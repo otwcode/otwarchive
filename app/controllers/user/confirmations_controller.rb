@@ -1,30 +1,40 @@
-class User::ConfirmationsController < Devise::ConfirmationsController
-  skip_after_filter :store_location
+# User namespace and class
+class User
+  # Handle Devise user confirmation and assign external works if any
+  class ConfirmationsController < Devise::ConfirmationsController
+    skip_after_filter :store_location
 
-  # GET /resource/confirmation/new
-  # def new
-  #   super
-  # end
+    def show
+      super do |user|
+        break unless resource.errors.empty?
 
-  # POST /resource/confirmation
-  # def create
-  #   super
-  # end
+        user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
 
-  # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+        # assign over any external authors that belong to this user
+        external_authors = []
+        external_authors << ExternalAuthor.find_by_email(user.email)
 
-  # protected
+        invitation = user.invitation
+        external_authors << invitation.external_author if invitation
 
-  # The path used after resending confirmation instructions.
-  # def after_resending_confirmation_instructions_path_for(resource_name)
-  #   super(resource_name)
-  # end
+        external_authors.compact!
 
-  # The path used after confirmation.
-  # def after_confirmation_path_for(resource_name, resource)
-  #   super(resource_name, resource)
-  # end
+        break if external_authors.empty?
+
+        external_authors.each { |author| author.claim!(user) }
+
+        @has_works = true
+      end
+    end
+
+    protected
+
+    def after_confirmation_path_for(resource_name, resource)
+      if @has_works
+        flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
+      end
+
+      super(resource_name, resource)
+    end
+  end
 end
