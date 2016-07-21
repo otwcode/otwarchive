@@ -1,3 +1,4 @@
+@no-txn
 Feature: Sign Up for a new account
   In order to add works to the Archive.
   As an unregistered user.
@@ -11,7 +12,7 @@ Feature: Sign Up for a new account
 
   Scenario Outline: The user should see validation errors when signing up with invalid data.
     When I fill in the sign up form with valid data
-      And I fill in "<field>" with "<value>"
+      And I fill in "<field>" with "<value>" on "#user_registration_form"
       And I press "Create Account"
     Then I should see "<error>"
       And I should not see "Account Created!"
@@ -39,7 +40,7 @@ Feature: Sign Up for a new account
       | login | password |
       | user1 | password |
     When I fill in the sign up form with valid data
-      And I fill in "user_login" with "user1"
+      And I fill in "user_login" with "user1" on "#user_registration_form"
       And I press "Create Account"
     Then I should see "Login has already been taken"
       And I should not see "Account Created!"
