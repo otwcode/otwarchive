@@ -16,7 +16,7 @@ Feature: User Authentication
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "reset_password_for" with "sam"
+    When I fill in "user_reset_password_for" with "sam"
       And I press "Reset Password"
     Then 1 email should be delivered
 
@@ -69,9 +69,9 @@ Feature: User Authentication
     Given I have loaded the fixtures
     When I am on the home page
     And I follow "Forgot password?"
-    When I fill in "reset_password_for" with "testuser"
+    When I fill in "user_reset_password_for" with "testuser"
       And I press "Reset Password"
-    Then I should see "Check your email"
+    Then I should see "You will receive an email with instructions on how to reset your password in a few minutes"
       And 1 email should be delivered
 
     # password from email should work
