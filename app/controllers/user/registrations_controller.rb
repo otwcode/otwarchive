@@ -20,13 +20,14 @@ class User
 
     def create
       super do |user|
-        if user.persisted? && Rails.env.development?
-          flash.now[:notice] = ts(
-            "During testing you can activate via <a href='%{url}'>your activation url</a>.",
-            url: confirmation_url(user, confirmation_token: user.confirmation_token)
-          ).html_safe
-        end
+        flash.now[:notice] = ts(
+          "During testing you can activate via <a href='%{url}'>your activation url</a>.",
+          url: confirmation_url(user, confirmation_token: user.confirmation_token)
+        ).html_safe if user.persisted? && Rails.env.development?
       end
+    end
+
+    def created
     end
 
     def destroy
@@ -58,6 +59,10 @@ class User
       devise_parameter_sanitizer.for(:user) do |u|
         u.permit(:age_over_13, :terms_of_service, :invitation_token)
       end
+    end
+
+    def after_inactive_sign_up_path_for(_resource)
+      created_user_registration_path
     end
 
     # Hide user dashboard on user creation or destroy

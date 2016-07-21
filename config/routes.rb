@@ -4,6 +4,7 @@ Otwarchive::Application.routes.draw do
     get '/logout' => 'user/sessions#destroy'
     get '/logout' => 'user/sessions#destroy'
 
+    get '/user/created' => 'user/registrations#created', as: 'created_user_registration'
     get '/user/register/(:invitation_token)' => 'user/registrations#new', as: 'new_user_registration'
   end
 
