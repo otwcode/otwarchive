@@ -65,11 +65,12 @@ class Invitation < ActiveRecord::Base
     return unless invitee_email_changed? && !invitee_email.blank?
 
     if external_author
-      archivist = external_author.external_creatorships
-                                 .collect(&:archivist)
-                                 .collect(&:login)
-                                 .uniq
-                                 .join(', ')
+      archivist = external_author.
+                  external_creatorships.
+                  map(&:archivist).
+                  map(&:login).
+                  uniq.
+                  join(', ')
 
       # send invite synchronously for now
       # this should now work delayed but just to be safe

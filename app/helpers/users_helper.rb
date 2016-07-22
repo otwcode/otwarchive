@@ -13,9 +13,9 @@ module UsersHelper
   #print all works that belong to a given pseud
   def print_works(pseud)
     result = ""
-	  conditions = user_signed_in? ? "posted = 1" : "posted = 1 AND restricted = 0 OR restricted IS NULL"
-	  pseud.works.find(:all, :order => "works.revised_at DESC", :conditions => conditions).each do |work|
-      result += (render :partial => 'works/work_blurb', :locals => {:work => work})
+    conditions = user_signed_in? ? "posted = 1" : "posted = 1 AND restricted = 0 OR restricted IS NULL"
+    pseud.works.find(:all, order: "works.revised_at DESC", conditions: conditions).each do |work|
+      result += (render partial: 'works/work_blurb', locals: { work: work })
     end
     result
   end

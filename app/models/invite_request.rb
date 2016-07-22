@@ -32,8 +32,9 @@ class InviteRequest < ActiveRecord::Base
   def self.invite
     admin_settings = Rails.cache.fetch('admin_settings') { AdminSetting.first }
 
-    order(:position).limit(admin_settings.invite_from_queue_number)
-                    .each(&:invite_and_remove)
+    order(:position).
+      limit(admin_settings.invite_from_queue_number).
+      each(&:invite_and_remove)
 
     InviteRequest.reset_order
   end
