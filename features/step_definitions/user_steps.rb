@@ -9,12 +9,12 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, :active, login: 'orphan_account')
+  FactoryGirl.create(:user, :active, login: 'orphan_account')
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, :active, hash)
+    FactoryGirl.create(:user, :active, hash)
   end
 end
 
@@ -28,7 +28,7 @@ end
 Given /^the user "([^\"]*)" exists and is activated$/ do |login|
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, :active, login: login, password: DEFAULT_PASSWORD )
+    FactoryGirl.create(:user, :active, login: login, password: DEFAULT_PASSWORD)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, :active, login: login, password: password)
+    FactoryGirl.create(:user, :active, login: login, password: password)
   else
     user.password = password
     user.password_confirmation = password
@@ -68,7 +68,7 @@ end
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = FactoryGirl.create(:user, :active, login: name, password: DEFAULT_PASSWORD)
+  FactoryGirl.create(:user, :active, login: name, password: DEFAULT_PASSWORD)
   visit login_path
   fill_in "User name", with: name
   fill_in "Password", with: DEFAULT_PASSWORD

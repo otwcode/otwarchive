@@ -70,7 +70,7 @@ end
 
 When /^I fill in "([^\"]*)" with "([^\']*)" on "([^\"]*)"$/ do |field, value, scope|
   with_scope(scope) do
-    fill_in(field, :with => value)
+    fill_in(field, with: value)
   end
 end
 
