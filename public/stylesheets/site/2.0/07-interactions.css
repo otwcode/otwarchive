@@ -149,6 +149,12 @@ form .footnote code {
   display: inline;
 }
 
+/* when we display information that cannot be edited, 
+like the current username on the change username form */
+form dd p.informational {
+  padding-top: 0;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
