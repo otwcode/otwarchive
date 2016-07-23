@@ -146,6 +146,10 @@ form.filters {
     box-sizing: border-box;
 }
 
+.filters .expander:focus {
+  outline: 1px dotted;
+}
+
 .filters .expanded .expander {
   background-image: url("/images/arrow-down.gif");
 }
