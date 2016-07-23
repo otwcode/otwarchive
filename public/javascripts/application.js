@@ -399,19 +399,8 @@ function setupAccordion() {
         e.preventDefault();
       };
 
-      // We need to treat the pseud menu differently so it will be properly responsive
-      // The other accordions need to be converted to a similar system
-      // Otherwise we run into bugs if one @media uses inline display and another uses block
-      if (expander.attr('title') == 'Pseud Switcher') {
-        if (expander.hasClass('expanded')) {
-          expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
-        } else {
-          expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
-        }
-      } else {
-        // change the classes upon clicking the expander
-        expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
-      }
+      // change the classes upon clicking the expander
+      expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
     });
   });
 }
