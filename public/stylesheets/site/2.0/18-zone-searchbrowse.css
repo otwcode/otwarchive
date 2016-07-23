@@ -20,6 +20,12 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INTERACTION: SEARCH */
 
+form.search input[type="text"] {		
+  border-top-color: #999;		
+  padding: 0.15em 0.25em;		
+    border-radius: 1em;		
+}
+
 .search p, li.search form p {
   position: relative;
 }
@@ -98,23 +104,20 @@ form.filters {
     border-radius: 0;
 }
 
-.filters input[type="submit"] {
-  text-align: center;
-  margin: 1em 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .filters .submit input {
   height: 100%;
+  margin: 1em 0;
   min-height: 1.286em;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
   white-space: normal;
 }
 
 .filters dl dl {
+  border: 0;
   margin: 0;
   padding: 0;
-  border: 0;
   background: none;
     box-shadow: none;
 }
@@ -138,8 +141,8 @@ form.filters {
 .filters .expander {
   background: url("/images/arrow-right.gif") left center no-repeat;
   color: #2a2a2a;
-  padding-left: 14px;
   min-height: 1.786em; /* default button height plus 0.25 vertical padding */
+  padding-left: 14px;
     box-sizing: border-box;
 }
 
