@@ -1,35 +1,47 @@
-// Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
-  setUpFilterExpanders();
+  setupFilterToggles();
   showFilters();
   setupNarrowScreenFilters();
 });
 
-function setUpFilterExpanders() {
-  var filter_option = $j('dt.tags, .tags dt');
-  
+// Make tag filter section names into buttons for toggling the sections
+// e.g. Fandoms dt should have a button to toggle dd with Fandom tags
+// (actual toggling done with setupAccordion in application.js)
+function setupFilterToggles() {
+  var filter_option = $j('.filters').find('dt.tags');
+
   filter_option.each(function() {
-    var option_name = $j(this).text();
     var option_list_id = $j(this).next().attr("id");
-    
+
     $j(this).wrapInner('<button type="button" class="expander" aria-expanded="false" aria-controls="' + option_list_id + '"></button>');
+  });
+
+  // change toggle button's aria-expanded value on click
+  $j('dt.tags button').on( "click", function() {
+    if ($j(this).attr('aria-expanded') == 'false') {
+      $j(this).attr('aria-expanded', 'true');
+    } else {
+      $j(this).attr('aria-expanded', 'false');
+    };
   });
 }
 
+// Expand a tag filter section if a tag of that type is selected
+// e.g. if I filtered for F/F, Include Categories section is expanded
 function showFilters() {
-  var filters = $j('dd.tags');
+  var filters = $j('.filters').find('dd.tags');
 
   filters.each(function(index, filter) {
     var tags = $j(filter).find('input');
-    var node = $j(filter);
-    var open_toggles = $j('.' + node.attr('id') + "_open");
-    var close_toggles = $j('.' + node.attr('id') + "_close");
+    var option_list_id = $j(filter).attr('id');
+    var toggle_container = $j('#toggle_' + option_list_id);
+    var toggle_button = $j('[aria-controls="' + option_list_id + '"]');
 
     tags.each(function(index, tag) {
-      if($j(tag).is(':checked')) {
-        $j(filter).show();
-        $j(open_toggles).hide();
-        $j(close_toggles).show();
+      if ($j(tag).is(':checked')) {
+        $j(filter).removeClass('hidden');
+        $j(toggle_container).removeClass('collapsed').addClass('expanded');
+        $j(toggle_button).attr('aria-expanded', 'true');
       }
     });
   });

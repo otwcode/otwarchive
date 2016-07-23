@@ -28,7 +28,7 @@
         <dd class="<%= filter_action %>">
           <dl>
             <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
-              <dt class="<%= tag_type %> tags">
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
                 <% # For accessibility, include filter action (e.g. Include) as landmark text %>
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
@@ -36,7 +36,7 @@
                     tag_type: tag_type_label(tag_type)
                     ).html_safe %>
               </dt>
-              <dd id="<%= filter_action %>_tag_category_<%= tag_type %>" class="expandable <%= tag_type %> tags">
+              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
