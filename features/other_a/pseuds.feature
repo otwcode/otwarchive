@@ -7,7 +7,7 @@ Scenario: pseud creation and playing with the default pseud
     And I go to myself's pseuds page
   Then I should see "Default Pseud" within "div#main.pseuds-index"
   When I follow "Edit"
-  Then I should see "cannot change your fallback pseud"
+  Then I should see "You cannot change the pseud that matches your user name"
     And the "pseud_is_default" checkbox should be checked
     And the "pseud_is_default" checkbox should be disabled
   When I follow "Back To Pseuds"
