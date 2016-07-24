@@ -20,6 +20,13 @@ describe StoryParser do
     @sp = StoryParser.new
   end
 
+  # Let the test get at external sites, but stub out anything containing "foo1" and "foo2"
+  WebMock.allow_net_connect!
+  WebMock.stub_request(:any, /foo1/).
+    to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+  WebMock.stub_request(:any, /foo2/).
+    to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
+
   describe "get_source_if_known:" do
 
     describe "the SOURCE_FFNET pattern" do
@@ -119,13 +126,13 @@ describe StoryParser do
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
 
-      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
+      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception
     end
 
     it "should recognise previously imported non-www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
-      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
+      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
     end
 
     it "should not perform a partial match on work import locations" do
@@ -137,20 +144,11 @@ describe StoryParser do
 
   describe "#download_and_parse_chapters_into_story" do
     it "should set the work revision date to the date of the last chapter" do
-      # Let the test get at external sites, but stub out anything containing "url1" and "url2"
-      WebMock.allow_net_connect!
-      WebMock.stub_request(:any, /url1/).
-        to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
-      WebMock.stub_request(:any, /url2/).
-        to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
-
       user = create(:user)
-      urls = %w(http://url1 http://url2)
+      urls = %w(http://foo1 http://foo2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
       work.save
-      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
-      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
-      expect(actual_date).to eq(expected_date)
+      expect(work.revised_at).to eq(Date.new(2001, 1, 22).strftime('%FT%T%:z'))
     end
   end
 
