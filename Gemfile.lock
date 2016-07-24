@@ -88,16 +88,16 @@ GEM
       safe_yaml (~> 1.0.0)
     css_parser (1.3.7)
       addressable
-    cucumber (2.3.2)
+    cucumber (2.4.0)
       builder (>= 2.1.2)
-      cucumber-core (~> 1.4.0)
+      cucumber-core (~> 1.5.0)
       cucumber-wire (~> 0.0.1)
       diff-lcs (>= 1.1.3)
-      gherkin (~> 3.2.0)
+      gherkin (~> 4.0)
       multi_json (>= 1.7.5, < 2.0)
       multi_test (>= 0.1.2)
-    cucumber-core (1.4.0)
-      gherkin (~> 3.2.0)
+    cucumber-core (1.5.0)
+      gherkin (~> 4.0)
     cucumber-rails (1.4.3)
       capybara (>= 1.1.2, < 3)
       cucumber (>= 1.3.8, < 3)
@@ -106,7 +106,7 @@ GEM
       railties (>= 3, < 5)
     cucumber-wire (0.0.1)
     dalli (2.7.6)
-    database_cleaner (1.2.0)
+    database_cleaner (1.5.3)
     delorean (2.1.0)
       chronic
     devise (3.5.10)
@@ -137,10 +137,10 @@ GEM
       mail (~> 2.2)
     erubis (2.7.0)
     escape_utils (1.2.1)
-    factory_girl (4.5.0)
+    factory_girl (4.7.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.6.0)
-      factory_girl (~> 4.5.0)
+    factory_girl_rails (4.7.0)
+      factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
     faker (1.6.3)
       i18n (~> 0.5)
@@ -149,7 +149,7 @@ GEM
     fastimage (1.8.1)
       addressable (~> 2.3, >= 2.3.5)
     ffi (1.9.10-x86-mingw32)
-    gherkin (3.2.0)
+    gherkin (4.0.0)
     globalize (3.1.0)
       activemodel (>= 3.1.0, < 4.0.0)
       activerecord (>= 3.1.0, < 4.0.0)
@@ -436,10 +436,9 @@ DEPENDENCIES
   cocaine
   connection_pool
   css_parser
-  cucumber (~> 2.3.2)
-  cucumber-rails (~> 1.4.3)
+  cucumber-rails (~> 1.0)
   dalli
-  database_cleaner (= 1.2.0)
+  database_cleaner (~> 1.0)
   delorean
   devise (~> 3.0)
   devise-async
@@ -447,11 +446,10 @@ DEPENDENCIES
   elasticsearch
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
-  factory_girl (~> 4.5.0)
+  factory_girl
   factory_girl_rails
   faker (~> 1.6.3)
   fastimage
-  gherkin
   globalize (~> 3.1.0)
   google_visualr (>= 2.1)
   htmlentities
