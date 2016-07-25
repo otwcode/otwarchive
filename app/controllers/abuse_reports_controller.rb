@@ -1,11 +1,16 @@
 class AbuseReportsController < ApplicationController
-
   skip_before_filter :store_location
+  before_filter :load_abuse_languages
 
   def new
     @abuse_report = AbuseReport.new
+    if logged_in_as_admin?
+      @abuse_report.email = current_admin.email
+    elsif is_registered_user?
+      @abuse_report.email = current_user.email
+      @abuse_report.username = current_user.login
+    end
     @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
-    @abuse_report.email = User.current_user.try(:email)
   end
 
   def create
@@ -17,6 +22,10 @@ class AbuseReportsController < ApplicationController
     else
       render action: "new"
     end
+  end
+
+  def load_abuse_languages
+    @abuse_languages = Language.where(abuse_support_available: true).order(:name)
   end
 
 end
