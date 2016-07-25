@@ -27,13 +27,13 @@
   </h1>
 
   <% if user_signed_in? || admin_signed_in? %>
-    <%= render 'user/sessions/greeting' %>
+    <%= render 'users/sessions/greeting' %>
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
         <%= link_to ts('Log In', key: 'header'), login_path %>
       </p>
-      <%= render 'user/sessions/form_small' %>
+      <%= render 'users/sessions/form_small' %>
     </div>
   <% end %>
 

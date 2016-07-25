@@ -44,7 +44,7 @@
     <li><%= link_to ts("Set My Preferences"), user_preferences_path(@user) %></li>
     <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
     <li><%= link_to ts('Delete My Account'),
-                    user_registration_path,
+                    users_path,
                     confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?'),
                     method: :delete %></li>
   </ul>

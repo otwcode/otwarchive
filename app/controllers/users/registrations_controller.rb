@@ -1,4 +1,4 @@
-class User
+module Users
   # Handle user devise registration
   class RegistrationsController < Devise::RegistrationsController
     before_filter :configure_sign_up_params, only: :create
@@ -20,13 +20,16 @@ class User
 
     def create
       super do |user|
-        flash.now[:notice] = ts(
+        flash[:notice] = ts(
           "During testing you can activate via <a href='%{url}'>your activation url</a>.",
           url: confirmation_url(user, confirmation_token: user.confirmation_token)
         ).html_safe if user.persisted? && Rails.env.development?
       end
     end
 
+    # We redirect the user here after user registration, because if we keep it
+    # on create method, the `respond_with` method would render it regardless
+    # of any error on user registration
     def created
     end
 
@@ -61,13 +64,13 @@ class User
       end
     end
 
-    def after_inactive_sign_up_path_for(_resource)
-      created_user_registration_path
-    end
-
     # Hide user dashboard on user creation or destroy
     def hide_dashboard
       @hide_dashboard = true
+    end
+
+    def after_inactive_sign_up_path_for(_resource)
+      created_user_path
     end
 
     # Check if the user can create a new account

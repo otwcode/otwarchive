@@ -1,12 +1,12 @@
-# User namespace and class
-class User
+# Users namespace
+module Users
   # Handle Devise user confirmation and assign external works if any
   class ConfirmationsController < Devise::ConfirmationsController
     skip_after_filter :store_location
 
     def show
       super do |user|
-        break unless resource.errors.empty?
+        next unless resource.errors.empty?
 
         user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
 
@@ -19,7 +19,7 @@ class User
 
         external_authors.compact!
 
-        break if external_authors.empty?
+        next if external_authors.empty?
 
         external_authors.each { |author| author.claim!(user) }
 

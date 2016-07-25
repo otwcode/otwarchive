@@ -319,19 +319,6 @@ class User < ActiveRecord::Base
     save(validate: false)
   end
 
-  private
-
-  # Set the roles for this user
-  def set_roles(role_list)
-    if role_list
-      self.roles = Role.find(role_list)
-    else
-      self.roles = []
-    end
-  end
-
-  public
-
   # Is this user an authorized translation admin?
   def translation_admin
     self.is_translation_admin?
@@ -446,6 +433,34 @@ class User < ActiveRecord::Base
     invite_request.destroy if invite_request
   end
 
+  def log_change_if_login_was_edited
+    create_log_item(
+      action: ArchiveConfig.ACTION_RENAME,
+      note: "Old Username: #{login_was}; New Username: #{login}"
+    ) if login_changed?
+  end
+
+  # Overwrite Devise reset password method so we can
+  # search for both user login or email.
+  def self.send_reset_password_instructions(attributes = {})
+    reset = attributes[:reset_password_for]
+    key = reset.include?('@') ? :email : :login
+    attributes[key] = reset
+
+    # The "trick" here is to define a key and force Devise to search our user
+    # based on that key, that could be either :login or :email
+    recoverable = find_or_initialize_with_errors([key], attributes)
+    recoverable.send_reset_password_instructions if recoverable.persisted?
+
+    # No matter what Devise return us, we define a default error message
+    unless recoverable.errors.empty?
+      recoverable.errors.clear
+      recoverable.errors.add(:base, :not_found, message: ts("We couldn't find an account with that email address or username. Please try again?"))
+    end
+
+    recoverable
+  end
+
   private
 
   # Create and/or return a user account for holding orphaned works
@@ -478,7 +493,12 @@ class User < ActiveRecord::Base
     end
   end
 
-   def log_change_if_login_was_edited
-     create_log_item( options = {:action => ArchiveConfig.ACTION_RENAME, :note => "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
-   end
+  # Set the roles for this user
+  def set_roles(role_list)
+    if role_list
+      self.roles = Role.find(role_list)
+    else
+      self.roles = []
+    end
+  end
 end
