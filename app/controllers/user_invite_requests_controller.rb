@@ -1,6 +1,6 @@
 class UserInviteRequestsController < ApplicationController
-  before_filter :authenticate_admin!, :except => [:new, :create]
-  before_filter :check_user_status, :only => [:new, :create]
+  before_filter :authenticate_admin!, except: [:new, :create]
+  before_filter :check_user_status, only: [:new, :create]
 
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
