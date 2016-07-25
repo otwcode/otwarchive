@@ -1,8 +1,7 @@
 class CollectionsController < ApplicationController
-
-  before_filter :authenticate_user!, :only => [:new, :edit, :create, :update]
-  before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :collection_owners_only, :only => [:edit, :update, :destroy, :confirm_delete]
+  before_filter :authenticate_user!, only: [:new, :edit, :create, :update]
+  before_filter :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_filter :validate_challenge_type
   cache_sweeper :collection_sweeper
