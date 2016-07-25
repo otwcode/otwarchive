@@ -241,3 +241,4 @@ end
 When /^I clear cookies$/ do
   Capybara.reset_sessions!
 end
+ 

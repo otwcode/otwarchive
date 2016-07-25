@@ -1,12 +1,12 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
-  before_filter :load_owner, :only => [ :index ]
-  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
-  before_filter :authenticate_user!, :only => [:new, :create, :edit, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
-  before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
+  before_filter :load_owner, only: [:index]
+  before_filter :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_filter :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_filter :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete] 
+  before_filter :check_visibility, only: [:show]
+  before_filter :check_ownership, only: [:edit, :update, :destroy, :confirm_delete]
   
   before_filter :check_pseud_ownership, :only => [:create, :update]
 

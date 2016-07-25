@@ -191,12 +191,12 @@ class ApplicationController < ActionController::Base
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-    access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+    access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   def check_ownership_or_admin
-     return true if admin_signed_in?
-     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+    return true if admin_signed_in?
+    check_ownership
   end
 
   # Make sure the user is allowed to see a specific page
@@ -281,7 +281,6 @@ class ApplicationController < ActionController::Base
   # Redirect to the URI stored by #back_or_default_path
   def redirect_back_or_default(default = root_path)
     redirect_to back_or_default_path(default)
-    return
   end
 
   # Return the URI stored by the most recent store_location call or

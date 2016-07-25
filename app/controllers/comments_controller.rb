@@ -110,7 +110,7 @@ class CommentsController < ApplicationController
 
   # Must be able to delete other people's comments on owned works, not just owned comments!
   def check_permission_to_delete
-    access_denied(:redirect => @comment) unless admin_signed_in? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
+    access_denied(redirect: @comment) unless admin_signed_in? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
   end
   
   # Comments cannot be edited after they've been replied to
@@ -152,13 +152,11 @@ class CommentsController < ApplicationController
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
       end
+    elsif admin_signed_in?
+      @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
     else
-      if admin_signed_in?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
-      else
-        redirect_back_or_default(root_path)
-        flash[:error] = ts("Sorry, you don't have permission to access that page.")
-      end
+      redirect_back_or_default(root_path)
+      flash[:error] = ts("Sorry, you don't have permission to access that page.")
     end
   end
 

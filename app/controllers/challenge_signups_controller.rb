@@ -2,15 +2,23 @@
 require 'csv'
 
 class ChallengeSignupsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:summary, :display_summary, :requests_summary]
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :allowed_to_destroy, :only => [:destroy, :confirm_delete]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :check_pseud_ownership, :only => [:create, :update]
+  before_filter :authenticate_user!, except: [:summary, :display_summary, :requests_summary]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, only: [:show]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
+  before_filter :authenticate_user!, except: [:summary, :display_summary, :requests_summary]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, only: [:show]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
+  before_filter :check_pseud_ownership, only: [:create, :update]
 
   skip_after_filter :store_location, only: :summary
 
