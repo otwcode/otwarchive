@@ -8,7 +8,6 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = current_admin.email
     elsif is_registered_user?
       @abuse_report.email = current_user.email
-      @abuse_report.username = current_user.login
     end
     @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
   end
