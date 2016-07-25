@@ -1,4 +1,4 @@
-class User
+module Users
   # Handle user session authentication
   class SessionsController < Devise::SessionsController
     layout 'session'

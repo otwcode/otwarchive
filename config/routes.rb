@@ -1,15 +1,15 @@
 Otwarchive::Application.routes.draw do
   devise_scope :user do
-    get '/login'  => 'user/sessions#new'
-    get '/logout' => 'user/sessions#destroy'
-    get '/logout' => 'user/sessions#destroy'
+    get '/login'  => 'users/sessions#new'
+    get '/logout' => 'users/sessions#destroy'
+    get '/logout' => 'users/sessions#destroy'
 
-    get '/user/created' => 'user/registrations#created', as: 'created_user_registration'
-    get '/user/register/(:invitation_token)' => 'user/registrations#new', as: 'new_user_registration'
+    get '/users/created' => 'users/registrations#created', as: 'created_user'
+    get '/users/register/(:invitation_token)' => 'users/registrations#new', as: 'new_user_registration'
   end
 
-  devise_for :user,
-             module: 'user',
+  devise_for :users,
+             module: 'users',
              path_names: {
                sign_in: 'login',
                sign_out: 'logout',
