@@ -1,5 +1,4 @@
 @admin
-@no-txn
 Feature: Invite queue management
 
   Background:
@@ -76,6 +75,7 @@ Feature: Invite queue management
     Then I should see "Wondering how long you'll have to wait"
       And I should see "Email"
 
+  @no-txn
   Scenario: The queue sends out invites and user can create and activate an account
 
     Given account creation is enabled
