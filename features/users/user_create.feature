@@ -1,4 +1,3 @@
-@no-txn
 Feature: Sign Up for a new account
   In order to add works to the Archive.
   As an unregistered user.
@@ -44,7 +43,8 @@ Feature: Sign Up for a new account
       And I press "Create Account"
     Then I should see "Login has already been taken"
       And I should not see "Account Created!"
-    
+
+  @no-txn
   Scenario: The user should be able to create a new account with a valid email and password
     When I fill in the sign up form with valid data
       And all emails have been delivered

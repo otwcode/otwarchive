@@ -141,6 +141,7 @@ Feature: Reading count
     And a chapter is added to "multichapter work"
   Then I should see "multichapter work"
   When I am logged out
+    And I clear cookies
     And I am logged in as "fandomer"
     And I view the work "multichapter work"
   When the reading rake task is run
