@@ -5,7 +5,7 @@ class TagsController < ApplicationController
   before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
   before_filter :load_tag_and_subtags, :only => [:show]
 
-  skip_after_filter :store_location, :except => [ :show, :index, :show_hidden, :search, :feed ]
+  skip_after_filter :store_location, except: [:show, :index, :show_hidden, :search, :feed]
 
   caches_page :feed
 
@@ -69,14 +69,15 @@ class TagsController < ApplicationController
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if user_signed_in? #current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
-      elsif admin_signed_in?
-        @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(:page => params[:page])
-      end
-      @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
+      @works = if user_signed_in?
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif admin_signed_in?
+                 @tag.works.visible_to_owner.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
+
+      @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do

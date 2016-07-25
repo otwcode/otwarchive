@@ -478,10 +478,10 @@ class User < ActiveRecord::Base
 
   # Set the roles for this user
   def set_roles(role_list)
-    if role_list
-      self.roles = Role.find(role_list)
-    else
-      self.roles = []
-    end
+    self.roles = if role_list
+                   Role.find(role_list)
+                 else
+                   []
+                 end
   end
 end
