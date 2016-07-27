@@ -82,6 +82,8 @@ GEM
       activesupport (>= 3.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
+    codeclimate-test-reporter (0.6.0)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.1)
     connection_pool (2.2.0)
     crack (0.4.3)
@@ -412,6 +414,7 @@ DEPENDENCIES
   capistrano-gitflow_version (>= 0.0.3)
   capybara (~> 2.6.2)
   cocaine
+  codeclimate-test-reporter
   connection_pool
   css_parser
   cucumber (~> 2.3.2)
@@ -474,9 +477,6 @@ DEPENDENCIES
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
-
-RUBY VERSION
-   ruby 2.1.9p490
 
 BUNDLED WITH
    1.12.5
