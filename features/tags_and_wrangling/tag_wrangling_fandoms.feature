@@ -38,7 +38,6 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Tag was updated"
     And I should not see "Synonyms"
   When I follow "Stargate Atlantis"
-  Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "SGA"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled

@@ -42,6 +42,7 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
 }
 
 button {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont', sans-serif;
   box-sizing: content-box;
 }
 
@@ -87,7 +88,7 @@ ol.pagination, div.pagination, ol.year {
     box-shadow: inset 2px 2px 2px #bbb;
 }
 
-.actions a:active, .current, a.current, .current a:visited {
+.actions a:active, .current, a.current, a:link.current, .current a:visited {
   color: #111;
   background: #ccc;
   border-color: #fff;
