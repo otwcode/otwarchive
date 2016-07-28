@@ -77,7 +77,7 @@ Feature: Subscriptions
     And I should see "author"
   When I view the "F/F" tag feed
   Then I should see "Old Snippet"
-    And I should see "/tags/11/feed"
+    And I should see "/tags/"
     And I should not see "myname1"
     And I should see "author"
   When I view the "M/F" tag feed
