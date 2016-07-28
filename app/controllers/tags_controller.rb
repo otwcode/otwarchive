@@ -115,7 +115,7 @@ class TagsController < ApplicationController
     @works = hash[:works]
     @tag = hash[:tag]
     unless redirect.nil? 
-      redirect_to path and return
+      redirect_to redirect and return
     end
 
     respond_to do |format|
