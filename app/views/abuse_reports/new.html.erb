@@ -8,7 +8,7 @@
 
 <!--main content-->
 <div class="userstuff">
-  <p><%= ts('The Abuse committee looks after all of your concerns regarding content and user behaviour which breach the
+  <p><%= ts('The Abuse committee looks after all of your concerns regarding content and user behavior which breach the
            Archive %{tos_link}. For technical help, please contact %{support_link}.',
             tos_link: (link_to ts("Terms of Service"), tos_path), support_link: (link_to ts("Support"),
                                                                                          new_feedback_report_path)).html_safe %></p>
@@ -28,14 +28,16 @@
             (link_to ts('DMCA Policy'), dmca_path)).html_safe %></li>
   </ul>
   <p><%= ts('<strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses
-            in any language other than English', list: @abuse_languages.map(&:name).to_sentence).html_safe %></p>
+            in any language other than English.', list: @abuse_languages.map(&:name).to_sentence).html_safe %></p>
 </div>
 <%= form_for @abuse_report, class: "post" do |f| %>
   <fieldset>
     <legend><%= ts("Link and Describe Abuse") %></legend>
     <dl>
-      <dt class='required'><%= f.label :email, ts('Your email (required)') %></dt>
-      <dd>
+      <dt><%= f.label :username, ts("Your name (optional)") %></dt>
+      <dd><%= f.text_field :username %></dd>
+      <dt class="required"><%= f.label :email, ts('Your email (required)') %></dt>
+      <dd class="required">
         <%= f.text_field :email, size: 60, 'aria-describedby' => 'email-field-description' %>
         <p class='footnote' id='email-field-description'>
           <%= ts("We cannot act on reports without a valid email address.") %>
@@ -45,13 +47,13 @@
       <dt class="required">
         <%= f.label :language, ts("Select language (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.collection_select(:language, @abuse_languages, :id, :name, { selected: Language.default.id }) %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary of Terms of Service Violation (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <%= live_validation_for_field('feedback_summary',

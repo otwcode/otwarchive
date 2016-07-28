@@ -45,13 +45,13 @@
       <dt class="required">
         <%= f.label :language, ts("Select language (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.collection_select(:language, @support_languages, :id, :name, { selected: Language.default.id }) %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <%= live_validation_for_field('feedback_summary',
@@ -60,7 +60,7 @@
       <dt class="required">
         <%= f.label :comment, ts("Your comment (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field('feedback_comment',
               failureMessage: ts("Please enter your feedback")) %>
