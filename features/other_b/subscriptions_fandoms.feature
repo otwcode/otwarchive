@@ -11,9 +11,9 @@ Feature: Subscriptions
     And I view the "F/F" works index
   Then I should see "RSS Feed"
   # TODO: If you uncomment the next line, it fails horribly. Is this a genuine bug, or a cucumber error?
-  # When I follow "RSS Feed"
-  # Then I should not see "My Work Title"
-  #   And I should not see "Stargate SG-1"
+  When I follow "RSS Feed"
+   Then I should not see "My Work Title"
+     And I should not see "Stargate SG-1"
     
   Scenario: Subscribe to a test fandom when there are works in it
   
