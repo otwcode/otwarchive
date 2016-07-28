@@ -38,7 +38,6 @@ class FeedbackReporter
       body: "&xml=#{encoded_xml}"
     )
 
-
   end
 
   def xml
