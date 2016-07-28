@@ -75,3 +75,11 @@ Feature: Subscriptions
   Then I should see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"
+  When I view the "F/F" tag feed
+  Then I should see "Old Snippet"
+    And I should see "/tags/11/feed"
+    And I should not see "myname1"
+    And I should see "author"
+  When I view the "M/F" tag feed
+  Then I should see "<?xml version"
+
