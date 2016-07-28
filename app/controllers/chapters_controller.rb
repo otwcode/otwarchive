@@ -23,6 +23,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
+    @tag_groups = @work.tag_groups
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
@@ -53,7 +54,7 @@ class ChaptersController < ApplicationController
       @comments = @chapter.comments.reviewed
 
       @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
-        get_page_title(@work.fandoms.string,
+        get_page_title(@tag_groups["Fandom"][0].name,
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 

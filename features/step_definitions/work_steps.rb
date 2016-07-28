@@ -97,9 +97,12 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   end
   step %{I am logged out}
   n_comments ||= 0
+  work = Work.find_by_title!(title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Bla bla" on the work "#{title}"}
+    visit work_url(work)
+    fill_in("comment[content]", with: "Bla bla")
+    click_button("Comment")
     step %{I am logged out}
   end
 end
@@ -143,8 +146,10 @@ Given /^the chaptered work with comments setup$/ do
 end
 
 Given /^the work "([^\"]*)"$/ do |work|
-  step %{I have a work "#{work}"}
-  step %{I am logged out}
+  unless Work.where(title: work).exists?
+    step %{I have a work "#{work}"}
+    step %{I am logged out}
+  end
 end
 
 ### WHEN
@@ -381,8 +386,8 @@ end
 
 When /^I delete the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
-  step %{I follow "Delete"}
+  visit edit_work_url(work)
+  step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
 end
@@ -497,5 +502,3 @@ end
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
-
-

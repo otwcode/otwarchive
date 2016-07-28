@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'webmock'
 
 describe StoryParser do
 
@@ -118,19 +119,38 @@ describe StoryParser do
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
 
-      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
-      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should not perform a partial match on work import locations" do
       @work = create(:work, imported_from_url: location_partial_match)
 
       expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
+    end
+  end
+
+  describe "#download_and_parse_chapters_into_story" do
+    it "should set the work revision date to the date of the last chapter" do
+      # Let the test get at external sites, but stub out anything containing "url1" and "url2"
+      WebMock.allow_net_connect!
+      WebMock.stub_request(:any, /url1/).
+        to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+      WebMock.stub_request(:any, /url2/).
+        to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
+
+      user = create(:user)
+      urls = %w(http://url1 http://url2)
+      work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
+      work.save
+      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
+      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      expect(actual_date).to eq(expected_date)
     end
   end
 
@@ -149,7 +169,7 @@ describe StoryParser do
       }.each_pair do |input, output|
         location, href = input
         story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
-        story_out = 'here is <a href="' + output + '">a link</a>.'
+        story_out = '<p>here is <a href="' + output + '">a link</a>.</p>'
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end

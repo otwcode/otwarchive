@@ -2,19 +2,19 @@ Otwarchive::Application.routes.draw do
 
   #### ERRORS ####
 
-  match '/403', :to => 'errors#403'
-  match '/404', :to => 'errors#404'
-  match '/422', :to => 'errors#422'
-  match '/500', :to => 'errors#500'
+  match '/403', to: 'errors#403'
+  match '/404', to: 'errors#404'
+  match '/422', to: 'errors#422'
+  match '/500', to: 'errors#500'
 
 
   #### DOWNLOADS ####
 
-  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
+  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', as: 'download'
 
   #### OPEN DOORS ####
   namespace :opendoors do
-    resources :tools, :only => [:index] do
+    resources :tools, only: [:index] do
       collection do
         post :url_update
       end
@@ -37,9 +37,9 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  match 'signup/:invitation_token' => 'users#new', :as => 'signup'
-  match 'claim/:invitation_token' => 'external_authors#claim', :as => 'claim'
-  match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', :as => 'complete_claim'
+  match 'signup/:invitation_token' => 'users#new', as: 'signup'
+  match 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
+  match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
   #### TAGS ####
 
@@ -79,10 +79,10 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
-	end
+  end
 
-  resources :tag_sets, :controller => 'owned_tag_sets' do
-    resources :nominations, :controller => 'tag_set_nominations' do
+  resources :tag_sets, controller: 'owned_tag_sets' do
+    resources :nominations, controller: 'tag_set_nominations' do
       collection do
         put  :update_multiple
         delete :destroy_multiple
@@ -92,7 +92,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :associations, :controller => 'tag_set_associations', :only => [:index] do
+    resources :associations, controller: 'tag_set_associations', only: [:index] do
       collection do
         put :update_multiple
       end
@@ -106,9 +106,9 @@ Otwarchive::Application.routes.draw do
       get :show_options
     end
   end
-  resources :tag_nominations, :only => [:update]
+  resources :tag_nominations, only: [:update]
 
-  resources :tag_wrangling_requests, :only => [:index] do
+  resources :tag_wrangling_requests, only: [:index] do
     collection do
       put :update_multiple
     end
@@ -120,18 +120,19 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, :only => [:new, :create, :destroy]
+  resources :admin_sessions, only: [:new, :create, :destroy]
 
   match '/admin/login' => 'admin_sessions#new'
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
-    resources :activities, :only => [:index, :show]
+    resources :activities, only: [:index, :show]
     resources :banners do
       member do
         get :confirm_delete
       end
     end
+    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -139,12 +140,12 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
-    resources :user_creations, :only => [:destroy] do
+    resources :user_creations, only: [:destroy] do
       member do
         get :hide
       end
     end
-    resources :users, :controller => 'admin_users' do
+    resources :users, controller: 'admin_users' do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
@@ -155,7 +156,7 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
-    resources :invitations, :controller => 'admin_invitations' do
+    resources :invitations, controller: 'admin_invitations' do
       collection do
         post :invite_from_queue
         post :grant_invites_to_users
@@ -169,13 +170,13 @@ Otwarchive::Application.routes.draw do
 
   #### USERS ####
 
-  resources :people, :only => [:index] do
+  resources :people, only: [:index] do
     collection do
       get :search
     end
   end
 
-  resources :passwords, :only => [:new, :create]
+  resources :passwords, only: [:new, :create]
 
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
@@ -190,7 +191,7 @@ Otwarchive::Application.routes.draw do
       post :end_first_login
       post :end_banner
     end
-    resources :assignments, :controller => "challenge_assignments", :only => [:index] do
+    resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
         put :update_multiple
       end
@@ -198,14 +199,14 @@ Otwarchive::Application.routes.draw do
         get :default
       end
     end
-    resources :claims, :controller => "challenge_claims", :only => [:index]
+    resources :claims, controller: "challenge_claims", only: [:index]
     resources :bookmarks
-    resources :collection_items, :only => [:index, :update, :destroy] do
+    resources :collection_items, only: [:index, :update, :destroy] do
       collection do
         put :update_multiple
       end
     end
-    resources :collections, :only => [:index]
+    resources :collections, only: [:index]
     resources :comments do
       member do
         put :approve
@@ -216,8 +217,8 @@ Otwarchive::Application.routes.draw do
       resources :external_author_names
     end
     resources :favorite_tags, only: [:create, :destroy]
-    resources :gifts, :only => [:index]
-    resource :inbox, :controller => "inbox" do
+    resources :gifts, only: [:index]
+    resource :inbox, controller: "inbox" do
       member do
         get :reply
         get :cancel_reply
@@ -232,9 +233,9 @@ Otwarchive::Application.routes.draw do
         get :manage
       end
     end
-    resources :nominations, :controller => "tag_set_nominations", :only => [:index]
-    resources :preferences, :only => [:index, :update]
-    resource :profile, :only => [:show], :controller => "profile"
+    resources :nominations, controller: "tag_set_nominations", only: [:index]
+    resources :preferences, only: [:index, :update]
+    resource :profile, only: [:show], controller: "profile"
     resources :pseuds do
       resources :works
       resources :series
@@ -252,11 +253,11 @@ Otwarchive::Application.routes.draw do
       end
       resources :serial_works
     end
-    resources :signups, :controller => "challenge_signups", :only => [:index]
-    resources :skins, :only => [:index]
-    resources :stats, :only => [:index]
-    resources :subscriptions, :only => [:index, :create, :destroy]
-    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
+    resources :signups, controller: "challenge_signups", only: [:index]
+    resources :skins, only: [:index]
+    resources :stats, only: [:index]
+    resources :subscriptions, only: [:index, :create, :destroy]
+    resources :tag_sets, controller: "owned_tag_sets", only: [:index]
     resources :works do
       collection do
         get :drafts
@@ -313,8 +314,8 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
-    resources :kudos, :only => [:index]
-    resources :links, :controller => "work_links", :only => [:index]
+    resources :kudos, only: [:index]
+    resources :links, controller: "work_links", only: [:index]
   end
 
   resources :chapters do
@@ -364,7 +365,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :confirm_delete
     end
-    resource  :profile, :controller => "collection_profile"
+    resource :profile, controller: "collection_profile"
     resources :collections
     resources :works
     resources :gifts
@@ -376,18 +377,18 @@ Otwarchive::Application.routes.draw do
     resources :tags do
       resources :works
     end
-    resources :participants, :controller => "collection_participants" do
+    resources :participants, controller: "collection_participants" do
       collection do
         get :add
         get :join
       end
     end
-    resources :items, :controller => "collection_items" do
+    resources :items, controller: "collection_items" do
       collection do
         put :update_multiple
       end
     end
-    resources :signups, :controller => "challenge_signups" do
+    resources :signups, controller: "challenge_signups" do
       collection do
         get :summary
       end
@@ -395,7 +396,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
+    resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
       collection do
         get :generate
         put :set
@@ -410,7 +411,7 @@ Otwarchive::Application.routes.draw do
         get :uncover_default
       end
     end
-    resources :claims, :controller => "challenge_claims" do
+    resources :claims, controller: "challenge_claims" do
       collection do
         put :set
         get :purge
@@ -423,10 +424,10 @@ Otwarchive::Application.routes.draw do
         get :regenerate_for_signup
       end
     end
-    resources :requests, :controller => "challenge_requests"
+    resources :requests, controller: "challenge_requests"
     # challenge types
-    resource :gift_exchange, :controller => 'challenge/gift_exchange'
-    resource :prompt_meme, :controller => 'challenge/prompt_meme'
+    resource :gift_exchange, controller: 'challenge/gift_exchange'
+    resource :prompt_meme, controller: 'challenge/prompt_meme'
   end
 
   #### I18N ####
@@ -445,7 +446,7 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
-  resources :user_sessions, :only => [:new, :create, :destroy] do
+  resources :user_sessions, only: [:new, :create, :destroy] do
     collection do
       get :passwd_small
       get :passwd
@@ -459,7 +460,11 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :import, only: [:create], defaults: { format: :json }
+      resources :bookmarks, only: [:create], defaults: { format: :json }
+      resources :works, only: [:create], defaults: { format: :json }
+      match 'bookmarks/import', to: 'bookmarks#create', via: :post
+      match 'import', to: 'works#create', via: :post
+      match 'works/import', to: 'works#create', via: :post
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
@@ -496,7 +501,7 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create]
+  resources :kudos, only: [:create]
 
   resources :skins do
     member do
@@ -508,7 +513,7 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :known_issues
-  resources :archive_faqs, :path => "faq" do
+  resources :archive_faqs, path: "faq" do
     member do
       get :confirm_delete
     end
@@ -527,7 +532,7 @@ Otwarchive::Application.routes.draw do
     end
   end
   
-  resource :redirect, :controller => "redirect", :only => [:show] do
+  resource :redirect, controller: "redirect", only: [:show] do
     member do
       get :do_redirect
     end
@@ -537,7 +542,7 @@ Otwarchive::Application.routes.draw do
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans, :only => [:index, :new, :create] do
+  resources :orphans, only: [:index, :new, :create] do
     collection do
       get :about
     end
@@ -545,8 +550,8 @@ Otwarchive::Application.routes.draw do
 
 
   match 'search' => 'works#search'
-  match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
-  match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
+  match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]
+  match 'support' => 'feedbacks#new', as: 'new_feedback_report', via: [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
   match 'unicorn_test' => 'home#unicorn_test'
@@ -556,7 +561,7 @@ Otwarchive::Application.routes.draw do
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
   match 'delete_confirmation' => 'users#delete_confirmation'
-  match 'activate/:id' => 'users#activate', :as => 'activate'
+  match 'activate/:id' => 'users#activate', as: 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
   match 'lost_cookie' => 'home#lost_cookie'
@@ -568,54 +573,7 @@ Otwarchive::Application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  root :to => "home#index"
+  root to: "home#index"
 
   # See how all your routes lay out with "rake routes"
 

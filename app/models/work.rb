@@ -5,7 +5,9 @@ class Work < ActiveRecord::Base
   include Bookmarkable
   include Pseudable
   include Searchable
+  include BookmarkCountCaching
   include WorkStats
+  include WorkChapterCountCaching
   include Tire::Model::Search
   # include Tire::Model::Callbacks
 
@@ -212,6 +214,32 @@ class Work < ActiveRecord::Base
       tag.update_works_index_timestamp!
       Rails.cache.delete(Tag.tag_feeds_key(tag.id))
     end
+    Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def self.work_blurb_tag_cache_key(id)
+    "/v1/work_blurb_tag_cache_key/#{id}"
+  end
+
+  def self.work_blurb_tag_cache(id)
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), :raw => true) { rand(1..1000) }
+  end
+
+  def self.expire_work_tag_groups_id(id)
+    Rails.cache.delete(Work.tag_groups_key_id(id))
+    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
+  end
+
+  def expire_work_tag_groups
+    Rails.cache.delete(self.tag_groups_key)
+  end
+
+  def self.tag_groups_key_id(id)
+    "/v2/work_tag_groups/#{id}"
+  end
+
+  def tag_groups_key
+    Work.tag_groups_key_id(self.id)
   end
 
   def expire_pseud(pseud)
@@ -520,6 +548,8 @@ class Work < ActiveRecord::Base
   
   def set_revised_at_by_chapter(chapter)
     return if self.posted? && !chapter.posted?
+    # Invalidate chapter count cache
+    self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? || 
@@ -643,14 +673,18 @@ class Work < ActiveRecord::Base
 
   # Get the total number of chapters for a work
   def number_of_chapters
-    self.chapters.count
+    Rails.cache.fetch(key_for_chapter_total_counting(self)) do
+      self.chapters.count
+    end
   end
 
   # Get the total number of posted chapters for a work
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    self.chapters.posted.count
+    Rails.cache.fetch(key_for_chapter_posted_counting(self)) do
+      self.chapters.posted.count
+    end
   end
 
   def chapters_in_order(include_content = true)
@@ -696,6 +730,7 @@ class Work < ActiveRecord::Base
 
   after_save :update_complete_status
   def update_complete_status
+    # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.complete_changed?
       Work.update_all("complete = #{self.complete}", "id = #{self.id}")
@@ -777,10 +812,19 @@ class Work < ActiveRecord::Base
   #######################################################################
 
   def tag_groups
-    if self.placeholder_tags
-      self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-    else
-      self.tags.group_by { |t| t.type.to_s }
+    Rails.cache.fetch(self.tag_groups_key) do
+      if self.placeholder_tags
+        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+      else
+        result = self.tags.group_by { |t| t.type.to_s }
+      end
+      result["Fandom"] ||= []
+      result["Rating"] ||= []
+      result["Warning"] ||= []
+      result["Relationship"] ||= []
+      result["Character"] ||= []
+      result["Freeform"] ||= []
+      result
     end
   end
 
