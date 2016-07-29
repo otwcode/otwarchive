@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Challenge::GiftExchangeController do
   include LoginMacros
 
-  describe "destroy" do
+  describe '#destroy' do
     before(:each) do
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
-      @collection.save
-      fake_login_known_user(@collection.owners.first.user)
+      user_login @collection.owners.first.user
       delete :destroy, id: @collection.challenge.id, collection_id: @collection.name
     end
 

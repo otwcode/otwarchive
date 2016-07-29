@@ -104,7 +104,7 @@ describe WorksController do
           end
 
           xit "should show restricted works to logged-in users" do
-            fake_login
+            user_login
             get :index, tag_id: @fandom.name
             expect(assigns(:works).items).to match_array([@work, @work2])
           end

@@ -20,6 +20,9 @@ FactoryGirl.define do
     password_confirmation { |u| u.password }
     email {generate(:email)}
 
+    trait :active do
+      confirmed_at { Date.today }
+    end
 
     factory :duplicate_user do
       login nil

@@ -204,22 +204,23 @@ describe Tag do
     it "should be false for a tag used in a tag set"
 
     it "should be true for a tag used on a bookmark" do
-      tag = FactoryGirl.create(:unsorted_tag)
+      tag = create(:unsorted_tag)
       expect(tag.can_change_type?).to be_truthy
+      
+      creator = create(:user, :active)
+      bookmarker = create(:user, :active)
+      work = create(
+        :work,
+        authors: [creator.pseuds.first],
+        chapters: [create(:chapter)]
+      )
+      bookmark = create(
+        :bookmark,
+        bookmarkable_id: work.id,
+        pseud_id: bookmarker.pseuds.first.id,
+        tag_string: tag.name
+      )
 
-      # TODO: use factories when they stop giving validation errors and stack too deep errors
-      creator = User.new(terms_of_service: '1', age_over_13: '1')
-      creator.login = "Creator"; creator.email = "creator@muse.net"
-      creator.save
-      bookmarker = User.new(terms_of_service: '1', age_over_13: '1')
-      bookmarker.login = "Bookmarker"; bookmarker.email = "bookmarker@avidfan.net"
-      bookmarker.save
-      chapter = Chapter.new(content: "Whatever 10 characters", authors: [creator.pseuds.first])
-      work = Work.new(title: "Work", fandom_string: "Whatever", authors: [creator.pseuds.first], chapters: [chapter])
-      work.posted = true
-      work.save
-
-      bookmark = Bookmark.create(bookmarkable_type: "Work", bookmarkable_id: work.id, pseud_id: bookmarker.pseuds.first.id, tag_string: tag.name)
       expect(bookmark.tags).to include(tag)
       expect(tag.can_change_type?).to be_truthy
     end

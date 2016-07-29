@@ -4,8 +4,7 @@ describe TagsController do
   include LoginMacros
 
   before do
-    fake_login
-    current_user.roles << Role.new(name: 'tag_wrangler')
+    user_login FactoryGirl.create(:user, :active, roles: [Role.new(name: 'tag_wrangler')])
   end
 
   describe "wrangle" do
