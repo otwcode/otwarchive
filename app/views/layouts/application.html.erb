@@ -34,7 +34,7 @@
     <%= phraseapp_in_context_editor_js %>
   </head>
 
-  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+  <body class="<%= user_signed_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
       <%= render :partial => 'layouts/header' %>
@@ -54,6 +54,7 @@
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> region" role="main">
           <%= flash_div :error, :caution, :notice %>
+          <% if alert %><div class="flash error"><%= alert.html_safe %></div><% end %>
           <div class="flash"></div>
           <%= yield %>
           <div class="clear"><!--presentational--></div>

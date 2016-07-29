@@ -1,9 +1,9 @@
 class PreferencesController < ApplicationController
   before_filter :load_user
   before_filter :check_ownership
-  skip_before_filter :store_location
 
-  
+  skip_after_filter :store_location
+
   # Ensure that the current user is authorized to view and change this information
   def load_user
     @user = User.find_by_login(params[:user_id])

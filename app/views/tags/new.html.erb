@@ -21,7 +21,7 @@
 
     <dt><%= ts('Category') %></dt>
     <dd>
-      <% if logged_in_as_admin? %>
+      <% if admin_signed_in? %>
         <% types = Tag::TYPES  %>
       <% else %>
         <% types = Tag::USER_DEFINED %>

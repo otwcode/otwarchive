@@ -1,10 +1,10 @@
 class DownloadsController < ApplicationController
-
   include XhtmlSplitter
 
-  skip_before_filter :store_location, :only => :show
-  before_filter :guest_downloading_off, :only => :show
-  before_filter :check_visibility, :only => :show
+  before_filter :guest_downloading_off, only: :show
+  before_filter :check_visibility, only: :show
+
+  skip_after_filter :store_location, only: :show
 
   # once a format has been created, we want nginx to be able to serve
   # it directly, without going through rails again (until the work changes).
@@ -125,7 +125,9 @@ protected
     @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
 
     # render template
-    html = render_to_string(:template => "downloads/show.html", :layout => 'barebones.html')
+    html = render_to_string template: 'downloads/show',
+                            formats: :html,
+                            layout: 'barebones.html'
 
     # write to file
     File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
@@ -212,7 +214,7 @@ protected
   end
 
   def guest_downloading_off
-    if !logged_in? && @admin_settings.guest_downloading_off?
+    if !user_signed_in? && @admin_settings.guest_downloading_off?
       redirect_to login_path(:high_load => true)
     end
   end

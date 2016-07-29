@@ -71,9 +71,9 @@ Português:
   iso: pt-BR
   language_id: 12
   main: "0" 
->中文:
+中文:
   id: 13
-  name: >中文
+  name: 中文
   iso: zh-CHS
   language_id: 13
   main: "0"

@@ -1,6 +1,5 @@
 class SkinsController < ApplicationController
-
-  before_filter :users_only, :only => [:new, :create, :destroy]
+  before_filter :authenticate_user!, only: [:new, :create, :destroy]
   before_filter :load_skin, :except => [:index, :new, :create, :unset]
   before_filter :check_title, :only => [:create, :update]
   before_filter :check_ownership_or_admin, :only => [:edit, :update]
@@ -64,7 +63,7 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
     if params[:user_id] && @user = User.find_by_login(params[:user_id])
-      redirect_to new_user_session_path and return unless logged_in?
+      redirect_to new_user_session_path && return unless user_signed_in?
       if (@user != current_user)
         flash[:error] = "You can only browse your own skins and approved public skins." 
         redirect_to skins_path and return
@@ -81,11 +80,11 @@ class SkinsController < ApplicationController
         @skins = WorkSkin.approved_skins.sort_by_recent_featured
         @title = ts('Public Work Skins')
       else
-        if logged_in? 
-          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
-        else
-          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
-        end
+        @skins = if user_signed_in?
+                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured
+                 else
+                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
+                 end
         @title = ts('Public Site Skins')
       end
     end
@@ -169,7 +168,7 @@ class SkinsController < ApplicationController
   
   def unset
     session[:site_skin] = nil
-    if logged_in? && current_user.preference
+    if user_signed_in? && current_user.preference
       current_user.preference.skin = Skin.default
       current_user.preference.save
     end    

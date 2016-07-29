@@ -25,6 +25,7 @@
     <!-- BEGIN main -->
     <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
       <%= flash_div :error, :caution, :notice %>
+      <% if alert %><div class="flash error"><%= alert.html_safe %></div><% end %>
       <p id="logo">
         <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
       </p>

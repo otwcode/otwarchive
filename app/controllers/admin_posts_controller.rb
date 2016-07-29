@@ -1,6 +1,6 @@
 class AdminPostsController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :authenticate_admin!, :except => [:index, :show]
 
   # GET /admin_posts
   def index

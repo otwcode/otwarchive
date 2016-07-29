@@ -31,7 +31,8 @@ Feature: Share Works
   When I add the co-author "EitherWay" to the work "Don't Lie When You're Hurting Inside"
     And I view the work "Don't Lie When You're Hurting Inside"
   Then I should see "Share"
-  When I am logged in as "EitherWay"
+  When I clear cookies
+    And I am logged in as "EitherWay"
     And I set my preferences to hide the share buttons on my work
     And I view the work "Don't Lie When You're Hurting Inside"
   Then I should not see "Share"

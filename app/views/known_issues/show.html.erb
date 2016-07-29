@@ -11,7 +11,7 @@
     <%= @known_issue.title %>
   </h3>
   <h4 class="heading"><%= ts("Updated:") %> <%= @known_issue.updated_at %>
-    <% if logged_in_as_admin? %>
+    <% if admin_signed_in? %>
       <span class="actions" role="navigation"><%= link_to ts("Edit"), edit_known_issue_path(@known_issue) %></span>
     <% end %>
   </h4>

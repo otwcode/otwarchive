@@ -89,7 +89,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
+      if (admin_signed_in? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
       end
       return anon_byline
@@ -133,7 +133,7 @@ module ApplicationHelper
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
+      if (admin_signed_in? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
       return anon_byline
@@ -219,7 +219,7 @@ module ApplicationHelper
         if flash[key].is_a?(Array)
           content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), class: "flash #{key}")
+          content_tag(:div, flash[key].html_safe, class: "flash #{key}")
         end
       end
     }.join.html_safe

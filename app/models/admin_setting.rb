@@ -59,13 +59,13 @@ class AdminSetting < ActiveRecord::Base
 
   # run once a day from cron
   def self.check_queue
-    if self.invite_from_queue_enabled? && InviteRequest.count > 0
-      if Date.today >= self.invite_from_queue_at.to_date
-        new_date = Time.now + self.invite_from_queue_frequency.days
-        self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteRequest.invite
-      end
-    end
+    return unless invite_from_queue_enabled? &&
+                  InviteRequest.count > 0 &&
+                  Date.today >= invite_from_queue_at.to_date
+
+    new_date = Time.now + invite_from_queue_frequency.days
+    first.update_attribute(:invite_from_queue_at, new_date)
+    InviteRequest.invite
   end
   
   @queue = :admin

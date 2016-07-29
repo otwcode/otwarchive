@@ -27,7 +27,7 @@
 
   <p>
     If you'd like to join us, please sign up at the following address:
-    <%= style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
+    <%= style_link(new_user_registration_url(invitation_token: @invitation.token), new_user_registration_url(invitation_token: @invitation.token)) %>
   </p>
 
   <p>

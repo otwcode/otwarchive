@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  skip_before_filter :store_location, :except => [:show, :index, :new]
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
@@ -18,9 +17,9 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_review, :only => [:unreviewed]
   before_filter :check_permission_to_access_single_unreviewed, only: [:show]
 
+  skip_after_filter :store_location, except: [:show, :index, :new]
+
   cache_sweeper :comment_sweeper
-
-
 
   def load_comment
     @comment = Comment.find(params[:id])
@@ -41,7 +40,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
     parent = find_parent
-    if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
+    if parent.respond_to?(:restricted) && parent.restricted? && ! (user_signed_in? || admin_signed_in?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
   end
@@ -49,7 +48,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
   def check_anonymous_comment_preference
     parent = find_parent
-    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
+    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !user_signed_in?
       flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
     end
@@ -58,7 +57,7 @@ class CommentsController < ApplicationController
   def check_unreviewed
     if @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
       flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
-      if logged_in?
+      if user_signed_in?
         redirect_to root_path and return
       else
         redirect_to login_path and return
@@ -68,9 +67,9 @@ class CommentsController < ApplicationController
   
   def check_permission_to_review
     parent = find_parent
-    unless logged_in_as_admin? || current_user_owns?(parent)
+    unless admin_signed_in? || current_user_owns?(parent)
       flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
-      if logged_in?
+      if user_signed_in?
         redirect_to root_path and return
       else
         redirect_to login_path and return
@@ -81,9 +80,9 @@ class CommentsController < ApplicationController
   def check_permission_to_access_single_unreviewed
     if @comment.unreviewed?
       parent = find_parent
-      unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+      unless admin_signed_in? || current_user_owns?(parent) || current_user_owns?(@comment)
         flash[:error] = ts("Sorry, that comment is currently in moderation.")
-        if logged_in?
+        if user_signed_in?
           redirect_to root_path and return
         else
           redirect_to login_path and return
@@ -94,13 +93,13 @@ class CommentsController < ApplicationController
 
   def check_tag_wrangler_access
     if @commentable.is_a?(Tag) || (@comment && @comment.commentable.is_a?(Tag))
-      logged_in_as_admin? || permit?("tag_wrangler") || access_denied
+      admin_signed_in? || permit?("tag_wrangler") || access_denied
     end
   end
 
   # Must be able to delete other people's comments on owned works, not just owned comments!
   def check_permission_to_delete
-    access_denied(:redirect => @comment) unless logged_in_as_admin? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
+    access_denied(redirect: @comment) unless admin_signed_in? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
   end
   
   # Comments cannot be edited after they've been replied to
@@ -142,13 +141,11 @@ class CommentsController < ApplicationController
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
       end
+    elsif admin_signed_in?
+      @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
     else
-      if logged_in_as_admin?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
-      else
-        redirect_back_or_default(root_path)
-        flash[:error] = ts("Sorry, you don't have permission to access that page.")
-      end
+      redirect_back_or_default(root_path)
+      flash[:error] = ts("Sorry, you don't have permission to access that page.")
     end
   end
 

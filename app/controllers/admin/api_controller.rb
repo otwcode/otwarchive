@@ -1,5 +1,5 @@
 class Admin::ApiController < ApplicationController
-  before_filter :admin_only
+  before_filter :authenticate_admin!
   before_filter :check_for_cancel, only: [:create, :update]
 
   def index

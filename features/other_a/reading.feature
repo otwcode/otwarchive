@@ -18,6 +18,7 @@ Feature: Reading count
     Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
+      And I clear cookies
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
     When I go to fandomer's reading page
@@ -37,6 +38,7 @@ Feature: Reading count
     Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
+      And I clear cookies
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
     When I go to fandomer's reading page
@@ -139,6 +141,7 @@ Feature: Reading count
     And a chapter is added to "multichapter work"
   Then I should see "multichapter work"
   When I am logged out
+    And I clear cookies
     And I am logged in as "fandomer"
     And I view the work "multichapter work"
   When the reading rake task is run

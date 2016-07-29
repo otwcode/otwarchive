@@ -6,7 +6,7 @@
     <!--/descriptions-->
     <!--subnav-->
     <div class="navigation actions module">
-      <% if logged_in_as_admin? %>
+      <% if admin_signed_in? %>
         <h4 class="landmark heading"><%= ts("Admin Actions") %></h4>
         <ul class="management actions" role="navigation">
           <li><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></li>

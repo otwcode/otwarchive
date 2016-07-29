@@ -16,44 +16,32 @@ Feature: User Authentication
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "reset_password_for" with "sam"
+    When I fill in "user_reset_password_for" with "sam"
       And I press "Reset Password"
-    Then 1 email should be delivered
+    Then I should see "You will receive an email with instructions on how to reset your password in a few minutes"
+      And 1 email should be delivered
 
-    # old password should still work
+    # actual password should still work
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
     And I press "Log In"
     Then I should see "Hi, sam"
 
-    # password from email should also work
+    # user follow emailed link to create a new password
     When I am logged out
-    And I fill in "User name" with "sam"
-    And I fill in "sam"'s temporary password
-    And I press "Log In"
-    Then I should see "Hi, sam"
-    And I should see "Change My Password"
-
-    # and I should be able to change the password
-    When I fill in "New password" with "newpass"
-    And I fill in "Confirm new password" with "newpass"
-    And I press "Change Password"
-    Then I should see "Your password has been changed"
+    Then the email should contain "Someone has requested a link to change your password."
+    When I click the first link in the email
+      And I fill in "New password" with "newpass" within "#new_user"
+      And I fill in "Confirm new password" with "newpass" within "#new_user"
+      And I press "Change my password"
+    Then I should see "Your password has been changed successfully"
 
     # old password should no longer work
     When I am logged out
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
-    And I press "Log In"
-    Then I should not see "Hi, sam"
-
-    # generated password should no longer work
-    When I am logged out
-    When I am on the homepage
-    And I fill in "User name" with "sam"
-    And I fill in "sam"'s temporary password
     And I press "Log In"
     Then I should not see "Hi, sam"
 
@@ -69,29 +57,25 @@ Feature: User Authentication
     Given I have loaded the fixtures
     When I am on the home page
     And I follow "Forgot password?"
-    When I fill in "reset_password_for" with "testuser"
+    When I fill in "user_reset_password_for" with "testuser"
       And I press "Reset Password"
-    Then I should see "Check your email"
+    Then I should see "You will receive an email with instructions on how to reset your password in a few minutes"
       And 1 email should be delivered
 
-    # password from email should work
-    When I fill in "User name" with "testuser"
-    And I fill in "testuser"'s temporary password
-    And I press "Log In"
-    Then I should see "Hi, testuser"
-    And I should see "Change My Password"
-
-    # and I should be able to change the password
-    When I fill in "New password" with "newpas"
-    And I fill in "Confirm new password" with "newpas"
-    And I press "Change Password"
-    Then I should see "Your password has been changed"
+    # user follow emailed link to create a new password
+    When I am logged out
+    Then the email should contain "Someone has requested a link to change your password."
+    When I click the first link in the email
+      And I fill in "New password" with "newpass" within "#new_user"
+      And I fill in "Confirm new password" with "newpass" within "#new_user"
+      And I press "Change my password"
+    Then I should see "Your password has been changed successfully"
 
     # new password should work
     When I am logged out
     When I am on the homepage
     And I fill in "User name" with "testuser"
-    And I fill in "Password" with "newpas"
+    And I fill in "Password" with "newpass"
     And I press "Log In"
     Then I should see "Hi, testuser"
 

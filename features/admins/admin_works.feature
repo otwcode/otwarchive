@@ -10,7 +10,10 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
-      And logged out users should not see the hidden work "ToS Violation" by "regular_user"
+    When I am logged out
+      And I view the work "ToS Violation"
+      Then I should not see the hidden work "ToS Violation" by "regular_user"
+
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered

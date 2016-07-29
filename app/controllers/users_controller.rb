@@ -1,54 +1,20 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_filter :check_account_creation_status, :only => [:new, :create]
-  skip_before_filter :store_location, :only => [:end_first_login]
+  before_filter :check_user_status, only: [:edit, :update]
+  before_filter :load_user, except: [:activate, :index]
+  before_filter :check_ownership, except: [:activate, :browse, :index, :show]
 
-
-  # This is meant to rescue from race conditions that sometimes occur on user creation
-  # The unique index on login (database level) prevents the duplicate user from being created,
-  # but ideally we can still send the user the activation code and show them the confirmation page
-  rescue_from ActiveRecord::RecordNotUnique do |exception|
-    # ensure we actually have a duplicate user situation
-    if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
-      @user && User.count(:conditions => {:login => @user.login}) > 0 &&
-      # and that we can find the original, valid user record
-      (@user = User.find_by_login(@user.login))
-        notify_and_show_confirmation_screen
-    else
-      # re-raise the exception and make it catchable by Rails and Airbrake
-      # (see http://www.simonecarletti.com/blog/2009/11/re-raise-a-ruby-exception-in-a-rails-rescue_from-statement/)
-      rescue_action_without_handler(exception)
-    end
-  end
+  skip_after_filter :store_location, only: :end_first_login
 
   def load_user
     @user = User.find_by_login(params[:id])
     @check_ownership_of = @user
   end
 
-  def check_account_creation_status
-    if is_registered_user?
-      flash[:error] = ts("You are already logged in!")
-      redirect_to root_path and return
-    end
-
-    token = params[:invitation_token]
-
-    if !@admin_settings.account_creation_enabled?
-      flash[:error] = ts("Account creation is suspended at the moment. Please check back with us later.")
-      redirect_to root_path and return
-    else
-      check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
-    end
-  end
-
   def index
     flash.keep
-    redirect_to :controller => :people, :action => :index
+    redirect_to controller: :people, action: :index
   end
 
   # GET /users/1
@@ -74,151 +40,54 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by_token(params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
-  end
-
   # GET /users/1/edit
   def edit
   end
 
   def changed_password
-    unless params[:password] && (@user.recently_reset? || reauthenticate)
-      render :change_password and return
+    unless params[:password] && reauthenticate
+      render :change_password
+      return
     end
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.recently_reset = false
 
     if @user.save
-      flash[:notice] = ts("Your password has been changed")
-      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
+      sign_in(@user, bypass: true)
+      flash[:notice] = ts('Your password has been changed')
+      @user.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
 
-      redirect_to user_profile_path(@user) and return
-    else
-      render :change_password and return
+      redirect_to user_profile_path(@user)
+      return
     end
+
+    render :change_password
   end
 
   def changed_username
     unless params[:new_login].present?
-      render :change_username and return
+      render :change_username
+      return
     end
 
     @new_login = params[:new_login]
-    session = UserSession.new(:login => @user.login, :password => params[:password])
 
-    unless session.valid?
-      flash[:error] = ts("Your password was incorrect")
-      render :change_username and return
+    unless @user.valid_password?(params[:password])
+      flash[:error] = ts('Your password was incorrect')
+      render :change_username
+      return
     end
 
     @user.login = @new_login
 
     if @user.save
-      flash[:notice] = ts("Your user name has been successfully updated.")
+      flash[:notice] = ts('Your user name has been successfully updated.')
       redirect_to @user
     else
       @user.reload
       render :change_username
     end
-  end
-
-  # POST /users
-  # POST /users.xml
-  def create
-    @hide_dashboard = true
-
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      @user = User.new
-      @user.login = params[:user][:login]
-      @user.email = params[:user][:email]
-      @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = params[:user][:age_over_13]
-      @user.terms_of_service = params[:user][:terms_of_service]
-
-      @user.password = params[:user][:password] if params[:user][:password]
-      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
-
-      @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-
-      if @user.save
-        notify_and_show_confirmation_screen
-      else
-        render :action => "new"
-      end
-    end
-  end
-
-  def notify_and_show_confirmation_screen
-    # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver!
-
-    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
-
-    render "confirmation"
-  end
-
-  def activate
-    if params[:id].blank?
-      flash[:error] = ts("Your activation key is missing.")
-      redirect_to ''
-
-      return
-    end
-
-    @user = User.find_by_activation_code(params[:id])
-
-    unless @user
-      flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
-      redirect_to ''
-
-      return
-    end
-
-    if @user.active?
-      flash.now[:error] = ts("Your account has already been activated.")
-      redirect_to @user
-
-      return
-    end
-
-    @user.activate
-
-    flash[:notice] = ts("Signup complete! Please log in.")
-
-    @user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
-
-    # assign over any external authors that belong to this user
-    external_authors = []
-    external_authors << ExternalAuthor.find_by_email(@user.email)
-    @invitation = @user.invitation
-    external_authors << @invitation.external_author if @invitation
-    external_authors.compact!
-
-    unless external_authors.empty?
-      external_authors.each do |external_author|
-        external_author.claim!(@user)
-      end
-
-      flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
-    end
-
-    redirect_to(login_path)
   end
 
   def update
@@ -249,35 +118,6 @@ class UsersController < ApplicationController
     end
 
     render :change_email
-  end
-
-  # DELETE /users/1
-  # DELETE /users/1.xml
-  def destroy
-    @hide_dashboard = true
-    @works = @user.works.find(:all, :conditions => {:posted => true})
-    @sole_owned_collections = @user.collections.delete_if {|collection| (collection.all_owners - @user.pseuds).size > 0}
-
-    if @works.empty? && @sole_owned_collections.empty?
-      if @user.unposted_works
-        @user.wipeout_unposted_works
-      end
-
-      @user.destroy
-      flash[:notice] = ts('You have successfully deleted your account.')
-
-      redirect_to(delete_confirmation_path)
-    elsif params[:coauthor].blank? && params[:sole_author].blank?
-      @sole_authored_works = @user.sole_authored_works
-      @coauthored_works = @user.coauthored_works
-
-      render 'delete_preview' and return
-    elsif params[:coauthor] || params[:sole_author]
-      destroy_author
-    end
-  end
-
-  def delete_confirmation
   end
 
   def end_first_login
@@ -314,53 +154,29 @@ class UsersController < ApplicationController
 
   private
 
+  # Check user password of logged in user for extra security
   def reauthenticate
-    if params[:password_check].blank?
-      return wrong_password!(params[:new_email],
-        ts("You must enter your password"),
-        ts("You must enter your old password"))
-    end
+    return wrong_password_message(
+      params[:new_email],
+      ts('You must enter your password'),
+      ts('You must enter your old password')
+    ) if params[:password_check].blank?
 
-    session = UserSession.new(:login => @user.login, :password => params[:password_check])
+    return wrong_password_message(
+      params[:new_email],
+      ts('Your password was incorrect'),
+      ts('Your old password was incorrect')
+    ) unless @user.valid_password?(params[:password_check])
 
-    if session.valid?
-      true
-    else
-      wrong_password!(params[:new_email],
-        ts("Your password was incorrect"),
-        ts("Your old password was incorrect"))
-    end
+    true
   end
 
-  def wrong_password!(condition, if_true, if_false)
+  # Define flash message when reauthentication fails
+  def wrong_password_message(condition, if_true, if_false)
     flash.now[:error] = condition ? if_true : if_false
     @wrong_password = true
 
     false
-  end
-
-  def check_account_creation_invite(token)
-    unless token.blank?
-      invitation = Invitation.find_by_token(token)
-
-      if !invitation
-        flash[:error] = ts("There was an error with your invitation token, please contact support")
-        redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at && invitation.invitee
-        flash[:error] = ts("This invitation has already been used to create an account, sorry!")
-        redirect_to root_path
-      end
-
-      return
-    end
-
-    if !@admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")
-      redirect_to root_path
-    else
-      flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-      redirect_to invite_requests_path
-    end
   end
 
   def visible_items(current_user)
@@ -386,88 +202,5 @@ class UsersController < ApplicationController
       series: visible_series,
       bookmarks: visible_bookmarks
     }
-  end
-
-  def destroy_author
-    @sole_authored_works = @user.sole_authored_works
-    @coauthored_works = @user.coauthored_works
-
-    if params[:cancel_button]
-      flash[:notice] = ts("Account deletion canceled.")
-      redirect_to user_profile_path(@user)
-
-      return
-    end
-
-
-    if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
-      # Orphans co-authored works.
-
-      pseuds = @user.pseuds
-      works = @coauthored_works
-
-      # We change the pseud to the default orphan pseud if use_default is true.
-      use_default = params[:use_default] == "true" || params[:coauthor] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-
-    elsif params[:coauthor] == 'remove'
-      # Removes user as an author from co-authored works
-
-      @coauthored_works.each do |w|
-        pseuds_with_author_removed = w.pseuds - @user.pseuds
-        w.pseuds = pseuds_with_author_removed
-
-        w.save
-
-        w.chapters.each do |c|
-          c.pseuds = c.pseuds - @user.pseuds
-
-          if c.pseuds.empty?
-            c.pseuds = w.pseuds
-          end
-          c.save
-        end
-      end
-    end
-
-    if params[:sole_author] == 'keep_pseud' || params[:sole_author] == 'orphan_pseud'
-      # Orphans works where user is the sole author.
-
-      pseuds = @user.pseuds
-      works = @sole_authored_works
-
-      # We change the pseud to default orphan pseud if use_default is true.
-      use_default = params[:use_default] == "true" || params[:sole_author] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
-    elsif params[:sole_author] == 'delete'
-      # Deletes works where user is sole author
-      @sole_authored_works.each do |s|
-        s.destroy
-      end
-
-      # Deletes collections where user is sole author
-      @sole_owned_collections.each do |c|
-        c.destroy
-      end
-    end
-
-    @works = @user.works.find(:all, :conditions => {:posted => true})
-
-    if @works.blank?
-      if @user.unposted_works
-        @user.wipeout_unposted_works
-      end
-
-      @user.destroy
-
-      flash[:notice] = ts('You have successfully deleted your account.')
-      redirect_to(delete_confirmation_path)
-    else
-      flash[:error] = ts("Sorry, something went wrong! Please try again.")
-      redirect_to(@user)
-    end
   end
 end

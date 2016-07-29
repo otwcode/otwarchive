@@ -1,33 +1,23 @@
 class User < ActiveRecord::Base
-  audited
   include WorksOwner
+
+  devise :database_authenticatable, :async, :registerable, :recoverable,
+         :rememberable, :trackable, :validatable, :confirmable, :lockable,
+         :timeoutable, :encryptable
+
+  # Virtual fields for form validation
+  attr_accessor :invitation_token, :age_over_13, :terms_of_service,
+                :reset_password_for
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :login, :email, :password, :password_confirmation,
+                  :remember_me, :invitation_token, :age_over_13,
+                  :terms_of_service
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
-  # Authlogic gem
-  acts_as_authentic do |config|
-    config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT  || "true") == "true" then
-      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    else
-      config.crypto_provider = Authlogic::CryptoProviders::Sha512
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    end
-    # Use our own validations for login
-    config.validate_login_field = false
-    config.validates_length_of_password_field_options = {:on => :update,
-                                                         :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                         :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update,
-                                                                      :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                                      :if => :has_no_credentials?}
-  end
-
-  def has_no_credentials?
-    self.crypted_password.blank?
-  end
+  audited
 
   # Authorization plugin
   acts_as_authorized_user
@@ -40,8 +30,6 @@ class User < ActiveRecord::Base
   has_one :invitation, :as => :invitee
   has_many :user_invite_requests, :dependent => :destroy
 
-  attr_accessor :invitation_token
-  attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
 
   has_many :external_authors, :dependent => :destroy
@@ -216,42 +204,30 @@ class User < ActiveRecord::Base
     :too_long => ts("is too long (maximum is %{max_login} characters)", 
       :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
 
-  # allow nil so can save existing users
-  validates_length_of :password, 
-    :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
-    :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", 
-      :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", 
-      :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
-
   validates_format_of :login,
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
+
   validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
-  validates :email, :email_veracity => true
+  validates :email, email_veracity: true
+
+  validates :password, confirmation: true
 
   # Virtual attribute for age check and terms of service
-  attr_accessor :age_over_13
-  attr_accessor :terms_of_service
-  attr_accessible :age_over_13, :terms_of_service
-
   validates_acceptance_of :terms_of_service,
-                         :allow_nil => false,
-                         :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
-                         :if => :first_save?
+                          allow_nil: false,
+                          message: ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
+                          if: :new_record?
 
-  validates_acceptance_of  :age_over_13,
-                          :allow_nil => false,
-                          :message => ts('Sorry, you have to be over 13!'),
-                          :if => :first_save?
+  validates_acceptance_of :age_over_13,
+                          allow_nil: false,
+                          message: ts('Sorry, you have to be over 13!'),
+                          if: :new_record?
 
   def to_param
     login
   end
-
 
   def self.for_claims(claims_ids)    
     joins(:request_claims).
@@ -275,43 +251,11 @@ class User < ActiveRecord::Base
     users.paginate(:page => options[:page] || 1)
   end
 
-  ### AUTHENTICATION AND PASSWORDS
-  def active?
-    !activated_at.nil?
-  end
-
-  def generate_password(length=8)
-    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
-    password = ''
-    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
-    password
-  end
-
-  # use update_all to force the update even if the user is invalid
-  def reset_user_password
-    temp_password = generate_password(20)
-    User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
-    # send synchronously to prevent getting caught in backed-up mail queue
-    UserMailer.reset_password(self.id, temp_password).deliver! 
-  end
-
-  def activate
-    return false if self.active?
-    self.update_attribute(:activated_at, Time.now.utc)
-  end
-
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :is_default => true)
     self.profile = Profile.new
     self.preference = Preference.new
   end
-
-  protected
-    def first_save?
-      self.new_record?
-    end
-
-  public
 
   # Returns an array (of pseuds) of this user's co-authors
   def coauthors
@@ -368,29 +312,12 @@ class User < ActiveRecord::Base
 
   # Allow admins to set roles and change email
   def admin_update(attributes)
-    if User.current_user.is_a?(Admin)
-      success = true
-      success = set_roles(attributes[:roles])
-      if success && attributes[:email]
-        self.email = attributes[:email]
-        success = self.save(:validate => false)
-      end
-      success
-    end
+    return unless set_roles(attributes[:roles]) && attributes[:email]
+
+    skip_reconfirmation! # Won't trigger Devise email reconfirmation
+    self.email = attributes[:email]
+    save(validate: false)
   end
-
-  private
-
-  # Set the roles for this user
-  def set_roles(role_list)
-    if role_list
-      self.roles = Role.find(role_list)
-    else
-      self.roles = []
-    end
-  end
-
-  public
 
   # Is this user an authorized translation admin?
   def translation_admin
@@ -488,21 +415,50 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
+  # If a new user has an invitation_token (meaning they were invited), the
+  # method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
-    unless self.invitation_token.blank?
-      invitation = Invitation.find_by_token(self.invitation_token)
-      if invitation
-        self.update_attribute(:invitation_id, invitation.id)
-        invitation.mark_as_redeemed(self)
-      end
-    end
+    return if invitation_token.blank?
+
+    invitation = Invitation.find_by_token(invitation_token)
+    return unless invitation
+
+    update_attribute(:invitation_id, invitation.id)
+    invitation.mark_as_redeemed(self)
   end
 
   # Existing users should be removed from the invitations queue
   def remove_from_queue
-    invite_request = InviteRequest.find_by_email(self.email)
+    invite_request = InviteRequest.find_by_email(email)
     invite_request.destroy if invite_request
+  end
+
+  def log_change_if_login_was_edited
+    create_log_item(
+      action: ArchiveConfig.ACTION_RENAME,
+      note: "Old Username: #{login_was}; New Username: #{login}"
+    ) if login_changed?
+  end
+
+  # Overwrite Devise reset password method so we can
+  # search for both user login or email.
+  def self.send_reset_password_instructions(attributes = {})
+    reset = attributes[:reset_password_for]
+    key = reset.include?('@') ? :email : :login
+    attributes[key] = reset
+
+    # The "trick" here is to define a key and force Devise to search our user
+    # based on that key, that could be either :login or :email
+    recoverable = find_or_initialize_with_errors([key], attributes)
+    recoverable.send_reset_password_instructions if recoverable.persisted?
+
+    # No matter what Devise return us, we define a default error message
+    unless recoverable.errors.empty?
+      recoverable.errors.clear
+      recoverable.errors.add(:base, :not_found, message: ts("We couldn't find an account with that email address or username. Please try again?"))
+    end
+
+    recoverable
   end
 
   private
@@ -537,7 +493,12 @@ class User < ActiveRecord::Base
     end
   end
 
-   def log_change_if_login_was_edited
-     create_log_item( options = {:action => ArchiveConfig.ACTION_RENAME, :note => "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
-   end
+  # Set the roles for this user
+  def set_roles(role_list)
+    self.roles = if role_list
+                   Role.find(role_list)
+                 else
+                   []
+                 end
+  end
 end

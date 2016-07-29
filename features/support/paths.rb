@@ -46,7 +46,7 @@ module NavigationHelpers
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
-      new_user_path
+      new_user_registration_path
     when /^invite requests page$/i
       invite_requests_path
     when /my pseuds page/
@@ -171,6 +171,8 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
+    when /^the admin_login page$/i
+      new_admin_session_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i

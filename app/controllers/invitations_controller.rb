@@ -1,12 +1,11 @@
 class InvitationsController < ApplicationController
-
   before_filter :check_permission
-  before_filter :admin_only, :only => [:create, :destroy]
-  before_filter :check_user_status, :only => [:index, :manage, :invite_friend, :update]
+  before_filter :authenticate_admin!, only: [:create, :destroy]
+  before_filter :check_user_status, only: [:index, :manage, :invite_friend, :update]
 
   def check_permission
     @user = User.find_by_login(params[:user_id])
-    access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
+    access_denied unless admin_signed_in? || @user.present? && @user == current_user
   end
 
   def index
@@ -56,7 +55,7 @@ class InvitationsController < ApplicationController
     @invitation.attributes = params[:invitation]
     if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
       flash[:notice] = 'Invitation was successfully sent.'
-      if logged_in_as_admin?
+      if admin_signed_in?
         redirect_to find_admin_invitations_url(:token => @invitation.token)
       else
         redirect_to([@user, @invitation])        

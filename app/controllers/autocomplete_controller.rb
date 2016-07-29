@@ -1,11 +1,12 @@
 class AutocompleteController < ApplicationController
   respond_to :json
-  
-  skip_before_filter :store_location
-  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets, :site_skins]
+
+  skip_before_filter :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_filter :fetch_admin_settings
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
+
+  skip_after_filter :store_location
 
   #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
   # # If you have an autocomplete that should fire without a term add it here
@@ -185,11 +186,11 @@ class AutocompleteController < ApplicationController
     if params[:term].present?
       search_param = '%' + params[:term] + '%'
       query = Skin.site_skins.where("title LIKE ?", search_param).limit(15).sort_by_recent
-      if logged_in?
-        query = query.approved_or_owned_by(current_user)
-      else
-        query = query.approved_skins
-      end
+      query = if user_signed_in?
+                query.approved_or_owned_by(current_user)
+              else
+                query.approved_skins
+              end
       render_output(query.value_of(:title))
     end
   end

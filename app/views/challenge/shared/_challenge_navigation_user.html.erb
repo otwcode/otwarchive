@@ -2,7 +2,7 @@
 <% collection ||= @collection %>
 
 <% # Start logged-in challenge logic %>
-<% if logged_in? && collection.challenge %>
+<% if user_signed_in? && collection.challenge %>
 
   <% # Start open sign-ups logic %>
   <% if collection.challenge.signup_open %>

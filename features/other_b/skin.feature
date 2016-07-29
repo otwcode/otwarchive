@@ -105,7 +105,7 @@ Feature: creating and editing skins
   Scenario: Users should not be able to see the admin skins page
   Given I am logged in as "skinner"
   When I go to admin's skins page
-  Then I should see "I'm sorry, only an admin can look at that area"
+  Then I should see "Please log out of your user account first!"
 
   Scenario: Admins should be able to see public skins in the admin skins page
   Given the unapproved public skin "public skin"

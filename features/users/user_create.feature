@@ -11,7 +11,7 @@ Feature: Sign Up for a new account
 
   Scenario Outline: The user should see validation errors when signing up with invalid data.
     When I fill in the sign up form with valid data
-      And I fill in "<field>" with "<value>"
+      And I fill in "<field>" with "<value>" on "#user_registration_form"
       And I press "Create Account"
     Then I should see "<error>"
       And I should not see "Account Created!"
@@ -39,11 +39,12 @@ Feature: Sign Up for a new account
       | login | password |
       | user1 | password |
     When I fill in the sign up form with valid data
-      And I fill in "user_login" with "user1"
+      And I fill in "user_login" with "user1" on "#user_registration_form"
       And I press "Create Account"
     Then I should see "Login has already been taken"
       And I should not see "Account Created!"
-    
+
+  @no-txn
   Scenario: The user should be able to create a new account with a valid email and password
     When I fill in the sign up form with valid data
       And all emails have been delivered

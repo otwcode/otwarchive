@@ -1,9 +1,9 @@
 <div class="splash">
-  <% if !logged_in? %>
+  <% if !user_signed_in? %>
     <%= render 'intro_module' %>
   <% end %>
 
-  <% if logged_in? && @homepage.favorite_tags.present? %>
+  <% if user_signed_in? && @homepage.favorite_tags.present? %>
     <div class="favorite module">
       <h3 class="heading"><%= ts('Find your favorites') %></h3>
       <ul>
@@ -17,7 +17,7 @@
   <% else %>
     <div class="browse module">
       <h3 class="heading"><%= ts('Find your favorites') %></h3>
-      <% if logged_in? %>
+      <% if user_signed_in? %>
         <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', maximum: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
       <% end %>
       <%= render 'menu/menu_fandoms' %>
@@ -28,7 +28,7 @@
     <%= render 'news_module', admin_posts: @homepage.admin_posts %>
   <% end %>
 
-  <% if logged_in? && @homepage.readings.present? %>
+  <% if user_signed_in? && @homepage.readings.present? %>
     <div class="random readings module">
       <h3 class="heading">
         <span class="title"><%= ts('Is it later already?') %></span>
@@ -44,7 +44,7 @@
     </div>
   <% end %>
 
-  <% if logged_in? && @homepage.inbox_comments.present? %>
+  <% if user_signed_in? && @homepage.inbox_comments.present? %>
     <%= render 'inbox_module', inbox_comments: @homepage.inbox_comments %>
   <% end %>
 

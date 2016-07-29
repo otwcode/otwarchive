@@ -1,6 +1,6 @@
 class Opendoors::ExternalAuthorsController < ApplicationController
   
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :opendoors_only
   before_filter :load_external_author, :only => [:show, :edit, :update, :forward]
   
