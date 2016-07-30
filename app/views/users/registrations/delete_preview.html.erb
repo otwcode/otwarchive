@@ -1,6 +1,6 @@
 <h2 class="heading"><%= ts('What do you want to do with your works?') %></h2>
 
-<%= form_tag(@user, method: 'delete') do %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), method: 'DELETE') do |f| %>
 
   <% unless @user.coauthors.blank? %>
   <fieldset>

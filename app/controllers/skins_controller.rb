@@ -63,7 +63,8 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
     if params[:user_id] && @user = User.find_by_login(params[:user_id])
-      redirect_to new_user_session_path && return unless user_signed_in?
+      return redirect_to new_user_session_path unless user_signed_in?
+
       if (@user != current_user)
         flash[:error] = "You can only browse your own skins and approved public skins." 
         redirect_to skins_path and return

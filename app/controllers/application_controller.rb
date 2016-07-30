@@ -338,9 +338,9 @@ class ApplicationController < ActionController::Base
       "user_menu_counts_#{current_user.id}",
       expires_in: 2.hours,
       race_condition_ttl: 5
-    ) {
+    ) do
       "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}"
-    }.split(',').map(&:to_i)
+    end.split(',').map(&:to_i)
   end
 
   # Filter method - requires user to have opendoors privs
