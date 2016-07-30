@@ -10,6 +10,11 @@
   line-height: 1.5;
 }
 
+/* AO3-4614 temporary workaround for Android bug */
+blockquote.userstuff p {
+  font-weight: normal;
+}
+
 /*lists */
 
 .userstuff dl {
