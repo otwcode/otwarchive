@@ -11,7 +11,8 @@ gem 'rails', '3.2.22.2'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '~> 0.3.20'
+gem 'mysql2', '0.3.20'
+
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
@@ -105,8 +106,7 @@ gem 'newrelic-redis'
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
-gem 'kgio'
-
+gem 'kgio', '2.10.0'
 
 group :test do
   gem 'rspec', '~> 3.4'
@@ -133,6 +133,8 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
+  gem 'test-unit', '~> 3.0'
+  gem 'minitest'
 end
 
 group :development do
