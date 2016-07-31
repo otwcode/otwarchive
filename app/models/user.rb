@@ -394,8 +394,8 @@ class User < ActiveRecord::Base
 
   # called to mark a user as "Active"
   def update_active
-    REDIS_GENERAL.sadd("last_login_list", login)
-    REDIS_GENERAL.set("last_active_#{login}", Time.now.utc)
+    REDIS_GENERAL.sadd("last_login_list", id)
+    REDIS_GENERAL.set("last_active_#{id}", Time.now.utc)
   end
 
   # Is this user an authorized translation admin?
@@ -558,18 +558,18 @@ class User < ActiveRecord::Base
   def self.update_last_login
     User.transaction do
       list = REDIS_GENERAL.smembers("last_login_list").each
-      list.each do |username|
-        login_time = REDIS_GENERAL.get("last_login_#{username}")
-        active_time = REDIS_GENERAL.get("last_active_#{username}")
-        REDIS_GENERAL.srem("last_login_list", username)
-        user = User.find_by_login(username)
-        if username && login_time.present? && user
+      list.each do |userid|
+        login_time = REDIS_GENERAL.get("last_login_#{userid}")
+        active_time = REDIS_GENERAL.get("last_active_#{userid}")
+        REDIS_GENERAL.srem("last_login_list", userid)
+        user = User.find(userid)
+        if userid && login_time.present? && user
           user.last_login_at = login_time
-          REDIS_GENERAL.del("last_login_#{username}")
+          REDIS_GENERAL.del("last_login_#{userid}")
         end
-        if username && active_time.present? && user
+        if userid && active_time.present? && user
           user.last_active_at = active_time
-          REDIS_GENERAL.del("last_active_#{username}")
+          REDIS_GENERAL.del("last_active_#{userid}")
         end
         user.save unless user.nil?
       end
