@@ -36,7 +36,6 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Tag was updated"
     And I should not see "Synonyms"
   When I follow "Alternate Universe Space Pirates"
-  Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "Pirates! in Spaaaaace! AU"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled

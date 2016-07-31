@@ -141,3 +141,9 @@ When /^I view the tag set "([^\"]*)"/ do |tagset|
   tagset = OwnedTagSet.find_by_title!(tagset)
   visit tag_set_path(tagset)
 end
+
+When(/^I flush the wrangling sidebar caches$/) do
+  [Fandom, Character, Relationship, Freeform].each do |klass|
+    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
+  end
+end

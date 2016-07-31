@@ -1,0 +1,12 @@
+<% # expects local variable f %>
+<dt class="language">
+  <%= f.label :language_id, ts('Choose a language') %>
+  <%= link_to_help "languages-help" %>
+</dt>
+<dd class="language">
+  <select id="work_language_id" name="work[language_id]">
+    <%= options_from_collection_for_select(Language.all(order: :short), :id, :name,
+      @work.language_id || Language.default.id) %>
+  </select>
+</dd>
+
