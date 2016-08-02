@@ -53,7 +53,7 @@ end
 
 Given /^I am logged out as an admin$/ do
   visit destroy_admin_session_path
-  assert assert page.has_link?('Log In')
+  assert page.has_link?('Log In')
 end
 
 Given /^basic languages$/ do
