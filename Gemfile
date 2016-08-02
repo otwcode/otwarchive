@@ -84,13 +84,8 @@ gem 'globalize', '~> 3.1.0'
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark", '>=0.7.5'
 
-<<<<<<< HEAD
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
-=======
-# Phrase-app
-gem 'phraseapp-in-context-editor-ruby'
->>>>>>> AO3-2839 update test gems
 
 # For URL mangling
 gem 'addressable'
@@ -126,12 +121,8 @@ end
 group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
-<<<<<<< HEAD
-  gem 'factory_girl', '~> 4.5.0'
-=======
   gem 'factory_girl'
   gem 'test-unit', '~> 3.0'
->>>>>>> AO3-2839 update test gems
   gem 'minitest'
 end
 
@@ -150,11 +141,7 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-<<<<<<< HEAD
-  gem 'unicorn', '>= 5.1.0', :require => false
-=======
   gem 'unicorn', require: false
->>>>>>> AO3-2839 update test gems
 end
 
 # Place the New Relic gem as low in the list as possible, allowing the
