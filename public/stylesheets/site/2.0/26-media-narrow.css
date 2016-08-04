@@ -82,18 +82,19 @@ body .narrow-shown {
 
 /* 05 region main */
 
-#main {
+#main, #main.dashboard {
   position: static;
 }
 
-#main, #main.dashboard {
-  margin: auto;
-}
-
-#main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, .fandoms-unassigned .index, #inner form dd, #inner form dt {
+/* once we remove the meta class from the work form, we can remove the form .meta selectors here */
+.filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  float: none;
+}
+
+.dashboard .index {
   float: none;
 }
 
@@ -120,6 +121,12 @@ body .narrow-shown {
 
 .alphabet .listbox li {
   display: block;
+}
+
+/* 11 group: listbox */
+
+.listbox .index {
+  width: auto;
 }
 
 /* 15 group: comments */
@@ -152,10 +159,11 @@ body .narrow-shown {
   padding: 0;
 }
 
-.splash div.module, .logged-in .splash > .module {
-  margin-left: 1%;
-  margin-right: 1%;
-  width: 98%;
+.splash div.module, .logged-in .splash div.module {
+  clear: both;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
 }
 
 .splash .intro {
@@ -165,14 +173,6 @@ body .narrow-shown {
 .splash .intro h2 {
   font-size: 1.5em;
     word-break: normal;
-}
-
-/* 17 zone: home */
-
-#inbox-form {
-  clear: both;
-  float: none;
-  width: auto;
 }
 
 /* 18 zone: search browse */

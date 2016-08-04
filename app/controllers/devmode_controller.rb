@@ -416,7 +416,6 @@ class DevmodeController < ApplicationController
       :endnotes => end_notes,
 #      :parent_url => nil,
       :restricted => false,
-      :ratings => ratings,
       :posted => true
     }
     work = Work.new(work_params)

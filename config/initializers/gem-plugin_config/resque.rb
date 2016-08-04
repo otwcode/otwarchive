@@ -1,6 +1,4 @@
 require 'resque'
-require 'resque-scheduler'
-require 'resque/scheduler/server'
 
  if ENV['TRAVIS']
    rails_root = ENV['TRAVIS_BUILD_DIR']

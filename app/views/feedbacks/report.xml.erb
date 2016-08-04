@@ -1,21 +1,11 @@
-<bug>
-  <% if @report.description.present? %>
-    <description><%= cdata_section(@report.description.html_safe) %></description>
-  <% end %>
-  <project-id><%= @report.project_id %></project-id>
-  <% if @report.title.present? %>
-    <title><%= cdata_section(@report.title.html_safe) %></title>
-  <% end %>
-  <% if @report.category.present? %>
-    <category-id type='integer'><%= cdata_section(@report.category) %></category-id>
-  <% end %>
-  <% if @report.email.present? %>
-    <custom-1389><%= cdata_section(@report.email) %></custom-1389>
-  <% end %>
-  <% if @report.user_agent.present? %>
-    <custom-1407><%= cdata_section(@report.user_agent) %></custom-1407>
-  <% end %>
-  <% if @report.user_agent.present? %>
-    <custom-1573><%= cdata_section(@report.site_revision) %></custom-1573>
-  <% end %>
-</bug>
+<requests>
+  <row no="1">
+    <fl val="Contact Name"><%= cdata_section(@report.username.present? ? @report.username : "Anonymous user") %></fl>
+    <fl val="Email"><%= cdata_section(@report.email.present? ? @report.email : "do-not-reply@archiveofourown.org") %></fl>
+    <fl val="Subject"><%= cdata_section(@report.title.present? ? "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{@report.title.html_safe}" : "[#{ArchiveConfig.APP_SHORT_NAME}] Support - No Title") %></fl>
+    <fl val="Description"><%= cdata_section(@report.description.present? ? @report.description.html_safe : "No description submitted.") %></fl>
+    <fl val="Language"><%= cdata_section(@report.language.present? ? @report.language : "English") %></fl>
+    <fl val="Archive Version"><%= cdata_section(@report.site_revision.present? ? @report.site_revision : "Unknown site revision") %></fl>
+    <fl val="User Agent"><%= cdata_section(@report.user_agent.present? ? @report.user_agent : "Unknown user agent") %></fl>
+  </row>
+</requests>

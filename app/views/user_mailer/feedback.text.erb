@@ -1,8 +1,11 @@
 <% content_for :message do %>
 
-Hi!
+Hi <%= @username.present? ? @username + "!" : "!" %>
 
-We're working hard to reply to everyone, and we'll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:
+We're working hard to reply to everyone, and we'll respond to you as soon as we can.
+Your communication is greatly valued, and it will be reviewed and answered
+by our volunteer Support team. In the meantime, here is a copy of the
+information you submitted through the Technical Support and Feedback form:
 
 <%= text_divider %>
 
@@ -11,7 +14,8 @@ We're working hard to reply to everyone, and we'll respond to you as soon as we 
 
 <%= text_divider %>
 
-If you have additional questions or information, do not hesitate to send in another ticket.
+If you have additional questions or information, do not hesitate to send in
+another ticket.
 
 Regards,
 the AO3 Support team

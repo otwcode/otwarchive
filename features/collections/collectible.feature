@@ -25,11 +25,12 @@ Feature: Collectible items
       And I should see "Blabla"
 
   Scenario: Add my work to a moderated collection (Add to Collections button)
+    Given I am logged in as "moderator" with password "password"
     Given I have a moderated collection "Various Penguins"
-      And I am logged in as a random user
+      And I am logged in as "Scott" with password "password"
       And I post the work "Blabla"
     When I add my work to the collection
-    Then I should see "will have to be approved"
+    Then I should see "until it has been approved by a moderator."
     When I go to "Various Penguins" collection's page
     Then I should see "Works (0)"
       And I should not see "Blabla"
@@ -96,7 +97,7 @@ Feature: Collectible items
       And I am logged in as a random user
       And I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
-    Then I should see "will have to be approved"
+    Then I should see "until it has been approved by a moderator."
     When I go to "Various Penguins" collection's page
     Then I should see "Bookmarks (0)"
       And I should not see "Tundra penguins"
