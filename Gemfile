@@ -84,7 +84,7 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark"
+gem "rack-dev-mark", '>=0.7.5'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'

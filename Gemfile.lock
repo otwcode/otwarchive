@@ -234,7 +234,7 @@ GEM
     rack (1.4.7)
     rack-cache (1.6.1)
       rack (>= 0.4)
-    rack-dev-mark (0.7.4)
+    rack-dev-mark (0.7.5)
       rack (>= 1.1)
     rack-protection (1.5.3)
       rack
@@ -446,7 +446,7 @@ DEPENDENCIES
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle
   pry-byebug
-  rack-dev-mark
+  rack-dev-mark (>= 0.7.5)
   rails (= 3.2.22.2)
   redis (>= 3.0)
   redis-namespace
