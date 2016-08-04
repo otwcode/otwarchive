@@ -33,7 +33,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list'
+gem 'acts_as_list', '>=0.7.6'
 gem 'akismetor'
 
 gem 'httparty'
