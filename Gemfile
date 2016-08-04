@@ -33,7 +33,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list'
+gem 'acts_as_list', '>=0.7.6'
 gem 'akismetor'
 
 gem 'httparty'
@@ -84,10 +84,10 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark"
+gem "rack-dev-mark", '>=0.7.5'
 
 #Phrase-app
-gem 'phraseapp-in-context-editor-ruby'
+gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
