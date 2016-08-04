@@ -87,7 +87,7 @@ gem 'globalize', '~> 3.1.0'
 gem "rack-dev-mark"
 
 #Phrase-app
-gem 'phraseapp-in-context-editor-ruby'
+gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
