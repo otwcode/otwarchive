@@ -1,8 +1,8 @@
 require 'spec_helper'
 describe AdminMailer do
   context "abuse_reports with email" do
-    let(:report) {create(:abuse_report)}
-    let(:mail) {AdminMailer.abuse_report(report.id)}
+    let(:report) { create(:abuse_report) }
+    let(:mail) { AdminMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
@@ -31,9 +31,9 @@ describe AdminMailer do
   end
 
   context "abuse_reports sends copy to submitter" do
-   let(:report) {create(:abuse_report, email: "cc_me@email.com")}
-   let(:mail) {AdminMailer.abuse_report(report.id)}
-   let(:mail2) {UserMailer.abuse_report(report.id)}
+    let(:report) { create(:abuse_report, email: "cc_me@email.com") }
+    let(:mail) { AdminMailer.abuse_report(report.id) }
+    let(:mail2) { UserMailer.abuse_report(report.id) }
 
 
    it "has the correct subject" do

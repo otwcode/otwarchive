@@ -10,7 +10,7 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = current_user.email
       @abuse_report.username = current_user.login
     end
-    @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
+    @abuse_report.url = params[:url] || request.env['HTTP_REFERER']
   end
 
   def create
@@ -19,15 +19,16 @@ class AbuseReportsController < ApplicationController
     @abuse_report.language = language_name
     if @abuse_report.save
       @abuse_report.email_and_send
-      flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
-      redirect_to ""
+      flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
+      redirect_to ''
     else
-      render action: "new"
+      render action: 'new'
     end
   end
 
   def load_abuse_languages
-    @abuse_languages = Language.where(abuse_support_available: true).order(:name)
+    @abuse_languages = Language.where(abuse_support_available: true).order(
+      :name
+    )
   end
-
 end
