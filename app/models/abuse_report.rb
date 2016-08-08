@@ -8,8 +8,7 @@ class AbuseReport < ActiveRecord::Base
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
-                                max:
-                                ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+                                max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   scope :by_date, order('created_at DESC')
 
@@ -42,7 +41,7 @@ class AbuseReport < ActiveRecord::Base
   end
 
   def send_report
-    return unless %w(staging production development).include?(Rails.env)
+    return unless %w(staging production).include?(Rails.env)
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -64,8 +63,7 @@ class AbuseReport < ActiveRecord::Base
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
-                                                 '%#{work_params_only}%')
-                                                 .count
+                                                 '%#{work_params_only}%').count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
         errors[:base] << ts('URL has already been reported. To make sure the
                             Abuse Team can handle reports quickly and

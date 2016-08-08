@@ -59,8 +59,6 @@ end
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by_short_and_name_and_support_available_and_abuse_support_available("DE", "Deutsch", true, true)
-  #french = Language.find_or_create_by_short_and_name("FR", "Francais")
-  #french.abuse_support_available = true
   de = Locale.new
   de.iso = 'de'
   de.name = 'Deutsch'
