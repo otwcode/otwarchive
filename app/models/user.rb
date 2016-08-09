@@ -562,16 +562,21 @@ class User < ActiveRecord::Base
         login_time = REDIS_GENERAL.get("last_login_#{userid}")
         active_time = REDIS_GENERAL.get("last_active_#{userid}")
         REDIS_GENERAL.srem("last_login_list", userid)
-        user = User.find(userid)
-        if userid && login_time.present? && user
-          user.last_login_at = login_time
-          REDIS_GENERAL.del("last_login_#{userid}")
-        end
-        if userid && active_time.present? && user
-          user.last_active_at = active_time
+        begin
+          user = User.find(userid)
+          if userid && login_time.present? && user
+            user.last_login_at = login_time
+            REDIS_GENERAL.del("last_login_#{userid}")
+          end
+          if userid && active_time.present? && user
+            user.last_active_at = active_time
+            REDIS_GENERAL.del("last_active_#{userid}")
+          end
+          user.save unless user.nil?
+        rescue ActiveRecord::RecordNotFound
+          # The user has been deleted...
           REDIS_GENERAL.del("last_active_#{userid}")
         end
-        user.save unless user.nil?
       end
     end
   end
