@@ -37,7 +37,6 @@ describe AdminMailer do
 
 
    it "has the correct subject" do
-     puts report.email_copy?
      expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
    end
 

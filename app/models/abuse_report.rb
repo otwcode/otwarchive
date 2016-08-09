@@ -1,5 +1,5 @@
 class AbuseReport < ActiveRecord::Base
-  validates_presence_of :email, email_veracity: { allow_blank: false }
+  validates :email, email_veracity: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
