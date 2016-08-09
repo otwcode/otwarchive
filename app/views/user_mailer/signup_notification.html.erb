@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p>Welcome to the Archive of Our Own, <%= style_bold(@user.login) %>!</p>
 
-  <p>Please <%= style_link("activate your account"), activate_url(id: @user.activation_code)) %>.</p>
+  <p>Please <%= style_link("activate your account", activate_url(id: @user.activation_code)) %>.</p>
 
   <p>Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more.</p>
 
