@@ -60,13 +60,13 @@ describe AbuseReport do
   end
 
   context "emailed copy" do
-    let(:no_email_provided) {build(:abuse_report, email: nil)}
+    let(:no_email_provided) { build(:abuse_report, email: nil) }
     it "is invalid if an email is not provided" do
       expect(no_email_provided.save).to be_falsey
       expect(no_email_provided.errors[:email]).not_to be_empty
     end
 
-    let(:email_provided) {build(:abuse_report)}
+    let(:email_provided) { build(:abuse_report) }
     it "is valid if an email is provided" do
       expect(email_provided.save).to be_truthy
       expect(email_provided.errors[:email]).to be_empty

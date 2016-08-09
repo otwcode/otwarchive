@@ -6,6 +6,5 @@ FactoryGirl.define do
     comment { Faker::Lorem.paragraph(1) }
     summary { Faker::Lorem.sentence(1) }
     language { "Francais" }
-
   end
 end
