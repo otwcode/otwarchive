@@ -201,7 +201,7 @@ Then /^I should get an activation email for "(.*?)"$/ do |login|
   step(%{1 email should be delivered})
   step(%{the email should contain "Welcome to the Archive of Our Own,"})
   step(%{the email should contain "#{login}"})
-  step(%{the email should contain "Please activate your account"})
+  step(%{the email should contain "activate your account"})
 end
 
 Then /^I should get a new user activation email$/ do
