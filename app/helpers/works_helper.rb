@@ -96,12 +96,12 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def marktoread_link(work)
-    link_to ts("Mark for Later"), marktoread_work_path(work)
+  def mark_as_read_link(work)
+    link_to ts("Mark as Read"), mark_as_read_work_path(work)
   end
 
-  def markasread_link(work)
-    link_to ts("Mark as Read"), marktoread_work_path(work)
+  def mark_for_later_link(work)
+    link_to ts("Mark for Later"), mark_for_later_work_path(work)
   end
 
   def get_endnotes_link
