@@ -8,7 +8,7 @@ Scenario: Adding Abuse support for a language
     | name        | short |
     | Arabic      | ar    |
   When I am logged in as an admin
-    And I visit the languages page
+    And I go to the languages page
     And I follow "Edit"
     And I check "Abuse support available"
     And I press "Update Language"
