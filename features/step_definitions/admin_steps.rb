@@ -259,6 +259,10 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+When (/^I visit the languages page$/) do
+  visit languages_path
+end
+
 ### THEN
 
 When (/^I make a translation of an admin post$/) do

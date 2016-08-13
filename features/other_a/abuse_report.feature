@@ -5,8 +5,7 @@ Feature: Filing an abuse report
 
   Scenario: File an abuse request with default options
 
-  Given I have a work "Illegal thing"
-    And basic languages
+  Given basic languages
   When I am logged in as "otheruser"
     And I am on the home page
     And I follow "Report Abuse"
@@ -31,8 +30,7 @@ Feature: Filing an abuse report
 
   Scenario: File an abuse request while logged out
 
-  Given I have a work "Illegal thing"
-    And basic languages
+  Given basic languages
   When I am logged out
     And I am on the home page
     And I follow "Report Abuse"

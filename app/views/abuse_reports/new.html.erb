@@ -38,7 +38,7 @@
       <dd><%= f.text_field :username %></dd>
       <dt class="required"><%= f.label :email, ts('Your email (required)') %></dt>
       <dd class="required">
-        <%= f.text_field :email, size: 60, 'aria-describedby' => 'email-field-description' %>
+        <%= f.text_field :email, 'aria-describedby' => 'email-field-description' %>
         <p class='footnote' id='email-field-description'>
           <%= ts("We cannot act on reports without a valid email address.") %>
         </p>
@@ -54,7 +54,7 @@
         <%= f.label :summary, ts("Brief summary of Terms of Service Violation (required)") %>
       </dt>
       <dd class="required">
-        <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
+        <%= f.text_field :summary, class: "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <%= live_validation_for_field('feedback_summary',
                                       failureMessage: ts("Please enter a brief summary of your message")) %>
@@ -78,7 +78,7 @@
               thorough the information the quicker we can start investigating.',
                   tos_link: (link_to ts("Terms of Service"), tos_path)).html_safe %>
         </p>
-        <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
+        <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field('abuse_report_comment',
               failureMessage: ts("Please describe your concern.")) %>
       </dd>
