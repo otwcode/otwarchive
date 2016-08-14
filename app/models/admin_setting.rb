@@ -1,5 +1,3 @@
-include SkinCacheHelper
-
 class AdminSetting < ActiveRecord::Base
 
   belongs_to :last_updated, :class_name => 'Admin', :foreign_key => :last_updated_by
@@ -53,8 +51,7 @@ class AdminSetting < ActiveRecord::Base
     self.first ? self.first.guest_downloading_off? : false
   end
   def self.default_skin
-    default_skin = Rails.cache.fetch(default_skin_cache_key) { Skin.default }
-    self.first ? (self.first.default_skin_id ? self.first.default_skin : default_skin) : default_skin
+    self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.default) : Skin.default
   end
   def self.stats_updated_at
     self.first ? self.first.stats_updated_at : nil
@@ -89,7 +86,6 @@ class AdminSetting < ActiveRecord::Base
   def expire_cached_settings
     unless Rails.env.development?
       Rails.cache.delete("admin_settings")
-      Rails.cache.delete(default_skin_cache_key)
     end
   end
 
