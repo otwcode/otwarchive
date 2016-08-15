@@ -24,7 +24,13 @@ our broad development plan at the [OTW-Archive Roadmap](http://transformativewor
 How to Contribute
 ----------
 
+You can also submit a pull request; we'll get back to you as soon as we can!
+
 Please see our [Contributing Guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md)
+
+* Bug Tracking: https://otwarchive.atlassian.net/projects/AO3/issues
+* Developer Documentation: https://github.com/otwcode/otwarchive/wiki
+* Beta Website: http://archiveofourown.org
 
 License
 ----------

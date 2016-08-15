@@ -17,11 +17,11 @@ environment so you can work on the Archive code.
 ### Submit your pull request
 
 Please read the checklist on [our pull request template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
-on the steps you need to perform to make we can accept your pull request.
+for the steps you need to perform to make sure we can accept your pull request.
 
 ### Action comments on your pull request
 
-When we review your pull request, we will make comments on Github. Please make sure you read these carefully and apply
+When we review your pull request, we will make comments on GitHub. Please make sure you read these carefully and apply
 their suggestions!
 
 Due to our workload, it may take several weeks before an approved pull request is merged, so be patient - we will get to it!
@@ -35,13 +35,13 @@ ability to benefit from your changes.
 ### Release
 
 Once we have checked that all is well, your contribution will be deployed to [Archive of Our Own](http://archiveofourown.org) and you will be credited
-in the [AO3 release notes](http://archiveofourown.org/admin_posts?tag=1)! Make sure you tell us your preferred name and pronoun
+in the [AO3 Release Notes](http://archiveofourown.org/admin_posts?tag=1)! Make sure you tell us your preferred name and pronoun
 in the pull request.
 
 ## Volunteering for the OTW
 
 If you would like to donate more of your time and expertise in a multi-national, inclusive, fandom-oriented development team, you might
- enjoy becoming an official OTW volunteer. We are always looking for coders and testers! 
+ enjoy becoming an official OTW volunteer.
 
 [Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer) 
 
