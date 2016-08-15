@@ -24,15 +24,7 @@ our broad development plan at the [OTW-Archive Roadmap](http://transformativewor
 How to Contribute
 ----------
 
-Volunteers are always welcome both for coding and testing! 
-
-[Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer) or [drop us an email](mailto:otw-coders@transformativeworks.org) if you have any questions. 
-
-You can also submit a pull request; we'll get back to you as soon as we can!
-
-* Bug Tracking: https://otwarchive.atlassian.net/projects/AO3/issues
-* Developer Documentation: https://github.com/otwcode/otwarchive/wiki
-* Beta Website: http://archiveofourown.org
+Please see our [Contributing Guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md)
 
 License
 ----------
