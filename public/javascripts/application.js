@@ -383,24 +383,25 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  var panes = $j(".expandable");
-  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
-    var expander = $j(this);
-    if (expander.attr('href') == '#') {
-      e.preventDefault();
-    }
-    // We need to treat the pseud menu differently so it will be properly responsive
-    // The other accordions need to be converted to a similar system
-    // Otherwise we run into bugs if one @media uses inline display and another uses block
-    if (expander.attr('title') == 'Pseud Switcher') {
-      if (expander.hasClass('expanded')) {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
-      } else {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
-      }
-    } else {
-      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-    }
+  $j(".expandable").each(function() {
+    var pane = $j(this);
+    // hide the pane element if it's not hidden by default
+    if ( !pane.hasClass("hidden") ) {
+      pane.addClass("hidden");
+    };
+
+    // make the expander visible
+    // add the default collapsed state
+    // make it do the expanding and collapsing
+    pane.prev().removeClass("hidden").addClass("collapsed").click(function(e) {
+      var expander = $j(this);
+      if (expander.attr('href') == '#') {
+        e.preventDefault();
+      };
+
+      // change the classes upon clicking the expander
+      expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
+    });
   });
 }
 

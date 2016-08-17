@@ -77,7 +77,7 @@ class WorksController < ApplicationController
     options = params[:work_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    @search = WorkSearch.new(options)
+    @search = WorkSearchForm.new(options)
     @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
@@ -123,7 +123,7 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).list_without_filters(@owner, options)
       else
-        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
 
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for

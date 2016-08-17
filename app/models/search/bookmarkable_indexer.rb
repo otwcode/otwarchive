@@ -19,7 +19,6 @@ class BookmarkableIndexer < Indexer
           creators: {
             type: 'string',
             analyzer: 'simple',
-            index_name: 'creator'
           },
           tag: {
             type: 'string',
@@ -28,7 +27,6 @@ class BookmarkableIndexer < Indexer
           work_types: {
             type: 'string',
             index: 'not_analyzed',
-            index_name: 'work_type'
           }
         }
       }
