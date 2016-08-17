@@ -190,7 +190,7 @@
       confirmation: "doesn't match confirmation"
       accepted: "must be accepted"
       empty: "can't be empty"
-      blank: "can't be blank" # this is a comment, can you see it in PhraseApp?
+      blank: "can't be blank"
       too_long:
         one: "is too long (maximum is 1 character)"
         other: "is too long (maximum is %{count} characters)"
@@ -225,55 +225,6 @@
         <<: *errors_template
       full_messages:
         format: "%{attribute} %{message}"
-    models:
-      bookmark: "Bookmark"
-      chapter: "Chapter"
-      character:
-        one: "Character"
-        other: "Characters"
-      comment: "Comment"
-      fandom:
-        one: "Fandom"
-        other: "Fandoms"
-      pseud: "Pseud"
-      rating: "Rating"
-      relationship:
-        one: "Relationship"
-        other: "Relationships"
-      tag:
-        one: "Tag"
-        other: "Tags"
-      warning:
-        one: "Warning"
-        other: "Warnings"
-      work: "Work"
-    attributes:
-      category:
-        name_with_colon:
-          one: "Category:"
-          other: "Categories:"
-      character:
-        name_with_colon:
-          one: "Character:"
-          other: "Characters:"
-      fandom:
-        name_with_colon:
-          one: "Fandom:"
-          other: "Fandoms:"
-      freeform:
-        name_with_colon:
-          one: "Additional Tag:"
-          other: "Additional Tags:"
-      rating:
-        name_with_colon: "Rating:"
-      relationship:
-        name_with_colon:
-          one: "Relationship:"
-          other: "Relationships:"
-      warning:
-        name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
 
   mailer:
     general:
@@ -326,75 +277,6 @@
       para1: "The following abuse report has been sent to the Abuse team:"
       url_para: "URL of the page the abuse is on:"
       description_para: "Description of the abuse:"
-    invitation:
-      greeting: "Hello from the %{app_name}!"
-      has_invited: "%{user_name} has invited you to join our beta!"
-      been_invited_html: "You've been invited to join our beta!"
-      part1: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks."
-      part2: "Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \\o/"
-      part3_html: "If you'd like to join us, please sign up at the following address:"
-      text:
-        faq_link: "For more information, please check out our FAQ at"
-      html:
-        faq_link: "For more information, please check out"
-        faq_link_text: "our FAQ"
-
-    invitation_to_claim:
-      greeting: "Hello from the %{app_name}!"
-      part5: "Claim or remove your works here"
-      part6: "The works uploaded include"
-      part8: "To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive."
-      part12: "If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply."
-      text:
-        part1: "You're receiving this e-mail because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!"
-        part2: "You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_link}."
-        part3: "If this is a mistake and these are not your works, please don't delete them! Please just contact Open Doors (%{open_doors_link}) and we will sort it out."
-        part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support."
-        part7: "If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please contact Support at %{support_link}.)"
-        part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
-        part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity."
-        part11: "For other inquiries, please contact AO3 Support at %{support_link}."
-        part13: |-
-          Best,
-          The Open Doors team
-          Organization for Transformative Works
-      html:
-        part1_html: "You're receiving this e-mail because an archive has recently been imported by %{open_doors_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!"
-        open_doors: "Open Doors"
-        part2_html: "You can read announcements about recent archive moves at %{news_link}, and find additional information on Open Doors' %{open_doors_faq_link} or %{open_doors_tutorial_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{support_link}."
-        faq_page: "FAQ page"
-        tutorial_page: "tutorial page"
-        contact_support: "contact AO3 support"
-        part3_html: "If this is a mistake and these are not your works, please don't delete them! Please just %{open_doors_link} and we will sort it out."
-        contact_open_doors: "contact Open Doors"
-        part4_html: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{support_link}."
-        part7_html: "If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please %{support_link} %>.)"
-        part9_html: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
-        part10_html: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
-        part11_html: "For other inquiries, please %{support_link}."
-        part13: "Best,"
-        part14: "The Open Doors team"
-        part15: "Organization for Transformative Works"
-
-    challenge_assignment_notification:
-      subject: "[%{app_name}][%{collection.title}] Your Assignment!"
-      recipient: "Recipient:" # this is followed by the name of the gift recipient
-      recipient_missing: "None: contact a moderator for help!"
-      prompts: "Prompts:"
-      optional_tags: "Optional Tags:"
-      prompt_url: "Prompt URL:"
-      description: "Description:"
-      due: "This assignment is due at:"
-      text:
-        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
-        look_up: "You can look up this assignment from your archive dashboard at %{link}."
-        footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please see %{profile_url}."
-      html:
-        part1: "You have been assigned the following request in the %{link} challenge at the Archive of Our Own!"
-        look_up: "You can look up this assignment from %{link}."
-        look_up_link: "your archive dashboard"
-        footer: "You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{profile_url} %>."
-        footer_link: "the challenge profile page"
 
   validators:
     email:
