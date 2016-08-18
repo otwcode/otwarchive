@@ -6,7 +6,7 @@
     <ul class="associations">
   <% end %>
     <% # dedication %>
-    <% unless @work.recipients.blank? %>
+    <% if @work.gifts.not_rejected.exists? %>
       <li><%= ts("For") %> <%= recipients_link(@work) %>.</li>
     <% end %>
 

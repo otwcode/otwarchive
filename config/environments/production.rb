@@ -28,14 +28,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL0'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL1'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL2'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL3'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL4'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL5'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL6'],
-                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL7'],
+  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
                           { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
 
   # Disable Rails's static asset server
@@ -65,5 +58,13 @@ Otwarchive::Application.configure do
 #      :sender_address => ArchiveConfig.RETURN_ADDRESS,
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
+
+  # https://github.com/winebarrel/activerecord-mysql-reconnect
+  config.active_record.enable_retry = true
+  config.active_record.execution_tries = 20 # times
+  config.active_record.execution_retry_wait = 0.3 # sec
+  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
+  config.active_record.retry_mode = :rw
+
 
 end

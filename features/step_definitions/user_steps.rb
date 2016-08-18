@@ -138,7 +138,7 @@ end
 Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
   author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
   author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
-  work = FactoryGirl.create(:work, :authors => [author1, author2], :posted => true)
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
 end
 
 # WHEN
@@ -256,6 +256,15 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
   step %{I should not see "#{title}"}
 end
 
+When /^I change my username to "([^\"]*)"/ do |new_name|
+  visit change_username_user_path(User.current_user)
+  fill_in("New user name", with: new_name)
+  fill_in("Password", with: "password")
+  click_button("Change User Name")
+  step %{I should get confirmation that I changed my username}
+end
+
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
+ 

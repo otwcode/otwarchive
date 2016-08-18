@@ -11,13 +11,28 @@ Feature: Reading count
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
     Then I should see "History" within "div#dashboard"
-
-  Scenario: disable reading history
-    also issue 1691
-      Add a view count to reading items
-      Counts will show on the reading history page.
+    
+  Scenario: Read a work several times, counts show on reading history
       increment the count whenever you reread a story
       also updates the date
+    Given I am logged in as "writer"
+      And I post the work "some work"
+      And I am logged out
+    When I am logged in as "fandomer"
+      And fandomer first read "some work" on "2010-05-25"
+    When I go to fandomer's reading page
+    Then I should see "some work"
+      And I should see "Viewed once"
+      And I should see "Last viewed: 25 May 2010"
+    When I am on writer's works page
+      And I follow "some work"
+    When the reading rake task is run
+      And I go to fandomer's reading page
+    Then I should see "Viewed 2 times"
+      And I should see "Last viewed: less than 1 minute ago"
+
+  Scenario: disable reading history
+    then re-enable and check counts update again
 
     Given I am logged in as "writer"
       And I post the work "some work"
@@ -43,7 +58,8 @@ Feature: Reading count
     When I check "Turn on Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
-      And I should see "Viewed once"
+    When I go to fandomer's reading page
+    Then I should see "Viewed once"
       And I should see "Last viewed: 25 May 2010"
     When I am on writer's works page
       And I follow "some work"
@@ -89,16 +105,14 @@ Feature: Reading count
     And I view the work "Testy"
   Then I should see "Mark for Later"
   When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "This work was added to your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
   Then I should see "Mark as Read"
   When I follow "Mark as Read"
-  Then I should see "This work was removed from your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "This work was removed from your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
     And I should not see "(Marked for Later.)"
@@ -146,8 +160,7 @@ Feature: Reading count
   When I view the work "multichapter work"
     And I follow "Next Chapter"
   When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "This work was added to your Marked for Later list."
     And I go to fandomer's reading page
   Then I should see "multichapter work"
   When "intermittent failure" is fixed

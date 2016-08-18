@@ -1,77 +1,65 @@
---- 
-http_interactions: 
-- request: 
+---
+http_interactions:
+- request:
     method: head
     uri: http://google.com/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      Accept: 
+      string: ''
+    headers:
+      Accept:
       - "*/*"
-      User-Agent: 
+      User-Agent:
       - Ruby
-  response: 
-    status: 
-      code: 301
-      message: Moved Permanently
-    headers: 
-      Location: 
-      - http://www.google.com/
-      Content-Type: 
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Cache-Control:
+      - private
+      Content-Type:
       - text/html; charset=UTF-8
-      Date: 
-      - Tue, 30 Sep 2014 02:52:25 GMT
-      Expires: 
-      - Thu, 30 Oct 2014 02:52:25 GMT
-      Cache-Control: 
-      - public, max-age=2592000
-      Server: 
-      - gws
-      Content-Length: 
-      - "219"
-      X-Xss-Protection: 
-      - 1; mode=block
-      X-Frame-Options: 
-      - SAMEORIGIN
-      Alternate-Protocol: 
-      - 80:quic,p=0.01
-    body: 
-      encoding: US-ASCII
-      string: ""
+      Location:
+      - http://www.google.co.uk/?gfe_rd=cr&ei=4CRaV877OuTS8AfhsqKYDQ
+      Content-Length:
+      - '261'
+      Date:
+      - Fri, 10 Jun 2016 02:24:32 GMT
+    body:
+      encoding: UTF-8
+      string: ''
     http_version: 
-  recorded_at: Tue, 30 Sep 2014 02:52:26 GMT
-- request: 
+  recorded_at: Fri, 10 Jun 2016 02:24:33 GMT
+- request:
     method: head
     uri: http://testarchive.transformativeworks.org/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      Accept: 
+      string: ''
+    headers:
+      Accept:
       - "*/*"
-      User-Agent: 
+      User-Agent:
       - Ruby
-  response: 
-    status: 
-      code: 302
-      message: Moved Temporarily
-    headers: 
-      Server: 
-      - nginx/1.5.6
-      Date: 
-      - Tue, 30 Sep 2014 02:52:27 GMT
-      Content-Type: 
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Date:
+      - Fri, 10 Jun 2016 02:24:36 GMT
+      Content-Type:
       - text/html
-      Content-Length: 
-      - "160"
-      Connection: 
+      Connection:
       - keep-alive
-      Location: 
-      - http://test.archiveofourown.org/
-    body: 
-      encoding: US-ASCII
-      string: ""
+      Cache-Control:
+      - no-cache
+    body:
+      encoding: UTF-8
+      string: ''
     http_version: 
-  recorded_at: Tue, 30 Sep 2014 02:52:27 GMT
-recorded_with: VCR 2.5.0
+  recorded_at: Fri, 10 Jun 2016 02:24:37 GMT
+recorded_with: VCR 3.0.1
