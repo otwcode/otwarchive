@@ -19,6 +19,7 @@ class AdminPostsController < ApplicationController
       @tags = AdminPostTag.order(:name)
     end
     @admin_posts = @admin_posts.order('created_at DESC').page(params[:page])
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1

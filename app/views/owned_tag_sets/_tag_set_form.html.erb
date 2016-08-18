@@ -28,7 +28,6 @@
     <%= render "tag_set_form_management", :form => tag_set_form %>
   </fieldset>
 
- <!--BACK END FRONT END THIS PAGE IS IN FLUX-->
   <fieldset class="tagset">
     <legend>Tags In Set <% unless @tag_set.new_record? || !@tag_set.tag_set || @tag_set.tag_set.tags.empty? %><%= ts('(check to remove)') %><% end %></legend>
     <h3 class="landmark heading"><%= ts('Tags in Set') %></h3>

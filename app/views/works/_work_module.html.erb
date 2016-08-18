@@ -24,11 +24,11 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v5") do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_tag_cache(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v7") do %>
 
-      <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
-  
-      <% unless work.recipients.blank? %>
+      <% tag_groups = work.tag_groups %>
+
+      <% if work.gifts.not_rejected.exists? %>
         <%= ts("for") %> <%= recipients_link(work) %>
       <% end %>
       <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
@@ -46,7 +46,7 @@
     <%= get_symbols_for(work, tag_groups) %>
     <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
-	  
+
   <% if !work.posted? %>
    <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{time}', time: time_in_zone(work.created_at + 1.month)).html_safe %></p>
   <% end %>
@@ -56,14 +56,14 @@
     <%= blurb_tag_block(work, tag_groups) %>
   </ul>
 
-  <!--summary-->	
+  <!--summary-->
   <% unless work.summary.blank? %>
     <h6 class="landmark heading"><%= ts("Summary") %></h6>
     <blockquote class="userstuff summary">
       <%=raw strip_images(sanitize_field(work, :summary)) %>
     </blockquote>
   <% end %>
-  	
+
   <% unless work.series.empty? %>
     <h6 class="landmark heading"><%= ts("Series") %></h6>
     <ul class="series">
@@ -79,13 +79,13 @@
 
   <dl class="stats">
     <% if work.language.present? %>
-      <dt><%= ts("Language") %>:</dt>
-      <dd><%= work.language.name %></dd>
+      <dt class="language"><%= ts("Language") %>:</dt>
+      <dd class="language"><%= work.language.name %></dd>
     <% end %>
-    <dt><%= ts('Words') %>:</dt>
-    <dd><%= number_with_delimiter(work.word_count) %></dd>
-    <dt><%= ts('Chapters') %>:</dt>
-    <dd><%= work.chapter_total_display %></dd>
+    <dt class="words"><%= ts('Words') %>:</dt>
+    <dd class="words"><%= number_with_delimiter(work.word_count) %></dd>
+    <dt class="chapters"><%= ts('Chapters') %>:</dt>
+    <dd class="chapters"><%= work.chapter_total_display %></dd>
 
 <% end %>
 <% #### END CACHE show/hide %>
@@ -93,30 +93,30 @@
 <% #### CACHE stats #### %>
 <% cache("#{work.cache_key}/stats", :expires_in => 1.hour) do %>
   <% unless work.approved_collections.empty? %>
-    <dt><%= ts('Collections') %>:</dt>
-    <dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
+    <dt class="collections"><%= ts('Collections') %>:</dt>
+    <dd class="collections"><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
   <% end %>
 
   <% if work.count_visible_comments > 0 %>
-    <dt><%= ts('Comments') %>:</dt>
-    <dd><%= link_to work.count_visible_comments, 
+    <dt class="comments"><%= ts('Comments') %>:</dt>
+    <dd class="comments"><%= link_to work.count_visible_comments,
                 (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
   <% end %>
   <% if work.all_kudos_count > 0 %>
-    <dt><%= ts('Kudos') %>:</dt>
-    <dd><%= link_to work.all_kudos_count.to_s, 
+    <dt class="kudos"><%= ts('Kudos') %>:</dt>
+    <dd class="kudos"><%= link_to work.all_kudos_count.to_s,
         (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments") : 
           (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
             work_path(work, :anchor => "comments")) %></dd>
   <% end %>
-  <% if (bookmark_count = work.bookmarks.is_public.count) > 0 %>
-    <dt><%= ts('Bookmarks') %>:</dt>
-    <dd><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
+  <% if (bookmark_count = work.public_bookmarks_count) > 0 %>
+    <dt class="bookmarks"><%= ts('Bookmarks') %>:</dt>
+    <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
   <% end %>
 
   <% if show_hit_count_to_public?(work) %>
-    <dt><%= ts("Hits") %>:</dt>
-    <dd><%= work.hits %></dd>
+    <dt class="hits"><%= ts("Hits") %>:</dt>
+    <dd class="hits"><%= work.hits %></dd>
   <% end %>
 <% end %>
 <% #### END CACHE stats #### %>

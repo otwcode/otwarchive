@@ -1,6 +1,6 @@
-<div class="admin home">
+<div class="news admin home">
   <% if logged_in_as_admin? %>
-    <%= render :partial => "admin_index" %>
+    <%= render "admin_index" %>
   <% else %>
     <div class="primary header module">
       <!--Descriptive page name, messages and instructions-->
@@ -15,50 +15,30 @@
       </ul>
       <!--/subnav-->
     </div>
-  <!--main content-->
-  <% @admin_posts.each do |admin_post| %>
+    <!--main content-->
+    <% @admin_posts.each do |admin_post| %>
 
-  <div class="module group" role="article">
-    <div class="header">
-      <h3 class="heading">
-        <%= link_to admin_post.title.html_safe, admin_post %>
-      </h3>
-      <h4 class="heading">
-        <%= ts('Published:') %> <span class="datetime"><%= admin_post.created_at %></span> 
-        <% if logged_in_as_admin? %>
-          <span class="actions"><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></span>
-        <% end %>
-      </h4>
-    </div>
-    <div class="userstuff">
-      <%=raw sanitize_field(admin_post, :content) %>
-    </div>
-    <% if admin_post.tags.length > 0 %>
-      <ul class="tags">
-        <% for tag in admin_post.tags %>
-          <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
-        <% end %>
-      </ul>
+      <div class="news module group" role="article">
+        <%= render "admin_post", admin_post: admin_post %>
+        <!-- BEGIN comment section -->
+        <h3 class="landmark heading"><%= ts("Comment") %></h3>
+        <ul class="actions" role="navigation">
+          <% if admin_post.count_visible_comments > 0 %>
+            <li><%= link_to (admin_post.count_visible_comments == 1 ? 
+                            ts("Read %{comment_count} Comment", comment_count: admin_post.count_visible_comments.to_s) : 
+                            ts("Read %{comment_count} Comments", comment_count: admin_post.count_visible_comments.to_s)),
+                            admin_post_path(id: admin_post.id, anchor: "comments", show_comments: true) %></li>
+          <% end %>
+          <li><%= link_to ts("Add Comment"), admin_post_path(id: admin_post.id, anchor: "comments", add_comment: true) %></li>
+        </ul>
+        <!-- END comment section -->
+      </div>
     <% end %>
-    <!-- BEGIN comment section -->
-    <h3 class="landmark heading"><%= ts("Comment") %></h3>
-    <ul class="actions" role="navigation">
-      <% if admin_post.count_visible_comments > 0 %>
-        <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
-                        ts("Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
-                        ts("Read %{comment_count} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
-                        admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li>
-      <% end %>
-      <li><%= link_to ts("Add Comment"), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) %></li>
-    </ul>  
-    <!-- END comment section -->
-  </div>
-  <% end %>
-  <!--/content-->
-  <hr class="clear" />
+    <!--/content-->
+    <hr class="clear" />
 
-  <!--subnav-->
+    <!--subnav-->
     <%= will_paginate @admin_posts %>
-  <!--/subnav-->
+    <!--/subnav-->
   <% end %>
 </div>

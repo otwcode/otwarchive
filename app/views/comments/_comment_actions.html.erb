@@ -1,0 +1,55 @@
+<h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
+
+<ul class="actions" role="menu" id="navigation_for_comment_<%= comment.id %>">
+  <% unless comment.unreviewed? || no_anon_reply(comment) %>
+    <li id="add_comment_reply_link_<%= comment.id %>"><%= add_cancel_comment_reply_link comment %></li>
+  <% end %>
+  <% unless comment.unreviewed? %>
+    <li><%= link_to ts("Thread"), comment %></li>
+  <% end %>
+  <% if is_author_of?(comment) && comment.count_all_comments == 0 %>
+    <li id="edit_comment_link_<%= comment.id %>">
+      <%= edit_comment_link comment %>
+    </li>
+  <% end %>
+  <% if comment.pseud.nil? and (logged_in_as_admin? || is_author_of?(comment.ultimate_parent)) %>
+    <li id="tag_comment_as_spam_link_<%= comment.id %>">
+      <%= tag_comment_as_spam_link comment %>
+    </li>
+  <% end %>
+  <% if comment.unreviewed? && is_author_of?(comment.ultimate_parent) %>
+    <li id="review_comment_link_<%= comment.id %>">
+      <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
+    </li>
+  <% end %>
+  <% if logged_in_as_admin? || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
+    <li id="delete_comment_link_<%= comment.id %>">
+      <%= do_cancel_delete_comment_link comment %>
+    </li>
+  <% end %>
+</ul>
+
+<!-- this is where the comment delete confirmation will be displayed if we have javascript -->
+<!-- if not, here is where we will render the delete-comment form -->
+<% if params[:delete_comment_id] && params[:delete_comment_id] == comment.id.to_s %>
+  <div id="delete_comment_placeholder_<%= comment.id %>">
+    <%= render 'comments/confirm_delete', :comment => comment %>
+<% else %>
+  <div id="delete_comment_placeholder_<%= comment.id %>" style="display:none;">
+<% end %>
+  </div>
+
+<% unless comment.unreviewed? %>
+  <!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->
+  <!-- if not, we will render the comment form if this is the comment we are replying to. -->
+  <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s %>
+    <div id="add_comment_reply_placeholder_<%= comment.id %>" title="<%= ts("reply to this comment") %>">
+      <%= render 'comments/comment_form',
+        :comment => Comment.new,
+        :commentable => comment,
+        :button_name => ts("Comment") %>
+  <% else %>
+    <div id="add_comment_reply_placeholder_<%= comment.id %>" style="display: none;">
+  <% end %>
+    </div>
+<% end %>

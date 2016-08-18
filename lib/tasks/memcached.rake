@@ -8,11 +8,7 @@ namespace :memcached do
   works=ENV['WORKS'] || 'id=1'
   Work.where(works).find_each do |work|
     puts "Clear memcached #{work.id}"
-    %w( nowarn showwarn ).each do |warn|
-      %w( nofreeform showfreeform ).each do |freeform|
-         Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v5"
-      end 
-    end 
+    Rails.cache.increment(work_blurb_tag_cache_key(work.id))
   end 
  end
 

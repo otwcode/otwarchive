@@ -1,6 +1,9 @@
+include SkinCacheHelper
+
 class WorkSkin < Skin
 
   has_many :works
+  after_save :skin_invalidate_cache
 
   # override parent's clean_css to append a prefix
   def clean_css

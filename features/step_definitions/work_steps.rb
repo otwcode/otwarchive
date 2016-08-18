@@ -6,6 +6,77 @@ DEFAULT_FREEFORM = "Scary tag"
 DEFAULT_CONTENT = "That could be an amusing crossover."
 DEFAULT_CATEGORY = "Other"
 
+### Setting up a work
+# These steps get used a lot by many other steps and tests to create works in the archive to test with
+
+When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
+  step %{I fill in basic work tags}
+  check(DEFAULT_WARNING)
+  fill_in("Work Title", with: title)
+  fill_in("content", with: DEFAULT_CONTENT)
+end
+
+# Here we set up a draft and can then post it as a draft, preview and post, post without preview, 
+# or fill in additional information on the work form. 
+# Example: I set up the draft "Foo"
+# Example: I set up the draft "Foo" with fandom "Captain America" in the collection "MCU Stories" as a gift to "Bob"
+# 
+# This is a complex regexp because it attempts to be flexible and match a lot of options (including using a/the, in/to etc)
+# the (?: ) construct means: do not use the stuff in () as a capture/match
+# the ()? construct means: the stuff in () is optional
+# This can handle any number of the options being omitted, but you DO have to match in order 
+# if you are using more than one of the options. That is, if you are specifying fandom AND freeform AND collection, 
+# it has to be: 
+#   with fandom "X" with freeform "Y" in collection "Z" 
+# and NOT: 
+#   with freeform "Y" in collection "Z" with fandom "X" 
+#
+# If you add to this regexp, you probably want to update all the 
+# similar regexps in the I post/Given the draft/the work steps below.
+When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to|with) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+  step %{basic tags}
+  visit new_work_path
+  step %{I fill in the basic work information for "#{title}"}
+  check(category.blank? ? DEFAULT_CATEGORY : category)
+  fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
+  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform))
+  unless collection.blank?
+    c = Collection.find_by_title(collection)
+    fill_in("Collections", with: c.name)
+  end
+  fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
+end
+
+# This is the same regexp as above
+When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|  
+  # If the work is already a draft then visit the preview page and post it
+  work = Work.find_by_title(title)
+  if work
+    visit preview_work_url(work)
+    click_button("Post")
+  else
+    # Note: this will match the above regexp and work just fine even if all the options are blank!
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+    click_button("Post Without Preview")
+  end
+  Work.tire.index.refresh
+end
+
+# Again, same regexp, it just creates a draft and not a posted 
+# To test posting after preview, use: Given the draft "Foo"
+# Then use: When I post the work "Foo"
+# and the above step 
+Given /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: in (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+  step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+  click_button("Preview")
+end
+
+When /^I post the works "([^\"]*)"$/ do |worklist|
+  worklist.split(/, ?/).each do |work_title|
+    step %{I post the work "#{work_title}"}
+  end
+end    
+
 ### GIVEN
 
 Given /^I have no works or comments$/ do
@@ -26,21 +97,24 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   end
   step %{I am logged out}
   n_comments ||= 0
+  work = Work.find_by_title!(title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Bla bla" on the work "#{title}"}
+    visit work_url(work)
+    fill_in("comment[content]", with: "Bla bla")
+    click_button("Comment")
     step %{I am logged out}
   end
 end
 
 Given /^I have a work "([^\"]*)"$/ do |work|
-  step "I am logged in as a random user"
-    step %{I post the work "#{work}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}"}
 end
 
 Given /^I have a locked work "([^\"]*)"$/ do |work|
-  step "I am logged in as a random user"
-    step %{I post the locked work "#{work}"}
+  step %{I am logged in as a random user}
+  step %{I post the locked work "#{work}"}
 end
 
 Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
@@ -72,8 +146,10 @@ Given /^the chaptered work with comments setup$/ do
 end
 
 Given /^the work "([^\"]*)"$/ do |work|
-  step %{I have a work "#{work}"}
-  step %{I am logged out}
+  unless Work.where(title: work).exists?
+    step %{I have a work "#{work}"}
+    step %{I am logged out}
+  end
 end
 
 ### WHEN
@@ -129,26 +205,9 @@ When /^I post the chaptered draft "([^\"]*)"$/ do |title|
   step %{a draft chapter is added to "#{title}"}
 end
 
-When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, collection|
-  work = Work.find_by_title(title)
-  if work.blank?
-    step "the draft \"#{title}\" in collection \"#{collection}\""
-    work = Work.find_by_title(title)
-  end
-  visit preview_work_url(work)
-  click_button("Post")
-  Work.tire.index.refresh
-  step "I should see \"Work was successfully posted.\""
-end
-
 When /^I post the work "([^\"]*)" without preview$/ do |title|
-  work = Work.find_by_title(title)
-  if work.blank?
-    step %{I set up the draft "#{title}"}
-    click_button("Post Without Preview")
-    Work.tire.index.refresh
-    step "I should see \"Work was successfully posted.\""
-  end
+  # we now post without preview as our default test case
+  step %{I post the work "#{title}"}
 end
 
 When /^a chapter is added to "([^\"]*)"$/ do |work_title|
@@ -174,43 +233,12 @@ When /^I post the draft chapter$/ do
   Work.tire.index.refresh
 end
 
-When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)" with category "([^\"]*)"$/ do |title, fandom, freeform, category|
-  work = Work.find_by_title(title)
-  if work.blank?
-    step %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}"}
-    work = Work.find_by_title(title)
-  end
-  visit preview_work_url(work)
-  click_button("Post")
-  step "I should see \"Work was successfully posted.\""
-  Work.tire.index.refresh
+Then /^I should see the default work content$/ do
+  page.should have_content(DEFAULT_CONTENT)
 end
 
-When /^I post the work "([^\"]*)"$/ do |title|
-  step %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
-end
-
-When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
-  step %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
-end
-
-When /^I post the work "([^\"]*)" with category "([^\"]*)"$/ do |title, category|
-  step %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
-end
-
-When /^I post a work with category "([^\"]*)"$/ do |category|
-  step %{I post the work "#{DEFAULT_TITLE}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
-end
-
-When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
-  step %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{DEFAULT_CATEGORY}"}
-end
-
-When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
-  step %{I fill in basic work tags}
-  check(DEFAULT_WARNING)
-  fill_in("Work Title", :with => title)
-  fill_in("content", :with => DEFAULT_CONTENT)
+Then /^I should not see the default work content$/ do
+  page.should_not have_content(DEFAULT_CONTENT)
 end
 
 When /^I fill in basic work tags$/ do
@@ -221,39 +249,54 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Your Tags", :with => DEFAULT_FREEFORM)
+  fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
+  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
-# the (?: ) construct means: do not use the stuff in () as a capture/match
-# the ()? construct means: the stuff in () is optional
-# they must be combined so that the entire thing is optional, and only the relevant bits are captured
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?$/ do |title, fandom, freeform, category|
-  step "basic tags"
-  visit new_work_url
-  step %{I fill in the basic work information for "#{title}"}
-  check(category.nil? ? DEFAULT_CATEGORY : category)
-  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
-  fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
-  click_button("Preview")
+When /^I set the fandom to "([^\"]*)"$/ do |fandom|
+  fill_in("Fandoms", with: fandom)
 end
 
-When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
-  step "basic tags"
-  visit new_work_url
-  step %{I fill in the basic work information for "#{title}"}
-  check(DEFAULT_CATEGORY)
-  fill_in("Fandoms", :with => "Naruto")
-  collection = Collection.find_by_title(collection)
-  fill_in("Collections", :with => collection.name)
-  click_button("Preview")
+# on the edit multiple works page
+When /^I select "([^\"]*)" for editing$/ do |title|
+  id = Work.find_by_title(title).id
+  check("work_ids_#{id}")
 end
 
-When /^I set up the draft "([^\"]*)"$/ do |title|
-  step "basic tags"
-  visit new_work_url
-  step %{I fill in the basic work information for "#{title}"}
-  check(DEFAULT_CATEGORY)
+When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
+  # check if the works have been posted yet
+  unless Work.where(title: title1).exists?
+    step %{I post the work "#{title1}"}
+  end
+  unless Work.where(title: title2).exists?
+    step %{I post the work "#{title2}"}
+  end
+  step %{I go to my edit multiple works page}
+  step %{I select "#{title1}" for editing}
+  step %{I select "#{title2}" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works with different comment moderation settings$/ do
+  step %{I set up the draft "Work with Comment Moderation Enabled"}
+  check("work_moderated_commenting_enabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Comment Moderation Disabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Comment Moderation Enabled" for editing}
+  step %{I select "Work with Comment Moderation Disabled" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works with different anonymous commenting settings$/ do
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
+  check("work_anon_commenting_disabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Anonymous Commenting Enabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Anonymous Commenting Disabled" for editing}
+  step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I press "Edit"}
 end
 
 When /^the purge_old_drafts rake task is run$/ do
@@ -309,8 +352,8 @@ end
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
-  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
-  fill_in("Url", :with => url_of_work)
+  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
+  fill_in("work_parent_attributes_url", with: url_of_work)
 end
 
 When /^I set the publication date to today$/ do
@@ -343,16 +386,10 @@ end
 
 When /^I delete the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
-  step %{I follow "Delete"}
+  visit edit_work_url(work)
+  step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
-end
-
-When /^I add my work to the collection$/ do
-  step %{I follow "Add To Collection"}
-  fill_in("collection_names", :with => "Various_Penguins")
-  click_button("Add")
 end
 
 When /^I preview the work$/ do
@@ -389,21 +426,28 @@ end
 When /^I add the co-author "([^\"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
   check("Add co-authors?")
-  fill_in("pseud_byline", :with => "#{coauthor}")
+  fill_in("pseud_byline", with: "#{coauthor}")
 end
 
 When /^I give the work to "([^\"]*)"$/ do |recipient|
-  fill_in("work_recipients", :with => "#{recipient}")
+  fill_in("work_recipients", with: "#{recipient}")
+end
+
+When /^I give the work "([^\"]*)" to the user "([^\"]*)"$/ do |work_title, recipient|
+  step %{the user "#{recipient}" exists and is activated}
+  visit edit_work_path(Work.find_by_title(work_title))
+  fill_in("work_recipients", with: "#{recipient}")
+  click_button("Post Without Preview")
 end
 
 When /^I add the beginning notes "([^\"]*)"$/ do |notes|
   check("at the beginning")
-  fill_in("work_notes", :with => "#{notes}")
+  fill_in("work_notes", with: "#{notes}")
 end
 
 When /^I add the end notes "([^\"]*)"$/ do |notes|
   check("at the end")
-  fill_in("work_endnotes", :with => "#{notes}")
+  fill_in("work_endnotes", with: "#{notes}")
 end
 
 When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
@@ -453,4 +497,8 @@ end
 
 Then /^I should not find a list for associations$/ do
   page.should_not have_xpath("//ul[@class=\"associations\"]")
+end
+
+Then /^the work "([^\"]*)" should be deleted$/ do |work|
+  assert !Work.where(title: work).exists?
 end

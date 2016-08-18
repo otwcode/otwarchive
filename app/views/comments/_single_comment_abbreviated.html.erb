@@ -1,10 +1,15 @@
-<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+<li class="<% if single_comment.unreviewed? %>unreviewed <% end %>comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <h4 class="heading byline">
     <%= h(ts('Posted on')) + ' ' + link_to_comment_ultimate_parent(single_comment) + ' ' + h(ts('by')) + ' ' %>
     <% if !single_comment.pseud.nil? %>
       <%= (single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anonymous? && single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent)) ? ts("Anonymous Creator") : get_commenter_pseud_or_name(single_comment) %>
     <% else %>
       <%= get_commenter_pseud_or_name(single_comment) %>
+    <% end %>
+    <% if single_comment.unreviewed? %>
+      <span class="unreviewed status">
+        <%= ts("(Unreviewed)") %>
+      </span>
     <% end %>
     <span class="posted datetime">
       <%= time_in_zone(single_comment.created_at) %>
