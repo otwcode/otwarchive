@@ -13,6 +13,10 @@ describe WorkSearch do
     Tire.index(Work.index_name).delete
   end
 
+  let!(:collection) do
+    FactoryGirl.create(:collection, id: 1)
+  end
+
   let!(:work) do
     FactoryGirl.create(:work,
       title: "There and back again",
@@ -22,7 +26,8 @@ describe WorkSearch do
       character_string: "Bilbo Baggins",
       posted: true,
       expected_number_of_chapters: 3,
-      complete: false
+      complete: false,
+      language_id: 1
     )
   end
 
@@ -33,7 +38,9 @@ describe WorkSearch do
       summary: "Mr and Mrs Dursley, of number four Privet Drive...",
       fandom_string: "Harry Potter",
       character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-      posted: true
+      posted: true,
+      collection_ids: [1],
+      language_id: 2
     )
   end
 
@@ -128,7 +135,12 @@ describe WorkSearch do
     end
 
     describe "when searching by language" do
-      it "should only return works in that language"
+      it "should only return works in that language" do
+        work_search = WorkSearch.new(language_id: 1)
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
     end
 
     describe "when searching by fandom" do
@@ -144,7 +156,11 @@ describe WorkSearch do
     end
 
     describe "when searching by collection" do
-      it "should only return works in that collection"
+      it "should only return works in that collection" do
+        work_search = WorkSearch.new(collection_ids: [1])
+        expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
+      end
     end
 
     describe "when searching by word count" do
@@ -233,6 +249,5 @@ describe WorkSearch do
       end
     end
   end
-
 end
 

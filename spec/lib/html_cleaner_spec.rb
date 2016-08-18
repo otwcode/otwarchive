@@ -147,7 +147,7 @@ describe HtmlCleaner do
 
     describe ":content" do
 
-      xit "should keep html" do
+      it "should keep html" do
         value = "<em>hello</em> <blockquote>world</blockquote>"
         result = sanitize_value(:content, value)
         doc = Nokogiri::HTML.fragment(result)
@@ -645,7 +645,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("some\n\n\ntext")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[2]").children.to_s.strip.ord).to eq(160)
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
 
@@ -660,7 +660,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("some<br/><br/><br/>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[2]").children.to_s.strip.ord).to eq(160)
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
 

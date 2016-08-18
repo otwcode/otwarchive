@@ -1,11 +1,12 @@
-<% cache("#{work.cache_key}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-<h3 class="landmark heading">Work Header</h3>
+<% cache("/v1/#{work.cache_key}-#{Work.work_blurb_tag_cache(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
 
   <dl class="work meta group" role="complementary">
-    <% Tag::VISIBLE.each do |type| %>
-      <% tags = work.tag_groups[type] %>
+    <% tag_group = work.tag_groups
+       Tag::VISIBLE.each do |type| %>
+      <% tags = tag_group[type] %>
         <% unless tags.blank? %>
           <dt class="<%= type.downcase %> tags">
             <% if type == "Warning" %>
@@ -83,6 +84,14 @@
              <%= @work.spam? %>
           <% end %>
         </dd>
+        <% if @work.gifts.are_rejected.exists? %>
+          <dt class="gift">
+            <%= ts('Refused As Gift:') %>
+          </dt>
+          <dd class="gift">
+            <%= @work.gifts.are_rejected.map { |g| g.recipient }.join(", ") %>
+          </dd>
+        <% end %>
       <% end %>
   </dl>
 </div>

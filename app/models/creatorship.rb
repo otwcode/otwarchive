@@ -1,6 +1,6 @@
 class Creatorship < ActiveRecord::Base
   belongs_to :pseud
-  belongs_to :creation, :polymorphic => true
+  belongs_to :creation, polymorphic: true, touch: true
   
   before_destroy :expire_caches
 

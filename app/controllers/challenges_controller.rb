@@ -32,7 +32,7 @@ class ChallengesController < ApplicationController
   #
   
   before_filter :load_collection
-  
+
   def no_collection
     flash[:error] = t('challenge.no_collection', :default => "What collection did you want to work with?")
     redirect_to(request.env["HTTP_REFERER"] || root_path)

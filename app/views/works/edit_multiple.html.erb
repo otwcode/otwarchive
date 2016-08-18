@@ -40,11 +40,13 @@
       <dd>
         <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
       </dd>
+
       <dt><%= form.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
             {:include_blank => true} %>
       </dd>
+
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <ul>
@@ -62,12 +64,57 @@
           </li>
         </ul>
       </dd>
-      <dt><%= ts("Comment Settings") %><%= link_to_help "anonymous-commenting" %></dt>
+
+      <dt><%= ts("Anonymous Commenting") %><%= link_to_help "comments-anonymous" %></dt>
       <dd>
-        <label for="work_anon_commenting_disabled">
-          <%= form.check_box :anon_commenting_disabled %>
-          <%= ts("Anonymous commenting disabled") %>
-        </label>
+        <ul> 
+          <li>
+            <label for="work_anon_commenting_disabled_">
+              <%= form.radio_button(:anon_commenting_disabled, '') %>
+              <%= ts("Keep current anonymous comment settings") %>
+            </label>
+          </li>
+          <li>
+            <% # We use "allow_anon" as a placeholder value because the mass edit code strips 0, which is the value we actually want %>
+            <% # The controller will change it to the proper value %>
+            <label for="work_anon_commenting_disabled_allow_anon">
+              <%= form.radio_button(:anon_commenting_disabled, "allow_anon") %>
+              <%= ts("Enable anonymous comments") %>
+            </label>
+          </li>   
+          <li>
+            <label for="work_anon_commenting_disabled_1">
+              <%= form.radio_button(:anon_commenting_disabled, "1") %>
+              <%= ts("Disable anonymous comments") %>
+            </label>
+          </li>  
+        </ul>
+      </dd>
+
+      <dt><%= ts("Comment Moderation") %><%= link_to_help "comments-moderated" %></dt>
+      <dd>
+        <ul>
+          <li>
+            <label for="work_moderated_commenting_enabled_">
+              <%= form.radio_button(:moderated_commenting_enabled, '') %>
+              <%= ts("Keep current comment moderation settings") %>
+            </label>
+          </li>
+          <li>
+            <label for="work_moderated_commenting_enabled_1">
+              <%= form.radio_button(:moderated_commenting_enabled, "1") %>
+              <%= ts("Enable comment moderation") %>
+            </label>
+          </li>   
+          <li>
+            <% # We use "not_moderated" as a placeholder value because the mass edit code strips 0, which is the value we actually want %>
+            <% # The controller will change it to the proper value %>
+            <label for="work_moderated_commenting_enabled_not_moderated">
+              <%= form.radio_button(:moderated_commenting_enabled, "not_moderated") %>
+              <%= ts("Disable comment moderation") %>
+            </label>
+          </li>   
+        </ul>
       </dd>
     </dl>
   </fieldset>

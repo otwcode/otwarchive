@@ -9,6 +9,7 @@ class CommentMailer < ActionMailer::Base
   def comment_notification(user_id, comment_id)
     user = User.find(user_id)
     @comment = Comment.find(comment_id)
+    @owner = user
     I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       mail(
         to: user.email,

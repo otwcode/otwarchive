@@ -8,18 +8,24 @@
   <p class="note"><%= ts('The latest unread items from your inbox.') %></p>
   <ul class="abbreviated comment group">
     <% inbox_comments.each do |inbox_comment| %>
-      <li class="unread comment group">
+      <li class="<% if inbox_comment.feedback_comment.unreviewed? %>unreviewed <% end %>unread comment group" id="feedback_comment_<%= inbox_comment.feedback_comment_id %>">
         <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>
         <ul class="actions">
           <li>
             <%= render 'inbox/delete_form', inbox_comment: inbox_comment, current_user: current_user %>
           </li>
-          <li>
+          <li id="read_comment_form_<%= inbox_comment.feedback_comment.id %>">
             <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
           </li>
-          <li>
-            <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
-          </li>
+          <% if inbox_comment.feedback_comment.unreviewed? %>
+            <li class="approve review" id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
+              <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment, approved_from: "home" %>
+            </li>
+          <% else %>
+            <li>
+              <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
+            </li>
+          <% end %>
         </ul>
       </li>
     <% end %>

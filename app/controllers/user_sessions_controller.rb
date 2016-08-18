@@ -31,7 +31,11 @@ class UserSessionsController < ApplicationController
               # we sent out a generated password and they're using it
               # log them in
               @current_user = UserSession.create(user, params[:remember_me]).record
-              # and tell them to change their password
+              # flash a notice telling user to change password, and redirect them
+              # to the correct form
+              flash[:notice] = ts('You used a temporary password to log in.
+                                   Please change it now as it will expire in a
+                                   week.')
               redirect_to change_password_user_path(@current_user) and return
             else
               message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
