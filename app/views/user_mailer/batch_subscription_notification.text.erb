@@ -4,22 +4,29 @@
 <% @creations.each_with_index do |creation, index| %>
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
 <% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
-<% work_link =  work_url(this_work) %>
-<% link = creation.is_a?(Work) ? work_link : work_chapter_url(this_work, creation) %>
-  <% if creation.is_a?(Work) %>
-      <%= if this_work.backdate then
-            t('user_mailer.batch_subscription_notification.text.work_backdated', pseud: pseud )
-          else
-            t('user_mailer.batch_subscription_notification.text.work_new', pseud: pseud )
-          end  %>
-    <% else %>
-      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")) %>
-      <%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of', work_link: link, word_count: this_work.word_count %>
-    <% end %>
-       <%=t('user_mailer.batch_subscription_notification.text.word_count', link: link, word_count: creation.word_count) %>
-      <% unless @seen[this_work.id] %>
-        <%=t('user_mailer.batch_subscription_notification.text.collected_by',  pseud: pseud ) %>
-      <% end %>
+<% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
+<% title = this_work.title %>
+<% if creation.is_a?(Work) then
+     link  = work_url(this_work)
+     word_count = this_work.word_count
+   else
+     link  = work_chapter_url(this_work, creation)
+     chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe
+   end %>
+<% if creation.is_a?(Work) %>
+<%= if this_work.backdate then
+t('user_mailer.batch_subscription_notification.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count )
+else
+t('user_mailer.batch_subscription_notification.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
+end %>
+<% else %>
+<%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of',byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
+<%end%>
+<%= t 'user_mailer.batch_subscription_notification.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
+
+<% if !creation.summary.blank? && creation.is_a?(Chapter) %>
+<%= t 'user_mailer.batch_subscription_notification.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+<% end %>
 
 <% unless @seen[this_work.id] %>
 <%= t 'user_mailer.chapters' %> <%= this_work.chapter_total_display %>
@@ -33,7 +40,7 @@
 <% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-<%=t 'user_mailer.summary'%>
+<%= t 'user_mailer.batch_subscription_notification.summary' %>
     <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>

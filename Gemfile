@@ -91,7 +91,6 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem "audited-activerecord", "~> 3.0"
 
 # For controlling application behavour dynamically
 gem 'rollout'

@@ -3,33 +3,32 @@
   <% @seen_summary = {} %>
   <% @creations.each_with_index do |creation, index| %>
 
-    <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
-    <% pseud = this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
-    <% link = creation.is_a?(Work) ? work_link : style_link(chapter_title, work_chapter_url(this_work, creation)) %>
+<% this_work = creation.respond_to?(:work) ? creation.work : creation %>
+<% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
+<% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
+<% title = this_work.title.html_safe %>
+<% if creation.is_a?(Work) then
+     link  = style_link(this_work.title.html_safe,work_url(this_work))
+     word_count = this_work.word_count
+   else
+     link  = style_link(this_work.title.html_safe,work_chapter_url(this_work, creation))
+     chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe
+   end %>
+<% if creation.is_a?(Work) %>
+<%= if this_work.backdate then
+t('user_mailer.batch_subscription_notification.html.work_backdated', byline: byline, title: title, link: link, word_count: word_count ).html_safe
+else
+t('user_mailer.batch_subscription_notification.html.work_new', byline: byline, title: title, link: link, word_count: word_count).html_safe
+end %>
+<% else %>
+<%= t('user_mailer.batch_subscription_notification.html.new_chapter_of',byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
+<%end%>
+<%= t( 'user_mailer.batch_subscription_notification.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
 
-    <% if creation.is_a?(Work) %>
-      <%= if this_work.backdate then 
-            t('user_mailer.batch_subscription_notification.html.work_backdated', pseud: pseud ).html_safe
-          else 
-            t('user_mailer.batch_subscription_notification.html.work_new', pseud: pseud ).html_safe
-          end  %>
-    <% else %>
-      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %>
-      <%= t 'user_mailer.batch_subscription_notification.html.new_chapter_of', work_link: link, word_count: this_work.word_count %>
-    <% end %>
+<% if !creation.summary.blank? && creation.is_a?(Chapter) %>
+<%= t 'user_mailer.batch_subscription_notification.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+<% end %>
 
-    <p>
-       <%=t('user_mailer.batch_subscription_notification.html.word_count', link:  style_bold(link), word_count: creation.word_count).html_safe %>
-
-      <% unless @seen[this_work.id] %>
-        <%=t('user_mailer.batch_subscription_notification.html.collected_by',  pseud: pseud ).html_safe %>
-      <% end %>
-    </p>
-
-    <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <%= style_bold(t 'user_mailer.batch_subscription_notification.chapter_summary' ) %> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
-    <% end %>
 
     <% unless @seen[this_work.id] %>
       <p>
@@ -53,6 +52,7 @@
 
       <% @seen[this_work.id] = true %>
     <% end %>
+
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
         <p>
           <%= style_bold(t 'user_mailer.summary') %>
@@ -70,5 +70,5 @@
 
 
 <% content_for :footer_note do %>
-<%=t 'user_mailer.batch_subscription_notification.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable)) %>
+<%=t( 'user_mailer.batch_subscription_notification.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))).html_safe %>
 <% end %>

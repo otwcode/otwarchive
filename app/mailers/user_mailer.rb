@@ -366,7 +366,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
         to: @user.email,
-        subject: t('user_mailer.admin_hidden_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
     )
   end
 
@@ -380,7 +380,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: t('user_mailer.delete_signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME, collection: @signup.collection.title)
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
       )
     end
     ensure

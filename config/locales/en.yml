@@ -73,21 +73,24 @@ en:
           %{archive_name}
     batch_subscription_notification:
       subject_linker: "and %{extra} more"
-      chapter_summary: "Chapter Summary:"
+      chapter_summary: "Chapter Summary: " 
+      summary: "summary:"
       text:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates: %{url}"
-        work_new: "%{pseud} posted a new work"
-        work_backdated: "%{pseud} backdated a work"
-        word_count: "%{link} (%{word_count} words)"
         collected_by: "by %{pseud}"
-        new_chapter_of: "new chapter of %{work_link} (%{word_count} words)"
+        new_chapter_of: "%{byline} posted a new chapter of %{title}:\n%{link}\n\n\
+            %{chapter_title} (%{word_count} words)"
+        work_backdated: "%{byline} backdated a new work:\n%{link}\n\n\
+            %{title} ((%{word_count} words)"
+        work_new: "%{byline} posted a new work:\n%{link}\n\n\
+            %{title} (%{word_count} words)"
       html:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
-        work_new: "%{pseud} posted a new work"
-        work_backdated: "%{pseud} backdated a work"
+        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
+        work_backdated: "<p>%{byline} backdated a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
         word_count: "<i>%{link}</i> (%{word_count} words)"
         collected_by: "<br>by %{pseud}"
-        new_chapter_of: "new chapter of <i><b>%{work_link}</i></b> (%{word_count} words)"
+        new_chapter_of: "<p>%{byline} posted a new chapter of %{title}:<br><b></i>%{link}</i></b></p><p>%{chapter_title} (%{word_count} words)</p>"
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
