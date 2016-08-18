@@ -11,7 +11,7 @@ end
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "false" )
+      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
       @work2.index.refresh
       @comment2 = create(:comment)
       @work2.comments << @comment2
@@ -58,10 +58,10 @@ describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "true" )
+      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
       @work1.index.refresh
-      @comment = create(:comment)
-      @work1.comments << @comment
+      @comment = create(:comment, commentable_id: @work1.id)
+      @comment2 = create(:comment, commentable_id: @work1.chapters.last.id, commentable_type: "Chapter")
     end
 
     it "should not be creatable by guests on a work" do
@@ -80,12 +80,12 @@ describe "Comments" do
       visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    xit "should not be directly readable by guests on a work" do
+    it "should not be directly readable by guests on a work" do
       visit "/works/#{@work1.id}/comments/#{@comment.id}"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    xit "should not be directly readable by guests on a work's chapter" do
-      visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/#{@comment.id}"
+    it "should not be directly readable by guests on a work's chapter" do
+      visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/#{@comment2.id}"
       is_expected.to have_content("Commenting on this work is only available to registered users of the Archive.")
     end
   end

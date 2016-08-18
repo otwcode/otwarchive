@@ -12,6 +12,3 @@ server "test-front11",  :app , :web , :workers , :primary => true
 
 set :rails_env, 'staging'
 set :branch, 'i18n'
-
-# reload the site skins after each deploy since there may have been CSS changes
-#after "deploy:restart", "extras:reload_site_skins"

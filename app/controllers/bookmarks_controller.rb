@@ -64,7 +64,7 @@ class BookmarksController < ApplicationController
 
       if @owner.present?
         if @admin_settings.disable_filtering?
-          @bookmarks = Bookmark.list_without_filters(@owner, options)
+          @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
           @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           results = @search.search_results
@@ -78,7 +78,7 @@ class BookmarksController < ApplicationController
           @bookmarks = search.search_results.to_a
         end
       else
-        @bookmarks = Bookmark.latest.to_a
+        @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
       end
     end
   end
@@ -144,18 +144,22 @@ class BookmarksController < ApplicationController
     errors = []
     params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
-      if @bookmark.collections.include?(collection)
-        next
-      elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-        errors << ts("#{collection.title} is closed to new submissions.")
-      elsif @bookmark.add_to_collection(collection) && @bookmark.save
-        if @bookmark.approved_collections.include?(collection)
-          new_collections << collection
-        else
-          unapproved_collections << collection
-        end
+      if collection.nil?
+        errors << ts("#{collection_name} does not exist.")
       else
-        errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!") 
+        if @bookmark.collections.include?(collection)
+          next
+        elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
+          errors << ts("#{collection.title} is closed to new submissions.")
+        elsif @bookmark.add_to_collection(collection) && @bookmark.save
+          if @bookmark.approved_collections.include?(collection)
+            new_collections << collection
+          else
+            unapproved_collections << collection
+          end
+        else
+          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+        end
       end
     end
 

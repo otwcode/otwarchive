@@ -5,6 +5,7 @@ class Feedback < ActiveRecord::Base
   # class which holds the user's comments.
   validates_presence_of :comment
   validates_presence_of :summary
+  validates_presence_of :language
   validates :email, :email_veracity => {:allow_blank => true}
   validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
 
@@ -61,23 +62,12 @@ class Feedback < ActiveRecord::Base
     reporter = SupportReporter.new(
       title: summary,
       description: comment,
-      category: category,
+      language: language,
       email: email,
+      username: username,
       user_agent: user_agent,
       site_revision: ArchiveConfig.REVISION.to_s
     )
     reporter.send_report!
   end
-
-  # Category names, used on form
-  CATEGORIES = [
-    ["Help Using the Archive", 11483],
-    ["Bug Report", 11482],
-    ["Feedback/Suggestions", 11484],
-    ["Languages/Translation", 11910],
-    ["General/Other", 11481],
-    ["Tags", 11485]
-  ]
-
-  DEFAULT_CATEGORY = 11481
 end

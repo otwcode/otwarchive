@@ -1,4 +1,4 @@
-OTW-Archive [![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) [![Coverage Status](https://coveralls.io/repos/otwcode/otwarchive/badge.png)](https://coveralls.io/r/otwcode/otwarchive) [![Codeship Status](https://www.codeship.io/projects/1f7468f0-7e15-0131-c059-7a8d26daf885/status?branch=master)](https://www.codeship.io/projects/14476)
+OTW-Archive [![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) [![Codeship Status](https://www.codeship.io/projects/1f7468f0-7e15-0131-c059-7a8d26daf885/status?branch=master)](https://www.codeship.io/projects/14476)
 =========
 
 The OTW-Archive software is an open-source web application intended for hosting archives
@@ -30,7 +30,7 @@ Volunteers are always welcome both for coding and testing!
 
 You can also submit a pull request; we'll get back to you as soon as we can!
 
-* Bug Tracking: https://code.google.com/p/otwarchive/issues/list
+* Bug Tracking: https://otwarchive.atlassian.net/projects/AO3/issues
 * Developer Documentation: https://github.com/otwcode/otwarchive/wiki
 * Beta Website: http://archiveofourown.org
 

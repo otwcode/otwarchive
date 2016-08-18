@@ -37,12 +37,12 @@
         <% end %>
       </li>
     <% end %>
-
-    <% if @work && is_author_of?(@work) %>
+    <% if @work && (is_author_of?(@work) || is_maintainer?) %>
       <li>
         <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
       </li>
     <% end %>
+
 
     <% if logged_in? && @work %>
       <li>
@@ -53,7 +53,7 @@
 
     <% if logged_in? && @work && marked_for_later?(@work) %>
       <li>
-        <%= markasread_link(@work) %>
+        <%= mark_as_read_link(@work) %>
       </li>
     <% end %>
 
@@ -88,7 +88,7 @@
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
-      <% @comments = commentable.comments.paginate(:page => params[:page]) %>
+      <% @comments = commentable.comments.reviewed.page(params[:page]) %>
       <%= will_paginate @comments %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->
@@ -97,7 +97,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_author_of?(@work) %>
+    <% if is_author_of?(@work) || is_maintainer? %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>

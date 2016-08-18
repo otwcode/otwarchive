@@ -1,38 +1,40 @@
---- 
-http_interactions: 
-- request: 
+---
+http_interactions:
+- request:
     method: head
     uri: http://test.sidrasue.com/short.html
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      Accept: 
+      string: ''
+    headers:
+      Accept:
       - "*/*"
-      User-Agent: 
+      User-Agent:
       - Ruby
-  response: 
-    status: 
+  response:
+    status:
       code: 200
       message: OK
-    headers: 
-      Server: 
-      - nginx/1.2.1
-      Date: 
-      - Fri, 31 Oct 2014 23:25:58 GMT
-      Content-Type: 
+    headers:
+      Server:
+      - nginx/1.6.2
+      Date:
+      - Thu, 09 Jun 2016 21:04:19 GMT
+      Content-Type:
       - text/html
-      Content-Length: 
-      - "6368"
-      Last-Modified: 
+      Content-Length:
+      - '6368'
+      Last-Modified:
       - Fri, 15 Mar 2013 17:30:28 GMT
-      Connection: 
+      Connection:
       - keep-alive
-      Accept-Ranges: 
+      Etag:
+      - '"51435ab4-18e0"'
+      Accept-Ranges:
       - bytes
-    body: 
-      encoding: US-ASCII
-      string: ""
+    body:
+      encoding: UTF-8
+      string: ''
     http_version: 
-  recorded_at: Fri, 31 Oct 2014 23:25:58 GMT
-recorded_with: VCR 2.5.0
+  recorded_at: Thu, 09 Jun 2016 21:04:19 GMT
+recorded_with: VCR 3.0.1

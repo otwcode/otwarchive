@@ -70,6 +70,7 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
+
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -113,17 +114,28 @@ Feature: Gift Exchange Challenge
     Then I should not see "Sign-ups" within "#dashboard"
   
   Scenario: Mod can view signups
-    Given the gift exchange "Awesome Gift Exchange" is ready for signups
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-    When I am logged in as "mod1"
-      And I go to "Awesome Gift Exchange" collection's page
-      And I follow "Sign-ups"
-    Then I should see "myname4" within "#main"
-      And I should see "myname3" within "#main"
-      And I should see "myname2" within "#main"
-      And I should see "myname1" within "#main"
-      And I should see "Something else weird"
-      And I should see "Alternate Universe - Historical"
+   Given the gift exchange "Awesome Gift Exchange" is ready for signups
+     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+   When I am logged in as "mod1"
+     And I go to "Awesome Gift Exchange" collection's page
+     And I follow "Sign-ups"
+   Then I should see "myname4" within "#main"
+     And I should see "myname3" within "#main"
+     And I should see "myname2" within "#main"
+     And I should see "myname1" within "#main"
+     And I should see "Something else weird"
+     And I should see "Alternate Universe - Historical"
+
+   Scenario: Mod can search signups by pseud
+   Given the gift exchange "Awesome Gift Exchange" is ready for signups
+     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+   When I am logged in as "mod1"
+     And I go to "Awesome Gift Exchange" collection's page
+     And I follow "Sign-ups"
+     And I fill in "query" with "3"
+     And I press "Search By Pseud"
+   Then I should see "myname3" within "#main"
+     And I should not see "myname4" within "#main"
 
   Scenario: Cannot generate matches while signup is open
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -340,6 +352,23 @@ Feature: Gift Exchange Challenge
     Then I should see "Awesome Gift Exchange"
       And I should not see "Not yet posted"
       And I should see "Fulfilled Story"
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+      
+  Scenario: Refused story should still fulfill the assignment
+  
+    Given an assignment has been fulfilled in a gift exchange
+      And I reveal works for "Awesome Gift Exchange"
+      And I refuse my gift story "Fulfilled Story"
+      And I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+  
 
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
@@ -379,31 +408,23 @@ Feature: Gift Exchange Challenge
     Then I should not see "Summary does not appear until at least"
       And I should see "Tags were not used in this Challenge, so there is no summary to display here."
 
-  Scenario: Tagsets show up in Challenge metadata
+  Scenario: Sign-up Form link shows up in sidebar of moderated collections
     Given I am logged in as "mod1"
-      And I have created the gift exchange "Cabbot Cove Remixes"
-      And I go to the tagsets page
-      And I follow the add new tagset link
-      And I fill in "Title" with "Angela Lansbury"
-      And I submit
-      And I go to "Cabbot Cove Remixes" collection's page
-      And I follow "Profile"
-      And I should see "Tag Set:"
-      And I should see "Standard Challenge Tags"
-    When I edit settings for "Cabbot Cove Remixes" challenge
-      And I fill in "Tag Sets To Use:" with "Angela Lansbury"
+      And I have created the gift exchange "Cabbot Cove"
+      And I open signups for "Cabbot Cove"
+    When  I am logged in as "Scott" with password "password"
+      And I go to "Cabbot Cove" collection's page
+      And I should see "Unmoderated"
+      And I should see "Sign-up Form"
+    Then  I am logged in as "mod1"
+      And I go to "Cabbot Cove" collection's page
+      And I follow "Collection Settings"
+      And I check "This collection is moderated"
       And I press "Update"
-    Then I should see "Tag Sets:"
-      And I should see "Standard Challenge Tags"
-      And I should see "Angela Lansbury"
-    When I edit settings for "Cabbot Cove Remixes" challenge
-      And I check "Standard Challenge Tags"
-      And I check "Angela Lansbury"
-      And I press "Update"
-    Then I should not see "Tag Sets:"
-      And I should not see "Tag Set:"
-      And I should not see "Standard Challenge Tags"
-      And I should not see "Angela Lansbury"
+    Then I am logged in as "Scott" with password "password"
+      And I go to "Cabbot Cove" collection's page
+      And I should see "Moderated"
+      And I should see "Sign-up Form"
 
   Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
     Given I am logged in as "mod1"

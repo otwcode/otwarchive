@@ -14,15 +14,23 @@ class Reading < ActiveRecord::Base
   end
 
   # called from reading controller
-  def self.mark_to_read_later(work, user)
-    reading_json = [user.id, Time.now, work.id, work.major_version, work.minor_version, true].to_json
-    REDIS_GENERAL.sadd("Reading:new", reading_json)
+  def self.mark_to_read_later(work, user, toread)
+    reading = Reading.find_or_initialize_by_work_id_and_user_id(work.id, user.id)
+    reading.major_version_read = work.major_version
+    reading.minor_version_read = work.minor_version
+    reading.last_viewed = Time.now
+    reading.toread = toread
+    reading.save
   end
 
   # called from rake
   def self.update_or_create_in_database
-    REDIS_GENERAL.smembers("Reading:new").reverse.each do |reading_json|
-      Reading.reading_object(reading_json)
+    REDIS_GENERAL.smembers("Reading:new").reverse.each_slice(ArchiveConfig.READING_BATCHSIZE || 1000) do |batch|
+      Reading.transaction do
+        batch.each do |reading_json|
+          Reading.reading_object(reading_json)
+        end
+      end
     end
   end
 
@@ -35,15 +43,6 @@ class Reading < ActiveRecord::Base
     reading.minor_version_read = minor_version
     reading.view_count = reading.view_count + 1 unless later
     reading.last_viewed = time
-    # toggle between to read and marking read
-    if later
-      if reading.toread
-      # it had been marked to read, and is now being marked read
-        reading.toread = false
-      else
-        reading.toread = true
-      end
-    end
     reading.save
     REDIS_GENERAL.srem("Reading:new", reading_json)
     return reading

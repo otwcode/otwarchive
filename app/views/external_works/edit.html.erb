@@ -1,33 +1,49 @@
-<div id="work-form" class="post external bookmark">
-  <%= form_for(@external_work) do |f| %>
-    <fieldset>
-      <legend>Work Preface</legend>
-      <dl>
-        <dt><%= f.label :url, ts("URL: ") %></dt>
-        <dd>
-          <%= f.text_field :url %>
-        </dd>
-        <dt><%= f.label :author, ts("Author: ") %></dt>
-        <dd>
-          <%= f.text_field :author, :class => "observe_textlength" %>
-          <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
-        </dd>
-        <dt><%= f.label :title, ts("Title: ") %></dt>
-        <dd>
-          <%= f.text_field :title, :class => "observe_textlength" %>
-          <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
-        </dd>
-        <dt>
-        <%= f.label :summary, ts("Author's Summary") %>
-        <%= ts("(please copy and paste from original work)") %></dt>
-        <dd>
-          <%= f.text_area :summary, :rows => 5, :class => "observe_textlength"%>
-          <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
-        </dd>
-      </dl>
-    </fieldset>
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
+  <%= ts("Edit External Work") %>
+</h2>
+<!--/descriptions-->
 
-    <%= render 'works/work_form_tags', :work => @external_work, :include_blank => false %>
-    <p class="submit actions"><%= f.submit %></p>
-  <% end %>
-</div>
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<%= form_for(@external_work, html: { class: "external work post" }) do |f| %>
+  <p class="required notice">* <%= ts("Required information") %></p>
+  <fieldset>
+    <legend><%= ts("Work Preface") %></legend>
+    <dl>
+      <dt class="required"><%= f.label :url, ts("URL") + "*" %></dt>
+      <dd class="required">
+        <%= f.text_field :url %>
+      </dd>
+      <dt class="required"><%= f.label :author, ts("Creator") + "*" %></dt>
+      <dd class="required">
+        <%= f.text_field :author, class: "observe_textlength" %>
+        <%= generate_countdown_html("bookmark_external_author",
+                                    ExternalWork::AUTHOR_LENGTH_MAX) %>
+      </dd>
+      <dt class="required"><%= f.label :title, ts("Title") + "*" %></dt>
+      <dd class="required">
+        <%= f.text_field :title, class: "observe_textlength" %>
+        <%= generate_countdown_html("bookmark_external_title",
+                                    ArchiveConfig.TITLE_MAX) %>
+      </dd>
+      <dt>
+        <%= f.label :summary, ts("Creator's Summary") %>
+        <%= ts("(please copy and paste from original work)") %>
+      </dt>
+      <dd>
+        <%= f.text_area :summary, rows: 5, class: "observe_textlength" %>
+        <%= generate_countdown_html("bookmark_external_summary",
+                                    ArchiveConfig.SUMMARY_MAX) %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <%= render 'works/work_form_tags', work: @external_work,
+      include_blank: false %>
+
+  <p class="submit actions"><%= f.submit %></p>
+<% end %>
+<!--/content-->
