@@ -73,8 +73,7 @@ en:
           %{archive_name}
     batch_subscription_notification:
       subject_linker: "and %{extra} more"
-      chapter_summary: "Chapter Summary: " 
-      summary: "summary:"
+      chapter_summary: "Chapter Summary:" 
       text:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates: %{url}"
         collected_by: "by %{pseud}"
