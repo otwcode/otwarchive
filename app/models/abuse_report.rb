@@ -41,7 +41,7 @@ class AbuseReport < ActiveRecord::Base
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless %w(staging production development).include?(Rails.env)
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -50,7 +50,7 @@ class AbuseReport < ActiveRecord::Base
       username: username,
       ip_address: ip_address
     )
-    reporter.send_abuse_report!
+    reporter.send_report!
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")
