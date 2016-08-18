@@ -5,21 +5,17 @@ Feature: Private bookmarks
   I want to bookmark some works privately
       
   Scenario: private bookmarks on public and restricted works
-# TODO
-# check their visibility on a tag's bookmarks
-# private bookmarks should also not increase a bookmark's counter
 
     Given the following activated users exist
-      | login           | password   |
-      | workauthor      | password   |
-      | bookmarker      | password   |
-      | otheruser       | password   |
+      | login           |
+      | workauthor      |
+      | bookmarker      |
+      | otheruser       |
       And a fandom exists with name: "Stargate SG-1", canonical: true
-      And I am logged in as "workauthor" with password "password"
+      And I am logged in as "workauthor"
       And I post the locked work "Secret Masterpiece"
       And I post the work "Public Masterpiece"
-    When I log out
-      And I am logged in as "bookmarker" with password "password"
+    When I am logged in as "bookmarker"
       And I view the work "Secret Masterpiece"
       And I follow "Bookmark"
       And I check "bookmark_rec"
@@ -47,9 +43,8 @@ Feature: Private bookmarks
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
     When I am on bookmarker's bookmarks page
-    #And show me the page
-      And I should see "2 Bookmarks by bookmarker"
-    Then I should see "Public Masterpiece"
+    Then I should see "2 Bookmarks by bookmarker"
+      And I should see "Public Masterpiece"
       And I should see "Secret Masterpiece"
       
     # Private bookmarks should not be visible when logged out
@@ -62,18 +57,18 @@ Feature: Private bookmarks
     When I go to bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-#    When I go to the works page
-#    Then I should not see "Secret Masterpiece"
-#      And I should see "Public Masterpiece"
-#      And I should not see "Bookmarks:"
-#      And I should not see "Bookmarks: 1"
+    When I go to the works page
+    Then I should not see "Secret Masterpiece"
+      And I should see "Public Masterpiece"
+      And I should not see "Bookmarks:"
+      And I should not see "Bookmarks: 1"
     When I view the work "Public Masterpiece"
     Then I should not see "Bookmarks:"
       And I should not see "Bookmarks:1"
       
     # Private bookmarks should not be visible to other users
     
-    When I am logged in as "otheruser" with password "password"
+    When I am logged in as "otheruser"
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
@@ -88,8 +83,7 @@ Feature: Private bookmarks
       
     # Private bookmarks should not be visible even to the author
     
-    When I log out
-      And I am logged in as "workauthor" with password "password"
+    When I am logged in as "workauthor"
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
@@ -98,12 +92,9 @@ Feature: Private bookmarks
       And I should not see "Public Masterpiece"
 
     # Private bookmarks should not be visible when logged out, even if there are other bookmarks on that work
-    When I am logged in as "otheruser" with password "password"
+    When I am logged in as "otheruser"
       And I view the work "Public Masterpiece"
-      And I follow "Bookmark"
-      And I check "bookmark_rec"
-      And I press "Create"
-    Then I should see "Bookmark was successfully created"
+      And I rec the current work
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -127,3 +118,13 @@ Feature: Private bookmarks
       And I should see "Public Masterpiece"
       And I should see "otheruser"
       And I should not see "bookmarker"
+
+    # Private bookmarks should not show on tag's page
+    When I go to the bookmarks tagged "Stargate SG-1"
+    Then I should not see "Secret Masterpiece"
+      And I should see "Public Masterpiece"
+      And I should not see "bookmarker"
+      And I should see "otheruser"
+      # bookmark counter
+      And I should see "0" within ".count"
+      And I should not see "2" within ".count"

@@ -28,9 +28,6 @@ describe Collectible do
     subject { work }
 
     describe "once added" do
-      before do
-        work.save
-      end
 
       it "should be in that collection" do
         work.save
@@ -45,6 +42,12 @@ describe Collectible do
         expect(work.collections).not_to include(collection)
         expect(collection.works).not_to include(work)
       end
+      
+      it "should be automatically approved when there is no current user" do 
+        work.save
+        expect(work.approved_collections).to include(collection)
+      end
+      
     end
 
     %w(unrevealed anonymous).each do |state|

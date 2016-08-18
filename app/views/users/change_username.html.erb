@@ -1,8 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Change My User Name') %></h2>
 <%= error_messages_for :user %>
-<p class="caution"><%= ts("Please use this feature with caution. We will not redirect your old user name to your new one. Bookmarks and external links to your user page and your pseud pages under the old name will no longer work and the old name may be used by someone else unless all you are changing is capitalization.") %></p>
-<p class="note"><%= ts("If that is not what you want, you can") %> <%= link_to ts("create a new Pseud"), new_user_pseud_path(@user) %> <%= ts("instead.") %></p>
+<p class="caution">
+  <%= ts("Please use this feature with caution. We will not redirect your old user name to your new one. Bookmarks and external links to your user page and your pseud pages under the old name will no longer work and the old name may be used by someone else unless all you are changing is capitalization.") %>
+</p>
+<p class="note">
+  <%= ts("If that is not what you want, you can <a href=\"#{new_user_pseud_path(@user)}\">create a new Pseud</a> instead.").html_safe %>
+</p>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -11,22 +15,25 @@
 
 <!--main content-->
 
-<%= form_tag change_username_user_path(@user) do %>  
+<%= form_tag changed_username_user_path(@user) do %>
   <dl>
-    <dt><%= ts("Current User Name") %></dt>
-    <dd><span class="important"><%= @user.login %></span></dd>
-    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+    <dt><%= ts("Current user name") %></dt>
+    <dd><p class="important informational"><%= @user.login %></p></dd>
+    <dt><%= label_tag :new_login, ts("New user name") %></dt>
     <dd>
-      <%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %>
-      <p class="footnote">
+      <%= text_field_tag :new_login, @new_login, autocomplete: 'off', "aria-describedby" => "new-login-field-description" %>
+      <p class="footnote" id="new-login-field-description">
         <%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)",
-               :minimum => ArchiveConfig.LOGIN_LENGTH_MIN, :maximum => ArchiveConfig.LOGIN_LENGTH_MAX) %>
+               minimum: ArchiveConfig.LOGIN_LENGTH_MIN,
+               maximum: ArchiveConfig.LOGIN_LENGTH_MAX) %>
       </p>
     </dd>
     <dt><%= label_tag :password, ts("Password") %></dt>
     <dd><%= password_field_tag :password %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
-    <dd class="submit actions"><%= submit_tag ts("Change User Name"), :confirm => ts("Are you sure you want to change your user name?") %></dd>
+    <dd class="submit actions">
+      <%= submit_tag ts("Change User Name"), confirm: ts("Are you sure you want to change your user name?") %>
+    </dd>
   </dl>
 <% end %>
 <% if @wrong_password %>
@@ -37,7 +44,7 @@
   <%= form_tag passwords_path do %>
     <%= hidden_field_tag 'login', @user.login %>
     <p class="footnote">
-      <%= submit_tag ts('Reset My Password', :class => 'submit') %>
+      <%= submit_tag ts('Reset My Password') %>
     </p>
   <% end %>
 <% end %>

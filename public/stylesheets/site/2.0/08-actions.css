@@ -15,7 +15,7 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-align: center;
 }
 
-.actions a, .action, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
@@ -76,7 +76,7 @@ ol.pagination, div.pagination, ol.year {
   margin: 0.643em auto;
 }
 
-.actions a:visited, .action:visited {
+.actions a:visited, .action:visited, .action a:link, .action a:visited {
   color: #111;
 }
 
@@ -87,7 +87,7 @@ ol.pagination, div.pagination, ol.year {
     box-shadow: inset 2px 2px 2px #bbb;
 }
 
-.actions a:active, .current, a.current, .current a:visited {
+.actions a:active, .current, a.current, a:link.current, .current a:visited {
   color: #111;
   background: #ccc;
   border-color: #fff;
@@ -188,6 +188,10 @@ dl.stats + .landmark + .actions {
 
 dd.any label.action {
   margin-left: 0.5625em;
+}
+
+dl.index p.actions {
+  margin: 0;
 }
 
 /*END== */

@@ -24,6 +24,7 @@ When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag 
   end
 end
 
+# Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
     tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags| 
@@ -31,7 +32,7 @@ When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
     end
     step %{I submit}
   step %{I should see an update confirmation message}
-end  
+end
 
 When /^I set up the nominated tag ?set "([^\"]*)" with (.*) fandom noms? and (.*) character noms?$/ do |title, fandom_count, char_count|
   unless OwnedTagSet.find_by_title("#{title}").present?
@@ -139,4 +140,10 @@ end
 When /^I view the tag set "([^\"]*)"/ do |tagset|
   tagset = OwnedTagSet.find_by_title!(tagset)
   visit tag_set_path(tagset)
+end
+
+When(/^I flush the wrangling sidebar caches$/) do
+  [Fandom, Character, Relationship, Freeform].each do |klass|
+    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
+  end
 end

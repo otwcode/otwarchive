@@ -1,60 +1,61 @@
 <div class="admin">
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Find Users") %></h2>
-<!--/descriptions-->
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t('admin.admin_users.index.page_heading', default: "Find Users") %></h2>
+  <!--/descriptions-->
 
-<!--subnav-->
-<!--/subnav-->
+  <!--subnav-->
+  <!--/subnav-->
 
-<!--main content-->
-<%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get, :class => "search", :role => "search" do %>
-  <p class="note"><%= ts("Search for a user by username, pseud or email, or search by role") %></p>
-  <dl>
-    <dt><%= label_tag "query", ts("Name or email") %></dt>
-    <dd><%= text_field_tag "query", params[:query] %></dd>
-    <dt><%= label_tag "role", ts("Role") %></dt>
-    <dd><%= select_tag "role", "<option></option>".html_safe + options_for_select(@role_values, @role.try(:name)) %></dd>
-    <dt><%= label_tag "status", ts("Status") %></dt>
-    <dd>
-      <%= check_box_tag "inactive", "1", params[:inactive].present? %>
-      <%= label_tag "inactive", ts("Not yet activated") %>
-    </dd>
-  </dl>
-  <p class="submit"><%= submit_tag ts("Find") %></p>
-<% end %>
+  <!--main content-->
+  <%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get, :class => "search", :role => "search" do %>
+    <p class="note"><%= t('admin.admin_users.index.form.note', default: "Search for a user by username, pseud or email, or search by role.") %></p>
+    <dl>
+      <dt><%= label_tag "query", t('admin.admin_users.index.form.query_label', default: "Name or email") %></dt>
+      <dd><%= text_field_tag "query", params[:query] %></dd>
+      <dt><%= label_tag "role", t('admin.admin_users.index.form.role_label', default: "Role") %></dt>
+      <dd><%= select_tag "role", "<option></option>".html_safe + options_for_select(@role_values, @role.try(:name)) %></dd>
+      <dt><%= label_tag "status", t('admin.admin_users.index.form.status_label', default: "Status") %></dt>
+      <dd>
+        <%= check_box_tag "inactive", "1", params[:inactive].present? %>
+        <%= label_tag "inactive", t('admin.admin_users.index.form.inactive_label', default: "Not yet activated") %>
+      </dd>
+    </dl>
+    <p class="submit"><%= submit_tag t('admin.admin_users.index.form.submit', default: "Find") %></p>
+  <% end %>
 
-<% if @users %>
-  <h3 class="heading"><%= ts("#{pluralize(@users.total_entries, 'user')} found") %></h3>
-  <% if @users.size > 0 %>
-    <div class="wrapper">
-      <table id="admin_users_table" summary="<%= ts("Users matching your search criteria, as well as options for updating the user's roles and viewing more information.") %>">
-        <caption><%= ts("List of Users") %></caption>
-        <colgroup>
-          <col class="name"/>
-          <col span="6" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col"><%= ts("Username") %></th>
-            <th scope="col"><%= ts("Email") %></th>
-            <% for role in @roles %>
-              <th scope="col"><%= role.name.try(:titleize) %></th>
-            <% end %>
-            <th scope="col"><%= ts("Update") %></th>
-            <th scope="col"><%= ts("Details") %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @users.each do |user| %>
-            <tr id="user_<%= user.id %>">
-              <%= render :partial => 'user_form', :locals => {:user => user} %>
+  <% if @users %>
+    <h3 class="heading"><%= ts("#{pluralize(@users.total_entries, 'user')} found") %></h3>
+    <% if @users.size > 0 %>
+      <div class="wrapper">
+        <table id="admin_users_table" summary="<%= t('admin.admin_users.index.results_table.summary', default: "Users matching your search criteria, as well as options for updating the user's roles and viewing more information.") %>">
+          <caption><%= t('admin.admin_users.index.results_table.caption', default: "List of Users") %></caption>
+          <colgroup>
+            <col class="name"/>
+            <col span="6" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col"><%= t('admin.admin_users.index.results_table.head.username', default: "Username") %></th>
+              <th scope="col"><%= t('admin.admin_users.index.results_table.head.email', default: "Email") %></th>
+              <% for role in @roles %>
+                <th scope="col"><%= role.name.try(:titleize) %></th>
+              <% end %>
+              <th scope="col"><%= t('admin.admin_users.index.results_table.head.fnok', default: "Fannish Next of Kin") %></th>
+              <th scope="col"><%= t('admin.admin_users.index.results_table.head.update', default: "Update") %></th>
+              <th scope="col"><%= t('admin.admin_users.index.results_table.head.details', default: "Details") %></th>
             </tr>
-          <% end %>
-        </tbody>
-      <% end %>
-    </table>
-  </div>
-  <%= will_paginate @users %>
-<% end %>
-<!--/content-->
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr id="user_<%= user.id %>">
+                <%= render 'user_form', user: user %>
+              </tr>
+            <% end %>
+          </tbody>
+        <% end %>
+      </table>
+    </div>
+    <%= will_paginate @users %>
+  <% end %>
+  <!--/content-->
 </div>

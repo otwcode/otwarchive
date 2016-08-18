@@ -3,14 +3,18 @@
   <% for comment in comments %>
     <% if comment.approved? || logged_in_as_admin? %>
     
-      <%= render :partial => 'comments/single_comment', :object => comment %>	  
+      <%= render 'comments/single_comment', single_comment: comment %>
+      <% child_comments = comment.comments.reviewed %>
       
-      <% if comment.comments && comment.comments.size > 0 %>
+      <% if child_comments && child_comments.count > 0 %>
         <!-- cut off the recursion when we get too deep, but not if there's just one last measly comment left -->
-        <% if depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH && comment.children_count > 1 %>
+        <% if depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH && child_comments.count > 1 %>
           <li class="comment"><p>(<%= ts("%{count} more comments in this thread", :count => comment.children_count) %>)</p></li>
         <% else %>
-          <li><%= render :partial => 'comments/comment_thread', :locals => {:comments => comment.comments, :depth => depth+1 } %></ol></li>
+          <li>
+            <%= render 'comments/comment_thread', comments: child_comments, depth: depth+1 %>
+            </ol> <!-- needed to close thread -->
+          </li>
         <% end %>
       <% end %>
     

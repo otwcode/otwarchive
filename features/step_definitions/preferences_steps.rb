@@ -16,6 +16,12 @@ When /^I set my preferences to turn off notification emails for kudos$/ do
   user.preference.save
 end
 
+When /^I set my preferences to turn off notification emails for gifts$/ do
+  user = User.current_user
+  user.preference.recipient_emails_off = true
+  user.preference.save
+end
+
 When /^I set my preferences to hide warnings$/ do
   user = User.current_user
   user.preference.hide_warnings = true
@@ -73,5 +79,11 @@ end
 When /^I set my preferences to turn off viewing history$/ do
   user = User.current_user
   user.preference.history_enabled = false
+  user.preference.save
+end
+
+When /^I set my time zone to "([^"]*)"$/ do |time_zone|
+  user = User.current_user
+  user.preference.time_zone = time_zone
   user.preference.save
 end

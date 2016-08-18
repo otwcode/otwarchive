@@ -108,7 +108,11 @@ module CommentsHelper
 
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
-
+  
+  def no_anon_reply(comment)
+    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+  end
+  
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
       cancel_comment_reply_link(comment)
@@ -222,7 +226,7 @@ module CommentsHelper
       delete_comment_link(comment)
     end
   end
-
+  
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
@@ -289,6 +293,39 @@ module CommentsHelper
       fallback_url_for_top_level(comment.ultimate_parent, options)
     end
 
+  end
+
+  # find the parent of the commentable
+  def find_parent(commentable)
+    if commentable.is_a?(Comment)
+      commentable.ultimate_parent
+    elsif commentable.respond_to?(:work)
+      commentable.work
+    else
+      commentable
+    end
+  end
+
+  # if parent commentable is a work, determine if current user created it
+  def current_user_is_work_creator(commentable)
+    if logged_in?
+      parent = find_parent(commentable)
+      parent.is_a?(Work) && current_user.is_author_of?(parent)
+    end
+  end
+
+  # if parent commentable is an anonymous work, determine if current user created it
+  def current_user_is_anonymous_creator(commentable)
+    if logged_in?
+      parent = find_parent(commentable)
+      parent.respond_to?(:work) && parent.anonymous? && current_user.is_author_of?(parent)
+    end
+  end
+
+  # determine if the parent has its comments set to moderated
+  def comments_are_moderated(commentable)
+    parent = find_parent(commentable)
+    parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
 
 end

@@ -103,6 +103,10 @@ PROMPT_TAGS_MAX: 20
 
 # max number of potential matches to generate
 POTENTIAL_MATCHES_MAX: 50
+# min number of potential matches to allow
+POTENTIAL_MATCHES_MIN: 10
+# max percentage of participants to match
+POTENTIAL_MATCHES_PERCENT: 10
 
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
@@ -194,6 +198,10 @@ MAX_RECENT: 20
 # This is used to determine how many works or how many authors have to be
 # present in order for anonymous or mystery works to begin being displayed
 ANONYMOUS_THRESHOLD_COUNT: 10
+
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should go back into moderation after editing or not
+COMMENT_MODERATION_THRESHOLD: 10
 
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
@@ -371,3 +379,4 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
+

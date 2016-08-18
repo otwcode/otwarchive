@@ -84,7 +84,12 @@ class ChallengeSignupsController < ApplicationController
     respond_to do |format|
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
-            @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE, :order => "pseuds.name")
+            @challenge_signups = @collection.signups.joins(:pseud)
+            if params[:query]
+              @query = params[:query]
+              @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
+            end
+            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)          
           elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else

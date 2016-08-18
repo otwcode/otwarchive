@@ -13,9 +13,12 @@ Feature: Admin Actions to Post Known Issues
       # Suspect related to issue 2458
       And I press "Post"
     Then I should see "Known issue was successfully created"
+      And I should see "First known problem"
 
   Scenario: Edit known issues
-    # TODO
+
     Given I have posted known issues
     When I edit known issues
     Then I should see "Known issue was successfully updated"
+      And I should not see "First known problem"
+      And I should see "This is a bit of a problem, and this is too"

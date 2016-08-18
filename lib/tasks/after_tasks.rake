@@ -418,12 +418,86 @@ namespace :After do
     end
   end
 
+  desc "Clean up challenge_id and challenge_type in Collections with deleted Challenges"
+  task(:remove_old_challenge_variables_from_collections => :environment) do
+    Collection.find_each do |collection|
+      unless collection.challenge?
+        if collection.challenge_id.present? || collection.challenge_type.present?
+          puts "Fixing collection: #{collection.name}"
+          puts "Which is a #{collection}"
+          collection.update_column(:challenge_id, nil)
+          collection.update_column(:challenge_type, nil)
+        end
+      end
+    end
+  end
+
+
   desc "Clean up work URLs for abuse reports from the last month"
   task(:clean_abuse_report_work_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
       report.clean_work_url
       puts report.url
       report.save
+    end
+  end
+
+  desc "Change handheld skins to narrow skins with a max-width of 44em"
+  task(:handheld_skin_to_narrow => :environment) do
+    current_width_media = "only screen and (max-width: 640px)"
+    skins_to_change = Skin.select { |s| s.media.include? current_width_media }
+    skins_to_change.each do |skin|
+      new_media = skin.media.map { |m| m == current_width_media ? "only screen and (max-width: 42em)" : m }
+      skin.media = new_media
+      skin.save
+    end
+  end
+
+  desc "Generate custom CSS so people using an old wizard skin don't lose it"
+  task(:generate_css_for_old_wizard_skins => :environment) do
+    Skin.wizard_site_skins.each do |skin|
+      old_css = skin.css.present? ? skin.css : ""
+
+      wizard_css = ""
+
+      if skin.margin.present?
+        wizard_css += "#workskin {margin: auto #{skin.margin}%; padding: 0.5em #{skin.margin}% 0;} "
+      end
+
+      if skin.background_color.present? || skin.foreground_color.present? || skin.font.present? || skin.base_em.present?
+        wizard_css += "body, #main { 
+          #{skin.background_color.present? ? "background: #{skin.background_color}; " : ''}
+          #{skin.foreground_color.present? ? "color: #{skin.foreground_color}; " : ''} "
+        if skin.base_em.present?
+          wizard_css += "font-size: #{skin.base_em}%; line-height: 1.125; "
+        end
+        if skin.font.present?
+          wizard_css += "font-family: #{skin.font}; "
+        end
+        wizard_css += "} "
+      end
+
+      if skin.paragraph_margin.present?
+        wizard_css += ".userstuff p {margin-bottom: #{skin.paragraph_margin}em;} "
+      end
+
+      if skin.headercolor.present?
+        wizard_css += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color: transparent;} "
+        wizard_css += "#header, #header ul.main, #footer {background: #{skin.headercolor}; border-color: #{skin.headercolor}; box-shadow: none;} "
+      end
+
+      if skin.accent_color.present?
+        wizard_css += "#header .icon, #dashboard ul, #main dl.meta {background: #{skin.accent_color}; border-color: #{skin.accent_color};} "
+      end
+
+      wizard_css += "#workskin {margin: auto #{skin.margin}%; padding: 0.5em #{skin.margin}% 0;} " if skin.margin.present?
+
+      # clear out the wizard settings, prepend the wizard css to the user's custom css, and save
+      unless wizard_css.blank?
+        skin.margin, skin.background_color, skin.foreground_color, skin.font, skin.base_em, skin.paragraph_margin, skin.headercolor, skin.accent_color = nil
+        skin.css = wizard_css + old_css
+        skin.save
+      end
     end
   end
 
