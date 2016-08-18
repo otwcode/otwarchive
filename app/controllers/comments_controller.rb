@@ -212,6 +212,7 @@ class CommentsController < ApplicationController
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(params[:comment])
+      @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env['HTTP_USER_AGENT']
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
