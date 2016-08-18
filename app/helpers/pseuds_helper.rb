@@ -3,7 +3,7 @@ module PseudsHelper
   # Prints array of pseuds with links to user pages
   # used on Profile page
   def print_pseud_list(pseuds)
-    pseuds.collect {|pseud| span_if_current(pseud.name, [pseud.user, pseud])}.join(", ").html_safe
+    pseuds.includes(:user).collect { |pseud| span_if_current(pseud.name, [pseud.user, pseud]) }.join(", ").html_safe
   end
   
   # used in the sidebar

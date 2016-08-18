@@ -42,7 +42,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   font-weight: 700;
 }
 
-.hidden, body .hidden, .actions .hidden {
+.hidden, body .hidden, .actions .hidden, .actions a.hidden {
   display: none;
 }
 
@@ -92,7 +92,7 @@ span.offered.requested {
 
 /* CONTEXTS */
 
-.dashboard .own {
+.dashboard .own, .comment span.unreviewed {
   background: transparent;
     opacity: 1.0;
 }

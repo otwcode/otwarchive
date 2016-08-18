@@ -26,9 +26,9 @@ class EmailVeracityValidator < ActiveModel::EachValidator
     end
     unless result
       if options[:allow_blank]
-        record.errors[attribute] << (options[:message] ||  I18n.t('email_invalid', :default => 'does not seem to be a valid address. Please use a different address or leave blank.'))
+        record.errors[attribute] << (options[:message] ||  I18n.t('validators.email.veracity.allow_blank'))
       else
-        record.errors[attribute] << (options[:message] || I18n.t('email_invalid', :default => 'does not seem to be a valid address.'))
+        record.errors[attribute] << (options[:message] || I18n.t('validators.email.veracity.no_blank'))
       end
     end
   end

@@ -82,5 +82,10 @@ Then (/^#{capture_email} html body should link to (.+)$/) do |email_ref, page|
 end
 
 Then(/^show me the emails?$/) do
-   save_and_open_emails
+  ActionMailer::Base.deliveries.each do |email|
+    puts "From: #{email.from}"
+    puts "To: #{email.to}"
+    puts email.text_part.body.to_s
+    puts ""
+  end
 end

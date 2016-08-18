@@ -150,6 +150,11 @@ namespace :skins do
   task(:load_site_skins => :environment) do
     Skin.load_site_css
   end
+
+  desc "Cache all site skins"
+  task(:cache_all_site_skins => :environment) do
+    Skin.where(cached: true).each{|skin| skin.cache!} 
+  end
   
   desc "Remove all existing skins from preferences"
   task(:disable_all => :environment) do
@@ -162,5 +167,5 @@ namespace :skins do
     default_id = Skin.default.id
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
-  
+
 end

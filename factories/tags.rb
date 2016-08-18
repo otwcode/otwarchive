@@ -1,6 +1,5 @@
 require 'faker'
 FactoryGirl.define do
-
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
   end
@@ -10,11 +9,14 @@ FactoryGirl.define do
   end
 
   factory :owned_tag_set do
-    title {generate(:tag_title)}
+    title { generate(:tag_title) }
     nominated true
+
     after(:build) do |owned_tag_set|
       owned_tag_set.build_tag_set
       owned_tag_set.add_owner(FactoryGirl.create(:pseud))
+      owned_tag_set.fandom_nomination_limit = 2
+      owned_tag_set.tags << FactoryGirl.create(:fandom)
     end
   end
 
@@ -23,13 +25,24 @@ FactoryGirl.define do
     association :pseud
   end
 
+  factory :tag_nomination do
+    type 'FandomNomination'
+
+    canonical true
+    association :owned_tag_set
+
+    after(:build) do |nomination|
+      nomination.tagname = Fandom.last.name
+    end
+  end
+
   factory :tag do
     canonical true
-    name {generate(:tag_name)}
+    name { generate(:tag_name) }
   end
 
   factory :unsorted_tag do
-    sequence(:name) { |n| "Unsorted Tag #{n}"}
+    sequence(:name) { |n| "Unsorted Tag #{n}" }
   end
 
   factory :fandom do

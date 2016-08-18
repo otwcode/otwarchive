@@ -15,7 +15,7 @@ class Admin::UserCreationsController < ApplicationController
                         ts('Item is no longer hidden.')
     if creation_class == Comment
       redirect_to(creation.ultimate_parent) 
-    elsif creation_class == ExternalWork
+    elsif creation_class == ExternalWork || creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       unless action  == "unhide"

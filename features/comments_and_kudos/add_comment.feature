@@ -5,6 +5,7 @@ Feature: Comment on work
   I'd like to comment on a work
 
 Scenario: Comment links from downloads and static pages
+
   When I am logged in as "author"
     And I post the work "Generic Work"
   When I am logged in as "commenter"
@@ -12,6 +13,7 @@ Scenario: Comment links from downloads and static pages
   Then I should see the comment form
 
 Scenario: When logged in I can comment on a work
+
   Given I have no works or comments
   When I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
@@ -27,8 +29,23 @@ Scenario: When logged in I can comment on a work
     And I follow "Entire Work"
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4.heading.byline"
-    
+
+Scenario: Comment editing
+
+  When I am logged in as "author"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I post the comment "Mistaken comment" on the work "The One Where Neal is Awesome"
+    And I follow "Edit"
+  And I fill in "Comment" with "Actually, I meant something different"
+    And I press "Update"
+  Then I should see "Comment was successfully updated"
+    And I should see "Actually, I meant something different"
+    And I should not see "Mistaken comment"
+    And I should see Last Edited in the right timezone
+
 Scenario: Comment threading, comment editing
+
   When I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
   When I am logged in as "commenter"
@@ -65,8 +82,7 @@ Scenario: Comment threading, comment editing
     #TODO Someone should figure out why this fails intermittently on Travis. Caching? The success message is there but the old comment text lingers.
     #And I should see "Actually, I meant something different"
     #And I should not see "Mistaken comment"
-    #And I should see "Posted"
-    #And I should see "Last Edited"
+    And I should see Last Edited in the right timezone
   When I am logged in as "commenter3"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Comments (5)"
@@ -83,7 +99,8 @@ Scenario: Comment threading, comment editing
     And I should not see "This should be nested" within ".thread .thread .thread .thread"
     And I should see "I loved this" within "ol.thread"
 
-  Scenario: Try to post an invalid comment '
+  Scenario: Try to post an invalid comment
+
     When I am logged in as "author"
       And I post the work "Generic Work"
     When I am logged in as "commenter"

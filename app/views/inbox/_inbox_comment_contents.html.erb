@@ -8,6 +8,11 @@
   <% else %>
     <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts('on') %> <%= commentable_description_link(feedback_comment) %>
   <% end %>
+  <% if feedback_comment.unreviewed? %>
+    <span class="unreviewed status">
+      <%= ts("(Unreviewed)") %>
+    </span>
+  <% end %>
   <span class="posted datetime">
     <%= distance_of_time_in_words_to_now(feedback_comment.created_at) %>
   </span>

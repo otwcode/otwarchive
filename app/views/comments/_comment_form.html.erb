@@ -11,28 +11,34 @@
       <% if commentable.is_a?(Tag) %>
         <%= hidden_field_tag :tag_id, commentable.name %>
       <% end %>
+
       <% if params[:view_full_work] %>
         <%= hidden_field_tag :view_full_work, params[:view_full_work] %>
       <% end %>
+
       <% if controller.controller_name == "inbox" && params[:filters] %>
         <%= hidden_field_tag "filters[read]", params[:filters][:read] %>
         <%= hidden_field_tag "filters[replied_to]", params[:filters][:replied_to] %>
         <%= hidden_field_tag "filters[date]", params[:filters][:date] %>
       <% end %>
+
       <% if params[:page] %>
         <%= hidden_field_tag :page, params[:page] %>
       <% end %>
+
+      <% if comments_are_moderated(commentable) && !current_user_is_work_creator(commentable) %>
+        <p class="notice">
+          <%= ts("This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.") %>
+        </p>
+      <% end %>
+
       <% if logged_in? %>
-          <% # The following two notices show on the top-level comment box on either a: Work (full view) or Chapter by Chapter page %>
-          <% if commentable.is_a?(Work) && current_user.is_author_of?(commentable) && commentable.anonymous? %>
-            <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
-          <% elsif commentable.is_a?(Chapter) && current_user.is_author_of?(commentable) && commentable.work.anonymous? %>
-            <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
-          <% end %>
-        <% # When the thing that we are commenting on is a comment (read: replying to) then we use this statement. Shows in user Inbox and nested reply %>
-        <% if commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent) %>
-          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+        <% if current_user_is_anonymous_creator(commentable) %>
+          <p class="notice">
+           <%= ts("While this work is anonymous, comments you post will also be listed anonymously.") %>
+          </p>
         <% end %>
+
         <% if current_user.pseuds.count > 1 %>
           <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>
@@ -78,7 +84,6 @@
           <dd>
             <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
-            <%= f.hidden_field :ip_address, :value => "#{request.remote_ip}", :id => "comment_ip_address_for_#{commentable.id}" %>
           </dd>
         </dl>
 
@@ -90,11 +95,10 @@
               $j(name_id).val($j.cookie('comment_name'));
             }
             if (!$j(email_id).val()) {
-              $j(email_id).val($j.cookie('comment_email'));              
+              $j(email_id).val($j.cookie('comment_email'));
             }
           <% end %>
         <% end %>
-        
       <% end %>
 
       <p>

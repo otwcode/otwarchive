@@ -2,18 +2,13 @@ require 'spec_helper'
 
 describe UserMailer do
 
-  describe "claim notification" do
+  context "claim notification" do
     title = 'Imported Work Title'
     title2 = 'Second ' + title
-
-    before(:each) do
-      @author = FactoryGirl.create(:user)
-
-      @work = FactoryGirl.create(:work, title: title, authors: [@author.pseuds.first])
-      @work2 = FactoryGirl.create(:work, title: title2, authors: [@author.pseuds.first])
-    end
-
-    let(:email) { UserMailer.claim_notification(@author.id, [@work.id, @work2.id], true).deliver }
+    let(:author) { create(:user) }
+    let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
+    let(:work2) { create(:work, title: title2, authors: [author.pseuds.first]) }
+    let(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true).deliver }
 
     # Shared content tests for both email types
     shared_examples_for 'claim content' do
@@ -74,7 +69,7 @@ describe UserMailer do
     title2 = 'Second ' + title
     token = 'abc123'
 
-    before(:all) do
+    before(:each) do
       @author = FactoryGirl.create(:user)
       @archivist = FactoryGirl.create(:user)
       @external_author = FactoryGirl.create(:external_author)
@@ -87,6 +82,20 @@ describe UserMailer do
       @work2 = FactoryGirl.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
       FactoryGirl.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
       FactoryGirl.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
+    end
+
+    # before(:all) doesn't get cleaned up by database cleaner
+    after(:all) do
+      @author.destroy if @author
+      @archivist.destroy if @archivist
+      @external_author.destroy if @external_author
+      @external_author_name.destroy if @external_author_name
+
+      @invitation.destroy if @invitation
+      @fandom1.destroy if @fandom1
+
+      @work.destroy if @work
+      @work2.destroy if @work2
     end
 
     let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver }

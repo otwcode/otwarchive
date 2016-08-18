@@ -19,5 +19,10 @@ end
 redis_configs = YAML.load_file(rails_root + '/config/redis.yml')
 redis_configs.each_pair do |name, redis_config|
   redis_host, redis_port = redis_config[rails_env].split(":")
-  Object.const_set(name.upcase, Redis.new(host: redis_host, port: redis_port))
+  redis_connection = Redis.new(host: redis_host, port: redis_port)
+  if ENV['DEV_USER']
+    namespaced_redis = Redis::Namespace.new(ENV['DEV_USER'], :redis => redis_connection)
+    redis_connection = namespaced_redis
+  end
+  Object.const_set(name.upcase, redis_connection)
 end
