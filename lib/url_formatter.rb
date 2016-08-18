@@ -26,6 +26,10 @@ class UrlFormatter
       return input.gsub(/(\?|#).*$/, '') << querystring.to_s
     end
   end
+
+  def minimal_no_http
+    minimal.gsub(/https?:\/\/www\./, "")
+  end
   
   def no_www
     minimal.gsub(/http:\/\/www\./, "http://")

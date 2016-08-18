@@ -1,19 +1,27 @@
 <% content_for :message do %>
   <p>
-    Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.
+    Hi <%= @username.present? ? @username + "!" : "!" %>
   </p>
-  
+
   <p>
-    In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.
-  </p>
-  
-  <p>
-    Here is a copy of your message for your reference:
+    We're working hard to reply to everyone, and we'll respond to you as soon as we can.
+    Your communication is greatly valued, and it will be reviewed and
+    answered by our volunteer Support team. In the meantime, here is a copy of
+    the information you submitted through the Technical Support and Feedback
+    form:
   </p>
   
   <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
 
-  <p>Love, the AO3 Support team.</p>
+  <p>
+    If you have additional questions or information, do not hesitate to send in
+    another ticket.
+  </p>
+
+  <p>
+    Regards,<br/>
+    the AO3 Support team
+  </p>
 <% end %>
 
 <% content_for :sent_at do %>
