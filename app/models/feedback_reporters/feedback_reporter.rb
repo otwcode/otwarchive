@@ -28,8 +28,7 @@ class FeedbackReporter
     # URL needs to be Percent-encoded so that everything shows up correctly on
     # the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
     encoded_xml = CGI.escape(xml.to_str)
-    puts "ORANGEZ: #{ArchiveConfig.BUGS_SITE}/#{project_path}#{encoded_xml}"
-    HTTParty.post("#{ArchiveConfig.BUGS_SITE}#{project_path}".to_s,
+    HTTParty.post("#{ArchiveConfig.BUGS_SITE}#{project_path}",
                   body: "&xml=#{encoded_xml}")
   end
 
