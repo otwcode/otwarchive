@@ -18,17 +18,3 @@ Feature: User statistics
   When I go to my stats page
   Then I should see "Don Solves Crime"
     And I should not see "Charlie Helps"
-  
-  Scenario: Do not show hit counts on stats page when user has set preference to hide hit counts on their own works
-  
-  Given I am logged in as "NUMB3RSfan"
-    And I set my preferences to hide hit counts on my works
-  When I go to my stats page
-  Then I should not see "Hits"
-  
-  Scenario: Do not show hit counts on stats page when user has set preference to hide all hit counts
-  
-  Given I am logged in as "NUMB3RSfan"
-    And I set my preferences to hide all hit counts
-  When I go to my stats page
-  Then I should not see "Hits"
