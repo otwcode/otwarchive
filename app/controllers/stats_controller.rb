@@ -25,8 +25,6 @@ class StatsController < ApplicationController
     
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is 
     # checked against the whitelist of valid options
-    sort_options = ""
-    @sort = ""
     sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
     @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     
