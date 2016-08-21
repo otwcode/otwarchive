@@ -27,13 +27,8 @@ class StatsController < ApplicationController
     # checked against the whitelist of valid options
     sort_options = ""
     @sort = ""
-    if current_user.preference.hide_hit_counts
-      sort_options = %w(date kudos.count comments.count bookmarks.count subscriptions.count word_count)
-      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
-    else
-      sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
-      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
-    end
+    sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
+    @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
     params[:sort_column] = @sort
@@ -78,7 +73,6 @@ class StatsController < ApplicationController
     @chart_data = GoogleVisualr::DataTable.new    
     @chart_data.new_column('string', 'Title')
 
-    # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
     if @sort == "date" && @dir == "ASC"

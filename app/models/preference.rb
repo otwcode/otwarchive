@@ -27,7 +27,4 @@ class Preference < ActiveRecord::Base
     self.time_zone = try if ActiveSupport::TimeZone[try]
   end
 
-  def hide_hit_counts
-    self.try(:hide_all_hit_counts) || self.try(:hide_private_hit_count)
-  end
 end

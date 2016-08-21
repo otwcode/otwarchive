@@ -19,7 +19,7 @@ module WorksHelper
     if (bookmark_count = work.public_bookmarks_count) > 0
       list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
+    list.concat([[ts('Hits:'), 'hits', work.hits]])
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
@@ -28,17 +28,6 @@ module WorksHelper
     end
     list = list.map { |list_item| content_tag(:dt, list_item.first, class: list_item.second) + content_tag(:dd, list_item.last.to_s, class: list_item.second) }.join.html_safe
     content_tag(:dl, list.to_s, class: 'stats').html_safe
-  end
-
-  def show_hit_count?(work)
-    return false if logged_in? && current_user.preference.try(:hide_all_hit_counts)
-    author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
-    all_authors_want_public_hits = work.users.select { |u| u.preference.try(:hide_public_hit_count) }.empty?
-    author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
-  end
-
-  def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.value_of(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)

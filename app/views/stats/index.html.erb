@@ -33,10 +33,8 @@
       <dt class="<%= html_class %>"><%= stat_text %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
-    <% unless @user.preference.hide_hit_counts %>
-      <dt class="hits"><%= ts("Hits:") %></dt>
-      <dd class="hits"><%= @totals[:hits] %></dd>
-    <% end %>
+    <dt class="hits"><%= ts("Hits:") %></dt>
+    <dd class="hits"><%= @totals[:hits] %></dd>
   </dl>
 </div>
 
@@ -50,9 +48,7 @@
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <li><%= sort_link ts("Date"), "date" %></li>
-    <% unless @user.preference.hide_hit_counts %>
-      <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
-    <% end %>
+    <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
     <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
@@ -88,10 +84,8 @@
                     <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
                     <dd class="subscriptions"><%= work_subscriber_count %></dd>
                   <% end %>
-                  <% unless @user.preference.hide_hit_counts %>
-                    <dt class="hits"><%= ts("Hits:") %></dt>
-                    <dd class="hits"><%= work.hits %></dd>
-                  <% end %>
+                  <dt class="hits"><%= ts("Hits:") %></dt>
+                  <dd class="hits"><%= work.hits %></dd>
                   <% # dt ts("Downloads:") /dt dd work.downloads /dd %>
                   <dt class="kudos"><%= ts("Kudos:") %></dt>
                   <dd class="kudos"><%= work.kudos.count %></dd>

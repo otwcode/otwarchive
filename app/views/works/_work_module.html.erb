@@ -114,10 +114,8 @@
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
   <% end %>
 
-  <% if show_hit_count_to_public?(work) %>
-    <dt class="hits"><%= ts("Hits") %>:</dt>
-    <dd class="hits"><%= work.hits %></dd>
-  <% end %>
+  <dt class="hits"><%= ts("Hits") %>:</dt>
+  <dd class="hits"><%= work.hits %></dd>
 <% end %>
 <% #### END CACHE stats #### %>
 

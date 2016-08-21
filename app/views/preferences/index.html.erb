@@ -91,27 +91,6 @@
 </fieldset>
 
 <fieldset>
-  <legend><%= ts('Statistics') %></legend>
-
-  <h4 class="heading"><%= ts('Statistics') %> <%= link_to_help 'statistics-preferences' %></h4>
-  <ul>
-    <li>
-      <%= f.check_box :hide_all_hit_counts %>
-      <%= f.label :hide_all_hit_counts, ts("Don't show me any hit counts.") %>
-    </li>
-
-    <li>
-      <%= f.check_box :hide_private_hit_count %>
-      <%= f.label :hide_private_hit_count, ts("Don't show me hits on my works.") %>
-    </li>
-
-    <li>
-      <%= f.check_box :hide_public_hit_count %>
-      <%= f.label :hide_public_hit_count, ts("Don't show other people hits on my works.") %>
-    </li>
-  </ul>
-</fieldset>
-<fieldset>
 	<legend><%= ts('Comments') %></legend>
   <h4 class="heading"><%= ts('Comments') %> <%= link_to_help 'comment-preferences' %></h4>
   <ul>
