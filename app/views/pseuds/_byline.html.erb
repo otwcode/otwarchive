@@ -28,13 +28,15 @@
     <ul class="many options index">
       <% for author in @coauthors %>
         <li>
+          <% # You should only be able to add co-creators %>
+          <% author_is_coauthor = @chapter.new_record? ? false : @selected_pseuds.include?(author.id) %>
           <%= label_tag "chapter_author_attributes_coauthors_#{author.id}",
                         author.id, class: "action" do %>
             <%= check_box_tag "chapter[author_attributes][coauthors][]",
                               author.id,
-                              @selected_pseuds.include?(author.id),
-                              id: "chapter_author_attributes_coauthors_#{author.id}",
-                              disabled: @selected_pseuds.include?(author.id) unless @chapter.new_record? %>
+                              author_is_coauthor,
+                              disabled: author_is_coauthor,
+                              id: "chapter_author_attributes_coauthors_#{author.id}" %>
             <%= author.name %>
           <% end %>
         </li>
