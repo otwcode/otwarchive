@@ -8,7 +8,7 @@
 
 <% if @coauthors.size > 0 %>
   <dt class="byline">
-    <%= @chapter ? ts("Work co-creators") : ts("Current co-creators") %>
+    <%= type == "chapter" ? ts("Work co-creators") : ts("Current co-creators") %>
   </dt>
   <dd class="byline">
     <ul>
@@ -19,7 +19,7 @@
   </dd>
 <% end %>
 
-<% if @chapter %>
+<% if type == "chapter" %>
   <dt>
     <%= ts("Chapter co-creators") %>
   </dt>
@@ -49,8 +49,8 @@
  <%= label_tag "co-authors-options-show", ts('Add co-creators?') %> 
 </dt>
 <dd class="byline coauthors">
-  <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
+  <%= check_box_tag "co-authors-options-show", "1", nil, class: "toggle_formfield" %>
   <fieldset id="co-authors-options" title="<%= ts('Add co-creators') %>">
-    <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
+    <%= text_field :pseud, :byline, autocomplete_options("pseud", size: 50) %>
   </fieldset>
 </dd>
