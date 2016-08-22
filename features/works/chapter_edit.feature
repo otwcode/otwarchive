@@ -279,6 +279,7 @@ Feature: Edit chapters
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
 
+
   Scenario: Posting a new chapter with a co-creator does not add them to previous or
   subsequent chapters
 
@@ -334,12 +335,11 @@ Feature: Edit chapters
   Scenario: Editing a chapter with a co-creator should not give you the ability to
   remove them as a co-creator
 
-  Given I am logged in as "karma" with password "the1noly"
-    And I post the work "Camp Friends"
-    And a chapter with the co-author "sabrina" is added to "Camp Friends"
-  When I follow "Edit Chapter"
-  Then I should see "Chapter co-creators"
-    And the "sabrina" checkbox should be checked
-    And the "sabrina" checkbox should be disabled
+    Given I am logged in as "karma" with password "the1noly"
+      And I post the work "Camp Friends"
+      And a chapter with the co-author "sabrina" is added to "Camp Friends"
+    When I follow "Edit Chapter"
+    Then I should see "Chapter co-creators"
+      And the "sabrina" checkbox should be checked
+      And the "sabrina" checkbox should be disabled
 
- 
