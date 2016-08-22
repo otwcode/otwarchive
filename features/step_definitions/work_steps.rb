@@ -239,7 +239,7 @@ When /^a new chapter for "([^\"]*)" is started$/ do |work_title|
 end
 
 # meant to be used in conjunction with above step
-When /^I post the(?:draft)? chapter$/ do
+When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
 end
