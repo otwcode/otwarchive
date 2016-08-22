@@ -343,3 +343,16 @@ Feature: Edit chapters
       And the "sabrina" checkbox should be checked
       And the "sabrina" checkbox should be disabled
 
+
+  Scenario: Editing a chapter even if you are not a co-creator
+
+    Given I am logged in as "originalposter"
+      And I post the work "OP's Work"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
+    When I am logged in as "opsfriend"
+      And I view the work "OP's Work"
+      And I follow "Edit Chapter"
+      And I fill in "content" with "opsfriend was here"
+      And I post the chapter
+    Then I should see "opsfriend was here"
+      And I should see "Chapter by originalposter"
