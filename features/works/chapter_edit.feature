@@ -202,7 +202,7 @@ Feature: Edit chapters
   When I press "Post"
     Then I should see "Chapter was successfully posted."
     And I should not see "This chapter is a draft and hasn't been posted yet!"
-  
+
 
   Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
   Given basic tags
@@ -228,7 +228,7 @@ Feature: Edit chapters
   Then I should see "Chapter was successfully updated."
     And I should see "This chapter is a draft and hasn't been posted yet!"
     And I should see "Like the ability to save easily."
-    
+
 
   Scenario: Chapter drafts aren't updates; posted chapter drafts are
     Given I am logged in as "testuser" with password "testuser"
@@ -251,7 +251,7 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
       And I press "Post Without Preview"
       Then I should see Updated today
-      
+
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
 
@@ -278,3 +278,68 @@ Feature: Edit chapters
       And I press "Post Without Preview"
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
+
+  Scenario: Posting a new chapter with a co-creator does not add them to previous or
+  subsequent chapters
+
+    Given I am logged in as "karma" with password "the1nonly"
+      And I post the work "Summer Friends"
+    When a new chapter for "Summer Friends" is started
+    Then I should not see "Chapter co-creators"
+    When I add the co-author "sabrina"
+      And I post the chapter
+    Then I should see "karma, sabrina"
+    When I follow "Previous Chapter"
+    Then I should see "Chapter by karma"
+    When a new chapter for "Summer Friends" is started
+    Then I should see "Chapter co-creators"
+      And the "sabrina" checkbox should not be checked
+    When I post the chapter
+    Then I should see "Chapter by karma"
+
+
+  Scenario: You should be able to edit a chapter to add a co-creator who is not already
+  on the work
+
+    Given I am logged in as "karma" with password "the1nonly"
+      And I post the work "Forever Friends"
+      And a chapter is added to "Forever Friends"
+    When I view the work "Forever Friends"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    Then I should not see "Chapter co-creators"
+    When I add the co-author "amy"
+      And I post the chapter
+    Then I should see "amy, karma"
+
+
+  Scenario: You should be able to edit a chapter to add a co-creator who is already on
+  the work
+
+    Given I am logged in as "karma" with password "the1noly"
+      And I post the work "Past Friends"
+      And a chapter with the co-author "sabrina" is added to "Past Friends"
+      And a chapter is added to "Past Friends"
+   When I view the work "Past Friends"
+      And I view the 3rd chapter
+    Then I should see "Chapter by karma"
+    When I follow "Edit Chapter"
+    Then I should see "Chapter co-creators"
+      And the "sabrina" checkbox should not be checked
+    When I check "sabrina"
+      And I post the chapter
+    Then I should not see "Chapter by karma"
+
+
+  Scenario: Editing a chapter with a co-creator should not give you the ability to
+  remove them as a co-creator
+
+  Given I am logged in as "karma" with password "the1noly"
+    And I post the work "Camp Friends"
+    And a chapter with the co-author "sabrina" is added to "Camp Friends"
+  When I follow "Edit Chapter"
+  Then I should see "Chapter co-creators"
+    And the "sabrina" checkbox should be checked
+    And the "sabrina" checkbox should be disabled
+
+ 

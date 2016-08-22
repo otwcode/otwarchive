@@ -174,8 +174,8 @@ Given /^a set of users for testing autocomplete$/ do
 end
 
 Then /^the coauthor autocomplete field should list matching users$/ do
-  check("Add co-authors?")
-  fill_in("pseud_byline", :with => "coa")
+  check("co-authors-options-show")
+  fill_in("pseud_byline", with: "coa")
   step %{I should see "coauthor" in the autocomplete}
   step %{I should not see "giftee" in the autocomplete}
 end
