@@ -513,3 +513,11 @@ end
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
+
+Then /^the Remove Me As Author option should be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should see "Remove Me As Author" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^the Remove Me As Author option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should not see "Remove Me As Author" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
