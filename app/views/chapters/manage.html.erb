@@ -16,7 +16,7 @@
           <li><%= link_to ts("Edit"), [:edit, @work, chapter] %></li>
            <% if @work.chapters.count > 1 %>
              <li><%= link_to ts("Delete"), [@work, chapter], :confirm => ts("Are you sure?"), :method => :delete %></li>
-             <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 %>
+             <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 && current_user.is_author_of?(@chapter) %>
                <li><%= link_to ts("Remove Me As Author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => ts("You will no longer be able to edit this chapter. Are you sure?") %></li>
              <% end %> 
           <% end %>
