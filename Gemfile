@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.1.9'
+gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
@@ -131,7 +132,6 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
-  gem 'test-unit', '~> 3.0'
   gem 'minitest'
 end
 
