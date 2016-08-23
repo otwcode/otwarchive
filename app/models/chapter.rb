@@ -94,6 +94,13 @@ class Chapter < ActiveRecord::Base
     end
   end
 
+  after_save :expire_caches
+  def expire_caches
+    unless Rails.env.development?
+      self.touch
+    end
+  end
+
   def moderated_commenting_enabled?
     work && work.moderated_commenting_enabled?
   end
