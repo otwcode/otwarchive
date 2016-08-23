@@ -93,7 +93,7 @@ class ChaptersController < ApplicationController
     if params["remove"] == "me"
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
-      flash[:notice] = ts("You have been removed as an author from the chapter")
+      flash[:notice] = ts("You have been removed as a creator from the chapter")
      redirect_to @work
     end
   end
