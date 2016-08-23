@@ -94,7 +94,7 @@ class ChaptersController < ApplicationController
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
       flash[:notice] = ts("You have been removed as a creator from the chapter")
-     redirect_to @work
+      redirect_to @work
     end
   end
 
