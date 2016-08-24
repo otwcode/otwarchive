@@ -346,11 +346,9 @@ Feature: Edit chapters
 
   Scenario: Editing a chapter even if you are not a co-creator
 
-    Given I am logged in as "originalposter"
-      And I post the work "OP's Work"
-      And a chapter with the co-author "opsfriend" is added to "OP's Work"
-    When I am logged in as "opsfriend"
-      And I view the work "OP's Work"
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
     Then I should see "Chapter 1"
       And I should see "Chapter by originalposter"
     When I follow "Edit Chapter"
@@ -358,3 +356,51 @@ Feature: Edit chapters
       And I post the chapter
     Then I should see "opsfriend was here"
       And I should see "Chapter by originalposter"
+
+
+  Scenario: Removing yourself as a co-creator from the chapter edit page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter 2"
+      And I should see "Chapter by originalposter"
+
+
+  Scenario: Removing yourself as a co-creator from the chapter manage page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter by originalposter"
+
+
+  Scenario: The option to remove yourself as a co-creator should only be included for
+  chapters you are a co-creator of
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    Then the Remove Me As Chapter Co-Creator option should not be on the 1st chapter
+      And the Remove Me As Chapter Co-Creator option should be on the 2nd chapter
+    When I view the work "OP's Work"
+      And I follow "Edit Chapter"
+    Then I should not see "Remove Me As Chapter Co-Creator"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    Then I should see "Remove Me As Chapter Co-Creator"

@@ -152,6 +152,12 @@ Given /^the work "([^\"]*)"$/ do |work|
   end
 end
 
+Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
+  step %{I am logged in as "#{author}"}
+  step %{I post the work "#{work}"}
+  step %{a chapter with the co-author "#{coauthor}" is added to "#{work}"}
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
@@ -512,4 +518,12 @@ end
 
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
+end
+
+Then /^the Remove Me As Chapter Co-Creator option should be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
