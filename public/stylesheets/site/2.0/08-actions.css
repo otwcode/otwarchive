@@ -98,6 +98,10 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
 }
 
+.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+  margin: 0.375em auto;
+}
+
 .delete a, span.delete {
   border: 0;
   color: #900;
