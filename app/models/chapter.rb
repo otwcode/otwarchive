@@ -80,6 +80,9 @@ class Chapter < ActiveRecord::Base
   
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.posted_changed? }
+
+  after_save :expire_cache_on_coauthor_removal
+
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
@@ -202,10 +205,12 @@ class Chapter < ActiveRecord::Base
   def commentable_name
     self.work.title
   end
-  
-   # private
-   # 
-   # def add_to_list_bottom    
-   # end
-  
+
+  private
+
+  def expire_cache_on_coauthor_removal
+    if self.authors_to_remove.present?
+      self.touch
+    end
+  end
 end

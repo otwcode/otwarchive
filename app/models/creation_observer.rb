@@ -119,8 +119,6 @@ class CreationObserver < ActiveRecord::Observer
       creation.pseuds.delete(creation.authors_to_remove)
       if creation.is_a?(Work)
         creation.chapters.first.pseuds.delete(creation.authors_to_remove)
-      elsif creation.is_a?(Chapter)
-        creation.touch
       end
     end
   end
