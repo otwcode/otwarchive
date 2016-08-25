@@ -320,7 +320,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
-    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+    And I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
     And I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
@@ -353,8 +353,12 @@ Scenario: Delete bookmarks of a work and a series
     | markymark   | password   |
     And I am logged in as "wahlly"
     And I add the work "A Mighty Duck" to series "The Funky Bunch"
+    And I add the work "A Mighty Duck2 the sequel" to series "The Funky Bunch"
   When I log out
     And I am logged in as "markymark"
+    And I view the work "A Mighty Duck2 the sequel"
+    And I follow "Bookmark"
+    And I press "Create"
     And I view the work "A Mighty Duck"
     And I follow "Bookmark"
     And I press "Create"
@@ -370,6 +374,24 @@ Scenario: Delete bookmarks of a work and a series
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
   Then I should see "Bookmark was successfully deleted."
+  When I go to my bookmarks page
+  Then I should see "A Mighty Duck2 the sequel"
+  When I log out
+    And I am logged in as "wahlly"
+    And I delete the work "A Mighty Duck2 the sequel"
+    Then I should see "A Mighty Duck2 the sequel was deleted."
+  When I log out
+    And I am logged in as "markymark"
+  When I go to my bookmarks page
+  Then I should see "This has been deleted, sorry!"
+    And I follow "Edit"
+    And I check "bookmark_private"
+    And I press "Update"
+  Then I should see "Bookmark was successfully updated"
+  When I follow "Delete"
+    And I press "Yes, Delete Bookmark"
+  Then I should see "Bookmark was successfully deleted."
+
 
 Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
   Given a fandom exists with name: "Testing BEW Button", canonical: true

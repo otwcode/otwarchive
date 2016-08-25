@@ -73,4 +73,12 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
+  # https://github.com/winebarrel/activerecord-mysql-reconnect
+  config.active_record.enable_retry = true
+  config.active_record.execution_tries = 20 # times
+  config.active_record.execution_retry_wait = 0.3 # sec
+  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
+  config.active_record.retry_mode = :rw
+
+
 end
