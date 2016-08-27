@@ -24,8 +24,8 @@ Are there any other relevant issues / PRs / mailing lists discussions related to
 
 ## Credit
 
-What name do you want us to use to credit your work in the [Archive of Our Own's Release Notes](http://archiveofourown.org/admin_posts?tag=1)?
+*What name do you want us to use to credit your work in the [Archive of Our Own's Release Notes](http://archiveofourown.org/admin_posts?tag=1)?*
 
-What pronouns do you prefer (she/her, he/him, zie/hir etc)?
+*What pronouns do you prefer (she/her, he/him, zie/hir etc)?*
 
 (if you do not fill this in, we will use your GitHub account name and will use "they" to avoid making assumptions about your gender)

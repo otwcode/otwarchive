@@ -1,6 +1,6 @@
 # We do not use GitHub for issues!
 
-Please do not create issues here. OTW volunteers create agreed issues in our 
+Please do not create issues here. OTW volunteers create approved issues in our 
 [JIRA issue tracker](https://otwarchive.atlassian.net) - please see below if you want to report a bug.
 
 ## To get help or report a bug
