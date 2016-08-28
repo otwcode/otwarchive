@@ -440,7 +440,7 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      return story
+      return story.force_encoding("UTF-8")
     end
 
     # canonicalize the url for downloading from lj or clones
