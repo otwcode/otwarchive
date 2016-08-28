@@ -5,7 +5,7 @@
   
   <p><%= t('user_mailer.admin_deleted_work_notification.html.part2', opendoors_link: opendoors_link(t 'user_mailer.admin_deleted_work_notification.opendoors')).html_safe %>
  
-  <p><%= t('user_mailer.admin_deleted_work_notification.html.part3', abuse: abuse_link(t 'user_mailer.admin_deleted_work_notification.abuse_committee' ) ).html_safe %>
+  <p><%= t('user_mailer.admin_deleted_work_notification.html.part3', abuse_link: abuse_link(t 'user_mailer.admin_deleted_work_notification.abuse_committee' ) ).html_safe %>
   
   <p><%= t 'user_mailer.admin_deleted_work_notification.bye' %></p>
 <% end %>
