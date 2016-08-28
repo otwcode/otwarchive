@@ -369,8 +369,8 @@ class UserMailer < BulletproofMailer::Base
         subject: t('user_mailer.admin_hidden_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
     )
     end
-    ensure
-      I18n.locale = I18n.default_locale
+  ensure
+    I18n.locale = I18n.default_locale
   end
 
   def delete_signup_notification(user, challenge_signup)
