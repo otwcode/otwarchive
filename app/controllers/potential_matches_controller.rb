@@ -83,7 +83,9 @@ class PotentialMatchesController < ApplicationController
       if params[:no_giver]
         @assignments = @collection.assignments.with_request.with_no_offer.order_by_requesting_pseud
       elsif params[:no_recipient]
-        @assignments = @collection.assignments.with_offer.with_no_request.order_by_offering_pseud
+        # ordering causes this to hang on large challenge due to
+        # left join required to get offering pseuds
+        @assignments = @collection.assignments.with_offer.with_no_request # .order_by_offering_pseud
       elsif params[:dup_giver]
         @assignments = ChallengeAssignment.duplicate_givers(@collection).order_by_offering_pseud
       elsif params[:dup_recipient]

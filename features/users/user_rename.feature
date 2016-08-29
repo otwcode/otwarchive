@@ -74,7 +74,7 @@ Feature:
     When I go to my pseuds page
       Then I should not see "oldusername"
     When I follow "Edit"
-    Then I should see "cannot change your fallback pseud"
+    Then I should see "You cannot change the pseud that matches your user name"
     Then the "pseud_is_default" checkbox should be checked
       And the "pseud_is_default" checkbox should be disabled
 
@@ -90,7 +90,7 @@ Feature:
     When I go to my pseuds page
       Then I should not see "uppercrust"
     When I follow "Edit"
-    Then I should see "cannot change your fallback pseud"
+    Then I should see "You cannot change the pseud that matches your user name"
     Then the "pseud_is_default" checkbox should be checked
       And the "pseud_is_default" checkbox should be disabled
 
