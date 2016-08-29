@@ -94,6 +94,8 @@ class Sanitize
         then "dailymotion"
       when /^viddler\.com\//
         then "viddler"
+      when /^viddlertube\.com\//
+        then "viddlertube"
       when /^metacafe\.com\//
         then "metacafe"
       when /^vidders\.net\//
