@@ -210,7 +210,6 @@ describe StoryParser do
       to_return(status: 200,
                 body: body.force_encoding("Windows-1252"),
                 headers: {})
-
   end
 
   describe "Import" do
@@ -227,8 +226,7 @@ describe StoryParser do
       urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
       urls.each do |url|
         expect {
-          @sp.download_and_parse_story(url, { pseuds: [@user.default_pseud],
-                                              do_not_set_current_author: false })
+          @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
         }.to_not raise_exception
       end
     end
