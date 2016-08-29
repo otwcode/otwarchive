@@ -86,7 +86,7 @@ end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
   work = Work.find_by_title!(work)
-  visit new_work_comment_path(work, :only_path => false)
+  visit new_work_comment_path(work, only_path: false)
 end
 
 When /^I comment on an admin post$/ do
