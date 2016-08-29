@@ -93,7 +93,7 @@ class Sanitize
       when /^dailymotion\.com\//
         then "dailymotion"
       when /^viddler\.com\//
-        then "vidder"
+        then "viddler"
       when /^viddertube\.com\//
         then "viddertube"
       when /^metacafe\.com\//
@@ -121,7 +121,7 @@ class Sanitize
       # if we don't know the source, sorry
       return if source.nil?           
 
-      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud", "viddertube"]
+      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
