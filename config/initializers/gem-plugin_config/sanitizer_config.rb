@@ -83,7 +83,7 @@ class Sanitize
       
       source = case url
       when /^archive\.org\//
-+        then "archiveorg"
+        then "archiveorg"
       when /^youtube(-nocookie)?\.com\//
         then "youtube"
       when /^(player\.)?vimeo\.com\//
