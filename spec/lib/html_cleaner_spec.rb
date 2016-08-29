@@ -206,7 +206,7 @@ describe HtmlCleaner do
       end
 
       %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com
-         viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
+         viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
 
         it "should allow embeds from #{source}" do
