@@ -175,4 +175,62 @@ describe StoryParser do
       end
     end
   end
+
+  # Let the test get at external sites, but stub out anything containing certain keywords
+  def mock_external
+    curly_quotes = "String with non-ASCII “Curly quotes” and apostrophes’"
+
+    body = "
+      Title: #{curly_quotes}
+      Summary: #{curly_quotes}
+      Fandom: #{curly_quotes}
+      Rating: #{curly_quotes}
+      Warnings: #{curly_quotes}
+      Characters: #{curly_quotes}
+      Pairing: Includes a character – that broke the importer
+      Category: #{curly_quotes}
+      Tags: #{curly_quotes}
+      Author's notes: #{curly_quotes}
+
+      stubbed response".gsub('      ', '')
+
+    WebMock.allow_net_connect!
+
+    WebMock.stub_request(:any, /ascii-8bit/).
+      to_return(status: 200,
+                body: body.force_encoding("ASCII-8BIT"),
+                headers: {})
+
+    WebMock.stub_request(:any, /utf-8/).
+      to_return(status: 200,
+                body: body,
+                headers: {})
+
+    WebMock.stub_request(:any, /win-1252/).
+      to_return(status: 200,
+                body: body.force_encoding("Windows-1252"),
+                headers: {})
+
+  end
+
+  describe "Import" do
+    before do
+      mock_external
+      @user = create(:user)
+    end
+
+    after do
+      WebMock.reset!
+    end
+
+    it "should not throw an exception with non-ASCII characters in metadata fields" do
+      urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
+      urls.each do |url|
+        expect {
+          @sp.download_and_parse_story(url, { pseuds: [@user.default_pseud],
+                                              do_not_set_current_author: false })
+        }.to_not raise_exception
+      end
+    end
+  end
 end

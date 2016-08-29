@@ -440,7 +440,7 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      return story.force_encoding("UTF-8")
+      return story
     end
 
     # canonicalize the url for downloading from lj or clones
@@ -943,7 +943,7 @@ class StoryParser
     # works conservatively -- doesn't split on
     # spaces and truncates instead.
     def clean_tags(tags)
-      tags = Sanitize.clean(tags) # no html allowed in tags
+      tags = Sanitize.clean(tags.force_encoding("UTF-8")) # no html allowed in tags
       if tags.match(/,/)
         tagslist = tags.split(/,/)
       else
