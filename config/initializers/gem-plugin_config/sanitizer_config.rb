@@ -82,6 +82,8 @@ class Sanitize
       url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
       
       source = case url
+      when /^archive\.org\//
+        then "archiveorg"
       when /^youtube(-nocookie)?\.com\//
         then "youtube"
       when /^(player\.)?vimeo\.com\//
