@@ -943,7 +943,7 @@ class StoryParser
     # works conservatively -- doesn't split on
     # spaces and truncates instead.
     def clean_tags(tags)
-      tags = Sanitize.clean(tags) # no html allowed in tags
+      tags = Sanitize.clean(tags.force_encoding("UTF-8")) # no html allowed in tags
       if tags.match(/,/)
         tagslist = tags.split(/,/)
       else

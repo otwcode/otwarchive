@@ -205,8 +205,8 @@ describe HtmlCleaner do
         expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
       end
 
-      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com
-         viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
+         metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
 
         it "should allow embeds from #{source}" do
