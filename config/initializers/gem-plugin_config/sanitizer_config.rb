@@ -86,14 +86,10 @@ class Sanitize
         then "youtube"
       when /^(player\.)?vimeo\.com\//
         then "vimeo"
-      when /^blip\.tv\//
-        then "blip"
       when /^(static\.)?ning\.com\//
         then "ning"
       when /^dailymotion\.com\//
         then "dailymotion"
-      when /^viddler\.com\//
-        then "viddler"
       when /^metacafe\.com\//
         then "metacafe"
       when /^vidders\.net\//
