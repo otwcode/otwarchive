@@ -90,6 +90,8 @@ class Sanitize
         then "ning"
       when /^dailymotion\.com\//
         then "dailymotion"
+      when /^viddertube\.com\//
+        then "viddertube"
       when /^metacafe\.com\//
         then "metacafe"
       when /^vidders\.net\//
