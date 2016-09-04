@@ -66,10 +66,14 @@ namespace :deploy do
   desc "Restart the unicorns"
   task :restart  do
     find_servers(roles: [:app, :web]).each do |server|
+      system( "ssh ao3-front01 ~/bin/disable_server #{server}")
+      system( "ssh ao3-front02 ~/bin/disable_server #{server}")
       puts "restart on #{server.host}"
       run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , :hosts => server.host
       run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
-      sleep(90)
+      sleep(80)
+      system( "ssh ao3-front01 ~/bin/enable_server #{server}")
+      system( "ssh ao3-front02 ~/bin/enable_server #{server}")
     end
   end
 
