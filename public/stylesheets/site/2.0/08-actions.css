@@ -146,13 +146,6 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
     border-radius: 0.15em;
 }
 
-.actions .modifier input, .actions .modifier label {
-  background: none transparent;
-  border: none;
-    border-radius: 0;
-    box-shadow: none;
-}
-
 /* CONTEXTS */
 
 .heading .actions, .heading .action, .heading span.actions {
