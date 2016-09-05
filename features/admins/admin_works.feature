@@ -188,7 +188,7 @@ Feature: Admin Actions for Works and Bookmarks
     When I follow "Comments (2)"
     Then I should not see "rolex"
       And I should see "I loved this!"
-
+      
   Scenario: Admin can edit language on works when posting without previewing
     Given basic tags
       And basic languages
@@ -217,3 +217,25 @@ Feature: Admin Actions for Works and Bookmarks
     When I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"  
+
+  Scenario: can mark a work as spam
+  Given the work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark As Spam"
+  When I follow "Mark As Spam"
+  Then I should see "marked as spam and hidden"
+    And I should see "Mark Not Spam"
+    And the work "Spammity Spam" should be marked as spam
+    And the work "Spammity Spam" should be hidden
+    
+  Scenario: can mark a spam work as not-spam
+  Given the spam work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark Not Spam"
+  When I follow "Mark Not Spam"
+  Then I should see "marked not spam and unhidden"
+    And I should see "Mark As Spam"
+    And the work "Spammity Spam" should not be marked as spam
+    And the work "Spammity Spam" should not be hidden

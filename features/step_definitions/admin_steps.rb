@@ -298,6 +298,20 @@ Then (/^I should not see a translated admin post$/) do
   step(%{I should not see "Translations: Deutsch"})
 end
 
+Then /^the work "([^\"]*)" should be hidden$/ do |work|
+  w = Work.find_by_title(work)
+  user = w.pseuds.first.user.login
+  step %{logged out users should not see the hidden work "#{work}" by "#{user}"}
+  step %{logged in users should not see the hidden work "#{work}" by "#{user}"}
+end
+
+Then /^the work "([^\"]*)" should not be hidden$/ do |work|
+  w = Work.find_by_title(work)
+  user = w.pseuds.first.user.login
+  step %{logged out users should see the unhidden work "#{work}" by "#{user}"}
+  step %{logged in users should see the unhidden work "#{work}" by "#{user}"}
+end
+
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
   step(%{I am logged out})
   step(%{I should not see the hidden work "#{work}" by "#{user}"})
@@ -399,4 +413,14 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
   step %{I should not see "has been blocked at the owner's request"}
   step %{I should see "Comment created!"}
+end
+
+Then /^the work "([^\"]*)" should be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert w.spam?
+end
+
+Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.spam?
 end
