@@ -372,6 +372,16 @@ class Pseud < ActiveRecord::Base
   end
 
   def change_challenge_participation
+    # We want to update all prompts associated with this pseud, but although
+    # each prompt contains a pseud_id column, they're not indexed on it. That
+    # means doing the search Prompt.where(pseud_id: self.id) would require
+    # searching all rows of the prompts table. So instead, we do a join on the
+    # challenge_signups table and look up prompts whose ChallengeSignup has the
+    # pseud_id that we want to change.
+    Prompt.joins(:challenge_signup).
+      where("challenge_signups.pseud_id = #{id}").
+      update_all("prompts.pseud_id = #{user.default_pseud.id}")
+
     ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
     ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
     return
