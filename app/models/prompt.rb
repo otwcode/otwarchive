@@ -39,7 +39,7 @@ class Prompt < ActiveRecord::Base
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id) 
   }
-  
+
   # CALLBACKS
 
   before_destroy :clear_claims
@@ -229,13 +229,25 @@ class Prompt < ActiveRecord::Base
     super || tag_set.respond_to?(method, include_private)
   end
 
+  # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
+  # result as an instance variable for speed. This is used by the matching
+  # algorithm, which doesn't change any signup/prompt/tagset information, so
+  # it's okay to cache some information. (And if the info does change
+  # mid-matching process, it's okay that we're using the tag sets that were
+  # there when the moderator started the matching process.)
+  def full_tag_set
+    if @full_tag_set.nil?
+      @full_tag_set = optional_tag_set ? tag_set + optional_tag_set : tag_set
+    end
+
+    @full_tag_set
+  end
+
   # Returns PotentialPromptMatch object if matches, otherwise nil
   # self is the request, other is the offer
   def match(other, settings=nil)
     return nil if settings.nil?
     potential_prompt_match_attributes = {:offer => other, :request => self}
-    full_request_tag_set = self.optional_tag_set ? self.tag_set + self.optional_tag_set : self.tag_set
-    full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
 
     TagSet::TAG_TYPES.each do |type|
       if self.send("any_#{type}") || other.send("any_#{type}")
@@ -243,7 +255,7 @@ class Prompt < ActiveRecord::Base
       else
         required_count = settings.send("num_required_#{type.pluralize}")
         if settings.send("include_optional_#{type.pluralize}")
-          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+          match_count = full_tag_set.match_rank(other.full_tag_set, type)
         else
           # we don't use optional tags to count towards required
           match_count = self.tag_set.match_rank(other.tag_set, type)
@@ -257,7 +269,7 @@ class Prompt < ActiveRecord::Base
 
         # now get the match rank including optional tags if we didn't before
         if !settings.send("include_optional_#{type.pluralize}")
-          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+          match_count = full_tag_set.match_rank(other.full_tag_set, type)
         end
       end
 

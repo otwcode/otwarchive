@@ -110,7 +110,7 @@ public
       signup_ids = collection.signups.value_of(:id)
       signup_ids.each do |signup_id|
         break if PotentialMatch.canceled?(collection)
-        signup = ChallengeSignup.find(signup_id)
+        signup = ChallengeSignup.with_request_tags.find(signup_id)
         REDIS_GENERAL.set progress_key(collection), signup.id
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
       end
@@ -124,7 +124,7 @@ public
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
     max_matches = [
-      (collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT),
+      (collection.signups.count * ArchiveConfig.POTENTIAL_MATCHES_PERCENT) / 100,
       ArchiveConfig.POTENTIAL_MATCHES_MAX
     ].min
     max_matches = [max_matches, ArchiveConfig.POTENTIAL_MATCHES_MIN].max
@@ -135,12 +135,19 @@ public
     # We randomize the signup ids to make sure potential matches are distributed across all the participants
     match_signup_ids.sort_by {rand}.each do |other_signup_id|
       next if signup.id == other_signup_id
-      other_signup = ChallengeSignup.find(other_signup_id)
 
-      # The "match" method of ChallengeSignup creates and returns a new (unsaved) potential match object
-      # It assumes the signup that is calling is the requesting signup, so if this is meant to be an offering signup
-      #  instead, we call it from the other signup
-      potential_match = (prompt_type == "request") ? signup.match(other_signup, settings) : other_signup.match(signup, settings)
+      # The "match" method of ChallengeSignup creates and returns a new
+      # (unsaved) potential match object. It assumes the signup that is calling
+      # is the requesting signup, so if this is meant to be an offering signup
+      # instead, we call it from the other signup.
+      if prompt_type == "request"
+        other_signup = ChallengeSignup.with_offer_tags.find(other_signup_id)
+        potential_match = signup.match(other_signup, settings)
+      else
+        other_signup = ChallengeSignup.with_request_tags.find(other_signup_id)
+        potential_match = other_signup.match(signup, settings)
+      end
+
       if potential_match && potential_match.valid?
         potential_match.save
         potential_match_count += 1
@@ -183,14 +190,14 @@ public
       # looking for requests with the same tag.
       matching_signup_ids = (prompt_type == "request" ? "Offer" : "Request").constantize.
                          where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
-                         value_of(:challenge_signup_id).compact.uniq
+                         value_of(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
       condition = "any_#{required_types.first.downcase} = 1"
-      matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id).uniq
+      matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id)
     end
 
-    return matching_signup_ids
+    return matching_signup_ids.uniq
   end
 
   # Regenerate potential matches for a single signup within a challenge where (presumably)
@@ -198,7 +205,9 @@ public
   # To do this, we have to regenerate its potential matches both as a request and as an offer
   # (instead of just generating them as a request as we do when generating ALL potential matches)
   def self.regenerate_for_signup_in_background(signup_id)
-    signup = ChallengeSignup.find(signup_id)
+    # The signup will be acting as both offer and request, so we want to load
+    # both request tags and offer tags.
+    signup = ChallengeSignup.with_request_tags.with_offer_tags.find(signup_id)
     collection = signup.collection
 
     # Get all the data

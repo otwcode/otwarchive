@@ -53,6 +53,14 @@ class ChallengeSignup < ActiveRecord::Base
   scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
   scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
 
+  # Scopes used to include extra data when loading.
+  scope :with_request_tags, includes(
+    :requests => [:tag_set => :tags, :optional_tag_set => :tags]
+  )
+  scope :with_offer_tags, includes(
+    :offers => [:tag_set => :tags, :optional_tag_set => :tags]
+  )
+
   ### VALIDATION
 
   validates_presence_of :pseud, :collection
@@ -246,8 +254,15 @@ class ChallengeSignup < ActiveRecord::Base
   # self is the request, other is the offer
   def match(other, settings=nil)
     no_match_required = settings.nil? || settings.no_match_required?
-    potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
+
+    potential_match_attributes = {
+      offer_signup: other,
+      request_signup: self,
+      collection_id: collection_id # ID only, so we don't have to load it
+    }
+
     prompt_matches = []
+
     unless no_match_required
       self.requests.each do |request|
         other.offers.each do |offer|
