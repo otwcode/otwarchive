@@ -246,7 +246,9 @@ class Prompt < ActiveRecord::Base
   # Returns PotentialPromptMatch object if matches, otherwise nil
   # self is the request, other is the offer
   def match(other, settings=nil)
+    return nil if challenge_signup.id == other.challenge_signup.id
     return nil if settings.nil?
+
     potential_prompt_match_attributes = {:offer => other, :request => self}
 
     TagSet::TAG_TYPES.each do |type|
@@ -276,6 +278,10 @@ class Prompt < ActiveRecord::Base
       potential_prompt_match_attributes["num_#{type.pluralize}_matched"] = match_count
     end
     return PotentialPromptMatch.new(potential_prompt_match_attributes)
+  end
+
+  def accepts_any?(type)
+    send("any_#{type.downcase}")
   end
 
   def get_prompt_restriction

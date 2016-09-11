@@ -46,7 +46,7 @@ public
   end
 
   def self.set_up_generating(collection)
-    REDIS_GENERAL.set progress_key(collection), collection.signups.first.id
+    REDIS_GENERAL.set progress_key(collection), "0.0"
   end
 
   def self.cancel_generation(collection)
@@ -97,24 +97,13 @@ public
       PotentialMatch.clear!(collection)
       settings = collection.challenge.potential_match_settings
 
-      # start by collecting the ids of all the tag sets of the offers/requests in this collection
-      collection_tag_sets = Prompt.where(collection_id: collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+      matcher = if settings.no_match_required?
+                  PotentialMatcherUnconstrained.new(collection)
+                else
+                  PotentialMatcherConstrained.new(collection)
+                end
 
-      # the topmost tags required for matching
-      required_types = settings.required_types.map {|t| t.classify}
-
-      # treat each signup as a request signup first
-      # because find_each doesn't give us a consistent order, but we don't necessarily
-      # want to load all the signups into memory with each, we get the ids first and 
-      # load each signup as needed
-      signup_ids = collection.signups.value_of(:id)
-      signup_ids.each do |signup_id|
-        break if PotentialMatch.canceled?(collection)
-        signup = ChallengeSignup.with_request_tags.find(signup_id)
-        REDIS_GENERAL.set progress_key(collection), signup.id
-        PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
-      end
-
+      matcher.generate
     end
     # TODO: for any signups with no potential matches try regenerating?
     PotentialMatch.finish_generation(collection)
@@ -250,32 +239,10 @@ public
     false
   end
 
-  def self.position(collection)
-    signup_id = REDIS_GENERAL.get progress_key(collection)
-    ChallengeSignup.find(signup_id).pseud.byline
-  end
-
+  # The PotentialMatcherProgress class calculates the percent, so we just need
+  # to retrieve it from redis.
   def self.progress(collection)
-    # the index of our current signup person in the full index of signup participants
-    current_id = REDIS_GENERAL.get(progress_key(collection))
-    collection_signup_key = signup_key(collection)
-    unless REDIS_GENERAL.exists(collection_signup_key)
-      score = 0
-      # we have to get the signups in the same order as they are processed 
-      # for this to work
-      collection.signups.value_of(:id).each do |signup_id|
-        REDIS_GENERAL.zadd collection_signup_key, score, signup_id
-        score += 1
-      end
-    end
-    rank = REDIS_GENERAL.zrank(collection_signup_key, current_id)
-    if rank.nil?
-      return -1
-    else
-      number_of_bylines = REDIS_GENERAL.zcount(collection_signup_key, 0, "+inf")
-      # we want a percentage: multiply by 100 first so we can keep this an integer calculation
-      return (rank * 100) / number_of_bylines
-    end
+    REDIS_GENERAL.get(progress_key(collection))
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
