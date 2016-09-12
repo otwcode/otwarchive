@@ -4,31 +4,23 @@
 #
 # The runtime is asymptotically quadratic in the number of signups, but the
 # batching keeps the constants relatively low.
-#
-# Interestingly enough, this will still work for unconstrained matches, thanks
-# to some weirdness with having nil as the @index_tag_type. But it does a lot
-# of extra work generating prompt matches that's really unnecessary when the
-# matching is unconstrained, so it probably shouldn't be used for those
-# purposes.
 class PotentialMatcherConstrained
   ALL = -1
 
   attr_reader :collection, :settings, :batch_size
   attr_reader :index_tag_type, :index_optional
 
-  def initialize(collection, batch_size = 100, enable_progress = true)
+  def initialize(collection, index_tag_type = nil, batch_size = 100)
     @collection = collection
     @settings = collection.challenge.potential_match_settings
     @batch_size = batch_size
 
     @required_types = @settings.required_types
-    unless @required_types.empty?
-      @index_tag_type = @required_types.first
-      @index_optional = @settings.include_optional?(@index_tag_type)
-    end
+    @index_tag_type = index_tag_type || @required_types.first
+    @index_optional = @settings.include_optional?(@index_tag_type)
 
     # Set up a new progress object for recording our progress.
-    @progress = PotentialMatcherProgress.new(collection, enable_progress)
+    @progress = PotentialMatcherProgress.new(collection)
   end
 
   private

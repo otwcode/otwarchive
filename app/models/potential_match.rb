@@ -97,11 +97,12 @@ public
       PotentialMatch.clear!(collection)
       settings = collection.challenge.potential_match_settings
 
-      matcher = if settings.no_match_required?
-                  PotentialMatcherUnconstrained.new(collection)
-                else
-                  PotentialMatcherConstrained.new(collection)
-                end
+      if settings.no_match_required?
+        matcher = PotentialMatcherUnconstrained.new(collection)
+      else
+        index_type = PromptTagTypeInfo.new(collection).good_index_types.first
+        matcher = PotentialMatcherConstrained.new(collection, index_type)
+      end
 
       matcher.generate
     end

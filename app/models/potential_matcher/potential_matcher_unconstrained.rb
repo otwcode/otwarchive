@@ -1,13 +1,13 @@
 # A class used to generate PotentialMatch objects when the matching is
 # unconstrained -- that is, anyone can be assigned to anyone else.
 class PotentialMatcherUnconstrained
-  def initialize(collection, batch_size = 100, enable_progress = true)
+  def initialize(collection, batch_size = 100)
     @collection = collection
     @batch_size = batch_size
     @sample_size = ArchiveConfig.POTENTIAL_MATCHES_MAX
 
     # Set up a new progress object for recording our progress.
-    @progress = PotentialMatcherProgress.new(collection, enable_progress)
+    @progress = PotentialMatcherProgress.new(collection)
   end
 
   # Generates potential match objects for the given request and each offer_id
