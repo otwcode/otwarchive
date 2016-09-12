@@ -21,6 +21,7 @@ module Otwarchive
         indexing 
         search 
         feedback_reporters
+        potential_matcher
     ).each do |dir|
       config.autoload_paths << "#{Rails.root}/app/models/#{dir}"
     end
