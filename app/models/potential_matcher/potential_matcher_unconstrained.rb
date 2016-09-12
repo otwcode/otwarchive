@@ -10,6 +10,19 @@ class PotentialMatcherUnconstrained
     @progress = PotentialMatcherProgress.new(collection)
   end
 
+  def sample_offers_for_request(request_id, offer_ids)
+    # Sample one extra to make sure that we can avoid sampling the request_id.
+    sampled = offer_ids.sample(@sample_size + 1)
+
+    # Delete the request_id if it's in the sample; otherwise, delete an
+    # arbitrary id from the sample. (Array.sample returns the items in random
+    # order.)
+    sampled.delete(request_id)
+    sampled.pop if sampled.size > @sample_size
+
+    sampled
+  end
+
   # Generates potential match objects for the given request and each offer_id
   # in the given list. (Doesn't load the offers, because this should only be
   # called if the matching is unconstrained, and we don't need any info about
@@ -18,8 +31,6 @@ class PotentialMatcherUnconstrained
     @progress.start_subtask(offer_ids.size)
 
     offer_ids.each do |offer_id|
-      next if offer_id == request.id
-
       PotentialMatch.create(collection: @collection,
                             offer_signup_id: offer_id,
                             request_signup: request,
@@ -48,7 +59,7 @@ class PotentialMatcherUnconstrained
       request_signups.each do |request|
         return if PotentialMatch.canceled?(@collection)
 
-        sampled_offer_ids = offer_ids.sample(@sample_size)
+        sampled_offer_ids = sample_offers_for_request(request.id, offer_ids)
         make_signup_matches(request, sampled_offer_ids)
 
         @progress.increment
