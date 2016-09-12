@@ -56,8 +56,10 @@ class PotentialMatcherUnconstrained
     @progress.start_subtask(offer_ids.size)
 
     requests.find_in_batches(batch_size: @batch_size) do |request_signups|
+      break if PotentialMatch.canceled?(@collection)
+
       request_signups.each do |request|
-        return if PotentialMatch.canceled?(@collection)
+        break if PotentialMatch.canceled?(@collection)
 
         sampled_offer_ids = sample_offers_for_request(request.id, offer_ids)
         make_signup_matches(request, sampled_offer_ids)

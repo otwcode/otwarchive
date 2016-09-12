@@ -98,6 +98,8 @@ class PotentialMatcherConstrained
   # Save all signup matches. Use a transaction because it's marginally faster,
   # and we like speed.
   def save_signup_matches(signup_matches)
+    return if signup_matches.empty?
+
     PotentialMatch.transaction do
       signup_matches.each(&:save)
     end
@@ -133,10 +135,12 @@ class PotentialMatcherConstrained
     @progress.start_subtask(batch_count * batch_count)
 
     offers.find_in_batches(batch_size: @batch_size) do |offer_signups|
+      break if PotentialMatch.canceled?(@collection)
+
       offer_batch = make_batch(offer_signups, :offers)
 
       requests.find_in_batches(batch_size: @batch_size) do |request_signups|
-        return if PotentialMatch.canceled?(@collection)
+        break if PotentialMatch.canceled?(@collection)
 
         request_batch = make_batch(request_signups, :requests)
         make_batch_matches(request_batch, offer_batch)
