@@ -36,7 +36,7 @@ class PotentialMatcherProgress
     @percent = 0
 
     @progress_enabled = progress_enabled
-    @redis_progress_key = "potential_match_status_for_#{collection.id}"
+    @redis_progress_key = PotentialMatch.progress_key(collection)
   end
 
   # Signal that you're starting work on a subtask. The sole argument gives the
