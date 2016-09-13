@@ -7,6 +7,7 @@ class AsyncIndexer
   ####################
 
   def self.perform(name)
+    raise "Redshirt self.perform #{name.split(":").first}" unless [""].include?(name.split(":").first)
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
     indexer.new(ids).index_documents

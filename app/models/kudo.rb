@@ -35,7 +35,7 @@ class Kudo < ActiveRecord::Base
 
   def cannot_be_author
     if pseud
-      raise "Security issue" unless commentable_type.classify == "Work"
+      raise "Redshirt cannot_be_author #{commentable_type.classify}" unless commentable_type.classify == "Work"
       commentable = commentable_type.classify.constantize.
                     find_by_id(commentable_id)
       kudos_giver = User.find_by_id(pseud.user_id)
@@ -47,7 +47,7 @@ class Kudo < ActiveRecord::Base
   end
 
   def guest_cannot_kudos_restricted_work
-    raise "Security issue" unless commentable_type.classify == "Work"
+    raise "Redshirt guest_cannot_kudos_restricted_work #{commentable_type.classify}" unless commentable_type.classify == "Work"
     commentable = commentable_type.classify.constantize.
                   find_by_id(commentable_id)
     if pseud.nil? && commentable.restricted?

@@ -136,6 +136,8 @@ protected
       when "setting"
         Rails.cache.fetch("admin_settings") { AdminSetting.first }
       when "assignment", "claim", "signup"
+        #raise "Redshirt get_id challenge_#{classname}" unless ["challenge_assignment", "challenge_signup", "challenge_claim"].include?("challenge_#{classname}")
+        Rails.logger.error Redshirt get_id challenge_#{classname}"
         klass = "challenge_#{classname}".classify.constantize
         query = classname == "assignment" ? klass.by_offering_user(user) :
                   (classname == "signup" ? klass.by_user(user) :  
@@ -145,18 +147,22 @@ protected
         end
         query.first
       when "item", "participant"
+        Rails.logger.error "Redshirt get_id (part3)  collection_#{classname}" 
+        #raise "Redshirt get_id (part3)  collection_#{classname}" unless ["collection_assignment", "collection_signup", "collection_claim"].include?("collection_#{classname}")
         "collection_#{classname}".classify.constantize.where(:collection_id => @last_id).first
       when "tag_wrangling", "user_creation"
         # not real objects
         nil
       else
+        Rails.logger.error "Redshirt get_id (part2) #{classname}" 
+        #raise "Redshirt get_id (part2) #{classname}" unless [""].include?(classname)
         klass = classname.classify.constantize
         if klass.column_names.include?("user_id")
           klass.where(:user_id => user.id).first
         elsif klass.column_names.include?("pseud_id")
           klass.where(:pseud_id => user.default_pseud.id).first
         else
-          classname.classify.constantize.first
+          klass.first
         end
       end
 

@@ -45,6 +45,7 @@ class TagSet < ActiveRecord::Base
     attr_writer "#{type}_tagnames".to_sym
 
     define_method("#{type}_tagnames") do
+      raise "Redshirt Unsurebutuniquelable #{type}" unless ["category", "character", "fandom", "freeform", "rating", "relationship", "warning"].include?(type)
       self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) : 
                                                                              self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
     end
@@ -80,6 +81,7 @@ class TagSet < ActiveRecord::Base
     TAG_TYPES.each do |type|
       if self.instance_variable_get("@#{type}_tagnames")
         # explicitly set the list of type_tagnames
+        raise "Redshirt assign_tags #{type}" unless ["category", "character", "fandom", "freeform", "rating", "relationship", "warning"].include?(type)
         new_tags = self.send("#{type}_taglist")
         old_tags = self.with_type(type.classify)
         tags_to_add += (new_tags - old_tags)
@@ -164,6 +166,7 @@ class TagSet < ActiveRecord::Base
     # this is required because otherwise tag sets created on the fly (eg with + during potential match generation)
     # that are not saved in the database will return empty list. 
     # We use Tag.where so that we can still chain this with other AR queries 
+    raise "Redshirt with_type #{type}" unless ["category", "Category", "character", "Character", "fandom", "Fandom", "freeform", "Freeform", "rating", "Rating", "relationship", "Relationship", "warning", "Warning"].include?(type)
     return self.new_record? ? Tag.where(:id => self.tags.select {|t| t.type == type.classify}.collect(&:id)) : self.tags.with_type(type)
   end
   
@@ -259,6 +262,7 @@ class TagSet < ActiveRecord::Base
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
       if type
+        raise "Redshirt tagnames_to_list #{type}" unless ["category", "character", "fandom", "freeform", "rating", "relationship", "warning"].include?(type)
         if Tag::USER_DEFINED.include?(type.classify)
           # allow users to create these
           taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)}

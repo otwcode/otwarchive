@@ -70,6 +70,7 @@ class Indexer
 
   # Add conditions here
   def self.indexables
+    raise "Redshirt self.indexables #{klass}" unless [""].include?(klass)
     klass.constantize
   end
 
@@ -104,6 +105,7 @@ class Indexer
   end
 
   def objects
+    raise "Redshirt objects #{klass}" unless [""].include?(klass)
     @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end

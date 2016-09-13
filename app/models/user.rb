@@ -446,6 +446,7 @@ class User < ActiveRecord::Base
     options[:categories] ||= %w(Fandom Character Relationship Freeform)
     type_tags = []
     options[:categories].each do |type_name|
+      # Happy with constantize as it is from a set list
       type_tags << type_name.constantize.all
     end
     all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten

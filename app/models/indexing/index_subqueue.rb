@@ -59,6 +59,7 @@ class IndexSubqueue
   end
 
   def klass
+    raise "Redshirt klass #{name.split(':')[1].classify}" unless [""].include?(name.split(':')[1].classify)
     name.split(':')[1].classify.constantize
   end
 
