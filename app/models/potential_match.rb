@@ -178,16 +178,16 @@ public
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
       # looking for requests with the same tag.
-      matching_signup_ids = (prompt_type == "request" ? "Offer" : "Request").constantize.
-                         where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
-                         value_of(:challenge_signup_id).compact
+      matching_signup_ids = (prompt_type == "request" ? Offer : Request).
+                            where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
+                            value_of(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
       condition = "any_#{required_types.first.downcase} = 1"
       matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id)
     end
 
-    return matching_signup_ids.uniq
+    matching_signup_ids.uniq
   end
 
   # Regenerate potential matches for a single signup within a challenge where (presumably)

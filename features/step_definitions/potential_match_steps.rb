@@ -1,5 +1,4 @@
 Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |name, table|
-
   # Set up the gift exchange with the correct owner.
   step %{the user "moderator" exists and is activated}
   user = User.find_by_login("moderator")

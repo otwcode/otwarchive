@@ -16,12 +16,13 @@ module Otwarchive
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += %W(#{Rails.root}/lib)
     config.autoload_paths += %W(#{Rails.root}/app/sweepers)
-    %w(challenge_models 
-        tagset_models 
-        indexing 
-        search 
-        feedback_reporters
-        potential_matcher
+    %w(
+      challenge_models
+      tagset_models
+      indexing
+      search
+      feedback_reporters
+      potential_matcher
     ).each do |dir|
       config.autoload_paths << "#{Rails.root}/app/models/#{dir}"
     end

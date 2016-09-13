@@ -55,10 +55,10 @@ class ChallengeSignup < ActiveRecord::Base
 
   # Scopes used to include extra data when loading.
   scope :with_request_tags, includes(
-    :requests => [:tag_set => :tags, :optional_tag_set => :tags]
+    requests: [tag_set: :tags, optional_tag_set: :tags]
   )
   scope :with_offer_tags, includes(
-    :offers => [:tag_set => :tags, :optional_tag_set => :tags]
+    offers: [tag_set: :tags, optional_tag_set: :tags]
   )
 
   ### VALIDATION
