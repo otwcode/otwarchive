@@ -39,7 +39,7 @@
         <% # do ratings, warnings, categories as taglists if not already specified %>
         <dd class="<%= ts("#{tag_type}") %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
           <h4 class="heading"><%= ts("#{tag_name.pluralize.titleize}") %></h4>
-          <% <% Rails.logger.error "Redshirt _prompt_form_tag_options.html.erb part2 #{tag_type.classify}" %> 
+          <% Rails.logger.error "Redshirt _prompt_form_tag_options.html.erb part2 #{tag_type.classify}" %> 
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", 
             (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name},
             :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
