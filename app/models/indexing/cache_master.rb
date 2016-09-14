@@ -51,7 +51,7 @@ class CacheMaster
 
   def expire
     get_hash.each_pair do |key, id_string|
-      raise "Redshirt expire #{key.classify}" unless ["Tag"].include?(key.classify)
+      raise "Redshirt expire #{key.classify}" unless ["Tag", "Pseud"].include?(key.classify)
       klass = key.classify.constantize
       klass.expire_ids(id_string.split(','))
     end
