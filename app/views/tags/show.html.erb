@@ -93,6 +93,7 @@
           <% if @tag_children[type].present? %>
             <div class="<%= type.to_s.pluralize.downcase %> listbox group">
               <% Rails.logger.error "Redshirt show.html.erb #{type}" %>
+              <% raise "Redshirt show.html.erb #{type}" unless [ "Character", "Relationship" ].include?(type) %>
               <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
               <ul class="tags commas index group">
                 <%= tag_link_list(@tag_children[type].sort) %>

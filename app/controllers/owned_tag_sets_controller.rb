@@ -84,8 +84,7 @@ class OwnedTagSetsController < ApplicationController
           assoc_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), tag_type)
           
           # get canonically associated fandoms
-          #raise "Redshirt show #{tag_type.classify}" unless [""].include?(tag_type.classify)
-          Rails.logger.error "Redshirt show #{tag_type.classify}"
+          raise "Redshirt show #{tag_type.classify}" unless ["Character", "Relationship" ].include?(tag_type.classify)
           canonical_hash = Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(@tag_set), "fandom")
 
           # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)

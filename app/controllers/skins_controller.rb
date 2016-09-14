@@ -105,8 +105,7 @@ class SkinsController < ApplicationController
 
   def create
     loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
-    #raise "Redshirt create #{params[:skin_type]}" unless ["WorkSkin"].include?(params[:skin_type])
-    Rails.logger.error "Redshirt create #{params[:skin_type]}"
+    raise "Redshirt createskin #{params[:skin_type]}" unless ["Skin","WorkSkin"].include?(params[:skin_type])
     @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
     @skin.author = current_user
     if @skin.save
