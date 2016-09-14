@@ -116,8 +116,8 @@ class PromptRestriction < ActiveRecord::Base
   end
 
   def tags(type="tag")
-    raise "Redshirt tags #{type}" unless ["Category", "Character", "Fandom", "Freeform", "Rating", "Relationship", "Warning"].include?(type)
-    type.classify.constantize.in_prompt_restriction(self)
+    raise "Redshirt tags #{type}" unless ["Category", "Character", "Fandom", "Freeform", "Rating", "Relationship", "Warning"].include?(type.gsub(/\s+/, ""))
+    type.gsub(/\s+/, "").classify.constantize.in_prompt_restriction(self)
   end
 
 end

@@ -15,11 +15,11 @@
         <div title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options(tag_type) %></div>      
 
     <% else %>
-      <% Rails.logger.error "Redshirt _internal_tag_set_fields.html.erb (1) #{tag_type.gsub(/\s+/, "").classify}" %>
+      <% raise "Redshirt _internal_tag_set_fields.html.erb (1) #{tag_type.gsub(/\s+/, "").classify}" unless [ "Category", "Rating", "Warning" ].include?(tag_type.gsub(/\s+/, "").classify) %>
       <% # ratings, categories, warnings %>
         <h4 class="heading"><%= tag_type.gsub(/\s+/, "").classify.pluralize %></h4>
         <%= check_all_none %>
-        <% Rails.logger.error "Redshirt _internal_tag_set_fields.html.erb (2) #{tag_type.gsub(/\s+/, "").classify}" %>
+        <% raise "Redshirt _internal_tag_set_fields.html.erb (2) #{tag_type.gsub(/\s+/, "").classify}" unless [ "Category", "Rating", "Warning" ].include?(tag_type.gsub(/\s+/, "").classify) %>
         <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.gsub(/\s+/, "").classify.constantize.value_of(:name),
                                :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s",
                                :checkbox_side => "left") %>
