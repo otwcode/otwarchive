@@ -35,11 +35,14 @@ class Kudo < ActiveRecord::Base
 
   def cannot_be_author
     if pseud
-      raise "Redshirt cannot_be_author #{commentable_type.classify}" unless commentable_type.classify == "Work"
-      commentable = commentable_type.classify.constantize.
-                    find_by_id(commentable_id)
+      commentable = nil
+      if commentable_type == "Work" 
+       commentable = Work.find_by_id(commentable_id)
+      elsif commentable_type == "Chapter"
+       commentable = Chapter.find_by_id(commentable_id).work
+      end
       kudos_giver = User.find_by_id(pseud.user_id)
-      if kudos_giver.is_author_of?(commentable)
+      if commentable.nil? || kudos_giver.is_author_of?(commentable)
         errors.add(:cannot_be_author,
                    ts("^You can't leave kudos on your own work."))
       end
