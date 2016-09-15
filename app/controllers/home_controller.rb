@@ -60,3 +60,4 @@ class HomeController < ApplicationController
     @hide_dashboard = true
     render action: 'index', layout: 'application'
   end
+end
