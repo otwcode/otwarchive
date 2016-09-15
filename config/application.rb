@@ -1,5 +1,5 @@
 require File.expand_path('../boot', __FILE__)
-
+# THIS IS JUST A TEST SO I CAN SEE THE NEW PR TEMPLATE
 require 'rails/all'
 
 # If you have a Gemfile, require the gems listed there, including any gems
