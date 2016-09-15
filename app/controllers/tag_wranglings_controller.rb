@@ -24,7 +24,7 @@ class TagWranglingsController < ApplicationController
         @page_subtitle = ts("fandoms")
         @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       else # by fandom
-        raise "Redshirt tag_wranglings_controller_index #{params[:show].classify}" unless ["Character", "Relationship", "Freeform"].include?(params[:show].classify)
+        raise "Redshirt tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
         klass = params[:show].classify.constantize
         @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       end

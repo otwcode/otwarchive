@@ -10,8 +10,7 @@
         <% unless tags.blank? %>
           <dt class="<%= type.downcase %> tags">
             <% if type == "Warning" %>
-              <% raise "Redshirt _meta.html.erb #{type}" unless ["Warning"].include?(type) %>
-              <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
+              <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) # safe constantize itterating though Tag::VISIBLE %>:
             <% elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME %>
               <%= type.constantize::NAME %>:
             <% else %>

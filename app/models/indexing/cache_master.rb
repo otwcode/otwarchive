@@ -1,4 +1,6 @@
 class CacheMaster
+ 
+  CACHED_CLASSES = %w(Work Tag User Pseud Collection)
 
   ###################
   # CLASS METHODS
@@ -51,7 +53,7 @@ class CacheMaster
 
   def expire
     get_hash.each_pair do |key, id_string|
-      raise "Redshirt expire #{key.classify}" unless ["Tag", "Pseud"].include?(key.classify)
+      raise "Redshirt expire #{key.classify}" unless CACHED_CLASSES.include?(key.classify)
       klass = key.classify.constantize
       klass.expire_ids(id_string.split(','))
     end

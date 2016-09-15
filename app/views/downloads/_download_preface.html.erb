@@ -7,8 +7,7 @@
       <% tags = @work.tag_groups[type] %>
       <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" && 
 hide_freeform?(@work)) %>
-        <% raise "Redshirt _download_preface.html.erb #{type}" unless [ "Category", "Fandom", "Freeform", "Rating", "Warning"].include?(type) %>
-        <dt><%= type.constantize::NAME %>:</dt>
+        <dt><%= type.constantize::NAME # constantize safe as itterating over Tag::VISIBLE  %>:</dt>
         <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
       <% end %>
     <% end %>
