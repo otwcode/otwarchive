@@ -163,7 +163,7 @@ class TagsController < ApplicationController
   def create
     type = params[:tag][:type] if params[:tag]
     if type
-      raise "Redshirt create #{type.classify}" unless ["Character","Fandom","Freeform","Relationship"].include?(type.classify)
+      raise "Redshirt create #{type.classify}" unless Tag::TYPES.include?(type.classify)
       model = type.classify.constantize rescue nil
       @tag = model.find_or_create_by_name(params[:tag][:name]) if model.is_a? Class
     else

@@ -50,9 +50,15 @@ class Kudo < ActiveRecord::Base
   end
 
   def guest_cannot_kudos_restricted_work
-    raise "Redshirt guest_cannot_kudos_restricted_work #{commentable_type.classify}" unless commentable_type.classify == "Work"
-    commentable = commentable_type.classify.constantize.
-                  find_by_id(commentable_id)
+    if pseud
+      commentable = nil
+      if commentable_type == "Work"
+       commentable = Work.find_by_id(commentable_id)
+      elsif commentable_type == "Chapter"
+       commentable = Chapter.find_by_id(commentable_id).work
+      end
+      kudos_giver = User.find_by_id(pseud.user_id)
+    end
     if pseud.nil? && commentable.restricted?
       errors.add(:guest_on_restricted,
                  ts("^You can't leave guest kudos on a restricted work."))

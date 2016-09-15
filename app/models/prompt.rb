@@ -172,7 +172,7 @@ class Prompt < ActiveRecord::Base
     if restriction
       TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
         if restriction.send("#{tag_type}_restrict_to_fandom")
-          raise "Redshirt restricted_tags #{tag_type.classify}" unless ["Character", "Relationship"].include?(tag_type.classify)
+          # tag_type is one of a set set so we know it is safe for constantize
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
           # check for tag set associations
