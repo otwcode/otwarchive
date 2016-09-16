@@ -4,7 +4,7 @@ class Admin::UserCreationsController < ApplicationController
   
   # Removes an object from public view
   def hide
-    raise "Redshirt hide #{params[:creation_type]}" unless ["ExternalWork","Bookmark","Work"].include?(params[:creation_type])
+    raise "Redshirt hide #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
@@ -34,7 +34,7 @@ class Admin::UserCreationsController < ApplicationController
   end
 
   def destroy
-    raise "Redshirt destroy #{params[:creation_type]}" unless ["ExternalWork", "Bookmark", "Work"].include?(params[:creation_type])
+    raise "Redshirt destroy #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     AdminActivity.log_action(current_admin, creation, action: 'destroy', summary: creation.inspect)

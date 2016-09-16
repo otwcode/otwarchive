@@ -107,7 +107,7 @@ class SkinsController < ApplicationController
     loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
     @skin = nil
     if params[:skin_type] 
-      raise "Redshirt createskin #{params[:skin_type]}" unless ["Skin","WorkSkin"].include?(params[:skin_type])
+      raise "Redshirt createskin #{params[:skin_type]}" unless %w(Skin WorkSkin).include?(params[:skin_type])
       @skin = params[:skin_type].constantize.new(params[:skin])
     else
       @skin = Skin.new(params[:skin])

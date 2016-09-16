@@ -117,8 +117,7 @@ class TagsController < ApplicationController
 
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
-      #raise "Redshirt show_hidden #{params[:creation_type].classify}" unless ["Series", "Work", "Chapter", ].include?(params[:creation_type].classify)
-      Rails.logger.error "Redshirt show_hidden #{params[:creation_type].classify}" 
+      raise "Redshirt show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
       model = params[:creation_type].classify.constantize rescue nil
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
       # Tags aren't directly on series, so we need to handle them differently
