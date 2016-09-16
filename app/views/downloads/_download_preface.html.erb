@@ -7,7 +7,7 @@
       <% tags = @work.tag_groups[type] %>
       <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" && 
 hide_freeform?(@work)) %>
-        <dt><%= type.constantize::NAME # constantize safe as itterating over Tag::VISIBLE  %>:</dt>
+        <dt><%= type.constantize::NAME  %>:</dt>
         <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
       <% end %>
     <% end %>
