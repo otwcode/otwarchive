@@ -105,7 +105,7 @@ class Indexer
   end
 
   def objects
-    Rails.logger.info "Redshirt objects #{klass}"
+    Rails.logger.info "Blueshirt objects #{klass}"
     @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end
