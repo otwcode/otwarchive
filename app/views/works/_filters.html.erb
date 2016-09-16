@@ -58,11 +58,13 @@
                 </ul>
               </dd>
             <% end %>
+            <% filter_action == "include" ? field_name = "other_tag_names" :
+               field_name = "excluded_tag_names" %>
             <dt class="autocomplete">
-              <%= f.label 'other_tag_names', ts("Other tags to %{filter_action}", filter_action: filter_action) %>
+              <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
             <dd class="autocomplete">
-              <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
+              <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
         </dd>
@@ -95,23 +97,6 @@
             <%= f.label :complete, ts("Complete only") %>
           </dd>
         </dl>
-      </dd>
-      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other tags to include") %><%= link_to_help "filters-tags-help" %></dt>
-      <dd class="autocomplete">
-        <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
-      </dd>
-      <dt class="autocomplete"><%= f.label 'excluded_tag_names', ts("Tags to exclude") %></dt>
-      <dd class="autocomplete">
-        <%= f.text_field 'excluded_tag_names', autocomplete_options("tag") %>
-      </dd>
-      <dt><%= f.label :query, ts("Search within results") %><%= link_to_help "work-search-text-help" %></dt>
-      <dd><%= f.text_field :query %></dd>
-      <dt><%= ts("Language") %></dt>
-      <dd><%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %></dd>
-      <dt><%= ts("Status") %></dt>
-      <dd>
-        <%= f.check_box :complete %>
-        <%= f.label :complete, ts("Complete only") %>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
