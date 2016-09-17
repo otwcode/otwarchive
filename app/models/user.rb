@@ -440,24 +440,6 @@ class User < ActiveRecord::Base
     LogItem.create(options)
   end
 
-  # Options can include :categories and :limit
-  def most_popular_tags(options = {})
-    all_tags = []
-    options[:categories] ||= %w(Fandom Character Relationship Freeform)
-    type_tags = []
-    options[:categories].each do |type_name|
-      # Happy with constantize as it is from a set list
-      type_tags << type_name.constantize.all
-    end
-    all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
-    tags_with_count = {}
-    all_tags.uniq.each do |tag|
-      tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-    end
-    all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-    popular_tags = options[:limit].blank? ? all_tags.collect {|pair| pair.first} : all_tags.collect {|pair| pair.first}[0..(options[:limit]-1)]
-  end
-
   # Returns true if user is the sole author of a work
   # Should also be true if the user has used more than one of their pseuds on a work
   def is_sole_author_of?(item)

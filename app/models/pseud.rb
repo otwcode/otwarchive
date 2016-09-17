@@ -210,23 +210,6 @@ class Pseud < ActiveRecord::Base
     end
   end
 
-  # Options can include :categories and :limit
-  # Gets all the canonical tags used by a given pseud (limited to certain
-  # types if type options are provided), then sorts them according to
-  # the number of times this pseud has used them, then returns an array
-  # of [tag, count] arrays, limited by size if a limit is provided
-  # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
-  def most_popular_tags(options = {})
-    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
-      tags_with_count = {}
-      all_tags.uniq.each do |tag|
-        tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-      end
-      all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-      options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
-    end
-  end
-
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
