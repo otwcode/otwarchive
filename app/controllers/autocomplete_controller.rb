@@ -92,7 +92,7 @@ class AutocompleteController < ApplicationController
   ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]
-    raise "Redshirt noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
+    raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
     tag_class = params[:type].classify.constantize
     render_output(tag_class.by_popularity
                       .where(["canonical = 0 AND name LIKE ?",

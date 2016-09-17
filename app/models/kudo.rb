@@ -43,7 +43,10 @@ class Kudo < ActiveRecord::Base
        commentable = Chapter.find_by_id(commentable_id).work
       end
       kudos_giver = User.find_by_id(pseud.user_id)
-      if commentable.nil? || kudos_giver.is_author_of?(commentable)
+      if commentable.nil? 
+        errors.add(:no_commentable,
+                   ts("^What did you want to leave kudos on?"))
+      elsif kudos_giver.is_author_of?(commentable)
         errors.add(:cannot_be_author,
                    ts("^You can't leave kudos on your own work."))
       end
@@ -58,7 +61,10 @@ class Kudo < ActiveRecord::Base
     if commentable_type == "Chapter"
       commentable = Chapter.find_by_id(commentable_id).work
     end
-    if pseud.nil? && commentable.restricted?
+    if commentable.nil?
+      errors.add(:no_commentable,
+                 ts("^What did you want to leave kudos on?"))
+    elsif pseud.nil? && commentable.restricted?
       errors.add(:guest_on_restricted,
                  ts("^You can't leave guest kudos on a restricted work."))
     end

@@ -2,7 +2,7 @@
 <% form.object.build_tag_set unless form.object.tag_set %>
 <%= form.fields_for :tag_set do |tag_set_form| %>
   <% TagSet::TAG_TYPES.each do |tag_type| %>
-    <% tag_name = tag_type.titleize.constantize::NAME # constantize safe as itterating over safe list %>
+    <% tag_name = tag_type.titleize.constantize::NAME # constantize safe as iterating over safe list %>
     <% num_allowed = restriction.allowed(tag_type) %>
     <% num_required = restriction.required(tag_type) %>
     <% if num_allowed > 0 %>

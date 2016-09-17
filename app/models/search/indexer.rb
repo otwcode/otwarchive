@@ -70,7 +70,7 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info  "Blueshirt self.indexables #{klass}" 
+    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}" 
     klass.constantize
   end
 
@@ -105,7 +105,7 @@ class Indexer
   end
 
   def objects
-    Rails.logger.info "Blueshirt objects #{klass}"
+    Rails.logger.info "Blueshirt: Logging use of constantize class objects #{klass}"
     @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end

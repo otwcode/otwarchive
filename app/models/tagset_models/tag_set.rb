@@ -259,7 +259,7 @@ class TagSet < ActiveRecord::Base
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
       if type
-        raise "Redshirt tagnames_to_list #{type}" unless TAG_TYPES.include?(type)
+        raise "Redshirt: Attempted to constantize invalid class initialize tagnames_to_list #{type}" unless TAG_TYPES.include?(type)
         if Tag::USER_DEFINED.include?(type.classify)
           # allow users to create these
           taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)} # Safe constantize checked above

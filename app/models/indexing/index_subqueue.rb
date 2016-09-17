@@ -59,7 +59,7 @@ class IndexSubqueue
   end
 
   def klass
-    raise "Redshirt klass #{name.split(':')[1].classify}" unless %w(Work).include?(name.split(':')[1].classify)
+    raise "Redshirt: Attempted to constantize invalid class initialize klass #{name.split(':')[1].classify}" unless %w(Work).include?(name.split(':')[1].classify)
     name.split(':')[1].classify.constantize
   end
 

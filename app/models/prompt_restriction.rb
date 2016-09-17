@@ -116,9 +116,9 @@ class PromptRestriction < ActiveRecord::Base
   end
 
   def tags(type="tag")
-    type.gsub!(/\s+/, "")
-    raise "Redshirt tags -#{type.classify}-" unless Tag::TYPES.include?(type.classify)
-    type.classify.constantize.in_prompt_restriction(self) # Safe constantize checked above
+    type = type.gsub!(/\s+/, "").classify
+    raise "Redshirt: Attempted to constantize invalid class initialize tags -#{type}-" unless Tag::TYPES.include?(type)
+    type.constantize.in_prompt_restriction(self) # Safe constantize checked above
   end
 
 end
