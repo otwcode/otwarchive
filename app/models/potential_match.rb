@@ -255,6 +255,12 @@ public
     cmp = compare_all(self.num_prompts_matched, other.num_prompts_matched)
     return cmp unless cmp == 0
 
+    # compare the "quality" of the best prompt match
+    # (i.e. the number of matching tags between the most closely-matching
+    # request prompt/offer prompt pair)
+    cmp = compare_all(self.max_tags_matched, other.max_tags_matched)
+    return cmp unless cmp == 0
+
     # otherwise we rank them based on how good the prompt matches are
     self_tally = 0
     other_tally = 0

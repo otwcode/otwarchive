@@ -243,41 +243,38 @@ class Prompt < ActiveRecord::Base
     @full_tag_set
   end
 
-  # Returns PotentialPromptMatch object if matches, otherwise nil
+  # Returns true if there's a match, false otherwise.
   # self is the request, other is the offer
-  def match(other, settings=nil)
+  def matches?(other, settings=nil)
     return nil if challenge_signup.id == other.challenge_signup.id
     return nil if settings.nil?
 
-    potential_prompt_match_attributes = {:offer => other, :request => self}
-
     TagSet::TAG_TYPES.each do |type|
-      if self.send("any_#{type}") || other.send("any_#{type}")
-        match_count = ALL
+      # We definitely match in this type if the request or the offer accepts
+      # "any" for it. No need to check any more info for this type.
+      next if send("any_#{type}") || other.send("any_#{type}")
+
+      required_count = settings.send("num_required_#{type.pluralize}")
+      if settings.send("include_optional_#{type.pluralize}")
+        match_count = full_tag_set.match_rank(other.full_tag_set, type)
       else
-        required_count = settings.send("num_required_#{type.pluralize}")
-        if settings.send("include_optional_#{type.pluralize}")
-          match_count = full_tag_set.match_rank(other.full_tag_set, type)
-        else
-          # we don't use optional tags to count towards required
-          match_count = self.tag_set.match_rank(other.tag_set, type)
-        end
-      
-        # if we have to match all and don't, not a match
-        return nil if required_count == ALL && match_count != ALL
-
-        # we are a match only if we either match all or at least as many as required
-        return nil if match_count != ALL && match_count < required_count
-
-        # now get the match rank including optional tags if we didn't before
-        if !settings.send("include_optional_#{type.pluralize}")
-          match_count = full_tag_set.match_rank(other.full_tag_set, type)
-        end
+        # we don't use optional tags to count towards required
+        match_count = tag_set.match_rank(other.tag_set, type)
       end
+      
+      # if we have to match all and don't, not a match
+      return false if required_count == ALL && match_count != ALL
 
-      potential_prompt_match_attributes["num_#{type.pluralize}_matched"] = match_count
+      # we are a match only if we either match all or at least as many as required
+      return false if match_count != ALL && match_count < required_count
     end
-    return PotentialPromptMatch.new(potential_prompt_match_attributes)
+
+    true
+  end
+
+  # Count the number of matching tags of all types.
+  def count_tags_matched(other)
+    full_tag_set.match_rank(other.full_tag_set, nil)
   end
 
   def accepts_any?(type)

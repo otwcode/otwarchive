@@ -1,71 +1,63 @@
 # A class used to generate PotentialMatch objects when the matching is
 # unconstrained -- that is, anyone can be assigned to anyone else.
 class PotentialMatcherUnconstrained
+  ALL = -1
+
   def initialize(collection, batch_size = 100)
     @collection = collection
     @batch_size = batch_size
-    @sample_size = ArchiveConfig.POTENTIAL_MATCHES_MAX
 
     # Set up a new progress object for recording our progress.
     @progress = PotentialMatcherProgress.new(collection)
   end
 
-  def sample_offers_for_request(request_id, offer_ids)
-    # Sample one extra to make sure that we can avoid sampling the request_id.
-    sampled = offer_ids.sample(@sample_size + 1)
+  # Generates potential match objects for all (valid) pairs of requests and
+  # offers from the passed-in lists of ids. Saves time by not loading the
+  # offers or requests, because unconstrained challenges always have ALL for
+  # num_prompts_matched and max_tags_matched.
+  def make_all_matches(request_ids, offer_ids)
+    PotentialMatch.transaction do
+      request_ids.each do |request_id|
+        offer_ids.each do |offer_id|
+          next if offer_id == request_id
 
-    # Delete the request_id if it's in the sample; otherwise, delete an
-    # arbitrary id from the sample. (Array.sample returns the items in random
-    # order.)
-    sampled.delete(request_id)
-    sampled.pop if sampled.size > @sample_size
-
-    sampled
+          PotentialMatch.create(collection: @collection,
+                                offer_signup_id: offer_id,
+                                request_signup_id: request_id,
+                                num_prompts_matched: ALL,
+                                max_tags_matched: ALL)
+        end
+      end
+    end
   end
 
-  # Generates potential match objects for the given request and each offer_id
-  # in the given list. (Doesn't load the offers, because this should only be
-  # called if the matching is unconstrained, and we don't need any info about
-  # the offers to generate PotentialMatch objects.)
-  def make_signup_matches(request, offer_ids)
-    @progress.start_subtask(offer_ids.size)
+  # Divides the given array into batches using @batch_size.
+  def divide_into_batches(array)
+    temp = array.dup
 
-    offer_ids.each do |offer_id|
-      PotentialMatch.create(collection: @collection,
-                            offer_signup_id: offer_id,
-                            request_signup: request,
-                            num_prompts_matched: request.requests.size)
+    batches = []
+    batches << temp.shift(@batch_size) until temp.empty?
 
-      @progress.increment
-    end
-
-    @progress.end_subtask
+    batches
   end
 
   # Generates all potential matches for the collection, under the assumption
   # that matching isn't constrained (so that everyone can match with everyone
   # else, and all matches are equally good).
   def generate
-    # We don't need tags to generate unconstrained, but we do need to know
-    # how many requests each signup has (to set num_prompts_matched).
-    requests = @collection.signups.includes(:requests)
+    all_ids = @collection.signups.pluck(:id)
+    batched_ids = divide_into_batches(all_ids)
 
-    # We don't even need the offers themselves, just the IDs.
-    offer_ids = @collection.signups.pluck(:id)
+    @progress.start_subtask(all_ids.size)
 
-    @progress.start_subtask(offer_ids.size)
-
-    requests.find_in_batches(batch_size: @batch_size) do |request_signups|
+    all_ids.each do |request_id|
       break if PotentialMatch.canceled?(@collection)
 
-      request_signups.each do |request|
-        break if PotentialMatch.canceled?(@collection)
-
-        sampled_offer_ids = sample_offers_for_request(request.id, offer_ids)
-        make_signup_matches(request, sampled_offer_ids)
-
-        @progress.increment
+      batched_ids.each do |offer_ids|
+        make_all_matches([request_id], offer_ids)
       end
+
+      @progress.increment
     end
 
     @progress.end_subtask

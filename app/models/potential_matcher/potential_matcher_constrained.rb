@@ -5,8 +5,6 @@
 # The runtime is asymptotically quadratic in the number of signups, but the
 # batching keeps the constants relatively low.
 class PotentialMatcherConstrained
-  ALL = -1
-
   attr_reader :collection, :settings, :batch_size
   attr_reader :index_tag_type, :index_optional
 
@@ -21,6 +19,9 @@ class PotentialMatcherConstrained
 
     # Set up a new progress object for recording our progress.
     @progress = PotentialMatcherProgress.new(collection)
+
+    # Set up a structure for holding multiple PotentialMatchBuilders.
+    @builders = {}
   end
 
   private
@@ -32,76 +33,47 @@ class PotentialMatcherConstrained
     PromptBatch.new(signups, prompt_type, @index_tag_type, @index_optional)
   end
 
-  # Generates (but doesn't save) all potential prompt matches between the given
-  # challenge signup (to be used as a request), and the batch of offers.
-  def make_prompt_matches(request_signup, offer_batch)
-    prompt_matches_for_signup = []
+  # Try matching the two prompts.
+  def try_match_prompts(request, offer)
+    return unless request.matches?(offer, @settings)
 
-    request_signup.requests.each do |request|
-      offer_candidates = offer_batch.candidates_for_matching(request)
-      offer_candidates.each do |offer|
-        match = request.match(offer, settings)
-        prompt_matches_for_signup << match unless match.nil?
+    request_signup = request.challenge_signup
+    offer_signup = offer.challenge_signup
+    pair_key = "#{request_signup.id}|#{offer_signup.id}"
+
+    @builders[pair_key] ||= PotentialMatchBuilder.new(
+      request_signup, offer_signup, @settings
+    )
+
+    # We've already checked that the request matches the offer, so we can use
+    # add_prompt_match instead of try_prompt_match (to avoid duplicating work).
+    @builders[pair_key].add_prompt_match(request, offer)
+  end
+
+  # Builds and saves all PotentialMatches using @builders, then clears out the
+  # @builders table for the next batch.
+  def save_potential_matches
+    return if @builders.empty?
+
+    PotentialMatch.transaction do
+      @builders.each_value do |builder|
+        match = builder.build_potential_match
+        match.save unless match.nil?
       end
     end
 
-    prompt_matches_for_signup
+    @builders.clear
   end
 
-  # Combines a list of PotentialPromptMatches into a single PotentialMatch
-  # object (not saved). Returns nil if the list of prompt_matches doesn't have
-  # enough matches to satisfy @settings.num_required_prompts.
-  def combine_prompt_matches(request, offer, prompt_matches)
-    required_matches = @settings.num_required_prompts
-    required_matches = request.requests.size if required_matches == ALL
+  # Tries to calculate all pairs of matching prompts between the given
+  # challenge signup (to be used as a request), and the batch of offers.
+  def build_matches_for_request(request_signup, offer_batch)
+    request_signup.requests.each do |request|
+      offer_candidates = offer_batch.candidates_for_matching(request)
 
-    # TODO: Maybe this should be checking the number of requests covered by
-    # prompt_matches, rather than the total number of matches? Do we want to
-    # allow a match when we're supposed to be matching ALL, but (for example)
-    # there are really three requests and three offers, with only two matching
-    # requests and two matching offers (for a total of four prompt matches)?
-    return nil if prompt_matches.size < required_matches
-
-    match = PotentialMatch.new(collection: @collection,
-                               offer_signup: offer,
-                               request_signup: request,
-                               num_prompts_matched: prompt_matches.size)
-
-    match.potential_prompt_matches = prompt_matches
-    match
-  end
-
-  # Takes as input a list of PotentialPromptMatches, and groups them together
-  # by their offer signup ID. (The request signup ID is assumed to be the
-  # same.) Those groups are then passed into the combine_prompt_matches
-  # function to try to generate new PotentialMatch objects.
-  def make_signup_matches(prompt_matches_for_request)
-    grouped = prompt_matches_for_request.group_by do |prompt_match|
-      prompt_match.offer.challenge_signup_id
-    end
-
-    signup_matches_for_request = []
-
-    grouped.each_value do |prompt_matches|
-      # All of the request signups and all of the offer signups are the same
-      # for every prompt match in this group, so we can just look them up in
-      # the first prompt_match.
-      request = prompt_matches.first.request.challenge_signup
-      offer = prompt_matches.first.offer.challenge_signup
-      signup_match = combine_prompt_matches(request, offer, prompt_matches)
-      signup_matches_for_request << signup_match unless signup_match.nil?
-    end
-
-    signup_matches_for_request
-  end
-
-  # Save all signup matches. Use a transaction because it's marginally faster,
-  # and we like speed.
-  def save_signup_matches(signup_matches)
-    return if signup_matches.empty?
-
-    PotentialMatch.transaction do
-      signup_matches.each(&:save)
+      offer_candidates.each do |offer|
+        try_match_prompts(request, offer)
+      end
     end
   end
 
@@ -111,9 +83,8 @@ class PotentialMatcherConstrained
     @progress.start_subtask(request_batch.signups.size)
 
     request_batch.signups.each do |request_signup|
-      prompt_matches = make_prompt_matches(request_signup, offer_batch)
-      signup_matches = make_signup_matches(prompt_matches)
-      save_signup_matches(signup_matches)
+      build_matches_for_request(request_signup, offer_batch)
+      save_potential_matches
       @progress.increment
     end
 
