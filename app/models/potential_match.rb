@@ -12,8 +12,6 @@ class PotentialMatch < ActiveRecord::Base
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
 
-  has_many :potential_prompt_matches, dependent: :destroy
-
 protected
 
   def self.progress_key(collection)
@@ -38,11 +36,7 @@ public
     # rapidly delete all potential prompt matches and potential matches
     # WITHOUT CALLBACKS
     pmids = collection.potential_matches.value_of(:id)
-    # trash all the potential PROMPT matches first
-    # since we are NOT USING CALLBACKS
-    PotentialPromptMatch.where("potential_match_id IN (?)", pmids).delete_all
-    # now take out the potential matches
-    PotentialMatch.where("id IN (?)", pmids).delete_all
+    PotentialMatch.where(id: pmids).delete_all
   end
 
   def self.set_up_generating(collection)
@@ -261,22 +255,7 @@ public
     cmp = compare_all(self.max_tags_matched, other.max_tags_matched)
     return cmp unless cmp == 0
 
-    # otherwise we rank them based on how good the prompt matches are
-    self_tally = 0
-    other_tally = 0
-    self.potential_prompt_matches.each do |self_prompt_match|
-      other.potential_prompt_matches.each do |other_prompt_match|
-        if self_prompt_match > other_prompt_match
-          self_tally = self_tally + 1
-        elsif other_prompt_match > self_prompt_match
-          other_tally = other_tally + 1
-        end
-      end
-    end
-    cmp = (self_tally <=> other_tally)
-    return cmp unless cmp == 0
-
-    # if we're a perfect match down to here just match on id
+    # if we're a match down to here just match on id
     return self.id <=> other.id
   end
 
