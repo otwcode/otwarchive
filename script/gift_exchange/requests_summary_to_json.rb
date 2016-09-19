@@ -25,13 +25,13 @@ end
 request_files = ARGV[0..-2]
 json_output = ARGV[-1]
 
-PROMPT_DELIMETER = '<li class="prompt blurb group" role="article">'.freeze
-BYLINE_START = '<h4 class="heading">'.freeze
-BYLINE_END = '</h4>'.freeze
-FANDOM_START = '<span class="landmark">Fandom:</span>'.freeze
-FANDOM_END = '&nbsp;'.freeze
-TAGS_START = '<ul class="tags commas">'.freeze
-TAGS_END = '</ul>'.freeze
+PROMPT_DELIMETER = '<li class="prompt blurb group" role="article">'
+BYLINE_START = '<h4 class="heading">'
+BYLINE_END = '</h4>'
+FANDOM_START = '<span class="landmark">Fandom:</span>'
+FANDOM_END = '&nbsp;'
+TAGS_START = '<ul class="tags commas">'
+TAGS_END = '</ul>'
 
 def load_user(text)
   byline = text.split(BYLINE_START)[1].split(BYLINE_END)[0]
@@ -82,7 +82,7 @@ def load_prompt(text, data_by_pseud)
   data_by_pseud[user][:requests] << request
 end
 
-OWN_PROMPT = '<li class="own prompt blurb group" role="article">'.freeze
+OWN_PROMPT = '<li class="own prompt blurb group" role="article">'
 
 def load_file(filename, data_by_pseud)
   text = File.open(filename, 'r').read

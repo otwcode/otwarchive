@@ -17,7 +17,7 @@ unless ARGV.size == 2
 end
 
 # TAG_SAMPLE_TYPE = 'uniform'.freeze
-TAG_SAMPLE_TYPE = 'geometric'.freeze
+TAG_SAMPLE_TYPE = 'geometric'
 # TAG_SAMPLE_TYPE = 'harmonic'.freeze
 
 ######################################################################
@@ -33,7 +33,7 @@ PLURAL_TAG_TYPES = %w(
   ratings
   warnings
   categories
-).freeze
+)
 
 # Checks whether this type is one of the nested ones.
 def nested?(type)

@@ -234,7 +234,7 @@ public
     # compare the "quality" of the best prompt match
     # (i.e. the number of matching tags between the most closely-matching
     # request prompt/offer prompt pair)
-    cmp = compare_all(self.max_tags_matched, other.max_tags_matched)
+    cmp = compare_all(max_tags_matched, other.max_tags_matched)
     return cmp unless cmp == 0
 
     # if we're a match down to here just match on id

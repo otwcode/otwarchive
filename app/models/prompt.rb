@@ -245,7 +245,7 @@ class Prompt < ActiveRecord::Base
 
   # Returns true if there's a match, false otherwise.
   # self is the request, other is the offer
-  def matches?(other, settings=nil)
+  def matches?(other, settings = nil)
     return nil if challenge_signup.id == other.challenge_signup.id
     return nil if settings.nil?
 
@@ -255,12 +255,12 @@ class Prompt < ActiveRecord::Base
       next if send("any_#{type}") || other.send("any_#{type}")
 
       required_count = settings.send("num_required_#{type.pluralize}")
-      if settings.send("include_optional_#{type.pluralize}")
-        match_count = full_tag_set.match_rank(other.full_tag_set, type)
-      else
-        # we don't use optional tags to count towards required
-        match_count = tag_set.match_rank(other.tag_set, type)
-      end
+      match_count = if settings.send("include_optional_#{type.pluralize}")
+                      full_tag_set.match_rank(other.full_tag_set, type)
+                    else
+                      # we don't use optional tags to count towards required
+                      tag_set.match_rank(other.tag_set, type)
+                    end
       
       # if we have to match all and don't, not a match
       return false if required_count == ALL && match_count != ALL
