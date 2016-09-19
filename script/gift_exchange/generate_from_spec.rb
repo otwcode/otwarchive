@@ -33,7 +33,7 @@ PLURAL_TAG_TYPES = %w(
   ratings
   warnings
   categories
-)
+).freeze
 
 # Checks whether this type is one of the nested ones.
 def nested?(type)

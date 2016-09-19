@@ -267,7 +267,7 @@ class ChallengeSignup < ActiveRecord::Base
 
     builder = PotentialMatchBuilder.new(self, other, settings)
 
-    self.requests.each do |request|
+    requests.each do |request|
       other.offers.each do |offer|
         builder.try_prompt_match(request, offer)
       end
