@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A datastructure representing a batch of prompts. Used in order to speed up
 # matching.
 class PromptBatch

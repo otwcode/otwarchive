@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A class used to generate PotentialMatch objects when the matching is
 # unconstrained -- that is, anyone can be assigned to anyone else.
 class PotentialMatcherUnconstrained

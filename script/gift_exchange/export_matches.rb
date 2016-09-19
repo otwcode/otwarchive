@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 unless ARGV.size == 1
   puts "
     Usage: rails runner export_matches.rb <EXCHANGE>

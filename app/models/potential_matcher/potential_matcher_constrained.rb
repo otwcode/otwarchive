@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Generates potential matches when the matching settings restrict who can be
 # matched with whom. Uses PromptBatches to speed up matching. Does not generate
 # assignments.

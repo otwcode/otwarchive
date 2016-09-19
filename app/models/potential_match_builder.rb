@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A class for building PotentialMatch objects by trying to add pairs of
 # matching prompts.
 class PotentialMatchBuilder

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A class used for gathering information about the rough frequency of different
 # required tag types in all of the prompts in a collection. Used to figure out
 # what would be a good "index type" -- that is, a type that we can use to try

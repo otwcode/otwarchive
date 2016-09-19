@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |name, table|
   # Set up the gift exchange with the correct owner.
   step %{the user "moderator" exists and is activated}

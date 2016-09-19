@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropPotentialPromptMatchesTable < ActiveRecord::Migration
   def up
     drop_table "potential_prompt_matches"

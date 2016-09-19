@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A class for recording the progress of potential match generation.
 #
 # Designed to make it easier to record progress on subtasks. It keeps two

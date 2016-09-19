@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'benchmark'
 
 if ARGV.size.zero? || ARGV.size > 2
