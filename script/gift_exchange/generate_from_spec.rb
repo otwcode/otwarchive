@@ -231,7 +231,7 @@ end
 # generation tasks. Ignores the fandoms specified by the given list of tasks,
 # and uses the override_fandoms list instead.
 def generate_unique_tags(type, tasks, override_fandoms = nil)
-  total = tasks.reduce(0) { |sum, task| sum + task.count }
+  total = tasks.inject(0) { |sum, task| sum + task.count }
 
   all = sample_tags(type, override_fandoms, total).shuffle
 
