@@ -272,9 +272,14 @@ class Prompt < ActiveRecord::Base
     true
   end
 
-  # Count the number of matching tags of all types.
+  # Count the number of overlapping tags of all types. Does not use ALL to
+  # indicate a 100% match, since the goal is to give a bonus to matches where
+  # both requester and offerer were specific about their desires, and had a lot
+  # of overlap.
   def count_tags_matched(other)
-    full_tag_set.match_rank(other.full_tag_set, nil)
+    self_tags = full_tag_set.tags.map(&:id)
+    other_tags = other.full_tag_set.tags.map(&:id)
+    (self_tags & other_tags).size
   end
 
   def accepts_any?(type)

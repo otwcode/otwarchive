@@ -35,15 +35,10 @@ class PotentialMatchBuilder
   def add_prompt_match(request_prompt, offer_prompt)
     @num_prompts_matched += 1
 
-    # If we've already matched ALL, we don't need to check the number of
-    # overlapping tags, since we've already got the maximum possible.
-    return if @max_tags_matched == ALL
-
     # Compute the number of matching tags, and update max_tags_matched if
     # necessary.
     curr_tags_matched = request_prompt.count_tags_matched(offer_prompt)
     @max_tags_matched = [@max_tags_matched, curr_tags_matched].max
-    @max_tags_matched = ALL if curr_tags_matched == ALL
   end
 
   # If possible, create the potential match that we've been building.

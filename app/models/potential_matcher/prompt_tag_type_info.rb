@@ -25,8 +25,22 @@ class PromptTagTypeInfo
     @settings = @collection.challenge.potential_match_settings
     @required_types = @settings.required_types
 
-    @limit_first_tags = [10, @total_signups / 10].min
-    @limit_prompts_with_any = [10, @total_prompts / 10].max
+    # Control the number of tags of each type that we want to see, in order to
+    # consider the tag type "good." (This is a lower limit -- the more
+    # different tags we see, the easier it will be to match on that type.)
+    @limit_first_tags = [
+      ArchiveConfig.PREPROCESS_COUNT_TAGS_MAX,
+      @total_signups / ArchiveConfig.PREPROCESS_COUNT_TAGS_DIVISOR
+    ].min
+
+    # Control the number of prompts with any that we want to see for a given
+    # type, in order to consider the type "good." (This is an upper limit --
+    # the more prompts we see with "any," the harder it will be to match on
+    # that type.)
+    @limit_prompts_with_any = [
+      ArchiveConfig.PREPROCESS_COUNT_ANY_MIN,
+      @total_prompts / ArchiveConfig.PREPROCESS_COUNT_ANY_DIVISOR
+    ].max
   end
 
   # Set up @count_prompts_with_any and @first_tags_of_type with the correct
