@@ -37,8 +37,9 @@ class CommentMailer < ActionMailer::Base
   # Sends email to commenter when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(your_comment_id, comment_id)
-    @your_comment = Comment.find(your_comment_id)
-    @comment = Comment.find(comment_id)
+    @your_comment = Comment.find_by_id(your_comment_id)
+    @comment = Comment.find_by_id(comment_id)
+    return if @comment.nil? || @your_comment.nil?
     mail(
       to: @your_comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
