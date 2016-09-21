@@ -1,13 +1,6 @@
 class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
 
-  # Send notifications when a creation is posted without preview
-  def after_create(creation)
-    notify_co_authors(creation)
-    return unless !creation.is_a?(Series) && creation.posted?
-    do_notify(creation)
-  end
-
   # Send notifications when a creation is posted from a draft state
   def before_update(creation)
     notify_co_authors(creation)
@@ -21,10 +14,11 @@ class CreationObserver < ActiveRecord::Observer
   end
 
   # Notify recipients after save only to prevent repeat notifications from previewing
+  # Send notifications when a creation is posted without preview
   def after_save(creation)
-    if creation.is_a?(Work)
-      notify_recipients(creation)
-    end
+    notify_co_authors(creation)
+    return unless !creation.is_a?(Series) && creation.posted?
+    do_notify(creation)
   end
   
   # send the appropriate notifications
