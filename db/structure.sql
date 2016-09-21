@@ -100,7 +100,7 @@ CREATE TABLE `admin_settings` (
   `creation_requires_invite` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_admin_settings_on_last_updated_by` (`last_updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `admins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -112,7 +112,7 @@ CREATE TABLE `admins` (
   `salt` varchar(255) DEFAULT NULL,
   `persistence_token` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `api_keys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -192,7 +192,7 @@ CREATE TABLE `bookmarks` (
   KEY `index_bookmarks_on_pseud_id` (`pseud_id`),
   KEY `index_bookmarkable_pseud` (`bookmarkable_id`,`bookmarkable_type`,`pseud_id`),
   KEY `index_bookmarks_on_private_and_hidden_by_admin_and_created_at` (`private`,`hidden_by_admin`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `challenge_assignments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -274,7 +274,7 @@ CREATE TABLE `chapters` (
   PRIMARY KEY (`id`),
   KEY `works_chapter_index` (`work_id`),
   KEY `index_chapters_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -293,7 +293,7 @@ CREATE TABLE `collection_items` (
   KEY `collection_items_unrevealed` (`unrevealed`),
   KEY `collection_items_anonymous` (`anonymous`),
   KEY `collection_items_item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350796 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_participants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -306,7 +306,7 @@ CREATE TABLE `collection_participants` (
   UNIQUE KEY `by collection and pseud` (`collection_id`,`pseud_id`),
   KEY `participants_by_collection_and_role` (`collection_id`,`participant_role`),
   KEY `participants_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350796 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_preferences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -323,7 +323,7 @@ CREATE TABLE `collection_preferences` (
   `email_notify` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_collection_preferences_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350796 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -340,7 +340,7 @@ CREATE TABLE `collection_profiles` (
   `assignment_notification` text,
   PRIMARY KEY (`id`),
   KEY `index_collection_profiles_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350796 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collections` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -364,7 +364,7 @@ CREATE TABLE `collections` (
   PRIMARY KEY (`id`),
   KEY `index_collections_on_name` (`name`),
   KEY `index_collections_on_parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -395,7 +395,7 @@ CREATE TABLE `comments` (
   KEY `index_comments_on_pseud_id` (`pseud_id`),
   KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `comments_by_thread` (`thread`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `common_taggings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -407,7 +407,7 @@ CREATE TABLE `common_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_common_tags` (`common_tag_id`,`filterable_type`,`filterable_id`),
   KEY `index_common_taggings_on_filterable_id` (`filterable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3000 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `creatorships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -419,7 +419,7 @@ CREATE TABLE `creatorships` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `creation_id_creation_type_pseud_id` (`creation_id`,`creation_type`,`pseud_id`),
   KEY `index_creatorships_pseud` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=596033519 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `delayed_jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -491,7 +491,7 @@ CREATE TABLE `external_works` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `language_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `fannish_next_of_kins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -539,7 +539,7 @@ CREATE TABLE `filter_counts` (
   UNIQUE KEY `index_filter_counts_on_filter_id` (`filter_id`),
   KEY `index_unhidden_works_count` (`unhidden_works_count`),
   KEY `index_public_works_count` (`public_works_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `filter_taggings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -552,7 +552,7 @@ CREATE TABLE `filter_taggings` (
   PRIMARY KEY (`id`),
   KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`),
   KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=19392250 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gift_exchanges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -600,7 +600,7 @@ CREATE TABLE `gifts` (
   KEY `index_gifts_on_recipient_name` (`recipient_name`),
   KEY `index_gifts_on_work_id` (`work_id`),
   KEY `index_gifts_on_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `inbox_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -614,7 +614,7 @@ CREATE TABLE `inbox_comments` (
   KEY `index_inbox_comments_on_read_and_user_id` (`read`,`user_id`),
   KEY `index_inbox_comments_on_feedback_comment_id` (`feedback_comment_id`),
   KEY `index_inbox_comments_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `invitations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -680,7 +680,7 @@ CREATE TABLE `languages` (
   `support_available` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_languages_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -696,7 +696,7 @@ CREATE TABLE `locales` (
   KEY `index_locales_on_iso` (`iso`),
   KEY `index_locales_on_short` (`short`),
   KEY `index_locales_on_language_id` (`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `log_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -869,7 +869,7 @@ CREATE TABLE `preferences` (
   `preferred_locale` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_preferences_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=484751137 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -883,7 +883,7 @@ CREATE TABLE `profiles` (
   `about_me_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_profiles_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=765128317 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `prompt_memes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1007,7 +1007,7 @@ CREATE TABLE `pseuds` (
   PRIMARY KEY (`id`),
   KEY `index_pseuds_on_user_id_and_name` (`user_id`,`name`),
   KEY `index_psueds_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `question_translations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1036,7 +1036,7 @@ CREATE TABLE `questions` (
   `position` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_questions_on_archive_faq_id_and_position` (`archive_faq_id`,`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `readings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1066,7 +1066,7 @@ CREATE TABLE `related_works` (
   PRIMARY KEY (`id`),
   KEY `index_related_works_on_parent_id_and_parent_type` (`parent_id`,`parent_type`),
   KEY `index_related_works_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1079,7 +1079,7 @@ CREATE TABLE `roles` (
   KEY `index_roles_on_authorizable_id_and_authorizable_type` (`authorizable_id`,`authorizable_type`),
   KEY `index_roles_on_authorizable_type` (`authorizable_type`),
   KEY `index_roles_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `roles_users` (
   `user_id` int(11) DEFAULT NULL,
@@ -1126,7 +1126,7 @@ CREATE TABLE `serial_works` (
   PRIMARY KEY (`id`),
   KEY `index_serial_works_on_work_id` (`work_id`),
   KEY `index_serial_works_on_series_id` (`series_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1141,7 +1141,7 @@ CREATE TABLE `series` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `notes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `set_taggings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1162,7 +1162,7 @@ CREATE TABLE `skin_parents` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60771 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `skins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1207,7 +1207,7 @@ CREATE TABLE `skins` (
   KEY `index_skins_on_author_id` (`author_id`),
   KEY `index_skins_on_in_chooser` (`in_chooser`),
   KEY `index_skins_on_title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=9683 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `stat_counters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1221,7 +1221,7 @@ CREATE TABLE `stat_counters` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hit_counters_on_work_id` (`work_id`),
   KEY `index_hit_counters_on_hit_count` (`hit_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=1043096534 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1300,7 +1300,7 @@ CREATE TABLE `taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_taggings_polymorphic` (`tagger_id`,`tagger_type`,`taggable_id`,`taggable_type`),
   KEY `index_taggings_taggable` (`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=1067725751 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1325,7 +1325,7 @@ CREATE TABLE `tags` (
   KEY `tag_created_at_index` (`created_at`),
   KEY `index_tags_on_type` (`type`),
   KEY `index_tags_on_sortable_name` (`sortable_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1063754168 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_invite_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1362,7 +1362,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_activation_code` (`activation_code`),
   KEY `index_users_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `work_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1420,7 +1420,7 @@ CREATE TABLE `works` (
   KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
   KEY `index_works_on_ip_address` (`ip_address`),
   KEY `index_works_on_spam` (`spam`)
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `wrangling_assignments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
