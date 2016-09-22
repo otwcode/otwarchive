@@ -9,7 +9,7 @@ end
 
 
 Before do
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
   DatabaseCleaner.start
 end
 
