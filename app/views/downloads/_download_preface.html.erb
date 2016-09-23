@@ -34,7 +34,7 @@ hide_freeform?(@work)) %>
     </dd>
   </dl>
   <h1><%= @work.title.html_safe %></h1>
-  <div class="byline"><%= ts("by") %> <%= byline(@work, :visibility => 'public') %></div>
+  <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
   <% unless @work.summary.blank? %>
     <p><%= ts('Summary') %></p>
     <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
@@ -58,7 +58,7 @@ hide_freeform?(@work)) %>
       <dt><%= ts('This work was inspired by') %></dt>
       <dd>
         <%= @work.parent_work_relationships.map{|rw| "#{link_to(rw.parent.title, 
-url_for(:action => :show, :controller => rw.parent_type.underscore.pluralize, :id => rw.parent_id, 
+url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
 :only_path => false))} #{ts('by')} 
 #{byline(rw.parent)}"}.join(", ").html_safe %>
       </dd>  

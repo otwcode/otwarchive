@@ -51,10 +51,15 @@
       <%= link_to ts("Cancel Bookmark"), "#", :class => "hidden bookmark_form_placement_close" %>
     </li>
 
-    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
-      <li class="mark"><%= marktoread_link(@work) %></li>
+    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
+    <li class="mark"> 
+      <% if marked_for_later?(@work) %>
+        <%= mark_as_read_link(@work) %>
+      <% else %>
+        <%= mark_for_later_link(@work) %>
+      <% end %>
+    </li>
     <% end %>
-
   <% end %>
 
   <li class="comments" id="show_comments_link_top">

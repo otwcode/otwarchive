@@ -188,9 +188,6 @@ class CollectionItem < ActiveRecord::Base
         notify_of_reveal
       end
     end
-    if anonymous_changed?
-      notify_of_author_reveal
-    end
   end
   
   after_destroy :expire_caches
@@ -314,20 +311,4 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-
-  # When the authors of anonymous works are revealed, notify users
-  # subscribed to those authors
-  def notify_of_author_reveal
-    unless self.anonymous? || !self.posted?
-      if item_type == "Work"
-        subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
-                                  item.pseuds.map{|p| p.user_id}]).
-                            group(:user_id)
-        subs.each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, item)
-        end
-      end      
-    end
-  end
-
 end
