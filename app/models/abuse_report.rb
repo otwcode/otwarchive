@@ -48,7 +48,9 @@ class AbuseReport < ActiveRecord::Base
       language: language,
       email: email,
       username: username,
-      ip_address: ip_address
+      ip_address: ip_address,
+      url: url
+
     )
     reporter.send_report!
   end

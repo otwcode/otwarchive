@@ -6,5 +6,6 @@
     <fl val="Description"><%= cdata_section(@report.description.present? ? @report.description.html_safe : "No comment submitted.") %></fl>
     <fl val="Language"><%= cdata_section(@report.language.present? ? @report.language : "English") %></fl>
     <fl val="IP"><%= cdata_section(@report.ip_address.present? ? @report.ip_address : "Unknown IP") %></fl>
+    <fl val="URL"><%= cdata_section(@report.url.present? ? @report.url : "Unknown URL") %></fl>
   </row>
 </requests>
