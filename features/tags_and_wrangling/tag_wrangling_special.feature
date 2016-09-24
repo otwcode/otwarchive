@@ -47,7 +47,6 @@ Feature: Tag Wrangling - special cases
     | wranglerette   |
     And I am logged in as "wranglerette"
     And a fandom exists with name: "amelie", canonical: false
-    And that the next test needs transactions
   When I edit the tag "amelie"
     And I fill in "Synonym of" with "Amelie"
     And I press "Save changes"
