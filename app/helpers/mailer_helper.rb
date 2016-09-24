@@ -72,5 +72,15 @@ module MailerHelper
         .gsub(/<\/?u>/, "_")
     )
   end
-  
+
+  # Reformat a string as HTML with <br> tags instead of newlines, but with all
+  # other HTML escaped.
+  # This is used for collection.assignment_notification, which already strips
+  # HTML tags (when saving the collection settings, the params are sanitized),
+  # but that still leaves other HTML entities.
+  def escape_html_and_create_linebreaks(html)
+    # Escape each line with h(), then join with <br>s and mark as html_safe to
+    # ensure that the <br>s aren't escaped.
+    html.split("\n").map { |x| h(x) }.join('<br>').html_safe
+  end
 end # end of MailerHelper
