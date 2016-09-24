@@ -37,6 +37,8 @@ class CommentMailer < ActionMailer::Base
   # Sends email to commenter when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(your_comment_id, comment_id)
+    # Here we use find_by_id so that we can silently fail if either the comment
+    # or the parent commet has been deleted.
     @your_comment = Comment.find_by_id(your_comment_id)
     @comment = Comment.find_by_id(comment_id)
     return if @comment.nil? || @your_comment.nil?

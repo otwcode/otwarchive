@@ -2,7 +2,11 @@ class CommentObserver < ActiveRecord::Observer
 
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
-  def after_create(comment)
+  def after_commit(comment)
+    # We are using after commit rather than after_save
+    # The following should fire only on a new record.
+    # for rails4 change to return unless transaction_any_action?([:create])
+    return unless transaction_include_action?(:create)
     comment.reload
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
@@ -47,7 +51,11 @@ class CommentObserver < ActiveRecord::Observer
 
   end
 
-  def after_update(comment)
+  def after_commit(comment)
+    # We are using after commit rather than after_update
+    # The following should fire only on an update to a record.
+    # for rails4 change to return unless transaction_any_action?([:update])
+    return unless transaction_include_action?(:update)
     users = []
     admins = []
 
