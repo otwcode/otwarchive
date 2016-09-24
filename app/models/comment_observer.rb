@@ -1,8 +1,15 @@
 class CommentObserver < ActiveRecord::Observer
 
+  # A wrapper to call both methods
+  def after_commit(comment)
+    # for rails4 change to return unless transaction_any_action?([:create])
+    send_user(comment) if transaction_include_action?(:create)
+    send_create(comment) if transaction_include_action?(:update)
+  end
+
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
-  def after_commit(comment)
+  def send_create(comment)
     # We are using after commit rather than after_save
     # The following should fire only on a new record.
     # for rails4 change to return unless transaction_any_action?([:create])
@@ -51,7 +58,7 @@ class CommentObserver < ActiveRecord::Observer
 
   end
 
-  def after_commit(comment)
+  def send_update(comment)
     # We are using after commit rather than after_update
     # The following should fire only on an update to a record.
     # for rails4 change to return unless transaction_any_action?([:update])
