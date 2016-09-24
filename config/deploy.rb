@@ -32,19 +32,19 @@ require 'bundler/capistrano'
 
 # deploy to different environments with tags
 require 'capistrano/ext/multistage'
-set :stages, ["staging", "production", "i18n"]
+set :stages, %w(staging production i18n)
 set :default_stage, "staging"
-#require 'capistrano/gitflow_version'
+# require 'capistrano/gitflow_version'
 
 # use rvm
 require "rvm/capistrano"    
-set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//, "")
+set :rvm_ruby_string, ENV['GEM_HOME'].gsub(%r{.*\/}, "")
 set :rvm_type, :user
 
 # user settings
 set :user, "ao3app"
 set :auth_methods, "publickey"
-#ssh_options[:verbose] = :debug
+# ssh_options[:verbose] = :debug
 ssh_options[:auth_methods] = %w(publickey)
 set :use_sudo, false
 default_run_options[:shell] = '/bin/bash'
@@ -64,43 +64,43 @@ set :deploy_via, :remote_cache
 # overwrite default capistrano deploy tasks
 namespace :deploy do
   desc "Restart the unicorns"
-  task :restart  do
+  task :restart do
     find_servers(roles: [:app, :web]).each do |server|
-      system( "ssh ao3-front01 ~/bin/disable_server #{server}")
-      system( "ssh ao3-front02 ~/bin/disable_server #{server}")
+      system("ssh ao3-front01 ~/bin/disable_server #{server}")
+      system("ssh ao3-front02 ~/bin/disable_server #{server}")
       puts "restart on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , :hosts => server.host
-      run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
-      sleep(80)
-      system( "ssh ao3-front01 ~/bin/enable_server #{server}")
-      system( "ssh ao3-front02 ~/bin/enable_server #{server}")
+      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}", hosts: server.host
+      run "/home/ao3app/bin/unicorns_reload", hosts: server.host
+      sleep 80
+      system("ssh ao3-front01 ~/bin/enable_server #{server}")
+      system("ssh ao3-front02 ~/bin/enable_server #{server}")
     end
   end
 
   desc "Restart the resque workers"
-  task :restart_workers, :roles => :workers do
+  task :restart_workers, roles: :workers do
     run "/home/ao3app/bin/workers_reload"
   end
 
   desc "Restart the schedulers"
-  task :restart_schedulers, :roles => :schedulers do
+  task :restart_schedulers, roles: :schedulers do
     run "/home/ao3app/bin/scheduler_reload"
   end
 
   desc "Get the config files"
-  task :update_configs, :roles => [ :app , :web ] do
+  task :update_configs, roles: [:app, :web] do
     run "/home/ao3app/bin/create_links_on_install"
   end
 
   desc "Update the web-related whenever tasks"
-  task :update_cron_web, :roles => :web do
+  task :update_cron_web, roles: :web do
     # run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
     run "echo cron entries are currently managed by hand"
   end
 
   # This should only be one machine 
   desc "update the crontab for whatever machine should run the scheduled tasks"
-  task :update_cron, :roles => :app, :only => {:primary => true} do
+  task :update_cron, roles: :app, only: { primary: true } do
     # run "bundle exec whenever --update-crontab #{application}"
     run "echo cron entries are currently managed by hand"
   end
@@ -108,10 +108,10 @@ namespace :deploy do
   # Needs to run on web (front-end) servers, but they must also have rails installed
   desc "Re-caches the site skins"
   task :reload_site_skins do
-    find_servers(:roles => :web).each do |server|
+    find_servers(roles: :web).each do |server|
       puts "Caching skins on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", :hosts => server.host
-      sleep (10)
+      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", hosts: server.host
+      sleep 10
     end
   end
 end
@@ -127,16 +127,16 @@ end
 #
 
 # after and before task triggers that should run on both staging and production
-#before "deploy:migrate", "deploy:web:disable"
-#after "deploy:migrate", "extras:run_after_tasks"
+# before "deploy:migrate", "deploy:web:disable"
+# after "deploy:migrate", "extras:run_after_tasks"
 
-#before "deploy:symlink", "deploy:web:enable_new"
-#after "deploy:symlink", "extras:update_revision"
+# before "deploy:symlink", "deploy:web:enable_new"
+# after "deploy:symlink", "extras:update_revision"
 
 after "deploy:restart", "deploy:update_cron"
 after "deploy:restart", "deploy:update_cron_web"
-#after "deploy:restart", "extras:restart_delayed_jobs"
-#after "deploy:restart", "deploy:cleanup"
+# after "deploy:restart", "extras:restart_delayed_jobs"
+# after "deploy:restart", "deploy:cleanup"
 
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:restart_schedulers"
