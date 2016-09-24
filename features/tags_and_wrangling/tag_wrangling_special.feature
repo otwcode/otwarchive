@@ -40,6 +40,23 @@ Feature: Tag Wrangling - special cases
     And I press "Save changes"
   Then I should see "Name can only be changed by an admin."
 
+  Scenario: Change capitalisation of a tag
+
+  Given the following activated tag wrangler exists
+    | login          |
+    | wranglerette   |
+    And I am logged in as "wranglerette"
+    And a fandom exists with name: "amelie", canonical: false
+    And that the next test needs transactions
+  When I edit the tag "amelie"
+    And I fill in "Synonym of" with "Amelie"
+    And I press "Save changes"
+  Then I should see "Amelie is considered the same as amelie by the database"
+    And I should not see "Tag was successfully updated."
+  When I fill in "Name" with "Amelie"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+                                       
   Scenario: Tags with non-standard characters in them - question mark and period
   
   Given basic tags
@@ -62,20 +79,3 @@ Feature: Tag Wrangling - special cases
   When I view the tag "James T. Kirk"
     And I follow "filter works"
   Then I should see "1 Work in James T. Kirk"
-  
-  Scenario: Change capitalisation of a tag
-
-  Given the following activated tag wrangler exists
-    | login          |
-    | wranglerette   |
-    And I am logged in as "wranglerette"
-    And a fandom exists with name: "amelie", canonical: false
-    And that the next test needs transactions
-  When I edit the tag "amelie"
-    And I fill in "Synonym of" with "Amelie"
-    And I press "Save changes"
-  Then I should see "Amelie is considered the same as amelie by the database"
-    And I should not see "Tag was successfully updated."
-  When I fill in "Name" with "Amelie"
-    And I press "Save changes"
-  Then I should see "Tag was updated"
