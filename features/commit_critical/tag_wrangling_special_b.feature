@@ -3,6 +3,7 @@ Feature: Tag Wrangling - special cases
 
   Scenario: Works should be updated when capitalisation is changed
     See AO3-4230 for a bug with the caching of this
+    These require commits to work and therefore dirty the db
   
   Given the following activated tag wrangler exists
     | login          |
