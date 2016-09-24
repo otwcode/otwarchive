@@ -17,6 +17,7 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
+  - TEST_GROUP="DIRTYDB=yes bundle exec cucumber features/commit_critical/tag_wrangling_special_b.feature ; DIRTYDB=yes bundle exec cucumber features/commit_critical/tag_wrangling_special_c.feature"
 rvm:
   - "2.2.5"
 services:
