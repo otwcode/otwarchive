@@ -214,10 +214,10 @@ end
 Then /^the notification message to "([^\"]*)" should contain linebreaks$/ do |user|
   @user = User.find_by_login(user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
-  email.multipart?.should == true
+  email.multipart?.should be == true
 
   text_lines = email.text_part.body.to_s.split("\n")
-  html_lines = email.html_part.body.to_s.split(/<(?:\/?p|br|div)\b[^>]*>/i)
+  html_lines = email.html_part.body.to_s.split(%r{<(?:\/?p|br|div)\b[^>]*>}i)
 
   (text_lines + html_lines).each do |line|
     # We shouldn't see "First Line" and "Second Line" on the same line.
@@ -233,7 +233,7 @@ end
 Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |user|
   @user = User.find_by_login(user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
-  email.multipart?.should == true
+  email.multipart?.should be == true
 
   email.html_part.body.should =~ /The first thing &amp; the second thing./
   email.html_part.body.should_not =~ /The first thing & the second thing./
