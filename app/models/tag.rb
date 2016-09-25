@@ -154,7 +154,7 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  after_save :queue_flush_work_cache
+  after_commit :queue_flush_work_cache
   def queue_flush_work_cache
     async(:flush_work_cache)
   end

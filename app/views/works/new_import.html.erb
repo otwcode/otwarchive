@@ -7,12 +7,7 @@
   <p class="important">
     <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
-  <p>
-    <%= ts("If you have trouble importing from another site, ") %> 
-    <%= link_to ts("please let us know"), new_feedback_report_path %>
-    <%= ts("so we can improve this tool!") %>
-  </p>
-  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/importing-and-mass-editing" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the #{ link_to(ts("Import FAQ"), archive_faqs_path + "/posting-and-editing#importwork") } useful.").html_safe %></p>
 </div>
 
 <!--/descriptions-->
@@ -21,27 +16,27 @@
 <ul class="navigation actions" role="menu">
   <% if @unposted %>
     <li id='restore-link'>
-      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
+      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(action: :new, load_unposted: true) %>
     </li>
   <% end %>
   <li id="form-link">
      <%= link_to( ts("Post New Work Instead?"),
        { url: { controller: :works, action: :new, import: false } },
-       :href => url_for(:controller => :works, :action => :new, :import => nil)) %>
+       :href => url_for(controller: :works, action: :new, import: nil)) %>
   </li>
 </ul>
 <!--/subnav-->
 
 <!-- This partial renders a form for importing a work from an existing URL -->
 
-<%= form_tag url_for(:controller => :works, :action => :import), :class => "import work verbose post" do %>
+<%= form_tag url_for(controller: :works, action: :import), :class => "import work verbose post" do %>
   <fieldset>
     <legend><%= ts("Works URLs") %></legend>
     <dl>
       <dt class="required"><%= label_tag "urls", ts("URLs") + "*" %></dt>
       <dd class="required"><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", rows: 20, cols: 90, "aria-describedby" => "url-field-description" %>
         <p class="footnote" id="url-field-description">
-          <%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong>
+          <%= ts("URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line.</strong>").html_safe %>
         </p>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
