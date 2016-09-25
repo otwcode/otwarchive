@@ -5,10 +5,6 @@ describe AbuseReport do
     it "is valid" do
       expect(build(:abuse_report)).to be_valid
     end
-
-    it "is valid without an email" do
-      expect(build(:abuse_report, email: nil)).to be_valid
-    end
   end
 
   context "comment missing" do
@@ -37,7 +33,7 @@ describe AbuseReport do
       let(:bad_email) {build(:abuse_report, email: email)}
       it "cannot be created if the email does not pass veracity check" do
         expect(bad_email.save).to be_falsey
-        expect(bad_email.errors[:email]).to include("does not seem to be a valid address. Please use a different address or leave blank.")
+        expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
       end
     end
 
@@ -63,14 +59,14 @@ describe AbuseReport do
     end
   end
 
-  context "email_copy?" do
-    let(:no_email_provided) {build(:abuse_report, email: nil, cc_me: "1")}
+  context "emailed copy" do
+    let(:no_email_provided) { build(:abuse_report, email: nil) }
     it "is invalid if an email is not provided" do
       expect(no_email_provided.save).to be_falsey
       expect(no_email_provided.errors[:email]).not_to be_empty
     end
 
-    let(:email_provided) {build(:abuse_report, cc_me: "1")}
+    let(:email_provided) { build(:abuse_report) }
     it "is valid if an email is provided" do
       expect(email_provided.save).to be_truthy
       expect(email_provided.errors[:email]).to be_empty
