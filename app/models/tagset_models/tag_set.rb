@@ -90,7 +90,7 @@ class TagSet < ActiveRecord::Base
           tags_to_add += tagnames_to_list(self.instance_variable_get("@#{type}_tagnames_to_add"), type)
         end
         if !self.instance_variable_get("@#{type}_tags_to_remove").blank?
-          tagclass = type.classify.constantize
+          tagclass = type.classify.constantize # Safe constantize itterating over TAG_TYPES
           tags_to_remove += (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
         end
       end
@@ -259,11 +259,12 @@ class TagSet < ActiveRecord::Base
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
       if type
+        raise "Redshirt: Attempted to constantize invalid class initialize tagnames_to_list #{type}" unless TAG_TYPES.include?(type)
         if Tag::USER_DEFINED.include?(type.classify)
           # allow users to create these
-          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)}
+          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)} # Safe constantize checked above
         else
-          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_by_name(tagname.squish)}.compact
+          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_by_name(tagname.squish)}.compact # Safe constantize checked above
         end
       else
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}

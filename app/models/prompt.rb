@@ -154,7 +154,7 @@ class Prompt < ActiveRecord::Base
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please contact your challenge moderator who can then log a request with Support for the tags to be made canonical if appropriate.",
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
               :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
@@ -172,6 +172,7 @@ class Prompt < ActiveRecord::Base
     if restriction
       TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
         if restriction.send("#{tag_type}_restrict_to_fandom")
+          # tag_type is one of a set set so we know it is safe for constantize
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
           # check for tag set associations

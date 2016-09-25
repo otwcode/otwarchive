@@ -5,7 +5,7 @@ gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.2'
+gem 'rails', '3.2.22.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -108,6 +108,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
+  gem "test_after_commit"
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
