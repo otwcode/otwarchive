@@ -303,3 +303,20 @@ Feature: Collection
 
     Then "eager_fan" should not be emailed
 
+  Scenario: Creating a new work then immediately editing to add it to an
+    anonymous collection should not trigger a subscriber email.
+
+    Given I have the anonymous collection "Anon Forever"
+      And the following activated users exist
+        | login      | password | email              |
+        | mysterious | password | mysterious@foo.com |
+        | subscriber | password | subscriber@foo.com |
+      And "subscriber" subscribes to author "mysterious"
+      And all emails have been delivered
+
+    When I am logged in as "mysterious"
+      And I post the work "Anonymous Gift"
+      And I add the work "Anonymous Gift" to the collection "Anon Forever"
+      And subscription notifications are sent
+
+    Then 0 emails should be delivered
