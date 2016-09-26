@@ -8,18 +8,19 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
-  META_PATTERNS = { title: 'Title',
-                    notes: 'Note',
-                    summary: 'Summary',
+  OPTIONAL_META = { notes: 'Note',
                     freeform_string: 'Tag',
                     fandom_string: 'Fandom',
                     rating_string: 'Rating',
                     warning_string: 'Warning',
                     relationship_string: 'Relationship|Pairing',
-                    character_string: 'Character',
+                    character_string: 'Character'
+                   }
+  REQUIRED_META = { title: 'Title',
+                    summary: 'Summary',
                     revised_at: 'Date|Posted|Posted on|Posted at',
                     chapter_title: 'Chapter Title'
-                   }
+                  }
 
 
   # Use this for raising custom error messages
@@ -537,7 +538,7 @@ class StoryParser
     # parse_common then calls sanitize_params (which would also be called on the standard work upload
     # form results) and returns the final sanitized hash.
     #
-    def parse_common(story, location = nil, encoding = nil)
+    def parse_common(story, location = nil, encoding = nil, detect_tags = true)
       work_params = { title: "Untitled Imported Work", chapter_attributes: { content: "" } }
 
       # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
@@ -564,7 +565,7 @@ class StoryParser
         params = eval("parse_story_from_#{source.downcase}(story)")
         work_params.merge!(params)
       else
-        work_params.merge!(parse_story_from_unknown(story))
+        work_params.merge!(parse_story_from_unknown(story, detect_tags))
       end
 
       shift_chapter_attributes(sanitize_params(work_params))
@@ -572,7 +573,7 @@ class StoryParser
 
     # our fallback: parse a story from an unknown source, so we have no special
     # rules.
-    def parse_story_from_unknown(story)
+    def parse_story_from_unknown(story, detect_tags = true)
       work_params = { chapter_attributes: {} }
 
       storyhead = @doc.css("head").inner_html if @doc.css("head")
@@ -582,11 +583,9 @@ class StoryParser
       storytext = element ? element.inner_html : story
 
       meta = {}
-      if @options[:detect_tags].nil? || @options[:detect_tags]
-        meta.merge!(scan_text_for_meta(storyhead)) unless storyhead.blank?
-        meta.merge!(scan_text_for_meta(story))
-        meta[:title] ||= @doc.css('title').inner_html
-      end
+      meta.merge!(scan_text_for_meta(storyhead, detect_tags)) unless storyhead.blank?
+      meta.merge!(scan_text_for_meta(story, detect_tags))
+      meta[:title] ||= @doc.css('title').inner_html
       work_params[:chapter_attributes][:title] = meta.delete(:chapter_title)
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
@@ -598,7 +597,7 @@ class StoryParser
     # Assumes that we have downloaded the story from one of those equivalents (ie, we've downloaded
     # it in format=light which is a stripped-down plaintext version.)
     #
-    def parse_story_from_lj(story)
+    def parse_story_from_lj(story, detect_tags = true)
       work_params = { chapter_attributes: {} }
 
       # in LJ "light" format, the story contents are in the second div
@@ -614,7 +613,7 @@ class StoryParser
       work_params[:chapter_attributes][:content] = storytext
       work_params[:title] = @doc.css("title").inner_html
       work_params[:title].gsub! /^[^:]+: /, ""
-      work_params.merge!(scan_text_for_meta(storytext))
+      work_params.merge!(scan_text_for_meta(storytext, detect_tags))
 
       date = @doc.css("time.b-singlepost-author-date")
       unless date.empty?
@@ -624,7 +623,7 @@ class StoryParser
       return work_params
     end
 
-    def parse_story_from_dw(story)
+    def parse_story_from_dw(story, detect_tags = true)
       work_params = { chapter_attributes: {} }
 
       body = @doc.css("body")
@@ -647,7 +646,7 @@ class StoryParser
       work_params[:chapter_attributes][:content] = storytext
       work_params[:title] = @doc.css("title").inner_html
       work_params[:title].gsub! /^[^:]+: /, ""
-      work_params.merge!(scan_text_for_meta(storytext))
+      work_params.merge!(scan_text_for_meta(storytext, detect_tags))
 
       font_blocks = @doc.xpath('//font')
       unless font_blocks.empty?
@@ -662,7 +661,7 @@ class StoryParser
       return work_params
     end
 
-    def parse_story_from_deviantart(story)
+    def parse_story_from_deviantart(story, detect_tags = true)
       work_params = { chapter_attributes: {} }
       storytext = ""
       notes = ""
@@ -708,7 +707,7 @@ class StoryParser
       notes = clean_storytext(notes)
       work_params[:notes] = notes
 
-      work_params.merge!(scan_text_for_meta(notes))
+      work_params.merge!(scan_text_for_meta(notes, detect_tags = true))
       work_params[:title] = title
 
       body.css("div.dev-title-container h1 a").each do |node|
@@ -837,7 +836,7 @@ class StoryParser
 
     # Find any cases of the given pieces of meta in the given text
     # and return a hash of meta values
-    def scan_text_for_meta(text)
+    def scan_text_for_meta(text, detect_tags = true)
       # break up the text with some extra newlines to make matching more likely
       # and strip out some tags
       text = text.gsub(/<br/, "\n<br")
@@ -845,7 +844,7 @@ class StoryParser
       text.gsub!(/<\/?(label|span|div|b)(.*?)?>/, '')
 
       meta = {}
-      metapatterns = META_PATTERNS
+      metapatterns = detect_tags ? REQUIRED_META.merge(OPTIONAL_META) : REQUIRED_META
       is_tag = Hash.new.tap do |h|
         %w(fandom_string relationship_string freeform_string rating_string warning_string).each do |c|
           h[c.to_sym] = true
@@ -1019,18 +1018,29 @@ class StoryParser
     # that aren't Archive warnings become additional tags instead
     def post_process_meta(meta)
       if meta[:warning_string]
-        new_warning = ''
-        meta[:warning_string].split(/\s?,\s?/).each do |warning|
-          if Warning.warning? warning
-            new_warning += ', ' unless new_warning.blank?
-            new_warning += warning
-          else
-            meta[:freeform_string] = (meta[:freeform_string] || '') + ", #{warning}"
-          end
-        end
-        meta[:warning_string] = new_warning.blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : new_warning
+        result = process_warnings(meta[:warning_string], meta[:freeform_string])
+        meta[:warning_string] = result[:warning_string]
+        meta[:freeform_string] = result[:freeform_string]
       end
       meta
+    end
+
+    def process_warnings(warning_string, freeform_string)
+      result = {
+        warning_string: warning_string,
+        freeform_string: freeform_string
+      }
+      new_warning = ''
+      result[:warning_string].split(/\s?,\s?/).each do |warning|
+        if Warning.warning? warning
+          new_warning += ', ' unless new_warning.blank?
+          new_warning += warning
+        else
+          result[:freeform_string] = (result[:freeform_string] || '') + ", #{warning}"
+        end
+      end
+      result[:warning_string] = new_warning
+      result
     end
 
     # tries to find appropriate existing collections and converts them to comma-separated collection names only

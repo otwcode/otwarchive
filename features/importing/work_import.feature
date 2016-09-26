@@ -24,7 +24,7 @@ Feature: Import Works
     When I go to the works page
     Then I should see "Recent Entries"
 
-  Scenario: Creating a new work with tags
+  Scenario: Creating a new work with provided tags
     When I start importing "http://astolat.dreamwidth.org/220479.html"
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
@@ -62,6 +62,27 @@ Feature: Import Works
     When I follow "Huddling"
     Then I should see "Preview"
       And I should see "2010-01-11"
+
+  Scenario: Tags should be detected when override is not enabled
+    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
+    When I press "Import"
+      Then I should see "Relationship: Lewis/Hathaway"
+
+  Scenario: Provided tags should be used when tags are entered, and override and tag detection are enabled
+    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
+      And I check "override_tags"
+      And I choose "detect_tags_true"
+      And I fill in "Relationships" with "Adam/Kris"
+      Then show me the page
+    When I press "Import"
+      Then I should see "Relationship: Adam/Kris"
+
+  Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
+    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
+      And I check "override_tags"
+      And I choose "detect_tags_false"
+    When I press "Import"
+      Then I should not see "Relationship: Lewis/Hathaway"
 
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic tags

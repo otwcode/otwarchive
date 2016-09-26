@@ -100,16 +100,17 @@
         <ul>
           <li>
             <%= check_box_tag "override_tags", 1, false, class: "toggle_formfield", id: "override_tags-options-show" %>
-            <%= label_tag "override_tags-options-show", ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
+            <%= label_tag "override_tags-options-show",
+                          ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
             <ul id="override_tags-options" class="dependent">
               <li>
-                <%= radio_button_tag "detect_tags", 1, true %>
-                <%= label_tag "detect_tags",
+                <%= radio_button_tag "detect_tags", 1, true, id: "detect_tags_true" %>
+                <%= label_tag "detect_tags_true",
                               ts("Use values extracted from the content for blank fields if possible") %>
               </li>
               <li>
-                <%= radio_button_tag "detect_tags", 0 %>
-                <%= label_tag "detect_tags",
+                <%= radio_button_tag "detect_tags", 0, false, id: "detect_tags_false"  %>
+                <%= label_tag "detect_tags_false",
                               ts("Do not use values extracted from the content at all; use Archive defaults for blank fields") %>
               </li>
             </ul>

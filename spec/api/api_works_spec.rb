@@ -181,14 +181,16 @@ describe "API WorksController - Create works" do
         user = create(:user)
         post "/api/v1/works",
              { archivist: user.login,
-               works: [{ external_author_name: "bar",
-                         external_author_email: "bar@foo.com",
+               works: [{ external_author_name: api_fields[:external_author_name],
+                         external_author_email: api_fields[:external_author_email],
                          chapter_urls: ["http://foo"] }]
              }.to_json,
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
+        created_user = ExternalAuthor.find_by_email(api_fields[:external_author_email])
+        created_user.destroy unless created_user.nil?
       end
 
       after(:all) do
@@ -196,38 +198,41 @@ describe "API WorksController - Create works" do
         WebMock.reset!
       end
 
-      it "detected content metadata should be used for Title" do
+      it "Title should be detected from the content" do
         expect(@work.title).to eq(content_fields[:title])
       end
-      it "detected content metadata should be used for Summary" do
+      it "Summary should be detected from the content" do
         expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
       end
-      it "detected content metadata should be used for Fandoms" do
+      it "Date should be detected from the content" do
+        expect(@work.revised_at).to eq(content_fields[:date])
+      end
+      it "Chapter title should be detected from the content" do
+        expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
+      end
+      it "Fandoms should be detected from the content" do
         expect(@work.fandoms.first.name).to eq(content_fields[:fandoms])
       end
-      it "detected content metadata should be used for Warnings" do
+      it "Warnings should be detected from the content" do
         expect(@work.warnings.first.name).to eq(content_fields[:warnings])
       end
-      it "detected content metadata should be used for Characters" do
+      it "Characters should be detected from the content" do
         expect(@work.characters.flat_map(&:name)).to eq(content_fields[:characters].split(", "))
       end
-      it "detected content metadata should be used for Ratings" do
+      it "Ratings should be detected from the content" do
         expect(@work.ratings.first.name).to eq(content_fields[:rating])
       end
-      it "detected content metadata should be used for Relationships" do
+      it "Relationships should be detected from the content" do
         expect(@work.relationships.first.name).to eq(content_fields[:relationships])
       end
-      it "detected content metadata should NOT be used for Categories" do
+      it "Categories should be detected from the content" do
         expect(@work.categories).to be_empty
       end
-      it "detected content metadata should be used for Additional Tags" do
+      it "Additional Tags should be detected from the content" do
         expect(@work.freeforms.flat_map(&:name)).to eq(content_fields[:freeform].split(", "))
       end
-      it "detected content metadata should be used for Notes" do
+      it "Notes should be detected from the content" do
         expect(@work.notes).to eq("<p>" + content_fields[:notes] + "</p>")
-      end
-      it "detected content metadata should be used for Author pseud" do
-        expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
       end
     end
 
@@ -237,8 +242,8 @@ describe "API WorksController - Create works" do
         user = create(:user)
         post "/api/v1/works",
              { archivist: user.login,
-               works: [{ external_author_name: "bar",
-                         external_author_email: "bar@foo.com",
+               works: [{ external_author_name: api_fields[:external_author_name],
+                         external_author_email: api_fields[:external_author_email],
                          chapter_urls: ["http://no-metadata"] }]
              }.to_json,
              valid_headers
@@ -252,11 +257,17 @@ describe "API WorksController - Create works" do
         WebMock.reset!
       end
 
-      it "Title should be 'Untitled Imported Work'" do
+      it "Title should be the default fallback title for imported works" do
         expect(@work.title).to eq("Untitled Imported Work")
       end
       it "Summary should be blank" do
         expect(@work.summary).to eq("")
+      end
+      it "Date should be todayish" do
+        expect(@work.created_at.utc.to_date).to eq(DateTime.now.utc.to_date)
+      end
+      it "Chapter title should be blank" do
+        expect(@work.chapters.first.title).to be_nil
       end
       it "Fandoms should be the default Archive fandom ('No Fandom')" do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
@@ -326,6 +337,12 @@ describe "API WorksController - Create works" do
       it "API should override content for Summary" do
         expect(@work.summary).to eq("<p>" + api_fields[:summary] + "</p>")
       end
+      it "Date should be detected from the content" do
+        expect(@work.revised_at).to eq(content_fields[:date])
+      end
+      it "Chapter title should be detected from the content" do
+        expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
+      end
       it "API should override content for Fandoms" do
         expect(@work.fandoms.first.name).to eq(api_fields[:fandoms])
       end
@@ -355,14 +372,14 @@ describe "API WorksController - Create works" do
       end
     end
 
-    describe "Imports should use fallback values or nil if no metadata is supplied and tag detection is turned off" do
+    describe "Some fields should be detected and others use fallback values or nil if no metadata is supplied and tag detection is turned off" do
       before(:all) do
         mock_external
         user = create(:user)
         post "/api/v1/works",
              { archivist: user.login,
-               works: [{ external_author_name: "bar",
-                         external_author_email: "bar@foo.com",
+               works: [{ external_author_name: api_fields[:external_author_name],
+                         external_author_email: api_fields[:external_author_email],
                          detect_tags: false,
                          chapter_urls: ["http://foo"] }]
              }.to_json,
@@ -377,11 +394,17 @@ describe "API WorksController - Create works" do
         WebMock.reset!
       end
 
-      it "Title should be 'Untitled Imported Work'" do
-        expect(@work.title).to eq("Untitled Imported Work")
+      it "Title should be detected from the content" do
+        expect(@work.title).to eq(content_fields[:title])
       end
-      it "Summary should be blank" do
-        expect(@work.summary).to eq("")
+      it "Summary should be detected from the content" do
+        expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
+      end
+      it "Date should be detected from the content" do
+        expect(@work.revised_at).to eq(content_fields[:date])
+      end
+      it "Chapter title should be detected from the content" do
+        expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
       end
       it "Fandoms should be the default Archive fandom ('No Fandom')" do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)

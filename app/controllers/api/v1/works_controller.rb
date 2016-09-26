@@ -186,7 +186,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       import_multiple: "chapters",
       importing_for_others: true,
       do_not_set_current_author: true,
-      post_without_preview: work_params[:post_without_preview].nil? ? true : work_params[:post_without_preview],
+      post_without_preview: work_params[:post_without_preview].blank? ? true : work_params[:post_without_preview],
       restricted: work_params[:restricted],
       override_tags: work_params[:override_tags].nil? ? true : work_params[:override_tags],
       detect_tags: work_params[:detect_tags].nil? ? true : work_params[:detect_tags],
