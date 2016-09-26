@@ -190,7 +190,7 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
-    work_params = parse_common(story, location, options[:encoding])
+    work_params = parse_common(story, location, options[:encoding], options[:detect_tags])
 
     # move any attributes from work to chapter if necessary
     return set_work_attributes(Work.new(work_params), location, options)
@@ -198,7 +198,7 @@ class StoryParser
 
   # parses and adds a new chapter to the end of the work
   def parse_chapter_of_work(work, chapter_content, location, options = {})
-    tmp_work_params = parse_common(chapter_content, location, options[:encoding])
+    tmp_work_params = parse_common(chapter_content, location, options[:encoding], options[:detect_tags])
     chapter = get_chapter_from_work_params(tmp_work_params)
     work.chapters << set_chapter_attributes(work, chapter, location, options)
     return work
@@ -207,7 +207,7 @@ class StoryParser
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
     chapter_contents.each do |content|
-      work_params = parse_common(content, location, options[:encoding])
+      work_params = parse_common(content, location, options[:encoding], options[:detect_tags])
       if work.nil?
         # create the new work
         work = Work.new(work_params)
