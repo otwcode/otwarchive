@@ -190,7 +190,8 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
-    work_params = parse_common(story, location, options[:encoding], options[:detect_tags])
+    detect_tags = options[:detect_tags].to_i == 0 ? false : true
+    work_params = parse_common(story, location, options[:encoding], detect_tags)
 
     # move any attributes from work to chapter if necessary
     return set_work_attributes(Work.new(work_params), location, options)
@@ -562,7 +563,7 @@ class StoryParser
 
       # Extract metadata (unless detect_tags is false)
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
-        params = eval("parse_story_from_#{source.downcase}(story)")
+        params = eval("parse_story_from_#{source.downcase}(story, detect_tags)")
         work_params.merge!(params)
       else
         work_params.merge!(parse_story_from_unknown(story, detect_tags))
