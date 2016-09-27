@@ -261,10 +261,10 @@ Feature:
   Scenario: Multi-fandom exchange with optional tags.
 
     Given I create the gift exchange "optional3" with the following options
-        | value      | minimum | maximum | match | optional |
-        | prompts    | 2       | 2       | 1     | n/a      |
-        | fandoms    | 1       | 1       | 1     | yes      |
-        | characters | 1       | 1       | 1     | yes      |
+        | value      | minimum | maximum | match | optional | any |
+        | prompts    | 2       | 2       | 1     | n/a      | n/a |
+        | fandoms    | 1       | 1       | 1     | yes      | no  |
+        | characters | 1       | 1       | 1     | yes      | yes |
       And the user "bookfan" signs up for "optional3" with the following prompts
         | type    | fandoms           | characters        | optional fandoms |
         | request | Out-of-Print Book | Rare Woobie       |                  |
@@ -291,3 +291,42 @@ Feature:
         | mixed   | showfan |
         | bookfan | mixed   |
         | showfan | mixed   |
+
+  Scenario: Exchange with optional tags and restrictions on a different type.
+
+    Given I create the gift exchange "optional4" with the following options
+        | value      | minimum | maximum | match | optional | any | unique |
+        | prompts    | 1       | 3       | 1     | n/a      | n/a | n/a    |
+        | characters | 1       | 1       | 1     | yes      | no  | no     |
+        | freeforms  | 1       | 1       | 1     | no       | no  | yes    |
+      And the user "test1" signs up for "optional4" with the following prompts
+        | type    | character         | optional characters  | freeform |
+        | request | Warlock           |                      | Fic      |
+        | request | Warlock           |                      | Art      |
+        | offer   | Warlock           | Witch, Magician      | Fic      |
+      And the user "test2" signs up for "optional4" with the following prompts
+        | type    | character         | optional characters  | freeform |
+        | request | Magician          | Headologist          | Art      |
+        | offer   | Magician          | Headologist, Warlock | Art      |
+      And the user "test3" signs up for "optional4" with the following prompts
+        | type    | character         | optional characters  | freeform |
+        | request | Magician          |                      | Fic      |
+        | request | Magician          |                      | Art      |
+        | request | Magician          |                      | Vid      |
+        | offer   | Magician          |                      | Fic      |
+        | offer   | Magician          |                      | Art      |
+        | offer   | Magician          |                      | Vid      |
+      And the user "test4" signs up for "optional4" with the following prompts
+        | type    | character         | optional characters  | freeform |
+        | request | Headologist       | Summoner, Witch      | Vid      |
+        | offer   | Headologist       | Summoner, Witch      | Art      |
+        | offer   | Headologist       | Summoner, Witch      | Vid      |
+
+    When potential matches are generated for "optional4"
+    Then the potential matches for "optional4" should be
+        | offer   | request |
+        | test2   | test1   |
+        | test3   | test2   |
+        | test1   | test3   |
+        | test2   | test3   |
+        | test4   | test2   |
