@@ -34,6 +34,7 @@ Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |n
     allowed = (hash["maximum"] || "0").to_i
     any = %w(y t yes true).include?(hash["any"] || "yes")
     unique = %w(y t yes true).include?(hash["unique"] || "yes")
+    optional = %w(y t yes true).include?(hash["optional"] || "no")
 
     # Constraints on the matching.
     match = (hash["match"] || hash["minimum"] || "0").to_i
@@ -53,6 +54,8 @@ Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |n
         "require_unique_#{type}" => unique
       }
 
+      attributes["optional_tags_allowed"] = true if optional
+
       # We treat requests and offers identically, in order to make the
       # constraints simpler to express. (The tests are designed to verify
       # potential match generation, not challenge signups, so we don't need
@@ -62,6 +65,10 @@ Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |n
 
       potential_match_settings.update_attribute(
         "num_required_#{type.pluralize}", match
+      )
+
+      potential_match_settings.update_attribute(
+        "include_optional_#{type.pluralize}", optional
       )
     end
   end
@@ -94,7 +101,19 @@ Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/
     )
 
     tagset = TagSet.new
+    optional_tag_set = nil
     TagSet::TAG_TYPES.each do |type|
+      optional = hash["optional #{type}"] || hash["optional #{type.pluralize}"]
+      unless optional.nil?
+        optional_tag_set ||= TagSet.new
+
+        tag_names = optional.split(/ *, */)
+        tag_names.each do |tag_name|
+          tag = type.classify.constantize.create_canonical(tag_name)
+          optional_tag_set.tags << tag
+        end
+      end
+
       value = hash[type] || hash[type.pluralize]
       next if value.nil?
       value = value.downcase
@@ -113,6 +132,10 @@ Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/
 
     tagset.save!
     prompt.tag_set = tagset
+
+    optional_tag_set.save! if optional_tag_set
+    prompt.optional_tag_set = optional_tag_set
+
     requests << prompt if prompt_type == "request"
     offers << prompt if prompt_type == "offer"
   end
