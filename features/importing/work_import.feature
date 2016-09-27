@@ -73,7 +73,6 @@ Feature: Import Works
       And I check "override_tags"
       And I choose "detect_tags_true"
       And I fill in "Relationships" with "Adam/Kris"
-      Then show me the page
     When I press "Import"
       Then I should see "Relationship: Adam/Kris"
 
