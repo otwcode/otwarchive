@@ -266,6 +266,20 @@ Feature: Gift Exchange Challenge
       And the email should link to myname1's user url
       And the email html body should link to the works tagged "Stargate Atlantis"
 
+  Scenario: Assignment emails contain only the relevant tags
+    Given the gift exchange "Awesome Gift Exchange" is ready for matching
+      And I have generated matches for "Awesome Gift Exchange"
+    When I have sent assignments for "Awesome Gift Exchange"
+    Then 1 email should be delivered to "myname4"
+      And the email should contain "Fandom:"
+      And the email should contain "Additional Tags:"
+      And the email should not contain "Character:"
+      And the email should not contain "Relationships:"
+      And the email should not contain "Rating:"
+      And the email should not contain "Warnings:"
+      And the email should not contain "Category:"
+      And the email should not contain "Optional Tags:"
+
   Scenario: User signs up for two gift exchanges at once #'
     Given I am logged in as "mod1"
       And I have created the gift exchange "Awesome Gift Exchange"
