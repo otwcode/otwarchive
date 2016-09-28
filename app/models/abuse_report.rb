@@ -65,7 +65,7 @@ class AbuseReport < ActiveRecord::Base
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
-                                                 '%#{work_params_only}%').count
+                                                 "%#{work_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
         errors[:base] << ts('URL has already been reported. To make sure the
                             Abuse Team can handle reports quickly and
