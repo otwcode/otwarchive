@@ -353,7 +353,7 @@ class Tag < ActiveRecord::Base
   def self.perform(id, method, *args)
     # we are doing this to step over issues when the tag is deleted.
     # in rails 4 this should be tag=find_by id: id
-    tag=find_by_id(id)
+    tag = find_by_id(id)
     tag.send(method, *args) unless tag.nil?
   end
 
