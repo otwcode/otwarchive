@@ -73,5 +73,16 @@ describe AbuseReport do
     end
   end
 
+  context "overreported work" do
+    let(:overreported_work) { build(:abuse_report,
+                              url: "http://archiveofourown.org/works/1234") }
+    it "cannot be reported again" do
+      max_reports = ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+      max_reports.times { create(:abuse_report,
+                          url: "http://archiveofourown.org/works/1234") }
+      expect(overreported_work.save).to be_falsey
+      expect(overreported_work.errors[:base]).not_to be_empty
+    end
+  end
 
 end
