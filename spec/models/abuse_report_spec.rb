@@ -73,19 +73,39 @@ describe AbuseReport do
     end
   end
 
-  context "when work is overreported" do
+  context "for an already-reported work" do
     work_url = "http://archiveofourown.org/works/1234"
 
-    let(:overreported_work) { build(:abuse_report, url: work_url) }
+    let(:common_report) { build(:abuse_report, url: work_url) }
+    it "can be submitted up to a set number of times" do
+      (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+        create(:abuse_report, url: work_url)
+      end
+      expect(common_report.save).to be_truthy
+      expect(common_report.errors[:base]).to be_empty
+    end
+  end
 
-    it "cannot be reported again" do
+  context "for a work reported the maximum number of times" do
+    work_url = "http://archiveofourown.org/works/789"
+    work_url_variant = "http://archiveofourown.org/works/789/chapters/123"
+
+    let(:common_report) { build(:abuse_report, url: work_url) }
+    it "can't be submitted" do
       ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
         create(:abuse_report, url: work_url)
       end
-      expect(overreported_work.save).to be_falsey
-      expect(overreported_work.errors[:base]).not_to be_empty
+      expect(common_report.save).to be_falsey
+      expect(common_report.errors[:base]).not_to be_empty
     end
 
+    let(:common_report_variant) { build(:abuse_report, url: work_url_variant) }
+    it "can't be submitted with a variation of the URL" do
+      ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+        create(:abuse_report, url: work_url)
+      end
+      expect(common_report_variant.save).to be_falsey
+      expect(common_report_variant.errors[:base]).not_to be_empty
+    end
   end
-
 end
