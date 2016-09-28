@@ -108,4 +108,18 @@ describe AbuseReport do
       expect(common_report_variant.errors[:base]).not_to be_empty
     end
   end
+
+  context "for a URL that is not a work" do
+    page_url = "http://archiveofourown.org/tags/Testing/works"
+
+    let(:common_report) { build(:abuse_report, url: page_url) }
+    it "can be submitted an unrestriced number of times" do
+      ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+        create(:abuse_report, url: page_url)
+      end
+      expect(common_report.save).to be_truthy
+      expect(common_report.errors[:base]).to be_empty
+    end
+  end
+
 end
