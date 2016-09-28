@@ -1,4 +1,4 @@
-@works
+@import
 Feature: Import Works
   In order to have an archive full of works
   As an author
@@ -9,23 +9,23 @@ Feature: Import Works
   Then I should see "Please log in"
 
   Scenario: Creating a new minimally valid work
-    When I set up importing
+    When I set up importing with a mock website
     Then I should see "Import New Work"
-    When I fill in "urls" with "http://cesy.dreamwidth.org"
+    When I fill in "urls" with "http://import-site-without-tags"
       And I press "Import"
     Then I should see "Preview"
-      And I should see "Welcome"
-      And I should not see "A work has already been imported from http://cesy.dreamwidth.org"
+      And I should see "Untitled Imported Work"
+      And I should not see "A work has already been imported from http://import-site-without-tags"
       And I should see "No Fandom"
       And I should see "Chose Not To"
       And I should see "Not Rated"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
-    Then I should see "Recent Entries"
+    Then I should see "Untitled Imported Work"
 
-  Scenario: Creating a new work with provided tags
-    When I start importing "http://astolat.dreamwidth.org/220479.html"
+  Scenario: With override disabled and tag detection enabled, tags should be detected
+    When I start importing "http://import-site-with-tags" with a mock website
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
@@ -36,18 +36,79 @@ Feature: Import Works
       And I fill in "Notes at the beginning" with "This is a <i>note</i>"
     When I press "Import"
     Then I should see "Preview"
-      And I should see "Extra Credit"
+      And I should see "Detected Title"
       And I should see "Explicit"
-      And I should see "No Archive Warnings Apply"
-      And I should see "Idol RPF"
-      And I should see "M/M"
-      And I should see "Adam/Kris"
-      And I should see "Adam Lambert"
-      And I should see "Kris Allen"
-      And I should see "kinkmeme"
-      And I should see "This is a note"
+      And I should see "Archive Warning: Underage"
+      And I should see "Fandom: Detected Fandom"
+      And I should see "Category: M/M"
+      And I should see "Relationship: Detected 1/Detected 2"
+      And I should see "Characters: Detected 1Detected 2"
+      And I should see "Additional Tags: Detected tag 1Detected tag 2"
+      And I should see "Notes: This is a content note."
     When I press "Post"
     Then I should see "Work was successfully posted."
+
+  Scenario: With override and tag detection enabled, provided tags should be used when tags are entered
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "override_tags"
+      And I choose "detect_tags_true"
+      And I select "Mature" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Idol RPF"
+      And I check "F/M"
+      And I fill in "Relationships" with "Adam/Kris"
+      And I fill in "Characters" with "Adam Lambert, Kris Allen"
+      And I fill in "Additional Tags" with "kinkmeme"
+      And I fill in "Notes at the beginning" with "This is a <i>note</i>"
+    When I press "Import"
+      Then I should see "Preview"
+      And I should see "Detected Title"
+      And I should see "Rating: Mature"
+      And I should see "Archive Warning: No Archive Warnings"
+      And I should see "Fandom: Idol RPF"
+      And I should see "Category: F/M"
+      And I should see "Relationship: Adam/Kris"
+      And I should see "Characters: Adam LambertKris Allen"
+      And I should see "Additional Tags: kinkmeme"
+      And I should see "Notes: This is a note"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+
+  Scenario: With override and tag detection enabled, both provided and detected tags should be used when not all tags are entered
+    When I start importing "http://import-site-with-tags" with a mock website
+    And I check "override_tags"
+    And I choose "detect_tags_true"
+    And I select "Mature" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Characters" with "Adam Lambert, Kris Allen"
+    And I fill in "Additional Tags" with "kinkmeme"
+    And I fill in "Notes at the beginning" with "This is a <i>note</i>"
+    When I press "Import"
+    Then I should see "Preview"
+    And I should see "Detected Title"
+    And I should see "Rating: Mature"
+    And I should see "Archive Warning: No Archive Warnings"
+    And I should see "Fandom: Detected Fandom"
+    And I should see "Relationship: Detected 1/Detected 2"
+    And I should see "Characters: Adam LambertKris Allen"
+    And I should see "Additional Tags: kinkmeme"
+    And I should see "Notes: This is a note"
+    And I should not see "Category: M/M"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+
+  Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "override_tags"
+      And I choose "detect_tags_false"
+    When I press "Import"
+      Then I should see "Detected Title"
+      And I should see "Rating: Not Rated"
+      And I should see "Archive Warning: Creator Chose Not To Use Archive Warnings"
+      And I should see "Fandom: No Fandom"
+      And I should not see "Relationship:"
+      And I should not see "Additional Tags:"
+      And I should not see "Relationship: Detected 1/Detected 2"
 
   Scenario: Importing multiple works with backdating
     When I import the urls
@@ -62,26 +123,6 @@ Feature: Import Works
     When I follow "Huddling"
     Then I should see "Preview"
       And I should see "2010-01-11"
-
-  Scenario: Tags should be detected when override is not enabled
-    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
-    When I press "Import"
-      Then I should see "Relationship: Lewis/Hathaway"
-
-  Scenario: Provided tags should be used when tags are entered, and override and tag detection are enabled
-    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
-      And I check "override_tags"
-      And I choose "detect_tags_true"
-      And I fill in "Relationships" with "Adam/Kris"
-    When I press "Import"
-      Then I should see "Relationship: Adam/Kris"
-
-  Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
-    When I start importing "http://rebecca2525.dreamwidth.org/3506.html"
-      And I check "override_tags"
-      And I choose "detect_tags_false"
-    When I press "Import"
-      Then I should not see "Relationship: Lewis/Hathaway"
 
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic tags
