@@ -351,7 +351,10 @@ class Tag < ActiveRecord::Base
   @queue = :utilities
   # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
-    find(id).send(method, *args)
+    # we are doing this to step over issues when the tag is deleted.
+    # in rails 4 this should be tag=find_by id: id
+    tag=find_by_id(id)
+    tag.send(method, *args) unless tag.nil?
   end
 
   # We can pass this any Tag instance method that we want to run later.
