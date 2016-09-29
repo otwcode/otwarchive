@@ -104,12 +104,12 @@
                           ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
             <ul id="override_tags-options" class="dependent">
               <li>
-                <%= radio_button_tag "detect_tags", 1, true, id: "detect_tags_true" %>
+                <%= radio_button_tag "detect_tags", true, true, id: "detect_tags_true" %>
                 <%= label_tag "detect_tags_true",
                               ts("Use values extracted from the content for blank fields if possible") %>
               </li>
               <li>
-                <%= radio_button_tag "detect_tags", 0, false, id: "detect_tags_false"  %>
+                <%= radio_button_tag "detect_tags", false, false, id: "detect_tags_false"  %>
                 <%= label_tag "detect_tags_false",
                               ts("Do not use values extracted from the content at all; use Archive defaults for blank fields") %>
               </li>

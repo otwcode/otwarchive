@@ -15,12 +15,12 @@ class StoryParser
                     warning_string: 'Warning',
                     relationship_string: 'Relationship|Pairing',
                     character_string: 'Character'
-                   }
+                   }.freeze
   REQUIRED_META = { title: 'Title',
                     summary: 'Summary',
                     revised_at: 'Date|Posted|Posted on|Posted at',
                     chapter_title: 'Chapter Title'
-                  }
+                  }.freeze
 
 
   # Use this for raising custom error messages
@@ -34,7 +34,7 @@ class StoryParser
   CHAPTER_ATTRIBUTES_ONLY = {}
 
   # These attributes need to be copied from the work to the chapter
-  CHAPTER_ATTRIBUTES_ALSO = { revised_at: :published_at }
+  CHAPTER_ATTRIBUTES_ALSO = { revised_at: :published_at }.freeze
 
   ### NOTE ON KNOWN SOURCES
   # These lists will stop with the first one it matches, so put more-specific matches
@@ -190,8 +190,7 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
-    detect_tags = options[:detect_tags].to_i == 0 ? false : true
-    work_params = parse_common(story, location, options[:encoding], detect_tags)
+    work_params = parse_common(story, location, options[:encoding], options[:detect_tags])
 
     # move any attributes from work to chapter if necessary
     return set_work_attributes(Work.new(work_params), location, options)
@@ -598,7 +597,7 @@ class StoryParser
     # Assumes that we have downloaded the story from one of those equivalents (ie, we've downloaded
     # it in format=light which is a stripped-down plaintext version.)
     #
-    def parse_story_from_lj(story, detect_tags = true)
+    def parse_story_from_lj(_story, detect_tags = true)
       work_params = { chapter_attributes: {} }
 
       # in LJ "light" format, the story contents are in the second div
