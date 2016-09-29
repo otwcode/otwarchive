@@ -1,6 +1,44 @@
 @skins
 Feature: creating and editing skins
 
+  Scenario: Users should be able to adjust their wizard skin by adding custom CSS
+  Given I am logged in as "skinner"
+    And I create and use a skin to make the header pink
+  When I edit my pink header skin to have a purple logo
+  Then I should see an update confirmation message
+    And I should see a pink header
+    And I should see a purple logo
+
+  Scenario: Users should be able to create and use a wizard skin to adjust work margins, and they should be able to edit the skin while they are using it
+  Given I am logged in as "skinner"
+  When I am on the new wizard skin page
+    And I fill in "Title" with "Wide margins"
+    And I fill in "Description" with "Layout skin"
+    And I fill in "Work margin width" with "text"
+    And I submit
+  Then I should see a save error message
+    And I should see "Margin is not a number"
+  When I fill in "Work margin width" with "5"
+    And I submit
+  Then I should see "Skin was successfully created"
+    And I should see "Work margin width: 5%"
+  When I am on skinner's preferences page
+  Then "Default" should be selected within "preference_skin_id"
+  When I select "Wide margins" from "preference_skin_id"
+    And I submit
+  Then I should see "Your preferences were successfully updated."
+    And I should see "margin: auto 5%; max-width: 100%" within "style"
+  When I edit the skin "Wide margins" with the wizard
+    And I fill in "Work margin width" with "4.5"
+    And I submit
+  # TODO: Think about whether rounding to 4 is actually the right behaviour or not
+  Then I should see an update confirmation message
+    And I should see "Work margin width: 4%"
+    And I should not see "Work margin width: 4.5%"
+    And I should see "margin: auto 4%;" within "style"
+  When I am on skinner's preferences page
+  Then "Wide margins" should be selected within "preference_skin_id"
+
   Scenario: A user's initial skin should be set to default
   Given basic skins
     And I am logged in as "skinner"
@@ -193,36 +231,6 @@ Feature: creating and editing skins
   When I follow "Write Custom CSS"
     Then I should see "CSS"
 
-  Scenario: Users should be able to create and use a wizard skin to adjust work margins, and they should be able to edit the skin while they are using it
-  Given I am logged in as "skinner"
-  When I am on the new wizard skin page
-    And I fill in "Title" with "Wide margins"
-    And I fill in "Description" with "Layout skin"
-    And I fill in "Work margin width" with "text"
-    And I submit
-  Then I should see a save error message
-    And I should see "Margin is not a number"
-  When I fill in "Work margin width" with "5"
-    And I submit
-  Then I should see "Skin was successfully created"
-    And I should see "Work margin width: 5%"
-  When I am on skinner's preferences page
-  Then "Default" should be selected within "preference_skin_id"
-  When I select "Wide margins" from "preference_skin_id"
-    And I submit
-  Then I should see "Your preferences were successfully updated."
-    And I should see "margin: auto 5%; max-width: 100%" within "style"
-  When I edit the skin "Wide margins" with the wizard
-    And I fill in "Work margin width" with "4.5"
-    And I submit
-  # TODO: Think about whether rounding to 4 is actually the right behaviour or not
-  Then I should see an update confirmation message
-    And I should see "Work margin width: 4%"
-    And I should not see "Work margin width: 4.5%"
-    And I should see "margin: auto 4%;" within "style"
-  When I am on skinner's preferences page
-  Then "Wide margins" should be selected within "preference_skin_id"
-
   Scenario: Users should be able to create and use a wizard skin with multiple wizard settings
   Given I am logged in as "skinner"
   When I am on the new wizard skin page
@@ -285,14 +293,6 @@ Feature: creating and editing skins
   When I follow "Skins"
     And I log out
   Then I should be on the login page
-
-  Scenario: Users should be able to adjust their wizard skin by adding custom CSS
-  Given I am logged in as "skinner"
-    And I create and use a skin to make the header pink
-  When I edit my pink header skin to have a purple logo
-  Then I should see an update confirmation message
-    And I should see a pink header
-    And I should see a purple logo
 
   Scenario: Change the accent color
   Given I am logged in as "skinner"
