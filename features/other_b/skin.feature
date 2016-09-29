@@ -2,14 +2,17 @@
 Feature: creating and editing skins
 
   Scenario: Users should be able to adjust their wizard skin by adding custom CSS
+  Given "test #1 start" is fixed
   Given I am logged in as "skinner"
     And I create and use a skin to make the header pink
   When I edit my pink header skin to have a purple logo
   Then I should see an update confirmation message
     And I should see a pink header
     And I should see a purple logo
+  Given "test #1 end" is fixed
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins, and they should be able to edit the skin while they are using it
+  Given "test #2 start" is fixed
   Given I am logged in as "skinner"
   When I am on the new wizard skin page
     And I fill in "Title" with "Wide margins"
@@ -38,6 +41,7 @@ Feature: creating and editing skins
     And I should see "margin: auto 4%;" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
+  Given "test #2 end" is fixed
 
   Scenario: A user's initial skin should be set to default
   Given basic skins
