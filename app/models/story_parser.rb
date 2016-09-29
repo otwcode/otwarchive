@@ -624,7 +624,7 @@ class StoryParser
       return work_params
     end
 
-    def parse_story_from_dw(story, detect_tags = true)
+    def parse_story_from_dw(_story, detect_tags = true)
       work_params = { chapter_attributes: {} }
 
       body = @doc.css("body")
@@ -662,7 +662,7 @@ class StoryParser
       return work_params
     end
 
-    def parse_story_from_deviantart(story, detect_tags = true)
+    def parse_story_from_deviantart(_story, detect_tags = true)
       work_params = { chapter_attributes: {} }
       storytext = ""
       notes = ""
@@ -708,7 +708,7 @@ class StoryParser
       notes = clean_storytext(notes)
       work_params[:notes] = notes
 
-      work_params.merge!(scan_text_for_meta(notes, detect_tags = true))
+      work_params.merge!(scan_text_for_meta(notes, detect_tags))
       work_params[:title] = title
 
       body.css("div.dev-title-container h1 a").each do |node|
