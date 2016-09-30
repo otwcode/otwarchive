@@ -27,10 +27,7 @@
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> system session region" role="main">
           <%= flash_div :error, :caution, :notice %>
-          <p id="logo">
-            <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
-          </p>
-          <div id="signin" role="main">
+          <div id="signin">
             <%= yield %>
           </div>
         </div>
