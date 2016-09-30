@@ -14,26 +14,30 @@
           <%= controller.action_name=="index" ? "" : controller.action_name.humanize.titleize %>
           <%= controller.action_name=="index" ? controller.controller_name.humanize.titleize : controller.controller_name.singularize.humanize.titleize %>
         <% end %>
-        |
         <%= ArchiveConfig.APP_NAME  %>
       <% end %>
     </title>
     <%= render :partial => 'layouts/includes' %>
   </head>
-  <body <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
-    <%= render :partial => 'layouts/header' %>
-    <!-- BEGIN main -->
-    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
-      <%= flash_div :error, :caution, :notice %>
-      <p id="logo">
-        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
-      </p>
-      <div id="signin" role="main">
-        <%= yield %>
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+    <div id="outer" class="wrapper">
+      <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
+      <%= render :partial => 'layouts/header' %>
+      <div id="inner" class="wrapper">
+        <!-- BEGIN main -->
+        <div id="main" class="<%= classes_for_main %> system session region" role="main">
+          <%= flash_div :error, :caution, :notice %>
+          <p id="logo">
+            <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
+          </p>
+          <div id="signin" role="main">
+            <%= yield %>
+          </div>
+        </div>
+        <!-- END main -->
       </div>
+      <%= render :partial => 'layouts/footer' %>
     </div>
-    <!-- END main -->
-    <%= render :partial => 'layouts/footer' %>
     <%= render :partial => 'layouts/javascripts' %>
   </body>
 </html>
