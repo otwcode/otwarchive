@@ -14,10 +14,11 @@
           <%= controller.action_name=="index" ? "" : controller.action_name.humanize.titleize %>
           <%= controller.action_name=="index" ? controller.controller_name.humanize.titleize : controller.controller_name.singularize.humanize.titleize %>
         <% end %>
-        <%= ArchiveConfig.APP_NAME  %>
+        | 
+        <%= ArchiveConfig.APP_NAME %>
       <% end %>
     </title>
-    <%= render :partial => 'layouts/includes' %>
+    <%= render 'layouts/includes' %>
   </head>
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
@@ -33,8 +34,8 @@
         </div>
         <!-- END main -->
       </div>
-      <%= render :partial => 'layouts/footer' %>
+      <%= render 'layouts/footer' %>
     </div>
-    <%= render :partial => 'layouts/javascripts' %>
+    <%= render 'layouts/javascripts' %>
   </body>
 </html>
