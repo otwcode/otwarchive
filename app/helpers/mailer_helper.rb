@@ -81,6 +81,6 @@ module MailerHelper
   def escape_html_and_create_linebreaks(html)
     # Escape each line with h(), then join with <br>s and mark as html_safe to
     # ensure that the <br>s aren't escaped.
-    html.split("\n").map { |x| h(x) }.join('<br>').html_safe
+    html.split("\n").map { |line_of_text| h(line_of_text) }.join('<br>').html_safe
   end
 end # end of MailerHelper
