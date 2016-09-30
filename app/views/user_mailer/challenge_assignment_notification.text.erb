@@ -38,7 +38,7 @@ Description:
 
 This assignment is due at: <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
-You can look up this assignment from your archive dashboard at <%= user_assignments_url(@assigned_user) %>.
+You can look up this assignment from your Assignments page at <%= user_assignments_url(@assigned_user) %>.
 <% if @collection && !@collection.assignment_notification.blank? %>
 
 
