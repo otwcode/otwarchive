@@ -2,6 +2,7 @@
 <% set_site_skin %>
 <% if @site_skin %>
   <% skin_cache_key, roles = get_skin_cache(@site_skin) %>
+  <% puts skin_cache_key %>
   <% cache('/v1/' + skin_cache_key) do %>
     <%= @site_skin.get_style(roles) %>
   <% end %>
