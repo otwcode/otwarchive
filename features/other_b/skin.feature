@@ -5,6 +5,7 @@ Feature: creating and editing skins
   Given "test #1 start" is fixed
   Given I am logged in as "skinner"
     And I create and use a skin to make the header pink
+    And I wait 1 second
   When I edit my pink header skin to have a purple logo
   Then I should see an update confirmation message
     And I should see a pink header
@@ -31,6 +32,7 @@ Feature: creating and editing skins
     And I submit
   Then I should see "Your preferences were successfully updated."
     And I should see "margin: auto 5%; max-width: 100%" within "style"
+    And I wait 1 second
   When I edit the skin "Wide margins" with the wizard
     And I fill in "Work margin width" with "4.5"
     And I submit
