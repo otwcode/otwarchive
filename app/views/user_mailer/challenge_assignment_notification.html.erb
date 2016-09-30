@@ -21,9 +21,9 @@
     <% chars = prompt.any_character ? "Any" : styled_tag_list(tag_groups["Character"]) %>
     <% ships = prompt.any_relationship ? "Any" : styled_tag_list(tag_groups["Relationship"]) %>
     <% ratings = prompt.any_rating ? "Any" : (tag_groups["Rating"] ? get_title_string(tag_groups["Rating"]) : nil) %>
-    <% warnings = tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil %>
-    <% categories = tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil %>
-    <% atags = styled_tag_list(tag_groups["Freeform"]) %>
+    <% warnings = prompt.any_warning ? "Any" : (tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil) %>
+    <% categories = prompt.any_category ? "Any" : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
+    <% atags = prompt.any_freeform ? "Any" : styled_tag_list(tag_groups["Freeform"]) %>
     <% otags = prompt.optional_tag_set ? styled_tag_list(prompt.optional_tag_set.tags) : nil %>
 
     <%= styled_divider %>

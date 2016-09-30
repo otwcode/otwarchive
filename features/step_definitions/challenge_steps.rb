@@ -121,8 +121,11 @@ end
 ### WHEN other
 
 When /^I close signups for "([^\"]*)"$/ do |title|
-  step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  collection = Collection.find_by_title(title)
+  user_id = collection.all_owners.first.user_id
+  mod_login = User.find_by_id(user_id).login
+  step %{I am logged in as "#{mod_login}"}
+  visit collection_path(collection)
   step %{I follow "Challenge Settings"}
     step %{I uncheck "Sign-up open?"}
     step %{I press "Update"}
