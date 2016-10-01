@@ -14,38 +14,38 @@
 
     <% def styled_tag_list(tags) %>
       <% return nil if !tags || tags.empty? %>
-      <% tags.map{|tag| style_link(tag.name, tag_works_url(tag))}.to_sentence.html_safe %>
+      <% tags.map { |tag| style_link(tag.name, tag_works_url(tag)) }.to_sentence.html_safe %>
     <% end %>
 
     <% fandoms = prompt.any_fandom ? "Any" : styled_tag_list(tag_groups["Fandom"]) %>
     <% chars = prompt.any_character ? "Any" : styled_tag_list(tag_groups["Character"]) %>
     <% ships = prompt.any_relationship ? "Any" : styled_tag_list(tag_groups["Relationship"]) %>
-    <% ratings = prompt.any_rating ? "Any" : get_title_string(tag_groups["Rating"]) %>
-    <% warnings = tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil %>
-    <% categories = tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil %>
-    <% atags = styled_tag_list(tag_groups["Freeform"]) %>
+    <% ratings = prompt.any_rating ? "Any" : (tag_groups["Rating"] ? get_title_string(tag_groups["Rating"]) : nil) %>
+    <% warnings = prompt.any_warning ? "Any" : (tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil) %>
+    <% categories = prompt.any_category ? "Any" : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
+    <% atags = prompt.any_freeform ? "Any" : styled_tag_list(tag_groups["Freeform"]) %>
     <% otags = prompt.optional_tag_set ? styled_tag_list(prompt.optional_tag_set.tags) : nil %>
 
     <%= styled_divider %>
-    <%= index+1 %>. <%= style_bold(prompt.title) %>
+    <%= index + 1 %>. <%= style_bold(prompt.title) %>
 
     <p>
-      <% if fandoms then %><%= style_bold("Fandom:") %> <%= fandoms %><br><% end %>      
-      <% if chars then %><%= style_bold("Characters:") %> <%= chars %><br><% end %>
-      <% if ships then %><%= style_bold("Relationships:") %> <%= ships %><br><% end %>
-      <% if ratings then %><%= style_bold("Rating:") %> <%= ratings %><br><% end %>
-      <% if warnings then %><%= style_bold("Warnings:") %> <%= warnings %><br><% end %>
-      <% if categories then %><%= style_bold("Category:") %> <%= categories %><br><% end %>
-      <% if atags then %><%= style_bold("Additional Tags:") %> <%= atags %><br><% end %>
-      <% if otags then %><%= style_bold("Optional Tags:") %> <%= otags %><br><% end %>
-      <% if prompt.url && !prompt.url.blank? then %><%= style_bold("Prompt URL:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
+      <% if fandoms %><%= style_bold("Fandom:") %> <%= fandoms %><br><% end %>
+      <% if chars %><%= style_bold("Characters:") %> <%= chars %><br><% end %>
+      <% if ships %><%= style_bold("Relationships:") %> <%= ships %><br><% end %>
+      <% if ratings %><%= style_bold("Rating:") %> <%= ratings %><br><% end %>
+      <% if warnings %><%= style_bold("Warnings:") %> <%= warnings %><br><% end %>
+      <% if categories %><%= style_bold("Category:") %> <%= categories %><br><% end %>
+      <% if atags %><%= style_bold("Additional Tags:") %> <%= atags %><br><% end %>
+      <% if otags %><%= style_bold("Optional Tags:") %> <%= otags %><br><% end %>
+      <% if prompt.url && !prompt.url.blank? %><%= style_bold("Prompt URL:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
       <% if prompt.description && !prompt.description.blank? %>
         <%= style_bold("Description:") %>
         <%= style_quote(prompt.description) %>
       <% end %>
     </p>
   <% end %>
-  
+
   <%= styled_divider %>
 
   <p>
@@ -53,7 +53,7 @@
   </p>
 
   <p>
-    You can look up this assignment from <%= style_link("your archive dashboard", user_assignments_url(@assigned_user)) %>.
+    You can look up this assignment from <%= style_link("your Assignments page", user_assignments_url(@assigned_user)) %>.
   </p>
 
   <% if @collection && !@collection.assignment_notification.blank? %>
