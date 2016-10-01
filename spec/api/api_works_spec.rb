@@ -98,7 +98,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ id: "123",
                          title: api_fields[:title],
@@ -165,7 +165,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
@@ -221,7 +221,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
