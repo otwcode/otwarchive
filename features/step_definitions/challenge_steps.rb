@@ -190,3 +190,51 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
     step %{I press "Update"}
 end
 
+# Notification messages
+
+When /^I create an assignment notification message with (an ampersand|linebreaks) for "([^\"]*)"$/ do |message_content, title|
+  c = Collection.find_by_title(title)
+  field = "collection_collection_profile_attributes_assignment_notification"
+  message = if message_content == "an ampersand"
+              "The first thing & the second thing."
+            else
+              "First Line\nSecond Line"
+            end
+
+  step %{I am logged in as "#{c.owners.first.name}"}
+  visit collection_path(c)
+
+  # TODO: Once AO3-3376 is fixed, this will need to change.
+  step %{I follow "Collection Settings"}
+
+  fill_in(field, with: message)
+  step %{I press "Update"}
+end
+
+Then /^the notification message to "([^\"]*)" should contain linebreaks$/ do |user|
+  @user = User.find_by_login(user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  text_lines = email.text_part.body.to_s.split("\n")
+  html_lines = email.html_part.body.to_s.split(%r{<(?:\/?p|br|div)\b[^>]*>}i)
+
+  (text_lines + html_lines).each do |line|
+    # We shouldn't see "First Line" and "Second Line" on the same line.
+    line.should_not =~ /Second Line/ if line =~ /First Line/
+  end
+
+  email.text_part.body.should =~ /First Line/
+  email.text_part.body.should =~ /Second Line/
+  email.html_part.body.should =~ /First Line/
+  email.html_part.body.should =~ /Second Line/
+end
+
+Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |user|
+  @user = User.find_by_login(user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  email.html_part.body.should =~ /The first thing &amp; the second thing./
+  email.html_part.body.should_not =~ /The first thing & the second thing./
+end

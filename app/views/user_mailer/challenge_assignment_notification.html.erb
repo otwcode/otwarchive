@@ -57,7 +57,7 @@
   </p>
 
   <% if @collection && !@collection.assignment_notification.blank? %>
-    <p><br><%= @collection.assignment_notification %></p>
+    <p><%= escape_html_and_create_linebreaks(@collection.assignment_notification) %></p>
   <% end %>
 <% end %>
 
