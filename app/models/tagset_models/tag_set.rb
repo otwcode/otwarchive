@@ -189,13 +189,38 @@ class TagSet < ActiveRecord::Base
   
   
   ### Matching
-  
-  def match_rank(another, type=nil)
-    # if we don't have any tags of this type, anything matches us
-    return ALL if tags.empty?
-    return ALL if type && with_type(type).empty?
-    return ALL if is_subset_of?(another, type) 
-    matching_tags(another, type).size
+
+  # Computes the "match rank" of the two arrays. The match rank is ALL if the
+  # request tags are a subset of (or equal to) the offer tags, and otherwise is
+  # equal to the size of the overlap between the two.
+  def self.match_array_rank(request, offer)
+    return ALL if request.nil? || request.empty?
+    return 0 if offer.nil? || offer.empty?
+    overlap = request & offer
+    overlap.size == request.size ? ALL : overlap.size
+  end
+
+  # Creates a hash mapping from tag types (lowercase) to lists of tag ids.
+  # Stores the result as an instance variable, to make sure that we only
+  # perform the work once. (This is only used by the matching algorithm, which
+  # doesn't update any tag set information, so it's okay to cache the results
+  # of this computation. Particularly since we want matching to go as fast as
+  # possible.)
+  def tag_ids_by_type
+    if @tag_ids_by_type.nil?
+      @tag_ids_by_type = tags.group_by { |tag| tag.type.downcase }
+      @tag_ids_by_type.each_value { |tag_list| tag_list.map!(&:id) }
+    end
+
+    @tag_ids_by_type
+  end
+
+  # Computes the match rank of the two tag sets, in the given type. (Or in all
+  # types, if type is nil.)
+  def match_rank(another, type = nil)
+    request = type ? tag_ids_by_type[type] : tags.map(&:id)
+    offer = type ? another.tag_ids_by_type[type] : another.tags.map(&:id)
+    TagSet.match_array_rank(request, offer)
   end
   
   def exact_match?(another, type=nil)

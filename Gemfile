@@ -108,6 +108,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
+  gem "test_after_commit"
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
