@@ -23,7 +23,7 @@
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
-      <%= render :partial => 'layouts/header' %>
+      <%= render 'layouts/header' %>
       <div id="inner" class="wrapper">
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> system session region" role="main">
