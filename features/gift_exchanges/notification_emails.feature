@@ -18,10 +18,7 @@ Feature: Gift Exchange Notification Emails
 
     When I close signups for "Holiday Swap"
       And I have generated matches for "Holiday Swap"
-      And all emails have been delivered
-      And I follow "Send Assignments"
-      And the system processes jobs
-      And I wait 3 seconds
+      And I have sent assignments for "Holiday Swap"
 
     Then 3 emails should be delivered
       And "mod1" should receive 1 email
@@ -47,10 +44,7 @@ Feature: Gift Exchange Notification Emails
 
     When I close signups for "Holiday Swap"
       And I have generated matches for "Holiday Swap"
-      And all emails have been delivered
-      And I follow "Send Assignments"
-      And the system processes jobs
-      And I wait 3 seconds
+      And I have sent assignments for "Holiday Swap"
 
     Then 3 emails should be delivered
       And "mod1" should receive 1 email
