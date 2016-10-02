@@ -428,6 +428,6 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
 
 Scenario: I cannot create a bookmark that I don't own
   Given the work "Random Work"
-  When I attempt to create a bookmark on "Random Work" with a pseud that is not mine
+  When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
   Then I should not see "Bookmark was successfully created"
-    And I should see "You can't bookmark with that pseud"
+    And I should see "You can't bookmark with that pseud."

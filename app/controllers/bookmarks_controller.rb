@@ -14,7 +14,7 @@ class BookmarksController < ApplicationController
     if params[:bookmark][:pseud_id]
       pseud = Pseud.find(params[:bookmark][:pseud_id])
       unless pseud && current_user && current_user.pseuds.include?(pseud)
-        flash[:error] = ts("You can't bookmark with that pseud")
+        flash[:error] = ts("You can't bookmark with that pseud.")
         redirect_to root_path and return
       end
     end
