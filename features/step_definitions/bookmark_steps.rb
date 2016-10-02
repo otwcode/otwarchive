@@ -88,3 +88,12 @@ Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not e
   bookmark.reload
   assert orig_cache_key == bookmark.cache_key, "Cache key #{orig_cache_key} does not match #{bookmark.cache_key}."
 end
+
+When(/^I attempt to create a bookmark on "([^"]*)" with a pseud that is not mine$/) do |work|
+  step %{I am logged in as "commenter"}
+  step %{I start a new bookmark for "#{work}"}
+  work_id = Work.find_by_title!(work).id
+  pseud_id = User.first.pseuds.first.id
+  find("#bookmark_pseud_id", visible: false).set(pseud_id)
+  click_button "Create"
+end

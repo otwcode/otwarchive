@@ -425,3 +425,9 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
   Then I should see "Bookmark was successfully created"
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
+
+Scenario: I cannot create a bookmark that I don't own
+  Given the work "Random Work"
+  When I attempt to create a bookmark on "Random Work" with a pseud that is not mine
+  Then I should not see "Bookmark was successfully created"
+    And I should see "You can't bookmark with that pseud"
