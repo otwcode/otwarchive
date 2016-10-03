@@ -431,3 +431,10 @@ Scenario: I cannot create a bookmark that I don't own
   When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
   Then I should not see "Bookmark was successfully created"
     And I should see "You can't bookmark with that pseud."
+
+Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't own
+  Given I am logged in as "original_bookmarker"
+    And I have a bookmark for "Random Work"
+  When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
+  Then I should not see "Bookmark was successfully updated"
+    And I should see "You can't bookmark with that pseud."
