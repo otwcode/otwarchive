@@ -92,7 +92,6 @@ end
 When(/^I attempt to create a bookmark of "([^"]*)" with a pseud that is not mine$/) do |work|
   step %{I am logged in as "commenter"}
   step %{I start a new bookmark for "#{work}"}
-  work_id = Work.find_by_title!(work).id
   pseud_id = User.first.pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
   click_button "Create"
