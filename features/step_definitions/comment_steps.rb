@@ -167,3 +167,50 @@ When /^I reload the comments on "([^\"]*?)"/ do |work|
   w = Work.find_by_title(work)
   w.find_all_comments.each { |c| c.reload }
 end
+
+When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
+  work = Work.find_by_title!(work)
+  chapter = work.chapters[0]
+  user = User.current_user
+
+  commentable = chapter
+
+  count = ArchiveConfig.COMMENT_THREAD_MAX_DEPTH + 1
+
+  count.times do |i|
+    commentable = Comment.create(
+      commentable: commentable,
+      parent: chapter,
+      content: "This is a comment at depth #{i}.",
+      pseud: user.default_pseud
+    )
+  end
+
+  # As long as there's only one child comment, it'll keep displaying the child.
+  # So we need two comments at the final depth:
+  2.times do |i|
+    ordinal = i.zero? ? "first" : "second"
+    Comment.create(
+      commentable: commentable,
+      parent: chapter,
+      content: "This is the #{ordinal} hidden comment.",
+      pseud: user.default_pseud
+    )
+  end
+end
+
+Then /^I (should|should not) see the deeply nested comments$/ do |should_or_should_not|
+  step %{I #{should_or_should_not} see "This is the first hidden comment."}
+  step %{I #{should_or_should_not} see "This is the second hidden comment."}
+end
+
+When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
+  work = Work.find_by_title!(work)
+
+  loop do
+    visit work_url(work, show_comments: true)
+    break unless page.has_content? "Delete"
+    click_link("Delete")
+    click_link("Yes, delete!") # TODO: Fix along with comment deletion.
+  end
+end
