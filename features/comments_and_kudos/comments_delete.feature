@@ -50,8 +50,7 @@ Feature: Delete a comment
 
   Scenario: Deleting higher-level comments in a deep comment thread should still allow readers to access the deeper comments.
 
-    Given I am logged in as "author"
-      And I post the work "Testing"
+    Given the work "Testing"
       And I am logged in as "commenter"
 
     When I post a deeply nested comment thread on "Testing"
