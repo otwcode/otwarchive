@@ -64,6 +64,34 @@ Feature:
         | test3 | test1   |
         | test3 | test2   |
 
+  Scenario: Unconstrained exchange with no tags.
+
+    Given I create the gift exchange "no_tags3" with the following options
+        | value      | minimum | maximum | match |
+        | prompts    | 1       | 1       | 1     |
+      And the user "test1" signs up for "no_tags3" with the following prompts
+        | type    |
+        | request |
+        | offer   |
+      And the user "test2" signs up for "no_tags3" with the following prompts
+        | type    |
+        | request |
+        | offer   |
+      And the user "test3" signs up for "no_tags3" with the following prompts
+        | type    |
+        | request |
+        | offer   |
+
+    When potential matches are generated for "no_tags3"
+    Then the potential matches for "no_tags3" should be
+        | offer | request |
+        | test1 | test2   |
+        | test1 | test3   |
+        | test2 | test1   |
+        | test2 | test3   |
+        | test3 | test1   |
+        | test3 | test2   |
+
   Scenario: Constrained exchange with no matches.
 
     Given I create the gift exchange "constrained3" with the following options
