@@ -44,12 +44,12 @@
   <h3 class="heading" id="edit_profile">
     <%= ts('Editing Your Profile, Password, and Preferences') %>
   </h3>
-  <p><%= ts('To add your info, go to %{homepage}, select the 
+  <p><%= ts('To add your info, go to %{dashboard}, select the 
   "%{profile}" tab, and select "%{edit_profile}" from the range of 
   options at the end of the page. Here, you can enter some basic personal 
   information. It\'s also where to go to change your password. Refer to the 
   %{profile_faq} for more information.',
-  homepage: (link_to ts('your home page'), user_path(current_user)),
+  dashboard: (link_to ts('your Dashboard'), user_path(current_user)),
   profile: (link_to ts('Profile'), user_profile_path(current_user)),
   edit_profile: (link_to ts('Edit My Profile'), edit_user_path(current_user)), 
   profile_faq: (link_to ts('Profile FAQ'), archive_faqs_path + '/profile')
@@ -179,7 +179,7 @@
   or on top of the page in mobile devices. You can clear your history, or delete 
   individual entries if you don\'t want these entries to show up in your 
   history. You can also add works to the "Marked for Later" list in your 
-  history. For more information on History, please visit %{history_faq}.',
+  history. For more information on History, please visit the %{history_faq}.',
   dashboard: (link_to ts('your Dashboard'), user_path(current_user)),
   history: (link_to ts('History'), user_readings_path(current_user)),
   history_faq: (link_to ts('History and Mark for Later FAQ'), 
@@ -193,7 +193,7 @@
   by selecting the "Subscribe" link at the top or bottom of a work, or at the 
   top or bottom of a collection or series page, or the user\'s profile page. You 
   can check your subscriptions from %{dashboard} by selecting the 
-  "Subscriptions" link. For more information on Subscriptions, please visit 
+  "Subscriptions" link. For more information on Subscriptions, please visit the 
   %{subscription_faq}.',
   dashboard: (link_to ts('your Dashboard'), user_path(current_user)),
   subscription_faq: (link_to ts('Subscriptions and Feeds FAQ'), 
