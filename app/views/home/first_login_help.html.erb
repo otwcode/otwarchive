@@ -1,16 +1,9 @@
+<% # Expects current_user %>
 <div class="userstuff">
   <h2 class="heading">
     <%= ts('Welcome to the %{app_name}!', app_name: ArchiveConfig.APP_NAME) %>
   </h2>
-
   <p><%= ts('Here are some tips to help you get started.') %></p>
-  <% if current_user %>
-    <%= form_tag end_first_login_user_path(current_user), method: :post, remote: true do %>
-      <p class="submit actions">
-        <%= submit_tag ts('Dismiss this message permanently') %>
-      </p>
-    <% end %>
-  <% end %>
 
   <h3 class="landmark heading"><%= ts('Table of Contents') %></h3>
   <ul id="toc" class="toc" role="directory">
