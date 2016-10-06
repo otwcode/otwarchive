@@ -94,8 +94,10 @@
   %{search_tutorial}.',
   fandoms: (link_to ts('Fandoms'), menu_fandoms_path),
   all_fandoms: (link_to ts('All Fandoms'), media_path),
-  movies: (link_to ts('Movies'), 
-                   medium_fandoms_path(Media.find_by_name('Movies'))),
+  movies: Media.find_by_name('Movies') ? (link_to ts('Movies'), 
+                                         medium_fandoms_path(
+                                           Media.find_by_name('Movies'))) :
+                                         ts('Movies'),
   search: (link_to ts('search feature'), search_works_path),
   search_faq: (link_to ts('Search and Browse FAQ'), 
                        archive_faqs_path + '/search-and-browse'),
