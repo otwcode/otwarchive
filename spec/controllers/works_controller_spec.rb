@@ -64,7 +64,7 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(true)
       end
 
-      it "should return the same result the second time when a new work is created within the expiration time" do
+      xit "should return the same result the second time when a new work is created within the expiration time" do
         get :index
         expect(assigns(:works)).to include(@work)
         work2 = FactoryGirl.create(:work, posted: true)
