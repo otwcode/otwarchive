@@ -5,6 +5,7 @@ Feature: View a work with various options
   Scenario: viewing a work in explicit View Full Work mode, with JavaScript turned off (Issue 2205)
   Given the chaptered work with 2 comments "Whatever"
   When I view the work "Whatever" in full mode
+  Then I should not see "Reindex Work"
     And I follow "Comments (2)"
   Then I should see "Bla bla"
 
@@ -30,6 +31,3 @@ Feature: View a work with various options
     And I should see "DeletedChapterWork"
     And I follow "Site Map"
   Then I should not see "Sorry, we couldn't find the chapter you were looking for."
-
-
-

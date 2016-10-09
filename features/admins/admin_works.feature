@@ -5,6 +5,13 @@ Feature: Admin Actions for Works and Bookmarks
 
   Scenario: Can hide works
     Given I am logged in as "regular_user"
+      And I post the work "Just a work you know"
+    When I am logged in as an admin
+      And I view the work "Just a work you know"
+      And I follow "Reindex Work"
+
+  Scenario: Can hide works
+    Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
