@@ -120,7 +120,7 @@ class IndexSubqueue
   end
 
   def add_deletion_to_batch(id)
-    if klass.respond_to? :index_name 
+    if klass.respond_to?(:index_name)
       basics = { "_index" => klass.index_name, "_type" => klass.document_type, "_id" => id }
       @batch << { delete: basics }.to_json
     else
