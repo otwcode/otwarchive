@@ -29,6 +29,8 @@ class TagsController < ApplicationController
       flash[:error] = ts("Please log in as admin")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
+    flash[:notice] = ts('Tag sent to be reindexed')
+    redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   end
 
   # GET /tags
