@@ -5,11 +5,11 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
-  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex ]
+  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected, :reindex ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected , :reindex ]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
   before_filter :log_admin_activity, :only => [ :update_tags ]
@@ -783,6 +783,17 @@ public
       flash[:notice] = ts("Your edits were put through! Please check over the works to make sure everything is right.")
       redirect_to show_multiple_user_works_path(@user, :work_ids => @works.collect(&:id))
     end
+  end
+
+  # Reindex the work.
+  def reindex
+    if logged_in_as_admin? || permit?("tag_wrangler")
+      RedisSearchIndexQueue.queue_works([params[:id]], priority: :high)
+      flash[:notice] = ts('Work queued to be reindexed')
+    else
+      flash[:notice] = ts("Sorry, you don't have permission to access the page you were trying to reach.")
+    end
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
   # marks a work to read later

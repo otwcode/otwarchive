@@ -289,6 +289,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
+      get :reindex
     end
     resources :bookmarks
     resources :chapters do
