@@ -30,7 +30,6 @@ Feature: Tag wrangling
       And I have no tags
       And basic tags
       And I have loaded the "roles" fixture
-      And the chaptered work with 2 comments "This is a work"
       And the following activated tag wrangler exists
       | login       |
       | dizmo       |
@@ -191,7 +190,7 @@ Feature: Tag wrangling
       And I should see "Stargate Atlantis"
 
     # A wrangler should see the reindex button
-    When I view the work "This is a work"
+    When I view the work "Revenge of the Sith 2"
     Then I should see "Reindex Work"
 
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
