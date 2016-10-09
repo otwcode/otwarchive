@@ -106,14 +106,36 @@ end
 
 ## Signing up
 
-When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+When /^I set up a signup for "([^\"]*)" with combination A$/ do |title|
   step %{I start signing up for "#{title}"}
-    step %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    step %{I check the 2nd checkbox with value "Stargate SG-1"}
-    step %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
-    step %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
-    click_button "Submit"
+  step %{I check the 1st checkbox with the value "Stargate Atlantis"}
+  step %{I check the 2nd checkbox with value "Stargate SG-1"}
+  step %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
+  step %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
+end
 
+When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+  step %{I set up a signup for "#{title}" with combination A}
+  click_button "Submit"
+end
+
+When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |title|
+  step %{the user "gooduser" exists and is activated}
+  step %{I am logged in as "baduser"}
+  step %{I set up a signup for "#{title}" with combination A}
+  pseud_id = Pseud.where(name: "gooduser").first.id
+  find("#challenge_signup_pseud_id", visible: false).set(pseud_id)
+  click_button "Submit"
+end  
+
+When /^I attempt to update my signup for "([^\"]*)" with a pseud that is not mine$/ do |title|
+  step %{the user "gooduser" exists and is activated}
+  step %{I am logged in as "baduser"}
+  step %{I sign up for "#{title}" with combination A}
+  step %{I follow "Edit Sign-up"}
+  pseud_id = Pseud.where(name: "gooduser").first.id
+  find("#challenge_signup_pseud_id", visible: false).set(pseud_id)
+  click_button "Update"
 end
 
 When /^I sign up for "([^\"]*)" with combination B$/ do |title|

@@ -70,7 +70,6 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
-
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -80,6 +79,18 @@ Feature: Gift Exchange Challenge
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
     Then I should see "sign-up is invalid"  
+
+  Scenario: I cannot sign up with a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to sign up for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully created"
+      And I should see "You can't sign up with that pseud"
+
+  Scenario: I cannot edit in a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to update my signup for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully updated"
+      And I should see "You can't sign up with that pseud"
 
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
