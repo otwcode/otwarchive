@@ -71,6 +71,7 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
+      get :reindex
     end
     collection do
       get :show_hidden

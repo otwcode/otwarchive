@@ -24,6 +24,13 @@ class TagsController < ApplicationController
     end
   end
 
+  def reindex
+    unless logged_in_as_admin?
+      flash[:error] = ts("Please log in as admin")
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    end
+  end
+
   # GET /tags
   def index
     if @collection
