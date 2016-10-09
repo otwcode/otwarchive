@@ -5,6 +5,7 @@
 
   <!--subnav-->
   <ul class="navigation actions" role="navigation">
+    <li><%= link_to ts('Reindex User'), check_user_path(@user) %> </li>
     <li>
       <%= button_to t('admin.admin_users.show.subnav.send_activation', default: "Send Activation Email"), {:action => 'send_activation', :id => @user}, disabled: @user.active? %>
     </li>

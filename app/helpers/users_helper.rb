@@ -161,6 +161,8 @@ module UsersHelper
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
       t('users_helper.log_validated', :default => 'Account Validated')
+    elsif action == ArchiveConfig.ACTION_CHECK
+      t('users_helper.log_validated', :default => 'Account Checked')
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
       t('users_helper.log_role_added', :default => 'Role Added: ')
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE

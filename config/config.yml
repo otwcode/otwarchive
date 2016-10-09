@@ -356,6 +356,7 @@ ACTION_WARN: 6
 ACTION_RENAME: 7
 ACTION_PASSWORD_RESET: 8
 ACTION_NEW_EMAIL: 9
+ACTION_CHECK: 10
 
 
 ##### For dumping the seed database and NOT clearing emails on stage
