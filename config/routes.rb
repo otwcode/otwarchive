@@ -190,6 +190,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      get :check_user
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do

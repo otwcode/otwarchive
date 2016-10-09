@@ -46,6 +46,10 @@ class UsersController < ApplicationController
     end
   end
 
+  # Run a set of corrections on a user
+  def check_user
+  end
+
   def index
     flash.keep
     redirect_to :controller => :people, :action => :index
