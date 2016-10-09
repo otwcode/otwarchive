@@ -49,6 +49,24 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[content]", with: comment_text)
 end
 
+When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
+  step %{I am logged in as "commenter"}
+  step %{I set up the comment "This is a test" on the work "#{work}"}
+  work_id = Work.find_by_title!(work).id
+  pseud_id = User.first.pseuds.first.id
+  find("#comment_pseud_id_for_#{work_id}", visible: false).set(pseud_id)
+  click_button "Comment"
+end
+
+When /^I attempt to update a comment on "([^"]*)" with a pseud that is not mine$/ do |work|
+  step %{I am logged in as "commenter"}
+  step %{I post the comment "blah blah blah" on the work "#{work}"}
+  step %{I follow "Edit"}
+  pseud_id = User.first.pseuds.first.id
+  find(:xpath, "//input[@name='comment[pseud_id]']", visible: false).set(pseud_id)
+  click_button "Update"
+end
+
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
   click_button("Comment")
