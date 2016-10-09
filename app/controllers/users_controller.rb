@@ -53,6 +53,23 @@ class UsersController < ApplicationController
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     @user = User.find_by_login(params[:id])
+    @subscriptions = @user.subscriptions.includes(:subscribable)
+    @subscriptions.to_a.each do |sub| 
+      if sub.name.nil? 
+        sub.destroy
+      end
+    end 
+    @user.works.each do |work| 
+      if work.revised_at.nil?
+        work.save
+      end
+      IndexQueue.enqueue(w, :main)
+    end
+    @user.bookmarks.each do |bookmark|
+      bookmark.update_index
+    end
+    @user.update_works_index_timestamp!
+    
     flash[:notice] = ts('User account sent to be tidied up')
     @user.create_log_item( options = {action: ArchiveConfig.ACTION_CHECK, admin_id: current_admin.id})
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
