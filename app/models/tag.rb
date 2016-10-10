@@ -503,7 +503,14 @@ class Tag < ActiveRecord::Base
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String
-    string = string.gsub('*s*', '/').gsub('*a*', '&').gsub('*d*', '.').gsub('*q*', '?').gsub('*h*', '#')
+    string = string.gsub(
+      /\*[sadqh]\*/,
+      '*s*' => '/',
+      '*a*' => '&',
+      '*d*' => '.',
+      '*q*' => '?',
+      '*h*' => '#'
+    )
     self.where('tags.name = ?', string).first
   end
 
