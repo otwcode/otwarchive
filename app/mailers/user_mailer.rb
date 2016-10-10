@@ -90,7 +90,10 @@ class UserMailer < BulletproofMailer::Base
   
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    @subscription = Subscription.find(subscription_id)
+    # Here we use find_by_id so that if the subscription is not found 
+    # then the resque job does not error and we just silently fail.
+    @subscription = Subscription.find_by_id(subscription_id)
+    return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
     # look up all the creations that have generated updates for this subscription
