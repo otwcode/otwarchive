@@ -22,15 +22,8 @@ describe "API WorksController - Create" do
       WebMock.reset!
     end
 
-    it "should support the deprecated /import end-point" do
-      post "/api/v1/import",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
-      assert_equal 200, response.status
+    it "should not support the deprecated /import end-point", type: :routing do
+      expect(post: "/api/v1/import").not_to be_routable
     end
 
     it "should return 200 OK when all stories are created" do
@@ -105,7 +98,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ id: "123",
                          title: api_fields[:title],
@@ -172,7 +165,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
@@ -228,7 +221,7 @@ describe "API WorksController - Create" do
       before(:all) do
         mock_external
         user = create(:user)
-        post "/api/v1/import",
+        post "/api/v1/works",
              { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
