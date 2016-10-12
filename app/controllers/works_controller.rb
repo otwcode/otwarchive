@@ -791,7 +791,7 @@ public
       RedisSearchIndexQueue.queue_works([params[:id]], priority: :high)
       flash[:notice] = ts('Work queued to be reindexed')
     else
-      flash[:notice] = ts("Sorry, you don't have permission to access the page you were trying to reach.")
+      flash[:notice] = ts("Sorry, you don't have permission to perform this action.")
     end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end

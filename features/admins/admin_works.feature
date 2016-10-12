@@ -3,7 +3,7 @@ Feature: Admin Actions for Works and Bookmarks
   As an admin
   I should be able to perform special actions on works
 
-  Scenario: Can hide works
+  Scenario: Can reindex works
     Given I am logged in as "regular_user"
       And I post the work "Just a work you know"
     When I am logged in as an admin

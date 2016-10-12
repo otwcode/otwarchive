@@ -5,9 +5,20 @@ Feature: View a work with various options
   Scenario: viewing a work in explicit View Full Work mode, with JavaScript turned off (Issue 2205)
   Given the chaptered work with 2 comments "Whatever"
   When I view the work "Whatever" in full mode
-  Then I should not see "Reindex Work"
     And I follow "Comments (2)"
   Then I should see "Bla bla"
+
+  Scenario: Regular logged-in user doesn't have the option to reindex a work
+  Given I am logged in
+    And I have the work "Whatever"
+   When I view the work "Whatever"
+   Then I should not see "Reindex Work"
+
+  Scenario: Logged-out user doesn't have the option to reindex a work
+  Given the work "Whatever"
+    And I am logged out
+   When I view the work "Whatever"
+   Then I should not see "Reindex Work"
 
   Scenario: viewing a work when logged in and having set full mode in the preferences
   Given I am logged in as a random user
