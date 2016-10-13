@@ -137,7 +137,7 @@ end
 
 Then /^I should see the first login popup$/ do
   step %{I should see "Here are some tips to help you get started."}
-    step %{I should see "To log in, locate and fill in the log in link"}
+    step %{I should see "To log in, locate the login link"}
 end
 
 Then /^I should see the banner with minor edits$/ do

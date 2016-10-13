@@ -113,7 +113,7 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  after_create :notify_of_association
+  after_commit :notify_of_association
   # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
     self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
