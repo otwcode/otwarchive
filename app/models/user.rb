@@ -488,6 +488,27 @@ class User < ActiveRecord::Base
     invite_request.destroy if invite_request
   end
 
+  # Run a set of corrections on a user
+  def check
+    @subscriptions = self.subscriptions.includes(:subscribable)
+    @subscriptions.to_a.each do |sub|
+      if sub.name.nil?
+        sub.destroy
+      end
+    end
+    self.works.each do |work|
+      if work.revised_at.nil?
+        work.save
+      end
+      IndexQueue.enqueue(w, :main)
+    end
+    self.bookmarks.each do |bookmark|
+      bookmark.update_index
+    end
+    self.update_works_index_timestamp!
+
+  end
+
   private
 
   # Create and/or return a user account for holding orphaned works
