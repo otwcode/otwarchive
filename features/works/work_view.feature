@@ -9,8 +9,8 @@ Feature: View a work with various options
   Then I should see "Bla bla"
 
   Scenario: Regular logged-in user doesn't have the option to reindex a work
-  Given I am logged in
-    And I have the work "Whatever"
+  Given the work "Whatever"
+    And I am logged in
    When I view the work "Whatever"
    Then I should not see "Reindex Work"
 
