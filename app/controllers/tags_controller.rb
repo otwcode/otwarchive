@@ -25,10 +25,18 @@ class TagsController < ApplicationController
   end
 
   def reindex
+    work_ids=[]
     unless logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
+    @tag = Tag.find_by_name(params[:id])
+    work_ids=@tag.work_ids
+    @tag.synonyms.each do |syn|
+      work_ids.push ( syn.work_ids )
+    end
+    work_ids.flatten!
+    self.reindex_all_works(work_ids) 
     flash[:notice] = ts('Tag sent to be reindexed')
     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   end
