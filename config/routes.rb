@@ -465,7 +465,6 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
       match 'bookmarks/import', to: 'bookmarks#create', via: :post
-      match 'import', to: 'works#create', via: :post
       match 'works/import', to: 'works#create', via: :post
       match 'works/urls', to: 'works#batch_urls', via: :post
     end

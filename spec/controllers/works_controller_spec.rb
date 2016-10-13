@@ -2,7 +2,38 @@ require 'spec_helper'
 
 describe WorksController do
   include LoginMacros
-
+  
+  describe "new" do
+    it "should not return the form for anyone not logged in" do
+      get :new
+      expect(response).to redirect_to new_user_session_path
+    end
+    
+    it "should render the form if logged in" do
+      fake_login
+      get :new
+      expect(response).to render_template("new") 
+    end
+  end
+  
+  describe "create" do
+    before do
+      @user = FactoryGirl.create(:user)
+      fake_login_known_user(@user)
+    end
+    
+    it "should not allow a user to submit only a pseud that is not theirs" do
+      @user2 = FactoryGirl.create(:user)
+      work_attributes = FactoryGirl.attributes_for(:work)
+      work_attributes[:author_attributes] = {:ids => [@user2.pseuds.first.id]}
+      expect {
+        post :create, { work: work_attributes }
+      }.to_not change(Work, :count)
+      expect(response).to render_template("new")
+      expect(flash[:error]).to eq "You're not allowed to use that pseud."
+    end
+  end
+  
   describe "index" do
     before do
       @fandom = FactoryGirl.create(:fandom)
@@ -33,7 +64,7 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(true)
       end
 
-      it "should return the same result the second time when a new work is created within the expiration time" do
+      xit "should return the same result the second time when a new work is created within the expiration time" do
         get :index
         expect(assigns(:works)).to include(@work)
         work2 = FactoryGirl.create(:work, posted: true)
