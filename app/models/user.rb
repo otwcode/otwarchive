@@ -490,18 +490,26 @@ class User < ActiveRecord::Base
 
   # Run a set of corrections on a user
   def check
+
+    # Delete any subscriptions the user has to deleted items because this causes
+    # the user's subscription page to error
     @subscriptions = self.subscriptions.includes(:subscribable)
     @subscriptions.to_a.each do |sub|
       if sub.name.nil?
         sub.destroy
       end
     end
+
+    # AKA "stats page unfucking". It is most often caused by the existence of works with nil revised_at dates.
+    # reindex the user's works to make sure they show up on the user's works page
     self.works.each do |work|
       if work.revised_at.nil?
         work.save
       end
       IndexQueue.enqueue(w, :main)
     end
+
+    # Reindex a users bookmakes.
     self.bookmarks.each do |bookmark|
       bookmark.update_index
     end
