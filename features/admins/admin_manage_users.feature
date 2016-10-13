@@ -136,6 +136,14 @@ Feature: Admin Actions to manage users
     And the "Fannish next of kin's username" field should contain "harrysmom"
     And the "Fannish next of kin's email" field should contain "harrysmom@example.com"
 
+  Scenario: A user account is Troubleshoot 
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+   When I go to the abuse administration page for "mrparis"
+    And I follow "Troubleshoot Account"
+   Then I should see "User account checked."
+
+
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
