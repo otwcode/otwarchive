@@ -147,6 +147,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        get :check_user
       end
       collection do
         get :notify
@@ -188,7 +189,6 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
-      get :check
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do

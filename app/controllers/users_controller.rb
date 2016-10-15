@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   before_filter :check_user_status, only: [:edit, :update]
   before_filter :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show, :check]
+  before_filter :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
   before_filter :check_account_creation_status, only: [:new, :create]
   skip_before_filter :store_location, only: [:end_first_login]
 
@@ -43,19 +43,6 @@ class UsersController < ApplicationController
     else
       check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
     end
-  end
-
-  # Run a set of corrections on a user
-  def check
-    unless logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
-      redirect_to(request.env['HTTP_REFERER'] || root_path) && return
-    end
-    @user = User.find_by_login(params[:id])
-    @user.check
-    @user.create_log_item(options = { action: ArchiveConfig.ACTION_CHECK, admin_id: current_admin.id })
-    flash[:notice] = ts('User account checked.')
-    redirect_to(request.env['HTTP_REFERER'] || root_path) && return
   end
 
   def index
