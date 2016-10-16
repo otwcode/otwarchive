@@ -437,10 +437,15 @@ Feature: creating and editing skins
   Scenario: A user should be able to choose a temporary skin
   Given basic skins
     And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+   Then I am logged in as an admin
+   When I follow "Approved Skins"
+    And I check "Cache"
+   Then I press "Update" 
+    And I should see "The following skins were updated: public skin"
+    And the skin "public skin" is in the chooser
     And I am logged in as "skinner"
     And I am on the home page
     And I follow "public skin"
    Then I should see "The skin public skin has been set. This will last for your current session."
-    And I should see "text-decoration: blink;" within "style"
     And I follow "Default"
    Then I should see "You are now using the default Archive skin again!"

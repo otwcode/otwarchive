@@ -132,6 +132,11 @@ When /^I edit my pink header skin to have a purple logo$/ do
   fill_in("CSS", with: "#header .heading a {color: purple;}")
   click_button("Update")
 end
+When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  skin.in_chooser = true
+  skin.save
+end
 
 ### THEN
 
