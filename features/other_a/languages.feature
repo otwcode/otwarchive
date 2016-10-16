@@ -1,5 +1,32 @@
 @works
 Feature: Languages
+
+  Scenario: Add a language and check abuse and support available
+
+  Given basic languages
+    And I am logged in as an admin
+    And I go to the languages page
+    And I follow "Add a Language"
+    And I fill in "Name" with "Klingon"
+    And I fill in "Abbreviation" with "tlh"
+    And I check "Support available"
+    And I check "Abuse support available"
+    And I press "Create Language"
+   Then I should see "Language was successfully added."
+    And I follow "Add a Language"
+    And I fill in "Name" with "Sindarin"
+    And I fill in "Abbreviation" with "sj"
+    And I press "Create Language"
+   Then I should see "Language was successfully added."
+   When I am logged out
+    And I am on the home page
+    And I follow "Report Abuse"
+   Then I should see "Klingon"
+    And I should not see "Sindarin"
+    And I follow "Technical Support and Feedback"
+   Then I should see "Klingon"
+    And I should not see "Sindarin"
+
     
   Scenario: Browse works by language
   
