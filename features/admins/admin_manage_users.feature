@@ -306,7 +306,7 @@ Feature: Admin Actions to manage users
    When I go to the abuse administration page for "mrparis"
     And I press "Activate User Account"
    Then I should see "User Account Activated"
-    And the user "mrparis" is activated
+    And the user "mrparis" should be activated
 
   Scenario: A admin can send an activation email for a user account
   Given the following users exist

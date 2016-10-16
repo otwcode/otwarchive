@@ -275,7 +275,7 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
  
-Then /^the user "([^"]*)" is activated$/ do |login|
+Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
 end
