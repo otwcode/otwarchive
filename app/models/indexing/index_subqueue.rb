@@ -59,6 +59,7 @@ class IndexSubqueue
   end
 
   def klass
+    raise "Redshirt: Attempted to constantize invalid class initialize klass #{name.split(':')[1].classify}" unless %w(Work Bookmark Pseud StatCounter Tag).include?(name.split(':')[1].classify)
     name.split(':')[1].classify.constantize
   end
 
@@ -119,8 +120,12 @@ class IndexSubqueue
   end
 
   def add_deletion_to_batch(id)
-    basics = { "_index" => klass.index_name, "_type" => klass.document_type, "_id" => id }
-    @batch << { delete: basics }.to_json
+    if klass.respond_to?(:index_name)
+      basics = { "_index" => klass.index_name, "_type" => klass.document_type, "_id" => id }
+      @batch << { delete: basics }.to_json
+    else
+      Rails.logger.error "Cyanshirt: #{klass.class.name} passed to add_deletion_to_batch Unknown"
+    end
   end
 
   def add_stats_to_batch(obj)

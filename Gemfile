@@ -1,17 +1,19 @@
 source 'http://rubygems.org'
 
-ruby '2.1.9'
+ruby '2.2.5'
+gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.2'
+gem 'rails', '3.2.22.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '~> 0.3.20'
+gem 'mysql2', '0.3.20'
+
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
@@ -32,7 +34,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list'
+gem 'acts_as_list', '>=0.7.6'
 gem 'akismetor'
 
 gem 'httparty'
@@ -69,8 +71,6 @@ gem "escape_utils", "1.2.1"
 
 gem 'valium'
 
-gem 'best_in_place'
-
 gem 'timeliness'
 
 gem 'rpm_contrib'
@@ -85,10 +85,10 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark"
+gem "rack-dev-mark", '>=0.7.5'
 
 #Phrase-app
-gem 'phraseapp-in-context-editor-ruby'
+gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
@@ -105,10 +105,10 @@ gem 'newrelic-redis'
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
-gem 'kgio'
-
+gem 'kgio', '2.10.0'
 
 group :test do
+  gem "test_after_commit"
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
@@ -133,6 +133,7 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
+  gem 'minitest'
 end
 
 group :development do
@@ -150,5 +151,5 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-  gem 'unicorn', :require => false
+  gem 'unicorn', '>= 5.1.0', :require => false
 end

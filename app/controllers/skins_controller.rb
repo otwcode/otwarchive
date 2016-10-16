@@ -104,8 +104,16 @@ class SkinsController < ApplicationController
   end
 
   def create
+    unless params[:skin_type].nil? || params[:skin_type] && %w(Skin WorkSkin).include?(params[:skin_type])
+      flash[:error] = ts("What kind of skin did you want to create?")
+      redirect_to :new and return
+    end
     loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
-    @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
+    if params[:skin_type] == "WorkSkin"
+      @skin = WorkSkin.new(params[:skin])
+    else
+      @skin = Skin.new(params[:skin])
+    end
     @skin.author = current_user
     if @skin.save
       flash[:notice] =  ts("Skin was successfully created.")

@@ -108,6 +108,20 @@ POTENTIAL_MATCHES_MIN: 10
 # max percentage of participants to match
 POTENTIAL_MATCHES_PERCENT: 10
 
+# These options control the number of tags we'd ideally like to see in each tag
+# type in a gift exchange, in order to ensure that indexing on that type (to
+# speed up matching) will yield good results. The number scales with the number
+# of signups (using the divisor), but is capped at the maximum. Increasing the
+# maximum (and decreasing the divisor) will cause the preprocessing step to
+# take somewhat longer.
+PREPROCESS_COUNT_TAGS_DIVISOR: 10
+PREPROCESS_COUNT_TAGS_MAX: 10
+
+# These options control how many prompts with "any_#{type}" an exchange can
+# have before we consider that tag type to be difficult to index on.
+PREPROCESS_COUNT_ANY_DIVISOR: 10
+PREPROCESS_COUNT_ANY_MIN: 10
+
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
 # max for prompt memes (can be much higher than for gift exchanges, as there is no matching)

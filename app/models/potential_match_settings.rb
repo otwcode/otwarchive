@@ -35,4 +35,7 @@ class PotentialMatchSettings < ActiveRecord::Base
     required_types.first
   end
 
+  def include_optional?(type)
+    send("include_optional_#{type.downcase.pluralize}")
+  end
 end

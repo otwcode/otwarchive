@@ -70,7 +70,6 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
-
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -80,6 +79,18 @@ Feature: Gift Exchange Challenge
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
     Then I should see "sign-up is invalid"  
+
+  Scenario: I cannot sign up with a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to sign up for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully created"
+      And I should see "You can't sign up with that pseud"
+
+  Scenario: I cannot edit in a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to update my signup for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully updated"
+      And I should see "You can't sign up with that pseud"
 
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -357,9 +368,9 @@ Feature: Gift Exchange Challenge
       And I follow "Complete"
     Then I should see "myname1"
       And I should see "Fulfilled Story"
-      
+
   Scenario: Refused story should still fulfill the assignment
-  
+
     Given an assignment has been fulfilled in a gift exchange
       And I reveal works for "Awesome Gift Exchange"
       And I refuse my gift story "Fulfilled Story"
@@ -368,7 +379,7 @@ Feature: Gift Exchange Challenge
       And I follow "Complete"
     Then I should see "myname1"
       And I should see "Fulfilled Story"
-  
+
 
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
@@ -438,3 +449,52 @@ Feature: Gift Exchange Challenge
     When I am logged in as "myname2"
       And I delete my signup for the gift exchange "Awesome Gift Exchange"
     Then I should see "Challenge sign-up was deleted."
+
+  Scenario: Assignment emails should contain all the information in the request
+  # Note: tag names are lowercased for the test so we could borrow the potential
+  # match steps, and due to the HTML, each tag must be looked for separate from
+  # its label or other tags of its type
+    Given I create the gift exchange "EmailTest" with the following options
+        | value      | minimum | maximum | match |
+        | prompts    | 1       | 1       | 1     |
+        | fandoms    | 1       | 1       | 0     |
+        | characters | 1       | 1       | 0     |
+        | freeforms  | 0       | 2       | 0     |
+        | ratings    | 0       | 1       | 0     |
+        | categories | 0       | 1       | 0     |
+      And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request | any        | the show | fic, art  | mature  |            |
+        | offer   | villain    | the show | fic       |         |            |
+      And the user "sweetiepie" signs up for "EmailTest" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request | protag     | the book |           |         | any        |
+        | offer   | protag     | the book | fic       |         |            |
+      When I have generated matches for "EmailTest"
+        And I have sent assignments for "EmailTest"
+      Then 1 email should be delivered to "sweetiepie"
+        And the email should contain "Fandom:"
+        And the email should contain "the show"
+        And the email should contain "Additional Tags:"
+        And the email should contain "fic"
+        And the email should contain "art"
+        And the email should contain "Characters:"
+        And the email should contain "Any"
+        And the email should contain "Rating:"
+        And the email should contain "mature"
+        And the email should not contain "Relationships:"
+        And the email should not contain "Warnings:"
+        And the email should not contain "Category:"
+        And the email should not contain "Optional Tags:"
+      Then 1 email should be delivered to "badgirlsdoitwell"
+        And the email should contain "Fandom:"
+        And the email should contain "the book"
+        And the email should contain "Characters:"
+        And the email should contain "protag"
+        And the email should contain "Category:"
+        And the email should contain "Any"
+        And the email should not contain "Additional Tags:"
+        And the email should not contain "Relationships:"
+        And the email should not contain "Rating:"
+        And the email should not contain "Warnings:"
+        And the email should not contain "Optional Tags:"
