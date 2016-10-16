@@ -433,3 +433,14 @@ Feature: creating and editing skins
     And I should see "only screen and (max-width: 42em), only screen and (max-width: 62em)"
   When I press "Use"
   Then the page should have a skin with the media query "only screen and (max-width: 42em), only screen and (max-width: 62em)"
+
+  Scenario: A user should be able to choose a temporary skin
+  Given basic skins
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as "skinner"
+    And I am on the home page
+    And I follow "public skin"
+   Then I should see "The skin public skin has been set. This will last for your current session."
+    And I should see "text-decoration: blink;" within "style"
+    And I follow "Default"
+   Then I should see "You are now using the default Archive skin again!"
