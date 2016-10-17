@@ -216,13 +216,13 @@ GEM
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
     ntlm-http (0.1.1)
-    paperclip (4.3.6)
     orm_adapter (0.5.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (= 0.3.0)
+    paperclip (4.3.6)
     permit_yo (2.1.4)
       activesupport (~> 3.0)
     phraseapp-in-context-editor-ruby (1.0.6)
@@ -418,13 +418,11 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-mysql-reconnect
-  acts_as_list (>= 0.7.6)
+  acts_as_list
   addressable
   akismetor
   audited-activerecord (~> 3.0)
   aws-sdk
-  bcrypt
-  best_in_place
   bullet (~> 5.0.0)
   bundler
   bundler-audit
@@ -461,10 +459,10 @@ DEPENDENCIES
   nokogiri (>= 1.6.6.2)
   paperclip
   permit_yo
-  phraseapp-in-context-editor-ruby (>= 1.0.6)
+  phraseapp-in-context-editor-ruby
   pickle
   pry-byebug
-  rack-dev-mark (>= 0.7.5)
+  rack-dev-mark
   rails (= 3.2.22.3)
   redis (>= 3.0)
   redis-namespace
@@ -486,7 +484,7 @@ DEPENDENCIES
   tire
   transaction_retry
   unicode
-  unicorn (>= 5.1.0)
+  unicorn
   unidecoder
   valium
   vcr (~> 3.0, >= 3.0.1)
@@ -496,7 +494,7 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 2.1.9p490
+   ruby 2.2.5p319
 
 BUNDLED WITH
-   1.12.5
+   1.13.2

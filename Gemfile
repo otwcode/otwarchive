@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 ruby '2.2.5'
-gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
@@ -29,7 +28,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list', '>=0.7.6'
+gem 'acts_as_list'
 gem 'akismetor'
 
 gem 'httparty'
@@ -82,10 +81,10 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark", '>=0.7.5'
+gem "rack-dev-mark"
 
-#Phrase-app
-gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
+# Phrase-app
+gem 'phraseapp-in-context-editor-ruby'
 
 # For URL mangling
 gem 'addressable'
@@ -100,7 +99,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  gem "test_after_commit"
+  gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
