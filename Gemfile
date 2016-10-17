@@ -127,6 +127,7 @@ group :test do
   # Code coverage
   gem 'simplecov', '~> 0.11.2',:require => false
   gem 'email_spec', '1.6.0'
+  gem "codeclimate-test-reporter", require: nil
 end
 
 group :test, :development do
