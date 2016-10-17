@@ -185,14 +185,6 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to(admin_users_path)
   end
 
-  # DELETE admin/users/1
-  # DELETE admin/users/1.xml
-  def destroy
-    @user = User.find_by_login(params[:id])
-    @user.destroy
-    redirect_to(admin_users_url)
-  end
-
   def notify
     if params[:letter] && params[:letter].is_a?(String)
       letter = params[:letter][0,1]
