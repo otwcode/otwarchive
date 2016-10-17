@@ -44,6 +44,9 @@ notifications:
      - "irc.freenode.org#otw-dev"
    on_success: change
    on_failure: change
+before_deploy: RAILS_ENV=test bundle exec rake coveralls:push
 deploy:
   skip_cleanup: true
-  script: RAILS_ENV=test bundle exec rake coveralls:push
+  script: echo "Deploy complete"
+
+
