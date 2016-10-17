@@ -4,6 +4,8 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+# This file has been edited by hand :(
+require 'simplecov'
 require 'cucumber/rails'
 require 'email_spec'
 require 'email_spec/cucumber'
@@ -30,6 +32,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 # 2) Set the value below to true. Beware that doing this globally is not
 # recommended as it will mask a lot of errors for you!
 #
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 ActionController::Base.allow_rescue = false
 
 # Config options for Capybara, including increased timeout to minimise failures on CI servers
