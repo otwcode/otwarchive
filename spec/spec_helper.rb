@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'simplecov'
+require 'coveralls'
+Coveralls.wear!('rails')
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'

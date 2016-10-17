@@ -6,6 +6,8 @@
 
 # This file has been edited by hand :(
 require 'simplecov'
+require 'coveralls'
+Coveralls.wear!('rails')
 require 'cucumber/rails'
 require 'email_spec'
 require 'email_spec/cucumber'
@@ -32,8 +34,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 # 2) Set the value below to true. Beware that doing this globally is not
 # recommended as it will mask a lot of errors for you!
 #
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 
 ActionController::Base.allow_rescue = false
 
