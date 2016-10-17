@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in? && !current_user.readings.empty? %>
+<% if user_signed_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
     <%= span_if_current ts('Full History'), user_readings_path(@user), params[:show].blank? %>
@@ -20,7 +20,7 @@
 
 <!--main content-->
 <h3 class="landmark heading"><%= ts('List of History Items') %></h3>
-<% if logged_in? && @readings.present? %>
+<% if user_signed_in? && @readings.present? %>
   <ol class="reading work index group">
     <% @readings.each do |reading| %>
       <%= render 'reading_blurb', :work => reading.work, :reading => reading %>

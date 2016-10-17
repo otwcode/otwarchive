@@ -5,6 +5,8 @@ class TagsController < ApplicationController
   before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
   before_filter :load_tag_and_subtags, :only => [:show]
 
+  skip_after_filter :store_location, except: [:show, :index, :show_hidden, :search, :feed]
+
   caches_page :feed
 
   cache_sweeper :tag_sweeper
@@ -61,20 +63,21 @@ class TagsController < ApplicationController
   #       to the works controller)
   def show
     @page_subtitle = @tag.name
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(Banned) && !admin_signed_in?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? #current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
-      elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(:page => params[:page])
-      end
-      @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
+      @works = if user_signed_in?
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif admin_signed_in?
+                 @tag.works.visible_to_owner.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
+
+      @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
@@ -187,7 +190,7 @@ class TagsController < ApplicationController
   def edit
     @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
 
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(Banned) && !admin_signed_in?
       flash[:error] = ts("Please log in as admin")
 
       redirect_to tag_wranglings_path and return

@@ -1,6 +1,6 @@
 class Challenge::PromptMemeController < ChallengesController
   
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_collection
   before_filter :load_challenge, :except => [:new, :create]
   before_filter :collection_owners_only, :only => [:new, :create, :edit, :update, :destroy]

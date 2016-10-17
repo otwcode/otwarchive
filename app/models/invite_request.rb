@@ -28,23 +28,29 @@ class InviteRequest < ActiveRecord::Base
     end
   end
 
-  #Invite a specified number of users  
+  # Invite a specified number of users
   def self.invite
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first} 
-    self.order(:position).limit(admin_settings.invite_from_queue_number).each do |request|
-      request.invite_and_remove
-    end
+    admin_settings = Rails.cache.fetch('admin_settings') { AdminSetting.first }
+
+    order(:position).
+      limit(admin_settings.invite_from_queue_number).
+      each(&:invite_and_remove)
+
     InviteRequest.reset_order
   end
-  
-  #Turn a request into an invite and then remove it from the queue
-  def invite_and_remove(creator=nil)
-    invitation = creator ? creator.invitations.build(:invitee_email => self.email, :from_queue => true) : 
-                                       Invitation.new(:invitee_email => self.email, :from_queue => true)
+
+  # Turn a request into an invite and then remove it from the queue
+  def invite_and_remove(creator = nil)
+    attributes = { invitee_email: email, from_queue: true }
+    invitation = if creator
+                   creator.invitations.build(attributes)
+                 else
+                   Invitation.new(attributes)
+                 end
+
     if invitation.save
       Rails.logger.info "#{invitation.invitee_email} was invited at #{Time.now}"
-      self.destroy
-    end  
+      destroy
+    end
   end
-  
 end

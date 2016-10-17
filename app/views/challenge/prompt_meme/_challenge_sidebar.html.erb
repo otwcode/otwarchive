@@ -8,7 +8,7 @@
 <li>
   <%= span_if_current ts("Prompts (%{count})", :count => @collection.prompts.count), collection_requests_path(@collection) %>
 </li>
-<% if logged_in? %>
+<% if user_signed_in? %>
   <% # signup form or link %>
   <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
     <li><%= span_if_current ts("My Prompts"), collection_signup_path(@collection, @challenge_signup) %></li>

@@ -1,4 +1,30 @@
 Otwarchive::Application.routes.draw do
+  devise_scope :user do
+    get '/login'  => 'users/sessions#new'
+    get '/logout' => 'users/sessions#destroy'
+    get '/logout' => 'users/sessions#destroy'
+
+    get '/users/created' => 'users/registrations#created', as: 'created_user'
+    get '/users/register/(:invitation_token)' => 'users/registrations#new', as: 'new_user_registration'
+  end
+
+  devise_for :users,
+             module: 'users',
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout',
+               sign_up: 'register'
+             }
+
+  devise_for :admin,
+             module: 'admin',
+             only: :sessions,
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
+
+  match 'activate/:id' => 'users#activate', as: 'activate'
 
   #### ERRORS ####
 
@@ -6,7 +32,6 @@ Otwarchive::Application.routes.draw do
   match '/404', to: 'errors#404'
   match '/422', to: 'errors#422'
   match '/500', to: 'errors#500'
-
 
   #### DOWNLOADS ####
 
@@ -37,7 +62,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  match 'signup/:invitation_token' => 'users#new', as: 'signup'
   match 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -84,9 +108,9 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        put  :update_multiple
+        put :update_multiple
         delete :destroy_multiple
-        get  :confirm_destroy_multiple
+        get :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
@@ -119,11 +143,6 @@ Otwarchive::Application.routes.draw do
   resources :admin_posts do
     resources :comments
   end
-
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -176,12 +195,12 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :passwords, only: [:new, :create]
-
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
       get :browse
+
+      # CHECK BEFORE DEPLOYING DEVISE
       get :change_email
       post :changed_email
       get :change_password
@@ -253,11 +272,14 @@ Otwarchive::Application.routes.draw do
       end
       resources :serial_works
     end
+
+    # CHECK BEFORE DEPLOYING DEVISE
     resources :signups, controller: "challenge_signups", only: [:index]
     resources :skins, only: [:index]
     resources :stats, only: [:index]
     resources :subscriptions, only: [:index, :create, :destroy]
     resources :tag_sets, controller: "owned_tag_sets", only: [:index]
+
     resources :works do
       collection do
         get :drafts
@@ -269,7 +291,6 @@ Otwarchive::Application.routes.draw do
       end
     end
   end
-
 
   #### WORKS ####
 
@@ -444,19 +465,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  match 'login' => 'user_sessions#new'
-  match 'logout' => 'user_sessions#destroy'
-
-
   #### API ####
 
   namespace :api do
@@ -468,7 +476,6 @@ Otwarchive::Application.routes.draw do
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
-
 
   #### MISC ####
 
@@ -548,7 +555,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]
   match 'support' => 'feedbacks#new', as: 'new_feedback_report', via: [:get]
@@ -560,8 +566,6 @@ Otwarchive::Application.routes.draw do
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
-  match 'delete_confirmation' => 'users#delete_confirmation'
-  match 'activate/:id' => 'users#activate', as: 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
   match 'lost_cookie' => 'home#lost_cookie'
@@ -573,7 +577,7 @@ Otwarchive::Application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
-  root to: "home#index"
+  root to: 'home#index'
 
   # See how all your routes lay out with "rake routes"
 

@@ -1,6 +1,6 @@
 class Admin::SkinsController < ApplicationController
 
-  before_filter :admin_only
+  before_filter :authenticate_admin!
 
   def index
     @unapproved_skins = Skin.unapproved_skins.sort_by_recent

@@ -1,7 +1,7 @@
 class TagSetNominationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
   
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_tag_set, :except => [ :index ]
   before_filter :check_pseud_ownership, :only => [:create, :update]
   before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]

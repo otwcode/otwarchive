@@ -1,0 +1,80 @@
+<h2 class="heading"><%= ts('What do you want to do with your works?') %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), method: 'DELETE') do |f| %>
+
+  <% unless @user.coauthors.blank? %>
+  <fieldset>
+  	<legend><%= t('.users.works_with_others', default: 'Works You Made With Others') %></legend>
+  
+    <p><%= ts("You have %{count} work(s) co-authored with the following users: %{users}.",
+              count: @coauthored_works.size,
+              users: print_coauthors(@user)
+              ) %></p>
+ 
+    <p><%= ts('You are not able to delete these as they are shared works.') %></p>
+
+    <p>
+      <%= radio_button_tag 'coauthor', 'keep_pseud', true %>
+      <%= label_tag 'coauthor_keep_pseud', ts('Leave my pseud but attach to the orphan account') %>
+    </p>
+    <p>
+      <%= radio_button_tag 'coauthor', 'orphan_pseud' %>
+      <%= label_tag 'coauthor_orphan_pseud', ts("Change my pseud to 'orphan' and attach to the orphan account") %>
+    </p>
+    <p>
+      <%= radio_button_tag 'coauthor', 'remove' %>
+      <%= label_tag 'coauthor_remove', ts('Remove me completely as co-author') %>
+    </p>
+  </fieldset>
+  <% end %>
+
+
+  <% unless @sole_authored_works.empty? && @sole_owned_collections.empty? %>
+  <fieldset>
+  	<legend><%= t('.users.by_self', default: 'Works and Collections You Made By Yourself') %></legend>
+
+    <% unless @sole_authored_works.empty? %>
+    <p>
+      <%= t('.users.sole_authored_works',
+            default: "You have %{num_sole_authored} work(s) under the following pseuds: %{pseuds}.",
+            num_sole_authored: @sole_authored_works.size,
+            pseuds: print_pseuds(@user)
+          ) %>
+    <p>
+    <% end %>
+    
+    <% unless @sole_owned_collections.empty? %>
+    <p>
+      <%= t('.users.sole_owned_collections',
+            default: "You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.", 
+            num_sole_collections: @sole_owned_collections.size, 
+            pseuds: @sole_owned_collections.collect(&:all_owners).flatten.uniq.collect(&:name).join(', ')
+          ) %>
+    </p>
+    <% end %>
+
+    <p><%= t('.users.can_delete_sole_owned', default: 'You can delete them, but please consider orphaning them instead!') %></p>
+
+    <p>
+      <%= radio_button_tag 'sole_author', 'keep_pseud', true %>
+      <%= label_tag 'sole_author_keep_pseud', 'Leave my pseud but attach to the orphan account' %>
+    </p>
+    <p>
+      <%= radio_button_tag 'sole_author', 'orphan_pseud' %>
+      <%= label_tag 'sole_author_orphan_pseud', "Change my pseud to 'orphan' and attach to the orphan account" %>
+    </p>
+    <p>
+      <%= radio_button_tag 'sole_author', 'delete' %>
+      <%= label_tag 'sole_author_delete', 'Delete completely' %>
+    </p>
+  </fieldset>
+  <% end %>
+
+
+  <fieldset>
+    <p class="submit cancel actions">
+  		<%= submit_tag 'Save', confirm: "Are you sure? This can't be undone!" %>
+      <%= submit_tag 'Cancel', name: 'cancel_button', class: 'cancel' %>
+    </p>
+  </fieldset>
+<% end %>

@@ -36,14 +36,17 @@
   <!--/content-->
   
   <!--subnav-->
-  <% if logged_in? && current_user == @user %>
+  <% if user_signed_in? && current_user == @user %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
   <ul class="navigation actions" role="navigation">
     <li><%= link_to ts("Edit My Works"), show_multiple_user_works_path(@user) %></li>
     <li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
     <li><%= link_to ts("Set My Preferences"), user_preferences_path(@user) %></li>
     <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
-    <li><%= link_to ts("Delete My Account"), @user, :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+    <li><%= link_to ts('Delete My Account'),
+                    users_path,
+                    confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?'),
+                    method: :delete %></li>
   </ul>
   <% end %>
   <!--/subnav-->

@@ -1,11 +1,8 @@
-# encoding=utf-8
-
 class WorksController < ApplicationController
-
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
+  before_filter :authenticate_user!, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags]
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
@@ -76,7 +73,7 @@ class WorksController < ApplicationController
     @languages = Language.default_order
     options = params[:work_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
     @search = WorkSearch.new(options)
     @page_subtitle = ts("Search Works")
 
@@ -109,14 +106,12 @@ class WorksController < ApplicationController
     end
 
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
     @page_subtitle = index_page_title
 
-    if logged_in? && @tag
-      @favorite_tag = @current_user.favorite_tags.
-                      where(tag_id: @tag.id).first ||
-                      FavoriteTag.
-                      new(tag_id: @tag.id, user_id: @current_user.id)
+    if user_signed_in? && @tag
+      @favorite_tag = current_user.favorite_tags.where(tag_id: @tag.id).first ||
+                      FavoriteTag.new(tag_id: @tag.id, user_id: current_user.id)
     end
 
     if @owner.present?
@@ -163,7 +158,7 @@ class WorksController < ApplicationController
     end
 
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
 
     @user = User.find_by_login(params[:user_id])
 
@@ -234,7 +229,7 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of entire work
     if @work.chaptered?
-      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (user_signed_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
@@ -1004,7 +999,7 @@ public
   end
 
   def log_admin_activity
-    if logged_in_as_admin?
+    if admin_signed_in?
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'

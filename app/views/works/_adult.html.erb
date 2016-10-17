@@ -9,7 +9,7 @@
   <li>
     <%= link_to ts('Go Back'), :back %>
   </li>
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <li>
       <%= link_to ts('Set your preferences now'), user_preferences_path(current_user) %>
     </li>

@@ -3,12 +3,6 @@ class UserMailer < BulletproofMailer::Base
 
   layout 'mailer'
 
-  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
-  helper_method :current_user
-  helper_method :current_admin
-  helper_method :logged_in?
-  helper_method :logged_in_as_admin?
-
   helper :application
   helper :mailer
   helper :tags
@@ -214,33 +208,6 @@ class UserMailer < BulletproofMailer::Base
       to: @assigned_user.email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your Assignment!"
     )
-  end
-
-  # Asks a user to validate and activate their new account
-  def signup_notification(user_id)
-    @user = User.find(user_id)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
-  # Sends a temporary password to the user
-  def reset_password(user_id, activation_code)
-    @user = User.find(user_id)
-    @password = activation_code
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Confirms to a user that their email was changed

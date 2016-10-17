@@ -1,12 +1,13 @@
 class FeedbacksController < ApplicationController
-  skip_before_filter :store_location
   before_filter :load_support_languages
+
+  skip_after_filter :store_location
 
   def new
     @feedback = Feedback.new
-    if logged_in_as_admin?
+    if admin_signed_in?
       @feedback.email = current_admin.email
-    elsif is_registered_user?
+    elsif user_signed_in?
       @feedback.email = current_user.email
       @feedback.username = current_user.login
     end

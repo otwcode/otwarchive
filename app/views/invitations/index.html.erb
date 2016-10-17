@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<% if logged_in_as_admin?  %>
+<% if admin_signed_in?  %>
   <h2 class="heading"><%= ts('Create more invitations for this user') %></h2>
   <%= form_tag user_invitations_url(@user) do %>
     <p><%= label_tag :number_of_invites, ts('Number of invitations:') %> <%= text_field_tag :number_of_invites  %> <%= submit_tag 'Create' %></p>

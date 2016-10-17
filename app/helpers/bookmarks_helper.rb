@@ -3,7 +3,7 @@ module BookmarksHelper
   # if the current user has the current object bookmarked return the existing bookmark
   # since the user may have multiple bookmarks for different pseuds we prioritize by current default pseud if more than one bookmark exists
   def bookmark_if_exists(bookmarkable)
-    return nil unless logged_in?
+    return nil unless user_signed_in?
     bookmarkable = bookmarkable.work if bookmarkable.class == Chapter
     bookmarks = Bookmark.where(:bookmarkable_id => bookmarkable.id, :bookmarkable_type => bookmarkable.class.name.to_s, :pseud_id => current_user.pseuds.collect(&:id))
     if bookmarks.count > 1
@@ -43,7 +43,7 @@ module BookmarksHelper
       
   # Link to bookmark
   def bookmark_link(bookmarkable, blurb=false)
-    return "" unless logged_in?
+    return "" unless user_signed_in?
     url = get_bookmark_path(bookmarkable)
     text = get_bookmark_link_text(bookmarkable, blurb)
     link_to text, url

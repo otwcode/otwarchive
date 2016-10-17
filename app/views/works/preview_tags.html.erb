@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <%= ts("Preview Tags and Language") %>
   <% else %>
     <%= ts("Preview Tags") %>
@@ -25,7 +25,7 @@
   <%= form.hidden_field :relationship_string, value: "#{@work.relationship_string}" %>
   <%= form.hidden_field :character_string, value: "#{@work.character_string}" %>
   <%= form.hidden_field :freeform_string, value: "#{@work.freeform_string}" %>
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <%= form.hidden_field :language_id, value: "#{@work.language.id}" %>
   <% end %>
 

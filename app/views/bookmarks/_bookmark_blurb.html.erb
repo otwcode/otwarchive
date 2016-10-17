@@ -19,10 +19,10 @@
     <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
 		
     <!--actions-->
-    <% if (bookmark_count > 1 && params[:tag_id]) || (bookmark_count > 1 && (@owner.blank? && @bookmarkable.blank?)) || (logged_in? && !is_author_of?(bookmark)) %>
+    <% if (bookmark_count > 1 && params[:tag_id]) || (bookmark_count > 1 && (@owner.blank? && @bookmarkable.blank?)) || (user_signed_in? && !is_author_of?(bookmark)) %>
       <ul class="actions" role="navigation">
         <% # If this bookmark does not belong to the current user, let them save a new copy or edit their existing copy %>
-        <% if logged_in? && !is_author_of?(bookmark) %>
+        <% if user_signed_in? && !is_author_of?(bookmark) %>
           <li>
           	<% if (current_user_bookmark ||= bookmark_if_exists(bookmarkable)) %>
               <%= link_to ts("Saved"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{bookmark_form_id}", :remote => true %>
@@ -52,7 +52,7 @@
   <% # recent bookmarks will be loaded up here if requested %>
   <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
 
-  <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
+  <% if admin_signed_in? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>
   <% end %>
 

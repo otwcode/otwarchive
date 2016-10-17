@@ -108,10 +108,13 @@ CREATE TABLE `admins` (
   `updated_at` datetime DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `login` varchar(255) DEFAULT NULL,
-  `crypted_password` varchar(255) DEFAULT NULL,
-  `salt` varchar(255) DEFAULT NULL,
-  `persistence_token` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `encrypted_password` varchar(255) DEFAULT NULL,
+  `password_salt` varchar(255) DEFAULT NULL,
+  `reset_password_token` varchar(255) DEFAULT NULL,
+  `reset_password_sent_at` datetime DEFAULT NULL,
+  `remember_created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_admins_on_reset_password_token` (`reset_password_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `api_keys` (
@@ -1345,22 +1348,33 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `activation_code` varchar(255) DEFAULT NULL,
+  `confirmation_token` varchar(255) DEFAULT NULL,
   `login` varchar(255) DEFAULT NULL,
-  `activated_at` datetime DEFAULT NULL,
-  `crypted_password` varchar(255) DEFAULT NULL,
-  `salt` varchar(255) DEFAULT NULL,
-  `recently_reset` tinyint(1) NOT NULL DEFAULT '0',
+  `confirmed_at` datetime DEFAULT NULL,
+  `encrypted_password` varchar(255) DEFAULT NULL,
+  `password_salt` varchar(255) DEFAULT NULL,
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `banned` tinyint(1) NOT NULL DEFAULT '0',
   `invitation_id` int(11) DEFAULT NULL,
   `suspended_until` datetime DEFAULT NULL,
   `out_of_invites` tinyint(1) NOT NULL DEFAULT '1',
-  `persistence_token` varchar(255) NOT NULL,
-  `failed_login_count` int(11) DEFAULT NULL,
+  `failed_attempts` int(11) DEFAULT NULL,
+  `reset_password_token` varchar(255) DEFAULT NULL,
+  `reset_password_sent_at` datetime DEFAULT NULL,
+  `remember_created_at` datetime DEFAULT NULL,
+  `sign_in_count` int(11) NOT NULL DEFAULT '0',
+  `current_sign_in_at` datetime DEFAULT NULL,
+  `last_sign_in_at` datetime DEFAULT NULL,
+  `current_sign_in_ip` varchar(255) DEFAULT NULL,
+  `last_sign_in_ip` varchar(255) DEFAULT NULL,
+  `confirmation_sent_at` datetime DEFAULT NULL,
+  `unconfirmed_email` varchar(255) DEFAULT NULL,
+  `locked_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_users_on_confirmation_token` (`confirmation_token`),
   UNIQUE KEY `index_users_on_login` (`login`),
-  KEY `index_users_on_activation_code` (`activation_code`),
+  UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
+  KEY `index_users_on_activation_code` (`confirmation_token`),
   KEY `index_users_on_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2002,3 +2016,7 @@ INSERT INTO schema_migrations (version) VALUES ('20151129234505');
 INSERT INTO schema_migrations (version) VALUES ('20160331005706');
 
 INSERT INTO schema_migrations (version) VALUES ('201604030319571');
+
+INSERT INTO schema_migrations (version) VALUES ('20160706030716');
+
+INSERT INTO schema_migrations (version) VALUES ('20160706031054');

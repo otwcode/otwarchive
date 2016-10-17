@@ -8,7 +8,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in? %>
+<% if user_signed_in? %>
   <%= render "series/series_navigation" %>
 <% end %>
 <!--/subnav-->
@@ -58,7 +58,7 @@
 
   </dl>
 </div>
-<% if logged_in? %>
+<% if user_signed_in? %>
   <div id="bookmark_form_placement" class="wrapper toggled">
     <% if @bookmark %>
       <%= render "bookmarks/bookmark_form", :bookmarkable => @series, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>
@@ -68,7 +68,7 @@
   </div>
 <% end %>
 
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
 <!-- BEGIN admin options -->
   <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>

@@ -7,7 +7,7 @@ describe Challenge::PromptMemeController do
     before(:each) do
       @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
       @collection.save
-      fake_login_known_user(@collection.owners.first.user)
+      user_login(@collection.owners.first.user)
       delete :destroy, id: @collection.challenge.id, collection_id: @collection.name
     end
 

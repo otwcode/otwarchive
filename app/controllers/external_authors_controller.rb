@@ -1,9 +1,9 @@
 class ExternalAuthorsController < ApplicationController
   before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
-  before_filter :check_user_status, :only => [:new, :create, :edit]
-  before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
-  before_filter :users_only, :only => [:complete_claim]
+  before_filter :check_ownership, only: [:create, :edit, :destroy, :new]
+  before_filter :check_user_status, only: [:new, :create, :edit]
+  before_filter :get_external_author_from_invitation, only: [:claim, :complete_claim]
+  before_filter :authenticate_user!, only: [:complete_claim]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
@@ -13,9 +13,9 @@ class ExternalAuthorsController < ApplicationController
   def index
     if @user && current_user == @user
       @external_authors = @user.external_authors
-    elsif logged_in? && current_user.archivist
+    elsif user_signed_in? && current_user.archivist
       @external_authors = ExternalCreatorship.find_all_by_archivist_id(current_user).collect(&:external_author).uniq
-    elsif logged_in?
+    elsif user_signed_in?
       redirect_to user_external_authors_path(current_user) and return
     else
       flash[:notice] = "You can't see that information."
@@ -73,7 +73,8 @@ class ExternalAuthorsController < ApplicationController
     @external_author = @invitation.external_author
     unless @external_author
       flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
-      redirect_to signup_path(@invitation.token) and return
+      redirect_to new_user_registration_path(@invitation.token)
+      return
     end
   end
 

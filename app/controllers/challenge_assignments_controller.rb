@@ -1,6 +1,6 @@
 class ChallengeAssignmentsController < ApplicationController
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_collection, :except => [:index, :default]
   before_filter :collection_owners_only, :except => [:index, :show, :default]
   before_filter :load_assignment_from_id, :only => [:show, :default, :undefault, :cover_default, :uncover_default]

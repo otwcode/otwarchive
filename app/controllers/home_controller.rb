@@ -1,59 +1,61 @@
 class HomeController < ApplicationController
+  before_filter :authenticate_user!, only: :site_pages
+  before_filter :check_permission_to_wrangle, only: :site_pages
 
-  skip_before_filter :store_location, :only => [:first_login_help]
-  
+  skip_after_filter :store_location, only: [:index, :first_login_help]
+
   # unicorn_test
   def unicorn_test
   end
 
   # terms of service
   def tos
-    render :action => "tos", :layout => "application"
+    render action: 'tos', layout: 'application'
   end
-  
+
   # terms of service faq
-  def tos_faq 
-    render :action => "tos_faq", :layout => "application"
+  def tos_faq
+    render action: 'tos_faq', layout: 'application'
   end
 
   # dmca policy
-  def dmca 
-    render :action => "dmca", :layout => "application"
+  def dmca
+    render action: 'dmca', layout: 'application'
   end
 
   # lost cookie
   def lost_cookie
     render action: 'lost_cookie', layout: 'application'
   end
-  
+
   # diversity statement
-  def diversity 
-    render :action => "diversity_statement", :layout => "application"
+  def diversity
+    render action: 'diversity_statement', layout: 'application'
   end
-  
+
   # site map
-  def site_map 
-    render :action => "site_map", :layout => "application"
+  def site_map
+    render action: 'site_map', layout: 'application'
   end
-  
+
   # donate
   def donate
-    render :action => "donate", :layout => "application"
+    render action: 'donate', layout: 'application'
   end
-  
+
   # about
   def about
-    render :action => "about", :layout => "application"
+    render action: 'about', layout: 'application'
   end
-  
+
   def first_login_help
-    render :action => "first_login_help", :layout => false
+    render action: 'first_login_help', layout: false
   end
 
   # home page itself
   def index
-    @homepage = Homepage.new(@current_user)
-    unless @homepage.logged_in?
+    @homepage = Homepage.new(current_user)
+    unless user_signed_in?
       @user_count, @work_count, @fandom_count = @homepage.rounded_counts
     end
 

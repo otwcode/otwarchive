@@ -7,10 +7,8 @@ require 'factory_girl'
 require 'database_cleaner'
 require 'email_spec'
 
-DatabaseCleaner.start
-
-DatabaseCleaner.clean
-
+DatabaseCleaner.clean_with(:truncation, except: %w(admin_settings languages locales))
+DatabaseCleaner.strategy = :transaction
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -28,29 +26,12 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
-  #config.raise_errors_for_deprecations!
+  # config.raise_errors_for_deprecations!
   config.include FactoryGirl::Syntax::Methods
-  config.include(EmailSpec::Helpers)
-  config.include(EmailSpec::Matchers)
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
+  config.include EmailSpec::Helpers
+  config.include EmailSpec::Matchers
+  config.include Devise::TestHelpers, type: :controller
   config.include Capybara::DSL
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
-  end
 
   config.before(:each) do
     DatabaseCleaner.start

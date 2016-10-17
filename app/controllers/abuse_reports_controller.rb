@@ -4,10 +4,10 @@ class AbuseReportsController < ApplicationController
 
   def new
     @abuse_report = AbuseReport.new
-    if logged_in_as_admin?
+    if admin_signed_in?
       @abuse_report.email = current_admin.email
       @abuse_report.username = current_admin.login
-    elsif is_registered_user?
+    elsif user_signed_in?
       @abuse_report.email = current_user.email
       @abuse_report.username = current_user.login
     end
@@ -23,7 +23,7 @@ class AbuseReportsController < ApplicationController
       flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
       redirect_to ''
     else
-      render action: 'new'
+      render action: :new
     end
   end
 

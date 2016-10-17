@@ -119,7 +119,7 @@ module TagsHelper
 
   # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
-    logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
+    admin_signed_in? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
   end
 
   def taggable_list(tag, controller_class)

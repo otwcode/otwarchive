@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <%= ts('Edit Work Tags and Language for %{title}', title: @work.title).html_safe %>
   <% else %>
     <%= ts('Edit Work Tags for %{title}', title: @work.title).html_safe %>
@@ -16,7 +16,7 @@
 
   <%= render 'work_form_tags', include_blank: false %>
 
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <fieldset role="article">
       <legend><%= ts('Associations') %></legend>
       <h3 class="landmark heading"><%= ts('Associations') %></h3>

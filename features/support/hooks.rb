@@ -15,3 +15,26 @@ Before do
 
   Rails.cache.clear
 end
+
+Before('~@no-txn') do
+  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.start
+end
+
+Before('@no-txn') do
+  DatabaseCleaner.strategy = :truncation, {
+    except: %w(admin_settings languages locales)
+  }
+end
+
+Before('@disable_caching') do
+  ActionController::Base.perform_caching = false
+end
+
+After('@disable_caching') do
+  ActionController::Base.perform_caching = true
+end
+
+After do
+  DatabaseCleaner.clean
+end

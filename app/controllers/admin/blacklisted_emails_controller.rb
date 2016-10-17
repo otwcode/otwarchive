@@ -1,6 +1,6 @@
 class Admin::BlacklistedEmailsController < ApplicationController
 
-  before_filter :admin_only
+  before_filter :authenticate_admin!
 
   def index
     @admin_blacklisted_email = AdminBlacklistedEmail.new 

@@ -14,7 +14,8 @@ Scenario: If I delete a user with no works, the user should be deleted without a
   Given I am logged in as "downthemall"
     And I have no works or comments
   When I try to delete my account as downthemall
-  Then I should see "You have successfully deleted your account."
+  Then I should see "Account deleted!"
+    And I should see "Your account has been deleted."
     And a user account should not exist for "downthemall"
     And I should be logged out
 
@@ -27,7 +28,8 @@ Scenario: If a user chooses "Delete Completely" when removing their account,  de
     And a user account should exist for "otheruser"
   When I choose "Delete completely"
     And I press "Save"
-  Then I should see "You have successfully deleted your account."
+  Then I should see "Account deleted!"
+    And I should see "Your account has been deleted."
     And a user account should not exist for "otheruser"
     And 1 email should be delivered
     And I should be logged out
@@ -46,7 +48,8 @@ Scenario: Allow a user to orphan their works when deleting their account
   Then I should see "What do you want to do with your works?"
   When I choose "Change my pseud to 'orphan' and attach to the orphan account"
     And I press "Save"
-  Then I should see "You have successfully deleted your account."
+  Then I should see "Account deleted!"
+    And I should see "Your account has been deleted."
     And 0 emails should be delivered
     And I should be logged out
     And a user account should not exist for "orphaner"
@@ -67,7 +70,8 @@ Scenario: Delete a user with a collection
   Then I should see "You have 1 collection(s) under the following pseuds: moderator."
   When I choose "Change my pseud to 'orphan' and attach to the orphan account"
     And I press "Save"
-  Then I should see "You have successfully deleted your account."
+  Then I should see "Account deleted!"
+    And I should see "Your account has been deleted."
     And 0 emails should be delivered
     And I should be logged out
     And a user account should not exist for "moderator"
@@ -87,7 +91,8 @@ Scenario: Delete a user who has coauthored a work
   Then I should see "What do you want to do with your works?"
   When I choose "Remove me completely as co-author"
     And I press "Save"
-  Then I should see "You have successfully deleted your account"
+  Then I should see "Account deleted!"
+    And I should see "Your account has been deleted."
     And a user account should not exist for "testuser"
     And I should be logged out
   # TODO - make this confirmation step better

@@ -62,21 +62,27 @@ class Invitation < ActiveRecord::Base
   end
 
   def send_and_set_date
-    if self.invitee_email_changed? && !self.invitee_email.blank?
-      begin
-        if self.external_author
-          archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-          # send invite synchronously for now -- this should now work delayed but just to be safe
-          UserMailer.invitation_to_claim(self.id, archivist).deliver!
-        else
-          # send invitations actively sent by a user synchronously to avoid delays
-          UserMailer.invitation(self.id).deliver! 
-        end
-        self.sent_at = Time.now
-      rescue Exception => exception
-        errors.add(:base, "Notification email could not be sent: #{exception.message}")
-      end
+    return unless invitee_email_changed? && !invitee_email.blank?
+
+    if external_author
+      archivist = external_author.
+                  external_creatorships.
+                  map(&:archivist).
+                  map(&:login).
+                  uniq.
+                  join(', ')
+
+      # send invite synchronously for now
+      # this should now work delayed but just to be safe
+      UserMailer.invitation_to_claim(id, archivist).deliver!
+    else
+      # send invitations actively sent by a user synchronously to avoid delays
+      UserMailer.invitation(id).deliver!
     end
+
+    self.sent_at = Time.now
+  rescue StandardError => e
+    errors.add(:base, "Notification email could not be sent: #{e.message}")
   end
 
   #Update the user's out_of_invites status

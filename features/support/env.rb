@@ -7,13 +7,8 @@
 require 'cucumber/rails'
 require 'email_spec'
 require 'email_spec/cucumber'
-ENV["RAILS_ENV"] ||= "test"
-require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
-
-# Capybara defaults to CSS3 selectors rather than XPath.
-# If you'd prefer to use XPath, just uncomment this line and adjust any
-# selectors in your step definitions to use the XPath syntax.
-# Capybara.default_selector = :xpath
+ENV['RAILS_ENV'] ||= 'test'
+# require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -32,20 +27,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 #
 ActionController::Base.allow_rescue = false
 
-# Config options for Capybara, including increased timeout to minimise failures on CI servers
-# ring-fence with if ENV['CI'] if this becomes a problem locally
 Capybara.configure do |config|
   config.match = :prefer_exact
   config.ignore_hidden_elements = false
   config.default_max_wait_time = 25
-end
-
-Before '@disable_caching' do
-  ActionController::Base.perform_caching = false
-end
-
-After '@disable_caching' do
-  ActionController::Base.perform_caching = true
 end
 
 # Possible values are :truncation and :transaction
@@ -53,3 +38,6 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :transaction
 
+# Disable DatabaseCleaner autorun, so we have a better
+# control on non transactional features
+Cucumber::Rails::Database.autorun_database_cleaner = false

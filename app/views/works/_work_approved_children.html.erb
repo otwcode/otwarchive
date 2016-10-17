@@ -10,7 +10,7 @@
         <% if child_work.translation %>
           <%= ts('(translation into %{language})', :language => child_work.work.language.name) %>
         <% end %>
-      <% elsif child_work.work.restricted? && !logged_in? %>
+      <% elsif child_work.work.restricted? && !user_signed_in? %>
         <%= ts("A [Restricted Work] by") %> <%= byline(child_work.work) %>
         <% if child_work.translation %>
           <%= ts('(translation into %{language})', :language => child_work.work.language.name) %>

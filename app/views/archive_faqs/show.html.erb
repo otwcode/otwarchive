@@ -7,7 +7,7 @@
 
 <!--main content-->
 <div class="admin" role="article">
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <div class="header">
       <h3 class="heading">
         Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>

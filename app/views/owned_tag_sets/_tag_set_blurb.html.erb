@@ -31,7 +31,7 @@
     </dl>
   <% end %>
     
-  <% if logged_in? && (tag_set.user_is_moderator?(current_user) || tag_set.nominated) %>
+  <% if user_signed_in? && (tag_set.user_is_moderator?(current_user) || tag_set.nominated) %>
     <h6 class="landmark heading"><%= ts('User Actions') %></h6>
     <ul class="actions" role="navigation">
       <% if tag_set.user_is_owner?(current_user) %>

@@ -1,20 +1,11 @@
 require 'spec_helper'
 
 describe User, :ready do
-
-  describe "Create" do
+  describe "#create" do
     context "valid user" do
-
       let(:user) {build(:user)}
       it "should save a minimalistic user" do
         expect(user.save).to be_truthy
-      end
-
-      let(:user) {build(:user)}
-      it "should encrypt password" do
-        user.save
-        expect(user.crypted_password).not_to be_empty
-        expect(user.crypted_password).not_to eq(user.password)
       end
 
       let(:user) {build(:user)}
@@ -47,13 +38,14 @@ describe User, :ready do
       end
 
       context "login length" do
-        let(:login_short) {build(:user, login: 5)}
+        let(:login_short) { build(:user, login: Faker::Lorem.characters(1)) }
+
         it "should not save user with too short login" do
           expect(login_short.save).to be_falsey
           expect(login_short.errors[:login]).not_to be_empty
         end
 
-        let(:login_long) {build(:user, login: 40)}
+        let(:login_long) { build(:user, login: Faker::Lorem.characters(60)) }
         it "should not save user with too long login" do
           expect(login_long.save).to be_falsey
           expect(login_long.errors[:login]).not_to be_empty
@@ -65,7 +57,6 @@ describe User, :ready do
           let(:bad_email) {build(:user, email: email)}
           it "cannot be created if the email does not pass veracity check" do
             expect(bad_email.save).to be_falsey
-            expect(bad_email.errors[:email]).to include("should look like an email address.")
             expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
           end
         end
@@ -87,48 +78,27 @@ describe User, :ready do
 
       context "login format validation" do
         let(:begins_with_symbol) {}
-        let(:ends_with_symbol){}
+        let(:ends_with_symbol) {}
         let(:correct_format) {}
       end
 
       context "login or email exists" do
-
         before :all do
           @existing = create(:user)
         end
 
-        let(:new) {build(:user, login: @existing.login)}
+        let(:new) { build(:user, login: @existing.login) }
         it "should not save user when login exists already" do
           expect(new.save).to be_falsey
           expect(new.errors[:login]).not_to be_empty
         end
 
-        let(:new) {build(:duplicate_user, email: @existing.email)}
+        let(:new) { build(:duplicate_user, email: @existing.email) }
         it "should not save user when email exists already" do
           expect(new.save).to be_falsey
           expect(new.errors[:email]).not_to be_empty
         end
-
-      end
-
-    end
-
-    describe "has_no_credentials?" do
-      it "is true if password is blank" do
-        @user = build(:user, password: nil)
-        puts @user.password
-        expect(@user.has_no_credentials?).to be_truthy
-      end
-      it "is false if password is not blank" do
-        @user = build(:user)
-        expect(@user.has_no_credentials?).to be_falsey
       end
     end
-
   end
-
-
 end
-
-
-
