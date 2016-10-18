@@ -30,6 +30,8 @@ script:
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - travis_retry bundle exec $TEST_GROUP
+  - echo "done" >> results_ready
+  - script/update_coveralls.sh 
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
@@ -44,6 +46,3 @@ notifications:
      - "irc.freenode.org#otw-dev"
    on_success: change
    on_failure: change
-deploy:
-  provider: script
-  script: scripts/update_coveralls.sh

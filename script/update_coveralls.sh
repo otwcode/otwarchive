@@ -1,2 +1,6 @@
 #!/bin/bash
-RAILS_ENV=test bundle exec rake coveralls:push
+LINES=$(wc -l results_ready)
+if [ "$LINES" = "16" ] ; then
+  RAILS_ENV=test bundle exec rake coveralls:push
+  echo "Coveralls updated"
+fi
