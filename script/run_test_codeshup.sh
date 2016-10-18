@@ -19,3 +19,4 @@ bash ./script/try_command.sh prompt_memes_c     "bundle exec cucumber -f progres
 bash ./script/try_command.sh tags_and_wrangling "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh users              "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh works              "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
+bundle exec rake coveralls:push   
