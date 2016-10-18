@@ -4,7 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'simplecov'
 require 'coveralls'
-SimpleCov.command_name "rspec" + (ENV['TEST_ENV_NUMBER'] || '')
+SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
 Coveralls.wear_merged!('rails')
 require 'rspec/rails'
 require 'factory_girl'

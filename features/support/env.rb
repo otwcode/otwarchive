@@ -7,7 +7,7 @@
 # This file has been edited by hand :(
 require 'simplecov'
 require 'coveralls'
-SimpleCov.command_name "features" + (ENV['TEST_ENV_NUMBER'] || '')
+SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || '')
 Coveralls.wear_merged!('rails')
 require 'cucumber/rails'
 require 'email_spec'
