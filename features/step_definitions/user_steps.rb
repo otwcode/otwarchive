@@ -279,3 +279,4 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
 end
+

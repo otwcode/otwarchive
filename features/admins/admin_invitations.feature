@@ -239,3 +239,40 @@ Feature: Admin Actions to Manage Invitations
     Then I should not see "Get Invited!"
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+
+  Scenario: An admin can send an invitation to a user via email
+    Given I am logged in as an admin
+      And all emails have been delivered
+      And I follow "Invite New Users"
+     Then I fill in "invitation[invitee_email]" with "fred@bedrock.com"
+      And I press "Invite user"
+      And 1 email should be delivered
+
+  Scenario: An admin can send an invitation to an existing user
+    Given the user "dax" exists and is activated
+      And I am logged in as an admin
+      And I follow "Invite New Users"
+      And "dax" should have "0" invitations
+     Then I fill in "number_of_invites" with "2"
+      And I select "All" from "user_group"
+     Then I press "Generate invitations"
+      And "dax" should have "2" invitations
+
+  Scenario: An admin can send an invitation to an existing user
+   Given the user "dax" exists and is activated
+     And the user "bashir" exists and is activated
+     And "dax" should have "0" invitations
+     And "bashir" should have "0" invitations
+     And I am logged in as an admin
+    When I am on dax's invitations page
+    Then I fill in "number_of_invites" with "5"
+     And I press "Create"
+    Then "dax" should have "5" invitations
+      And I follow "Invite New Users"
+     Then I fill in "number_of_invites" with "2"
+      And I select "With no unused invitations" from "user_group"
+     Then I press "Generate invitations"
+      And "dax" should have "5" invitations
+      And "bashir" should have "2" invitations
+
+

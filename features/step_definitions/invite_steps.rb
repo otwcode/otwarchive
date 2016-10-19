@@ -1,5 +1,10 @@
 ### GIVEN
 
+Given(/^"([^"]*)" should have "([^"]*)" invitations$/) do |login, invitation_count|
+  user = User.find_by_login(login)
+  assert user.invitations.count == invitation_count.to_i
+end
+
 Given /^an invitation(?: for "([^\"]+)") exists$/ do |invitee_email|
   invite = Invitation.new
   invite.invitee_email = (invitee_email ? invitee_email : "default@example.org")
