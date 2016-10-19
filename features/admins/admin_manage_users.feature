@@ -195,6 +195,12 @@ Feature: Admin Actions to manage users
   Then I should see "User has been permanently suspended."
     And I should see "Suspended Permanently"
     And I should see "To the New Zealand penal colony with you."
+  Then I should follow "Manage Users"
+   And I fill in "query" with "mrparis"
+   And I press "find"
+  Then I should see "1 user found"
+  Then I should follow "Details"
+   And I should see "To the New Zealand penal colony with you."
 
   Scenario: A user cannot be banned without a note
   Given the user "mrparis" exists and is activated
