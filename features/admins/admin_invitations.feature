@@ -307,3 +307,18 @@ Feature: Admin Actions to Manage Invitations
     Then I fill in "user_name" with "dax"
      And I press "Go"
     Then I should see "No results were found. Try another search"
+
+  Scenario: An admin can invite people from the queue
+   Given I am logged out
+     And I ask for an invitation for "fred@bedrock.com"
+    Then I ask for an invitation for "barney@bedrock.com"
+     And all emails have been delivered
+    Then I am logged in as an admin
+     And I follow "Invite New Users"
+    Then I should see "There are 2 requests in the queue."
+    Then I fill in "invite_from_queue" with "1"
+     And press "Invite from queue"
+    Then I should see "There are 1 requests in the queue."
+     And I should see "1 people from the invite queue were invited"
+     And 1 email should be delivered
+

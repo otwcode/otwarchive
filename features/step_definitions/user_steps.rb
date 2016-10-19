@@ -280,3 +280,8 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   assert user.active?
 end
 
+Then /^I ask for an invitation for "([^"]*)"$/ do |email|
+  step %{I go to the invite_requests page}
+  fill_in("invite_request[email]", with: email)
+  click_button("Add me to the list")
+end
