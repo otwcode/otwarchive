@@ -10,7 +10,6 @@ Feature: Languages
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
     And I check "Support available"
-    And I check "Abuse support available"
     And I press "Create Language"
    Then I should see "Language was successfully added."
     And I follow "Add a Language"
@@ -20,13 +19,22 @@ Feature: Languages
    Then I should see "Language was successfully added."
    When I am logged out
     And I am on the home page
-    And I follow "Report Abuse"
-   Then I should see "Klingon"
-    And I should not see "Sindarin"
     And I follow "Technical Support and Feedback"
-   Then I should see "Klingon"
+   Then I should see "Klingon" within "select#feedback_language"
     And I should not see "Sindarin"
 
+  Scenario: Adding Support for a language
+
+  Given the following language exists
+    | name           | short |
+    | Francais       | fr    |
+  When I am logged in as an admin
+    And I go to the languages page
+    And I follow "Edit"
+    And I check "Support available"
+    And I press "Update Language"
+  When I follow "Technical Support and Feedback"
+    And I should see "Francais" within "select#feedback_language"
     
   Scenario: Browse works by language
   
