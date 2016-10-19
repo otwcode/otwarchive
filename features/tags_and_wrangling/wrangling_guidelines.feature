@@ -41,3 +41,11 @@ Feature: Wrangling Guidelines
   Then I should see "1. The 2 Wrangling Guideline"
     And I should see "2. The 3 Wrangling Guideline"
     And I should see "3. The 1 Wrangling Guideline"
+
+  Scenario: Delete Wrangling Guideline
+  
+  Given I am logged in as an admin
+    And 1 Wrangling Guideline exists
+  When I go to the Wrangling Guidelines page
+    And I follow "Delete"
+  Then I should not see
