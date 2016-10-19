@@ -275,4 +275,15 @@ Feature: Admin Actions to Manage Invitations
       And "dax" should have "5" invitations
       And "bashir" should have "2" invitations
 
+  Scenario: An admin can see the invitation of an existing user
+   Given the user "dax" exists and is activated
+     And "dax" should have "0" invitations
+     And I am logged in as an admin
+    When I am on dax's invitations page
+    Then I fill in "number_of_invites" with "5"
+     And I press "Create"
+     And I follow "Invite New Users"
+    Then I fill in "user_name" with "dax"
+     And I press "Go"
+    Then I should see "copy and use"
 
