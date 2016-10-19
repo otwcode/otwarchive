@@ -246,7 +246,16 @@ Feature: Admin Actions to Manage Invitations
       And I follow "Invite New Users"
      Then I fill in "invitation[invitee_email]" with "fred@bedrock.com"
       And I press "Invite user"
+      And I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
+
+  Scenario: An admin can't create an invite without an email address.
+   Given I am logged in as an admin
+      And all emails have been delivered
+      And I follow "Invite New Users"
+     And I press "Invite user"
+      And I should see "Please enter an email address"
+      And 0 email should be delivered
 
   Scenario: An admin can send an invitation to an existing user
     Given the user "dax" exists and is activated
@@ -275,15 +284,26 @@ Feature: Admin Actions to Manage Invitations
       And "dax" should have "5" invitations
       And "bashir" should have "2" invitations
 
-  Scenario: An admin can see the invitation of an existing user
+  Scenario: An admin can see the invitation of an existing user via name or token
    Given the user "dax" exists and is activated
      And "dax" should have "0" invitations
      And I am logged in as an admin
     When I am on dax's invitations page
-    Then I fill in "number_of_invites" with "5"
+    Then I fill in "number_of_invites" with "2"
      And I press "Create"
+    Then "dax" should have "2" invitations 
      And I follow "Invite New Users"
     Then I fill in "user_name" with "dax"
      And I press "Go"
     Then I should see "copy and use"
+     And I follow "Invite New Users"
+    Then I fill in "token" with "dax's" invite code
+     And I press "Go"
+    Then I should see "copy and use"
 
+  Scenario: An admin can't find a invitation for a non existant user
+   Given I am logged in as an admin
+     And I follow "Invite New Users"
+    Then I fill in "user_name" with "dax"
+     And I press "Go"
+    Then I should see "No results were found. Try another search"
