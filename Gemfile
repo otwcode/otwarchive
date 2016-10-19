@@ -125,7 +125,8 @@ group :test do
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'simplecov', '~> 0.11.2',:require => false,:group => :test
+  gem 'coveralls', require: false
   gem 'email_spec', '1.6.0'
 end
 
