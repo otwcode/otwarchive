@@ -227,10 +227,15 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   click_button("Post")
 end
 
-When /^(\d+) Wrangling Guidelines? exists?$/ do |n|	
+When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:wrangling_guideline, id: i)
   end
+end
+
+When /^I uncheck the Tag Wrangler checkbox for "([^\"]*)"$/ do |username|
+  user_id = User.find_by_login(username).id
+  uncheck("user_roles_#{user_id}")
 end
 
 ### THEN
@@ -249,4 +254,23 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     with_scope(selector) do
       page.has_no_text?(result)
     end
+end
+
+Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
+  user = User.find_by_login(username)
+  user.tag_wrangler.should be_falsey
+end
+
+Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
+  user = User.find_by_login(username)
+  fandom = Fandom.find_by_name(fandom)
+  assignment = WranglingAssignment.find(:first, :conditions => { :user_id => user.id, :fandom_id => fandom.id })
+  assignment.should_not be_nil
+end
+
+Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
+  user = User.find_by_login(username)
+  fandom = Fandom.find_by_name(fandom)
+  assignment = WranglingAssignment.find(:first, :conditions => { :user_id => user.id, :fandom_id => fandom.id })
+  assignment.should be_nil
 end

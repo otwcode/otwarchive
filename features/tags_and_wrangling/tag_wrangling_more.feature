@@ -81,3 +81,22 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then "dizmo" should be selected within "wrangler_id"
       And I should see "Ghost Soup"
       And I should see "first fandom"
+
+  Scenario: Wrangler can remove self from a fandom
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And I am logged in as "tangler" with password "wr@ngl3r"
+    When I am on the wranglers page
+      And I follow "x"
+    Then "Testing" should not be assigned to the wrangler "tangler"
+
+  Scenario: Wrangler can remove another wrangler from a fandom
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And the following activated tag wrangler exists
+      | login          |
+      | wranglerette   |
+      And I am logged in as "wranglerette"
+    When I am on the wranglers page
+      And I follow "x"
+    Then "Testing" should not be assigned to the wrangler "tangler"
