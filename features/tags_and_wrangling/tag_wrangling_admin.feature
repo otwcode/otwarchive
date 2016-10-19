@@ -26,7 +26,8 @@ Feature: Tag wrangling
     Then I should see "tangler" within "#admin_users_table"
     When I uncheck the "Tag Wrangler" role checkbox
       And I press "Update"
-    Then "tangler" should not be a tag wrangler
+    Then I should see "User was successfully updated." 
+      And "tangler" should not be a tag wrangler
       And "Testing" should be assigned to the wrangler "tangler"
 
   Scenario: Admin can remove a user's wrangling assignments
