@@ -5,21 +5,21 @@ Feature: Languages
 
   Given basic languages
     And I am logged in as an admin
-    And I go to the languages page
-    And I follow "Add a Language"
+   When I go to the languages page
+   When I follow "Add a Language"
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
     And I check "Support available"
     And I press "Create Language"
    Then I should see "Language was successfully added."
-    And I follow "Add a Language"
+   When I follow "Add a Language"
     And I fill in "Name" with "Sindarin"
     And I fill in "Abbreviation" with "sj"
     And I press "Create Language"
    Then I should see "Language was successfully added."
    When I am logged out
     And I am on the home page
-    And I follow "Technical Support and Feedback"
+   When I follow "Technical Support and Feedback"
    Then I should see "Klingon" within "select#feedback_language"
     And I should not see "Sindarin"
 
