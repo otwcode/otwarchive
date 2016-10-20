@@ -284,7 +284,7 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"
       And I press "Generate invitations"
-    Then "dax" should have "5" invitations
+    Then "dax" should have "7" invitations
       And "bashir" should have "2" invitations
 
   Scenario: An admin can see the invitation of an existing user via name or token
