@@ -197,6 +197,10 @@ module NavigationHelpers
       opendoors_tools_path
     when /^the languages page$/i
       languages_path
+    when /^the wranglers page$/i
+      tag_wranglers_path
+    when /^the unassigned fandoms page $/i
+      unassigned_fandoms_path
       
     # Here is an example that pulls values out of the Regexp:
     #

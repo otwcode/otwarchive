@@ -170,6 +170,12 @@ Given /^I have posted an admin post with tags$/ do
   click_button("Post")
 end
 
+Given(/^the following language exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(:language, hash)
+  end
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -253,10 +259,10 @@ When /^I edit known issues$/ do
     step(%{I press "Post"})
 end
 
-Given(/^the following language exists$/) do |table|
-  table.hashes.each do |hash|
-    FactoryGirl.create(:language, hash)
-  end
+When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
+  role_name = role.parameterize.underscore
+  role_id = Role.find_by_name(role_name).id
+  uncheck("user_roles_#{role_id}")
 end
 
 ### THEN
