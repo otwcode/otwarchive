@@ -82,7 +82,7 @@ class Invitation < ActiveRecord::Base
   #Update the user's out_of_invites status
   def adjust_user_invite_status
     if self.creator.respond_to?(:out_of_invites)
-      self.creator.out_of_invites = (self.creator.invitations.unredeemed.count < 1)
+      self.creator.out_of_invites = (self.creator.invitations.unredeemed.count == 0 && self.creator.invitations.unsent.count == 0)
       self.creator.save(:validate => false)
     end
   end

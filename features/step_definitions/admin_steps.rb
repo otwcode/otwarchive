@@ -400,3 +400,9 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I should not see "has been blocked at the owner's request"}
   step %{I should see "Comment created!"}
 end
+
+Then(/^I fill in "([^"]*)" with "([^"]*)'s" invite code$/) do |field, login|
+  user = User.find_by_login(login)
+  token = user.invitations.first.token
+  fill_in(field, with: token)
+end
