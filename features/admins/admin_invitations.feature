@@ -243,82 +243,80 @@ Feature: Admin Actions to Manage Invitations
   Scenario: An admin can send an invitation to a user via email
     Given I am logged in as an admin
       And all emails have been delivered
-      And I follow "Invite New Users"
-     Then I fill in "invitation[invitee_email]" with "fred@bedrock.com"
+    When I follow "Invite New Users"
+      And I fill in "invitation[invitee_email]" with "fred@bedrock.com"
       And I press "Invite user"
-      And I should see "An invitation was sent to fred@bedrock.com"
+    Then I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
 
   Scenario: An admin can't create an invite without an email address.
    Given I am logged in as an admin
       And all emails have been delivered
-      And I follow "Invite New Users"
+    When I follow "Invite New Users"
      And I press "Invite user"
-      And I should see "Please enter an email address"
+    Then I should see "Please enter an email address"
       And 0 email should be delivered
 
-  Scenario: An admin can send an invitation to an existing user
-    Given the user "dax" exists and is activated
+  Scenario: An admin can send an invitation to all existing users
+    Given the following activated users exist
+      | login | password   |
+      | dax   | lotsaspots |
+      | odo   | mybucket9  |
+      And "dax" has "0" invitations
+      And "odo" has "3" invitations
       And I am logged in as an admin
-      And I follow "Invite New Users"
-      And "dax" should have "0" invitations
-     Then I fill in "number_of_invites" with "2"
-      And I select "All" from "user_group"
-     Then I press "Generate invitations"
-      And "dax" should have "2" invitations
+    When I follow "Invite New Users"
+      And I fill in "Number of invitations" with "2"
+      And I select "All" from "Users"
+      And I press "Generate invitations"
+    Then "dax" should have "2" invitations
+      And "odo" should have "5" invitations
 
-  Scenario: An admin can send an invitation to an existing user
-   Given the user "dax" exists and is activated
-     And the user "bashir" exists and is activated
-     And "dax" should have "0" invitations
-     And "bashir" should have "0" invitations
-     And I am logged in as an admin
-    When I am on dax's invitations page
-    Then I fill in "number_of_invites" with "5"
-     And I press "Create"
+  Scenario: An admin can send invitations to only existing users who don't have unused invitations
+    Given the following activated users exist
+      | login  | password    |
+      | dax    | lotsaspots  |
+      | bashir | heytheredoc |
+      And "dax" has "5" invitations
+      And "bashir" has "0" invitations
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "Number of invitations" with "2"
+      And I select "With no unused invitations" from "Users"
+      And I press "Generate invitations"
     Then "dax" should have "5" invitations
-      And I follow "Invite New Users"
-     Then I fill in "number_of_invites" with "2"
-      And I select "With no unused invitations" from "user_group"
-     Then I press "Generate invitations"
-      And "dax" should have "5" invitations
       And "bashir" should have "2" invitations
 
   Scenario: An admin can see the invitation of an existing user via name or token
-   Given the user "dax" exists and is activated
-     And "dax" should have "0" invitations
-     And I am logged in as an admin
-    When I am on dax's invitations page
-    Then I fill in "number_of_invites" with "2"
-     And I press "Create"
-    Then "dax" should have "2" invitations 
-     And I follow "Invite New Users"
-    Then I fill in "user_name" with "dax"
-     And I press "Go"
+    Given the user "dax" exists and is activated
+      And "dax" has "2" invitations
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "Enter a user name" with "dax"
+      And I press "Go"
     Then I should see "copy and use"
-     And I follow "Invite New Users"
-    Then I fill in "token" with "dax's" invite code
-     And I press "Go"
+    When I follow "Invite New Users"
+      And I fill in "Enter an invite token" with "dax's" invite code
+      And I press "Go"
     Then I should see "copy and use"
 
-  Scenario: An admin can't find a invitation for a non existant user
-   Given I am logged in as an admin
-     And I follow "Invite New Users"
-    Then I fill in "user_name" with "dax"
-     And I press "Go"
+  Scenario: An admin can't find a invitation for a nonexistent user
+    Given I am logged in as an admin
+      And I follow "Invite New Users"
+    Then I fill in "Enter a user name" with "dax"
+      And I press "Go"
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
-   Given I am logged out
-     And I ask for an invitation for "fred@bedrock.com"
-    Then I ask for an invitation for "barney@bedrock.com"
-     And all emails have been delivered
-    Then I am logged in as an admin
-     And I follow "Invite New Users"
+    Given an invitation request for "fred@bedrock.com"
+      And an invitation request for "barney@bedrock.com"
+      And all emails have been delivered
+    When I am logged in as an admin
+      And I follow "Invite New Users"
     Then I should see "There are 2 requests in the queue."
-    Then I fill in "invite_from_queue" with "1"
-     And press "Invite from queue"
+    When I fill in "Number of people to invite" with "1"
+      And press "Invite from queue"
     Then I should see "There are 1 requests in the queue."
-     And I should see "1 people from the invite queue were invited"
-     And 1 email should be delivered
+      And I should see "1 people from the invite queue were invited"
+      And 1 email should be delivered
 

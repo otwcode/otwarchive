@@ -1,10 +1,5 @@
 ### GIVEN
 
-Given(/^"([^"]*)" should have "([^"]*)" invitations$/) do |login, invitation_count|
-  user = User.find_by_login(login)
-  assert user.invitations.count == invitation_count.to_i
-end
-
 Given /^an invitation(?: for "([^\"]+)") exists$/ do |invitee_email|
   invite = Invitation.new
   invite.invitee_email = (invitee_email ? invitee_email : "default@example.org")
@@ -80,6 +75,22 @@ Given /^the invitation queue is disabled$/ do
   }
 end
 
+Given /^"([^\"]*)" has "([^"]*)" invitations?$/ do |login, invitation_count|
+  user = User.find_by_login(login)
+  # If there are more invitations than we want, first destroy them
+  if invitation_count.to_i < user.invitations.count
+    user.invitations.destroy_all 
+  end
+  # Now create the number of invitations we want
+  invitation_count.to_i.times { user.invitations.create }
+end
+
+Given /^an invitation request for "([^"]*)"$/ do |email|
+  visit invite_requests_path
+  fill_in("invite_request[email]", with: email)
+  click_button("Add me to the list")
+end
+
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
@@ -136,4 +147,9 @@ end
 Then /^I should see how long I have to activate my account$/ do
   days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
   step %{I should see "You must verify your account within #{days_to_activate} days"}
+end
+
+Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|
+  user = User.find_by_login(login)
+  assert user.invitations.count == invitation_count.to_i
 end
