@@ -4,13 +4,6 @@ require 'api/api_helper'
 describe "API BookmarksController" do
   include ApiHelper
 
-  # Override is_archivist so all users are archivists from this point on
-  class User < ActiveRecord::Base
-    def is_archivist?
-      true
-    end
-  end
-
   bookmark = { id: "123",
                url: "http://foo.com",
                author: "Thing",
@@ -30,11 +23,15 @@ describe "API BookmarksController" do
   describe "Valid API bookmark import" do
     before do
       mock_external
-      @user = create(:user)
     end
 
     after do
       WebMock.reset!
+    end
+
+    before(:each) do
+      allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
+      @user = create(:user)
     end
 
     it "should return 200 OK when all bookmarks are created" do
@@ -110,7 +107,7 @@ describe "API BookmarksController" do
       assert_equal 400, response.status
     end
 
-    it "should return an error mess if no URL is specified" do
+    it "should return an error message if no URL is specified" do
       post "/api/v1/bookmarks",
            { archivist: @user.login,
              bookmarks: [ bookmark.except(:url) ]
@@ -168,6 +165,18 @@ describe "API BookmarksController" do
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "This bookmark does not contain an external author name. Please specify an author."
+    end
+  end
+
+  describe "Bookmark import_bookmark" do
+    it "should return an error message when an Exception is raised" do
+      user = create(:user)
+      allow(Bookmark).to receive(:new).and_raise(Exception)
+      under_test = Api::V1::BookmarksController.new
+      bookmark_response = under_test.instance_eval { import_bookmark(user, bookmark) }
+      assert_equal "Exception", bookmark_response[:messages][0]
+      assert_equal "123", bookmark_response[:original_id]
+      assert_equal :unprocessable_entity, bookmark_response[:status]
     end
   end
 
