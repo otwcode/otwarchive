@@ -131,12 +131,11 @@ Feature: Orphan work
     And I should see "Glorious"
     And I should see "Excellent"
     And I should not see "Lovely"
-    And I follow "Orphan Works Instead"
+   When I follow "Orphan Works Instead"
    Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
-    And I press "Yes, I'm sure"
+   When I press "Yes, I'm sure"
    Then I should see "Orphaning was successful."
-    And I go to my works page
-    And I should not see "Glorious"
+   When I go to my works page
+   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
-
