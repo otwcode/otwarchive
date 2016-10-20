@@ -93,6 +93,10 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Mature"
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
+     When I follow "Activities"
+     Then I should see "View Admin Activity"
+     When I visit the first activities page
+     Then I should see "No Archive Warnings Apply"
 
   Scenario: Can edit external works
     Given basic tags
