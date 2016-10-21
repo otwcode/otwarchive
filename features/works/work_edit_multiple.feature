@@ -10,19 +10,19 @@ Feature: Edit Multiple Works
     And I post the work "Excellent" with fandom "Star Trek"
     And I post the work "Lovely" with fandom "Steven Universe"
     And I go to my works page
-   When I follow "Edit Works"
-   Then I should see "Edit Multiple Works"
-   When I select "Glorious" for editing
+  When I follow "Edit Works"
+  Then I should see "Edit Multiple Works"
+  When I select "Glorious" for editing
     And I select "Excellent" for editing
     And I press "Delete"
-   Then I should see "Are you sure you want to delete these works PERMANENTLY?"
+  Then I should see "Are you sure you want to delete these works PERMANENTLY?"
     And I should see "Glorious"
     And I should see "Excellent"
     And I should not see "Lovely"
-   When I press "Yes, Delete Works"
-   Then I should see "Your works Glorious, Excellent were deleted."
-   When I go to my works page
-   Then I should not see "Glorious"
+  When I press "Yes, Delete Works"
+  Then I should see "Your works Glorious, Excellent were deleted."
+  When I go to my works page
+  Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
 
