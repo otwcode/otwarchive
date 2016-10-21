@@ -498,3 +498,45 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Rating:"
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
+
+  Scenario: A mod can delete a gift exchange and all the assignments and
+  sign-ups will be deleted with it, but the collection will remain
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Challenge settings were deleted."
+      And I should not see the gift exchange dashboard for "Bad Gift Exchange"
+      And no one should have an assignment for "Bad Gift Exchange"
+      And no one should be signed up for "Bad Gift Exchange"
+    When I am on the collections page
+    Then I should see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Sign-ups page after a gift exchange 
+  they were signed up for has been deleted
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Bad Gift Exchange"
+      And I open signups for "Bad Gift Exchange"
+      And everyone has signed up for the gift exchange "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my signups page
+    Then I should see "Challenge Sign-ups"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange
+  they had an unfulfilled assignment in has been deleted
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange 
+  they had a fulfilled assignment in has been deleted
+    Given an assignment has been fulfilled in a gift exchange
+      And the challenge "Awesome Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Awesome Gift Exchange"

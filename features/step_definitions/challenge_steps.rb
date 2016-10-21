@@ -241,3 +241,25 @@ Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |
   email.html_part.body.should =~ /The first thing &amp; the second thing./
   email.html_part.body.should_not =~ /The first thing & the second thing./
 end
+
+# Delete challenge
+
+Given /^the challenge "([^\"]*)" is deleted$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  user_id = collection.all_owners.first.user_id
+  mod_login = User.find_by_id(user_id).login
+  step %{I am logged in as "#{mod_login}"}
+  step %{I delete the challenge "#{challenge_title}"}
+end
+
+When /^I delete the challenge "([^\"]*)"$/ do |challenge_title|
+  step %{I edit settings for "#{challenge_title}" challenge}
+  step %{I follow "Delete Challenge"}
+end
+
+Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  User.all.each do |user|
+    user.challenge_signups.in_collection(collection).should be_empty
+  end
+end
