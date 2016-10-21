@@ -401,6 +401,6 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I should see "Comment created!"}
 end
 
-Then(/^I visit the first activities page$/) do
-  visit('/admin/activities/1')
+Then(/^I visit the last activities item$/) do
+  visit("/admin/activities/#{AdminActivity.last.id}")
 end
