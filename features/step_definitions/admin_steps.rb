@@ -172,6 +172,12 @@ end
 
 ### WHEN
 
+When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
+  user = User.find_by_login(login)
+  token = user.invitations.first.token
+  fill_in(field, with: token)
+end
+
 When /^I turn off guest downloading$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
@@ -399,10 +405,4 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
   step %{I should not see "has been blocked at the owner's request"}
   step %{I should see "Comment created!"}
-end
-
-Then(/^I fill in "([^"]*)" with "([^"]*)'s" invite code$/) do |field, login|
-  user = User.find_by_login(login)
-  token = user.invitations.first.token
-  fill_in(field, with: token)
 end

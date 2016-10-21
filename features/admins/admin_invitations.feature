@@ -235,26 +235,26 @@ Feature: Admin Actions to Manage Invitations
       And I uncheck "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
       And I am logged out as an admin
-     When I go to the home page
-     Then I should not see "Get Invited!"
+    When I go to the home page
+    Then I should not see "Get Invited!"
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
   Scenario: An admin can send an invitation to a user via email
     Given I am logged in as an admin
       And all emails have been delivered
-     When I follow "Invite New Users"
+    When I follow "Invite New Users"
       And I fill in "invitation[invitee_email]" with "fred@bedrock.com"
       And I press "Invite user"
-     Then I should see "An invitation was sent to fred@bedrock.com"
+    Then I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
 
   Scenario: An admin can't create an invite without an email address.
    Given I am logged in as an admin
      And all emails have been delivered
-    When I follow "Invite New Users"
+   When I follow "Invite New Users"
      And I press "Invite user"
-    Then I should see "Please enter an email address"
+   Then I should see "Please enter an email address"
      And 0 email should be delivered
 
   Scenario: An admin can send an invitation to all existing users
@@ -265,11 +265,11 @@ Feature: Admin Actions to Manage Invitations
       And "dax" has "0" invitations
       And "odo" has "3" invitations
       And I am logged in as an admin
-     When I follow "Invite New Users"
+    When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
       And I press "Generate invitations"
-     Then "dax" should have "2" invitations
+    Then "dax" should have "2" invitations
       And "odo" should have "5" invitations
 
   Scenario: An admin can send invitations to only existing users who don't have unused invitations
@@ -280,42 +280,42 @@ Feature: Admin Actions to Manage Invitations
      And "dax" has "5" invitations
      And "bashir" has "0" invitations
      And I am logged in as an admin
-    When I follow "Invite New Users"
+   When I follow "Invite New Users"
      And I fill in "Number of invitations" with "2"
      And I select "With no unused invitations" from "Users"
      And I press "Generate invitations"
-    Then "dax" should have "7" invitations
+   Then "dax" should have "7" invitations
      And "bashir" should have "2" invitations
 
   Scenario: An admin can see the invitation of an existing user via name or token
     Given the user "dax" exists and is activated
      And "dax" has "2" invitations
      And I am logged in as an admin
-    When I follow "Invite New Users"
+   When I follow "Invite New Users"
      And I fill in "Enter a user name" with "dax"
      And I press "Go"
-    Then I should see "copy and use"
-    When I follow "Invite New Users"
+   Then I should see "copy and use"
+   When I follow "Invite New Users"
      And I fill in "Enter an invite token" with "dax's" invite code
      And I press "Go"
-    Then I should see "copy and use"
+   Then I should see "copy and use"
 
   Scenario: An admin can't find a invitation for a nonexistent user
     Given I am logged in as an admin
       And I follow "Invite New Users"
-     Then I fill in "Enter a user name" with "dax"
+    Then I fill in "Enter a user name" with "dax"
       And I press "Go"
-     Then I should see "No results were found. Try another search"
+    Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
     Given an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
-     When I am logged in as an admin
+    When I am logged in as an admin
       And I follow "Invite New Users"
-     Then I should see "There are 2 requests in the queue."
-     When I fill in "Number of people to invite" with "1"
+    Then I should see "There are 2 requests in the queue."
+    When I fill in "Number of people to invite" with "1"
       And press "Invite from queue"
-     Then I should see "There are 1 requests in the queue."
+    Then I should see "There are 1 requests in the queue."
       And I should see "1 people from the invite queue were invited"
       And 1 email should be delivered
