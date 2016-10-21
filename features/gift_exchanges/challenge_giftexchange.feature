@@ -498,3 +498,24 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Rating:"
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
+
+  Scenario: A mod can delete a gift exchange and all the assignments and
+  sign-ups will be deleted with it, but the collection will remain
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Bad Gift Exchange"
+      And I open signups for "Bad Gift Exchange"
+      And everyone has signed up for the gift exchange "Bad Gift Exchange"
+      And I have generated matches for "Bad Gift Exchange"
+      And I have sent assignments for "Bad Gift Exchange"
+    When I go to "Bad Gift Exchange" collection's page
+      And I edit settings for "Bad Gift Exchange" challenge
+      And I follow "Delete Challenge"
+    Then I should see "Challenge settings were deleted."
+      And no one should have an assignment for "Bad Gift Exchange"
+      And no one should be signed up for "Bad Gift Exchange"
+      And I should not see "Challenge Settings"
+      And I should not see "Sign-up Summary"
+      And I should not see "Assignments"
+      And I should not see "Requests Summary"
+    When I am on the collections page
+    Then I should see "Bad Gift Exchange"
