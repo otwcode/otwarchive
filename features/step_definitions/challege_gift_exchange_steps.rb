@@ -333,3 +333,23 @@ When /^I have set up matching for "([^\"]*)" with no required matching$/ do |cha
   step %{I open signups for "Awesome Gift Exchange"}
   step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
 end
+
+### Deleting things
+# use the same names as "everyone is signed up"
+
+Then /^no one should be signed up for "([^\"]*)"$/ do |challenge|
+  collection = Collection.find_by_title(challenge)
+  %w(myname1 myname2 myname3 myname4).each do |name|
+    user = User.find_by_login(name)
+    user.challenge_signups.in_collection(collection).should be_empty
+  end
+end
+
+Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge|
+  collection = Collection.find_by_title(challenge)
+  %w(myname1 myname2 myname3 myname4).each do |name|
+    user = User.find_by_login(name)
+    user.offer_assignments.in_collection(collection).should be_empty
+    user.pinch_hit_assignments.in_collection(collection).should be_empty
+  end
+end
