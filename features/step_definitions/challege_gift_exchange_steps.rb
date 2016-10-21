@@ -340,7 +340,7 @@ end
 Then /^no one should be signed up for "([^\"]*)"$/ do |challenge|
   collection = Collection.find_by_title(challenge)
   %w(myname1 myname2 myname3 myname4).each do |name|
-    user = User.find_by_login("myname1")
+    user = User.find_by_login(name)
     user.challenge_signups.in_collection(collection).should be_empty
   end
 end
@@ -348,7 +348,7 @@ end
 Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge|
   collection = Collection.find_by_title(challenge)
   %w(myname1 myname2 myname3 myname4).each do |name|
-    user = User.find_by_login("myname1")
+    user = User.find_by_login(name)
     user.offer_assignments.in_collection(collection).should be_empty
     user.pinch_hit_assignments.in_collection(collection).should be_empty
   end
