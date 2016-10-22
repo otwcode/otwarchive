@@ -178,6 +178,12 @@ end
 
 ### WHEN
 
+When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
+  user = User.find_by_login(login)
+  token = user.invitations.first.token
+  fill_in(field, with: token)
+end
+
 When /^I turn off guest downloading$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
