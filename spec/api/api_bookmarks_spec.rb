@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'api/api_helper'
+require "spec_helper"
+require "api/api_helper"
 
 describe "API BookmarksController" do
   include ApiHelper
@@ -168,17 +168,17 @@ describe "API BookmarksController" do
     end
   end
 
-  describe "Bookmark import_bookmark" do
+  describe "Unit tests - import_bookmark" do
     it "should return an error message when an Exception is raised" do
       user = create(:user)
+      # Stub the Bookmark.new method to throw an exception
       allow(Bookmark).to receive(:new).and_raise(Exception)
       under_test = Api::V1::BookmarksController.new
       bookmark_response = under_test.instance_eval { import_bookmark(user, bookmark) }
-      assert_equal "Exception", bookmark_response[:messages][0]
-      assert_equal "123", bookmark_response[:original_id]
-      assert_equal :unprocessable_entity, bookmark_response[:status]
+      expect(bookmark_response[:messages][0]).to eq "Exception"
+      expect(bookmark_response[:original_id]).to eq "123"
+      expect(bookmark_response[:status]).to eq :unprocessable_entity
     end
   end
-
   WebMock.allow_net_connect!
 end
