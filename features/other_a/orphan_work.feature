@@ -116,3 +116,26 @@ Feature: Orphan work
     When subscription notifications are sent
     Then 0 emails should be delivered
 
+  Scenario: I can orphan multiple works at once
+  Given I am logged in as "author"
+    And I post the work "Glorious" with fandom "SGA"
+    And I post the work "Excellent" with fandom "Star Trek"
+    And I post the work "Lovely" with fandom "Steven Universe"
+    And I go to my works page
+  When I follow "Edit Works"
+  Then I should see "Edit Multiple Works"
+  When I select "Glorious" for editing
+    And I select "Excellent" for editing
+    And I press "Delete"
+  Then I should see "Are you sure you want to delete these works PERMANENTLY?"
+    And I should see "Glorious"
+    And I should see "Excellent"
+    And I should not see "Lovely"
+  When I follow "Orphan Works Instead"
+  Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
+  When I press "Yes, I'm sure"
+  Then I should see "Orphaning was successful."
+  When I go to my works page
+  Then I should not see "Glorious"
+    And I should not see "Excellent"
+    And I should see "Lovely"

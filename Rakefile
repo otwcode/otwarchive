@@ -5,10 +5,11 @@ require File.expand_path('../config/application', __FILE__)
 require 'rake'
 require 'resque/tasks'
 
-require 'coveralls/rake/task'
-Coveralls::RakeTask.new
-task :test_with_coveralls => [:spec, :features, 'coveralls:push']
+if ENV['RAILS_ENV'] == "test" then
+  require 'coveralls/rake/task'
+  Coveralls::RakeTask.new
+  task :test_with_coveralls => [:spec, :features, 'coveralls:push']
+end
 
 include Rake::DSL
 Otwarchive::Application.load_tasks
-
