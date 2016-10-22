@@ -68,7 +68,7 @@ describe "Base API Controller" do
       user = @user
       loads_of_items = Array.new(210) { |_| api_fields }
       _, messages = @under_test.instance_eval { batch_errors(user, loads_of_items) }
-      assert_equal "This request contains too many items to import. A maximum of 200 items can be imported at one time by an archivist.", messages[0]
+      expect(messages[0]).to start_with "This request contains too many items to import."
     end
 
     it "should return OK status" do
