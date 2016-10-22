@@ -277,24 +277,17 @@ Feature: Gift Exchange Challenge
       And the email should link to myname1's user url
       And the email html body should link to the works tagged "Stargate Atlantis"
 
-  Scenario: User signs up for two gift exchanges at once #'
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
-    Given I have created the gift exchange "Second Challenge" with name "testcoll2"
-      And I open signups for "Second Challenge"
-      And everyone has signed up for the gift exchange "Second Challenge"
-      And I have generated matches for "Second Challenge"
-      And I have sent assignments for "Second Challenge"
+  Scenario: User signs up for two gift exchanges at once and can use the Fulfill
+  link to fulfill one assignment at a time
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      # This is in fact a bug - only one of them should be checked
-      # TODO: Uncomment when the intermittent bug has been fixed
-    #Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #  And the "Second Challenge (myname3)" checkbox should be checked
+      And "AO3-4571" is fixed
+    # "I start to fulfill" will use the first Fulfill option on the page
+    # which will be for the oldest assignment
+    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+    #   And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -319,11 +312,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: Mod can see everyone's assignments, includind users' emails
     Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Awesome Gift Exchange"
     When I go to the "Awesome Gift Exchange" assignments page
       Then I should see "Assignments for Awesome"
     When I follow "Open"
@@ -332,12 +321,7 @@ Feature: Gift Exchange Challenge
       And I should see the image "alt" text "email myname1"
 
   Scenario: User can see their assignment, but no email links
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to my user page
       And I follow "Assignments"
@@ -350,12 +334,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
 
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I fulfill my assignment
     When I go to my user page

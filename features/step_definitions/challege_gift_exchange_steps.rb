@@ -100,8 +100,8 @@ end
 
 Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
+  step %{I have created the gift exchange "#{title}"}
+  step %{I open signups for "#{title}"}
 end
 
 ## Signing up
@@ -281,10 +281,7 @@ Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
 end
 
 Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
-  step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "#{challenge_title}"}
-  step %{I open signups for "#{challenge_title}"}
-  step %{everyone has signed up for the gift exchange "#{challenge_title}"}
+  step %{the gift exchange "#{challenge_title}" is ready for matching}
   step %{I have generated matches for "#{challenge_title}"}
   step %{I have sent assignments for "#{challenge_title}"}
 end
@@ -310,12 +307,7 @@ When /^I fulfill my assignment$/ do
 end
 
 When /^an assignment has been fulfilled in a gift exchange$/ do
-  step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
-  step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
-  step %{I have generated matches for "Awesome Gift Exchange"}
-  step %{I have sent assignments for "Awesome Gift Exchange"}
+  step %{everyone has their assignments for "Awesome Gift Exchange"}
   step %{I am logged in as "myname1"}
   step %{I fulfill my assignment}
 end
