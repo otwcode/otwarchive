@@ -223,5 +223,5 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Preview Tags and Language"
     When I press "Update"
     Then I should see "Deutsch"
-      And I should not see "English
+      And I should not see "English"
 
