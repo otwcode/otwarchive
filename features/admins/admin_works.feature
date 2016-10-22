@@ -97,6 +97,9 @@ Feature: Admin Actions for Works and Bookmarks
      Then I should see "View Admin Activity"
      When I visit the last activities item
      Then I should see "No Archive Warnings Apply"
+      And I should see "Old tags"
+      And I should see "User-Added Fandom"
+      And I should not see "Admin-Added Fandom"
 
   Scenario: Can edit external works
     Given basic tags
