@@ -246,10 +246,7 @@ end
 
 Given /^the challenge "([^\"]*)" is deleted$/ do |challenge_title|
   collection = Collection.find_by_title(challenge_title)
-  user_id = collection.all_owners.first.user_id
-  mod_login = User.find_by_id(user_id).login
-  step %{I am logged in as "#{mod_login}"}
-  step %{I delete the challenge "#{challenge_title}"}
+  collection.challenge.destroy
 end
 
 When /^I delete the challenge "([^\"]*)"$/ do |challenge_title|
