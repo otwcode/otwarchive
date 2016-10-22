@@ -111,10 +111,10 @@ class Api::V1::WorksController < Api::V1::BaseController
     status = :bad_request
     errors = []
     urls = work[:chapter_urls]
-    if urls.nil?
+    if urls.nil? || urls.empty?
       errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
     elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS}" \
+      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS} " \
                 "chapters can be imported per work."
     end
     status = :ok if errors.empty?

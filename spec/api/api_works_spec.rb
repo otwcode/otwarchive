@@ -1,9 +1,9 @@
-require 'spec_helper'
-require 'api/api_helper'
+require "spec_helper"
+require "api/api_helper"
 
 include ApiHelper
 
-describe "API WorksController - Create" do
+describe "API WorksController - Create works" do
 
   # Override is_archivist so all users are archivists from this point on
   class User < ActiveRecord::Base
@@ -73,6 +73,20 @@ describe "API WorksController - Create" do
            valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
       expect(parsed_body[:works].first[:original_id]).to eq("123")
+    end
+
+    it "should send claim emails if send_claim_email is true" do
+      # This test hits the call to #send_external_invites in #create for coverage
+      # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
+      post "/api/v1/works",
+           { archivist: @user.login,
+             send_claim_emails: 1,
+             works: [{ id: "123",
+                       external_author_name: "bar",
+                       external_author_email: "send_invite@ao3.org",
+                       chapter_urls: ["http://foo"] }]
+           }.to_json,
+           valid_headers
     end
 
     it "should return 400 Bad Request if no works are specified" do
@@ -308,6 +322,23 @@ describe "API WorksController - Find Works" do
       expect(parsed_body.first[:original_url]).to eq "foo"
     end
 
+    it "should return an error when no URLs are provided" do
+      post "/api/v1/works/urls",
+           { original_urls: [] }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:error]).to eq "Please provide a list of URLs to find."
+    end
+
+    it "should return an error when too many URLs are provided" do
+      loads_of_items = Array.new(210) { |_| "url" }
+      post "/api/v1/works/urls",
+           { original_urls: loads_of_items }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:error]).to start_with "Please provide no more than"
+    end
+
     it "should return an error for a work that wasn't imported" do
       post "/api/v1/works/urls",
            { original_urls: %w(bar) }.to_json,
@@ -326,6 +357,43 @@ describe "API WorksController - Find Works" do
       expect(parsed_body.first).to include(:error)
       expect(parsed_body.second[:status]).to eq("not_found")
       expect(parsed_body.second).to include(:error)
+    end
+  end
+end
+
+describe "API WorksController - Unit Tests" do
+  before do
+    @under_test = Api::V1::WorksController.new
+  end
+
+  it "work_url_from_external should return an error message when the work URL is blank" do
+    work_url_response = @under_test.instance_eval { work_url_from_external("user", "") }
+    expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
+  end
+
+  it "send_external_invites should call find_or_invite on each external author" do
+    user = create(:user)
+    author1 = create(:external_author)
+    author2 = create(:external_author)
+    work = create(:work, external_authors: [author1, author2])
+
+    expect(author1).to receive(:find_or_invite).once
+    expect(author2).to receive(:find_or_invite).once
+    @under_test.instance_eval { send_external_invites([work], user) }
+  end
+
+  describe "work_errors" do
+    it "should return an error if a work doesn't contain chapter urls" do
+      work = { chapter_urls: [] }
+      error_message = @under_test.instance_eval { work_errors(work) }
+      expect(error_message[1][0]).to start_with "This work doesn't contain chapter_urls."
+    end
+
+    it "should return an error if a work has too many chapters" do
+      loads_of_items = Array.new(210) { |_| "chapter_url" }
+      work = { chapter_urls: loads_of_items }
+      error_message = @under_test.instance_eval { work_errors(work) }
+      expect(error_message[1][0]).to start_with "This work contains too many chapter URLs"
     end
   end
 end
