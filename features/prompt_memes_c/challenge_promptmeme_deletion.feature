@@ -170,7 +170,8 @@ Feature: Prompt Meme Challenge
     # And I should not see "In response to a prompt"
     # And I should not see "Battle 12"
 
-  Scenario: Delete a signup, claims should also be deleted from the prompt meme's Claims list
+  Scenario: Delete a signup, claims should also be deleted from the prompt 
+  meme's Claims list
 
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -180,19 +181,6 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
     And I delete my signup for the prompt meme "Battle 12"
   Then I should see "Challenge sign-up was deleted."
-  When I am logged in as "myname4"
-    And I go to my claims page
-  Then I should see "Claims (0)"
-
-  Scenario: Delete a prompt, claims should also be deleted from the user's Claims page
-
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I am logged in as "myname1"
-    And I delete my signup for the prompt meme "Battle 12"
   When I am logged in as "myname4"
     And I go to my claims page
   Then I should see "Claims (0)"
