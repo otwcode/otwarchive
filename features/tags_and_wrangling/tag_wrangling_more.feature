@@ -104,3 +104,23 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
+
+  Scenario: Updating multiple tags works.
+    Given the following typed tags exists
+        | name                                   | type         |
+        | Cowboy Bebop                           | Fandom       |
+        | Spike Spiegel is a sweetie             | Freeform     |
+        | Jet Black is a sweetie                 | Freeform     |
+        | Faye Valentine  is a sweetie           | Freeform     |
+      And I am logged in as a random user
+      And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Jet Black is a sweetie"
+      And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with freeform "Faye Valentine  is a sweetie"
+     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+      And I follow "Tag Wrangling"
+      And I follow "3"
+      And I fill in "fandom_string" with "Cowboy Bebop"
+      And I check the wrangling tag "Spike Spiegel is a sweetie"
+      And I check the wrangling tag "Jet Black is a sweetie"
+      And I press "Wrangle"
+     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"

@@ -153,7 +153,33 @@ Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
   end
 end
 
+Given(/^the following unsorted tag exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(:unsorted_tag, hash)
+  end
+end
+
+Given(/^the following typed tags exists$/) do |table|
+  table.hashes.each do |hash|
+    type = hash["type"].classify.constantize
+    hash.delete("type")
+    FactoryGirl.create(type, hash)
+  end
+end
+
+
+
 ### WHEN
+
+When /^I select "([^"]*)" for "([^"]*)" tag$/ do |type, tagname|
+  tag = Tag.find_by_name(tagname)
+  select(type, :from => "tags[#{tag.id}]")
+end
+
+When /^I check the wrangling tag "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("selected_tags_#{tag.id}")
+end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
@@ -266,6 +292,8 @@ end
 Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by_login(username)
   fandom = Fandom.find_by_name(fandom)
+  puts user.inspect
+  puts fandom.inspect
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should_not be_nil
 end
@@ -275,4 +303,9 @@ Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom
   fandom = Fandom.find_by_name(fandom)
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should be_nil
+end
+
+Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
+  tag = Tag.find_by_name(tagname)
+  assert tag.type == tag_type
 end

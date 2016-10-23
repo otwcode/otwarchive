@@ -24,3 +24,26 @@ Feature: Tag Wrangling - Unsorted Tags
       And I follow "2"
       And I press "Update"
     Then I should see "2" within ".pagination span.current"
+
+  Scenario: Updating multiple tags works.
+    Given I am logged in as a tag wrangler
+      And the following unsorted tag exists
+        | name                                   |
+        | Cowboy Bebop                           |
+        | Serial experiments lain                |
+        | Spike Spiegel                          |
+        | Annalise Keating & Bonnie Winterbottom |
+        | i love good omens                      |
+    When I go to the unsorted_tags page
+    When I select "Fandom" for "Cowboy Bebop" tag
+     And I select "Fandom" for "Serial experiments lain" tag
+     And I select "Character" for "Spike Spiegel" tag
+     And I select "Relationship" for "Annalise Keating & Bonnie Winterbottom" tag
+     And I select "Freeform" for "i love good omens" tag
+     And I press "Update"
+    Then I should see "Tags were successfully sorted"
+     And the "Cowboy Bebop" tag should be a "Fandom" tag
+     And the "Serial experiments lain" tag should be a "Fandom" tag
+     And the "Spike Spiegel" tag should be a "Character" tag
+     And the "Annalise Keating & Bonnie Winterbottom" tag should be a "Relationship" tag
+     And the "i love good omens" tag should be a "Freeform" tag
