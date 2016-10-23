@@ -256,7 +256,16 @@ end
 
 Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
   collection = Collection.find_by_title(challenge_title)
-  User.all.each do |user|
-    user.challenge_signups.in_collection(collection).should be_empty
+  if collection.present?
+    User.all.each do |user|
+      user.challenge_signups.in_collection(collection).should be_empty
+    end
+  # we don't have a collection id because the collection has been deleted
+  # so let's make sure any remaining sign ups are for exisiting collections
+  else
+    ChallengeSignup.all.each do |signup|
+      collection_id = signup.collection_id
+      Collection.find_by_id(collection_id).should_not be_nil
+    end
   end
 end
