@@ -159,12 +159,13 @@ Feature: Prompt Meme Challenge
   Scenario: Claim fills should still be accessible even after the prompt meme 
   collection has been deleted
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
-    And "myname1" has fulfilled a claim from Battle 12
-    And the collection "Battle 12" is deleted
-  When I view the work "Fulfilled Story"
-  Then I should see "Fulfilled Story"
+  Given "AO3-4693" is fixed
+  # Given I have Battle 12 prompt meme fully set up
+    # And everyone has signed up for Battle 12
+    # And "myname1" has fulfilled a claim from Battle 12
+    # And the collection "Battle 12" is deleted
+  # When I view the work "Fulfilled Story"
+  # Then I should see "Fulfilled Story"
     # TODO: Make an issue
     # And I should not see "In response to a prompt"
     # And I should not see "Battle 12"
