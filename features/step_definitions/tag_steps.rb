@@ -171,6 +171,11 @@ end
 
 ### WHEN
 
+When /^I check the canonical wrangling tag "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("canonicals_#{tag.id}")
+end
+
 When /^I select "([^"]*)" for "([^"]*)" tag$/ do |type, tagname|
   tag = Tag.find_by_name(tagname)
   select(type, :from => "tags[#{tag.id}]")
@@ -308,4 +313,14 @@ end
 Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
   tag = Tag.find_by_name(tagname)
   assert tag.type == tag_type
+end
+
+Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  assert tag.canonical?
+end
+
+Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  puts tag.inspect
 end
