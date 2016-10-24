@@ -4,46 +4,40 @@ Feature: Prompt Meme Challenge
   As a humble user
   I want to create a prompt meme and post to it
 
+  Background:
+  Given I have Battle 12 prompt meme fully set up
+
   Scenario: As a co-moderator I can't delete whole signups
 
-  Given I have Battle 12 prompt meme fully set up
   # TODO: fix the form in the partial collection_participants/participant_form
   # TODO: we allow maintainers to delete whole sign-ups
   Given I have added a co-moderator "mod2" to collection "Battle 12"
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  When I am logged in as "mod2"
+    And "myname1" has signed up for Battle 12 with combination A
+    And I am logged in as "mod2"
   When I start to delete the signup by "myname1"
   Then I should see "myname1"
     And I should not see a link "myname1"
 
   Scenario: As a co-moderator I can delete prompts
 
-  Given I have Battle 12 prompt meme fully set up
-  # TODO: fix the form in the partial collection_participants/participant_form and make sure the moderator is a real mod. Can't delete prompts because there are only 2 and so are not allowed to be deleted (needs to be three)
   Given I have added a co-moderator "mod2" to collection "Battle 12"
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-  When I add a new prompt to my signup for a prompt meme
+    And "myname1" has signed up for Battle 12 with more prompts than required
   When I am logged in as "mod2"
-  When I delete the prompt by "myname1"
+    And I delete the prompt by "myname1"
   Then I should see "Prompt was deleted."
 
   Scenario: When user deletes signup, its prompts disappear from the collection
 
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
+  Given I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
   When I delete my signup for the prompt meme "Battle 12"
-  When I view prompts for "Battle 12"
+    And I view prompts for "Battle 12"
   Then I should not see "myname1" within "ul.index"
 
   Scenario: When user deletes signup, the signup disappears from their dashboard
 
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  When I delete my signup for the prompt meme "Battle 12"
+  Given I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
   When I go to my signups page
   Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
@@ -51,12 +45,10 @@ Feature: Prompt Meme Challenge
   Scenario: When user deletes signup, the work stays part of the collection,
   but no longer has the "In response to a prompt by" note
 
-  Given I have Battle 12 prompt meme fully set up
-    And "myname1" has signed up for Battle 12 with combination A
+  Given "myname1" has signed up for Battle 12 with combination A
     And "myname2" has fulfilled a claim from Battle 12
     And "myname1" has deleted their sign up for the prompt meme "Battle 12"
-  When I am logged in as "myname2"
-    And I go to "Battle 12" collection's page
+  When I go to "Battle 12" collection's page
   Then I should see "Fulfilled Story"
   When I follow "Fulfilled Story"
   Then I should not see "In response to a prompt"
@@ -65,8 +57,7 @@ Feature: Prompt Meme Challenge
   Scenario: When user deletes signup, the work creator can edit the work 
   normally
 
-  Given I have Battle 12 prompt meme fully set up
-    And "myname1" has signed up for Battle 12 with combination A
+  Given "myname1" has signed up for Battle 12 with combination A
     And "myname2" has fulfilled a claim from Battle 12
     And "myname1" has deleted their sign up for the prompt meme "Battle 12"
   When I am logged in as "myname2"
@@ -76,11 +67,10 @@ Feature: Prompt Meme Challenge
   Then I should see "Work was successfully updated."
     And I should see "My New Tag"
 
-  Scenario: A mod can delete a prompt meme and all the claims and sign-ups will 
+  Scenario: A mod can delete a prompt meme and all the claims and sign-ups will
   be deleted with it, but the collection will remain
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And "myname4" has claimed a prompt from Battle 12
   When I am logged in as "mod1"
     And I delete the challenge "Battle 12"
@@ -91,22 +81,20 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
 
-  Scenario: A user can still access their Sign-ups page after a prompt meme they 
+  Scenario: A user can still access their Sign-ups page after a prompt meme they
   were signed up for has been deleted
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname1"
     And I go to my signups page
   Then I should see "Challenge Sign-ups for myname1"
     And I should not see "Battle 12"
 
-  Scenario: A user can still access their Claims page after a prompt meme they 
+  Scenario: A user can still access their Claims page after a prompt meme they
   had an unfulfilled claim in has been deleted
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And "myname1" has claimed a prompt from Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname1"
@@ -117,8 +105,7 @@ Feature: Prompt Meme Challenge
   Scenario: A user can still access their Claims page after a prompt meme they 
   had a fulfilled claim in has been deleted
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And "myname4" has fulfilled a claim from Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname4"
@@ -130,8 +117,7 @@ Feature: Prompt Meme Challenge
   Scenario: The prompt line should not show on claim fills after the prompt meme 
   has been deleted
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And "myname1" has fulfilled a claim from Battle 12
     And the challenge "Battle 12" is deleted
   When I view the work "Fulfilled Story"
@@ -140,8 +126,7 @@ Feature: Prompt Meme Challenge
   Scenario: A mod can delete a prompt meme collection and all the claims and
   sign-ups will be deleted with it
 
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
+  Given everyone has signed up for Battle 12
     And "myname1" has fulfilled a claim from Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "mod1"
@@ -156,7 +141,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should not see "Battle 12"
 
-  Scenario: Claim fills should still be accessible even after the prompt meme 
+  Scenario: Claim fills should still be accessible even after the prompt meme
   collection has been deleted
 
   Given "AO3-4693" is fixed
@@ -170,17 +155,12 @@ Feature: Prompt Meme Challenge
     # And I should not see "In response to a prompt"
     # And I should not see "Battle 12"
 
-  Scenario: Delete a signup, claims should also be deleted from the prompt 
+  Scenario: Delete a signup, claims should also be deleted from the prompt
   meme's Claims list
 
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I am logged in as "myname1"
-    And I delete my signup for the prompt meme "Battle 12"
-  Then I should see "Challenge sign-up was deleted."
+  Given "myname1" has signed up for Battle 12 with combination B
+    And "myname4" has claimed a prompt from Battle 12
+    And "myname1" has deleted their sign up for the prompt meme "Battle 12"
   When I am logged in as "myname4"
     And I go to my claims page
   Then I should see "Claims (0)"
