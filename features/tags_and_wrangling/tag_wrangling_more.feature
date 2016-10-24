@@ -152,6 +152,18 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I am logged in as "wranglerette"
     When I visit "/tags/this_is_an_unknown_tag/edit" it should fail with an error
     When I visit "/tags/this_is_an_unknown_tag/show" it should fail with an error
+    When I visit "/tags/this_is_an_unknown_tag/feed.atom" it should fail with an error
+
+  Scenario: Banned tags can only be viewed by an admin
+    Given the following typed tags exists
+        | name                                   | type         |
+        | Cowboy Bebop                           | Fandom       |
+
+    When I am logged in as a random user
+     And I view the tag "Cowboy Bebop"
+    Then I should see "Please log in as an admin"
+    When I am logged in as an admin
+    Then I should not see "Please log in as an admin"
 
   @javascript
   Scenario: A user can see hidden tags
