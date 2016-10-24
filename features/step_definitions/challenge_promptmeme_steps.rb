@@ -415,13 +415,6 @@ When /^I edit the first prompt$/ do
   #step %{I follow "Edit Prompt"}
 end
 
-When /^I edit the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  click_link("#{participant}")
-  step %{I follow "Edit"}
-end
-
 Then /^I should see prompt meme options$/ do
   step %{I should not see "Offer Settings"}
     step %{I should see "Request Settings"}

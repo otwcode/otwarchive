@@ -144,11 +144,6 @@ When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
   step %{I delete the signup}
 end
 
-When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-end
-
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   click_link("#{participant}")
   step %{I delete the signup}
@@ -158,13 +153,6 @@ When /^I delete the signup$/ do
   step %{I follow "Delete Sign-up"}
   step %{I press "Yes, Delete Sign-up"}
   step %{I should see "Challenge sign-up was deleted."}
-end
-
-When /^I edit the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  click_link("#{participant}")
-  step %{I follow "Edit"}
 end
 
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
