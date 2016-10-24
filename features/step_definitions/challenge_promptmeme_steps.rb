@@ -55,7 +55,7 @@ Given /^"([^\"]*)" has signed up for Battle 12 with combination ([^\"]*)$/ do |u
   step %{I sign up for Battle 12 with combination #{combo}}
 end
 
-Given /^"([^\"]*)" has signed up for Battle 12 with more prompts than required$/ do |username|
+Given /^"([^\"]*)" has signed up for Battle 12 with one more prompt than required$/ do |username|
   step %{I am logged in as "#{username}"}
   step %{I sign up for Battle 12 with combination C}
   step %{I add a new prompt to my signup for a prompt meme}
