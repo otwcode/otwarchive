@@ -7,6 +7,7 @@
 # This file has been edited by hand :(
 require 'simplecov'
 require 'coveralls'
+require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || '')
 Coveralls.wear_merged!('rails')
 require 'cucumber/rails'
@@ -14,6 +15,9 @@ require 'email_spec'
 require 'email_spec/cucumber'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
+
+# Produce a screen shot for each failure
+require 'capybara-screenshot/cucumber'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -59,3 +63,5 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :transaction
 
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :poltergeist
