@@ -7,16 +7,14 @@ Feature: Prompt Meme Challenge
   Background:
   Given I have Battle 12 prompt meme fully set up
 
-  Scenario: As a co-moderator I can't delete whole signups
+  Scenario: As a co-moderator I can delete whole sign-ups
 
-  # TODO: fix the form in the partial collection_participants/participant_form
-  # TODO: we allow maintainers to delete whole sign-ups
   Given I have added a co-moderator "mod2" to collection "Battle 12"
     And "myname1" has signed up for Battle 12 with combination A
-    And I am logged in as "mod2"
-  When I start to delete the signup by "myname1"
-  Then I should see "myname1"
-    And I should not see a link "myname1"
+  When I am logged in as "mod2"
+    And I start to delete the signup by "myname1"
+    And I follow "Delete Sign-up"
+  Then I should see "Challenge sign-up was deleted."
 
   Scenario: As a co-moderator I can delete prompts
 
