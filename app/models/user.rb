@@ -499,14 +499,14 @@ class User < ActiveRecord::Base
     end
   end
  
-  def reindex_users_works
+  def reindex_user_works
     # reindex the user's works to make sure they show up on the user's works page
     self.works.each do |work|
       IndexQueue.enqueue(w, :main)
     end
   end
 
-  def check_users_work_dates
+  def set_user_work_dates
     # Fix user stats page error caused by the existence of works with nil revised_at dates
     self.works.each do |work|
       if work.revised_at.nil?

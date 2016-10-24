@@ -247,13 +247,13 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to :action => :notify
   end
 
-  def check
+  def troubleshoot
     @user = User.find_by_login(params[:id])
     @user.fix_user_subscriptions
-    @user.reindex_users_works
-    @user.check_users_work_dates
+    @user.reindex_user_works
+    @user.set_user_work_dates
     @user.reindex_user_bookmarks
-    @user.create_log_item(options = { action: ArchiveConfig.ACTION_CHECK, admin_id: current_admin.id })
+    @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts('User account checked.')
     redirect_to(request.env['HTTP_REFERER'] || root_path) && return
   end
