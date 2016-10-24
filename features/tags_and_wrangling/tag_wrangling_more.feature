@@ -157,13 +157,14 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
   Scenario: Banned tags can only be viewed by an admin
     Given the following typed tags exists
         | name                                   | type         |
-        | Cowboy Bebop                           | Fandom       |
-
+        | Cowboy Bebop                           | Banned       |
     When I am logged in as a random user
      And I view the tag "Cowboy Bebop"
-    Then I should see "Please log in as an admin"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
     When I am logged in as an admin
+     And I view the tag "Cowboy Bebop"
     Then I should not see "Please log in as an admin"
+     And I should see "Cowboy Bebop"
 
   @javascript
   Scenario: A user can see hidden tags
