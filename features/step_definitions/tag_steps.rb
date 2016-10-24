@@ -297,8 +297,6 @@ end
 Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by_login(username)
   fandom = Fandom.find_by_name(fandom)
-  puts user.inspect
-  puts fandom.inspect
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should_not be_nil
 end

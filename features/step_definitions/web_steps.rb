@@ -20,6 +20,18 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When /^I logout using the browser$/ do
+  step %{I follow "Log Out"}
+end
+
+When /^I limit myself to the Archive$/ do
+  page.driver.browser.url_whitelist = ['http://127.0.0.1']
+end
+
+When /^I clear the network traffic$/ do
+  page.driver.clear_network_traffic
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -265,13 +277,20 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
-
 Then /^I should get a file with ending and type ([^\"]*)$/ do |type|
   page.response_headers['Content-Disposition'].should =~ Regexp.new("filename=.*?\.#{type}")
   page.response_headers['Content-Type'].should =~ Regexp.new("/#{type}")
 end
 
-
 Then /^show me the page$/ do
   save_and_open_page
+  sleep 120
+end
+
+Then /^show me the network traffic$/ do
+  puts page.driver.network_traffic.to_yaml
+end
+
+Then /^I take a screenshot$/ do
+  screenshot_and_save_page
 end

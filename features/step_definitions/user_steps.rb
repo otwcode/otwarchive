@@ -45,6 +45,11 @@ end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   step("I am logged out")
+  step(%{I am logged in as "#{login}" with password "#{password}" no logout step})
+  assert UserSession.find
+end
+
+Given /^I am logged in as "([^\"]*)" with password "([^\"]*)" no logout step(?:( with things hidden))?$/ do |login, password, hidden|
   user = User.find_by_login(login)
   if user.blank?
     user = FactoryGirl.create(:user, {:login => login, :password => password})
@@ -54,12 +59,16 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
     user.password_confirmation = password
     user.save
   end
+  if hidden.present?
+    user.preference.hide_warnings = true
+    user.preference.hide_freeform = true
+    user.preference.save
+  end
   visit login_path
   fill_in "User name", :with => login
   fill_in "Password", :with => password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
@@ -279,3 +288,8 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
 end
+
+Then /^I should see the current users preferences.$/ do
+  puts User.current_user.preference.inspect
+end
+
