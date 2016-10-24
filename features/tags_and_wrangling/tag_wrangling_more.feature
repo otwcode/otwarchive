@@ -115,12 +115,12 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Jet Black is a sweetie"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-      And I follow "Tag Wrangling"
-      And I follow "2"
-      And I fill in "fandom_string" with "Cowboy Bebop"
-      And I check the wrangling tag "Spike Spiegel is a sweetie"
-      And I check the wrangling tag "Jet Black is a sweetie"
-      And I press "Wrangle"
+       And I follow "Tag Wrangling"
+       And I follow "2"
+       And I fill in "fandom_string" with "Cowboy Bebop"
+       And I check the wrangling tag "Spike Spiegel is a sweetie"
+       And I check the wrangling tag "Jet Black is a sweetie"
+       And I press "Wrangle"
      Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"
 
   Scenario: Updating multiple tags works and set them as canonical
@@ -133,14 +133,32 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie"
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with freeform "Faye Valentine  is a sweetie"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-      And I follow "Tag Wrangling"
-      And I follow "2"
-      And I fill in "fandom_string" with "Cowboy Bebop"
-      And I check the wrangling tag "Faye Valentine is a sweetie"
-      And I check the wrangling tag "Ed is a sweetie"
-      And I check the canonical wrangling tag "Faye Valentine is a sweetie"
-      And I check the canonical wrangling tag "Ed is a sweetie"
-      And I press "Wrangle"
+       And I follow "Tag Wrangling"
+       And I follow "2"
+       And I fill in "fandom_string" with "Cowboy Bebop"
+       And I check the wrangling tag "Faye Valentine is a sweetie"
+       And I check the wrangling tag "Ed is a sweetie"
+       And I check the canonical wrangling tag "Faye Valentine is a sweetie"
+       And I check the canonical wrangling tag "Ed is a sweetie"
+       And I press "Wrangle"
      Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie Wrangle Tags for Cowboy Bebop"
-      And the "Faye Valentine is a sweetie" tag should be canonical
-      And the "Ed is a sweetie" tag should be canonical
+       And the "Faye Valentine is a sweetie" tag should be canonical
+       And the "Ed is a sweetie" tag should be canonical
+
+  @javascript
+  Scenario: A user can see hidden tags
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+      And I limit myself to the Archive
+      And I am logged in as "first_user" with password "secure_password" no logout step with things hidden
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
+      And I should see "Work was successfully posted."
+      And I logout using the browser
+      And I am logged in as "second_user" with password "secure_password" no logout step with things hidden
+    When I view the work "Asteroid Blues"
+    When I follow "Show additional tags"
+    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
+     And I should not see "Show additional tags"
