@@ -20,6 +20,12 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When(/^I edit an unknown tag it should fail with "([^"]*)"$/) do |arg1|
+  expect {
+    visit "/tags/this_is_an_unknown_tag/edit"
+  }.to raise_error
+end
+
 When /^I logout using the browser$/ do
   step %{I follow "Log Out"}
 end

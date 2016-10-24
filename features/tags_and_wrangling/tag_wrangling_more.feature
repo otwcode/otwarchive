@@ -145,6 +145,14 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And the "Faye Valentine is a sweetie" tag should be canonical
        And the "Ed is a sweetie" tag should be canonical
 
+  Scenario: Tags that don't exist cause errors
+    Given the following activated tag wrangler exists
+      | login          |
+      | wranglerette   |
+    When I am logged in as "wranglerette"
+    When I visit "/tags/this_is_an_unknown_tag/edit" it should fail with an error
+    When I visit "/tags/this_is_an_unknown_tag/show" it should fail with an error
+
   @javascript
   Scenario: A user can see hidden tags
     Given the following typed tags exists
@@ -162,3 +170,5 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I follow "Show additional tags"
     Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
      And I should not see "Show additional tags"
+
+
