@@ -54,10 +54,7 @@ Feature: Prompt Meme Challenge
     And I sign up for Battle 12 with combination C
   When I view prompts for "Battle 12"
   Then I should not see "Delete Prompt"
-  When I follow "Edit Sign-up"
-  Then I should see "Sign-up for myname1"
-    And I should see "Delete Sign-up"
-    And I should not see "Delete Prompt"
+    And I should see "Edit Sign-up"
 
   Scenario: User can delete one prompt provided their sign-up has more than the
   minimum number required for the meme
@@ -95,7 +92,9 @@ Feature: Prompt Meme Challenge
   Given "myname1" has signed up for Battle 12 with combination A
     And "myname2" has fulfilled a claim from Battle 12
     And "myname1" has deleted their sign up for the prompt meme "Battle 12"
-  When I go to "Battle 12" collection's page
+  # Use the work creator account to avoid having to reveal the collection
+  When I am logged in as "myname2"
+    And I go to "Battle 12" collection's page
   Then I should see "Fulfilled Story"
   When I follow "Fulfilled Story"
   Then I should not see "In response to a prompt"
