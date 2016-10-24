@@ -47,14 +47,17 @@ Feature: Prompt Meme Challenge
     And I should not see "Delete Prompt"
     And I should see "Delete Sign-up"
 
-  Scenario: User can't delete prompt if they don't more than the minimum number
-  required by the meme
+  Scenario: User can't delete prompt if they don't have more than the minimum 
+  number required by the meme
 
   Given I am logged in as "myname1"
     And I sign up for Battle 12 with combination C
   When I view prompts for "Battle 12"
   Then I should not see "Delete Prompt"
+  When I follow "Edit Sign-up"
+  Then I should see "Sign-up for myname1"
     And I should see "Delete Sign-up"
+    And I should not see "Delete Prompt"
 
   Scenario: User can delete one prompt provided their sign-up has more than the
   minimum number required for the meme
@@ -64,8 +67,9 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
     And I follow "Delete Prompt"
   Then I should see "Prompt was deleted."
-    And I should not see "Delete Prompt"
+    And I should see "Sign-up for myname1"
     And I should see "Delete Sign-up"
+    And I should not see "Delete Prompt"
 
   Scenario: When user deletes signup, its prompts disappear from the collection
 
@@ -163,7 +167,8 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
     And "myname1" has fulfilled a claim from Battle 12
     And the challenge "Battle 12" is deleted
-  When I view the work "Fulfilled Story"
+  When I am logged out
+    And I view the work "Fulfilled Story"
   Then I should not see "In response to a prompt"
 
   Scenario: A mod can delete a prompt meme collection and all the claims and
