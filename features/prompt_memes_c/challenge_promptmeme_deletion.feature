@@ -32,11 +32,13 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
   Then I should not see "myname1" within "ul.index"
 
-  Scenario: When user deletes signup, the signup disappears from their dashboard
+  Scenario: When user deletes sign-up, the sign-up disappears from their
+  dashboard
 
   Given I am logged in as "myname1"
     And I sign up for Battle 12 with combination A
-  When I go to my signups page
+  When I delete my signup for the prompt meme "Battle 12"
+    And I go to my signups page
   Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
 
