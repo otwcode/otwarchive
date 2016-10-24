@@ -167,8 +167,6 @@ Given(/^the following typed tags exists$/) do |table|
   end
 end
 
-
-
 ### WHEN
 
 When /^I check the canonical wrangling tag "([^"]*)"$/ do |tagname|
