@@ -26,6 +26,22 @@ Feature: Subscriptions
   Then I should see "My Work Title"
     And I should see "Stargate SG-1"
 
+  Scenario: Check subscriptions to synonym work as the original 
+
+    Given a fandom exists with name: "Doctor Who", canonical: true
+      And a synonym "Dr Who" of the tag "Doctor Who"
+      And I am logged in as "author"
+      And I post the work "The mark of the Rani" with fandom "Dr Who"
+    When I am logged in as "reader"
+      And I view the "Dr Who" works index
+    Then I should see "RSS Feed"
+    When I follow "RSS Feed"
+    Then I should see "The mark of the Rani"
+    When I view the "Doctor Who" works index
+    Then I should see "RSS Feed"
+    When I follow "RSS Feed"
+    Then I should see "The mark of the Rani"
+
   Scenario: Subscribe to a non-test fandom
   
   When I am logged in as "author"
