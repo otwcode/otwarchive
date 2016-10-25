@@ -77,8 +77,8 @@ end
 
 Given /^"([^\"]*)" has "([^"]*)" invitations?$/ do |login, invitation_count|
   user = User.find_by_login(login)
-  # If there are more invitations than we want, first destroy them
-  if invitation_count.to_i < user.invitations.count
+  # If the user has invitations, first destroy them
+  if invitation_count.to_i != 0
     user.invitations.destroy_all 
   end
   # Now create the number of invitations we want
