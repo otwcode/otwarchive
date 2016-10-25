@@ -1,7 +1,7 @@
 @fandoms
-Feature: Fandom is my Fandom
+Feature: There is a list of unassigned Fandoms
 
-  Scenario: Fandom is my Fandom
+  Scenario: A user can see the list of fandoms and filter it
 
     Given I have a canonical "TV Shows" fandom tag named "Steven Universe"
       And I have a canonical "Movies" fandom tag named "High School Musical"
