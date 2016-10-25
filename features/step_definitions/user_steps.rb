@@ -45,15 +45,7 @@ end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   step("I am logged out")
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
-    user.activate
-  else
-    user.password = password
-    user.password_confirmation = password
-    user.save
-  end
+  find_or_create_user(login, password)
   visit login_path
   fill_in "User name", :with => login
   fill_in "Password", :with => password
