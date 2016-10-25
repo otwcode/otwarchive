@@ -1,6 +1,6 @@
-require 'spec_helper'
-require 'webmock'
-require 'api/api_helper'
+require "spec_helper"
+require "webmock"
+require "api/api_helper"
 
 describe "API Authorization" do
   include ApiHelper
