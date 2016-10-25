@@ -29,15 +29,15 @@ class FandomsController < ApplicationController
     @fandoms_by_letter = @fandoms.group_by {|f| f.sortable_name[0].upcase}
   end
   
-  def show		
-    @fandom = Fandom.find_by_name(params[:id])		
-    if @fandom.nil?		
-      flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])		
-      redirect_to media_path and return		
-    end		
-    @characters = @fandom.characters.canonical.by_name		
+  def show
+    @fandom = Fandom.find_by_name(params[:id])
+    if @fandom.nil?
+      flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
+      redirect_to media_path and return
+    end
+    @characters = @fandom.characters.canonical.by_name
   end
-
+  
   def unassigned
     join_string = "LEFT JOIN wrangling_assignments 
                   ON (wrangling_assignments.fandom_id = tags.id) 
