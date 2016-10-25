@@ -142,3 +142,15 @@ Feature: Invite requests
     When I fill in "number_of_invites" with "4"
      And press "Create"
     Then I should see "Invitations were successfully created."
+
+  Scenario: An admin can delete a users invitations
+    Given the user "user1" exists and is activated
+      And "user1" has "5" invitations
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "user_name" with "user1"
+      And I press "Go"
+    Then I should see "Token"
+    When I follow "Delete"
+    Then I should see "Invitation successfully destroyed"
+      And "user1" should have "4" invitations
