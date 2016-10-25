@@ -117,28 +117,3 @@ Feature: Invite requests
     When I go to my invitations page
     Then I should be on my user page
     And I should see "Your account has been banned."
-
-  Scenario:  A user can manage their invitations
-
-    Given I am logged in as "user1"
-      And "user1" has "5" invitations
-    When I go to my user page
-     And I follow "Invitations"
-     And I follow "Manage Invitations"
-    Then I should see "Unsent (5)"
-    When I follow "Unsent (5)"
-    Then I should see "Unsent (5)"
-    When I follow the link for "user1" first invite
-    Then I should see "Enter an email address"
-    When I fill in "invitation[invitee_email]" with "user6@example.org"
-    Then I press "Update Invitation"
-    Then I should see "Invitation was successfully sent."
-
-  Scenario: An admin can create a users invitations
-    Given I am logged in as an admin
-      And the user "steven" exists and is activated
-      And I go to steven's invitations page
-    Then I should see "Create more invitations for this user"
-    When I fill in "number_of_invites" with "4"
-     And press "Create"
-    Then I should see "Invitations were successfully created."
