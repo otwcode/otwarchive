@@ -45,20 +45,7 @@ end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
-    user.activate
-  else
-    user.password = password
-    user.password_confirmation = password
-    user.save
-  end
-  if hidden.present?
-    user.preference.hide_warnings = true
-    user.preference.hide_freeform = true
-    user.preference.save
-  end
+  find_or_create_user(login, password, hidden)
   visit login_path
   fill_in "User name", :with => login
   fill_in "Password", :with => password
@@ -155,10 +142,10 @@ end
 
 # WHEN
 
-When /^I follow the link for "([^\"]*)" first invite$/ do |login|		
-  user = User.find_by_login(login)		
-  invite = user.invitations.first		
-  step(%{I follow "#{invite.token}"})		
+When /^I follow the link for "([^\"]*)" first invite$/ do |login|
+  user = User.find_by_login(login)
+  invite = user.invitations.first
+  step(%{I follow "#{invite.token}"})
 end
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|

@@ -1,15 +1,15 @@
 ### GIVEN
 
 Given /^I have an archivist "([^\"]*)"$/ do |name|
-  step(%{I have pre-archivist setup for "#{name}"})
-  step(%{I am logged in as an admin})
-    step(%{I make "#{name}" an archivist})
-    step(%{I log out})
+  user = find_or_create_user(name, "password")
+  role = Role.find_or_create_by_name("archivist")
+  user.roles = [role]
+  user.save
 end
 
 Given /^I have pre-archivist setup for "([^\"]*)"$/ do |name|
   step(%{I am logged in as "#{name}"})
-    step(%{I have loaded the "roles" fixture})
+  step(%{I have loaded the "roles" fixture})
 end
 
 Given /^I have an Open Doors committee member "([^\"]*)"$/ do |name|
