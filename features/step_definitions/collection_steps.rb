@@ -86,6 +86,10 @@ end
 
 ### WHEN
 
+When(/^I choose "([^"]*)" as the type$/) do |option|
+  select(option, :from => "medium_id")
+end
+
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   visit new_collection_url
   fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
