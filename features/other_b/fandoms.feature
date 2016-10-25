@@ -1,0 +1,23 @@
+@fandoms
+Feature: Fandom is my Fandom
+
+  Scenario: Fandom is my Fandom
+
+    Given I have a canonical "TV Shows" fandom tag named "Steven Universe"
+      And I have a canonical "Movies" fandom tag named "High School Musical"
+      And I am logged in as "author"
+      And I post the work "Stronger than you" with fandom "Steven Universe"
+      And I post the work "Breaking free" with fandom "High School Musical"
+      And I am logged in as a tag wrangler
+    When I go to the unassigned fandoms page
+    Then I should see "Steven Universe"
+      And I should see "High School Musical"
+    When I choose "TV Shows" as the media type
+      And I press "Sort and Filter"
+    Then I should see "Steven Universe"
+      And I should not see "High School Musical"
+    When I choose "Movies" as the media type
+      And I press "Sort and Filter"
+    Then I should see "High School Musical"
+    When I follow "High School Musical"
+    Then I should see "This tag belongs to the Fandom Category."
