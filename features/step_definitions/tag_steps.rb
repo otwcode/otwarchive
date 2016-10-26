@@ -155,10 +155,6 @@ end
 
 ### WHEN
 
-When(/^I choose "([^"]*)" as the media type$/) do |media|
-   select(media, :from => "media_id")
-end
-
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
   visit tag_url(tag)

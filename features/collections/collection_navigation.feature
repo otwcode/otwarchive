@@ -80,11 +80,11 @@ Feature: Basic collection navigation
       And I post the work "Breaking Free" with fandom "High School Musical" in the collection "We all sing together"
       And I go to "We all sing together" collection's page
       And I follow "Fandoms ("
-      And I choose "Movies" as the type
+      And I select "Movies" from "medium_id"
       And I press "Show"
     Then I should see "High School Musical"
       And I should not see "Steven's Universe"
-    When I choose "TV Shows" as the type
+    When I select "TV Shows" from "medium_id"
       And I press "Show"
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"

@@ -12,11 +12,11 @@ Feature: There is a list of unassigned Fandoms
     When I go to the unassigned fandoms page
     Then I should see "Steven Universe"
       And I should see "High School Musical"
-    When I choose "TV Shows" as the media type
+    When I select "TV Shows" from "media_id"
       And I press "Sort and Filter"
     Then I should see "Steven Universe"
       And I should not see "High School Musical"
-    When I choose "Movies" as the media type
+    When I select "Movies" from "media_id"
       And I press "Sort and Filter"
     Then I should see "High School Musical"
     When I follow "High School Musical"
