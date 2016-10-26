@@ -27,13 +27,13 @@ Feature: Tag Wrangling - Unsorted Tags
 
   Scenario: Updating multiple tags works.
     Given I am logged in as a tag wrangler
-      And the following unsorted tag exists
-        | name                                   |
-        | Cowboy Bebop                           |
-        | Serial experiments lain                |
-        | Spike Spiegel                          |
-        | Annalise Keating & Bonnie Winterbottom |
-        | i love good omens                      |
+      And the following typed tags exists
+        | name                                   | type     |
+        | Cowboy Bebop                           | Unsorted_tag |
+        | Serial experiments lain                | Unsorted_tag |
+        | Spike Spiegel                          | Unsorted_tag |
+        | Annalise Keating & Bonnie Winterbottom | Unsorted_tag |
+        | i love good omens                      | Unsorted_tag |
     When I go to the unsorted_tags page
     When I select "Fandom" for "Cowboy Bebop" tag
      And I select "Fandom" for "Serial experiments lain" tag

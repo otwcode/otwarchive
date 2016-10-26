@@ -153,12 +153,6 @@ Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
   end
 end
 
-Given(/^the following unsorted tag exists$/) do |table|
-  table.hashes.each do |hash|
-    FactoryGirl.create(:unsorted_tag, hash)
-  end
-end
-
 Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
     type = hash["type"].classify.constantize
