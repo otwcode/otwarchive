@@ -176,7 +176,6 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as "first_user" with password "secure_password" with preferences set to hidden warnings and no additional tags
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
       And I should see "Work was successfully posted."
-      And I logout using the browser
       And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and no additional tags
     When I view the work "Asteroid Blues"
     When I follow "Show additional tags"
@@ -195,7 +194,6 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as "first_user" with password "secure_password" with preferences set to hidden warnings and no additional tags
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues" by "first_user"
       And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues" by "first_user"
-      And I logout using the browser
       And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and no additional tags
       And I go to first_user's user page
       And I follow "Cowboy Bebop Blues"

@@ -20,10 +20,6 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^I logout using the browser$/ do
-  step %{I follow "Log Out"}
-end
-
 When /^I take a screenshot$/ do
   screenshot_and_save_page
 end
