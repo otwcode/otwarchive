@@ -138,8 +138,8 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I fill in "fandom_string" with "Cowboy Bebop"
        And I check the wrangling tag "Faye Valentine is a sweetie"
        And I check the wrangling tag "Ed is a sweetie"
-       And I check the canonical wrangling tag "Faye Valentine is a sweetie"
-       And I check the canonical wrangling tag "Ed is a sweetie"
+       And I check the canonical option for the tag "Faye Valentine is a sweetie"
+       And I check the canonical option for the tag "Ed is a sweetie"
        And I press "Wrangle"
      Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie Wrangle Tags for Cowboy Bebop"
        And the "Faye Valentine is a sweetie" tag should be canonical

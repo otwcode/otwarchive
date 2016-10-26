@@ -163,7 +163,7 @@ end
 
 ### WHEN
 
-When /^I check the canonical wrangling tag "([^"]*)"$/ do |tagname|
+When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   check("canonicals_#{tag.id}")
 end
