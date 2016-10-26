@@ -117,9 +117,9 @@ end
 
 Given /^I am logged out$/ do
   visit logout_path
-  assert !UserSession.find unless @javascript
+  assert UserSession.find.nil? unless @javascript
   visit admin_logout_path
-  assert !AdminSession.find unless @javascript
+  assert AdminSession.find.nil? unless @javascript
 end
 
 Given /^I log out$/ do
@@ -235,7 +235,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert UserSession.find unless @javascript
+  assert UserSession.find.nil? unless @javascript
 end
 
 def get_work_name(age, classname, name)
