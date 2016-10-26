@@ -50,6 +50,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :unassigned
     end
+    get :show
   end
   resources :tag_wranglings do
     member do
