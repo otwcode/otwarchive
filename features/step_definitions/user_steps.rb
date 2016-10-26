@@ -285,7 +285,7 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   assert user.active?
 end
 
-Then /^I should see the current users preferences.$/ do
+Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
 end
 
