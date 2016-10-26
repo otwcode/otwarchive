@@ -20,15 +20,14 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When(/^I visit "([^"]*)" it should fail with an error$/) do |path|
-  expect {
-    visit path
-  }.to raise_error
-end
-
 When /^I logout using the browser$/ do
   step %{I follow "Log Out"}
 end
+
+# We set the default domain to example.org.
+# The phantomjs drive fetchs pages directly so some tests will go to example.org
+# setting this whitelist stops this happening which is in itself a good thing
+# and makes the network traces easier to read as there are less calls to twitter etc.
 
 When /^I limit myself to the Archive$/ do
   page.driver.browser.url_whitelist = ['http://127.0.0.1']
@@ -113,6 +112,12 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   with_scope(selector) do
     attach_file(field, path)
   end
+end
+
+Then /^visiting "([^"]*)" it should fail with an error$/ do |path|
+  expect {
+    visit path
+  }.to raise_error
 end
 
 Then /^(?:|I )should see JSON:$/ do |expected_json|
