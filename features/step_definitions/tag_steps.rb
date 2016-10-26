@@ -168,12 +168,12 @@ When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
   check("canonicals_#{tag.id}")
 end
 
-When /^I select "([^"]*)" for "([^"]*)" tag$/ do |type, tagname|
+When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
   tag = Tag.find_by_name(tagname)
   select(type, :from => "tags[#{tag.id}]")
 end
 
-When /^I check the wrangling tag "([^"]*)"$/ do |tagname|
+When /^I check the mass wrangling option for "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   check("selected_tags_#{tag.id}")
 end

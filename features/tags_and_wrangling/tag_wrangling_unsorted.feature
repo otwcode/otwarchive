@@ -35,11 +35,11 @@ Feature: Tag Wrangling - Unsorted Tags
         | Annalise Keating & Bonnie Winterbottom | Unsorted_tag |
         | i love good omens                      | Unsorted_tag |
     When I go to the unsorted_tags page
-    When I select "Fandom" for "Cowboy Bebop" tag
-     And I select "Fandom" for "Serial experiments lain" tag
-     And I select "Character" for "Spike Spiegel" tag
-     And I select "Relationship" for "Annalise Keating & Bonnie Winterbottom" tag
-     And I select "Freeform" for "i love good omens" tag
+    When I select "Fandom" for the unsorted tag "Cowboy Bebop"
+     And I select "Fandom" for the unsorted tag "Serial experiments lain"
+     And I select "Character" for the unsorted tag "Spike Spiegel"
+     And I select "Relationship" for the unsorted tag "Annalise Keating & Bonnie Winterbottom"
+     And I select "Freeform" for the unsorted tag "i love good omens"
      And I press "Update"
     Then I should see "Tags were successfully sorted"
      And the "Cowboy Bebop" tag should be a "Fandom" tag
