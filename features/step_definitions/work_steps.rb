@@ -48,7 +48,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with f
     if page.has_select?("work[series_attributes][id]", with_options: [series])
       select(series, from: "work[series_attributes][id]")
     else
-      select(series, :from => "work[series_attributes][id]")
+      fill_in("work[series_attributes][title]", with: series)
     end
   end
   screenshot_and_save_page
