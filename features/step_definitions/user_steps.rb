@@ -43,13 +43,8 @@ Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
   end
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and no additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
-  step(%{I am logged in as "#{login}" with password "#{password}" no logout step})
-  assert UserSession.find
-end
-
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)" no logout step(?:( with things hidden))?$/ do |login, password, hidden|
   user = User.find_by_login(login)
   if user.blank?
     user = FactoryGirl.create(:user, {:login => login, :password => password})
@@ -69,6 +64,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)" no logout step(?:(
   fill_in "Password", :with => password
   check "Remember Me"
   click_button "Log In"
+  assert UserSession.find unless @javascript
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
@@ -89,7 +85,7 @@ Given /^I am logged in as a random user$/ do
   fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 Given /^I am logged in as a banned user$/ do
@@ -103,7 +99,7 @@ Given /^I am logged in as a banned user$/ do
   fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 Given /^user "([^\"]*)" is banned$/ do |login|
@@ -121,9 +117,9 @@ end
 
 Given /^I am logged out$/ do
   visit logout_path
-  assert !UserSession.find
+  assert !UserSession.find unless @javascript
   visit admin_logout_path
-  assert !AdminSession.find
+  assert !AdminSession.find unless @javascript
 end
 
 Given /^I log out$/ do
@@ -239,7 +235,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert !UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 def get_work_name(age, classname, name)

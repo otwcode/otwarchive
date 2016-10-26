@@ -50,6 +50,11 @@ Capybara.configure do |config|
   config.default_max_wait_time = 25
 end
 
+@javascript = false
+Before '@javascript' do
+  @javascript = true
+end
+
 Before '@disable_caching' do
   ActionController::Base.perform_caching = false
 end
@@ -65,3 +70,5 @@ Cucumber::Rails::Database.javascript_strategy = :transaction
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = :poltergeist
+
+
