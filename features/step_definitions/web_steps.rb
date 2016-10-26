@@ -24,6 +24,10 @@ When /^I logout using the browser$/ do
   step %{I follow "Log Out"}
 end
 
+When /^I take a screenshot$/ do
+  screenshot_and_save_page
+end
+
 # We set the default domain to example.org.
 # The phantomjs drive fetchs pages directly so some tests will go to example.org
 # setting this whitelist stops this happening which is in itself a good thing
@@ -300,8 +304,4 @@ end
 
 Then /^show me the network traffic$/ do
   puts page.driver.network_traffic.to_yaml
-end
-
-Then /^I take a screenshot$/ do
-  screenshot_and_save_page
 end
