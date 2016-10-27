@@ -35,7 +35,7 @@ Feature: Tag Wrangling - Unsorted Tags
         | Annalise Keating & Bonnie Winterbottom | Unsorted_tag |
         | i love good omens                      | Unsorted_tag |
     When I go to the unsorted_tags page
-    When I select "Fandom" for the unsorted tag "Cowboy Bebop"
+     And I select "Fandom" for the unsorted tag "Cowboy Bebop"
      And I select "Fandom" for the unsorted tag "Serial experiments lain"
      And I select "Character" for the unsorted tag "Spike Spiegel"
      And I select "Relationship" for the unsorted tag "Annalise Keating & Bonnie Winterbottom"
