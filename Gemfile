@@ -116,6 +116,9 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
+  gem 'selenium-webdriver'
+  gem 'poltergeist'
+  gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
