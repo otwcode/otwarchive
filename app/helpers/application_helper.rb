@@ -108,20 +108,24 @@ module ApplicationHelper
         pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
         pseuds = pseuds.flatten.uniq.sort
 
-        archivists = {}
+        archivists = Hash.new []
         if creation.is_a?(Work)
           external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
           external_creatorships.each do |ec|
             archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-            archivists[archivist_pseud] = ec.author_name
+            archivists[archivist_pseud] += [ec.author_name]
           end
         end
 
-        pseuds.collect { |pseud| 
-          archivists[pseud].nil? ? 
-              pseud_link(pseud, only_path) :
-              archivists[pseud] + " [" + ts("archived by %{name}", name: pseud_link(pseud, only_path)) + "]"
-        }.join(', ').html_safe
+        pseuds.collect { |pseud|
+          if archivists[pseud].nil?
+            pseud_link(pseud, only_path)
+          else
+            archivists[pseud].collect do |ext_author|
+              ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_link(pseud, only_path))
+            end
+          end
+        }.flatten.join(', ').html_safe
       end
     end
   end
