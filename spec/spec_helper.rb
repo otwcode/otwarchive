@@ -5,7 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'simplecov'
 require 'coveralls'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
-Coveralls.wear_merged!('rails')
+Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
