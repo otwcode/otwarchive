@@ -43,7 +43,7 @@ Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
   end
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and no additional tags))?$/ do |login, password, hidden|
+Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
