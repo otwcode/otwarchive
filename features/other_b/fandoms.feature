@@ -21,3 +21,11 @@ Feature: There is a list of unassigned Fandoms
     Then I should see "High School Musical"
     When I follow "High School Musical"
     Then I should see "This tag belongs to the Fandom Category."
+
+  Scenario: A user can see the list of relationships in a fandom
+
+    Given I have a canonical "TV Shows" fandom tag named "Steven Universe"
+      And I am logged in as "author"
+      And I post the work "Stronger than you" with fandom "Steven Universe" relationship "Ruby/Sapphire (Steven Universe)"
+    When I go to the "Ruby/Sapphire (Steven Universe)" tag page
+
