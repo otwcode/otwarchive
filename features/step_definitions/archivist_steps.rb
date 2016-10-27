@@ -44,13 +44,18 @@ When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]
   end
 end
 
-When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|
+When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")(?: and by "([^\"]*)" with email "([^\"]*)")$/ do
+      |url, creator_name, creator_email, cocreator_name, cocreator_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
   step(%{I fill in "urls" with "#{url}"})
-  if external_author_name.present?
-    step(%{I fill in "external_author_name" with "#{external_author_name}"})
-    step(%{I fill in "external_author_email" with "#{external_author_email}"})
+  if creator_name.present?
+    step(%{I fill in "external_author_name" with "#{creator_name}"})
+    step(%{I fill in "external_author_email" with "#{creator_email}"})
+  end
+  if cocreator_name.present?
+    step(%{I fill in "external_coauthor_name" with "#{cocreator_name}"})
+    step(%{I fill in "external_coauthor_email" with "#{cocreator_email}"})
   end
   step(%{I check "Post without previewing"})
   step(%{I press "Import"})

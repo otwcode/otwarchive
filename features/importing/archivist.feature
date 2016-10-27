@@ -29,7 +29,18 @@ Feature: Archivist bulk imports
       And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
 
   Scenario: Import a work for multiple authors without accounts
+    When I go to the import page
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    And I should see "Story"
+    And I should see "name1 [archived by archivist]"
+    And I should see "name2 [archived by archivist]"
 
+  Scenario: Import a work for multiple authors without accounts should send emails to all authors
+    When I go to the import page
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    When the system processes jobs
+    Then 1 email should be delivered to "a@ao3.org"
+    And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import multiple works as an archivist
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
