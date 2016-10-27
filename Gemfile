@@ -1,10 +1,11 @@
 source 'http://rubygems.org'
 
 ruby '2.2.5'
+gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.2'
+gem 'rails', '3.2.22.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -107,6 +108,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
+  gem "test_after_commit"
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
@@ -123,7 +125,8 @@ group :test do
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'simplecov', '~> 0.12.0'
+  gem 'coveralls', '~> 0.8.12'
   gem 'email_spec', '1.6.0'
 end
 
@@ -131,7 +134,6 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
-  gem 'test-unit', '~> 3.0'
   gem 'minitest'
 end
 
