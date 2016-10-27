@@ -150,12 +150,6 @@ end
 
 # WHEN
 
-When(/^I follow the link for "([^\"]*)" first invite$/) do |login|
-  user = User.find_by_login(login)
-  invite = user.invitations.first
-  step(%{I follow "#{invite.token}"})
-end
-
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
   fill_in "Name", :with => newpseud
