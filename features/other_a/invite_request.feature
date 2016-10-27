@@ -131,7 +131,7 @@ Feature: Invite requests
     When I follow the link for "user1" first invite
     Then I should see "Enter an email address"
     When I fill in "invitation[invitee_email]" with "user6@example.org"
-      AndI press "Update Invitation"
+      And I press "Update Invitation"
     Then I should see "Invitation was successfully sent."
 
   Scenario: An admin can create a user's invitations
