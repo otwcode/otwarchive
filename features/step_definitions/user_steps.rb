@@ -36,6 +36,13 @@ Given /^the user "([^\"]*)" exists and is activated$/ do |login|
   end
 end
 
+Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
+  user = User.find_by_login(login)
+  if user.blank?
+    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
+  end
+end
+
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   step("I am logged out")
   user = User.find_by_login(login)
@@ -201,7 +208,7 @@ Then /^I should get an activation email for "(.*?)"$/ do |login|
   step(%{1 email should be delivered})
   step(%{the email should contain "Welcome to the Archive of Our Own,"})
   step(%{the email should contain "#{login}"})
-  step(%{the email should contain "Please activate your account"})
+  step(%{the email should contain "activate your account"})
 end
 
 Then /^I should get a new user activation email$/ do
@@ -268,3 +275,7 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
  
+Then /^the user "([^"]*)" should be activated$/ do |login|
+  user = User.find_by_login(login)
+  assert user.active?
+end

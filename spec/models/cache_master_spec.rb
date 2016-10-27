@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe CacheMaster do
- let(:cache_master) { CacheMaster.new(42) }
+ let(:cache_master) { CacheMaster.new(123456) }
 
   it "should have a key" do
-    expect(cache_master.key).to eq("works:42:assocs")
+    expect(cache_master.key).to eq("works:123456:assocs")
   end
 
   it "should record deleted associations" do
