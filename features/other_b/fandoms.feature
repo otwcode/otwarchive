@@ -24,8 +24,17 @@ Feature: There is a list of unassigned Fandoms
 
   Scenario: A user can see the list of relationships in a fandom
 
-    Given I have a canonical "TV Shows" fandom tag named "Steven Universe"
+    Given the following typed tags exists
+        | name                            | type         | canonical |
+        | Steven Universe                 | Fandom       | true      |
+        | Ruby/Sapphire (Steven Universe) | Relationship | true      |
+        | Ruby (Steven Universe)          | Character    | true      |
+        | Sapphire (Steven Universe)      | Character    | true      |
+      And I add the fandom "Steven Universe" to the character "Ruby (Steven Universe)"
+      And I add the fandom "Steven Universe" to the character "Sapphire (Steven Universe)"
       And I am logged in as "author"
-      And I post the work "Stronger than you" with fandom "Steven Universe" relationship "Ruby/Sapphire (Steven Universe)"
-    When I go to the "Ruby/Sapphire (Steven Universe)" tag page
-
+      And I post the work "Stronger than you" with fandom "Steven Universe" with character "Ruby (Steven Universe)" with character2 "Sapphire (Steven Universe)" with relationship "Ruby/Sapphire (Steven Universe)"
+    When I go to the "Steven Universe" tag page
+      And I follow "Relationship tags in this Fandom"
+    Then I should see "Ruby (Steven Universe)"
+      And I should see "Sapphire (Steven Universe)"
