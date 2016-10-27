@@ -114,7 +114,7 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" it should fail with an error$/ do |path|
+Then /^visiting "([^"]*)" should fail with an error$/ do |path|
   expect {
     visit path
   }.to raise_error
