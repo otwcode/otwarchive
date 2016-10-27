@@ -2,7 +2,7 @@
 
 Feature: Tag Wrangling - Fandoms
 
-Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
+Scenario: fandoms wrangling - syns, mergerss, metatags
 
   Given the following activated tag wrangler exists
     | login  | password    |
@@ -211,3 +211,25 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I should see "Be a second B fandom" within "#letter-B .tags"
     And I should see "Be another thing" within "#letter-B .tags"
 
+@javascript
+Scenario: fandoms wrangling - autocompletes
+
+  Given the following activated tag wrangler exists
+        | login  | password    |
+        | Enigel | wrangulate! |
+    And basic tags
+    And the following typed tags exists
+        | name                            | type         | canonical |
+        | Steven Universe                 | Fandom       | true      |
+        | Ruby (Pokemon)                  | Character    | true      |
+        | Ruby (Firefly)                  | Character    | true      |
+        | Ruby (Steven Universe)          | Character    | true      |
+        | Ruby (SU)                       | Character    | false     |
+    And I am logged in as "Enigel" with password "wrangulate!"
+    When I go to the "Ruby (SU)" tag page
+     And I follow "Edit"
+     And I type in "ul.autocomplete" with "Ruby"
+    When I take a screenshot
+    Then I should see "Ruby (Pokemon)" in 
+      And I should see "Ruby (Firefly)" in the autocomplete
+      And I should see "Ruby (Steven Universe)" in the autocomplete

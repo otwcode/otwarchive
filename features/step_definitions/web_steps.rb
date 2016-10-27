@@ -33,6 +33,13 @@ When /^I limit myself to the Archive$/ do
   page.driver.browser.url_whitelist = ['http://127.0.0.1']
 end
 
+When /^I type in "([^"]*)" with "([^"]*)"$/ do |selector,contents|
+ find(selector).native.send_keys(contents)
+ #sleep 5
+ #puts page.evaluate_script( 'document.documentElement.innerHTML' )
+ puts find(:css , 'div.autocomplete.dropdown', :wait=> 20 , :text => 'uby' ).text
+end
+
 When /^I clear the network traffic$/ do
   page.driver.clear_network_traffic
 end

@@ -205,7 +205,8 @@ module NavigationHelpers
       tag_wranglers_path
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
-      
+    when /^the "(.*)" tag page$/i
+      tag_path(Tag.find_by_name($1)) 
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
