@@ -56,7 +56,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with f
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?$/ do |title, fandom, freeform, freeform2, category, collection, recipient,series|  
+When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?$/ do |title, fandom, freeform, freeform2, category, collection, recipient, series|  
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
