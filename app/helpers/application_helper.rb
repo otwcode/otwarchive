@@ -100,33 +100,38 @@ module ApplicationHelper
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path 
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      if creation.respond_to?(:author)
-        creation.author
-      else
-        pseuds = []
-        pseuds << creation.authors if creation.authors
-        pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-        pseuds = pseuds.flatten.uniq.sort
+      byline_text(creation, only_path)
+    end
+  end
 
-        archivists = Hash.new []
-        if creation.is_a?(Work)
-          external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
-          external_creatorships.each do |ec|
-            archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-            archivists[archivist_pseud] += [ec.author_name]
-          end
+  def byline_text(creation, only_path, text_only = false)
+    if creation.respond_to?(:author)
+      creation.author
+    else
+      pseuds = []
+      pseuds << creation.authors if creation.authors
+      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = pseuds.flatten.uniq.sort
+
+      archivists = Hash.new []
+      if creation.is_a?(Work)
+        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
+        external_creatorships.each do |ec|
+          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
+          archivists[archivist_pseud] += [ec.author_name]
         end
-
-        pseuds.collect { |pseud|
-          if archivists[pseud].nil?
-            pseud_link(pseud, only_path)
-          else
-            archivists[pseud].collect do |ext_author|
-              ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_link(pseud, only_path))
-            end
-          end
-        }.flatten.join(', ').html_safe
       end
+
+      pseuds.collect { |pseud|
+        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
+        if archivists[pseud].empty?
+          pseud_byline
+        else
+          archivists[pseud].collect { |ext_author|
+            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
+          }.join(', ')
+        end
+      }.join(', ').html_safe
     end
   end
 
@@ -139,41 +144,12 @@ module ApplicationHelper
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
-        end
-      return anon_byline
-    end
-    non_anonymous_text_byline(creation)
-  end
-
-  def non_anonymous_text_byline(creation)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-      pseuds = pseuds.flatten.uniq.sort
-    
-      archivists = {}
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.external_author_name.nil? ? nil : ec.external_author_name.name
-        end
+        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
       end
-
-      pseuds.collect { |pseud|
-        archivists[pseud].nil? ?
-            pseud_text(pseud) :
-            archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
-      }.join(', ').html_safe
+      anon_byline
+    else
+      byline_text(creation, only_path = false, text_only = true)
     end
-  end
-
-  def pseud_text(pseud)
-    pseud.byline
   end
 
   def link_to_modal(content = "", options = {})
