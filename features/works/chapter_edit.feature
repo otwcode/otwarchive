@@ -344,20 +344,6 @@ Feature: Edit chapters
       And the "sabrina" checkbox should be disabled
 
 
-  Scenario: Editing a chapter even if you are not a co-creator
-
-    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
-      And I am logged in as "opsfriend"
-    When I view the work "OP's Work"
-    Then I should see "Chapter 1"
-      And I should see "Chapter by originalposter"
-    When I follow "Edit Chapter"
-      And I fill in "content" with "opsfriend was here"
-      And I post the chapter
-    Then I should see "opsfriend was here"
-      And I should see "Chapter by originalposter"
-
-
   Scenario: Removing yourself as a co-creator from the chapter edit page
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
