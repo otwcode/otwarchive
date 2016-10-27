@@ -131,19 +131,19 @@ Feature: Invite requests
     When I follow the link for "user1" first invite
     Then I should see "Enter an email address"
     When I fill in "invitation[invitee_email]" with "user6@example.org"
-    Then I press "Update Invitation"
+      AndI press "Update Invitation"
     Then I should see "Invitation was successfully sent."
 
-  Scenario: An admin can create a users invitations
+  Scenario: An admin can create a user's invitations
     Given I am logged in as an admin
       And the user "steven" exists and is activated
-      And I go to steven's invitations page
+    When I go to steven's invitations page
     Then I should see "Create more invitations for this user"
     When I fill in "number_of_invites" with "4"
      And press "Create"
     Then I should see "Invitations were successfully created."
 
-  Scenario: An admin can delete a users invitations
+  Scenario: An admin can delete a user's invitations
     Given the user "user1" exists and is activated
       And "user1" has "5" invitations
       And I am logged in as an admin
