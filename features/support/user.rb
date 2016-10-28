@@ -1,5 +1,5 @@
 module UserHelpers
-  def find_or_create_user(login, password, hidden)
+  def find_or_create_new_user(login, password)
     user = User.find_by_login(login)
     if user.blank?
       user = FactoryGirl.create(:user, { login: login, password: password })
@@ -8,11 +8,6 @@ module UserHelpers
       user.password = password
       user.password_confirmation = password
       user.save
-    end
-    if hidden.present?
-      user.preference.hide_warnings = true
-      user.preference.hide_freeform = true
-      user.preference.save
     end
     user
   end

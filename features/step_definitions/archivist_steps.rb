@@ -1,7 +1,7 @@
 ### GIVEN
 
 Given /^I have an archivist "([^\"]*)"$/ do |name|
-  user = find_or_create_user(name, "password")
+  user = find_or_create_new_user(name, "password")
   role = Role.find_or_create_by_name("archivist")
   user.roles = [role]
   user.save
