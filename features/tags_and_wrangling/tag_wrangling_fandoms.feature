@@ -229,7 +229,7 @@ Scenario: fandoms wrangling - autocompletes
     When I go to the "Ruby (SU)" tag page
      And I follow "Edit"
      And I type in "ul.autocomplete" with "Ruby"
-    When I take a screenshot
-    Then I should see "Ruby (Pokemon)" in 
-      And I should see "Ruby (Firefly)" in the autocomplete
-      And I should see "Ruby (Steven Universe)" in the autocomplete
+    Then I should see "Ruby (Pokemon)" in autocomplete hack
+      And I should see "Ruby (Firefly)" in autocomplete hack
+      And I should see "Ruby (Steven Universe)" in autocomplete hack
+      And I should see "Ruby (SU)" in autocomplete hack

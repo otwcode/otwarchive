@@ -34,10 +34,8 @@ When /^I limit myself to the Archive$/ do
 end
 
 When /^I type in "([^"]*)" with "([^"]*)"$/ do |selector,contents|
+ Rails.cache.delete('/v1/autocomplete_hack/last_result')
  find(selector).native.send_keys(contents)
- #sleep 5
- #puts page.evaluate_script( 'document.documentElement.innerHTML' )
- puts find(:css , 'div.autocomplete.dropdown', :wait=> 20 , :text => 'uby' ).text
 end
 
 When /^I clear the network traffic$/ do
@@ -125,6 +123,23 @@ Then /^visiting "([^"]*)" should fail with an error$/ do |path|
   expect {
     visit path
   }.to raise_error
+end
+
+Then(/^I should see "([^"]*)" in autocomplete hack$/) do |answer|
+  # This breaks the rule https://github.com/cucumber/cucumber/wiki/Given-When-Then
+  # While it might be tempting to implement Then steps to just look in the database 
+  # resist the temptation. You should only verify outcome that is observable for
+  # the user (or external system) and databases usually are not.
+  result = false
+  (1..20).each do 
+    next unless Rails.cache.read('/v1/autocomplete_hack/last_result').nil?
+    sleep 1
+  end
+  assert !Rails.cache.read('/v1/autocomplete_hack/last_result').nil? 
+  Rails.cache.read('/v1/autocomplete_hack/last_result').each do |autocomplete|
+    result = true if autocomplete == answer
+  end
+  assert result
 end
 
 Then /^(?:|I )should see JSON:$/ do |expected_json|
@@ -304,6 +319,7 @@ Then /^show me the page$/ do
   save_and_open_page
   sleep 120
 end
+
 
 Then /^show me the network traffic$/ do
   puts page.driver.network_traffic.to_yaml
