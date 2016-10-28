@@ -230,7 +230,7 @@ class TagsController < ApplicationController
 
     @tag.attributes = params[:tag]
 
-    @tag.syn_string = syn_string if @tag.save
+    @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
     if @tag.errors.empty? && @tag.save
       # check if a resetting of the taggings_count was requsted

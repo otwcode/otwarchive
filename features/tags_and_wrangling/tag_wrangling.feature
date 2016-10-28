@@ -146,8 +146,9 @@ Feature: Tag wrangling
     # trying to assign a non-canonical fandom to a character
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
-    Then I should see "Tag was updated"
-      And I should not see "Stargate Atlantis"
+    Then I should see "Cannot add association"
+      And I should see "'Stargate Atlantis' tag is not canonical"
+      And I should not see "Stargate Atlantis" within "form"
       
     # making a fandom tag canonical, then assigning it to a character
     When I view the tag "Stargate Atlantis"
