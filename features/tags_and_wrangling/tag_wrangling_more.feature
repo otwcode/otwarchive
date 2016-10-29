@@ -141,9 +141,39 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I check the canonical option for the tag "Faye Valentine is a sweetie"
        And I check the canonical option for the tag "Ed is a sweetie"
        And I press "Wrangle"
-     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie Wrangle Tags for Cowboy Bebop"
+     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie"
        And the "Faye Valentine is a sweetie" tag should be canonical
        And the "Ed is a sweetie" tag should be canonical
+
+  Scenario: more wrangling....Freeform
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+        | Spike Spiegel is a sweetie             | Freeform     | false     |
+      And a media exists with name: "Anime & Manga", canonical: true
+      And I am logged in as a random user
+      And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie"
+     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+       And I go to the tagwranglings page
+       And I follow "Fandoms by media (2)"
+       And I check the wrangling option for "Cowboy Bebop"
+       And I press "Wrangle"
+     Then I should not see "Cowboy Bebop"
+
+  Scenario: more wrangling....Relationships( Canonical edition )
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | October Daye Series - Seanan McGuire   | Fandom       | true      |
+        | Tybalt (Toby Daye)                     | Character    | false     |
+        | October "Toby" Daye                    | Character    | true      |
+        | Toby Daye/Tybalt                       | Relationship | false     |
+      And a media exists with name: "Books & Literature", canonical: true
+      And I am logged in as a random user
+      And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform 
+
 
   Scenario: Tags that don't exist cause errors
     Given the following activated tag wrangler exists
