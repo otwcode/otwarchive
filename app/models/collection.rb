@@ -310,7 +310,7 @@ class Collection < ActiveRecord::Base
 
   def all_fandoms
     # We want filterable fandoms, but not inherited metatags:
-    Fandom.for_collections([self] + self.children).
+    Fandom.for_collections([self] + children).
       where('filter_taggings.inherited = 0').uniq
   end
 
