@@ -33,7 +33,7 @@ Given /^the user "([^\"]*)" exists and is activated$/ do |login|
 end
 
 Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
-  find_or_create_new_user(login, DEFAULT_PASSWORD, activated: false)
+  find_or_create_new_user(login, DEFAULT_PASSWORD, activate: false)
 end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
