@@ -990,9 +990,9 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       parent = Tag.find_by_name(name)
       if parent && parent.canonical?
-        self.add_association(parent)
+        add_association(parent)
       else
-        self.errors.add(:base, "Cannot add association: '#{name}' tag " +
+        errors.add(:base, "Cannot add association: '#{name}' tag " +
           (parent ? "is not canonical." : "does not exist."))
       end
     end
