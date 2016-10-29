@@ -82,19 +82,16 @@ module ApplicationHelper
       form.send( field_type, field_name, id: field_id )
   end
 
-  # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
-  # in order to disambiguate in the case of identical pseuds
-  # and on Feb 24 09 to sort alphabetically for great justice
-  # and show only the authors when in preview_mode, unless they're empty
+  # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [".html_safe + non_anonymous_byline(creation, options[:only_path]) + "]".html_safe
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
+        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
     end
-    non_anonymous_byline(creation, (options[:full_path] ? false : options[:only_path]))
+    non_anonymous_byline(creation, options[:only_path])
   end
 
   def non_anonymous_byline(creation, url_path = nil)
@@ -122,12 +119,12 @@ module ApplicationHelper
         end
       end
 
-      pseuds.collect { |pseud|
+      pseuds.map { |pseud|
         pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
         if archivists[pseud].empty?
           pseud_byline
         else
-          archivists[pseud].collect { |ext_author|
+          archivists[pseud].map { |ext_author|
             ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
           }.join(', ')
         end
@@ -148,7 +145,7 @@ module ApplicationHelper
       end
       anon_byline
     else
-      byline_text(creation, only_path = false, text_only = true)
+      byline_text(creation, only_path: false, text_only: true)
     end
   end
 
