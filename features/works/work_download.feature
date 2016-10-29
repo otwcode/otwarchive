@@ -182,3 +182,13 @@ Scenario: Download chaptered works as HTML
   When I view the work "Bazinga"
     And I follow "HTML"
   Then I should see "Chapter 2"
+
+  Scenario: Unrevealed works cannot be downloaded
+
+  Given the work "Now You See Me" in the unrevealed collection "Invisibility"
+  When I am logged in as the owner of "Invisibility"
+    And I view the work "Now You See Me"
+    And I follow "HTML"
+    And "AO3-4706" is fixed
+  # Then I should see "Sorry, you can't download an unrevealed work"
+  #   And I should be on the works page

@@ -160,6 +160,13 @@ Given /^the work "([^\"]*)"$/ do |work|
   end
 end
 
+Given /^the work "([^\"]*)" in the unrevealed collection "([^\"]*)"$/ do |work, collection|
+  step %{I have the hidden collection "#{collection}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}" to the collection "#{collection}"}
+  step %{I am logged out}
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
