@@ -111,24 +111,6 @@ Feature: Download a work
   # Then...
 
   @wip
-  Scenario: disable guest download
-
-  Given the work "NaNoWriMo"
-  When I view the work "NaNoWriMo"
-    And I follow "HTML"
-  Then I should see "NaNoWriMo"
-    And I should not see "Comments"
-  When guest downloading is off
-    And I am logged out as an admin
-    And I view the work "NaNoWriMo"
-    And I follow "PDF"
-  Then I should see "Due to current high load"
-  When I am logged in as a random user
-    And I view the work "NaNoWriMo"
-    And I follow "MOBI"
-  Then I should not see "Due to current high load"
-
-  @wip
   Scenario: Download chaptered works doesn't bomb
  
   Given the chaptered work "Epic Novel"
