@@ -933,6 +933,13 @@ public
     if params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
       params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
     end
+
+    # make sure at least one of the pseuds is actually owned by this user
+    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).value_of(:user_id).uniq
+    unless user_ids.include?(current_user.id)
+      flash.now[:error] = ts("You're not allowed to use that pseud.")
+      render :new and return
+    end
   end
 
   # Sets values for @work and @tags[category]

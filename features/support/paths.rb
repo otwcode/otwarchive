@@ -43,6 +43,8 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
+    when /^the unassigned fandoms page$/i
+      unassigned_fandoms_path
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
@@ -81,6 +83,8 @@ module NavigationHelpers
       user_invitations_path(User.current_user)
     when /my gifts page/
       user_gifts_path(User.current_user)
+    when /my assignments page/
+      user_assignments_path(User.current_user)
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
@@ -95,9 +99,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^(.*?)(?:'s)? bookmarks page$/i
       Bookmark.tire.index.refresh
       user_bookmarks_path(user_id: $1)
@@ -197,6 +201,10 @@ module NavigationHelpers
       opendoors_tools_path
     when /^the languages page$/i
       languages_path
+    when /^the wranglers page$/i
+      tag_wranglers_path
+    when /^the unassigned fandoms page $/i
+      unassigned_fandoms_path
       
     # Here is an example that pulls values out of the Regexp:
     #

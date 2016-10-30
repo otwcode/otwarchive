@@ -98,7 +98,7 @@
                           <%= t 'mailer.general.footer.general.html', support_url: root_url + "support", donate_url: donate_url %>
 
                           <% if content_for?(:sent_at) %>
-                            <p><%= t 'mailer.general.footer.sent_at', sent_at: :sent_at %></p>
+                            <p><%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %></p>
                           <% end %>
 
                           <% if content_for?(:sent_by) %>

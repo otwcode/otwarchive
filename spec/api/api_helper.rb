@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'webmock/rspec'
+require "spec_helper"
+require "webmock/rspec"
 
 module ApiHelper
   # set up a valid token and some headers

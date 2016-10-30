@@ -93,6 +93,13 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Mature"
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
+     When I follow "Activities"
+     Then I should see "View Admin Activity"
+     When I visit the last activities item
+     Then I should see "No Archive Warnings Apply"
+      And I should see "Old tags"
+      And I should see "User-Added Fandom"
+      And I should not see "Admin-Added Fandom"
 
   Scenario: Can edit external works
     Given basic tags
@@ -216,4 +223,5 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Preview Tags and Language"
     When I press "Update"
     Then I should see "Deutsch"
-      And I should not see "English"  
+      And I should not see "English"
+
