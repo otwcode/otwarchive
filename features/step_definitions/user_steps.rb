@@ -43,7 +43,7 @@ Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
   end
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
@@ -54,12 +54,17 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
     user.password_confirmation = password
     user.save
   end
+  if hidden.present?
+    user.preference.hide_warnings = true
+    user.preference.hide_freeform = true
+    user.preference.save
+  end
   visit login_path
   fill_in "User name", :with => login
   fill_in "Password", :with => password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
@@ -80,7 +85,7 @@ Given /^I am logged in as a random user$/ do
   fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 Given /^I am logged in as a banned user$/ do
@@ -94,7 +99,7 @@ Given /^I am logged in as a banned user$/ do
   fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
 Given /^user "([^\"]*)" is banned$/ do |login|
@@ -112,9 +117,9 @@ end
 
 Given /^I am logged out$/ do
   visit logout_path
-  assert !UserSession.find
+  assert UserSession.find.nil? unless @javascript
   visit admin_logout_path
-  assert !AdminSession.find
+  assert AdminSession.find.nil? unless @javascript
 end
 
 Given /^I log out$/ do
@@ -149,6 +154,12 @@ Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
 end
 
 # WHEN
+
+When /^I follow the link for "([^\"]*)" first invite$/ do |login|		
+  user = User.find_by_login(login)		
+  invite = user.invitations.first		
+  step(%{I follow "#{invite.token}"})		
+end
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
@@ -230,7 +241,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert !UserSession.find
+  assert UserSession.find.nil? unless @javascript
 end
 
 def get_work_name(age, classname, name)
@@ -279,3 +290,8 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
 end
+
+Then /^I should see the current user's preferences in the console$/ do
+  puts User.current_user.preference.inspect
+end
+
