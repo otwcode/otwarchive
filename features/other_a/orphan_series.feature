@@ -66,7 +66,6 @@ Feature: Orphan series
     Given I am logged in as "keeper"
       And I add the work "Shared Beginnings" to the series "Shared Series"
       And I add the co-author "orphaneer" to the work "Shared Beginnings"
-      And I view the series "Shared Series"
       And I add the work "Keeper's Solo" to the series "Shared Series"
 
     # Double-check to make sure that we've set up the authorships correctly.
