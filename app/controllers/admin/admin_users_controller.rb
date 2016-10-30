@@ -246,7 +246,7 @@ class Admin::AdminUsersController < ApplicationController
     @user.set_user_work_dates
     @user.reindex_user_bookmarks
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
-    flash[:notice] = ts('User account checked.')
+    flash[:notice] = ts('User account troubleshooting complete.')
     redirect_to(request.env['HTTP_REFERER'] || root_path) && return
   end
 
