@@ -189,6 +189,13 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+  Scenario: Wrangler has option to reindex a work
+
+    Given the work "Indexing Issues"
+      And I am logged in as a tag wrangler
+     When I view the work "Indexing Issues"
+     Then I should see "Reindex Work"
+
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
     
     Given a canonical fandom "'Allo 'Allo"

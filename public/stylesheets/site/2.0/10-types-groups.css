@@ -166,6 +166,10 @@ li.relationships a {
   background: #eee;
 }
 
+.reindex a {
+  border-bottom: 3px solid #900;
+}
+
 .series.footnote {
   font-size: 100%;
   float: none;
