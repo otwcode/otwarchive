@@ -158,8 +158,6 @@ module UsersHelper
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
       t('users_helper.log_validated', default: 'Account Validated')
-    elsif action == ArchiveConfig.ACTION_CHECK
-      t('users_helper.log_validated', default: 'Account Checked')
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
       t('users_helper.log_role_added', default: 'Role Added: ')
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
@@ -178,6 +176,8 @@ module UsersHelper
       t('users_helper.log_password_change', default: 'Password Changed')
     elsif action == ArchiveConfig.ACTION_NEW_EMAIL
       t('users_helper.log_email_change', default: 'Email Changed')
+    elsif action == ArchiveConfig.ACTION_TROUBLESHOT
+      t('users_helper.log_validated', default: 'Account Troubleshot')
     end
   end
 
