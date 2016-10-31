@@ -2,7 +2,7 @@
 
 Feature: Tag Wrangling - Fandoms
 
-Scenario: fandoms wrangling - syns, mergerss, metatags
+Scenario: fandoms wrangling - syns, mergers, metatags
 
   Given the following activated tag wrangler exists
     | login  | password    |
@@ -228,8 +228,7 @@ Scenario: fandoms wrangling - autocompletes
     And I am logged in as "Enigel" with password "wrangulate!"
     When I go to the "Ruby (SU)" tag page
      And I follow "Edit"
-     And I type in "ul.autocomplete" with "Ruby"
+     And I type in "ul.autocomplete input" with "Ruby"
     Then I should see "Ruby (Pokemon)" in autocomplete hack
       And I should see "Ruby (Firefly)" in autocomplete hack
       And I should see "Ruby (Steven Universe)" in autocomplete hack
-      And I should see "Ruby (SU)" in autocomplete hack
