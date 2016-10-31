@@ -169,8 +169,8 @@ class AutocompleteController < ApplicationController
     signup_id = params[:signup_id] 
     signup = ChallengeSignup.find(signup_id)
     pmatches = return_requests ? 
-      signup.offer_potential_matches.map {|pm| pm.request_signup.pseud.byline} :
-      signup.request_potential_matches.map {|pm| pm.offer_signup.pseud.byline}
+      signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
+      signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
     pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
     render_output(pmatches)
   end
