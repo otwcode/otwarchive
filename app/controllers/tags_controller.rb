@@ -36,7 +36,7 @@ class TagsController < ApplicationController
       work_ids.push syn.work_ids
     end
     work_ids.flatten!
-    reindex_all_works(work_ids)
+    @tag.reindex_all_works(work_ids)
     flash[:notice] = ts('Tag sent to be reindexed')
     redirect_to(request.env['HTTP_REFERER'] || root_path) && return
   end
