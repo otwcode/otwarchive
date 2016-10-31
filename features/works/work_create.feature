@@ -49,8 +49,6 @@ Feature: Create Works
 
   Scenario: Creating a new work with everything filled in, and we do mean everything
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And the following activated users exist
         | login          | password    | email                 |
         | coauthor       | something   | coauthor@example.org  |

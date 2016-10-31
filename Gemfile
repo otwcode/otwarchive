@@ -116,6 +116,9 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
+  gem 'selenium-webdriver'
+  gem 'poltergeist'
+  gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
@@ -125,7 +128,8 @@ group :test do
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'simplecov', '~> 0.12.0'
+  gem 'coveralls', '~> 0.8.12'
   gem 'email_spec', '1.6.0'
 end
 
