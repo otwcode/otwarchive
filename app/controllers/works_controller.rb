@@ -1062,6 +1062,7 @@ public
       importing_for_others: params[:importing_for_others],
       restricted: params[:restricted],
       override_tags: params[:override_tags],
+      detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],
       warning: params[:work][:warning_strings],
       character: params[:work][:character_string],
