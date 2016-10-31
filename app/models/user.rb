@@ -491,7 +491,7 @@ class User < ActiveRecord::Base
   def fix_user_subscriptions
     # Delete any subscriptions the user has to deleted items because this causes
     # the user's subscription page to error
-    @subscriptions = self.subscriptions.includes(:subscribable)
+    @subscriptions = subscriptions.includes(:subscribable)
     @subscriptions.to_a.each do |sub|
       if sub.name.nil?
         sub.destroy
@@ -501,14 +501,14 @@ class User < ActiveRecord::Base
  
   def reindex_user_works
     # reindex the user's works to make sure they show up on the user's works page
-    self.works.each do |work|
+    works.each do |work|
       IndexQueue.enqueue(w, :main)
     end
   end
 
   def set_user_work_dates
     # Fix user stats page error caused by the existence of works with nil revised_at dates
-    self.works.each do |work|
+    works.each do |work|
       if work.revised_at.nil?
         work.save
       end
@@ -518,10 +518,10 @@ class User < ActiveRecord::Base
 
   def reindex_user_bookmarks
     # Reindex a user's bookmarks.
-    self.bookmarks.each do |bookmark|
+    bookmarks.each do |bookmark|
       bookmark.update_index
     end
-    self.update_works_index_timestamp!
+    update_works_index_timestamp!
   end
 
   private

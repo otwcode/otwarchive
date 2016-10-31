@@ -124,7 +124,7 @@ module UsersHelper
     visible_works = pseud.respond_to?(:work_count) ? pseud.work_count.to_i : (work_counts[pseud.id] || 0)
     visible_recs = pseud.respond_to?(:rec_count) ? pseud.rec_count.to_i : (rec_counts[pseud.id] || 0)
     items = visible_works == 1 ? link_to(visible_works.to_s + ' work', user_pseud_works_path(pseud.user, pseud)) : (visible_works > 1 ? link_to(visible_works.to_s + ' works', user_pseud_works_path(pseud.user, pseud)) : '')
-    items += ', ' if (visible_works > 0) && (visible_recs > 0)
+    items += ', ' if (visible_works.positive?) && (visible_recs.positive?)
     if visible_recs > 0
       items += visible_recs == 1 ? link_to(visible_recs.to_s + ' rec', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true)) : link_to(visible_recs.to_s + ' recs', user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true))
     end
@@ -147,7 +147,7 @@ module UsersHelper
         collection.total_entries.to_s + " #{what}"
       end
     else
-      %( %d - %d of %d ) % [
+      %( %d - %d of %d )% [
         collection.offset + 1,
         collection.offset + collection.length,
         collection.total_entries
