@@ -141,8 +141,7 @@ Feature: Admin Actions to manage users
     And I am logged in as an admin
    When I go to the abuse administration page for "mrparis"
     And I follow "Troubleshoot Account"
-   Then I should see "User account checked."
-
+   Then I should see "User account troubleshooting complete."
 
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
