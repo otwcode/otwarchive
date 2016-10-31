@@ -101,3 +101,10 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I should not see "Canonical Fandomish"
     And I should not see "Canonical unwrangled"
 
+  When I follow "Random"
+  Then I should not see "Non-canonical NoFandom"
+    And I should not see "Non-canonical Fandomish"
+    And I should not see "Non-canonical unwrangled"
+    And I should not see "Canonical unused NoFandom"
+    And I should not see "Canonical Fandomish"
+    And I should not see "Canonical unwrangled"

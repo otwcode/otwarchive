@@ -70,7 +70,6 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
-
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -80,6 +79,18 @@ Feature: Gift Exchange Challenge
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
     Then I should see "sign-up is invalid"  
+
+  Scenario: I cannot sign up with a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to sign up for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully created"
+      And I should see "You can't sign up with that pseud"
+
+  Scenario: I cannot edit in a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to update my signup for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully updated"
+      And I should see "You can't sign up with that pseud"
 
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -266,24 +277,17 @@ Feature: Gift Exchange Challenge
       And the email should link to myname1's user url
       And the email html body should link to the works tagged "Stargate Atlantis"
 
-  Scenario: User signs up for two gift exchanges at once #'
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
-    Given I have created the gift exchange "Second Challenge" with name "testcoll2"
-      And I open signups for "Second Challenge"
-      And everyone has signed up for the gift exchange "Second Challenge"
-      And I have generated matches for "Second Challenge"
-      And I have sent assignments for "Second Challenge"
+  Scenario: User signs up for two gift exchanges at once and can use the Fulfill
+  link to fulfill one assignment at a time
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      # This is in fact a bug - only one of them should be checked
-      # TODO: Uncomment when the intermittent bug has been fixed
-    #Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #  And the "Second Challenge (myname3)" checkbox should be checked
+      And "AO3-4571" is fixed
+    # "I start to fulfill" will use the first Fulfill option on the page
+    # which will be for the oldest assignment
+    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+    #   And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -308,11 +312,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: Mod can see everyone's assignments, includind users' emails
     Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Awesome Gift Exchange"
     When I go to the "Awesome Gift Exchange" assignments page
       Then I should see "Assignments for Awesome"
     When I follow "Open"
@@ -321,12 +321,7 @@ Feature: Gift Exchange Challenge
       And I should see the image "alt" text "email myname1"
 
   Scenario: User can see their assignment, but no email links
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to my user page
       And I follow "Assignments"
@@ -339,12 +334,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
 
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I fulfill my assignment
     When I go to my user page
@@ -487,3 +477,45 @@ Feature: Gift Exchange Challenge
         And the email should not contain "Rating:"
         And the email should not contain "Warnings:"
         And the email should not contain "Optional Tags:"
+
+  Scenario: A mod can delete a gift exchange and all the assignments and
+  sign-ups will be deleted with it, but the collection will remain
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Challenge settings were deleted."
+      And I should not see the gift exchange dashboard for "Bad Gift Exchange"
+      And no one should have an assignment for "Bad Gift Exchange"
+      And no one should be signed up for "Bad Gift Exchange"
+    When I am on the collections page
+    Then I should see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Sign-ups page after a gift exchange 
+  they were signed up for has been deleted
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Bad Gift Exchange"
+      And I open signups for "Bad Gift Exchange"
+      And everyone has signed up for the gift exchange "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my signups page
+    Then I should see "Challenge Sign-ups"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange
+  they had an unfulfilled assignment in has been deleted
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange 
+  they had a fulfilled assignment in has been deleted
+    Given an assignment has been fulfilled in a gift exchange
+      And the challenge "Awesome Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Awesome Gift Exchange"
