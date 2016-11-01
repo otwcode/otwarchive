@@ -176,8 +176,8 @@ module UsersHelper
       t('users_helper.log_password_change', default: 'Password Changed')
     elsif action == ArchiveConfig.ACTION_NEW_EMAIL
       t('users_helper.log_email_change', default: 'Email Changed')
-    elsif action == ArchiveConfig.ACTION_TROUBLESHOT
-      t('users_helper.log_validated', default: 'Account Troubleshot')
+    elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
+      t('users_helper.log_troubleshot', default: 'Account Troubleshot')
     end
   end
 
