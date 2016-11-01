@@ -234,8 +234,8 @@ Feature: Tag wrangling
         | name              | type         | canonical |
         | Cowboy Bebop      | Fandom       | true      |
       And I am logged in as a random user
-      When I view the tag "Cowboy Bebop"
-      Then I should not see "Reindex Tag"
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
 
   Scenario: A tag wrangler can not see the reindex button on a tag page
 
@@ -243,8 +243,8 @@ Feature: Tag wrangling
         | name              | type         | canonical |
         | Cowboy Bebop      | Fandom       | true      |
       And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-      When I view the tag "Cowboy Bebop"
-      Then I should not see "Reindex Tag"
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
 
   Scenario: An admin can see the reindex button on a tag page and will recieve the correct message when pressed.
 
@@ -252,7 +252,6 @@ Feature: Tag wrangling
         | name              | type         | canonical |
         | Cowboy Bebop      | Fandom       | true      |
       And I am logged in as an admin
-      When I view the tag "Cowboy Bebop"
-      Then I follow "Reindex Tag"
-        And I should see "Tag sent to be reindexed"
-      
+    When I view the tag "Cowboy Bebop"
+    Then I follow "Reindex Tag"
+      And I should see "Tag sent to be reindexed"
