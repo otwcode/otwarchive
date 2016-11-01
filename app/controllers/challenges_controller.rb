@@ -1,5 +1,4 @@
 class ChallengesController < ApplicationController
-  require 'pp'
   # This is the PARENT controller for all the challenge controller classes
   #
   # Here's how challenges work:
