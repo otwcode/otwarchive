@@ -2,10 +2,6 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
   unselect(item, :from => selector)
 end
 
-When /^(?:|I )pry in to the system$/ do
-  require 'pry'
-  binding.pry
-end
 Then /^debug$/ do
   binding.pry
 end
