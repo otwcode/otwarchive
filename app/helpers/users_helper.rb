@@ -147,7 +147,7 @@ module UsersHelper
         collection.total_entries.to_s + " #{what}"
       end
     else
-      %( %d - %d of %d )% [
+      %( %d - %d of %d ) %[
         collection.offset + 1,
         collection.offset + collection.length,
         collection.total_entries
