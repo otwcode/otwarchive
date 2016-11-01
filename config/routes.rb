@@ -1,12 +1,10 @@
 Otwarchive::Application.routes.draw do
-
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
   match '/404', to: 'errors#404'
   match '/422', to: 'errors#422'
   match '/500', to: 'errors#500'
-
 
   #### DOWNLOADS ####
 
@@ -86,7 +84,7 @@ Otwarchive::Application.routes.draw do
       collection do
         put  :update_multiple
         delete :destroy_multiple
-        get  :confirm_destroy_multiple
+        get :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
@@ -149,6 +147,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        get :check_user
       end
       collection do
         get :notify
@@ -270,7 +269,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   #### WORKS ####
 
   resources :works do
@@ -351,7 +349,7 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts, only: [:index]  do
+  resources :gifts, only: [:index] do
     member do
       post :toggle_rejected
     end
@@ -445,7 +443,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   #### SESSIONS ####
 
   resources :user_sessions, only: [:new, :create, :destroy] do
@@ -456,7 +453,6 @@ Otwarchive::Application.routes.draw do
   end
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
-
 
   #### API ####
 
@@ -469,7 +465,6 @@ Otwarchive::Application.routes.draw do
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
-
 
   #### MISC ####
 
@@ -548,7 +543,6 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-
 
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]
