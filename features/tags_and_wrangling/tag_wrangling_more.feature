@@ -145,7 +145,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And the "Faye Valentine is a sweetie" tag should be canonical
        And the "Ed is a sweetie" tag should be canonical
 
-  Scenario: more wrangling....Freeform
+  Scenario: Mass wrangling in the Freeform bins
     Given the following typed tags exists
         | name                                   | type         | canonical |
         | Cowboy Bebop                           | Fandom       | true      |
@@ -163,7 +163,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I press "Wrangle"
      Then I should not see "Cowboy Bebop"
 
-  Scenario: more wrangling....Relationships
+  Scenario: A relationship can't be wrangled into a fandom that isn't a canonical tag
     Given the following typed tags exists
         | name                                   | type         | canonical |
         | Tybalt (Toby Daye)                     | Character    | false     |
@@ -181,7 +181,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I press "Wrangle"
      Then I should see "The following names are not canonical fandoms: October Daye Series - Seanan McGuire."
 
-  Scenario: more wrangling....Relationships canonically
+  Scenario: A relationship can be wrangled into a fandom that is a canonical tag
     Given the following typed tags exists
         | name                                   | type         | canonical |
         | Tybalt (Toby Daye)                     | Character    | true      |
@@ -199,7 +199,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I press "Wrangle"
      Then I should see "The following tags were successfully wrangled to October Daye Series - Seanan McGuire: Toby Daye/Tybalt"
 
-  Scenario: more wrangling....Characters can be canonical
+  Scenario: A wrangler can make tags canonical while wrangling them.
 
     Given the following typed tags exists
         | name              | type         | canonical |

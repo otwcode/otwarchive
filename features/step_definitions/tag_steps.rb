@@ -186,10 +186,6 @@ When /^I edit the tag "([^\"]*)"$/ do |tag|
   end
 end
 
-When(/^I view the tagwranglings page$/) do
-  visit tag_wranglings
-end
-
 When /^I view the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
   visit tag_url(tag)
