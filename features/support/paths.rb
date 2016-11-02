@@ -205,7 +205,7 @@ module NavigationHelpers
       tag_wranglers_path
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
-    when /the tagwranglings page$/
+    when /^the wrangling tools page$/
       tag_wranglings_path
       
     # Here is an example that pulls values out of the Regexp:
