@@ -145,78 +145,62 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And the "Faye Valentine is a sweetie" tag should be canonical
        And the "Ed is a sweetie" tag should be canonical
 
-  Scenario: Mass wrangling in the Freeform bins
-    Given the following typed tags exists
+  Scenario: Mass wrangling in the fandoms bins
+    Given I am logged in as a tag wrangler
+      And a media exists with name: "Anime & Manga", canonical: true
+      And the following typed tags exists
         | name                                   | type         | canonical |
         | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-        | Spike Spiegel is a sweetie             | Freeform     | false     |
-      And a media exists with name: "Anime & Manga", canonical: true
-      And I am logged in as a random user
-      And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I go to the wrangling tools page
-       And I follow "Fandoms by media (2)"
-       And I check the wrangling option for "Cowboy Bebop"
-       And I press "Wrangle"
-     Then I should not see "Cowboy Bebop"
+    When I go to the wrangling tools page
+      And I follow "Fandoms by media (1)"
+      And I check the wrangling option for "Cowboy Bebop"
+      And I select "Anime & Manga" from "Wrangle to Media"
+      And I press "Wrangle"
+    Then I should not see "Cowboy Bebop"
 
-  Scenario: A relationship can't be wrangled into a fandom that isn't a canonical tag
-    Given the following typed tags exists
+  Scenario: A relationship can't be mass wrangled into a fandom that isn't a
+  canonical tag
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
         | name                                   | type         | canonical |
-        | Tybalt (Toby Daye)                     | Character    | false     |
-        | October Daye                           | Character    | false     |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | false     |
-      And a media exists with name: "Books & Literature", canonical: true
-      And I am logged in as a random user
-      And I post the work "The course of true love never did run smooth" with fandom "October Daye Series - Seanan McGuire" with character "Tybalt (Toby Daye)" with second character "October Daye" with relationship "Toby Daye/Tybalt"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "October Daye Series - Seanan McGuire"
-       And I go to the wrangling tools page
-       And I follow "Relationships by fandom (1)"
-       And I check the wrangling option for "Toby Daye/Tybalt"
-       And I fill in "fandom_string" with "October Daye Series - Seanan McGuire"
-       And I press "Wrangle"
-     Then I should see "The following names are not canonical fandoms: October Daye Series - Seanan McGuire."
+    When I go to the wrangling tools page
+      And I follow "Relationships by fandom (1)"
+      And I check the wrangling option for "Toby Daye/Tybalt"
+      And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
+      And I press "Wrangle"
+    Then I should see "The following names are not canonical fandoms: October Daye Series - Seanan McGuire."
 
-  Scenario: A relationship can be wrangled into a fandom that is a canonical tag
-    Given the following typed tags exists
+  Scenario: A relationship can be mass wrangled into a fandom that is a
+  canonical tag
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
         | name                                   | type         | canonical |
-        | Tybalt (Toby Daye)                     | Character    | true      |
-        | October 'Toby' Daye                    | Character    | true      |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | true      |
-      And a media exists with name: "Books & Literature", canonical: true
-      And I am logged in as a random user
-      And I post the work "The course of true love never did run smooth" with fandom "October Daye Series - Seanan McGuire" with character "Tybalt (Toby Daye)" with second character "October 'Toby' Daye" with relationship "Toby Daye/Tybalt"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "October Daye Series - Seanan McGuire"
-       And I go to the wrangling tools page
-       And I follow "Relationships by fandom (1)"
-       And I check the wrangling option for "Toby Daye/Tybalt"
-       And I fill in "fandom_string" with "October Daye Series - Seanan McGuire"
-       And I press "Wrangle"
-     Then I should see "The following tags were successfully wrangled to October Daye Series - Seanan McGuire: Toby Daye/Tybalt"
+    When I go to the wrangling tools page
+      And I follow "Relationships by fandom (1)"
+      And I check the wrangling option for "Toby Daye/Tybalt"
+      And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully wrangled to October Daye Series - Seanan McGuire: Toby Daye/Tybalt"
 
-  Scenario: A wrangler can make tags canonical while wrangling them.
-
-    Given the following typed tags exists
+  Scenario: A wrangler can make tags canonical while mass wrangling
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
         | name              | type         | canonical |
         | Cowboy Bebop      | Fandom       | true      |
         | Faye Valentine    | Character    | false     |
         | Ed                | Character    | false     |
-      And I am logged in as a random user
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with character "Ed"
-      And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I go to the wrangling tools page
-       And I follow "Characters by fandom (2)"
-       And I fill in "fandom_string" with "Cowboy Bebop"
-       And I check the canonical option for the tag "Faye Valentine"
-       And I check the canonical option for the tag "Ed"
-       And I press "Wrangle"
-     Then I should see "The following tags were successfully made canonical: Faye Valentine, Ed"
+      And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed"
+    When I go to the wrangling tools page
+      And I follow "Characters by fandom (2)"
+      And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
+      And I check the canonical option for the tag "Faye Valentine"
+      And I check the canonical option for the tag "Ed"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully made canonical: Faye Valentine, Ed"
 
   Scenario: Tags that don't exist cause errors
     Given the following activated tag wrangler exists
