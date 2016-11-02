@@ -6,8 +6,8 @@
 <%= form_tag destroy_user_creations_admin_user_path(@user), method: :post, class: "simple destroy" do %>
 
   <p class="caution notice">
-    <%= ts("Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user, " \
-           "along with their #{bookmarks} bookmarks, #{series} series, and #{collections} collections? This <strong>cannot be undone</strong>.",
+    <%= ts("Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user,
+           along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.",
            bookmarks: @bookmarks.count, series: @series.count, collections: @collections.count).html_safe %>
   </p>
 
