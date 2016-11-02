@@ -157,7 +157,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I go to the tagwranglings page
+       And I go to the wrangling tools page
        And I follow "Fandoms by media (2)"
        And I check the wrangling option for "Cowboy Bebop"
        And I press "Wrangle"
@@ -174,7 +174,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as a random user
       And I post the work "The course of true love never did run smooth" with fandom "October Daye Series - Seanan McGuire" with character "Tybalt (Toby Daye)" with second character "October Daye" with relationship "Toby Daye/Tybalt"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "October Daye Series - Seanan McGuire"
-       And I go to the tagwranglings page
+       And I go to the wrangling tools page
        And I follow "Relationships by fandom (1)"
        And I check the wrangling option for "Toby Daye/Tybalt"
        And I fill in "fandom_string" with "October Daye Series - Seanan McGuire"
@@ -192,7 +192,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as a random user
       And I post the work "The course of true love never did run smooth" with fandom "October Daye Series - Seanan McGuire" with character "Tybalt (Toby Daye)" with second character "October 'Toby' Daye" with relationship "Toby Daye/Tybalt"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "October Daye Series - Seanan McGuire"
-       And I go to the tagwranglings page
+       And I go to the wrangling tools page
        And I follow "Relationships by fandom (1)"
        And I check the wrangling option for "Toby Daye/Tybalt"
        And I fill in "fandom_string" with "October Daye Series - Seanan McGuire"
@@ -210,7 +210,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with character "Ed"
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine"
      When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I go to the tagwranglings page
+       And I go to the wrangling tools page
        And I follow "Characters by fandom (2)"
        And I fill in "fandom_string" with "Cowboy Bebop"
        And I check the canonical option for the tag "Faye Valentine"
