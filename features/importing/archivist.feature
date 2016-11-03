@@ -18,7 +18,7 @@ Feature: Archivist bulk imports
 
   Scenario: Archivist can see link to import for others
     When I go to the import page
-    Then I should see "FOOO Import for others ONLY with permission"
+    Then I should see "Import for others ONLY with permission"
 
   Scenario: Importing for an author without an account should have the correct byline and email
     When I import the work "http://rebecca2525.livejournal.com/3562.html"

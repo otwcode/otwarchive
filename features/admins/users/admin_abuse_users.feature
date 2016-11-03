@@ -1,5 +1,5 @@
 @admin
-Feature: Admin Actions to manage users
+Feature: Admin Abuse actions
   In order to manage user accounts
   As an an admin
   I want to be able to manage abusive users
