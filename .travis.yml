@@ -4,7 +4,7 @@ sudo: required
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rspec spec"
-  - TEST_GROUP="cucumber -f progress -r features features/admins"
+  - TEST_GROUP="cucumber -r features features/admins -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -f progress -r features features/bookmarks"
   - TEST_GROUP="cucumber -f progress -r features features/collections"
   - TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"

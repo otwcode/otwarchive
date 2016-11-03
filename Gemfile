@@ -67,7 +67,7 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils", "1.2.1"
+gem 'escape_utils', '1.2.1'
 
 gem 'valium'
 
@@ -76,7 +76,7 @@ gem 'timeliness'
 gem 'rpm_contrib'
 
 # for generating graphs
-gem "google_visualr", ">= 2.1"
+gem 'google_visualr', '>= 2.1'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
@@ -85,14 +85,14 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark", '>=0.7.5'
+gem 'rack-dev-mark', '>=0.7.5'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem "audited-activerecord", "~> 3.0"
+gem 'audited-activerecord', '~> 3.0'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -108,7 +108,7 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  gem "test_after_commit"
+  gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
