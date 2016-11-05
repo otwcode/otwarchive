@@ -270,7 +270,7 @@ class User < ActiveRecord::Base
       users = users.joins(:roles).where("roles.id = ?", role.id)
     end
     if query.present?
-      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email = ?", "%#{query}%", query)
+      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
     end
     users.paginate(:page => options[:page] || 1)
   end
