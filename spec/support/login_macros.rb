@@ -14,4 +14,9 @@ module LoginMacros
     allow(controller).to receive(:current_user).and_return(@current_user)
     allow(controller).to receive(:logout_if_not_user_credentials).and_return(nil)
   end
+ 
+  def restore_login
+    @current_user.rspec_reset
+  end
+
 end

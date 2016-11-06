@@ -107,6 +107,7 @@ describe WorksController do
             fake_login
             get :index, tag_id: @fandom.name
             expect(assigns(:works).items).to match_array([@work, @work2])
+            restore_login
           end
         end
 
