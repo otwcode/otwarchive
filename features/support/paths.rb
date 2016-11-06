@@ -209,6 +209,8 @@ module NavigationHelpers
       tag_path(Tag.find_by_name($1))
     when /^the wrangling tools page$/
       tag_wranglings_path
+    when /^the "(.*)" fandom relationship page$/i
+      fandom_path($1)
       
     # Here is an example that pulls values out of the Regexp:
     #
