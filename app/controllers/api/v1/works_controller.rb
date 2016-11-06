@@ -180,31 +180,32 @@ class Api::V1::WorksController < Api::V1::BaseController
   end
 
   # Create options map for StoryParser
-  def options(archivist, params)
+  def options(archivist, work_params)
     {
       archivist: archivist,
       import_multiple: "chapters",
       importing_for_others: true,
       do_not_set_current_author: true,
-      post_without_preview: params[:post_without_preview].blank? ? true : params[:post_without_preview],
-      restricted: params[:restricted],
-      override_tags: params[:override_tags].blank? ? true : params[:override_tags],
-      collection_names: params[:collection_names],
-      title: params[:title],
-      fandom: params[:fandoms],
-      warning: params[:warnings],
-      character: params[:characters],
-      rating: params[:rating],
-      relationship: params[:relationships],
-      category: params[:categories],
-      freeform: params[:additional_tags],
-      summary: params[:summary],
-      notes: params[:notes],
-      encoding: params[:encoding],
-      external_author_name: params[:external_author_name],
-      external_author_email: params[:external_author_email],
-      external_coauthor_name: params[:external_coauthor_name],
-      external_coauthor_email: params[:external_coauthor_email]
+      post_without_preview: work_params[:post_without_preview].blank? ? true : work_params[:post_without_preview],
+      restricted: work_params[:restricted],
+      override_tags: work_params[:override_tags].nil? ? true : work_params[:override_tags],
+      detect_tags: work_params[:detect_tags].nil? ? true : work_params[:detect_tags],
+      collection_names: work_params[:collection_names],
+      title: work_params[:title],
+      fandom: work_params[:fandoms],
+      warning: work_params[:warnings],
+      character: work_params[:characters],
+      rating: work_params[:rating],
+      relationship: work_params[:relationships],
+      category: work_params[:categories],
+      freeform: work_params[:additional_tags],
+      summary: work_params[:summary],
+      notes: work_params[:notes],
+      encoding: work_params[:encoding],
+      external_author_name: work_params[:external_author_name],
+      external_author_email: work_params[:external_author_email],
+      external_coauthor_name: work_params[:external_coauthor_name],
+      external_coauthor_email: work_params[:external_coauthor_email]
     }
   end
 end

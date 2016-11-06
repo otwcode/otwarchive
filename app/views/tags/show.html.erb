@@ -9,9 +9,12 @@
           <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
           <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
         <% end %>
-    	  <% if can_wrangle? %>
+    	<% if can_wrangle? %>
       	  <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       	  <li><%= tag_comment_link(@tag) %></li>
+        <% end %>
+        <% if logged_in_as_admin? %>
+          <li><%= link_to ts('Reindex Tag'), reindex_tag_path(@tag) %> </li>
         <% end %>
       </ul>
     <% end %>

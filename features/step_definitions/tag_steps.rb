@@ -17,10 +17,11 @@ Given /^basic tags$/ do
   Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
   Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
+  Category.find_or_create_by_name_and_canonical("Gen", true)
   Category.find_or_create_by_name_and_canonical("Other", true)
   Category.find_or_create_by_name_and_canonical("F/F", true)
   Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("M/F", true)
+  Category.find_or_create_by_name_and_canonical("F/M", true)
   Category.find_or_create_by_name_and_canonical("M/M", true)
 end
 
@@ -173,7 +174,7 @@ When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
   select(type, :from => "tags[#{tag.id}]")
 end
 
-When /^I check the mass wrangling option for "([^"]*)"$/ do |tagname|
+When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   check("selected_tags_#{tag.id}")
 end

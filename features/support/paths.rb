@@ -207,6 +207,8 @@ module NavigationHelpers
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
+    when /^the wrangling tools page$/
+      tag_wranglings_path
       
     # Here is an example that pulls values out of the Regexp:
     #
