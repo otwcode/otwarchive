@@ -338,7 +338,7 @@ public
   end
 
   def use_caching?
-    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching? || %w(test).include?(Rails.env) && ! Rails.cache.read("test_caching_store").nil?
   end
 
   protected

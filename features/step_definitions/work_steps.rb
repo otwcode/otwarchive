@@ -398,6 +398,13 @@ When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   Work.tire.index.refresh
 end
 
+When(/^I browse the "([^"]*)" works with fandom set to "([^"]*)"$/) do |tagname, fandom|
+  tag = Tag.find_by_name(tagname)
+  fandom = Fandom.find_by_name(fandom)
+  visit tag_works_path(tag, :fandom_id => fandom.id)
+  Work.tire.index.refresh
+end
+
 When /^I delete the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
