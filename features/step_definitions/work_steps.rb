@@ -9,6 +9,12 @@ DEFAULT_CATEGORY = "Other"
 ### Setting up a work
 # These steps get used a lot by many other steps and tests to create works in the archive to test with
 
+Given(/^I have a (\d+) "([^"]*)" works\.$/) do |number_of_works, fandom|
+  number_of_works.to_i.times do |index|
+    step %{I post the work "Work number #{index}" with fandom "#{fandom}" with "#{index}" words}
+  end
+end
+
 When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
