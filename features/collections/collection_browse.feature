@@ -134,6 +134,7 @@ Feature: Collection
     And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed" to the collection "Ride him cowboy"
     And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with character "Faye Valentine" to the collection "Ride him cowboy"
     And I have test caching turned on
+    And all search indexes are updated
   When I view the collection "Ride him cowboy"
     And I follow "Works (2)"
     And I follow "Faye Valentine"
