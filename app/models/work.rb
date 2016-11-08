@@ -368,16 +368,20 @@ class Work < ActiveRecord::Base
     end
   end
 
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud=nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    new_pseud = new_user.default_pseud if new_pseud.nil?
+  def add_creator(creator_to_add, new_pseud = nil)
+    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
     self.pseuds << new_pseud
     self.chapters.each do |chapter|
       chapter.pseuds << new_pseud
       chapter.save
     end
     save
+  end
+
+  # Transfer ownership of the work from one user to another
+  def change_ownership(old_user, new_user, new_pseud = nil)
+    raise "No new user provided, cannot change ownership" unless new_user
+    self.add_creator(new_user, new_pseud)
     self.remove_author(old_user) if old_user && users.include?(old_user)
   end
 
