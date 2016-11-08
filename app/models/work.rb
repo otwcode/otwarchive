@@ -381,8 +381,8 @@ class Work < ActiveRecord::Base
   # Transfer ownership of the work from one user to another
   def change_ownership(old_user, new_user, new_pseud = nil)
     raise "No new user provided, cannot change ownership" unless new_user
-    self.add_creator(new_user, new_pseud)
-    self.remove_author(old_user) if old_user && users.include?(old_user)
+    add_creator(new_user, new_pseud)
+    remove_author(old_user) if old_user && users.include?(old_user)
   end
 
   def set_challenge_info

@@ -69,7 +69,7 @@ class ExternalAuthor < ActiveRecord::Base
           # ()archivist might already be removed if another coauthor already claimed), then add user as owner
           archivist = external_creatorship.archivist
           pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
-          if other_external_creators.empty? || !other_external_creators.map {|e| e.archivist}.include?(archivist)
+          if other_external_creators.empty? || !other_external_creators.map(&:archivist).include?(archivist)
             work.change_ownership(archivist, claiming_user, pseud_to_add)
           else
             work.add_creator(claiming_user, pseud_to_add)
