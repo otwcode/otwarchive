@@ -45,6 +45,15 @@ RSpec.configure do |config|
 
   config.before :each do
     DatabaseCleaner.start
+    # Now clear memcached
+    Rails.cache.clear
+    # Now reset redis ...
+    REDIS_GENERAL.flushall
+    REDIS_KUDOS.flushall
+    REDIS_RESQUE.flushall
+    REDIS_ROLLOUT.flushall     
+    # Finally elastic search
+    Tire::Model::Search.index_prefix Time.now.to_f.to_s
   end
 
   config.after :each do
