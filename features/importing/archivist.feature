@@ -28,12 +28,12 @@ Feature: Archivist bulk imports
     Then 1 email should be delivered to "rebecca2525@livejournal.com"
       And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
 
-  Scenario: Import a work for multiple authors without accounts
+  Scenario: Import a work for multiple authors without accounts should display all in the byline
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    And I should see "Story"
-    And I should see "name1 [archived by archivist]"
-    And I should see "name2 [archived by archivist]"
+    Then I should see "Story"
+      And I should see "name1 [archived by archivist]"
+      And I should see "name2 [archived by archivist]"
 
   Scenario: Import a work for multiple authors without accounts should send emails to all authors
     When I go to the import page
@@ -41,6 +41,26 @@ Feature: Archivist bulk imports
     When the system processes jobs
     Then 1 email should be delivered to "a@ao3.org"
     And 1 email should be delivered to "b@ao3.org"
+
+  Scenario: Import a work for multiple authors with and without accounts should display all in the byline
+    Given the following activated users exist
+      | login | email |
+      | user1 | a@ao3.org |
+    When I go to the import page
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    Then I should see "Story"
+      And I should see "user1"
+      And I should see "name2 [archived by archivist]"
+
+  Scenario: Import a work for multiple authors with and without accounts should send emails to all authors
+    Given the following activated users exist
+      | login | email |
+      | user1 | a@ao3.org |
+    When I go to the import page
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    When the system processes jobs
+      Then 1 email should be delivered to "a@ao3.org"
+      And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import multiple works as an archivist
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"

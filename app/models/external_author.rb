@@ -61,12 +61,19 @@ class ExternalAuthor < ActiveRecord::Base
     external_author_names.each do |external_author_name|
       external_author_name.external_work_creatorships.each do |external_creatorship|
         work = external_creatorship.creation
+        other_external_creators = work.external_creatorships - [external_creatorship]
+
         # if previously claimed, don't do it again
         unless work.users.include?(claiming_user)
-          # remove archivist as owner if still on the work -- might not be if another coauthor already claimed, add user as owner
+          # remove archivist as owner if still on the work and there are no other external authors associated with it
+          # ()archivist might already be removed if another coauthor already claimed), then add user as owner
           archivist = external_creatorship.archivist
           pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
-          work.change_ownership(archivist, claiming_user, pseud_to_add)
+          if other_external_creators.empty? || !other_external_creators.map(&:archivist).include?(archivist)
+            work.change_ownership(archivist, claiming_user, pseud_to_add)
+          else
+            work.add_creator(claiming_user, pseud_to_add)
+          end
           claimed_works << work.id
         end
       end
