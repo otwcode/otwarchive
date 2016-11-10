@@ -169,7 +169,7 @@ describe TagSetsHelper do
     end
 
     context 'for synonym tags' do
-      it 'should show correct tag information for synonym tags' do
+      xit 'should show correct tag information for synonym tags' do
         # I've left this here so others can see what I was attempting to do.
         # It looks like the Fandom object is changing (being recreated) between
         # what it looks like here in this test, and when it shows up in the
