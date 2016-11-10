@@ -94,7 +94,7 @@ describe Collectible do
             work.reload
           end
 
-          xit "should no longer be #{state}" do
+          it "should no longer be #{state}" do
             expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
           end
         end
