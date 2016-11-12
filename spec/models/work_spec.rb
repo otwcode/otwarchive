@@ -113,8 +113,8 @@ describe Work do
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "cannot be used by another user" do
-         work.work_skin_allowed
-         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
+        work.work_skin_allowed
+        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
       end
     end
   end
