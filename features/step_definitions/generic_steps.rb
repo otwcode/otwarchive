@@ -1,5 +1,5 @@
 Given(/^I have test caching turned on$/) do
-  Rails.cache.write("test_caching_store","please")
+  Rails.cache.write("test_caching_store", "please")
 end
 
 Then(/^I have test caching turned off$/) do
