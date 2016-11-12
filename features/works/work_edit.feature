@@ -133,15 +133,6 @@ Feature: Edit Works
       And I press "Preview"
     Then I should not see "draft"
 
-  Scenario: you cant edit work to remove the fandom
-    Given I am logged in as "editor"
-      And I post the work "Load of Typos"
-    When I edit the work "Load of Typos"
-      And I fill in "Fandoms" with ""
-      And I press "Preview"
-    Then I should see "Updating: Please add all required tags. Fandom is missing."
-    Then I should not see "draft"
-
   Scenario: You can add a co-author to an already-posted work
     Given I am logged in as "leadauthor"
       And I post the work "Dialogue"
@@ -165,3 +156,4 @@ Feature: Edit Works
     When I view the work "Shared"
     Then I should see "ex_friend" within ".byline"
       And I should not see "coolperson" within ".byline"
+
