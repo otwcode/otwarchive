@@ -13,6 +13,7 @@ describe CacheMaster do
   end
 
   it "should combine multiple deleted associations" do
+    clean_the_database   
     cache_master.record('tag', 5)
     cache_master.record('tag', 6)
     cache_master.record('pseud', 7)
@@ -20,6 +21,7 @@ describe CacheMaster do
   end
 
   it "should expire caches" do
+    clean_the_database
     cache_master.record('tag', 5)
     cache_master.record('tag', 6)
     cache_master.record('pseud', 7)
