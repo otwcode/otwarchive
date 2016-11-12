@@ -10,7 +10,11 @@ http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
 .draft {
   border: 2px dashed #aaa;
   padding: 0.643em;
-    border-radius: 0.5em;
+  border-radius: 0.5em;
+}
+
+works-drafts .module {
+  padding: 0.4em;
 }
 
 /*(these states spoof the ".navigation .current" style)*/
