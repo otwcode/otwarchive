@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'webmock'
-clean_the_database
 
 describe StoryParser do
 
