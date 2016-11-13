@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'webmock'
+clean_the_database
 
 describe StoryParser do
 
@@ -137,7 +138,6 @@ describe StoryParser do
 
   describe "#download_and_parse_chapters_into_story" do
     it "should set the work revision date to the date of the last chapter" do
-      clean_the_database
       # Let the test get at external sites, but stub out anything containing "url1" and "url2"
       WebMock.allow_net_connect!
       WebMock.stub_request(:any, /url1/).
@@ -215,7 +215,6 @@ describe StoryParser do
 
   describe "Import" do
     before do
-      clean_the_database  
       mock_external
       @user = create(:user)
     end
