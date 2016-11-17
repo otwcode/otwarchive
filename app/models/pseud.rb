@@ -326,7 +326,7 @@ class Pseud < ActiveRecord::Base
     # Should only transfer creatorship if we're a co-creator.
     if creation.pseuds.include?(self)
       creation.pseuds.delete(self)
-      creation.pseuds << pseud rescue nil
+      creation.pseuds << pseud unless creation.pseuds.include?(pseud)
     end
 
     if creation.is_a?(Work)
