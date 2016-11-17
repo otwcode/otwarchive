@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
                                               :cancel_comment_reply, :cancel_comment_edit,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
+  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
   before_filter :check_visibility, :only => [:show]
   before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access
