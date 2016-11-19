@@ -136,6 +136,13 @@ Feature: Admin Actions to manage users
     And the "Fannish next of kin's username" field should contain "harrysmom"
     And the "Fannish next of kin's email" field should contain "harrysmom@example.com"
 
+  Scenario: A user account is Troubleshoot 
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+   When I go to the abuse administration page for "mrparis"
+    And I follow "Troubleshoot Account"
+   Then I should see "User account troubleshooting complete."
+
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
@@ -195,6 +202,12 @@ Feature: Admin Actions to manage users
   Then I should see "User has been permanently suspended."
     And I should see "Suspended Permanently"
     And I should see "To the New Zealand penal colony with you."
+  When I follow "Manage Users"
+   And I fill in "query" with "mrparis"
+   And I press "Find"
+  Then I should see "1 user found"
+  When I follow "Details"
+  Then I should see "To the New Zealand penal colony with you."
 
   Scenario: A user cannot be banned without a note
   Given the user "mrparis" exists and is activated
@@ -299,5 +312,22 @@ Feature: Admin Actions to manage users
   Then I should see "Are you sure you want to delete"
   When I press "Yes, Delete All Spammer Creations"
   Then I should see "All creations by user Spamster have been deleted."
-  
-  
+
+  Scenario: A admin can activate a user account
+  Given the user "mrparis" exists and is not activated
+    And I am logged in as an admin
+   When I go to the abuse administration page for "mrparis"
+    And I press "Activate User Account"
+   Then I should see "User Account Activated"
+    And the user "mrparis" should be activated
+
+  Scenario: A admin can send an activation email for a user account
+  Given the following users exist
+        | login        | password    | email                 | activation_code |
+        | torres       | something   | torres@starfleet.org  | fake_code       |
+    And I am logged in as an admin
+    And all emails have been delivered
+   When I go to the abuse administration page for "torres"
+    And I press "Send Activation Email"
+   Then I should see "Activation email sent"
+    And 1 email should be delivered to "torres"

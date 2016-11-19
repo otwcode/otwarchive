@@ -50,6 +50,13 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I follow "The First Doctor"
+  Then I should not see "Make tag non-canonical and unhook all associations"
+ Given I am logged in as an admin
+  When I edit the tag "The Doctor (1st)"
+    And I fill in "Synonym of" with "The First Doctor"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I follow "The First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
     And the "tag_canonical" checkbox should be checked
@@ -61,13 +68,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should see "Tag was updated"
     And I should not see "Synonyms"
   When I follow "Edit First Doctor"
-  Then I should see "Make tag non-canonical and unhook all associations"
-    And I should see "The Doctor (1st)"
-    And I should see "The First Doctor"
-    And the "tag_canonical" checkbox should be checked
-    And the "tag_canonical" checkbox should be disabled
   
   # creating non-canonical characters from work posting
+  When I am logged in as "Enigel" with password "wrangulate!"
   When I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"

@@ -29,6 +29,21 @@ Scenario: When logged in I can comment on a work
     And I follow "Entire Work"
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4.heading.byline"
+  
+Scenario: I cannot comment with a pseud that I don't own
+
+  Given the work "Random Work"
+  When I attempt to comment on "Random Work" with a pseud that is not mine
+  Then I should not see "Comment created!"
+    And I should not see "on Chapter 1"
+    And I should see "You can't comment with that pseud"
+
+Scenario: I cannot edit in a pseud that I don't own
+
+  Given the work "Random Work"
+  When I attempt to update a comment on "Random Work" with a pseud that is not mine
+  Then I should not see "Comment was successfully updated"
+    And I should see "You can't comment with that pseud"
 
 Scenario: Comment editing
 

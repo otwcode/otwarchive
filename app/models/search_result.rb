@@ -5,6 +5,7 @@ class SearchResult
   attr_reader :klass, :tire_response
 
   def initialize(model_name, response)
+    raise "Redshirt: Attempted to constantize invalid class initialize #{model_name.classify}" unless %w(Bookmark Pseud Tag Work).include?(model_name.classify)
     @klass = model_name.classify.constantize
     @tire_response = response
   end

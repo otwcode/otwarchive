@@ -184,8 +184,8 @@ module HtmlCleaner
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
-  def sanitize_params(params = params)
-    params = walk_hash(params) if params
+  def sanitize_params(new_params = params)
+    walk_hash(new_params) if new_params
   end
 
   def walk_hash(hash)
