@@ -8,39 +8,29 @@ http_interactions:
       string: ''
     headers:
       Accept:
-      - ! '*/*'
+      - "*/*"
       User-Agent:
       - Ruby
   response:
     status:
-      code: 301
-      message: Moved Permanently
+      code: 302
+      message: Found
     headers:
-      Location:
-      - http://www.google.com/
+      Cache-Control:
+      - private
       Content-Type:
       - text/html; charset=UTF-8
-      Date:
-      - Wed, 13 May 2015 04:58:19 GMT
-      Expires:
-      - Fri, 12 Jun 2015 04:58:19 GMT
-      Cache-Control:
-      - public, max-age=2592000
-      Server:
-      - gws
+      Location:
+      - http://www.google.co.uk/?gfe_rd=cr&ei=4CRaV877OuTS8AfhsqKYDQ
       Content-Length:
-      - '219'
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Frame-Options:
-      - SAMEORIGIN
-      Alternate-Protocol:
-      - 80:quic,p=1
+      - '261'
+      Date:
+      - Fri, 10 Jun 2016 02:24:32 GMT
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Wed, 13 May 2015 04:58:19 GMT
+  recorded_at: Fri, 10 Jun 2016 02:24:33 GMT
 - request:
     method: head
     uri: http://testarchive.transformativeworks.org/
@@ -49,29 +39,27 @@ http_interactions:
       string: ''
     headers:
       Accept:
-      - ! '*/*'
+      - "*/*"
       User-Agent:
       - Ruby
   response:
     status:
-      code: 302
-      message: Moved Temporarily
+      code: 200
+      message: OK
     headers:
       Server:
       - nginx/1.6.2
       Date:
-      - Wed, 13 May 2015 04:58:20 GMT
+      - Fri, 10 Jun 2016 02:24:36 GMT
       Content-Type:
       - text/html
-      Content-Length:
-      - '160'
       Connection:
       - keep-alive
-      Location:
-      - http://test.archiveofourown.org/
+      Cache-Control:
+      - no-cache
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Wed, 13 May 2015 04:58:20 GMT
-recorded_with: VCR 2.5.0
+  recorded_at: Fri, 10 Jun 2016 02:24:37 GMT
+recorded_with: VCR 3.0.1

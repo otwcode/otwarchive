@@ -16,9 +16,10 @@
 
     <% else %>
       <% # ratings, categories, warnings %>
-        <h4 class="heading"><%= tag_type.classify.pluralize %></h4>
+        <h4 class="heading"><%= tag_type.gsub(/\s+/, "").classify.pluralize %></h4>
         <%= check_all_none %>
-        <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.classify.constantize.value_of(:name),
+        <% raise "Redshirt: Attempted to constantize invalid class initialize _internal_tag_set_fields.html.erb (2) #{tag_type.gsub(/\s+/, "").classify}" unless %w(Category Rating Warning).include?(tag_type.gsub(/\s+/, "").classify) %>
+        <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.gsub(/\s+/, "").classify.constantize.value_of(:name),
                                :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s",
                                :checkbox_side => "left") %>
     <% end %>

@@ -136,7 +136,7 @@ class CollectionItemsController < ApplicationController
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
         flash[:notice] ||= ""
-        flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">Invited</a> to your collection (#{needs_user_approval.title}).").html_safe
+        flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">invited</a> to your collection (#{needs_user_approval.title}).").html_safe
       end
     end
     unless unapproved_collections.empty?
