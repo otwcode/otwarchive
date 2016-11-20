@@ -80,7 +80,7 @@ Feature: Subscriptions
     And I should see "/tags/"
     And I should not see "myname1"
     And I should see "author"
-  When I view the "M/F" tag feed
+  When I view the "F/M" tag feed
   Then I should not see "/tags/"
   Then I should see "GPL by the OTW"
 

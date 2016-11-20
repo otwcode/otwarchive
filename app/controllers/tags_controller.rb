@@ -111,7 +111,7 @@ class TagsController < ApplicationController
       rescue ActiveRecord::RecordNotFound
         raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
       end
-      tag = @tag.merger if !@tag.canonical? && @tag.merger
+      tag = tag.merger if !tag.canonical? && tag.merger
       # Temp for testing
       if %w(Fandom Character Relationship).include?(tag.type.to_s) || tag.name == "F/F"
         if tag.canonical?
