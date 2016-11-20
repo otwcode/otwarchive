@@ -112,7 +112,7 @@ class TagsController < ApplicationController
         raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
       end
       tag = tag.merger if !tag.canonical? && tag.merger
-      # Temp for testing
+      # F/F is currently a special case...
       if %w(Fandom Character Relationship).include?(tag.type.to_s) || tag.name == "F/F"
         if tag.canonical?
           works = tag.filtered_works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all
