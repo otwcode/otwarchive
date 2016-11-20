@@ -103,6 +103,10 @@ class TagsController < ApplicationController
   end
 
   def feed
+    # Construct a hash that can be cached. The has contains
+    # path: where to redirect to
+    # work: The list of works
+    # tag: the tag the feed is for
     hash = Rails.cache.fetch(Tag.tag_feeds_key(params[:id])) do
       path = nil
       works = nil 
