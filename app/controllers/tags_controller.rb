@@ -103,7 +103,6 @@ class TagsController < ApplicationController
   end
 
   def feed
-<<<<<<< HEAD
     hash = Rails.cache.fetch(Tag.tag_feeds_key(params[:id])) do
       path = nil
       works = nil 
