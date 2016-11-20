@@ -1,6 +1,5 @@
 class WranglingGuidelinesController < ApplicationController
-
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :admin_only, except: [:index, :show]
 
   # GET /wrangling_guidelines
   def index
@@ -35,7 +34,7 @@ class WranglingGuidelinesController < ApplicationController
       flash[:notice] = ts('Wrangling Guideline was successfully created.')
       redirect_to(@wrangling_guideline)
     else
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
@@ -47,18 +46,18 @@ class WranglingGuidelinesController < ApplicationController
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
       redirect_to(@wrangling_guideline)
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
   # reorder FAQs
   def update_positions
     if params[:wrangling_guidelines]
-      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])       
+      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])
       flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
     elsif params[:wrangling_guideline]
       params[:wrangling_guideline].each_with_index do |id, position|
-        WranglingGuideline.update(id, :position => position + 1)
+        WranglingGuideline.update(id, position: position + 1)
         (@wrangling_guidelines ||= []) << WranglingGuideline.find(id)
       end
     end
