@@ -53,13 +53,8 @@ class WranglingGuidelinesController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:wrangling_guidelines]
-      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])
+      @wrangling_guidelines = WranglingGuideline.reorder(params.permit(:utf8, :commit, wrangling_guidelines: [])[:wrangling_guidelines])
       flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
-    elsif params[:wrangling_guideline]
-      params[:wrangling_guideline].each_with_index do |id, position|
-        WranglingGuideline.update(id, position: position + 1)
-        (@wrangling_guidelines ||= []) << WranglingGuideline.find(id)
-      end
     end
     redirect_to(wrangling_guidelines_path)
   end
