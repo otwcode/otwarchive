@@ -57,7 +57,6 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with c
   unless relationship.blank?
     fill_in("work[relationship_string]", with: relationship)
   end
-  screenshot_and_save_page
   fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
 end
 
