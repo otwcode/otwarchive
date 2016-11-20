@@ -8,7 +8,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines/1
   def show
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
+    @wrangling_guideline = WranglingGuideline.find(wrangling_guideline_id)
   end
 
   # GET /wrangling_guidelines/new
@@ -18,7 +18,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines/1/edit
   def edit
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
+    @wrangling_guideline = WranglingGuideline.find(wrangling_guideline_id)
   end
 
   # GET /wrangling_guidelines/manage
@@ -40,7 +40,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # PUT /wrangling_guidelines/1
   def update
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
+    @wrangling_guideline = WranglingGuideline.find(wrangling_guideline_id)
 
     if @wrangling_guideline.update_attributes(wrangling_guideline_params)
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
@@ -66,16 +66,18 @@ class WranglingGuidelinesController < ApplicationController
 
   # DELETE /wrangling_guidelines/1
   def destroy
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
+    @wrangling_guideline = WranglingGuideline.find(wrangling_guideline_id)
     @wrangling_guideline.destroy
 
     redirect_to(wrangling_guidelines_url)
   end
 
   private
+    def wrangling_guideline_params
+      params.require(:wrangling_guideline).permit(:title, :content)
+    end
 
-  def wrangling_guideline_params
-    params.require(:wrangling_guideline).permit(:title, :content)
-  end
-
+    def wrangling_guideline_id
+      params.require(:id)
+    end
 end
