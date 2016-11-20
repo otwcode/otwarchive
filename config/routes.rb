@@ -1,12 +1,10 @@
 Otwarchive::Application.routes.draw do
-
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
   match '/404', to: 'errors#404'
   match '/422', to: 'errors#422'
   match '/500', to: 'errors#500'
-
 
   #### DOWNLOADS ####
 
@@ -50,6 +48,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :unassigned
     end
+    get :show
   end
   resources :tag_wranglings do
     member do
@@ -71,6 +70,7 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
+      get :reindex
     end
     collection do
       get :show_hidden
@@ -86,7 +86,7 @@ Otwarchive::Application.routes.draw do
       collection do
         put  :update_multiple
         delete :destroy_multiple
-        get  :confirm_destroy_multiple
+        get :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
@@ -149,6 +149,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        get :check_user
       end
       collection do
         get :notify
@@ -270,7 +271,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   #### WORKS ####
 
   resources :works do
@@ -286,8 +286,10 @@ Otwarchive::Application.routes.draw do
       get :edit_tags
       get :preview_tags
       put :update_tags
-      get :marktoread
+      get :mark_for_later
+      get :mark_as_read
       get :confirm_delete
+      get :reindex
     end
     resources :bookmarks
     resources :chapters do
@@ -349,7 +351,7 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts, only: [:index]  do
+  resources :gifts, only: [:index] do
     member do
       post :toggle_rejected
     end
@@ -443,7 +445,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   #### SESSIONS ####
 
   resources :user_sessions, only: [:new, :create, :destroy] do
@@ -455,7 +456,6 @@ Otwarchive::Application.routes.draw do
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
-
   #### API ####
 
   namespace :api do
@@ -463,12 +463,10 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
       match 'bookmarks/import', to: 'bookmarks#create', via: :post
-      match 'import', to: 'works#create', via: :post
       match 'works/import', to: 'works#create', via: :post
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
-
 
   #### MISC ####
 
@@ -547,7 +545,6 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-
 
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]

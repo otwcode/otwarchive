@@ -440,23 +440,6 @@ class User < ActiveRecord::Base
     LogItem.create(options)
   end
 
-  # Options can include :categories and :limit
-  def most_popular_tags(options = {})
-    all_tags = []
-    options[:categories] ||= %w(Fandom Character Relationship Freeform)
-    type_tags = []
-    options[:categories].each do |type_name|
-      type_tags << type_name.constantize.all
-    end
-    all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
-    tags_with_count = {}
-    all_tags.uniq.each do |tag|
-      tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-    end
-    all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-    popular_tags = options[:limit].blank? ? all_tags.collect {|pair| pair.first} : all_tags.collect {|pair| pair.first}[0..(options[:limit]-1)]
-  end
-
   # Returns true if user is the sole author of a work
   # Should also be true if the user has used more than one of their pseuds on a work
   def is_sole_author_of?(item)
@@ -503,6 +486,42 @@ class User < ActiveRecord::Base
   def remove_from_queue
     invite_request = InviteRequest.find_by_email(self.email)
     invite_request.destroy if invite_request
+  end
+
+  def fix_user_subscriptions
+    # Delete any subscriptions the user has to deleted items because this causes
+    # the user's subscription page to error
+    @subscriptions = subscriptions.includes(:subscribable)
+    @subscriptions.to_a.each do |sub|
+      if sub.name.nil?
+        sub.destroy
+      end
+    end
+  end
+ 
+  def reindex_user_works
+    # reindex the user's works to make sure they show up on the user's works page
+    works.each do |work|
+      IndexQueue.enqueue(w, :main)
+    end
+  end
+
+  def set_user_work_dates
+    # Fix user stats page error caused by the existence of works with nil revised_at dates
+    works.each do |work|
+      if work.revised_at.nil?
+        work.save
+      end
+      IndexQueue.enqueue(w, :main)
+    end
+  end
+
+  def reindex_user_bookmarks
+    # Reindex a user's bookmarks.
+    bookmarks.each do |bookmark|
+      bookmark.update_index
+    end
+    update_works_index_timestamp!
   end
 
   private

@@ -6,7 +6,7 @@ Feature: Subscriptions
   Scenario: Subscribe to a test fandom when there are no works in it
 
   When I am logged in as "author"
-    And I post a work "My Work Title" with category "M/F"
+    And I post a work "My Work Title" with category "F/M"
   When I am logged in as "reader"
     And I view the "F/F" works index
   Then I should see "RSS Feed"

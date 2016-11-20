@@ -69,8 +69,6 @@ Feature: Import Works from LJ
   @import_lj_no_backdate
   Scenario: Creating a new work from an LJ story without backdating it
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"

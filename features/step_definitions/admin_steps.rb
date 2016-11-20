@@ -58,7 +58,7 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  german = Language.find_or_create_by_short_and_name_and_support_available("DE", "Deutsch", true)
+  german = Language.find_or_create_by_short_and_name_and_support_available_and_abuse_support_available("DE", "Deutsch", true, true)
   de = Locale.new
   de.iso = 'de'
   de.name = 'Deutsch'
@@ -170,7 +170,23 @@ Given /^I have posted an admin post with tags$/ do
   click_button("Post")
 end
 
+Given(/^the following language exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(:language, hash)
+  end
+end
+
 ### WHEN
+
+When /^I visit the last activities item$/ do
+  visit("/admin/activities/#{AdminActivity.last.id}")
+end
+
+When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
+  user = User.find_by_login(login)
+  token = user.invitations.first.token
+  fill_in(field, with: token)
+end
 
 When /^I turn off guest downloading$/ do
   step("I am logged in as an admin")
@@ -253,10 +269,10 @@ When /^I edit known issues$/ do
     step(%{I press "Post"})
 end
 
-Given(/^the following language exists$/) do |table|
-  table.hashes.each do |hash|
-    FactoryGirl.create(:language, hash)
-  end
+When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
+  role_name = role.parameterize.underscore
+  role_id = Role.find_by_name(role_name).id
+  uncheck("user_roles_#{role_id}")
 end
 
 ### THEN

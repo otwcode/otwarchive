@@ -8,10 +8,10 @@ end
 
 ### WHEN
 
-When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
+When /^an admin creates an?( active)?(?: "([^\"]*)")? banner$/ do |active, banner_type|
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
-  fill_in("admin_banner_content", :with => "This is some banner text")
+  fill_in("admin_banner_content", with: "This is some banner text")
   if banner_type.present?
     if banner_type == "alert"
       choose("admin_banner_banner_type_alert")
@@ -21,9 +21,9 @@ When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
       choose("admin_banner_banner_type_")
     end
   end
-  check("admin_banner_active")
+  check("admin_banner_active") unless active.blank?
   click_button("Create Banner")
-  step %{I should see "Setting banner back on for all users. This may take some time."}
+  step %{I should see "Setting banner back on for all users. This may take some time."} unless active.blank?
 end
 
 When /^an admin deactivates the banner$/ do
@@ -39,15 +39,25 @@ When /^an admin edits the active banner$/ do
   step %{I am logged in as an admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
-  fill_in("admin_banner_content", :with => "This is some edited banner text")
+  fill_in("admin_banner_content", with: "This is some edited banner text")
   click_button("Update Banner")
   step %{I should see "Setting banner back on for all users. This may take some time."}
+end
+
+When /^an admin makes a minor edit to the active banner$/ do
+  step %{I am logged in as an admin}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  fill_in("admin_banner_content", with: "This is some banner text!")
+  check("admin_banner_minor_edit")
+  click_button("Update Banner")
+  step %{I should see "Updating banner for users who have not already dismissed it. This may take some time."}
 end
 
 When /^an admin creates a different active banner$/ do
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
-  fill_in("admin_banner_content", :with => "This is new banner text")
+  fill_in("admin_banner_content", with: "This is new banner text")
   check("admin_banner_active")
   click_button("Create Banner")
   step %{I should see "Setting banner back on for all users. This may take some time."}
@@ -127,5 +137,22 @@ end
 
 Then /^I should see the first login popup$/ do
   step %{I should see "Here are some tips to help you get started."}
-    step %{I should see "To log in, locate and fill in the log in link"}
+    step %{I should see "To log in, locate the login link"}
 end
+
+Then /^I should see the banner with minor edits$/ do
+  step %{I should see "This is some banner text!"}
+end
+
+Then /^I should not see the banner with minor edits$/ do
+  step %{I should not see "This is some banner text!"}
+end
+
+Then /^the page should have the different banner$/ do
+  step %{I should see "This is new banner text"}
+end
+
+Then /^the page should not have a banner$/ do
+  page.should_not have_xpath("//div[@class=\"announcement group\"]")
+end
+
