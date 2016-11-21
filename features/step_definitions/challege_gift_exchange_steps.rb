@@ -100,8 +100,8 @@ end
 
 Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
+  step %{I have created the gift exchange "#{title}"}
+  step %{I open signups for "#{title}"}
 end
 
 ## Signing up
@@ -280,6 +280,12 @@ Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
   step %{I should not see "Assignments are now being sent out"}
 end
 
+Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
+  step %{the gift exchange "#{challenge_title}" is ready for matching}
+  step %{I have generated matches for "#{challenge_title}"}
+  step %{I have sent assignments for "#{challenge_title}"}
+end
+
 ### Fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
@@ -301,12 +307,7 @@ When /^I fulfill my assignment$/ do
 end
 
 When /^an assignment has been fulfilled in a gift exchange$/ do
-  step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
-  step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
-  step %{I have generated matches for "Awesome Gift Exchange"}
-  step %{I have sent assignments for "Awesome Gift Exchange"}
+  step %{everyone has their assignments for "Awesome Gift Exchange"}
   step %{I am logged in as "myname1"}
   step %{I fulfill my assignment}
 end
@@ -332,4 +333,29 @@ When /^I have set up matching for "([^\"]*)" with no required matching$/ do |cha
   step %{I have created the gift exchange "Awesome Gift Exchange"}
   step %{I open signups for "Awesome Gift Exchange"}
   step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
+end
+
+### Deleting a gift exchange
+
+Then /^I should not see the gift exchange dashboard for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  visit collection_path(collection)
+  step %{I should not see "Gift Exchange" within "#dashboard"}
+  step %{I should not see "Sign-up Form" within "#dashboard"}
+  step %{I should not see "My Sign-up" within "#dashboard"}
+  step %{I should not see "Sign-ups" within "#dashboard"}
+  step %{I should not see "Challenge Settings" within "#dashboard"}
+  step %{I should not see "Sign-up Summary" within "#dashboard"}
+  step %{I should not see "Requests Summary" within "#dashboard"}
+  step %{I should not see "Matching" within "#dashboard"}
+  step %{I should not see "Assignments" within "#dashboard"}
+  step %{I should not see "Challenge Settings" within "#dashboard"}
+end
+
+Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  User.all.each do |user|
+    user.offer_assignments.in_collection(collection).should be_empty
+    user.pinch_hit_assignments.in_collection(collection).should be_empty
+  end
 end
