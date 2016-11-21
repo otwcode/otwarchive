@@ -90,6 +90,22 @@ Feature: Subscriptions
     And I should not see "qpootle5"
     And I should see "theblackcat"
   
+  Scenario: Adding a co author is reflected in the feed.
+
+  Given a user exists with login: "sam"
+  When I am logged in as "qpootle5" with password "password"
+    And I post a work "A sunny story" with category "F/F"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should see "qpootle5"
+  When I add the co-author "sam" to the work "A sunny story"
+  Then I view the "F/F" works index
+    And I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should see "sam"
 
   Scenario: Mystery work is not shown in feed
   
