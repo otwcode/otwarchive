@@ -33,6 +33,64 @@ Feature: Subscriptions
     And I view the "Multi" works index
   Then I should not see "RSS Feed"
 
+  Scenario: Changing the title is reflected in the feed.
+
+  When I am logged in as "author"
+    And I post a work "A sunny story" with category "F/F"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should see "Stargate SG-1"
+  When I edit the work "A sunny story"
+    And I fill in "work[title]" with "A dark story"
+    And I press "Post Without Preview"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should not see "A sunny story"
+    And I should see "A dark story"
+
+  Scenario: Changing the summary is reflected in the feed.
+
+  When I am logged in as "author"
+    And I post a work "A sunny story" with category "F/F"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should see "Stargate SG-1"
+    And I should not see "A fun story"
+  When I edit the work "A sunny story"
+    And I fill in "work[summary]" with "A fun story"
+    And I press "Post Without Preview"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A fun story"
+
+  Scenario: Changing the username of the author is reflected in the feed.
+
+  When I am logged in as "qpootle5" with password "password"
+    And I post a work "A sunny story" with category "F/F"
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should see "qpootle5"
+  When I visit the change username page for qpootle5
+    And I fill in "New user name" with "theblackcat"
+    And I fill in "Password" with "password"
+  When I press "Change"
+  Then I should get confirmation that I changed my username
+    And I view the "F/F" works index
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
+  Then I should see "A sunny story"
+    And I should not see "qpootle5"
+    And I should see "theblackcat"
+  
+
   Scenario: Mystery work is not shown in feed
   
   Given basic tags
@@ -83,4 +141,3 @@ Feature: Subscriptions
   When I view the "F/M" tag feed
   Then I should not see "/tags/"
   Then I should see "GPL by the OTW"
-
