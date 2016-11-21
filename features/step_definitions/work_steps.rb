@@ -230,19 +230,30 @@ When /^a chapter is added to "([^\"]*)"$/ do |work_title|
   Work.tire.index.refresh
 end
 
+When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
+  step %{a new chapter for "#{work_title}" is started}
+  step %{I add the co-author "#{coauthor}"}
+  click_button("Post")
+  Work.tire.index.refresh
+end
+
 When /^a draft chapter is added to "([^\"]*)"$/ do |work_title|
+  step %{a new chapter for "#{work_title}" is started}
+  step %{I press "Preview"}
+  Work.tire.index.refresh
+end
+
+When /^a new chapter for "([^\"]*)" is started$/ do |work_title|
   work = Work.find_by_title(work_title)
   user = work.users.first
   step %{I am logged in as "#{user.login}"}
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
-  step %{I press "Preview"}
-  Work.tire.index.refresh
 end
 
 # meant to be used in conjunction with above step
-When /^I post the draft chapter$/ do
+When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
 end
@@ -439,7 +450,7 @@ end
 
 When /^I add the co-author "([^\"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
-  check("Add co-authors?")
+  check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 

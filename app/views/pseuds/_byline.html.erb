@@ -1,36 +1,58 @@
-<!-- Co-Author stuff -->
-
 <dt class="byline<%= @pseuds.size > 1 ? "" : " hidden" %>">
-  <%= label_tag "#{type}_author_attributes_ids_", ts("Author / Pseud(s)") %>
+  <%= label_tag "#{type}_author_attributes_ids_", ts("Creator/Pseud(s)") %>
 </dt>
 <dd class="byline<%= @pseuds.size > 1 ? "" : " hidden" %>">
   <%= select_tag "#{type}[author_attributes][ids][]",
-      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), :multiple => true %>
+      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), multiple: true %>
 </dd>
 
-<% unless @coauthors.blank? %>
-  <select name="<%= type %>[author_attributes][coauthors][]" multiple="multiple" class="hidden">
-    <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
-  </select>
-<% end %>
-
 <% if @coauthors.size > 0 %>
-  <dt class="byline"><%= ts("Current Co-authors:") %> </dt>
-    <dd class="byline">
-      <ul>
+  <dt class="byline">
+    <%= type == "chapter" ? ts("Work co-creators") : ts("Current co-creators") %>
+  </dt>
+  <dd class="byline">
+    <ul>
+      <% for author in @coauthors %>
+        <li><%= author.byline %></li>
+      <% end %>
+    </ul>
+  </dd>
+
+  <% if type == "chapter" %>
+    <dt>
+      <%= ts("Chapter co-creators") %>
+    </dt>
+    <dd class="listbox">
+      <h4 class="heading"><%= ts("Co-creators") %></h4>
+      <ul class="many options index">
         <% for author in @coauthors %>
-          <li><%= author.byline %></li>
+          <li>
+            <% # You should only be able to add co-creators %>
+            <% author_is_coauthor = @chapter.new_record? ? false :
+                                    @selected_pseuds.include?(author.id) %>
+            <%= label_tag "chapter_author_attributes_coauthors_#{author.id}",
+                          author.id, class: "action" do %>
+              <%= check_box_tag "chapter[author_attributes][coauthors][]",
+                                author.id,
+                                author_is_coauthor,
+                                disabled: author_is_coauthor,
+                                id: "chapter_author_attributes_coauthors_#{author.id}" %>
+              <%= author.byline %>
+            <% end %>
+          </li>
         <% end %>
       </ul>
     </dd>
+  <% end %>
 <% end %>
 
+
 <dt class="byline coauthors">
- <%= label_tag "co-authors-options-show", ts('Add co-authors?') %> 
+ <%= label_tag "co-authors-options-show", ts("Add co-creators?") %> 
 </dt>
 <dd class="byline coauthors">
-  <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
-  <fieldset id="co-authors-options" title="Add Co Authors">
-    <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
+  <%= check_box_tag "co-authors-options-show", "1", nil, class: "toggle_formfield" %>
+  <fieldset id="co-authors-options" title="<%= ts("Add co-creators") %>">
+    <%= text_field :pseud, :byline, autocomplete_options("pseud", size: 50) %>
   </fieldset>
 </dd>
