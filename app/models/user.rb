@@ -185,7 +185,6 @@ class User < ActiveRecord::Base
     if login_changed?
       self.works.each do |work| 
         work.touch
-        work.expire_caches
       end
     end
   end

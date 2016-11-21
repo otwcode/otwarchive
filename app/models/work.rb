@@ -188,6 +188,7 @@ class Work < ActiveRecord::Base
   after_update :adjust_series_restriction
   
   after_save :expire_caches
+  after_touch :expire_caches
 
   def self.rss_work_summary_key(id)
     "/v1/rss_data_work/#{id}/summary"
