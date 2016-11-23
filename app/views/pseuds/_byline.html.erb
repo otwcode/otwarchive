@@ -23,7 +23,7 @@
       <%= ts("Chapter co-creators") %>
     </dt>
     <dd class="listbox">
-      <h4 class="heading"><%= ts('Co-creators') %></h4>
+      <h4 class="heading"><%= ts("Co-creators") %></h4>
       <ul class="many options index">
         <% for author in @coauthors %>
           <li>
@@ -37,7 +37,7 @@
                                 author_is_coauthor,
                                 disabled: author_is_coauthor,
                                 id: "chapter_author_attributes_coauthors_#{author.id}" %>
-              <%= author.name %>
+              <%= author.byline %>
             <% end %>
           </li>
         <% end %>
@@ -48,11 +48,11 @@
 
 
 <dt class="byline coauthors">
- <%= label_tag "co-authors-options-show", ts('Add co-creators?') %> 
+ <%= label_tag "co-authors-options-show", ts("Add co-creators?") %> 
 </dt>
 <dd class="byline coauthors">
   <%= check_box_tag "co-authors-options-show", "1", nil, class: "toggle_formfield" %>
-  <fieldset id="co-authors-options" title="<%= ts('Add co-creators') %>">
+  <fieldset id="co-authors-options" title="<%= ts("Add co-creators") %>">
     <%= text_field :pseud, :byline, autocomplete_options("pseud", size: 50) %>
   </fieldset>
 </dd>
