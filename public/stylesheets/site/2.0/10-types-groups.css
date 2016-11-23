@@ -166,7 +166,7 @@ li.relationships a {
   background: #eee;
 }
 
-.reindex a {
+.actions .reindex a {
   border-bottom: 3px solid #900;
 }
 
