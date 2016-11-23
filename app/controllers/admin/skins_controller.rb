@@ -76,7 +76,7 @@ class Admin::SkinsController < ApplicationController
         unless @admin_setting.save
           flash[:error] = ts("We couldn't save the default skin change.")
         else
-          flash[:notice] << ts("Default skin changed to %{title}", skin.title)
+          flash[:notice] << ts("Default skin changed to %{title}", :title => skin.title)
         end
       end
     end
