@@ -82,7 +82,7 @@ Given /^"([^\"]*)" has "([^"]*)" invitations?$/ do |login, invitation_count|
     user.invitations.destroy_all 
   end
   # Now create the number of invitations we want
-  invitation_count.to_i.times { user.invitations.create }
+  (invitation_count.to_i - user.invitations.count).times { user.invitations.create }
 end
 
 Given /^an invitation request for "([^"]*)"$/ do |email|

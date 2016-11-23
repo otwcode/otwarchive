@@ -99,9 +99,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^(.*?)(?:'s)? bookmarks page$/i
       Bookmark.tire.index.refresh
       user_bookmarks_path(user_id: $1)
@@ -205,6 +205,12 @@ module NavigationHelpers
       tag_wranglers_path
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
+    when /^the "(.*)" tag page$/i
+      tag_path(Tag.find_by_name($1))
+    when /^the wrangling tools page$/
+      tag_wranglings_path
+    when /^the "(.*)" fandom relationship page$/i
+      fandom_path($1)
       
     # Here is an example that pulls values out of the Regexp:
     #

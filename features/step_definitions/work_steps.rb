@@ -33,22 +33,36 @@ end
 #
 # If you add to this regexp, you probably want to update all the 
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to|with) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
   check(category.blank? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
-  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform))
+  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform)+(freeform2.blank? ? '' : ','+freeform2))
+  unless character.blank?
+    fill_in("work[character_string]", with: character + ( character2.blank? ? '' : ','+character2 ) )
+  end
   unless collection.blank?
     c = Collection.find_by_title(collection)
     fill_in("Collections", with: c.name)
   end
+  unless series.blank?
+    if page.has_select?("work[series_attributes][id]", with_options: [series])
+      select(series, from: "work[series_attributes][id]")
+    else
+      fill_in("work[series_attributes][title]", with: series)
+    end
+  end
+  unless relationship.blank?
+    fill_in("work[relationship_string]", with: relationship)
+  end
+  screenshot_and_save_page
   fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|  
+When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -56,7 +70,7 @@ When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with free
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}"}
     click_button("Post Without Preview")
   end
   Work.tire.index.refresh
@@ -168,7 +182,7 @@ end
 
 When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title!(work)
-  visit work_url(work)
+  visit work_url(work).gsub("http://www.example.com","")
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
@@ -527,3 +541,4 @@ end
 Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end
+

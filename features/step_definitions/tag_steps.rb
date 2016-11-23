@@ -17,10 +17,11 @@ Given /^basic tags$/ do
   Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
   Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
+  Category.find_or_create_by_name_and_canonical("Gen", true)
   Category.find_or_create_by_name_and_canonical("Other", true)
   Category.find_or_create_by_name_and_canonical("F/F", true)
   Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("M/F", true)
+  Category.find_or_create_by_name_and_canonical("F/M", true)
   Category.find_or_create_by_name_and_canonical("M/M", true)
 end
 
@@ -153,7 +154,30 @@ Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
   end
 end
 
+Given(/^the following typed tags exists$/) do |table|
+  table.hashes.each do |hash|
+    type = hash["type"].classify.constantize
+    hash.delete("type")
+    FactoryGirl.create(type, hash)
+  end
+end
+
 ### WHEN
+
+When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("canonicals_#{tag.id}")
+end
+
+When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
+  tag = Tag.find_by_name(tagname)
+  select(type, :from => "tags[#{tag.id}]")
+end
+
+When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("selected_tags_#{tag.id}")
+end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
@@ -275,4 +299,19 @@ Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom
   fandom = Fandom.find_by_name(fandom)
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should be_nil
+end
+
+Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
+  tag = Tag.find_by_name(tagname)
+  assert tag.type == tag_type
+end
+
+Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  assert tag.canonical?
+end
+
+Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  puts tag.inspect
 end

@@ -9,7 +9,7 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, :login => 'orphan_account')
+  user = FactoryGirl.create(:user, login: 'orphan_account')
   user.activate
 end
 
@@ -29,40 +29,30 @@ Given /the following activated tag wranglers? exists?/ do |table|
 end
 
 Given /^the user "([^\"]*)" exists and is activated$/ do |login|
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
-    user.activate
-  end
+  find_or_create_new_user(login, DEFAULT_PASSWORD)
 end
 
 Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
-  end
+  find_or_create_new_user(login, DEFAULT_PASSWORD, activate: false)
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
-    user.activate
-  else
-    user.password = password
-    user.password_confirmation = password
-    user.save
+  user = find_or_create_new_user(login, password)
+  if hidden.present?
+    user.preference.hide_warnings = true
+    user.preference.hide_freeform = true
+    user.preference.save
   end
   visit login_path
-  fill_in "User name", :with => login
-  fill_in "Password", :with => password
+  fill_in "User name", with: login
+  fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  assert UserSession.find unless @javascript
 end
 
-Given /^I am logged in as "([^\"]*)"$/ do |login|
+Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
@@ -71,63 +61,39 @@ Given /^I am logged in$/ do
 end
 
 Given /^I am logged in as a random user$/ do
-  step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = FactoryGirl.create(:user, :login => name, :password => DEFAULT_PASSWORD)
-  user.activate
-  visit login_path
-  fill_in "User name", :with => name
-  fill_in "Password", :with => DEFAULT_PASSWORD
-  check "Remember me"
-  click_button "Log In"
-  assert UserSession.find
+  step(%{I am logged in as "#{name}" with password "#{DEFAULT_PASSWORD}"})
 end
 
 Given /^I am logged in as a banned user$/ do
-  step("I am logged out")
-  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
-  user.activate
-  user.banned = true
-  user.save
-  visit login_path
-  fill_in "User name", :with => "banned"
-  fill_in "Password", :with => DEFAULT_PASSWORD
-  check "Remember Me"
-  click_button "Log In"
-  assert UserSession.find
+  step(%{user "banned" is banned})
+  step(%{I am logged in as "banned"})
 end
 
-Given /^user "([^\"]*)" is banned$/ do |login|
-  user = User.where(login: login).first
-  if user.nil?
-    user = FactoryGirl.create(
-      :user,
-      { login: login, password: DEFAULT_PASSWORD }
-    )
-    user.activate
-  end
+Given /^user "([^"]*)" is banned$/ do |login|
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   user.banned = true
   user.save
 end
 
 Given /^I am logged out$/ do
   visit logout_path
-  assert !UserSession.find
+  assert UserSession.find.nil? unless @javascript
   visit admin_logout_path
-  assert !AdminSession.find
+  assert AdminSession.find.nil? unless @javascript
 end
 
 Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
+Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
   step (%{I am logged in as "#{username}"})
   step(%{"#{username}" creates the pseud "#{pseud}"})
   step("I am logged out")
 end
 
-Given /^"([^\"]*)" deletes their account/ do |username|
+Given /^"([^"]*)" deletes their account/ do |username|
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
@@ -143,34 +109,40 @@ Given /^I view the people page$/ do
 end
 
 Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
-  author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
-  author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
+  author1 = FactoryGirl.create(:pseud, user: User.find_by_login(login))
+  author2 = FactoryGirl.create(:pseud, user: User.find_by_login(coauthor))
   FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
 end
 
 # WHEN
 
-When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
+When /^I follow the link for "([^"]*)" first invite$/ do |login|
+  user = User.find_by_login(login)
+  invite = user.invitations.first
+  step(%{I follow "#{invite.token}"})
+end
+
+When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   check("pseud_is_default")
   click_button "Create"
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
   user = User.find_by_login(login)
-  fill_in "Password", :with => user.activation_code
+  fill_in "Password", with: user.activation_code
 end
 
-When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
+When /^"([^\"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 
-When /^I create the pseud "([^\"]*)"$/ do |newpseud|
+When /^I create the pseud "([^"]*)"$/ do |newpseud|
   visit new_user_pseud_path(User.current_user)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 
@@ -230,7 +202,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert !UserSession.find
+  assert UserSession.find.nil? unless @javascript
 end
 
 def get_work_name(age, classname, name)
@@ -253,17 +225,17 @@ def get_series_name(age, classname, name)
   end
 end
   
-Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should see "#{title}"}
 end
 
-Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should not see "#{title}"}
 end
 
-When /^I change my username to "([^\"]*)"/ do |new_name|
+When /^I change my username to "([^"]*)"/ do |new_name|
   visit change_username_user_path(User.current_user)
   fill_in("New user name", with: new_name)
   fill_in("Password", with: "password")
@@ -279,3 +251,8 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
 end
+
+Then /^I should see the current user's preferences in the console$/ do
+  puts User.current_user.preference.inspect
+end
+
