@@ -138,6 +138,8 @@ Feature: Admin Actions to manage users
 
   Scenario: A user account is Troubleshoot 
   Given the user "mrparis" exists and is activated
+    And I am logged in as "mrparis"
+    And I post the work "Captain Janeway our secret story"
     And I am logged in as an admin
    When I go to the abuse administration page for "mrparis"
     And I follow "Troubleshoot Account"
