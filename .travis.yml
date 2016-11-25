@@ -3,8 +3,8 @@ cache: bundler
 sudo: required
 env:
   - TEST_GROUP="./script/check_syntax"
-  - TEST_GROUP="rspec spec --tag ~rspec_run_two"
-  - TEST_GROUP="rspec spec --tag  rspec_run_two"
+  - TEST_GROUP="rspec spec"
+  - TEST_GROUP="rspec spec"
   - TEST_GROUP="cucumber -f progress -r features features/admins"
   - TEST_GROUP="cucumber -f progress -r features features/bookmarks"
   - TEST_GROUP="cucumber -f progress -r features features/collections"

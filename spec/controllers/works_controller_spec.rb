@@ -103,11 +103,6 @@ describe WorksController do
             expect(assigns(:works).items).not_to include(@work2)
           end
 
-          it "should show restricted works to logged-in users" do
-            fake_login
-            get :index, tag_id: @fandom.name
-            expect(assigns(:works).items).to match_array([@work, @work2])
-          end
         end
 
       end
