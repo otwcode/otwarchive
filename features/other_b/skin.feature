@@ -47,7 +47,7 @@ Feature: creating and editing skins
    Then I should see "The skin public skin has been set. This will last for your current session."
    When I am logged in as an admin
      And I follow "Approved Skins"
-     And I check "Not in Chooser"
+     And I check "make_unin_chooser_public_skin"
    Then I press "Update"
 
   Scenario: A user should be able to create a skin with CSS
