@@ -44,7 +44,7 @@ When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]
   end
 end
 
-When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?(?: and by "([^\"]*)" with email "([^\"]*)")?$/ do
+When /^I import the work "(.*?)"(?: by "(.*?)" with email "(.*?)")?(?: and by "(.*?)" with email "(.*?)")?$/ do
       |url, creator_name, creator_email, cocreator_name, cocreator_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})

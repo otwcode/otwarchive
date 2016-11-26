@@ -502,7 +502,7 @@ class User < ActiveRecord::Base
   def reindex_user_works
     # reindex the user's works to make sure they show up on the user's works page
     works.each do |work|
-      IndexQueue.enqueue(w, :main)
+      IndexQueue.enqueue(work, :main)
     end
   end
 
@@ -512,7 +512,7 @@ class User < ActiveRecord::Base
       if work.revised_at.nil?
         work.save
       end
-      IndexQueue.enqueue(w, :main)
+      IndexQueue.enqueue(work, :main)
     end
   end
 
