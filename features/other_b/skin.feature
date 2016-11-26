@@ -29,7 +29,7 @@ Feature: creating and editing skins
    Then I press "Update" 
     And I should see "The following skins were updated: public skin"
    When I follow "Approved Skins"
-    And I check "Unache"
+    And I check "Uncache"
    Then I press "Update"
     And I should see "The following skins were updated: public skin"
 
