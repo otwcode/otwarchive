@@ -28,6 +28,10 @@ Feature: creating and editing skins
     And I check "Cache"
    Then I press "Update" 
     And I should see "The following skins were updated: public skin"
+   When I follow "Approved Skins"
+    And I check "Unache"
+   Then I press "Update"
+    And I should see "The following skins were updated: public skin"
 
   Scenario: Admin can add a public skin to the chooser
   Given basic skins
@@ -41,6 +45,10 @@ Feature: creating and editing skins
    When I am logged in as "skinner"
     And I follow "public skin"
    Then I should see "The skin public skin has been set. This will last for your current session."
+   When I am logged in as an admin
+     And I follow "Approved Skins"
+     And I check "Not in Chooser"
+   Then I press "Update"
 
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
