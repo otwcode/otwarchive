@@ -174,7 +174,7 @@ When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
   select(type, :from => "tags[#{tag.id}]")
 end
 
-When /^I check the mass wrangling option for "([^"]*)"$/ do |tagname|
+When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   check("selected_tags_#{tag.id}")
 end

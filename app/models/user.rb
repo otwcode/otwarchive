@@ -488,6 +488,42 @@ class User < ActiveRecord::Base
     invite_request.destroy if invite_request
   end
 
+  def fix_user_subscriptions
+    # Delete any subscriptions the user has to deleted items because this causes
+    # the user's subscription page to error
+    @subscriptions = subscriptions.includes(:subscribable)
+    @subscriptions.to_a.each do |sub|
+      if sub.name.nil?
+        sub.destroy
+      end
+    end
+  end
+ 
+  def reindex_user_works
+    # reindex the user's works to make sure they show up on the user's works page
+    works.each do |work|
+      IndexQueue.enqueue(work, :main)
+    end
+  end
+
+  def set_user_work_dates
+    # Fix user stats page error caused by the existence of works with nil revised_at dates
+    works.each do |work|
+      if work.revised_at.nil?
+        work.save
+      end
+      IndexQueue.enqueue(work, :main)
+    end
+  end
+
+  def reindex_user_bookmarks
+    # Reindex a user's bookmarks.
+    bookmarks.each do |bookmark|
+      bookmark.update_index
+    end
+    update_works_index_timestamp!
+  end
+
   private
 
   # Create and/or return a user account for holding orphaned works

@@ -136,6 +136,15 @@ Feature: Admin Actions to manage users
     And the "Fannish next of kin's username" field should contain "harrysmom"
     And the "Fannish next of kin's email" field should contain "harrysmom@example.com"
 
+  Scenario: A user account is Troubleshoot 
+  Given the user "mrparis" exists and is activated
+    And I am logged in as "mrparis"
+    And I post the work "Captain Janeway our secret story"
+    And I am logged in as an admin
+   When I go to the abuse administration page for "mrparis"
+    And I follow "Troubleshoot Account"
+   Then I should see "User account troubleshooting complete."
+
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
@@ -324,4 +333,3 @@ Feature: Admin Actions to manage users
     And I press "Send Activation Email"
    Then I should see "Activation email sent"
     And 1 email should be delivered to "torres"
-

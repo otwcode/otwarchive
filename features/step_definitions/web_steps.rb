@@ -142,6 +142,11 @@ Then(/^I should see "([^"]*)" in autocomplete hack$/) do |answer|
   assert result
 end
 
+Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
+  visit path
+  step %{I should see "#{flash_error}" within ".flash"}
+end
+
 Then /^(?:|I )should see JSON:$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
