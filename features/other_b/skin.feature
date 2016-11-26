@@ -42,8 +42,6 @@ Feature: creating and editing skins
     And I follow "public skin"
    Then I should see "The skin public skin has been set. This will last for your current session."
 
-
-
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
     And I am logged in as "skinner"
@@ -66,6 +64,33 @@ Feature: creating and editing skins
   Scenario: A logged-out user should not be able to create skins.
   When I am on skin's new page
     Then I should see "Sorry, you don't have permission"
+
+  Scenario: An admin can reject a skin
+  Given the unapproved public skin "public skin"
+    And I am logged in as an admin
+  When I go to admin's skins page
+    And I check "make_rejected_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Rejected Skins"
+  Then I should see "public skin"
+  When I check "make_unrejected_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Rejected Skins"
+  Then I should not see "public skin"
+
+  Scenario: An admin can feature a skin
+  Given the approved public skin "public skin"
+    And I am logged in as an admin
+  When I follow "Approved Skins"
+    And I check "make_featured_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Approved Skins"
+    And I check "make_unfeatured_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
 
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
   Given I am logged in as "skinner"
@@ -474,3 +499,4 @@ Feature: creating and editing skins
 
     And I follow "Default"
    Then I should see "You are now using the default Archive skin again!"
+
