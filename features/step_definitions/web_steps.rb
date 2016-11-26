@@ -33,9 +33,9 @@ When /^I limit myself to the Archive$/ do
   page.driver.browser.url_whitelist = ['http://127.0.0.1']
 end
 
-When /^I type in "([^"]*)" with "([^"]*)"$/ do |selector,contents|
- Rails.cache.delete('/v1/autocomplete_hack/last_result')
- find(selector).native.send_keys(contents)
+When /^I type in "([^"]*)" with "([^"]*)"$/ do |selector, contents|
+  Rails.cache.delete('/v1/autocomplete_hack/last_result')
+  find(selector).native.send_keys(contents)
 end
 
 When /^I clear the network traffic$/ do
@@ -324,7 +324,6 @@ Then /^show me the page$/ do
   save_and_open_page
   sleep 120
 end
-
 
 Then /^show me the network traffic$/ do
   puts page.driver.network_traffic.to_yaml
