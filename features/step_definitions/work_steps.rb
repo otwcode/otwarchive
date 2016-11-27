@@ -33,7 +33,7 @@ end
 #
 # If you add to this regexp, you probably want to update all the 
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
@@ -63,7 +63,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with c
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -71,7 +71,7 @@ When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with char
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}"}
     click_button("Post Without Preview")
   end
   # Now add the chapters
