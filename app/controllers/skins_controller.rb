@@ -78,13 +78,13 @@ class SkinsController < ApplicationController
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.sort_by_recent_featured
+        @skins = WorkSkin.approved_skins
         @title = ts('Public Work Skins')
       else
         if logged_in? 
-          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
+          @skins = Skin.approved_skins.usable.site_skins
         else
-          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
+          @skins = Skin.approved_skins.usable.site_skins
         end
         @title = ts('Public Site Skins')
       end

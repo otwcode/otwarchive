@@ -42,15 +42,13 @@
               <%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin_name}" %>
             </label>
 
-            <% %w(cached featured in_chooser).each do |type| %>
+            <% %w(cached in_chooser).each do |type| %>
               <% if skin.send("#{type}?") %>
                 <label for="make_un<%= type %>_<%= skin_name %>" class="action">
                   <%= 
                     case type 
                     when "cached"
                       ts("Uncache")
-                    when "featured"
-                      ts("Unfeature")
                     when "in_chooser"
                       ts("Not In Chooser")
                     end
@@ -63,8 +61,6 @@
                     case type 
                     when "cached"
                       ts("Cache")
-                    when "featured"
-                      ts("Feature")
                     when "in_chooser"
                       ts("Chooser")
                     end

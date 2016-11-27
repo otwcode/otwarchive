@@ -17,7 +17,7 @@ class Admin::SkinsController < ApplicationController
   def update    
     flash[:notice] = []
     modified_skin_titles = []
-    %w(official rejected cached featured in_chooser).each do |action|
+    %w(official rejected cached in_chooser).each do |action|
       skins_to_set = params["make_#{action}"] ? Skin.where(:id => params["make_#{action}"].map {|id| id.to_i}) : []
       skins_to_unset = params["make_un#{action}"] ? Skin.where(:id => params["make_un#{action}"].map {|id| id.to_i}) : []
       skins_to_set.each do |skin|
@@ -29,10 +29,6 @@ class Admin::SkinsController < ApplicationController
         when "cached"
           next unless skin.official? && !skin.is_a?(WorkSkin)
           skin.cache!
-        when "featured"
-          next unless skin.official? && !skin.is_a?(WorkSkin)
-          skin.cache! unless skin.cached?
-          skin.update_attribute(:featured, true)
         when "in_chooser"
           next unless skin.official? && !skin.is_a?(WorkSkin)
           skin.cache! unless skin.cached?
@@ -53,9 +49,6 @@ class Admin::SkinsController < ApplicationController
         when "cached"
           next unless skin.official? && !skin.is_a?(WorkSkin)
           skin.clear_cache! if skin.cached?
-        when "featured"
-          next unless skin.official? && !skin.is_a?(WorkSkin)
-          skin.update_attribute(:featured, false)
         when "in_chooser"
           next unless skin.official? && !skin.is_a?(WorkSkin)
           skin.update_attribute(:in_chooser, false)

@@ -90,7 +90,7 @@ class Skin < ActiveRecord::Base
     return false
   end
 
-  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
+  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :in_chooser
 
   validates_presence_of :title
   validates_uniqueness_of :title, :message => ts('must be unique')
@@ -149,10 +149,6 @@ class Skin < ActiveRecord::Base
     where(:in_chooser => true)
   end
 
-  def self.featured
-    where(:featured => true)
-  end
-
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
       where(:public => true, :official => true)
@@ -167,10 +163,6 @@ class Skin < ActiveRecord::Base
 
   def self.sort_by_recent
     order("updated_at DESC")
-  end
-
-  def self.sort_by_recent_featured
-    order("featured DESC, updated_at DESC")
   end
 
   def remove_me_from_preferences
