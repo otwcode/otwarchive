@@ -5,10 +5,6 @@ class Admin::AdminInvitationsController < ApplicationController
   def index
   end 
 
-  def new
-    @invitation = Invitation.new
-  end
-  
   def create
     @invitation = current_admin.invitations.new(params[:invitation])
     if @invitation.invitee_email.blank?

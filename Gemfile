@@ -1,24 +1,28 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.2.5'
+gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.2'
+gem 'rails', '3.2.22.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '0.3.10'
+gem 'mysql2', '0.3.20'
+
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
+#https://github.com/winebarrel/activerecord-mysql-reconnect
+gem 'activerecord-mysql-reconnect'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
-gem 'redis', ">=3.2.2"
-gem 'redis-namespace', ">=1.5.2"
+gem 'redis', ">=3.0"
+gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
@@ -30,7 +34,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list'
+gem 'acts_as_list', '>=0.7.6'
 gem 'akismetor'
 
 gem 'httparty'
@@ -40,9 +44,9 @@ gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
-gem 'resque', '>=1.25.2'
-gem 'resque_mailer', '>=2.2.7'
-gem 'resque-scheduler', '>=4.1.0'
+gem 'resque', '>=1.14.0'
+gem 'resque_mailer'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'elasticsearch'
@@ -63,18 +67,16 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils"
+gem 'escape_utils', '1.2.1'
 
 gem 'valium'
-
-gem 'best_in_place'
 
 gem 'timeliness'
 
 gem 'rpm_contrib'
 
 # for generating graphs
-gem "google_visualr", ">= 2.1"
+gem 'google_visualr', '>= 2.1'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
@@ -83,14 +85,14 @@ gem "google_visualr", ">= 2.1"
 gem 'globalize', '~> 3.1.0'
 
 # Add a clean notifier that shows we are on dev or test
-gem "rack-dev-mark"
+gem 'rack-dev-mark', '>=0.7.5'
 
 #Phrase-app
-gem 'phrase'
+gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem "audited-activerecord", "~> 3.0"
+gem 'audited-activerecord', '~> 3.0'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -103,18 +105,20 @@ gem 'newrelic-redis'
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
-gem 'kgio'
-
+gem 'kgio', '2.10.0'
 
 group :test do
+  gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl', '~> 4.5.0'
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
+  gem 'selenium-webdriver'
+  gem 'poltergeist'
+  gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
@@ -124,13 +128,20 @@ group :test do
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'simplecov', '~> 0.12.0'
+  gem 'coveralls', '~> 0.8.12'
   gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
-  gem 'pry', '~> 0.10.3'
+  gem 'pry-byebug'
   gem 'whiny_validation'
+  gem 'factory_girl', '~> 4.5.0'
+  gem 'minitest'
+end
+
+group :development do
+  gem 'factory_girl_rails'
   gem 'bundler-audit'
 end
 
@@ -144,5 +155,5 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-  gem 'unicorn', :require => false
+  gem 'unicorn', '>= 5.1.0', :require => false
 end

@@ -5,6 +5,7 @@ class Work < ActiveRecord::Base
   include Bookmarkable
   include Pseudable
   include Searchable
+  include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
   include Tire::Model::Search
@@ -201,12 +202,20 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+    Work.expire_work_tag_groups_id(self.id)
+  end
 
-    self.expire_work_tag_groups
+  def self.work_blurb_tag_cache_key(id)
+    "/v1/work_blurb_tag_cache_key/#{id}"
+  end
+
+  def self.work_blurb_tag_cache(id)
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), :raw => true) { rand(1..1000) }
   end
 
   def self.expire_work_tag_groups_id(id)
     Rails.cache.delete(Work.tag_groups_key_id(id))
+    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
   end
 
   def expire_work_tag_groups
@@ -214,7 +223,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.tag_groups_key_id(id)
-    "/v1/work_tag_groups/#{id}"
+    "/v2/work_tag_groups/#{id}"
   end
 
   def tag_groups_key
@@ -359,17 +368,21 @@ class Work < ActiveRecord::Base
     end
   end
 
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud=nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    new_pseud = new_user.default_pseud if new_pseud.nil?
+  def add_creator(creator_to_add, new_pseud = nil)
+    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
     self.pseuds << new_pseud
     self.chapters.each do |chapter|
       chapter.pseuds << new_pseud
       chapter.save
     end
     save
-    self.remove_author(old_user) if old_user && users.include?(old_user)
+  end
+
+  # Transfer ownership of the work from one user to another
+  def change_ownership(old_user, new_user, new_pseud = nil)
+    raise "No new user provided, cannot change ownership" unless new_user
+    add_creator(new_user, new_pseud)
+    remove_author(old_user) if old_user && users.include?(old_user)
   end
 
   def set_challenge_info
@@ -793,10 +806,17 @@ class Work < ActiveRecord::Base
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
       if self.placeholder_tags
-        self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
-        self.tags.group_by { |t| t.type.to_s }
+        result = self.tags.group_by { |t| t.type.to_s }
       end
+      result["Fandom"] ||= []
+      result["Rating"] ||= []
+      result["Warning"] ||= []
+      result["Relationship"] ||= []
+      result["Character"] ||= []
+      result["Freeform"] ||= []
+      result
     end
   end
 

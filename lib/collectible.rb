@@ -3,19 +3,29 @@ module Collectible
   def self.included(collectible)
     collectible.class_eval do
 
-      has_many :collection_items, :as => :item, :dependent => :destroy, :inverse_of => :item
-      accepts_nested_attributes_for :collection_items, :allow_destroy => true
-      has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
-        :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :collection_items, as: :item, dependent: :destroy, inverse_of: :item
+      accepts_nested_attributes_for :collection_items, allow_destroy: true
+      has_many :approved_collection_items, class_name: "CollectionItem", as: :item,
+               conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :user_approved_collection_items, class_name: "CollectionItem", as: :item,
+               conditions: ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]
 
       has_many :collections, 
-        :through => :collection_items, 
-        :after_add => [:set_visibility, :expire_item_caches],
-        :after_remove => [:update_visibility, :expire_item_caches]
+               through: :collection_items, 
+               after_add: [:set_visibility, :expire_item_caches],
+               after_remove: [:update_visibility, :expire_item_caches]
       has_many :approved_collections, 
-        :through => :collection_items, 
-        :source => :collection,
-        :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+               through: :collection_items, 
+               source: :collection,
+               conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :user_approved_collections, 
+               through: :collection_items, 
+               source: :collection,
+               conditions: ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]        
+      has_many :rejected_collections,
+               through: :collection_items,
+               source: :collection,
+               conditions: ['collection_items.user_approval_status = ? ', CollectionItem::REJECTED]
     end
   end
 
@@ -25,9 +35,9 @@ module Collectible
     names = trim_collection_names(collection_names)
     names.each do |name|
       c = Collection.find_by_name(name)
-      errors.add(:base, ts("We couldn't find the collection %{name}.", :name => name)) and return if c.nil?
+      errors.add(:base, ts("We couldn't find the collection %{name}.", name: name)) and return if c.nil?
       if c.closed?
-        errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id)
+        errors.add(:base, ts("The collection %{name} is not currently open.", name: name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id)
       end
       add_to_collection(c)
     end
@@ -84,10 +94,18 @@ module Collectible
   #### UNREVEALED/ANONYMOUS
 
   # Set the anonymous/unrevealed status of the collectible based on its collections
+  # We can't check for user approval because the collection item doesn't exist
+  # and don't need to because this only gets called when the work is a new record and 
+  # therefore being created by its author
   def set_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? 
-      self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+      # if we have collection items saved here then the collectible is not a new object
+      if self.collection_items.empty?
+        self.in_anon_collection = !self.collections.select(&:anonymous?).empty? 
+        self.in_unrevealed_collection = !self.collections.select(&:unrevealed?).empty?
+      else
+        update_anon_unrevealed
+      end
     end
     return true
   end
@@ -95,10 +113,11 @@ module Collectible
   # TODO: need a better, DRY, long-term fix
   # Collection items can be revealed independently of a collection, so we don't want
   # to check the collection status when those are updated
+  # Only include collections approved by the user
   def update_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.collection_items.select {|c| c.anonymous? }.empty?
-      self.in_unrevealed_collection = !self.collection_items.select{|c| c.unrevealed? }.empty?
+      self.in_anon_collection = !self.user_approved_collection_items.select(&:anonymous?).empty?
+      self.in_unrevealed_collection = !self.user_approved_collection_items.select(&:unrevealed?).empty?
     end
     return true
   end

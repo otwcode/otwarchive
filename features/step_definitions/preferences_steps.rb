@@ -16,9 +16,21 @@ When /^I set my preferences to turn off notification emails for kudos$/ do
   user.preference.save
 end
 
+When /^I set my preferences to turn off notification emails for gifts$/ do
+  user = User.current_user
+  user.preference.recipient_emails_off = true
+  user.preference.save
+end
+
 When /^I set my preferences to hide warnings$/ do
   user = User.current_user
   user.preference.hide_warnings = true
+  user.preference.save
+end
+
+When /^I set my preferences to hide freeform$/ do
+  user = User.current_user
+  user.preference.hide_freeform = true
   user.preference.save
 end
 
@@ -93,3 +105,18 @@ When /^I set my preferences to warn before showing adult content$/ do
   user.preference.adult = false
   user.preference.save
 end
+
+When /^I set my preferences to hide warnings by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_warnings]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+
+When /^I set my preferences to hide freeform by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_freeform]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+

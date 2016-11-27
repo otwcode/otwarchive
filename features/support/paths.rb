@@ -43,6 +43,8 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
+    when /^the unassigned fandoms page$/i
+      unassigned_fandoms_path
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
@@ -81,6 +83,10 @@ module NavigationHelpers
       user_invitations_path(User.current_user)
     when /my gifts page/
       user_gifts_path(User.current_user)
+    when /my assignments page/
+      user_assignments_path(User.current_user)
+    when /^my collection items page$/
+      user_collection_items_path(User.current_user)
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
@@ -95,9 +101,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
-      work_path(Work.find_by_title($1))
+      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
     when /^(.*?)(?:'s)? bookmarks page$/i
       Bookmark.tire.index.refresh
       user_bookmarks_path(user_id: $1)
@@ -169,6 +175,8 @@ module NavigationHelpers
       admin_settings_path      
     when /^the admin-notices page$/i
       notify_admin_users_path
+    when /^the admin-blacklist page$/i
+      admin_blacklisted_emails_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
@@ -193,6 +201,18 @@ module NavigationHelpers
       admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
+    when /^the languages page$/i
+      languages_path
+    when /^the wranglers page$/i
+      tag_wranglers_path
+    when /^the unassigned fandoms page $/i
+      unassigned_fandoms_path
+    when /^the "(.*)" tag page$/i
+      tag_path(Tag.find_by_name($1))
+    when /^the wrangling tools page$/
+      tag_wranglings_path
+    when /^the "(.*)" fandom relationship page$/i
+      fandom_path($1)
       
     # Here is an example that pulls values out of the Regexp:
     #

@@ -25,6 +25,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
+    @tag_groups = @work.tag_groups
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
@@ -55,7 +56,7 @@ class ChaptersController < ApplicationController
       @comments = @chapter.comments.reviewed
 
       @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
-        get_page_title(@work.fandoms.string,
+        get_page_title(@tag_groups["Fandom"][0].name,
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
@@ -283,6 +284,13 @@ class ChaptersController < ApplicationController
     @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
     to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    
+    # make sure at least one of the pseuds is actually owned by this user
+    user_ids = Pseud.where(id: @selected_pseuds).value_of(:user_id).uniq
+    unless user_ids.include?(current_user.id)
+      flash.now[:error] = ts("You're not allowed to use that pseud.")
+      render :new and return
+    end
 
   end
 

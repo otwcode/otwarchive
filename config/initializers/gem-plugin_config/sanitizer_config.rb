@@ -82,18 +82,18 @@ class Sanitize
       url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
       
       source = case url
+      when /^archive\.org\//
+        then "archiveorg"
       when /^youtube(-nocookie)?\.com\//
         then "youtube"
       when /^(player\.)?vimeo\.com\//
         then "vimeo"
-      when /^blip\.tv\//
-        then "blip"
       when /^(static\.)?ning\.com\//
         then "ning"
       when /^dailymotion\.com\//
         then "dailymotion"
-      when /^viddler\.com\//
-        then "viddler"
+      when /^viddertube\.com\//
+        then "viddertube"
       when /^metacafe\.com\//
         then "metacafe"
       when /^vidders\.net\//

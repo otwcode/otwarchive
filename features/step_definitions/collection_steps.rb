@@ -4,6 +4,14 @@ Given /^I have no collections$/ do
   Collection.delete_all
 end
 
+Given /^the collection "([^\"]*)" is deleted$/ do |collection_title|
+  step %{I am logged in as the owner of "#{collection_title}"}
+  visit edit_collection_path(Collection.find_by_title(collection_title))
+  click_link "Delete Collection"
+  click_button "Yes, Delete Collection"
+  page.should have_content("Collection was successfully deleted.")
+end
+
 When /^I am logged in as the owner of "([^\"]*)"$/ do |collection|
   c = Collection.find_by_title(collection)
   step %{I am logged in as "#{c.owners.first.user.login}"}
@@ -28,9 +36,17 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
   click_button("Add")
 end
 
-When(/^I view the approved collection items page for "(.*?)"$/) do |collection|
+When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
   c = Collection.find_by_title(collection)
-  visit collection_items_path(c, approved: true)
+  if item_status == "approved"
+    visit collection_items_path(c, approved: true)
+  elsif item_status == "rejected"
+    visit collection_items_path(c, rejected: true)
+  elsif item_status == "invited"
+    visit collection_items_path(c, invited: true)  
+  else
+    visit collection_items_path(c)
+  end
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -129,6 +145,13 @@ When /^I check all the collection settings checkboxes$/ do
   check("collection_collection_preference_attributes_anonymous")
   check("collection_collection_preference_attributes_show_random")
   check("collection_collection_preference_attributes_email_notify")
+end
+
+When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
+  the_collection = Collection.find_by_title(collection)
+  collection_item_id = the_collection.collection_items.first.id
+  visit user_collection_items_path(User.current_user)
+  step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
 end
 
 ### THEN

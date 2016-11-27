@@ -13,7 +13,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And a character exists with name: "Zoe Washburne", canonical: true
     And a character exists with name: "Jack Harkness", canonical: true
     And a character exists with name: "Ianto Jones", canonical: true
-    And I am logged in as "Enigel" with password "wrangulate!"
+    And I am logged in as an admin
     And I follow "Tag Wrangling"
     
   # create a new canonical relationship from tag wrangling interface
@@ -45,7 +45,6 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Hoban Washburne/Zoe Washburne"
   Then I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
-    And I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
@@ -65,7 +64,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And the "tag_canonical" checkbox should be disabled
   
   # creating non-canonical relationships from work posting
-  When I go to the new work page
+  When I am logged in as "Enigel" with password "wrangulate!"
+   And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "Torchwood"

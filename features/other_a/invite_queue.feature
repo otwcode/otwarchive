@@ -119,7 +119,7 @@ Feature: Invite queue management
     Then 1 email should be delivered
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
-      And the email should contain "Please activate your account"
+      And the email should contain "activate your account"
     
     # user activates account
     When all emails have been delivered
