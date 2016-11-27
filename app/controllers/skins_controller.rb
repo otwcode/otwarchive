@@ -84,7 +84,7 @@ class SkinsController < ApplicationController
         if logged_in? 
           @skins = Skin.approved_skins.usable.site_skins
         else
-          @skins = Skin.approved_skins.usable.site_skins
+          @skins = Skin.approved_skins.usable.site_skins.cached
         end
         @title = ts('Public Site Skins')
       end
