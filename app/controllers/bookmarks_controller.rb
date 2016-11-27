@@ -8,6 +8,17 @@ class BookmarksController < ApplicationController
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
+  before_filter :check_pseud_ownership, :only => [:create, :update]
+
+  def check_pseud_ownership
+    if params[:bookmark][:pseud_id]
+      pseud = Pseud.find(params[:bookmark][:pseud_id])
+      unless pseud && current_user && current_user.pseuds.include?(pseud)
+        flash[:error] = ts("You can't bookmark with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
 
   # get the parent
   def load_bookmarkable

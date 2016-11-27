@@ -60,6 +60,7 @@ class OwnedTagSetsController < ApplicationController
     @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
     @tag_set_ids = @tag_sets.value_of(:tag_set_id)
     @tag_type = params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type]) ? params[:tag_type] : "fandom"
+    # @tag_type is restricted by in_prompt_restriction and therefore safe to pass to constantize
     @tags = @tag_type.classify.constantize.joins(:set_taggings).where("set_taggings.tag_set_id IN (?)", @tag_set_ids).by_name_without_articles
   end
   
@@ -82,6 +83,7 @@ class OwnedTagSetsController < ApplicationController
           assoc_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), tag_type)
           
           # get canonically associated fandoms
+          # Safe for constantize as tag_type restricted to character relationship
           canonical_hash = Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(@tag_set), "fandom")
 
           # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)

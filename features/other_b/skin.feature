@@ -7,14 +7,42 @@ Feature: creating and editing skins
   When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
 
-  Scenario: A user should be able to choose a different public skin in their preferences
+  Scenario: User can set a skin for a session and then unset it
   Given basic skins
     And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
-    And I am logged in as "skinner"
-  When I change my skin to "public skin"
-  When I am on skinner's preferences page
-  Then "public skin" should be selected within "preference_skin_id"
-    And I should see "text-decoration: blink;" within "style"
+    And the skin "public skin" is cached
+    And the skin "public skin" is in the chooser
+  When I am logged in as "skinner"
+    And I follow "public skin"
+  Then I should see "The skin public skin has been set. This will last for your current session."
+    And the page should have the cached skin "public skin"
+  When I follow "Default"
+  Then I should see "You are now using the default Archive skin again!"
+    And the page should not have the cached skin "public skin"
+
+  Scenario: Admin can cache a public skin
+  Given basic skins
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as an admin
+   When I follow "Approved Skins"
+    And I check "Cache"
+   Then I press "Update" 
+    And I should see "The following skins were updated: public skin"
+
+  Scenario: Admin can add a public skin to the chooser
+  Given basic skins
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And the skin "public skin" is cached
+    And I am logged in as an admin
+   When I follow "Approved Skins"
+    And I check "Chooser"
+   Then I press "Update"
+    And I should see "The following skins were updated: public skin"
+   When I am logged in as "skinner"
+    And I follow "public skin"
+   Then I should see "The skin public skin has been set. This will last for your current session."
+
+
 
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
@@ -212,6 +240,8 @@ Feature: creating and editing skins
     And I submit
   Then I should see "Your preferences were successfully updated."
     And I should see "margin: auto 5%; max-width: 100%" within "style"
+    # Make sure that the creation/update cache keys are different:
+    And I wait 1 second
   When I edit the skin "Wide margins" with the wizard
     And I fill in "Work margin width" with "4.5"
     And I submit
@@ -289,6 +319,8 @@ Feature: creating and editing skins
   Scenario: Users should be able to adjust their wizard skin by adding custom CSS
   Given I am logged in as "skinner"
     And I create and use a skin to make the header pink
+    # Make sure that the creation/update cache keys are different:
+    And I wait 1 second
   When I edit my pink header skin to have a purple logo
   Then I should see an update confirmation message
     And I should see a pink header
@@ -430,14 +462,16 @@ Feature: creating and editing skins
   When I press "Use"
   Then the page should have a skin with the media query "only screen and (max-width: 42em), only screen and (max-width: 62em)"
 
-  Scenario: User should be able to access their site and work skins from an individual skin's show page
+  Scenario: User should be able to access their site and work skins from an
+  individual skin's show page
   Given I am logged in as "skinner"
     And I create the skin "my skin"
   When I view the skin "my skin"
   Then I should see "My Site Skins"
     And I should see "My Work Skins"
 
-  Scenario: User should be able to revert to the default skin from an individual skin's show page
+  Scenario: User should be able to revert to the default skin from an individual
+  skin's show page
   Given basic skins
     And I am logged in as "skinner"
     And I create the skin "my skin"
@@ -448,14 +482,16 @@ Feature: creating and editing skins
   Then I should see a "Revert to Default Skin" button
     And I should see "My Work Skins"
 
-  Scenario: User should be able to access their site and work skins from an individual skin's edit page
+  Scenario: User should be able to access their site and work skins from an
+  individual skin's edit page
   Given I am logged in as "skinner"
     And I create the skin "my skin"
   When I edit the skin "my skin"
   Then I should see "My Site Skins"
     And I should see "My Work Skins"
 
-  Scenario: User should be able to revert to the default skin from an individual skin's edit page
+  Scenario: User should be able to revert to the default skin from an individual 
+  skin's edit page
   Given basic skins
     And I am logged in as "skinner"
     And I create the skin "my skin"
@@ -464,3 +500,16 @@ Feature: creating and editing skins
   When I change my skin to "my skin"
     And I edit the skin "my skin"
   Then I should see a "Revert to Default Skin" button
+
+  Scenario: A user should be able to choose a temporary skin
+  Given basic skins
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And the skin "public skin" is cached
+    And the skin "public skin" is in the chooser
+  When I am logged in as "skinner"
+    And I am on the home page
+    And I follow "public skin"
+  Then I should see "The skin public skin has been set. This will last for your current session."
+  When I follow "Default"
+   Then I should see "You are now using the default Archive skin again!"
+
