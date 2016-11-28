@@ -3,7 +3,7 @@ When /^I view the series "([^\"]*)"$/ do |series|
 end
 
 When /^I add the series "([^\"]*)"$/ do |series_title|
-  check("series-options-show")  
+  check("series-options-show")
   if Series.find_by_title(series_title)
     step %{I select "#{series_title}" from "work_series_attributes_id"}
   else
@@ -12,10 +12,10 @@ When /^I add the series "([^\"]*)"$/ do |series_title|
 end
 
 When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
-  unless pseud.blank? && Pseud.where(name: pseud).exists?    
+  unless pseud.blank? && Pseud.where(name: pseud).exists?
     step %{I create the pseud "#{pseud}"}
   end
-  
+
   if Work.where(title: work_title).exists?
     # an existing work
     step %{I edit the work "#{work_title}"}
@@ -46,7 +46,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     step "I should see \"Work was successfully posted.\""
     Work.tire.index.refresh
   end
-  
+
   count.to_i.times do |i|
     step "I edit the work \"#{work_title}\""
     check("series-options-show")
@@ -100,15 +100,15 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link over it$
     visit work_path(neighbor.work)
     # the neighbors should link to each other if they both exist
     if neighbors.count > 1 && index == 0
-      click_link("»")
+      click_link("Next Work →")
       page.should_not have_content(work_title)
       page.should have_content(neighbors[1].work.title)
     elsif neighbors.count > 1 && index == 1
-      click_link("«")
+      click_link("← Previous Work")
       page.should_not have_content(work_title)
       page.should have_content(neighbors[0].work.title)
     end
-  end  
+  end
 end
 
 Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link to it$/ do |work_title, series_title|
@@ -119,10 +119,10 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link to it$/ 
   neighbors.each do |neighbor|
     visit work_path(neighbor.work)
     if neighbor.position > position
-      click_link("«")
+      click_link("← Previous Work")
       page.should have_content(work_title)
-    else      
-      click_link("»")
+    else
+      click_link("Next Work →")
       page.should have_content(work_title)
     end
   end
