@@ -71,7 +71,8 @@ class ChaptersController < ApplicationController
       Reading.update_or_create(@work, current_user) if current_user
 
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
-      if chapter_position == 0
+      if chapter_position == 0 || (request.referer == "#{root_url}" && params[:hits] == "increase"
+                                  && chapter_position == (@work.number_of_posted_chapters.to_i - 1)
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
