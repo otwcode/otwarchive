@@ -4,6 +4,6 @@ class RemoveFeaturedfromSkins < ActiveRecord::Migration
   end
 
   def down
-    add_column :skins:, :featured
+    add_column :skins, :featured
   end
 end
