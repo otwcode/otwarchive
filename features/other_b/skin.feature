@@ -34,8 +34,7 @@ Feature: creating and editing skins
    Then I should see "The following skins were updated: public skin"
 
   Scenario: Admin can add a public skin to the chooser
-  Given basic skins
-    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And the skin "public skin" is cached
     And I am logged in as an admin
   When I follow "Approved Skins"
@@ -43,7 +42,7 @@ Feature: creating and editing skins
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
-    And I check "make_unin_chooser_public_skin"
+    And I check "Not In Chooser"
     And I press "Update"
   Then I should see "The following skins were updated: public skin"
 
@@ -89,12 +88,11 @@ Feature: creating and editing skins
   Given the approved public skin "public skin"
     And I am logged in as an admin
   When I follow "Approved Skins"
-    And show me the page
-    And I check "make_featured_public_skin"
+    And I check "Feature"
     And I submit
   Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
-    And I check "make_unfeatured_public_skin"
+    And I check "Unfeature"
     And I submit
   Then I should see "The following skins were updated: public skin"
 
