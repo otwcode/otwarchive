@@ -136,6 +136,7 @@ end
 When /^I view the skin "([^\"]*)"$/ do |skin|
   skin = Skin.find_by_title!(skin)
   visit skin_url(skin)
+end
 
 When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
   skin = Skin.find_by_title(skin_name)
