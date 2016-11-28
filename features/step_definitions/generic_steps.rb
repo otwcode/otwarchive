@@ -115,6 +115,12 @@ Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article,
   end
 end
 
+Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+  with_scope(selector) do
+    page.should_not have_xpath("//input[@value='#{text}']")
+  end
+end
+
 When /^"([^\"]*)" is fixed$/ do |what|
   puts "\nDEFERRED (#{what})"
 end
