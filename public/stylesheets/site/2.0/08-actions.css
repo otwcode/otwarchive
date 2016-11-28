@@ -72,7 +72,7 @@ p.submit, input.submit, dd.submit {
   padding: 0;
 }
 
-/*subtypes and modes 
+/*subtypes and modes
 test note: this pagination clear needs to be kept an eye on*/
 
 ol.pagination, div.pagination, ol.year {
@@ -148,6 +148,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 /* CONTEXTS */
 
+#new_work_search fieldset:first-of-type .submit {
+  padding-top: 0;
+}
+
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
   font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont',sans-serif;
@@ -186,13 +190,13 @@ dl.stats + .landmark + .actions {
   padding: 0 0 0.15em 0;
 }
 
-.many p.actions { 
-  float: none; 
-  text-align: right; 
+.many p.actions {
+  float: none;
+  text-align: right;
 }
 
-.concise label.action { 
-  float: left; 
+.concise label.action {
+  float: left;
 }
 
 dd.any label.action {
