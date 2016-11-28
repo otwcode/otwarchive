@@ -60,7 +60,6 @@ class PotentialMatchesController < ApplicationController
     elsif PotentialMatch.in_progress?(@collection)
       # we're generating
       @in_progress = true
-      @current_position = PotentialMatch.position(@collection)
       @progress = PotentialMatch.progress(@collection)
     elsif ChallengeAssignment.in_progress?(@collection)
       @assignment_in_progress = true

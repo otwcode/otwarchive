@@ -62,7 +62,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
           bookmark_status = :unprocessable_entity
           bookmark_messages << bookmarkable.errors.full_messages + bookmark.errors.full_messages
         end
-      rescue => exception
+      rescue Exception => exception
         bookmark_status = :unprocessable_entity
         bookmark_messages << exception.message
       end

@@ -28,6 +28,24 @@ When /^I set my preferences to hide warnings$/ do
   user.preference.save
 end
 
+When /^I set my preferences to hide freeform$/ do
+  user = User.current_user
+  user.preference.hide_freeform = true
+  user.preference.save
+end
+
+When /^I set my preferences to hide all hit counts$/ do
+  user = User.current_user
+  user.preference.hide_all_hit_counts = true
+  user.preference.save
+end
+
+When /^I set my preferences to hide hit counts on my works$/ do
+  user = User.current_user
+  user.preference.hide_private_hit_count = true
+  user.preference.save
+end
+
 When /^I set my preferences to hide the share buttons on my work$/ do
   user = User.current_user
   user.preference.disable_share_links = true
@@ -75,3 +93,19 @@ When /^I set my time zone to "([^"]*)"$/ do |time_zone|
   user.preference.time_zone = time_zone
   user.preference.save
 end
+
+When /^I set my preferences to hide warnings by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_warnings]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+
+When /^I set my preferences to hide freeform by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_freeform]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+
+

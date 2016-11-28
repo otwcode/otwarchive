@@ -20,6 +20,23 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When /^I take a screenshot$/ do
+  screenshot_and_save_page
+end
+
+# We set the default domain to example.org.
+# The phantomjs drive fetchs pages directly so some tests will go to example.org
+# setting this whitelist stops this happening which is in itself a good thing
+# and makes the network traces easier to read as there are less calls to twitter etc.
+
+When /^I limit myself to the Archive$/ do
+  page.driver.browser.url_whitelist = ['http://127.0.0.1']
+end
+
+When /^I clear the network traffic$/ do
+  page.driver.clear_network_traffic
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -95,6 +112,17 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   with_scope(selector) do
     attach_file(field, path)
   end
+end
+
+Then /^visiting "([^"]*)" should fail with an error$/ do |path|
+  expect {
+    visit path
+  }.to raise_error
+end
+
+Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
+  visit path
+  step %{I should see "#{flash_error}" within ".flash"}
 end
 
 Then /^(?:|I )should see JSON:$/ do |expected_json|
@@ -265,13 +293,16 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
-
 Then /^I should get a file with ending and type ([^\"]*)$/ do |type|
   page.response_headers['Content-Disposition'].should =~ Regexp.new("filename=.*?\.#{type}")
   page.response_headers['Content-Type'].should =~ Regexp.new("/#{type}")
 end
 
-
 Then /^show me the page$/ do
   save_and_open_page
+  sleep 120
+end
+
+Then /^show me the network traffic$/ do
+  puts page.driver.network_traffic.to_yaml
 end
