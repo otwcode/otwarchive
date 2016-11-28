@@ -177,12 +177,15 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
+  # For works that are more than 1 chapter, returns "current #/expected #" of chapters
+  # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
+  # returns the un-linked version.
   def chapter_total_display_with_link(work)
-    posted_chapters_count = work.number_of_posted_chapters
-    if posted_chapters_count > 1
-      link_to(posted_chapters_count.to_s,
-              work_chapter_path(work, work.last_posted_chapter.id)) +
-      '/' + work.wip_length.to_s
+    number_of_posted_chapters = work.number_of_posted_chapters
+    if number_of_posted_chapters > 1
+      link_to(number_of_posted_chapters.to_s,
+              work_chapter_path(work, work.last_posted_chapter.id)) + "/" +
+      work.wip_length.to_s
     else
       work.chapter_total_display
     end
