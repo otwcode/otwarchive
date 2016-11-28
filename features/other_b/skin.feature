@@ -33,7 +33,7 @@ Feature: creating and editing skins
     And I press "Update"
    Then I should see "The following skins were updated: public skin"
 
-  Scenario: Admin can add a public skin to the chooser
+  Scenario: Admin can add a public skin to the chooser and then remove it
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And the skin "public skin" is cached
     And I am logged in as an admin
