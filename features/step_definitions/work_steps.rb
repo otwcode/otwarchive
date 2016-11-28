@@ -93,6 +93,18 @@ end
 
 ### GIVEN
 
+Given(/^I have the Battle set loaded$/) do 
+  step %{I have loaded the fixtures}
+  step %{I have Battle 12 prompt meme fully set up}
+  step %{everyone has signed up for Battle 12}
+  step %{mod fulfills claim}
+  step %{I reveal the "Battle 12" challenge}
+  step %{I am logged in as "myname4"}
+  step %{I have flushed Redis}
+  step %{the statistics_tasks rake task is run}
+  step %{the work indexes are updated}
+end
+
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all
@@ -516,4 +528,5 @@ end
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
+
 
