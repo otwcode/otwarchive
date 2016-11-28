@@ -109,13 +109,13 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
-Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   with_scope(selector) do
     page.should have_xpath("//input[@value='#{text}']")
   end
 end
 
-Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   with_scope(selector) do
     page.should_not have_xpath("//input[@value='#{text}']")
   end
