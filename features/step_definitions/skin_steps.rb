@@ -87,7 +87,7 @@ Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"
   step "the approved public skin \"public skin\" with css \"#{css}\""
   step "I am logged in as \"#{login}\""
   step "I am on #{login}'s preferences page"
-  select("#{skin_name}", from: "preference_skin_id")
+  select(skin_name, from: "preference_skin_id")
   step %{I submit}
 end
 
