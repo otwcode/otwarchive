@@ -12,9 +12,9 @@ module SeriesHelper
       serial_works = serial.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
-        previous_link = (visible_position > 0) ? link_to("&larr; Previous Work".html_safe, serial_works[visible_position - 1]) : "".html_safe
-        main_link = (" Part " + (visible_position+1).to_s + " of the " + link_to(serial.title, serial) + " series ").html_safe
-        next_link = (visible_position < serial_works.size-1) ? link_to("Next Work &rarr;".html_safe, serial_works[visible_position + 1]) : "".html_safe
+        previous_link = visible_position > 0 ? link_to(ts("&larr; Previous Work").html_safe, serial_works[visible_position - 1]) : "".html_safe
+        main_link = ts(" Part %{position} of the %{series_title} series ", position: (visible_position + 1).to_s, series_title: link_to(serial.title, serial)).html_safe
+        next_link = (visible_position < serial_works.size-1) ? link_to(ts("Next Work &rarr;").html_safe, serial_works[visible_position + 1]) : "".html_safe
         previous_link + main_link + next_link
       end
     end
@@ -22,7 +22,7 @@ module SeriesHelper
 
   def work_series_description(work, series)
     serial = SerialWork.where(:work_id => work.id, :series_id => series.id).first
-    ("Part <strong>#{serial.position}</strong> of " + link_to(series.title, series)).html_safe
+    ts("Part <strong>#{serial.position}</strong> of #{link_to(series.title, series)}").html_safe
   end
 
   def series_list_for_feeds(work)
