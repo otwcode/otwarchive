@@ -59,11 +59,11 @@ Feature: Create and Edit Series
       And I view the series "Ponies"
       And I follow "Rainbow Dash"
     Then I should see "Part 3 of the Ponies series"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Starsong"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Sweetie Belle"
-    When I follow "»"
+    When I follow "Next Work →"
     Then I should see "Starsong"
     When I view the series "Ponies"
       And I follow "Edit Series"
@@ -152,11 +152,11 @@ Feature: Create and Edit Series
       And I view the series "Ponies"
       And I follow "Rainbow Dash"
     Then I should see "Part 3 of the Ponies series"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Starsong"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Sweetie Belle"
-    When I follow "»"
+    When I follow "Next Work →"
     Then I should see "Starsong"
     When I view the series "Ponies"
       And I follow "Edit Series"
@@ -217,13 +217,13 @@ Feature: Create and Edit Series
       And I should see "polarbears"
 
   Scenario: Series index for maaany series
-    Given I am logged in as "whoever" with password "whatever"  
+    Given I am logged in as "whoever" with password "whatever"
       And I add the work "grumble" to "32" series "penguins"
     When I go to whoever's series page
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
-  
+
   Scenario: Delete a series
     Given I am logged in as "cereal" with password "yumyummy"
       And I add the work "Snap" to series "Krispies"
