@@ -20,7 +20,7 @@ Feature: creating and editing skins
   Then I should see "You are now using the default Archive skin again!"
     And the page should not have the cached skin "public skin"
 
-  Scenario: Admin can cache a public skin
+  Scenario: Admin can cache and uncache a public skin
   Given basic skins
     And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I am logged in as an admin
@@ -28,21 +28,23 @@ Feature: creating and editing skins
     And I check "Cache"
    Then I press "Update" 
     And I should see "The following skins were updated: public skin"
+   When I follow "Approved Skins"
+    And I check "Uncache"
+    And I press "Update"
+   Then I should see "The following skins were updated: public skin"
 
-  Scenario: Admin can add a public skin to the chooser
-  Given basic skins
-    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+  Scenario: Admin can add a public skin to the chooser and then remove it
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And the skin "public skin" is cached
     And I am logged in as an admin
-   When I follow "Approved Skins"
+  When I follow "Approved Skins"
     And I check "Chooser"
-   Then I press "Update"
-    And I should see "The following skins were updated: public skin"
-   When I am logged in as "skinner"
-    And I follow "public skin"
-   Then I should see "The skin public skin has been set. This will last for your current session."
-
-
+    And I press "Update"
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Approved Skins"
+    And I check "Not In Chooser"
+    And I press "Update"
+  Then I should see "The following skins were updated: public skin"
 
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
@@ -66,6 +68,33 @@ Feature: creating and editing skins
   Scenario: A logged-out user should not be able to create skins.
   When I am on skin's new page
     Then I should see "Sorry, you don't have permission"
+
+  Scenario: An admin can reject and unreject a skin
+  Given the unapproved public skin "public skin"
+    And I am logged in as an admin
+  When I go to admin's skins page
+    And I check "make_rejected_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Rejected Skins"
+  Then I should see "public skin"
+  When I check "make_unrejected_public_skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Rejected Skins"
+  Then I should not see "public skin"
+
+  Scenario: An admin can feature and unfeature skin
+  Given the approved public skin "public skin"
+    And I am logged in as an admin
+  When I follow "Approved Skins"
+    And I check "Feature"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Approved Skins"
+    And I check "Unfeature"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
 
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
   Given I am logged in as "skinner"

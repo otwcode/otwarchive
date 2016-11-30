@@ -6,33 +6,28 @@ Feature: Search Works
   
   # do everything that doesn't modify the works in one scenario
   # so you only have to load the fixtures and update the sphinx indexes once
-  Scenario: Search works
-    Given I have loaded the fixtures
-      And I have Battle 12 prompt meme fully set up
-      And everyone has signed up for Battle 12
-    When mod fulfills claim
-    When I reveal the "Battle 12" challenge
-    When I am logged in as "myname4"
-      And I have flushed Redis
-      And the statistics_tasks rake task is run
-      And the work indexes are updated
+  Scenario: anon work doesn't show up in searches
+    Given I have the Battle set loaded
       
-    # anon work doesn't show up in searches
-    When I search for works containing "mod"
-    Then I should see "No results found"
-    When I search for works by mod
-    Then I should see "No results found"
+      When I search for works containing "mod"
+      Then I should see "No results found"
+      When I search for works by mod
+      Then I should see "No results found"
     
-    # reveal works
+  Scenario: reveal works doesn't show up in searches
+    Given I have the Battle set loaded
+
     When I reveal the authors of the "Battle 12" challenge
-    When all search indexes are updated
-    When I am logged in as "myname4"
-    When I search for works containing "mod"
+      And all search indexes are updated
+      And I am logged in as "myname4"
+      And I search for works containing "mod"
     Then I should see "No results found"
     When I search for works by mod
     Then I should see "No results found"
 
-    # do some valid searches
+  Scenario:  do some valid searches
+    Given I have the Battle set loaded
+
     When I search for a simple term from the search box
     Then I should see "3 Found"
     When I follow "Edit Your Search"
@@ -43,21 +38,27 @@ Feature: Search Works
       And I press "Search" within "form#new_work_search"
     Then I should see "1 Found"
 
-    # search by language
+  Scenario: search by language
+    Given I have the Battle set loaded
+
     When I am on the search works page
       And I select "Deutsch" from "Language"
       And I press "Search" within "form#new_work_search"
     Then I should see "1 Found"
 
-    # search by range of hits
+  Scenario: search by range of hits
+    Given I have the Battle set loaded
+
     When I am on the search works page
       And I fill in "Hits" with "10000-20000"
       And I press "Search" within "form#new_work_search"
     Then I should see "1 Found"
 
-    # search by date and then by word count AND date
+  Scenario: search by date and then by word count AND date
+    Given I have the Battle set loaded
+
     When I am on the search works page
-    When I fill in "Date" with "> 2 years ago"
+      And I fill in "Date" with "> 2 years ago"
       And I press "Search" within "form#new_work_search"
     Then I should see "6 Found"
     When I follow "Edit Your Search"
@@ -66,7 +67,9 @@ Feature: Search Works
       And I press "Search" within "form#new_work_search"
     Then I should see "No results found"
 
-    # search by > hits
+  Scenario: search by > hits
+    Given I have the Battle set loaded
+
     When I am on the search works page
       And I fill in "Hits" with "> 100"
       And I press "Search" within "form#new_work_search"
@@ -75,7 +78,9 @@ Feature: Search Works
       And I should see "third work"
       And I should see "You searched for: hits: > 100"
 
-    # search with the header search field and then refine it using the author/artist field
+  Scenario: search with the header search field and then refine it using the author/artist field
+    Given I have the Battle set loaded
+    
     When I am on the homepage.
       And I fill in "site_search" with "testuser2"
       And I press "Search"
@@ -87,7 +92,9 @@ Feature: Search Works
       And I press "Search" within "form#new_work_search"
     Then I should see "3 Found"
 
-    # search by number of kudos
+  Scenario: search by number of kudos
+    Given I have the Battle set loaded
+
     When I am on the search works page
       And I fill in "Kudos" with ">0"
       And I press "Search" within "form#new_work_search"
@@ -107,12 +114,9 @@ Feature: Search Works
       And I fill in "Kudos" with "<2"
       And I press "Search" within "form#new_work_search"
     Then I should see "You searched for: kudos count: <2"
-    Then I should see "6 Found"
-
-    # search for complete works with few kudos
+      And I should see "6 Found"
     When I follow "Edit Your Search"
       And I check "Complete"
       And I press "Search" within "form#new_work_search"
     Then I should see "You searched for: Complete kudos count: <2"
-    Then I should see "4 Found"
-    
+      And I should see "4 Found"
