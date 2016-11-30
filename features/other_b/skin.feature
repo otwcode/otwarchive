@@ -84,18 +84,6 @@ Feature: creating and editing skins
   When I follow "Rejected Skins"
   Then I should not see "public skin"
 
-  Scenario: An admin can feature and unfeature skin
-  Given the approved public skin "public skin"
-    And I am logged in as an admin
-  When I follow "Approved Skins"
-    And I check "Feature"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
-  When I follow "Approved Skins"
-    And I check "Unfeature"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
-
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
