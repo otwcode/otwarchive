@@ -135,7 +135,7 @@ describe StoryParser do
     end
   end
 
-  describe "#download_and_parse_chapters_into_story", :rspec_run_two => true do
+  describe "#download_and_parse_chapters_into_story"
     it "should set the work revision date to the date of the last chapter" do
       # Let the test get at external sites, but stub out anything containing "url1" and "url2"
       WebMock.allow_net_connect!
@@ -222,7 +222,7 @@ describe StoryParser do
       WebMock.reset!
     end
 
-    it "should not throw an exception with non-ASCII characters in metadata fields", :rspec_run_two => true do
+    it "should not throw an exception with non-ASCII characters in metadata fields"
       urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
       urls.each do |url|
         expect {
