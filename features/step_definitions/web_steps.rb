@@ -299,7 +299,7 @@ Then /^I should download a ([^"]*) file with(?: (\d+) rows and)? the header row 
   body_without_bom = page.body.encode("UTF-8").gsub!("\xEF\xBB\xBF", "")
   csv = CSV.parse(body_without_bom, col_sep: "\t") # array of arrays
   expect(csv.first.join(" ")).to eq(header)
-  expect(csv.size).to == rows.to_i if rows
+  expect(csv.size).to eq(rows.to_i) if rows
 end
 
 Then /^show me the page$/ do
