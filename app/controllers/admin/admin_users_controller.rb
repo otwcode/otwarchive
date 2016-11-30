@@ -1,4 +1,5 @@
 class Admin::AdminUsersController < ApplicationController
+  include ExportsHelper
 
   before_filter :admin_only
 
@@ -6,7 +7,23 @@ class Admin::AdminUsersController < ApplicationController
     @roles = Role.assignable.uniq
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by_name(params[:role]) if params[:role]
-    @users = User.search_by_role(@role, params[:query], :inactive => params[:inactive], :page => params[:page])
+    @users = User.search_by_role(@role, params[:query], inactive: params[:inactive], page: params[:page])
+  end
+
+  def bulk_search
+    @roles = Role.assignable.uniq
+    @emails = params[:emails].split if params[:emails]
+    unless @emails.nil? || @emails.blank?
+      all_users, @not_found = User.search_multiple_by_email(@emails)
+      @users = all_users.paginate(page: params[:page] || 1)
+      if params[:download_button]
+        header = [["Email", "Username"]]
+        found = all_users.map { |u| [u.email, u.login] }
+        not_found = @not_found.map { |email| [email, ""]}
+        send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv")
+        flash.now[:notice] = ts("Downloaded CSV")
+      end
+    end
   end
 
   # GET admin/users/1
