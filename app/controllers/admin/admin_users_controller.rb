@@ -19,7 +19,7 @@ class Admin::AdminUsersController < ApplicationController
       if params[:download_button]
         header = [["Email", "Username"]]
         found = all_users.map { |u| [u.email, u.login] }
-        not_found = @not_found.map { |email| [email, ""]}
+        not_found = @not_found.map { |email| [email, ""] }
         send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv")
         flash.now[:notice] = ts("Downloaded CSV")
       end

@@ -309,13 +309,14 @@ protected
     csv_array = []
     csv_array << header
     @collection.prompts.where(type: "Request").each do |request|
-      if request.anonymous?
-        row = ["(Anonymous)", "", ""]
-      else
-        row = [request.challenge_signup.pseud.name,
-               request.challenge_signup.pseud.user.email,
-               collection_signup_url(@collection, request.challenge_signup)]
-      end
+      row =
+        if request.anonymous?
+          ["(Anonymous)", "", ""]
+        else
+          [request.challenge_signup.pseud.name,
+           request.challenge_signup.pseud.user.email,
+           collection_signup_url(@collection, request.challenge_signup)]
+        end
       csv_array << (row + request_to_array("request", request))
     end
 

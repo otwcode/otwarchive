@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ExportsHelper
 
   def send_csv_data(content_array, filename)
@@ -9,7 +10,7 @@ module ExportsHelper
   # automatically into proper table format. OpenOffice handles it
   # well, too.
   def export_csv(content_array)
-    csv_data = content_array.map {|x| x.to_csv(col_sep: "\t", encoding: "utf-8")}.join
+    csv_data = content_array.map { |x| x.to_csv(col_sep: "\t", encoding: "utf-8") }.join
     byte_order_mark = "\uFEFF"
     (byte_order_mark + csv_data).encode("utf-16le", "utf-8", invalid: :replace, undef: :replace, replace: "")
   end
