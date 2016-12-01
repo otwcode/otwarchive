@@ -303,7 +303,8 @@ function toggleFormField(element_id) {
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options', '#parent-options', '#series-options', '#backdate-options'];
+        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
         $j.each(toHide, function(index, name) {
             if ($j(name)) {
                 if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }

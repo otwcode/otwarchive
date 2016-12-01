@@ -416,17 +416,12 @@ class Collection < ActiveRecord::Base
   
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
-    send_author_reveal_notifications
   end
   
   def send_reveal_notifications
     approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
   end
   
-  def send_author_reveal_notifications
-    approved_collection_items.each {|collection_item| collection_item.notify_of_author_reveal}
-  end
-
   def self.sorted_and_filtered(sort, filters, page)
     pagination_args = {:page => page}
 

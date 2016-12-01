@@ -2,6 +2,10 @@ ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
+require 'simplecov'
+require 'coveralls'
+SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
+Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
@@ -30,34 +34,25 @@ RSpec.configure do |config|
   config.mock_with :rspec
   #config.raise_errors_for_deprecations!
   config.include FactoryGirl::Syntax::Methods
-  config.include(EmailSpec::Helpers)
-  config.include(EmailSpec::Matchers)
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
+  config.include EmailSpec::Helpers
+  config.include EmailSpec::Matchers
   config.include Capybara::DSL
 
-  config.before(:suite) do
+  config.before :suite do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
   end
 
-  config.before(:each) do
+  config.before :each do
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after :each do
     DatabaseCleaner.clean
+  end
+
+  config.after :suite do
+    DatabaseCleaner.clean_with :truncation
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

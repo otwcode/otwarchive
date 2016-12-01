@@ -1,23 +1,22 @@
-<h3 class="heading"><%= ts('User History') %></h3>
+<h3 class="heading"><%= ts("User History") %></h3>
 <div class="wrapper">
-	<table id="user_history" summary="<%= ts('Shows what notable actions, such as creating an account, a user performed, and when they did them.') %>">
-	  <caption><%= ts('History of User Actions') %></caption>
+  <table id="user_history" summary="<%= ts("Shows what notable actions, such as creating an account, a user performed, and when they did them.") %>">
+    <caption><%= ts("History of User Actions") %></caption>
     <thead>
-	    <tr>
-        <th scope="col"><%= ts('Date / Time') %></th>
-        <th scope="col"><%= ts('Action') %></th>
-        <th scope="col"><%= ts('Details') %></th>
-      </tr>
+    <tr>
+      <th scope="col"><%= ts("Date / Time") %></th>
+      <th scope="col"><%= ts("Action") %></th>
+      <th scope="col"><%= ts("Details") %></th>
+    </tr>
     </thead>
     <tbody>
-      <% unless @log_items.blank?
-        @log_items.each do |item| %>
+    <% unless @log_items.blank?
+         @log_items.each do |item| %>
         <tr>
           <td><%= item.created_at %> (<abbr class="timeago" title="<%= item.created_at %>"><%= item.created_at.iso8601 %></abbr>)</td>
           <td><%= log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
           <td><%= item.note %></td>
         </tr>
-        <% end %>
       <% end %>
       <tr>
         <td><%= @user.created_at %> (<abbr class="timeago" title="<%= @user.created_at %>"><%= @user.created_at.iso8601 %></abbr>)</td>
