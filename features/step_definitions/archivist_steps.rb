@@ -1,10 +1,7 @@
 ### GIVEN
 
 Given /^I have an archivist "([^\"]*)"$/ do |name|
-  user = find_or_create_new_user(name, "password")
-  role = Role.find_or_create_by_name("archivist")
-  user.roles = [role]
-  user.save
+  step(%{the user "#{name}" exists and has the role "archivist"})
 end
 
 Given /^I have pre-archivist setup for "([^\"]*)"$/ do |name|
@@ -44,7 +41,7 @@ When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]
   end
 end
 
-When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?(?: and by "([^\"]*)" with email "([^\"]*)")?$/ do
+When /^I import the work "(.*?)"(?: by "(.*?)" with email "(.*?)")?(?: and by "(.*?)" with email "(.*?)")?$/ do
       |url, creator_name, creator_email, cocreator_name, cocreator_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
