@@ -53,7 +53,7 @@ class WranglingGuidelinesController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:wrangling_guidelines]
-      @wrangling_guidelines = WranglingGuideline.reorder(params.permit(:utf8, :commit, wrangling_guidelines: [])[:wrangling_guidelines])
+      @wrangling_guidelines = WranglingGuideline.reorder(params[:wrangling_guidelines])
       flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
     end
     redirect_to(wrangling_guidelines_path)
