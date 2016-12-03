@@ -85,6 +85,8 @@ module NavigationHelpers
       user_gifts_path(User.current_user)
     when /my assignments page/
       user_assignments_path(User.current_user)
+    when /^my collection items page$/
+      user_collection_items_path(User.current_user)
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
