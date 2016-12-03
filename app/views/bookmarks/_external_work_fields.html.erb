@@ -3,7 +3,11 @@
   <dl>
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
     <dd class="required" title="URL">
-      <%= ew.text_field :url, :value => params[:url_from_external].blank? ? "" : params[:url_from_external] %>
+      <% if params[:url_from_external].blank? %>		 
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1) %>
+      <% else %>		
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
+      <% end %>
     </dd>
     <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
     <dd class="required">
