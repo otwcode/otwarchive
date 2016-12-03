@@ -8,17 +8,6 @@ class ExternalWorksController < ApplicationController
     @bookmark = Bookmark.new
   end
   
-  # Used with bookmark form to get an existing external work and return it via ajax
-  def fetch
-   if params[:external_work_url]
-     url = ExternalWork.new.reformat_url(params[:external_work_url])
-     @external_work = ExternalWork.where(:url => url).first
-   end
-   respond_to do |format|
-    format.js
-   end
-  end
-  
   def index
     if params[:show] == 'duplicates'
       @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(:page => params[:page])      

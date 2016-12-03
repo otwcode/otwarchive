@@ -332,7 +332,6 @@ Otwarchive::Application.routes.draw do
     collection do
       get :compare
       post :merge
-      get :fetch
     end
     resources :bookmarks
     resources :related_works
