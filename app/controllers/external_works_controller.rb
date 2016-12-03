@@ -21,9 +21,9 @@ class ExternalWorksController < ApplicationController
   
   def index
     if params[:show] == 'duplicates'
-      @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(:page => params[:page])      
+      @external_works = ExternalWork.order("created_at DESC").paginate(:page => params[:page])      
     else
-      @external_works = ExternalWork.order("created_at DESC").paginate(:page => params[:page])
+      @external_works = ExternalWork.order("created_at DESC").uniq.paginate(:page => params[:page])
     end
   end
   

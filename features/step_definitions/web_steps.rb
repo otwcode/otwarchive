@@ -219,6 +219,10 @@ Then /"(.*)" should appear before "(.*)"/ do |first_example, second_example|
   page.body.should =~ /#{first_example}.*#{second_example}/m
 end
 
+Then /^"([^"]*)" should not appear before "([^"]*)"$/ do |first_example, second_example|
+   ! page.body.should =~ /#{first_example}.*#{second_example}/m
+end
+
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)

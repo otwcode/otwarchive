@@ -24,6 +24,11 @@ module NavigationHelpers
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the external works page$/i
+      external_works_path
+    when /^the external works without duplicates page$/i
+      external_works_path(show: :duplicates)
+
 
     # the following are examples using path_to_pickle
 
