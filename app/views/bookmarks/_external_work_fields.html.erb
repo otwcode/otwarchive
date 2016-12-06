@@ -4,18 +4,6 @@
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
     <dd class="required" title="URL">
       <%= ew.text_field :url %>
-      <%= hidden_field "fetched", "", :id => "fetched" %>
-      <%= content_for :footer_js do %>
-        <%= javascript_tag do %>
-          $j("#bookmark_external_url").blur(function() {
-            $j.ajax({
-              type: "get",
-              data: "external_work_url=" + $j("#bookmark_external_url").val(),
-              dataType: "script",
-              url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
-            })
-          })
-        <% end %>
       <% end %>
     </dd>
     <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
