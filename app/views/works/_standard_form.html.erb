@@ -185,12 +185,7 @@
                       <%= link_to serial.series.title, serial.series %>
                     </li>
                     <li>
-                      <%= link_to ts('Remove'), serial_work_path(serial),
-                              method: :delete %>
-                    </li>
-                    <li>
-                      <%= link_to ts('Delete'), serial.series,
-                              confirm: ts('Delete series from all works?'),
+                      <%= link_to ts('Remove work from series'), serial_work_path(serial),
                               method: :delete %>
                     </li>
                   </ul>
