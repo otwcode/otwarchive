@@ -144,11 +144,6 @@ When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
   step %{I delete the signup}
 end
 
-When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-end
-
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   click_link("#{participant}")
   step %{I delete the signup}
@@ -158,13 +153,6 @@ When /^I delete the signup$/ do
   step %{I follow "Delete Sign-up"}
   step %{I press "Yes, Delete Sign-up"}
   step %{I should see "Challenge sign-up was deleted."}
-end
-
-When /^I edit the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  click_link("#{participant}")
-  step %{I follow "Edit"}
 end
 
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
@@ -256,7 +244,16 @@ end
 
 Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
   collection = Collection.find_by_title(challenge_title)
-  User.all.each do |user|
-    user.challenge_signups.in_collection(collection).should be_empty
+  if collection.present?
+    User.all.each do |user|
+      user.challenge_signups.in_collection(collection).should be_empty
+    end
+  # we don't have a collection id because the collection has been deleted
+  # so let's make sure any remaining sign ups are for exisiting collections
+  else
+    ChallengeSignup.all.each do |signup|
+      collection_id = signup.collection_id
+      Collection.find_by_id(collection_id).should_not be_nil
+    end
   end
 end

@@ -3,6 +3,13 @@ Feature: Admin Actions for Works and Bookmarks
   As an admin
   I should be able to perform special actions on works
 
+  Scenario: Can reindex works
+    Given I am logged in as "regular_user"
+      And I post the work "Just a work you know"
+    When I am logged in as an admin
+      And I view the work "Just a work you know"
+      And I follow "Reindex Work"
+
   Scenario: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
@@ -223,5 +230,4 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Preview Tags and Language"
     When I press "Update"
     Then I should see "Deutsch"
-      And I should not see "English"
-
+      And I should not see "English"  

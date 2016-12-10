@@ -85,6 +85,8 @@ module NavigationHelpers
       user_gifts_path(User.current_user)
     when /my assignments page/
       user_assignments_path(User.current_user)
+    when /^my collection items page$/
+      user_collection_items_path(User.current_user)
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
@@ -205,6 +207,12 @@ module NavigationHelpers
       tag_wranglers_path
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
+    when /^the "(.*)" tag page$/i
+      tag_path(Tag.find_by_name($1))
+    when /^the wrangling tools page$/
+      tag_wranglings_path
+    when /^the "(.*)" fandom relationship page$/i
+      fandom_path($1)
       
     # Here is an example that pulls values out of the Regexp:
     #

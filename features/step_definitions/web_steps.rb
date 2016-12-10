@@ -120,6 +120,11 @@ Then /^visiting "([^"]*)" should fail with an error$/ do |path|
   }.to raise_error
 end
 
+Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
+  visit path
+  step %{I should see "#{flash_error}" within ".flash"}
+end
+
 Then /^(?:|I )should see JSON:$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
