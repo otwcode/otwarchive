@@ -15,8 +15,9 @@
     <%= link_to ts("Default All Incomplete"), default_all_collection_assignments_path(@collection),
                 :confirm => ts("Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting.") %>
   </li>
-  <li role="button"><%= link_to ts("Purge Assignments"), purge_collection_assignments_path(@collection), 
-          :confirm => ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
+  <li><%= link_to ts("Purge Assignments"),
+                  confirm_purge_collection_assignments_path(@collection),
+                  confirm: ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
   </li>
 </ul>
 <!--/subnav-->

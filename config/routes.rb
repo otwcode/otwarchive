@@ -400,9 +400,10 @@ Otwarchive::Application.routes.draw do
     end
     resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
       collection do
+        get :confirm_purge
         get :generate
         put :set
-        get :purge
+        post :purge
         get :send_out
         put :update_multiple
         get :default_all

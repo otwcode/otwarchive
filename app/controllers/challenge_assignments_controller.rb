@@ -8,7 +8,7 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :purge]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :destroy, :confirm_delete]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
@@ -181,11 +181,14 @@ class ChallengeAssignmentsController < ApplicationController
     end
   end
 
+  def confirm_purge
+  end
+
   def purge
     ChallengeAssignment.clear!(@collection)
     @challenge.assignments_sent_at = nil
     @challenge.save
-    flash[:notice] = "Assignments purged!"
+    flash[:notice] = ts("Assignments purged!")
     redirect_to collection_path(@collection)
   end
 
