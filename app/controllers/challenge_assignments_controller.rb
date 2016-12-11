@@ -8,7 +8,7 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :destroy, :confirm_delete]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :purge, :confirm_purge]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
