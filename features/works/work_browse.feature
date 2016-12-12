@@ -23,7 +23,7 @@ if there is a draft chapter
     And I follow the recent chapter link for the work "My WIP"
   Then I should find myself on Chapter 2 of the work "My WIP"
 
-Scenario: The recent chapter link in a work's blurb should should the adult
+Scenario: The recent chapter link in a work's blurb should show the adult
 content notice to visitors who are not logged in
 
   Given I am logged in as a random user
@@ -36,6 +36,7 @@ content notice to visitors who are not logged in
   Then I should see "adult content"
   When I follow "Proceed"
   Then I should find myself on Chapter 3 of the work "WIP"
+    And I should see "Hits: 1"
 
 Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
