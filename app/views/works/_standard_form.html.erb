@@ -3,7 +3,7 @@
 
   <p class="required notice">* <%= ts("Required information") %></p>
 
-  <%= render 'work_form_tags', include_blank: false %>
+  <%= render "work_form_tags", include_blank: false %>
 
   <fieldset class="preface" role="article">
     <legend><%= ts("Preface") %></legend>
@@ -14,7 +14,7 @@
       </dt>
       <dd class="title required">
         <%= f.text_field :title, class: "observe_textlength text" %>
-        <%= live_validation_for_field('work_title',
+        <%= live_validation_for_field("work_title",
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
               failureMessage: ts("We need a title! (At least %{min_length} characters long, please.)",
@@ -24,14 +24,14 @@
       </dd>
 
       <!-- Add coauthors-->
-      <%= render 'pseuds/byline', form: f, type: 'work' %>
+      <%= render "pseuds/byline", form: f, type: "work" %>
 
       <dt class="summary">
         <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, class: "observe_textlength" %>
-        <%= live_validation_for_field('work_summary', presence: false,
+        <%= live_validation_for_field("work_summary", presence: false,
               maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
@@ -94,7 +94,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
+        <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -160,14 +160,14 @@
         <%= check_box_tag "series-options-show", "1", !@work.series.blank?, class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
-        <%= label_tag 'series-options-show', ts("This work is part of a series") %>
+        <%= label_tag "series-options-show", ts("This work is part of a series") %>
         <%= link_to_help "choosing-series" %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
           <dl>
             <%= fields_for "work[series_attributes]" do |s| %>
-              <dt><%= s.label 'id', ts("Choose one of your existing series:") %></dt>
+              <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
               <dd>
                 <%= s.collection_select(:id, @series, :id, :title, { :prompt => true }) %>
               </dd>
@@ -234,7 +234,7 @@
           </fieldset>
         </dd>
 
-        <%= render 'work_form_associations_language', f: f %>
+        <%= render "work_form_associations_language", f: f %>
 
         <dt class="skin">
           <%= f.label :work_skin_id, ts("Select Work Skin") %>
@@ -246,7 +246,7 @@
                 :title,
                 { :selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), include_blank: true } %>
           <p class="actions" role="navigation">
-            <%= link_to ts("Public Work Skins"), skins_path(:skin_type => 'WorkSkin') %>
+            <%= link_to ts("Public Work Skins"), skins_path(:skin_type => "WorkSkin") %>
           </p>
         </dd>
       </dl>
@@ -308,7 +308,7 @@
           <h4 class="landmark heading"><%= ts("Work Text") %>*</h4>
           <%= c.text_area :content, value: @chapter.content,
                 class: "mce-editor observe_textlength large", id: "content" %>
-          <%= live_validation_for_field('content',
+          <%= live_validation_for_field("content",
             maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
             minimum_length: ArchiveConfig.CONTENT_MIN,
             tooLongMessage: ts("We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)",
@@ -331,18 +331,18 @@
     <ul class="actions">
       <% unless @work.new_record? || @work.posted? %>
         <li>
-          <%= submit_tag ts("Save Without Posting"), name: 'save_button' %>
+          <%= submit_tag ts("Save Without Posting"), name: "save_button" %>
         </li>
       <% end %>
       <li>
-        <%= submit_tag ts("Preview"), name: 'preview_button' %>
+        <%= submit_tag ts("Preview"), name: "preview_button" %>
       </li>
       <li>
-        <%= submit_tag ts("Post Without Preview"), name: 'post_button',
+        <%= submit_tag ts("Post Without Preview"), name: "post_button",
               disable_with: ts("Please wait...") %>
       </li>
       <li>
-        <%= submit_tag ts("Cancel"), name: 'cancel_button' %>
+        <%= submit_tag ts("Cancel"), name: "cancel_button" %>
       </li>
     </ul>
   </fieldset>
