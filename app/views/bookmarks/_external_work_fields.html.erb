@@ -3,7 +3,10 @@
   <dl>
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
     <dd class="required" title="URL">
-      <%= ew.text_field :url %>
+      <% if !params[:url_from_external].blank? %>
+        <%= ew.text_field :url, value: params[:url_from_external] %>
+      <% else %>
+        <%= ew.text_field :url %>
       <% end %>
     </dd>
     <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
