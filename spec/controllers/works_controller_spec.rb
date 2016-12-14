@@ -64,7 +64,7 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(true)
       end
 
-      xit "should return the same result the second time when a new work is created within the expiration time" do
+      it "should return the same result the second time when a new work is created within the expiration time" do
         get :index
         expect(assigns(:works)).to include(@work)
         work2 = FactoryGirl.create(:work, posted: true)
@@ -80,13 +80,13 @@ describe WorksController do
           @work2.index.refresh
         end
 
-        xit "should only get works under that tag" do
+        it "should only get works under that tag" do
           get :index, tag_id: @fandom.name
           expect(assigns(:works).items).to include(@work)
           expect(assigns(:works).items).not_to include(@work2)
         end
 
-        xit "should show different results on second page" do
+        it "should show different results on second page" do
           get :index, tag_id: @fandom.name, page: 2
           expect(assigns(:works).items).not_to include(@work)
         end
@@ -97,17 +97,12 @@ describe WorksController do
             @work2.index.refresh
           end
 
-          xit "should not show restricted works to guests" do
+          it "should not show restricted works to guests" do
             get :index, tag_id: @fandom.name
             expect(assigns(:works).items).to include(@work)
             expect(assigns(:works).items).not_to include(@work2)
           end
 
-          xit "should show restricted works to logged-in users" do
-            fake_login
-            get :index, tag_id: @fandom.name
-            expect(assigns(:works).items).to match_array([@work, @work2])
-          end
         end
 
       end
