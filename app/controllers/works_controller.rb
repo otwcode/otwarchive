@@ -517,44 +517,24 @@ class WorksController < ApplicationController
 
   # POST /works/import
   def import
-    # check to make sure we have some urls to work with
     @urls = params[:urls].split
 
-    if @urls.empty?
-      flash.now[:error] = ts('Did you want to enter a URL?')
-      render(:new_import) && return
-    end
+    import_errors = check_import_errors(params)
+    if import_errors.blank?
+      options = build_options(params)
 
-    # is external author information entered when import for others is not checked?
-    if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
-      flash.now[:error] = ts('You have entered an external author name or e-mail address but did not select "Import for others." Please select the "Import for others" option or remove the external author information to continue.')
+      # now let's do the import
+      if params[:import_multiple] == 'works' && @urls.length > 1
+        import_multiple(@urls, options)
+      else # a single work possibly with multiple chapters
+        import_single(@urls, options)
+      end
+    else
+      flash.now[:error] = import_errors
       render(:new_import) && return
-    end
-
-    # is this an archivist importing?
-    if params[:importing_for_others] && !current_user.archivist
-      flash.now[:error] = ts('You may not import stories by other users unless you are an approved archivist.')
-      render(:new_import) && return
-    end
-
-    # make sure we're not importing too many at once
-    if params[:import_multiple] == 'works' && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
-      flash.now[:error] = ts('You cannot import more than %{max} works at a time.', max: current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
-      render(:new_import) && return
-    elsif params[:import_multiple] == 'chapters' && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = ts('You cannot import more than %{max} chapters at a time.', max: ArchiveConfig.IMPORT_MAX_CHAPTERS)
-      render(:new_import) && return
-    end
-
-    options = build_options(params)
-
-    # now let's do the import
-    if params[:import_multiple] == 'works' && @urls.length > 1
-      import_multiple(@urls, options)
-    else # a single work possibly with multiple chapters
-      import_single(@urls, options)
     end
   end
+
 
   protected
 
@@ -1058,5 +1038,40 @@ class WorksController < ApplicationController
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
     }
+  end
+
+  def check_import_errors(params)
+
+    # check to make sure we have some urls to work with
+    if @urls.nil? || @urls.empty?
+      return ts("Did you want to enter a URL?")
+    end
+
+    # is external author information entered when import for others is not checked?
+    if (params[:external_author_name].present? || params[:external_author_email].present?) &&
+      !params[:importing_for_others]
+      return ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" " +
+                  "Please select the \"Import for others\" option or remove the external author information to continue.")
+    end
+
+    # is this an archivist importing?
+    if params[:importing_for_others] && !current_user.archivist
+      return ts("You may not import stories by other users unless you are an approved archivist.")
+    end
+
+    # make sure we're not importing too many at once
+    if params[:import_multiple] == "works" &&
+      (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS ||
+        @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
+      return ts("You cannot import more than %{max} works at a time.",
+                max: current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+
+    elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
+      return ts("You cannot import more than %{max} chapters at a time.",
+                max: ArchiveConfig.IMPORT_MAX_CHAPTERS)
+    end
+
+    # we made it this far, we have no errors
+    return ""
   end
 end
