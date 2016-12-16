@@ -396,6 +396,7 @@ $.TokenList = function (input, url_or_data, settings) {
     // Check the token limit
     if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
         input_box.hide();
+        
     }        
     
     
@@ -534,6 +535,8 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Check the token limit
         if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
+            // move focus to the remove option of the last token and then hide the input
+            input_box.parent().prev().find("a").last().focus();
             input_box.hide();
         } else {
             input_box.focus();
