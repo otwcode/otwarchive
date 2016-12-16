@@ -110,4 +110,69 @@ describe WorksController do
 
   end
 
+  # Method tests
+  describe "check_import_errors" do
+    describe "should return the right error messages" do
+      before :all do
+        @user = create(:user, { id: 456 })
+        @archivist = create(:user, { id: 123 })
+        @archivist.roles << Role.new(name: "archivist")
+
+        @controller = WorksController.new
+      end
+
+      def call_import_errors(urls, settings)
+        @controller.instance_variable_set(:@urls, urls)
+        @controller.instance_eval { check_import_errors(settings) }
+      end
+
+      it "when urls are empty" do
+        settings = {}
+        urls = []
+
+        expect(call_import_errors(urls, settings)).to eq "Did you want to enter a URL?"
+      end
+
+      it "there is an external author name but importing_for_others is NOT turned on" do
+        settings = { external_author_name: "Foo", importing_for_others: false }
+        urls = %w(url1 url2)
+
+        expect(call_import_errors(urls, settings)).to start_with "You have entered an external author name"
+      end
+
+      it "there is an external author email but importing_for_others is NOT turned on" do
+        settings = { external_author_email: "Foo", importing_for_others: false }
+        urls = %w(url1 url2)
+
+        expect(call_import_errors(urls, settings)).to start_with "You have entered an external author name"
+      end
+
+      it "the current user is NOT an archivist but importing_for_others is turned on" do
+        settings = { importing_for_others: "1" }
+        urls = %w(url1 url2)
+        allow(controller).to receive(:current_user) { @user }
+
+        expect(call_import_errors(urls, settings)).to start_with "You may not import stories by other users"
+      end
+
+      it "the current user is NOT an archivist and is importing over the maximum number of works" do
+        max = ArchiveConfig.IMPORT_MAX_WORKS
+        settings = { importing_for_others: false, import_multiple: "works" }
+        urls = Array.new(max + 1) { |i| "url#{i}" }
+        allow(controller).to receive(:current_user) { @user }
+
+        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
+      end
+
+      it "the current user is an archivist and is importing over the maximum number of works" do
+        max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
+        settings = { importing_for_others: 0, import_multiple: "works" }
+        urls = Array.new(max + 1) { |i| "url#{i}" }
+        allow(controller).to receive(:current_user) { @archivist }
+
+        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
+      end
+
+    end
+  end
 end
