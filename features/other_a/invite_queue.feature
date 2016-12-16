@@ -36,6 +36,7 @@ Feature: Invite queue management
     Then I should see "Request an Invitation"
 
   Scenario: An admin can delete people from the queue
+
     Given an invitation request for "invitee@example.org"
       And I am logged in as an admin
     When I go to the manage invite queue page
