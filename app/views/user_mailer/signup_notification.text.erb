@@ -1,11 +1,8 @@
 <% content_for :message do %>
-<%= t 'user_mailer.signup_notification.welcome', user: @user.login %>
-
-<%= t 'user_mailer.signup_notification.activate', link: activate_url(:id => @user.activation_code) %>
-
-<%= t 'user_mailer.signup_notification.para1' %>
-
-<%= t 'user_mailer.signup_notification.text.para2', archive_faqs_url: archive_faqs_url, admin_posts: root_url + "admin_posts", support: root_url + "support" %>
-
-<%= t 'user_mailer.signup_notification.bye' %>
+<%= t('user_mailer.signup_notification.text.main_text',
+           login: @user.login,
+           activate_account: activate_url(id: @user.activation_code), 
+           faq: archive_faqs_url,
+           admin_posts: admin_posts_url, 
+           contact_support: root_url + 'support' ) %>
 <% end %>

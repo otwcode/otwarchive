@@ -1,11 +1,8 @@
 <% content_for :message do %>
-  <p><%= t('user_mailer.signup_notification.welcome', user: style_bold(@user.login)).html_safe%></p>
-
-  <p><%= t('user_mailer.signup_notification.activate', link: style_link(activate_url(:id => @user.activation_code), activate_url(:id => @user.activation_code))).html_safe %></p>
-
-  <p><%= t 'user_mailer.signup_notification.para1' %></p>
-
-  <p><%= t('user_mailer.signup_notification.html.para2', archive_faqs_url: style_link(t('user_mailer.signup_notification.faq'), archive_faqs_url), admin_posts: style_link(t('user_mailer.signup_notification.admin_posts'), root_url + "admin_posts"), support: support_link(t 'user_mailer.signup_notification.support')).html_safe %></p>
-
-  <p><%= t 'user_mailer.signup_notification.bye' %></p>
+  <%= t('user_mailer.signup_notification.html.main_text', 
+           login: style_bold(@user.login), 
+           activate_account: style_link( t('user_mailer.signup_notification.activate_your_account'), activate_url(id: @user.activation_code)), 
+           faq: style_link(t('user_mailer.signup_notification.faq'), archive_faqs_url),
+           admin_posts: style_link(t('user_mailer.signup_notification.admin_posts'), admin_posts_url), 
+           contact_support: support_link(t 'user_mailer.signup_notification.support') ).html_safe %>
 <% end %>

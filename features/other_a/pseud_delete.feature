@@ -27,7 +27,61 @@ Feature: Delete pseud.
     And I follow "testymctesty"
   Then I should see "fourth"
     And I should not see "fifth work"
-              
-     
-    
-      
+
+  Scenario: Deleting a pseud shouldn't break gift exchange signups.
+
+    Given I am logged in as "moderator"
+      And I set up the collection "Exchange1"
+      And I select "Gift Exchange" from "challenge_type"
+      And I press "Submit"
+      And I check "Sign-up open?"
+      And I press "Submit"
+      And I am logged in as "test"
+      And I add the pseud "testpseud"
+
+    When I start signing up for "Exchange1"
+      And I select "testpseud" from "challenge_signup_pseud_id"
+      And I fill in "Description:" with "Antidisestablishmentarianism."
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created."
+
+    When I view the collection "Exchange1"
+      And I follow "My Sign-up"
+    Then I should see "Antidisestablishmentarianism."
+
+    When I am on test's pseuds page
+      And I follow "Delete"
+    Then I should see "The pseud was successfully deleted."
+
+    When I view the collection "Exchange1"
+      And I follow "My Sign-up"
+    Then I should see "Antidisestablishmentarianism."
+
+  Scenario: Deleting a pseud shouldn't break prompt meme signups.
+
+    Given I am logged in as "moderator"
+      And I set up the collection "PromptsGalore"
+      And I select "Prompt Meme" from "challenge_type"
+      And I press "Submit"
+      And I press "Submit"
+      And I am logged in as "test"
+      And I add the pseud "testpseud"
+
+    When I start signing up for "PromptsGalore"
+      And I select "testpseud" from "challenge_signup_pseud_id"
+      And I fill in "Description:" with "Antidisestablishmentarianism."
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created."
+
+    When I view the collection "PromptsGalore"
+      And I follow "My Prompts"
+    Then I should see "Antidisestablishmentarianism."
+
+    When I am on test's pseuds page
+      And I follow "Delete"
+    Then I should see "The pseud was successfully deleted."
+
+    When I view the collection "PromptsGalore"
+      And I follow "My Prompts"
+    Then I should see "Antidisestablishmentarianism."
+

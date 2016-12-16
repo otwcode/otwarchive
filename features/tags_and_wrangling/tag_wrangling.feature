@@ -189,6 +189,13 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+  Scenario: Wrangler has option to reindex a work
+
+    Given the work "Indexing Issues"
+      And I am logged in as a tag wrangler
+     When I view the work "Indexing Issues"
+     Then I should see "Reindex Work"
+
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
     
     Given a canonical fandom "'Allo 'Allo"
@@ -227,3 +234,31 @@ Feature: Tag wrangling
     When I edit the tag "Cabin Pressure"
     Then I should not see "Sign Up"
       And I should see the tag wrangler listed as an editor of the tag
+
+  Scenario: A user can not see the reindex button on a tag page
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And I am logged in as a random user
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
+
+  Scenario: A tag wrangler can not see the reindex button on a tag page
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
+
+  Scenario: An admin can see the reindex button on a tag page and will recieve the correct message when pressed.
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And I am logged in as an admin
+    When I view the tag "Cowboy Bebop"
+    Then I follow "Reindex Tag"
+      And I should see "Tag sent to be reindexed"
