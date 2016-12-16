@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset class="external">
 	<legend><%= ts('External Work') %></legend>
   <dl>
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
@@ -11,16 +11,19 @@
       <%= hidden_field "fetched", "", :id => "fetched" %>
       <%= content_for :footer_js do %>
         <%= javascript_tag do %>
-          $j("#bookmark_external_url").blur(function() {
+          $j("#bookmark-form").on("blur", "#bookmark_external_url_autocomplete", function() {
             $j.ajax({
               type: "get",
               data: "external_work_url=" + $j("#bookmark_external_url").val(),
               dataType: "script",
               url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
-            })
-          })
+            });
+          });
         <% end %>
       <% end %>
+      <p class="footnote">
+        <%= ts("If this URL has been bookmarked before, the work information will be filled in automatically once you move to a different field.") %>
+      </p>
     </dd>
     <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
     <dd class="required">
@@ -46,7 +49,7 @@
     </dd>
   </dl>
 </fieldset>
-<fieldset>
+<fieldset class="external">
   <legend><%= ts('Creator\'s Tags') %></legend>
   <p>
     <%= ts('Creator\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => ArchiveConfig.TAG_MAX) %>
