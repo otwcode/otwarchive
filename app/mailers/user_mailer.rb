@@ -1,4 +1,4 @@
-elass UserMailer < BulletproofMailer::Base
+class UserMailer < BulletproofMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -244,7 +244,7 @@ elass UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t 'user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME
+        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
