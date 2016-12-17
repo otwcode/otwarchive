@@ -19,6 +19,7 @@ class ChallengeSignupSummary
   # For a multi-fandom challenge, this is probably Fandom, but for a single-fandom 
   # challenge, it may be something else
   def tag_class
+    raise "Redshirt: Attempted to constantize invalid class initialize tag_class #{challenge.topmost_tag_type.classify}" unless Tag::TYPES.include?(challenge.topmost_tag_type.classify)
     challenge.topmost_tag_type.classify.constantize
   end
 

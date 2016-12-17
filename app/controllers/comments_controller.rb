@@ -10,6 +10,7 @@ class CommentsController < ApplicationController
   before_filter :check_visibility, :only => [:show]
   before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access, :only => [:index, :show]
+  before_filter :check_pseud_ownership, :only => [:create, :update]
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
@@ -20,7 +21,15 @@ class CommentsController < ApplicationController
 
   cache_sweeper :comment_sweeper
 
-
+  def check_pseud_ownership
+    if params[:comment][:pseud_id]
+      pseud = Pseud.find(params[:comment][:pseud_id])
+      unless pseud && current_user && current_user.pseuds.include?(pseud)
+        flash[:error] = ts("You can't comment with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
 
   def load_comment
     @comment = Comment.find(params[:id])

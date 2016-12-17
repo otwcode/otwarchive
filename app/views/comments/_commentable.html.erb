@@ -53,7 +53,7 @@
 
     <% if logged_in? && @work && marked_for_later?(@work) %>
       <li>
-        <%= markasread_link(@work) %>
+        <%= mark_as_read_link(@work) %>
       </li>
     <% end %>
 

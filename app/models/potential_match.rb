@@ -3,16 +3,14 @@ class PotentialMatch < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
-  CACHE_PROGRESS_KEY = "potential_match_status_for_"
-  CACHE_BYLINE_KEY = "potential_match_bylines_for_"
-  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
-  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_"
+  CACHE_PROGRESS_KEY = "potential_match_status_for_".freeze
+  CACHE_SIGNUP_KEY = "potential_match_signups_for_".freeze
+  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_".freeze
+  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_".freeze
 
   belongs_to :collection
-  belongs_to :offer_signup, :class_name => "ChallengeSignup"
-  belongs_to :request_signup, :class_name => "ChallengeSignup"
-
-  has_many :potential_prompt_matches, :dependent => :destroy
+  belongs_to :offer_signup, class_name: "ChallengeSignup"
+  belongs_to :request_signup, class_name: "ChallengeSignup"
 
 protected
 
@@ -20,8 +18,8 @@ protected
     CACHE_PROGRESS_KEY + "#{collection.id}"
   end
 
-  def self.byline_key(collection)
-    CACHE_BYLINE_KEY + "#{collection.id}"
+  def self.signup_key(collection)
+    CACHE_SIGNUP_KEY + "#{collection.id}"
   end
 
   def self.interrupt_key(collection)
@@ -35,12 +33,14 @@ protected
 public
 
   def self.clear!(collection)
-    # destroy all potential matches in this collection
-    PotentialMatch.destroy_all(["collection_id = ?", collection.id])
+    # rapidly delete all potential prompt matches and potential matches
+    # WITHOUT CALLBACKS
+    pmids = collection.potential_matches.value_of(:id)
+    PotentialMatch.where(id: pmids).delete_all
   end
 
   def self.set_up_generating(collection)
-    REDIS_GENERAL.set progress_key(collection), collection.signups.first.pseud.byline
+    REDIS_GENERAL.set progress_key(collection), "0.0"
   end
 
   def self.cancel_generation(collection)
@@ -91,53 +91,42 @@ public
       PotentialMatch.clear!(collection)
       settings = collection.challenge.potential_match_settings
 
-      # start by collecting the ids of all the tag sets of the offers/requests in this collection
-      collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
-
-      # the topmost tags required for matching
-      required_types = settings.required_types.map {|t| t.classify}
-
-      # treat each signup as a request signup first
-      collection.signups.find_each do |signup|
-        break if PotentialMatch.canceled?(collection)
-        REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
-        PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
+      if settings.no_match_required?
+        matcher = PotentialMatcherUnconstrained.new(collection)
+      else
+        index_type = PromptTagTypeInfo.new(collection).good_index_types.first
+        matcher = PotentialMatcherConstrained.new(collection, index_type)
       end
 
+      matcher.generate
     end
     # TODO: for any signups with no potential matches try regenerating?
     PotentialMatch.finish_generation(collection)
   end
 
-  # Generate potential matches for a signup in the general process
+  # Generate potential matches for a single signup.
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
-    potential_match_count = 0
-
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
 
     # We randomize the signup ids to make sure potential matches are distributed across all the participants
-    match_signup_ids.sort_by {rand}.each do |other_signup_id|
+    match_signup_ids.shuffle.each do |other_signup_id|
       next if signup.id == other_signup_id
-      other_signup = ChallengeSignup.find(other_signup_id)
 
-      # The "match" method of ChallengeSignup creates and returns a new (unsaved) potential match object
-      # It assumes the signup that is calling is the requesting signup, so if this is meant to be an offering signup
-      #  instead, we call it from the other signup
-      potential_match = (prompt_type == "request") ? signup.match(other_signup, settings) : other_signup.match(signup, settings)
-      if potential_match && potential_match.valid?
-        potential_match.save
-        potential_match_count += 1
+      # The "match" method of ChallengeSignup creates and returns a new
+      # (unsaved) potential match object. It assumes the signup that is calling
+      # is the requesting signup, so if this is meant to be an offering signup
+      # instead, we call it from the other signup.
+      if prompt_type == "request"
+        other_signup = ChallengeSignup.with_offer_tags.find(other_signup_id)
+        potential_match = signup.match(other_signup, settings)
+      else
+        other_signup = ChallengeSignup.with_request_tags.find(other_signup_id)
+        potential_match = other_signup.match(signup, settings)
       end
 
-      # Stop looking if we've hit the max
-      break if potential_match_count == ArchiveConfig.POTENTIAL_MATCHES_MAX
+      potential_match.save if potential_match && potential_match.valid?
     end
-  end
-
-  # Get a random set of signups to examine
-  def self.random_signup_ids(collection)
-    collection.signups.order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:id)
   end
 
   # Get the ids of all signups that have some overlap in the tag types required for matching
@@ -145,36 +134,36 @@ public
     matching_signup_ids = []
 
     if required_types.empty?
-      # nothing is required, so any signup can match -- check a random selection
-      return PotentialMatch.random_signup_ids(collection)
+      # nothing is required, so any signup can match -- check all of them
+      return collection.signups.pluck(:id)
     end
 
     # get the tagsets used in the signup we are trying to match
     signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
 
     # get the ids of all the tags of the required types in the signup's tagsets
-    signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
+    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
-      return PotentialMatch.random_signup_ids(collection)
+      return collection.signups.pluck(:id)
     else
       # now find all the tagsets in the collection that share the original signup's tags
-      match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
+      match_tagsets = SetTagging.where(tag_id: signup_tags, tag_set_id: collection_tag_sets).value_of(:tag_set_id).uniq
 
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
       # looking for requests with the same tag.
-      matching_signup_ids = (prompt_type == "request" ? "Offer" : "Request").constantize.
-                         where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
-                         value_of(:challenge_signup_id).compact.uniq
+      matching_signup_ids = (prompt_type == "request" ? Offer : Request).
+                            where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
+                            value_of(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
       condition = "any_#{required_types.first.downcase} = 1"
-      matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id).uniq
+      matching_signup_ids += collection.prompts.where(condition).value_of(:challenge_signup_id)
     end
 
-    return matching_signup_ids
+    matching_signup_ids.uniq
   end
 
   # Regenerate potential matches for a single signup within a challenge where (presumably)
@@ -182,12 +171,14 @@ public
   # To do this, we have to regenerate its potential matches both as a request and as an offer
   # (instead of just generating them as a request as we do when generating ALL potential matches)
   def self.regenerate_for_signup_in_background(signup_id)
-    signup = ChallengeSignup.find(signup_id)
+    # The signup will be acting as both offer and request, so we want to load
+    # both request tags and offer tags.
+    signup = ChallengeSignup.with_request_tags.with_offer_tags.find(signup_id)
     collection = signup.collection
 
     # Get all the data
     settings = collection.challenge.potential_match_settings
-    collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    collection_tag_sets = Prompt.where(collection_id: collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
     required_types = settings.required_types.map {|t| t.classify}
 
     # clear the existing potential matches for this signup in each direction
@@ -203,7 +194,7 @@ public
   # Finish off the potential match generation
   def self.finish_generation(collection)
     REDIS_GENERAL.del progress_key(collection)
-    REDIS_GENERAL.del byline_key(collection)
+    REDIS_GENERAL.del signup_key(collection)
     if PotentialMatch.canceled?(collection)
       REDIS_GENERAL.del interrupt_key(collection)
       # eventually we'll want to be able to pick up where we left off,
@@ -225,22 +216,10 @@ public
     false
   end
 
-  def self.position(collection)
-    REDIS_GENERAL.get progress_key(collection)
-  end
-
+  # The PotentialMatcherProgress class calculates the percent, so we just need
+  # to retrieve it from redis.
   def self.progress(collection)
-    # the index of our current signup person in the full index of signup participants
-    current_byline = REDIS_GENERAL.get(progress_key(collection))
-    collection_byline_key = byline_key(collection)
-    unless REDIS_GENERAL.exists(collection_byline_key)
-      score = 0
-      collection.signups.pseud_only.find_each do |pseud|
-        REDIS_GENERAL.zadd collection_byline_key, score, pseud.byline
-        score += 1
-      end
-    end
-    progress = (REDIS_GENERAL.zrank(collection_byline_key, current_byline)  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+    REDIS_GENERAL.get(progress_key(collection))
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
@@ -252,22 +231,13 @@ public
     cmp = compare_all(self.num_prompts_matched, other.num_prompts_matched)
     return cmp unless cmp == 0
 
-    # otherwise we rank them based on how good the prompt matches are
-    self_tally = 0
-    other_tally = 0
-    self.potential_prompt_matches.each do |self_prompt_match|
-      other.potential_prompt_matches.each do |other_prompt_match|
-        if self_prompt_match > other_prompt_match
-          self_tally = self_tally + 1
-        elsif other_prompt_match > self_prompt_match
-          other_tally = other_tally + 1
-        end
-      end
-    end
-    cmp = (self_tally <=> other_tally)
+    # compare the "quality" of the best prompt match
+    # (i.e. the number of matching tags between the most closely-matching
+    # request prompt/offer prompt pair)
+    cmp = compare_all(max_tags_matched, other.max_tags_matched)
     return cmp unless cmp == 0
 
-    # if we're a perfect match down to here just match on id
+    # if we're a match down to here just match on id
     return self.id <=> other.id
   end
 
