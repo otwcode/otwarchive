@@ -1,12 +1,12 @@
 <% content_for :message do %>
-<p><%= t('user_mailer.signup_notification.welcome',
+<p><%= t('.welcome',
            login: style_bold(@user.login)).html_safe %></p>
-<p><%= t('user_mailer.signup_notification.html.part1',
-           activate_account_link: style_link( t('user_mailer.signup_notification.activate_your_account'), activate_url(id: @user.activation_code))).html_safe %></p>
-<p><%= t('user_mailer.signup_notification.html.part2') %></p>
-<p><%= t('user_mailer.signup_notification.html.part3', 
-           faq_link: style_link(t('user_mailer.signup_notification.faq'), archive_faqs_url),
-           admin_posts_link: style_link(t('user_mailer.signup_notification.admin_posts'), admin_posts_url), 
-           contact_support_link: support_link(t 'user_mailer.signup_notification.contact_support')).html_safe %></p>
-<p><%= t('user_mailer.signup_notification.bye') %></p>
+<p><%= t('.html.part1',
+           activate_account_link: style_link( t('.activate_your_account'), activate_url(id: @user.activation_code))).html_safe %></p>
+<p><%= t('.html.part2') %></p>
+<p><%= t('.html.part3', 
+           faq_link: style_link(t('.faq'), archive_faqs_url),
+           admin_posts_link: style_link(t('.admin_posts'), admin_posts_url), 
+           contact_support_link: support_link(t '.contact_support')).html_safe %></p>
+<p><%= t('.bye') %></p>
 <% end %>

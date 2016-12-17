@@ -1,16 +1,16 @@
 <% content_for :message do %>
-<%= t('user_mailer.signup_notification.welcome',
+<%= t('.welcome',
            login: @user.login ) %>
 
-<%= t('user_mailer.signup_notification.text.part1',
+<%= t('.text.part1',
            activate_account_url: activate_url(id: @user.activation_code)) %>
 
-<%= t('user_mailer.signup_notification.text.part2') %>
+<%= t('.text.part2') %>
 
-<%= t('user_mailer.signup_notification.text.part3', 
+<%= t('.text.part3', 
            faq_url: archive_faqs_url,
            admin_posts_url: admin_posts_url, 
            contact_support_url: root_url + 'support') %>
 
-<%= t('user_mailer.signup_notification.bye') %>
+<%= t('.bye') %>
 <% end %>
