@@ -9,7 +9,7 @@ DEFAULT_CATEGORY = "Other"
 ### Setting up a work
 # These steps get used a lot by many other steps and tests to create works in the archive to test with
 
-When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
+When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
   fill_in("Work Title", with: title)
@@ -33,7 +33,7 @@ end
 #
 # If you add to this regexp, you probably want to update all the 
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
@@ -62,7 +62,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with c
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with character "([^\"]*)")?(?: with second character "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with second freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?(?: as part of a series "([^\"]*)")?(?: with relationship "([^\"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -80,12 +80,12 @@ end
 # To test posting after preview, use: Given the draft "Foo"
 # Then use: When I post the work "Foo"
 # and the above step 
-Given /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: in (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with freeform "([^"]*)")?(?: with category "([^"]*)")?(?: in (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
   step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
   click_button("Preview")
 end
 
-When /^I post the works "([^\"]*)"$/ do |worklist|
+When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}
   end
@@ -133,12 +133,12 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   end
 end
 
-Given /^I have a work "([^\"]*)"$/ do |work|
+Given /^I have a work "([^"]*)"$/ do |work|
   step %{I am logged in as a random user}
   step %{I post the work "#{work}"}
 end
 
-Given /^I have a locked work "([^\"]*)"$/ do |work|
+Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I am logged in as a random user}
   step %{I post the locked work "#{work}"}
 end
@@ -171,11 +171,18 @@ Given /^the chaptered work with comments setup$/ do
   step "I am logged out"
 end
 
-Given /^the work "([^\"]*)"$/ do |work|
+Given /^the work "([^"]*)"$/ do |work|
   unless Work.where(title: work).exists?
     step %{I have a work "#{work}"}
     step %{I am logged out}
   end
+end
+
+Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |work, collection|
+  step %{I have the hidden collection "#{collection}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}" to the collection "#{collection}"}
+  step %{I am logged out}
 end
 
 ### WHEN
@@ -186,14 +193,14 @@ When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
   end
 end
 
-When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
+When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title!(work)
   visit work_url(work).gsub("http://www.example.com","")
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 
-When /^I view the work "([^\"]*)" with comments$/ do |work|
+When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by_title!(work)
   visit work_url(work, :anchor => "comments", :show_comments => true)
 end
@@ -208,16 +215,16 @@ When /^I view a deleted chapter$/ do
   visit "/works/#{work.id}/chapters/12345"
 end
 
-When /^I edit the work "([^\"]*)"$/ do |work|
+When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
 end
 
-When /^I edit the draft "([^\"]*)"$/ do |draft|
+When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
 
-When /^I post the chaptered work "([^\"]*)"$/ do |title|
+When /^I post the chaptered work "([^"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
   fill_in("content", :with => "Another Chapter.")
@@ -226,23 +233,23 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   Work.tire.index.refresh
 end
 
-When /^I post the chaptered draft "([^\"]*)"$/ do |title|
+When /^I post the chaptered draft "([^"]*)"$/ do |title|
   step %{the draft "#{title}"}
   step %{a draft chapter is added to "#{title}"}
 end
 
-When /^I post the work "([^\"]*)" without preview$/ do |title|
+When /^I post the work "([^"]*)" without preview$/ do |title|
   # we now post without preview as our default test case
   step %{I post the work "#{title}"}
 end
 
-When /^a chapter is added to "([^\"]*)"$/ do |work_title|
+When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   Work.tire.index.refresh
 end
 
-When /^a draft chapter is added to "([^\"]*)"$/ do |work_title|
+When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   work = Work.find_by_title(work_title)
   user = work.users.first
   step %{I am logged in as "#{user.login}"}
@@ -279,17 +286,17 @@ When /^I fill in basic external work tags$/ do
   fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
-When /^I set the fandom to "([^\"]*)"$/ do |fandom|
+When /^I set the fandom to "([^"]*)"$/ do |fandom|
   fill_in("Fandoms", with: fandom)
 end
 
 # on the edit multiple works page
-When /^I select "([^\"]*)" for editing$/ do |title|
+When /^I select "([^"]*)" for editing$/ do |title|
   id = Work.find_by_title(title).id
   check("work_ids_#{id}")
 end
 
-When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
+When /^I edit the multiple works "([^"]*)" and "([^"]*)"/ do |title1, title2|
   # check if the works have been posted yet
   unless Work.where(title: title1).exists?
     step %{I post the work "#{title1}"}
@@ -329,14 +336,14 @@ When /^the purge_old_drafts rake task is run$/ do
   Work.purge_old_drafts
 end
 
-When /^the work "([^\"]*)" was created (\d+) days ago$/ do |title, number|
+When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   step "the draft \"#{title}\""
   work = Work.find_by_title(title)
   work.update_attribute(:created_at, number.to_i.days.ago)
   Work.tire.index.refresh
 end
 
-When /^I post the locked work "([^\"]*)"$/ do |title|
+When /^I post the locked work "([^"]*)"$/ do |title|
   work = Work.find_by_title(work)
   if work.blank?
     step "the locked draft \"#{title}\""
@@ -347,7 +354,7 @@ When /^I post the locked work "([^\"]*)"$/ do |title|
   Work.tire.index.refresh
 end
 
-When /^the locked draft "([^\"]*)"$/ do |title|
+When /^the locked draft "([^"]*)"$/ do |title|
   step "basic tags"
   visit new_work_url
   step %{I fill in the basic work information for "#{title}"}
@@ -359,7 +366,7 @@ When /^I lock the work$/ do
   check("work_restricted")
 end
 
-When /^I lock the work "([^\"]*)"$/ do |work|
+When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
   step %{I post the work}
@@ -369,13 +376,13 @@ When /^I unlock the work$/ do
   uncheck("work_restricted")
 end
 
-When /^I unlock the work "([^\"]*)"$/ do |work|
+When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
   step %{I post the work}
 end
 
-When /^I list the work "([^\"]*)" as inspiration$/ do |title|
+When /^I list the work "([^"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
@@ -410,7 +417,7 @@ When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   Work.tire.index.refresh
 end
 
-When /^I delete the work "([^\"]*)"$/ do |work|
+When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
   step %{I follow "Delete Work"}
@@ -443,52 +450,52 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.stats_to_database
 end
 
-When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
   step %{I post the work without preview}
 end
 
-When /^I add the co-author "([^\"]*)"$/ do |coauthor|
+When /^I add the co-author "([^"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
   check("Add co-authors?")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
-When /^I give the work to "([^\"]*)"$/ do |recipient|
+When /^I give the work to "([^"]*)"$/ do |recipient|
   fill_in("work_recipients", with: "#{recipient}")
 end
 
-When /^I give the work "([^\"]*)" to the user "([^\"]*)"$/ do |work_title, recipient|
+When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipient|
   step %{the user "#{recipient}" exists and is activated}
   visit edit_work_path(Work.find_by_title(work_title))
   fill_in("work_recipients", with: "#{recipient}")
   click_button("Post Without Preview")
 end
 
-When /^I add the beginning notes "([^\"]*)"$/ do |notes|
+When /^I add the beginning notes "([^"]*)"$/ do |notes|
   check("at the beginning")
   fill_in("work_notes", with: "#{notes}")
 end
 
-When /^I add the end notes "([^\"]*)"$/ do |notes|
+When /^I add the end notes "([^"]*)"$/ do |notes|
   check("at the end")
   fill_in("work_endnotes", with: "#{notes}")
 end
 
-When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+When /^I add the beginning notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
   step %{I post the work without preview}
 end
 
-When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+When /^I add the end notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
   step %{I post the work without preview}
 end
 
-When /^I mark the work "([^\"]*)" for later$/ do |work|
+When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by_title!(work)
   visit work_url(work)
   step %{I follow "Mark for Later"}
@@ -525,7 +532,7 @@ Then /^I should not find a list for associations$/ do
   page.should_not have_xpath("//ul[@class=\"associations\"]")
 end
 
-Then /^the work "([^\"]*)" should be deleted$/ do |work|
+Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
 
