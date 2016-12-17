@@ -151,9 +151,9 @@ describe RelatedWorksController do
       end
 
       it "deletes the related work" do
-        expect{
+        expect {
           delete :destroy, id: @related_work
-        }.to change(RelatedWork,:count).by(-1)
+        }.to change(RelatedWork, :count).by(-1)
       end
 
       xit "redirects the requester" do
@@ -163,4 +163,3 @@ describe RelatedWorksController do
     end
   end
 end
-
