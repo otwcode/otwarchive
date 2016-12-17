@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe RelatedWorksController do
   include LoginMacros
+  let(:child_creator) { FactoryGirl.create(:user) }
+  let(:child_work) { FactoryGirl.create(:work, authors: [child_creator.default_pseud]) }
+  let(:parent_creator) { FactoryGirl.create(:user) }
+  let(:parent_work) { FactoryGirl.create(:work, authors: [parent_creator.default_pseud]) }
 
   describe "GET #index" do
     context "for a blank user" do
@@ -36,11 +40,9 @@ describe RelatedWorksController do
   describe "PUT #update" do
     context "by the creator of the child work" do
       before(:each) do
-        child_creator = FactoryGirl.create(:user)
-        child_work = FactoryGirl.create(:work, authors: [child_creator.default_pseud])
-        related_work = FactoryGirl.create(:related_work, work_id: child_work.id)
+        @related_work = FactoryGirl.create(:related_work, work_id: child_work.id)
         fake_login_known_user(child_creator)
-        put :update, id: related_work
+        put :update, id: @related_work
       end
 
       it "sets a flash message" do
@@ -54,9 +56,9 @@ describe RelatedWorksController do
 
     context "by a user who is not the creator of either work" do
       before(:each) do
-        related_work = FactoryGirl.create(:related_work)
+        @related_work = FactoryGirl.create(:related_work)
         fake_login
-        put :update, id: related_work
+        put :update, id: @related_work
       end
 
       it "sets a flash message" do
@@ -70,8 +72,6 @@ describe RelatedWorksController do
 
     context "by the creator of the parent work" do
       before(:each) do
-        parent_creator = FactoryGirl.create(:user)
-        parent_work = FactoryGirl.create(:work, authors: [parent_creator.default_pseud])
         @related_work = FactoryGirl.create(:related_work, parent_id: parent_work.id, reciprocal: true)
         fake_login_known_user(parent_creator)
       end
@@ -110,11 +110,9 @@ describe RelatedWorksController do
   describe "DELETE #destroy" do
     context "by the creator of the parent work" do
       before(:each) do
-        parent_creator = FactoryGirl.create(:user)
-        parent_work = FactoryGirl.create(:work, authors: [parent_creator.default_pseud])
-        related_work = FactoryGirl.create(:related_work, parent_id: parent_work.id, reciprocal: true)
+        @related_work = FactoryGirl.create(:related_work, parent_id: parent_work.id, reciprocal: true)
         fake_login_known_user(parent_creator)
-        delete :destroy, id: related_work
+        delete :destroy, id: @related_work
       end
 
       it "sets a flash message" do
@@ -128,9 +126,9 @@ describe RelatedWorksController do
 
     context "by a user who is not the creator of either work" do
       before(:each) do
-        related_work = FactoryGirl.create(:related_work)
+        @related_work = FactoryGirl.create(:related_work)
         fake_login
-        delete :destroy, id: related_work
+        delete :destroy, id: @related_work
       end
 
       it "sets a flash message" do
@@ -144,8 +142,6 @@ describe RelatedWorksController do
 
     context "by the creator of the child work" do
       before(:each) do
-        child_creator = FactoryGirl.create(:user)
-        child_work = FactoryGirl.create(:work, authors: [child_creator.default_pseud])
         @related_work = FactoryGirl.create(:related_work, work_id: child_work.id)
         fake_login_known_user(child_creator)
       end
