@@ -4,7 +4,7 @@
 
 Feature: Download a work
   @wip
-  Scenario: Download an ordinary work
+  Scenario: Download an ordinary work in MOBI
   
   Given basic tags
     And I am logged in as "myname"
@@ -12,12 +12,26 @@ Feature: Download a work
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Tittle with doubble letters"
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
   Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
   When I follow "MOBI"
     Then I should see "Tittle with doubble letters"
     Then I should see the text with tags "Tittle with doubble letters"
+
+  Scenario: Download an ordinary work in other formats
+
+  Given basic tags
+    And I am logged in as "myname"
+  When I go to the new work page
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with "Tittle with doubble letters"
+    And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
   When I go to the work page with title Tittle with doubble letters
   When I follow "PDF"
   When I go to the work page with title Tittle with doubble letters
@@ -38,8 +52,10 @@ Feature: Download a work
       "Has double quotes"
       """
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
+  Then I should see "Work was successfully posted."
   When I follow "MOBI"
   When I go to the work page with title "Has double quotes"
   When I follow "PDF"
@@ -55,6 +71,7 @@ Feature: Download a work
       Первый_маг
       """
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
   # TODO: Think about whether we can invent a better name than this
@@ -74,6 +91,7 @@ Feature: Download a work
       Has curly’d quotes
       """
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
   When I follow "MOBI"
@@ -91,6 +109,7 @@ Feature: Download a work
       "Hàs curly’d quotes"
       """
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
   When I follow "MOBI"
@@ -157,8 +176,10 @@ Feature: Download a work
       ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
       """
     And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
   When I press "Preview"
     And I press "Post"
+  Then I should see "Work was successfully posted."
   When I follow "MOBI"
   When I go to the work page with title ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
   When I follow "PDF"
