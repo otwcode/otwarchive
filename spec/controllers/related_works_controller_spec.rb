@@ -156,9 +156,9 @@ describe RelatedWorksController do
         }.to change(RelatedWork, :count).by(-1)
       end
 
-      xit "redirects the requester" do
+      it "redirects the requester" do
         delete :destroy, id: @related_work
-        expect(response).to redirect_to user_related_works_path(@current_user)
+        expect(response).to have_http_status(:redirect)
       end
     end
   end
