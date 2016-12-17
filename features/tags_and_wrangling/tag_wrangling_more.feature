@@ -141,9 +141,66 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
        And I check the canonical option for the tag "Faye Valentine is a sweetie"
        And I check the canonical option for the tag "Ed is a sweetie"
        And I press "Wrangle"
-     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie Wrangle Tags for Cowboy Bebop"
+     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Faye Valentine is a sweetie, Ed is a sweetie"
        And the "Faye Valentine is a sweetie" tag should be canonical
        And the "Ed is a sweetie" tag should be canonical
+
+  Scenario: Mass wrangling in the fandoms bins
+    Given I am logged in as a tag wrangler
+      And a media exists with name: "Anime & Manga", canonical: true
+      And the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+    When I go to the wrangling tools page
+      And I follow "Fandoms by media (1)"
+      And I check the wrangling option for "Cowboy Bebop"
+      And I select "Anime & Manga" from "Wrangle to Media"
+      And I press "Wrangle"
+    Then I should not see "Cowboy Bebop"
+
+  Scenario: A relationship can't be mass wrangled into a fandom that isn't a
+  canonical tag
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
+        | name                                   | type         | canonical |
+        | Toby Daye/Tybalt                       | Relationship | true      |
+        | October Daye Series - Seanan McGuire   | Fandom       | false     |
+    When I go to the wrangling tools page
+      And I follow "Relationships by fandom (1)"
+      And I check the wrangling option for "Toby Daye/Tybalt"
+      And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
+      And I press "Wrangle"
+    Then I should see "The following names are not canonical fandoms: October Daye Series - Seanan McGuire."
+
+  Scenario: A relationship can be mass wrangled into a fandom that is a
+  canonical tag
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
+        | name                                   | type         | canonical |
+        | Toby Daye/Tybalt                       | Relationship | true      |
+        | October Daye Series - Seanan McGuire   | Fandom       | true      |
+    When I go to the wrangling tools page
+      And I follow "Relationships by fandom (1)"
+      And I check the wrangling option for "Toby Daye/Tybalt"
+      And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully wrangled to October Daye Series - Seanan McGuire: Toby Daye/Tybalt"
+
+  Scenario: A wrangler can make tags canonical while mass wrangling
+    Given I am logged in as a tag wrangler
+      And the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+        | Faye Valentine    | Character    | false     |
+        | Ed                | Character    | false     |
+      And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed"
+    When I go to the wrangling tools page
+      And I follow "Characters by fandom (2)"
+      And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
+      And I check the canonical option for the tag "Faye Valentine"
+      And I check the canonical option for the tag "Ed"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully made canonical: Faye Valentine, Ed"
 
   Scenario: Tags that don't exist cause errors
     Given the following activated tag wrangler exists
