@@ -16,50 +16,68 @@
 
 <!--main content-->
 <h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
-
-<p><%= ts("We're still in our beta phase of development, so there are ") %><a href="http://code.google.com/p/otwarchive/issues/list"><%= ts("lots of bugs to be fixed") %></a><%= ts(" and ") %><a href="https://trello.com/board/feature-requests/4f0cd935f97f91cf29246288"><%= ts("new features to be considered") %></a><%= ts(". For live updates on Archive performance, please check out our Twitter feed: ") %><a href="http://twitter.com/ao3_status">@AO3_status</a><%= ts(". Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for authors should be left on their works. If you have technical issues with this page, please use ") %><a href="http://transformativeworks.org/contact/archive%20support"><%= ts("the back-up form.") %></a></p>
-
-<p><%= ts("<strong>We can answer Support inquiries in العربية, Bahasa Indonesia, català, čeština, Deutsch, español, français, 한국어, italiano, Kiswahili, magyar, Nederlands, polski, português, Русский, suomi, svenska, Türkçe, 中文.</strong> You can just write your question or feedback in one of the listed languages and we'll sort it out! Please allow for up to one week delay for responses in any language other than English and español.").html_safe %></p>
-
-<%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
+<div class="userstuff">
+  <p><%= ts('We\'re still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href="http://twitter.com/ao3_status">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href="http://www.transformativeworks.org/contact_us/contact-archive-support/">the back-up form</a>.').html_safe %></p>
+  <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+</div>
+<%= form_for(@feedback, html: { class: "post feedback" }) do |f| %>
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
-    <p class="notice"><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></p>
+    <p class="notice" id="email-field-description">
+      <%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %>
+    </p>
     <dl>
+      <dt><%= f.label :username, ts("Your name (optional)") %></dt>
+      <dd>
+        <%= f.text_field :username %>
+      </dd>
       <dt><%= f.label :email, ts("Your email (optional)") %></dt>
-      <dd><%= f.text_field :email, :size => 60 %></dd>
+      <dd>
+        <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
+      </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Describe Your Feedback') %></legend>
     <dl>
-      <dt class="required"><%= f.label :category, ts("What is your feedback about") %></dt>
-      <dd>
-        <%= f.select("category", Feedback::CATEGORIES, 
-                     selected: Feedback::DEFAULT_CATEGORY) %>
+      <dt class="required">
+        <%= f.label :language, ts("Select language (required)") %>
+      </dt>
+      <dd class="required">
+        <%= f.collection_select(:language, @support_languages, :id, :name, { selected: Language.default.id }) %>
       </dd>
-      <dt class="required"><%= f.label :summary, ts("Brief summary (required)") %></dt>
-      <dd>
-        <%= f.text_field :summary, :size => 60, :class => "observe_textlength" %>
+      <dt class="required">
+        <%= f.label :summary, ts("Brief summary (required)") %>
+      </dt>
+      <dd class="required">
+        <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
-        <%= live_validation_for_field('feedback_summary', :failureMessage => ts("Please enter a brief summary of your message")) %>
+        <%= live_validation_for_field('feedback_summary',
+              failureMessage: ts("Please enter a brief summary of your message")) %>
       </dd>
-      <dt class="required"><%= f.label :comment, ts("Your comment (required)") %></dt>
-      <dd>
-        <%= f.text_area :comment, :cols => 60 %>
-        <%= live_validation_for_field('feedback_comment', :failureMessage => ts("Please enter your feedback")) %>
-        <p class="footnote"><%= ts("Please be as specific as possible, including error messages and/or links") %></p>
+      <dt class="required">
+        <%= f.label :comment, ts("Your comment (required)") %>
+      </dt>
+      <dd class="required">
+        <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
+        <%= live_validation_for_field('feedback_comment',
+              failureMessage: ts("Please enter your feedback")) %>
+        <p class="footnote" id="comment-field-description">
+          <%= ts("Please be as specific as possible, including error messages and/or links") %>
+        </p>
       </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Send Your Feedback') %></legend>
-    <%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
-    <%= f.hidden_field :ip_address, :value => request.remote_ip %>
-    <p class="submit actions"><%= f.submit ts("Send"), :disable_with => ts("Please wait...") %></p>
+    <%= f.hidden_field :user_agent, value: request.env["HTTP_USER_AGENT"] %>
+    <%= f.hidden_field :ip_address, value: request.remote_ip %>
+    <p class="submit actions">
+      <%= f.submit ts("Send"), disable_with: ts("Please wait...") %>
+    </p>
   </fieldset>
-  
+
 <% end %>
 <!--/content-->

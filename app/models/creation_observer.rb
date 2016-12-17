@@ -11,8 +11,13 @@ class CreationObserver < ActiveRecord::Observer
   # Send notifications when a creation is posted from a draft state
   def before_update(creation)
     notify_co_authors(creation)
-    return unless !creation.is_a?(Series) && creation.valid? && creation.posted_changed? && creation.posted?
-    do_notify(creation)
+    return unless !creation.is_a?(Series) && creation.valid? && creation.posted?
+
+    if creation.posted_changed?
+      do_notify(creation)
+    else
+      notify_subscribers_on_reveal(creation)
+    end
   end
 
   # Notify recipients after save only to prevent repeat notifications from previewing
@@ -50,18 +55,19 @@ class CreationObserver < ActiveRecord::Observer
 
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
+  # only notify a recipient once for each work
   def notify_recipients(work)
     if work.posted && !work.new_recipients.blank? && !work.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
-      recipient_pseuds.each do |pseud|
-        if work.collections.empty?
-          UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+      # check user prefs to see which recipients want to get gift notifications
+      # (since each user has only one preference item, this removes duplicates)
+      recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
+                                   recipient_emails_off: false).pluck(:user_id)
+      recip_ids.each do |userid|
+        if work.collections.empty? || work.collections.first.nil?
+          UserMailer.recipient_notification(userid, work.id).deliver
         else
-          if work.collections.first.nil?
-            UserMailer.recipient_notification(pseud.user.id, work.id).deliver
-          else
-            UserMailer.recipient_notification(pseud.user.id, work.id, work.collections.first.id).deliver
-          end
+          UserMailer.recipient_notification(userid, work.id, work.collections.first.id).deliver
         end
       end
     end
@@ -73,6 +79,31 @@ class CreationObserver < ActiveRecord::Observer
     if work && !work.unrevealed? && !work.anonymous?
       Subscription.for_work(work).each do |subscription|
         RedisMailQueue.queue_subscription(subscription, creation)
+      end
+    end
+  end
+
+  # Check whether the work's creator has just been revealed (whether because
+  # a collection has just revealed its works, or a collection has just revealed
+  # creators). If so, queue up creator subscription emails.
+  def notify_subscribers_on_reveal(work)
+    # Double-check that it's a posted work.
+    return unless work.is_a?(Work) && work.posted
+
+    # Bail out if the work or its creator is currently unrevealed.
+    return if work.in_anon_collection || work.in_unrevealed_collection
+
+    # If we've reached here, the creator of the work must be public.
+    # So now we want to check whether that's a recent thing.
+    if work.in_anon_collection_changed? || work.in_unrevealed_collection_changed?
+      # Prior to this save, the work was either anonymous or unrevealed.
+      # Either way, the author was just revealed, so we should trigger
+      # a creator subscription email.
+      Subscription.where(
+        subscribable_id: work.pseuds.pluck(:user_id),
+        subscribable_type: "User"
+      ).each do |subscription|
+        RedisMailQueue.queue_subscription(subscription, work)
       end
     end
   end

@@ -69,8 +69,6 @@ Feature: Import Works from LJ
   @import_lj_no_backdate
   Scenario: Creating a new work from an LJ story without backdating it
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"
@@ -94,7 +92,7 @@ Feature: Import Works from LJ
   Scenario: Creating a new work from an LJ story that is posted to a community
     Given basic tags
       And I am logged in as "cosomeone"
-    When "Issue 4817" is fixed
+    When "AO3-4179" is fixed
     #When I go to the import page
     #  And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
     #When I press "Import"
@@ -133,6 +131,7 @@ Feature: Import Works from LJ
   Scenario: Creating a new multichapter work from an LJ story
     Given basic tags
       And I am logged in as "cosomeone"
+      And I set my time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
          """

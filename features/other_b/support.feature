@@ -6,51 +6,54 @@ Feature: Filing a support request
   Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
+  And basic languages
   When I follow "Support and Feedback"
-  Then I should see "General/Other"
-  When I select "Feedback/Suggestions" from "feedback_category"
+  When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And all emails have been delivered
     And I press "Send"
-  Then I should see "Your message was sent to the archive team - thank you!"
+  Then I should see "Your message was sent to the Archive team - thank you!"
     And 2 emails should be delivered
-    And the email should contain "Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can."
-    And the email should contain "In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible."
-    And the email should contain "Just a brief note"
+    And the email should contain "We're working hard to reply to everyone, and we'll respond to you as soon as we can."
+    And the email should contain "If you have additional questions or information"
+    And the email should say what time it was sent
   When I follow "Support and Feedback"
     And I fill in "Brief summary" with "you suck"
     And I fill in "Your comment" with "blah blah blah"
     And I fill in "Your email (optional)" with ""
+    And I select "Deutsch" from "feedback_language"
     And all emails have been delivered
     And I press "Send"
-  Then I should see "Your message was sent to the archive team - thank you!"
+  Then I should see "Your message was sent to the Archive team - thank you!"
     And 1 email should be delivered
     And the email should contain "you suck"
 
   Scenario: Not logged in, with email
   
   When I am on the home page
+    And basic languages
     And I follow "Support and Feedback"
-  Then I should see "General/Other"
-  When I select "Feedback/Suggestions" from "feedback_category"
+  When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And I fill in "Your email (optional)" with "test@archiveofourown.org"
     And all emails have been delivered
     And I press "Send"
-  Then I should see "Your message was sent to the archive team - thank you!"
+  Then I should see "Your message was sent to the Archive team - thank you!"
     And 2 emails should be delivered
     
   Scenario: Not logged in, without email
   
   When I am on the home page
+    And basic languages
   When I follow "Support and Feedback"
+    And I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "you suck"
     And I fill in "Your comment" with "blah blah blah"
     And I fill in "Your email (optional)" with ""
     And all emails have been delivered
     And I press "Send"
-  Then I should see "Your message was sent to the archive team - thank you!"
+  Then I should see "Your message was sent to the Archive team - thank you!"
     And 1 email should be delivered
     And the email should contain "you suck"

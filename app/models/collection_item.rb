@@ -52,27 +52,31 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def self.approved_by_user
-    where(:user_approval_status => APPROVED)
+    where(user_approval_status: APPROVED)
   end
 
   def self.rejected_by_user
-    where(:user_approval_status => REJECTED)
+    where(user_approval_status: REJECTED)
   end
 
   def self.unreviewed_by_user
-    where(:user_approval_status => NEUTRAL)
+    where(user_approval_status: NEUTRAL)
   end
   
   def self.approved_by_collection
-    where(:collection_approval_status => APPROVED)
+    where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
+  end
+
+  def self.invited_by_collection
+    where(collection_approval_status: APPROVED).where(user_approval_status: NEUTRAL)
   end
 
   def self.rejected_by_collection
-    where(:collection_approval_status => REJECTED)
+    where(collection_approval_status: REJECTED)
   end
   
   def self.unreviewed_by_collection
-    where(:collection_approval_status => NEUTRAL)    
+    where(collection_approval_status: NEUTRAL)
   end
 
   before_save :set_anonymous_and_unrevealed
@@ -109,7 +113,7 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  after_create :notify_of_association
+  after_commit :notify_of_association
   # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
     self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
@@ -145,14 +149,37 @@ class CollectionItem < ActiveRecord::Base
 
         users.each do |user|
           if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+            # if the work is being added by a collection maintainer and at
+            # least ONE of the works owners allows automatic inclusion in
+            # collections, add the work to the collection
             approve_by_user
+            users.each do |email_user|
+              unless email_user.preference.collection_emails_off
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+              end
+            end
             break
           end
         end
       end
     end
   end
-  
+
+  before_save :send_work_invitation
+  def send_work_invitation
+    if !approved_by_user? && approved_by_collection? && self.new_record?
+      if !User.current_user.is_author_of?(item)
+        # a maintainer is attempting to add this work to their collection
+        # so we send an email to all the works owners
+        item.users.each do |email_author|
+          unless email_author.preference.collection_emails_off
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+          end
+        end
+      end
+    end
+  end
+
   after_update :notify_of_status_change
   def notify_of_status_change
     if unrevealed_changed?
@@ -160,9 +187,6 @@ class CollectionItem < ActiveRecord::Base
       if !work.new_recipients.blank?
         notify_of_reveal
       end
-    end
-    if anonymous_changed?
-      notify_of_author_reveal
     end
   end
   
@@ -287,20 +311,4 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-
-  # When the authors of anonymous works are revealed, notify users
-  # subscribed to those authors
-  def notify_of_author_reveal
-    unless self.anonymous? || !self.posted?
-      if item_type == "Work"
-        subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
-                                  item.pseuds.map{|p| p.user_id}]).
-                            group(:user_id)
-        subs.each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, item)
-        end
-      end      
-    end
-  end
-
 end

@@ -21,6 +21,9 @@ $j(document).ready(function() {
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
+    // make Approve buttons on inbox items visible
+    $j('#inbox-form, .messages').find('.unreviewed').find('.review').find('a').removeClass('hidden');
+
     prepareDeleteLinks();
     thermometer();
     $j('body').addClass('javascript');
@@ -298,7 +301,8 @@ function toggleFormField(element_id) {
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options', '#parent-options', '#series-options', '#backdate-options'];
+        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
         $j.each(toHide, function(index, name) {
             if ($j(name)) {
                 if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
@@ -386,7 +390,18 @@ function setupAccordion() {
     if (expander.attr('href') == '#') {
       e.preventDefault();
     }
-    expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+    // We need to treat the pseud menu differently so it will be properly responsive
+    // The other accordions need to be converted to a similar system
+    // Otherwise we run into bugs if one @media uses inline display and another uses block
+    if (expander.attr('title') == 'Pseud Switcher') {
+      if (expander.hasClass('expanded')) {
+        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
+      } else {
+        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
+      }
+    } else {
+      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+    }
   });
 }
 
@@ -408,15 +423,15 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('a#kudos_summary').click(function(e) {
+  $j('#kudos_summary').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').hide();
+    $j(this).hide();
     $j('.kudos_expanded').show();
   });
 
-  $j('.kudos_expanded a').click(function(e) {
+  $j('#kudos_collapser').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').show();
+    $j('#kudos_summary').show();
     $j('.kudos_expanded').hide();
   });
 

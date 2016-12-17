@@ -26,44 +26,29 @@ Feature: Create Works
     Then I should see "All Hell Breaks Loose"
 
   Scenario: Creating a new minimally valid work and posting without preview
-    Given basic tags
-      And I am logged in as "newbie"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
+    Given I am logged in as "newbie"
+    When I set up the draft "All Hell Breaks Loose" 
       And I fill in "content" with "Bad things happen, etc."
-    When I press "Post Without Preview"
+      And I press "Post Without Preview"
     Then I should see "Work was successfully posted."
-    And I should see "Bad things happen, etc."
+      And I should see "Bad things happen, etc."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
 
   Scenario: Creating a new minimally valid work when you have more than one pseud
-    Given basic tags
-      And I am logged in as "newbie"      
-      And "newbie" creates the default pseud "Pointless Pseud"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
+    Given I am logged in as "newbie"      
+      And "newbie" creates the pseud "Pointless Pseud"
+    When I set up the draft "All Hell Breaks Loose"
+      And I unselect "newbie" from "work_author_attributes_ids_"
       And I select "Pointless Pseud" from "work_author_attributes_ids_"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Preview"
-    Then I should see "Preview"
-    When I press "Post"
+      And I press "Post Without Preview"
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
+      And I should see "by Pointless Pseud"
 
   Scenario: Creating a new work with everything filled in, and we do mean everything
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And the following activated users exist
         | login          | password    | email                 |
         | coauthor       | something   | coauthor@example.org  |
@@ -73,29 +58,13 @@ Feature: Create Works
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough" with password "something"
+      And "thorough" creates the pseud "Pseud2"
+      And "thorough" creates the pseud "Pseud3"
       And all emails have been delivered
-    When I go to thorough's user page
-      And I follow "Profile"
-      And I follow "Manage My Pseuds"
-    Then I should see "Pseuds for"
-    When I follow "New Pseud"
-    Then I should see "New pseud"
-    When I fill in "Name" with "Pseud2"
-      And I press "Create"
-    Then I should see "Pseud was successfully created."
-    When I follow "Back To Pseuds"
-      And I follow "New Pseud"
-      And I fill in "Name" with "Pseud3"
-      And I press "Create"
-    Then I should see "Pseud was successfully created."
     When I go to the new work page
-    Then I should see "Post New Work"
-    When all emails have been delivered
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
-    Then I should see "F/M"
-      And I should see "Gen"
-    When I check "F/M"
+      And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
@@ -119,8 +88,8 @@ Feature: Create Works
     Then I should see "Work was successfully posted."
       And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
-       And 1 email should be delivered to "recipient@example.org"
-       And the email should contain "A gift work has been posted for you"
+      And 1 email should be delivered to "recipient@example.org"
+      And the email should contain "A gift work has been posted for you"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -192,39 +161,13 @@ Feature: Create Works
   Scenario: Creating a new work with some maybe-invalid things
   # TODO: needs some more actually invalid things as well
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And the following activated users exist
         | login          | password    | email                   |
-        | coauthor       | something   | coauthor@example.org    |
-        | cosomeone      | something   | cosomeone@example.org   |
+        | coauthor       | something   | coauthor@example.org |
         | badcoauthor    | something   | badcoauthor@example.org |
-        | giftee         | something   | giftee@example.org      |
-        | recipient      | something   | recipient@example.org   |
       And I am logged in as "thorough" with password "something"
       And user "badcoauthor" is banned
-    When I go to thorough's user page
-      And I follow "Profile"
-      And I follow "Manage My Pseuds"
-    Then I should see "Pseuds for"
-    When I follow "New Pseud"
-    Then I should see "New pseud"
-    When I fill in "Name" with "Pseud2"
-      And I press "Create"
-    Then I should see "Pseud was successfully created."
-    When I follow "Back To Pseuds"
-      And I follow "New Pseud"
-      And I fill in "Name" with "Pseud3"
-      And I press "Create"
-    Then I should see "Pseud was successfully created."
-    When I go to the new work page
-    Then I should see "Post New Work"
-    When all emails have been delivered
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-    Then I should see "F/M"
-      And I should see "Gen"
-    When I check "F/M"
+    When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
       And I fill in "Work Title" with "/"
       And I fill in "content" with "T"
@@ -242,7 +185,7 @@ Feature: Create Works
     When I fill in "work_collection_names" with ""
       And I fill in "pseud_byline" with "badcoauthor"
       And I press "Preview"
-    Then I should see "badcoauthor has been banned"
+    Then I should see "badcoauthor is currently banned"
     When I fill in "pseud_byline" with "coauthor"
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
@@ -254,64 +197,25 @@ Feature: Create Works
       And I should see "1/?"
 
   Scenario: test for integer title and multiple fandoms
-    Given basic tags
-      And I am logged in
-      And I go to the new work page
-      And I check "No Archive Warnings Apply"
+    Given I am logged in
+    When I set up the draft "02138"
       And I fill in "Fandoms" with "Supernatural, Smallville"
-      And I fill in "Work Title" with "02138"
-      And I fill in "content" with "Bad things happen, etc."
     When I press "Post Without Preview"
     Then I should see "Work was successfully posted."
-      And I should see "Bad things happen, etc."
       And I should see "Supernatural"
       And I should see "Smallville"
       And I should see "02138" within "h2.title"
 
   Scenario: test for < and > in title
-    Given basic tags
-    When I am logged in as "newbie" with password "password"
-      And I go to the new work page
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "4 > 3 and 2 < 5"
-      And I fill in "content" with "Bad things happen, etc."
+    Given I am logged in
+    When I set up the draft "4 > 3 and 2 < 5"
     When I press "Post Without Preview"
     Then I should see "Work was successfully posted."
-      And I should see "Bad things happen, etc."
       And I should see "4 > 3 and 2 < 5" within "h2.title"
 
-  Scenario: Creating a new work when sphinx is down
-    Given remote sphinx is stopped
-      And basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Preview"
-    Then I should see "Preview"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
-    And sphinx is started again
-
-    Scenario: posting a chapter without preview
-    Given basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."  
-      And I press "Post Without Preview"
-    Then I should see "Work was successfully posted"
+  Scenario: posting a chapter without preview
+    Given I am logged in as "newbie" with password "password"
+      And I post the work "All Hell Breaks Loose"
     When I follow "Add Chapter"
       And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
@@ -331,12 +235,7 @@ Feature: Create Works
   Scenario: posting a backdated work
   Given I am logged in as "testuser" with password "testuser"
     And I post the work "This One Stays On Top"
-    And I go to the new work page
-    And I fill in "Work Title" with "Backdated"
-    And I fill in "content" with "This work is backdated and shouldn't be at the top"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "Testing"
+    And I set up the draft "Backdated"
     And I check "backdate-options-show"
     And I select "1" from "work_chapter_attributes_published_at_3i"
     And I select "January" from "work_chapter_attributes_published_at_2i"
@@ -349,7 +248,7 @@ Feature: Create Works
         
   Scenario: Users must set something as a warning and Author Chose Not To Use Archive Warnings should not be added automatically
     Given basic tags
-      And I am logged in as "triggerfinger" with password "everyoneinthephonebook"
+      And I am logged in
     When I go to the new work page
       And I fill in "Fandoms" with "Dallas"
       And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"

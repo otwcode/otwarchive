@@ -146,6 +146,7 @@
 #workskin {
   font-size: 1.08em;
   margin: auto;
+  padding: 0 0.25em;
   max-width: 72em;
   overflow-x: auto;
   overflow-y: hidden;
@@ -164,6 +165,10 @@
 
 .bookmark .user .userstuff blockquote {
 	margin-bottom: 1.286em;
+}
+
+.news .userstuff img {
+  max-width: 100%;
 }
 
 /*END== */

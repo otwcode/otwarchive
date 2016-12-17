@@ -1,16 +1,3 @@
-<%= error_messages_for :language %>
+<h2 class="heading"><%= t('.new_language', :default => 'New Language') %></h2>
 
-<h2 class="heading"><%= t('.add_new_language', :default => 'Add a new language:') %></h2>
-
-<%= form_for(@language) do |f| %>
-  <dl>
-    <dt><%= f.label :name, t('.name', :default => "Name:") %></dt>
-    <dd><%= f.text_field :name %></dd>
-    
-    <dt><%= f.label :short, t('.short', :default => "Abbreviation:") %></dt>
-    <dd><%= f.text_field :short %></dd>
-  </dl>
-  <p class="submit actions"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
-<% end %>
-
-
+<%= render 'form' %>

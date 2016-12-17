@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
     <meta name="language" content="en-US" />
     <meta name="subject" content="fandom" />
@@ -31,10 +32,10 @@
     </title>
 
     <%= render :partial => 'layouts/includes' %>
-    <%= render 'layouts/phraseapp' %>
+    <%= phraseapp_in_context_editor_js %>
   </head>
 
-  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>">
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
       <%= render :partial => 'layouts/header' %>

@@ -1,5 +1,5 @@
 <% # expects "prompt", if index is passed will use that in title if none exists, if suppress_claims is true will ignore %>
-<li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb group" role="article">
+<li class="<% if is_author_of?(prompt) %>own <% end %> blurb group" role="article">
   <div class="header module">
     <h4 class="heading">
       <% if !prompt.title.blank? %>
@@ -20,7 +20,7 @@
     <% tag_groups = prompt.tag_groups %>
 
     <% # eventually we should let mod specify topmost tag type to display -- ie chars and rels for single-fandom meme, freeforms for single-relationship meme  %>
-    <h5 class="heading">
+    <h5 class="fandoms heading">
       <span class="landmark"><%= ts('Fandom') %>:</span>
       <%= tag_groups['Fandom'].collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
       &nbsp;
@@ -31,7 +31,7 @@
     <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
   </div>
 
-  <h6 class="landmark heading"><%= ts("Tags") %></h6>  
+  <h6 class="landmark heading"><%= ts("Tags") %></h6> 
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
@@ -40,8 +40,8 @@
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-    <h6 class="heading"><%= ts("Optional:") %></h6>
-    <ul class="tags commas">
+    <h6 class="optional heading"><%= ts("Optional Tags:") %></h6>
+    <ul class="optional tags commas">
       <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
     </ul>
   <% end %>

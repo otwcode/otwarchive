@@ -145,7 +145,22 @@ form dd.required {
   color: #2a2a2a;
 }
 
+form .footnote code {
+  display: inline;
+}
+
+/* when we display information that cannot be edited, 
+like the current username on the change username form */
+form dd p.informational {
+  padding-top: 0;
+}
+
 /*END FORM RULES*/
+
+/* WIDGET: DEPENDENT OPTIONS */
+.toggle_formfield ~ ul.dependent {
+  margin-left: 2.625em;
+}
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
 
@@ -224,7 +239,7 @@ form li ul.autocomplete li.input {
 }
 
 .required .autocomplete, .autocomplete .notice {
-  color: #222;
+  color: #2a2a2a;
 }
 
 .autocomplete .notice {
@@ -552,6 +567,10 @@ form.verbose legend, .verbose form legend {
 
 form.simple span.actions {
   float: none;
+}
+
+.simple input[type="submit"] {
+  margin: 0;
 }
 
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */

@@ -280,6 +280,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
  
 #header #search .button {
   height: auto;
+  margin: 0;
 }
  
 /*CONTEXT: collections*/

@@ -40,8 +40,10 @@ class Pseud < ActiveRecord::Base
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
-  has_many :gifts
-  has_many :gift_works, :through => :gifts, :source => :work
+  has_many :gifts, conditions: { rejected: false }
+  has_many :gift_works, through: :gifts, source: :work
+  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id",
@@ -71,6 +73,7 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
+  after_update :expire_caches
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -207,23 +210,6 @@ class Pseud < ActiveRecord::Base
     end
   end
 
-  # Options can include :categories and :limit
-  # Gets all the canonical tags used by a given pseud (limited to certain
-  # types if type options are provided), then sorts them according to
-  # the number of times this pseud has used them, then returns an array
-  # of [tag, count] arrays, limited by size if a limit is provided
-  # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
-  def most_popular_tags(options = {})
-    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
-      tags_with_count = {}
-      all_tags.uniq.each do |tag|
-        tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-      end
-      all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-      options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
-    end
-  end
-
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
@@ -243,6 +229,14 @@ class Pseud < ActiveRecord::Base
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
     (name != user_name) ? name + " (" + user_name + ")" : name
+  end
+
+  # get the former byline
+  def byline_was
+    past_name = name_was.blank? ? name : name_was
+    # if we have a user and their login has changed get the old one
+    past_user_name = user.blank? ? "" : (user.login_was.blank? ? user.login : user.login_was)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
   end
 
   # Parse a string of the "pseud.name (user.login)" format into a pseud
@@ -272,7 +266,7 @@ class Pseud < ActiveRecord::Base
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? }
+      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
       if banned_pseuds.present?
         pseuds = pseuds - banned_pseuds
         banned_pseuds = banned_pseuds.map(&:byline)
@@ -302,6 +296,10 @@ class Pseud < ActiveRecord::Base
 
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
+  end
+
+  def autocomplete_value_was
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
 
   ## END AUTOCOMPLETE
@@ -357,6 +355,16 @@ class Pseud < ActiveRecord::Base
   end
 
   def change_challenge_participation
+    # We want to update all prompts associated with this pseud, but although
+    # each prompt contains a pseud_id column, they're not indexed on it. That
+    # means doing the search Prompt.where(pseud_id: self.id) would require
+    # searching all rows of the prompts table. So instead, we do a join on the
+    # challenge_signups table and look up prompts whose ChallengeSignup has the
+    # pseud_id that we want to change.
+    Prompt.joins(:challenge_signup).
+      where("challenge_signups.pseud_id = #{id}").
+      update_all("prompts.pseud_id = #{user.default_pseud.id}")
+
     ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
     ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
     return
@@ -378,6 +386,12 @@ class Pseud < ActiveRecord::Base
     if !self.is_default? && self.user.pseuds.to_enum.find(&:is_default?) == nil
       default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
       default_pseud.update_attribute(:is_default, true)
+    end
+  end
+
+  def expire_caches
+    if name_changed?
+      self.works.each{ |work| work.touch }
     end
   end
 

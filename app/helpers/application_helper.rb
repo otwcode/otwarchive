@@ -25,6 +25,9 @@ module ApplicationHelper
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name
     end
+    if controller.controller_name == "errors"
+      class_names = "system " + controller.controller_name + " error-" + controller.action_name
+    end
 
     class_names
   end
@@ -76,25 +79,29 @@ module ApplicationHelper
   # see http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the-same-page-causes-duplicate-ids
   def field_with_unique_id( form, field_type, object, field_name )
       field_id = "#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}"
-      form.send( field_type, field_name, :id => field_id )
+      form.send( field_type, field_name, id: field_id )
   end
 
-  # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
-  # in order to disambiguate in the case of identical pseuds
-  # and on Feb 24 09 to sort alphabetically for great justice
-  # and show only the authors when in preview_mode, unless they're empty
+  # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
+        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
     end
-    non_anonymous_byline(creation)
+    non_anonymous_byline(creation, options[:only_path])
   end
 
-  def non_anonymous_byline(creation)
+  def non_anonymous_byline(creation, url_path = nil)
+    only_path = url_path.nil? ? true : url_path 
+    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
+      byline_text(creation, only_path)
+    end
+  end
+
+  def byline_text(creation, only_path, text_only = false)
     if creation.respond_to?(:author)
       creation.author
     else
@@ -103,29 +110,30 @@ module ApplicationHelper
       pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
       pseuds = pseuds.flatten.uniq.sort
 
-      archivists = {}
+      archivists = Hash.new []
       if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
         external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.author_name
+          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
+          archivists[archivist_pseud] += [ec.author_name]
         end
       end
 
-      pseuds.collect { |pseud| 
-        archivists[pseud].nil? ? 
-            pseud_link(pseud) :
-            archivists[pseud] + " [" + ts("archived by %{name}", :name => pseud_link(pseud)) + "]"
+      pseuds.map { |pseud|
+        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
+        if archivists[pseud].empty?
+          pseud_byline
+        else
+          archivists[pseud].map { |ext_author|
+            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
+          }.join(', ')
+        end
       }.join(', ').html_safe
     end
   end
 
-  def pseud_link(pseud)
-    if @downloading
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
-    else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
-    end
+  def pseud_link(pseud, only_path = true)
+    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: only_path), rel: "author")
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
@@ -133,41 +141,12 @@ module ApplicationHelper
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
-        end
-      return anon_byline
-    end
-    non_anonymous_text_byline(creation)
-  end
-
-  def non_anonymous_text_byline(creation)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-      pseuds = pseuds.flatten.uniq.sort
-    
-      archivists = {}
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.external_author_name.name
-        end
+        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
       end
-
-      pseuds.collect { |pseud|
-        archivists[pseud].nil? ?
-            pseud_text(pseud) :
-            archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
-      }.join(', ').html_safe
+      anon_byline
+    else
+      byline_text(creation, only_path: false, text_only: true)
     end
-  end
-
-  def pseud_text(pseud)
-    pseud.byline
   end
 
   def link_to_modal(content = "", options = {})
@@ -226,7 +205,7 @@ module ApplicationHelper
 
   # For setting the current locale
   def locales_menu    
-    result = "<form action=\"" + url_for(:action => 'set', :controller => 'locales') + "\">\n" 
+    result = "<form action=\"" + url_for(action: 'set', controller: 'locales') + "\">\n" 
     result << "<div><select id=\"accessible_menu\" name=\"locale_id\" >\n"
     result << options_from_collection_for_select(@loaded_locales, :iso, :name, @current_locale.iso)
     result << "</select></div>"
@@ -252,9 +231,9 @@ module ApplicationHelper
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
       link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe,
-          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class, :title => (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
+          request.parameters.merge( {sort_column: column, sort_direction: direction} ), {class: css_class, title: (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
-      link_to_unless params[:sort_column].nil?, title, url_for(params.merge :sort_column => nil, :sort_direction => nil)
+      link_to_unless params[:sort_column].nil?, title, url_for(params.merge sort_column: nil, sort_direction: nil)
     end
   end
 
@@ -283,15 +262,15 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
-    content_tag(:p, span + ts(' characters left'), :class => "character_counter")
+    span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    content_tag(:p, span + ts(' characters left'), class: "character_counter")
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
   def expand_contract_all(target="index")
-    expand_all = content_tag(:a, ts("Expand All"), :href=>"#", :class => "expand_all", "target_class" => target, :role => "button")
-    contract_all = content_tag(:a, ts("Contract All"), :href=>"#", :class => "contract_all", "target_class" => target, :role => "button")
-    content_tag(:span, expand_all + "\n".html_safe + contract_all, :class => "actions hidden showme", :role => "menu")
+    expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
+    contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
+    content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")
   end
 
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
@@ -308,12 +287,12 @@ module ApplicationHelper
   # note: we do this and put the message defaults here so we can use translation on them
   def autocomplete_options(method, options={})
     {
-      :class => "autocomplete",
-      :autocomplete_method => (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      :autocomplete_hint_text => ts("Start typing for suggestions!"),
-      :autocomplete_no_results_text => ts("(No suggestions found)"),
-      :autocomplete_min_chars => 1,
-      :autocomplete_searching_text => ts("Searching...")
+      class: "autocomplete",
+      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+      autocomplete_hint_text: ts("Start typing for suggestions!"),
+      autocomplete_no_results_text: ts("(No suggestions found)"),
+      autocomplete_min_chars: 1,
+      autocomplete_searching_text: ts("Searching...")
     }.merge(options)
   end
 
@@ -322,16 +301,16 @@ module ApplicationHelper
     new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new
     child_index = "new_#{nested_model_name}"
     rendered_partial_to_add = 
-      form.fields_for(nested_model_name, new_nested_model, :child_index => child_index) {|child_form|
-        render(:partial => partial_to_render, :locals => {:form => child_form, :index => child_index}.merge(locals))
+      form.fields_for(nested_model_name, new_nested_model, child_index: child_index) {|child_form|
+        render(partial: partial_to_render, locals: {form: child_form, index: child_index}.merge(locals))
       }
-    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :class => "hidden showme")
+    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", class: "hidden showme")
   end
 
   # see above
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
     form.hidden_field(:_destroy) + "\n" +
-    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
   def time_in_zone(time, zone=nil, user=User.current_user)
@@ -420,7 +399,7 @@ module ApplicationHelper
     toggle = content_tag(:p, 
       (options[:no_show] ? "".html_safe : toggle_show) + 
       toggle_hide + 
-      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions", :style => "display: none;")
+      (options[:no_js] ? "".html_safe : javascript_bits), class: "actions", style: "display: none;")
   end
 
   # create a scrollable checkboxes section for a form that can be toggled open/closed
@@ -436,23 +415,23 @@ module ApplicationHelper
   # See the prompt_form in challenge signups for example of usage
   def checkbox_section(form, attribute, choices, options = {})
     options = {
-      :checked_method => nil, 
-      :name_method => "name", 
-      :name_helper_method => nil, # alternative: pass a helper method that gets passed the choice
-      :extra_info_method => nil, # helper method that gets passed the choice, for any extra information that gets attached to the label
-      :value_method => "id", 
-      :disabled => false,
-      :include_toggle => true,
-      :checkbox_side => "left",
-      :include_blank => true,
-      :concise => false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
+      checked_method: nil, 
+      name_method: "name", 
+      name_helper_method: nil, # alternative: pass a helper method that gets passed the choice
+      extra_info_method: nil, # helper method that gets passed the choice, for any extra information that gets attached to the label
+      value_method: "id", 
+      disabled: false,
+      include_toggle: true,
+      checkbox_side: "left",
+      include_blank: true,
+      concise: false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
     }.merge(options)
 
     field_name = options[:field_name] || field_name(form, attribute)
     field_name += '[]'
     base_id = options[:field_id] || field_id(form, attribute)
     checkboxes_id = "#{base_id}_checkboxes"
-    opts = options[:disabled] ? {:disabled => "true"} : {}
+    opts = options[:disabled] ? {disabled: "true"} : {}
     already_checked = case 
       when options[:checked_method].is_a?(Array)
         options[:checked_method]
@@ -472,8 +451,8 @@ module ApplicationHelper
         end
       value = choice.send(options[:value_method])
       checkbox_id = "#{base_id}_#{name_to_id(value)}"
-      checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))
-      checkbox_and_label = label_tag checkbox_id, :class => "action" do 
+      checkbox = check_box_tag(field_name, value, is_checked, opts.merge({id: checkbox_id}))
+      checkbox_and_label = label_tag checkbox_id, class: "action" do 
         options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
       end
       if options[:extra_info_method]
@@ -485,7 +464,7 @@ module ApplicationHelper
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
     css_class = checkbox_section_css_class(size, options[:concise])
-    checkboxes_ul = content_tag(:ul, checkboxes, :class => css_class)
+    checkboxes_ul = content_tag(:ul, checkboxes, class: css_class)
 
     toggle = "".html_safe
     if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
@@ -493,7 +472,7 @@ module ApplicationHelper
     end
 
     # We wrap the whole thing in a div
-    return content_tag(:div, checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id)
+    return content_tag(:div, checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), id: checkboxes_id)
   end
 
   def checkbox_section_css_class(size, concise=false)
@@ -520,7 +499,7 @@ module ApplicationHelper
 
   def submit_button(form=nil, button_text=nil)
     button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
-    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=> "submit")
+    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), class: "submit")
   end
 
   def submit_fieldset(form=nil, button_text=nil)

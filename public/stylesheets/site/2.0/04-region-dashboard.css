@@ -3,7 +3,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 */
 
 #dashboard {
-  width: 12em;
+  width: 11.25em;
   float: left;
   padding: 0.5em;
 }
@@ -19,8 +19,10 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   height: auto;
   line-height: 2;
   padding: 0 0.5625em;
+  margin: 0;
   border: none;
   background: transparent;
+  vertical-align: middle;
     word-wrap: break-word;
     box-shadow: none;
 }

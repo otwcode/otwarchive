@@ -4,6 +4,7 @@ class Admin::UserCreationsController < ApplicationController
   
   # Removes an object from public view
   def hide
+    raise "Redshirt: Attempted to constantize invalid class initialize hide #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
@@ -15,7 +16,7 @@ class Admin::UserCreationsController < ApplicationController
                         ts('Item is no longer hidden.')
     if creation_class == Comment
       redirect_to(creation.ultimate_parent) 
-    elsif creation_class == ExternalWork
+    elsif creation_class == ExternalWork || creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       unless action  == "unhide"
@@ -33,6 +34,7 @@ class Admin::UserCreationsController < ApplicationController
   end
 
   def destroy
+    raise "Redshirt: Attempted to constantize invalid class initialize destroy #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     AdminActivity.log_action(current_admin, creation, action: 'destroy', summary: creation.inspect)

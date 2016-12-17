@@ -112,7 +112,7 @@ Feature: Edit Works
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
       
   Scenario: Editing a work you created today should not bump its revised-at date
-      When "Issue 2542" is fixed    
+      When "AO3-2539" is fixed    
 # Given I am logged in as "testuser" with password "testuser"
 #      And I post the work "Don't Bump Me"
 #      And I post the work "This One Stays On Top"
@@ -132,3 +132,27 @@ Feature: Edit Works
     When I edit the work "Load of Typos"
       And I press "Preview"
     Then I should not see "draft"
+
+  Scenario: You can add a co-author to an already-posted work
+    Given I am logged in as "leadauthor"
+      And I post the work "Dialogue"
+    When I add the co-author "coauthor" to the work "Dialogue"
+    Then I should see "Work was successfully updated"
+      And I should see "coauthor, leadauthor" within ".byline"
+
+  Scenario: You can remove yourself as coauthor from a work
+    Given basic tags
+      And the following activated users exist
+        | login          |
+        | coolperson     |
+        | ex_friend      |
+      And I have coauthored a work as "coolperson" with "ex_friend"
+      And I am logged in as "coolperson"
+    When I view the work "Shared"
+    Then I should see "test pseud 1 (coolperson), test pseud 2 (ex_friend)" within ".byline"
+    When I edit the work "Shared"
+      And I follow "Remove Me As Author"
+    Then I should see "You have been removed as an author from the work"
+    When I view the work "Shared"
+    Then I should see "ex_friend" within ".byline"
+      And I should not see "coolperson" within ".byline"

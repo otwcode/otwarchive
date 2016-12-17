@@ -76,7 +76,11 @@ module TagsHelper
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
+    if options[:full_path] 
+      link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
+    else
+      link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
+    end
   end
 
   def link_to_edit_tag(tag, options = {})
@@ -89,7 +93,11 @@ module TagsHelper
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+    if options[:full_path]
+      link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+    else 
+      link_to_with_tag_class(@collection ? collection_tag_works_path(@collection, tag) : tag_works_path(tag), link_text, options)
+    end
   end
 
   # the label on checkboxes to remove tag associations
@@ -234,19 +242,21 @@ module TagsHelper
 
     categories.each do |category|
       if tags = tag_groups[category]
-        class_name = category.downcase.pluralize
-        if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
-          open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
-          close_tags = "</strong></li>"
-          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
-        elsif class_name == "warnings"
-          open_tags = "<li class='#{class_name}'><strong>"
-          close_tags = "</strong></li>"
-          link_array = tags.collect{|tag| link_to_tag_works(tag)}
-          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
-        else
-          link_array = tags.collect{|tag| link_to_tag_works(tag)}
-          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
+        unless tags.empty?
+          class_name = category.downcase.pluralize
+          if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
+            open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
+            close_tags = "</strong></li>"
+            tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
+          elsif class_name == "warnings"
+            open_tags = "<li class='#{class_name}'><strong>"
+            close_tags = "</strong></li>"
+            link_array = tags.collect{|tag| link_to_tag_works(tag)}
+            tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
+          else
+            link_array = tags.collect{|tag| link_to_tag_works(tag)}
+            tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
+          end
         end
       end
     end

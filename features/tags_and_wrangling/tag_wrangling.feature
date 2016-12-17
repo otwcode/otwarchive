@@ -3,29 +3,24 @@ Feature: Tag wrangling
 
   Scenario: Admin can create a tag wrangler using the interface
 
-    Given the following admin exists
-      | login       |
-      | Zooey       |
-      And the following activated user exists
-      | login       |
-      | dizmo       |
-      And I have loaded the "roles" fixture
+    Given I have loaded the "roles" fixture
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as an admin
       And I fill in "query" with "dizmo"
       And I press "Find"
-    Then I should see "dizmo" within "#admin_users_table"
-    
+    Then I should see "dizmo" within "#admin_users_table"    
     # admin making user tag wrangler
     When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
-    
     # accessing wrangling pages
     When I am logged in as "dizmo"
       And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
+    # no access otherwise
+    When I log out
+    Then I should see "Sorry, you don't have permission"
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
         Make a new fandom canonical and wrangle it to a medium.
@@ -64,6 +59,7 @@ Feature: Tag wrangling
       Then I should see "Work was successfully posted."
     
     # mass wrangling
+    When I flush the wrangling sidebar caches
     When I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
@@ -193,6 +189,13 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+  Scenario: Wrangler has option to reindex a work
+
+    Given the work "Indexing Issues"
+      And I am logged in as a tag wrangler
+     When I view the work "Indexing Issues"
+     Then I should see "Reindex Work"
+
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
     
     Given a canonical fandom "'Allo 'Allo"
@@ -231,3 +234,31 @@ Feature: Tag wrangling
     When I edit the tag "Cabin Pressure"
     Then I should not see "Sign Up"
       And I should see the tag wrangler listed as an editor of the tag
+
+  Scenario: A user can not see the reindex button on a tag page
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And I am logged in as a random user
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
+
+  Scenario: A tag wrangler can not see the reindex button on a tag page
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+    When I view the tag "Cowboy Bebop"
+    Then I should not see "Reindex Tag"
+
+  Scenario: An admin can see the reindex button on a tag page and will recieve the correct message when pressed.
+
+    Given the following typed tags exists
+        | name              | type         | canonical |
+        | Cowboy Bebop      | Fandom       | true      |
+      And I am logged in as an admin
+    When I view the tag "Cowboy Bebop"
+    Then I follow "Reindex Tag"
+      And I should see "Tag sent to be reindexed"

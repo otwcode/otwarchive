@@ -103,6 +103,24 @@ PROMPT_TAGS_MAX: 20
 
 # max number of potential matches to generate
 POTENTIAL_MATCHES_MAX: 50
+# min number of potential matches to allow
+POTENTIAL_MATCHES_MIN: 10
+# max percentage of participants to match
+POTENTIAL_MATCHES_PERCENT: 10
+
+# These options control the number of tags we'd ideally like to see in each tag
+# type in a gift exchange, in order to ensure that indexing on that type (to
+# speed up matching) will yield good results. The number scales with the number
+# of signups (using the divisor), but is capped at the maximum. Increasing the
+# maximum (and decreasing the divisor) will cause the preprocessing step to
+# take somewhat longer.
+PREPROCESS_COUNT_TAGS_DIVISOR: 10
+PREPROCESS_COUNT_TAGS_MAX: 10
+
+# These options control how many prompts with "any_#{type}" an exchange can
+# have before we consider that tag type to be difficult to index on.
+PREPROCESS_COUNT_ANY_DIVISOR: 10
+PREPROCESS_COUNT_ANY_MIN: 10
 
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
@@ -194,6 +212,10 @@ MAX_RECENT: 20
 # This is used to determine how many works or how many authors have to be
 # present in order for anonymous or mystery works to begin being displayed
 ANONYMOUS_THRESHOLD_COUNT: 10
+
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should go back into moderation after editing or not
+COMMENT_MODERATION_THRESHOLD: 10
 
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
@@ -334,6 +356,7 @@ ACTION_WARN: 6
 ACTION_RENAME: 7
 ACTION_PASSWORD_RESET: 8
 ACTION_NEW_EMAIL: 9
+ACTION_TROUBLESHOOT: 10
 
 
 ##### For dumping the seed database and NOT clearing emails on stage
@@ -371,3 +394,4 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
+

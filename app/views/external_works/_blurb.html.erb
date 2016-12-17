@@ -9,7 +9,7 @@
       <%= byline(external_work) %>
     </h4>
 
-    <h5 class="heading">
+    <h5 class="fandoms heading">
       <span class="landmark"><%= ts('Fandom') %>:</span>
       <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
       &nbsp;
@@ -47,10 +47,7 @@
   </dl>
 
   <% if logged_in_as_admin? %>
-    <h6 class="landmark heading">Author Actions</h6>
-    <ul class="actions" role="navigation">
-      <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
-    </ul>
+    <%= render "admin/admin_options", item: external_work %>
   <% end %>
 
 </li>

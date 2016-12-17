@@ -147,7 +147,7 @@ describe HtmlCleaner do
 
     describe ":content" do
 
-      xit "should keep html" do
+      it "should keep html" do
         value = "<em>hello</em> <blockquote>world</blockquote>"
         result = sanitize_value(:content, value)
         doc = Nokogiri::HTML.fragment(result)
@@ -205,9 +205,9 @@ describe HtmlCleaner do
         expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
       end
 
-      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com
-         viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
-         embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
+         metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
+         embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
 
         it "should allow embeds from #{source}" do
           html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -645,7 +645,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("some\n\n\ntext")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[2]").children.to_s.strip.ord).to eq(160)
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
 
@@ -660,7 +660,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("some<br/><br/><br/>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[2]").children.to_s.strip.ord).to eq(160)
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
 
@@ -812,8 +812,8 @@ describe HtmlCleaner do
       expect(doc.xpath(".//i/p")).to be_empty
     end
 
-    xit "should deal with br tags at the beginning" do
-      result = add_paragraphs_to_text("<br/></br>text")
+    it "should deal with br tags at the beginning" do
+      result = add_paragraphs_to_text("</br>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//p").children.to_s.strip).to eq("text")
     end
