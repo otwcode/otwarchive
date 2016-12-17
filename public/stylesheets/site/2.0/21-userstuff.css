@@ -146,6 +146,7 @@
 #workskin {
   font-size: 1.08em;
   margin: auto;
+  padding: 0 0.25em;
   max-width: 72em;
   overflow-x: auto;
   overflow-y: hidden;

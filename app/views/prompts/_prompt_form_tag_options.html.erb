@@ -2,7 +2,7 @@
 <% form.object.build_tag_set unless form.object.tag_set %>
 <%= form.fields_for :tag_set do |tag_set_form| %>
   <% TagSet::TAG_TYPES.each do |tag_type| %>
-    <% tag_name = tag_type.titleize.constantize::NAME %>
+    <% tag_name = tag_type.titleize.constantize::NAME # constantize safe as iterating over safe list %>
     <% num_allowed = restriction.allowed(tag_type) %>
     <% num_required = restriction.required(tag_type) %>
     <% if num_allowed > 0 %>
@@ -39,7 +39,7 @@
         <dd class="<%= ts("#{tag_type}") %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
           <h4 class="heading"><%= ts("#{tag_name.pluralize.titleize}") %></h4>
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", 
-            (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name},
+            (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name}, # constantize safe as itterating over safe list
             :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
           <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
         </dd>

@@ -16,11 +16,10 @@
 
 <!--main content-->
 <h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
-
-<p><%= ts('We\'re still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href="http://twitter.com/ao3_status">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href="http://www.transformativeworks.org/contact_us/contact-archive-support/">the back-up form</a>.').html_safe %></p>
-
-<p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
-
+<div class="userstuff">
+  <p><%= ts('We\'re still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href="http://twitter.com/ao3_status">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href="http://www.transformativeworks.org/contact_us/contact-archive-support/">the back-up form</a>.').html_safe %></p>
+  <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+</div>
 <%= form_for(@feedback, html: { class: "post feedback" }) do |f| %>
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
@@ -45,13 +44,13 @@
       <dt class="required">
         <%= f.label :language, ts("Select language (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.collection_select(:language, @support_languages, :id, :name, { selected: Language.default.id }) %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <%= live_validation_for_field('feedback_summary',
@@ -60,7 +59,7 @@
       <dt class="required">
         <%= f.label :comment, ts("Your comment (required)") %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field('feedback_comment',
               failureMessage: ts("Please enter your feedback")) %>

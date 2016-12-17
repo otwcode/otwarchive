@@ -210,23 +210,6 @@ class Pseud < ActiveRecord::Base
     end
   end
 
-  # Options can include :categories and :limit
-  # Gets all the canonical tags used by a given pseud (limited to certain
-  # types if type options are provided), then sorts them according to
-  # the number of times this pseud has used them, then returns an array
-  # of [tag, count] arrays, limited by size if a limit is provided
-  # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
-  def most_popular_tags(options = {})
-    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
-      tags_with_count = {}
-      all_tags.uniq.each do |tag|
-        tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-      end
-      all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-      options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
-    end
-  end
-
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
@@ -372,6 +355,16 @@ class Pseud < ActiveRecord::Base
   end
 
   def change_challenge_participation
+    # We want to update all prompts associated with this pseud, but although
+    # each prompt contains a pseud_id column, they're not indexed on it. That
+    # means doing the search Prompt.where(pseud_id: self.id) would require
+    # searching all rows of the prompts table. So instead, we do a join on the
+    # challenge_signups table and look up prompts whose ChallengeSignup has the
+    # pseud_id that we want to change.
+    Prompt.joins(:challenge_signup).
+      where("challenge_signups.pseud_id = #{id}").
+      update_all("prompts.pseud_id = #{user.default_pseud.id}")
+
     ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
     ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
     return
