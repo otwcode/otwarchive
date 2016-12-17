@@ -1,8 +1,12 @@
 <% content_for :message do %>
-  <%= t('user_mailer.signup_notification.html.main_text', 
-           login: style_bold(@user.login), 
-           activate_account: style_link( t('user_mailer.signup_notification.activate_your_account'), activate_url(id: @user.activation_code)), 
-           faq: style_link(t('user_mailer.signup_notification.faq'), archive_faqs_url),
-           admin_posts: style_link(t('user_mailer.signup_notification.admin_posts'), admin_posts_url), 
-           contact_support: support_link(t 'user_mailer.signup_notification.support') ).html_safe %>
+<p><%= t('user_mailer.signup_notification.welcome',
+           login: style_bold(@user.login)).html_safe %></p>
+<p><%= t('user_mailer.signup_notification.html.part1',
+           activate_account_link: style_link( t('user_mailer.signup_notification.activate_your_account'), activate_url(id: @user.activation_code))).html_safe %></p>
+<p><%= t('user_mailer.signup_notification.html.part2') %></p>
+<p><%= t('user_mailer.signup_notification.html.part3', 
+           faq_link: style_link(t('user_mailer.signup_notification.faq'), archive_faqs_url),
+           admin_posts_link: style_link(t('user_mailer.signup_notification.admin_posts'), admin_posts_url), 
+           contact_support_link: support_link(t 'user_mailer.signup_notification.contact_support')).html_safe %></p>
+<p><%= t('user_mailer.signup_notification.bye') %></p>
 <% end %>
