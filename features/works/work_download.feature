@@ -3,7 +3,6 @@
 @works
 
 Feature: Download a work
-  @wip
   Scenario: Download an ordinary work
 
   Given the work "Tittle with doubble letters"
@@ -22,7 +21,6 @@ Feature: Download a work
     And I follow "EPUB"
   # Then...
 
-  @wip
   Scenario: Download works with quotation marks in the title doesn't bomb
 
   Given I am logged in as a random user
@@ -44,7 +42,6 @@ Feature: Download a work
     And I follow "EPUB"
   # Then...
 
-  @wip
   Scenario: Download works with Cyrillic in the title doesn't bomb
 
   Given I set up the draft "Title I'll Replace In A Sec"
@@ -67,7 +64,6 @@ Feature: Download a work
     And I follow "EPUB"
   # Then...
 
-  @wip
   Scenario: Download works with curly quotes in the title doesn't bomb
 
   Given I set up the draft "Title I'll Replace In A Sec"
@@ -88,7 +84,6 @@ Feature: Download a work
     And I follow "EPUB"
   # Then...
 
-  @wip
   Scenario: Download works with curly and straight quotes and accented 
   characters in the title doesn't bomb
 
@@ -110,7 +105,6 @@ Feature: Download a work
     And I follow "EPUB"
   # Then...
 
-  @wip
   Scenario: Download chaptered works doesn't bomb
  
   Given the chaptered work "Epic Novel"
@@ -128,7 +122,6 @@ Feature: Download a work
   When I view the work "Epic Novel"
     And I follow "EPUB"
 
-  @wip
   Scenario: Download MOBI and PDF for works with unusual characters in the title
 
   Given I set up the draft "Title I'll Replace In A Sec"
@@ -143,7 +136,6 @@ Feature: Download a work
     And I follow "PDF"
   # Then...
 
-  @wip
   Scenario: Download MOBI and PDF for works with more unusual characters in the title
 
   Given I set up the draft "Title I'll Replace In A Sec"
@@ -167,7 +159,7 @@ Feature: Download a work
 
   Scenario: Unrevealed works cannot be downloaded
 
-  Given the work "Now You See Me" in the unrevealed collection "Invisibility"
+  Given there is a work "Now You See Me" in an unrevealed collection "Invisibility"
   When I am logged in as the owner of "Invisibility"
     And I view the work "Now You See Me"
     And I follow "HTML"
