@@ -79,7 +79,7 @@ Feature: Admin Actions to Manage Invitations
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
-      And I uncheck "Users can request invitations"
+      And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
       And I am logged out as an admin
