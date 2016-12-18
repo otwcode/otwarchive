@@ -240,7 +240,7 @@ Feature: Create and Edit Series
       And I check "Choose Not To Use Archive Warnings"
       And I fill in "Fandoms" with "My Little Pony"
       And I check "co-authors-options-show"
-      And I fill in "pseud_byline_autocomplete" with "moon"
+      And I fill in "co-authors-options" with "moon"
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "Ponies"
       And I fill in "Work Title" with "Sweetie Belle"
