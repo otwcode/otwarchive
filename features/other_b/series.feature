@@ -213,7 +213,6 @@ Feature: Create and Edit Series
     Then I should not see the image "title" text "Restricted" within "h2"
 
   Scenario: View user's series index
-
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "grumble" to series "polarbears"
     When I go to whoever's series page
@@ -227,6 +226,36 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
+
+  Scenario: Removing self as co-author from co-authored series
+    Given the following activated users exist
+      | login         | password   |
+      | sun           | password   |
+      | moon          | password   |
+      And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
+      And the default ratings exist
+    When I am logged in as "sun" with password "password"
+      And I go to the new work page
+      And I select "Not Rated" from "Rating"
+      And I check "Choose Not To Use Archive Warnings"
+      And I fill in "Fandoms" with "My Little Pony"
+      And I check "co-authors-options-show"
+      And I fill in "pseud_byline_autocomplete" with "moon"
+      And I check "series-options-show"
+      And I fill in "work_series_attributes_title" with "Ponies"
+      And I fill in "Work Title" with "Sweetie Belle"
+      And I fill in "content" with "First little pony is all alone"
+    When I press "Post Without Preview"
+    Then I should see "Work was successfully posted"
+      And I should see "Part 1 of the Ponies series" within "div#series"
+    When I follow "Ponies"
+    Then I should see "Sweetie Belle by moon, sun"
+    When I press "Remove Me As Author"
+    Then I should see "You have been removed as an author from the series and its works."
+      And I should see "Sweetie Belle by moon"
+      And I should not see "Sweetie Belle by moon, sun"
+    When I follow "sun"
+    Then I should not see "Sweetie Belle by moon, sun" within "div#user-series"
 
   Scenario: Delete a series
     Given I am logged in as "cereal" with password "yumyummy"
