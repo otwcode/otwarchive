@@ -219,7 +219,6 @@ Feature: Create and Edit Series
     When I go to whoever's series page
     Then I should see "whoever's Series"
       And I should see "polarbears"
-      And the page title should include "by whoever"
 
   Scenario: Series index for maaany series
     Given I am logged in as "whoever" with password "whatever"
