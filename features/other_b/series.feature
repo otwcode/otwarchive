@@ -250,7 +250,7 @@ Feature: Create and Edit Series
       And I should see "Part 1 of the Ponies series" within "div#series"
     When I follow "Ponies"
     Then I should see "Sweetie Belle by moon, sun"
-    When I press "Remove Me As Author"
+    When I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the series and its works."
       And I should see "Sweetie Belle by moon"
       And I should not see "Sweetie Belle by moon, sun"
