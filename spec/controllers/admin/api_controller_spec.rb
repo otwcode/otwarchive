@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe Admin::ApiController do
@@ -44,20 +45,20 @@ describe Admin::ApiController do
         fake_login_admin(admin)
       end
 
-      let(:api_key_prefixes) { ["a", "b", "c"]}
-      let!(:api_keys) {
-        api_key_prefixes.each { |p|
+      let(:api_key_prefixes) { %w(a b c) }
+      let!(:api_keys) do
+        api_key_prefixes.each do |p|
           FactoryGirl.create(:api_key, name: "#{p}_key")
-        }
-      }
+        end
+      end
 
       context "where no query params are set" do
         it "returns a successful response with all api keys" do
           get :index, params
           expect(response).to have_http_status(:success)
-          api_key_prefixes.each { |p|
+          api_key_prefixes.each do |p|
             expect(response.body).to include("#{p}_key")
-          }
+          end
         end
       end
 
@@ -111,13 +112,12 @@ describe Admin::ApiController do
 
       before do
         fake_login_admin(admin)
-
       end
 
       context "with an api key param" do
-        let(:api_key_name) { "api_key"}
+        let(:api_key_name) { "api_key" }
         let(:api_key_params) { { name: api_key_name } }
-        let(:params) { {api_key: api_key_params} }
+        let(:params) { { api_key: api_key_params } }
 
         it "redirects to the homepage and notifies of the success" do
           post :create, params
@@ -136,9 +136,9 @@ describe Admin::ApiController do
       end
 
       context "the save was unsuccessful" do
-        let(:api_key_name) { "api_key"}
+        let(:api_key_name) { "api_key" }
         let(:api_key_params) { { name: api_key_name } }
-        let(:params) { {api_key: api_key_params} }
+        let(:params) { { api_key: api_key_params } }
 
         before do
           allow_any_instance_of(ApiKey).to receive(:save).and_return(false)
@@ -175,7 +175,7 @@ describe Admin::ApiController do
         let!(:api_key) { FactoryGirl.create(:api_key, name: "api_key") }
 
         it "populates the form with the api key" do
-          get :edit, { id: api_key.id }
+          get :edit, id: api_key.id
           expect(response).to have_http_status(:success)
           expect(response.body).to include(api_key.name)
         end
@@ -184,7 +184,7 @@ describe Admin::ApiController do
       context "where the api key can't be found" do
         it "raises an error" do
           assert_raise do
-            get :edit, { id: 12345 }
+            get :edit, id: 123
           end
         end
       end
@@ -210,13 +210,13 @@ describe Admin::ApiController do
         end
 
         context "where the update is successful" do
-            it "updates the api key and redirects to index" do
-              expect(ApiKey.where(name: new_name)).to be_empty
-              post :update, params
-              expect(ApiKey.where(name: new_name)).to_not be_empty
-              it_redirects_to_admin_api_index
-              expect(flash[:notice]).to include("Access token was successfully updated")
-            end
+          it "updates the api key and redirects to index" do
+            expect(ApiKey.where(name: new_name)).to be_empty
+            post :update, params
+            expect(ApiKey.where(name: new_name)).to_not be_empty
+            it_redirects_to_admin_api_index
+            expect(flash[:notice]).to include("Access token was successfully updated")
+          end
         end
 
         context "where the update is unsuccessful" do
@@ -225,7 +225,7 @@ describe Admin::ApiController do
           end
 
           it "shows the edit view" do
-            post :update, { id: api_key.id, api_key: { name: "new_name" } }
+            post :update, id: api_key.id, api_key: { name: "new_name" }
             expect(ApiKey.where(name: "new_name")).to be_empty
             assert_template :edit
           end
@@ -235,17 +235,17 @@ describe Admin::ApiController do
       context "where the api key doesn't exist" do
         it "raises an error" do
           assert_raise do
-            post :update, { id: 12345, api_key: { name: "new_name" } }
+            post :update, id: 123, api_key: { name: "new_name" }
           end
         end
       end
 
       context "cancel_button is true" do
-        let(:api_key_id) { 12345 }
+        let(:api_key_id) { 123 }
         let!(:api_key) { FactoryGirl.create(:api_key, id: api_key_id) }
 
         it "redirects to index" do
-          post :update, { id: api_key_id, cancel_button: "Cancel" }
+          post :update, id: api_key_id, cancel_button: "Cancel"
           it_redirects_to_admin_api_index
         end
       end
@@ -261,11 +261,11 @@ describe Admin::ApiController do
       end
 
       context "where the api key exists" do
-        let(:api_key_id) { 12345 }
+        let(:api_key_id) { 123 }
         let!(:api_key) { FactoryGirl.create(:api_key, id: api_key_id) }
 
         it "destroys the api key, then redirects to edit" do
-          post :destroy, { id: api_key_id }
+          post :destroy, id: api_key_id
           expect(ApiKey.where(id: api_key_id)).to be_empty
           expect(response).to redirect_to admin_api_path
         end
@@ -274,7 +274,7 @@ describe Admin::ApiController do
       context "where the api key doesn't exist" do
         it "raises an error" do
           assert_raise do
-            post :destroy, { id: 12345 }
+            post :destroy, id: 123
           end
         end
       end
