@@ -1,11 +1,12 @@
 <% content_for :message do %>
-  <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
-      t('user_mailer.delete_work_notification.text.entire_other',
-        user:  @user.default_pseud.byline,
+<%= t('.hello', user:  @user.default_pseud.byline) %>
+<%= (@work.pseuds.count > 1 && @user != User.current_user) ?
+t('.part1_other',
         title: @work.title,
-        pseud: User.current_user.default_pseud ).html_safe :
-      t('user_mailer.delete_work_notification.text.entire_yourself',
-        user:  @user.default_pseud.byline,
-        title: @work.title ).html_safe
-  %>
+        pseud: User.current_user.default_pseud ) :
+t('.part1_yourself',
+        title: @work.title) %>
+<%= t('.part2', support: support_url ) %></p>
+<%= t('.part3') %>
 <% end %>
+

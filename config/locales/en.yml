@@ -57,32 +57,11 @@ en:
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       support: "contact Support"
-      html:
-        entire_other: "<p>Dear %{user},</p>\n\
-<p>Your work <i>%{title}</i> was deleted at the request of %{pseud}.</p>\n\
-<p>If you have questions, please %{support}.</p>\n\
-<p>Attached is a copy of your work for your reference.</p>"
-        entire_yourself: "<p>Dear %{user},</p>\n\
-<p>Your work <i>%{title}</i> was deleted at your request.</p>\n\
-<p>If you have questions, please %{support}.</p>\n\
-<p>Attached is a copy of your work for your reference.</p>"
-      text:
-        entire_other: |-
-                     Dear %{user},
-                      
-                     Your work %{title}  was deleted at the request of %{pseud}.
-
-                     If you have questions, please contact support.
-
-                     Attached is a copy of your work for your reference.
-        entire_yourself: |-
-                        Dear %{user},
-                        
-                        Your work %{title}  was deleted at your request.
-
-                        If you have questions, please contact support.
-
-                        Attached is a copy of your work for your reference.
+      hello: "Dear %{user},"
+      part1_other: "Your work %{title} was deleted at the request of %{pseud}."
+      part1_yourself: "Your work %{title} was deleted at your request."
+      part2: "If you have questions, please %{support}."
+      part3: "Attached is a copy of your work for your reference."
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
