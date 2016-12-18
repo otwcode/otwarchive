@@ -255,7 +255,7 @@ Feature: Create and Edit Series
       And I should see "Sweetie Belle by moon"
       And I should not see "Sweetie Belle by moon, sun"
     When I follow "sun"
-    Then I should not see "Sweetie Belle by moon, sun" within "div#user-series"
+    Then I should see "Series (0)"
 
   Scenario: Delete a series
     Given I am logged in as "cereal" with password "yumyummy"
