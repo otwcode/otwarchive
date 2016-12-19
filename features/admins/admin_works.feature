@@ -39,6 +39,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
+      And the email should not contain "translation missing"
     When I am logged out
       And I am on regular_users's works page
     Then I should not see "ToS Violation"
