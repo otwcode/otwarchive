@@ -3,8 +3,19 @@ class TagSetNominationsController < ApplicationController
   
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
+  before_filter :check_pseud_ownership, :only => [:create, :update]
   before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]
   before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
+
+  def check_pseud_ownership
+    if params[:tag_set_nomination][:pseud_id]
+      pseud = Pseud.find(params[:tag_set_nomination][:pseud_id])
+      unless pseud && current_user && current_user.pseuds.include?(pseud)
+        flash[:error] = ts("You can't nominate tags with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
   
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])

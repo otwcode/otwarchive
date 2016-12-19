@@ -8,21 +8,21 @@ Prompts:
 <% tag_groups = prompt.tag_groups %>
 <% def tag_list(tags) %>
 <%  return nil if !tags || tags.empty? %>
-<%  tags.map{|tag| tag.name}.to_sentence.html_safe %>
+<%  tags.map { |tag| tag.name }.to_sentence.html_safe %>
 <% end %>
 <% fandoms = prompt.any_fandom ? "Any" : tag_list(tag_groups["Fandom"]) %>
 <% chars = prompt.any_character ? "Any" : tag_list(tag_groups["Character"]) %>
 <% ships = prompt.any_relationship ? "Any" : tag_list(tag_groups["Relationship"]) %>
-<% ratings = prompt.any_rating ? "Any" : get_title_string(tag_groups["Rating"]) %>
-<% warnings = tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil %>
-<% categories = tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil %>
-<% atags = tag_list(tag_groups["Freeform"]) %>
+<% ratings = prompt.any_rating ? "Any" : (tag_groups["Rating"] ? get_title_string(tag_groups["Rating"]) : nil) %>
+<% warnings = prompt.any_warning ? "Any" : (tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil) %>
+<% categories = prompt.any_category ? "Any" : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
+<% atags = prompt.any_freeform ? "Any" : tag_list(tag_groups["Freeform"]) %>
 <% otags = prompt.optional_tag_set ? tag_list(prompt.optional_tag_set.tags) : nil %>
 <%= text_divider %>
 
-<%= index+1 %>. <%= prompt.title %>
+<%= index + 1 %>. <%= prompt.title %>
 
-<% if fandoms then %>Fandom: <%= fandoms %><% end %><% if chars %>
+<% if fandoms %>Fandom: <%= fandoms %><% end %><% if chars %>
 Characters: <%= chars %><% end %><% if ships %>
 Relationships: <%= ships %><% end %><% if ratings %>
 Rating: <%= ratings %><% end %><% if warnings %>
@@ -38,7 +38,7 @@ Description:
 
 This assignment is due at: <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
-You can look up this assignment from your archive dashboard at <%= user_assignments_url(@assigned_user) %>.
+You can look up this assignment from your Assignments page at <%= user_assignments_url(@assigned_user) %>.
 <% if @collection && !@collection.assignment_notification.blank? %>
 
 
