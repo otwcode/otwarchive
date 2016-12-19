@@ -4,26 +4,22 @@ Feature: Create and Edit Series
   As a reader
   The index needs to load properly, even for authors with more than ArchiveConfig.ITEMS_PER_PAGE series
 
-  Scenario: Creator adds a work to a new series when the work is first posted
+  Scenario: Creator manually enters a series name to add a work to a new series when the work is first posted
     Given I am logged in as "author"
       And I set up the draft "Sweetie Belle"
     When I fill in "work_series_attributes_title" with "Ponies"
-      And I press "Preview"
-    Then I should see "Part 1 of the Ponies series"
-    When I press "Post"
+    When I press "Post Without Preview"
     Then I should see "Part 1 of the Ponies series" within "div#series"
       And I should see "Part 1 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
 
-  Scenario: Creator adds a work to an existing series when the work is first posted
+  Scenario: Creator selects an existing series name to add a work to an existing series when the work is first posted
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
       And I set up the draft "Starsong"
     When I select "Ponies" from "work_series_attributes_id"
-      And I press "Preview"
-    Then I should see "Part 2 of the Ponies series"
-    When I press "Post"
+      And I press "Post Without Preview"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
@@ -103,9 +99,7 @@ Feature: Create and Edit Series
       And I add the pseud "Pointless Pseud"
       And I set up the draft "Sweetie Belle" using the pseud "Pointless Pseud"
     When I fill in "work_series_attributes_title" with "Ponies"
-      And I press "Preview"
-    Then I should see "Part 1 of the Ponies series"
-    When I press "Post"
+      And I press "Post Without Preview"
     Then I should see "Pointless Pseud"
       And I should see "Part 1 of the Ponies series" within "div#series"
       And I should see "Part 1 of the Ponies series" within "dd.series"
@@ -118,11 +112,10 @@ Feature: Create and Edit Series
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
     When I set up the draft "Starsong" using the pseud "Pointless Pseud"
       And I select "Ponies" from "work_series_attributes_id"
-      And I press "Preview"
+      And I press "Post Without Preview"
     Then I should see "Pointless Pseud"
       And I should see "Part 2 of the Ponies series"
-    When I press "Post"
-      And I view the series "Ponies"
+    When I view the series "Ponies"
     Then I should see "Sweetie Belle"
       And I should see "Starsong"
 
@@ -208,3 +201,21 @@ Feature: Create and Edit Series
       And I follow "Delete Series"
       And I press "Yes, Delete Series"
     Then I should see "Series was successfully deleted."
+
+  Scenario: A work's series information is visible and up to date when previewing the work while posting or editing
+    Given I am logged in as "author"
+      And I add the pseud "Pointless Pseud"
+      And I set up the draft "Sweetie Belle" as part of a series "Ponies"
+    When I press "Preview"
+    Then I should see "Part 1 of the Ponies series"
+    When I press "Post"
+      And I set up the draft "Rainbow Dash" as part of a series "Ponies" using the pseud "Pointless Pseud"
+      And I press "Preview"
+    Then I should see "Pointless Pseud"
+      And I should see "Part 2 of the Ponies series"
+    When I edit the work "Rainbow Dash"
+      And I fill in "work_series_attributes_title" with "Black Beauty"
+      And I press "Preview"
+    Then I should see "Part 2 of the Ponies series" within "dd.series"
+    When "AO3-3455" is fixed
+    # And I should see "Part 1 of the Black Beauty series" within "dd.series"
