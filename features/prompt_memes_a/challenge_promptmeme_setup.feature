@@ -346,30 +346,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
     And I view prompts for "Battle 12"
   Then I should not see "Edit Sign-up"
-  
-  Scenario: Mod can't delete whole signups
-
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  When I am logged in as "mod1"
-  When I start to delete the signup by "myname1"
-  Then I should see "myname1"
-    And I should not see a link "myname1"
-  
-  Scenario: Mod deletes a prompt that doesn't fit the challenge rules
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-	When I add a new prompt to my signup for a prompt meme
-  When I am logged in as "mod1"
-  When I delete the prompt by "myname1"
-  Then I should see "Prompt was deleted"
-    And I should see "Prompts for Battle 12"
-    And I should not see "Sign-ups for Battle 12"
-  #  TODO: And "myname1" should be emailed
-  
+ 
   Scenario: Mod cannot edit someone else's prompt
   
   Given I have Battle 12 prompt meme fully set up
@@ -379,23 +356,6 @@ Feature: Prompt Meme Challenge
     # The next step just takes you to the 'Prompts' page
   When I edit the first prompt
   Then I should not see "Edit Prompt"
-
-  Scenario: User can't delete prompt if they don't have enough
-
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-  When I view prompts for "Battle 12"
-	Then I should not see "Delete"
-  
-  Scenario: User deletes one prompt
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-    And I add a new prompt to my signup for a prompt meme
-  When I delete the prompt by "myname1"
-  Then I should see "Prompt was deleted"
   
   Scenario: Claim an anon prompt
   

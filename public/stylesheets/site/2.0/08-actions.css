@@ -15,6 +15,11 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-align: center;
 }
 
+ul.actions {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
 .actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
@@ -134,18 +139,11 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
   z-index: 99;
   border: 2px solid #bbb;
   margin: auto;
-  padding: 0.375em;
+  padding: 0 0.375em;
   overflow: hidden;
   right: 2.5em;
     box-shadow: 2px 2px 5px #bbb;
     border-radius: 0.15em;
-}
-
-.actions .modifier input, .actions .modifier label {
-  background: none transparent;
-  border: none;
-    border-radius: 0;
-    box-shadow: none;
 }
 
 /* CONTEXTS */
