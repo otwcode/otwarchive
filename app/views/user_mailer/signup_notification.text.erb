@@ -1,6 +1,6 @@
 <% content_for :message do %>
 <%= t('.welcome',
-           login: @user.login ) %>
+           login: @user.login) %>
 
 <%= t('.text.part1',
            activate_account_url: activate_url(id: @user.activation_code)) %>
@@ -10,7 +10,7 @@
 <%= t('.text.part3', 
            faq_url: archive_faqs_url,
            admin_posts_url: admin_posts_url, 
-           contact_support_url: root_url + 'support') %>
+           contact_support_url: new_feedback_report_url) %>
 
 <%= t('.bye') %>
 <% end %>
