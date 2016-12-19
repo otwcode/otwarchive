@@ -7,6 +7,7 @@ Feature: Rearrange works within a series
   Scenario: Rearrange parts of a series.
     Given I am logged in as "author"
       And I post the work "A Bad, Bad Day" as part of a series "Tale of Woe"
+    Then I should see "Part 1 of the Tale of Woe series"
     When I view the series "Tale of Woe"
     Then I should see "A Bad, Bad Day"
     When I post the work "A Bad, Bad Night" as part of a series "Tale of Woe"
