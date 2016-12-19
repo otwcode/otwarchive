@@ -3,11 +3,11 @@
 
   <%= t '.text.part1', open_doors: 'http://opendoors.transformativeworks.org', ao3_root: root_url %>
 
-  <%= t '.text.part2', support: root_url + "support" %>
+  <%= t '.text.part2', support: new_feedback_report_url %>
 
   <%= t '.text.part3' %>
 
-  <%= t '.text.part4', support: root_url + "support" %>
+  <%= t '.text.part4', support: new_feedback_report_url %>
 
   <%= t '.text.part5', email: @external_email %>
   <% @claimed_works.each do |work| %>
@@ -20,7 +20,7 @@
 
   <%= t '.html.part8' %>
 
-  <%= t '.html.part9', support: root_url + "support" %>
+  <%= t '.html.part9', support: new_feedback_report_url %>
  
   <%= t '.html.part10' %>
 <% end %>

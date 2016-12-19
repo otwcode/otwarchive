@@ -56,15 +56,15 @@ en:
           %{archive_name}
     claim_notification:
       subject: "[%{app_name}] Works uploaded"
+      open_doors: "Open Doors"
+      open_doors_faq: "FAQ page"
+      contact_open_doors: "contact Open Doors"
+      ao3: "Archive of Our Own"
+      ao3_news: "AO3 News"
+      tutorials_page: "tutorials page"
+      support: "contact Support"
       html:
         hello: "Hello from the Archive of Our Own!"
-        open_doors: "Open Doors"
-        open_doors_faq: "FAQ page"
-        contact_open_doors: "contact Open Doors"
-        ao3: "Archive of Our Own"
-        ao3_news: "AO3 News"
-        tutorials_page: "tutorials page"
-        support: "contact Support"
         part1: "You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors} into the  %{ao3} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account."
         part2: "You can read announcements about recent archive moves at %{ao3_news}, and find additional information on Open Doors' %{open_doors_faq} or %{tutorial_page}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{support}"
         part3: "If this is a mistake and these are not your works, please don't delete them! Please %{open_doors} and we will sort it out."
