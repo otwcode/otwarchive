@@ -114,11 +114,12 @@ describe WorksController do
   describe "check_import_errors" do
     describe "should return the right error messages" do
       before :all do
-        @user = create(:user, { id: 456 })
-        @archivist = create(:user, { id: 123 })
-        @archivist.roles << Role.new(name: "archivist")
-
         @controller = WorksController.new
+        @user = create(:user)
+      end
+
+      before :each do
+        fake_login_known_user(@user)
       end
 
       def call_import_errors(urls, settings)
@@ -148,9 +149,8 @@ describe WorksController do
       end
 
       it "the current user is NOT an archivist but importing_for_others is turned on" do
-        settings = { importing_for_others: "1" }
+        settings = { importing_for_others: true }
         urls = %w(url1 url2)
-        allow(controller).to receive(:current_user) { @user }
 
         expect(call_import_errors(urls, settings)).to start_with "You may not import stories by other users"
       end
@@ -159,18 +159,19 @@ describe WorksController do
         max = ArchiveConfig.IMPORT_MAX_WORKS
         settings = { importing_for_others: false, import_multiple: "works" }
         urls = Array.new(max + 1) { |i| "url#{i}" }
-        allow(controller).to receive(:current_user) { @user }
 
         expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
       end
 
       it "the current user is an archivist and is importing over the maximum number of works" do
         max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-        settings = { importing_for_others: 0, import_multiple: "works" }
+        settings = { importing_for_others: false, import_multiple: "works" }
         urls = Array.new(max + 1) { |i| "url#{i}" }
-        allow(controller).to receive(:current_user) { @archivist }
+        allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
 
         expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
+
+        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
       end
 
     end
