@@ -3,10 +3,10 @@
 <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
 t('.part1_other',
         title: @work.title,
-        pseud: User.current_user.default_pseud ) :
+        pseud: User.current_user.default_pseud) :
 t('.part1_yourself',
         title: @work.title) %>
-<%= t('.part2', support: t('user_mailer.delete_work_notification.support')+' '+root_url+"support" ) %>
+<%= t('.part2', support: t('.support')+' '+new_feedback_report_url ) %>
 <%= t('.part3') %>
 <% end %>
 
