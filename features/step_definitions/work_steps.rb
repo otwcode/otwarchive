@@ -24,7 +24,7 @@ end
 # the (?: ) construct means: do not use the stuff in () as a capture/match
 # the ()? construct means: the stuff in () is optional
 # This can handle any number of the options being omitted, but you DO have to match in order
-# if you are using more than one of the options. That is, if you are specifying fandom AND freeform AND collection, 
+# if you are using more than one of the options. That is, if you are specifying fandom AND freeform AND collection,
 # it has to be:
 #   with fandom "X" with freeform "Y" in collection "Z"
 # and NOT:
