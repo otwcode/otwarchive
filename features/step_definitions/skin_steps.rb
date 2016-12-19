@@ -133,7 +133,30 @@ When /^I edit my pink header skin to have a purple logo$/ do
   click_button("Update")
 end
 
+When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  skin.in_chooser = true
+  skin.save
+end
+
+When /^the skin "([^\"]*)" is cached$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  skin.cached = true
+  skin.save
+  skin.cache!
+end
+
 ### THEN
+
+Then /^the page should have the cached skin "([^"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  page.should have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+end
+
+Then /^the page should not have the cached skin "([^"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  page.should_not have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+end
 
 Then /^I should see a pink header$/ do
   step %{I should see "#header .primary" within "style"}

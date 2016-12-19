@@ -7,12 +7,7 @@
   <p class="important">
     <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
-  <p>
-    <%= ts("If you have trouble importing from another site, ") %> 
-    <%= link_to ts("please let us know"), new_feedback_report_path %>
-    <%= ts("so we can improve this tool!") %>
-  </p>
-  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/importing-and-mass-editing" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the #{ link_to(ts("Import FAQ"), archive_faqs_path + "/posting-and-editing#importwork") } useful.").html_safe %></p>
 </div>
 
 <!--/descriptions-->
@@ -21,27 +16,27 @@
 <ul class="navigation actions" role="menu">
   <% if @unposted %>
     <li id='restore-link'>
-      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
+      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(action: :new, load_unposted: true) %>
     </li>
   <% end %>
   <li id="form-link">
      <%= link_to( ts("Post New Work Instead?"),
        { url: { controller: :works, action: :new, import: false } },
-       :href => url_for(:controller => :works, :action => :new, :import => nil)) %>
+       :href => url_for(controller: :works, action: :new, import: nil)) %>
   </li>
 </ul>
 <!--/subnav-->
 
 <!-- This partial renders a form for importing a work from an existing URL -->
 
-<%= form_tag url_for(:controller => :works, :action => :import), :class => "import work verbose post" do %>
+<%= form_tag url_for(controller: :works, action: :import), :class => "import work verbose post" do %>
   <fieldset>
     <legend><%= ts("Works URLs") %></legend>
     <dl>
       <dt class="required"><%= label_tag "urls", ts("URLs") + "*" %></dt>
       <dd class="required"><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", rows: 20, cols: 90, "aria-describedby" => "url-field-description" %>
         <p class="footnote" id="url-field-description">
-          <%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong>
+          <%= ts("URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line.</strong>").html_safe %>
         </p>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
@@ -102,8 +97,25 @@
       </dd>
       <dt><%= ts("Override tags and notes") %></dt>
       <dd>
-        <%= check_box_tag "override_tags" %>
-        <%= label_tag "override_tags", ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
+        <ul>
+          <li>
+            <%= check_box_tag "override_tags", 1, false, class: "toggle_formfield", id: "override_tags-options-show" %>
+            <%= label_tag "override_tags-options-show",
+                          ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
+            <ul id="override_tags-options" class="dependent">
+              <li>
+                <%= radio_button_tag "detect_tags", true, true, id: "detect_tags_true" %>
+                <%= label_tag "detect_tags_true",
+                              ts("Use values extracted from the content for blank fields if possible") %>
+              </li>
+              <li>
+                <%= radio_button_tag "detect_tags", false, false, id: "detect_tags_false"  %>
+                <%= label_tag "detect_tags_false",
+                              ts("Do not use values extracted from the content at all; use Archive defaults for blank fields") %>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </dd>
     </dl>
   </fieldset>
@@ -128,4 +140,15 @@
     </p>
   </fieldset>
 
+<% end %>
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j(".toggle_formfield").click(function() {
+        var targetId = $j(this).attr("id").replace("-show", "");
+        toggleFormField(targetId);
+      });
+    })
+  <% end %>
 <% end %>
