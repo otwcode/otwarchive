@@ -6,7 +6,9 @@ Feature: Locked and partially locked series
 
   Scenario: Post a series with a restricted work, then add a draft, then make the draft public and post it
     Given I am logged in as "fandomer"
-      And I post the locked work "Humbug" as part of a series "Antiholidays"
+      And I set up the draft "Humbug" as part of a series "Antiholidays"
+      And I lock the work
+      And I press "Post Without Preview"
     Then I should see "Part 1 of the Antiholidays series"
     When I go to fandomer's series page
     Then I should see "Antiholidays"
