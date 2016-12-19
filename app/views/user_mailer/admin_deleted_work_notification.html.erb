@@ -1,11 +1,11 @@
 <% content_for :message do %>
-  <p><%= t 'user_mailer.admin_deleted_work_notification.hello', user: @user.default_pseud.byline %></p>
+  <p><%= t '.hello', user: @user.default_pseud.byline %></p>
   
-  <p><%= t('user_mailer.admin_deleted_work_notification.html.part1', title: style_bold(@work.title.html_safe)).html_safe %>
+  <p><%= t('.html.part1', title: style_bold(@work.title.html_safe)).html_safe %>
   
-  <p><%= t('user_mailer.admin_deleted_work_notification.html.part2', opendoors_link: opendoors_link(t 'user_mailer.admin_deleted_work_notification.opendoors')).html_safe %>
+  <p><%= t('.html.part2', opendoors_link: opendoors_link(t '.opendoors')).html_safe %>
  
-  <p><%= t('user_mailer.admin_deleted_work_notification.html.part3', abuse_link: abuse_link(t 'user_mailer.admin_deleted_work_notification.abuse_committee' ) ).html_safe %>
+  <p><%= t('.html.part3', abuse_link: abuse_link(t '.abuse_committee' ) ).html_safe %>
   
-  <p><%= t 'user_mailer.admin_deleted_work_notification.bye' %></p>
+  <p><%= t '.bye' %></p>
 <% end %>
