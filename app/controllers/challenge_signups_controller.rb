@@ -11,6 +11,7 @@ class ChallengeSignupsController < ApplicationController
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_filter :check_pseud_ownership, :only => [:create, :update]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -33,8 +34,12 @@ class ChallengeSignupsController < ApplicationController
     false
   end
 
+  def signup_closed_owner?
+    @collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)
+  end
+    
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless @challenge_signup.pseud.user == current_user || signup_closed_owner?
   end
 
   def maintainer_or_signup_owner_only
@@ -62,6 +67,16 @@ class ChallengeSignupsController < ApplicationController
     false
   end
 
+  def check_pseud_ownership
+    if params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
+      # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
+      unless current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
+        flash[:error] = ts("You can't sign up with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
+  
   #### ACTIONS
 
   def index

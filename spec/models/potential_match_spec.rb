@@ -24,23 +24,7 @@ describe PotentialMatch do
   
     it "should report progress" do 
       expect(PotentialMatch.in_progress?(@collection)).to be_truthy
-      expect(PotentialMatch.position(@collection)).to include(@first_signup.pseud.byline)
-      expect(PotentialMatch.progress(@collection)).not_to be == -1
-      expect(PotentialMatch.progress(@collection)).to be == 0
-    end
-    
-    describe "when on the last signup" do
-      before do
-        # manually set to last signup
-        REDIS_GENERAL.set PotentialMatch.progress_key(@collection), @last_signup.id
-      end
-      
-      it "should report more progress" do
-        expect(PotentialMatch.position(@collection)).to include(@last_signup.pseud.byline)
-        expect(PotentialMatch.progress(@collection)).not_to be == -1
-        expect(PotentialMatch.progress(@collection)).not_to be == 0
-        expect(PotentialMatch.progress(@collection)).to be > 0
-      end      
+      expect(PotentialMatch.progress(@collection)).to be == "0.0"
     end
   end  
 end
