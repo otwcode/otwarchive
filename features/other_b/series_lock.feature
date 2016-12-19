@@ -74,14 +74,10 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
     And I should see "Antivalentine"
 
   Scenario: edit a locked work to add it to a series
-    Given I am logged in as "fandomer" with password "password"
-      And basic tags
+    Given I am logged in as "fandomer"
       And I post the locked work "Boohoo"
     When I edit the work "Boohoo"
       And I uncheck "work_restricted"
-      And I check "front-notes-options-show"
-      And I fill in "work_notes" with "Humbugness!"
-      And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "Antiholidays"
       And I press "Preview"
     Then I should see "Preview"
