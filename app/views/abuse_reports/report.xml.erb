@@ -1,20 +1,11 @@
-<bug>
-  <% if @report.description.present? %>
-    <description><%= cdata_section(@report.description.html_safe) %></description>
-  <% end %>
-  <project-id><%= @report.project_id %></project-id>
-  <% if @report.title.present? %>
-    <title><%= cdata_section(@report.title.html_safe) %></title>
-  <% end %>
-  <% if @report.category.present? %>
-    <category-id type='integer'><%= cdata_section(@report.category) %></category-id>
-  <% end %>
-  <% if @report.email.blank? %>
-    <custom-1397>1</custom-1397>
-  <% else %>
-    <custom-1409><%= cdata_section(@report.email) %></custom-1409>
-  <% end %>
-  <% if @report.ip_address.present? %>
-    <custom-1408><%= cdata_section(@report.ip_address) %></custom-1408>
-  <% end %>
-</bug>
+<requests>
+  <row no="1">
+    <fl val="Contact Name"><%= cdata_section(@report.username.present? ? @report.username : "Anonymous user") %></fl>
+    <fl val="Email"><%= cdata_section(@report.email.present? ? @report.email : "do-not-reply@archiveofourown.org") %></fl>
+    <fl val="Subject"><%= cdata_section(@report.title.present? ? "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{@report.title.html_safe}" : "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - No Subject") %></fl>
+    <fl val="Description"><%= cdata_section(@report.description.present? ? @report.description.html_safe : "No comment submitted.") %></fl>
+    <fl val="Language"><%= cdata_section(@report.language.present? ? @report.language : "English") %></fl>
+    <fl val="IP"><%= cdata_section(@report.ip_address.present? ? @report.ip_address : "Unknown IP") %></fl>
+    <fl val="URL"><%= cdata_section(@report.url.present? ? @report.url : "Unknown URL") %></fl>
+  </row>
+</requests>

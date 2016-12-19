@@ -1,26 +1,26 @@
 <% content_for :message do %>
-  <%= t 'user_mailer.claim_notification.text.hello' %>
+  <%= t '.text.hello' %>
 
-  <%= t 'user_mailer.claim_notification.text.part1', open_doors: 'http://opendoors.transformativeworks.org', ao3_root: root_url %>
+  <%= t '.text.part1', open_doors: 'http://opendoors.transformativeworks.org', ao3_root: root_url %>
 
-  <%= t 'user_mailer.claim_notification.text.part2', support: root_url + "support" %>
+  <%= t '.text.part2', support: root_url + "support" %>
 
-  <%= t 'user_mailer.claim_notification.text.part3' %>
+  <%= t '.text.part3' %>
 
-  <%= t 'user_mailer.claim_notification.text.part4', support: root_url + "support" %>
+  <%= t '.text.part4', support: root_url + "support" %>
 
-  <%= t 'user_mailer.claim_notification.text.part5', email: @external_email %>
+  <%= t '.text.part5', email: @external_email %>
   <% @claimed_works.each do |work| %>
     - <%= work.title.html_safe %>  <%= work_url(work) %> <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %>
   <% end %>
 
-  <%= t 'user_mailer.claim_notification.html.part6' %>
+  <%= t '.html.part6' %>
 
-  <%= t 'user_mailer.claim_notification.html.part7' %>
+  <%= t '.html.part7' %>
 
-  <%= t 'user_mailer.claim_notification.html.part8' %>
+  <%= t '.html.part8' %>
 
-  <%= t 'user_mailer.claim_notification.html.part9', support: root_url + "support" %>
+  <%= t '.html.part9', support: root_url + "support" %>
  
-  <%= t 'user_mailer.claim_notification.html.part10' %>
+  <%= t '.html.part10' %>
 <% end %>
