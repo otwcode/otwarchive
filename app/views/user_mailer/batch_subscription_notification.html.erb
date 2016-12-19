@@ -19,18 +19,18 @@
     <% if creation.is_a?(Work) %>
       <%= 
         if this_work.backdate
-          t('user_mailer.batch_subscription_notification.html.work_backdated', byline: byline, title: title, link: link, word_count: word_count).html_safe
+          t('.html.work_backdated', byline: byline, title: title, link: link, word_count: word_count).html_safe
         else
-          t('user_mailer.batch_subscription_notification.html.work_new', byline: byline, title: title, link: link, word_count: word_count).html_safe
+          t('.html.work_new', byline: byline, title: title, link: link, word_count: word_count).html_safe
         end
       %>
     <% else %>
-      <%= t('user_mailer.batch_subscription_notification.html.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
+      <%= t('.html.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
     <% end %>
-    <%= t('user_mailer.batch_subscription_notification.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
+    <%= t('.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
 
     <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-      <%= t 'user_mailer.batch_subscription_notification.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+      <%= t '.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
     <% end %>
     <% unless @seen[this_work.id] %>
       <p>
@@ -72,5 +72,5 @@
 
 
 <% content_for :footer_note do %>
-  <%=t( 'user_mailer.batch_subscription_notification.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))).html_safe %>
+  <%=t( '.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))).html_safe %>
 <% end %>

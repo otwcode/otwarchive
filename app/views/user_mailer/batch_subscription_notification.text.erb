@@ -18,18 +18,18 @@
 <% if creation.is_a?(Work) %>
   <%=
     if this_work.backdate
-     t('user_mailer.batch_subscription_notification.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count )
+     t('.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count )
     else
-      t('user_mailer.batch_subscription_notification.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
+      t('.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
     end
    %>
 <% else %>
-  <%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
+  <%= t '.text.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
 <% end %>
-<%= t 'user_mailer.batch_subscription_notification.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
+<%= t '.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-  <%= t 'user_mailer.batch_subscription_notification.chapter_summary' %> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+  <%= t '.chapter_summary' %> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 <% end %>
 
 <% unless @seen[this_work.id] %>
@@ -44,7 +44,7 @@
 <% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-<%= t 'user_mailer.batch_subscription_notification.summary' %>
+<%= t '.summary' %>
     <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>
@@ -52,5 +52,5 @@
 <% end %><% end %><% end %>
 
 <% content_for :footer_note do %>
-<%= t 'user_mailer.batch_subscription_notification.text.footer', who: @subscription.name, url: polymorphic_url(@subscription.subscribable) %>
+<%= t '.text.footer', who: @subscription.name, url: polymorphic_url(@subscription.subscribable) %>
 <% end %>

@@ -127,6 +127,7 @@
   Then 0 emails should be delivered
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
+    And the email should not contain "translation missing"
     And the email should contain "The First"
     And the email should contain "Another"
     And the email should contain "A Third"
