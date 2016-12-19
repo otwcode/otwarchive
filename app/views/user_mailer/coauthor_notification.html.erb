@@ -1,11 +1,11 @@
 <% content_for :message do %>
   <% creation_type = @creation.class.name.underscore.humanize.downcase %>
 
-  <p><%= t 'user_mailer.coauthor_notification.part1', type: creation_type %></p>
+  <p><%= t ".part1_#{creation_type}" %></p>
 
   <p>
     <i><b><%= style_link(@creation.title, (@creation.class == Series ? series_url(@creation) : work_url(@creation))) %></b></i>
   </p>
 
-  <p><%= t('user_mailer.coauthor_notification.html.part2', edit: style_link(t('user_mailer.coauthor_notification.edit_the', type: creation_type), (@creation.class == Series ? edit_series_url(@creation) : edit_work_url(@creation)))).html_safe %></p>
+  <p><%= t(".html.part2_#{creation_type}", edit: style_link(t(".edit_the_#{creation_type}"), (@creation.class == Series ? edit_series_url(@creation) : edit_work_url(@creation)))).html_safe %></p>
 <% end %>

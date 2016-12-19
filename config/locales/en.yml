@@ -56,12 +56,16 @@ en:
           %{archive_name}
     coauthor_notification:
       subject: "[%{app_name}] Co-Author Notification"
-      edit_the: "Edit the %{type}"
-      part1: "You have been listed as a coauthor on the following %{type}:"
+      edit_the_work: "Edit the work"
+      edit_the_series: "Edit the series"
+      part1_work: "You have been listed as a coauthor on the following work:"
+      part1_series: "You have been listed as a coauthor on the following series:"
       html:
-        part2: "%{edit} to remove yourself as author if you've been added in error or don't want to be listed as an author."
+        part2_work: "%{edit} to remove yourself as author if you've been added in error or don't want to be listed as a creator."
+        part2_series: "%{edit} to remove yourself as author if you've been added in error or don't want to be listed as a creator."
       text:
-        part2: "Edit the %{type} to remove yourself as an author if you've been added in error or don't want to be listed as an author: %{url}"
+        part2_work: "Edit the work to remove yourself as an author if you've been added in error or don't want to be listed as a creator: %{url}"
+        part2_series: "Edit the series to remove yourself as an author if you've been added in error or don't want to be listed as a creator: %{url}"
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
