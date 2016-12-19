@@ -1,11 +1,11 @@
 <% content_for :message do %>
-    <p><%= t('user_mailer.admin_hidden_work_notification.hello', user: @user.default_pseud.byline) %></p>
+    <p><%= t('.hello', user: @user.default_pseud.byline) %></p>
 
-    <p><%= t('user_mailer.admin_hidden_work_notification.html.part1', title: style_link(@work.title.html_safe, work_url(@work)), tos: style_link('user_mailer.admin_hidden_work_notification.tos', tos_url).html_safe).html_safe %> 
+    <p><%= t('.html.part1', title: style_link(@work.title.html_safe, work_url(@work)), tos: style_link('.tos', tos_url).html_safe).html_safe %> 
 
-    <p><%=t('user_mailer.admin_hidden_work_notification.part2') %></p>
+    <p><%= t('.part2') %></p>
 
-    <p><%= t('user_mailer.admin_hidden_work_notification.html.part3', abuse: abuse_link(t('user_mailer.admin_hidden_work_notification.abuse'))).html_safe %></p>
-    <p><%= t('user_mailer.admin_hidden_work_notification.sincerely') %></p>
-    <p><%= style_bold(t('user_mailer.admin_hidden_work_notification.ao3_abuse')) %></p>
+    <p><%= t('.html.part3', abuse: abuse_link(t('.abuse'))).html_safe %></p>
+    <p><%= t('.sincerely') %></p>
+    <p><%= style_bold(t('.ao3_abuse')) %></p>
 <% end %>
