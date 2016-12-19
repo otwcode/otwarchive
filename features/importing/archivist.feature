@@ -34,6 +34,7 @@ Feature: Archivist bulk imports
     And I should see "rebecca2525 [archived by archivist]"
   When the system processes jobs
   Then 1 email should be delivered to "rebecca2525@livejournal.com"
+    And the email should not contain "translation missing"
     And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
       
   Scenario: Import multiple works as an archivist
@@ -55,6 +56,7 @@ Feature: Archivist bulk imports
       And I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
       And the system processes jobs
     Then 1 email should be delivered to "ao3testing@dreamwidth.org"
+      And the email should not contain "translation missing"
 
   Scenario: Importing for an existing Archive author should have correct byline and email
 
@@ -70,6 +72,7 @@ Feature: Archivist bulk imports
     And I should not see "[archived by archivist]"
     And 1 email should be delivered to "ao3testing@dreamwidth.org"
     And the email should contain claim information
+    And the email should not contain "translation missing"
 
   Scenario: Importing sends an email to a guessed address if it can't find the author
 
@@ -82,6 +85,7 @@ Feature: Archivist bulk imports
   When the system processes jobs
   # Importer assumes dreamwidth email for works from there
   Then 1 email should be delivered to "ao3testing@dreamwidth.org"
+    And the email should not contain "translation missing"
     And the email should contain invitation warnings from "archivist" for work "Story" in fandom "Testing"
 
   Scenario: Import a single work as an archivist specifying as external author
@@ -97,6 +101,7 @@ Feature: Archivist bulk imports
       And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When the system processes jobs
     Then 1 email should be delivered to "random@example.com"
+      And the email should not contain "translation missing"
 
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
 
@@ -108,7 +113,8 @@ Feature: Archivist bulk imports
     Then I should see import confirmation
       And I should see "ra_ndom-test n@me."
     When the system processes jobs
-      Then 1 email should be delivered to "random@example.com"
+    Then 1 email should be delivered to "random@example.com"
+      And the email should not contain "translation missing"
 
   Scenario: Claim a work and create a new account in response to an invite
 
@@ -120,6 +126,7 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
       And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
+      And the email should not contain "translation missing"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
@@ -141,6 +148,7 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
       And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
+      And the email should not contain "translation missing"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
@@ -165,6 +173,7 @@ Feature: Archivist bulk imports
       And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
+      And the email should not contain "translation missing"
     When I am logged out
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
@@ -188,6 +197,7 @@ Feature: Archivist bulk imports
       And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
+      And the email should not contain "translation missing"
     When I am logged out
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
