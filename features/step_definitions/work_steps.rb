@@ -80,7 +80,7 @@ end
 # To test posting after preview, use: Given the draft "Foo"
 # Then use: When I post the work "Foo"
 # and the above step
-Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with freeform "([^"]*)")?(?: with category "([^"]*)")?(?: in (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with freeform "([^"]*)")?(?: with category "([^"]*)")?(?: in (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
   step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
   click_button("Preview")
 end
