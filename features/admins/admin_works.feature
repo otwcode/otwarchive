@@ -14,6 +14,7 @@ Feature: Admin Actions for Works and Bookmarks
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
+      And the email should not contain "translation missing"
       And the email should contain "We are investigating the matter and will contact you"
 
   Scenario: Can unhide works
