@@ -81,7 +81,7 @@ end
 # Then use: When I post the work "Foo"
 # and the above step
 Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with freeform "([^"]*)")?(?: with category "([^"]*)")?(?: in (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
-  step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+  step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
   click_button("Preview")
 end
 
