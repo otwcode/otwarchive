@@ -88,6 +88,7 @@ Feature: Create Works
     Then I should see "Work was successfully posted."
       And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
     When I go to the works page
