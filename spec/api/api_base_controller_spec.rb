@@ -5,10 +5,6 @@ include ApiHelper
 
 describe "Base API Controller" do
 
-  before do
-    allow(User).to receive(:is_archivist?).and_return(true)
-  end
-
   before(:each) do
     @under_test = Api::V1::BaseController.new
   end
@@ -43,15 +39,9 @@ describe "Base API Controller" do
   end
 
   describe "batch_errors with a valid pseud" do
-    # Override is_archivist so all users are archivists from this point on
-    class User < ActiveRecord::Base
-      def is_archivist?
-        true
-      end
-    end
-
     before(:each) do
       @user = create(:user)
+      @user.roles << Role.new(name: "archivist")
     end
 
     after(:each) do
