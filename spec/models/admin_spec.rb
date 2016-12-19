@@ -68,6 +68,5 @@ describe Admin, :ready do
     it "is invalid if email already exists" do
       expect(build(:admin, email: existing_user.email)).to be_invalid
     end
-
-  end
+   end
 end
