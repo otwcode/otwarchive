@@ -6,7 +6,7 @@ t('.part1_other',
         pseud: User.current_user.default_pseud ) :
 t('.part1_yourself',
         title: @work.title) %>
-<%= t('.part2', support: support_url ) %></p>
+<%= t('.part2', support: t('user_mailer.delete_work_notification.support')+' '+root_url+"support" ) %>
 <%= t('.part3') %>
 <% end %>
 
