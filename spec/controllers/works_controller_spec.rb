@@ -2,11 +2,87 @@ require 'spec_helper'
 
 describe WorksController do
   include LoginMacros
-  
+
+  def it_redirects_to_user_login
+    expect(response).to have_http_status(:redirect)
+    expect(response).to redirect_to new_user_session_path
+  end
+
+  describe "before_filter #clean_work_search_params" do
+    let(:params) { nil }
+
+    context "when no work search parameters are given" do
+      it "redirects to the login screen when no user is logged in" do
+        get :clean_work_search_params, params
+        it_redirects_to_user_login
+      end
+
+      it "returns a nil" do
+        fake_login
+        controller.params = params
+        controller.clean_work_search_params
+        expect(controller.params[:work_search]).to be_nil
+      end
+    end
+
+    context "when search parameters are empty" do
+      let(:params) { { work_search: [] } }
+
+      before do
+        fake_login
+      end
+
+      it "returns a RecordNotFound exception" do
+        controller.params = params
+        controller.clean_work_search_params
+        expect(controller.params[:work_search]).to be_empty
+      end
+    end
+
+    context "when search parameters are provided" do
+      it "should escape less and greater than in query" do
+
+        [
+          { params: "< 5 words", expected: "&lt; 5 words", message: "Should escape <" },
+          { params: "> 5 words", expected: "&gt; 5 words", message: "Should escape >" },
+        ].each do |settings|
+          fake_login
+          controller.params = { work_search: { query: settings[:params] } }
+          controller.clean_work_search_params
+          expect(controller.params[:work_search][:query])
+            .to eq(settings[:expected]), settings[:message]
+        end
+      end
+
+      it "should convert 'word' to 'word_count'" do
+        controller.params = { work_search: { query: "word:5" } }
+        controller.clean_work_search_params
+        expect(controller.params[:work_search][:word_count]).to eq("5")
+      end
+
+      it "should convert 'words' to 'word_count'" do
+        controller.params = { work_search: { query: "words:5" } }
+        controller.clean_work_search_params
+        expect(controller.params[:work_search][:word_count]).to eq("5")
+      end
+
+      it "should convert 'hits' queries to 'hits'"
+
+      it "should convert other queries to (pluralized term)_count" do
+        %w(kudo comment bookmark).each do |term|
+          controller.params = { work_search: { query: "#{term}:5" } }
+          controller.clean_work_search_params
+          expect(controller.params[:work_search]["#{term.pluralize}_count"])
+            .to eq("5"), "Search term '#{term}' should become #{term.pluralize}_count key"
+        end
+      end
+    end
+  end
+
   describe "new" do
     it "should not return the form for anyone not logged in" do
       get :new
-      expect(response).to redirect_to new_user_session_path
+      it_redirects_to_user_login
     end
     
     it "should render the form if logged in" do
@@ -34,7 +110,7 @@ describe WorksController do
     end
   end
   
-  describe "index" do
+  describe "GET #index" do
     before do
       @fandom = FactoryGirl.create(:fandom)
       @work = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name)
@@ -109,6 +185,7 @@ describe WorksController do
     end
 
   end
+
 
   # Method tests
   describe "check_import_errors" do
