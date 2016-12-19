@@ -18,8 +18,7 @@ Feature: Locked and partially locked series
     Then I should see "Antiholidays"
     When I view the series "Antiholidays"
     Then I should see "Humbug"
-    When I am logged out
-      And I am logged in as "fandomer"
+    When I am logged in as "fandomer"
       And I set up the draft "Antivalentine" as part of a series "Antiholidays"
       And I check "work_restricted"
       And I press "Preview"
@@ -31,7 +30,7 @@ Feature: Locked and partially locked series
     When I view the work "Humbug"
     Then I should not see "»" within "dd"
     When I edit the work "Antivalentine"
-      And I uncheck "work_restricted"
+      And I unlock the work
       And I press "Preview"
     Then I should see "Part 2 of the Antiholidays series"
     When I press "Post"
