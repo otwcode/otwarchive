@@ -25,8 +25,7 @@ class Admin::SettingsController < ApplicationController
       :invite_from_queue_frequency, :days_to_purge_unactivated, :last_updated_by,
       :invite_from_queue_at, :suspend_filter_counts, :suspend_filter_counts_at,
       :enable_test_caching, :cache_expiration, :tag_wrangling_off, :guest_downloading_off,
-      :default_skin_id, :stats_updated_at, :disable_filtering, :request_invite_enabled,
-      :creation_requires_invite
+      :disable_filtering, :request_invite_enabled, :creation_requires_invite
     )
   end
 end
