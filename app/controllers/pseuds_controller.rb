@@ -151,8 +151,8 @@ class PseudsController < ApplicationController
 
   def pseud_params
     params.require(:pseud).permit(
-      :user_id, :name, :description, :is_default, :icon_file_name, :icon_content_type,
-      :icon_file_size, :icon_updated_at, :icon_alt_text, :delta, :icon_comment_text
+      :user_id, :name, :description, :is_default, :icon, :icon_file_name, :icon_content_type,
+      :icon_file_size, :icon_alt_text, :icon_comment_text, :delta
     )
   end
 
