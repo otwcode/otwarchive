@@ -16,9 +16,13 @@ Feature: Admin Actions to Post Known Issues
       And I should see "First known problem"
 
   Scenario: Edit known issues
-
     Given I have posted known issues
     When I edit known issues
     Then I should see "Known issue was successfully updated"
       And I should not see "First known problem"
       And I should see "This is a bit of a problem, and this is too"
+
+  Scenario: Delete known issues
+    Given I have posted known issues
+    When I delete known issues
+    Then I should not see "First known problem"
