@@ -8,8 +8,7 @@ describe "API WorksController - Create works" do
   describe "API import with a valid archivist" do
     before :all do
       mock_external
-      @user = create(:user)
-      @user.roles << Role.new(name: "archivist")
+      @user = create_archivist
     end
 
     after :all do

@@ -352,6 +352,17 @@ describe WorksController do
         allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
       end
 
+      it "the current user is an archivist and is importing over the maximum number of chapters" do
+        max = ArchiveConfig.IMPORT_MAX_CHAPTERS
+        settings = { importing_for_others: false, import_multiple: "chapters" }
+        urls = Array.new(max + 1) { |i| "url#{i}" }
+        allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
+
+        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
+
+        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
+      end
+
     end
   end
 end

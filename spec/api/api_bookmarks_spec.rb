@@ -22,8 +22,7 @@ describe "API BookmarksController" do
 
   before do
     mock_external
-    @user = create(:user)
-    @user.roles << Role.new(name: "archivist")
+    @user = create_archivist
   end
 
   after do
@@ -32,6 +31,7 @@ describe "API BookmarksController" do
   end
 
   context "Valid API bookmark import" do
+
     it "should return 200 OK when all bookmarks are created" do
       post "/api/v1/bookmarks/import",
            { archivist: @user.login,
