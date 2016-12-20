@@ -1,26 +1,26 @@
 <% content_for :message do %>
-  <%= t '.hello' %>
+<%= t '.hello' %>
 
-  <%= t '.text.part1', open_doors: 'http://opendoors.transformativeworks.org', ao3_root: root_url %>
+<%= t '.text.part1', open_doors: 'http://opendoors.transformativeworks.org', ao3_root: root_url %>
 
-  <%= t '.text.part2', support: new_feedback_report_url %>
+<%= t '.text.part2', support: new_feedback_report_url %>
 
-  <%= t '.text.part3' %>
+<%= t '.text.part3' %>
 
-  <%= t '.text.part4', support: new_feedback_report_url %>
+<%= t '.text.part4', support: new_feedback_report_url %>
 
-  <%= t '.text.part5', email: @external_email %>
-  <% @claimed_works.each do |work| %>
-    - <%= work.title.html_safe %>  <%= work_url(work) %> <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %>
-  <% end %>
+<%= t '.text.part5', email: @external_email %>
+<% @claimed_works.each do |work| %>
+  - <%= work.title.html_safe %>  <%= work_url(work) %> <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %>
+<% end %>
 
-  <%= t '.html.part6' %>
+<%= t '.text.part6' %>
 
-  <%= t '.html.part7' %>
+<%= t '.text.part7' %>
 
-  <%= t '.html.part8' %>
+<%= t '.text.part8' %>
 
-  <%= t '.html.part9', support: new_feedback_report_url %>
+<%= t '.text.part9', support: new_feedback_report_url %>
  
-  <%= t '.html.part10' %>
+<%= t '.text.part10' %>
 <% end %>
