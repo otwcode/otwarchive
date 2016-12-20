@@ -1,7 +1,7 @@
 <% content_for :message do %>
     <p><%= t('.hello', user: @user.default_pseud.byline) %></p>
 
-    <p><%= t('.html.part1', title: style_link(@work.title.html_safe, work_url(@work)), tos: style_link('.tos', tos_url).html_safe).html_safe %> 
+    <p><%= t('.html.part1', title: style_link(@work.title.html_safe, work_url(@work)), tos: style_link('.tos', tos_url).html_safe).html_safe %></p>
 
     <p><%= t('.part2') %></p>
 

@@ -66,7 +66,7 @@ en:
         part1: "Your work <i>%{title}</i> has been reported as being in violation of the Archive of Our Own's %{tos}."
         part3: "If you have any questions, please %{abuse}."
       text:
-        part1: "Your work %{title} has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (%{tos_url})"
+        part1: "Your work %{title} has been been reported as being in violation of the Archive of Our Own's Terms of Service (%{tos_url})."
         part3: "If you have any questions, please contact our Abuse Team (%{abuse})"
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
