@@ -18,7 +18,6 @@ Feature: Admin Actions to Post Known Issues
       And I follow "Known Issues" within "#main"
       And I follow "Show"
     Then I should see "First known problem"
-      And I should not see "Show"
 
   Scenario: Edit known issues
     Given I have posted known issues
