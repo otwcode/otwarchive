@@ -11,6 +11,11 @@ describe WorksController do
   describe "before_filter #clean_work_search_params" do
     let(:params) { nil }
 
+    def call_with_params(params)
+      controller.params = { work_search: params }
+      controller.clean_work_search_params
+    end
+
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params
@@ -26,55 +31,151 @@ describe WorksController do
     end
 
     context "when search parameters are empty" do
-      let(:params) { { work_search: [] } }
-
-      before do
-        fake_login
-      end
+      let(:params) { [] }
 
       it "returns a RecordNotFound exception" do
-        controller.params = params
-        controller.clean_work_search_params
+        call_with_params params
         expect(controller.params[:work_search]).to be_empty
       end
     end
 
-    context "when search parameters are provided" do
+    context "when the query contains countable search parameters" do
       it "should escape less and greater than in query" do
-
         [
           { params: "< 5 words", expected: "&lt; 5 words", message: "Should escape <" },
           { params: "> 5 words", expected: "&gt; 5 words", message: "Should escape >" },
         ].each do |settings|
-          fake_login
-          controller.params = { work_search: { query: settings[:params] } }
-          controller.clean_work_search_params
+          call_with_params({ query: settings[:params] })
           expect(controller.params[:work_search][:query])
             .to eq(settings[:expected]), settings[:message]
         end
       end
 
       it "should convert 'word' to 'word_count'" do
-        controller.params = { work_search: { query: "word:5" } }
-        controller.clean_work_search_params
-        expect(controller.params[:work_search][:word_count]).to eq("5")
+        call_with_params({ query: "word:6" })
+        expect(controller.params[:work_search][:word_count]).to eq("6")
       end
 
       it "should convert 'words' to 'word_count'" do
-        controller.params = { work_search: { query: "words:5" } }
-        controller.clean_work_search_params
-        expect(controller.params[:work_search][:word_count]).to eq("5")
+        call_with_params({ query: "words:7" })
+        expect(controller.params[:work_search][:word_count]).to eq("7")
       end
 
-      it "should convert 'hits' queries to 'hits'"
+      it "should convert 'hits' queries to 'hits'" do
+        call_with_params({ query: "hits:8" })
+        expect(controller.params[:work_search][:hits]).to eq("8")
+      end
 
       it "should convert other queries to (pluralized term)_count" do
         %w(kudo comment bookmark).each do |term|
-          controller.params = { work_search: { query: "#{term}:5" } }
-          controller.clean_work_search_params
+          call_with_params({ query: "#{term}:9" })
           expect(controller.params[:work_search]["#{term.pluralize}_count"])
-            .to eq("5"), "Search term '#{term}' should become #{term.pluralize}_count key"
+            .to eq("9"), "Search term '#{term}' should become #{term.pluralize}_count key"
         end
+      end
+    end
+
+    context "when sort parameters are provided" do
+      it "should convert variations on 'sorted by: X' into :sort_column key" do
+        [
+          "sort by: words",
+          "sorted by: words",
+          "sorted: words",
+          "sort: words",
+          "sort by < words",
+          "sort by > words",
+          "sort by = words"
+        ].each do |query|
+          call_with_params({ query: query })
+          expect(controller.params[:work_search][:sort_column])
+            .to eq("word_count"), "Sort command '#{query}' should be converted to :sort_column"
+        end
+      end
+
+      it "should convert variations on sort columns to column name" do
+        [
+          { query: "sort by: word count", expected: "word_count"},
+          { query: "sort by: words", expected: "word_count"},
+          { query: "sort by: word", expected: "word_count"},
+          { query: "sort by: author", expected: "authors_to_sort_on"},
+          { query: "sort by: title", expected: "title_to_sort_on"},
+          { query: "sort by: date", expected: "created_at"},
+          { query: "sort by: date posted", expected: "created_at"},
+          { query: "sort by: hits", expected: "hits"},
+          { query: "sort by: kudos", expected: "kudos_count"},
+          { query: "sort by: comments", expected: "comments_count"},
+          { query: "sort by: bookmarks", expected: "bookmarks_count"},
+        ].each do |settings|
+          call_with_params({ query: settings[:query] })
+          actual = controller.params[:work_search][:sort_column]
+          expect(actual)
+            .to eq(settings[:expected]),
+                "Query '#{settings[:query]}' should be converted to :sort_column '#{settings[:expected]}' but is '#{actual}'"
+        end
+      end
+
+      it "should convert 'ascending' or '>' into :sort_direction key 'asc'" do
+        [
+          "sort > word_count",
+          "sort: word_count ascending",
+          "sort: hits ascending",
+        ].each do |query|
+          call_with_params({ query: query })
+          expect(controller.params[:work_search][:sort_direction]).to eq("asc")
+        end
+      end
+
+      it "should convert 'descending' or '<' into :sort_direction key 'desc'" do
+        [
+          "sort < word_count",
+          "sort: word_count descending",
+          "sort: hits descending",
+        ].each do |query|
+          call_with_params({ query: query })
+          expect(controller.params[:work_search][:sort_direction]).to eq("desc")
+        end
+      end
+
+      # The rest of these are probably bugs
+      it "returns no sort column if there is NO punctuation after 'sort by' clause" do
+        call_with_params({ query: "sort by word count" })
+        expect(controller.params[:work_search][:sort_column]).to be_nil
+      end
+
+      it "can't search by date updated" do
+        [
+          { query: "sort by: date updated", expected: "revised_at"},
+        ].each do |settings|
+          call_with_params({ query: settings[:query] })
+          expect(controller.params[:work_search][:sort_column]).to eq("created_at") # should be revised_at
+        end
+      end
+
+      it "can't sort ascending if more than one word follows the colon" do
+        [
+          "sort by: word count ascending",
+        ].each do |query|
+          call_with_params({ query: query })
+          expect(controller.params[:work_search][:sort_direction]).to be_nil
+        end
+      end
+    end
+
+    context "when the query contains categories" do
+      it "surrounds categories in quotes" do
+        [
+          { query: "M/F sort by: comments", expected: "M/F "},
+          { query: "f/f Scully/Reyes", expected: "\"f/f\" Scully/Reyes"},
+        ].each do |settings|
+          call_with_params({ query: settings[:query] })
+          expect(controller.params[:work_search][:query]).to eq(settings[:expected])
+        end
+      end
+
+      it "surrounds categories in quotes even when it shouldn't (AO3-3576)" do
+        query = "sam/frodo sort by: word"
+        call_with_params({ query: query })
+        expect(controller.params[:work_search][:query]).to eq("sa\"m/f\"rodo ")
       end
     end
   end
