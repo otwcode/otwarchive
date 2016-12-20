@@ -107,18 +107,18 @@ end
 
 Given /^I have posted known issues$/ do
   step(%{I am logged in as an admin})
-    step(%{I follow "Admin Posts"})
-    step(%{I follow "Known Issues" within "#main"})
-    step(%{I follow "make a new known issues post"})
-    step(%{I fill in "known_issue_title" with "First known problem"})
-    step(%{I fill in "content" with "This is a bit of a problem"})
-    step(%{I press "Post"})
+  step(%{I follow "Admin Posts"})
+  step(%{I follow "Known Issues" within "#main"})
+  step(%{I follow "make a new known issues post"})
+  step(%{I fill in "known_issue_title" with "First known problem"})
+  step(%{I fill in "content" with "This is a bit of a problem"})
+  step(%{I press "Post"})
 end
 
 Given /^I have posted an admin post$/ do
   step("I am logged in as an admin")
-    step("I make an admin post")
-    step("I am logged out as an admin")
+  step("I make an admin post")
+  step("I am logged out as an admin")
 end
 
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
@@ -261,19 +261,19 @@ end
 
 When /^I edit known issues$/ do
   step(%{I am logged in as an admin})
-    step(%{I follow "Admin Posts"})
-    step(%{I follow "Known Issues" within "#main"})
-    step(%{I follow "Edit"})
-    step(%{I fill in "known_issue_title" with "More known problems"})
-    step(%{I fill in "content" with "This is a bit of a problem, and this is too"})
-    step(%{I press "Post"})
+  step(%{I follow "Admin Posts"})
+  step(%{I follow "Known Issues" within "#main"})
+  step(%{I follow "Edit"})
+  step(%{I fill in "known_issue_title" with "More known problems"})
+  step(%{I fill in "content" with "This is a bit of a problem, and this is too"})
+  step(%{I press "Post"})
 end
 
 When /^I delete known issues$/ do
   step(%{I am logged in as an admin})
-    step(%{I follow "Admin Posts"})
-    step(%{I follow "Known Issues" within "#main"})
-    step(%{I follow "Delete"})
+  step(%{I follow "Admin Posts"})
+  step(%{I follow "Known Issues" within "#main"})
+  step(%{I follow "Delete"})
 end
 
 When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
