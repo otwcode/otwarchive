@@ -289,31 +289,30 @@ describe WorksController do
 
   describe "GET #import" do
     describe "should return the right error messages" do
-      let(:user) { create(:user) }
-
-      before do
-        fake_login_known_user(user)
-      end
-
-      it "when urls are empty" do
-        params = { urls: "" }
-        get :import, params
-        expect(flash[:error]).to eq "Did you want to enter a URL?"
-      end
-
-      it "there is an external author name but importing_for_others is NOT turned on" do
-        params = { urls: "url1, url2", external_author_name: "Foo", importing_for_others: false }
-        get :import, params
-        expect(flash[:error]).to start_with "You have entered an external author name"
-      end
-
-      it "there is an external author email but importing_for_others is NOT turned on" do
-        params = { urls: "url1, url2", external_author_email: "Foo", importing_for_others: false }
-        get :import, params
-        expect(flash[:error]).to start_with "You have entered an external author name"
-      end
-
       context "the current user is NOT an archivist" do
+        let(:user) { create(:user) }
+
+        before do
+          fake_login_known_user(user)
+        end
+
+        it "when urls are empty" do
+          params = { urls: "" }
+          get :import, params
+          expect(flash[:error]).to eq "Did you want to enter a URL?"
+        end
+
+        it "there is an external author name but importing_for_others is NOT turned on" do
+          params = { urls: "url1, url2", external_author_name: "Foo", importing_for_others: false }
+          get :import, params
+          expect(flash[:error]).to start_with "You have entered an external author name"
+        end
+
+        it "there is an external author email but importing_for_others is NOT turned on" do
+          params = { urls: "url1, url2", external_author_email: "Foo", importing_for_others: false }
+          get :import, params
+          expect(flash[:error]).to start_with "You have entered an external author name"
+        end
 
         it "should error when importing_for_others is turned on" do
           params = { urls: "url1, url2", importing_for_others: true }
@@ -333,7 +332,7 @@ describe WorksController do
       context "the current user is an archivist" do
         let(:archivist) { create_archivist }
 
-        before do
+        before :each do
           fake_login_known_user(archivist)
         end
 
