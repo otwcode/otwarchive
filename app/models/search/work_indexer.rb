@@ -15,7 +15,6 @@ class WorkIndexer < Indexer
           creators: {
             type: 'string',
             analyzer: 'simple',
-            index_name: 'creator'
           },
           tag: {
             type: 'string',
@@ -35,9 +34,14 @@ class WorkIndexer < Indexer
           },
           work_types: {
             type: 'string',
-            index_name: 'work_type',
             index: 'not_analyzed',
-          }
+          },
+          posted: { type: 'boolean' },
+          restricted: { type: 'boolean' },
+          hidden_by_admin: { type: 'boolean' },
+          complete: { type: 'boolean' },
+          in_anon_collection: { type: 'boolean' },
+          in_unrevealed_collection: { type: 'boolean' }
         }
       }
     }
@@ -48,7 +52,9 @@ class WorkIndexer < Indexer
       root: false,
       except: [
         :delta, :summary_sanitizer_version, :notes_sanitizer_version,
-        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old],
+        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old,
+        :anon_commenting_disabled, :ip_address, :spam, :spam_checked_at, 
+        :moderated_commenting_enabled],
       methods: [
         :rating_ids,
         :warning_ids,
@@ -60,6 +66,7 @@ class WorkIndexer < Indexer
         :filter_ids,
         :tag,
         :pseud_ids,
+        :user_ids,
         :collection_ids,
         :hits,
         :comments_count,

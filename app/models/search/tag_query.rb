@@ -1,5 +1,9 @@
 class TagQuery < Query
 
+  def klass
+    'Tag'
+  end
+
   def index_name
     TagIndexer.index_name
   end
