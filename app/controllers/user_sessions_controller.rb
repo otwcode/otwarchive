@@ -23,7 +23,7 @@ class UserSessionsController < ApplicationController
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
         REDIS_GENERAL.sadd("last_login_list", @current_user.id)
-        REDIS_GENERAL.set("last_login_#{ @current_user.id }", Time.now.utc)
+        REDIS_GENERAL.set("last_login_#{@current_user.id}", Time.now.utc)
         redirect_back_or_default(@current_user)
       else
         if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
