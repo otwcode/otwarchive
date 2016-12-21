@@ -168,10 +168,6 @@ dl.stats + .landmark + .actions {
   float: none;
 }
 
-.chapter .secondary, .download .secondary {
-  top: auto;
-}
-
 .dashboard .landmark {
   clear: right;
 }
