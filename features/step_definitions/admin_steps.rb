@@ -322,8 +322,8 @@ Then (/^I should not see a translated admin post$/) do
 end
 
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step%{I am logged out}
-  step%{I should not see the hidden work "#{work}" by "#{user}"}
+  step %{I am logged out}
+  step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
 Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
