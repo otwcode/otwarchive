@@ -43,8 +43,6 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
-    when /^the nominate tagset page$/i
-      edit_tag_set_nomination_path
     when /^the unassigned fandoms page$/i
       unassigned_fandoms_path
     when /^the login page$/i
