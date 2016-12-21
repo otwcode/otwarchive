@@ -287,82 +287,72 @@ describe WorksController do
 
   end
 
-
-  # Method tests
-  describe "check_import_errors" do
+  describe "GET #import" do
     describe "should return the right error messages" do
-      before :all do
-        @controller = WorksController.new
-        @user = create(:user)
-      end
+      let(:user) { create(:user) }
 
-      before :each do
-        fake_login_known_user(@user)
-      end
-
-      def call_import_errors(urls, settings)
-        @controller.instance_variable_set(:@urls, urls)
-        @controller.instance_eval { check_import_errors(settings) }
+      before do
+        fake_login_known_user(user)
       end
 
       it "when urls are empty" do
-        settings = {}
-        urls = []
-
-        expect(call_import_errors(urls, settings)).to eq "Did you want to enter a URL?"
+        params = { urls: "" }
+        get :import, params
+        expect(flash[:error]).to eq "Did you want to enter a URL?"
       end
 
       it "there is an external author name but importing_for_others is NOT turned on" do
-        settings = { external_author_name: "Foo", importing_for_others: false }
-        urls = %w(url1 url2)
-
-        expect(call_import_errors(urls, settings)).to start_with "You have entered an external author name"
+        params = { urls: "url1, url2", external_author_name: "Foo", importing_for_others: false }
+        get :import, params
+        expect(flash[:error]).to start_with "You have entered an external author name"
       end
 
       it "there is an external author email but importing_for_others is NOT turned on" do
-        settings = { external_author_email: "Foo", importing_for_others: false }
-        urls = %w(url1 url2)
-
-        expect(call_import_errors(urls, settings)).to start_with "You have entered an external author name"
+        params = { urls: "url1, url2", external_author_email: "Foo", importing_for_others: false }
+        get :import, params
+        expect(flash[:error]).to start_with "You have entered an external author name"
       end
 
-      it "the current user is NOT an archivist but importing_for_others is turned on" do
-        settings = { importing_for_others: true }
-        urls = %w(url1 url2)
+      context "the current user is NOT an archivist" do
 
-        expect(call_import_errors(urls, settings)).to start_with "You may not import stories by other users"
+        it "should error when importing_for_others is turned on" do
+          params = { urls: "url1, url2", importing_for_others: true }
+          get :import, params
+          expect(flash[:error]).to start_with "You may not import stories by other users"
+        end
+
+        it "should error when importing over the maximum number of works" do
+          max = ArchiveConfig.IMPORT_MAX_WORKS
+          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
+          params = { urls: urls, importing_for_others: false, import_multiple: "works" }
+          get :import, params
+          expect(flash[:error]).to start_with "You cannot import more than #{max}"
+        end
       end
 
-      it "the current user is NOT an archivist and is importing over the maximum number of works" do
-        max = ArchiveConfig.IMPORT_MAX_WORKS
-        settings = { importing_for_others: false, import_multiple: "works" }
-        urls = Array.new(max + 1) { |i| "url#{i}" }
+      context "the current user is an archivist" do
+        let(:archivist) { create_archivist }
 
-        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
+        before do
+          fake_login_known_user(archivist)
+        end
+
+        it "should error when importing over the maximum number of works" do
+          max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
+          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
+          params = { urls: urls, importing_for_others: false, import_multiple: "works" }
+          get :import, params
+          expect(flash[:error]).to start_with "You cannot import more than #{max}"
+        end
+
+        it "should error when importing over the maximum number of chapters" do
+          max = ArchiveConfig.IMPORT_MAX_CHAPTERS
+          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
+          params = { urls: urls, importing_for_others: false, import_multiple: "chapters" }
+          get :import, params
+          expect(flash[:error]).to start_with "You cannot import more than #{max}"
+        end
       end
-
-      it "the current user is an archivist and is importing over the maximum number of works" do
-        max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-        settings = { importing_for_others: false, import_multiple: "works" }
-        urls = Array.new(max + 1) { |i| "url#{i}" }
-        allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-
-        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
-
-        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
-      end
-
-      it "the current user is an archivist and is importing over the maximum number of chapters" do
-        max = ArchiveConfig.IMPORT_MAX_CHAPTERS
-        settings = { importing_for_others: false, import_multiple: "chapters" }
-        urls = Array.new(max + 1) { |i| "url#{i}" }
-        allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-
-        expect(call_import_errors(urls, settings)).to start_with "You cannot import more than #{max}"
-
-        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
-      end
-
     end
   end
 end

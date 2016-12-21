@@ -67,10 +67,4 @@ stubbed response", headers: {})
     WebMock.stub_request(:any, /bar/).
       to_return(status: 404, headers: {})
   end
-
-  def create_archivist
-    user = create(:user)
-    user.roles << Role.new(name: "archivist")
-    user
-  end
 end
