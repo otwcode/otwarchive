@@ -89,7 +89,7 @@ Feature: creating and editing tag sets
     And I follow "Nominate"
     And I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
   When I follow "Edit"
-  Then I should see "Floobry" within ".added"
+  Then I should see "Floobry" within "li"
   When I press "Submit"
   Then I should see "Your nominations were successfully updated"
   Given I am logged in as "tagsetter"
@@ -107,7 +107,7 @@ Feature: creating and editing tag sets
     And I follow "Edit"
   Then I should see "Floobry"
     And I should see "This nomination has been approved!"
-    And I should not see "Floobry" within ".added"
+    And I should not see "Floobry" within "li"
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
