@@ -27,7 +27,7 @@ end
 # Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
-    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags| 
+    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags|
       fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => tags)
     end
     step %{I submit}
@@ -85,7 +85,16 @@ When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"/ 
   step %{I submit}
   step %{I should see a success message}
 end
-  
+
+When /^there are (\d+) unreviewed nomations$/ do |n|
+  (1..n.to_i).each do |i|
+    step %{Given I am logged in as "#{'nominator' + i}"}
+    step %{And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as "#{'nominator' + i}"}
+    step %{And I press "Submit"}
+    step %{Then I should see "Your nominations were successfully submitted"}
+  end
+end
+
 When /^I review nominations for "([^\"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I go to the "#{title}" tag set page}
@@ -97,7 +106,7 @@ When /^I review associations for "([^\"]*)"/ do |title|
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Review Associations"}
 end
-  
+
 When /^I nominate and approve fandom "([^\"]*)" and character "([^\"]*)" in "([^\"]*)"/ do |fandom, char, title|
   step %{I am logged in as "tagsetter"}
   step %{I set up the nominated tag set "#{title}" with 3 fandom noms and 3 character noms}
