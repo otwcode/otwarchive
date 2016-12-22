@@ -1,6 +1,6 @@
-<!doctype html>
-<title>Acknowledgments</title>
-<h1>Acknowledgments</h1>
+Acknowledgments
+=========
+
 <p valign="middle"><a href="https://www.browserstack.com/"><img src="http://media.archiveofourown.org/ao3/logos/Browserstack.svg" width="200"/></a> for cross-browser testing tool. </p>
 <!--cc0 image https://pixabay.com/en/capybara-mammal-capibara-animal-147184/ -->
 <p valign="middle"><a href="http://teamcapybara.github.io/capybara/"><img src="http://media.archiveofourown.org/ao3/logos/capabara.png" width="200"/></a> Capybara for intergration testing</p>
