@@ -117,7 +117,7 @@ Feature: creating and editing tag sets
   Then I should see "Your nominations were successfully submitted"
   Given I am logged in as "tagsetter"
   When I review nominations for "Nominated Tags"
-    And I press "Clear Nominations"
+    And I follow "Clear Nominations"
     And I press "Yes, Clear Tag Set Nominations"
   Then I should see "All nominations for this Tag Set have been cleared"
 
