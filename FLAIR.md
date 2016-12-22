@@ -1,7 +1,7 @@
 Acknowledgments
 =========
 
-<p><a href="https://www.browserstack.com/"><img src="http://media.archiveofourown.org/ao3/logos/Browserstack.svg" alt="BrowserStack" style="width: 200px;"/></a> for cross-browser testing tool. </p>
+<p><a href="https://www.browserstack.com/"><img src="http://media.archiveofourown.org/ao3/logos/Browserstack.svg" width="200"/></a> for cross-browser testing tool. </p>
 <!--cc0 image https://pixabay.com/en/capybara-mammal-capibara-animal-147184/ -->
 <p><a href="http://teamcapybara.github.io/capybara/"><img src="http://media.archiveofourown.org/ao3/logos/capabara.png" style="width: 200px;"/></a> Capybara for intergration testing</p>
 <p><a href="https://codeship.com/"><img src="http://media.archiveofourown.org/ao3/logos/logo_codeship_colour_whitebg.png" style="width: 200px;"/></a> for continuous intergration.</p>
