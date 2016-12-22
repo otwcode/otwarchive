@@ -86,12 +86,10 @@ When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"/ 
   step %{I should see a success message}
 end
 
-When /^there are (\d+) unreviewed nomations$/ do |n|
+When /^there are (\d+) unreviewed nominations$/ do |n|
   (1..n.to_i).each do |i|
     step %{Given I am logged in as "#{'nominator' + i}"}
     step %{And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as "#{'nominator' + i}"}
-    step %{And I press "Submit"}
-    step %{Then I should see "Your nominations were successfully submitted"}
   end
 end
 
