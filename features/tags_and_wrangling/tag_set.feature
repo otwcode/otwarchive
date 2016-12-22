@@ -80,6 +80,182 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Your nominations were successfully submitted"
 
+  Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
+  Given I am logged in as "passerby"
+    And I go to the tagsets page
+    And I follow "Mayfly"
+    And I follow "Nominate"
+    And I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  When I follow "Edit"
+    And I nominate fandom "Bloobry" and character "Farblah" in "Mayfly"
+    And I submit
+  Then I should see "Your nominations were successfully updated"
+  Given I am logged in as tagsetter
+    And I go to the tagsets page
+    And I follow "Mayfly"
+    And I follow "Review Nominations"
+  Then I should see "Bloobry" within ".tagset"
+  When I check "fandom_approve_Bloobry"
+    And I submit
+  Then I should see "Successfully added to set: Bloobry"
+  Given I am logged in as "passerby"
+    And I go to the tagsets page
+    And I follow "Mayfly"
+    And I follow "My Nominations"
+    And I follow "Edit"
+  Then I should see "Bloobry"
+    And I should see "This nomination has been approved!"
+    And I should not see "Bloobry" within "li.added.tag"
+
+  Scenario: Owner of a tag set can clear all nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+  Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  When I follow "Back to Nominated Tags"
+    And I follow "Clear Nominations"
+    And I press "Yes, Clear Tag Set Nominations"
+  Then I should see "All nominations for this Tag Set have been cleared"
+
+  Scenario: Owner of a tag set with over 30 nominations sees a message that they can't all be displayed on one page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
+  Given I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as "nominator"
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator1"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator2"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator3"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator4"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator5"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator6"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator7"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator8"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator9"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator10"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator11"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator12"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator13"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator14"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator15"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator16"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator17"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator18"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator19"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator20"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator21"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator22"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator23"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator24"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator25"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator26"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator27"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator28"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator29"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator30"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "nominator32"
+    And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "tagsetter"
+    And I review nominations for "Nominated Tags"
+  Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
+
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
