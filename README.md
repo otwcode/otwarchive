@@ -30,5 +30,6 @@ We benefit from software and services that are free to use for Open Source proje
 * [Travis CI](https://travis-ci.org/)
 * [Codeship](http://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
+* [BrowserStack](https://www.browserstack.com)
 
 Thank you kindly!
