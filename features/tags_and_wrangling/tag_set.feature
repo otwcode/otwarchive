@@ -88,13 +88,11 @@ Feature: creating and editing tag sets
     And I follow "Mayfly"
     And I follow "Nominate"
     And I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
-    And I press "Submit"
-  Then I should see "Your nominations were successfully submitted"
   When I follow "Edit"
     And I nominate fandom "Bloobry" and character "Farblah" in "Mayfly"
     And I press "Submit"
   Then I should see "Your nominations were successfully updated"
-  Given I am logged in as tagsetter
+  Given I am logged in as "tagsetter"
     And I go to the tagsets page
     And I follow "Mayfly"
     And I follow "Review Nominations"
@@ -118,7 +116,7 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Your nominations were successfully submitted"
   When I follow "Back to Nominated Tags"
-    And I follow "Clear Nominations"
+    And I press "Clear Nominations"
     And I press "Yes, Clear Tag Set Nominations"
   Then I should see "All nominations for this Tag Set have been cleared"
 
