@@ -289,7 +289,6 @@ describe WorksController do
 
   describe "GET #import" do
     describe "should return the right error messages" do
-      context "the current user is NOT an archivist" do
         let(:user) { create(:user) }
 
         before do
@@ -314,6 +313,7 @@ describe WorksController do
           expect(flash[:error]).to start_with "You have entered an external author name"
         end
 
+      context "the current user is NOT an archivist" do
         it "should error when importing_for_others is turned on" do
           params = { urls: "url1, url2", importing_for_others: true }
           get :import, params
@@ -330,26 +330,28 @@ describe WorksController do
       end
 
       context "the current user is an archivist" do
-        let(:archivist) { create_archivist }
-
-        before :each do
-          fake_login_known_user(archivist)
-        end
-
         it "should error when importing over the maximum number of works" do
           max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
           urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
           params = { urls: urls, importing_for_others: false, import_multiple: "works" }
+          allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
+
           get :import, params
           expect(flash[:error]).to start_with "You cannot import more than #{max}"
+
+          allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
         end
 
         it "should error when importing over the maximum number of chapters" do
           max = ArchiveConfig.IMPORT_MAX_CHAPTERS
           urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
           params = { urls: urls, importing_for_others: false, import_multiple: "chapters" }
+          allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
+
           get :import, params
           expect(flash[:error]).to start_with "You cannot import more than #{max}"
+
+          allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
         end
       end
     end
