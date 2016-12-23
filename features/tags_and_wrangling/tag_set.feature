@@ -103,7 +103,7 @@ Feature: creating and editing tag sets
     And I follow "My Nominations"
   Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
   When I follow "Edit"
-  Then I should not see "Bloob" within "input#tag_set_nomination_fandom_nominations_attributes_0_tagname"
+  Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
