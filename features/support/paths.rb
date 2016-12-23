@@ -18,7 +18,7 @@ module NavigationHelpers
       search_tags_path
     when /^the search works page$/i
       Work.tire.index.refresh
-      search_works_path      
+      search_works_path
     when /^the search people page$/i
       Pseud.tire.index.refresh
       search_people_path
@@ -56,6 +56,8 @@ module NavigationHelpers
       new_user_path
     when /^invite requests page$/i
       invite_requests_path
+    when /^the manage invite queue page$/i
+      manage_invite_requests_path
     when /my pseuds page/
       user_pseuds_path(User.current_user)
     when /my user page/
@@ -71,9 +73,9 @@ module NavigationHelpers
     when /my edit multiple works page/
       show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
-      user_subscriptions_path(User.current_user)   
+      user_subscriptions_path(User.current_user)
     when /my stats page/
-      user_stats_path(User.current_user)   
+      user_stats_path(User.current_user)
     when /my profile page/
       user_profile_path(User.current_user)
     when /my claims page/
@@ -177,7 +179,7 @@ module NavigationHelpers
     when /^the admin-posts page$/i
       admin_posts_path
     when /^the admin-settings page$/i
-      admin_settings_path      
+      admin_settings_path
     when /^the admin-notices page$/i
       notify_admin_users_path
     when /^the admin-blacklist page$/i
@@ -197,7 +199,7 @@ module NavigationHelpers
     when /^the new tag ?set page$/i
       new_tag_set_path
     when /^the "(.*)" tag ?set edit page$/i
-      edit_tag_set_path(OwnedTagSet.find_by_title($1))    
+      edit_tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the manage users page$/
@@ -218,7 +220,7 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
-      
+
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
@@ -238,4 +240,3 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
-
