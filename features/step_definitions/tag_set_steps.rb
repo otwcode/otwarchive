@@ -89,7 +89,7 @@ end
 When /^there are (\d+) unreviewed nominations$/ do |n|
   (1..n.to_i).each do |i|
     step %{I am logged in as \"nominator#{i}\"}
-    step %{And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as \"nominator#{i}\"}
+    step %{I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as \"nominator#{i}\"}
   end
 end
 
