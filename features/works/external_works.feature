@@ -6,11 +6,12 @@ Feature: External works are not hosted on the Archive
     Given basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
+      And I bookmark the external work "All changes"
       And I am logged in as "less_regular_user"
       And I bookmark the external work "External Changes"
     When I go to the external works page
-    Then "External Changes" should appear before "External Changes"
-    When I go to the external works without duplicates page
-    Then "External Changes" should not appear before "External Changes"
-
-
+    Then I should see "External Changes"
+      And I should see "All changes"
+    When I go to the external works with only duplicates page
+    Then I should see "External Changes"
+      And I should not see "All changes"

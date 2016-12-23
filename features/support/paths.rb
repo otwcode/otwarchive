@@ -26,7 +26,7 @@ module NavigationHelpers
       bookmarks_path
     when /^the external works page$/i
       external_works_path
-    when /^the external works without duplicates page$/i
+    when /^the external works with only duplicates page$/i
       external_works_path(show: :duplicates)
 
 
