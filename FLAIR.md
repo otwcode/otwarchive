@@ -7,7 +7,7 @@ Acknowledgments
 <p><a href="https://codeship.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_codeship_colour_whitebg.png" width="200"/> Codeship</a> for continuous integration.</p>
 <p><a href="https://cucumber.io/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo-cucumber.png" width="200"/> Cucumber</a> for integration testing.</p>
 <p><a href="https://www.debian.org/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Debian.png" width="200"/> Debian</a> for our Linux distribution.</p>
-<p><a href="https://www.elastic.co/products/elasticsearch"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Elasticsearch-Logo-Color-H.png" width="200"/> Elasticsearch for our tag searching.</p>
+<p><a href="https://www.elastic.co/products/elasticsearch"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Elasticsearch-Logo-Color-H.png" width="200"/> Elasticsearch</a> for our tag searching.</p>
 <p><a href="http://www.exim.org/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/exim.png" width="200"/> Exim</a> for mail sending.</p>
 <p><a href="http://galeracluster.com/products/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/galera.png" width="200"/> Galera Cluster</a> for clustered MySQL.</p>
 <p><a href="github.com/otwcode/otwarchive"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/GitHub_Logo.png" width="200"/> GitHub</a> for collaborative programming.</p>
