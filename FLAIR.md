@@ -3,9 +3,9 @@ Acknowledgments
 
 <p><a href="https://www.browserstack.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/Browserstack.svg" width="200"/></a> for cross-browser testing tool.</p>
 <!--cc0 image https://pixabay.com/en/capybara-mammal-capibara-animal-147184/ -->
-<p><a href="http://teamcapybara.github.io/capybara/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/capabara.png" width="200"/></a> Capybara for intergration testing.</p>
-<p><a href="https://codeship.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_codeship_colour_whitebg.png" width="200"/></a> for continuous intergration.</p>
-<p><a href="https://cucumber.io/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo-cucumber.png" width="200"/></a> for intergration testing.</p>
+<p><a href="http://teamcapybara.github.io/capybara/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/capabara.png" width="200"/></a> Capybara for integration testing.</p>
+<p><a href="https://codeship.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_codeship_colour_whitebg.png" width="200"/></a> for continuous integration.</p>
+<p><a href="https://cucumber.io/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo-cucumber.png" width="200"/></a> for integration testing.</p>
 <p><a href="https://www.debian.org/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/Debian.png" width="200"/></a> for our linux distribution.</p>
 <p><a href="https://www.elastic.co/products/elasticsearch"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/Elasticsearch-Logo-Color-H.png" width="200"/></a> for our tag searching.</p>
 <p><a href="http://www.exim.org/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/exim.png" width="200"/></a> for mail sending.</p>
@@ -24,6 +24,6 @@ Acknowledgments
 <p><a href="https://www.ruby-lang.org/en/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/ruby.png" width="200"/></a> Ruby as our language.</p>
 <p><a href="https://www.jetbrains.com/ruby/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_RubyMine.svg" width="200"/></a> for our integrated development environment.</p>
 <p><a href="https://slack.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/Slack_RGB.svg" width="200"/></a> for communications.</p>
-<p><a href="https://travis-ci.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/TravisCI-Full-Color-45e242791b7752b745a7ae53f265acd4.png" width="200"/></a> for continuous intergration.</p>
+<p><a href="https://travis-ci.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/TravisCI-Full-Color-45e242791b7752b745a7ae53f265acd4.png" width="200"/></a> for continuous integration.</p>
 <p><a href="https://www.vagrantup.com/"><img valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_wide-56017ded.png" width="200"/></a> for our developement environment.</p>
 
