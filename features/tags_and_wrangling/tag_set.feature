@@ -90,7 +90,7 @@ Feature: creating and editing tag sets
     And I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
   When I follow "Edit"
-  Then I should see "Floobry" within "div#main input"
+  Then I should see "Floobry" within "div#main input.autocomplete"
     And I should see "Barblah" within "div#main input"
   When I press "Submit"
   Then I should see "Your nominations were successfully updated"
