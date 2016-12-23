@@ -90,8 +90,8 @@ Feature: creating and editing tag sets
     And I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
   When I follow "Edit"
-  Then I should see "Floobry" within "div#main form#tag_set_nomination_form  fieldset fieldset.tagset dl dd input#tag_set_nomination_fandom_nominations_attributes_0_tagname"
-    And I should see "Barblah" within "input"
+  Then I should see "Floobry" within "div#main input"
+    And I should see "Barblah" within "div#main input"
   When I press "Submit"
   Then I should see "Your nominations were successfully updated"
   Given I am logged in as "tagsetter"
@@ -106,7 +106,7 @@ Feature: creating and editing tag sets
     And I follow "My Nominations"
   Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
   When I follow "Edit"
-  Then I should not see "Floobry" within "inputtag_set_nomination_fandom_nominations_attributes_0_tagname"
+  Then I should not see "Floobry" within "#div#main input"
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
