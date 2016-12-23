@@ -84,7 +84,7 @@ Feature: creating and editing tag sets
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
   Given I am logged in as "passerby"
-    And I nominate fandom "Floobry" and character "Barblah" in "Mayfly" as "passerby"
+    And I nominate fandoms "Floobry" and characters "Barblah" in the "Mayfly" tag set as "passerby"
     And I press "Submit"
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
   When I follow "Edit"
