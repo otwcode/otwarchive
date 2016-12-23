@@ -92,7 +92,7 @@ When /^there are (\d+) unreviewed nominations$/ do |n|
     step %{And I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as \"nominator#{i}\"}
   end
 end
-
+ 
 When /^I review nominations for "([^\"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I go to the "#{title}" tag set page}
