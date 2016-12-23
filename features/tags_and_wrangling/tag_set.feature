@@ -83,8 +83,8 @@ Feature: creating and editing tag sets
   Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
-  Given I am logged in as "passerby"
-    And I nominate fandoms "Floobry" and characters "Barblah" in the "Mayfly" tag set as "passerby"
+  Given I am logged in as "nominator"
+    And I nominate fandoms "Floobry" and characters "Barblah" in "Mayfly"
     And I press "Submit"
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
   When I follow "Edit"
@@ -98,7 +98,7 @@ Feature: creating and editing tag sets
   When I check "fandom_approve_Floobry"
     And I press "Submit"
   Then I should see "Successfully added to set: Floobry"
-  Given I am logged in as "passerby"
+  Given I am logged in as "nominator"
     And I go to the tagsets page
     And I follow "Mayfly"
     And I follow "My Nominations"
