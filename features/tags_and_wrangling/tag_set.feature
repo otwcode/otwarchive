@@ -85,6 +85,7 @@ Feature: creating and editing tag sets
     And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
   When I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
+    And I should see "Floobry"
   When I follow "Edit"
   Then I should see "Floobry"
     And I should see "Barblah"
