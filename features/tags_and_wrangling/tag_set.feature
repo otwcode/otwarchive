@@ -126,7 +126,7 @@ Feature: creating and editing tag sets
   Given I nominate 6 fandoms and 6 characters in the "Nominated Tags" tag set as "nominator"
     And I press "Submit"
   Then I should see "Your nominations were successfully submitted"
-  When there are 31 unreviewed nominations
+  When there are 36 unreviewed nominations
   Given I am logged in as "tagsetter"
     And I review nominations for "Nominated Tags"
   Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
