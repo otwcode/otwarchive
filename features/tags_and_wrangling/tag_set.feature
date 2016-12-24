@@ -65,6 +65,7 @@ Feature: creating and editing tag sets
   Then I should see "Nominate"
   When I follow "Nominate"
   Then I should see "You can nominate up to 3 characters"
+    And I should be on the tagset nomination page
 
   Scenario: Tag set nominations should nest characters under fandoms if fandoms are being nominated
   Given I am logged in as "tagsetter"
