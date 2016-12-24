@@ -22,7 +22,7 @@ Then /^show me the main content$/ do
   puts "\n" + find("#main").native.inner_html
 end
 
-Then /^show me the errors$/ do 
+Then /^show me the errors$/ do
   puts "\n" + find("div.error").native.inner_html
 end
 
@@ -149,6 +149,12 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
     end
 end
 
+Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  with_scope(selector) do
+    page.should_not have_xpath("//input[@#{id}='#{id}']")
+  end
+end
+
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
@@ -178,9 +184,9 @@ end
 # These submit steps will only find submit tags inside a <p class="submit">
 # That wrapping paragraph tag will be generated automatically if you use
 # the submit_button or submit_fieldset helpers in application_helper.rb
-# The text on the button will not matter and can be changed without breaking tests. 
+# The text on the button will not matter and can be changed without breaking tests.
 #
-# NOTE: 
+# NOTE:
 # If you have multiple forms on a page you will need to specify which one you want to submit with, eg,
 # "I submit with the 2nd button", but in those cases you probably want to make sure that
 # the different forms have different button text anyway, and submit them using
