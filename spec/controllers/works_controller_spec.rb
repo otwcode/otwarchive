@@ -227,6 +227,12 @@ describe WorksController do
       expect(assigns(:works)).to include(@work)
     end
 
+    it "should set the fandom when given a fandom id" do
+      params = { fandom_id: @fandom.id }
+      get :index, params
+      expect(assigns(:fandom)).to eq(@fandom)
+    end
+
     describe "without caching" do
       before do
         allow(controller).to receive(:use_caching?).and_return(false)
@@ -289,7 +295,6 @@ describe WorksController do
 
       end
     end
-
   end
 
   describe "GET #import" do
