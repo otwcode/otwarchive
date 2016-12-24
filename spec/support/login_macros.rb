@@ -1,5 +1,4 @@
 module LoginMacros
-
   def fake_login
     # Stub out the current_user method
     @current_user = FactoryGirl.create(:user)
@@ -19,5 +18,10 @@ module LoginMacros
     @current_admin = admin
     allow(controller).to receive(:logged_in_as_admin?).and_return(true)
     allow(controller).to receive(:current_admin).and_return(@current_admin)
+  end
+
+  def it_redirects_to_user_login
+    expect(response).to have_http_status(:redirect)
+    expect(response).to redirect_to new_user_session_path
   end
 end
