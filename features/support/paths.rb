@@ -193,8 +193,6 @@ module NavigationHelpers
       new_feedback_report_path
     when /^the new tag ?set page$/i
       new_tag_set_path
-    when /^the tagset nomination page$/i
-      edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
     when /^the "(.*)" tag ?set edit page$/i
       edit_tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the "(.*)" tag ?set page$/i
