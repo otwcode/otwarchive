@@ -102,3 +102,9 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
 end
+
+def create_archivist
+  user = create(:user)
+  user.roles << Role.new(name: "archivist")
+  user
+end
