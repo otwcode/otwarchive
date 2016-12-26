@@ -124,3 +124,18 @@ Feature: User dashboard
     And I should not see "Oldest Series"
   Then I should see "Recent bookmarks"
     And I should see "Work 5" within "#user-bookmarks"
+
+  Scenario: Sorting within user or collection filtered results removes fandom filter
+  Given a media exists with name: "TV Shows", canonical: true
+    And a fandom exists with name: "Star Trek", canonical: true
+    And a fandom exists with name: "Star Trek: Discovery", canonical: true
+  When I am logged in as "meatloaf"
+    And I post the work "Excellent" with fandom "Star Trek"
+    And I post the work "Even more Excellent" with fandom "Star Trek"
+    And I post the work "Exciting" with fandom "Star Trek: Discovery"
+  When I go to meatloaf's user page
+  When I follow "Star Trek"
+  Then I should see "2 Works by meatloaf in Star Trek"
+  When I press "Sort and Filter"
+  Then I should see "2 Works by meatloaf in Star Trek"
+
