@@ -103,7 +103,7 @@ class WorksController < ApplicationController
 
       tag = @fandom || @tag
       # This strange dance is because there is an interaction between
-      # strong_parameters and dup, with out the dance 
+      # strong_parameters and dup, without the dance 
       # options[:filter_ids] << tag.id is ignored.
       filter_ids = options[:filter_ids] || []
       filter_ids << tag.id

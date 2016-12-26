@@ -125,16 +125,16 @@ Feature: User dashboard
   Then I should see "Recent bookmarks"
     And I should see "Work 5" within "#user-bookmarks"
 
-  Scenario: Sorting within user or collection filtered results removes fandom filter
+  Scenario: You can follow a fandom link from a user's dashboard and then use the filters to sort within that fandom.
   Given a media exists with name: "TV Shows", canonical: true
     And a fandom exists with name: "Star Trek", canonical: true
     And a fandom exists with name: "Star Trek: Discovery", canonical: true
-  When I am logged in as "meatloaf"
+    And I am logged in as "meatloaf"
     And I post the work "Excellent" with fandom "Star Trek"
     And I post the work "Even more Excellent" with fandom "Star Trek"
     And I post the work "Exciting" with fandom "Star Trek: Discovery"
   When I go to meatloaf's user page
-  When I follow "Star Trek"
+    And I follow "Star Trek"
   Then I should see "2 Works by meatloaf in Star Trek"
   When I press "Sort and Filter"
   Then I should see "2 Works by meatloaf in Star Trek"
