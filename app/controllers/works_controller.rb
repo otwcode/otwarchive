@@ -102,8 +102,12 @@ class WorksController < ApplicationController
       end
 
       tag = @fandom || @tag
-      options[:filter_ids] ||= []
-      options[:filter_ids] << tag.id
+      # This strange dance is because there is an interaction between
+      # strong_parameters and dup, with out the dance 
+      # options[:filter_ids] << tag.id is ignored.
+      filter_ids = options[:filter_ids] || []
+      filter_ids << tag.id
+      options[:filter_ids] = filter_ids
     end
 
     options[:page] = params[:page]
