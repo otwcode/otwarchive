@@ -1,5 +1,4 @@
 class Fandom < Tag
-  include ActiveModel::ForbiddenAttributesProtection
 
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
   index_name Tag.index_name
