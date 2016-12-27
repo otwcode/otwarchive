@@ -169,23 +169,16 @@ class CollectionsController < ApplicationController
 
   def collection_params
     params.require(:collection).permit(
-      :name, :title, :email, :header_image_url, :description, :parent_id,
-      :parent_name, :challenge_id, :challenge_type, :icon, :icon_file_name,
-      :icon_content_type, :icon_file_size, :icon_alt_text, :icon_comment_text,
+      :name, :title, :email, :header_image_url, :description,
+      :parent_name, :challenge_type, :icon, :icon_file_name,
+      :icon_alt_text, :icon_comment_text,
       collection_profile_attributes: [
-        :id, :collection_id, :intro, :faq, :rules,
+        :id, :intro, :faq, :rules,
         :gift_notification, :assignment_notification
       ],
       collection_preference_attributes: [
-        :id, :collection_id, :moderated, :closed, :unrevealed, :anonymous,
+        :id, :moderated, :closed, :unrevealed, :anonymous,
         :gift_exchange, :show_random, :prompt_meme, :email_notify
-      ],
-      collection_items_attributes: [
-        :id, :collection_id, :item_id, :item_type, :user_approval_status,
-        :collection_approval_status, :anonymous, :unrevealed, :_destroy
-      ],
-      collection_participants_attributes: [
-        :id, :collection_id, :pseud_id, :participant_role, :_destroy
       ]
     )
   end
