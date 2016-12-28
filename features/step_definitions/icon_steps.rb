@@ -23,4 +23,12 @@ When /^I add an icon to the collection$/ do
     step %{I press "Update"}
 end
 
+When /^I delete an icon of the collection$/ do
+  step %{I am logged in as "moderator"}
+    step %{I am on "Pretty" collection's page}
+    step %{I follow "Settings"}
+    step %{the "collection_delete_icon" checkbox should be checked}
+    step %{I press "Update"}
+end
+
 ### THEN

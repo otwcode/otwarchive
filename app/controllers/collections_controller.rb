@@ -170,7 +170,7 @@ class CollectionsController < ApplicationController
   def collection_params
     params.require(:collection).permit(
       :name, :title, :email, :header_image_url, :description,
-      :parent_name, :challenge_type, :icon, :icon_file_name,
+      :parent_name, :challenge_type, :icon, :delete_icon,
       :icon_alt_text, :icon_comment_text,
       collection_profile_attributes: [
         :id, :intro, :faq, :rules,
