@@ -31,4 +31,14 @@ When /^I delete the icon from the collection "([^"]*)"$/ do |name|
   step %{I press "Update"}
 end
 
+Then /^the collection "([^"]*)" has an icon$/ do |name|
+  collection = Collection.find_by_name!(name) 
+  assert !collection.icon_file_name.blank?
+end
+
+Then /^the collection "([^"]*)" has no icon$/ do |name|
+  collection = Collection.find_by_name!(name)
+  assert collection.icon_file_name.blank?
+end
+
 ### THEN
