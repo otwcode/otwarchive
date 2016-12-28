@@ -15,17 +15,17 @@ end
 
 ### WHEN
 
-When /^I add an icon to the collection$/ do
+When /^I add an icon to the collection "([^"]*)"$/ do |name|
   step %{I am logged in as "moderator"}
-  step %{I am on "Pretty" collection's page}
+  step %{I am on "#{name}" collection's page}
   step %{I follow "Settings"}
   step %{I attach the file "test/fixtures/icon.gif" to "collection_icon"}
   step %{I press "Update"}
 end
 
-When /^I delete the icon from the collection$/ do
+When /^I delete the icon from the collection "([^"]*)"$/ do |name|
   step %{I am logged in as "moderator"}
-  step %{I am on "Pretty" collection's page}
+  step %{I am on "#{name}" collection's page}
   step %{I follow "Settings"}
   check("collection_delete_icon")
   step %{I press "Update"}

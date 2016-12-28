@@ -20,7 +20,7 @@ Feature: User icons
   Scenario: Add and remove a collection icon
 
   Given I have a collection "Pretty"
-  When I add an icon to the collection
+  When I add an icon to the collection "Pretty"
   Then I should see "Collection was successfully updated"
-  When I delete the icon from the collection
+  When I delete the icon from the collection "Pretty"
   Then I should see "Collection was successfully updated."
