@@ -22,7 +22,7 @@ Feature: User icons
   Given I have a collection "Pretty"
   When I add an icon to the collection "Pretty"
   Then I should see "Collection was successfully updated"
-    And the collection "Pretty" has an icon
+    And the "Pretty" collection should have an icon
   When I delete the icon from the collection "Pretty"
   Then I should see "Collection was successfully updated."
-    And the collection "Pretty" has no icon
+    And the "Pretty" collection should not have an icon

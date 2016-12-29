@@ -15,29 +15,29 @@ end
 
 ### WHEN
 
-When /^I add an icon to the collection "([^"]*)"$/ do |name|
+When /^I add an icon to the collection "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
-  step %{I am on "#{name}" collection's page}
+  step %{I am on "#{title}" collection's page}
   step %{I follow "Settings"}
   step %{I attach the file "test/fixtures/icon.gif" to "collection_icon"}
   step %{I press "Update"}
 end
 
-When /^I delete the icon from the collection "([^"]*)"$/ do |name|
+When /^I delete the icon from the collection "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
-  step %{I am on "#{name}" collection's page}
+  step %{I am on "#{title}" collection's page}
   step %{I follow "Settings"}
   check("collection_delete_icon")
   step %{I press "Update"}
 end
 
-Then /^the collection "([^"]*)" has an icon$/ do |name|
-  collection = Collection.find_by_name!(name) 
+Then /^the "([^"]*)" collection should have an icon$/ do |title|
+  collection = Collection.find_by_title!(title)
   assert !collection.icon_file_name.blank?
 end
 
-Then /^the collection "([^"]*)" has no icon$/ do |name|
-  collection = Collection.find_by_name!(name)
+Then /^the "([^"]*)" collection should not have an icon$/ do |title|
+  collection = Collection.find_by_title!(title)
   assert collection.icon_file_name.blank?
 end
 
