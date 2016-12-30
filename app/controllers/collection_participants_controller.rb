@@ -61,7 +61,7 @@ class CollectionParticipantsController < ApplicationController
     else
       participants.each do |participant|
         if participant.is_invited?
-          participant approve_membership!
+          participant.approve_membership!
           flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of %{collection}.", :collection => @collection.title)
           redirect_to(request.env["HTTP_REFERER"] || root_path) and return
         end
