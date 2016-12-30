@@ -232,16 +232,11 @@ Feature: Archivist bulk imports
       And the default ratings exist
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
-    Then I fill in "external_author_email" with "random@example.com"
-    When I submit with the 2nd button
+      And I fill in "external_author_email" with "random@example.com"
+      And I submit with the 2nd button
     Then I should see "We have saved and blocked the email address random@example.com"
     When I am logged in as "archivist"
-      And I go to the import page
-      And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
-      And I fill in "Author Name*" with "ao3testing"
-      And I fill in "Author Email Address*" with "random@example.com"
-      And I check the 1st checkbox with id matching "importing_for_others"
-    And I press "Import"
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
     Then I should see "Author ao3testing at random@example.com does not allow importing their work to this archive."
 
   Scenario: Open Doors committee members can supply a new email address for an already imported work.
@@ -255,6 +250,6 @@ Feature: Archivist bulk imports
       And I go to the Open Doors external authors page
     Then I should see "random@example.com"
     When I fill in "email" with "random_person@example.com"
-    When I submit
+      And I submit
     Then I should see "Claim invitation for random@example.com has been forwarded to random_person@example.com"
       And 1 email should be delivered to "random_person@example.com"
