@@ -20,8 +20,8 @@ module LoginMacros
     allow(controller).to receive(:current_admin).and_return(@current_admin)
   end
 
-  def it_redirects_to_user_login
+  def it_redirects_to(path)
     expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to new_user_session_path
+    expect(response).to redirect_to path
   end
 end

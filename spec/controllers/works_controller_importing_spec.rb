@@ -1,9 +1,7 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe WorksController do
   include LoginMacros
-
-  puts "RUNNING IMPORTING_SPEC"
 
   describe "import" do
     context "should return the right error messages" do

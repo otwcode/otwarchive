@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe WorksController do
   include LoginMacros
@@ -388,6 +388,8 @@ describe WorksController do
         expect(assigns(:works)).not_to include(@unrestricted_work)
       end
 
+      # The code this would reach appears to be broken
+      # --------------
       # it "should return ONLY works in collections with filtering disabled" do
       #   allow(controller).to receive(:fetch_admin_settings).and_return(true)
       #   admin_settings = AdminSetting.new(disable_filtering: true)
