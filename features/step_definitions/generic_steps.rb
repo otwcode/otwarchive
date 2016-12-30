@@ -181,6 +181,10 @@ When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with 
 end
 
 
+When /^I submit with the (\d+)(?:st|nd|rd|th) button anywhere$/ do |index|
+  page.all("input[type='submit']")[(index.to_i-1)].click
+end
+
 # These submit steps will only find submit tags inside a <p class="submit">
 # That wrapping paragraph tag will be generated automatically if you use
 # the submit_button or submit_fieldset helpers in application_helper.rb
