@@ -23,41 +23,6 @@ class ExternalAuthorsController < ApplicationController
     end
   end
 
-  def new
-    flash[:notice] = "Coming soon!"
-    redirect_to :action => :index
-    # @external_author = ExternalAuthor.new
-    # @external_author.external_author_names.build
-  end
-
-  def create
-    # we need to confirm email addresses before we hand them over
-    flash[:notice] = "Coming soon!"
-    redirect_to :action => :index
-    
-    # @external_author = ExternalAuthor.new(params[:external_author])
-    # if @user == current_user
-    #   @external_author.is_claimed = true
-    #   @external_author.user = @user
-    # end
-    # 
-    # if @external_author.save
-    #   flash[:notice] = 'ExternalAuthor was successfully created.'
-    #   redirect_to user_external_authors_path(@user)
-    # else
-    #   render :action => "new"
-    # end
-  end
-
-  def destroy
-    flash[:notice] = "Coming soon!"
-    redirect_to :action => :index
-    # @external_author = ExternalAuthor.find(params[:id])
-    # @external_author.destroy
-    # 
-    # redirect_to user_external_authors_path(@user)
-  end
-
   def edit
     @external_author = ExternalAuthor.find(params[:id])
   end
