@@ -203,6 +203,8 @@ module NavigationHelpers
       admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
+    when /^the Open Doors external authors page$/i
+      opendoors_external_authors_path
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i
