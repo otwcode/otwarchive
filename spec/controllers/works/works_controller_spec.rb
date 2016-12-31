@@ -315,6 +315,29 @@ describe WorksController do
     end
   end
 
+  describe "update" do
+    let!(:update_user) { create(:user) }
+    let!(:update_chapter) { create(:chapter) }
+    let!(:update_work) {
+      work = create(:work, authors: [update_user.default_pseud], posted: true)
+      work.chapters << update_chapter
+      work
+    }
+
+    before do
+      fake_login_known_user(update_user)
+    end
+
+    it "should redirect to the edit page if the work could not be saved" do
+      allow_any_instance_of(Work).to receive(:save).and_return(false)
+      update_work.fandom_string = "Testing"
+      attrs = { title: "New Work Title" }
+      put :update, id: update_work.id, work: attrs
+      expect(response).to render_template :edit
+      allow_any_instance_of(Work).to receive(:save).and_call_original
+    end
+  end
+
   describe "collected" do
     let(:collected_fandom) { create(:fandom) }
     let(:collected_fandom2) { create(:fandom) }
