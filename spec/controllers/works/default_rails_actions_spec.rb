@@ -410,20 +410,6 @@ describe WorksController do
         expect(assigns(:works)).to include(@restricted_work_in_collection)
         expect(assigns(:works)).not_to include(@unrestricted_work)
       end
-
-      # The code this would reach appears to be broken
-      # --------------
-      # it "should return ONLY works in collections with filtering disabled" do
-      #   allow(controller).to receive(:fetch_admin_settings).and_return(true)
-      #   admin_settings = AdminSetting.new(disable_filtering: true)
-      #   controller.instance_variable_set("@admin_settings", admin_settings)
-      #   get :collected, { user_id: @collected_user.login }
-      #   expect(assigns(:works)).to include(@unrestricted_work_in_collection)
-      #   expect(assigns(:works)).to include(@restricted_work_in_collection)
-      #   expect(assigns(:works)).not_to include(@unrestricted_work)
-      #
-      #   allow(controller).to receive(:fetch_admin_settings).and_call_original
-      # end
     end
   end
 end

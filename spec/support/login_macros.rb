@@ -19,9 +19,4 @@ module LoginMacros
     allow(controller).to receive(:logged_in_as_admin?).and_return(true)
     allow(controller).to receive(:current_admin).and_return(@current_admin)
   end
-
-  def it_redirects_to(path)
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to path
-  end
 end
