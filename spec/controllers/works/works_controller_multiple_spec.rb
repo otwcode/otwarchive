@@ -10,17 +10,6 @@ describe WorksController do
     user
   }
 
-  # describe "show_multiple" do
-  #   it "should select only the works for the specified pseud" do
-  #     work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
-  #     work2 = create(:work, authors: [multiple_user_pseud], posted: true)
-  #     fake_login_known_user(multiple_works_user)
-  #     get :show_multiple, pseud_id: multiple_user_pseud.id
-  #     expect(assigns(:works)).to include(work2)
-  #     expect(assigns(:works)).not_to include(work1)
-  #   end
-  # end
-
   describe "edit_multiple" do
     it "should redirect to the orphan path when the Orphan button was clicked" do
       work1 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
