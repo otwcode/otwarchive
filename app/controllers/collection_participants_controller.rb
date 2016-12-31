@@ -44,8 +44,6 @@ class CollectionParticipantsController < ApplicationController
     !@participant.is_owner? || (@collection.owners != [@participant.pseud]) || owners_required
   end
 
-
-
   ## ACTIONS
 
   def join
@@ -55,8 +53,8 @@ class CollectionParticipantsController < ApplicationController
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
     if participants.empty?
-      @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud,
-                        :participant_role => CollectionParticipant::NONE)
+      @participant = CollectionParticipant.new(collection: @collection, pseud: current_user.default_pseud,
+                        participant_role: CollectionParticipant::NONE)
       @participant.save
       flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join %{collection}.", :collection => @collection.title)
     else

@@ -36,7 +36,7 @@ describe CollectionParticipantsController do
 
       context "where there is no collection" do
         it "redirects to index and displays an error" do
-          get :join, { collection_id: nil }
+          get :join, collection_id: nil
           it_redirects_to_with_error(root_path, "Which collection did you want to join?")
         end
 
@@ -70,7 +70,7 @@ describe CollectionParticipantsController do
             let(:current_role) { CollectionParticipant::INVITED }
 
             it "approves the participant and redirects to the index" do
-              get :join, { collection_id: collection.name }
+              get :join, collection_id: collection.name
               expect(CollectionParticipant.find(participant.id).participant_role).to eq CollectionParticipant::MEMBER
               it_redirects_to_with_notice(root_path, "You are now a member of #{collection.title}.")
             end
@@ -78,7 +78,7 @@ describe CollectionParticipantsController do
 
           context "where the user is not currently invited" do
             it "redirects to the index and displays a notice that the user has already joined or applied" do
-              get :join, { collection_id: collection.name }
+              get :join, collection_id: collection.name
               it_redirects_to_with_notice(root_path, "You have already joined (or applied to) this collection.")
             end
           end
@@ -86,7 +86,7 @@ describe CollectionParticipantsController do
 
         context "where user isn't a participant yet" do
           it "creates a participant for the user, redirects to index and notifies them that they have applied" do
-            get :join, { collection_id: collection.name }
+            get :join, collection_id: collection.name
             participant = CollectionParticipant.find_by_pseud_id(user.default_pseud.id)
             expect(participant).to be_present
             expect(participant.participant_role).to eq CollectionParticipant::NONE
@@ -104,7 +104,7 @@ describe CollectionParticipantsController do
 
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
-        get :index, { collection_id: collection.name }
+        get :index, collection_id: collection.name
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -137,7 +137,7 @@ describe CollectionParticipantsController do
 
         context "where the collection has several participants" do
           let!(:users) do
-            3.times.map do
+            Array.new(3) do
               user = FactoryGirl.create(:user)
               FactoryGirl.create(
                 :collection_participant,
@@ -196,13 +196,13 @@ describe CollectionParticipantsController do
     end
 
     context "where there is a participant" do
-      let(:participant) {
+      let(:participant) do
         FactoryGirl.create(
           :collection_participant,
           collection: user_participant.collection,
           participant_role: CollectionParticipant::NONE
         )
-      }
+      end
       let(:id_to_update) { participant.id }
       context "where the user is not a collection maintainer" do
         it "redirects to the collection page and displays an error" do
@@ -326,9 +326,7 @@ describe CollectionParticipantsController do
 
         context "where participant to be destroyed is an owner" do
           let(:delete_participant_id) { CollectionParticipant.find_by_pseud_id(collection.owners.first.id) }
-          let(:params) {
-            { id: delete_participant_id }
-          }
+          let(:params) { { id: delete_participant_id } }
 
           context "where there are no other owners" do
             it "displays an error and redirects to the collection participants path" do
