@@ -53,21 +53,21 @@ describe CollectionParticipantsController do
       end
 
       context "where there is a collection" do
-        let (:collection) { FactoryGirl.create(:collection) }
-        let (:current_role) { CollectionParticipant::NONE }
+        let(:collection) { FactoryGirl.create(:collection) }
+        let(:current_role) { CollectionParticipant::NONE }
 
         context "where the user is already a participant" do
-          let! (:participant) {
+          let!(:participant) do
             FactoryGirl.create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,
               participant_role: current_role
             )
-          }
+          end
 
           context "where the user has been invited" do
-            let (:current_role) { CollectionParticipant::INVITED }
+            let(:current_role) { CollectionParticipant::INVITED }
 
             it "approves the participant and redirects to the index" do
               get :join, { collection_id: collection.name }
@@ -98,9 +98,9 @@ describe CollectionParticipantsController do
   end
 
   describe "index" do
-    let (:collection) { FactoryGirl.create(:collection) }
-    let (:current_role) { CollectionParticipant::NONE }
-    let (:user) { FactoryGirl.create(:user) }
+    let(:collection) { FactoryGirl.create(:collection) }
+    let(:current_role) { CollectionParticipant::NONE }
+    let(:user) { FactoryGirl.create(:user) }
 
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
@@ -110,15 +110,15 @@ describe CollectionParticipantsController do
     end
 
     context "user is logged in" do
-      let! (:participant) {
+      let!(:participant) do
         FactoryGirl.create(
           :collection_participant,
           collection: collection,
           pseud: user.default_pseud,
           participant_role: current_role
         )
-      }
-      let (:params) { { collection_id: collection.name } }
+      end
+      let(:params) { { collection_id: collection.name } }
 
       before do
         fake_login_known_user(user)
@@ -133,10 +133,10 @@ describe CollectionParticipantsController do
 
       context "where the user is a maintainer" do
         render_views
-        let (:current_role) { CollectionParticipant::MODERATOR }
+        let(:current_role) { CollectionParticipant::MODERATOR }
 
         context "where the collection has several participants" do
-          let! (:users) {
+          let!(:users) do
             3.times.map do
               user = FactoryGirl.create(:user)
               FactoryGirl.create(
@@ -146,7 +146,7 @@ describe CollectionParticipantsController do
               )
               user
             end
-          }
+          end
 
           it "displays the participants in the correct order" do
             get :index, params
@@ -161,26 +161,26 @@ describe CollectionParticipantsController do
   end
 
   describe "update" do
-    let (:user) { FactoryGirl.create(:user) }
-    let (:collection) { FactoryGirl.create(:collection) }
-    let (:user_role) { CollectionParticipant::NONE }
-    let! (:user_participant) {
+    let(:user) { FactoryGirl.create(:user) }
+    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user_role) { CollectionParticipant::NONE }
+    let!(:user_participant) do
       FactoryGirl.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
         participant_role: user_role
       )
-    }
-    let (:id_to_update) { nil }
-    let (:params) {
+    end
+    let(:id_to_update) { nil }
+    let(:params) do
       {
         collection_participant: {
           participant_role:  CollectionParticipant::MEMBER,
           id: id_to_update
         }
       }
-    }
+    end
 
     before do
       fake_login_known_user(user)
@@ -196,14 +196,14 @@ describe CollectionParticipantsController do
     end
 
     context "where there is a participant" do
-      let (:participant) {
+      let(:participant) {
         FactoryGirl.create(
           :collection_participant,
           collection: user_participant.collection,
           participant_role: CollectionParticipant::NONE
         )
       }
-      let (:id_to_update) { participant.id }
+      let(:id_to_update) { participant.id }
       context "where the user is not a collection maintainer" do
         it "redirects to the collection page and displays an error" do
           put :update, params
@@ -214,7 +214,7 @@ describe CollectionParticipantsController do
       end
 
       context "where the user is a collection maintainer" do
-        let (:user_role) { CollectionParticipant::MODERATOR }
+        let(:user_role) { CollectionParticipant::MODERATOR }
         context "where the participant is updated successfully" do
           it "successfully updates and redirects to collection participants" do
             put :update, params
@@ -242,28 +242,28 @@ describe CollectionParticipantsController do
   end
 
   describe "destroy" do
-    let (:user) { FactoryGirl.create(:user) }
-    let (:pseud_name) { user.default_pseud.name }
-    let (:collection) { FactoryGirl.create(:collection) }
-    let (:user_participant_role) { CollectionParticipant::MEMBER }
-    let! (:user_participant) {
+    let(:user) { FactoryGirl.create(:user) }
+    let(:pseud_name) { user.default_pseud.name }
+    let(:collection) { FactoryGirl.create(:collection) }
+    let(:user_participant_role) { CollectionParticipant::MEMBER }
+    let!(:user_participant) do
       FactoryGirl.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
         participant_role: user_participant_role
       )
-    }
-    let (:params) {
+    end
+    let(:params) do
       { id: user_participant.id }
-    }
+    end
 
     before do
       fake_login_known_user(user)
     end
 
     context "where there is no participant found" do
-      let (:params) { { id: nil } }
+      let(:params) { { id: nil } }
 
       it "displays an error and redirects to the index" do
         delete :destroy, params
@@ -282,17 +282,15 @@ describe CollectionParticipantsController do
         end
 
         context "where the user is trying to destroy another participant" do
-          let (:other_participant) {
+          let(:other_participant) do
             FactoryGirl.create(
               :collection_participant,
               collection: collection,
               participant_role: CollectionParticipant::MEMBER
             )
-          }
-          let (:pseud_name) { other_participant.pseud.name }
-          let (:params) {
-            { id: other_participant.id }
-          }
+          end
+          let(:pseud_name) { other_participant.pseud.name }
+          let(:params) { { id: other_participant.id } }
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params
@@ -304,19 +302,19 @@ describe CollectionParticipantsController do
       end
 
       context "where user is a maintainer" do
-        let (:user_participant_role) { CollectionParticipant::MODERATOR }
-        let (:collection) { FactoryGirl.create(:collection) }
-        let (:other_participant) {
+        let(:user_participant_role) { CollectionParticipant::MODERATOR }
+        let(:collection) { FactoryGirl.create(:collection) }
+        let(:other_participant) do
           FactoryGirl.create(
             :collection_participant,
             collection: collection,
             participant_role: CollectionParticipant::MEMBER
           )
-        }
-        let (:pseud_name) { other_participant.pseud.name }
-        let (:params) {
+        end
+        let(:pseud_name) { other_participant.pseud.name }
+        let(:params) do
           { id: other_participant.id }
-        }
+        end
 
         context "where participant to be destroyed is not an owner" do
           it "destroys the participant successfully and redirects to index" do
@@ -327,8 +325,8 @@ describe CollectionParticipantsController do
         end
 
         context "where participant to be destroyed is an owner" do
-          let (:delete_participant_id) { CollectionParticipant.find_by_pseud_id(collection.owners.first.id) }
-          let (:params) {
+          let(:delete_participant_id) { CollectionParticipant.find_by_pseud_id(collection.owners.first.id) }
+          let(:params) {
             { id: delete_participant_id }
           }
 
@@ -341,14 +339,14 @@ describe CollectionParticipantsController do
           end
 
           context "where there are other owners" do
-            let! (:pseud_name) { CollectionParticipant.find(delete_participant_id).pseud.name }
-            let! (:other_owner) {
+            let!(:pseud_name) { CollectionParticipant.find(delete_participant_id).pseud.name }
+            let!(:other_owner) do
               FactoryGirl.create(
                 :collection_participant,
                 collection: collection,
                 participant_role: CollectionParticipant::OWNER
               )
-            }
+            end
 
             it "destroys the participant successfully and redirects to index" do
               delete :destroy, params
@@ -362,24 +360,24 @@ describe CollectionParticipantsController do
   end
 
   describe "add" do
-    let (:user) { FactoryGirl.create(:user) }
-    let (:collection) { FactoryGirl.create(:collection) }
-    let (:participants_to_invite) { "" }
-    let! (:params) {
+    let(:user) { FactoryGirl.create(:user) }
+    let(:collection) { FactoryGirl.create(:collection) }
+    let(:participants_to_invite) { "" }
+    let!(:params) do
       {
         collection_id: collection.name,
         participants_to_invite: participants_to_invite
       }
-    }
-    let (:user_participant_role) { CollectionParticipant::MEMBER }
-    let! (:user_participant) {
+    end
+    let(:user_participant_role) { CollectionParticipant::MEMBER }
+    let!(:user_participant) do
       FactoryGirl.create(
         :collection_participant,
         pseud: user.default_pseud,
         collection: collection,
         participant_role: user_participant_role
       )
-    }
+    end
 
     before do
       fake_login_known_user(user)
@@ -393,15 +391,15 @@ describe CollectionParticipantsController do
     end
 
     context "where the user is a maintainer" do
-      let (:user_participant_role) { CollectionParticipant:: MODERATOR }
-      let (:banned) { false }
-      let (:users) { 3.times.map { FactoryGirl.create(:user, banned: banned) } }
-      let (:participants_to_invite) {
+      let(:user_participant_role) { CollectionParticipant:: MODERATOR }
+      let(:banned) { false }
+      let(:users) { Array.new(3) { FactoryGirl.create(:user, banned: banned) } }
+      let(:participants_to_invite) do
         users.map(&:default_pseud).map(&:byline).map(&:to_s).join(",")
-      }
+      end
 
       context "where users to be added have already applied to the collection" do
-        let! (:participants) {
+        let!(:participants) do
           users.each do |user|
             FactoryGirl.create(
               :collection_participant,
@@ -410,7 +408,7 @@ describe CollectionParticipantsController do
               participant_role: CollectionParticipant::NONE
             )
           end
-        }
+        end
 
         it "approves those users, redirects to the collection participants page and displays a notification" do
           get :add, params
@@ -438,7 +436,7 @@ describe CollectionParticipantsController do
       end
 
       context "where users to be added are banned users" do
-        let (:banned) { true }
+        let(:banned) { true }
 
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params
@@ -450,10 +448,10 @@ describe CollectionParticipantsController do
       end
 
       context "where users to be added can't be found" do
-        let! (:pseud_ids) { users.map(&:default_pseud).map(&:id) }
+        let!(:pseud_ids) { users.map(&:default_pseud).map(&:id) }
         it "displays an error and redirects" do
           users.each do |user|
-              user.default_pseud.destroy
+            user.default_pseud.destroy
           end
 
           get :add, params
