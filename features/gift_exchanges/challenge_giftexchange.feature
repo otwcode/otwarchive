@@ -348,6 +348,46 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
+  Scenario: A mod can default all incomplete assignments
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And I am logged in as "myname1"
+      And I fulfill my assignment
+   When I am logged in as "mod1"
+     And I go to the "Awesome Gift Exchange" assignments page
+     And I follow "Default All Incomplete"
+   Then I should see "All unfulfilled assignments marked as defaulting."
+     And I should see "Undefault myname2"
+     And I should see "Undefault myname3"
+     And I should see "Undefault myname4"
+
+  Scenario: User can default and undefault on their assignment 
+   Given everyone has their assignments for "Awesome Gift Exchange"
+   When I am logged in as "myname1"
+     And I go to my user page
+     And I follow "Assignments"
+     And I follow "Default"
+   Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+   When I am logged in as "mod1"
+     And I go to the "Awesome Gift Exchange" assignments page
+     And I check the 1st checkbox with id matching ".*"
+     And I press "Submit"
+   Then I should see "Assignment updates complete!"
+     And I should not see "Undefault"
+      When I am logged in as "myname1"
+     And I go to my user page
+     And I follow "Assignments"
+     And I follow "Default"
+   Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+   When I am logged in as "mod1"
+     And I go to the "Awesome Gift Exchange" assignments page
+     And I fill in the 2nd field with id matching ".*" with "nonexistent"
+     And I press "Submit"
+   Then I should see "We couldn't find the user nonexistent to assign that to."
+   When I fill in the 2nd field with id matching ".*" with "myname1"
+     And I press "Submit"
+   Then I should see "No assignments to review!"
+     And I should see "Assignment updates complete!"
+
   Scenario: Refused story should still fulfill the assignment
 
     Given an assignment has been fulfilled in a gift exchange
@@ -501,6 +541,7 @@ Feature: Gift Exchange Challenge
       And I go to my signups page
     Then I should see "Challenge Sign-ups"
       And I should not see "Bad Gift Exchange"
+
 
   Scenario: A user can still access their Assignments page after a gift exchange
   they had an unfulfilled assignment in has been deleted
