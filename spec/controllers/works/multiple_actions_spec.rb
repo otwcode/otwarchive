@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "spec_helper"
 
 describe WorksController do
@@ -36,12 +37,14 @@ describe WorksController do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
-             posted: true) }
+             posted: true)
+    }
     let(:multiple_work2) {
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
-             posted: true) }
+             posted: true)
+    }
 
     before do
       fake_login_known_user(multiple_works_user)
@@ -60,17 +63,49 @@ describe WorksController do
   end
 
   describe "update_multiple" do
-    it "should convert the anon_commenting_disabled parameter to '0'" do
+    let!(:multiple_works_user) { create(:user) }
+    let(:multiple_work1) {
+      create(:work,
+             authors: [multiple_works_user.default_pseud],
+             title: "Work 1",
+             anon_commenting_disabled: true,
+             moderated_commenting_enabled: true,
+             posted: true)
+    }
+    let(:multiple_work2) {
+      create(:work,
+             authors: [multiple_works_user.default_pseud],
+             title: "Work 2",
+             anon_commenting_disabled: true,
+             moderated_commenting_enabled: true,
+             posted: true)
+    }
+    let(:params) {
+      {
+        work_ids: [multiple_work1.id, multiple_work2.id],
+        work: {
+          anon_commenting_disabled: "allow_anon",
+          moderated_commenting_enabled: "not_moderated"
+        }
+      }
+    }
+
+    before do
+      fake_login_known_user(multiple_works_user)
     end
 
-    it "should convert the moderated_commenting_enabled parameter to '0'" do
+    it "should convert the anon_commenting_disabled parameter to false" do
+      put :update_multiple, params
+      assigns(:works).each do |work|
+        expect(work.anon_commenting_disabled).to be false
+      end
     end
 
-    it "should display an error if any of the works can't be updated" do
-    end
-
-    it "should display an error if any errors occurred while updating the works" do
+    it "should convert the moderated_commenting_enabled parameter to false" do
+      put :update_multiple, params
+      assigns(:works).each do |work|
+        expect(work.moderated_commenting_enabled).to be false
+      end
     end
   end
 end
-

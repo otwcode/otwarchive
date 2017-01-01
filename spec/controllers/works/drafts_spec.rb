@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "spec_helper"
 
 describe WorksController do
@@ -37,7 +38,6 @@ describe WorksController do
     end
 
     context "with a valid user_id" do
-
       context "if the user_id requested doesn't belong to the current user" do
         it "should display an error" do
           get :drafts, user_id: other_drafts_user.login
