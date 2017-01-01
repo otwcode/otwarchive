@@ -45,14 +45,4 @@ describe BookmarksController do
       end
     end
   end
-
-  describe 'load_bookmarkable' do
-    context 'when a chapter' do
-      let(:chapter) { FactoryGirl.create(:chapter) }
-      params = { chapter_id: chapter.id}
-      chapter_id = chapter.id
-      get :load_bookmarkable, params
-      expect(assigns(:bookmarkable)).to include(chapter.work)
-    end
-  end
 end
