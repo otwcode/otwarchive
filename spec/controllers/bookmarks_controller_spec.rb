@@ -1,0 +1,58 @@
+require 'spec_helper'
+
+describe BookmarksController do
+  include LoginMacros
+
+  def it_redirects_to_user_login
+    expect(response).to have_http_status(:redirect)
+    expect(response).to redirect_to new_user_session_path
+  end
+
+  describe 'new' do
+    context 'without javascript' do
+
+      it 'should not return the form for anyone not logged in' do
+        get :new
+        it_redirects_to_user_login
+      end
+
+      it 'should render the form if logged in' do
+        fake_login
+        get :new
+        expect(response).to render_template('new')
+      end
+
+    end
+
+    context 'with javascript' do
+
+      it 'should render the bookmark_form_dynamic form if logged in' do
+        fake_login
+        get :new, format: 'js'
+        expect(response).to render_template('bookmark_form_dynamic')
+      end
+    end
+  end
+
+  describe 'edit' do
+    context 'with javascript' do
+      let(:bookmark) { FactoryGirl.create(:bookmark) }
+
+      it 'should return the bookmark_form_dynamic form' do
+        fake_login_known_user(bookmark.pseud.user)
+        get :edit, id: bookmark.id, format: 'js'
+        expect(response).to render_template('bookmark_form_dynamic')
+      end
+    end
+  end
+
+  describe 'load_bookmarkable' do
+    context 'when a chapter' do
+      let(:chapter) { FactoryGirl.create(:chapter) }
+      params = { chapter_id: chapter.id}
+      chapter_id = chapter.id
+      get :load_bookmarkable, params
+      expect(assigns(:bookmarkable)).to include(chapter.work)
+    end
+  end
+end

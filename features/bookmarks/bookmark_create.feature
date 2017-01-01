@@ -187,6 +187,8 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
   Then I should not see "The collection Five Pillars is currently moderated."
 
 
+
+
 Scenario: bookmarks added to moderated collections appear correctly
   Given the following activated users exist
     | login      | password |
@@ -194,6 +196,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     | bookmarker | password |
     | otheruser  | password |
     And I have a moderated collection "JBs Greatest" with name "jbs_greatest"
+    And I have a moderated collection "Bedknobs and Broomsticks" with name "beds_and_brooms"
     And I have the collection "Mrs. Pots" with name "mrs_pots"
     And I am logged in as "workauthor" with password "password"
     And I post the work "The Murder of Sherlock Holmes"
@@ -205,6 +208,14 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I press "Create"
   Then I should see "Bookmark was successfully created"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+    # UPDATE the bookmark and add it to a second MODERATED collection and
+    # recheck all the things
+  Then I follow "Edit"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms"
+    And I press "Update"
+    And all search indexes are updated
+  Then I should see "Bookmark was successfully updated."
+    And I should see "You have submitted your work to the moderated collection"
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
     And I should see "Bookmarker's Collections: JBs Greatest"
@@ -231,7 +242,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I am logged in as "bookmarker" with password "password"
     And I view the work "The Murder of Sherlock Holmes"
     And I follow "Edit Bookmark"
-    And I fill in "bookmark_collection_names" with "jbs_greatest,mrs_pots"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
     And I press "Edit" within "div#bookmark-form"
     And all search indexes are updated
   Then I should see "Bookmark was successfully updated."
