@@ -195,19 +195,28 @@ describe WorksController do
 
   describe "create" do
     before do
-      @user = FactoryGirl.create(:user)
+      @user = create(:user)
       fake_login_known_user(@user)
     end
 
     it "should not allow a user to submit only a pseud that is not theirs" do
-      @user2 = FactoryGirl.create(:user)
-      work_attributes = FactoryGirl.attributes_for(:work)
+      @user2 = create(:user)
+      work_attributes = attributes_for(:work)
       work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
       expect {
         post :create, { work: work_attributes }
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
       expect(flash[:error]).to eq "You're not allowed to use that pseud."
+    end
+  end
+
+  describe "show" do
+    it "shouldn't error when a work has no fandoms" do
+      work = create(:work, fandoms: [], posted: true)
+      fake_login
+      get :show, id: work.id
+      expect(assigns(:page_title)).to include "No fandom specified"
     end
   end
 
