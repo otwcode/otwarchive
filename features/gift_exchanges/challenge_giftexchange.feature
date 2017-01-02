@@ -542,7 +542,6 @@ Feature: Gift Exchange Challenge
     Then I should see "Challenge Sign-ups"
       And I should not see "Bad Gift Exchange"
 
-
   Scenario: A user can still access their Assignments page after a gift exchange
   they had an unfulfilled assignment in has been deleted
     Given everyone has their assignments for "Bad Gift Exchange"
