@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe WorksController do
   include LoginMacros
-
-  def it_redirects_to_user_login
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to new_user_session_path
-  end
+  include RedirectExpectationHelper
 
   describe "before_filter #clean_work_search_params" do
     let(:params) { nil }
@@ -19,7 +15,7 @@ describe WorksController do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params
-        it_redirects_to_user_login
+        it_redirects_to new_user_session_path
       end
 
       it "returns a nil" do
@@ -183,7 +179,7 @@ describe WorksController do
   describe "new" do
     it "should not return the form for anyone not logged in" do
       get :new
-      it_redirects_to_user_login
+      it_redirects_to new_user_session_path
     end
 
     it "should render the form if logged in" do

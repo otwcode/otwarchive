@@ -3,21 +3,7 @@ require "spec_helper"
 
 describe CollectionParticipantsController do
   include LoginMacros
-
-  def it_redirects_to_with_notice(path, notice)
-    it_redirects_to(path)
-    expect(flash[:notice]).to eq notice
-  end
-
-  def it_redirects_to_with_error(path, error)
-    it_redirects_to(path)
-    expect(flash[:error]).to eq error
-  end
-
-  def it_redirects_to(path)
-    expect(response).to have_http_status :redirect
-    expect(response).to redirect_to path
-  end
+  include RedirectExpectationHelper
 
   describe "join" do
     context "where user isn't logged in" do
@@ -148,7 +134,7 @@ describe CollectionParticipantsController do
             end
           end
 
-          it "displays the participants in the correct order" do
+          it "displays the participants" do
             get :index, params
             expect(response).to have_http_status(:success)
             users.each do |user|
@@ -189,9 +175,7 @@ describe CollectionParticipantsController do
     context "where there is no participant" do
       it "displays an error and redirects to the index" do
         put :update, params
-        expect(response).to have_http_status :redirect
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to eq "Which participant did you want to work with?"
+        it_redirects_to_with_error(root_path, "Which participant did you want to work with?")
       end
     end
 
@@ -207,9 +191,7 @@ describe CollectionParticipantsController do
       context "where the user is not a collection maintainer" do
         it "redirects to the collection page and displays an error" do
           put :update, params
-          expect(flash[:error]).to eq "Sorry, you're not allowed to do that."
-          expect(response).to have_http_status :redirect
-          expect(response).to redirect_to collection_path(collection)
+          it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
         end
       end
 
@@ -218,10 +200,8 @@ describe CollectionParticipantsController do
         context "where the participant is updated successfully" do
           it "successfully updates and redirects to collection participants" do
             put :update, params
+            it_redirects_to_with_notice(collection_participants_path(collection), "Updated #{participant.pseud.name}.")
             expect(flash[:notice]).to eq "Updated #{participant.pseud.name}."
-            expect(response).to have_http_status :redirect
-            expect(response).to redirect_to collection_participants_path(collection)
-            expect(CollectionParticipant.find_by_pseud_id(participant.pseud_id).participant_role).to eq CollectionParticipant::MEMBER
           end
         end
 
@@ -232,9 +212,7 @@ describe CollectionParticipantsController do
 
           it "displays an error notice and and redirects to collection participants" do
             put :update, params
-            expect(flash[:error]).to eq "Couldn't update #{participant.pseud.name}."
-            expect(response).to have_http_status :redirect
-            expect(response).to redirect_to collection_participants_path(collection)
+            it_redirects_to_with_error(collection_participants_path(collection), "Couldn't update #{participant.pseud.name}.")
           end
         end
       end
