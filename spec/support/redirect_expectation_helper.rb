@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 module RedirectExpectationHelper
-
   def it_redirects_to_with_notice(path, notice)
     it_redirects_to(path)
     expect(flash[:notice]).to eq notice
