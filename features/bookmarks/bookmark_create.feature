@@ -215,7 +215,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I press "Update"
     And all search indexes are updated
   Then I should see "Bookmark was successfully updated."
-    And I should see "You have submitted your work to the moderated collection"
+    And I should see "You have submitted your bookmark to the moderated collection"
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
     And I should see "Bookmarker's Collections: JBs Greatest"
