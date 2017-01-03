@@ -407,11 +407,6 @@ Otwarchive::Application.routes.draw do
         put :update_multiple
         get :default_all
       end
-      member do
-        get :undefault
-        get :cover_default
-        get :uncover_default
-      end
     end
     resources :claims, controller: "challenge_claims" do
       collection do
