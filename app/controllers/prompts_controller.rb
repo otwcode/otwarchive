@@ -70,12 +70,9 @@ class PromptsController < ApplicationController
   end
 
   def load_prompt_from_id
-    @prompt = Prompt.find_by_id(params[:id])
-    if @prompt.nil?
-      no_prompt
-      return
-    end
+    @prompt = Prompt.find(params[:id])
     @challenge_signup = @prompt.challenge_signup
+    no_prompt and return unless @prompt
   end
 
   def no_prompt

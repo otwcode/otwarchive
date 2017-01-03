@@ -47,15 +47,6 @@ describe PromptsController do
     end
   end
 
-  describe 'no_prompt' do
-   it 'should show an error and redirect' do
-      signups = create(:challenge_signup)
-      post :edit,  collection_id: signups.collection.name
-      expect(response).to redirect_to(collection_path(signups.collection))
-      expect(flash[:error]).to eq "What prompt did you want to work on?"
-    end
-  end
-
   describe 'new_prompt_offer' do
     it 'should have no errors and redirect' do
       signups = create(:challenge_signup)
