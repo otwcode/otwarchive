@@ -1,10 +1,10 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :load_bookmarkable, :only => [ :index, :new, :create ]
+  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :confirm_delete ]
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
@@ -215,6 +215,25 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
+  end
+
+  # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
+  # Only main bookmarks page or tag bookmarks page
+  # non-JS fallback should be to the 'view all bookmarks' link which serves the same function
+  def fetch_recent
+    @bookmarkable = @bookmark.bookmarkable
+    respond_to do |format|
+      format.js {
+        @bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
+      }
+      format.html do
+        id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
+        redirect_to url_for({:action => :index, id_symbol => @bookmarkable})
+      end
+    end
+  end
+  def hide_recent
+    @bookmarkable = @bookmark.bookmarkable
   end
 
   protected
