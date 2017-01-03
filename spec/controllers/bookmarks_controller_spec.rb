@@ -10,7 +10,6 @@ describe BookmarksController do
 
   describe 'new' do
     context 'without javascript' do
-
       it 'should not return the form for anyone not logged in' do
         get :new
         it_redirects_to_user_login
@@ -21,11 +20,9 @@ describe BookmarksController do
         get :new
         expect(response).to render_template('new')
       end
-
     end
 
     context 'with javascript' do
-
       it 'should render the bookmark_form_dynamic form if logged in' do
         fake_login
         get :new, format: 'js'
