@@ -22,10 +22,10 @@ class CollectionParticipantsController < ApplicationController
 
   def load_participant_and_collection
     if params[:collection_participant]
-      @participant = CollectionParticipant.where(id: params[:collection_participant][:id]).first
+      @participant = CollectionParticipant.find_by_id(params[:collection_participant][:id])
       @new_role = params[:collection_participant][:participant_role]
     else
-      @participant = CollectionParticipant.where(id: params[:id]).first
+      @participant = CollectionParticipant.find_by_id(params[:id])
     end
 
     no_participant and return unless @participant

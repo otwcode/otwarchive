@@ -201,7 +201,6 @@ describe CollectionParticipantsController do
           it "successfully updates and redirects to collection participants" do
             put :update, params
             it_redirects_to_with_notice(collection_participants_path(collection), "Updated #{participant.pseud.name}.")
-            expect(flash[:notice]).to eq "Updated #{participant.pseud.name}."
           end
         end
 
@@ -273,7 +272,7 @@ describe CollectionParticipantsController do
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params
             it_redirects_to collection_path(collection)
-            expect(flash[:error]).to eq "Sorry, you're not allowed to do that."
+            it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
             expect(CollectionParticipant.find(other_participant)).to be_present
           end
         end
