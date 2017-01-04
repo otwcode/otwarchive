@@ -1,0 +1,10 @@
+common_caps:
+  "browserstack.debug": true
+
+browser_caps:
+  -
+    "os": "Windows"
+    "os_version": "7"
+    "browser": "IE"
+    "browser_version": "8.0"
+    "resolution": "1024x768"
