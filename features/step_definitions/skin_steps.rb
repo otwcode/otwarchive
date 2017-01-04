@@ -1,5 +1,14 @@
 DEFAULT_CSS = "\"#title { text-decoration: blink;}\""
 
+Given /^I have the site skins$/ do
+  admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
+  Skin.load_site_css
+  admin_settings = AdminSetting.first
+  admin_settings.default_skin_id = Skin.find_by_title("Archive 2.0").id
+  admin_settings.last_updated_by = admin.id
+  admin_settings.save!
+end
+
 Given /^basic skins$/ do
   assert Skin.default
   assert WorkSkin.basic_formatting
