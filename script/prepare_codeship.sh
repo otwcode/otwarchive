@@ -25,6 +25,9 @@ tail config/config.yml
 #wget http://media.transformativeworks.org/ao3/codeship/prepare_part2.sh -O - | bash -x
 VERSION="0.90.13"
 PORT="9333"
+cd ~/bin
+wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip -O /tmp/browserstack.zip
+unzip /tmp/browserstack.zip
 cd ~
 wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${VERSION}.zip
 unzip -o  elasticsearch-${VERSION}.zip
