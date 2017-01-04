@@ -139,11 +139,13 @@ group :test, :development do
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
   gem 'minitest'
+  gem 'browserstack-local'
 end
 
 group :development do
   gem 'factory_girl_rails'
   gem 'bundler-audit'
+  gem 'travis'
 end
 
 group :test, :development, :staging  do

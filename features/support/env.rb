@@ -5,6 +5,10 @@
 # files.
 
 # This file has been edited by hand :(
+require 'yaml'
+require 'selenium/webdriver'
+require 'capybara/cucumber'
+require 'browserstack/local'
 require 'simplecov'
 require 'coveralls'
 require 'capybara/poltergeist'
@@ -18,6 +22,41 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
 # Produce a screen shot for each failure
 require 'capybara-screenshot/cucumber'
+
+# Browser stack:
+class Capybara::Selenium::Driver < Capybara::Driver::Base
+  def reset!
+    if @browser
+      @browser.navigate.to('about:blank')
+    end
+  end
+end
+
+TASK_ID = (ENV['TASK_ID'] || 0).to_i
+CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
+
+CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}.config.yml")))
+CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
+CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
+
+#Capybara.server_port = 8000
+Capybara.register_driver :browserstack do |app|
+  @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
+  @caps['browserstack.local'] = 'true' unless ENV['TEST_LOCAL'].nil?
+
+  # Code to start browserstack local before start of test
+  if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true';
+    @bs_local = BrowserStack::Local.new
+    bs_local_args = {"key" => "#{CONFIG['key']}"}
+    @bs_local.start(bs_local_args)
+  end
+
+  Capybara::Selenium::Driver.new(app,
+    :browser => :remote,
+    :url => "http://#{CONFIG['user']}:#{CONFIG['key']}@#{CONFIG['server']}/wd/hub",
+    :desired_capabilities => @caps
+  )
+end
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -50,9 +89,21 @@ Capybara.configure do |config|
   config.default_max_wait_time = 25
 end
 
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :poltergeist
+
 @javascript = false
+@browserstack = false
 Before '@javascript' do
   @javascript = true
+  @browserstack = false
+end
+
+Before '@browserstack' do
+  @browserstack = true
+  @javascript = false
+  Capybara.javascript_driver = :webkit
+  page.driver.browser.manage.window.maximize
 end
 
 Before '@disable_caching' do
@@ -68,7 +119,7 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :transaction
 
-Capybara.default_driver = :rack_test
-Capybara.javascript_driver = :poltergeist
-
-
+# Code to stop browserstack local after end of test
+at_exit do
+  @bs_local.stop unless @bs_local.nil? 
+end
