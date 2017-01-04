@@ -6,7 +6,7 @@ common_caps:
 browser_caps:
   -
     "os": "Windows"
-    "os_version": "7"
+    "os_version": "10"
     "browser": "IE"
-    "browser_version": "8.0"
+    "browser_version": "11.0"
     "resolution": "1024x768"
