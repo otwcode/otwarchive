@@ -80,6 +80,18 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
+def clean_the_database
+  # Now clear memcached
+  Rails.cache.clear
+  # Now reset redis ...
+  REDIS_GENERAL.flushall
+  REDIS_KUDOS.flushall
+  REDIS_RESQUE.flushall
+  REDIS_ROLLOUT.flushall
+  # Finally elastic search
+  Tire::Model::Search.index_prefix Time.now.to_f.to_s
+end
+
 def get_message_part (mail, content_type)
   mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
 end
@@ -89,4 +101,10 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.length).to eq(2)
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
+end
+
+def create_archivist
+  user = create(:user)
+  user.roles << Role.new(name: "archivist")
+  user
 end
