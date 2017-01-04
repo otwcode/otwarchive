@@ -33,6 +33,7 @@ class Capybara::Selenium::Driver < Capybara::Driver::Base
 end
 
 Capybara.server_port = 8080
+Capybara.asset_host = "http://127.0.0.1:8080"
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
@@ -100,10 +101,12 @@ Before '@javascript' do
   @browserstack = false
 end
 
+Capybara::Screenshot.autosave_on_failure = true
 Before '@browserstack' do
   @browserstack = true
   @javascript = false
   Capybara.javascript_driver = :browserstack
+  Capybara::Screenshot.autosave_on_failure = false
   #page.driver.browser.manage.window.maximize
 end
 
