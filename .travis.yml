@@ -44,8 +44,3 @@ notifications:
      - "irc.freenode.org#otw-dev"
    on_success: change
    on_failure: change
-addons:
-  browserstack:
-    username: "jamesbeal1"
-    secure: "X/tuhJrJus7OqmtG3WleHQXgabjIzQTTmVPZ3kRUqqrlEHw39Qd5vRGiqaINbV6luaZD4baRpPTzOQPRI40LbivqaVewXpY/NmbrIwWI1Wb2dQavgJpWNIW60/Fm6BVj/zsA/jqaNYy3p9a/0wbjwbZKmN08jFqWOOfLIUgYkCE="
- 
