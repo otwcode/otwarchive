@@ -217,10 +217,10 @@ describe WorksController do
     end
   end
 
-  describe "GET #index" do
+  describe "index" do
     before do
-      @fandom = FactoryGirl.create(:fandom)
-      @work = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name)
+      @fandom = create(:fandom)
+      @work = create(:work, posted: true, fandom_string: @fandom.name)
     end
 
     it "should return the work" do
@@ -259,7 +259,7 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(true)
       end
 
-      describe "with NO owner tag" do
+      context "with NO owner tag" do
         it "should return the same result the second time when a new work is created within the expiration time" do
           get :index
           expect(assigns(:works)).to include(@work)
@@ -270,7 +270,7 @@ describe WorksController do
         end
       end
 
-      describe "with an owner tag" do
+      context "with an owner tag" do
         before do
           @fandom2 = FactoryGirl.create(:fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
@@ -298,7 +298,7 @@ describe WorksController do
           allow(controller).to receive(:fetch_admin_settings).and_call_original
         end
 
-        describe "with restricted works" do
+        context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
             @work2.index.refresh
