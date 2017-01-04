@@ -32,7 +32,7 @@ class Capybara::Selenium::Driver < Capybara::Driver::Base
   end
 end
 
-#Capybara.server_port = 8080
+Capybara.server_port = 8080
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
@@ -43,7 +43,7 @@ CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
 
 Capybara.register_driver :browserstack do |app|
   @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
-  @caps['browserstack.local'] = 'true' unless ENV['TEST_LOCAL'].nil?
+  @caps['browserstack.local'] = 'true' if ENV['BROWSERSTACK_ACCESS_KEY']
 
   # Code to start browserstack local before start of test
   if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true';
