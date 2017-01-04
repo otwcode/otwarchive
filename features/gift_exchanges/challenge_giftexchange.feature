@@ -567,3 +567,14 @@ Feature: Gift Exchange Challenge
       And I go to my assignments page
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
+
+  Scenario: A mod can purge assignments after they have been sent, but must
+  first confirm the action
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I go to the "Bad Gift Exchange" assignments page
+      And I follow "Purge Assignments"
+    Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
+    When I press "Yes, Purge Assignments"
+    Then I should see "Assignments purged!"
+
