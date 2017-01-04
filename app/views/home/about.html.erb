@@ -6,14 +6,12 @@
   <p><%= ts("The Archive of Our Own offers a noncommercial and nonprofit central hosting place for fanworks using open-source archiving software.") %></p>
   <p><%= ts("Our other major projects include:") %>
     <ul>
-      <li><%= link_to ts("Fanlore"), "http://fanlore.org" %><%= ts(", a fandom wiki devoted to preserving the history of
-transformative fanworks and the fandoms from which they have arisen.") %></li>
-      <li><%= link_to ts("Legal Advocacy"), "http://transformativeworks.org/projects/legal" %><%=ts (", committed to protecting and defending fanworks from
-commercial exploitation and legal challenge.") %></li>
-      <li><%= link_to ts("Open Doors"), "http://opendoors.transformativeworks.org" %><%=ts (", which offers shelter to at-risk fannish projects.") %></li>
-      <li><%= link_to ts("Transformative Works and Cultures"), "http://journal.transformativeworks.org/index.php/twc" %><%= ts(", a peer-reviewed academic journal
-that seeks to promote scholarship on fanworks and practices.") %></li>
+      <li><%= ts("%{fanlore}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen.", :fanlore => link_to(ts("Fanlore"), "http://fanlore.org")) %></li>
+      <li><%= ts("%{legal_advocacy} committed to protecting and defending fanworks from commercial exploitation and legal challenge.", :legal_advocacy => link_to(ts("Legal Advocacy"), "http://transformativeworks.org/projects/legal")) %></li>
+      <li><%= ts("%{open_doors}, which offers shelter to at-risk fannish projects.", :open_doors => link_to(ts("Open Doors"), "http://opendoors.transformativeworks.org")) %></li>
+      <li><%= ts("%{twc}, a peer-reviewed academic journal
+that seeks to promote scholarship on fanworks and practices.", :twc => link_to(ts("Transformative Works and Cultures"), "http://journal.transformativeworks.org/index.php/twc")) %></li>
     </ul>
   </p>
-  <p><%= ts("You can find out more about the OTW and its projects at its website,") %> <%= link_to ts("transformativeworks.org"), "http://transformativeworks.org" %><%= ts(", and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its") %> <%= link_to ts("FAQ page"), "http://transformativeworks.org/faq-page" %>.</p>
+  <p><%= ts("You can find out more about the OTW and its projects at its website, %{transformative_works}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq}. If you have a media or research question, please contact the %{communications_team}.", :transformative_works => link_to(ts("transformativeworks.org"), "http://transformativeworks.org"), :faq => link_to(ts("FAQ page"), "http://transformativeworks.org/faq"), :communications_team => link_to(ts("Communications team"), "http://transformativeworks.org/contact_us/concomm")) %>.</p>
 </div>
