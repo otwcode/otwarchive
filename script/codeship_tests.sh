@@ -1,7 +1,7 @@
 #!/bin/bash
 export RAILS_ENV=test
 bash ./script/prepare_codeship.sh
-bash TRIES=1 ./script/try_command.sh /other_b/browserstack_demo.feature "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
+TRIES=1 bash ./script/try_command.sh /other_b/browserstack_demo.feature "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
 exit 0
 bash ./script/try_command.sh rspec "bundle exec rspec spec "
 bundle exec rake db:drop
