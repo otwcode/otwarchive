@@ -33,7 +33,6 @@ class Capybara::Selenium::Driver < Capybara::Driver::Base
 end
 
 Capybara.server_port = 8080
-Capybara.app_host = "http://0.0.0.0:8080"
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
