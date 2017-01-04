@@ -349,44 +349,52 @@ Feature: Gift Exchange Challenge
       And I should see "Fulfilled Story"
 
   Scenario: A mod can default all incomplete assignments
+
     Given everyone has their assignments for "Awesome Gift Exchange"
       And I am logged in as "myname1"
       And I fulfill my assignment
-   When I am logged in as "mod1"
-     And I go to the "Awesome Gift Exchange" assignments page
-     And I follow "Default All Incomplete"
-   Then I should see "All unfulfilled assignments marked as defaulting."
-     And I should see "Undefault myname2"
-     And I should see "Undefault myname3"
-     And I should see "Undefault myname4"
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Default All Incomplete"
+    Then I should see "All unfulfilled assignments marked as defaulting."
+      And I should see "Undefault myname2"
+      And I should see "Undefault myname3"
+      And I should see "Undefault myname4"
+      And I should not see "Undefault myname1"
 
-  Scenario: User can default and undefault on their assignment 
-   Given everyone has their assignments for "Awesome Gift Exchange"
-   When I am logged in as "myname1"
-     And I go to my user page
-     And I follow "Assignments"
-     And I follow "Default"
-   Then I should see "We have notified the collection maintainers that you had to default on your assignment."
-   When I am logged in as "mod1"
-     And I go to the "Awesome Gift Exchange" assignments page
-     And I check the 1st checkbox with id matching ".*"
-     And I press "Submit"
-   Then I should see "Assignment updates complete!"
-     And I should not see "Undefault"
-      When I am logged in as "myname1"
-     And I go to my user page
-     And I follow "Assignments"
-     And I follow "Default"
-   Then I should see "We have notified the collection maintainers that you had to default on your assignment."
-   When I am logged in as "mod1"
-     And I go to the "Awesome Gift Exchange" assignments page
-     And I fill in the 2nd field with id matching ".*" with "nonexistent"
-     And I press "Submit"
-   Then I should see "We couldn't find the user nonexistent to assign that to."
-   When I fill in the 2nd field with id matching ".*" with "myname1"
-     And I press "Submit"
-   Then I should see "No assignments to review!"
-     And I should see "Assignment updates complete!"
+  Scenario: User can default and a mod can undefault on their assignment 
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I check "Undefault myname1"
+      And I press "Submit"
+    Then I should see "Assignment updates complete!"
+      And I should not see "Undefault"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I should see "Default"
+
+  Scenario: User can default and a mod can assign a pinch hitter
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I fill in "Pinch Hitter:" with "nonexistent"
+      And I press "Submit"
+    Then I should see "We couldn't find the user nonexistent to assign that to."
+    When I fill in "Pinch Hitter:" with "myname1"
+      And I press "Submit"
+    Then I should see "No assignments to review!"
+      And I should see "Assignment updates complete!"
 
   Scenario: Refused story should still fulfill the assignment
 
