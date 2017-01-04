@@ -105,7 +105,7 @@ Before '@browserstack' do
   @browserstack = true
   @javascript = false
   Capybara.javascript_driver = :browserstack
-  page.driver.browser.manage.window.maximize
+  #page.driver.browser.manage.window.maximize
 end
 
 Before '@disable_caching' do
