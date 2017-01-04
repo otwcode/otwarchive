@@ -3,7 +3,8 @@ Feature: Various things on the homepage
   @browserstack
   Scenario: test browserstack
 
-  Given I have the site skins
+  Given basic skins
+    And I have the site skins
     And I am on the homepage
   Then I should see "The Archive of Our Own is a project of the" 
     And I should see "Organization for Transformative Works"
