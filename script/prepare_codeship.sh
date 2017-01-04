@@ -26,8 +26,10 @@ tail config/config.yml
 VERSION="0.90.13"
 PORT="9333"
 cd ~/bin
-wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip -O /tmp/browserstack.zip
-unzip /tmp/browserstack.zip
+if [ ! -x BrowserStackLocal ] ; then
+  wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip -O /tmp/browserstack.zip
+  unzip /tmp/browserstack.zip
+fi
 cd ~
 wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${VERSION}.zip
 unzip -o  elasticsearch-${VERSION}.zip
