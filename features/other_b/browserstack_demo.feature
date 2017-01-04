@@ -5,7 +5,8 @@ Feature: Various things on the homepage
 
   Given I have the site skins
     And I am on the homepage
-  Then I should see 'The Archive of Our Own is a project of the <A href="http://transformativeworks.org">Organization for Transformative Works</A>.'
+  Then I should see "The Archive of Our Own is a project of the" 
+    And I should see "Organization for Transformative Works"
   When I follow "Diversity Statement"
   Then I should see "You are welcome at the Archive of Our Own."
   When I follow "DMCA Policy"
