@@ -34,6 +34,7 @@ end
 
 Capybara.server_port = 8080
 Capybara.asset_host = "http://127.0.0.1:8080"
+Capybara.always_include_port = true
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
