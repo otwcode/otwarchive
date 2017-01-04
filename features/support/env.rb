@@ -32,6 +32,9 @@ class Capybara::Selenium::Driver < Capybara::Driver::Base
   end
 end
 
+Capybara.server_port = 8080
+Capybara.app_host = "http://0.0.0.0:8080"
+
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CONFIG_NAME'] || 'browserstack'
 
@@ -39,7 +42,6 @@ CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/#{C
 CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
 CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
 
-#Capybara.server_port = 8000
 Capybara.register_driver :browserstack do |app|
   @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
   @caps['browserstack.local'] = 'true' unless ENV['TEST_LOCAL'].nil?
@@ -102,7 +104,7 @@ end
 Before '@browserstack' do
   @browserstack = true
   @javascript = false
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :browserstack
   page.driver.browser.manage.window.maximize
 end
 
