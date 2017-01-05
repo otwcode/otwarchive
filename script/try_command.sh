@@ -2,8 +2,10 @@
 MAX_LOOP=${TRIES:-3}
 n=0
 export TEST_RUN="$1"
-export COFG_NAME="${CFG_NAME}"
-echo "Browserstack config: <${CFG_NAME}><${COFG_NAME}" 
+if [ -n "$3" ] ; then
+  export CFG_NAME="$3"
+fi
+echo "Browserstack config: <${CFG_NAME}><${COFG_NAME}>" 
 rm /tmp/coverage.tar
 tar cvf /tmp/coverage.tar ./coverage
 until [ $n -ge $MAX_LOOP ]
