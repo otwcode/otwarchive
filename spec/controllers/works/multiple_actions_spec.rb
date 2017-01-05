@@ -3,6 +3,7 @@ require "spec_helper"
 
 describe WorksController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   let(:multiple_user_pseud) { create(:pseud) }
   let!(:multiple_works_user) {

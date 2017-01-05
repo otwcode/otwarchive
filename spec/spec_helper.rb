@@ -100,8 +100,3 @@ def create_archivist
   user.roles << Role.new(name: "archivist")
   user
 end
-
-def it_redirects_to(path)
-  expect(response).to have_http_status(:redirect)
-  expect(response).to redirect_to path
-end
