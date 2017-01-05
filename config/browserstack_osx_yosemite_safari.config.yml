@@ -1,0 +1,17 @@
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+browser_caps:
+  -
+    "os": "OS X"
+    "os_version": "Yosemite"
+    "browser": "Safari"
+    "browser_version": "8.0"
+    "resolution": "1600x1200"

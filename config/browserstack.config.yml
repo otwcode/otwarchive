@@ -1,4 +1,0 @@
-server: "hub-cloud.browserstack.com"
-
-common_caps:
-  "browserstack.debug": true

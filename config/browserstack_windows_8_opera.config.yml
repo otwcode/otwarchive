@@ -1,0 +1,17 @@
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+browser_caps:
+  -
+    "os": "Windows"
+    "os_version": "8.1"
+    "browser": "Opera"
+    "browser_version": "12.16"
+    "resolution": "1280x1024"

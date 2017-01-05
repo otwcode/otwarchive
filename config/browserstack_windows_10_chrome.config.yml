@@ -1,0 +1,17 @@
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+browser_caps:
+  -
+    "os": "Windows"
+    "os_version": "10"
+    "browser": "Chrome"
+    "browser_version": "55.0"
+    "resolution": "1366x768"

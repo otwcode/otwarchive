@@ -1,0 +1,15 @@
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+server: "hub-cloud.browserstack.com"
+
+common_caps:
+  "browserstack.debug": true
+
+browser_caps:
+  -
+    "browserName": "android"
+    "platform": "ANDROID"
+    "device": "Samsung Galaxy Tab 4 10.1"
