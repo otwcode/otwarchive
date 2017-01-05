@@ -25,7 +25,7 @@ class SubscriptionsController < ApplicationController
   # POST /subscriptions
   # POST /subscriptions.xml
   def create
-    @subscription = @user.subscriptions.build(params[:subscription])
+    @subscription = @user.subscriptions.build(subscription_params)
 
     success_message = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_url}\">your Subscriptions page</a>.", name: @subscription.name).html_safe
     if @subscription.save
@@ -57,4 +57,13 @@ class SubscriptionsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
+  
+  private
+  
+  def subscription_params
+    params.require(:subscription).permit(
+      :subscribable_id, :subscribable_type
+    )
+  end
+
 end
