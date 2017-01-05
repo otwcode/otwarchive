@@ -2,6 +2,7 @@
 MAX_LOOP=${TRIES:-3}
 n=0
 export TEST_RUN="$1"
+export CFG_NAME="${CFG_NAME}"
 tar cvf /tmp/coverage.tar ./coverage
 until [ $n -ge $MAX_LOOP ]
  do

@@ -37,7 +37,7 @@ Capybara.asset_host = "http://127.0.0.1:8080"
 Capybara.always_include_port = true
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
-CONFIG_NAME = 'browserstack'+ENV['CFG_NAME']
+CONFIG_NAME = 'browserstack'+( ENV['CFG_NAME'] || "" )
 
 CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}.config.yml")))
 CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
