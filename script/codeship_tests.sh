@@ -9,34 +9,34 @@ bash ./script/prepare_codeship.sh
 # This rune forces something to succeed. "|| :"
 if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
 
-  CONFIG_NAME="_windows_10_edge" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_windows_10_edge" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_windows_10_ie" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_windows_10_ie" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_windows_10_firefox" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_windows_10_firefox" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_windows_8_opera" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_windows_8_opera" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_windows_10_chrome" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_windows_10_chrome" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_osx_yosemite_safari" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_osx_yosemite_safari" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_nexus_5" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_nexus_5" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_kindle_fire_2" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_kindle_fire_2" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_galaxy_tab4_101" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_galaxy_tab4_101" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
-  CONFIG_NAME="_ipad_mini_4" TRIES=1 bash ./script/try_command.sh "" \
+  CFG_NAME="_ipad_mini_4" TRIES=1 bash ./script/try_command.sh "" \
   "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 
 fi
