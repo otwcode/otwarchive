@@ -5,7 +5,7 @@ bash ./script/try_command.sh rspec "bundle exec rspec spec "
 bundle exec rake db:drop
 bash ./script/prepare_codeship.sh
 # This rune forces something to succeed. "|| :"
-TRIES=1 bash ./script/try_command.sh "" "bundle exec cucumber -f progress -r features features/\$TEST_RUN"
+TRIES=1 bash ./script/try_command.sh "" "bundle exec cucumber -tags @browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh admins             "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh bookmarks          "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh collections        "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
