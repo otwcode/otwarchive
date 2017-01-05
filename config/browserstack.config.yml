@@ -10,3 +10,41 @@ browser_caps:
     "browser": "IE"
     "browser_version": "11.0"
     "resolution": "1024x768"
+  -
+    "browserName": "iPad"
+    "platform": "MAC"
+    "device": "iPad Air"
+  -
+    "browserName": "android"
+    "platform": "ANDROID"
+    "device": "Google Nexus 5"
+  -
+    "os": "OS X"
+    "os_version": "Yosemite"
+    "browser": "Safari"
+    "browser_version": "8.0"
+    "resolution": "1600x1200"
+  -
+    "os": "Windows"
+    "os_version": "10"
+    "browser": "Edge"
+    "browser_version": "14.0"
+    "resolution": "1600x1200"
+  -
+    "os": "Windows"
+    "os_version": "10"
+    "browser": "Firefox"
+    "browser_version": "51.0 beta"
+    "resolution": "1440x900"
+  -
+    "os": "Windows"
+    "os_version": "10"
+    "browser": "Chrome"
+    "browser_version": "55.0"
+    "resolution": "1366x768"
+  -
+    "os": "Windows"
+    "os_version": "8.1"
+    "browser": "Opera"
+    "browser_version": "12.16"
+    "resolution": "1280x1024"
