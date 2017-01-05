@@ -5,7 +5,7 @@ export TEST_RUN="$1"
 if [ -n "$3" ] ; then
   export CFG_NAME="$3"
 fi
-echo "Browserstack config: <${CFG_NAME}><${COFG_NAME}>" 
+echo "Browserstack config: <${CFG_NAME}>
 rm /tmp/coverage.tar
 tar cvf /tmp/coverage.tar ./coverage
 until [ $n -ge $MAX_LOOP ]
