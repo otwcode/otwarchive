@@ -46,6 +46,14 @@ CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
 Capybara.register_driver :browserstack do |app|
   @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
   @caps['browserstack.local'] = 'true' if ENV['BROWSERSTACK_ACCESS_KEY']
+  @caps['os'] = ENV['BROWSERSTACK_OS'] if ENV['BROWSERSTACK_OS']
+  @caps['os_version'] = ENV['BROWSERSTACK_OS_VERSION'] if ENV['BROWSERSTACK_OS_VERSION']
+  @caps['browser'] = ENV['BROWSERSTACK_BROWSER'] if ENV['BROWSERSTACK_BROWSER']
+  @caps['browser_version'] = ENV['BROWSERSTACK_BROWSER_VERSION'] if ENV['BROWSERSTACKBROWSER_VERSION']
+  @caps['resolution'] = ENV['BROWSERSTACK_RESOLUTION'] if ENV['BROWSERSTACK_RESOLUTION']
+  @caps['browserName'] = ENV['BROWSERSTACK_BROWSERNAME'] if ENV['BROWSERSTACK_BROWSERNAME']
+  @caps['platform'] = ENV['BROWSERSTACK_PLATFORM'] if ENV['BROWSERSTACK_PLATFORM']
+  @caps['device'] = ENV['BROWSERSTACK_DEVICE'] if ENV['BROWSERSTACK_DEVICE']
 
   # Code to start browserstack local before start of test
   if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true';
