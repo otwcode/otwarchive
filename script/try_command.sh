@@ -12,7 +12,7 @@ until [ $n -ge "$MAX_LOOP" ]
  do
     echo "Attempt $n"
     bash -c "$2" && break
-    n=$[$n+1]
+    n=$((nr+1))
     rm -rf ./coverage
     tar xvfp /tmp/coverage.tar
 done
