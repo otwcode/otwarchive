@@ -47,5 +47,6 @@ Otwarchive::Application.configure do
 
   config.assets.enabled = true
   config.assets.debug = true
-  config.public_file_server.enabled = true
+  #config.public_file_server.enabled = true
+  config.serve_static_assets = true
 end
