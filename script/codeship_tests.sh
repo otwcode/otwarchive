@@ -1,8 +1,8 @@
 #!/bin/bash
 export RAILS_ENV=test
-bash ./script/prepare_codeship.sh
-bash ./script/try_command.sh rspec "bundle exec rspec spec "
-bundle exec rake db:drop
+#bash ./script/prepare_codeship.sh
+#bash ./script/try_command.sh rspec "bundle exec rspec spec "
+#bundle exec rake db:drop
 bash ./script/prepare_codeship.sh
 # This rune forces something to succeed. "|| :"
 if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
