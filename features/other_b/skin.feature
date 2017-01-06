@@ -96,7 +96,8 @@ Feature: creating and editing skins
     And I submit
   Then I should see "The following skins were updated: public skin"
 
-  Scenario: A user should be able to select one of their own non-public skins to use in their preferences
+  Scenario: A user should be able to select one of their own non-public skins to use in
+  their preferences
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   When I am on skinner's preferences page
@@ -106,7 +107,8 @@ Feature: creating and editing skins
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
 
-  Scenario: A user should be able to select one of their own non-public skins to use in their My Skins page
+  Scenario: A user should be able to select one of their own non-public skins to use in
+  their My Skins page
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   Then I should see "my blinking skin"
@@ -138,8 +140,8 @@ Feature: creating and editing skins
     And I submit
   Then I should see an update confirmation message
 
-  Scenario: Newly created public skins should not appear on the main skins page until approved and should be
-    marked as not-yet-approved
+  Scenario: Newly created public skins should not appear on the main skins page until
+  approved and should be marked as not-yet-approved
   Given I am logged in as "skinner"
     And the unapproved public skin "public skin"
   When I am on the skins page
@@ -229,7 +231,8 @@ Feature: creating and editing skins
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
 
-  Scenario: Admins should be able to unapprove public skins, which should also remove them from preferences
+  Scenario: Admins should be able to unapprove public skins, which should also remove
+  them from preferences
   Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I unapprove the skin "public skin"
   Then I should see "The following skins were updated: public skin"
@@ -250,7 +253,8 @@ Feature: creating and editing skins
   When I follow "Write Custom CSS"
     Then I should see "CSS"
 
-  Scenario: Users should be able to create and use a wizard skin to adjust work margins, and they should be able to edit the skin while they are using it
+  Scenario: Users should be able to create and use a wizard skin to adjust work margins,
+  and they should be able to edit the skin while they are using it
   Given I am logged in as "skinner"
   When I am on the new wizard skin page
     And I fill in "Title" with "Wide margins"
@@ -282,7 +286,8 @@ Feature: creating and editing skins
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
 
-  Scenario: Users should be able to create and use a wizard skin with multiple wizard settings
+  Scenario: Users should be able to create and use a wizard skin with multiple wizard
+  settings
   Given I am logged in as "skinner"
   When I am on the new wizard skin page
     And I fill in "Title" with "Many changes"
@@ -408,7 +413,8 @@ Feature: creating and editing skins
       And I follow "Create Work Skin"
     Then "Work Skin" should be selected within "skin_type"
 
-  Scenario: Skin type should persist and remain selectable if you encounter errors during creation
+  Scenario: Skin type should persist and remain selectable if you encounter errors
+  during creation
     Given I am logged in as "skinner"
     When I am on the skins page
       And I follow "My Work Skins"
@@ -479,7 +485,7 @@ Feature: creating and editing skins
   Then I should see "Skin was successfully created"
   Then the cache of the skin on "my blinking skin" should not expire after I save "Complex"
   Then the cache of the skin on "Complex" should expire after I save a parent skin
-  
+
   Scenario: Users should be able to create skins using @media queries
   Given I am logged in as "skinner"
     And I set up the skin "Media Query Test Skin"
@@ -500,7 +506,6 @@ Feature: creating and editing skins
     And I am on the home page
     And I follow "public skin"
    Then I should see "The skin public skin has been set. This will last for your current session."
-
     And I follow "Default"
    Then I should see "You are now using the default Archive skin again!"
 
