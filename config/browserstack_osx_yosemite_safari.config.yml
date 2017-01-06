@@ -3,11 +3,6 @@ server: "hub-cloud.browserstack.com"
 common_caps:
   "browserstack.debug": true
 
-server: "hub-cloud.browserstack.com"
-
-common_caps:
-  "browserstack.debug": true
-
 browser_caps:
   -
     "os": "OS X"
