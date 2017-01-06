@@ -8,15 +8,15 @@ fi
 echo "Browserstack config: <${CFG_NAME}>"
 rm /tmp/coverage.tar
 tar cvf /tmp/coverage.tar ./coverage
-until [ $n -ge $MAX_LOOP ]
+until [ $n -ge "$MAX_LOOP" ]
  do
     echo "Attempt $n"
     bash -c "$2" && break
-    n=$[$n+1]
+    n=($n+1)
     rm -rf ./coverage
     tar xvfp /tmp/coverage.tar
 done
-if [ $n -eq $MAX_LOOP ] ;  then
+if [ $n -eq "$MAX_LOOP" ] ;  then
  exit 1
 fi
 exit 0
