@@ -5,13 +5,13 @@ export TEST_RUN="$1"
 if [ -n "$3" ] ; then
   export CFG_NAME="$3"
 fi
-echo "Browserstack config: <${CFG_NAME}>
+echo "Browserstack config: <${CFG_NAME}>"
 rm /tmp/coverage.tar
 tar cvf /tmp/coverage.tar ./coverage
 until [ $n -ge $MAX_LOOP ]
  do
     echo "Attempt $n"
-    bash -c "$2" && break  # substitute your command here
+    bash -c "$2" && break
     n=$[$n+1]
     rm -rf ./coverage
     tar xvfp /tmp/coverage.tar
