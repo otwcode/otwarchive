@@ -108,7 +108,7 @@ Before '@browserstack' do
   @javascript = false
   Capybara.javascript_driver = :browserstack
   Capybara::Screenshot.autosave_on_failure = false
-  #page.driver.browser.manage.window.maximize
+  page.driver.browser.manage.window.maximize
 end
 
 Before '@disable_caching' do
