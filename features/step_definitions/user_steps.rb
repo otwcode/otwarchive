@@ -44,7 +44,7 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
-  step("I am logged out")
+  step("I am logged out") unless @browserstack
   user = find_or_create_new_user(login, password)
   if hidden.present?
     user.preference.hide_warnings = true
