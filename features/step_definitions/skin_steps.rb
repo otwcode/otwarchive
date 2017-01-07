@@ -4,8 +4,6 @@ Given /^I have the site skins$/ do
   Skin.default
   WorkSkin.basic_formatting
   admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
-  Skin.load_site_css
-  Skin.where(cached: true).each{|skin| skin.cache!} 
   admin_settings = AdminSetting.first
   admin_settings.default_skin_id = Skin.find_by_title("Archive 2.0").id
   admin_settings.last_updated_by = admin.id
