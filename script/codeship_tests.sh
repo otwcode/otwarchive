@@ -9,12 +9,12 @@ if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
   export TRIES=1
   for i in _windows_10_edge _windows_10_ie _windows_10_firefox _windows_8_opera _windows_10_chrome \
         _osx_yosemite_safari _nexus_5 _kindle_fire_2 _ipad_mini_4 ; do
-    export CFG_NAME="browserstack/browserstack_${i}.config.yml"
+    export CFG_NAME="browserstack/browserstack${i}.config.yml"
     bash ./script/try_command.sh "other_b/browserstack_demo.feature" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
   done
   export TRIES=3
 fi
-export CFG_NAME="browserstack/browserstack__windows_10_chrome.config.yml" bash ./script/try_command.sh "" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
+export CFG_NAME="browserstack/browserstack_windows_10_chrome.config.yml" bash ./script/try_command.sh "" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh admins             "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh bookmarks          "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh collections        "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
