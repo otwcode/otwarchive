@@ -239,3 +239,10 @@ Feature: Non-public site and work skins
   Then I should see "You can only browse your own skins and approved public skins."
     And I should be on the public skins page
 
+  Scenario: A user can't use fixed positioning in a work skin
+  Given I am logged in as "skinner"
+  When I set up the skin "Work Skin" with css ".selector {position: fixed; top: 0;}"
+    And I select "Work Skin" from "Type"
+    And I submit
+  Then I should see "The position property in .selector cannot have the value fixed in Work skins, sorry!"
+
