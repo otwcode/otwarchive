@@ -6,11 +6,10 @@ Feature: Skin wizard
     And I am on the new skin page
   Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard"
-  Then I should be on the new wizard skin page
-    And I should see "Site Skin Wizard"
+  Then I should see "Site Skin Wizard"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS"
-  Then I should be on the new skin page
+  Then I should see "Create New Skin"
     And I should see "CSS"
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins,
