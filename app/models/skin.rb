@@ -94,6 +94,13 @@ class Skin < ActiveRecord::Base
 
   validates_presence_of :title
   validates_uniqueness_of :title, :message => ts('must be unique')
+  # We don't want this validation to run when loading site skins with the rake task
+  validate :valid_title, :if => "User.current_user"
+  def valid_title
+    if title =~ /archive/i
+      errors.add(:title, ts("can't use the word 'archive'. (We have to reserve it for official skins.)"))
+    end
+  end
 
   validates_numericality_of :margin, :base_em, :allow_nil => true
   validate :valid_font
