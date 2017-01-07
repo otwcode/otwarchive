@@ -94,7 +94,7 @@ class Skin < ActiveRecord::Base
 
   validates_presence_of :title
   validates_uniqueness_of :title, :message => ts('must be unique')
-  validate :valid_title
+  validate :valid_title, :if => "User.current_user"
   def valid_title
     if title =~ /archive/i
       errors.add(:title, ts("can't use the word 'archive'. (We have to reserve it for official skins.)"))
