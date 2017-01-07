@@ -207,20 +207,20 @@ module NavigationHelpers
       fandom_path($1)
 
     # Admin Pages
-      when /^the admin-posts page$/i
-        admin_posts_path
-      when /^the admin-settings page$/i
-        admin_settings_path
-      when /^the admin-notices page$/i
-        notify_admin_users_path
-      when /^the admin-blacklist page$/i
-        admin_blacklisted_emails_path
-      when /^the manage users page$/
-        admin_users_path
-      when /^the bulk email search page$/i
-        bulk_search_admin_users_path
-      when /^the abuse administration page for "(.*)"$/i
-        admin_user_path(User.find_by_login($1))
+    when /^the admin-posts page$/i
+      admin_posts_path
+    when /^the admin-settings page$/i
+      admin_settings_path
+    when /^the admin-notices page$/i
+      notify_admin_users_path
+    when /^the admin-blacklist page$/i
+      admin_blacklisted_emails_path
+    when /^the manage users page$/
+      admin_users_path
+    when /^the bulk email search page$/i
+      bulk_search_admin_users_path
+    when /^the abuse administration page for "(.*)"$/i
+      admin_user_path(User.find_by_login($1))
 
     # Here is an example that pulls values out of the Regexp:
     #
