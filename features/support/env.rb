@@ -111,7 +111,7 @@ Before '@browserstack' do
   Capybara::Screenshot.autosave_on_failure = false
   page.driver.browser.manage.window.maximize if @hardware.blank?
   puts "\n\nmaximise\n\n" if @hardware.blank?
-  puts @hardware.inspect
+  puts CONFIG['browser_caps']
 end
 
 Before '@disable_caching' do
