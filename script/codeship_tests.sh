@@ -4,7 +4,8 @@ export RAILS_ENV=test
 #bash ./script/try_command.sh rspec "bundle exec rspec spec "
 #bundle exec rake db:drop
 bash ./script/prepare_codeship.sh
-# This rune forces something to succeed. "|| :"
+yes | bundle exec rake skins:load_user_skins RAILS_ENV=production
+bundle exec rake skins:cache_all_site_skins RAILS_ENV=production
 if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
   export TRIES=1
   for i in _windows_10_edge _windows_10_ie _windows_10_firefox _windows_8_opera _windows_10_chrome \
