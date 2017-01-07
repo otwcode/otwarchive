@@ -7,7 +7,7 @@ if [ -n "$3" ] ; then
 fi
 echo "Browserstack config: <${CFG_NAME}>"
 rm /tmp/coverage.tar
-tar cvf /tmp/coverage.tar ./coverage
+tar cf /tmp/coverage.tar ./coverage
 until [ $n -ge "$MAX_LOOP" ]
  do
     echo "Attempt $n"

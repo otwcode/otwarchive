@@ -459,7 +459,7 @@ class Skin < ActiveRecord::Base
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
         end
-        if %w(testing staging production).include? Rails.env
+        if %w(staging production).include? Rails.env
           top_skin.cache!
         end
       end
