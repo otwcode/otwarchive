@@ -39,7 +39,7 @@ Capybara.always_include_port = true
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CFG_NAME'].nil? ? "" : ENV['CFG_NAME']
 
-CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/browserstack#{CONFIG_NAME}.config.yml")))
+CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/{CONFIG_NAME}")))
 CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
 CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
 @hardware = CONFIG['browser_caps'][0]['device']
@@ -105,13 +105,12 @@ end
 
 Capybara::Screenshot.autosave_on_failure = true
 Before '@browserstack' do
+  puts CONFIG['browser_caps']
   @browserstack = true
   @javascript = false
   Capybara.javascript_driver = :browserstack
   Capybara::Screenshot.autosave_on_failure = false
   page.driver.browser.manage.window.maximize if @hardware.blank?
-  puts "\n\nmaximise\n\n" if @hardware.blank?
-  puts CONFIG['browser_caps']
 end
 
 Before '@disable_caching' do
