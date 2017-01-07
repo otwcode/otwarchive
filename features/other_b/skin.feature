@@ -229,10 +229,8 @@ Feature: Non-public site and work skins
   Scenario: A user can't make a skin with "Archive" in the title
   Given I am logged in as "skinner"
     And I set up the skin "My Archive Skin" with some css
-  When "AO3-4820" is fixed
-    # And I press "Submit"
-  # Then I should see "You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)"
-    # And I should be on the new skin page
+  When I press "Submit"
+  Then I should see "Title can't use the word 'archive'. (We have to reserve it for official skins.)"
 
   Scenario: A user can't look at another user's skins
   Given the user "scully" exists and is activated
@@ -240,4 +238,11 @@ Feature: Non-public site and work skins
   When I go to scully's skins page
   Then I should see "You can only browse your own skins and approved public skins."
     And I should be on the public skins page
+
+  Scenario: A user can't use fixed positioning in a work skin
+  Given I am logged in as "skinner"
+  When I set up the skin "Work Skin" with css ".selector {position: fixed; top: 0;}"
+    And I select "Work Skin" from "Type"
+    And I submit
+  Then I should see "The position property in .selector cannot have the value fixed in Work skins, sorry!"
 
