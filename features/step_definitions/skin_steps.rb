@@ -10,6 +10,8 @@ Given /^I have the site skins$/ do
   admin_settings.default_skin_id = Skin.find_by_title("Archive 2.0").id
   admin_settings.last_updated_by = admin.id
   admin_settings.save!
+  assert admin_settings.default_skin_id != Skin.default.id
+  assert !admin_settings.default_skin_id.blank?
 end
 
 Given /^basic skins$/ do
