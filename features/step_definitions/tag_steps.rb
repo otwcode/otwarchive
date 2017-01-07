@@ -125,9 +125,9 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
-Given /^the canonical fandom "([^\"]*)" with (\d+) works$/ do |tag_name, number_of_works|
-  tag = FactoryGirl.create(:fandom, name: tag_name, canonical: true)
-  number_of_works.to_i.times do |i|
+Given /^the canonical fandom "([^"]*)" with (\d+) works$/ do |tag_name, number_of_works|
+  FactoryGirl.create(:fandom, name: tag_name, canonical: true)
+  number_of_works.to_i.times do
     FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
   end
 end
