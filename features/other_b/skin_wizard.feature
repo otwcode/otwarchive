@@ -6,16 +6,18 @@ Feature: Skin wizard
     And I am on the new skin page
   Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard"
-    Then I should see "Site Skin Wizard"
+  Then I should be on the new wizard skin page
+    And I should see "Site Skin Wizard"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS"
-    Then I should see "CSS"
+  Then I should be on the new skin page
+    And I should see "CSS"
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins,
   and they should be able to edit the skin while they are using it
   Given I am logged in as "skinner"
-  When I am on the new wizard skin page
-    And I fill in "Title" with "Wide margins"
+    And I am on the new wizard skin page
+  When I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
     And I fill in "Work margin width" with "text"
     And I submit
@@ -26,8 +28,7 @@ Feature: Skin wizard
   Then I should see "Skin was successfully created"
     And I should see "Work margin width: 5%"
   When I am on skinner's preferences page
-  Then "Default" should be selected within "preference_skin_id"
-  When I select "Wide margins" from "preference_skin_id"
+    And I select "Wide margins" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
     And I should see "margin: auto 5%; max-width: 100%" within "style"
@@ -47,8 +48,8 @@ Feature: Skin wizard
   Scenario: Users should be able to create and use a wizard skin with multiple wizard
   settings
   Given I am logged in as "skinner"
-  When I am on the new wizard skin page
-    And I fill in "Title" with "Many changes"
+    And I am on the new wizard skin page
+  When I fill in "Title" with "Many changes"
     And I fill in "Description" with "Layout skin"
     And I fill in "Font" with "'Times New Roman', Garamond, serif"
     And I fill in "Background color" with "#ccccff"

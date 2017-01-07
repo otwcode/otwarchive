@@ -188,7 +188,9 @@ Feature: Non-public site and work skins
     And I check "Load Archive Skin Components"
     And I submit
   Then I should see a create confirmation message
-  When I set up the skin "Title" with css "#title { text-decoration: blink;}"
+   When I am on the new skin page
+    And I fill in "Title" with "my blinking skin"
+    And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I submit
   Then I should see "Skin was successfully created"
     And the cache of the skin on "my blinking skin" should not expire after I save "Complex"

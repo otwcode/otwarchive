@@ -13,7 +13,7 @@ Given /^I set up the skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^I set up the skin "([^"]*)" with some css$/ do |skin_name|
-  step %{I set up the skin "#{skin_name}" with css "#{DEFAULT_CSS}"}
+  step %{I set up the skin "#{skin_name}" with css #{DEFAULT_CSS}}
 end
 
 Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|

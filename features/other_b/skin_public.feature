@@ -83,9 +83,9 @@ Feature: Public skins
   Given I am logged in as "skinner"
     And I am on skinner's skins page
   When I follow "Public Work Skins"
-  Then I should see "Public Work Skins"
-    When I follow "Public Site Skins"
-  Then I should see "Public Site Skins"
+  Then I should see "Public Work Skins" within "h2"
+  When I follow "Public Site Skins"
+  Then I should see "Public Site Skins" within "h2"
 
   Scenario: Reverting to default skin when a custom skin is selected
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
@@ -109,8 +109,8 @@ Feature: Public skins
   Then I should see "Cached skin"
     And I should not see "Uncached skin"
 
-  Scenario: A user can preview a cached public site skin, and it will take the user to
-  the works page for a canonical tag with between 10 and 20 works
+  Scenario: A user can preview a cached public site skin, and it will take the 
+  user to the works page for a canonical tag with between 10 and 20 works
   Given the approved public skin "Usable Skin"
     And the skin "Usable Skin" is cached
     And the canonical fandom "Dallas" with 2 works
@@ -124,4 +124,4 @@ Feature: Public skins
     And I should see "Go back or click any link to remove the skin"
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
   When I follow "Return To Skin To Use"
-  Then I should be on the "Usable Skin" page
+  Then I should be on "Usable Skin" skin page

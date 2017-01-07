@@ -100,10 +100,10 @@ Feature: Admin manage skins
     And I should not see "#title"
   Then the cache of the skin on "public skin" should expire after I save the skin
 
-  Scenario: Admins should be able to unapprove public skins, which should also remove
-  them from preferences
+  Scenario: Admins should be able to unapprove public skins, which should also
+  remove them from preferences
   Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
-    And I unapprove the skin "public skin"
+  When I unapprove the skin "public skin"
   Then I should see "The following skins were updated: public skin"
     And I should see "public skin" within "table#unapproved_skins"
   When I am logged in as "skinuser"
@@ -111,3 +111,4 @@ Feature: Admin manage skins
   Then "Default" should be selected within "preference_skin_id"
     And I should not see "#title"
     And I should not see "text-decoration: blink;"
+
