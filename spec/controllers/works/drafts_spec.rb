@@ -4,8 +4,8 @@ require "spec_helper"
 describe WorksController do
   include LoginMacros
 
-  let!(:drafts_user_pseud) { create(:pseud, name: "Visiting User Pseud") }
-  let!(:drafts_user) {
+  let(:drafts_user_pseud) { create(:pseud, name: "Visiting User Pseud") }
+  let(:drafts_user) {
     user = create(:user)
     user.pseuds << drafts_user_pseud
     user
@@ -73,7 +73,7 @@ describe WorksController do
   end
 
 
-  describe "post_drafts" do
+  describe "post_draft" do
     before do
       fake_login_known_user(drafts_user)
     end

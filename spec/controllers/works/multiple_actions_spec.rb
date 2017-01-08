@@ -30,6 +30,8 @@ describe WorksController do
       fake_login_known_user(multiple_works_user)
       params = { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] }
       post :confirm_delete_multiple, params
+      expect(assigns(:works)).to include(work1)
+      expect(assigns(:works)).to include(work2)
     end
   end
 
@@ -64,7 +66,7 @@ describe WorksController do
   end
 
   describe "update_multiple" do
-    let!(:multiple_works_user) { create(:user) }
+    let(:multiple_works_user) { create(:user) }
     let(:multiple_work1) {
       create(:work,
              authors: [multiple_works_user.default_pseud],

@@ -95,7 +95,7 @@ describe WorksController do
   # note: this non-action method renders a template before returning which Rspec can't process,
   # so calling the method directly requires a rescue to swallow the Rspec error
   describe "import_multiple" do
-    it "should display the correct error when a timeout occurs" do
+    it "should display the correct error when an error occurs" do
       works_failed_errors = [[], ["url1"], ["error 1", "error 2"]]
       allow_any_instance_of(StoryParser).to receive(:import_from_urls).and_return(works_failed_errors)
       expect(controller.send(:import_multiple, ["url1"], {})).to rescue # stop it whingeing about the response

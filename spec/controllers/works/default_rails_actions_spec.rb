@@ -317,9 +317,9 @@ describe WorksController do
   end
 
   describe "update" do
-    let!(:update_user) { create(:user) }
-    let!(:update_chapter) { create(:chapter) }
-    let!(:update_work) {
+    let(:update_user) { create(:user) }
+    let(:update_chapter) { create(:chapter) }
+    let(:update_work) {
       work = create(:work, authors: [update_user.default_pseud], posted: true)
       work.chapters << update_chapter
       work
