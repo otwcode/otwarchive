@@ -182,7 +182,7 @@ end
 
 
 When /^I submit with the (\d+)(?:st|nd|rd|th) button anywhere$/ do |index|
-  page.all("input[type='submit']")[(index.to_i-1)].click
+  page.all("input[type='submit']")[(index.to_i - 1)].click
 end
 
 # These submit steps will only find submit tags inside a <p class="submit">
