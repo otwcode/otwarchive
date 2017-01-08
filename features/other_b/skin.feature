@@ -214,6 +214,7 @@ Feature: Non-public site and work skins
     And I follow "Delete"
   Then I should see "The skin was deleted."
     And I should be on skinner's skins page
+    And I should not see "Ugly Skin"
 
   Scenario: A user's skin should be reset to the default if they delete the skin they
   are using
