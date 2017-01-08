@@ -9,7 +9,7 @@
     And I press "Remove"
   Then I should see "You can't remove the only owner!"
 
-  Scenario: You can invite and remove someone to a collection
+  Scenario: A collection owner can invite, update, and remove a collection member
   Given a user exists with login: "sam"
     And I have the collection "Such a nice collection"
     And I am logged in as the owner of "Such a nice collection"
@@ -23,7 +23,7 @@
   When I submit with the 6th button anywhere
   Then I should see "Removed sam from collection."
 
-  Scenario: You can't invite a non existant user to a collection
+  Scenario: Owner can't invite a nonexistent user to the collection
   Given I have the collection "Such a nice collection"
     And I am logged in as the owner of "Such a nice collection"
   When I am on the "Such a nice collection" participants page
@@ -31,7 +31,7 @@
     And I press "Submit"
   Then I should see "We couldn't find anyone new by that name to add."
 
-  Scenario: You can't invite a banned user to a collection
+  Scenario: Collection owner can't invite a banned user to a collection
   Given a user exists with login: "sam"
     And user "sam" is banned
     And I have the collection "Such a nice collection"
@@ -41,7 +41,7 @@
     And I press "Submit"
   Then I should see "sam is currently banned and cannot participate in challenges."
 
-  Scenario: You can ask to join a closed collection
+  Scenario: A user can ask to join a closed collection
   Given I have a moderated closed collection "Such a nice collection"
     And I am logged in as "sam"
   When I go to "Such a nice collection" collection's page
