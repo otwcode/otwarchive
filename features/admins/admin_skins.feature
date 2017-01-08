@@ -10,14 +10,14 @@ Feature: Admin manage skins
   Given basic skins
     And the approved public skin "public skin"
     And I am logged in as an admin
-   When I follow "Approved Skins"
+  When I follow "Approved Skins"
     And I check "Cache"
-   Then I press "Update" 
+  Then I press "Update" 
     And I should see "The following skins were updated: public skin"
-   When I follow "Approved Skins"
+  When I follow "Approved Skins"
     And I check "Uncache"
     And I press "Update"
-   Then I should see "The following skins were updated: public skin"
+  Then I should see "The following skins were updated: public skin"
 
   Scenario: Admin can add a public skin to the chooser and then remove it
   Given the approved public skin "public skin"
