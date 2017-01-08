@@ -145,7 +145,6 @@ end
 group :development do
   gem 'factory_girl_rails'
   gem 'bundler-audit'
-  gem 'travis'
 end
 
 group :test, :development, :staging  do
