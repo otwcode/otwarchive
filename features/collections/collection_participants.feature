@@ -2,7 +2,7 @@
 
   Feature: Collection
 
-  Scenario: You can't remove the owner from a collection
+  Scenario: A collection owner can't remove the owner from a collection
   Given I have the collection "Such a nice collection"
     And I am logged in as the owner of "Such a nice collection"
   When I am on the "Such a nice collection" participants page
@@ -48,7 +48,7 @@
     And I follow "Join"
   Then I should see "You have applied to join Such a nice collection"
 
-  Scenario: You can be preapproved to join a closed collection
+  Scenario: A collection owner can preapprove a user to join a closed collection
   Given I have a moderated closed collection "Such a nice collection"
     And I am in sam's browser
     And I am logged in as "sam"
