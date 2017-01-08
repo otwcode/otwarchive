@@ -45,8 +45,4 @@ Otwarchive::Application.configure do
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 
-  config.assets.enabled = true
-  config.assets.debug = true
-  #config.public_file_server.enabled = true
-  config.serve_static_assets = true
 end

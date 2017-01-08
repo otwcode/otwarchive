@@ -16,7 +16,7 @@ if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
   done
   export TRIES=3
 fi
-CFG_NAME="browserstack/browserstack_windows_10_chrome.config.yml" bash ./script/try_command.sh "browserspec" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
+CFG_NAME="browserstack/browserstack_windows_10_chrome.config.yml" bash ./script/try_command.sh "" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh admins             "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh bookmarks          "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
 bash ./script/try_command.sh collections        "bundle exec cucumber --tags ~@browserstack -f progress -r features features/\$TEST_RUN"
