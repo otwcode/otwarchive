@@ -93,6 +93,8 @@ module NavigationHelpers
       user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
+    when /the public skins page/
+      skins_path
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
@@ -128,9 +130,11 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? profile page$/i
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
-      skins_path(user_id: $1)
+      user_skins_path(user_id: $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
+    when /^the new skin page/
+      new_skin_path
     when /^the new wizard skin page/
       new_skin_path(wizard: true)
     when /^"(.*)" edit skin page/
