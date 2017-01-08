@@ -10,7 +10,7 @@ bash ./script/prepare_codeship.sh
 echo 'Skin.load_site_css; Skin.where(cached: true).each{|skin| skin.cache!}' | bundle exec rails c  > /dev/null
 if [ -n "${BROWSERSTACK_USERNAME}" ] ; then
   export TRIES=1
-  for i in config/browserstack/browserstack*.config.yml do
+  for i in config/browserstack/browserstack*.config.yml ; do
     export CFG_NAME="../${i}"
     bash ./script/try_command.sh "other_b/browserstack_demo.feature" "bundle exec cucumber --tags @browserstack -f progress -r features features/\$TEST_RUN"
   done
