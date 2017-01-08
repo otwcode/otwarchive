@@ -40,8 +40,8 @@ TASK_ID = (ENV['TASK_ID'] || 0).to_i
 CONFIG_NAME = ENV['CFG_NAME'].nil? ? "" : ENV['CFG_NAME']
 
 CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")))
-CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
-CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
+CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user'] || ""
+CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key'] || ""
 @hardware = CONFIG['browser_caps'][0]['device']
 
 Capybara.register_driver :browserstack do |app|
