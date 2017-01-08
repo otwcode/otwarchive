@@ -423,7 +423,6 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "No assignments to review!"
       And I should see "Assignment updates complete!"
->>>>>>> 90adfb03dda2bdb86990dded06e6757b84f66824
 
   Scenario: Refused story should still fulfill the assignment
 
