@@ -2,8 +2,8 @@
 Feature: Skin wizard
 
   Scenario: User should be able to toggle between the wizard and the form
-  When I am logged in
-    And I am on the new skin page
+  Given I am logged in
+  When I go to the new skin page
   Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard"
   Then I should see "Site Skin Wizard"
