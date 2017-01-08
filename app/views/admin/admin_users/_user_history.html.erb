@@ -10,14 +10,15 @@
     </tr>
     </thead>
     <tbody>
-    <% unless @log_items.blank? %>
-         @log_items.each do |item|
+    <% unless @log_items.blank?
+      @log_items.each do |item| %>
         <tr>
           <td><%= item.created_at %> (<abbr class="timeago" title="<%= item.created_at %>"><%= item.created_at.iso8601 %></abbr>)</td>
           <td><%= log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
           <td><%= item.note %></td>
         </tr>
       <% end %>
+     <% end %>
       <tr>
         <td><%= @user.created_at %> (<abbr class="timeago" title="<%= @user.created_at %>"><%= @user.created_at.iso8601 %></abbr>)</td>
         <td><%= ts('Account Created') %></td>
