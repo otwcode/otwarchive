@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe WorksController do
   include LoginMacros
-
-  def it_redirects_to_user_login
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to new_user_session_path
-  end
+  include RedirectExpectationHelper
 
   describe "before_filter #clean_work_search_params" do
     let(:params) { nil }
@@ -19,7 +15,7 @@ describe WorksController do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params
-        it_redirects_to_user_login
+        it_redirects_to new_user_session_path
       end
 
       it "returns a nil" do
@@ -183,7 +179,7 @@ describe WorksController do
   describe "new" do
     it "should not return the form for anyone not logged in" do
       get :new
-      it_redirects_to_user_login
+      it_redirects_to new_user_session_path
     end
 
     it "should render the form if logged in" do
@@ -195,19 +191,28 @@ describe WorksController do
 
   describe "create" do
     before do
-      @user = FactoryGirl.create(:user)
+      @user = create(:user)
       fake_login_known_user(@user)
     end
 
     it "should not allow a user to submit only a pseud that is not theirs" do
-      @user2 = FactoryGirl.create(:user)
-      work_attributes = FactoryGirl.attributes_for(:work)
+      @user2 = create(:user)
+      work_attributes = attributes_for(:work)
       work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
       expect {
         post :create, { work: work_attributes }
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
       expect(flash[:error]).to eq "You're not allowed to use that pseud."
+    end
+  end
+
+  describe "show" do
+    it "shouldn't error when a work has no fandoms" do
+      work = create(:work, fandoms: [], posted: true)
+      fake_login
+      get :show, id: work.id
+      expect(assigns(:page_title)).to include "No fandom specified"
     end
   end
 
