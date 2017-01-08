@@ -1,4 +1,5 @@
-require 'spec_helper'
+# frozen_string_literal: true
+require "spec_helper"
 
 describe WorksController do
   include LoginMacros
@@ -216,14 +217,26 @@ describe WorksController do
     end
   end
 
-  describe "GET #index" do
+  describe "index" do
     before do
-      @fandom = FactoryGirl.create(:fandom)
-      @work = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name)
+      @fandom = create(:fandom)
+      @work = create(:work, posted: true, fandom_string: @fandom.name)
     end
 
     it "should return the work" do
       get :index
+      expect(assigns(:works)).to include(@work)
+    end
+
+    it "should set the fandom when given a fandom id" do
+      params = { fandom_id: @fandom.id }
+      get :index, params
+      expect(assigns(:fandom)).to eq(@fandom)
+    end
+
+    it "should return search results when given work_search parameters" do
+      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
+      get :index, params
       expect(assigns(:works)).to include(@work)
     end
 
@@ -246,16 +259,18 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(true)
       end
 
-      it "should return the same result the second time when a new work is created within the expiration time" do
-        get :index
-        expect(assigns(:works)).to include(@work)
-        work2 = FactoryGirl.create(:work, posted: true)
-        work2.index.refresh
-        get :index
-        expect(assigns(:works)).not_to include(work2)
+      context "with NO owner tag" do
+        it "should return the same result the second time when a new work is created within the expiration time" do
+          get :index
+          expect(assigns(:works)).to include(@work)
+          work2 = FactoryGirl.create(:work, posted: true)
+          work2.index.refresh
+          get :index
+          expect(assigns(:works)).not_to include(work2)
+        end
       end
 
-      describe "with an owner tag" do
+      context "with an owner tag" do
         before do
           @fandom2 = FactoryGirl.create(:fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
@@ -273,7 +288,17 @@ describe WorksController do
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        describe "with restricted works" do
+        it "should show results when filters are disabled" do
+          allow(controller).to receive(:fetch_admin_settings).and_return(true)
+          admin_settings = AdminSetting.new(disable_filtering: true)
+          controller.instance_variable_set("@admin_settings", admin_settings)
+          get :index, tag_id: @fandom.name
+          expect(assigns(:works)).to include(@work)
+
+          allow(controller).to receive(:fetch_admin_settings).and_call_original
+        end
+
+        context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
             @work2.index.refresh
@@ -289,75 +314,102 @@ describe WorksController do
 
       end
     end
-
   end
 
-  describe "GET #import" do
-    describe "should return the right error messages" do
-      let(:user) { create(:user) }
+  describe "update" do
+    let(:update_user) { create(:user) }
+    let(:update_chapter) { create(:chapter) }
+    let(:update_work) {
+      work = create(:work, authors: [update_user.default_pseud], posted: true)
+      work.chapters << update_chapter
+      work
+    }
 
+    before do
+      fake_login_known_user(update_user)
+    end
+
+    it "should redirect to the edit page if the work could not be saved" do
+      allow_any_instance_of(Work).to receive(:save).and_return(false)
+      update_work.fandom_string = "Testing"
+      attrs = { title: "New Work Title" }
+      put :update, id: update_work.id, work: attrs
+      expect(response).to render_template :edit
+      allow_any_instance_of(Work).to receive(:save).and_call_original
+    end
+  end
+
+  describe "collected" do
+    let(:collected_fandom) { create(:fandom) }
+    let(:collected_fandom2) { create(:fandom) }
+    let(:collection) { create(:collection) }
+    let(:collected_user) { create(:user) }
+
+    before do
+      @unrestricted_work = create(:work,
+                                  authors: [collected_user.default_pseud],
+                                  posted: true,
+                                  fandom_string: collected_fandom.name)
+      @unrestricted_work_in_collection = create(:work,
+                                                authors: [collected_user.default_pseud],
+                                                collection_names: collection.name,
+                                                posted: true,
+                                                fandom_string: collected_fandom.name)
+      @unrestricted_work_2_in_collection = create(:work,
+                                                  authors: [collected_user.default_pseud],
+                                                  collection_names: collection.name,
+                                                  posted: true,
+                                                  fandom_string: collected_fandom2.name)
+      @restricted_work_in_collection = create(:work,
+                                              restricted: true,
+                                              authors: [collected_user.default_pseud],
+                                              collection_names: collection.name,
+                                              posted: true,
+                                              fandom_string: collected_fandom.name)
+      [@unrestricted_work,
+       @unrestricted_work_2_in_collection,
+       @unrestricted_work_in_collection,
+       @restricted_work_in_collection].each do |work|
+        work.index.refresh
+      end
+    end
+
+    context "as a guest" do
+      it "should render the empty collected form" do
+        get :collected
+        expect(response).to render_template("collected")
+      end
+
+      it "should NOT return any works if no user is set" do
+        get :collected
+        expect(assigns(:works)).to be_nil
+      end
+
+      it "should return ONLY unrestricted works in collections" do
+        get :collected, user_id: collected_user.login
+        expect(assigns(:works)).to include(@unrestricted_work_in_collection)
+        expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
+        expect(assigns(:works)).not_to include(@unrestricted_work)
+        expect(assigns(:works)).not_to include(@restricted_work_in_collection)
+      end
+
+      it "should return filtered works when search parameters are provided" do
+        get :collected, { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
+        expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
+        expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
+      end
+    end
+
+    context "with a logged-in user" do
       before do
-        fake_login_known_user(user)
+        fake_login
       end
 
-      it "when urls are empty" do
-        params = { urls: "" }
-        get :import, params
-        expect(flash[:error]).to eq "Did you want to enter a URL?"
-      end
-
-      it "there is an external author name but importing_for_others is NOT turned on" do
-        params = { urls: "url1, url2", external_author_name: "Foo", importing_for_others: false }
-        get :import, params
-        expect(flash[:error]).to start_with "You have entered an external author name"
-      end
-
-      it "there is an external author email but importing_for_others is NOT turned on" do
-        params = { urls: "url1, url2", external_author_email: "Foo", importing_for_others: false }
-        get :import, params
-        expect(flash[:error]).to start_with "You have entered an external author name"
-      end
-
-      context "the current user is NOT an archivist" do
-        it "should error when importing_for_others is turned on" do
-          params = { urls: "url1, url2", importing_for_others: true }
-          get :import, params
-          expect(flash[:error]).to start_with "You may not import stories by other users"
-        end
-
-        it "should error when importing over the maximum number of works" do
-          max = ArchiveConfig.IMPORT_MAX_WORKS
-          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
-          params = { urls: urls, importing_for_others: false, import_multiple: "works" }
-          get :import, params
-          expect(flash[:error]).to start_with "You cannot import more than #{max}"
-        end
-      end
-
-      context "the current user is an archivist" do
-        it "should error when importing over the maximum number of works" do
-          max = ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
-          params = { urls: urls, importing_for_others: false, import_multiple: "works" }
-          allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-
-          get :import, params
-          expect(flash[:error]).to start_with "You cannot import more than #{max}"
-
-          allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
-        end
-
-        it "should error when importing over the maximum number of chapters" do
-          max = ArchiveConfig.IMPORT_MAX_CHAPTERS
-          urls = Array.new(max + 1) { |i| "url#{i}" }.join(", ")
-          params = { urls: urls, importing_for_others: false, import_multiple: "chapters" }
-          allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-
-          get :import, params
-          expect(flash[:error]).to start_with "You cannot import more than #{max}"
-
-          allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
-        end
+      it "should return ONLY works in collections" do
+        get :collected, { user_id: collected_user.login }
+        expect(assigns(:works)).to include(@unrestricted_work_in_collection)
+        expect(assigns(:works)).to include(@restricted_work_in_collection)
+        expect(assigns(:works)).not_to include(@unrestricted_work)
       end
     end
   end
