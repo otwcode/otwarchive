@@ -18,9 +18,9 @@
     And I press "Submit"
   Then I should see "New members invited: sam"
   When I select "Owner" from "sam_role"
-     And I submit with the 5th button anywhere
+     And I submit with the 5th button
   Then I should see "Updated sam."
-  When I submit with the 6th button anywhere
+  When I submit with the 6th button
   Then I should see "Removed sam from collection."
 
   Scenario: Owner can't invite a nonexistent user to the collection
@@ -60,7 +60,7 @@
     And I press "Submit"
   Then I should see "New members invited: sam"
   When I select "Invited" from "sam_role"
-    And I submit with the 5th button anywhere
+    And I submit with the 5th button
   Then I should see "Updated sam."
   When I am in sam's browser
     And I follow "Join"
