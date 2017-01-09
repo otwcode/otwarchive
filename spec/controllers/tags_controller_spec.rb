@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'equivalent-xml'
 
 describe TagsController do
   include LoginMacros
@@ -103,20 +104,60 @@ describe TagsController do
     end
   end
 
-  describe "update" do
-    context "when fixing a tag's taggings_count" do
+  describe "reindex" do
+    context "when reindexing a tag" do
       before do
         @tag = FactoryGirl.create(:freeform)
-        # manufacture a tag with borked taggings_count
-        @tag.taggings_count = 10
-        @tag.save
+      end
+
+      it "Only an admin can reindex a tag" do
+        get :reindex, id: @tag.name        
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq "Please log in as admin"
+      end
+    end
+  end
+
+  describe "feed" do
+    it "You can only get a feed on Fandom, Character and Relationships" do
+      @tag = FactoryGirl.create(:banned, canonical: false)
+      get :feed, id: @tag.id, format: :atom
+        expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+    end
+  end
+
+  describe "edit" do
+    context "when editing a tag" do
+      before do
+        @tag = FactoryGirl.create(:banned)
+      end
+
+      it "Only an admin can edit a banned tag" do
+        get :edit, id: @tag.name
+        expect(flash[:error]).to eq "Please log in as admin"
+        expect(response).to redirect_to(tag_wranglings_path)
+      end
+    end
+  end
+
+  describe "update" do
+    context "when updating a tag" do
+      before do
+        @tag = FactoryGirl.create(:freeform)
       end
 
       it "should reset the taggings_count" do
+        # manufacture a tag with borked taggings_count
+        @tag.taggings_count = 10
+        @tag.save
         put :update, id: @tag.name, tag: { fix_taggings_count: true }
-
         @tag.reload
         expect(@tag.taggings_count).to eq(0)
+      end
+
+      it "you can wrangle" do
+        put :update, id: @tag.name, tag: {}, commit: :Wrangle
+        expect(response).to redirect_to(tag_path(@tag)+"/wrangle?page=1&sort_column=name&sort_direction=ASC")
       end
     end
   end
