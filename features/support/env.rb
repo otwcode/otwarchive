@@ -37,29 +37,32 @@ Capybara.asset_host = "http://localhost:#{Capybara.server_port}"
 Capybara.always_include_port = true
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
+
 CONFIG_NAME = ENV['CFG_NAME'].nil? ? "" : ENV['CFG_NAME']
+configuration_file = File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")
+if exists?(configuration_file) 
+  CONFIG = YAML.load(File.read(configuration_file))
+  CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user'] 
+  CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
+  @hardware = CONFIG['browser_caps'][0]['device']
 
-CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")))
-CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user'] || ""
-CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key'] || ""
-@hardware = CONFIG['browser_caps'][0]['device']
+  Capybara.register_driver :browserstack do |app|
+    @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
+    @caps['browserstack.local'] = 'true' if ENV['BROWSERSTACK_ACCESS_KEY']
 
-Capybara.register_driver :browserstack do |app|
-  @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
-  @caps['browserstack.local'] = 'true' if ENV['BROWSERSTACK_ACCESS_KEY']
+    # Code to start browserstack local before start of test
+    if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true'; 
+      @bs_local = BrowserStack::Local.new
+      bs_local_args = {"key" => "#{CONFIG['key']}"}
+      @bs_local.start(bs_local_args)
+    end
 
-  # Code to start browserstack local before start of test
-  if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true'; 
-    @bs_local = BrowserStack::Local.new
-    bs_local_args = {"key" => "#{CONFIG['key']}"}
-    @bs_local.start(bs_local_args)
+    Capybara::Selenium::Driver.new(app,
+      :browser => :remote,
+      :url => "http://#{CONFIG['user']}:#{CONFIG['key']}@#{CONFIG['server']}/wd/hub",
+      :desired_capabilities => @caps
+    )
   end
-
-  Capybara::Selenium::Driver.new(app,
-    :browser => :remote,
-    :url => "http://#{CONFIG['user']}:#{CONFIG['key']}@#{CONFIG['server']}/wd/hub",
-    :desired_capabilities => @caps
-  )
 end
 
 # Capybara defaults to CSS3 selectors rather than XPath.
