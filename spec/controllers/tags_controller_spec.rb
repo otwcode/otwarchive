@@ -111,7 +111,6 @@ describe TagsController do
         expect(@character3.mergers).to eq []
       end
     end
-
   end
 
   describe "reindex" do
@@ -132,7 +131,7 @@ describe TagsController do
     it "You can only get a feed on Fandom, Character and Relationships" do
       @tag = FactoryGirl.create(:banned, canonical: false)
       get :feed, id: @tag.id, format: :atom
-        expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+      expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
     end
   end
 
@@ -167,7 +166,7 @@ describe TagsController do
 
       it "you can wrangle" do
         put :update, id: @tag.name, tag: {}, commit: :Wrangle
-        expect(response).to redirect_to(tag_path(@tag)+"/wrangle?page=1&sort_column=name&sort_direction=ASC")
+        expect(response).to redirect_to(tag_path(@tag) + "/wrangle?page=1&sort_column=name&sort_direction=ASC")
       end
     end
   end
