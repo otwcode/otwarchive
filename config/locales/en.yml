@@ -62,6 +62,10 @@ en:
       part1_yourself: "Your work %{title} was deleted at your request."
       part2: "If you have questions, please %{support}."
       part3: "Attached is a copy of your work for your reference."
+      html:
+        part2: "If you have questions, please %{support}."
+      text:
+        part2: "If you have questions, please %{support} %{url}."
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
