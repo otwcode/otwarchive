@@ -335,10 +335,13 @@ class TagsController < ApplicationController
     end
 
     # remove associated tags
+    Rails.logger.info "james_"
     if params[:remove_associated].present? && params[:remove_associated].is_a?(Array)
+      Rails.logger.info "james_2"
       saved_removed_associateds = []
       not_saved_removed_associateds = []
       tags = Tag.where(id: params[:remove_associated])
+      Rails.logger.info "james_3 #{tags.inspect}"
 
       tags.each do |tag_to_remove|
         if @tag.remove_association(tag_to_remove.id)

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'equivalent-xml'
 
 describe TagsController do
   include LoginMacros
@@ -33,7 +32,8 @@ describe TagsController do
 
       @freeform1 = FactoryGirl.create(:freeform, canonical: false)
       @character1 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: FactoryGirl.create(:character, canonical: true))
+      @character3 = FactoryGirl.create(:character, canonical: false)
+      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
       @work = FactoryGirl.create(:work,
                                  posted: true,
                                  fandom_string: "#{@fandom1.name}",
@@ -102,6 +102,16 @@ describe TagsController do
         expect(@character2).not_to be_canonical
       end
     end
+
+    context "A wrangler can remove associated tag" do
+      it "should be successful" do
+        put :mass_update, id: @character3.name, remove_associated: [@character2.id]
+        expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
+        expect(flash[:error]).to be_nil
+        expect(@character3.mergers).to eq []
+      end
+    end
+
   end
 
   describe "reindex" do
