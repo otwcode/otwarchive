@@ -14,11 +14,11 @@ describe Admin, :ready do
     end
 
     it 'without an email address' do
-      expect {create(:admin, email: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Email should look like an email address.")
+      expect { create(:admin, email: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Email should look like an email address.")
     end
 
     it 'without a password' do
-      expect {create(:admin, password: nil)}.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Password is too short (minimum is 4 characters), Password confirmation is too short (minimum is 4 characters)")
+      expect { create(:admin, password: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Password is too short (minimum is 4 characters), Password confirmation is too short (minimum is 4 characters)")
     end
 
     it 'without a password confirmation' do
