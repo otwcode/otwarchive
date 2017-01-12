@@ -1,4 +1,4 @@
-class AdminSessionsController < ApplicationController
+class AdminSessionsController < Devise::SessionsController
   
   before_filter :user_logout_required
   

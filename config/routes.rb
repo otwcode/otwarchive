@@ -120,12 +120,9 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
+    devise_for :admin, only: :sessions, path_names: { sign_in: 'login', sign_out: 'logout' }
     resources :activities, only: [:index, :show]
     resources :banners do
       member do
