@@ -54,6 +54,8 @@
 
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> region" role="main">
+          <% if notice %><div  class="notice"><%= notice.html_safe %></div><% end %>
+          <% if alert %><div class="error"><%= alert.html_safe %></div><% end %>
           <%= flash_div :error, :caution, :notice %>
           <div class="flash"></div>
           <%= yield %>

@@ -154,7 +154,7 @@ public
 
   # Filter method - keeps users out of admin areas
   def admin_only
-    logged_in_as_admin? || admin_only_access_denied
+    def authenticate_admin! || admin_only_access_denied
   end
 
   # Filter method to prevent admin users from accessing certain actions
