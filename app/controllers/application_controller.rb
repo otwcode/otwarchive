@@ -68,15 +68,6 @@ protected
     @current_user_session = UserSession.find
   end
 
-  def current_admin_session
-    return @current_admin_session if defined?(@current_admin_session)
-    @current_admin_session = AdminSession.find
-  end
-
-  def current_admin
-    @current_admin = current_admin_session && current_admin_session.record
-  end
-
   def logged_in?
     current_user.nil? ? false : true
   end

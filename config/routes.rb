@@ -1,4 +1,13 @@
 Otwarchive::Application.routes.draw do
+
+  devise_for :admin,
+    module: 'admin',
+    only: :sessions,
+    path_names: {
+      sign_in: 'login',
+      sign_out: 'logout'
+    }
+
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
@@ -122,7 +131,6 @@ Otwarchive::Application.routes.draw do
 
 
   namespace :admin do
-    devise_for :admin, only: :sessions, path_names: { sign_in: 'login', sign_out: 'logout' }
     resources :activities, only: [:index, :show]
     resources :banners do
       member do
