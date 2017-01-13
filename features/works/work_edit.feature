@@ -152,4 +152,4 @@ Feature: Edit Works
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
       And I press "Post Without Preview"
-    Then I should see "something"
+    Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
