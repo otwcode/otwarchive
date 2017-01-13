@@ -52,7 +52,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
+  visit destroy_admin_session_path
   assert !AdminSession.find
 end
 
