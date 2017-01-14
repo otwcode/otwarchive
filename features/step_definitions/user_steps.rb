@@ -86,8 +86,8 @@ end
 Given /^I am logged out$/ do
   visit logout_path
   assert UserSession.find.nil? unless @javascript
-  visit destroy_admin_session_path
-  assert AdminSession.find.nil? unless @javascript
+#  visit destroy_admin_session_path
+#  assert AdminSession.find.nil? unless @javascript
 end
 
 Given /^I log out$/ do
