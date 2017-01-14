@@ -143,6 +143,16 @@ public
     end
   end
 
+  def authenticate_admin!
+    if admin_signed_in?
+      super
+    else
+      redirect_to root_path, :notice => 'Not authorised'
+      ## if you want render 404 page
+      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+    end
+  end
+
   # Filter method - keeps users out of admin areas
   def admin_only
     authenticate_admin! || admin_only_access_denied
