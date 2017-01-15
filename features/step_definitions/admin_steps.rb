@@ -53,7 +53,6 @@ end
 
 Given /^I am logged out as an admin$/ do
   visit destroy_admin_session_path
-  assert !AdminSession.find
 end
 
 Given /^basic languages$/ do
