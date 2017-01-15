@@ -1,93 +1,88 @@
 require 'spec_helper'
 
 describe Admin, :ready do
-
-
   it "can be created" do
     expect(create(:admin)).to be_valid
   end
 
-  it 'with a strange email address' do
-    expect(create(:admin, email: '!def!xyz%abc@example.com')).to be_valid
+  it "with a strange email address" do
+    expect(create(:admin, email: "!def!xyz%abc@example.com")).to be_valid
   end
 
   context "invalid" do
-
-    it 'without a user name' do
+    it "without a user name" do
       expect { create(:admin, login: nil) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-          "Validation failed: Login can't be blank, Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
+                    "Validation failed: Login can't be blank, Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
     end
 
-    it 'without an invalid email address' do
-      expect { create(:admin, email: 'james_example.org') }.to \
+    it "without an invalid email address" do
+      expect { create(:admin, email: "james_example.org") }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Email is invalid")
+                    "Validation failed: Email is invalid")
     end
 
-    it 'without an email address' do
+    it "without an email address" do
       expect { create(:admin, email: nil) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-          "Validation failed: Email can't be blank")
+                    "Validation failed: Email can't be blank")
     end
 
-    it 'without a password' do
+    it "without a password" do
       expect { create(:admin, password: nil) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-          "Validation failed: Password can't be blank, Password confirmation can't be blank")
+                    "Validation failed: Password can't be blank, Password confirmation can't be blank")
     end
 
-    it 'without a password confirmation' do
+    it "without a password confirmation" do
       expect { create(:admin, password_confirmation: nil) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-          "Validation failed: Password confirmation can't be blank")
+                    "Validation failed: Password confirmation can't be blank")
     end
   end
-  
+
   context "length of login" do
-  
     it "if under #{ArchiveConfig.LOGIN_LENGTH_MIN} long characters" do
       expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MIN - 1)) }.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
     end
-   
+
     it "is invalid if over #{ArchiveConfig.LOGIN_LENGTH_MAX + 1} characters" do
       expect { create(:admin, login: Faker::Lorem.characters(ArchiveConfig.LOGIN_LENGTH_MAX + 1)) }.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Login is too long (maximum is #{ArchiveConfig.LOGIN_LENGTH_MAX} characters)")
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Login is too long (maximum is #{ArchiveConfig.LOGIN_LENGTH_MAX} characters)")
     end
   end
-  
-  context "length of password" do
 
+  context "length of password" do
     it "is invalid if under #{ArchiveConfig.PASSWORD_LENGTH_MIN - 1} characters" do
       expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MIN - 1)) }.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Password is too short (minimum is #{ArchiveConfig.PASSWORD_LENGTH_MIN} characters)")
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Password is too short (minimum is #{ArchiveConfig.PASSWORD_LENGTH_MIN} characters)")
     end
-  
+
     it "is invalid if over #{ArchiveConfig.PASSWORD_LENGTH_MAX + 1} characters" do
-      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1))}.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Password is too long (maximum is #{ArchiveConfig.PASSWORD_LENGTH_MAX} characters)")
+      expect { create(:admin, password: Faker::Lorem.characters(ArchiveConfig.PASSWORD_LENGTH_MAX + 1)) }.to \
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Password is too long (maximum is #{ArchiveConfig.PASSWORD_LENGTH_MAX} characters)")
     end
   end
 
   context "uniqueness" do
-    let(:existing_user) {create(:admin)}
+    let(:existing_user) { create(:admin) }
 
     it "is invalid if login is not unique" do
       expect { create(:admin, login: existing_user.login) }.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Login has already been taken")
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Login has already been taken")
     end
 
     # Why does this get a double error ?
     it "is invalid if email already exists" do
       expect { create(:admin, email: existing_user.email) }.to \
-       raise_error(ActiveRecord::RecordInvalid, \
-         "Validation failed: Email has already been taken, Email has already been taken")
+        raise_error(ActiveRecord::RecordInvalid, \
+                    "Validation failed: Email has already been taken, Email has already been taken")
     end
   end
 end
