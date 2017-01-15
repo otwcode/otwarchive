@@ -151,7 +151,7 @@ public
     if admin_signed_in?
       super
     else
-      redirect_to root_path, :notice => "I'm sorry, only an admin can look at that area"
+      redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
       ## if you want render 404 page
       ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
     end

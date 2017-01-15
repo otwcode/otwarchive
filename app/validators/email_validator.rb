@@ -1,11 +1,11 @@
 require 'mail'
 class EmailValidator < ActiveModel::EachValidator
-  def validate_each(record,attribute,value)
+  def validate_each(record, attribute, value)
     begin
       m = Mail::Address.new(value)
       # We must check that value contains a domain, the domain has at least
       # one '.' and that value is an email address      
-      r = m.domain!=nil && m.domain.match('\.') && m.address == value
+      r = !m.domain.nil? && m.domain.match('\.') && m.address == value
 
       # Update 2015-Mar-24
       # the :tree method was private and is no longer available.

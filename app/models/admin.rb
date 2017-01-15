@@ -1,8 +1,11 @@
 class Admin < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  devise :database_authenticatable, :registerable, :encryptable,\
-    :validatable, password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+  devise :database_authenticatable, \
+         :registerable, \
+         :encryptable, \
+         :validatable, \
+         password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
   
   has_many :log_items
   has_many :invitations, :as => :creator
