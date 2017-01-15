@@ -8,6 +8,17 @@ class BookmarksController < ApplicationController
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
+  before_filter :check_pseud_ownership, :only => [:create, :update]
+
+  def check_pseud_ownership
+    if params[:bookmark][:pseud_id]
+      pseud = Pseud.find(params[:bookmark][:pseud_id])
+      unless pseud && current_user && current_user.pseuds.include?(pseud)
+        flash[:error] = ts("You can't bookmark with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
 
   # get the parent
   def load_bookmarkable
@@ -64,7 +75,7 @@ class BookmarksController < ApplicationController
 
       if @owner.present?
         if @admin_settings.disable_filtering?
-          @bookmarks = Bookmark.list_without_filters(@owner, options)
+          @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
           @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           results = @search.search_results
@@ -78,7 +89,7 @@ class BookmarksController < ApplicationController
           @bookmarks = search.search_results.to_a
         end
       else
-        @bookmarks = Bookmark.latest.to_a
+        @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
       end
     end
   end

@@ -20,6 +20,29 @@ class UserMailer < BulletproofMailer::Base
 
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
+  # Send an email letting authors know their work has been added to a collection
+  def added_to_collection_notification(user_id, work_id, collection_id)
+    @user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id)
+    mail(
+         to: @user.email,
+         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
+    )
+  end
+
+  # Send a request to a work owner asking that they approve the inclusion
+  # of their work in a collection
+  def invited_to_collection_notification(user_id, work_id, collection_id)
+    @user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id)
+    mail(
+         to: @user.email,
+         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+    )
+  end
+
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
   # TODO refactor to make it asynchronous
@@ -67,7 +90,10 @@ class UserMailer < BulletproofMailer::Base
   
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    @subscription = Subscription.find(subscription_id)
+    # Here we use find_by_id so that if the subscription is not found 
+    # then the resque job does not error and we just silently fail.
+    @subscription = Subscription.find_by_id(subscription_id)
+    return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
     # look up all the creations that have generated updates for this subscription
@@ -78,6 +104,14 @@ class UserMailer < BulletproofMailer::Base
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
       # TODO: allow subscriptions to orphan_account to receive notifications
+
+      # If the subscription notification is for a user subscription, we don't
+      # want to send updates about works that have recently become anonymous.
+      if @subscription.subscribable_type == 'User'
+        next if creation.is_a?(Work) && creation.anonymous?
+        next if creation.is_a?(Chapter) && creation.work.anonymous?
+      end
+
       @creations << creation
     end
     
@@ -196,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -372,6 +406,8 @@ class UserMailer < BulletproofMailer::Base
     return unless feedback.email
     @summary = feedback.summary
     @comment = feedback.comment
+    @username = feedback.username if feedback.username.present?
+    @language = feedback.language
     mail(
       to: feedback.email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
@@ -385,7 +421,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
     )
   end
 

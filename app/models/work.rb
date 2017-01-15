@@ -5,7 +5,9 @@ class Work < ActiveRecord::Base
   include Bookmarkable
   include Pseudable
   include Searchable
+  include BookmarkCountCaching
   include WorkStats
+  include WorkChapterCountCaching
   include Tire::Model::Search
   # include Tire::Model::Callbacks
 
@@ -200,6 +202,32 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+    Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def self.work_blurb_tag_cache_key(id)
+    "/v1/work_blurb_tag_cache_key/#{id}"
+  end
+
+  def self.work_blurb_tag_cache(id)
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), :raw => true) { rand(1..1000) }
+  end
+
+  def self.expire_work_tag_groups_id(id)
+    Rails.cache.delete(Work.tag_groups_key_id(id))
+    Rails.cache.increment(Work.work_blurb_tag_cache_key(id))
+  end
+
+  def expire_work_tag_groups
+    Rails.cache.delete(self.tag_groups_key)
+  end
+
+  def self.tag_groups_key_id(id)
+    "/v2/work_tag_groups/#{id}"
+  end
+
+  def tag_groups_key
+    Work.tag_groups_key_id(self.id)
   end
 
   def expire_pseud(pseud)
@@ -340,17 +368,21 @@ class Work < ActiveRecord::Base
     end
   end
 
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud=nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    new_pseud = new_user.default_pseud if new_pseud.nil?
+  def add_creator(creator_to_add, new_pseud = nil)
+    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
     self.pseuds << new_pseud
     self.chapters.each do |chapter|
       chapter.pseuds << new_pseud
       chapter.save
     end
     save
-    self.remove_author(old_user) if old_user && users.include?(old_user)
+  end
+
+  # Transfer ownership of the work from one user to another
+  def change_ownership(old_user, new_user, new_pseud = nil)
+    raise "No new user provided, cannot change ownership" unless new_user
+    add_creator(new_user, new_pseud)
+    remove_author(old_user) if old_user && users.include?(old_user)
   end
 
   def set_challenge_info
@@ -387,18 +419,30 @@ class Work < ActiveRecord::Base
   def recipients=(recipient_names)
     new_recipients = [] # collect names of new recipients
     gifts = [] # rebuild the list of associated gifts using the new list of names
-    recipient_names.split(',').each do |name|
+    # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
+    recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
+    recip_names.uniq.each do |name|
       name.strip!
       gift = self.gifts.for_name_or_byline(name).first
-      new_recipients << name unless (gift && self.posted) # all recipients are new if work isn't posted
-      gifts << gift unless !gift # new gifts are added after saving, not now
+      if gift
+        gifts << gift # new gifts are added after saving, not now
+        new_recipients << name unless self.posted # all recipients are new if work not posted
+      else
+        # check that the gift would be valid
+        g = Gift.new(work: self, recipient: name)
+        if g.valid?
+          new_recipients << name # new gifts are added after saving, not now
+        else
+          errors.add(:base, ts("You cannot give a gift to the same user twice."))
+        end
+      end
     end
     self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
   end
 
-  def recipients
-    names = self.gifts.collect(&:recipient)
+  def recipients(for_form = false)
+    names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
     unless self.new_recipients.blank?
       self.new_recipients.split(",").each do |name|
         names << name unless names.include? name
@@ -411,7 +455,10 @@ class Work < ActiveRecord::Base
     unless self.new_recipients.blank?
       self.new_recipients.split(',').each do |name|
         gift = self.gifts.for_name_or_byline(name).first
-        self.gifts << Gift.new(:recipient => name) unless gift
+        unless gift.present?
+          g = Gift.new(recipient: name, work: self)
+          g.save
+        end
       end
     end
   end
@@ -493,6 +540,8 @@ class Work < ActiveRecord::Base
   
   def set_revised_at_by_chapter(chapter)
     return if self.posted? && !chapter.posted?
+    # Invalidate chapter count cache
+    self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? || 
@@ -616,14 +665,18 @@ class Work < ActiveRecord::Base
 
   # Get the total number of chapters for a work
   def number_of_chapters
-    self.chapters.count
+    Rails.cache.fetch(key_for_chapter_total_counting(self)) do
+      self.chapters.count
+    end
   end
 
   # Get the total number of posted chapters for a work
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    self.chapters.posted.count
+    Rails.cache.fetch(key_for_chapter_posted_counting(self)) do
+      self.chapters.posted.count
+    end
   end
 
   def chapters_in_order(include_content = true)
@@ -669,6 +722,7 @@ class Work < ActiveRecord::Base
 
   after_save :update_complete_status
   def update_complete_status
+    # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.complete_changed?
       Work.update_all("complete = #{self.complete}", "id = #{self.id}")
@@ -750,10 +804,19 @@ class Work < ActiveRecord::Base
   #######################################################################
 
   def tag_groups
-    if self.placeholder_tags
-      self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-    else
-      self.tags.group_by { |t| t.type.to_s }
+    Rails.cache.fetch(self.tag_groups_key) do
+      if self.placeholder_tags
+        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+      else
+        result = self.tags.group_by { |t| t.type.to_s }
+      end
+      result["Fandom"] ||= []
+      result["Rating"] ||= []
+      result["Warning"] ||= []
+      result["Relationship"] ||= []
+      result["Character"] ||= []
+      result["Freeform"] ||= []
+      result
     end
   end
 
@@ -1007,7 +1070,7 @@ class Work < ActiveRecord::Base
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
-  scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
+  scope :giftworks_for_recipient_name, lambda { |name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name).where("gifts.rejected = FALSE") }
 
   scope :non_anon, where(:in_anon_collection => false)
   scope :unrevealed, where(:in_unrevealed_collection => true)
@@ -1255,7 +1318,7 @@ class Work < ActiveRecord::Base
 
   def to_indexed_json
     to_json(
-      except: [:spam, :spam_checked_at],
+      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
       methods: [
         :rating_ids,
         :warning_ids,

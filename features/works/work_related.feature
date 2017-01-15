@@ -1,4 +1,4 @@
-﻿@works
+@works
 Feature: Inspirations, remixes and translations
   In order to reflect the connections between some fanworks
   As a fan author, part of a fan community
@@ -251,12 +251,7 @@ Scenario: Listing external works as inspirations
 
   Given basic tags
   When I am logged in as "remixer" with password "password"
-    And I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "Stargate"
-    And I fill in "Work Title" with "Followup"
-    And I fill in "content" with "That could be an amusing crossover."
+    And I set up the draft "Followup"
     And I check "parent-options-show"
     And I fill in "URL" with "google.com"
     And I press "Preview"

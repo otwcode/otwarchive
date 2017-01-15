@@ -1,4 +1,4 @@
-@works
+@import
 Feature: Import Works
   In order to have an archive full of works
   As an author
@@ -8,26 +8,24 @@ Feature: Import Works
   When I go to the import page
   Then I should see "Please log in"
 
-  @work_import_minimal_valid
   Scenario: Creating a new minimally valid work
-    When I set up importing
+    When I set up importing with a mock website
     Then I should see "Import New Work"
-    When I fill in "urls" with "http://cesy.dreamwidth.org"
+    When I fill in "urls" with "http://import-site-without-tags"
       And I press "Import"
     Then I should see "Preview"
-      And I should see "Welcome"
-      And I should not see "A work has already been imported from http://cesy.dreamwidth.org"
+      And I should see "Untitled Imported Work"
+      And I should not see "A work has already been imported from http://import-site-without-tags"
       And I should see "No Fandom"
       And I should see "Chose Not To"
       And I should see "Not Rated"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
-    Then I should see "Recent Entries"
+    Then I should see "Untitled Imported Work"
 
-  @work_import_tags
-  Scenario: Creating a new work with tags
-    When I start importing "http://astolat.dreamwidth.org/220479.html"
+  Scenario: With override disabled and tag detection enabled, tags should be detected
+    When I start importing "http://import-site-with-tags" with a mock website
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
@@ -35,21 +33,83 @@ Feature: Import Works
       And I fill in "Relationships" with "Adam/Kris"
       And I fill in "Characters" with "Adam Lambert, Kris Allen"
       And I fill in "Additional Tags" with "kinkmeme"
+      And I fill in "Notes at the beginning" with "This is a <i>note</i>"
     When I press "Import"
     Then I should see "Preview"
-      And I should see "Extra Credit"
+      And I should see "Detected Title"
       And I should see "Explicit"
-      And I should see "No Archive Warnings Apply"
-      And I should see "Idol RPF"
-      And I should see "M/M"
-      And I should see "Adam/Kris"
-      And I should see "Adam Lambert"
-      And I should see "Kris Allen"
-      And I should see "kinkmeme"
+      And I should see "Archive Warning: Underage"
+      And I should see "Fandom: Detected Fandom"
+      And I should see "Category: M/M"
+      And I should see "Relationship: Detected 1/Detected 2"
+      And I should see "Characters: Detected 1Detected 2"
+      And I should see "Additional Tags: Detected tag 1Detected tag 2"
+      And I should see "Notes: This is a content note."
     When I press "Post"
     Then I should see "Work was successfully posted."
 
-  @work_import_multi_tags_backdate
+  Scenario: With override and tag detection enabled, provided tags should be used when tags are entered
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "override_tags"
+      And I choose "detect_tags_true"
+      And I select "Mature" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Idol RPF"
+      And I check "F/M"
+      And I fill in "Relationships" with "Adam/Kris"
+      And I fill in "Characters" with "Adam Lambert, Kris Allen"
+      And I fill in "Additional Tags" with "kinkmeme"
+      And I fill in "Notes at the beginning" with "This is a <i>note</i>"
+    When I press "Import"
+      Then I should see "Preview"
+      And I should see "Detected Title"
+      And I should see "Rating: Mature"
+      And I should see "Archive Warning: No Archive Warnings"
+      And I should see "Fandom: Idol RPF"
+      And I should see "Category: F/M"
+      And I should see "Relationship: Adam/Kris"
+      And I should see "Characters: Adam LambertKris Allen"
+      And I should see "Additional Tags: kinkmeme"
+      And I should see "Notes: This is a note"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+
+  Scenario: With override and tag detection enabled, both provided and detected tags should be used when not all tags are entered
+    When I start importing "http://import-site-with-tags" with a mock website
+    And I check "override_tags"
+    And I choose "detect_tags_true"
+    And I select "Mature" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Characters" with "Adam Lambert, Kris Allen"
+    And I fill in "Additional Tags" with "kinkmeme"
+    And I fill in "Notes at the beginning" with "This is a <i>note</i>"
+    When I press "Import"
+    Then I should see "Preview"
+    And I should see "Detected Title"
+    And I should see "Rating: Mature"
+    And I should see "Archive Warning: No Archive Warnings"
+    And I should see "Fandom: Detected Fandom"
+    And I should see "Relationship: Detected 1/Detected 2"
+    And I should see "Characters: Adam LambertKris Allen"
+    And I should see "Additional Tags: kinkmeme"
+    And I should see "Notes: This is a note"
+    And I should not see "Category: M/M"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+
+  Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "override_tags"
+      And I choose "detect_tags_false"
+    When I press "Import"
+      Then I should see "Detected Title"
+      And I should see "Rating: Not Rated"
+      And I should see "Archive Warning: Creator Chose Not To Use Archive Warnings"
+      And I should see "Fandom: No Fandom"
+      And I should not see "Relationship:"
+      And I should not see "Additional Tags:"
+      And I should not see "Relationship: Detected 1/Detected 2"
+
   Scenario: Importing multiple works with backdating
     When I import the urls
         """
@@ -64,6 +124,28 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
+  Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
+    Given basic tags
+    And the following activated user exists
+      | login          | password    |
+      | cosomeone      | something   |
+    And I am logged in as "cosomeone" with password "something"
+    And I set my time zone to "UTC"
+    When I go to the import page
+    And I fill in "urls" with
+         """
+         http://rebecca2525.dreamwidth.org/3506.html
+         http://rebecca2525.dreamwidth.org/4024.html
+         """
+    And I choose "import_multiple_chapters"
+    When I press "Import"
+      Then I should see "Preview"
+    When I press "Post"
+      Then I should see "Published:2000-01-10"
+      Then I should see "Completed:2000-01-22"
+    When I follow "Chapter Index"
+      Then I should see "1. Chapter 1 (2000-01-10)"
+      Then I should see "2. Importing Test Part 2 (2000-01-22)"
 
 #  Scenario: Import works for others and have them automatically notified
 
@@ -74,14 +156,12 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-  @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-  @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
     When I start importing "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
@@ -90,7 +170,6 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-  @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
     When I start importing "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
@@ -100,7 +179,6 @@ Feature: Import Works
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
 
-  @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
     When I start importing "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"
@@ -109,7 +187,6 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-  @work_import_efiction
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
@@ -117,12 +194,6 @@ Feature: Import Works
   When I press "Post"
     And I follow "Next Chapter →"
   Then I should see "Chapter 2"
-
-  # @work_import_efiction_nonprintable
-  # Scenario: Import a work from an efiction site which keeps giving identical chapters and has a broken printable format
-  # When I import "http://thehexfiles.net/viewstory.php?sid=15563"
-  # Then I should see "Preview"
-  #  And I should see "Chapters:1/1"
 
   Scenario: Imported works should be English language by default
     When I import "http://www.intimations.org/fanfic/idol/Huddling.html"

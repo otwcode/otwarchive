@@ -26,7 +26,7 @@ end
 Given /^account creation is enabled$/ do
   steps %Q{
     Given the following admin settings are configured:
-    | account_creation_enabled | 0 |
+    | account_creation_enabled | 1 |
   }
 end
 
@@ -73,6 +73,22 @@ Given /^the invitation queue is disabled$/ do
     Given the following admin settings are configured:
     | invite_from_queue_enabled | 0 |
   }
+end
+
+Given /^"([^\"]*)" has "([^"]*)" invitations?$/ do |login, invitation_count|
+  user = User.find_by_login(login)
+  # If there are more invitations than we want, first destroy them
+  if invitation_count.to_i < user.invitations.count
+    user.invitations.destroy_all 
+  end
+  # Now create the number of invitations we want
+  (invitation_count.to_i - user.invitations.count).times { user.invitations.create }
+end
+
+Given /^an invitation request for "([^"]*)"$/ do |email|
+  visit invite_requests_path
+  fill_in("invite_request[email]", with: email)
+  click_button("Add me to the list")
 end
 
 ### WHEN
@@ -124,4 +140,16 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   visit(invite_requests_path)
   fill_in("email", :with => "#{email}")
   click_button("Look me up")
+end
+
+### Then
+
+Then /^I should see how long I have to activate my account$/ do
+  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  step %{I should see "You must verify your account within #{days_to_activate} days"}
+end
+
+Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|
+  user = User.find_by_login(login)
+  assert user.invitations.count == invitation_count.to_i
 end

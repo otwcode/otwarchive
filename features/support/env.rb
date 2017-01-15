@@ -4,9 +4,20 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+# This file has been edited by hand :(
+require 'simplecov'
+require 'coveralls'
+require 'capybara/poltergeist'
+SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
+Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
 require 'cucumber/rails'
+require 'email_spec'
+require 'email_spec/cucumber'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
+
+# Produce a screen shot for each failure
+require 'capybara-screenshot/cucumber'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -28,6 +39,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 # 2) Set the value below to true. Beware that doing this globally is not
 # recommended as it will mask a lot of errors for you!
 #
+
 ActionController::Base.allow_rescue = false
 
 # Config options for Capybara, including increased timeout to minimise failures on CI servers
@@ -35,43 +47,28 @@ ActionController::Base.allow_rescue = false
 Capybara.configure do |config|
   config.match = :prefer_exact
   config.ignore_hidden_elements = false
-  config.default_wait_time = 15
+  config.default_max_wait_time = 25
 end
 
+@javascript = false
+Before '@javascript' do
+  @javascript = true
+end
 
-## Remove/comment out the lines below if your app doesn't have a database.
-## For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
-#begin
-#  DatabaseCleaner.strategy = :truncation
-#rescue NameError
-#  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
-#end
-#
-#Before do
-#  DatabaseCleaner.start
-#end
-#
-#After do |scenario|
-#  DatabaseCleaner.clean
-#end
+Before '@disable_caching' do
+  ActionController::Base.perform_caching = false
+end
 
-# You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
-# See the DatabaseCleaner documentation for details. Example:
-#
-#   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
-#     # { :except => [:widgets] } may not do what you expect here
-#     # as Cucumber::Rails::Database.javascript_strategy overrides
-#     # this setting.
-#     DatabaseCleaner.strategy = :truncation
-#   end
-#
-#   Before('~@no-txn', '~@selenium', '~@culerity', '~@celerity', '~@javascript') do
-#     DatabaseCleaner.strategy = :transaction
-#   end
-#
+After '@disable_caching' do
+  ActionController::Base.perform_caching = true
+end
 
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :transaction
+
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :poltergeist
+
 

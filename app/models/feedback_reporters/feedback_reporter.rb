@@ -1,12 +1,16 @@
 class FeedbackReporter
   include HtmlCleaner
+  require 'url_formatter'
 
-  attr_accessor :title, 
-    :description, 
-    :category, 
-    :email
+  attr_accessor :title,
+                :description,
+                :email,
+                :language,
+                :category,
+                :username,
+                :url
 
-  def initialize(attrs={})
+  def initialize(attrs = {})
     attrs.each_pair do |key, val|
       self.send("#{key}=", val)
     end
@@ -21,26 +25,21 @@ class FeedbackReporter
   end
 
   def send_report!
-    HTTParty.post("#{ArchiveConfig.BUGS_SITE}/projects/#{project_id}/bugs",
-      headers: { 
-        "Content-Type" => "application/xml", 
-        "Accept" => "application/xml" 
-      },
-      basic_auth: {
-        username: ArchiveConfig.BUGS_USER,
-        password: ArchiveConfig.BUGS_PASSWORD
-      },
-      body: xml
-    )
+    # We're sending the XML data via a URL to our Support ticket service. The
+    # URL needs to be Percent-encoded so that everything shows up correctly on
+    # the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
+    encoded_xml = CGI.escape(xml.to_str)
+    HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
+                  body: "&xml=#{encoded_xml}")
   end
 
   def xml
-    view = ActionView::Base.new(Rails.root.join("app", "views"))
-    view.assign({report: self})
+    view = ActionView::Base.new(Rails.root.join('app', 'views'))
+    view.assign({ report: self })
     view.render(template: template)
   end
 
-  def project_id
-    self.class::PROJECT_ID
+  def project_path
+    self.class::PROJECT_PATH
   end
 end

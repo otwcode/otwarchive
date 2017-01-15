@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
   has_many :users, :through => :inbox_comments
 
   validates_presence_of :name, :unless => :pseud_id
-  validates :email, :email_veracity => {:on => :create, :unless => :pseud_id}
+  validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
   validates_presence_of :content
   validates_length_of :content,
@@ -75,6 +75,11 @@ class Comment < ActiveRecord::Base
                       self.parent.moderated_commenting_enabled? && 
                       !User.current_user.try(:is_author_of?, self.ultimate_parent)
     return true # because if reviewed is the return value, when it's false the record won't save!
+  end
+  
+  # is this a comment by the creator of the ultimate parent
+  def is_creator_comment?
+    pseud && pseud.user && pseud.user.try(:is_author_of?, ultimate_parent)
   end
   
   def moderated_commenting_enabled?

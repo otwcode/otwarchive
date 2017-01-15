@@ -1,6 +1,20 @@
 require 'spec_helper'
+require 'webmock'
 
 describe StoryParser do
+
+  # Temporarily make the methods we want to test public
+  before(:all) do
+    class StoryParser
+      public :get_source_if_known, :check_for_previous_import, :parse_common
+    end
+  end
+  
+  after(:all) do
+    class StoryParser
+      protected :get_source_if_known, :check_for_previous_import, :parse_common
+    end
+  end
 
   before(:each) do
     @sp = StoryParser.new
@@ -105,19 +119,39 @@ describe StoryParser do
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
 
-      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
-      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should not perform a partial match on work import locations" do
       @work = create(:work, imported_from_url: location_partial_match)
 
       expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
+    end
+  end
+
+  context "#download_and_parse_chapters_into_story" do
+    it "should set the work revision date to the date of the last chapter" do
+
+      # Let the test get at external sites, but stub out anything containing "url1" and "url2"
+      WebMock.allow_net_connect!
+      WebMock.stub_request(:any, /url1/).
+        to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+      WebMock.stub_request(:any, /url2/).
+        to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
+
+      storyparser_user = FactoryGirl.create(:user)
+      urls = %w(http://url1 http://url2)
+      work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
+      work.save
+      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
+      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      expect(actual_date).to eq(expected_date)
     end
   end
 
@@ -136,9 +170,65 @@ describe StoryParser do
       }.each_pair do |input, output|
         location, href = input
         story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
-        story_out = 'here is <a href="' + output + '">a link</a>.'
+        story_out = '<p>here is <a href="' + output + '">a link</a>.</p>'
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
+      end
+    end
+  end
+
+  # Let the test get at external sites, but stub out anything containing certain keywords
+  def mock_external
+    curly_quotes = "String with non-ASCII “Curly quotes” and apostrophes’"
+
+    body = "
+      Title: #{curly_quotes}
+      Summary: #{curly_quotes}
+      Fandom: #{curly_quotes}
+      Rating: #{curly_quotes}
+      Warnings: #{curly_quotes}
+      Characters: #{curly_quotes}
+      Pairing: Includes a character – that broke the importer
+      Category: #{curly_quotes}
+      Tags: #{curly_quotes}
+      Author's notes: #{curly_quotes}
+
+      stubbed response".gsub('      ', '')
+
+    WebMock.allow_net_connect!
+
+    WebMock.stub_request(:any, /ascii-8bit/).
+      to_return(status: 200,
+                body: body.force_encoding("ASCII-8BIT"),
+                headers: {})
+
+    WebMock.stub_request(:any, /utf-8/).
+      to_return(status: 200,
+                body: body,
+                headers: {})
+
+    WebMock.stub_request(:any, /win-1252/).
+      to_return(status: 200,
+                body: body.force_encoding("Windows-1252"),
+                headers: {})
+  end
+
+  describe "Import" do
+    before do
+      mock_external
+      @user = create(:user)
+    end
+
+    after do
+      WebMock.reset!
+    end
+
+    it "should not throw an exception with non-ASCII characters in metadata fields" do
+      urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
+      urls.each do |url|
+        expect {
+          @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
+        }.to_not raise_exception
       end
     end
   end

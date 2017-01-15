@@ -5,7 +5,7 @@ class GiftsController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
-    @page_subtitle = ts("for %{name}", :name => (@user ? @user.login : @recipient_name))
+    @page_subtitle = ts("Gifts for %{name}", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
       flash[:error] = ts("Whose gifts did you want to see?")
       redirect_to(@collection || root_path) and return
@@ -14,7 +14,11 @@ class GiftsController < ApplicationController
       if current_user.nil?
         @works = @user.gift_works.visible_to_all
       else
-        @works = @user.gift_works.visible_to_registered_user
+        if @user == current_user && params[:refused]
+          @works = @user.rejected_gift_works.visible_to_registered_user
+        else
+          @works = @user.gift_works.visible_to_registered_user
+        end
       end
     else
       pseud = Pseud.parse_byline(@recipient_name, :assume_matching_login => true).first
@@ -35,5 +39,22 @@ class GiftsController < ApplicationController
     @works = @works.in_collection(@collection) if @collection
     @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
-  
+
+  def toggle_rejected
+    @gift = Gift.find(params[:id])
+    # have to have the gift, be logged in, and the owner of the gift
+    if @gift && current_user && @gift.user == current_user
+      @gift.rejected = !@gift.rejected?
+      @gift.save!
+      if @gift.rejected?
+        flash[:notice] = ts("This work will no longer be listed among your gifts.")
+      else
+        flash[:notice] = ts("This work will now be listed among your gifts.")
+      end
+    else
+      # user doesn't have permission
+      access_denied
+    end
+    redirect_to user_gifts_url(current_user) and return
+  end
 end

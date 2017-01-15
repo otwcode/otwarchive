@@ -1,53 +1,53 @@
 <div class="admin">
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Send Notification To Users") %></h2>
-<!--/descriptions-->
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= ts("Send Notification To Users") %></h2>
+  <!--/descriptions-->
 
-<!--main content-->
-<%= form_tag send_notification_admin_users_path, :method => :post do %>
-<fieldset>
-  <legend><%= ts("Write Notification") %></legend>
-    <h3 class="heading"><%= label_tag "subject", ts("Subject") %></h3>
-    <div><%= text_field_tag "subject" %></div>
-  <h3 class="heading"><%= label_tag "content", ts("Message") %></h3>
-    <div><%= text_area_tag "content" %></div>
-</fieldset>
-<fieldset>
-  <legend><%= ts("Notify Groups") %></legend>
-  <ul>
-    <li><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %>
-	<%= label_tag "notify_all", ts("Notify All Users") %> </li>
-    
-    <% @roles.each do |role| %>
-      <li><%= check_box_tag "notify_all[]", role.name, nil, {:id => "notify_all_#{role.name}"} %>
-	<%= label_tag "notify_all_#{role.name}", ts("Notify All %{role_name}", :role_name => role.name.humanize.titlecase.pluralize) %></li>
-    <% end %>
-  </ul>
-</fieldset>
-<fieldset>
-  <legend><%= ts("Send, Or Continue") %></legend>
-  <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
-</fieldset>
-<fieldset>
-  <legend><%= ts("Notify Individuals") %></legend>
-  <h3 class="heading"><%= ts("Or Select Users To Notify") %></h3>
-  <%= alpha_paginated_section %>
-  <h4 class="heading"><%= ts("Users") %><%= check_all_none %></h4>
-  <div class="users listbox">
-    <ul class="index concise">
-      <% @all_users.each do |user| %>
-        <li id="user_<%= user.id %>">
-          <%= check_box_tag "user_ids[]", user.id, false, :id => "user_ids_#{user.id}", :class => "user_id" %>
-          <%= label_tag "user_ids_#{user.id}", user.login %>
-        </li>
-      <% end %>
-    </ul>
-  </div>  
-  <%= alpha_paginated_section %>
-</fieldset>
-<fieldset>
-  <legend><%= ts("Send Notification") %></legend>
-  <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
-</fieldset>
-<% end %>
+  <!--main content-->
+  <%= form_tag send_notification_admin_users_path, method: :post do %>
+    <fieldset>
+      <legend><%= ts("Write Notification") %></legend>
+      <h3 class="heading"><%= label_tag "subject", ts("Subject") %></h3>
+      <div><%= text_field_tag "subject" %></div>
+      <h3 class="heading"><%= label_tag "content", ts("Message") %></h3>
+      <div><%= text_area_tag "content" %></div>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Notify Groups") %></legend>
+      <ul>
+        <li><%= check_box_tag "notify_all[]", 0, nil, { id: "notify_all" } %>
+          <%= label_tag "notify_all", ts("Notify All Users") %> </li>
+
+        <% @roles.each do |role| %>
+          <li><%= check_box_tag "notify_all[]", role.name, nil, { id: "notify_all_#{role.name}" } %>
+            <%= label_tag "notify_all_#{role.name}", ts("Notify All %{role_name}", role_name: role.name.humanize.titlecase.pluralize) %></li>
+        <% end %>
+      </ul>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Send, Or Continue") %></legend>
+      <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Notify Individuals") %></legend>
+      <h3 class="heading"><%= ts("Or Select Users To Notify") %></h3>
+      <%= alpha_paginated_section %>
+      <h4 class="heading"><%= ts("Users") %><%= check_all_none %></h4>
+      <div class="users listbox">
+        <ul class="index concise">
+          <% @all_users.each do |user| %>
+            <li id="user_<%= user.id %>">
+              <%= check_box_tag "user_ids[]", user.id, false, id: "user_ids_#{user.id}", class: "user_id" %>
+              <%= label_tag "user_ids_#{user.id}", user.login %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <%= alpha_paginated_section %>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Send Notification") %></legend>
+      <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
+    </fieldset>
+  <% end %>
 </div>

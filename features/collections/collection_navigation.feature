@@ -1,6 +1,7 @@
 @collections
 Feature: Basic collection navigation
 
+  @disable_caching
   Scenario: Create a collection and check the links
   When I am logged in as "mod" with password "password"
     And I go to the collections page
@@ -70,4 +71,20 @@ Feature: Basic collection navigation
     And "A League of Their Own" should appear before "Merlin"
     And "Merlin" should appear before "Teen Wolf"
 
-
+  Scenario: Collections can be filtered by media type
+    Given I have the collection "We all sing together"
+      And I have a canonical "TV Shows" fandom tag named "Steven's Universe"
+      And I have a canonical "Movies" fandom tag named "High School Musical"
+    When I am logged in as "Brian" with password "They called him Brian"
+      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "We all sing together" 
+      And I post the work "Breaking Free" with fandom "High School Musical" in the collection "We all sing together"
+      And I go to "We all sing together" collection's page
+      And I follow "Fandoms ("
+      And I select "Movies" from "medium_id"
+      And I press "Show"
+    Then I should see "High School Musical"
+      And I should not see "Steven's Universe"
+    When I select "TV Shows" from "medium_id"
+      And I press "Show"
+    Then I should not see "High School Musical"
+      And I should see "Steven's Universe"

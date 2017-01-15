@@ -2,6 +2,9 @@
 Feature: Collection
   I want to test Yuletide, because it has several specific settings that are different from an ordinary gift exchange
 
+  # Basic tag set testing is covered in challenge_giftexchange_tagsets.feature.
+  # Advanced stuff and nominations are covered in tags_and_wrangling/tag_set.feature.
+
   # uncomment this and the other 'javascript' lines below when testing on local
   # in order to test javascript-based features
   #@javascript
@@ -515,7 +518,7 @@ Feature: Collection
     And I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
-  # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
+  # Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
   When I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
@@ -568,7 +571,6 @@ Feature: Collection
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
     And the email should contain "A gift work has been posted for you"
-    # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
     And the email should contain "by an anonymous responder"
     And the email should not contain "by myname1"

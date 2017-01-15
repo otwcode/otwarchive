@@ -1,15 +1,13 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-en: 
-  mailer: 
-    kudos:
-      guest: a guest
-      guests: guests
-      you_have: "[%{app_name}] You've got kudos!"
-      html:
-        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
-      text:
-        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
+en:
+  admin:
+    blacklist:
+      emails_found: 
+        one: "one email found"
+        other: "%{count} emails found"
+  
+  mailer:
     general: 
       footer: 
         general: 
@@ -29,6 +27,19 @@ en:
         sent_by: 
           html: "Sent by <b>%{sent_by}</b>."
           text: "Sent by %{sent_by}."
+    kudos:
+      guest:
+        one: a guest
+        other: "%{count} guests"
+      you_have: "[%{app_name}] You've got kudos!"
+      html:
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
@@ -42,3 +53,41 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    signup_notification:
+      subject: "[%{app_name}] Confirmation" 
+      faq: "FAQ"
+      admin_posts: "Archive admin posts"
+      contact_support: "get in touch with our Support team"
+      activate_your_account: "activate your account"
+      welcome: "Welcome to the Archive of Our Own, %{login}!"
+      bye: "We hope you enjoy using the Archive."
+      text:
+        part1: "Please activate your account: %{activate_account_url}"
+        part2: |-
+                  Once your account is up and running, you can post your fanworks, set up email
+                  subscriptions to let you know when your favorite creators or works have updated,
+                  set preferences to customize the way the site looks and works for you, keep
+                  track of the works you've viewed on the Archive via your history, and much more.
+        part3: |-
+                  There's lots of information and advice on how to use the Archive in our FAQ
+                  at %{faq_url}. You'll
+                  find the latest news about site developments in our Archive admin posts at
+                  %{admin_posts_url}. If you need more
+                  help, run into a bug, or have questions or comments, please get in touch with
+                  our Support team, who are always happy to help out:
+                  %{contact_support_url}.
+      html:
+        part1: "Please %{activate_account_link}."
+        part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
+        part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
+    abuse_report:
+      subject: "[%{app_name}] Your Abuse Report"
+      para1: "The following abuse report has been sent to the Abuse team:"
+      url_para: "URL of the page the abuse is on:"
+      description_para: "Description of the abuse:"
+  validators:
+    email:
+      blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
+      veracity:
+        allow_blank: "does not seem to be a valid address. Please use a different address or leave blank."
+        no_blank: "does not seem to be a valid address."  

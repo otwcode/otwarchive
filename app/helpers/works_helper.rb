@@ -16,7 +16,7 @@ module WorksHelper
       list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
     end
 
-    if (bookmark_count = work.bookmarks.is_public.count) > 0
+    if (bookmark_count = work.public_bookmarks_count) > 0
       list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
     list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
@@ -43,7 +43,7 @@ module WorksHelper
 
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
-    work.gifts.map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
+    work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
   # select the default warning if this is a new work
@@ -96,12 +96,12 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def marktoread_link(work)
-    link_to ts("Mark for Later"), marktoread_work_path(work)
+  def mark_as_read_link(work)
+    link_to ts("Mark as Read"), mark_as_read_work_path(work)
   end
 
-  def markasread_link(work)
-    link_to ts("Mark as Read"), marktoread_work_path(work)
+  def mark_for_later_link(work)
+    link_to ts("Mark for Later"), mark_for_later_work_path(work)
   end
 
   def get_endnotes_link
@@ -134,7 +134,7 @@ module WorksHelper
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = "<p>by #{byline(work, visibility: 'public')}</p>"
+    text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
@@ -152,7 +152,7 @@ module WorksHelper
         else
           type.pluralize
         end
-        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t) }.join(', ')}</li>"
+        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t, {full_path: true }) }.join(', ')}</li>"
       end
     end
     text << "</ul>"
@@ -163,7 +163,7 @@ module WorksHelper
   def show_work_notes?(work)
     work.notes.present? ||
     work.endnotes.present? ||
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
@@ -171,7 +171,7 @@ module WorksHelper
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.approved_related_works.where(translation: true).exists? ||
     work.parent_work_relationships.exists? ||
     work.challenge_claims.present?

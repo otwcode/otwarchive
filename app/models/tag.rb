@@ -154,6 +154,17 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  after_commit :queue_flush_work_cache
+  def queue_flush_work_cache
+    async(:flush_work_cache)
+  end
+
+  def flush_work_cache
+    self.work_ids.each do |work|
+      Work.expire_work_tag_groups_id(work)
+    end
+  end
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?
@@ -340,7 +351,10 @@ class Tag < ActiveRecord::Base
   @queue = :utilities
   # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
-    find(id).send(method, *args)
+    # we are doing this to step over issues when the tag is deleted.
+    # in rails 4 this should be tag=find_by id: id
+    tag = find_by_id(id)
+    tag.send(method, *args) unless tag.nil?
   end
 
   # We can pass this any Tag instance method that we want to run later.
@@ -492,8 +506,15 @@ class Tag < ActiveRecord::Base
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String
-    string = string.gsub('*s*', '/').gsub('*a*', '&').gsub('*d*', '.').gsub('*q*', '?').gsub('*h*', '#')
-    self.where('name = ?', string).first
+    string = string.gsub(
+      /\*[sadqh]\*/,
+      '*s*' => '/',
+      '*a*' => '&',
+      '*d*' => '.',
+      '*q*' => '?',
+      '*h*' => '#'
+    )
+    self.where('tags.name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them

@@ -86,7 +86,7 @@
         <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient" title="<%= ts('gift to') %>">
-        <%= f.text_field :recipients, autocomplete_options("pseud") %>
+        <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
       </dd>
 
       <!-- Inspiration / remix -->
@@ -239,16 +239,7 @@
           </fieldset>
         </dd>
 
-        <dt class="language">
-          <%= f.label :language_id, ts('Choose a language') %>
-          <%= link_to_help "languages-help" %>
-        </dt>
-        <dd class="language">
-          <select id="work_language_id" name="work[language_id]">
-            <%= options_from_collection_for_select(Language.all(order: :short), :id, :name,
-                  @work.language_id || Language.default.id) %>
-          </select>
-        </dd>
+        <%= render 'work_form_associations_language', f: f %>
 
         <dt class="skin">
           <%= f.label :work_skin_id, ts('Select Work Skin') %>
@@ -286,14 +277,15 @@
         <%= f.check_box :anon_commenting_disabled %>
       </dt>
       <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts('Anonymous commenting disabled') %>
+        <%= f.label :anon_commenting_disabled, ts("Disable anonymous commenting") %>
         <%= link_to_help "comments-anonymous" %>
       </dd>
+
       <dt class="moderated comments">
         <%= f.check_box :moderated_commenting_enabled %>
       </dt>
       <dd class="moderated comments">
-        <%= f.label :moderated_commenting_enabled, ts("Comments moderated")%>
+        <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
     </dl>
