@@ -108,7 +108,7 @@
       <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
-  <% if @work.posted? && @admin_settings.downloads_enabled? %>
+  <% if @work.posted? %>
     <li class="download" aria-haspopup="true">
       <a href="#"><%= ts("Download") %></a>
       <ul class="expandable secondary">
