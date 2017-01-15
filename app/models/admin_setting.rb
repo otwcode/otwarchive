@@ -51,9 +51,6 @@ class AdminSetting < ActiveRecord::Base
   def self.guest_downloading_off?
     self.first ? self.first.guest_downloading_off? : false
   end
-  def self.downloads_enabled?
-    self.first ? self.first.downloads_enabled? : true
-  end
   def self.default_skin
     self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.default) : Skin.default
   end
