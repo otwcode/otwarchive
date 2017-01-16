@@ -93,6 +93,8 @@ module NavigationHelpers
       user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
+    when /the public skins page/
+      skins_path
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
@@ -128,9 +130,11 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? profile page$/i
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
-      skins_path(user_id: $1)
+      user_skins_path(user_id: $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
+    when /^the new skin page/
+      new_skin_path
     when /^the new wizard skin page/
       new_skin_path(wizard: true)
     when /^"(.*)" edit skin page/
@@ -145,6 +149,8 @@ module NavigationHelpers
       collection_requests_path(Collection.find_by_title($1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by_title($1))
+    when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
+      collection_participants_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
@@ -203,6 +209,8 @@ module NavigationHelpers
       admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
+    when /^the Open Doors external authors page$/i
+      opendoors_external_authors_path
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i

@@ -15,25 +15,24 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   fill_in("Work Title", with: title)
   fill_in("content", with: DEFAULT_CONTENT)
 end
-
-# Here we set up a draft and can then post it as a draft, preview and post, post without preview, 
-# or fill in additional information on the work form. 
+# Here we set up a draft and can then post it as a draft, preview and post, post without preview,
+# or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
 # Example: I set up the draft "Foo" with fandom "Captain America" in the collection "MCU Stories" as a gift to "Bob"
-# 
+#
 # This is a complex regexp because it attempts to be flexible and match a lot of options (including using a/the, in/to etc)
 # the (?: ) construct means: do not use the stuff in () as a capture/match
 # the ()? construct means: the stuff in () is optional
-# This can handle any number of the options being omitted, but you DO have to match in order 
-# if you are using more than one of the options. That is, if you are specifying fandom AND freeform AND collection, 
-# it has to be: 
-#   with fandom "X" with freeform "Y" in collection "Z" 
-# and NOT: 
-#   with freeform "Y" in collection "Z" with fandom "X" 
+# This can handle any number of the options being omitted, but you DO have to match in order
+# if you are using more than one of the options. That is, if you are specifying fandom AND freeform AND collection,
+# it has to be:
+#   with fandom "X" with freeform "Y" in collection "Z"
+# and NOT:
+#   with freeform "Y" in collection "Z" with fandom "X"
 #
-# If you add to this regexp, you probably want to update all the 
+# If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
@@ -57,12 +56,13 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
   unless relationship.blank?
     fill_in("work[relationship_string]", with: relationship)
   end
+  select(pseud, from: "work[author_attributes][ids][]") unless pseud.blank?
   screenshot_and_save_page
   fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship|
+When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -70,18 +70,18 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
     click_button("Post Without Preview")
   end
   Work.tire.index.refresh
 end
 
-# Again, same regexp, it just creates a draft and not a posted 
+# Again, same regexp, it just creates a draft and not a posted
 # To test posting after preview, use: Given the draft "Foo"
 # Then use: When I post the work "Foo"
-# and the above step 
-Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with freeform "([^"]*)")?(?: with category "([^"]*)")?(?: in (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
-  step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+# and the above step
+Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+  step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
   click_button("Preview")
 end
 
@@ -89,11 +89,11 @@ When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}
   end
-end    
+end
 
 ### GIVEN
 
-Given(/^I have the Battle set loaded$/) do 
+Given(/^I have the Battle set loaded$/) do
   step %{I have loaded the fixtures}
   step %{I have Battle 12 prompt meme fully set up}
   step %{everyone has signed up for Battle 12}
@@ -199,7 +199,6 @@ When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |wo
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
-
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by_title!(work)
   visit work_url(work, :anchor => "comments", :show_comments => true)
@@ -219,7 +218,6 @@ When /^I edit the work "([^"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
 end
-
 When /^I edit the draft "([^"]*)"$/ do |draft|
   step %{I edit the work "#{draft}"}
 end
@@ -289,7 +287,6 @@ end
 When /^I set the fandom to "([^"]*)"$/ do |fandom|
   fill_in("Fandoms", with: fandom)
 end
-
 # on the edit multiple works page
 When /^I select "([^"]*)" for editing$/ do |title|
   id = Work.find_by_title(title).id
@@ -388,11 +385,10 @@ When /^I list the work "([^"]*)" as inspiration$/ do |title|
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("work_parent_attributes_url", with: url_of_work)
 end
-
 When /^I set the publication date to today$/ do
   today = Time.new
   month = today.strftime("%B")
-  
+
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")
     select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
@@ -410,7 +406,6 @@ When /^I browse the "([^"]+)" works$/ do |tagname|
   visit tag_works_path(tag)
   Work.tire.index.refresh
 end
-
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
@@ -424,32 +419,26 @@ When /^I delete the work "([^"]*)"$/ do |work|
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
 end
-
 When /^I preview the work$/ do
   click_button("Preview")
   Work.tire.index.refresh
 end
-
 When /^I update the work$/ do
   click_button("Update")
   Work.tire.index.refresh
 end
-
 When /^I post the work without preview$/ do
   click_button "Post Without Preview"
   Work.tire.index.refresh
 end
-
 When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
-
 When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
-
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
@@ -501,9 +490,7 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   step %{I follow "Mark for Later"}
   Reading.update_or_create_in_database
 end
-
 ### THEN
-
 Then /^I should see Updated today$/ do
   today = Time.zone.today.to_s
   step "I should see \"Updated:#{today}\""
@@ -535,5 +522,3 @@ end
 Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
-
-

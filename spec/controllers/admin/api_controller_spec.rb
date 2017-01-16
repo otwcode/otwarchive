@@ -3,16 +3,7 @@ require 'spec_helper'
 
 describe Admin::ApiController do
   include LoginMacros
-
-  def it_redirects_to_homepage
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to root_path
-  end
-
-  def it_redirects_to_admin_api_index
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to admin_api_index_path
-  end
+  include RedirectExpectationHelper
 
   describe "GET #index" do
     let(:params) { nil }
@@ -20,7 +11,7 @@ describe Admin::ApiController do
     context "where there is no user or admin logged in" do
       it "redirects to the homepage" do
         get :index, params
-        it_redirects_to_homepage
+        it_redirects_to root_path
       end
     end
 
@@ -33,7 +24,7 @@ describe Admin::ApiController do
 
       it "redirects to the homepage" do
         get :index, params
-        it_redirects_to_homepage
+        it_redirects_to root_path
       end
     end
 
@@ -85,7 +76,7 @@ describe Admin::ApiController do
 
       it "redirects to the homepage" do
         get :show
-        it_redirects_to_admin_api_index
+        it_redirects_to admin_api_index_path
       end
     end
   end
@@ -122,7 +113,7 @@ describe Admin::ApiController do
         it "redirects to the homepage and notifies of the success" do
           post :create, params
           expect(ApiKey.where(name: api_key_name)).to_not be_empty
-          it_redirects_to_admin_api_index
+          it_redirects_to admin_api_index_path
           expect(flash[:notice]).to include("New token successfully created")
         end
       end
@@ -156,7 +147,7 @@ describe Admin::ApiController do
 
         it "redirects to index" do
           post :create, params
-          it_redirects_to_admin_api_index
+          it_redirects_to admin_api_index_path
         end
       end
     end
@@ -214,7 +205,7 @@ describe Admin::ApiController do
             expect(ApiKey.where(name: new_name)).to be_empty
             post :update, params
             expect(ApiKey.where(name: new_name)).to_not be_empty
-            it_redirects_to_admin_api_index
+            it_redirects_to admin_api_index_path
             expect(flash[:notice]).to include("Access token was successfully updated")
           end
         end
@@ -246,7 +237,7 @@ describe Admin::ApiController do
 
         it "redirects to index" do
           post :update, id: api_key_id, cancel_button: "Cancel"
-          it_redirects_to_admin_api_index
+          it_redirects_to admin_api_index_path
         end
       end
     end
