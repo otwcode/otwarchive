@@ -12,9 +12,8 @@ Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   fill_in("CSS", with: "#title { text-decoration: blink;}")
 end
 
-Given /^I set up the skin "([^"]*)" with css$/ do |skin_name, css|
-  step "I set up the skin \"#{skin_name}\""
-  fill_in("CSS", with: css)
+Given /^I set up the skin "([^"]*)" with some css$/ do |skin_name|
+  step %{I set up the skin "#{skin_name}" with css #{DEFAULT_CSS}}
 end
 
 Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
@@ -27,7 +26,7 @@ Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step %{I submit}
 end
 
-Given /^I create the skin "([^"]*)" with css$/ do |skin_name, css|
+Given /^I create the skin "([^"]*)" with some css$/ do |skin_name, css|
   step "I set up the skin \"#{skin_name}\" with css \"#{css}\""
   step %{I submit}
 end
@@ -57,7 +56,7 @@ end
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
   step "I am logged in as an admin"
   visit admin_skins_url
-  check("make_official_#{skin_name.gsub(/\s/, '_')}")
+  check("make_official_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
@@ -65,7 +64,7 @@ Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
   step "I am logged in as an admin"
   visit admin_skins_url
   step "I follow \"Approved Skins\""
-  check("make_unofficial_#{skin_name.gsub(/\s/, '_')}")
+  check("make_unofficial_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
@@ -149,6 +148,16 @@ When /^the skin "([^\"]*)" is cached$/ do |skin_name|
   skin.cached = true
   skin.save
   skin.cache!
+end
+
+When /^I preview the skin "([^\"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  visit preview_skin_path(skin)
+end
+
+When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  visit set_skin_path(skin)
 end
 
 ### THEN

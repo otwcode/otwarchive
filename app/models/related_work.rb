@@ -1,4 +1,5 @@
 class RelatedWork < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   belongs_to :work
   belongs_to :parent, :polymorphic => true
   
