@@ -419,6 +419,13 @@ function prepareDeleteLinks() {
       $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     };
   });
+
+  // For purging assignments in gift exchanges. This is only on one page and easy to
+  // check, so don't worry about adding a fallback data-confirm message.
+  $j('a[href$="/confirm_purge"]').each(function() {
+    this.href = this.href.replace(/\/confirm_purge$/, "/purge");
+    $j(this).attr("data-method", "post");
+  });
 }
 
 /// Kudos

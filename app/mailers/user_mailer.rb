@@ -230,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -244,7 +244,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
+        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
