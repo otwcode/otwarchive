@@ -1,4 +1,5 @@
 class Admin < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true

@@ -73,10 +73,10 @@ class Admin::SkinsController < ApplicationController
       if skin && @admin_setting
         @admin_setting.default_skin = skin
         @admin_setting.last_updated_by = params[:last_updated_by]
-        unless @admin_setting.save
-          flash[:error] = ts("We couldn't save the default skin change.")
+        if @admin_setting.save
+          flash[:notice] << ts("Default skin changed to %{title}", title: skin.title)
         else
-          flash[:notice] << ts("Default skin changed to %{title}", skin.title)
+          flash[:error] = ts("We couldn't save the default skin change.")
         end
       end
     end
