@@ -38,9 +38,9 @@ Capybara.always_include_port = true
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 
-CONFIG_NAME = ENV['CFG_NAME'].nil? ? "/browserstack/browserstack.config.yml" : ENV['CFG_NAME']
-configuration_file = File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")
-if configuration_file && exists?(configuration_file) 
+begin
+  CONFIG_NAME = ENV['CFG_NAME'].nil? ? "/browserstack/browserstack.config.yml" : ENV['CFG_NAME']
+  configuration_file = File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")
   CONFIG = YAML.load(File.read(configuration_file))
   CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user'] 
   CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
@@ -63,6 +63,8 @@ if configuration_file && exists?(configuration_file)
       :desired_capabilities => @caps
     )
   end
+rescue
+  # exists? doesn't seem to work here.
 end
 
 # Capybara defaults to CSS3 selectors rather than XPath.
