@@ -40,7 +40,7 @@ TASK_ID = (ENV['TASK_ID'] || 0).to_i
 
 CONFIG_NAME = ENV['CFG_NAME'].nil? ? "/browserstack/browserstack.config.yml" : ENV['CFG_NAME']
 configuration_file = File.join(File.dirname(__FILE__), "../../config/#{CONFIG_NAME}")
-if exists?(configuration_file) 
+if configuration_file && exists?(configuration_file) 
   CONFIG = YAML.load(File.read(configuration_file))
   CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user'] 
   CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
