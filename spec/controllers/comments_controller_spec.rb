@@ -24,9 +24,34 @@ describe CommentsController do
       expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
     end
 
+    it "checks that the comment right user is reviewing" do
+      fake_login
+      comment = FactoryGirl.create(:comment)
+      comment.unreviewed = true
+      comment.save
+      fake_login
+      get :unreviewed, comment_id: comment.id
+      expect(response).to redirect_to(root_path)
+      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+      fake_logout
+      get :unreviewed, comment_id: comment.id
+      expect(response).to redirect_to(login_path)
+      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+    end
+
     it "checks that there is something to comment on" do
       post :new, tag_id: "Non existant tag"
       expect(flash[:error]).to eq "What did you want to comment on?"
+    end
+
+    it "checks that the owner can delete an unreviewed comment" do
+      fake_login
+      comment = FactoryGirl.create(:comment)
+      comment.unreviewed = true
+      comment.save
+      get :destroy, comment_id: comment.id
+      expect(response).to redirect_to(root_path)
+      expect(flash[:error]).to eq "Comment delted."
     end
 
     it "create a comment on an Admin post" do
