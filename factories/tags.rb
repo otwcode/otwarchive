@@ -64,4 +64,9 @@ FactoryGirl.define do
     canonical true
     sequence(:name) { |n| "Freeform #{n}" }
   end
+
+  factory :banned do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "Banned #{n}" }
+  end
 end

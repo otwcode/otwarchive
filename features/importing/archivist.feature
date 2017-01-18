@@ -62,6 +62,18 @@ Feature: Archivist bulk imports
       Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
+  Scenario: Import a work for multiple authors with accounts should not display the archivist
+    Given the following activated users exist
+      | login | email |
+      | user1 | a@ao3.org |
+      | user2 | b@ao3.org |
+    When I go to the import page
+    And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    Then I should see "Story"
+      And I should see "user1"
+      And I should see "user2"
+      But I should not see "archivist" within ".byline"
+
   Scenario: Import multiple works as an archivist
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
     Then I should see multi-story import messages
@@ -213,3 +225,31 @@ Feature: Archivist bulk imports
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
     Then I should see "Update Redirect URL"
+
+  Scenario: Open Doors committee members can block an email address from having imports
+    Given I have an Open Doors committee member "OpenDoors"
+      And I have an archivist "archivist"
+      And the default ratings exist
+      And I am logged in as "OpenDoors"
+    When I go to the Open Doors tools page
+      And I fill in "external_author_email" with "random@example.com"
+      And I submit with the 3rd button
+    Then I should see "We have saved and blocked the email address random@example.com"
+    When I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
+    Then I should see "Author ao3testing at random@example.com does not allow importing their work to this archive."
+
+  Scenario: Open Doors committee members can supply a new email address for an already imported work.
+    Given I have an Open Doors committee member "OpenDoors"
+      And I have an archivist "archivist"
+      And the default ratings exist
+      And I am logged in as "archivist"
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+      And I am logged in as "OpenDoors"
+      And I go to the Open Doors external authors page
+    Then I should see "random@example.com"
+    When I fill in "email" with "random_person@example.com"
+      And I submit
+    Then I should see "Claim invitation for random@example.com has been forwarded to random_person@example.com"
+      And 1 email should be delivered to "random_person@example.com"

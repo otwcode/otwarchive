@@ -5,6 +5,16 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
     Bookmark.tire.index.refresh
 end
 
+Given /^I have a bookmark of a deleted work$/ do
+  title = "Deleted Work For Bookmarking"
+  step %{I start a new bookmark for "#{title}"}
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  step %{I press "Create"}
+  work = Work.find_by_title(title)
+  work.destroy
+  Bookmark.tire.index.refresh
+end
+
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
   step %{I start a new bookmark for "#{title}"}
   unless pseud.nil?

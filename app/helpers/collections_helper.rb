@@ -86,4 +86,21 @@ module CollectionsHelper
     end
   end
 
+  def collection_item_display_title(collection_item)
+    item = collection_item.item
+    item_type = collection_item.item_type
+    if item_type == 'Bookmark' && item.present? && item.bookmarkable.present?
+      # .html_safe is necessary for titles with ampersands etc when inside ts()
+      ts('Bookmark for %{title}', title: item.bookmarkable.title).html_safe
+    elsif item_type == 'Bookmark'
+      ts('Bookmark of deleted item')
+    elsif item_type == 'Work' && item.posted?
+      item.title
+    elsif item_type == 'Work' && !item.posted?
+      ts('%{title} (Draft)', title: item.title).html_safe
+    # Prevent 500 error if collection_item is not destroyed when collection_item.item is
+    else
+      ts('Deleted or unknown item')
+    end
+  end
 end
