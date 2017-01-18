@@ -53,6 +53,9 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    change_email:
+      subject: "[%{app_name}] Email changed"
+      part1: "%{login}, the email associated with your account has been changed to %{email}"
     reset_password:
       subject: "[%{app_name}] Generated password"
       part1: "%{user}, the following generated password has been created for you: %{password}" 
