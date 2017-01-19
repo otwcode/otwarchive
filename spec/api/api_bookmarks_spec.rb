@@ -1,15 +1,8 @@
-require 'spec_helper'
-require 'api/api_helper'
+require "spec_helper"
+require "api/api_helper"
 
 describe "API BookmarksController" do
   include ApiHelper
-
-  # Override is_archivist so all users are archivists from this point on
-  class User < ActiveRecord::Base
-    def is_archivist?
-      true
-    end
-  end
 
   bookmark = { id: "123",
                url: "http://foo.com",
@@ -27,15 +20,17 @@ describe "API BookmarksController" do
                private: "0",
                rec: "0" }
 
-  describe "Valid API bookmark import" do
-    before do
-      mock_external
-      @user = create(:user)
-    end
+  before do
+    mock_external
+    @user = create_archivist
+  end
 
-    after do
-      WebMock.reset!
-    end
+  after do
+    WebMock.reset!
+    @user.destroy
+  end
+
+  context "Valid API bookmark import" do
 
     it "should return 200 OK when all bookmarks are created" do
       post "/api/v1/bookmarks/import",
@@ -93,16 +88,6 @@ describe "API BookmarksController" do
   end
 
   describe "Invalid API bookmark import" do
-    before do
-      mock_external
-      @user = create(:user)
-    end
-
-    after do
-      WebMock.reset!
-    end
-
-
     it "should return 400 Bad Request if no bookmarks are specified" do
       post "/api/v1/bookmarks",
            { archivist: @user.login }.to_json,
@@ -110,7 +95,7 @@ describe "API BookmarksController" do
       assert_equal 400, response.status
     end
 
-    it "should return an error mess if no URL is specified" do
+    it "should return an error message if no URL is specified" do
       post "/api/v1/bookmarks",
            { archivist: @user.login,
              bookmarks: [ bookmark.except(:url) ]
@@ -171,5 +156,17 @@ describe "API BookmarksController" do
     end
   end
 
+  describe "Unit tests - import_bookmark" do
+    it "should return an error message when an Exception is raised" do
+      user = create(:user)
+      # Stub the Bookmark.new method to throw an exception
+      allow(Bookmark).to receive(:new).and_raise(Exception)
+      under_test = Api::V1::BookmarksController.new
+      bookmark_response = under_test.instance_eval { import_bookmark(user, bookmark) }
+      expect(bookmark_response[:messages][0]).to eq "Exception"
+      expect(bookmark_response[:original_id]).to eq "123"
+      expect(bookmark_response[:status]).to eq :unprocessable_entity
+    end
+  end
   WebMock.allow_net_connect!
 end

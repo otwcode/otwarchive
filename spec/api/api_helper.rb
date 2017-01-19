@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'webmock/rspec'
+require "spec_helper"
+require "webmock/rspec"
 
 module ApiHelper
   # set up a valid token and some headers
@@ -15,19 +15,21 @@ module ApiHelper
   # Values in API fake content
   def content_fields
     {
-      title: "Foo Title", summary: "Foo summary", fandoms: "Foo Fandom", warnings: "Underage",
-      characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
-      categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
-      external_author_email: "bar@foo.com", notes: "This is a <i>content note</i>."
+      title: "Detected Title", summary: "Detected summary", fandoms: "Detected Fandom", warnings: "Underage",
+      characters: "Detected 1, Detected 2", rating: "Explicit", relationships: "Detected 1/Detected 2",
+      categories: "F/F", freeform: "Detected tag 1, Detected tag 2", external_author_name: "Detected Author",
+      external_author_email: "detected@foo.com", notes: "This is a <i>content note</i>.",
+      date: "2002-01-12", chapter_title: "Detected chapter title"
     }
   end
 
   def api_fields
     {
-      title: "Bar Title", summary: "Bar summary", fandoms: "Bar Fandom", warnings: "Rape/Non-Con",
-      characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
-      categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
-      external_author_email: "bar@foo.com", notes: "This is an <i>API note</i>."
+      title: "API Title", summary: "API summary", fandoms: "API Fandom", warnings: "Rape/Non-Con",
+      characters: "API 1, API 2", rating: "General", relationships: "bar 1/bar 2",
+      categories: "M/M", freeform: "API tag 1, API tag 2", external_author_name: "API Author",
+      external_author_email: "api@foo.com", notes: "This is an <i>API note</i>.",
+      date: "2002-01-12", chapter_title: "API chapter title (TBD)"
     }
   end
 
@@ -39,6 +41,7 @@ module ApiHelper
                 body:
                   "Title: #{content_fields[:title]}
 Summary:  #{content_fields[:summary]}
+Date: #{content_fields[:date]}
 Fandom:  #{content_fields[:fandoms]}
 Rating: #{content_fields[:rating]}
 Warnings:  #{content_fields[:warnings]}
@@ -47,6 +50,7 @@ Pairings:  #{content_fields[:relationships]}
 Category:  #{content_fields[:categories]}
 Tags:  #{content_fields[:freeform]}
 Author's notes:  #{content_fields[:notes]}
+Chapter title:  #{content_fields[:chapter_title]}
 
 stubbed response", headers: {})
 

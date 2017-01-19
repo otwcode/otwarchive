@@ -92,6 +92,7 @@ class AutocompleteController < ApplicationController
   ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]
+    raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
     tag_class = params[:type].classify.constantize
     render_output(tag_class.by_popularity
                       .where(["canonical = 0 AND name LIKE ?",
@@ -166,8 +167,8 @@ class AutocompleteController < ApplicationController
     signup_id = params[:signup_id] 
     signup = ChallengeSignup.find(signup_id)
     pmatches = return_requests ? 
-      signup.offer_potential_matches.map {|pm| pm.request_signup.pseud.byline} :
-      signup.request_potential_matches.map {|pm| pm.offer_signup.pseud.byline}
+      signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
+      signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
     pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
     render_output(pmatches)
   end

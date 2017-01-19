@@ -22,7 +22,7 @@
   <p class="note"><%= ts('Looking for assignments you were given for a gift exchange? Try') %> <%= link_to ts("My Assignments"), user_assignments_path(@user) %></p>
 <% end %>
 
-<ol class="index group">
+<ol class="prompt index group">
 
 	<% @claims.each do |claim| %>
 		<%= render "prompts/prompt_blurb", :prompt => claim.request_prompt, :claim => claim, :suppress_claims => !params[:posted] %>

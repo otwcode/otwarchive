@@ -300,7 +300,7 @@ class Skin < ActiveRecord::Base
     Rails.cache.fetch(skin_cache_html_key(self, roles_to_include)) do
       style = ""
       if self.get_role != "override" && self.get_role != "site"
-        style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+        style += AdminSetting.default_skin != Skin.default ? '' : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
       end
       style += self.get_style_block(roles_to_include)
       style.html_safe

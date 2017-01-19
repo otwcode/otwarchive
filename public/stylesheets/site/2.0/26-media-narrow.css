@@ -114,12 +114,6 @@ body .narrow-shown {
   clear: both;
 }
 
-/* 08 actions */
-
-#main .actions a {
-  margin: auto;
-}
-
 /* 10 types and groups */
 
 .blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {

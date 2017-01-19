@@ -49,6 +49,24 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[content]", with: comment_text)
 end
 
+When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
+  step %{I am logged in as "commenter"}
+  step %{I set up the comment "This is a test" on the work "#{work}"}
+  work_id = Work.find_by_title!(work).id
+  pseud_id = User.first.pseuds.first.id
+  find("#comment_pseud_id_for_#{work_id}", visible: false).set(pseud_id)
+  click_button "Comment"
+end
+
+When /^I attempt to update a comment on "([^"]*)" with a pseud that is not mine$/ do |work|
+  step %{I am logged in as "commenter"}
+  step %{I post the comment "blah blah blah" on the work "#{work}"}
+  step %{I follow "Edit"}
+  pseud_id = User.first.pseuds.first.id
+  find(:xpath, "//input[@name='comment[pseud_id]']", visible: false).set(pseud_id)
+  click_button "Update"
+end
+
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
   click_button("Comment")
@@ -166,4 +184,51 @@ end
 When /^I reload the comments on "([^\"]*?)"/ do |work|
   w = Work.find_by_title(work)
   w.find_all_comments.each { |c| c.reload }
+end
+
+When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
+  work = Work.find_by_title!(work)
+  chapter = work.chapters[0]
+  user = User.current_user
+
+  commentable = chapter
+
+  count = ArchiveConfig.COMMENT_THREAD_MAX_DEPTH + 1
+
+  count.times do |i|
+    commentable = Comment.create(
+      commentable: commentable,
+      parent: chapter,
+      content: "This is a comment at depth #{i}.",
+      pseud: user.default_pseud
+    )
+  end
+
+  # As long as there's only one child comment, it'll keep displaying the child.
+  # So we need two comments at the final depth:
+  2.times do |i|
+    ordinal = i.zero? ? "first" : "second"
+    Comment.create(
+      commentable: commentable,
+      parent: chapter,
+      content: "This is the #{ordinal} hidden comment.",
+      pseud: user.default_pseud
+    )
+  end
+end
+
+Then /^I (should|should not) see the deeply nested comments$/ do |should_or_should_not|
+  step %{I #{should_or_should_not} see "This is the first hidden comment."}
+  step %{I #{should_or_should_not} see "This is the second hidden comment."}
+end
+
+When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
+  work = Work.find_by_title!(work)
+
+  loop do
+    visit work_url(work, show_comments: true)
+    break unless page.has_content? "Delete"
+    click_link("Delete")
+    click_link("Yes, delete!") # TODO: Fix along with comment deletion.
+  end
 end
