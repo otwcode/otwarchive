@@ -275,7 +275,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
+        subject: t('user_mailer.cocreator_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
