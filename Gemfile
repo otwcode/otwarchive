@@ -6,7 +6,10 @@ gem 'test-unit', '~> 3.0'
 gem 'bundler'
 
 gem 'rails', '3.2.22.3'
-gem 'strong_parameters'
+
+# the published gem does not include fixes that are in Rails
+# specifically https://github.com/rails/strong_parameters/issues/16
+gem 'strong_parameters', github: 'rails/strong_parameters'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

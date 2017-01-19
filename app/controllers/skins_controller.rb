@@ -155,7 +155,6 @@ class SkinsController < ApplicationController
   private
 
   def skin_params
-    params = repair_nested_params
     params.require(:skin).permit(
         :title, :description, :public, :css, :role, :ie_condition, :unusable,
         :font, :base_em, :margin, :paragraph_margin, :background_color,
