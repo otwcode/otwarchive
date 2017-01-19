@@ -1,76 +1,75 @@
 class Pseud < ActiveRecord::Base
-  
+  include ActiveModel::ForbiddenAttributesProtection
+
   include Tire::Model::Search
   # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
-  attr_protected :description_sanitizer_version
-
   has_attached_file :icon,
-    :styles => { :standard => "100x100>" },
-    :path => %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
-    :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-    :s3_credentials => "#{Rails.root}/config/s3.yml",
-    :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-    :default_url => "/images/skins/iconsets/default/icon_user.png"
+    styles: { standard: "100x100>" },
+    path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
+    s3_credentials: "#{Rails.root}/config/s3.yml",
+    bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+    default_url: "/images/skins/iconsets/default/icon_user.png"
 
-  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
-  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
+  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
   DESCRIPTION_MAX = 500
 
   belongs_to :user
-  delegate :login, :to => :user, :prefix => true
+  delegate :login, to: :user, prefix: true
   has_many :kudos
-  has_many :bookmarks, :dependent => :destroy
-  has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
+  has_many :bookmarks, dependent: :destroy
+  has_many :recs, class_name: 'Bookmark', conditions: {rec: true}
   has_many :comments
   has_many :creatorships
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :readonly => false
-  has_many :tags, :through => :works
-  has_many :filters, :through => :works
-  has_many :direct_filters, :through => :works
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :readonly => false
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :readonly => false
-  has_many :collection_participants, :dependent => :destroy
-  has_many :collections, :through => :collection_participants
-  has_many :tag_set_ownerships, :dependent => :destroy
-  has_many :tag_sets, :through => :tag_set_ownerships
-  has_many :challenge_signups, :dependent => :destroy
+  has_many :works, through: :creatorships, source: :creation, source_type: 'Work', readonly: false
+  has_many :tags, through: :works
+  has_many :filters, through: :works
+  has_many :direct_filters, through: :works
+  has_many :chapters, through: :creatorships, source: :creation, source_type: 'Chapter', readonly: false
+  has_many :series, through: :creatorships, source: :creation, source_type: 'Series', readonly: false
+  has_many :collection_participants, dependent: :destroy
+  has_many :collections, through: :collection_participants
+  has_many :tag_set_ownerships, dependent: :destroy
+  has_many :tag_sets, through: :tag_set_ownerships
+  has_many :challenge_signups, dependent: :destroy
   has_many :gifts, conditions: { rejected: false }
   has_many :gift_works, through: :gifts, source: :work
   has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
-  has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
-  has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id",
-    :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :offer_assignments, through: :challenge_signups, conditions: ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :pinch_hit_assignments, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id",
+    conditions: ["challenge_assignments.sent_at IS NOT NULL"]
 
-  has_many :prompts, :dependent => :destroy
+  has_many :prompts, dependent: :destroy
 
   before_validation :clear_icon
 
   validates_presence_of :name
   validates_length_of :name,
-    :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min} characters)", :min => NAME_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max} characters)", :max => NAME_LENGTH_MAX)
-  validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
+    within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
+    too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
+    too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
+  validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
   validates_format_of :name,
-    :message => ts('can contain letters, numbers, spaces, underscores, and dashes.'),
-    :with => /\A[\p{Word} -]+\Z/u
+    message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
+    with: /\A[\p{Word} -]+\Z/u
   validates_format_of :name,
-    :message => ts('must contain at least one letter or number.'),
-    :with => /\p{Alnum}/u
-  validates_length_of :description, :allow_blank => true, :maximum => DESCRIPTION_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => DESCRIPTION_MAX)
-  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_COMMENT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
+    message: ts('must contain at least one letter or number.'),
+    with: /\p{Alnum}/u
+  validates_length_of :description, allow_blank: true, maximum: DESCRIPTION_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: DESCRIPTION_MAX)
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
   after_update :expire_caches
@@ -78,7 +77,7 @@ class Pseud < ActiveRecord::Base
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
     joins(:works).
-    where(:works => {:id => owned_works.collect(&:id)}).
+    where(works: {id: owned_works.collect(&:id)}).
     order(:name)
   }
 
@@ -97,7 +96,7 @@ class Pseud < ActiveRecord::Base
     group(:id).
     order(:name)
 
-  # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
+  # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
   scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
 
   scope :with_public_recs,
@@ -159,28 +158,28 @@ class Pseud < ActiveRecord::Base
 
   scope :public_work_count_for, lambda {|pseud_ids|
     {
-      :select => "pseuds.id, count(pseuds.id) AS work_count",
-      :joins => :works,
-      :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
+      select: "pseuds.id, count(pseuds.id) AS work_count",
+      joins: :works,
+      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
+      group: 'pseuds.id'
     }
   }
 
   scope :posted_work_count_for, lambda {|pseud_ids|
     {
-      :select => "pseuds.id, count(pseuds.id) AS work_count",
-      :joins => :works,
-      :conditions => {:works => {:posted => true, :hidden_by_admin => false}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
+      select: "pseuds.id, count(pseuds.id) AS work_count",
+      joins: :works,
+      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
+      group: 'pseuds.id'
     }
   }
 
   scope :public_rec_count_for, lambda {|pseud_ids|
     {
-      :select => "pseuds.id, count(pseuds.id) AS rec_count",
-      :joins => :bookmarks,
-      :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
+      select: "pseuds.id, count(pseuds.id) AS rec_count",
+      joins: :bookmarks,
+      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
+      group: 'pseuds.id'
     }
   }
 
@@ -211,18 +210,18 @@ class Pseud < ActiveRecord::Base
   end
 
   def unposted_works
-    @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
+    @unposted_works = self.works.find(:all, conditions: {posted: false}, order: 'works.created_at DESC')
   end
 
 
   # look up by byline
   scope :by_byline, lambda {|byline|
     {
-      :conditions => ['users.login = ? AND pseuds.name = ?',
+      conditions: ['users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
       ],
-      :include => :user
+      include: :user
     }
   }
 
@@ -256,7 +255,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.find(:all, :include => :user, :conditions => conditions)
+    Pseud.find(:all, include: :user, conditions: conditions)
   end
 
   # Takes a comma-separated list of bylines
@@ -280,13 +279,13 @@ class Pseud < ActiveRecord::Base
       end
     end
     {
-      pseuds: valid_pseuds, 
-      ambiguous_pseuds: ambiguous_pseuds, 
+      pseuds: valid_pseuds,
+      ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
       banned_pseuds: banned_pseuds
     }
   end
-  
+
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
@@ -355,6 +354,16 @@ class Pseud < ActiveRecord::Base
   end
 
   def change_challenge_participation
+    # We want to update all prompts associated with this pseud, but although
+    # each prompt contains a pseud_id column, they're not indexed on it. That
+    # means doing the search Prompt.where(pseud_id: self.id) would require
+    # searching all rows of the prompts table. So instead, we do a join on the
+    # challenge_signups table and look up prompts whose ChallengeSignup has the
+    # pseud_id that we want to change.
+    Prompt.joins(:challenge_signup).
+      where("challenge_signups.pseud_id = #{id}").
+      update_all("prompts.pseud_id = #{user.default_pseud.id}")
+
     ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
     ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
     return
@@ -398,24 +407,24 @@ class Pseud < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-  
+
   #################################
   ## SEARCH #######################
   #################################
-  
+
   mapping do
     indexes :name, boost: 20
   end
-  
+
   def collection_ids
     collections.value_of(:id)
   end
-  
+
   self.include_root_in_json = false
   def to_indexed_json
     to_json(methods: [:user_login, :collection_ids])
   end
-  
+
   def self.search(options={})
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       query do
