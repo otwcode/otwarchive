@@ -345,7 +345,8 @@ class CommentsController < ApplicationController
   def review_all
     unless @commentable && current_user_owns?(@commentable)
       flash[:error] = ts("What did you want to review comments on?")
-      redirect_back_or_default(root_path) and return
+      redirect_back_or_default(root_path)
+      return
     end
 
     @comments = @commentable.find_all_comments.unreviewed_only
