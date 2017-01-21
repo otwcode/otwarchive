@@ -36,10 +36,6 @@ describe CommentsController do
       get :unreviewed, comment_id: comment.id
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
-      fake_logout
-      get :unreviewed, comment_id: comment.id
-      expect(response).to redirect_to(login_path)
-      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
     end
 
     it "checks that there is something to comment on" do
@@ -97,6 +93,44 @@ describe CommentsController do
       get :add_comment_reply, comment_id: comment.id, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+    end
+
+    it "can cancel a comment" do
+      comment = FactoryGirl.create(:comment)
+      comment.save
+      get :cancel_comment , comment_id: comment.id
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
+      get :cancel_comment , comment_id: comment.id, show_comments: 'yes', random_option: 'no'
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+    end
+
+    it "can cancel a comment reply" do
+      comment = FactoryGirl.create(:comment)
+      comment.save
+      get :cancel_comment_reply , comment_id: comment.id
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
+      get :cancel_comment_reply , comment_id: comment.id, show_comments: 'yes', random_option: 'no'
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+    end
+
+    it "can cancel a request to delete a comment ?" do
+      comment = FactoryGirl.create(:comment)
+      comment.save
+      get :cancel_comment_delete , id: comment.id
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+    end
+
+    it "can cancel an edit to a comment" do
+      comment = FactoryGirl.create(:comment)
+      comment.save
+      get :cancel_comment_edit , id: comment.id
+      expect(flash[:error]).to be_nil
+      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
     end
 
     it "checks that the owner can delete an unreviewed comment" do
