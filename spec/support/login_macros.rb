@@ -28,5 +28,4 @@ module LoginMacros
     allow(controller).to receive(:logged_in?).and_return(false)
     allow(controller).to receive(:current_user).and_return(@current_user)
   end
-
 end
