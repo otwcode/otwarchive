@@ -50,7 +50,6 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt (3.1.11)
-    bcrypt (3.1.11-x86-mingw32)
     builder (3.0.4)
     bullet (5.0.0)
       activesupport (>= 3.0.0)
@@ -150,7 +149,6 @@ GEM
     fastimage (1.8.1)
       addressable (~> 2.3, >= 2.3.5)
     ffi (1.9.10)
-    ffi (1.9.10-x86-mingw32)
     gherkin (3.2.0)
     globalize (3.1.0)
       activemodel (>= 3.1.0, < 4.0.0)
@@ -199,7 +197,6 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mysql2 (0.3.20)
-    mysql2 (0.3.20-x86-mingw32)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     net-scp (1.1.1)
@@ -215,9 +212,6 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.14.1.311)
     nokogiri (1.6.8)
-      mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
-    nokogiri (1.6.8-x86-mingw32)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
     ntlm-http (0.1.1)
@@ -300,11 +294,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rest-client (1.8.0-x86-mingw32)
-      ffi (~> 1.9)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
     rollout (2.0.0)
       redis
     rpm_contrib (2.1.11)
@@ -364,6 +353,11 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     stringex (2.0.3)
+    strong_parameters (0.2.3)
+      actionpack (~> 3.0)
+      activemodel (~> 3.0)
+      activesupport (~> 3.0)
+      railties (~> 3.0)
     term-ansicolor (1.4.0)
       tins (~> 1.0)
     test-unit (3.1.8)
@@ -394,9 +388,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
-    unf_ext (0.0.7.1-x86-mingw32)
     unicode (0.4.4.2)
-    unicode (0.4.4.2-x86-mingw32)
     unicorn (5.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -429,7 +421,6 @@ GEM
 
 PLATFORMS
   ruby
-  x86-mingw32
 
 DEPENDENCIES
   activerecord-mysql-reconnect
@@ -499,6 +490,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda
   simplecov (~> 0.12.0)
+  strong_parameters
   test-unit (~> 3.0)
   test_after_commit
   timeliness

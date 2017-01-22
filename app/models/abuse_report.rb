@@ -1,4 +1,6 @@
 class AbuseReport < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   validates :email, email_veracity: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
@@ -11,8 +13,6 @@ class AbuseReport < ActiveRecord::Base
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   scope :by_date, order('created_at DESC')
-
-  attr_protected :comment_sanitizer_version
 
   # if the URL ends like "works/123", add a / at the end
   # if the URL contains "works/123?", remove the parameters and add a /
@@ -50,7 +50,6 @@ class AbuseReport < ActiveRecord::Base
       username: username,
       ip_address: ip_address,
       url: url
-
     )
     reporter.send_report!
   end

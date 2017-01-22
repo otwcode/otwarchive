@@ -32,7 +32,8 @@ describe TagsController do
 
       @freeform1 = FactoryGirl.create(:freeform, canonical: false)
       @character1 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: FactoryGirl.create(:character, canonical: true))
+      @character3 = FactoryGirl.create(:character, canonical: false)
+      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
       @work = FactoryGirl.create(:work,
                                  posted: true,
                                  fandom_string: "#{@fandom1.name}",
@@ -101,22 +102,71 @@ describe TagsController do
         expect(@character2).not_to be_canonical
       end
     end
+
+    context "A wrangler can remove associated tag" do
+      it "should be successful" do
+        put :mass_update, id: @character3.name, remove_associated: [@character2.id]
+        expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
+        expect(flash[:error]).to be_nil
+        expect(@character3.mergers).to eq []
+      end
+    end
+  end
+
+  describe "reindex" do
+    context "when reindexing a tag" do
+      before do
+        @tag = FactoryGirl.create(:freeform)
+      end
+
+      it "Only an admin can reindex a tag" do
+        get :reindex, id: @tag.name        
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq "Please log in as admin"
+      end
+    end
+  end
+
+  describe "feed" do
+    it "You can only get a feed on Fandom, Character and Relationships" do
+      @tag = FactoryGirl.create(:banned, canonical: false)
+      get :feed, id: @tag.id, format: :atom
+      expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+    end
+  end
+
+  describe "edit" do
+    context "when editing a tag" do
+      before do
+        @tag = FactoryGirl.create(:banned)
+      end
+
+      it "Only an admin can edit a banned tag" do
+        get :edit, id: @tag.name
+        expect(flash[:error]).to eq "Please log in as admin"
+        expect(response).to redirect_to(tag_wranglings_path)
+      end
+    end
   end
 
   describe "update" do
-    context "when fixing a tag's taggings_count" do
+    context "when updating a tag" do
       before do
         @tag = FactoryGirl.create(:freeform)
-        # manufacture a tag with borked taggings_count
-        @tag.taggings_count = 10
-        @tag.save
       end
 
       it "should reset the taggings_count" do
+        # manufacture a tag with borked taggings_count
+        @tag.taggings_count = 10
+        @tag.save
         put :update, id: @tag.name, tag: { fix_taggings_count: true }
-
         @tag.reload
         expect(@tag.taggings_count).to eq(0)
+      end
+
+      it "you can wrangle" do
+        put :update, id: @tag.name, tag: {}, commit: :Wrangle
+        expect(response).to redirect_to(tag_path(@tag) + "/wrangle?page=1&sort_column=name&sort_direction=ASC")
       end
     end
   end

@@ -17,8 +17,12 @@ Feature: User icons
     And I press "Update"
   Then I should see the image "alt" text "Some test description"
 
-  Scenario: Add an icon to a collection
+  Scenario: Add and remove a collection icon
 
   Given I have a collection "Pretty"
-  When I add an icon to the collection
+  When I add an icon to the collection "Pretty"
   Then I should see "Collection was successfully updated"
+    And the "Pretty" collection should have an icon
+  When I delete the icon from the collection "Pretty"
+  Then I should see "Collection was successfully updated."
+    And the "Pretty" collection should not have an icon

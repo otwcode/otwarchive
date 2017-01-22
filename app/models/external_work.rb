@@ -111,32 +111,6 @@ class ExternalWork < ActiveRecord::Base
     end  
   end
 
-  # Assign the bookmarks and related works of other external works
-  # to this one, and then delete them
-  # TODO: use update_all instead?
-  def merge_similar(externals)
-    for external_work in externals
-      unless external_work == self
-        if external_work.bookmarks
-          external_work.bookmarks.each do |bookmark|
-            bookmark.bookmarkable = self
-            bookmark.save!
-          end
-        end
-        if external_work.related_works
-          external_work.related_works.each do |related_work|
-            related_work.parent = self
-            related_work.save!
-          end        
-        end
-        external_work.reload
-        if external_work.bookmarks.empty? && external_work.related_works.empty?
-          external_work.destroy
-        end
-      end
-    end
-  end
-
   def tag_groups
     self.tags.group_by { |t| t.type.to_s }
   end
