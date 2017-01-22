@@ -3,7 +3,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
   before_filter :admin_only
 
   def index
-    @admin_blacklisted_email = AdminBlacklistedEmail.new
+    @admin_blacklisted_email = AdminBlacklistedEmail.new 
     if params[:query]
       @admin_blacklisted_emails = AdminBlacklistedEmail.where(["email LIKE ?", '%' + params[:query] + '%'])
       @admin_blacklisted_emails = @admin_blacklisted_emails.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
@@ -15,7 +15,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
   end
 
   def create
-    @admin_blacklisted_email = AdminBlacklistedEmail.new(admin_blacklisted_email_params)
+    @admin_blacklisted_email = AdminBlacklistedEmail.new(params[:admin_blacklisted_email])
 
     if @admin_blacklisted_email.save
       flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} added to blacklist.")
@@ -28,16 +28,8 @@ class Admin::BlacklistedEmailsController < ApplicationController
   def destroy
     @admin_blacklisted_email = AdminBlacklistedEmail.find(params[:id])
     @admin_blacklisted_email.destroy
-
+    
     flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} removed from blacklist.")
     redirect_to admin_blacklisted_emails_url
-  end
-
-  private
-
-  def admin_blacklisted_email_params
-    params.require(:admin_blacklisted_email).permit(
-      :email
-    )
   end
 end
