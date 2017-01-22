@@ -163,10 +163,17 @@ class CommentsController < ApplicationController
 
   def unreviewed
     if @commentable.nil?
+      # I think you can't get here as the earlier tests in check_permission_to_reviewi
+      # will catch these issues.
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
     else
-      @comments = @commentable.find_all_comments.unreviewed_only.page(params[:page])
+      all_comments = @commentable.find_all_comments
+      if all_comments.blank?
+        @comments = nil
+      else
+        @comments = all_comments.unreviewed_only.page(params[:page])
+      end
     end
   end
 
@@ -338,7 +345,8 @@ class CommentsController < ApplicationController
   def review_all
     unless @commentable && current_user_owns?(@commentable)
       flash[:error] = ts("What did you want to review comments on?")
-      redirect_back_or_default(root_path) and return
+      redirect_back_or_default(root_path)
+      return
     end
 
     @comments = @commentable.find_all_comments.unreviewed_only
