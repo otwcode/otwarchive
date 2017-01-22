@@ -43,7 +43,7 @@ describe CommentsController do
       expect(flash[:error]).to eq "What did you want to comment on?"
     end
 
-    xit "checks that there is something to review" do
+    it "checks that there is something to review" do
       comment = FactoryGirl.create(:comment)
       comment.unreviewed = true
       comment.save
