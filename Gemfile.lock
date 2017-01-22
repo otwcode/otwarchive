@@ -130,8 +130,6 @@ GEM
       warden (~> 1.2.3)
     devise-async (0.10.2)
       devise (>= 3.2, < 4.0)
-    devise-encryptable (0.2.0)
-      devise (>= 2.1.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
     domain_name (0.5.25)
@@ -479,7 +477,6 @@ DEPENDENCIES
   delorean
   devise (~> 3.0)
   devise-async
-  devise-encryptable
   elasticsearch
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)

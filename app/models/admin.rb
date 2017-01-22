@@ -3,7 +3,6 @@ class Admin < ActiveRecord::Base
 
   devise :database_authenticatable,
          :registerable,
-         :encryptable,
          :validatable,
          password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
 
