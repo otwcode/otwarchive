@@ -53,6 +53,21 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    coauthor_notification:
+      subject: "[%{app_name}] Co-creator Notification"
+      edit_the_work: "Edit the work"
+      edit_the_series: "Edit the series"
+      part1_work: "You have been listed as a co-creator on the following work:"
+      part1_series: "You have been listed as a co-creator on the following series:"
+      html:
+        part2_work: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+        part2_series: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+      text:
+        part2_work: "Edit the work to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+        part2_series: "Edit the series to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+    change_email:
+      subject: "[%{app_name}] Email changed"
+      part1: "%{login}, the email associated with your account has been changed to %{email}"
     reset_password:
       subject: "[%{app_name}] Generated password"
       part1: "%{user}, the following generated password has been created for you: %{password}" 
