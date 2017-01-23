@@ -19,14 +19,20 @@ class Admin < ActiveRecord::Base
       # test that on failure
       return true if result
       if Authlogic::CryptoProviders::BCrypt.matches?(self.encrypted_password,[password, self.password_salt].compact)
-        self.password = password
+        # I am commenting the following line so that if
+        # we needed to roll back the migration becuase
+        # of reasons the authentication would still work.
+        #self.password = password
         return true
       end
       return false
     rescue BCrypt::Errors::InvalidHash
       # Now a really old password hash
       return false unless Digest::SHA1.hexdigest(password) == encrypted_password
-      self.password = password
+      # I am commenting the following line so that if
+      # we needed to roll back the migration becuase
+      # of reasons the authentication would still work.
+      #self.password = password
       true
     end
   end
