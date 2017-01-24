@@ -12,6 +12,8 @@ describe TagSetNominationsController do
   let(:moderator) { mod_pseud.user }
   let(:mod_pseud) { FactoryGirl.create(:pseud) }
 
+  let(:random_user) { FactoryGirl.create(:user) }
+
   describe 'GET index' do
     before do
       owned_tag_set.add_moderator(mod_pseud)
@@ -57,7 +59,7 @@ describe TagSetNominationsController do
       end
 
       context 'user_id param is falsey' do
-        context 'tag set is found' do
+        context 'tag set exists' do
           context 'logged in user is moderator' do
             let(:user) { moderator }
 
@@ -419,7 +421,7 @@ describe TagSetNominationsController do
           end
 
           context 'logged in user is not moderator' do
-            let(:user) { FactoryGirl.create(:user) }
+            let(:user) { random_user }
 
             it 'redirects and shows an error message' do
               get :index, tag_set_id: owned_tag_set.id
@@ -430,8 +432,8 @@ describe TagSetNominationsController do
 
         # is testing this even possible?
         # how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'tag set is not found' do
-          let(:user) { FactoryGirl.create(:user) }
+        xcontext 'no tag set' do
+          let(:user) { random_user }
 
           it 'redirects and shows an error message' do
             get :index, tag_set_id: nil
@@ -485,7 +487,6 @@ describe TagSetNominationsController do
 
           context 'user is also not moderator of tag set' do
             before do
-              random_user = FactoryGirl.create(:user)
               fake_login_known_user(random_user)
             end
 
@@ -540,7 +541,116 @@ describe TagSetNominationsController do
   end
 
   describe 'GET new' do
+    context 'user is not logged in' do
+      it 'redirects and shows an error message' do
+        get :new, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      context 'tag set exists' do
+        context 'user already has nominated tags for tag set' do
+          before do
+            fake_login_known_user(tag_nominator)
+            get :new, tag_set_id: owned_tag_set.id
+          end
+
+          it 'redirects to edit page' do
+            it_redirects_to(edit_tag_set_nomination_path(owned_tag_set, tag_set_nomination))
+          end
+
+          it 'does not build a new tag set nomination' do
+            expect(assigns(:tag_set_nomination).new_record?).to be_falsey
+            expect(assigns(:tag_set_nomination)).to eq(tag_set_nomination)
+          end
+        end
+
+        context 'user has not yet nominated tags for tag set' do
+          before do
+            fake_login_known_user(random_user)
+          end
+
+          it 'renders the new template' do
+            get :new, tag_set_id: owned_tag_set.id
+            expect(response).to render_template("new")
+          end
+
+          it 'builds a new tag set nomination' do
+            get :new, tag_set_id: owned_tag_set.id
+            expect(assigns(:tag_set_nomination).new_record?).to be_truthy
+            expect(assigns(:tag_set_nomination).pseud).to eq(random_user.default_pseud)
+            expect(assigns(:tag_set_nomination).owned_tag_set).to eq(owned_tag_set)
+          end
+
+          it 'builds new freeform nominations until freeform_nomination_limit' do
+            owned_tag_set.update_attribute(:freeform_nomination_limit, 3)
+            get :new, tag_set_id: owned_tag_set.id
+            expect(assigns(:tag_set_nomination).freeform_nominations.size).to eq(3)
+          end
+
+          context 'fandom_nomination_limit is > 0' do
+            before do
+              owned_tag_set.fandom_nomination_limit = 2
+              owned_tag_set.character_nomination_limit = 4
+              owned_tag_set.relationship_nomination_limit = 6
+              owned_tag_set.save(validate: false)
+
+              get :new, tag_set_id: owned_tag_set.id
+            end
+
+            it 'builds new fandom nominations until fandom_nomination_limit' do
+              expect(assigns(:tag_set_nomination).fandom_nominations.size).to eq(2)
+            end
+
+            it 'builds new character nominations for each fandom nomination' do
+              assigns(:tag_set_nomination).fandom_nominations.each do |fandom_nom|
+                expect(fandom_nom.character_nominations.size).to eq(4)
+              end
+            end
+
+            it 'builds new relationship nominations for each fandom nomination' do
+              assigns(:tag_set_nomination).fandom_nominations.each do |fandom_nom|
+                expect(fandom_nom.relationship_nominations.size).to eq(6)
+              end
+            end
+          end
+
+          context 'fandom_nomination_limit is 0' do
+            before do
+              owned_tag_set.fandom_nomination_limit = 0
+              owned_tag_set.character_nomination_limit = 4
+              owned_tag_set.relationship_nomination_limit = 6
+              owned_tag_set.save(validate: false)
+
+              get :new, tag_set_id: owned_tag_set.id
+            end
+
+            it 'does not build new fandom nominations' do
+              expect(assigns(:tag_set_nomination).fandom_nominations.size).to eq(0)
+            end
+
+            it 'builds new character nominations until character_nomination_limit' do
+              expect(assigns(:tag_set_nomination).character_nominations.size).to eq(4)
+            end
+
+            it 'builds new relationship nominations until relationship_nomination_limit' do
+              expect(assigns(:tag_set_nomination).relationship_nominations.size).to eq(6)
+            end
+          end
+        end
+      end
+
+      # is testing this even possible?
+      # how can OwnedTagSet.find not raise an error but still return falsey?
+      xcontext 'no tag set' do
+        it 'redirects and shows an error message' do
+          fake_login_known_user(random_user)
+          get :new, tag_set_id: nil
+          it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+        end
+      end
+    end
   end
 
   describe 'GET edit' do
