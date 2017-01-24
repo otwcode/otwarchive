@@ -748,7 +748,10 @@ class Work < ActiveRecord::Base
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
     if self.new_record?
-      self.word_count = self.chapters.first.set_word_count
+      self.word_count = 0
+      chapters.each do |chapter|
+        self.word_count += chapter.set_word_count
+      end
     else
       self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id, :posted => true).first.work_word_count
     end

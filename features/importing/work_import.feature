@@ -147,6 +147,14 @@ Feature: Import Works
       Then I should see "1. Chapter 1 (2000-01-10)"
       Then I should see "2. Importing Test Part 2 (2000-01-22)"
 
+  Scenario: Imported multichapter work should have the correct word count
+    Given I import the urls with mock websites as chapters without preview
+      """
+      http://import-site-without-tags
+      http://second-import-site-without-tags
+      """
+    Then I should see "Words:5"
+
 #  Scenario: Import works for others and have them automatically notified
 
   @work_import_special_characters_auto_utf
