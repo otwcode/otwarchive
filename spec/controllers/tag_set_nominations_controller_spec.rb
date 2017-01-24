@@ -10,17 +10,16 @@ describe TagSetNominationsController do
   let(:tag_nominator) { tag_nominator_pseud.user }
   let(:tag_nominator_pseud) { tag_set_nomination.pseud }
   let(:moderator) { mod_pseud.user }
-  let(:mod_pseud) { FactoryGirl.create(:pseud) }
+  let(:mod_pseud) {
+    FactoryGirl.create(:pseud).tap do |pseud|
+      owned_tag_set.add_moderator(pseud)
+      owned_tag_set.save!
+    end
+  }
 
   let(:random_user) { FactoryGirl.create(:user) }
 
   describe 'GET index' do
-    before do
-      owned_tag_set.add_moderator(mod_pseud)
-      owned_tag_set.save!
-      moderator.reload
-    end
-
     context 'user is not logged in' do
       it 'redirects and shows an error message' do
         get :index, user_id: moderator.login, tag_set_id: owned_tag_set.id
@@ -61,7 +60,7 @@ describe TagSetNominationsController do
       context 'user_id param is falsey' do
         context 'tag set exists' do
           context 'logged in user is moderator' do
-            let(:user) { moderator }
+            let(:user) { moderator.reload } # Why reload?
 
             it 'renders the index template' do
               get :index, tag_set_id: owned_tag_set.id
@@ -478,62 +477,37 @@ describe TagSetNominationsController do
       end
 
       context 'valid params' do
-        context 'logged in user is not author of nomination' do
+        context 'user is not associated with nomination' do
           before do
-            owned_tag_set.add_moderator(mod_pseud)
-            owned_tag_set.save!
-            moderator.reload
+            fake_login_known_user(random_user)
           end
 
-          context 'user is also not moderator of tag set' do
-            before do
-              fake_login_known_user(random_user)
-            end
-
-            it 'redirects and shows an error message' do
-              get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-              it_redirects_to_with_notice(tag_set_path(owned_tag_set),
-                                          "You can only see your own nominations or nominations for a set you moderate.")
-            end
-          end
-
-          context 'user is moderator of tag set' do
-            before do
-              fake_login_known_user(moderator)
-            end
-
-            it 'renders the show template' do
-              get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-              expect(response).to render_template("show")
-            end
+          it 'redirects and shows an error message' do
+            get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
+                                        "You can only see your own nominations or nominations for a set you moderate.")
           end
         end
 
-        context 'logged in user is author of nomination' do
+        context 'user is author of nomination' do
           before do
-            fake_login_known_user(tag_nominator)
+            fake_login_known_user(tag_nominator.reload) # Why reload?
           end
 
-          context 'user is not moderator of tag set' do
-            it 'renders the show template' do
-              tag_nominator.reload # Whywhywhywhy
+          it 'renders the show template' do
+            get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            expect(response).to render_template("show")
+          end
+        end
 
-              get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-              expect(response).to render_template("show")
-            end
+        context 'user is moderator of tag set' do
+          before do
+            fake_login_known_user(moderator.reload) # Why reload?
           end
 
-          context 'user is also moderator of tag set' do
-            before do
-              owned_tag_set.add_moderator(tag_nominator_pseud)
-              owned_tag_set.save!
-              tag_nominator.reload
-            end
-
-            it 'renders the show template' do
-              get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-              expect(response).to render_template("show")
-            end
+          it 'renders the show template' do
+            get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            expect(response).to render_template("show")
           end
         end
       end
@@ -654,7 +628,156 @@ describe TagSetNominationsController do
   end
 
   describe 'GET edit' do
+    context 'user is not logged in' do
+      it 'redirects and shows an error message' do
+        get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      context 'invalid params' do
+        before do
+          fake_login_known_user(tag_nominator)
+        end
+
+        # is testing this even possible?
+        # how can OwnedTagSet.find not raise an error but still return falsey?
+        xcontext 'no tag set' do
+          it 'redirects and shows an error message' do
+            get :edit, id: tag_set_nomination.id, tag_set_id: nil
+            it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+          end
+        end
+
+        # is testing this even possible?
+        # how can TagSetNomination.find not raise an error but still return falsey?
+        xcontext 'no tag set nomination' do
+          it 'redirects and shows an error message' do
+            get :edit, id: nil, tag_set_id: owned_tag_set.id
+            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
+          end
+        end
+      end
+
+      context 'valid params' do
+        context 'user is not associated with nomination' do
+          before do
+            fake_login_known_user(random_user)
+          end
+
+          it 'redirects and shows an error message' do
+            get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
+                                        "You can only see your own nominations or nominations for a set you moderate.")
+          end
+        end
+
+        context 'user is author of nomination' do
+          let!(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination,
+                                                      tagname: "New Fandom", approved: false, rejected: false) }
+
+          before do
+            fake_login_known_user(tag_nominator.reload) # Why reload?
+
+            owned_tag_set.fandom_nomination_limit = 1
+            owned_tag_set.character_nomination_limit = 3
+            owned_tag_set.relationship_nomination_limit = 2
+            owned_tag_set.freeform_nomination_limit = 4
+            owned_tag_set.save(validate: false)
+          end
+
+          it 'renders the edit template' do
+            get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            expect(response).to render_template("edit")
+          end
+
+          context 'number of tag nominations matches limits specified on tag set' do
+            before do
+              add_character_nominations(owned_tag_set.character_nomination_limit)
+              add_relationship_nominations(owned_tag_set.relationship_nomination_limit)
+              add_freeform_nominations(owned_tag_set.freeform_nomination_limit)
+
+              get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            end
+
+            it 'returns associated fandom, character, relationship, and freeform nominations' do
+              expect(assigns(:tag_set_nomination).fandom_nominations).to eq([fandom_nom])
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.count).to eq(3)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.count).to eq(2)
+              expect(assigns(:tag_set_nomination).freeform_nominations.count).to eq(4)
+            end
+
+            it 'does not build new tag nominations' do
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.size).to eq(3)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.size).to eq(2)
+              expect(assigns(:tag_set_nomination).freeform_nominations.size).to eq(4)
+            end
+          end
+
+          context 'fewer tag nominations than limit specified on tag set' do
+            before do
+              add_character_nominations(1)
+              add_relationship_nominations(1)
+              add_freeform_nominations(1)
+
+              get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            end
+
+            it 'returns existing associated fandom, character, relationship, and freeform nominations' do
+              expect(assigns(:tag_set_nomination).fandom_nominations).to eq([fandom_nom])
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.count).to eq(1)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.count).to eq(1)
+              expect(assigns(:tag_set_nomination).freeform_nominations.count).to eq(1)
+            end
+
+            it 'builds new tag nominations until _nomination_limit is reached' do
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.size).to eq(3)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.size).to eq(2)
+              expect(assigns(:tag_set_nomination).freeform_nominations.size).to eq(4)
+            end
+          end
+
+          def add_character_nominations(num)
+            num.times do
+              CharacterNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
+                                         tagname: "New Character #{num}")
+              num -= 1
+            end
+          end
+
+          def add_relationship_nominations(num)
+            num.times do
+              RelationshipNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
+                                            tagname: "New Relationship #{num}")
+              num -= 1
+            end
+          end
+
+          def add_freeform_nominations(num)
+            num.times do
+              FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Freeform #{num}")
+              num -= 1
+            end
+          end
+        end
+
+        context 'user is moderator of tag set' do
+          before do
+            fake_login_known_user(moderator.reload) # Why reload?
+          end
+
+          it 'renders the edit template' do
+            get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            expect(response).to render_template("edit")
+          end
+
+          it 'returns associated fandom, character, relationship, and freeform nominations' do
+
+          end
+        end
+      end
+    end
   end
 
   describe 'POST create' do
