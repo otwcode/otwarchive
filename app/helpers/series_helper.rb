@@ -7,14 +7,31 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select{|s| s.visible?(current_user)}
+    series = work.series.select{ |s| s.visible?(current_user) }
     series.map do |serial|
-      serial_works = serial.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
+      serial_works = serial.serial_works.find(:all,
+                                              include: :work,
+                                              conditions: ['works.posted = ?', true],
+                                              order: :position).
+                                         select{ |sw| sw.work.visible(current_user) }.
+                                         collect{ |sw| sw.work }
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
-        previous_link = visible_position > 0 ? link_to(ts("&larr; Previous Work").html_safe, serial_works[visible_position - 1]) : "".html_safe
-        main_link = ts(" Part %{position} of the %{series_title} series ", position: (visible_position + 1).to_s, series_title: link_to(serial.title, serial)).html_safe
-        next_link = (visible_position < serial_works.size-1) ? link_to(ts("Next Work &rarr;").html_safe, serial_works[visible_position + 1]) : "".html_safe
+        previous_link = if visible_position > 0
+                          link_to(ts("&larr; Previous Work").html_safe,
+                                  serial_works[visible_position - 1])
+                        else
+                          "".html_safe
+                        end
+        main_link = ts(" Part %{position} of the %{series_title} series ",
+                       position: (visible_position + 1).to_s,
+                       series_title: link_to(serial.title, serial)).html_safe
+        next_link = if (visible_position < serial_works.size - 1)
+                      link_to(ts("Next Work &rarr;").html_safe,
+                              serial_works[visible_position + 1])
+                    else
+                      "".html_safe
+                    end
         previous_link + main_link + next_link
       end
     end
