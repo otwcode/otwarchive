@@ -218,13 +218,11 @@ end
 # where the key is converted to a string
 # but the pull was closed due to:
 # "parameter keys [already] arrive as strings when submitted via HTTP requests"
-# but, with our cucumber tests, nested attribute keys are, in fact, integers
-if Rails.env.test?
-  module ActionController
-    class Parameters
-      def fields_for_style?(object)
-        object.is_a?(Hash) && object.all? { |k, v| k.to_s =~ /\A-?\d+\z/ && v.is_a?(Hash) }
-      end
+# but, at least with our cucumber tests, nested attribute keys are, in fact, integers
+module ActionController
+  class Parameters
+    def fields_for_style?(object)
+      object.is_a?(Hash) && object.all? { |k, v| k.to_s =~ /\A-?\d+\z/ && v.is_a?(Hash) }
     end
   end
 end
