@@ -1204,7 +1204,33 @@ describe TagSetNominationsController do
   end
 
   describe 'GET confirm_destroy_multiple' do
+    context 'user is not logged in' do
+      it 'redirects and returns an error message' do
+        get :confirm_destroy_multiple, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      before do
+        fake_login_known_user(random_user)
+      end
+
+      context 'tag set exists' do
+        it 'renders the confirm_destroy_multiple template' do
+          get :confirm_destroy_multiple, tag_set_id: owned_tag_set.id
+          expect(response).to render_template("confirm_destroy_multiple")
+        end
+      end
+
+      # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
+      xcontext 'no tag set' do
+        it 'redirects and returns an error message' do
+          get :confirm_destroy_multiple, tag_set_id: nil
+          it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+        end
+      end
+    end
   end
 
   describe 'DELETE destroy_multiple' do
