@@ -38,7 +38,7 @@ module SeriesHelper
                                 ts("Part %{position} of the %{series_title} series",
                                    position: (visible_position + 1).to_s,
                                    series_title: link_to(serial.title, serial)).html_safe,
-                                class: "title")
+                                class: "position")
         # This is empty if there is no next work, otherwise it is
         # <span class="divider"> </span><a href class="next">Next Work</a>
         # with a right-pointing arrow after "Work"
