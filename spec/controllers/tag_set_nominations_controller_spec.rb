@@ -429,8 +429,7 @@ describe TagSetNominationsController do
           end
         end
 
-        # is testing this even possible?
-        # how can OwnedTagSet.find not raise an error but still return falsey?
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
           let(:user) { random_user }
 
@@ -457,8 +456,7 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # is testing this even possible?
-        # how can OwnedTagSet.find not raise an error but still return falsey?
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
           it 'redirects and shows an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: nil
@@ -466,8 +464,7 @@ describe TagSetNominationsController do
           end
         end
 
-        # is testing this even possible?
-        # how can TagSetNomination.find not raise an error but still return falsey?
+        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
         xcontext 'no tag set nomination' do
           it 'redirects and shows an error message' do
             get :show, id: nil, tag_set_id: owned_tag_set.id
@@ -615,8 +612,7 @@ describe TagSetNominationsController do
         end
       end
 
-      # is testing this even possible?
-      # how can OwnedTagSet.find not raise an error but still return falsey?
+      # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
       xcontext 'no tag set' do
         it 'redirects and shows an error message' do
           fake_login_known_user(random_user)
@@ -641,8 +637,7 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # is testing this even possible?
-        # how can OwnedTagSet.find not raise an error but still return falsey?
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
           it 'redirects and shows an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: nil
@@ -650,8 +645,7 @@ describe TagSetNominationsController do
           end
         end
 
-        # is testing this even possible?
-        # how can TagSetNomination.find not raise an error but still return falsey?
+        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
         xcontext 'no tag set nomination' do
           it 'redirects and shows an error message' do
             get :edit, id: nil, tag_set_id: owned_tag_set.id
@@ -661,6 +655,9 @@ describe TagSetNominationsController do
       end
 
       context 'valid params' do
+        let!(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination,
+                                                    tagname: "New Fandom", approved: false, rejected: false) }
+
         context 'user is not associated with nomination' do
           before do
             fake_login_known_user(random_user)
@@ -674,9 +671,6 @@ describe TagSetNominationsController do
         end
 
         context 'user is author of nomination' do
-          let!(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination,
-                                                      tagname: "New Fandom", approved: false, rejected: false) }
-
           before do
             fake_login_known_user(tag_nominator.reload) # Why reload?
 
@@ -701,7 +695,7 @@ describe TagSetNominationsController do
               get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
             end
 
-            it 'returns associated fandom, character, relationship, and freeform nominations' do
+            it 'returns existing associated tag nominations' do
               expect(assigns(:tag_set_nomination).fandom_nominations).to eq([fandom_nom])
               expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.count).to eq(3)
               expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.count).to eq(2)
@@ -724,7 +718,7 @@ describe TagSetNominationsController do
               get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
             end
 
-            it 'returns existing associated fandom, character, relationship, and freeform nominations' do
+            it 'returns existing associated tag nominations' do
               expect(assigns(:tag_set_nomination).fandom_nominations).to eq([fandom_nom])
               expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.count).to eq(1)
               expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.count).to eq(1)
@@ -763,17 +757,28 @@ describe TagSetNominationsController do
         end
 
         context 'user is moderator of tag set' do
+          let!(:character_nom) { CharacterNomination.create(tag_set_nomination: tag_set_nomination,
+                                                            fandom_nomination: fandom_nom, tagname: "New Character") }
+          let!(:relationship_nom) { RelationshipNomination.create(tag_set_nomination: tag_set_nomination,
+                                                                  fandom_nomination: fandom_nom,
+                                                                  tagname: "New Relationship") }
+          let!(:freeform_nom) { FreeformNomination.create(tag_set_nomination: tag_set_nomination,
+                                                          tagname: "New Freeform") }
+
           before do
             fake_login_known_user(moderator.reload) # Why reload?
+            get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
           end
 
           it 'renders the edit template' do
-            get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
             expect(response).to render_template("edit")
           end
 
-          it 'returns associated fandom, character, relationship, and freeform nominations' do
-
+          it 'returns associated tag nominations' do
+            expect(assigns(:tag_set_nomination).fandom_nominations).to include(fandom_nom)
+            expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations).to include(character_nom)
+            expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations).to include(relationship_nom)
+            expect(assigns(:tag_set_nomination).freeform_nominations).to include(freeform_nom)
           end
         end
       end
@@ -781,7 +786,157 @@ describe TagSetNominationsController do
   end
 
   describe 'POST create' do
+    context 'user is not logged in' do
+      it 'redirects and shows an error message' do
+        post :create, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      context 'invalid params' do
+        before do
+          fake_login_known_user(random_user)
+        end
+
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
+        xcontext 'no tag set' do
+          it 'redirects and shows an error message' do
+            post :create, tag_set_id: nil
+            it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+          end
+        end
+
+        context 'pseud_id param does not match user' do
+          it 'redirects and shows an error message' do
+            post :create, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: tag_nominator.default_pseud.id }
+            it_redirects_to_with_error(root_path, "You can't nominate tags with that pseud.")
+          end
+        end
+      end
+
+      context 'valid params' do
+        before do
+          fake_login_known_user(random_user.reload) # Why reload?
+        end
+
+        context 'tag set nomination saves successfully' do
+          before do
+            owned_tag_set.update_attribute(:character_nomination_limit, 1)
+            post :create,
+                 tag_set_id: owned_tag_set.id,
+                 tag_set_nomination: { pseud_id: random_user.default_pseud.id,
+                                       owned_tag_set_id: owned_tag_set.id }.merge(nomination_attributes)
+          end
+
+          context 'all tag nominations are canonical' do
+            let(:nomination_attributes) {
+              { fandom_nominations_attributes: {
+                  "0": { tagname: "New Fandom",
+                             character_nominations_attributes: {
+                                 "0": { tagname: "New Character",
+                                        from_fandom_nomination: true } } } }
+              }
+            }
+
+            it 'creates a new tag set nomination' do
+              new_tag_set_nomination = TagSetNomination.last
+              expect(assigns(:tag_set_nomination)).to eq(new_tag_set_nomination)
+              expect(new_tag_set_nomination.pseud).to eq(random_user.default_pseud)
+              expect(new_tag_set_nomination.owned_tag_set).to eq(owned_tag_set)
+            end
+
+            it 'creates associated tag nominations' do
+              new_fandom_nomination = FandomNomination.last
+              expect(assigns(:tag_set_nomination).fandom_nominations.count).to eq(1)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0]).to eq(new_fandom_nomination)
+              expect(new_fandom_nomination.tagname).to eq("New Fandom")
+              expect(new_fandom_nomination.character_nominations.count).to eq(1)
+              expect(new_fandom_nomination.character_nominations[0].tagname).to eq("New Character")
+            end
+
+            it 'returns a flash message and redirects to tag set nomination page' do
+              it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, TagSetNomination.last),
+                                          "Your nominations were successfully submitted.")
+            end
+          end
+
+          context 'at least one tag nomination is noncanonical' do
+            # TODO: I can force test #request_nancanonical_info for these 2 tests by adding the
+            # [:tag_set_nomination][:character_nominations_attributes][:from_fandom_nomination] param, but I don't
+            # think the resulting params can actually be triggered by the UI
+            # If so, how do I trigger the state where a new CharacterNom or RelationshipNom is created
+            # with parented: false && parent_tagname: "", without failing CastNomination#known_fandom validation?
+            context 'noncanonical character nominations are created' do
+              let(:nomination_attributes) {
+                { character_nominations_attributes: {
+                    "0": { tagname: "New Character",
+                           parent_tagname: "",
+                           from_fandom_nomination: true } }
+                }
+              }
+
+              it 'returns a flash message about noncanonical tags' do
+                expect(flash[:notice]).to eq("Your nominations were successfully submitted." +
+                                                 " Please consider editing to add fandoms to any of your non-canonical tags!")
+              end
+            end
+
+            context 'noncanonical relationship nominations are created' do
+              let(:nomination_attributes) {
+                { relationship_nominations_attributes: {
+                    "0": { tagname: "New Relationship",
+                           parent_tagname: "",
+                           from_fandom_nomination: true } }
+                }
+              }
+
+              it 'returns a flash message about noncanonical tags' do
+                expect(flash[:notice]).to eq("Your nominations were successfully submitted." +
+                                                 " Please consider editing to add fandoms to any of your non-canonical tags!")
+              end
+            end
+          end
+        end
+
+        context 'tag set nomination save fails' do
+          let!(:old_tag_set_nom_count) { owned_tag_set.tag_set_nominations.count }
+
+          before do
+            owned_tag_set.nominated = false
+            owned_tag_set.fandom_nomination_limit = 1
+            owned_tag_set.character_nomination_limit = 2
+            owned_tag_set.relationship_nomination_limit = 3
+            owned_tag_set.freeform_nomination_limit = 1
+            owned_tag_set.save(validate: false)
+
+            post :create,
+                 tag_set_id: owned_tag_set.id,
+                 tag_set_nomination: { pseud_id: random_user.default_pseud.id,
+                                       owned_tag_set_id: owned_tag_set.id }
+          end
+
+          it 'builds a new tag set nomination' do
+            new_tag_set_nom_count = owned_tag_set.tag_set_nominations.count
+            expect(old_tag_set_nom_count).to eq(new_tag_set_nom_count)
+            expect(assigns(:tag_set_nomination).new_record?).to be_truthy
+            expect(assigns(:tag_set_nomination).pseud).to eq(random_user.default_pseud)
+            expect(assigns(:tag_set_nomination).owned_tag_set).to eq(owned_tag_set)
+          end
+
+          it 'builds new tag nominations until limits' do
+            expect(assigns(:tag_set_nomination).fandom_nominations.size).to eq(1)
+            expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.size).to eq(2)
+            expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.size).to eq(3)
+            expect(assigns(:tag_set_nomination).freeform_nominations.size).to eq(1)
+          end
+
+          it 'renders the new template' do
+            expect(response).to render_template("new")
+          end
+        end
+      end
+    end
   end
 
   describe 'PUT update' do
