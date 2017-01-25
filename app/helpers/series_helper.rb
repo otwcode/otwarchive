@@ -7,14 +7,15 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select{ |s| s.visible?(current_user) }
+    series = work.series.select { |s| s.visible?(current_user) }
     series.map do |serial|
-      serial_works = serial.serial_works.find(:all,
-                                              include: :work,
-                                              conditions: ['works.posted = ?', true],
-                                              order: :position).
-                                         select{ |sw| sw.work.visible(current_user) }.
-                                         collect{ |sw| sw.work }
+      serial_works = serial.serial_works.
+                            find(:all,
+                                 include: :work,
+                                 conditions: ['works.posted = ?', true],
+                                 order: :position).
+                           select { |sw| sw.work.visible(current_user) }.
+                           collect(&:work)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
@@ -22,12 +23,11 @@ module SeriesHelper
         # us to use CSS to insert a decorative divider
         divider_span = content_tag(:span, " ", class: "divider")
         # This is empty if there is no previous work, otherwise it is:
-        # <a href class="previous">←Previous Work</a><span class="divider"> </span>
-        previous_link = if visible_position > 0
+        # <a href class="previous"><- Previous Work</a><span class="divider"> </span>
+        previous_link = if visible_position.positive?
                           link_to(ts("&#8592; Previous Work").html_safe,
                                   serial_works[visible_position - 1],
-                                  class: "previous") +
-                          divider_span
+                                  class: "previous") + divider_span
                         else
                           "".html_safe
                         end
@@ -35,16 +35,15 @@ module SeriesHelper
         # <span class="title">Part # of the <a href>TITLE</a> series</a></span>
         main_link = content_tag(:span,
                                 ts("Part %{position} of the %{series_title} series",
-                                  position: (visible_position + 1).to_s,
-                                  series_title: link_to(serial.title, serial)).html_safe,
+                                   position: (visible_position + 1).to_s,
+                                   series_title: link_to(serial.title, serial)).html_safe,
                                 class: "title")
         # This is empty if there is no next work, otherwise it is:
-        # <span class="divider"> </span><a href class="next">Next Work →</a>
-        next_link = if (visible_position < serial_works.size - 1)
-                      divider_span +
-                      link_to(ts("Next Work &#8594;").html_safe,
-                              serial_works[visible_position + 1],
-                              class: "next")
+        # <span class="divider"> </span><a href class="next">Next Work -></a>
+        next_link = if visible_position < serial_works.size - 1
+                      divider_span + link_to(ts("Next Work &#8594;").html_safe,
+                                             serial_works[visible_position + 1],
+                                             class: "next")
                     else
                       "".html_safe
                     end
