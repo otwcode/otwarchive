@@ -41,7 +41,7 @@ module SeriesHelper
                                 class: "title")
         # This is empty if there is no next work, otherwise it is
         # <span class="divider"> </span><a href class="next">Next Work</a>
-        # wwith a right-pointing arrow after "Work"
+        # with a right-pointing arrow after "Work"
         next_link = if visible_position < serial_works.size - 1
                       divider_span + link_to(ts("Next Work &#8594;").html_safe,
                                              serial_works[visible_position + 1],
