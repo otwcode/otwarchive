@@ -833,9 +833,9 @@ describe TagSetNominationsController do
             let(:nomination_attributes) {
               { fandom_nominations_attributes: {
                   "0": { tagname: "New Fandom",
-                             character_nominations_attributes: {
-                                 "0": { tagname: "New Character",
-                                        from_fandom_nomination: true } } } }
+                         character_nominations_attributes: {
+                             "0": { tagname: "New Character",
+                                    from_fandom_nomination: true } } } }
               }
             }
 
@@ -861,7 +861,7 @@ describe TagSetNominationsController do
             end
           end
 
-          context 'at least one tag nomination is noncanonical' do
+          context 'at least one character or relationship nomination is noncanonical' do
             # TODO: I can force test #request_nancanonical_info for these 2 tests by adding the
             # [:tag_set_nomination][:character_nominations_attributes][:from_fandom_nomination] param, but I don't
             # think the resulting params can actually be triggered by the UI
@@ -940,7 +940,173 @@ describe TagSetNominationsController do
   end
 
   describe 'PUT update' do
+    context 'user is not logged in' do
+      it 'redirects and shows an error message' do
+        put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      context 'invalid params' do
+        before do
+          fake_login_known_user(tag_nominator)
+        end
+
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
+        xcontext 'no tag set' do
+          it 'redirects and shows an error message' do
+            put :update, tag_set_id: nil, id: tag_set_nomination.id, tag_set_nomination: {}
+            it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+          end
+        end
+
+        context 'pseud_id param does not match user' do
+          it 'redirects and shows an error message' do
+            put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id,
+                tag_set_nomination: { pseud_id: random_user.default_pseud.id }
+            it_redirects_to_with_error(root_path, "You can't nominate tags with that pseud.")
+          end
+        end
+
+        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
+        xcontext 'no tag set nomination' do
+          it 'redirects and shows an error message' do
+            put :update, id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: {}
+            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
+          end
+        end
+      end
+
+      context 'valid params' do
+        context 'user is not associated with nomination' do
+          before do
+            fake_login_known_user(random_user)
+          end
+
+          it 'redirects and shows an error message' do
+            put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id, tag_set_nomination: {}
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
+                                        "You can only see your own nominations or nominations for a set you moderate.")
+          end
+        end
+
+        context 'user is author of nomination' do
+          before do
+            fake_login_known_user(tag_nominator.reload) # Why reload?
+          end
+
+          context 'tag set nomination saves successfully' do
+            before do
+              owned_tag_set.update_attribute(:character_nomination_limit, 1)
+              put :update,
+                  tag_set_id: owned_tag_set.id,
+                  id: tag_set_nomination.id,
+                  tag_set_nomination: { pseud_id: tag_nominator_pseud.id,
+                                        owned_tag_set_id: owned_tag_set.id }.merge(nomination_attributes)
+              tag_set_nomination.reload
+            end
+
+            context 'all tag nominations are canonical' do
+              let(:nomination_attributes) {
+                { fandom_nominations_attributes: {
+                    "0": { tagname: "Renamed Fandom",
+                           character_nominations_attributes: {
+                               "0": { tagname: "Renamed Character",
+                                      from_fandom_nomination: true } } } }
+                }
+              }
+
+              it 'updates the tag set nomination and associated tag nominations' do
+                expect(tag_set_nomination.fandom_nominations[0].tagname).to eq("Renamed Fandom")
+                expect(tag_set_nomination.fandom_nominations[0].character_nominations[0].tagname).to eq("Renamed Character")
+              end
+
+              it 'returns a flash message and redirects to tag set nomination page' do
+                it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
+                                            "Your nominations were successfully updated.")
+              end
+            end
+
+            context 'at least one character or relationship nomination is noncanonical' do
+              # TODO: I can force test #request_nancanonical_info for these 2 tests by adding the
+              # [:tag_set_nomination][:character_nominations_attributes][:from_fandom_nomination] param, but I don't
+              # think the resulting params can actually be triggered by the UI
+              # If so, how do I trigger the state where a new CharacterNom or RelationshipNom is created
+              # with parented: false && parent_tagname: "", without failing CastNomination#known_fandom validation?
+              let(:nomination_attributes) {
+                { character_nominations_attributes: {
+                    "0": { tagname: "Renamed Character",
+                           parent_tagname: "",
+                           from_fandom_nomination: true } }
+                }
+              }
+
+              it 'returns a flash message about noncanonical tags' do
+                expect(flash[:notice]).to eq("Your nominations were successfully updated." +
+                                                 " Please consider editing to add fandoms to any of your non-canonical tags!")
+              end
+            end
+          end
+
+          context 'tag set nomination save fails' do
+            before do
+              owned_tag_set.nominated = false
+              owned_tag_set.fandom_nomination_limit = 1
+              owned_tag_set.character_nomination_limit = 2
+              owned_tag_set.relationship_nomination_limit = 3
+              owned_tag_set.freeform_nomination_limit = 1
+              owned_tag_set.save(validate: false)
+
+              put :update,
+                  tag_set_id: owned_tag_set.id,
+                  id: tag_set_nomination.id,
+                  tag_set_nomination: { pseud_id: tag_nominator_pseud.id,
+                                        owned_tag_set_id: owned_tag_set.id }
+            end
+
+            it 'builds new tag nominations until limits' do
+              expect(assigns(:tag_set_nomination).fandom_nominations.size).to eq(1)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.size).to eq(2)
+              expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.size).to eq(3)
+              expect(assigns(:tag_set_nomination).freeform_nominations.size).to eq(1)
+            end
+
+            it 'renders the edit template' do
+              expect(response).to render_template("edit")
+            end
+          end
+        end
+
+        context 'user is moderator of tag set' do
+          before do
+            fake_login_known_user(moderator.reload) # Why reload?
+            owned_tag_set.update_attribute(:character_nomination_limit, 1)
+            put :update,
+                tag_set_id: owned_tag_set.id,
+                id: tag_set_nomination.id,
+                tag_set_nomination: { pseud_id: mod_pseud.id,
+                                      owned_tag_set_id: owned_tag_set.id,
+                                      fandom_nominations_attributes: {
+                                          "0": { tagname: "Renamed Fandom",
+                                                 character_nominations_attributes: {
+                                                     "0": { tagname: "Renamed Character",
+                                                            from_fandom_nomination: true } } } } }
+            tag_set_nomination.reload
+          end
+
+          it 'updates the tag set nomination and associated tag nominations' do
+            expect(tag_set_nomination.fandom_nominations[0].tagname).to eq("Renamed Fandom")
+            expect(tag_set_nomination.fandom_nominations[0].character_nominations[0].tagname).to eq("Renamed Character")
+          end
+
+          it 'returns a flash message and redirects to tag set nomination page' do
+            it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
+                                        "Your nominations were successfully updated.")
+          end
+        end
+      end
+    end
   end
 
   describe 'DELETE destroy' do
