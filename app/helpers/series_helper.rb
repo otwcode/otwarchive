@@ -11,11 +11,11 @@ module SeriesHelper
     series.map do |serial|
       serial_works = serial.serial_works.
                            find(:all,
-                                 include: :work,
-                                 conditions: ['works.posted = ?', true],
-                                 order: :position).
+                                include: :work,
+                                conditions: ['works.posted = ?', true],
+                                order: :position).
                            select { |sw| sw.work.visible(current_user) }.
-                           map(&:work)
+                     map(&:work)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
