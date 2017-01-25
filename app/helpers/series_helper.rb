@@ -33,7 +33,7 @@ module SeriesHelper
                           "".html_safe
                         end
         # This part is always included
-        # <span class="title">Part # of the <a href>TITLE</a> series</a></span>
+        # <span class="title">Part # of the <a href>TITLE</a> series</span>
         main_link = content_tag(:span,
                                 ts("Part %{position} of the %{series_title} series",
                                    position: (visible_position + 1).to_s,
