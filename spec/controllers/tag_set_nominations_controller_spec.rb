@@ -19,6 +19,8 @@ describe TagSetNominationsController do
 
   let(:random_user) { FactoryGirl.create(:user) }
 
+  #TODO: Create some tag_set_nomination and tag_nomination factories?
+
   describe 'GET index' do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
@@ -1234,7 +1236,47 @@ describe TagSetNominationsController do
   end
 
   describe 'DELETE destroy_multiple' do
+    before do
+      allow(OwnedTagSet).to receive(:find).with("#{owned_tag_set.id}") { owned_tag_set }
+      allow(owned_tag_set).to receive(:clear_nominations!)
+    end
 
+    context 'user is not logged in' do
+      it 'redirects and returns an error message' do
+        delete :destroy_multiple, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context 'logged in user is owner of tag set' do
+      before do
+        fake_login_known_user(owned_tag_set.owners.first.user)
+        delete :destroy_multiple, tag_set_id: owned_tag_set.id
+      end
+
+      it 'deletes all associated tag nominations' do
+        expect(owned_tag_set).to have_received(:clear_nominations!)
+      end
+
+      it 'redirects and returns a success message' do
+        it_redirects_to_with_notice(tag_set_path(owned_tag_set), "All nominations for this Tag Set have been cleared.")
+      end
+    end
+
+    context 'logged in user is not owner of tag set' do
+      before do
+        fake_login_known_user(moderator)
+        delete :destroy_multiple, tag_set_id: owned_tag_set.id
+      end
+
+      it 'redirects and returns an error message' do
+        it_redirects_to_with_error(tag_set_path(owned_tag_set), "You don't have permission to do that.")
+      end
+
+      it 'does not delete associated tag nominations' do
+        expect(owned_tag_set).not_to have_received(:clear_nominations!)
+      end
+    end
   end
 
   describe 'PUT update_multiple' do
