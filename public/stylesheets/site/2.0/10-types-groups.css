@@ -175,6 +175,20 @@ li.relationships a {
   float: none;
 }
 
+/* circle dividers for series navigation on works */
+
+span.series .divider {
+  color: #777;
+}
+
+span.series .previous + .divider:before {
+  content: "\0020\25CF";
+}
+
+span.series .title + .divider:after {
+  content: "\25CF\0020";
+}
+
 p.kudos {
   background: url("/images/imageset.png") no-repeat -110px -580px;
   padding: 0.5em 0.5em 0.5em 60px;
