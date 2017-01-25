@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/rails/strong_parameters.git
+  remote: https://github.com/rails/strong_parameters.git
   revision: 904af2910c57b71bc992e8364aa48896be230c2f
+  ref: 904af2910c57b71bc992e8364aa48896be230c2f
   specs:
     strong_parameters (0.2.3)
       actionpack (~> 3.0)
@@ -9,7 +10,7 @@ GIT
       railties (~> 3.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     aaronh-chronic (0.3.9)
     actionmailer (3.2.22.3)
