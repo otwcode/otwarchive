@@ -21,7 +21,7 @@ describe TagSetNominationsController do
 
   describe 'GET index' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         get :index, user_id: moderator.login, tag_set_id: owned_tag_set.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -36,7 +36,7 @@ describe TagSetNominationsController do
         let(:user) { tag_nominator }
 
         context 'user_id does not match logged in user' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :index, user_id: "invalid", tag_set_id: owned_tag_set.id
             it_redirects_to_with_error(tag_sets_path, "You can only view your own nominations, sorry.")
           end
@@ -422,7 +422,7 @@ describe TagSetNominationsController do
           context 'logged in user is not moderator' do
             let(:user) { random_user }
 
-            it 'redirects and shows an error message' do
+            it 'redirects and returns an error message' do
               get :index, tag_set_id: owned_tag_set.id
               it_redirects_to_with_error(tag_sets_path, "You can't see those nominations, sorry.")
             end
@@ -433,7 +433,7 @@ describe TagSetNominationsController do
         xcontext 'no tag set' do
           let(:user) { random_user }
 
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :index, tag_set_id: nil
             it_redirects_to_with_error(tag_sets_path, "What nominations did you want to work with?")
           end
@@ -444,7 +444,7 @@ describe TagSetNominationsController do
 
   describe 'GET show' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -458,7 +458,7 @@ describe TagSetNominationsController do
 
         # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: nil
             it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
           end
@@ -466,7 +466,7 @@ describe TagSetNominationsController do
 
         # TODO: how can TagSetNomination.find not raise an error but still return falsey?
         xcontext 'no tag set nomination' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :show, id: nil, tag_set_id: owned_tag_set.id
             it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
           end
@@ -479,7 +479,7 @@ describe TagSetNominationsController do
             fake_login_known_user(random_user)
           end
 
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
             it_redirects_to_with_notice(tag_set_path(owned_tag_set),
                                         "You can only see your own nominations or nominations for a set you moderate.")
@@ -513,7 +513,7 @@ describe TagSetNominationsController do
 
   describe 'GET new' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         get :new, tag_set_id: owned_tag_set.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -614,7 +614,7 @@ describe TagSetNominationsController do
 
       # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
       xcontext 'no tag set' do
-        it 'redirects and shows an error message' do
+        it 'redirects and returns an error message' do
           fake_login_known_user(random_user)
           get :new, tag_set_id: nil
           it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
@@ -625,7 +625,7 @@ describe TagSetNominationsController do
 
   describe 'GET edit' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -639,7 +639,7 @@ describe TagSetNominationsController do
 
         # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: nil
             it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
           end
@@ -647,7 +647,7 @@ describe TagSetNominationsController do
 
         # TODO: how can TagSetNomination.find not raise an error but still return falsey?
         xcontext 'no tag set nomination' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :edit, id: nil, tag_set_id: owned_tag_set.id
             it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
           end
@@ -663,7 +663,7 @@ describe TagSetNominationsController do
             fake_login_known_user(random_user)
           end
 
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
             it_redirects_to_with_notice(tag_set_path(owned_tag_set),
                                         "You can only see your own nominations or nominations for a set you moderate.")
@@ -787,7 +787,7 @@ describe TagSetNominationsController do
 
   describe 'POST create' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         post :create, tag_set_id: owned_tag_set.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -801,14 +801,14 @@ describe TagSetNominationsController do
 
         # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             post :create, tag_set_id: nil
             it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
           end
         end
 
         context 'pseud_id param does not match user' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             post :create, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: tag_nominator.default_pseud.id }
             it_redirects_to_with_error(root_path, "You can't nominate tags with that pseud.")
           end
@@ -941,7 +941,7 @@ describe TagSetNominationsController do
 
   describe 'PUT update' do
     context 'user is not logged in' do
-      it 'redirects and shows an error message' do
+      it 'redirects and returns an error message' do
         put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -955,14 +955,14 @@ describe TagSetNominationsController do
 
         # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
         xcontext 'no tag set' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             put :update, tag_set_id: nil, id: tag_set_nomination.id, tag_set_nomination: {}
             it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
           end
         end
 
         context 'pseud_id param does not match user' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id,
                 tag_set_nomination: { pseud_id: random_user.default_pseud.id }
             it_redirects_to_with_error(root_path, "You can't nominate tags with that pseud.")
@@ -971,7 +971,7 @@ describe TagSetNominationsController do
 
         # TODO: how can TagSetNomination.find not raise an error but still return falsey?
         xcontext 'no tag set nomination' do
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             put :update, id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: {}
             it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
           end
@@ -984,7 +984,7 @@ describe TagSetNominationsController do
             fake_login_known_user(random_user)
           end
 
-          it 'redirects and shows an error message' do
+          it 'redirects and returns an error message' do
             put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id, tag_set_nomination: {}
             it_redirects_to_with_notice(tag_set_path(owned_tag_set),
                                         "You can only see your own nominations or nominations for a set you moderate.")
@@ -1110,7 +1110,97 @@ describe TagSetNominationsController do
   end
 
   describe 'DELETE destroy' do
+    context 'user is not logged in' do
+      it 'redirects and returns an error message' do
+        delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'user is logged in' do
+      context 'invalid params' do
+        before do
+          fake_login_known_user(tag_nominator)
+        end
+
+        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
+        xcontext 'no tag set' do
+          it 'redirects and returns an error message' do
+            delete :destroy, id: tag_set_nomination.id, tag_set_id: nil
+            it_redirects_to_with_error(tag_sets_path, "What tag set did you want to nominate for?")
+          end
+        end
+
+        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
+        xcontext 'no tag set nomination' do
+          it 'redirects and returns an error message' do
+            delete :destroy, id: nil, tag_set_id: owned_tag_set.id
+            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), "Which nominations did you want to work with?")
+          end
+        end
+      end
+
+      context 'valid params' do
+        context 'user is not moderator of tag set' do
+          before do
+            fake_login_known_user(tag_nominator.reload) # Why reload?
+          end
+
+          context 'at least one tag nominations associated with tag_set_nomination is reviewed' do
+            before do
+              allow(TagSetNomination).to receive(:find) { tag_set_nomination } # hmm, is this the best way?
+              allow(tag_set_nomination).to receive(:unreviewed?) { false }
+            end
+
+            it 'does not delete the tag set nomination' do
+              delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+              expect(tag_set_nomination.reload).to eq(tag_set_nomination)
+            end
+
+            it 'redirects and returns an error message' do
+              delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+              it_redirects_to_with_error(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
+                                         "You cannot delete nominations after some of them have been reviewed, sorry!")
+            end
+          end
+
+          context 'all tag nominations associated with tag_set_nomination are unreviewed' do
+            before do
+              allow(TagSetNomination).to receive(:find) { tag_set_nomination } # hmm, is this the best way?
+              allow(tag_set_nomination).to receive(:unreviewed?) { true }
+            end
+
+            it 'deletes the tag set nomination' do
+              expect { delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }.
+                  to change { TagSetNomination.count }.by(-1)
+            end
+
+            it 'redirects and returns a success message' do
+              delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+              it_redirects_to_with_notice(tag_set_path(owned_tag_set), "Your nominations were deleted.")
+            end
+          end
+        end
+
+        context 'user is moderator of tag set' do
+          before do
+            allow(TagSetNomination).to receive(:find) { tag_set_nomination } # hmm, is this the best way?
+            allow(tag_set_nomination).to receive(:unreviewed?) { false }
+            fake_login_known_user(moderator.reload) # Why reload?
+          end
+
+          it 'deletes the tag set nomination' do
+            expect { delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }.
+                to change { TagSetNomination.count }.by(-1)
+          end
+
+          it 'redirects and returns a success message' do
+            delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set), "Your nominations were deleted.")
+          end
+        end
+      end
+    end
   end
 
   describe 'GET confirm_destroy_multiple' do
