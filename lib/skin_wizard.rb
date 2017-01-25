@@ -45,6 +45,10 @@ module SkinWizard
         #dashboard.own {
           border-color: #{color};
         }
+
+        .actions .reindex a {
+          border-bottom-color: #{color};
+        }
       "
     else
       ""
