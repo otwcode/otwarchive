@@ -1280,6 +1280,290 @@ describe TagSetNominationsController do
   end
 
   describe 'PUT update_multiple' do
+    context 'user is not logged in' do
+      it 'redirects and returns an error message' do
+        put :update_multiple, tag_set_id: owned_tag_set.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
 
+    context 'logged in user is moderator of tag set' do
+      let(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Fandom") }
+      let!(:character_nom1) { CharacterNomination.create(tag_set_nomination: tag_set_nomination,
+                                                         fandom_nomination: fandom_nom,
+                                                         tagname: "New Character 1") }
+      let!(:character_nom2) { CharacterNomination.create(tag_set_nomination: tag_set_nomination,
+                                                         fandom_nomination: fandom_nom,
+                                                         tagname: "New Character 2") }
+      let!(:relationship_nom) { RelationshipNomination.create(tag_set_nomination: tag_set_nomination,
+                                                              fandom_nomination: fandom_nom,
+                                                              tagname: "New Relationship",
+                                                              approved: false, rejected: false) }
+      let!(:freeform_nom) { FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Freeform") }
+      let(:base_params) { { "character_change_New Character 1": "",
+                              "character_change_New Character 2": "",
+                              "relationship_change_New Relationship": "",
+                              "fandom_change_New Fandom": "",
+                              "freeform_change_New Fandom": "" } }
+
+      before do
+        fake_login_known_user(moderator.reload)
+      end
+
+      context 'not all tag nominations have an associated _approve, _reject, _change, or _synonym param value' do
+        it 'redirects and returns a flash message' do
+          put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params)
+          it_redirects_to(tag_set_nominations_path(owned_tag_set))
+          expect(flash[:notice]).to include("Still some nominations left to review!")
+        end
+      end
+
+      context 'all tag nominations have an associated _approve, _reject, _change, or _synonym param value' do
+        it 'redirects and returns a flash message' do
+          put :update_multiple, { tag_set_id: owned_tag_set.id }.
+              merge(base_params).merge({ "character_approve_New Character 1": 1,
+                                           "character_reject_New Character 2": 1,
+                                           "relationship_approve_New Relationship": 1,
+                                           "fandom_approve_New Fandom": 1,
+                                           "freeform_reject_New Fandom": 1 })
+          it_redirects_to(tag_set_nominations_path(owned_tag_set))
+          expect(flash[:notice]).to include("Still some nominations left to review!")
+        end
+      end
+
+      context 'tag nomination _reject param has a value' do
+        before do
+          put :update_multiple, { tag_set_id: owned_tag_set.id }.
+              merge(base_params).merge({ "relationship_reject_New Relationship": 1 })
+        end
+
+        it 'updates tag_nomination.rejected to true' do
+          expect(relationship_nom.reload.rejected).to be_truthy
+        end
+
+        it 'returns a success message' do
+          expect(flash[:notice]).to include("Successfully rejected: New Relationship")
+        end
+      end
+
+      context 'tag nomination _approve param has a value' do
+        context 'approving the tag nomination is successful' do
+          before do
+            put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                merge(base_params).merge({ "fandom_approve_New Fandom": 1,
+                                             "character_approve_New Character 2": 1 })
+          end
+
+          it 'updates tag_nomination.approved to true' do
+            expect(fandom_nom.reload.approved).to be_truthy
+            expect(character_nom2.reload.approved).to be_truthy
+          end
+
+          it 'returns a success message' do
+            expect(flash[:notice]).to include("Successfully added to set: New Fandom")
+            expect(flash[:notice]).to include("Successfully added to set: New Character 2")
+          end
+        end
+
+        context 'approving the tag nomination fails' do
+          before do
+            allow(OwnedTagSet).to receive(:find).with("#{owned_tag_set.id}") { owned_tag_set }
+            allow(owned_tag_set).to receive(:add_tagnames).with('fandom', ['New Fandom']) { false }
+            put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                merge(base_params).merge({ "fandom_approve_New Fandom": 1,
+                                             "character_approve_New Character 2": 1 })
+          end
+
+          it 'renders the index template and returns an error message' do
+            expect(flash[:error]).to eq("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
+            expect(response).to render_template('index')
+          end
+        end
+
+        context 'other tag nominations exist in tag set that go by a synonym of the approved nom' do
+          before do
+            character_nom1.update_column(:synonym, 'New Character 2')
+          end
+
+          context 'name change is successful' do
+            it 'changes tagname of the other tags to their synonyms' do
+              allow(TagNomination).to receive(:change_tagname!)
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "character_approve_New Character 2": 1 })
+              expect(TagNomination).to have_received(:change_tagname!).with(owned_tag_set, 'New Character 1', 'New Character 2')
+            end
+          end
+
+          context 'name change fails' do
+            it 'renders the index template and returns an error message' do
+              allow(TagNomination).to receive(:change_tagname!) { false }
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "character_approve_New Character 2": 1 })
+              expect(flash[:error]).to eq("Oh no! We ran into a problem partway through saving your updates, changing New Character 1 to New Character 2 -- please check over your tag set closely!")
+              expect(response).to render_template('index')
+            end
+          end
+        end
+      end
+
+      context 'tag nomination _approve and _reject params have a value' do
+        before do
+          put :update_multiple, { tag_set_id: owned_tag_set.id }.
+              merge(base_params).merge({ "relationship_approve_New Relationship": 1,
+                                           "relationship_reject_New Relationship": 2 })
+        end
+
+        it 'renders the index template' do
+          expect(response).to render_template('index')
+        end
+
+        it 'returns expected errors' do
+          expect(assigns(:errors)).to include("You have both approved and rejected the following relationship tags: " + "New Relationship")
+        end
+      end
+
+      context 'tag nomination _change param is not empty' do
+        context '_change param = current tag nomination tagname' do
+          it 'does not update the tag nomination' do
+            put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                merge(base_params).merge({ "freeform_change_New Freeform": 'New Freeform' })
+            expect(freeform_nom.reload.approved).to be_falsey
+          end
+        end
+
+        context '_change param is different from current tag nomination tagname' do
+          context 'new name is invalid' do
+            before do
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "freeform_change_New Freeform": "N*w Fr**f*rm" })
+            end
+
+            it 'renders the index template' do
+              expect(response).to render_template('index')
+            end
+
+            it 'returns expected errors' do
+              expect(assigns(:errors).first).to start_with("Invalid name change for New Freeform to N*w Fr**f*rm: ")
+            end
+          end
+
+          context 'no tag nomination associated with name' do
+            before do
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "freeform_change_A Freeform Masquerade": "Different Freeform" })
+            end
+
+            it 'renders the index template' do
+              expect(response).to render_template('index')
+            end
+
+            it 'returns expected errors' do
+              expect(assigns(:errors)).to include("Couldn't find a freeform nomination for A Freeform Masquerade")
+            end
+          end
+
+          context 'new name is valid' do
+            context 'name change is successful' do
+              before do
+                allow(TagNomination).to receive(:change_tagname!).and_call_original
+                put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                    merge(base_params).merge({ "freeform_change_New Freeform": 'Different Freeform' })
+              end
+
+              it 'calls TagNomination#change_tagname! with _change param value' do
+                expect(TagNomination).to have_received(:change_tagname!).with(owned_tag_set, 'New Freeform', 'Different Freeform')
+              end
+
+              it 'updates tag_nomination.approved to true' do
+                expect(freeform_nom.reload.approved).to be_truthy
+              end
+
+              it 'returns a success message' do
+                expect(flash[:notice]).to include("Successfully added to set: Different Freeform")
+              end
+            end
+
+            context 'name change is not successful' do
+              it 'renders the index template and returns an error message' do
+                allow(TagNomination).to receive(:change_tagname!) { false }
+                put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                    merge(base_params).merge({ "freeform_change_New Freeform": 'Different Freeform' })
+                expect(flash[:error]).to eq("Oh no! We ran into a problem partway through saving your updates, changing New Freeform to Different Freeform -- please check over your tag set closely!")
+                expect(response).to render_template('index')
+              end
+            end
+          end
+        end
+      end
+
+      context 'tag nomination _synonym param is not empty' do
+        context '_synonym param = current tag nomination tagname' do
+          it 'does not update the tag nomination' do
+            put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                merge(base_params).merge({ "freeform_synonym_New Freeform": 'New Freeform' })
+            expect(freeform_nom.reload.approved).to be_falsey
+          end
+        end
+
+        context '_synonym param is different from current tag nomination tagname' do
+          context 'new name is invalid' do
+            before do
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "freeform_synonym_New Freeform": "N*w Fr**f*rm" })
+            end
+
+            it 'renders the index template' do
+              expect(response).to render_template('index')
+            end
+
+            it 'returns expected errors' do
+              expect(assigns(:errors).first).to start_with("Invalid name change for New Freeform to N*w Fr**f*rm: ")
+            end
+          end
+
+          context 'no tag nomination associated with name' do
+            before do
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "freeform_synonym_A Freeform Masquerade": "Different Freeform" })
+            end
+
+            it 'renders the index template' do
+              expect(response).to render_template('index')
+            end
+
+            it 'returns expected errors' do
+              expect(assigns(:errors)).to include("Couldn't find a freeform nomination for A Freeform Masquerade")
+            end
+          end
+
+          context 'new name is valid' do
+            before do
+              freeform_nom.update_column(:synonym, 'Different Freeform')
+              put :update_multiple, { tag_set_id: owned_tag_set.id }.
+                  merge(base_params).merge({ "freeform_synonym_New Freeform": 'Different Freeform' })
+            end
+
+            it 'updates tag_nomination.approved to true' do
+              expect(freeform_nom.reload.approved).to be_truthy
+            end
+
+            it 'returns a success message' do
+              expect(flash[:notice]).to include("Successfully added to set: Different Freeform")
+            end
+          end
+        end
+      end
+    end
+
+    context 'logged in user is not moderator of tag set' do
+      before do
+        fake_login_known_user(tag_nominator)
+        put :update_multiple, tag_set_id: owned_tag_set.id
+      end
+
+      it 'redirects and returns an error message' do
+        it_redirects_to_with_error(tag_set_path(owned_tag_set), "You don't have permission to do that.")
+      end
+    end
   end
 end
