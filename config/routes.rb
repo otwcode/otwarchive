@@ -3,7 +3,7 @@ Otwarchive::Application.routes.draw do
   devise_for :admin,
              module: 'admin',
              only: :sessions,
-             controllers: { sessions: 'admins/sessions' },
+             controllers: { sessions: 'admin/sessions' },
              path_names: {
                sign_in: 'login',
                sign_out: 'logout'
