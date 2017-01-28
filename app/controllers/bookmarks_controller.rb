@@ -186,7 +186,11 @@ class BookmarksController < ApplicationController
     end
     unless unapproved_collections.empty?
       flash[:notice] ||= ""
-      flash[:notice] += ts(" You have submitted your bookmark to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+      flash[:notice] += if unapproved_collections.size > 1
+                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                        else
+                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.map { |f| f.title })
+                        end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?

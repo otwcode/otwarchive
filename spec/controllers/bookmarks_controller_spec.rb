@@ -35,7 +35,7 @@ describe BookmarksController do
     context 'with javascript' do
       let(:bookmark) { FactoryGirl.create(:bookmark) }
 
-      it 'should return the bookmark_form_dynamic form' do
+      it 'should render the bookmark_form_dynamic form' do
         fake_login_known_user(bookmark.pseud.user)
         get :edit, id: bookmark.id, format: 'js'
         expect(response).to render_template('bookmark_form_dynamic')
