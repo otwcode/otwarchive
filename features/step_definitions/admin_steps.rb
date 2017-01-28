@@ -70,20 +70,6 @@ Given /^advanced languages$/ do
   Language.find_or_create_by_short_and_name("FR", "Francais")
 end
 
-Given /^caching is enabled$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Turn on caching (currently experimental)")
-  click_button("Update")
-end
-
-Given /^filtering is disabled$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Turn off filtering on index pages")
-  click_button("Update")
-end
-
 Given /^guest downloading is off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
