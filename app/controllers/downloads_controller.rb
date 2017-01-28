@@ -25,6 +25,12 @@ class DownloadsController < ApplicationController
       redirect_back_or_default works_path and return
     end
 
+    unless @admin_settings.downloads_enabled?
+      flash[:error] = ts("Sorry, downloads are currently disabled.")
+      redirect_back_or_default works_path 
+      return
+    end
+
     Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(:posted => true)

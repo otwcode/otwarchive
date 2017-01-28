@@ -1,7 +1,6 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
-#require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'simplecov'
 require 'coveralls'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
@@ -24,15 +23,8 @@ FactoryGirl.find_definitions
 FactoryGirl.definition_file_paths = %w(factories)
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
-  #config.raise_errors_for_deprecations!
+
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
