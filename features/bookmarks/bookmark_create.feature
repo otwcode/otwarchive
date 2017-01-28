@@ -218,7 +218,6 @@ Scenario: bookmarks added to moderated collections appear correctly
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
-    And show me the page
   Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
