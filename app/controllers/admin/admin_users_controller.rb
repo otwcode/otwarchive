@@ -185,14 +185,6 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to(admin_users_path)
   end
 
-  # DELETE admin/users/1
-  # DELETE admin/users/1.xml
-  def destroy
-    @user = User.find_by_login(params[:id])
-    @user.destroy
-    redirect_to(admin_users_url)
-  end
-
   def notify
     if params[:letter] && params[:letter].is_a?(String)
       letter = params[:letter][0,1]
@@ -246,6 +238,18 @@ class Admin::AdminUsersController < ApplicationController
     flash[:notice] = ts("Notification sent to %{count} user(s).", :count => @users.size)
     redirect_to :action => :notify
   end
+
+  def troubleshoot
+    @user = User.find_by_login(params[:id])
+    @user.fix_user_subscriptions
+    @user.reindex_user_works
+    @user.set_user_work_dates
+    @user.reindex_user_bookmarks
+    @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
+    flash[:notice] = ts('User account troubleshooting complete.')
+    redirect_to(request.env['HTTP_REFERER'] || root_path) && return
+  end
+
 
   def activate
     @user = User.find_by_login(params[:id])

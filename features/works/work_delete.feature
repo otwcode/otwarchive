@@ -34,8 +34,6 @@ Feature: Delete Works
 
   Scenario: Deleting a work with everything filled in, and we do mean everything
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And the following activated users exist
         | login          | password    | email                 |
         | coauthor       | something   | coauthor@example.org  |
@@ -73,7 +71,7 @@ Feature: Delete Works
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 2 email should be delivered to "coauthor@example.org"
-      And the email should contain "You have been listed as a coauthor"
+      And the email should contain "You have been listed as a co-creator"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
     When I go to the works page

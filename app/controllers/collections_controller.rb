@@ -1,8 +1,8 @@
 class CollectionsController < ApplicationController
 
-  before_filter :users_only, :only => [:new, :edit, :create, :update]
-  before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :collection_owners_only, :only => [:edit, :update, :destroy, :confirm_delete]
+  before_filter :users_only, only: [:new, :edit, :create, :update]
+  before_filter :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_filter :validate_challenge_type
   cache_sweeper :collection_sweeper
@@ -12,7 +12,7 @@ class CollectionsController < ApplicationController
   # For now just make sure the values passed to it are safe
   def validate_challenge_type
     if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme"].include?(params[:challenge_type])
-      return render :status => :bad_request, :text => "invalid challenge_type"
+      return render status: :bad_request, text: "invalid challenge_type"
     end
   end
 
@@ -25,11 +25,11 @@ class CollectionsController < ApplicationController
 
   def index
     if params[:work_id] && (@work = Work.find_by_id(params[:work_id]))
-      @collections = @work.approved_collections.by_title.paginate(:page => params[:page])
+      @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-      @collections = @collection.children.by_title.paginate(:page => params[:page])
+      @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-      @collections = @user.maintained_collections.by_title.paginate(:page => params[:page])
+      @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
@@ -44,7 +44,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page]).includes(:parent, :moderators, :children, :collection_preference, owners: [:user])
     end
   end
 
@@ -71,12 +71,12 @@ class CollectionsController < ApplicationController
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      visible_bookmarks = @collection.approved_bookmarks.visible(order: 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
       @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      # visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible(:order => 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
+      visible_bookmarks = Bookmark.in_collection(@collection).visible(order: 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
     @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
@@ -96,13 +96,13 @@ class CollectionsController < ApplicationController
 
   def create
     @hide_dashboard = true
-    @collection = Collection.new(params[:collection])
+    @collection = Collection.new(collection_params)
 
     # add the owner
     owner_attributes = []
     (params[:owner_pseuds] || [current_user.default_pseud]).each do |pseud_id|
       pseud = Pseud.find(pseud_id)
-      owner_attributes << {:pseud => pseud, :participant_role => CollectionParticipant::OWNER} if pseud
+      owner_attributes << {pseud: pseud, participant_role: CollectionParticipant::OWNER} if pseud
     end
     @collection.collection_participants.build(owner_attributes)
 
@@ -117,12 +117,12 @@ class CollectionsController < ApplicationController
       end
     else
       @challenge_type = params[:challenge_type]
-      render :action => "new"
+      render action: "new"
     end
   end
 
   def update
-    if @collection.update_attributes(params[:collection])
+    if @collection.update_attributes(collection_params)
       flash[:notice] = ts('Collection was successfully updated.')
       if params[:challenge_type].blank?
         if @collection.challenge
@@ -146,13 +146,13 @@ class CollectionsController < ApplicationController
       end
       redirect_to(@collection)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
   def confirm_delete
   end
-  
+
   def destroy
     @hide_dashboard = true
     @collection = Collection.find_by_name(params[:id])
@@ -163,6 +163,24 @@ class CollectionsController < ApplicationController
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
     redirect_to(collections_url)
+  end
+
+  private
+
+  def collection_params
+    params.require(:collection).permit(
+      :name, :title, :email, :header_image_url, :description,
+      :parent_name, :challenge_type, :icon, :delete_icon,
+      :icon_alt_text, :icon_comment_text,
+      collection_profile_attributes: [
+        :id, :intro, :faq, :rules,
+        :gift_notification, :assignment_notification
+      ],
+      collection_preference_attributes: [
+        :id, :moderated, :closed, :unrevealed, :anonymous,
+        :gift_exchange, :show_random, :prompt_meme, :email_notify
+      ]
+    )
   end
 
 end

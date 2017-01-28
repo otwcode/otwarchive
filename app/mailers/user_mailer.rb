@@ -90,7 +90,10 @@ class UserMailer < BulletproofMailer::Base
   
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    @subscription = Subscription.find(subscription_id)
+    # Here we use find_by_id so that if the subscription is not found 
+    # then the resque job does not error and we just silently fail.
+    @subscription = Subscription.find_by_id(subscription_id)
+    return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
     # look up all the creations that have generated updates for this subscription
@@ -101,6 +104,14 @@ class UserMailer < BulletproofMailer::Base
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
       # TODO: allow subscriptions to orphan_account to receive notifications
+
+      # If the subscription notification is for a user subscription, we don't
+      # want to send updates about works that have recently become anonymous.
+      if @subscription.subscribable_type == 'User'
+        next if creation.is_a?(Work) && creation.anonymous?
+        next if creation.is_a?(Chapter) && creation.work.anonymous?
+      end
+
       @creations << creation
     end
     
@@ -219,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -233,7 +244,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
+        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -248,7 +259,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @old_email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
+        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -264,7 +275,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
+        subject: t('user_mailer.coauthor_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure

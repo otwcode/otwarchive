@@ -251,12 +251,7 @@ Scenario: Listing external works as inspirations
 
   Given basic tags
   When I am logged in as "remixer" with password "password"
-    And I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "Stargate"
-    And I fill in "Work Title" with "Followup"
-    And I fill in "content" with "That could be an amusing crossover."
+    And I set up the draft "Followup"
     And I check "parent-options-show"
     And I fill in "URL" with "google.com"
     And I press "Preview"
@@ -360,7 +355,7 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I preview the work
     And I post the work
   Then 1 email should be delivered to "misterdeejay"
-    And the email should contain "You have been listed as a coauthor on the following work"
+    And the email should contain "You have been listed as a co-creator on the following work"
   Then 1 email should be delivered to "inspiration"
     And the email should link to inspired's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"

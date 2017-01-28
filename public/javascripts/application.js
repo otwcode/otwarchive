@@ -301,7 +301,8 @@ function toggleFormField(element_id) {
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options', '#parent-options', '#series-options', '#backdate-options'];
+        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
         $j.each(toHide, function(index, name) {
             if ($j(name)) {
                 if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
@@ -417,6 +418,13 @@ function prepareDeleteLinks() {
     } else {
       $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     };
+  });
+
+  // For purging assignments in gift exchanges. This is only on one page and easy to
+  // check, so don't worry about adding a fallback data-confirm message.
+  $j('a[href$="/confirm_purge"]').each(function() {
+    this.href = this.href.replace(/\/confirm_purge$/, "/purge");
+    $j(this).attr("data-method", "post");
   });
 }
 
