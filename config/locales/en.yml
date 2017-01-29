@@ -60,7 +60,7 @@ en:
       abuse_committee: "contact our Abuse Committee"
       bye: "Attached is a copy of your work for your reference."
       html:
-        part1: "Your work <i>%{title}</i> was deleted from the Archive by a site admin."
+        part1: "Your work %{title} was deleted from the Archive by a site admin."
         part2: "If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions."
         part3: "If it's possible your work violated the Archive's Terms of Service, please %{abuse_link}."
       text:
