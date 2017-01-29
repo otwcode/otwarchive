@@ -7,7 +7,7 @@ describe CommentMailer do
       @comment = FactoryGirl.create(:comment)
     end
 
-    let(:email) { CommentMailer.comment_sent_notification(@comment.id).deliver }
+    let(:email) { CommentMailer.comment_sent_notification(@comment).deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"

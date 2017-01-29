@@ -288,7 +288,7 @@ GEM
       redis (>= 3.0.0)
       resque (>= 1.20.0, < 1.25)
       rufus-scheduler (~> 2.0)
-    resque_mailer (2.2.4)
+    resque_mailer (2.3.1)
       actionmailer (>= 3.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
