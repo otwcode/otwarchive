@@ -21,7 +21,7 @@ describe OwnedTagSetsController do
     context "where the restriction param is set" do
       let(:restriction) { create(:prompt_restriction) }
       let(:owned_set_taggings) { [create(:owned_set_tagging, set_taggable_type: restriction.class.to_s, set_taggable_id: restriction.id)] }
-      let!(:owned_tag_sets) { create(:owned_tag_set, owned_set_taggings: owned_set_taggings ) }
+      let!(:owned_tag_sets) { create(:owned_tag_set, owned_set_taggings: owned_set_taggings) }
 
       it "displays the tag sets associated with the restriction" do
         get :index, restriction: restriction.id
@@ -53,18 +53,18 @@ describe OwnedTagSetsController do
   describe "show_options" do
     context "where the restriction is found" do
       let(:restriction) { create(:prompt_restriction) }
-      let!(:fandom_tag_sets) {
-        Array.new(3) {
+      let!(:fandom_tag_sets) do
+        Array.new(3) do
           owned_set_tagging = create(:owned_set_tagging, set_taggable_type: restriction.class.to_s, set_taggable_id: restriction.id)
           create(:owned_tag_set, owned_set_taggings: [owned_set_tagging])
-        }
-      }
+        end
+      end
       let(:character_tag) { create(:character) }
-      let!(:character_tag_set) {
+      let!(:character_tag_set) do
         owned_set_tagging = create(:owned_set_tagging, set_taggable_type: restriction.class.to_s, set_taggable_id: restriction.id)
         create(:owned_tag_set, owned_set_taggings: [owned_set_tagging], tags: [character_tag])
-      }
-      let(:params) { {restriction: restriction.id } }
+      end
+      let(:params) { { restriction: restriction.id } }
 
       before do
         get :show_options, params
@@ -208,9 +208,9 @@ describe OwnedTagSetsController do
       context "where the tag set has not been successfully updated" do
         let(:fandom_tag) { create(:fandom) }
         let(:character_tag) { create(:character) }
-        let(:tag_set) {
+        let(:tag_set) do
           create(:owned_tag_set, owner: user.default_pseud, tags: [fandom_tag, character_tag])
-        }
+        end
 
         before do
           allow_any_instance_of(OwnedTagSet).to receive(:save).and_return(false)
