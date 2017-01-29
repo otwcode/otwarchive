@@ -173,6 +173,7 @@ module SkinWizard
         .post .required .warnings,
         dd.required,
         .required .autocomplete,
+        span.series .divider,
         .userstuff h2 {
           color: #{color};
         }
