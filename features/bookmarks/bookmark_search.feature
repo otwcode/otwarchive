@@ -15,3 +15,8 @@ Feature: Search Bookmarks
       And I check "Rec"
       And I press "Search bookmarks"
     Then I should see "First work"
+    When I am on the search bookmarks page
+      And I fill in "bookmark_search_query" with "Hobbits"
+      And I press "Search bookmarks"
+    Then I should see "Bookmarks Matching 'Hobbits'"
+
