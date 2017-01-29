@@ -72,6 +72,12 @@ span.error {
   display: block;
 }
 
+/* contexts */
+
+.actions + .footnote {
+ clear: both;
+}
+
 /* ADMIN ANNOUNCEMENT BANNERS
 Set by an admin, these banners appear on every page until the user dismisses them or the admin deletes it
 default (no additional class) => blue like other notice messages

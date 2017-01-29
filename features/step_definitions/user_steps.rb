@@ -28,15 +28,22 @@ Given /the following activated tag wranglers? exists?/ do |table|
   end
 end
 
-Given /^the user "([^\"]*)" exists and is activated$/ do |login|
+Given /^the user "([^"]*)" exists and is activated$/ do |login|
   find_or_create_new_user(login, DEFAULT_PASSWORD)
 end
 
-Given /^the user "([^\"]*)" exists and is not activated$/ do |login|
+Given /^the user "([^"]*)" exists and is not activated$/ do |login|
   find_or_create_new_user(login, DEFAULT_PASSWORD, activate: false)
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD)
+  role = Role.find_or_create_by_name(role)
+  user.roles = [role]
+  user.save
+end
+
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   step("I am logged out")
   user = find_or_create_new_user(login, password)
   if hidden.present?
@@ -129,12 +136,12 @@ When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   click_button "Create"
 end
 
-When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
+When /^I fill in "([^"]*)"'s temporary password$/ do |login|
   user = User.find_by_login(login)
   fill_in "Password", with: user.activation_code
 end
 
-When /^"([^\"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
+When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
   fill_in "Name", with: newpseud
   click_button "Create"

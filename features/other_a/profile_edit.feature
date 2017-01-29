@@ -56,6 +56,9 @@ Scenario: Edit profile - Changing email address and viewing
   When I change my email
     Then I should see "Your email has been successfully updated"
 	And 1 email should be delivered to "bar@ao3.org"
+        And the email should contain "the email associated with your account has been changed to"
+        And the email should contain "valid2@archiveofourown.org"
+        And the email should not contain "translation missing"
 	When I change my preferences to display my email address
 	  Then I should see "My email address: valid2@archiveofourown.org"
 
