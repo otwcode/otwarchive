@@ -53,6 +53,18 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    delete_work_notification:
+      subject: "[%{app_name}] Your work has been deleted"
+      support: "contact Support"
+      hello: "Dear %{user},"
+      part1_other: "Your work %{title} was deleted at the request of %{pseud}."
+      part1_yourself: "Your work %{title} was deleted at your request."
+      part2: "If you have questions, please %{support}."
+      part3: "Attached is a copy of your work for your reference."
+      html:
+        part2: "If you have questions, please %{support}."
+      text:
+        part2: "If you have questions, please %{support} %{url}."
     coauthor_notification:
       subject: "[%{app_name}] Co-creator Notification"
       edit_the_work: "Edit the work"
