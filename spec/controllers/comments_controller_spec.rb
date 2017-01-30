@@ -115,7 +115,6 @@ describe CommentsController do
 
     it "checks that the owner can delete an unreviewed comment" do
       fake_login
-      pseud = @current_user.default_pseud
       comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
       get :destroy, id: comment.id
       expect(response).to redirect_to("/where_i_came_from")
