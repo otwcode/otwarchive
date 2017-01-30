@@ -8,33 +8,37 @@ describe CommentsController do
   end
 
   describe "GET #add_comment_reply" do
-    it "checks that the comment is reviewed and asks that you login" do
-      comment = create(:unreviewed_comment)
-      get :add_comment_reply, comment_id: comment.id
-      expect(response).to redirect_to(login_path)
-      expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
+    context "when comment is unreviewed" do
+      let(:comment) { create(:unreviewed_comment) }
+
+      it "redirects logged out user to login path with an error" do
+        get :add_comment_reply, comment_id: comment.id
+        expect(response).to redirect_to(login_path)
+        expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
+      end
+
+      it "redirects logged in user to root path with an error" do
+        fake_login
+        get :add_comment_reply, comment_id: comment.id
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
+      end
     end
 
-    it "checks that the comment is reviewed" do
-      fake_login
-      comment = create(:unreviewed_comment)
-      get :add_comment_reply, comment_id: comment.id
-      expect(response).to redirect_to(root_path)
-      expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
-    end
+    context "when comment is not unreviewed" do
+      let(:comment) { create(:comment) }
 
-    it "can add a comment reply to comment" do
-      comment = create(:comment)
-      get :add_comment_reply, comment_id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
-    end
+      it "redirects to the comment on the commentable without an error" do
+        get :add_comment_reply, comment_id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
 
-    it "can add a comment reply to comment extra" do
-      comment = create(:comment)
-      get :add_comment_reply, comment_id: comment.id, id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+      it "redirects to the comment on the commentable with the reply form open and without an error" do
+        get :add_comment_reply, comment_id: comment.id, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
     end
   end
 
