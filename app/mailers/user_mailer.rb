@@ -363,7 +363,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+        subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
