@@ -67,7 +67,6 @@ describe CommentsController do
 
     it "can add a comment reply to comment" do
       comment = create(:comment)
-      comment.save
       get :add_comment_reply, comment_id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
@@ -75,7 +74,6 @@ describe CommentsController do
 
     it "can add a comment reply to comment extra" do
       comment = create(:comment)
-      comment.save
       get :add_comment_reply, comment_id: comment.id, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
@@ -83,7 +81,6 @@ describe CommentsController do
 
     it "can cancel a comment" do
       comment = create(:comment)
-      comment.save
       get :cancel_comment, comment_id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
@@ -94,7 +91,6 @@ describe CommentsController do
 
     it "can cancel a comment reply" do
       comment = create(:comment)
-      comment.save
       get :cancel_comment_reply, comment_id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
@@ -105,7 +101,6 @@ describe CommentsController do
 
     it "can cancel a request to delete a comment ?" do
       comment = create(:comment)
-      comment.save
       get :cancel_comment_delete, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
@@ -113,7 +108,6 @@ describe CommentsController do
 
     it "can cancel an edit to a comment" do
       comment = create(:comment)
-      comment.save
       get :cancel_comment_edit, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
