@@ -114,26 +114,42 @@ describe CommentsController do
   end
 
   describe "GET #cancel_comment" do
-    it "can cancel a comment" do
-      comment = create(:comment)
-      get :cancel_comment, comment_id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
-      get :cancel_comment, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+    let(:comment) { create(:comment) }
+
+    context "with only valid params" do
+      it "redirects to comment path with the comments anchor and without an error" do
+        get :cancel_comment, comment_id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
+      end
+    end
+
+    context "with valid and invalid params" do
+      it "removes invalid params and redirects to comment path with valid params and the comments anachor and without an error" do
+        get :cancel_comment, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+      end
     end
   end
 
   describe "GET #cancel_comment_reply" do
-    it "can cancel a comment reply" do
-      comment = create(:comment)
-      get :cancel_comment_reply, comment_id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
-      get :cancel_comment_reply, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+    let(:comment) { create(:comment) }
+
+    context "with only valid params" do
+      it "redirects to comment path with the comments anchor and without an error" do
+        get :cancel_comment_reply, comment_id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
+      end
+    end
+
+    context "with valid and invalid params" do
+      it "removes invalid params and redirects to comment path with valid params and the comments anachor and without an error" do
+        get :cancel_comment_reply, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
+      end
     end
   end
 
