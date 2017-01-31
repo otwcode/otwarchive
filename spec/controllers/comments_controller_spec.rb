@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe CommentsController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   before(:each) do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
@@ -13,15 +14,13 @@ describe CommentsController do
 
       it "redirects logged out user to login path with an error" do
         get :add_comment_reply, comment_id: comment.id
-        expect(response).to redirect_to(login_path)
-        expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
+        it_redirects_to_with_error(login_path, "Sorry, you cannot reply to an unapproved comment.")
       end
 
       it "redirects logged in user to root path with an error" do
         fake_login
         get :add_comment_reply, comment_id: comment.id
-        expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq "Sorry, you cannot reply to an unapproved comment."
+        it_redirects_to_with_error(root_path, "Sorry, you cannot reply to an unapproved comment.")
       end
     end
 
@@ -49,15 +48,13 @@ describe CommentsController do
 
     it "redirects logged out users to login path with an error" do
       get :unreviewed, comment_id: comment.id
-      expect(response).to redirect_to(login_path)
-      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+      it_redirects_to_with_error(login_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
     it "redirects to root path with an error when logged in user does not own the commentable" do
       fake_login
       get :unreviewed, comment_id: comment.id
-      expect(response).to redirect_to(root_path)
-      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+      it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
     it "renders the :unreviewed template for a user who owns the work" do
@@ -103,8 +100,7 @@ describe CommentsController do
       comment = create(:unreviewed_comment)
       fake_login
       put :review_all, work_id: comment.commentable_id 
-      expect(flash[:error]).to eq "What did you want to review comments on?"
-      expect(response).to redirect_to(root_path)
+      it_redirects_to_with_error(root_path, "What did you want to review comments on?")
     end
   end
 
@@ -212,8 +208,7 @@ describe CommentsController do
       comment = create(:unreviewed_comment)
       fake_login
       get :show, id: comment.id
-      expect(response).to redirect_to(root_path)
-      expect(flash[:error]).to eq "Sorry, that comment is currently in moderation."
+      it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
     end
   end
 
