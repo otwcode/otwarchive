@@ -194,28 +194,6 @@ describe CommentsController do
     end
   end
 
-  describe "GET #show" do
-    it "redirects to root path if logged in user does not have permission to access comment" do
-      fake_login
-      get :show, id: unreviewed_comment.id
-      it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
-    end
-  end
-
-  describe "GET #index" do
-    it "errors when not logged in as admin" do
-      get :index
-      expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
-    end
-
-    it "renders :index template when logged in as admin" do
-      fake_login_admin(create(:admin))
-      get :index
-      expect(response).to render_template("index")
-      fake_logout # we don't want to mess up the next tests
-    end
-  end
-
   describe "PUT #review" do
     let!(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
@@ -243,6 +221,27 @@ describe CommentsController do
         comment.reload
         expect(comment.unreviewed).to be false
       end
+    end
+  end
+
+  describe "GET #show" do
+    it "redirects to root path if logged in user does not have permission to access comment" do
+      fake_login
+      get :show, id: unreviewed_comment.id
+      it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
+    end
+  end
+
+  describe "GET #index" do
+    it "errors when not logged in as admin" do
+      get :index
+      expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
+    end
+
+    it "renders :index template when logged in as admin" do
+      fake_login_admin(create(:admin))
+      get :index
+      expect(response).to render_template("index")
     end
   end
 end
