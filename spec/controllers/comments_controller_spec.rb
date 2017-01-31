@@ -90,6 +90,7 @@ describe CommentsController do
     it "redirects to the comment on the commentable without an error" do
       comment = create(:unreviewed_comment)
       put :approve, id: comment.id
+      expect(comment.approved).to be true
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: 'comments'))
     end
@@ -125,7 +126,7 @@ describe CommentsController do
     end
 
     context "with valid and invalid params" do
-      it "removes invalid params and redirects to comment path with valid params and the comments anachor and without an error" do
+      it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
         get :cancel_comment, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
@@ -145,7 +146,7 @@ describe CommentsController do
     end
 
     context "with valid and invalid params" do
-      it "removes invalid params and redirects to comment path with valid params and the comments anachor and without an error" do
+      it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
         get :cancel_comment_reply, comment_id: comment.id, show_comments: 'yes', random_option: 'no'
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(comment_path(comment, show_comments: 'yes', anchor: "comments"))
@@ -172,11 +173,12 @@ describe CommentsController do
   end
 
   describe "GET #destroy" do
-    context "when logged in as the owner of the comment" do
-      it "redirects to referrer with a success message" do
+    context "when logged in as the owner of the unreviewed comment" do
+      it "deletes the comment and redirects to referrer with a success message" do
         fake_login
         comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
         get :destroy, id: comment.id
+        expect(Comment.find_by_id(comment.id)).to_not be_present
         expect(response).to redirect_to("/where_i_came_from")
         expect(flash[:notice]).to eq "Comment deleted."
       end
