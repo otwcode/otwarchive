@@ -43,12 +43,33 @@ describe CommentsController do
   end
 
   describe "GET #unreviewed" do
-    it "redirects to root path with an error if logged in user does not own the comment or commentable" do
-      comment = create(:unreviewed_comment)
+    let!(:user) { create(:user) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let!(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
+
+    it "redirects to root path with an error when logged in user does not own the commentable" do
       fake_login
       get :unreviewed, comment_id: comment.id
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+    end
+
+    it "redirects logged out users to login path with an error" do
+      get :unreviewed, comment_id: comment.id
+      expect(response).to redirect_to(login_path)
+      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+    end
+
+    it "renders the :unreviewed template for a user who owns the work" do
+      fake_login_known_user(user)
+      get :unreviewed, work_id: comment.commentable_id
+      expect(response).to render_template("unreviewed")
+    end
+
+    it "renders the :unreviewed template for an admin" do
+      fake_login_admin(create(:admin))
+      get :unreviewed, work_id: comment.commentable_id
+      expect(response).to render_template("unreviewed")
     end
   end
 
