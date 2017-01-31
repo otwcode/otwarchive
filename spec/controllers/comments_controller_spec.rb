@@ -47,16 +47,16 @@ describe CommentsController do
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
     let!(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
 
+    it "redirects logged out users to login path with an error" do
+      get :unreviewed, comment_id: comment.id
+      expect(response).to redirect_to(login_path)
+      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
+    end
+
     it "redirects to root path with an error when logged in user does not own the commentable" do
       fake_login
       get :unreviewed, comment_id: comment.id
       expect(response).to redirect_to(root_path)
-      expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
-    end
-
-    it "redirects logged out users to login path with an error" do
-      get :unreviewed, comment_id: comment.id
-      expect(response).to redirect_to(login_path)
       expect(flash[:error]).to eq "Sorry, you don't have permission to see those unreviewed comments."
     end
 
@@ -99,9 +99,10 @@ describe CommentsController do
   end
 
   describe "PUT #review_all" do
-    xit "checks that there is something to review" do
+    xit "redirects to root path with an error if current user does not own the commentable" do
       comment = create(:unreviewed_comment)
-      put :review_all, comment_id: comment.id 
+      fake_login
+      put :review_all, work_id: comment.commentable_id 
       expect(flash[:error]).to eq "What did you want to review comments on?"
       expect(response).to redirect_to(root_path)
     end
@@ -203,6 +204,29 @@ describe CommentsController do
         expect(response).to redirect_to("/where_i_came_from")
         expect(flash[:notice]).to eq "Comment deleted."
       end
+    end
+  end
+
+  describe "GET #show" do
+    it "redirects to root path if logged in user does not have permission to access comment" do
+      comment = create(:unreviewed_comment)
+      fake_login
+      get :show, id: comment.id
+      expect(response).to redirect_to(root_path)
+      expect(flash[:error]).to eq "Sorry, that comment is currently in moderation."
+    end
+  end
+
+  describe "GET #index" do
+    it "redirects to root path with an error when not logged in as admin" do
+      get :index
+      expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
+    end
+
+    it "renders :index template when logged in as admin" do
+      fake_login_admin(create(:admin))
+      get :index
+      expect(response).to render_template("index")
     end
   end
 end
