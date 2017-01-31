@@ -212,6 +212,37 @@ describe CommentsController do
       fake_login_admin(create(:admin))
       get :index
       expect(response).to render_template("index")
+      fake_logout # we don't want to mess up the next tests
+    end
+  end
+
+  describe "PUT #review" do
+    let!(:user) { create(:user) }
+    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
+    let(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    context "when recipient approves comment from inbox" do
+      it "marks comment reviewed and redirects to user inbox path with success message" do
+        put :review, id: comment.id, approved_from: "inbox"
+        expect(response).to redirect_to(user_inbox_path(user))
+        expect(flash[:notice]).to eq "Comment approved."
+        comment.reload
+        expect(comment.unreviewed).to be false
+      end
+    end
+
+    context "when recipient approves comment from homepage" do
+      it "marks comment reviewed and redirects to root path with success message" do
+        put :review, id: comment.id, approved_from: "home"
+        expect(response).to redirect_to(root_path)
+        expect(flash[:notice]).to eq "Comment approved."
+        comment.reload
+        expect(comment.unreviewed).to be false
+      end
     end
   end
 end
