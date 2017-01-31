@@ -218,7 +218,7 @@ describe CommentsController do
   end
 
   describe "GET #index" do
-    it "redirects to root path with an error when not logged in as admin" do
+    it "errors when not logged in as admin" do
       get :index
       expect(flash[:error]).to eq "Sorry, you don't have permission to access that page."
     end
