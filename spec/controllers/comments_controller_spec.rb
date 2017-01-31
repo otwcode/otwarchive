@@ -4,29 +4,28 @@ describe CommentsController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:comment) { create(:comment) }
+  let(:unreviewed_comment) { create(:unreviewed_comment) }
+
   before(:each) do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
   end
 
   describe "GET #add_comment_reply" do
     context "when comment is unreviewed" do
-      let(:comment) { create(:unreviewed_comment) }
-
       it "redirects logged out user to login path with an error" do
-        get :add_comment_reply, comment_id: comment.id
+        get :add_comment_reply, comment_id: unreviewed_comment.id
         it_redirects_to_with_error(login_path, "Sorry, you cannot reply to an unapproved comment.")
       end
 
       it "redirects logged in user to root path with an error" do
         fake_login
-        get :add_comment_reply, comment_id: comment.id
+        get :add_comment_reply, comment_id: unreviewed_comment.id
         it_redirects_to_with_error(root_path, "Sorry, you cannot reply to an unapproved comment.")
       end
     end
 
     context "when comment is not unreviewed" do
-      let(:comment) { create(:comment) }
-
       it "redirects to the comment on the commentable without an error" do
         get :add_comment_reply, comment_id: comment.id
         expect(flash[:error]).to be_nil
@@ -44,7 +43,7 @@ describe CommentsController do
   describe "GET #unreviewed" do
     let!(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true ) }
-    let!(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
+    let(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
 
     it "redirects logged out users to login path with an error" do
       get :unreviewed, comment_id: comment.id
@@ -97,44 +96,40 @@ describe CommentsController do
 
   describe "PUT #review_all" do
     xit "redirects to root path with an error if current user does not own the commentable" do
-      comment = create(:unreviewed_comment)
       fake_login
-      put :review_all, work_id: comment.commentable_id 
+      put :review_all, work_id: unreviewed_comment.commentable_id 
       it_redirects_to_with_error(root_path, "What did you want to review comments on?")
     end
   end
 
   describe "PUT #approve" do
     it "redirects to the comment on the commentable without an error" do
-      comment = create(:unreviewed_comment)
-      put :approve, id: comment.id
-      expect(comment.approved).to be true
+      put :approve, id: unreviewed_comment.id
+      expect(unreviewed_comment.approved).to be true
       expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: 'comments'))
+      expect(response).to redirect_to(work_path(unreviewed_comment.ultimate_parent, show_comments: true, anchor: 'comments'))
     end
   end
 
   describe "GET #hide_comments" do
     it "redirects to the comment path without an error" do
-      comment = create(:unreviewed_comment)
-      get :hide_comments, comment_id: comment.id
+      get :hide_comments, comment_id: unreviewed_comment.id
       expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, anchor: 'comments'))
+      expect(response).to redirect_to(comment_path(unreviewed_comment, anchor: 'comments'))
     end
   end
 
   describe "GET #add_comment" do
-    it "redirects to the comment path with add_comment params and without an error" do
-      comment = create(:unreviewed_comment)
-      get :add_comment, comment_id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(comment_path(comment, add_comment: true, anchor: 'comments'))
+    context "when comment is unreviewed" do
+      it "redirects to the comment path with add_comment params and without an error" do
+        get :add_comment, comment_id: unreviewed_comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: 'comments'))
+      end
     end
   end
 
   describe "GET #cancel_comment" do
-    let(:comment) { create(:comment) }
-
     context "with only valid params" do
       it "redirects to comment path with the comments anchor and without an error" do
         get :cancel_comment, comment_id: comment.id
@@ -153,8 +148,6 @@ describe CommentsController do
   end
 
   describe "GET #cancel_comment_reply" do
-    let(:comment) { create(:comment) }
-
     context "with only valid params" do
       it "redirects to comment path with the comments anchor and without an error" do
         get :cancel_comment_reply, comment_id: comment.id
@@ -174,7 +167,6 @@ describe CommentsController do
 
   describe "GET #cancel_comment_delete" do
     it "redirects to the comment on the commentable without an error" do
-      comment = create(:comment)
       get :cancel_comment_delete, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
@@ -183,7 +175,6 @@ describe CommentsController do
 
   describe "GET #cancel_comment_edit" do
     it "redirects to the comment on the commentable without an error" do
-      comment = create(:comment)
       get :cancel_comment_edit, id: comment.id
       expect(flash[:error]).to be_nil
       expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
@@ -205,9 +196,8 @@ describe CommentsController do
 
   describe "GET #show" do
     it "redirects to root path if logged in user does not have permission to access comment" do
-      comment = create(:unreviewed_comment)
       fake_login
-      get :show, id: comment.id
+      get :show, id: unreviewed_comment.id
       it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
     end
   end
