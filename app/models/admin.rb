@@ -2,7 +2,6 @@ class Admin < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
   devise :database_authenticatable,
-         :registerable,
          :validatable,
          password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
 
@@ -18,6 +17,9 @@ class Admin < ActiveRecord::Base
       # Now the common form is that we are using an authlogic method so lets
       # test that on failure
       return true if result
+      # This is the backwards compatibility with who we used to 
+      # authenticate with bcrypt and authlogic.
+      # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
       if Authlogic::CryptoProviders::BCrypt.matches?(self.encrypted_password,[password, self.password_salt].compact)
         # I am commenting the following line so that if
         # we needed to roll back the migration becuase
@@ -28,6 +30,8 @@ class Admin < ActiveRecord::Base
       return false
     rescue BCrypt::Errors::InvalidHash
       # Now a really old password hash
+      # This is the backwards compatibility for the old sha1 passwords, all 1 of them
+      # http://stackoverflow.com/questions/6113375/converting-existing-password-hash-to-devise/9079088
       return false unless Digest::SHA1.hexdigest(password) == encrypted_password
       # I am commenting the following line so that if
       # we needed to roll back the migration becuase
