@@ -16,15 +16,8 @@ class MoveAdminsToDevise < ActiveRecord::Migration
     # Remove old authlogic field
     remove_column :admins, :persistence_token
 
-    # Fields for Recoverable module
-    add_column :admins, :reset_password_token, :string, limit: 255
-    add_column :admins, :reset_password_sent_at, :timestamp
-
-    # Field for Rememberable module
-    add_column :admins, :remember_created_at, :timestamp
-
     # Index
-    add_index :admins, :reset_password_token, unique: true
+    add_index :admins, unique: true
   end
 
   def self.down
@@ -35,12 +28,7 @@ class MoveAdminsToDevise < ActiveRecord::Migration
     # Recreate deleted column
     add_column :admins, :persistence_token, :string
 
-    # Remove Devise columns
-    remove_column :admins, :reset_password_token
-    remove_column :admins, :reset_password_sent_at
-    remove_column :admins, :remember_created_at
-
     # Remove index
-    remove_index :admins, :reset_password_token
+    remove_index :admins
   end
 end
