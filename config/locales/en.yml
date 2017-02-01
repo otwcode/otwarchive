@@ -54,7 +54,7 @@ en:
           Cheers, 
           %{archive_name}
     admin_deleted_work_notification:
-      subject: "[%{app_name}] Your work has been deleted by an Admin"
+      subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"
       opendoors: "contact Open Doors"
       abuse_committee: "contact our Abuse Committee"
