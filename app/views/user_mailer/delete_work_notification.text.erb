@@ -1,11 +1,13 @@
 <% content_for :message do %>
 <%= t('.hello', user:  @user.default_pseud.byline) %>
+
 <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
 t('.part1_other',
         title: @work.title,
-        pseud: User.current_user.default_pseud) :
+        pseud: text_pseud(User.current_user.default_pseud)) :
 t('.part1_yourself',
         title: @work.title) %>
+
 <%= t('.text.part2', support: t('.support'), url: new_feedback_report_url) %>
 
 <%= t('.part3') %>
