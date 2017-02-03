@@ -41,7 +41,7 @@ module MailerHelper
   end
 
   def opendoors_link(text)
-    style_link(text, "http://opendoors.transformativeworks.org/contact/open%20doors")
+    style_link(text, "http://opendoors.transformativeworks.org/contact-open-doors/")
   end
   
   def styled_divider

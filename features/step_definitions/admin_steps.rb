@@ -84,6 +84,13 @@ Given /^guest downloading is on$/ do
   click_button("Update")
 end
 
+Given /^downloads are off$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Allow downloads")
+  click_button("Update")
+end
+
 Given /^tag wrangling is off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)

@@ -233,7 +233,7 @@ Feature: Archivist bulk imports
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
       And I fill in "external_author_email" with "random@example.com"
-      And I submit with the 2nd button
+      And I submit with the 3rd button
     Then I should see "We have saved and blocked the email address random@example.com"
     When I am logged in as "archivist"
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
