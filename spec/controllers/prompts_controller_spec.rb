@@ -3,6 +3,7 @@ require 'spec_helper'
 describe PromptsController do
   include LoginMacros
   include RedirectExpectationHelper
+  let(:collection) { create(:collection) }
 
   before do
     fake_login
@@ -10,7 +11,6 @@ describe PromptsController do
 
   describe 'no_challenge' do
     it 'should show an error and redirect' do
-      collection = create(:collection)
       get :show, collection_id: collection.name
       it_redirects_to collection_path(collection)
       expect(flash[:error]).to eq "What challenge did you want to sign up for?"
