@@ -15,9 +15,6 @@ class MoveAdminsToDevise < ActiveRecord::Migration
 
     # Remove old authlogic field
     remove_column :admins, :persistence_token
-
-    # Index
-    add_index :admins, unique: true
   end
 
   def self.down
@@ -27,8 +24,5 @@ class MoveAdminsToDevise < ActiveRecord::Migration
 
     # Recreate deleted column
     add_column :admins, :persistence_token, :string
-
-    # Remove index
-    remove_index :admins
   end
 end
