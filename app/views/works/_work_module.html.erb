@@ -85,7 +85,7 @@
     <dt class="words"><%= ts('Words') %>:</dt>
     <dd class="words"><%= number_with_delimiter(work.word_count) %></dd>
     <dt class="chapters"><%= ts('Chapters') %>:</dt>
-    <dd class="chapters"><%= chapter_total_display_with_link(work) %></dd>
+    <dd class="chapters"><%= work.chapter_total_display %></dd>
 
 <% end %>
 <% #### END CACHE show/hide %>
