@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe RelatedWorksController do
+  include RedirectExpectationHelper
   include LoginMacros
   let(:child_creator) { FactoryGirl.create(:user) }
   let(:child_work) { FactoryGirl.create(:work, authors: [child_creator.default_pseud]) }
@@ -13,12 +14,8 @@ describe RelatedWorksController do
         get :index, user_id: ""
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Whose related works were you looking for?")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(user_related_works_path, "Whose related works were you looking for?") 
       end
     end
 
@@ -27,12 +24,8 @@ describe RelatedWorksController do
         get :index, user_id: "user"
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Sorry, we couldn't find that user")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(user_related_works_path, "Sorry, we couldn't find that user")
       end
     end
   end
@@ -45,12 +38,8 @@ describe RelatedWorksController do
         put :update, id: @related_work
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that. Try removing the link from your own work.")
       end
     end
 
@@ -61,12 +50,8 @@ describe RelatedWorksController do
         put :update, id: @related_work
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Sorry, but you don't have permission to do that.")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that.")
       end
     end
 
@@ -86,12 +71,8 @@ describe RelatedWorksController do
           expect(@related_work.reciprocal?).to be false
         end
 
-        it "sets a flash message" do
-          expect(flash[:notice]).to eq("Link was successfully removed")
-        end
-
-        it "redirects to the parent work" do
-          expect(response).to redirect_to @related_work.parent
+        it "sets a flash message and redirects the requester" do
+          it_redirects_to_with_notice(@related_work.parent, "Link was successfully removed")
         end
       end
 
@@ -115,12 +96,8 @@ describe RelatedWorksController do
         delete :destroy, id: @related_work
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
       end
     end
 
@@ -131,12 +108,8 @@ describe RelatedWorksController do
         delete :destroy, id: @related_work
       end
 
-      it "sets a flash message" do
-        expect(flash[:error]).to eq("Sorry, but you don't have permission to do that.")
-      end
-
-      it "redirects the requester" do
-        expect(response).to have_http_status(:redirect)
+      it "sets a flash message and redirects the requester" do
+        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that.")
       end
     end
 
@@ -154,7 +127,7 @@ describe RelatedWorksController do
 
       it "redirects the requester" do
         delete :destroy, id: @related_work
-        expect(response).to have_http_status(:redirect)
+        it_redirects_to(related_work_path(@related_work))
       end
     end
   end
