@@ -77,12 +77,10 @@ describe RelatedWorksController do
       end
 
       context "with invalid parameters" do
-        xit "sets a flash message" do
-          expect(flash[:notice]).to eq("Sorry, something went wrong.")
-        end
-
-        xit "redirects to the related work" do
-          expect(response).to redirect_to @related_work
+        it "sets a flash message and redirects to the related work" do
+          allow_any_instance_of(RelatedWork).to receive(:save).and_return(false)
+          put :update, id: @related_work
+          it_redirects_to_with_error(related_work_path(@related_work), "Sorry, something went wrong.")
         end
       end
     end
