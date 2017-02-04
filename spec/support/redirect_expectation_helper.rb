@@ -27,5 +27,6 @@ module RedirectExpectationHelper
     it_redirects_to_internal(path)
     expect(flash[:notice]).blank?
     expect(flash[:error]).blank?
+    expect(flash).empty?
   end
 end
