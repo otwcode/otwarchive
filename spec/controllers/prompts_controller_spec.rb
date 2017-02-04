@@ -4,12 +4,12 @@ describe PromptsController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:collection) { create(:collection) }
-  let(:open_signup) {      
-      signups = create(:challenge_signup)
-      prompt = signups.collection.prompts.first
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
-      signups }
+  let(:open_signup) do
+    signups = create(:challenge_signup)
+    signups.collection.challenge.signup_open = true
+    signups.collection.challenge.save
+    signups
+  end
 
   before do
     fake_login
@@ -70,27 +70,30 @@ describe PromptsController do
       # Login as the signup owner
       fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
       post :create, collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {}
-      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
+      it_redirects_to "#{collection_signups_path(open_signup.collection)}/"\
+                      "#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
       expect(flash[:notice]).blank?
       expect(flash[:error]).blank?
     end
   end
 
   describe "update" do
-    it "should have no errors and redirect" do
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
-      put :update, collection_id: open_signup.collection.name, prompt_type: "offer",\
-                   prompt: { description: "This is a description" }, id: open_signup.collection.prompts.first.id
-      expect(flash[:notice]).to eq "Prompt was successfully updated."
-      expect(flash[:error]).blank?
-      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
-      new_prompt = open_signup.collection.prompts.first
-      expect(new_prompt.description).to eq("<p>This is a description</p>")
+    context "when prompt is valid" do
+      it "should have no errors and redirect" do
+        fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+        put :update, collection_id: open_signup.collection.name, prompt_type: "offer",\
+                     prompt: { description: "This is a description" }, id: open_signup.collection.prompts.first.id
+        expect(flash[:notice]).to eq "Prompt was successfully updated."
+        expect(flash[:error]).blank?
+        it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
+        new_prompt = open_signup.collection.prompts.first
+        expect(new_prompt.description).to eq("<p>This is a description</p>")
+      end
     end
   end
 
   describe "destroy" do
-    it "can not delete a prompt after sign-ups are closed." do
+    it "redirects with an error when sign-ups are closed" do
       signups = create(:challenge_signup)
       prompt = signups.collection.prompts.first
       fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
@@ -100,18 +103,18 @@ describe PromptsController do
       it_redirects_to "#{collection_signups_path(signups.collection)}/#{signups.id}"
     end
 
-    it "can not delete a prompt if it would make it invalid" do
+    it "redirects with an error when it would make a sign-up invalid" do
       fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
       delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
       expect(flash[:error]).to eq "That would make your sign-up invalid, sorry! Please edit instead."
       it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
     end
 
-    it "we can delete a new prompt." do
+    it "deletes the prompt and redirects with a success message" do
       # Login as the signup owner
       fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
       prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
-                                    collection_id: open_signup.collection.id)
+                                        collection_id: open_signup.collection.id)
       prompt.save
       delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
       expect(flash[:error]).blank?
@@ -120,12 +123,14 @@ describe PromptsController do
     end
   end
 
-  describe "no_prompt" do
-    it "should show an error and redirect" do
-      signups = create(:challenge_signup)
-      post :edit, collection_id: signups.collection.name
-      it_redirects_to collection_path(signups.collection)
-      expect(flash[:error]).to eq "What prompt did you want to work on?"
+  describe "edit" do
+    context "no prompt" do
+      it "should show an error and redirect" do
+        signups = create(:challenge_signup)
+        post :edit, collection_id: signups.collection.name
+        it_redirects_to collection_path(signups.collection)
+        expect(flash[:error]).to eq "What prompt did you want to work on?"
+      end
     end
   end
 end
