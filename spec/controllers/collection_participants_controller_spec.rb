@@ -387,7 +387,8 @@ describe CollectionParticipantsController do
 
         it "approves those users, redirects to the collection participants page and displays a notification" do
           get :add, params
-          it_redirects_to collection_participants_path(collection)
+          expect(response).to have_http_status :redirect
+          expect(response).to redirect_to collection_participants_path(collection)
           expect(flash[:notice]).to include "Members added:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline

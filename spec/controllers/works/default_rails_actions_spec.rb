@@ -17,6 +17,8 @@ describe WorksController do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params
         it_redirects_to new_user_session_path
+        it_redirects_to_with_error(new_user_session_path,\
+                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
 
       it "returns a nil" do
