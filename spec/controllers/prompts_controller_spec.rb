@@ -4,6 +4,12 @@ describe PromptsController do
   include LoginMacros
   include RedirectExpectationHelper
   let(:collection) { create(:collection) }
+  let(:open_signup) {      
+      signups = create(:challenge_signup)
+      prompt = signups.collection.prompts.first
+      signups.collection.challenge.signup_open = true
+      signups.collection.challenge.save
+      signups }
 
   before do
     fake_login
@@ -47,47 +53,38 @@ describe PromptsController do
     end
   end
 
-  describe "new_prompt_offer" do
-    it "should have no errors and redirect" do
-      signups = create(:challenge_signup)
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
-      # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
-      post :new, collection_id: signups.collection.name, prompt_type: "offer"
-      expect(response).to have_http_status(200)
-      expect(flash[:error]).blank?
+  describe "new" do
+    context "when prompt_type is offer" do
+      it "should have no errors and redirect" do
+        # Login as the signup owner
+        fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+        post :new, collection_id: open_signup.collection.name, prompt_type: "offer"
+        expect(response).to have_http_status(200)
+        expect(flash[:error]).blank?
+      end
     end
   end
 
-  describe "create_prompt_offer" do
+  describe "create" do
     it "should have no errors and redirect" do
-      signups = create(:challenge_signup)
-      prompt = signups.collection.prompts.first
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
       # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
-      post :create, collection_id: signups.collection.name, prompt_type: "offer", prompt: {}
-      it_redirects_to "#{collection_signups_path(signups.collection)}/#{prompt.challenge_signup_id}/edit"
+      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+      post :create, collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {}
+      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
       expect(flash[:notice]).blank?
       expect(flash[:error]).blank?
     end
   end
 
-  describe "update_prompt" do
+  describe "update" do
     it "should have no errors and redirect" do
-      signups = create(:challenge_signup)
-      prompt = signups.collection.prompts.first
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
-      put :update, collection_id: signups.collection.name, prompt_type: "offer",\
-                   prompt: { description: "This is a description" }, id: prompt.id
+      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+      put :update, collection_id: open_signup.collection.name, prompt_type: "offer",\
+                   prompt: { description: "This is a description" }, id: open_signup.collection.prompts.first.id
       expect(flash[:notice]).to eq "Prompt was successfully updated."
       expect(flash[:error]).blank?
-      it_redirects_to "#{collection_signups_path(signups.collection)}/#{signups.id}"
-      new_prompt = signups.collection.prompts.first
+      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
+      new_prompt = open_signup.collection.prompts.first
       expect(new_prompt.description).to eq("<p>This is a description</p>")
     end
   end
@@ -104,29 +101,22 @@ describe PromptsController do
     end
 
     it "can not delete a prompt if it would make it invalid" do
-      signups = create(:challenge_signup)
-      prompt = signups.collection.prompts.first
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
-      delete :destroy, collection_id: signups.collection.name, id: prompt.id
+      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+      delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
       expect(flash[:error]).to eq "That would make your sign-up invalid, sorry! Please edit instead."
-      it_redirects_to "#{collection_signups_path(signups.collection)}/#{signups.id}"
+      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
     end
 
     it "we can delete a new prompt." do
-      signups = create(:challenge_signup)
-      signups.collection.challenge.signup_open = true
-      signups.collection.challenge.save
       # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signups.collection).first.pseud_id).user)
-      prompt = signups.offers.build(pseud_id: ChallengeSignup.in_collection(signups.collection).first.pseud_id,\
-                                    collection_id: signups.collection.id)
+      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
+      prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
+                                    collection_id: open_signup.collection.id)
       prompt.save
-      delete :destroy, collection_id: signups.collection.name, id: prompt.id
+      delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
       expect(flash[:error]).blank?
       expect(flash[:notice]).to eq "Prompt was deleted."
-      it_redirects_to "#{collection_signups_path(signups.collection)}/#{signups.id}"
+      it_redirects_to "#{collection_signups_path(open_signup.collection)}/#{open_signup.id}"
     end
   end
 
