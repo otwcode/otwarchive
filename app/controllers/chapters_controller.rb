@@ -77,7 +77,6 @@ class ChaptersController < ApplicationController
       if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
                                   (request.referer.nil? ||
                                   !request.referer.match(/#{work_path(@work)}/))
-        Rails.logger.debug "DEBUG: #{work_path(@work)} (#{Time.now})"
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
