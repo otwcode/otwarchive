@@ -70,14 +70,8 @@ class ChaptersController < ApplicationController
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
 
-      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted
-      # or added to history at all. Increases hit count if accessing the first chapter or
-      # if accessing the most recent chapter when you're not already on the work (e.g. if
-      # you followed the recent chapter link or came from a subscription email).
-      if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
-                                  (request.referer.nil? ||
-                                  !request.referer.match(/#{work_path(@work)}/))
-        Rails.logger.debug "DEBUG: #{work_path(@work)} (#{Time.now})"
+      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
+      if chapter_position == 0
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
