@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe BookmarksController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   def it_redirects_to_user_login
-    expect(response).to have_http_status(:redirect)
-    expect(response).to redirect_to new_user_session_path
+    it_redirects_to_internal new_user_session_path
   end
 
   describe 'new' do
