@@ -9,7 +9,8 @@ describe CollectionParticipantsController do
     context "where user isn't logged in" do
       it "redirects to new user session" do
         get :join
-        it_redirects_to new_user_session_path
+        it_redirects_to_with_error(new_user_session_path,
+                                    "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
 
@@ -271,7 +272,6 @@ describe CollectionParticipantsController do
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params
-            it_redirects_to collection_path(collection)
             it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
             expect(CollectionParticipant.find(other_participant)).to be_present
           end
@@ -400,7 +400,8 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params
-          it_redirects_to collection_participants_path(collection)
+          expect(response).to have_http_status :redirect
+          expect(response).to redirect_to collection_participants_path(collection)
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline

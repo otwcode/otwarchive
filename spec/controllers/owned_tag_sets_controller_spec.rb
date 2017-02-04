@@ -201,7 +201,7 @@ describe OwnedTagSetsController do
         it "updates the tag set and redirects" do
           put :update, params
           expect(OwnedTagSet.find(tag_set.id).nominated).to eq false
-          it_redirects_to tag_set_path(tag_set)
+          it_redirects_to_with_notice(tag_set_path(tag_set), "Tag Set was successfully updated.")
         end
       end
 

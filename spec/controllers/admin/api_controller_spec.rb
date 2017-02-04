@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'spec_helper'
+require "spec_helper"
 
 describe Admin::ApiController do
   include LoginMacros
@@ -11,7 +11,7 @@ describe Admin::ApiController do
     context "where there is no user or admin logged in" do
       it "redirects to the homepage" do
         get :index, params
-        it_redirects_to root_path
+        it_redirects_to_with_error(root_path, "I'm sorry, only an admin can look at that area.")
       end
     end
 
@@ -24,7 +24,7 @@ describe Admin::ApiController do
 
       it "redirects to the homepage" do
         get :index, params
-        it_redirects_to root_path
+        it_redirects_to_with_error(root_path, "I'm sorry, only an admin can look at that area.")
       end
     end
 
@@ -113,8 +113,7 @@ describe Admin::ApiController do
         it "redirects to the homepage and notifies of the success" do
           post :create, params
           expect(ApiKey.where(name: api_key_name)).to_not be_empty
-          it_redirects_to admin_api_index_path
-          expect(flash[:notice]).to include("New token successfully created")
+          it_redirects_to_with_notice(admin_api_index_path, "New token successfully created")
         end
       end
 
@@ -205,8 +204,7 @@ describe Admin::ApiController do
             expect(ApiKey.where(name: new_name)).to be_empty
             post :update, params
             expect(ApiKey.where(name: new_name)).to_not be_empty
-            it_redirects_to admin_api_index_path
-            expect(flash[:notice]).to include("Access token was successfully updated")
+            it_redirects_to_with_notice(admin_api_index_path, "Access token was successfully updated")
           end
         end
 

@@ -180,7 +180,8 @@ describe WorksController do
   describe "new" do
     it "should not return the form for anyone not logged in" do
       get :new
-      it_redirects_to new_user_session_path
+      it_redirects_to_with_error(new_user_session_path,\
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "should render the form if logged in" do
