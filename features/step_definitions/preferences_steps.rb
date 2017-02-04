@@ -107,4 +107,3 @@ When /^I set my preferences to hide freeform by browser$/ do
   click_button("Update")
   step %{I should see "Your preferences were successfully updated"}
 end
-
