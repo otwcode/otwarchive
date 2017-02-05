@@ -40,7 +40,6 @@ en:
         left_kudos:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
@@ -68,6 +67,79 @@ en:
       text:
         part1: "Your work %{title} has been been reported as being in violation of the Archive of Our Own's Terms of Service (%{tos_url})."
         part3: "If you have any questions, please contact our Abuse Team (%{abuse})."
+    admin_deleted_work_notification:
+      subject: "[%{app_name}] Your work has been deleted by an admin"
+      hello: "Dear %{user},"
+      opendoors: "contact Open Doors"
+      abuse_committee: "contact our Abuse Committee"
+      bye: "Attached is a copy of your work for your reference."
+      html:
+        part1: "Your work %{title} was deleted from the Archive by a site admin."
+        part2: "If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions."
+        part3: "If it's possible your work violated the Archive's Terms of Service, please %{abuse_link}."
+      text:
+        part1: "Your work \"%{title}\" was deleted from the Archive by a site admin."
+        part2: "If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions."
+        part3: "If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (%{abuse_link})."
+    delete_work_notification:
+      subject: "[%{app_name}] Your work has been deleted"
+      support: "contact Support"
+      hello: "Dear %{user},"
+      part1_other: "Your work \"%{title}\" was deleted at the request of %{pseud}."
+      part1_yourself: "Your work \"%{title}\" was deleted at your request."
+      part2: "If you have questions, please %{support}."
+      part3: "Attached is a copy of your work for your reference."
+      html:
+        part2: "If you have questions, please %{support}."
+      text:
+        part2: "If you have questions, please %{support} (%{url})."
+    coauthor_notification:
+      subject: "[%{app_name}] Co-creator Notification"
+      edit_the_work: "Edit the work"
+      edit_the_series: "Edit the series"
+      part1_work: "You have been listed as a co-creator on the following work:"
+      part1_series: "You have been listed as a co-creator on the following series:"
+      html:
+        part2_work: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+        part2_series: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+      text:
+        part2_work: "Edit the work to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+        part2_series: "Edit the series to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+    change_email:
+      subject: "[%{app_name}] Email changed"
+      part1: "%{login}, the email associated with your account has been changed to %{email}"
+    reset_password:
+      subject: "[%{app_name}] Generated password"
+      part1: "%{user}, the following generated password has been created for you: %{password}" 
+      part2: "After you log in using this generated password you will be asked to change your password to something you can remember. If you do not use this generated password within a week, it will expire, and you will have to request a new one."
+      part3: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."
+    signup_notification:
+      subject: "[%{app_name}] Confirmation" 
+      faq: "FAQ"
+      admin_posts: "Archive admin posts"
+      contact_support: "get in touch with our Support team"
+      activate_your_account: "activate your account"
+      welcome: "Welcome to the Archive of Our Own, %{login}!"
+      bye: "We hope you enjoy using the Archive."
+      text:
+        part1: "Please activate your account: %{activate_account_url}"
+        part2: |-
+                  Once your account is up and running, you can post your fanworks, set up email
+                  subscriptions to let you know when your favorite creators or works have updated,
+                  set preferences to customize the way the site looks and works for you, keep
+                  track of the works you've viewed on the Archive via your history, and much more.
+        part3: |-
+                  There's lots of information and advice on how to use the Archive in our FAQ
+                  at %{faq_url}. You'll
+                  find the latest news about site developments in our Archive admin posts at
+                  %{admin_posts_url}. If you need more
+                  help, run into a bug, or have questions or comments, please get in touch with
+                  our Support team, who are always happy to help out:
+                  %{contact_support_url}.
+      html:
+        part1: "Please %{activate_account_link}."
+        part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
+        part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
