@@ -17,6 +17,7 @@ Feature: Comment on work
      And I post the work "The One Where Neal is Awesome"
    When I am logged in as "commenter"
      And I post the comment "Mistaken comment" on the work "The One Where Neal is Awesome"
+     And I wait 2 seconds
      And I debug comments
      And I follow "Edit"
    And I fill in "Comment" with "Actually, I meant something different"
