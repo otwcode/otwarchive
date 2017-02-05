@@ -2,7 +2,7 @@
 
 Feature: External works are not hosted on the Archive
 
-  Scenario: Can see an external works
+  Scenario: Can see external works
     Given basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
