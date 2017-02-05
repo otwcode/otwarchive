@@ -1,14 +1,15 @@
 class InviteRequest < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
-  validates :email, :presence => true, :email_veracity => true  
-  validates_uniqueness_of :email, :message => "is already part of our queue."
-  before_validation :compare_with_users, :on => :create
+  validates :email, presence: true, email_veracity: true  
+  validates_uniqueness_of :email, message: "is already part of our queue."
+  before_validation :compare_with_users, on: :create
   
   # Realign positions if they're incorrect
   def self.reset_order
-    first_request = self.find(:first, :order => :position)
+    first_request = self.find(:first, order: :position)
     unless first_request && first_request.position == 1
-       requests = self.find(:all, :order => :position)
+       requests = self.find(:all, order: :position)
        requests.each_with_index {|request, index| request.update_attribute(:position, index + 1)}   
     end
   end
@@ -39,8 +40,8 @@ class InviteRequest < ActiveRecord::Base
   
   #Turn a request into an invite and then remove it from the queue
   def invite_and_remove(creator=nil)
-    invitation = creator ? creator.invitations.build(:invitee_email => self.email, :from_queue => true) : 
-                                       Invitation.new(:invitee_email => self.email, :from_queue => true)
+    invitation = creator ? creator.invitations.build(invitee_email: self.email, from_queue: true) : 
+                                       Invitation.new(invitee_email: self.email, from_queue: true)
     if invitation.save
       Rails.logger.info "#{invitation.invitee_email} was invited at #{Time.now}"
       self.destroy
