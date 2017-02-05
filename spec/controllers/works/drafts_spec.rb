@@ -3,19 +3,20 @@ require "spec_helper"
 
 describe WorksController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   let(:drafts_user_pseud) { create(:pseud, name: "Visiting User Pseud") }
-  let(:drafts_user) {
+  let(:drafts_user) do
     user = create(:user)
     user.pseuds << drafts_user_pseud
     user
-  }
-  let!(:default_pseud_work) {
+  end
+  let!(:default_pseud_work) do
     create(:work, authors: [drafts_user.default_pseud], posted: false, title: "Default pseud work")
-  }
-  let!(:other_pseud_work) {
+  end
+  let!(:other_pseud_work) do
     create(:work, authors: [drafts_user_pseud], posted: false, title: "Other pseud work")
-  }
+  end
 
   describe "drafts" do
     let(:other_drafts_user) { create(:user) }
@@ -25,15 +26,9 @@ describe WorksController do
     end
 
     context "no user_id" do
-      it "should redirect to the user controller" do
+      it "should redirect to the user controller and display an appropriate error message" do
         get :drafts
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to users_path
-      end
-
-      it "should display an appropriate error message" do
-        get :drafts
-        expect(flash[:error]).to start_with "Whose drafts did you want to look at?"
+        it_redirects_to_with_error(users_path, "Whose drafts did you want to look at?")
       end
     end
 
@@ -41,20 +36,14 @@ describe WorksController do
       context "if the user_id requested doesn't belong to the current user" do
         it "should display an error" do
           get :drafts, user_id: other_drafts_user.login
-          expect(flash[:error]).to eq "You can only see your own drafts, sorry!"
-        end
-
-        it "should redirect to the current user's dashboard" do
-          get :drafts, user_id: other_drafts_user.login
-          expect(response).to have_http_status(:redirect)
-          expect(response).to redirect_to user_path(drafts_user)
+          it_redirects_to_with_error(user_path(drafts_user), "You can only see your own drafts, sorry!")
         end
       end
 
       context "if the user_id is that of the current user" do
         it "should display no errors" do
           get :drafts, user_id: drafts_user.login
-          expect(flash[:error]).to be_nil
+          expect(response).to have_http_status(200)
         end
 
         it "should display all the user's drafts if no pseud_id is specified" do
@@ -72,7 +61,6 @@ describe WorksController do
     end
   end
 
-
   describe "post_draft" do
     before do
       fake_login_known_user(drafts_user)
@@ -83,21 +71,16 @@ describe WorksController do
       put :post_draft, id: random_work.id
       # There is code to return a different message in the action, but it is unreachable using a web request
       # as the application_controller redirects the user first
-      expect(flash[:error]).to start_with "Sorry, you don't have permission to access"
+      it_redirects_to_with_error(work_path(random_work),\
+                                 "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
     context "if the work is already posted" do
       it "should display an error" do
         drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: true)
         put :post_draft, id: drafts_user_work.id
-        expect(flash[:error]).to eq "That work is already posted. Do you want to edit it instead?"
-      end
-
-      it "should redirect to the user work edit page" do
-        drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: true)
-        put :post_draft, id: drafts_user_work.id
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to edit_user_work_path(drafts_user, drafts_user_work)
+        it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),\
+                                   "That work is already posted. Do you want to edit it instead?")
       end
     end
 
@@ -105,8 +88,8 @@ describe WorksController do
       drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
       allow_any_instance_of(Work).to receive(:valid?).and_return(false)
       put :post_draft, id: drafts_user_work.id
-      expect(flash[:error]).to eq "There were problems posting your work."
-
+      it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),\
+                                 "There were problems posting your work.")
       allow_any_instance_of(Work).to receive(:valid?).and_call_original
     end
 
@@ -117,7 +100,9 @@ describe WorksController do
       drafts_user_work.collections << draft_collection
       controller.instance_variable_set("@collection", draft_collection)
       put :post_draft, id: drafts_user_work.id
-      expect(flash[:notice]).to start_with "Work was submitted to a moderated collection."
+      it_redirects_to_with_notice(work_path(drafts_user_work),\
+                                  "Work was submitted to a moderated collection."\
+                                  " It will show up in the collection once approved.")
     end
   end
 end

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe TagsController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   before do
     fake_login
@@ -18,7 +19,6 @@ describe TagsController do
 
       it "should show those freeforms" do
         get :wrangle, id: @fandom.name, show: 'freeforms', status: 'unwrangled'
-
         expect(assigns(:tags)).to include(@freeform1)
       end
     end
@@ -121,8 +121,7 @@ describe TagsController do
 
       it "Only an admin can reindex a tag" do
         get :reindex, id: @tag.name        
-        expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq "Please log in as admin"
+        it_redirects_to_with_error(root_path, "Please log in as admin")
       end
     end
   end
@@ -131,7 +130,7 @@ describe TagsController do
     it "You can only get a feed on Fandom, Character and Relationships" do
       @tag = FactoryGirl.create(:banned, canonical: false)
       get :feed, id: @tag.id, format: :atom
-      expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+      it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
   end
 
@@ -143,8 +142,7 @@ describe TagsController do
 
       it "Only an admin can edit a banned tag" do
         get :edit, id: @tag.name
-        expect(flash[:error]).to eq "Please log in as admin"
-        expect(response).to redirect_to(tag_wranglings_path)
+        it_redirects_to_with_error(tag_wranglings_path, "Please log in as admin")
       end
     end
   end
@@ -166,7 +164,7 @@ describe TagsController do
 
       it "you can wrangle" do
         put :update, id: @tag.name, tag: {}, commit: :Wrangle
-        expect(response).to redirect_to(tag_path(@tag) + "/wrangle?page=1&sort_column=name&sort_direction=ASC")
+        it_redirects_to_with_notice("#{tag_path(@tag)}/wrangle?page=1&sort_column=name&sort_direction=ASC", "Tag was updated.")
       end
     end
   end
