@@ -1,5 +1,5 @@
 #¡/bin/bash
-MAX_LOOP=${TRIES:-3}
+MAX_LOOP=${TRIES:-1}
 n=0
 export TEST_RUN="$1"
 tar cvf /tmp/coverage.tar ./coverage
