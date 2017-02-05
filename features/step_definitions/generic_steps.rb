@@ -42,10 +42,6 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
-Then(/^I wait (\d+) seconds?$/) do |number|
-  Kernel::sleep number.to_i
-end
-
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
