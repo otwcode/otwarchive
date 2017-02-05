@@ -348,6 +348,54 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
+  Scenario: A mod can default all incomplete assignments
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And I am logged in as "myname1"
+      And I fulfill my assignment
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Default All Incomplete"
+    Then I should see "All unfulfilled assignments marked as defaulting."
+      And I should see "Undefault myname2"
+      And I should see "Undefault myname3"
+      And I should see "Undefault myname4"
+      And I should not see "Undefault myname1"
+
+  Scenario: User can default and a mod can undefault on their assignment 
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I check "Undefault myname1"
+      And I press "Submit"
+    Then I should see "Assignment updates complete!"
+      And I should not see "Undefault"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I should see "Default"
+
+  Scenario: User can default and a mod can assign a pinch hitter
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I fill in "Pinch Hitter:" with "nonexistent"
+      And I press "Submit"
+    Then I should see "We couldn't find the user nonexistent to assign that to."
+    When I fill in "Pinch Hitter:" with "myname1"
+      And I press "Submit"
+    Then I should see "No assignments to review!"
+      And I should see "Assignment updates complete!"
+
   Scenario: Refused story should still fulfill the assignment
 
     Given an assignment has been fulfilled in a gift exchange
@@ -359,14 +407,13 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
-
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
 
     When I go to the "My Gift Exchange" signups page
     And I follow "Download (CSV)"
-    Then I should get a file with ending and type csv
+    Then I should download a csv file with the header row "Pseud Email Sign-up URL Request 1 Tags Request 1 Description Offer 1 Tags Offer 1 Description"
 
   Scenario: View a signup summary with no tags
     Given the following activated users exist
@@ -519,3 +566,14 @@ Feature: Gift Exchange Challenge
       And I go to my assignments page
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
+
+  Scenario: A mod can purge assignments after they have been sent, but must
+  first confirm the action
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I go to the "Bad Gift Exchange" assignments page
+      And I follow "Purge Assignments"
+    Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
+    When I press "Yes, Purge Assignments"
+    Then I should see "Assignments purged!"
+
