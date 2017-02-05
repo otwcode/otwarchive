@@ -237,6 +237,12 @@ Then /^I should not see a link "([^\"]*)"$/ do |name|
   page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
+Then /^I debug comments$/ do
+  puts
+  puts Comment.last.inspect
+  puts
+end
+
 Then /^There is a caching bug and so we clear the cache$/ do
   Rails.cache.clear
 end
