@@ -55,7 +55,7 @@ Scenario: Comment editing
   And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
   Then I should see "Comment was successfully updated"
-    And I wait 2 seconds?
+    And I wait 2 seconds
     And I should see "Actually, I meant something different"
     And I should not see "Mistaken comment"
     And I should see Last Edited in the right timezone
