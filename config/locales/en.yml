@@ -74,11 +74,11 @@ en:
         part8: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors} with any information that can help verify your identity."
         part9: "For other inquiries, please %{support}"
         part10: |-
-               <p>If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply.</p>
-
-               <p>Best,<br/>
+               If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply.
+        closing: |-
+               Best,<br/>
                The Open Doors team<br/>
-               Organization for Transformative Works</p>
+               Organization for Transformative Works
       text:
         part1: "You're receiving this e-mail because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors}) into the Archive of Our Own (AO3 - %{ao3_root}). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account."
         part2: "You can read announcements about recent archive moves at AO3 News (http://archiveofourown.org/admin_posts?tag=18), and find additional information on Open Doors's FAQ page (http://opendoors.transformativeworks.org/faq) or tutorials page (http://opendoors.transformativeworks.org/tutorials). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support}"
@@ -91,7 +91,7 @@ en:
         part9: "For other inquiries, please contact support at %{support}"
         part10: |-
                If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply.
-
+        closing: |-
                Best,
                The Open Doors team
                Organization for Transformative Works
