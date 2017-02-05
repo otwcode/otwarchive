@@ -61,7 +61,7 @@ en:
       ao3: "Archive of Our Own"
       ao3_news: "AO3 News"
       tutorials_page: "tutorials page"
-      support: "contact Support"
+      contact_support: "contact Support"
       hello: "Hello from the Archive of Our Own!"
       html:
         part1: "You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors} into the  %{ao3} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account."
