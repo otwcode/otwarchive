@@ -23,6 +23,7 @@ Feature: Comment on work
    And I fill in "Comment" with "Actually, I meant something different"
      And I press "Update"
    Then I should see "Comment was successfully updated"
+     And There is a caching bug and so we clear the cache
      And I debug comments
      And I should see "Actually, I meant something different"
      And I should not see "Mistaken comment"
