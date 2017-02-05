@@ -1,4 +1,5 @@
 #¡/bin/bash
+# comment
 MAX_LOOP=${TRIES:-1}
 n=0
 export TEST_RUN="$1"
