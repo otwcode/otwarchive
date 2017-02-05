@@ -237,6 +237,10 @@ Then /^I should not see a link "([^\"]*)"$/ do |name|
   page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
+Then /^There is a caching bug and so we clear the cache$/ do
+  Rails.cache.clear
+end
+
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
