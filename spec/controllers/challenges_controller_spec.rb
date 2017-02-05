@@ -29,7 +29,7 @@ describe ChallengesController do
     context 'when no collection is unavailable' do
       it 'should show a no collection error message, redirect, return false' do
         get :no_challenge
-        t_redirects_to_with_error(root_path, "What collection did you want to work with?")
+        it_redirects_to_with_error(root_path, "What collection did you want to work with?")
       end
     end
   end
