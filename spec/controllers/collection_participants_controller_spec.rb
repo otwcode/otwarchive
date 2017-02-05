@@ -10,7 +10,8 @@ describe CollectionParticipantsController do
       it "redirects to new user session" do
         get :join
         it_redirects_to_with_error(new_user_session_path,
-                                    "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+                                   "Sorry, you don't have permission to access the page"\
+                                   " you were trying to reach. Please log in.")
       end
     end
 
@@ -92,7 +93,8 @@ describe CollectionParticipantsController do
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
         get :index, collection_id: collection.name
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the"\
+                                                          " page you were trying to reach. Please log in.")
       end
     end
 
@@ -114,7 +116,8 @@ describe CollectionParticipantsController do
       context "where the user is not a maintainer" do
         it "redirects to the index" do
           get :index, params
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access"\
+                                                      " the page you were trying to reach.")
         end
       end
 
@@ -212,7 +215,8 @@ describe CollectionParticipantsController do
 
           it "displays an error notice and and redirects to collection participants" do
             put :update, params
-            it_redirects_to_with_error(collection_participants_path(collection), "Couldn't update #{participant.pseud.name}.")
+            it_redirects_to_with_error(collection_participants_path(collection),\
+                                       "Couldn't update #{participant.pseud.name}.")
           end
         end
       end
@@ -361,7 +365,8 @@ describe CollectionParticipantsController do
     context "where the user is not a maintainer" do
       it "redirects and shows an error message" do
         get :add, params
-        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access"\
+                                                    " the page you were trying to reach.")
       end
     end
 
@@ -417,7 +422,9 @@ describe CollectionParticipantsController do
 
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params
-          it_redirects_to_with_error(collection_participants_path(collection), "#{users.last.default_pseud.name} is currently banned and cannot participate in challenges.")
+          it_redirects_to_with_error(collection_participants_path(collection), \
+                                     "#{users.last.default_pseud.name} is currently banned"\
+                                     " and cannot participate in challenges.")
           users.each do |user|
             expect(CollectionParticipant.where(pseud_id: user.default_pseud.id)).to be_empty
           end
@@ -432,7 +439,8 @@ describe CollectionParticipantsController do
           end
 
           get :add, params
-          it_redirects_to_with_error(collection_participants_path(collection), "We couldn't find anyone new by that name to add.")
+          it_redirects_to_with_error(collection_participants_path(collection),\
+                                     "We couldn't find anyone new by that name to add.")
           pseud_ids.each do |pseud_id|
             expect(CollectionParticipant.where(pseud_id: pseud_id)).to be_empty
           end
