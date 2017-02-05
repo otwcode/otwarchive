@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 ruby '2.2.5'
 gem 'test-unit', '~> 3.0'
@@ -6,7 +6,10 @@ gem 'test-unit', '~> 3.0'
 gem 'bundler'
 
 gem 'rails', '3.2.22.3'
-gem 'strong_parameters'
+
+# the published gem does not include fixes that are in Rails
+# specifically https://github.com/rails/strong_parameters/issues/16
+gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

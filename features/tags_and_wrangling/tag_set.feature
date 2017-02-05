@@ -1,7 +1,7 @@
 # encoding: utf-8
 @tag_sets
 Feature: creating and editing tag sets
-  
+
   Scenario: A user should be able to create a tag set with a title
   Given I am logged in as "tagsetter"
     And I go to the tagsets page
@@ -11,13 +11,13 @@ Feature: creating and editing tag sets
   Then I should see a create confirmation message
     And I should see "About Empty Tag Set"
     And I should see "tagsetter" within ".meta"
-  
+
   Scenario: A user should be able to create a tag set with noncanonical tags
   Given I am logged in as "tagsetter"
     And I set up the tag set "Noncanonical Tags" with the fandom tags "Ywerwe, Blah di blah, Foooo"
   Then I should see a create confirmation message
     And I should see "Ywerwe"
-    
+
   Scenario: A user should be able to add additional tags to an existing set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Noncanonical Tags" with the fandom tags "Ywerwe, Blah di blah, Foooo"
@@ -25,7 +25,7 @@ Feature: creating and editing tag sets
     And I add the character tags "Bababa, Lalala" and the freeform tags "wheee, gloopy" to the tag set "Noncanonical Tags"
   Then I should see an update confirmation message
     And I should see "wheee"
-    
+
   Scenario: If a tag set does not have a visible tag list, only a moderator should be able to see the tags in the set, but everyone should be able to see the tag set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Tag Set with Non-visible Tag List" with an invisible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
@@ -42,7 +42,7 @@ Feature: creating and editing tag sets
     And I should not see "Knots Landing"
     And I should not see "Models Inc"
     And I should see "The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway)."
-    
+
   Scenario: If a tag set has a visible tag list, everyone should be able to see the tags in the set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Tag Set with Visible Tag List" with a visible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
@@ -65,7 +65,7 @@ Feature: creating and editing tag sets
   Then I should see "Nominate"
   When I follow "Nominate"
   Then I should see "You can nominate up to 3 characters"
-  
+
   Scenario: Tag set nominations should nest characters under fandoms if fandoms are being nominated
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
@@ -79,7 +79,51 @@ Feature: creating and editing tag sets
   Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
     And I submit
   Then I should see "Your nominations were successfully submitted"
-    
+
+  Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
+  When I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
+  Then I should see "Not Yet Reviewed (may be edited or deleted)"
+    And I should see "Floobry"
+  When I follow "Edit"
+    And I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
+  When I press "Submit"
+  Then I should see "Your nominations were successfully updated"
+  Given I am logged in as "tagsetter"
+  When I review nominations for "Mayfly"
+  Then I should see "Bloob" within ".tagset"
+  When I check "fandom_approve_Bloob"
+    And I press "Submit"
+  Then I should see "Successfully added to set: Bloob"
+  Given I am logged in as "nominator"
+    And I go to the tagsets page
+    And I follow "Mayfly"
+    And I follow "My Nominations"
+  Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
+  When I follow "Edit"
+  Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+
+  Scenario: Owner of a tag set can clear all nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+  Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "tagsetter"
+  When I review nominations for "Nominated Tags"
+    And I follow "Clear Nominations"
+    And I press "Yes, Clear Tag Set Nominations"
+  Then I should see "All nominations for this Tag Set have been cleared"
+
+  Scenario: Owner of a tag set with over 30 nominations sees a message that they can't all be displayed on one page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
+  When there are 36 unreviewed nominations
+  Given I am logged in as "tagsetter"
+    And I review nominations for "Nominated Tags"
+  Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
+
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
@@ -87,7 +131,7 @@ Feature: creating and editing tag sets
     And I follow "Review Nominations"
   Then I should see "left to review"
 
-  Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page 
+  Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
     And I nominate fandom "Floobry" and character "Barblah" in "Nominated Tags"
@@ -112,7 +156,7 @@ Feature: creating and editing tag sets
   Then I should see "Successfully rejected: Floobry"
     And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
-    
+
   Scenario: Tags with brackets should work with replacement
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
@@ -172,7 +216,7 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Nominated associations were added"
     And I should not see "don't seem to be associated"
-    
+
   Scenario: If a nominated tag and its parent are wrangled after approval it should still be possible to associate them
   Given I nominate and approve fandom "Floobry" and character "Zarrr" in "Nominated Tags"
     And a canonical character "Zarrr" in fandom "Floobry"
@@ -182,9 +226,9 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Nominated associations were added"
     And I should not see "don't seem to be associated"
-    
+
   Scenario: Tags with brackets should work in associations
-  
+
   Scenario: Batch load character tags should successfully load characters that are canonical and return characters that are not
   Given a fandom exists with name: "MASH (TV)", canonical: true
     And a fandom exists with name: "Dallas (TV)", canonical: true
