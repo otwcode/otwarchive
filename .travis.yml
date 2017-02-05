@@ -32,6 +32,7 @@ env:
   - TEST_GROUP="cucumber -r features features/comments_and_kudos/edit_comment.feature -f Ao3Cucumber::Formatter --color --tags ~@ignore27"
   - TEST_GROUP="cucumber -r features features/comments_and_kudos/edit_comment.feature -f Ao3Cucumber::Formatter --color --tags ~@ignore28"
   - TEST_GROUP="cucumber -r features features/comments_and_kudos/edit_comment.feature -f Ao3Cucumber::Formatter --color --tags ~@ignore29"
+rvm:
   - "2.2.5"
 services:
   - elasticsearch
