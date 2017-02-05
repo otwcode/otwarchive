@@ -19,6 +19,9 @@ Feature: User Authentication
     When I fill in "reset_password_for" with "sam"
       And I press "Reset Password"
     Then 1 email should be delivered
+      And the email should contain "the following generated password has been created for you"
+      And the email should contain "sam"
+      And the email should not contain "translation missing"
 
     # old password should still work
     When I am on the homepage

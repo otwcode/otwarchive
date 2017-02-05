@@ -27,6 +27,7 @@ Feature: Delete Works
     When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
       And 1 email should be delivered
+      And the email should not contain "translation missing"
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page
@@ -71,7 +72,7 @@ Feature: Delete Works
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 2 email should be delivered to "coauthor@example.org"
-      And the email should contain "You have been listed as a coauthor"
+      And the email should contain "You have been listed as a co-creator"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
     When I go to the works page

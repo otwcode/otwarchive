@@ -129,6 +129,7 @@ Feature: Invite queue management
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
       And the email should contain "activate your account"
+      And the email should not contain "translation missing"
 
     # user activates account
     When all emails have been delivered
