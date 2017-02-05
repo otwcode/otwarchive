@@ -43,7 +43,7 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
 end
 
 Then /^I wait (\d+) seconds?$/ do |number|
-  step "I wait #{number} seconds?"
+  Kernel::sleep number.to_i
 end
 
 Given /^I wait (\d+) seconds?$/ do |number|
