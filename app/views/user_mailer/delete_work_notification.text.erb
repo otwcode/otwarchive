@@ -3,10 +3,10 @@
 
 <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
 t('.part1_other',
-        title: @work.title,
+        title: %Q["#{@work.title}"]
         pseud: text_pseud(User.current_user.default_pseud)) :
 t('.part1_yourself',
-        title: @work.title) %>
+        title: %Q["#{@work.title}"]) %>
 
 <%= t('.text.part2', support: t('.support'), url: new_feedback_report_url) %>
 
