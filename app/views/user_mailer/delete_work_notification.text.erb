@@ -2,7 +2,7 @@
 <%= t('.hello', user:  @user.default_pseud.byline) %>
 
 <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
-t('.text..part1_other',
+t('.text.part1_other',
         title: @work.title,
         pseud: text_pseud(User.current_user.default_pseud)) :
 t('.text.part1_yourself',
