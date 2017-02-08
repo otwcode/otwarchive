@@ -1,5 +1,5 @@
 @admin
-Feature: Admin Actions to re-order FAQs
+Feature: Admin Actions to re-order questions in a FAQ Category
   As an an admin
   I want to be able to re-order the questions in a FAQ Category
 
