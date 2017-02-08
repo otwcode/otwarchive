@@ -1,9 +1,9 @@
 @admin
 Feature: Admin Actions to re-order FAQs
   As an an admin
-  I want to be able to re-order the FAQs
+  I want to be able to re-order the questions in a FAQ Category
 
-Scenario: Re-order the FAQs
+Scenario: Re-order the questions in a FAQ Category
   Given I am logged in as an admin
     And I make a multi-question FAQ post
   When I go to the archive_faqs page
@@ -11,7 +11,7 @@ Scenario: Re-order the FAQs
     And I follow "Edit"
     And I follow "Reorder Questions"
     # First confirm the current order of the questions
-    And I should see "1. Number 1 Question."
+  Then I should see "1. Number 1 Question."
     And I should see "2. Number 2 Question."
     And I should see "3. Number 3 Question."
     # Flip the order of the questions
