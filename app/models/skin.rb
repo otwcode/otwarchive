@@ -5,6 +5,7 @@ include SkinCacheHelper
 include SkinWizard
 
 class Skin < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -25,44 +26,44 @@ class Skin < ActiveRecord::Base
   SKIN_PATH = '/stylesheets/skins/'
   SITE_SKIN_PATH = '/stylesheets/site/'
 
-  belongs_to :author, :class_name => 'User'
+  belongs_to :author, class_name: 'User'
   has_many :preferences
 
   serialize :media, Array
 
   # a skin can be both parent and child
-  has_many :skin_parents, :foreign_key => 'child_skin_id',
-                          :class_name => 'SkinParent',
-                          :dependent => :destroy, :inverse_of => :child_skin
-  has_many :parent_skins, :through => :skin_parents, :order => "skin_parents.position ASC", :inverse_of => :child_skins
+  has_many :skin_parents, foreign_key: 'child_skin_id',
+                          class_name: 'SkinParent',
+                          dependent: :destroy, inverse_of: :child_skin
+  has_many :parent_skins, through: :skin_parents, order: "skin_parents.position ASC", inverse_of: :child_skins
 
-  has_many :skin_children, :foreign_key => 'parent_skin_id',
-                                  :class_name => 'SkinParent', :dependent => :destroy, :inverse_of => :parent_skin
-  has_many :child_skins, :through => :skin_children, :inverse_of => :parent_skins
+  has_many :skin_children, foreign_key: 'parent_skin_id',
+                                  class_name: 'SkinParent', dependent: :destroy, inverse_of: :parent_skin
+  has_many :child_skins, through: :skin_children, inverse_of: :parent_skins
 
-  accepts_nested_attributes_for :skin_parents, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:position].blank? }
+  accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? }
 
   has_attached_file :icon,
-                    :styles => { :standard => "100x100>" },
-                    :url => "/system/:class/:attachment/:id/:style/:basename.:extension",
-                    :path => %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-                    :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-                    :s3_credentials => "#{Rails.root}/config/s3.yml",
-                    :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-                    :default_url => "/images/skins/iconsets/default/icon_skins.png"
+                    styles: { standard: "100x100>" },
+                    url: "/system/:class/:attachment/:id/:style/:basename.:extension",
+                    path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
+                    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
+                    s3_credentials: "#{Rails.root}/config/s3.yml",
+                    bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+                    default_url: "/images/skins/iconsets/default/icon_skins.png"
 
   after_save :skin_invalidate_cache
 
-  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
-  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
-  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
 
-  validates_length_of :description, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+  validates_length_of :css, allow_blank: true, maximum: ArchiveConfig.CONTENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
 
   before_validation :clean_media
   def clean_media
@@ -76,12 +77,12 @@ class Skin < ActiveRecord::Base
   validate :valid_media
   def valid_media
     if media && media.is_a?(Array) && media.any? {|m| !MEDIA.include?(m)}
-      errors.add(:base, ts("We don't currently support the media type %{media}, sorry! If we should, please let Support know.", :media => media.join(', ')))
+      errors.add(:base, ts("We don't currently support the media type %{media}, sorry! If we should, please let Support know.", media: media.join(', ')))
     end
   end
 
-  validates :ie_condition, :inclusion => {:in => IE_CONDITIONS, :allow_nil => true, :allow_blank => true}
-  validates :role, :inclusion => {:in => ALL_ROLES, :allow_blank => true, :allow_nil => true }
+  validates :ie_condition, inclusion: {in: IE_CONDITIONS, allow_nil: true, allow_blank: true}
+  validates :role, inclusion: {in: ALL_ROLES, allow_blank: true, allow_nil: true }
 
   validate :valid_public_preview
   def valid_public_preview
@@ -93,9 +94,9 @@ class Skin < ActiveRecord::Base
   attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
 
   validates_presence_of :title
-  validates_uniqueness_of :title, :message => ts('must be unique')
+  validates_uniqueness_of :title, message: ts('must be unique')
 
-  validates_numericality_of :margin, :base_em, :allow_nil => true
+  validates_numericality_of :margin, :base_em, allow_nil: true
   validate :valid_font
   def valid_font
     return if self.font.blank?
@@ -124,11 +125,11 @@ class Skin < ActiveRecord::Base
     self.css = clean_css_code(self.css)
   end
 
-  scope :public_skins, where(:public => true)
-  scope :approved_skins, where(:official => true, :public => true)
-  scope :unapproved_skins, where(:public => true, :official => false, :rejected => false)
-  scope :rejected_skins, where(:public => true, :official => false, :rejected => true)
-  scope :site_skins, where(:type => nil)
+  scope :public_skins, where(public: true)
+  scope :approved_skins, where(official: true, public: true)
+  scope :unapproved_skins, where(public: true, official: false, rejected: false)
+  scope :rejected_skins, where(public: true, official: false, rejected: true)
+  scope :site_skins, where(type: nil)
   scope :wizard_site_skins, where("type IS NULL AND (
       margin IS NOT NULL OR
       background_color IS NOT NULL OR
@@ -142,27 +143,27 @@ class Skin < ActiveRecord::Base
   ")
 
   def self.cached
-    where(:cached => true)
+    where(cached: true)
   end
 
   def self.in_chooser
-    where(:in_chooser => true)
+    where(in_chooser: true)
   end
 
   def self.featured
-    where(:featured => true)
+    where(featured: true)
   end
 
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
-      where(:public => true, :official => true)
+      where(public: true, official: true)
     else
       where("(public = 1 AND official = 1) OR author_id = ?", user.id)
     end
   end
 
   def self.usable
-    where(:unusable => false)
+    where(unusable: false)
   end
 
   def self.sort_by_recent
@@ -449,14 +450,14 @@ class Skin < ActiveRecord::Base
           top_skin.clear_cache! if top_skin.cached?
           top_skin.skin_parents.delete_all
         else
-          top_skin = Skin.new(:title => "Archive #{version}", :css => "", :description => "Version #{version} of the default Archive style.",
-                              :public => true, :role => "site", :media => ["screen"])
+          top_skin = Skin.new(title: "Archive #{version}", css: "", description: "Version #{version} of the default Archive style.",
+                              public: true, role: "site", media: ["screen"])
         end
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
         skins.each_with_index do |skin, index|
-          skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
+          skin_parent = top_skin.skin_parents.build(child_skin: top_skin, parent_skin: skin, position: index+1)
           skin_parent.save!
         end
         if %w(staging production).include? Rails.env
@@ -502,7 +503,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.create_default
-    skin = Skin.find_or_create_by_title_and_official(:title => "Default", :css => "", :public => true, :role => "user")
+    skin = Skin.find_or_create_by_title_and_official(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
       File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}

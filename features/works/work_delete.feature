@@ -27,6 +27,7 @@ Feature: Delete Works
     When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
       And 1 email should be delivered
+      And the email should not contain "translation missing"
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page

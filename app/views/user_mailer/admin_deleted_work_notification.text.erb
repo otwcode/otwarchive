@@ -1,11 +1,11 @@
 <% content_for :message do %>
-Dear <%= @user.default_pseud.byline %>,
+<%= t '.hello', user: @user.default_pseud.byline %>
 
-Your work "<%= @work.title.html_safe %>" was deleted from the Archive by a site admin.
+<%= t('.text.part1', title: @work.title) %>
 
-If your work was part of an import project managed by our Open Doors team, please contact Open Doors (<%= "http://opendoors.transformativeworks.org/contact/open%20doors" %>) with any further questions.
+<%= t('.text.part2', opendoors_link: 'http://opendoors.transformativeworks.org/contact-open-doors/') %>
 
-If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (<%= root_url + "abuse_reports/new" %>).
+<%= t('.text.part3', abuse_link: new_abuse_report_url) %>
 
-Attached is a copy of your work for your reference.
+<%= t '.bye' %>
 <% end %>
