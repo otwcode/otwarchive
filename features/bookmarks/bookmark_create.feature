@@ -214,7 +214,8 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I press "Update"
     And all search indexes are updated
   Then I should see "Bookmark was successfully updated."
-    And I should see "You have submitted your bookmark to the moderated collection"
+    And show me the page
+    And I should see "to the moderated collection 'Bedknobs and Broomsticks'."
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
