@@ -104,6 +104,13 @@ describe OwnedTagSetsController do
   end
 
   describe "show" do
+    context "where tag set is not found" do
+      it "redirects and displays a notice" do
+        get :show, id: 12345
+        it_redirects_to_with_notice(tag_sets_path, "What Tag Set did you want to look at?")
+      end
+    end
+
     context "where tag set is found" do
       let(:visible) { false }
       let(:tag) { create(:character) }
