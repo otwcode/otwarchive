@@ -226,6 +226,25 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   click_button("Post")
 end
 
+When /^I make a multi-question FAQ post$/ do
+  visit new_archive_faq_path
+  fill_in("Question*", with: "Number 1 Question.")
+  fill_in("Answer*", with: "Number 1 posted FAQ, this is.")
+  fill_in("Category name*", with: "Standard FAQ Category")
+  fill_in("Anchor name*", with: "Number1anchor")
+  click_button("Post")
+  step %{I follow "Edit"}
+  step %{I fill in "Questions:" with "3"}
+  step %{I press "Update Form"}
+  fill_in("archive_faq_questions_attributes_1_question", with: "Number 2 Question.")
+  fill_in("archive_faq_questions_attributes_1_content", with: "This is an answer to the second question")
+  fill_in("archive_faq_questions_attributes_1_anchor", with: "whatisao32")
+  fill_in("archive_faq_questions_attributes_2_question", with: "Number 3 Question.")
+  fill_in("archive_faq_questions_attributes_2_content", with: "This is an answer to the third question")
+  fill_in("archive_faq_questions_attributes_2_anchor", with: "whatisao33")
+  click_button("Post")
+end
+
 When /^there are (\d+) Archive FAQs$/ do |n|
   (1..n.to_i).each do |i|
     step %{I make a #{i} FAQ post}
