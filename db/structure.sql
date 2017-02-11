@@ -604,7 +604,7 @@ CREATE TABLE `gifts` (
   KEY `index_gifts_on_recipient_name` (`recipient_name`),
   KEY `index_gifts_on_work_id` (`work_id`),
   KEY `index_gifts_on_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190968 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `inbox_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
