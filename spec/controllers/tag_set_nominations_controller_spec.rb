@@ -7,15 +7,15 @@ describe TagSetNominationsController do
   let(:tag_set_nomination) { FactoryGirl.create(:tag_set_nomination) }
   let(:owned_tag_set) { tag_set_nomination.owned_tag_set }
 
-  let(:tag_nominator) { tag_nominator_pseud.user }
   let(:tag_nominator_pseud) { tag_set_nomination.pseud }
-  let(:moderator) { mod_pseud.user }
+  let(:tag_nominator) { tag_nominator_pseud.user }
   let(:mod_pseud) {
     FactoryGirl.create(:pseud).tap do |pseud|
       owned_tag_set.add_moderator(pseud)
       owned_tag_set.save!
     end
   }
+  let(:moderator) { mod_pseud.user }
 
   let(:random_user) { FactoryGirl.create(:user) }
 
@@ -23,8 +23,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :index, user_id: moderator.login, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -101,9 +101,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " +
-                                                           "randomized selection! Additional nominations will appear " +
-                                                           "after you approve or reject some.")
+                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
+                                                         "randomized selection! Additional nominations will appear " \
+                                                         "after you approve or reject some.")
                     end
                   end
 
@@ -119,9 +119,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " +
-                                                       "randomized selection! Additional nominations will appear " +
-                                                       "after you approve or reject some.")
+                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
+                                                     "randomized selection! Additional nominations will appear " \
+                                                     "after you approve or reject some.")
                     end
                   end
 
@@ -189,9 +189,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " +
-                                                           "randomized selection! Additional nominations will appear " +
-                                                           "after you approve or reject some.")
+                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
+                                                         "randomized selection! Additional nominations will appear " \
+                                                         "after you approve or reject some.")
                     end
                   end
 
@@ -204,9 +204,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " +
-                                                       "randomized selection! Additional nominations will appear " +
-                                                       "after you approve or reject some.")
+                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
+                                                     "randomized selection! Additional nominations will appear " \
+                                                     "after you approve or reject some.")
                     end
                   end
                 end
@@ -323,9 +323,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " +
-                                                           "randomized selection! Additional nominations will appear " +
-                                                           "after you approve or reject some.")
+                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
+                                                         "randomized selection! Additional nominations will appear " \
+                                                         "after you approve or reject some.")
                     end
                   end
 
@@ -344,9 +344,9 @@ describe TagSetNominationsController do
                     end
 
                     it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " +
-                                                       "randomized selection! Additional nominations will appear " +
-                                                       "after you approve or reject some.")
+                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
+                                                     "randomized selection! Additional nominations will appear " \
+                                                     "after you approve or reject some.")
                     end
                   end
                 end
@@ -413,8 +413,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -483,8 +483,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :new, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -594,8 +594,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -663,11 +663,11 @@ describe TagSetNominationsController do
             it 'returns only existing associated tag nominations' do
               expect(assigns(:tag_set_nomination).fandom_nominations.map(&:tagname)).to eq(['New Fandom'])
               expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.map(&:tagname)).
-                  to eq(['New Character 0', 'New Character 1', 'New Character 2'])
+                to eq(['New Character 0', 'New Character 1', 'New Character 2'])
               expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.map(&:tagname)).
-                  to eq(['New Relationship 0', 'New Relationship 1'])
+                to eq(['New Relationship 0', 'New Relationship 1'])
               expect(assigns(:tag_set_nomination).freeform_nominations.map(&:tagname)).
-                  to eq(['New Freeform 0', 'New Freeform 1', 'New Freeform 2', 'New Freeform 3'])
+                to eq(['New Freeform 0', 'New Freeform 1', 'New Freeform 2', 'New Freeform 3'])
             end
           end
 
@@ -683,9 +683,9 @@ describe TagSetNominationsController do
             it 'returns existing associated tag nominations' do
               expect(assigns(:tag_set_nomination).fandom_nominations.map(&:tagname)).to eq(['New Fandom'])
               expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.map(&:tagname)).
-                  to include('New Character 0')
+                to include('New Character 0')
               expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.map(&:tagname)).
-                  to include('New Relationship 0')
+                to include('New Relationship 0')
               expect(assigns(:tag_set_nomination).freeform_nominations.map(&:tagname)).to include('New Freeform 0')
             end
 
@@ -716,9 +716,9 @@ describe TagSetNominationsController do
           it 'returns associated tag nominations' do
             expect(assigns(:tag_set_nomination).fandom_nominations.map(&:tagname)).to eq(['New Fandom'])
             expect(assigns(:tag_set_nomination).fandom_nominations[0].character_nominations.map(&:tagname)).
-                to eq(['New Character 0'])
+              to eq(['New Character 0'])
             expect(assigns(:tag_set_nomination).fandom_nominations[0].relationship_nominations.map(&:tagname)).
-                to eq(['New Relationship 0'])
+              to eq(['New Relationship 0'])
             expect(assigns(:tag_set_nomination).freeform_nominations.map(&:tagname)).to eq(['New Freeform 0'])
           end
         end
@@ -750,8 +750,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         post :create, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -788,70 +788,35 @@ describe TagSetNominationsController do
             post :create,
                  tag_set_id: owned_tag_set.id,
                  tag_set_nomination: { pseud_id: random_user.default_pseud.id,
-                                       owned_tag_set_id: owned_tag_set.id }.merge(nomination_attributes)
+                                       owned_tag_set_id: owned_tag_set.id,
+                                       fandom_nominations_attributes: {
+                                         '0': { tagname: 'New Fandom',
+                                                character_nominations_attributes: {
+                                                  '0': { tagname: 'New Character',
+                                                         from_fandom_nomination: true }
+                                                } }
+                                       } }
           end
 
-          context 'all tag nominations are canonical' do
-            let(:nomination_attributes) {
-              { fandom_nominations_attributes: { '0': { tagname: 'New Fandom',
-                                                        character_nominations_attributes: {
-                                                            '0': { tagname: 'New Character',
-                                                                   from_fandom_nomination: true } } } } }
-            }
-
-            it 'creates a new tag set nomination' do
-              new_tag_set_nomination = TagSetNomination.last
-              expect(assigns(:tag_set_nomination)).to eq(new_tag_set_nomination)
-              expect(new_tag_set_nomination.pseud).to eq(random_user.default_pseud)
-              expect(new_tag_set_nomination.owned_tag_set).to eq(owned_tag_set)
-            end
-
-            it 'creates associated tag nominations' do
-              new_fandom_nomination = FandomNomination.last
-              new_character_nomination = CharacterNomination.last
-              expect(assigns(:tag_set_nomination).fandom_nominations).to eq([new_fandom_nomination])
-              expect(new_fandom_nomination.tagname).to eq('New Fandom')
-              expect(new_fandom_nomination.character_nominations).to eq([new_character_nomination])
-              expect(new_character_nomination.tagname).to eq('New Character')
-            end
-
-            it 'redirects and returns a success message' do
-              it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, TagSetNomination.last),
-                                          'Your nominations were successfully submitted.')
-            end
+          it 'creates a new tag set nomination' do
+            new_tag_set_nomination = TagSetNomination.last
+            expect(assigns(:tag_set_nomination)).to eq(new_tag_set_nomination)
+            expect(new_tag_set_nomination.pseud).to eq(random_user.default_pseud)
+            expect(new_tag_set_nomination.owned_tag_set).to eq(owned_tag_set)
           end
 
-          context 'at least one character or relationship nomination is noncanonical' do
-            # TODO: I can force test #request_nancanonical_info for these 2 tests by adding the
-            # [:tag_set_nomination][:character_nominations_attributes][:from_fandom_nomination] param, but I don't
-            # think the resulting params can actually be triggered by the UI
-            # If so, how do I trigger the state where a new CharacterNom or RelationshipNom is created
-            # with parented: false && parent_tagname: '', without failing CastNomination#known_fandom validation?
-            context 'noncanonical character nominations are created' do
-              let(:nomination_attributes) {
-                { character_nominations_attributes: { '0': { tagname: 'New Character',
-                                                             parent_tagname: '',
-                                                             from_fandom_nomination: true } } }
-              }
+          it 'creates associated tag nominations' do
+            new_fandom_nomination = FandomNomination.last
+            new_character_nomination = CharacterNomination.last
+            expect(assigns(:tag_set_nomination).fandom_nominations).to eq([new_fandom_nomination])
+            expect(new_fandom_nomination.tagname).to eq('New Fandom')
+            expect(new_fandom_nomination.character_nominations).to eq([new_character_nomination])
+            expect(new_character_nomination.tagname).to eq('New Character')
+          end
 
-              it 'returns a success message with info about noncanonical tags' do
-                expect(flash[:notice]).to eq('Your nominations were successfully submitted. Please consider editing ' +
-                                                 'to add fandoms to any of your non-canonical tags!')
-              end
-            end
-
-            context 'noncanonical relationship nominations are created' do
-              let(:nomination_attributes) {
-                { relationship_nominations_attributes: { '0': { tagname: 'New Relationship',
-                                                                parent_tagname: '',
-                                                                from_fandom_nomination: true } } }
-              }
-
-              it 'returns a success message with info about noncanonical tags' do
-                expect(flash[:notice]).to eq('Your nominations were successfully submitted. Please consider editing ' +
-                                                 'to add fandoms to any of your non-canonical tags!')
-              end
-            end
+          it 'redirects and returns a success message' do
+            it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, TagSetNomination.last),
+                                        'Your nominations were successfully submitted.')
           end
         end
 
@@ -869,7 +834,7 @@ describe TagSetNominationsController do
           it 'builds a new tag set nomination' do
             expect { post :create, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: random_user.default_pseud.id,
                                                                                        owned_tag_set_id: owned_tag_set.id } }.
-                not_to change { owned_tag_set.tag_set_nominations.count }
+              not_to change { owned_tag_set.tag_set_nominations.count }
             expect(assigns(:tag_set_nomination).new_record?).to be_truthy
             expect(assigns(:tag_set_nomination).pseud).to eq(random_user.default_pseud)
             expect(assigns(:tag_set_nomination).owned_tag_set).to eq(owned_tag_set)
@@ -897,8 +862,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -963,50 +928,26 @@ describe TagSetNominationsController do
                   tag_set_id: owned_tag_set.id,
                   id: tag_set_nomination.id,
                   tag_set_nomination: { pseud_id: tag_nominator_pseud.id,
-                                        owned_tag_set_id: owned_tag_set.id }.merge(nomination_attributes)
+                                        owned_tag_set_id: owned_tag_set.id,
+                                        fandom_nominations_attributes: {
+                                          '0': { tagname: 'Renamed Fandom',
+                                                 id: fandom_nom.id,
+                                                 character_nominations_attributes: {
+                                                   '0': { tagname: 'Renamed Character',
+                                                          id: character_nom.id,
+                                                          from_fandom_nomination: true }
+                                                 } }
+                                        } }
             end
 
-            context 'all tag nominations are canonical' do
-              let(:nomination_attributes) {
-                { fandom_nominations_attributes: { '0': { tagname: 'Renamed Fandom',
-                                                          id: fandom_nom.id,
-                                                          character_nominations_attributes: {
-                                                              '0': { tagname: 'Renamed Character',
-                                                                     id: character_nom.id,
-                                                                     from_fandom_nomination: true } } } }
-                }
-              }
-
-              it 'updates the tag set nomination and associated tag nominations' do
-                expect(fandom_nom.reload.tagname).to eq('Renamed Fandom')
-                expect(character_nom.reload.tagname).to eq('Renamed Character')
-              end
-
-              it 'redirects and returns a success message' do
-                it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
-                                            'Your nominations were successfully updated.')
-              end
+            it 'updates the tag set nomination and associated tag nominations' do
+              expect(fandom_nom.reload.tagname).to eq('Renamed Fandom')
+              expect(character_nom.reload.tagname).to eq('Renamed Character')
             end
 
-            context 'at least one character or relationship nomination is noncanonical' do
-              # TODO: I can force test #request_nancanonical_info for these 2 tests by adding the
-              # [:tag_set_nomination][:character_nominations_attributes][:from_fandom_nomination] param, but I don't
-              # think the resulting params can actually be triggered by the UI
-              # If so, how do I trigger the state where a new CharacterNom or RelationshipNom is created
-              # with parented: false && parent_tagname: "", without failing CastNomination#known_fandom validation?
-              let(:nomination_attributes) {
-                { character_nominations_attributes: {
-                    '0': { tagname: 'Renamed Character',
-                           parent_tagname: '',
-                           id: character_nom.id,
-                           from_fandom_nomination: true } }
-                }
-              }
-
-              it 'returns a success message with info about noncanonical tags' do
-                expect(flash[:notice]).to eq('Your nominations were successfully updated. Please consider editing ' +
-                                                 'to add fandoms to any of your non-canonical tags!')
-              end
+            it 'redirects and returns a success message' do
+              it_redirects_to_with_notice(tag_set_nomination_path(owned_tag_set, tag_set_nomination),
+                                          'Your nominations were successfully updated.')
             end
           end
 
@@ -1051,12 +992,14 @@ describe TagSetNominationsController do
                 tag_set_nomination: { pseud_id: mod_pseud.id,
                                       owned_tag_set_id: owned_tag_set.id,
                                       fandom_nominations_attributes: {
-                                          '0': { tagname: 'Renamed Fandom',
-                                                 id: fandom_nom.id,
-                                                 character_nominations_attributes: {
-                                                     '0': { tagname: 'Renamed Character',
-                                                            id: character_nom.id,
-                                                            from_fandom_nomination: true } } } } }
+                                        '0': { tagname: 'Renamed Fandom',
+                                               id: fandom_nom.id,
+                                               character_nominations_attributes: {
+                                                 '0': { tagname: 'Renamed Character',
+                                                        id: character_nom.id,
+                                                        from_fandom_nomination: true }
+                                               } }
+                                      } }
           end
 
           it 'updates the tag set nomination and associated tag nominations' do
@@ -1077,8 +1020,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -1139,7 +1082,7 @@ describe TagSetNominationsController do
 
             it 'deletes the tag set nomination' do
               expect { delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }.
-                  to change { TagSetNomination.count }.by(-1)
+                to change { TagSetNomination.count }.by(-1)
             end
 
             it 'redirects and returns a success message' do
@@ -1157,7 +1100,7 @@ describe TagSetNominationsController do
 
           it 'deletes the tag set nomination' do
             expect { delete :destroy, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }.
-                to change { TagSetNomination.count }.by(-1)
+              to change { TagSetNomination.count }.by(-1)
           end
 
           it 'redirects and returns a success message' do
@@ -1173,8 +1116,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :confirm_destroy_multiple, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -1204,15 +1147,15 @@ describe TagSetNominationsController do
 
   describe 'DELETE destroy_multiple' do
     before do
-      allow(OwnedTagSet).to receive(:find).with("#{owned_tag_set.id}") { owned_tag_set }
+      allow(OwnedTagSet).to receive(:find).with(owned_tag_set.id.to_s) { owned_tag_set }
       allow(owned_tag_set).to receive(:clear_nominations!)
     end
 
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         delete :destroy_multiple, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -1251,8 +1194,8 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         put :update_multiple, tag_set_id: owned_tag_set.id
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " +
-            "were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
+          "were trying to reach. Please log in.")
       end
     end
 
@@ -1289,11 +1232,11 @@ describe TagSetNominationsController do
       context 'all tag nominations have an associated _approve, _reject, _change, or _synonym param value' do
         it 'redirects and returns a flash message' do
           put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-              merge({ 'character_approve_New Character 1': 1,
-                      'character_reject_New Character 2': 1,
-                      'relationship_approve_New Relationship': 1,
-                      'fandom_approve_New Fandom': 1,
-                      'freeform_reject_New Fandom': 1 })
+            merge('character_approve_New Character 1': 1,
+                  'character_reject_New Character 2': 1,
+                  'relationship_approve_New Relationship': 1,
+                  'fandom_approve_New Fandom': 1,
+                  'freeform_reject_New Fandom': 1)
           it_redirects_to(tag_set_nominations_path(owned_tag_set))
           expect(flash[:notice]).to include('Still some nominations left to review!')
         end
@@ -1302,7 +1245,7 @@ describe TagSetNominationsController do
       context 'tag nomination _reject param has a value' do
         before do
           put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-              merge({ 'relationship_reject_New Relationship': 1 })
+            merge('relationship_reject_New Relationship': 1)
         end
 
         it 'updates tag_nomination.rejected to true' do
@@ -1318,7 +1261,7 @@ describe TagSetNominationsController do
         context 'approving the tag nomination is successful' do
           before do
             put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                merge({ 'fandom_approve_New Fandom': 1, 'character_approve_New Character 2': 1 })
+              merge('fandom_approve_New Fandom': 1, 'character_approve_New Character 2': 1)
           end
 
           it 'updates tag_nomination.approved to true' do
@@ -1334,15 +1277,15 @@ describe TagSetNominationsController do
 
         context 'approving the tag nomination fails' do
           before do
-            allow(OwnedTagSet).to receive(:find).with("#{owned_tag_set.id}") { owned_tag_set }
+            allow(OwnedTagSet).to receive(:find).with(owned_tag_set.id.to_s) { owned_tag_set }
             allow(owned_tag_set).to receive(:add_tagnames).with('fandom', ['New Fandom']) { false }
             put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                merge({ 'fandom_approve_New Fandom': 1, 'character_approve_New Character 2': 1 })
+              merge('fandom_approve_New Fandom': 1, 'character_approve_New Character 2': 1)
           end
 
           it 'renders the index template and returns an error message' do
-            expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates -- please ' +
-                                            'check over your tag set closely!')
+            expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates -- please ' \
+                                          'check over your tag set closely!')
             expect(response).to render_template('index')
           end
         end
@@ -1356,7 +1299,7 @@ describe TagSetNominationsController do
             it 'calls TagNomination.change_tagname! with old and new tagnames' do
               allow(TagNomination).to receive(:change_tagname!)
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'character_approve_New Character 2': 1 })
+                merge('character_approve_New Character 2': 1)
               expect(TagNomination).to have_received(:change_tagname!).with(owned_tag_set, 'New Character 1', 'New Character 2')
             end
           end
@@ -1365,10 +1308,10 @@ describe TagSetNominationsController do
             it 'renders the index template and returns an error message' do
               allow(TagNomination).to receive(:change_tagname!) { false }
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'character_approve_New Character 2': 1 })
-              expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates, ' +
-                                              'changing New Character 1 to New Character 2 -- please check over ' +
-                                              'your tag set closely!')
+                merge('character_approve_New Character 2': 1)
+              expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates, ' \
+                                            'changing New Character 1 to New Character 2 -- please check over ' \
+                                            'your tag set closely!')
               expect(response).to render_template('index')
             end
           end
@@ -1378,7 +1321,7 @@ describe TagSetNominationsController do
       context 'tag nomination _approve and _reject params have a value' do
         before do
           put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-              merge({ 'relationship_approve_New Relationship': 1, 'relationship_reject_New Relationship': 2 })
+            merge('relationship_approve_New Relationship': 1, 'relationship_reject_New Relationship': 2)
         end
 
         it 'renders the index template' do
@@ -1386,8 +1329,8 @@ describe TagSetNominationsController do
         end
 
         it 'returns expected errors' do
-          expect(assigns(:errors)).to include('You have both approved and rejected the following relationship tags: ' +
-                                                  'New Relationship')
+          expect(assigns(:errors)).to include('You have both approved and rejected the following relationship tags: ' \
+                                                'New Relationship')
         end
       end
 
@@ -1395,7 +1338,7 @@ describe TagSetNominationsController do
         context '_change param = current tag nomination tagname' do
           it 'does not update the tag nomination' do
             put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                merge({ 'freeform_change_New Freeform': 'New Freeform' })
+              merge('freeform_change_New Freeform': 'New Freeform')
             expect(freeform_nom.reload.approved).to be_falsey
           end
         end
@@ -1404,7 +1347,7 @@ describe TagSetNominationsController do
           context 'new name is invalid' do
             before do
               put :update_multiple, { tag_set_id: owned_tag_set.id }.
-                  merge(base_params).merge({ 'freeform_change_New Freeform': 'N*w Fr**f*rm' })
+                merge(base_params).merge('freeform_change_New Freeform': 'N*w Fr**f*rm')
             end
 
             it 'renders the index template' do
@@ -1419,7 +1362,7 @@ describe TagSetNominationsController do
           context 'no tag nomination associated with name' do
             before do
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'freeform_change_A Freeform Masquerade': 'Different Freeform' })
+                merge('freeform_change_A Freeform Masquerade': 'Different Freeform')
             end
 
             it 'renders the index template' do
@@ -1436,7 +1379,7 @@ describe TagSetNominationsController do
               before do
                 allow(TagNomination).to receive(:change_tagname!).and_call_original
                 put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                    merge({ 'freeform_change_New Freeform': 'Different Freeform' })
+                  merge('freeform_change_New Freeform': 'Different Freeform')
               end
 
               it 'calls TagNomination.change_tagname! with _change param value' do
@@ -1457,7 +1400,7 @@ describe TagSetNominationsController do
               before do
                 allow(TagNomination).to receive(:change_tagname!) { false }
                 put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                    merge({ 'freeform_change_New Freeform': 'Different Freeform' })
+                  merge('freeform_change_New Freeform': 'Different Freeform')
               end
 
               it 'renders the index template' do
@@ -1465,9 +1408,9 @@ describe TagSetNominationsController do
               end
 
               it 'returns an error message' do
-                expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates, ' +
-                                                'changing New Freeform to Different Freeform -- please check over ' +
-                                                'your tag set closely!')
+                expect(flash[:error]).to eq('Oh no! We ran into a problem partway through saving your updates, ' \
+                                              'changing New Freeform to Different Freeform -- please check over ' \
+                                              'your tag set closely!')
               end
             end
           end
@@ -1477,8 +1420,8 @@ describe TagSetNominationsController do
       context 'tag nomination _synonym param is not empty' do
         context '_synonym param = current tag nomination tagname' do
           it 'does not update the tag nomination' do
-            put :update_multiple, { tag_set_id: owned_tag_set.id }.
-                merge(base_params).merge({ 'freeform_synonym_New Freeform': 'New Freeform' })
+            put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
+              merge('freeform_synonym_New Freeform': 'New Freeform')
             expect(freeform_nom.reload.approved).to be_falsey
           end
         end
@@ -1487,7 +1430,7 @@ describe TagSetNominationsController do
           context 'new name is invalid' do
             before do
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'freeform_synonym_New Freeform': 'N*w Fr**f*rm' })
+                merge('freeform_synonym_New Freeform': 'N*w Fr**f*rm')
             end
 
             it 'renders the index template' do
@@ -1502,7 +1445,7 @@ describe TagSetNominationsController do
           context 'no tag nomination associated with name' do
             before do
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'freeform_synonym_A Freeform Masquerade': 'Different Freeform' })
+                merge('freeform_synonym_A Freeform Masquerade': 'Different Freeform')
             end
 
             it 'renders the index template' do
@@ -1518,7 +1461,7 @@ describe TagSetNominationsController do
             before do
               freeform_nom.update_column(:synonym, 'Different Freeform')
               put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
-                  merge({ 'freeform_synonym_New Freeform': 'Different Freeform' })
+                merge('freeform_synonym_New Freeform': 'Different Freeform')
             end
 
             it 'updates tag_nomination.approved to true' do
