@@ -3,7 +3,7 @@ When /^I view the "([^\"]*)" works index$/ do |tag|
 end
 
 When /^I view the "([^\"]*)" tag feed$/ do |tag|
-  tag_id=Tag.find_by_name(tag).id
+  tag_id = Tag.find_by_name(tag).id
   visit feed_tag_path(:id => tag_id.to_param, :format => :atom)
 end
 

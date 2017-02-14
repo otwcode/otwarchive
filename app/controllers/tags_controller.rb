@@ -103,7 +103,7 @@ class TagsController < ApplicationController
   end
 
   def feed
-    # Construct a hash that can be cached. The has contains
+    # Construct a hash that can be cached. The hash contains
     # path: where to redirect to
     # work: The list of works
     # tag: the tag the feed is for
@@ -118,10 +118,9 @@ class TagsController < ApplicationController
       tag = tag.merger if !tag.canonical? && tag.merger
       # F/F is currently a special case...
       if %w(Fandom Character Relationship).include?(tag.type.to_s) || tag.name == "F/F"
-        if tag.canonical?
-          works = tag.filtered_works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all
-        else
-          works = tag.works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all
+          works = tag.canonical? ? \
+                    tag.filtered_works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all :
+                    tag.works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all
         end
       else
         path = tag_works_path(tag_id: tag.to_param)
