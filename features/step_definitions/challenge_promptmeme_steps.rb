@@ -191,6 +191,14 @@ When /^I fill in prompt meme challenge options$/ do
     fill_in("Sign-up closes:", with: Date.tomorrow)
 end
 
+When /^I allow (\d+) prompts$/ do |number|
+  fill_in("prompt_meme_requests_num_allowed", with: number)
+end
+
+When /^I require (\d+) prompts$/ do |number|
+  fill_in("prompt_meme_requests_num_required", with: number)
+end
+
 When /^I sign up for Battle 12$/ do
   step %{I start signing up for "Battle 12"}
     step %{I check the 1st checkbox with the value "Stargate SG-1"}
@@ -509,6 +517,14 @@ end
 
 Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
+end
+
+Then /^(\d+) prompts should be required$/ do |number|
+  find_field("prompt_meme_requests_num_required").value.should == number
+end
+
+Then /^(\d+) prompts should be allowed$/ do |number|
+  find_field("prompt_meme_requests_num_allowed").value.should == number
 end
 
 Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|

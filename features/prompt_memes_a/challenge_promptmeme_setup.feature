@@ -79,7 +79,19 @@ Feature: Prompt Meme Challenge
     And I am logged in as "mod1"
   When I edit settings for "Battle 12" challenge
   Then I should be editing the challenge settings
-  
+
+  Scenario: Entering a greater number for required prompts than allowed prompts 
+  automatically increases the number of allowed promps
+
+  Given I set up Battle 12 promptmeme collection
+  When I require 3 prompts
+    And I allow 2 prompts
+    And I press "Submit"
+  Then I should see a success message
+  When I edit settings for "Battle 12" challenge
+  Then 3 prompts should be required
+    And 3 prompts should be allowed
+
   Scenario: Sign-up being open is shown on profile
   
   Given I have Battle 12 prompt meme fully set up
