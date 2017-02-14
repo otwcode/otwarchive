@@ -119,9 +119,8 @@ class TagsController < ApplicationController
       # F/F is currently a special case...
       if %w(Fandom Character Relationship).include?(tag.type.to_s) || tag.name == "F/F"
           works = tag.canonical? ? \
-                    tag.filtered_works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all :
+                    tag.filtered_works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all : \
                     tag.works.visible_to_all.order("created_at DESC").limit(ArchiveConfig.FEED_ELEMENTS || 25).all
-        end
       else
         path = tag_works_path(tag_id: tag.to_param)
       end
