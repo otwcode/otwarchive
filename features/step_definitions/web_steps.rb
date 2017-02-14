@@ -16,6 +16,10 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+When /^I am in (.*) browser$/ do |name|
+  Capybara.session_name = name
+end
+
 Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -266,7 +270,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
     has_unchecked_field?(label)
   end
 end
- 
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
@@ -293,9 +297,13 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
-Then /^I should get a file with ending and type ([^\"]*)$/ do |type|
-  page.response_headers['Content-Disposition'].should =~ Regexp.new("filename=.*?\.#{type}")
-  page.response_headers['Content-Type'].should =~ Regexp.new("/#{type}")
+Then /^I should download a ([^"]*) file with(?: (\d+) rows and)? the header row "(.*?)"$/ do |type, rows, header|
+  page.response_headers['Content-Disposition'].should =~ /attachment; filename=.*?\.#{type}/i
+  page.response_headers['Content-Type'].should =~ /\/#{type}/i
+  body_without_bom = page.body.encode("UTF-8").delete!("\xEF\xBB\xBF")
+  csv = CSV.parse(body_without_bom, col_sep: "\t") # array of arrays
+  expect(csv.first.join(" ")).to eq(header)
+  expect(csv.size).to eq(rows.to_i) if rows
 end
 
 Then /^show me the page$/ do

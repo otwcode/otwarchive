@@ -101,8 +101,12 @@ class WorksController < ApplicationController
       end
 
       tag = @fandom || @tag
-      options[:filter_ids] ||= []
-      options[:filter_ids] << tag.id
+      # This strange dance is because there is an interaction between
+      # strong_parameters and dup, without the dance 
+      # options[:filter_ids] << tag.id is ignored.
+      filter_ids = options[:filter_ids] || []
+      filter_ids << tag.id
+      options[:filter_ids] = filter_ids
     end
 
     options[:page] = params[:page]
@@ -205,19 +209,18 @@ class WorksController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if @work.unrevealed?
-      @page_title = ts('Mystery Work')
+      @page_title = ts("Mystery Work")
     else
-      page_title_inner = ''
-      page_creator = ''
-      if @work.anonymous?
-        page_creator = ts('Anonymous')
-      else
-        page_creator = @work.pseuds.collect(&:byline).sort.join(', ')
-      end
-      page_title_inner = if @tag_groups['Fandom'].size > 3
-                           ts('Multifandom')
+      page_creator = if @work.anonymous?
+                       ts("Anonymous")
+                     else
+                       @work.pseuds.map(&:byline).sort.join(", ")
+                     end
+      fandoms = @tag_groups["Fandom"]
+      page_title_inner = if fandoms.size > 3
+                           ts("Multifandom")
                          else
-                           @tag_groups['Fandom'][0].name
+                           fandoms.empty? ? ts("No fandom specified") : fandoms[0].name
                          end
       @page_title = get_page_title(page_title_inner, page_creator, @work.title)
     end

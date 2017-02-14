@@ -7,6 +7,10 @@ When /^I view the "([^\"]*)" tag feed$/ do |tag|
   visit feed_tag_path(:id => tag_id.to_param, :format => :atom)
 end
 
+When /^I view the "([^"]*)" works feed$/ do |tag|
+  visit "/tags/#{Tag.find_by_name(tag).id}/feed.atom"
+end
+
 When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type, name|
   case type
   when "author"
