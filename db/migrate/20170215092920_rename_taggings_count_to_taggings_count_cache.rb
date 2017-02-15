@@ -1,4 +1,4 @@
-class RemoveTaggingsCountToTags < ActiveRecord::Migration
+class RenameTaggingsCountToTaggingsCountCache < ActiveRecord::Migration
   def up
     rename_column :tags, :taggings_count, :taggings_count_cache
     add_column    :tags, :large_tag, :boolean, default: false, null: false
