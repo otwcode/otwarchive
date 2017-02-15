@@ -5,7 +5,7 @@ class RemoveTaggingsCountToTags < ActiveRecord::Migration
   end
 
   def down
-    add_column    :tags, :taggings_count, :integers, :default => 0
+    add_column    :tags, :taggings_count, :integer, :default => 0
     remove_column :tags, :large_tag
   end
 end
