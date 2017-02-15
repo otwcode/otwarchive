@@ -23,15 +23,42 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  def is_this_a_large_tag(length_of_time_in_cache,how_long_it_takes_to_compute_size)
+    if length_of_time_in_cache < 40 || how_long_it_takes_to_compute_size < ( ArchiveConfig.TAGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4 )
+      if self.large_tag
+        self.large_tag = false
+        self.save
+        return
+      end
+    end
+    return if self.large_tag
+    self.large_tag = true
+    self.save
+  end
+
+  def taggings_count_expiry(count)
+    expiry_time = count/(ArchiveConfig.TAGINGS_COUNT_CACHE_DIVISOR || 2000 )
+    [[expiry_time, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||3)].min, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||60)].max
+  end
+
+  def taggings_count_cache_key
+    "/v1/taggings_count/#{self.id}"
+  end
+
+  def taggings_count=(value)
+    expiry_time = taggings_count_expiry(value)
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes )
+  end
+
   def taggings_count
-    cache_key = "/v1/taggings_count/#{self.id}"
-    cache_read = Rails.cache.read(cache_key)
+    cache_read = Rails.cache.read(self.taggings_count_cache_key)
     return cache_read unless cache_read.nil?
+    time_start = Time.now.to_i
     real_value = self.taggings.length
-    if real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)
-      expiry_time = real_value/(ArchiveConfig.TAGINGS_COUNT_CACHE_DIVISOR || 2000 )
-      expiry_time = [[expiry_time, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||3)].min, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||60)].max
-      Rails.cache.write(cache_key, real_value ,race_condition_ttl: 10, expires_in: expiry_time.minutes)
+    time_end = Time.now.to_i
+    if ( real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || ( time_end - time_start > (ArchiveConfig.TAGINGS_COUNT_MAX_ALLOWED_TIME || 6 ))
+      self.taggings_count = real_value
+      is_this_a_large_tag(expiry_time, time_end - time_start )
     end
     real_value
   end
