@@ -49,9 +49,13 @@ describe WorkSearch do
     before(:each) do
       work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
       work.update_index
+      # We need to save the work so all the tags associated with it get flagged as used.
+      work.save
 
       second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       second_work.update_index
+      # We need to save the work so all the tags associated with it get flagged as used.
+      second_work.save
 
       Work.tire.index.refresh
     end
