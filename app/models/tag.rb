@@ -61,8 +61,21 @@ class Tag < ActiveRecord::Base
     if ( real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || ( time_end - time_start > (ArchiveConfig.TAGINGS_COUNT_MAX_ALLOWED_TIME || 6 ))
       self.taggings_count = real_value
       is_this_a_large_tag(taggings_count_expiry(real_value),time_end - time_start )
+    else
+      if self.taggings_count_cache != real_value
+        self.taggings_count_cache = real_value
+        self.save
+      end
     end
     real_value
+  end
+
+  def check_if_taggings_count_needs_updating
+    cache_read = Rails.cache.read(self.taggings_count_cache_key)
+    if cache_read.nil? || ( cache_read < (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+      self.taggings_count
+      return
+    end
   end
 
   acts_as_commentable
