@@ -23,6 +23,19 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  def taggings_count
+    cache_key = "/v1/taggings_count/#{self.id}"
+    cache_read = Rails.cache.read(cache_key)
+    return cache_read unless cache_read.nil?
+    real_value = self.taggings.length
+    if real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+      expiry_time = real_value/(ArchiveConfig.TAGINGS_COUNT_CACHE_DIVISOR || 2000 )
+      expiry_time = [[expiry_time, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||3)].min, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||60)].max
+      Rails.cache.write(cache_key, real_value ,race_condition_ttl: 10, expires_in: expiry_time.minutes)
+    end
+    real_value
+  end
+
   acts_as_commentable
   def commentable_name
     self.name
