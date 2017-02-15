@@ -48,6 +48,8 @@ class Tag < ActiveRecord::Base
   def taggings_count=(value)
     expiry_time = taggings_count_expiry(value)
     Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes )
+    self.taggings_count_cache = value
+    self.save!
   end
 
   def taggings_count
@@ -58,7 +60,7 @@ class Tag < ActiveRecord::Base
     time_end = Time.now.to_i
     if ( real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || ( time_end - time_start > (ArchiveConfig.TAGINGS_COUNT_MAX_ALLOWED_TIME || 6 ))
       self.taggings_count = real_value
-      is_this_a_large_tag(expiry_time, time_end - time_start )
+      is_this_a_large_tag(taggings_count_expiry(real_value),time_end - time_start )
     end
     real_value
   end
@@ -241,7 +243,7 @@ class Tag < ActiveRecord::Base
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL")
-  scope :in_use, where("canonical = 1 OR taggings_count > 0")
+  scope :in_use, where("canonical = 1 OR taggings_count_cache > 0")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
 
   # Tags that have sub tags
@@ -265,7 +267,7 @@ class Tag < ActiveRecord::Base
 
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
-  scope :by_popularity, order('taggings_count DESC')
+  scope :by_popularity, order('taggings_count_cache DESC')
   scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
@@ -681,7 +683,7 @@ class Tag < ActiveRecord::Base
   
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
+    Tag.find_each(:conditions => "taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
       if tag.filter
         to_add = tag.works - tag.filter.filtered_works
         to_add.each do |work|
