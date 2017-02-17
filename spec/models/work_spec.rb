@@ -1,193 +1,265 @@
 require 'spec_helper'
 
-describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+describe WorkSearch do
 
-  it "creates a minimally work" do
-    expect(create(:work)).to be_valid
+  before(:each) do
+    Tire.index(Work.index_name).delete
+    Work.create_elasticsearch_index
+    Work.import
+    # The counts on the tags will not be correct until the works are saved.
+    work.save
+    work.update_index
+    second_work.save
+    second_work.update_index
   end
 
-  context "create_stat_counter" do
-    it "creates a stat counter for that work id" do
-      expect {
-        @work = build(:work)
-        @work.save!
-      }.to change{ StatCounter.all.count }.by(1)
-      expect(StatCounter.where(work_id: @work.id)).to exist
-    end
+  after(:each) do
+    Work.destroy_all
+    Tire.index(Work.index_name).delete
   end
 
-  context "invalid title" do
-    it { expect(build(:work, title: nil)).to be_invalid }
-
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
-    it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
-      expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
-    end
-
-    let(:too_long) {ArchiveConfig.TITLE_MAX + 1}
-    it "cannot be longer than ArchiveConfig.TITLE_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
-    end
+  let!(:collection) do
+    FactoryGirl.create(:collection, id: 1)
   end
 
-  context "clean_and_validate_title" do
-    before do
-      ArchiveConfig.TITLE_MIN = 10
-    end
-    it "strips out leading spaces from the title" do
-      @work = create(:work, title: "    Has Leading Spaces")
-      @work.reload
-      expect(@work.title).to eq("Has Leading Spaces")
-    end
-
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
-    it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect {
-        @work = create(:work, title: "     #{too_short}")
-        @work.reload
-      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
-    end
-
-    # Reset the min characters in the title, so that the factory is valid
-    after do
-      ArchiveConfig.TITLE_MIN = 1
-    end
+  let!(:work) do
+    FactoryGirl.create(:work,
+      title: "There and back again",
+      authors: [ Pseud.find_by_name("JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien") ],
+      summary: "An unexpected journey",
+      fandom_string: "The Hobbit",
+      character_string: "Bilbo Baggins",
+      posted: true,
+      expected_number_of_chapters: 3,
+      complete: false,
+      language_id: 1
+    )
   end
 
-  context "invalid summary" do
-    let(:too_long) {ArchiveConfig.SUMMARY_MAX + 1}
-    it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
-    end
+  let!(:second_work) do
+    FactoryGirl.create(:work,
+      title: "Harry Potter and the Sorcerer's Stone",
+      authors: [ Pseud.find_by_name("JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling") ],
+      summary: "Mr and Mrs Dursley, of number four Privet Drive...",
+      fandom_string: "Harry Potter",
+      character_string: "Harry Potter, Ron Weasley, Hermione Granger",
+      posted: true,
+      collection_ids: [collection.id],
+      language_id: 2
+    )
   end
 
-  context "invalid notes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
-    it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
-    end
-  end
-
-
-  context "invalid endnotes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
-    it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
-    end
-  end
-
-  context "validate authors" do
-
-    # TODO: testing specific invalid pseuds should take place in pseud_spec
-    # However, we still want to make sure we can't save works without a valid pseud
-    it "does not save an invalid pseud with *", :pending do
-      @pseud = create(:pseud, name: "*pseud*")
-      @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
-      expect(@work.save).to be_falsey
-      expect(@work.errors[:base]).to include["These pseuds are invalid: *pseud*"]
-    end
-
-    let(:invalid_work) { build(:no_authors) }
-    it "does not save if author is blank" do
-      expect(invalid_work.save).to be_falsey
-      expect(invalid_work.errors[:base]).to include "Work must have at least one author."
-    end
-  end
-
-  describe "work_skin_allowed"  do
-    context "public skin"
-
-    context "private skin" do
-      before :each do
-        @skin_author = create(:user)
-        @second_author = create(:user)
-        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
-      end
-
-      let(:work_author) {@skin_author}
-      let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
-      it "can be used by the work skin author" do
-        expect(work.save).to be_truthy
-      end
-
-      let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
-      it "cannot be used by another user" do
-        work.work_skin_allowed
-        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
-      end
-    end
-  end
-
-  describe "new recipients virtual attribute"  do
+  describe '#search_results' do
 
     before(:each) do
-      @author = create(:user)
-      @recipient1 = create(:user)
-      @recipient2 = create(:user)
-      @recipient3 = create(:user)
+      work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
+      work.update_index
 
-      @fandom1 = create(:fandom)
-      @chapter1 = create(:chapter)
+      second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
+      second_work.update_index
 
-      @work = Work.new(title: "Title")
-      @work.fandoms << @fandom1
-      @work.authors = [@author.pseuds.first]
-      @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      @work.chapters << @chapter1
+      Work.tire.index.refresh
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "should find works that match" do
+      work_search = WorkSearch.new(query: "Hobbit")
+      expect(work_search.search_results).to include work
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
-      @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+    it "should not find works that don't match" do
+      work_search = WorkSearch.new(query: "Hobbit")
+      expect(work_search.search_results).not_to include second_work
     end
 
-    it "simple assignment should work" do
-      @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
-    end
+    describe "when searching unposted works" do
+      before(:each) do
+        work.update_attribute(:posted, false)
+        Work.tire.index.refresh
+      end
 
-    it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name 
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
-    end
-
-  end
-
-  describe "#find_by_url" do
-    it "should find imported works with various URL formats" do
-      [
-        'http://foo.com/bar.html',
-        'http://foo.com/bar',
-        'http://lj-site.com/bar/foo?color=blue',
-        'http://www.foo.com/bar'
-      ].each do |url|
-        work = create(:work, imported_from_url: url)
-        expect(Work.find_by_url(url)).to eq(work)
-        work.destroy
+      it "should not return them by default" do
+        work_search = WorkSearch.new(query: "Hobbit")
+        expect(work_search.search_results).not_to include work
       end
     end
 
-    it "should not mix up imported works with similar URLs or significant query parameters" do
-      {
-        'http://foo.com/12345' => 'http://foo.com/123',
-        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
-        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
-      }.each do |import_url, find_url|
-        work = create(:work, imported_from_url: import_url)
-        expect(Work.find_by_url(find_url)).to_not eq(work)
-        work.destroy
+    describe "when searching restricted works" do
+      before(:each) do
+        work.update_attribute(:restricted, true)
+        Work.tire.index.refresh
+      end
+
+      it "should not return them by default" do
+        work_search = WorkSearch.new(query: "Hobbit")
+        expect(work_search.search_results).not_to include work
+      end
+
+      it "should return them when asked" do
+        work_search = WorkSearch.new(query: "Hobbit", show_restricted: true)
+        expect(work_search.search_results).to include work
       end
     end
 
-    it "should find works imported with irrelevant query parameters" do
-      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
-      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
-      work.destroy
+    describe "when searching incomplete works" do
+      it "should not return them when asked for complete works" do
+        work_search = WorkSearch.new(query: "Hobbit", complete: true)
+        expect(work_search.search_results).not_to include work
+      end
+    end
+
+    describe "when searching by title" do
+      it "should match partial titles" do
+        work_search = WorkSearch.new(title: "back again")
+        expect(work_search.search_results).to include work
+      end
+
+      it "should not match fields other than titles" do
+        work_search = WorkSearch.new(title: "Privet Drive")
+        expect(work_search.search_results).not_to include second_work
+      end
+    end
+
+    describe "when searching by author" do
+      it "should match partial author names" do
+        second_work.update_index
+        work_search = WorkSearch.new(creator: "Rowling")
+        expect(work_search.search_results).to include second_work
+      end
+
+      it "should not match fields other than authors" do
+        work.update_index
+        work_search = WorkSearch.new(creator: "Baggins")
+        expect(work_search.search_results).not_to include work
+      end
+
+      it "should turn - into NOT" do
+        work.update_index
+        work_search = WorkSearch.new(creator: "-Tolkien")
+        expect(work_search.search_results).not_to include work
+      end
+    end
+
+    describe "when searching by language" do
+      it "should only return works in that language" do
+        work_search = WorkSearch.new(language_id: 1)
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
+    end
+
+    describe "when searching by fandom" do
+      it "should only return works in that fandom" do
+        work_search = WorkSearch.new(fandom_names: "Harry Potter")
+        expect(work_search.search_results).not_to include work
+      end
+
+      it "should not choke on exclamation points" do
+        work_search = WorkSearch.new(fandom_names: "Hobbit!")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
+      it "should not choke on exclamation points" do
+        work_search = WorkSearch.new(fandom_names: "Potter!")
+        expect(work_search.search_results).not_to include work
+        expect(work_search.search_results).to include second_work
+      end
+    end
+
+    describe "when searching by collection" do
+      it "should only return works in that collection" do
+        work_search = WorkSearch.new(collection_ids: [1])
+        expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
+      end
+    end
+
+    describe "when searching by word count" do
+      before(:each) do
+        work.chapters.first.update_attributes(content: "This is a work with a word count of ten.", posted: true)
+        work.save
+
+        second_work.chapters.first.update_attributes(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
+        second_work.save
+
+        Work.tire.index.refresh
+      end
+
+      it "should find the right works less than a given number" do
+        work_search = WorkSearch.new(word_count: "<13")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+      it "should find the right works more than a given number" do
+        work_search = WorkSearch.new(word_count: "> 10")
+        expect(work_search.search_results).not_to include work
+        expect(work_search.search_results).to include second_work
+      end
+
+      it "should find the right works within a range" do
+        work_search = WorkSearch.new(word_count: "0-10")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+    end
+
+    describe "when searching by kudos count" do
+      it "should find the right works less than a given number" do
+        work_search = WorkSearch.new(kudos_count: "< 1,000")
+        expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
+      end
+      it "should find the right works more than a given number" do
+        work_search = WorkSearch.new(kudos_count: "> 999")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
+      it "should find the right works within a range" do
+        work_search = WorkSearch.new(kudos_count: "1,000-2,000")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+    end
+
+    describe "when searching by comments count" do
+      it "should find the right works less than a given number" do
+        work_search = WorkSearch.new(comments_count: "< 100")
+        expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
+      end
+      it "should find the right works more than a given number" do
+        work_search = WorkSearch.new(comments_count: "> 99")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
+      it "should find the right works within a range" do
+        work_search = WorkSearch.new(comments_count: "100-2,000")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+    end
+
+    describe "when searching by bookmarks count" do
+      it "should find the right works less than a given number" do
+        work_search = WorkSearch.new(bookmarks_count: "< 10")
+        expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
+      end
+      it "should find the right works more than a given number" do
+        work_search = WorkSearch.new(bookmarks_count: ">9")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
+
+      it "should find the right works within a range" do
+        work_search = WorkSearch.new(bookmarks_count: "10-20")
+        expect(work_search.search_results).to include work
+        expect(work_search.search_results).not_to include second_work
+      end
     end
   end
 end
+
