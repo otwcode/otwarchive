@@ -78,6 +78,11 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  def update_counts_cache(id)
+    tag = Tag.find(id)
+    tag.taggings_count = tag.taggings.length
+  end
+
   acts_as_commentable
   def commentable_name
     self.name
