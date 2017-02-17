@@ -154,8 +154,9 @@ describe WorkSearch do
       end
 
       it "should not choke on exclamation points" do
-        work_search = WorkSearch.new(fandom_names: "Potter")
+        work_search = WorkSearch.new(fandom_names: "Potter!")
         expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
       end
     end
 
