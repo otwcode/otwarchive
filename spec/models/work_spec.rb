@@ -9,6 +9,7 @@ describe WorkSearch do
     # The counts on the tags will not be correct until the works are saved.
     work.save
     work.update_index
+    second_work.collection_ids = [collection.id]
     second_work.save
     second_work.update_index
   end
@@ -44,7 +45,6 @@ describe WorkSearch do
       fandom_string: "Harry Potter",
       character_string: "Harry Potter, Ron Weasley, Hermione Granger",
       posted: true,
-      collection_ids: [collection.id],
       language_id: 2
     )
   end
