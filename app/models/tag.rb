@@ -23,8 +23,8 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  def is_this_a_large_tag(length_of_time_in_cache,how_long_it_takes_to_compute_size)
-    if length_of_time_in_cache < 40 || how_long_it_takes_to_compute_size < ( ArchiveConfig.TAGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4 )
+  def check_if_large_tag(length_of_time_in_cache,how_long_it_takes_to_compute_size)
+    if length_of_time_in_cache < 40 || how_long_it_takes_to_compute_size < (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4)
       if self.large_tag
         self.large_tag = false
         self.save
@@ -37,8 +37,8 @@ class Tag < ActiveRecord::Base
   end
 
   def taggings_count_expiry(count)
-    expiry_time = count/(ArchiveConfig.TAGINGS_COUNT_CACHE_DIVISOR || 2000 )
-    [[expiry_time, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||3)].min, (ArchiveConfig.TAGINGS_COUNT_MIN_TIME||60)].max
+    expiry_time = count/(ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000 )
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME||3)].min, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME||60)].max
   end
 
   def taggings_count_cache_key
@@ -60,9 +60,9 @@ class Tag < ActiveRecord::Base
     time_start = Time.now.to_i
     real_value = self.taggings.length
     time_end = Time.now.to_i
-    if (real_value > (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGINGS_COUNT_MAX_ALLOWED_TIME || 6))
+    if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
       self.taggings_count = real_value
-      is_this_a_large_tag(taggings_count_expiry(real_value),time_end - time_start )
+      check_if_large_tag(taggings_count_expiry(real_value),time_end - time_start )
     else
       if self.taggings_count_cache != real_value
         self.taggings_count_cache = real_value
@@ -74,7 +74,7 @@ class Tag < ActiveRecord::Base
 
   def check_if_taggings_count_needs_updating
     cache_read = Rails.cache.read(self.taggings_count_cache_key)
-    if cache_read.nil? || (cache_read < (ArchiveConfig.TAGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
       self.taggings_count
       return
     end
