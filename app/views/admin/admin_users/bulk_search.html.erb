@@ -13,8 +13,8 @@
       <legend><%= ts("Email addresses") %></legend>
       <dl>
         <dt class="required"><%= label_tag "emails", ts("Email addresses *") %></dt>
-        <dd class="required"><%= text_area_tag "emails", @emails ? @emails.join("\n") : "", rows: 10, cols: 70, "aria-describedby" => "url-field-description" %>
-          <p class="footnote" id="url-field-description">
+        <dd class="required"><%= text_area_tag "emails", @emails ? @emails.join("\n") : "", rows: 10, cols: 70, "aria-describedby" => "email-field-description" %>
+          <p class="footnote" id="email-field-description">
             <%= ts("Emails to find; <strong>one URL per line.</strong>").html_safe %>
           </p>
         </dd>
