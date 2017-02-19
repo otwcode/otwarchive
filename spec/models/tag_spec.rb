@@ -13,40 +13,51 @@ describe Tag do
 
   context "checking count caching" do
 
-   before(:each) do
-     # Set the minimail amount of time a tag can be cached for.
-     ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
-     # Set so that we need few uses of a tag to start caching it.
-     ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
-     # Set the minimum number of uses needed for caching is possible
-     ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
-     @fandom_tag = FactoryGirl.create(:fandom)
-   end
+    before(:each) do
+      # Set the minimail amount of time a tag can be cached for.
+      ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
+      # Set so that we need few uses of a tag to start caching it.
+      ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
+      # Set the minimum number of uses needed for caching is possible
+      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
+      @fandom_tag = FactoryGirl.create(:fandom)
+    end
 
-   it "A small tag should be uneffected by caching" do
-     work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-     work.save
-     @fandom_tag.reload
-     expect(@fandom_tag.taggings_count_cache).to eq 1
-     expect(@fandom_tag.taggings_count).to eq 1
-     expect(@fandom_tag.large_tag).not_to be_truthy
-   end
-
-   it "A tag will start to be cached when its used" do
-    (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1).each do |try|
+    it "A small tag should be uneffected by caching" do
       work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
       work.save
       @fandom_tag.reload
-      expect(@fandom_tag.taggings_count_cache).to eq try 
-      expect(@fandom_tag.taggings_count).to eq try 
+      expect(@fandom_tag.taggings_count_cache).to eq 1
+      expect(@fandom_tag.taggings_count).to eq 1
+      expect(@fandom_tag.large_tag).not_to be_truthy
     end
-    work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-    work.save
-    @fandom_tag.reload
-    # This value should be cached and wrong
-    expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
-    expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
-    expect(@fandom_tag.large_tag).not_to be_truthy
+
+    it "A tag will start to be cached when its used" do
+      (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1).each do |try|
+        work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        work.save
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq try 
+        expect(@fandom_tag.taggings_count).to eq try 
+      end
+      work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+      work.save
+      @fandom_tag.reload
+      # This value should be cached and wrong
+      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
+      expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
+      expect(@fandom_tag.large_tag).not_to be_truthy
+    end
+
+    it "A tag used enough will become a big tag" do
+      (1..40*ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR-1).each do |try|
+        @fandom_tag.taggings_count=try
+        @fandom_tag.reload
+        expect(@fandom_tag.large_tag).not_to be_truthy
+      end
+       @fandom_tag.taggings_count= 40*ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+      @fandom_tag.reload
+      expect(@fandom_tag.large_tag).to be_truthy
     end
   end
 
