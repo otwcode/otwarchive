@@ -203,7 +203,7 @@ class Work < ActiveRecord::Base
       tag.update_works_index_timestamp!
     end
     self.tags.each do |tag|
-      tag.check_if_taggings_count_needs_updating
+      tag.update_tag_cache
     end
     Work.expire_work_tag_groups_id(self.id)
   end

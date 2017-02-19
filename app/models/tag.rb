@@ -85,11 +85,10 @@ class Tag < ActiveRecord::Base
     real_value
   end
 
-  def check_if_taggings_count_needs_updating
+  def update_tag_cache
     cache_read = Rails.cache.read(self.taggings_count_cache_key)
     if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
       self.taggings_count
-      return
     end
   end
 
