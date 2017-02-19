@@ -13,16 +13,16 @@ describe Tag do
 
   context 'checking count caching' do
     before(:each) do
-      # Set the minimail amount of time a tag can be cached for.
+      # Set the minimal amount of time a tag can be cached for.
       ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
       # Set so that we need few uses of a tag to start caching it.
       ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
-      # Set the minimum number of uses needed for caching is possible
+      # Set the minimum number of uses needed for before caching is started.
       ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
       @fandom_tag = FactoryGirl.create(:fandom)
     end
 
-    it 'A small tag should be uneffected by caching' do
+    it 'should not cache tags which are not used much' do
       work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
       work.save
       @fandom_tag.reload
@@ -31,7 +31,7 @@ describe Tag do
       expect(@fandom_tag.large_tag).not_to be_truthy
     end
 
-    it 'A tag will start to be cached when its used' do
+    it 'will start caching a when tag when that tag is used significantly' do
       (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1).each do |try|
         work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
         work.save
@@ -48,7 +48,7 @@ describe Tag do
       expect(@fandom_tag.large_tag).not_to be_truthy
     end
 
-    it 'A tag used enough will become a big tag' do
+    it 'that a tag is big depending on the number of uses it has' do
       (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
         @fandom_tag.taggings_count = try
         @fandom_tag.reload
