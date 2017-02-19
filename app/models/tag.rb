@@ -23,22 +23,22 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  def check_if_large_tag(length_of_time_in_cache,how_long_it_takes_to_compute_size)
-    if length_of_time_in_cache < 40 && how_long_it_takes_to_compute_size < (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4)
-      if self.large_tag
-        self.large_tag = false
-        self.save
-      end
-      return
-    end
-    return if self.large_tag
-    self.large_tag = true
+  def check_if_large_tag(time_in_cache, time_to_count_sec)
+    # A large tag is one which is periodically refreshed by a background task.
+    # The task is defined in config/resque_schedule.yml
+    # This refreshes the large tags every 30 minutes. It seemed sensible to 
+    # only allow tags which stay in the cache longer than the perodic refresh 
+    # period. Additionally any tag that takes longer than 4 seconds to count then
+    # it seems reasonable to say that the tag is large.
+    target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4) )
+    return if self.large_tag == target_state
+    self.large_tag = target_state 
     self.save
   end
 
   def taggings_count_expiry(count)
-    expiry_time = count/(ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000 )
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME||3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME||60)].min
+    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000 )
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
   end
 
   def taggings_count_cache_key
@@ -48,7 +48,7 @@ class Tag < ActiveRecord::Base
   def taggings_count=(value)
     expiry_time = taggings_count_expiry(value)
     Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if (value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
-    check_if_large_tag(expiry_time,0)
+    check_if_large_tag(expiry_time, 0)
     if self.taggings_count_cache != value
       self.taggings_count_cache = value
       self.save
