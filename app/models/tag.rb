@@ -37,6 +37,12 @@ class Tag < ActiveRecord::Base
   end
 
   def taggings_count_expiry(count)
+    # What we are trying to do here is work out a resonable amount of time for a work to be cached for 
+    # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 2000 )
+    # such that for example 2000, would be naturally be tagged for one minute while 140,000 would be cached for
+    # 70 minutes. However we then apply a filter such that the minimum amount of time we will cache something for
+    # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
+    # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
     expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000 )
     [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
   end
@@ -47,6 +53,7 @@ class Tag < ActiveRecord::Base
 
   def taggings_count=(value)
     expiry_time = taggings_count_expiry(value)
+    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
     Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if (value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
     check_if_large_tag(expiry_time, 0)
     if self.taggings_count_cache != value
@@ -61,6 +68,11 @@ class Tag < ActiveRecord::Base
     time_start = Time.now.to_i
     real_value = self.taggings.length
     time_end = Time.now.to_i
+    # here we cache the value we have more than AGGINGS_COUNT_MIN_CACHE_COUNT uses or 
+    # if the amount of time taken to count the number of uses is more than TAGGINGS_COUNT_MAX_ALLOWED_TIME  seconds 
+    # ( defaulting to 6 seconds ) this second check is a emergency feature which I would not expect to kick in
+    # but we want to know how long it takes to count the taggings to work out if it is a large tag 
+    # for the scheduled background counts.
     if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
       self.taggings_count = real_value
       check_if_large_tag(taggings_count_expiry(real_value), time_end - time_start)
