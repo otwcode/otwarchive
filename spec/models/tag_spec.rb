@@ -33,7 +33,7 @@ describe Tag do
     end
 
     it "A tag will start to be cached when its used" do
-      (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1).each do |try|
+      (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1).each do |try|
         work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
         work.save
         @fandom_tag.reload
@@ -44,8 +44,8 @@ describe Tag do
       work.save
       @fandom_tag.reload
       # This value should be cached and wrong
-      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
-      expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT+1
+      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
+      expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
       expect(@fandom_tag.large_tag).not_to be_truthy
     end
 
@@ -55,7 +55,7 @@ describe Tag do
         @fandom_tag.reload
         expect(@fandom_tag.large_tag).not_to be_truthy
       end
-       @fandom_tag.taggings_count= 40*ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+      @fandom_tag.taggings_count= 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
       @fandom_tag.reload
       expect(@fandom_tag.large_tag).to be_truthy
     end

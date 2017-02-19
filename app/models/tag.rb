@@ -63,7 +63,7 @@ class Tag < ActiveRecord::Base
     time_end = Time.now.to_i
     if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
       self.taggings_count = real_value
-      check_if_large_tag(taggings_count_expiry(real_value),time_end - time_start )
+      check_if_large_tag(taggings_count_expiry(real_value), time_end - time_start)
     else
       if self.taggings_count_cache != real_value
         self.taggings_count_cache = real_value
