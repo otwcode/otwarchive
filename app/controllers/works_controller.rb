@@ -768,7 +768,7 @@ class WorksController < ApplicationController
       RedisSearchIndexQueue.queue_works([params[:id]], priority: :high)
       flash[:notice] = ts('Work queued to be reindexed')
     else
-      flash[:notice] = ts("Sorry, you don't have permission to perform this action.")
+      flash[:error] = ts("Sorry, you don't have permission to perform this action.")
     end
     redirect_to(request.env['HTTP_REFERER'] || root_path)
   end
