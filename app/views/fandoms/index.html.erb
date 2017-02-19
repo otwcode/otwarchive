@@ -1,3 +1,6 @@
+<% collection_key = @collection.nil? ? "NULL" : @collection.id %>
+<% media_key = @medium.nil? ? "NULL" : @medium.name %>
+<% cache("/v1/media_pages/#{collection_key}/#{media_key}", :expires_in => 1.hour) do %>
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <% if @collection %>
   <h2 class="heading"><%= link_to(@collection.title, @collection) %> > <%= ts("Fandoms") %></h2>
@@ -51,3 +54,4 @@
   <h3 class="no_fandoms"><%= ts("No fandoms found") %></h3>
 <% end %>
 <!--/content-->
+<% end %>

@@ -1,4 +1,4 @@
-<% cache expires_in: 1.hour %>
+<% cache ("/v1/media_pages/all_media", :expires_in => 1.hour)  do %>
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading"><%= ts('Fandoms') %></h2>
 <!--/descriptions-->
