@@ -56,6 +56,7 @@ describe PromptsController do
         post :new, collection_id: open_signup.collection.name, prompt_type: "offer"
         expect(response).to have_http_status(200)
         expect(flash[:error]).blank?
+        expect(assigns(:index)).to eq(open_signup.offers.count)
       end
     end
   end
