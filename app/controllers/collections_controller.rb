@@ -44,7 +44,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page]).includes(:parent, :moderators, :children, :collection_preference, owners: [:user])
+      @collections = Collection.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
   end
 

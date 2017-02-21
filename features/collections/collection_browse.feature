@@ -121,6 +121,17 @@ Feature: Collection
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
+  Scenario: Filter collections index to see 
+
+  Given I have loaded the fixtures
+    And I am logged in as "newbie"
+    And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "Another Gift Swap"
+  When I go to the collections page
+    And I fill in "collection_filters_fandom" with "Steven's Universe"
+    And I press "Sort and Filter"
+  Then I should see "Another Gift Swap"
+    And I should not see "Sorry, there were no collections found."
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given I have loaded the fixtures
