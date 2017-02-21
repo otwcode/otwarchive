@@ -12,8 +12,9 @@ describe PromptsController do
   end
   let(:signup) { create(:challenge_signup) }
 
+  let(:user) { create(:user) }
   before do
-    fake_login
+    fake_login_known_user(user)
   end
 
   describe "no_challenge" do
@@ -32,9 +33,8 @@ describe PromptsController do
   end
 
   describe "signups_closed" do
+    let(:user) { Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user }
     it "should show an error and redirect" do
-      # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user)
       post :create, collection_id: signup.collection.name
       it_redirects_to_with_error(signup.collection, "Signup is currently closed: please contact a moderator for help.")
     end
