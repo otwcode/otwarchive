@@ -1,4 +1,6 @@
 class UserSessionsController < ApplicationController
+  force_ssl unless Rails.env.test?
+
 
   # I hope this isn't catching unwanted exceptions; it's hard to locate
   # where exactly the exception is thrown in case of no cookies. --rebecca
