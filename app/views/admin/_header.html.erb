@@ -1,6 +1,12 @@
 <h3 class="landmark heading"><%= ts("Admin Navigation", key: "header") %></h3>
 <ul class="admin primary navigation actions" role="navigation">
-  <li><%= link_to ts("Manage Users", key: "header"), admin_users_path %></li>
+  <li class="dropdown">
+    <%= link_to ts("Manage Users", key: "header"), admin_users_path %>
+    <ul class="menu" role="menu">
+      <li><%= link_to ts("Find Users", key: "header"), admin_users_path %></li>
+      <li><%= link_to ts("Bulk Email Search", key: "header"), bulk_search_admin_users_path %></li>
+    </ul>
+  </li>
   <li><%= link_to ts("Notifications", key: "header"), notify_admin_users_path %></li>
   <li class="dropdown">
     <%= link_to ts("Invitations", key: "header"), admin_invitations_path %>

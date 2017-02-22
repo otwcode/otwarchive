@@ -49,11 +49,11 @@ Feature: Create and Edit Series
     When I view the series "Ponies"
       And I follow "Rainbow Dash"
     Then I should see "Part 3 of the Ponies series"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Starsong"
-    When I follow "«"
+    When I follow "← Previous Work"
     Then I should see "Sweetie Belle"
-    When I follow "»"
+    When I follow "Next Work →"
     Then I should see "Starsong"
 
   Scenario: Creator can add series information
