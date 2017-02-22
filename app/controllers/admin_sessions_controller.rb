@@ -1,5 +1,4 @@
 class AdminSessionsController < ApplicationController
-  force_ssl unless Rails.env.test?
   
   before_filter :user_logout_required
   
