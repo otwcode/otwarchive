@@ -44,15 +44,15 @@ class OwnedTagSetsController < ApplicationController
         @query = params[:query]
         @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
       else
-        # show a random selection 
+        # show a random selection
         @tag_sets = @tag_sets.order("created_at DESC")
       end
     end
     @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
   end
-  
+
   def show_options
-    @restriction = PromptRestriction.find(params[:restriction])
+    @restriction = PromptRestriction.find_by_id(params[:restriction])
     unless @restriction
       flash[:error] = ts("Which Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
