@@ -7,9 +7,9 @@ end
 
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_url
-  fill_in("Title", :with => skin_name)
-  fill_in("Description", :with => "Random description")
-  fill_in("CSS", :with => "#title { text-decoration: blink;}")
+  fill_in("Title", with: skin_name)
+  fill_in("Description", with: "Random description")
+  fill_in("CSS", with: "#title { text-decoration: blink;}")
 end
 
 Given /^I set up the skin "([^"]*)" with some css$/ do |skin_name|
@@ -18,7 +18,7 @@ end
 
 Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step "I set up the skin \"#{skin_name}\""
-  fill_in("CSS", :with => css)
+  fill_in("CSS", with: css)
 end
 
 Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
@@ -86,7 +86,7 @@ Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"
   step "the approved public skin \"public skin\" with css \"#{css}\""
   step "I am logged in as \"#{login}\""
   step "I am on #{login}'s preferences page"
-  select("#{skin_name}", :from => "preference_skin_id")
+  select(skin_name, from: "preference_skin_id")
   step %{I submit}
 end
 
@@ -130,6 +130,11 @@ When /^I edit my pink header skin to have a purple logo$/ do
   visit edit_skin_path(skin)
   fill_in("CSS", with: "#header .heading a {color: purple;}")
   click_button("Update")
+end
+
+When /^I view the skin "([^\"]*)"$/ do |skin|
+  skin = Skin.find_by_title!(skin)
+  visit skin_url(skin)
 end
 
 When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
@@ -205,7 +210,7 @@ end
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
   skin = Skin.find_by_title(arg1)
   orig_skin_key = skin_cache_value(skin)
-  parent_id = SkinParent.where(:child_skin_id => skin.id).last.parent_skin_id
+  parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)
   parent.save!
   assert orig_skin_key != skin_cache_value(skin), "Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"

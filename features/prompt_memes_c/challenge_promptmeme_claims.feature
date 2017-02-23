@@ -387,7 +387,7 @@ Feature: Prompt Meme Challenge
     And I create Battle 12 promptmeme
   When I go to the "Battle 12" signups page
     And I follow "Download (CSV)"
-  Then I should get a file with ending and type csv
+  Then I should download a csv file with the header row "Pseud Email Sign-up URL Tags Description"
 
   Scenario: Can't download prompt CSV from requests page
   # it's aimed at users, not mods

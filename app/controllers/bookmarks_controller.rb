@@ -4,7 +4,7 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
@@ -178,14 +178,19 @@ class BookmarksController < ApplicationController
     unless errors.empty?
       flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
+
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
+      flash[:notice] += ts("Added to collection(s): %{collections}.",
                           :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
-                                      :moderated => unapproved_collections.collect(&:title).join(", "))
+      flash[:notice] ||= ""
+      flash[:notice] += if unapproved_collections.size > 1
+                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                        else
+                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
+                        end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
@@ -193,7 +198,9 @@ class BookmarksController < ApplicationController
 
     if errors.empty?
       if @bookmark.update_attributes(params[:bookmark])
-        flash[:notice] = ts("Bookmark was successfully updated.")
+        flash[:notice] ||= ""
+        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
+        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
         redirect_to(@bookmark)
       end
     else

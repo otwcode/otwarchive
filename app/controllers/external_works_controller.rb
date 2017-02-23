@@ -47,25 +47,4 @@ class ExternalWorksController < ApplicationController
     end
   end
   
-  def compare
-    if params[:external_work_url]
-      @external_works = ExternalWork.where(["url LIKE ?", params[:external_work_url] + "%"]).order(:url)
-    end
-  end
-  
-  def merge
-    if !params[:merger_id].blank? && !params[:to_merge].blank?
-      @external_work = ExternalWork.find(params[:merger_id])
-      external_works = ExternalWork.find(params[:to_merge])
-      if @external_work.merge_similar(external_works)
-        flash[:notice] = "The external works were successfully merged."
-      else
-        flash[:error] = "Sorry, the system was unable to complete the merge."
-      end
-      redirect_to compare_external_works_path(:external_work_url => @external_work.url)
-    else
-      redirect_to compare_external_works_path
-    end
-  end
-  
 end
