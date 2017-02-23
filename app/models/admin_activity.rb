@@ -1,4 +1,5 @@
 class AdminActivity < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   belongs_to :admin
   belongs_to :target, polymorphic: true
 
