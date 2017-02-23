@@ -5,19 +5,19 @@ class OwnedTagSetsController < ApplicationController
   before_filter :users_only, :only => [ :new, :create, :nominate ]
   before_filter :moderators_only, :except => [ :index, :new, :create, :show, :show_options ]
   before_filter :owners_only, :only => [ :destroy ]
-  
+
   def load_tag_set
-    @tag_set = OwnedTagSet.find(params[:id])
+    @tag_set = OwnedTagSet.find_by_id(params[:id])
     unless @tag_set
       flash[:notice] = ts("What Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
-  
+
   def moderators_only
     @tag_set.user_is_moderator?(current_user) || access_denied
   end
-  
+
   def owners_only
     @tag_set.user_is_owner?(current_user) || access_denied
   end
