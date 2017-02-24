@@ -1,6 +1,6 @@
 class TagSetNominationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
-  
+
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
   before_filter :check_pseud_ownership, :only => [:create, :update]
@@ -8,15 +8,15 @@ class TagSetNominationsController < ApplicationController
   before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
-    if params[:tag_set_nomination][:pseud_id]
-      pseud = Pseud.find(params[:tag_set_nomination][:pseud_id])
+    if tag_set_nomination_params[:pseud_id]
+      pseud = Pseud.find(tag_set_nomination_params[:pseud_id])
       unless pseud && current_user && current_user.pseuds.include?(pseud)
         flash[:error] = ts("You can't nominate tags with that pseud.")
         redirect_to root_path and return
       end
     end
   end
-  
+
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])
     unless @tag_set
@@ -41,10 +41,10 @@ class TagSetNominationsController < ApplicationController
     @limit = HashWithIndifferentAccess.new
 	  @limit[:fandom] = @tag_set.fandom_nomination_limit
 	  @limit[:character] = @tag_set.character_nomination_limit
-	  @limit[:relationship] = @tag_set.relationship_nomination_limit 
+	  @limit[:relationship] = @tag_set.relationship_nomination_limit
 	  @limit[:freeform] = @tag_set.freeform_nomination_limit
   end
-    
+
   # used in new/edit to build any nominations that don't already exist before we open the form
   def build_nominations
     @limit[:fandom].times do |i|
@@ -61,7 +61,7 @@ class TagSetNominationsController < ApplicationController
     @limit[:freeform].times {|i| @tag_set_nomination.freeform_nominations[i] || @tag_set_nomination.freeform_nominations.build }
   end
 
-            
+
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
@@ -91,7 +91,7 @@ class TagSetNominationsController < ApplicationController
   def new
     if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first
       redirect_to edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
-    else      
+    else
       @tag_set_nomination = TagSetNomination.new(:pseud => current_user.default_pseud, :owned_tag_set => @tag_set)
       build_nominations
     end
@@ -103,7 +103,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def create
-    @tag_set_nomination = TagSetNomination.new(params[:tag_set_nomination])
+    @tag_set_nomination = TagSetNomination.new(tag_set_nomination_params)
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
       request_noncanonical_info
@@ -116,7 +116,7 @@ class TagSetNominationsController < ApplicationController
 
 
   def update
-    if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
+    if @tag_set_nomination.update_attributes(tag_set_nomination_params)
       flash[:notice] = ts("Your nominations were successfully updated.")
       request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
@@ -129,7 +129,7 @@ class TagSetNominationsController < ApplicationController
   def request_noncanonical_info
     if @tag_set_nomination.character_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?} ||
       @tag_set_nomination.relationship_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?}
-      
+
       flash[:notice] += ts(" Please consider editing to add fandoms to any of your non-canonical tags!")
     end
   end
@@ -149,7 +149,7 @@ class TagSetNominationsController < ApplicationController
     TagNomination.where(:type => (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).
       for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
   end
-  
+
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
@@ -163,14 +163,14 @@ class TagSetNominationsController < ApplicationController
       @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
       more_noms = true if  @nominations_count[:fandom] > @nom_limit
       @nominations[:fandom] = more_noms ? base_nom_query("fandom").order("RAND()") : base_nom_query("fandom").order(:tagname)
-      if (@limit[:character] > 0 || @limit[:relationship] > 0) 
+      if (@limit[:character] > 0 || @limit[:relationship] > 0)
         @nominations[:cast] = base_nom_query(%w(character relationship)).
           join_fandom_nomination.
           where('fandom_nominations_tag_nominations.approved = 1').
           order(:parent_tagname, :type, :tagname)
       end
     else
-      # if there are no fandoms we're going to assume this is a one or few fandom tagset    
+      # if there are no fandoms we're going to assume this is a one or few fandom tagset
       @nominations_count[:character] = @tag_set.character_nominations.unreviewed.count
       @nominations_count[:relationship] = @tag_set.relationship_nominations.unreviewed.count
       more_noms = true if (@tag_set.character_nominations.unreviewed.count > @nom_limit || @tag_set.relationship_nominations.unreviewed.count > @nom_limit)
@@ -179,7 +179,7 @@ class TagSetNominationsController < ApplicationController
       if more_noms
         parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).value_of(:parent_tagname).uniq.first(30)
         @nominations[:character] = @nominations[:character].where(:parent_tagname => parent_tagnames) if @limit[:character] > 0
-        @nominations[:relationship] = @nominations[:relationship].where(:parent_tagname => parent_tagnames) if @limit[:relationship] > 0        
+        @nominations[:relationship] = @nominations[:relationship].where(:parent_tagname => parent_tagnames) if @limit[:relationship] > 0
       end
       @nominations[:character] = @nominations[:character].order(:parent_tagname, :tagname) if @limit[:character] > 0
       @nominations[:relationship] = @nominations[:relationship].order(:parent_tagname, :tagname) if @limit[:relationship] > 0
@@ -187,11 +187,11 @@ class TagSetNominationsController < ApplicationController
     @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
     more_noms = true if @nominations_count[:freeform] > @nom_limit
     @nominations[:freeform] = (more_noms ? base_nom_query("freeform").order("RAND()") : base_nom_query("freeform").order(:tagname)) if @limit[:freeform] > 0
-    
+
     if more_noms
       flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
     end
-    
+
     if @tag_set.tag_nominations.unreviewed.empty?
       flash[:notice] = ts("No nominations to review!")
     end
@@ -199,7 +199,7 @@ class TagSetNominationsController < ApplicationController
 
   def confirm_destroy_multiple
   end
-  
+
   def destroy_multiple
     unless @tag_set.user_is_owner?(current_user)
       flash[:error] = ts("You don't have permission to do that.")
@@ -211,14 +211,14 @@ class TagSetNominationsController < ApplicationController
     redirect_to tag_set_path(@tag_set)
   end
 
-  # update_multiple gets called from the index/review form. 
-  # we expect params like "character_approve_My Awesome Tag" and "fandom_reject_My Lousy Tag" 
+  # update_multiple gets called from the index/review form.
+  # we expect params like "character_approve_My Awesome Tag" and "fandom_reject_My Lousy Tag"
   def update_multiple
     unless @tag_set.user_is_moderator?(current_user)
       flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
-    setup_for_review    
+    setup_for_review
 
     # Collate the input into @approve, @reject, @synonym, @change, checking for:
     # - invalid tag name changes
@@ -228,18 +228,18 @@ class TagSetNominationsController < ApplicationController
     @reject = HashWithIndifferentAccess.new; @change = HashWithIndifferentAccess.new
     @errors = []; @force_expand = {}
     collect_update_multiple_results
-    
+
     # If we have errors don't move ahead
     unless @errors.empty?
       render :action => "index" and return
     end
-    
+
     # OK, now we're going ahead and making piles of db changes! eep! D:
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       # we're adding the approved tags and synonyms
       @tagnames_to_add = @approve[tag_type] + @synonym[tag_type]
       @tagnames_to_remove = @reject[tag_type]
-      
+
       # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
       tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).value_of(:tagname).uniq
       tagnames_to_change.each do |oldname|
@@ -247,10 +247,10 @@ class TagSetNominationsController < ApplicationController
         unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             :oldname => oldname, :newname => synonym)
-          render :action => "index" and return           
+          render :action => "index" and return
         end
       end
-      
+
       # do the name changes
       @change[tag_type].each do |oldname, newname|
         if TagNomination.change_tagname!(@tag_set, oldname, newname)
@@ -259,25 +259,25 @@ class TagSetNominationsController < ApplicationController
           # ughhhh
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             :oldname => oldname, :newname => newname)
-          render :action => "index" and return           
+          render :action => "index" and return
         end
       end
 
       # update the tag set
-      unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)     
+      unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
         render :action => "index" and return
       end
-      
+
       @notice ||= []
       @notice << ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
       @notice << ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
     end
-    
+
     # If we got here we made it through, YAY
     flash[:notice] = @notice
-    if @tag_set.tag_nominations.unreviewed.empty? 
+    if @tag_set.tag_nominations.unreviewed.empty?
       flash[:notice] << ts("All nominations reviewed, yay!")
       redirect_to tag_set_path(@tag_set)
     else
@@ -285,10 +285,10 @@ class TagSetNominationsController < ApplicationController
       redirect_to tag_set_nominations_path(@tag_set) and return
     end
   end
-  
+
   protected
-  
-  # gathers up the data for all the tag types 
+
+  # gathers up the data for all the tag types
   def collect_update_multiple_results
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       @approve[tag_type] = []
@@ -296,7 +296,7 @@ class TagSetNominationsController < ApplicationController
       @reject[tag_type] = []
       @change[tag_type] = []
     end
-    
+
     params.each_pair do |key, val|
       next unless val.present?
       if key.match(/^([a-z]+)_(approve|reject|synonym|change)_(.*)$/)
@@ -316,7 +316,7 @@ class TagSetNominationsController < ApplicationController
             next if val == name
             # this is the tricky one: make sure we can do this name change
             tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{type.classify}Nomination", :tagname => name).first
-            if !tagnom 
+            if !tagnom
               @errors << ts("Couldn't find a #{type} nomination for #{name}")
               @force_expand[type] = true
             elsif !tagnom.change_tagname?(val)
@@ -331,7 +331,7 @@ class TagSetNominationsController < ApplicationController
         end
       end
     end
-    
+
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       unless (intersect = @approve[tag_type] & @reject[tag_type]).empty?
         @errors << ts("You have both approved and rejected the following %{type} tags: %{intersect}", :type => tag_type, :intersect => intersect.join(", "))
@@ -339,6 +339,27 @@ class TagSetNominationsController < ApplicationController
       end
     end
   end
-  
+
+  private
+
+  def tag_set_nomination_params
+    params.require(:tag_set_nomination).permit(
+      :pseud_id,
+      :owned_tag_set_id,
+      fandom_nominations_attributes: [
+        :id,
+        :tagname,
+        character_nominations_attributes: [
+          :id, :tagname, :from_fandom_nomination
+        ],
+        relationship_nominations_attributes: [
+          :id, :tagname, :from_fandom_nomination
+        ],
+      ],
+      freeform_nominations_attributes: [
+        :id, :tagname
+      ]
+    )
+  end
 
 end
