@@ -9,6 +9,12 @@ DEFAULT_CATEGORY = "Other"
 ### Setting up a work
 # These steps get used a lot by many other steps and tests to create works in the archive to test with
 
+Given(/^I have a (\d+) "([^"]*)" works\.$/) do |number_of_works, fandom|
+  number_of_works.to_i.times do |index|
+    step %{I post the work "Work number #{index}" with fandom "#{fandom}" with "#{index}" words}
+  end
+end
+
 When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
@@ -32,7 +38,7 @@ end
 #
 # If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?(?: with "([^"]*)" words)?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud, words|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
@@ -57,12 +63,14 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
     fill_in("work[relationship_string]", with: relationship)
   end
   select(pseud, from: "work[author_attributes][ids][]") unless pseud.blank?
-  screenshot_and_save_page
   fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
+  unless words.blank?
+    fill_in("content", with: "Spam, " * words.to_i)
+  end
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?(?: with "([^"]*)" words)?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud, words|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -70,7 +78,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}" with "#{words}" words}
     click_button("Post Without Preview")
   end
   Work.tire.index.refresh
@@ -80,8 +88,8 @@ end
 # To test posting after preview, use: Given the draft "Foo"
 # Then use: When I post the work "Foo"
 # and the above step
-Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
-  step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
+Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?(?: with "([^"]*)" words)?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud, words|
+  step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}" with "#{words}" words}
   click_button("Preview")
 end
 
@@ -409,6 +417,13 @@ end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
+  Work.tire.index.refresh
+end
+
+When(/^I browse the "([^"]*)" works with fandom set to "([^"]*)"$/) do |tagname, fandom|
+  tag = Tag.find_by_name(tagname)
+  fandom = Fandom.find_by_name(fandom)
+  visit tag_works_path(tag, :fandom_id => fandom.id)
   Work.tire.index.refresh
 end
 

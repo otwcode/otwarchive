@@ -121,6 +121,30 @@ Feature: Collection
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
+  Scenario: browse the collection filtered by a tag
+
+  Given I have loaded the fixtures
+    And the following typed tags exists
+      | name              | type         | canonical |
+      | Cowboy Bebop      | Fandom       | true      |
+      | Faye Valentine    | Character    | true      |
+      | Ed                | Character    | true      |
+    And I am logged in as a random user
+  When I create the collection "Ride him cowboy" with name "bebop"
+    And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed" to the collection "Ride him cowboy"
+    And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with character "Faye Valentine" to the collection "Ride him cowboy"
+    And I have test caching turned on
+    And all search indexes are updated
+  When I view the collection "Ride him cowboy"
+    And I follow "Works (2)"
+    And I follow "Faye Valentine"
+  Then I should see "2 Works in Ride him cowboy"
+  When I view the collection "Ride him cowboy"
+    And I follow "Works (2)"
+    And I follow "Ed"
+  Then I should see "1 Work in Ride him cowboy"
+  Then I have test caching turned off
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given I have loaded the fixtures

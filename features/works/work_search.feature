@@ -3,7 +3,32 @@ Feature: Search Works
   In order to test search
   As a humble coder
   I have to use cucumber with thinking sphinx
-  
+
+  Scenario: Advance search Limit by words.
+    Given I have loaded the fixtures
+      And I am logged in as a random user
+      And a fandom exists with name: "Babylon 5", canonical: true
+      And I have a 50 "Babylon 5" works.
+    When I browse the "Babylon 5" works
+    Then I should see "Work number 29 "
+      And I should see "Words: 29 "
+      And I should not see "Work number 1 "
+    When I fill in "work_search_query" with "words:1-5"
+      And press "Sort and Filter"
+    Then I should see "5 Works in Babylon 5"
+
+  Scenario: Advance search sort by words.
+    Given I have loaded the fixtures
+      And I am logged in as a random user
+      And a fandom exists with name: "Babylon 5", canonical: true
+      And I have a 50 "Babylon 5" works.
+      And I browse the "Babylon 5" works
+    When I fill in "work_search_query" with "sort:>words"
+      And press "Sort and Filter"
+    Then I should not see "Work number 29 "
+      And I should not see "Words: 29 "
+      And I should see "Work number 1 "
+
   # do everything that doesn't modify the works in one scenario
   # so you only have to load the fixtures and update the sphinx indexes once
   Scenario: anon work doesn't show up in searches

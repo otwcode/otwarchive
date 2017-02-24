@@ -144,3 +144,4 @@ Feature: Edit Works
     When I view the work "Shared"
     Then I should see "ex_friend" within ".byline"
       And I should not see "coolperson" within ".byline"
+
