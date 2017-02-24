@@ -24,6 +24,8 @@ module NavigationHelpers
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the admin login page$/i
+      new_admin_session_path
 
     # the following are examples using path_to_pickle
 
