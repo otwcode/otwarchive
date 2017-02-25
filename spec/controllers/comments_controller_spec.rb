@@ -79,18 +79,21 @@ describe CommentsController do
       admin_post = create(:admin_post)
       post :new, admin_post_id: admin_post.id
       expect(response).to render_template("new")
+      expect(assigns(:name)).to eq(admin_post.title)
     end
 
     it "renders the :new template if commentable is a valid tag" do
       fandom = create(:fandom)
       post :new, tag_id: fandom.name
       expect(response).to render_template("new")
+      expect(assigns(:name)).to eq("Fandom")
     end
 
     it "renders the :new template if commentable is a valid comment" do
       comment = create(:comment)
       post :new, comment_id: comment.id
       expect(response).to render_template("new")
+      expect(assigns(:name)).to eq("Previous Comment")
     end
   end
 
@@ -190,6 +193,16 @@ describe CommentsController do
         expect(Comment.find_by_id(comment.id)).to_not be_present
         expect(response).to redirect_to("/where_i_came_from")
         expect(flash[:notice]).to eq "Comment deleted."
+      end
+      it "redirects and gives an error if the comment could not be deleted" do
+        fake_login
+        comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
+        allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_return(false)
+        get :destroy, id: comment.id
+        allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_call_original
+        expect(Comment.find_by_id(comment.id)).to be_present
+        expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+        expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end
     end
   end
