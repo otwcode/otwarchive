@@ -135,7 +135,7 @@ class ExternalAuthor < ActiveRecord::Base
 
   def find_or_invite(archivist = nil)
     if self.email
-      matching_user = User.find_by_email(self.email)
+      matching_user = User.find_by_email(self.email) || User.find_by_id(self.user_id)
       if matching_user
         self.claim!(matching_user)
       else
