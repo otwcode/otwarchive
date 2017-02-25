@@ -59,7 +59,7 @@ describe ExternalAuthorsController do
       it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
     end
 
-    xit "errors if the preferences can't be saved" do
+    it "errors if the preferences can't be saved" do
       external_author = FactoryGirl.create(:external_author)
       user = FactoryGirl.create(:user)
       fake_login_known_user(user)
@@ -67,7 +67,9 @@ describe ExternalAuthorsController do
       allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
       get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
       allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
-      it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! There were problems saving your preferences.")
+      expect(response).to render_template :edit
+      expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
+      expect(flash[:error]).to eq "There were problems saving your preferences."
     end
   end
 

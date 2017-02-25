@@ -84,7 +84,7 @@ class ExternalAuthorsController < ApplicationController
         redirect_to root_path
       end
     else
-      flash[:error] += "There were problems saving your preferences."
+      flash[:error] = "There were problems saving your preferences."
       render :action => "edit" 
     end
   end
