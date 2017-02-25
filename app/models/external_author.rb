@@ -141,12 +141,11 @@ class ExternalAuthor < ActiveRecord::Base
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
+          @invitation = Invitation.new(invitee_email: self.email, external_author: self, creator: User.current_user)
           @invitation.save
         end
       end
     end
-    # eventually we may want to try finding authors by pseud?
   end
 
 end
