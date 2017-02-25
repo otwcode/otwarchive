@@ -59,7 +59,7 @@ describe ExternalAuthorsController do
       it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
     end
 
-    it "errors if the preferences can't be saved" do
+    xit "errors if the preferences can't be saved" do
       external_author = FactoryGirl.create(:external_author)
       user = FactoryGirl.create(:user)
       fake_login_known_user(user)
