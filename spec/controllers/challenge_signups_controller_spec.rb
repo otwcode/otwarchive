@@ -5,7 +5,6 @@ describe ChallengeSignupsController, type: :controller do
   let(:tag_set1) { create(:tag_set) }
   let(:signup) { create(:challenge_signup) }
 
-
   describe "gift_exchange_to_csv" do
     let(:tag_set2) { create(:tag_set) }
     let(:gift_exchange) { create(:gift_exchange) }
