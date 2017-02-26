@@ -91,6 +91,10 @@ When /^I post the works "([^"]*)"$/ do |worklist|
   end
 end
 
+When /^I look for a work with url "([^"]*)"$/ do |url|
+  Work.find_by_url(url)
+end
+
 ### GIVEN
 
 Given(/^I have the Battle set loaded$/) do
@@ -523,7 +527,13 @@ Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
 
-Then /^there should be (no|a) work cached for "([^"]*)"$/ do |sense,url|
+Then /^there should be (no|a) work_url cached for "([^"]*)"$/ do |sense,url|
   work = Rails.cache.read(Work.find_by_url_cache_key(url))
-  puts work.inspect, sense
+  if sense == "no"
+    assert work.nil?
+  else
+    assert !work.nil?
+  end
 end
+
+
