@@ -29,7 +29,7 @@ describe ExternalAuthorsController do
         assert_equal response.status, 200
       end
     end
-   
+
     context "without works to claim" do
       it "redirects with an error" do
         no_story_invitation = FactoryGirl.create(:invitation)
@@ -67,7 +67,7 @@ describe ExternalAuthorsController do
           put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
           it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
         end
- 
+
         context "when updating preferences" do
           xit "renders edit template with a success message for orphaning and an error for preferences" do
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
@@ -91,28 +91,46 @@ describe ExternalAuthorsController do
   end
 
   describe "GET #index" do
-    it "redirects and gives a notice when not logged in" do
-      fake_logout
-      get :index
-      it_redirects_to_with_notice(root_path, "You can't see that information.")
+    context "when logged out" do
+      before(:each) do
+        fake_logout
+      end
+
+      it "redirects with notice" do
+        get :index
+        it_redirects_to_with_notice(root_path, "You can't see that information.")
+      end
     end
 
-    it "assigns @external_authors" do
-      external_author.claim!(user)     
-      get :index, user_id: user.login
-      expect(assigns(:external_authors)).to eq([external_author])
+    context "when logged in as user"  do
+      context "without archivist permissions" do
+        it "assigns external_authors" do
+          external_author.claim!(user)     
+          get :index, user_id: user.login
+          expect(assigns(:external_authors)).to eq([external_author])
+        end
+
+        it "redirects" do
+          get :index
+          it_redirects_to(user_external_authors_path(user))
+        end
+      end
     end
 
-    it "redirects when you are logged in" do
-      get :index
-      it_redirects_to(user_external_authors_path(user))
-    end
+    context "with archivist permissions" do
+      before(:each) do
+        allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
+      end
 
-    it "archivist are special" do
-      allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-      get :index
-      allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
-      expect(assigns(:external_authors)).to eq([])
+      after(:each) do
+        allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
+      end
+
+      it "assigns external_authors and renders index" do
+        get :index
+        expect(assigns(:external_authors)).to eq([])
+        expect(response).to render_template :index
+      end
     end
   end
 end
