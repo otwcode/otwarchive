@@ -46,32 +46,32 @@ describe ExternalAuthorsController do
     end
   end 
 
-  describe "GET #update" do
+  describe "PUT #update" do
     it "redirects with an error if the user does not have permission" do
       wrong_external_author = FactoryGirl.create(:external_author)
       someone_elses_invitation = FactoryGirl.create(:invitation, external_author: wrong_external_author)
-      get :update, invitation_token: someone_elses_invitation.token, id: external_author.id
+      put :update, invitation_token: someone_elses_invitation.token, id: external_author.id
       it_redirects_to_with_error(root_path, "You don't have permission to do that.")
     end
 
     context "When the user has permission" do
       context "when doing nothing with imported works" do
         it "redirects with a success message" do
-          get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing"
+          put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing"
           it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
         end
       end
 
       context "when orphaning imported works" do
         it "redirects with a success message" do
-          get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
+          put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
           it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
         end
  
         context "when updating preferences" do
           xit "renders edit template with a success message for orphaning and an error for preferences" do
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-            get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
+            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
