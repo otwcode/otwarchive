@@ -30,28 +30,28 @@ describe ExternalAuthorsController do
   end 
 
   describe "GET #update" do
+    before(:each) do
+      fake_login_known_user(user)
+    end
+
     it "needs to be done by the right user" do
       wrong_external_author = FactoryGirl.create(:external_author)
-      fake_login_known_user(user)
       someone_elses_invitation = FactoryGirl.create(:invitation, external_author: wrong_external_author)
       get :update, invitation_token: someone_elses_invitation.token, id: external_author.id
       it_redirects_to_with_error(root_path, "You don't have permission to do that.")
     end
 
     it "can do nothing" do
-      fake_login_known_user(user)
       get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing"
       it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
     end
 
     it "can be orphaned" do
-      fake_login_known_user(user)
       get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
       it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
     end
 
     xit "errors if the preferences can't be saved" do
-      fake_login_known_user(user)
       allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
       get :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
       allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
