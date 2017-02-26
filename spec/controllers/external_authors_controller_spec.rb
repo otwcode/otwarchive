@@ -8,6 +8,10 @@ describe ExternalAuthorsController do
   let(:invitation) { FactoryGirl.create(:invitation, external_author: external_author) }
   let(:external_author) { FactoryGirl.create(:external_author) }
 
+  before(:each) do
+    fake_login_known_user(user)
+  end
+
   describe "GET #get_external_author_from_invitation" do
     it "needs a valid invitaiton" do
       get :get_external_author_from_invitation, invitation_token: "None existent"
@@ -23,17 +27,12 @@ describe ExternalAuthorsController do
 
   describe "GET #complete_claim" do 
     it "should give the user the works" do
-      fake_login_known_user(user)
       get :complete_claim, invitation_token: invitation.token
       it_redirects_to_with_notice(user_external_authors_path(user), "We have added the stories imported under #{external_author.email} to your account.")
     end
   end 
 
   describe "GET #update" do
-    before(:each) do
-      fake_login_known_user(user)
-    end
-
     it "needs to be done by the right user" do
       wrong_external_author = FactoryGirl.create(:external_author)
       someone_elses_invitation = FactoryGirl.create(:invitation, external_author: wrong_external_author)
@@ -64,7 +63,6 @@ describe ExternalAuthorsController do
   describe "GET #edit" do
     it "assigns external_author" do
       user.save
-      fake_login_known_user(user)
       get :edit, id: external_author.id, user_id: user.login
       expect(assigns(:external_author)).to eq(external_author)
     end
@@ -72,25 +70,23 @@ describe ExternalAuthorsController do
 
   describe "GET #index" do
     it "redirects and gives a notice when not logged in" do
+      fake_logout
       get :index
       it_redirects_to_with_notice(root_path, "You can't see that information.")
     end
 
     it "assigns @external_authors" do
       external_author.claim!(user)     
-      fake_login_known_user(user)
       get :index, user_id: user.login
       expect(assigns(:external_authors)).to eq([external_author])
     end
 
     it "redirects when you are logged in" do
-      fake_login_known_user(user)
       get :index
       it_redirects_to(user_external_authors_path(user))
     end
 
     it "archivist are special" do
-      fake_login_known_user(user)
       allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
       get :index
       allow_any_instance_of(User).to receive(:is_archivist?).and_call_original
