@@ -1,7 +1,7 @@
 module LoginMacros
 
   def fake_logout
-   # Stub out the current_user method
+    # Stub out the current_user method
     @current_user = nil
     allow(controller).to receive(:logged_in?).and_return(false)
     allow(controller).to receive(:current_user).and_return(nil)

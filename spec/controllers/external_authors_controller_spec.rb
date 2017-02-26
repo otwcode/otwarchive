@@ -102,7 +102,7 @@ describe ExternalAuthorsController do
       end
     end
 
-    context "when logged in as user"  do
+    context "when logged in as user" do
       context "without archivist permissions" do
         it "assigns external_authors" do
           external_author.claim!(user)     
