@@ -273,8 +273,9 @@ Feature: Gift Exchange Challenge
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
       And the email should contain "Stargate SG-1"
-      And the email should contain "Rating:"
-      And the email should contain "Choose Not To Use Archive Warnings"
+      # Ratings and warnings don't show unless they've been selected to be something other than the default
+      And the email should not contain "Rating:"
+      And the email should not contain "Choose Not To Use Archive Warnings"
       And the email should contain "Additional Tag"
       And the email should contain "Something else weird"
       And 1 email should be delivered to "myname2"
