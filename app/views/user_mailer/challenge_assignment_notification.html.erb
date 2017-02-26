@@ -33,7 +33,7 @@
       <% if ships then %><%= style_bold(Relationship.human_attribute_name("name_with_colon", count: tag_groups["Relationship"].count)) %> <%= ships %><br><% end %>
       <% if ratings then %><%= style_bold(Rating.human_attribute_name("name_with_colon")) %> <%= ratings %><br><% end %>
       <% if warnings then %><%= style_bold(Warning.human_attribute_name("name_with_colon", count: tag_groups["Warning"].count)) %> <%= warnings %><br><% end %>
-      <% if categories then %><%= style_bold(Category.human_attribute_name("name_with_colon", count: tag_groups["Category"].count)) %> <%= categories %><br><% end %>
+      <% if categories then %><%= style_bold(Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %> <%= categories %><br><% end %>
       <% if atags then %><%= style_bold(Freeform.human_attribute_name("name_with_colon", count: tag_groups["Freeform"].count)) %> <%= atags %><br><% end %>
       <% if otags then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.optional_tags')}:") %> <%= otags %><br><% end %>
       <% if prompt.url && !prompt.url.blank? then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.prompt_url')}:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
