@@ -1,9 +1,9 @@
 <% content_for :message do %>
-<%= t 'user_mailer.challenge_assignment_notification.text.part1', collection_title: @collection.title, collection_url: collection_url(@collection) %>
+<%= t "text.part1", collection_title: @collection.title, collection_url: collection_url(@collection) %>
 
-<%= t 'user_mailer.challenge_assignment_notification.recipient' %> <%= @request.nil? ? t('challenge_assignment_notification.recipient_missing') : text_pseud(@request.pseud) %>
+<%= t "recipient" %> <%= @request.nil? ? t("recipient_missing") : text_pseud(@request.pseud) %>
 
-<%= t 'user_mailer.challenge_assignment_notification.prompts' %>
+<%= t "prompts" %>
 <% @request.requests.each_with_index do |prompt, index| %>
 <% tag_groups = prompt.tag_groups %>
 <% def tag_list(tags) %>
@@ -22,26 +22,26 @@
 
 <%= index + 1 %>. <%= prompt.title %>
 
-<% if fandoms then %><%= Fandom.human_attribute_name("name_with_colon", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) %> <%= fandoms %><% end %><% if chars %>
+<% if fandoms %><%= Fandom.human_attribute_name("name_with_colon", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) %> <%= fandoms %><% end %><% if chars %>
 <%= Character.human_attribute_name("name_with_colon", count: prompt.any_character ? 1 : tag_groups["Character"].count) %> <%= chars %><% end %><% if ships %>
 <%= Relationship.human_attribute_name("name_with_colon", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) %> <%= ships %><% end %><% if ratings %>
 <%= Rating.human_attribute_name("name_with_colon") %> <%= ratings %><% end %><% if warnings %>
 <%= Warning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count) %> <%= warnings %><% end %><% if categories %>
 <%= Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count) %> <%= categories %><% end %><% if atags %>
 <%= Freeform.human_attribute_name("name_with_colon", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) %> <%= atags %><% end %><% if otags %>
-<%= t 'user_mailer.challenge_assignment_notification.optional_tags' %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
-<%= t 'user_mailer.challenge_assignment_notification.prompt_url' %> <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
-<%= t 'user_mailer.challenge_assignment_notification.description' %>
+<%= t "optional_tags" %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
+<%= t "prompt_url" %> <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
+<%= t "description" %>
     <%= to_plain_text(prompt.description) %><% end %>
 
 <% end %><%= text_divider %>
 
-<%= t 'user_mailer.challenge_assignment_notification.due' %> <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
+<%= t 'due' %> <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
-<%= t 'user_mailer.challenge_assignment_notification.text.look_up', link: user_assignments_url(@assigned_user) %>
+<%= t "text.look_up", link: user_assignments_url(@assigned_user) %>
 <% if @collection && !@collection.assignment_notification.blank? %>
 
 
 <%= @collection.assignment_notification %><% end %><% end %>
-<% content_for :footer_note do %><%= t 'user_mailer.challenge_assignment_notification.text.footer', title: @collection.title, url: collection_url(@collection), profile_url: collection_profile_url(@collection) %><% end %>
+<% content_for :footer_note do %><%= t "text.footer", title: @collection.title, url: collection_url(@collection), profile_url: collection_profile_url(@collection) %><% end %>
 <% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
