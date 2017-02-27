@@ -39,12 +39,12 @@ describe ExternalAuthorsController do
     end
   end
 
-  describe "GET #complete_claim" do 
+  describe "GET #complete_claim" do
     it "redirects with a success message" do
       get :complete_claim, invitation_token: invitation.token
       it_redirects_to_with_notice(user_external_authors_path(user), "We have added the stories imported under #{external_author.email} to your account.")
     end
-  end 
+  end
 
   describe "PUT #update" do
     it "redirects with an error if the user does not have permission" do
@@ -84,7 +84,6 @@ describe ExternalAuthorsController do
 
   describe "GET #edit" do
     it "assigns external_author" do
-      user.save
       get :edit, id: external_author.id, user_id: user.login
       expect(assigns(:external_author)).to eq(external_author)
     end
@@ -105,7 +104,7 @@ describe ExternalAuthorsController do
     context "when logged in as user" do
       context "without archivist permissions" do
         it "assigns external_authors" do
-          external_author.claim!(user)     
+          external_author.claim!(user)
           get :index, user_id: user.login
           expect(assigns(:external_authors)).to eq([external_author])
         end
