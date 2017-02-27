@@ -124,16 +124,8 @@ Feature:
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"
-    # Has old name until indexes are updated
     When I search for works containing "oldusername"
-    Then I should see "Epic story"
-      And I should see "newusername"
-    # Still doesn't yet work due to bug AO3-3468
-    When all search indexes are updated
-    When I search for works containing "oldusername"
-    # Change the two lines below this comment to the reverse when bug is fixed
-    Then I should not see "No results found"
-      And I should see "Epic story"
-    # Works properly regardless of bug
+    Then I should see "No results found"
+      And I should not see "Epic story"
     When I search for works containing "newusername"
     Then I should see "Epic story"
