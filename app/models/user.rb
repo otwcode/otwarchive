@@ -548,22 +548,15 @@ class User < ActiveRecord::Base
     if login.downcase == login_was.downcase
       old_pseud.name = login
       old_pseud.save!
-      old_pseud.works.each do |work|
-        work.set_author_sorting
-        work.save!
-      end
+      old_pseud.reset_author_sorting
     else
       new_pseud = self.pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
       return if new_pseud.present?
-
       if old_pseud.present?
         # change the old pseud to match
         old_pseud.update_attribute(:name, login)
-        old_pseud.works.each do |work|
-          work.set_author_sorting
-          work.save!
-        end
+        old_pseud.reset_author_sorting
       else
         # shouldn't be able to get here, but just in case
         Pseud.create(name: login, user_id: self.id)
