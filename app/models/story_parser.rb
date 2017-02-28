@@ -105,7 +105,6 @@ class StoryParser
         work.delete if work
       end
     end
-    Work.flush_find_by_url_cache
     return [works, failed_urls, errors]
   end
 
@@ -350,7 +349,6 @@ class StoryParser
         # ack! causing the chapters to exist even if work doesn't get created!
         # chapter.save
       end
-      Work.flush_find_by_url_cache
       return work
     end
 

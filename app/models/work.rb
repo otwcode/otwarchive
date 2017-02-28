@@ -186,15 +186,15 @@ class Work < ActiveRecord::Base
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
-  
+
   after_save :expire_caches
-  
+
   def expire_caches
     self.pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
     end
-    
+
     self.all_collections.each do |collection|
       collection.update_works_index_timestamp!
     end
@@ -203,6 +203,7 @@ class Work < ActiveRecord::Base
       tag.update_works_index_timestamp!
     end
     Work.expire_work_tag_groups_id(self.id)
+    Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -249,7 +250,7 @@ class Work < ActiveRecord::Base
     pseuds = Pseud.select("pseuds.id, pseuds.user_id").
                     joins(:creatorships).
                     where(creatorships: {
-                      creation_id: ids, 
+                      creation_id: ids,
                       creation_type: 'Work'
                       }
                     )
@@ -311,7 +312,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.find_by_url_generation
-    Rails.cache.fetch(Work.find_by_url_generation_key, :raw => true) { rand(1..1000) } 
+    Rails.cache.fetch(Work.find_by_url_generation_key, raw: true) { rand(1..1000) }
   end
 
   def self.flush_find_by_url_cache
@@ -320,25 +321,33 @@ class Work < ActiveRecord::Base
 
   def self.find_by_url_cache_key(url)
     url = UrlFormatter.new(url)
-    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.minimal}"
+    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
   end
 
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
   # 1. first exact match
   # 2. first exact match with variants of the provided url
   # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
+
+  def self.find_by_url_orig(url)
+    url = UrlFormatter.new(url)
+    Work.where(imported_from_url: url.original).first ||
+      Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+        work_url = UrlFormatter.new(w.imported_from_url)
+        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+          work_url.send(method) == url.send(method)
+        }
+      }.first
+  end
+
   def self.find_by_url(url)
-    Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
-      url = UrlFormatter.new(url)
-      Work.where(:imported_from_url => url.original).first ||
-        Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-        Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
-          work_url = UrlFormatter.new(w.imported_from_url)
-          ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
-            work_url.send(method) == url.send(method)
-          }
-        }.first
+    result2 = Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
+      find_by_url_orig(url)
     end
+    result = find_by_url_orig(url)
+    raise "This is wrong" unless result == result2
+    result
   end
 
   ########################################################################
@@ -362,7 +371,7 @@ class Work < ActiveRecord::Base
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
       if results[:banned_pseuds].present?
         self.errors.add(
-          :base, 
+          :base,
           ts("%{name} is currently banned and cannot be listed as a co-creator.",
              name: results[:banned_pseuds].to_sentence
           )
@@ -551,27 +560,27 @@ class Work < ActiveRecord::Base
   end
 
   def set_revised_at(date=nil)
-    date ||= self.chapters.where(:posted => true).maximum('published_at') || 
+    date ||= self.chapters.where(:posted => true).maximum('published_at') ||
         self.revised_at || self.created_at
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
-  
+
   def set_revised_at_by_chapter(chapter)
     return if self.posted? && !chapter.posted?
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? || 
-        chapter.published_at > self.revised_at.to_date || 
+    elsif self.revised_at.nil? ||
+        chapter.published_at > self.revised_at.to_date ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
       self.set_revised_at(max_date)
-    # else 
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't 
+    # else
+      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
       # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
       # work's position in date-sorted indexes, so don't do it unnecessarily.
     end
@@ -795,7 +804,7 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = string.to_ascii 
+    string = string.to_ascii
     string.gsub(/[^[\w _-]]+/, '')
   end
 
@@ -1367,11 +1376,11 @@ class Work < ActiveRecord::Base
       root: false,
       only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids, 
-        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, 
+      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
-      anonymous: anonymous?, 
+      anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work'
     )
