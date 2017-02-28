@@ -170,7 +170,7 @@ class ChallengeAssignmentsController < ApplicationController
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    @assignments = ChallengeAssignment.update(challenge_assignment_params.keys, challenge_assignment_params.values).reject {|a| a.errors.empty?}
+    @assignments = ChallengeAssignment.update(challenge_assignment_params[:challenge_assignments].keys, challenge_assignment_params[:challenge_assignments].values).reject {|a| a.errors.empty?}
     ChallengeAssignment.update_placeholder_assignments!(@collection)
     if @assignments.empty?
       flash[:notice] = "Assignments updated"
@@ -256,7 +256,16 @@ class ChallengeAssignmentsController < ApplicationController
     # Ideally, the param structure would be updated to allow for a more secure
     # method of permitting params. Currently based off a railscast for editing
     # multiple records individually prior to the advent of strong params.
-    params.require(:challenge_assignments).permit!
+    params.permit(
+      :collection_id,
+      challenge_assignments: [
+        :id,
+        :collection_id,
+        :request_signup_pseud,
+        :offer_signup_pseud,
+        :pinch_hitter_byline
+      ]
+    )
   end
 
 end
