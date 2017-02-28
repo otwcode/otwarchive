@@ -188,6 +188,7 @@ class Work < ActiveRecord::Base
   after_update :adjust_series_restriction
 
   after_save :expire_caches
+  after_destroy :expire_caches
 
   def expire_caches
     self.pseuds.each do |pseud|
@@ -329,7 +330,7 @@ class Work < ActiveRecord::Base
   # 2. first exact match with variants of the provided url
   # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
 
-  def self.find_by_url_orig(url)
+  def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
       Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
@@ -342,12 +343,9 @@ class Work < ActiveRecord::Base
   end
 
   def self.find_by_url(url)
-    result2 = Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
-      find_by_url_orig(url)
+    Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
+      find_by_url_uncached(url)
     end
-    result = find_by_url_orig(url)
-    raise "This is wrong" unless result == result2
-    result
   end
 
   ########################################################################
