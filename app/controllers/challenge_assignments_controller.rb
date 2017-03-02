@@ -257,6 +257,9 @@ class ChallengeAssignmentsController < ApplicationController
     # method of permitting params. Currently based off a railscast for editing
     # multiple records individually prior to the advent of strong params.
     params.permit(
+      :utf8,
+      :_method,
+      :commit,
       :collection_id,
       challenge_assignments: [
         :id,
