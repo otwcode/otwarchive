@@ -1,5 +1,4 @@
 module LoginMacros
-
   def fake_login
     # Stub out the current_user method
     @current_user = FactoryGirl.create(:user)
