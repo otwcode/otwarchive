@@ -1,5 +1,5 @@
 class Challenge::GiftExchangeController < ChallengesController
-  
+
   before_filter :users_only
   before_filter :load_collection
   before_filter :load_challenge, :except => [:new, :create]
@@ -34,11 +34,11 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def create
-    @challenge = GiftExchange.new(params[:gift_exchange])
+    @challenge = GiftExchange.new(gift_exchange_params)
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = ts('Challenge was successfully created.')      
+      flash[:notice] = ts('Challenge was successfully created.')
       redirect_to collection_profile_path(@collection)
     else
       render :action => :new
@@ -46,12 +46,12 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def update
-    if @challenge.update_attributes(params[:gift_exchange])
+    if @challenge.update_attributes(gift_exchange_params)
       flash[:notice] = ts('Challenge was successfully updated.')
-      
+
       # expire the cache on the signup form
       expire_fragment(:controller => 'challenge_signups', :action => 'new')
-      
+
       # see if we initialized the tag set
       redirect_to collection_profile_path(@collection)
     else
@@ -64,10 +64,60 @@ class Challenge::GiftExchangeController < ChallengesController
     flash[:notice] = 'Challenge settings were deleted.'
     redirect_to @collection
   end
-  
+
   private
+
+  def gift_exchange_params
+    params.require(:gift_exchange).permit(
+      :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
+      :assignments_due_at_string, :requests_summary_visible, :requests_num_required,
+      :requests_num_allowed, :offers_num_required, :offers_num_allowed,
+      :signup_instructions_general, :signup_instructions_requests,
+      :signup_instructions_offers, :request_url_label, :offer_url_label,
+      :offer_description_label, :request_description_label,
+      request_restriction_attributes: [
+        :id, :optional_tags_allowed, :title_required, :title_allowed, :description_required,
+        :description_allowed, :url_required, :url_allowed, :fandom_num_required,
+        :fandom_num_allowed, :allow_any_fandom, :require_unique_fandom,
+        :character_num_required, :character_num_allowed, :allow_any_character,
+        :require_unique_character, :relationship_num_required, :relationship_num_allowed,
+        :allow_any_relationship, :require_unique_relationship, :rating_num_required,
+        :rating_num_allowed, :allow_any_rating, :require_unique_rating,
+        :category_num_required, :category_num_allowed, :allow_any_category,
+        :require_unique_category, :freeform_num_required, :freeform_num_allowed,
+        :allow_any_freeform, :require_unique_freeform, :warning_num_required,
+        :warning_num_allowed, :allow_any_warning, :require_unique_warning
+      ],
+      offer_restriction_attributes: [
+        :id, :optional_tags_allowed, :title_required, :title_allowed,
+        :description_required, :description_allowed, :url_required, :url_allowed,
+        :fandom_num_required, :fandom_num_allowed, :allow_any_fandom,
+        :require_unique_fandom, :character_num_required, :character_num_allowed,
+        :allow_any_character, :require_unique_character, :relationship_num_required,
+        :relationship_num_allowed, :allow_any_relationship, :require_unique_relationship,
+        :rating_num_required, :rating_num_allowed, :rating_num_required, :allow_any_rating, :require_unique_rating,
+        :category_num_required, :category_num_allowed, :allow_any_category,
+        :require_unique_category, :freeform_num_required, :freeform_num_allowed,
+        :allow_any_freeform, :require_unique_freeform, :warning_num_required,
+        :warning_num_allowed, :allow_any_warning, :require_unique_warning,
+        :tag_sets_to_add, :character_restrict_to_fandom,
+        :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
+        :relationship_restrict_to_tag_set,
+        tag_sets_to_remove: []
+      ],
+      potential_match_settings_attributes: [
+        :id, :num_required_prompts, :num_required_fandoms, :num_required_characters,
+        :num_required_relationships, :num_required_freeforms, :num_required_categories,
+        :num_required_ratings, :num_required_warnings, :include_optional_fandoms,
+        :include_optional_characters, :include_optional_relationships,
+        :include_optional_freeforms, :include_optional_categories, :include_optional_ratings,
+        :include_optional_warnings, :max_tags_matched
+      ]
+    )
+  end
+
   def initializing_tag_sets?
-    # uuughly :P but check params to see if we're initializing 
+    # uuughly :P but check params to see if we're initializing
     !params[:gift_exchange][:offer_restriction_attributes].keys.
       select { |k| k =~ /init_(less|greater)/ }.
       select { |k| params[:gift_exchange][:offer_restriction_attributes][k] == '1' }.
