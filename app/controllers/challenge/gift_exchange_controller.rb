@@ -74,7 +74,8 @@ class Challenge::GiftExchangeController < ChallengesController
       :requests_num_allowed, :offers_num_required, :offers_num_allowed,
       :signup_instructions_general, :signup_instructions_requests,
       :signup_instructions_offers, :request_url_label, :offer_url_label,
-      :offer_description_label, :request_description_label,
+      :offer_description_label, :request_description_label, :works_reveal_at_string,
+      :authors_reveal_at_string,
       request_restriction_attributes: [
         :id, :optional_tags_allowed, :title_required, :title_allowed, :description_required,
         :description_allowed, :url_required, :url_allowed, :fandom_num_required,
