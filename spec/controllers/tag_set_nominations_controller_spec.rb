@@ -906,7 +906,7 @@ describe TagSetNominationsController do
             fake_login_known_user(random_user)
           end
 
-          it 'redirects and returns an error message', focus: true do
+          it 'redirects and returns an error message' do
             put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id, tag_set_nomination: {pseud_id: nil}
             it_redirects_to_with_notice(tag_set_path(owned_tag_set),
                                         'You can only see your own nominations or nominations for a set you moderate.')
