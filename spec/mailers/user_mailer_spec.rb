@@ -197,4 +197,48 @@ describe UserMailer do
       end
     end
   end
+  
+  describe "invite request" do
+    token = 'abc123'
+
+    before(:each) do
+      @invitation = FactoryGirl.create(:invitation, token: token)
+    end
+
+    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+
+    # Test the headers
+    it 'should have a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'should have the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'should have text contents' do
+        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+      end
+      
+      it 'should not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+    end
+
+    describe 'text version' do
+      it 'should say the right thing' do
+        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+      end
+      
+      it 'should not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
 end
