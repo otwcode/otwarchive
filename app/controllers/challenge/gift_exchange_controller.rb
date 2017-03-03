@@ -10,8 +10,8 @@ class Challenge::GiftExchangeController < ChallengesController
 
   # we use this to make the times get set in the moderator's specified timezone
   def set_time_zone
-    if params[:gift_exchange] && params[:gift_exchange][:time_zone]
-      Time.zone = params[:gift_exchange][:time_zone]
+    if gift_exchange_params && gift_exchange_params[:time_zone]
+      Time.zone = gift_exchange_params[:time_zone]
     elsif @challenge && @challenge.time_zone
       Time.zone = @challenge.time_zone
     end
@@ -119,7 +119,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def initializing_tag_sets?
     # uuughly :P but check params to see if we're initializing
-    !params[:gift_exchange][:offer_restriction_attributes].keys.
+    !gift_exchange_params[:offer_restriction_attributes].keys.
       select { |k| k =~ /init_(less|greater)/ }.
       select { |k| params[:gift_exchange][:offer_restriction_attributes][k] == '1' }.
       empty?
