@@ -245,4 +245,53 @@ describe UserMailer do
       end
     end
   end
+
+  describe "challenge assignment" do
+
+    let!(:gift_exchange) { create(:gift_exchange) }
+    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+    let!(:otheruser) { create(:user) }
+    let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
+    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
+
+    let(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
+
+    # Test the headers
+    it 'should have a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'should have the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}] [#{collection.title}] Your Assignment!"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'should have text contents' do
+        expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
+      end
+      
+      it 'should not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'should not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe 'text version' do
+      it 'should say the right thing' do
+        expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
+      end
+      
+      it 'should not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
 end
