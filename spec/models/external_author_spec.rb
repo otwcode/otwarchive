@@ -15,7 +15,7 @@ describe ExternalAuthor, type: :model do
     context "a user with a matching email exists" do
       subject { unclaimed_user_author }
 
-      it "should automatically be claimed by the user" do
+      it "is automatically claimed by the user" do
         subject.find_or_invite(archivist)
         expect(subject.claimed?).to eq(true)
         expect(subject.user_id).to eq(unclaimed_user.id)
@@ -25,12 +25,12 @@ describe ExternalAuthor, type: :model do
     context "a claimed external user with a matching email exists" do
       subject { claimed_ext_author }
 
-      it "should automatically be claimed by the corresponding user" do
+      it "is automatically claimed by the corresponding user" do
         expect(subject).to receive(:claim!).with(claimed_user)
         subject.find_or_invite(archivist)
       end
 
-      it "should not send an invitation email" do
+      it "does NOT generate an invitation email" do
         expect(Invitation).to_not receive(:new)
         subject.find_or_invite(archivist)
       end
@@ -39,7 +39,7 @@ describe ExternalAuthor, type: :model do
     context "no external author or user with a matching email exists" do
       subject { unclaimed_ext_author }
 
-      it "should generate an invite for the email address" do
+      it "generates an invitation email" do
         expect(Invitation).to receive(:new).and_call_original
         subject.find_or_invite(archivist)
       end
