@@ -512,7 +512,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Additional Tags:"
         And the email should contain "fic"
         And the email should contain "art"
-        And the email should contain "Characters:"
+        And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
         And the email should contain "mature"
