@@ -1,6 +1,6 @@
 # GB English translations for Ruby on Rails
 
-"en-GB":
+en-GB:
   date:
     formats:
       default: "%d-%m-%Y"
