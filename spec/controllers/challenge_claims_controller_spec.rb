@@ -7,6 +7,7 @@ RSpec.describe ChallengeClaimsController, type: :controller do
   let(:signups) { create(:challenge_signup) }
   let(:collection) { signups.collection }
   let(:claim) { create(:challenge_claim, collection: collection) }
+  let(:empty_claim) { create(:challenge_claim) }
 
   describe 'index' do
     it 'gives a notice if the collection is closed' do
@@ -32,9 +33,16 @@ RSpec.describe ChallengeClaimsController, type: :controller do
       it_redirects_to(collection_prompt_path(collection, claim.request_prompt))
     end
 
-    xit 'needs a collection' do
+    it 'needs a claim' do
       fake_login_known_user(@user)
-      get :show
+      get :show, collection_id: "none existent collection"
+      it_redirects_to_with_error(root_path, \
+                                 "What claim did you want to work on?")
+    end
+
+    it 'needs a collection' do
+      fake_login_known_user(@user)
+      get :show, id: empty_claim.id, collection_id: "none existent collection"
       it_redirects_to_with_error(root_path, \
                                  "What challenge did you want to work with?")
     end
