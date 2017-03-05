@@ -229,16 +229,18 @@ en:
         part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
         part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
     invitation:
+      subject: "%{app_name} Invitation"
       greeting: "Hello from the %{app_name}!"
       has_invited: "%{user_name} has invited you to join our beta!"
-      been_invited_html: "You've been invited to join our beta!"
+      been_invited: "You've been invited to join our beta!"
       part1: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks."
       part2: "Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \\o/"
-      part3_html: "If you'd like to join us, please sign up at the following address:"
       text:
-        faq_link: "For more information, please check out our FAQ at"
+        faq_link: "For more information, please check out our FAQ at %{faq_link}."
+        part3: "If you'd like to join us, please sign up at the following address: %{invitation_link}"
       html:
-        faq_link: "For more information, please check out"
+        part3: "If you'd like to join us, please sign up at the following address: %{invitation_link}"
+        faq_link: "For more information, please check out %{faq_link}."
         faq_link_text: "our FAQ"
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"

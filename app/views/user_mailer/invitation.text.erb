@@ -1,18 +1,17 @@
 <% content_for :message do %>
-<%= t "user_mailer.invitation.greeting", app_name: ArchiveConfig.APP_NAME %>
+<%= t ".greeting", app_name: ArchiveConfig.APP_NAME %>
 
 <% if !@user_name.blank? %>
-<%= t "user_mailer.invitation.has_invited", user_name: @user_name %>
+<%= t ".has_invited", user_name: @user_name %>
 <% else %>
-<%= t "user_mailer.invitation.been_invited_html" %>
+<%= t ".been_invited" %>
 <% end %>
 
-<%= t "user_mailer.invitation.part1" %>
+<%= t ".part1" %>
 
-<%= t "user_mailer.invitation.part2" %>
+<%= t ".part2" %>
 
-<%= t "user_mailer.invitation.part3_html" %>
-<%= signup_url(:invitation_token => @invitation.token) %>
+<%= t ".text.part3_html", invitation_link: signup_url(:invitation_token => @invitation.token) %>
 
-<%= t "user_mailer.invitation.text.faq_link" %> <%= archive_faqs_url %>.
+<%= t ".text.faq_link", faq_link: archive_faqs_url %>
 <% end %>

@@ -1,30 +1,29 @@
 <% content_for :message do %>
   <p>
-    <%= t "user_mailer.invitation.greeting", app_name: ArchiveConfig.APP_NAME %>
+    <%= t ".greeting", app_name: ArchiveConfig.APP_NAME %>
   </p>
 
   <p>
     <% if !@user_name.blank? %>
-      <%= t "user_mailer.invitation.has_invited", user_name: style_bold(@user_name) %>
+      <%= t ".has_invited", user_name: style_bold(@user_name) %>
     <% else %>
-      <%= t "user_mailer.invitation.been_invited_html" %>
+      <%= t ".been_invited" %>
     <% end %>
   </p>
 
   <p>
-    <%= t "user_mailer.invitation.part1" %>
+    <%= t ".part1" %>
   </p>
 
   <p>
-    <%= t "user_mailer.invitation.part2" %>
+    <%= t ".part2" %>
   </p>
 
   <p>
-    <%= t "user_mailer.invitation.part3_html" %>
-    <%= style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
+    <%= t ".html.part3", invitation_link: style_link(signup_url(:invitation_token: @invitation.token), signup_url(:invitation_token: @invitation.token)) %>
   </p>
 
   <p>
-    <%= t "user_mailer.invitation.html.faq_link" %> <%= style_link(t("user_mailer.invitation.html.faq_link_text"), archive_faqs_url) %>.
+    <%= t ".html.faq_link", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url) %>
   </p>
 <% end %>
