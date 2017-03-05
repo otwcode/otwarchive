@@ -1,14 +1,10 @@
 class ChallengeClaimsController < ApplicationController
-
   before_filter :users_only
-  before_filter :load_collection, :except => [:index]
-  before_filter :collection_owners_only, :except => [:index, :show, :create, :destroy]
-  before_filter :load_claim_from_id, :only => [:show, :destroy]
-
-  before_filter :load_challenge, :except => [:index]
-
-  before_filter :allowed_to_destroy, :only => [:destroy]
-
+  before_filter :load_collection, except: [:index]
+  before_filter :collection_owners_only, except: [:index, :show, :create, :destroy]
+  before_filter :load_claim_from_id, only: [:show, :destroy]
+  before_filter :load_challenge, except: [:index]
+  before_filter :allowed_to_destroy, only: [:destroy]
 
   # PERMISSIONS AND STATUS CHECKING
 
@@ -65,7 +61,6 @@ class ChallengeClaimsController < ApplicationController
     @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
-
   # ACTIONS
 
   def index
@@ -77,7 +72,7 @@ class ChallengeClaimsController < ApplicationController
       @challenge = @collection.challenge if @collection
       @claims = ChallengeClaim.unposted_in_collection(@collection)
       if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
-        @claims = @claims.where(:claiming_user_id => current_user.id)
+        @claims = @claims.where(claiming_user_id: current_user.id)
       end
 
       # sorting
@@ -102,7 +97,7 @@ class ChallengeClaimsController < ApplicationController
         redirect_to '/' and return
       end
     end
-    @claims = @claims.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+    @claims = @claims.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   def show
@@ -118,7 +113,7 @@ class ChallengeClaimsController < ApplicationController
     else
       flash[:error] = "We couldn't save the new claim."
     end
-    redirect_to collection_claims_path(@collection, :for_user => true)
+    redirect_to collection_claims_path(@collection, for_user: true)
   end
 
   def destroy
@@ -139,5 +134,4 @@ class ChallengeClaimsController < ApplicationController
     end
     redirect_to collection_claims_path(@collection)
   end
-
 end
