@@ -15,7 +15,7 @@ class ChallengeClaimsController < ApplicationController
       # What we want is the ruby &. operator
       @challenge = @challenge_claim.collection.challenge if @challenge_claim.collection
     end
-    no_challenge and return unless @challenge
+    no_challenge && return unless @challenge
   end
 
   def no_challenge
@@ -26,7 +26,7 @@ class ChallengeClaimsController < ApplicationController
 
   def load_claim_from_id
     @challenge_claim = ChallengeClaim.find_by_id(params[:id])
-    no_claim and return unless @challenge_claim
+    no_claim && return unless @challenge_claim
   end
 
   def no_claim
@@ -41,20 +41,20 @@ class ChallengeClaimsController < ApplicationController
 
   def load_user
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
-    no_user and return unless @user
+    no_user && return unless @user
   end
 
   def no_user
     flash[:error] = ts("What user were you trying to work with?")
-    redirect_to "/" and return
+    redirect_to "/" && return
     false
   end
 
   def owner_only
-    unless @user == @challenge_claim.claiming_user
-      flash[:error] = ts("You aren't the claimer of that prompt.")
-      redirect_to "/" and return false
-    end
+    return if @user == @challenge_claim.claiming_user
+    flash[:error] = ts("You aren't the claimer of that prompt.")
+    redirect_to "/"
+    false
   end
 
   def allowed_to_destroy
@@ -64,37 +64,24 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if !(@collection = Collection.find_by_name(params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
-      flash[:notice] = ts("This challenge is currently closed to new posts.")
-    end
+    flash[:notice] = ts("This challenge is currently closed to new posts.") if !(@collection = Collection.find_by_name(params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
     if params[:collection_id]
       return unless load_collection
       @challenge = @collection.challenge if @collection
       @claims = ChallengeClaim.unposted_in_collection(@collection)
-      if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
-        @claims = @claims.where(claiming_user_id: current_user.id)
-      end
-
+      @claims = @claims.where(claiming_user_id: current_user.id) if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
       # sorting
       set_sort_order
 
-      if params[:sort] == "claimer"
-        @claims = @claims.order_by_offering_pseud(@sort_direction)
-      else
-        @claims = @claims.order(@sort_order)
-      end
+      @claims = params[:sort] == "claimer" ? @claims.order_by_offering_pseud(@sort_direction) : @claims.order(@sort_order)
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
-				if params[:posted]
-					@claims = @user.request_claims.order_by_date.posted
-				end
-        if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-          @claims = @claims.in_collection(@collection)
-        end
+        @claims = @user.request_claims.order_by_date.posted if params[:posted]
+        @claims = @claims.in_collection(@collection) if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
       else
         flash[:error] = ts("You aren't allowed to see that user's claims.")
-        redirect_to '/' and return
+        redirect_to '/' && return
       end
     end
     @claims = @claims.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
@@ -109,26 +96,18 @@ class ChallengeClaimsController < ApplicationController
     # create a new claim
     claim = ChallengeClaim.new(params[:challenge_claim])
     if claim.save
-      flash[:notice] = "New claim made."
+      flash[:notice] = ts("New claim made.")
     else
-      flash[:error] = "We couldn't save the new claim."
+      flash[:error] = ts("We couldn't save the new claim.")
     end
     redirect_to collection_claims_path(@collection, for_user: true)
   end
 
   def destroy
     @claim = ChallengeClaim.find(params[:id])
-
     begin
-      if @claim.claiming_user == current_user
-        @usernotmod = "true"
-      end
       @claim.destroy
-      if @usernotmod == "true"
-        flash[:notice] = ts("Your claim was deleted.")
-      else
-        flash[:notice] = ts("The claim was deleted.")
-      end
+      flash[:notice] = @claim.claiming_user == current_user ? ts("Your claim was deleted.") : ts("The claim was deleted.")
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
