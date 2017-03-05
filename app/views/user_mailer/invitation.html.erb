@@ -20,7 +20,7 @@
   </p>
 
   <p>
-    <%= t ".html.part3", invitation_link: style_link(signup_url(:invitation_token: @invitation.token), signup_url(:invitation_token: @invitation.token)) %>
+    <%= t ".html.part3", invitation_link: style_link(signup_url(invitation_token: @invitation.token), signup_url(invitation_token: @invitation.token)) %>
   </p>
 
   <p>

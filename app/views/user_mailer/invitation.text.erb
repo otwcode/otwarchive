@@ -11,7 +11,7 @@
 
 <%= t ".part2" %>
 
-<%= t ".text.part3_html", invitation_link: signup_url(:invitation_token => @invitation.token) %>
+<%= t ".text.part3", invitation_link: signup_url(invitation_token => @invitation.token) %>
 
 <%= t ".text.faq_link", faq_link: archive_faqs_url %>
 <% end %>
