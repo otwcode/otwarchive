@@ -18,19 +18,20 @@ RSpec.describe ChallengeClaimsController, type: :controller do
       expect(assigns(:claims))
     end
 
-    xit 'will not allow you to see someone elses claims' do
+    it 'will not allow you to see someone elses claims' do
       second_user = create(:user)
       fake_login_known_user(user)
       get :index, id: claim.id, user_id: second_user.id
       it_redirects_to_with_error(root_path, \
-                                 "You aren't allowed to see that user's claims")
+                                 "You aren't allowed to see that user's claims.")
     end
   end
 
   describe 'show' do
-    xit 'redirects' do
+    it 'redirects' do
+      fake_login_known_user(@user)
       get :show, id: claim.id, collection_id: collection.name
-      it_redirects_to(collection_prompt_path(collection, claim.request_prompt))
+      it_redirects_to(root_path)
     end
 
     it 'needs a claim' do
