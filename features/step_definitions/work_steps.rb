@@ -78,7 +78,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by_title(title)
     visit work_url(work)
-    (number_of_chapters.to_i - 1).times do |i|
+    (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
       click_button("Post Without Preview")
