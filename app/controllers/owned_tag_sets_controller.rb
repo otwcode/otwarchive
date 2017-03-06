@@ -222,7 +222,7 @@ class OwnedTagSetsController < ApplicationController
       :usable, :nominated, :fandom_nomination_limit, :character_nomination_limit,
       :relationship_nomination_limit, :freeform_nomination_limit,
       tag_set_attributes: [
-        :id,
+        :id, :fandom_tags_to_remove, :character_tags_to_remove, :relationship_tags_to_remove, :freeform_tags_to_remove,
         :from_owned_tag_set, :fandom_tagnames_to_add, :character_tagnames_to_add,
         :relationship_tagnames_to_add, :freeform_tagnames_to_add,
         character_tagnames: [], rating_tagnames: [], warning_tagnames: [],
