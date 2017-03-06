@@ -10,7 +10,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   # we use this to make the times get set in the moderator's specified timezone
   def set_time_zone
-    if gift_exchange_params && gift_exchange_params[:time_zone]
+    if params[:gift_exchange] && gift_exchange_params[:time_zone]
       Time.zone = gift_exchange_params[:time_zone]
     elsif @challenge && @challenge.time_zone
       Time.zone = @challenge.time_zone
