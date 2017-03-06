@@ -37,7 +37,7 @@ content notice to visitors who are not logged in
   When I follow "Proceed"
   Then I should find myself on Chapter 3 of the work "WIP"
   When "AO3-4751" is fixed
-    And I should see "Hits: 1"
+    # And I should see "Hits: 1"
 
 Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
