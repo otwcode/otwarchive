@@ -70,6 +70,13 @@ describe OwnedTagSetsController do
         get :show_options, params
       end
 
+      context "where the restriction isn't found" do
+        it "displays an error and redirects" do
+          get :show_options
+          it_redirects_to_with_error(tag_sets_path, "Which Tag Set did you want to look at?")
+        end
+      end
+
       context "where tag_type isn't specified" do
         it "then sets the correct tags with the type fandom" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
@@ -104,6 +111,13 @@ describe OwnedTagSetsController do
   end
 
   describe "show" do
+    context "where tag set is not found" do
+      it "redirects and displays a notice" do
+        get :show, id: 12345
+        it_redirects_to_with_notice(tag_sets_path, "What Tag Set did you want to look at?")
+      end
+    end
+
     context "where tag set is found" do
       let(:visible) { false }
       let(:tag) { create(:character) }
