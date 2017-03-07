@@ -114,9 +114,8 @@ ActiveRecord::Schema.define(:version => 201604030319571) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "login"
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.string   "persistence_token", :null => false
+    t.string   "encrypted_password"
+    t.string   "password_salt"
   end
 
   create_table "api_keys", :force => true do |t|
@@ -944,6 +943,7 @@ ActiveRecord::Schema.define(:version => 201604030319571) do
     t.text     "content"
     t.integer  "content_sanitizer_version",    :limit => 2, :default => 0, :null => false
     t.integer  "screencast_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.string   "is_translated"
   end
 
   add_index "question_translations", ["locale"], :name => "index_question_translations_on_locale"
