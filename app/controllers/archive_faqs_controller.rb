@@ -94,7 +94,7 @@ class ArchiveFaqsController < ApplicationController
   # reorder FAQs
   def update_positions
     if params[:archive_faqs]
-      @archive_faqs = ArchiveFaq.reorder(archive_faq_params)
+      @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       archive_faq_params.each_with_index do |id, position|
