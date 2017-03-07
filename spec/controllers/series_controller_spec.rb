@@ -14,7 +14,7 @@ RSpec.describe SeriesController, type: :controller do
   end
 
   describe 'edit' do
-    it 'redirects to orphan if there are no psueds left.' do
+    it 'redirects to orphan if there are no pseuds left' do
       fake_login_known_user(user)
       get :edit, remove: "me", id: series
       it_redirects_to(new_orphan_path(series_id: series))
@@ -22,7 +22,7 @@ RSpec.describe SeriesController, type: :controller do
   end
 
   describe 'create' do
-    it 'when renders new if the series is invalid' do
+    it 'renders new if the series is invalid' do
       fake_login_known_user(user)
       post :create
       expect(response).to render_template('new')
@@ -37,7 +37,7 @@ RSpec.describe SeriesController, type: :controller do
   end
 
   describe 'update' do
-    it 'stops you removing the last author of a series' do
+    it 'redirects and errors if removing the last author of a series' do
       fake_login_known_user(user)
       put :update, series: { author_attributes: {} }, id: series
       it_redirects_to_with_error(edit_series_path(series), \
