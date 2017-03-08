@@ -37,7 +37,6 @@ class ExternalWorksController < ApplicationController
   end
 
   def update
-    raise params.inspect
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = work_params
     if @external_work.update_attributes(external_work_params)
