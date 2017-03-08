@@ -37,6 +37,7 @@ class ExternalWorksController < ApplicationController
   end
 
   def update
+    raise params.inspect
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = work_params
     if @external_work.update_attributes(external_work_params)
@@ -58,7 +59,7 @@ class ExternalWorksController < ApplicationController
   def work_params
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
-      :freeform_string, :category_string
+      :freeform_string, category_string: []
     )
   end
 end
