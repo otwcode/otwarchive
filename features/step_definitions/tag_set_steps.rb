@@ -3,27 +3,20 @@ When /^I follow the add new tag ?set link$/ do
   step %{I follow "New Tag Set"}
 end
 
-When /^I set up the basic tag ?set "([^\"]*)"$/ do |title|
-  unless OwnedTagSet.find_by_title("#{title}").present?
-    visit new_tag_set_path
-    fill_in("owned_tag_set_title", with: title)
-  end
-end
-
 # This takes strings like:
 # ...with a visible tag list
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
 When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
-  unless OwnedTagSet.find_by_title("#{title}").present?
-    step %{I set up the basic tag set "#{title}"}
-    fill_in("owned_tag_set_description", :with => "Here's my tagset")
+  unless OwnedTagSet.find_by_title(title).present?
+    visit new_tag_set_path
+    fill_in("owned_tag_set_title", with: title)    fill_in("owned_tag_set_description", with: "Here's my tagset")
     visibility ||= "invisible"
     check("owned_tag_set_visible") if visibility == "visible"
     uncheck("owned_tag_set_visible") if visibility == "invisible"
     tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
       if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
-        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
+        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scannedtags)
       else
         tags = scannedtags.split(/, ?/)
         tags.each do |tag|
@@ -40,17 +33,17 @@ end
 # If you want to use ratings, warnings, or categories, you must make sure you have loaded basic or default tags for those types
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
-    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
-      if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
-        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
-      else
-        tags = scannedtags.split(/, ?/)
-        tags.each do |tag|
-          check("#{tag}")
-        end
+  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
+    if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
+      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scannedtags)
+    else
+      tags = scannedtags.split(/, ?/)
+      tags.each do |tag|
+        check("#{tag}")
       end
     end
-    step %{I submit}
+  end
+  step %{I submit}
   step %{I should see an update confirmation message}
 end
 
@@ -59,12 +52,10 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
   tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
     tags = scanned_tags.split(/, ?/)
-    if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
-      tags.each do |tag|
+    tags.each do |tag|
+      if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
         check("#{tag}")
-      end
-    else
-      tags.each do |tag|
+      else
         uncheck("#{tag}")
       end
     end
@@ -73,15 +64,14 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I should see an update confirmation message}
 end
 
-
 When /^I set up the nominated tag ?set "([^\"]*)" with (.*) fandom noms? and (.*) character noms?$/ do |title, fandom_count, char_count|
   unless OwnedTagSet.find_by_title("#{title}").present?
     step %{I go to the new tag set page}
-      fill_in("owned_tag_set_title", :with => title)
-      fill_in("owned_tag_set_description", :with => "Here's my tagset")
+      fill_in("owned_tag_set_title", with: title)
+      fill_in("owned_tag_set_description", with: "Here's my tagset")
       check("Currently taking nominations?")
-      fill_in("Fandom nomination limit", :with => fandom_count)
-      fill_in("Character nomination limit", :with => char_count)
+      fill_in("Fandom nomination limit", with: fandom_count)
+      fill_in("Character nomination limit", with: char_count)
     step %{I submit}
     step %{I should see a create confirmation message}
   end
@@ -92,9 +82,9 @@ When /^I nominate (.*) fandoms and (.*) characters in the "([^\"]*)" tag ?set as
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
   1.upto(fandom_count.to_i) do |i|
-    fill_in("Fandom #{i}", :with => "Blah #{i}")
+    fill_in("Fandom #{i}", with: "Blah #{i}")
     0.upto(char_count.to_i - 1) do |j|
-      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", :with => "Foobar #{i} #{j}")
+      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", with: "Foobar #{i} #{j}")
     end
   end
 end
@@ -116,9 +106,9 @@ When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"/ 
   char_index = 0
   chars_per_fandom = @chars.size/@fandoms.size
   1.upto(@fandoms.size) do |i|
-    fill_in("Fandom #{i}", :with => @fandoms[i-1])
+    fill_in("Fandom #{i}", with: @fandoms[i-1])
     0.upto(chars_per_fandom - 1) do |j|
-      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", :with => @chars[char_index])
+      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", with: @chars[char_index])
       char_index += 1
     end
   end
@@ -166,7 +156,7 @@ When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |ti
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
   tags.each_with_index do |tag, i|
-    fill_in("Fandom #{i+1}", :with => tag)
+    fill_in("Fandom #{i+1}", with: tag)
   end
   step %{I submit}
   step %{I should see a success message}

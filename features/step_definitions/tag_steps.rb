@@ -272,7 +272,7 @@ When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   end
 end
 
-When(/^I flush the wrangling sidebar caches$/) do
+When /^I flush the wrangling sidebar caches$/ do
   [Fandom, Character, Relationship, Freeform].each do |klass|
     Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
