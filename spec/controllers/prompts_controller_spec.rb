@@ -50,9 +50,8 @@ describe PromptsController do
 
   describe "new" do
     context "when prompt_type is offer" do
+      let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "should have no errors" do
-        # Login as the signup owner
-        fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
         post :new, collection_id: open_signup.collection.name, prompt_type: "offer"
         expect(response).to have_http_status(200)
         expect(flash[:error]).blank?
@@ -62,9 +61,8 @@ describe PromptsController do
   end
 
   describe "create" do
+    let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
     it "should have no errors and redirect to the edit page" do
-      # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
       post :create, collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {}
       it_redirects_to "#{collection_signups_path(open_signup.collection)}/"\
                       "#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
@@ -75,8 +73,8 @@ describe PromptsController do
 
   describe "update" do
     context "when prompt is valid" do
+      let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "should save the prompt and redirect with a success message" do
-        fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
         put :update, collection_id: open_signup.collection.name, prompt_type: "offer",\
                      prompt: { description: "This is a description" }, id: open_signup.collection.prompts.first.id
         it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
@@ -88,31 +86,31 @@ describe PromptsController do
   end
 
   describe "destroy" do
+    let(:user) { Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user }
     it "redirects with an error when sign-ups are closed" do
       prompt = signup.collection.prompts.first
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user)
       delete :destroy, collection_id: signup.collection.name, id: prompt.id
       it_redirects_to_with_error("#{collection_signups_path(signup.collection)}/#{signup.id}",
                                  "You cannot delete a prompt after sign-ups are closed."\
                                   " Please contact a moderator for help.")
     end
 
-    it "redirects with an error when it would make a sign-up invalid" do
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
-      delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
-      it_redirects_to_with_error("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
-                                 "That would make your sign-up invalid, sorry! Please edit instead.")
-    end
+    context "where current_user is signup owner" do
+      let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
+      it "redirects with an error when it would make a sign-up invalid" do
+        delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
+        it_redirects_to_with_error("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
+        "That would make your sign-up invalid, sorry! Please edit instead.")
+      end
 
-    it "deletes the prompt and redirects with a success message" do
-      # Login as the signup owner
-      fake_login_known_user(Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user)
-      prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
-                                        collection_id: open_signup.collection.id)
-      prompt.save
-      delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
-      it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
-                                  "Prompt was deleted.")
+      it "deletes the prompt and redirects with a success message" do
+        prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
+        collection_id: open_signup.collection.id)
+        prompt.save
+        delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
+        it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
+        "Prompt was deleted.")
+      end
     end
   end
 
