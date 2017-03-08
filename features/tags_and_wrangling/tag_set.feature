@@ -137,8 +137,32 @@ Feature: creating and editing tag sets
     And I should see "Knots Landing"
     And I should see "Models Inc"
 
-  Scenario: A moderator should be able to manually set up associations between tags in their set on the main tag set edit page
-
+  @javascript
+  Scenario: A moderator should be able to manually set up and remove associations between tags in their set on the main tag set edit page
+  Given I am logged in
+    And I set up the tag set "Associations" with the fandom tags "Major Crimes, The Closer" and the character tags "Brenda Leigh Johnson, Sharon Raydor"
+  When I go to the "Associations" tag set edit page
+    And I follow "Add Association"
+    And I select "Sharon Raydor" from "Tag"
+    And I select "The Closer" from "Parent tag"
+    And I press "Update"
+  Then I should see an update confirmation message
+    And I should see "Uncategorized Fandoms (2)"
+    And I should see "Unassociated Characters & Relationships (1)"
+  When I follow "Expand All"
+  Then I should see "The Closer (1)"
+    And I should see "Major Crimes (0)"
+    And "Sharon Raydor" should be associated with the "Uncategorized" fandom "The Closer"
+  When I go to the "Associations" tag set edit page
+    And I check "Sharon Raydor (The Closer)"
+    And I press "Update"
+  Then I should see an update confirmation message
+    And I should see "Unassociated Characters & Relationships (2)"
+  When I follow "Expand All"
+  Then I should see "The Closer (0)"
+    And I should see "Major Crimes (0)"
+  When I expand the unassociated characters and relationships
+  Then "Sharon Raydor" should be an unassociated tag
 
   # NOMINATIONS
   Scenario: A tag set should take nominations within the nomination limits

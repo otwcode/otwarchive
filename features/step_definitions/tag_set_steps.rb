@@ -195,3 +195,19 @@ When(/^I flush the wrangling sidebar caches$/) do
     Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
 end
+
+When /^I expand the unassociated characters and relationships$/ do
+  within('span[action_target="#list_for_unassociated_char_and_rel"]') do
+    click_link("↓")
+  end
+end
+
+Then /^"([^\"]*)" should be associated with the "([^\"]*)" fandom "([^\"]*)"$/ do |tag, fandom_type, fandom_name|
+  name = fandom_name.tr(" ", "_")
+  type = fandom_type.tr(" ", "_")
+  step %{I should see "#{tag}" within "ol#list_for_fandom_#{name}_in_#{type}_Fandoms li"}
+end
+
+Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
+  step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
+end
