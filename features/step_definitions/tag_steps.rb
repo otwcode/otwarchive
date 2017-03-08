@@ -29,12 +29,9 @@ Given /^the basic warnings exist$/ do
 end
 
 Given /^the basic categories exist$/ do
-  Category.find_or_create_by_name_and_canonical("Gen", true)
-  Category.find_or_create_by_name_and_canonical("Other", true)
-  Category.find_or_create_by_name_and_canonical("F/F", true)
-  Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("F/M", true)
-  Category.find_or_create_by_name_and_canonical("M/M", true)
+  %w(Gen Other F/F Multi F/M M/M).each do |category|
+    Category.find_or_create_by_name_and_canonical(category, true)
+  end
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
