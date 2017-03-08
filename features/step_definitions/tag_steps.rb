@@ -6,23 +6,10 @@ Given /^I have no tags$/ do
 end
 
 Given /^basic tags$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  ratings.each do |rating|
-    Rating.find_or_create_by_name_and_canonical(rating, true)
-  end
-  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
-  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  step %{the default ratings exist}
+  step %{the basic warnings exist}
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
-  Category.find_or_create_by_name_and_canonical("Gen", true)
-  Category.find_or_create_by_name_and_canonical("Other", true)
-  Category.find_or_create_by_name_and_canonical("F/F", true)
-  Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("F/M", true)
-  Category.find_or_create_by_name_and_canonical("M/M", true)
+  step %{the basic categories exist}
 end
 
 Given /^the default ratings exist$/ do
@@ -34,6 +21,20 @@ Given /^the default ratings exist$/ do
   ratings.each do |rating|
     Rating.find_or_create_by_name_and_canonical(rating, true)
   end
+end
+
+Given /^the basic warnings exist$/ do
+  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+end
+
+Given /^the basic categories exist$/ do
+  Category.find_or_create_by_name_and_canonical("Gen", true)
+  Category.find_or_create_by_name_and_canonical("Other", true)
+  Category.find_or_create_by_name_and_canonical("F/F", true)
+  Category.find_or_create_by_name_and_canonical("Multi", true)
+  Category.find_or_create_by_name_and_canonical("F/M", true)
+  Category.find_or_create_by_name_and_canonical("M/M", true)
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|

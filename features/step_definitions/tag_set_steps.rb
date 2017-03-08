@@ -1,7 +1,13 @@
 # encoding: utf-8
-
 When /^I follow the add new tag ?set link$/ do
   step %{I follow "New Tag Set"}
+end
+
+When /^I set up the basic tag ?set "([^\"]*)"$/ do |title|
+  unless OwnedTagSet.find_by_title("#{title}").present?
+    visit new_tag_set_path
+    fill_in("owned_tag_set_title", with: title)
+  end
 end
 
 # This takes strings like:
@@ -10,29 +16,63 @@ end
 # ...with an invisible tag list and the freeform tags "m, n, o"
 When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
   unless OwnedTagSet.find_by_title("#{title}").present?
-    step %{I go to the new tag set page}
-      fill_in("owned_tag_set_title", :with => title)
-      fill_in("owned_tag_set_description", :with => "Here's my tagset")
-      visibility ||= "invisible"
-      check("owned_tag_set_visible") if visibility == "visible"
-      uncheck("owned_tag_set_visible") if visibility == "invisible"
-      tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags|
-        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => tags)
+    step %{I set up the basic tag set "#{title}"}
+    fill_in("owned_tag_set_description", :with => "Here's my tagset")
+    visibility ||= "invisible"
+    check("owned_tag_set_visible") if visibility == "visible"
+    uncheck("owned_tag_set_visible") if visibility == "invisible"
+    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
+      if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
+        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
+      else
+        tags = scannedtags.split(/, ?/)
+        tags.each do |tag|
+          check("#{tag}")
+        end
       end
+    end
     step %{I submit}
     step %{I should see a create confirmation message}
   end
 end
 
 # Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
+# If you want to use ratings, warnings, or categories, you must make sure you have loaded basic or default tags for those types
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
     tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
-      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
+      if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
+        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
+      else
+        tags = scannedtags.split(/, ?/)
+        tags.each do |tag|
+          check("#{tag}")
+        end
+      end
     end
     step %{I submit}
   step %{I should see an update confirmation message}
 end
+
+# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
+When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
+  step %{I go to the "#{title}" tag set edit page}
+  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
+    tags = scanned_tags.split(/, ?/)
+    if type == "fandom" || type == "freeform" || type == "character" || type == "relationship"
+      tags.each do |tag|
+        check("#{tag}")
+      end
+    else
+      tags.each do |tag|
+        uncheck("#{tag}")
+      end
+    end
+  end
+  step %{I submit}
+  step %{I should see an update confirmation message}
+end
+
 
 When /^I set up the nominated tag ?set "([^\"]*)" with (.*) fandom noms? and (.*) character noms?$/ do |title, fandom_count, char_count|
   unless OwnedTagSet.find_by_title("#{title}").present?
