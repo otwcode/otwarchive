@@ -10,7 +10,8 @@ end
 When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
   unless OwnedTagSet.find_by_title(title).present?
     visit new_tag_set_path
-    fill_in("owned_tag_set_title", with: title)    fill_in("owned_tag_set_description", with: "Here's my tagset")
+    fill_in("owned_tag_set_title", with: title)
+    fill_in("owned_tag_set_description", with: "Here's my tagset")
     visibility ||= "invisible"
     check("owned_tag_set_visible") if visibility == "visible"
     uncheck("owned_tag_set_visible") if visibility == "invisible"
