@@ -112,7 +112,7 @@ class Challenge::GiftExchangeController < ChallengesController
         :num_required_ratings, :num_required_warnings, :include_optional_fandoms,
         :include_optional_characters, :include_optional_relationships,
         :include_optional_freeforms, :include_optional_categories, :include_optional_ratings,
-        :include_optional_warnings, :max_tags_matched
+        :include_optional_warnings
       ]
     )
   end
