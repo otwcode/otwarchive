@@ -100,16 +100,16 @@ describe PromptsController do
       it "redirects with an error when it would make a sign-up invalid" do
         delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
         it_redirects_to_with_error("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
-        "That would make your sign-up invalid, sorry! Please edit instead.")
+                                   "That would make your sign-up invalid, sorry! Please edit instead.")
       end
 
       it "deletes the prompt and redirects with a success message" do
         prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
-        collection_id: open_signup.collection.id)
+                                          collection_id: open_signup.collection.id)
         prompt.save
         delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
         it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
-        "Prompt was deleted.")
+                                    "Prompt was deleted.")
       end
     end
   end
