@@ -190,12 +190,6 @@ When /^I view the tag set "([^\"]*)"/ do |tagset|
   visit tag_set_path(tagset)
 end
 
-When(/^I flush the wrangling sidebar caches$/) do
-  [Fandom, Character, Relationship, Freeform].each do |klass|
-    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
-  end
-end
-
 When /^I expand the unassociated characters and relationships$/ do
   within('span[action_target="#list_for_unassociated_char_and_rel"]') do
     click_link("↓")
