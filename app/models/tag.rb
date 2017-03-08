@@ -27,7 +27,7 @@ class Tag < ActiveRecord::Base
     # A large tag is one which is periodically refreshed by a background task.
     # The task is defined in config/resque_schedule.yml
     # This refreshes the large tags every 30 minutes. It seemed sensible to 
-    # only allow tags which stay in the cache longer than the perodic refresh 
+    # only allow tags which stay in the cache longer than the periodic refresh 
     # period. Additionally any tag that takes longer than 4 seconds to count then
     # it seems reasonable to say that the tag is large.
     target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4) )
@@ -68,7 +68,7 @@ class Tag < ActiveRecord::Base
     time_start = Time.now.to_i
     real_value = self.taggings.length
     time_end = Time.now.to_i
-    # here we cache the value we have more than AGGINGS_COUNT_MIN_CACHE_COUNT uses or 
+    # here we cache the value we have more than TAGGINGS_COUNT_MIN_CACHE_COUNT uses or 
     # if the amount of time taken to count the number of uses is more than TAGGINGS_COUNT_MAX_ALLOWED_TIME  seconds 
     # ( defaulting to 6 seconds ) this second check is a emergency feature which I would not expect to kick in
     # but we want to know how long it takes to count the taggings to work out if it is a large tag 

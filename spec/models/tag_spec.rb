@@ -24,7 +24,6 @@ describe Tag do
 
     it 'should not cache tags which are not used much' do
       work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-      work.save
       @fandom_tag.reload
       expect(@fandom_tag.taggings_count_cache).to eq 1
       expect(@fandom_tag.taggings_count).to eq 1
@@ -48,7 +47,7 @@ describe Tag do
       expect(@fandom_tag.large_tag).not_to be_truthy
     end
 
-    it 'that a tag is big depending on the number of uses it has' do
+    it "flags a tag as large based on its number of uses" do
       (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
         @fandom_tag.taggings_count = try
         @fandom_tag.reload
