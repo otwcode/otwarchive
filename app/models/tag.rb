@@ -23,6 +23,80 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  def check_if_large_tag(time_in_cache, time_to_count_sec)
+    # A large tag is one which is periodically refreshed by a background task.
+    # The task is defined in config/resque_schedule.yml
+    # This refreshes the large tags every 30 minutes. It seemed sensible to 
+    # only allow tags which stay in the cache longer than the periodic refresh 
+    # period. Additionally any tag that takes longer than 4 seconds to count then
+    # it seems reasonable to say that the tag is large.
+    target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4) )
+    return if self.large_tag == target_state
+    self.large_tag = target_state 
+    self.save
+  end
+
+  def taggings_count_expiry(count)
+    # What we are trying to do here is work out a resonable amount of time for a work to be cached for 
+    # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 2000 )
+    # such that for example 2000, would be naturally be tagged for one minute while 140,000 would be cached for
+    # 70 minutes. However we then apply a filter such that the minimum amount of time we will cache something for
+    # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
+    # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
+    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000)
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+  end
+
+  def taggings_count_cache_key
+    "/v1/taggings_count/#{self.id}"
+  end
+
+  def taggings_count=(value)
+    expiry_time = taggings_count_expiry(value)
+    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if (value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    check_if_large_tag(expiry_time, 0)
+    if self.taggings_count_cache != value
+      self.taggings_count_cache = value
+      self.save
+    end
+  end
+
+  def taggings_count
+    cache_read = Rails.cache.read(self.taggings_count_cache_key)
+    return cache_read unless cache_read.nil?
+    time_start = Time.now.to_i
+    real_value = self.taggings.length
+    time_end = Time.now.to_i
+    # here we cache the value we have more than TAGGINGS_COUNT_MIN_CACHE_COUNT uses or 
+    # if the amount of time taken to count the number of uses is more than TAGGINGS_COUNT_MAX_ALLOWED_TIME  seconds 
+    # ( defaulting to 6 seconds ) this second check is a emergency feature which I would not expect to kick in
+    # but we want to know how long it takes to count the taggings to work out if it is a large tag 
+    # for the scheduled background counts.
+    if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
+      self.taggings_count = real_value
+      check_if_large_tag(taggings_count_expiry(real_value), time_end - time_start)
+    else
+      if self.taggings_count_cache != real_value
+        self.taggings_count_cache = real_value
+        self.save
+      end
+    end
+    real_value
+  end
+
+  def update_tag_cache
+    cache_read = Rails.cache.read(self.taggings_count_cache_key)
+    if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+      self.taggings_count
+    end
+  end
+
+  def update_counts_cache(id)
+    tag = Tag.find(id)
+    tag.taggings_count = tag.taggings.length
+  end
+
   acts_as_commentable
   def commentable_name
     self.name
@@ -201,7 +275,7 @@ class Tag < ActiveRecord::Base
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL")
-  scope :in_use, where("canonical = 1 OR taggings_count > 0")
+  scope :in_use, where("canonical = 1 OR taggings_count_cache > 0")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
 
   # Tags that have sub tags
@@ -225,7 +299,7 @@ class Tag < ActiveRecord::Base
 
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
-  scope :by_popularity, order('taggings_count DESC')
+  scope :by_popularity, order('taggings_count_cache DESC')
   scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
@@ -641,7 +715,7 @@ class Tag < ActiveRecord::Base
   
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
+    Tag.find_each(conditions: "taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
       if tag.filter
         to_add = tag.works - tag.filter.filtered_works
         to_add.each do |work|
