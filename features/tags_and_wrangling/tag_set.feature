@@ -81,14 +81,38 @@ Feature: creating and editing tag sets
   Then I should see "Your nominations were successfully submitted"
 
   Scenario: You should be able to nominate characters when the tagset doesn't allow fandom nominations
-  Given I am logged in as "tagsetter"
+  Given a canonical character "Common Character" in fandom "Canon"
+    And I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
   When I follow "Nominate"
-    And I fill in "Character 1" with "My Favorite Character"
-    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I fill in "Character 1" with "Obscure Character"
+    And I fill in "Character 2" with "Common Character"
+    And I press "Submit"
+  Then I should see "Sorry! We couldn't save this tag set nomination"
+    And I should see "We need to know what fandom Obscure Character belongs in."
+    But I should not see "We need to know what fandom Common Character belongs in."
+  When I fill in "Fandom?" with "Canon"
     And I press "Submit"
   Then I should see "Your nominations were successfully submitted."
-    And I should see "My Favorite Character"
+    And I should see "Obscure Character"
+    And I should see "Common Character"
+
+  Scenario: You should be able to nominate relationships when the tagset doesn't allow fandom nominations
+  Given a canonical relationship "Common Pairing" in fandom "Canon"
+    And I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 relationship noms
+  When I follow "Nominate"
+    And I fill in "Relationship 1" with "Rare Pairing"
+    And I fill in "Relationship 2" with "Common Pairing"
+    And I press "Submit"
+  Then I should see "Sorry! We couldn't save this tag set nomination"
+    And I should see "We need to know what fandom Rare Pairing belongs in."
+    But I should not see "We need to know what fandom Common Pairing belongs in."
+  When I fill in "Fandom?" with "Canon"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "Rare Pairing"
+    And I should see "Common Pairing"
 
   Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
   Given I am logged in as "tagsetter"
@@ -129,6 +153,22 @@ Feature: creating and editing tag sets
   Then I should see "Your nominations were successfully updated."
     And I should see "My Favorite Character"
     But I should not see "My Aforvite Character"
+
+  Scenario: You should be able to edit your nominated relationships when the tagset doesn't allow fandom nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 relationship noms
+  When I follow "Nominate"
+    And I fill in "Relationship 1" with "My Favorite Character & Their Best Friend"
+    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "My Favorite Character & Their Best Friend"
+  When I follow "Edit"
+    And I fill in "Relationship 1" with "My Favorite Character/Their Worst Enemy"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully updated."
+    And I should see "My Favorite Character/Their Worst Enemy"
+    But I should not see "Their Best Friend"
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
