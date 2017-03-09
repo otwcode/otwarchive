@@ -80,6 +80,16 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Your nominations were successfully submitted"
 
+  Scenario: You should be able to nominate characters when the tagset doesn't allow fandom nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+  When I follow "Nominate"
+    And I fill in "Character 1" with "My Favorite Character"
+    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "My Favorite Character"
+
   Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
@@ -103,6 +113,22 @@ Feature: creating and editing tag sets
   Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
   When I follow "Edit"
   Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+
+  Scenario: You should be able to edit your nominated characters when the tagset doesn't allow fandom nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+  When I follow "Nominate"
+    And I fill in "Character 1" with "My Aforvite Character"
+    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "My Aforvite Character"
+  When I follow "Edit"
+    And I fill in "Character 1" with "My Favorite Character"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully updated."
+    And I should see "My Favorite Character"
+    But I should not see "My Aforvite Character"
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
