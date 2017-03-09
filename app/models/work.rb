@@ -202,6 +202,9 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+    self.tags.each do |tag|
+      tag.update_tag_cache
+    end
     Work.expire_work_tag_groups_id(self.id)
   end
 
