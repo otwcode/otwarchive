@@ -810,7 +810,7 @@ describe TagSetNominationsController do
                        parent_tagname: "Fandom B"
                      }
                    }
-                }
+                 }
 
             owned_tag_set.reload
           end
@@ -1033,7 +1033,7 @@ describe TagSetNominationsController do
                          parent_tagname: "Fandom D"
                        }
                      }
-                  }
+                   }
 
               owned_tag_set.reload
               tag_set_nom.reload
