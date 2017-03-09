@@ -34,14 +34,14 @@ When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I should see an update confirmation message}
 end
 
-When /^I set up the nominated tag ?set "([^\"]*)" with (.*) fandom noms? and (.*) character noms?$/ do |title, fandom_count, char_count|
+When /^I set up the nominated tag ?set "([^\"]*)" with (\d*) fandom noms? and (\d*) (character|relationship) noms?$/ do |title, fandom_count, nested_count, nested_type|
   unless OwnedTagSet.find_by_title("#{title}").present?
     step %{I go to the new tag set page}
-      fill_in("owned_tag_set_title", :with => title)
-      fill_in("owned_tag_set_description", :with => "Here's my tagset")
-      check("Currently taking nominations?")
-      fill_in("Fandom nomination limit", :with => fandom_count)
-      fill_in("Character nomination limit", :with => char_count)
+    fill_in("owned_tag_set_title", with: title)
+    fill_in("owned_tag_set_description", with: "Here's my tagset")
+    check("Currently taking nominations?")
+    fill_in("Fandom nomination limit", with: fandom_count)
+    fill_in("#{nested_type.titleize} nomination limit", with: nested_count)
     step %{I submit}
     step %{I should see a create confirmation message}
   end
