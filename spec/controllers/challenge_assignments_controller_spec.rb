@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe ChallengeAssignmentsController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   context "when not logged in" do
     describe 'no_challenge' do
       before(:each) do
         @collection = FactoryGirl.create(:collection)
-        @collection.save
       end
       
       it 'should error to login page' do
@@ -21,15 +21,13 @@ describe ChallengeAssignmentsController do
   context "when logged in" do
     before(:each) do
       @collection = FactoryGirl.create(:collection)
-      @collection.save
       fake_login_known_user(@collection.owners.first.user)
     end
     
     describe 'no_challenge' do
       it 'should show an error, redirect and return false' do
         get :no_challenge, collection_id: @collection.name
-        expect(flash[:error]).to eq "What challenge did you want to work with?"
-        expect(response).to redirect_to(collection_path(@collection))
+        it_redirects_to_with_error(collection_path(@collection), "What challenge did you want to work with?")
       end
     end
   end
