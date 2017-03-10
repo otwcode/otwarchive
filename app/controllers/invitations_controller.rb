@@ -60,7 +60,7 @@ class InvitationsController < ApplicationController
     if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
-        redirect_to find_admin_invitations_url(:token => @invitation.token)
+        redirect_to find_admin_invitations_url("invitation[token]" => @invitation.token)
       else
         redirect_to([@user, @invitation])
       end
