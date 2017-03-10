@@ -158,7 +158,6 @@ describe UserMailer do
     token = 'abc123'
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
       @invitation = FactoryGirl.create(:invitation, token: token)
     end
 
@@ -180,7 +179,7 @@ describe UserMailer do
 
     describe 'HTML version' do
       it 'should have text contents' do
-        expect(get_message_part(email, /html/)).to include("If you'd like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
       end
       
       it 'should not have missing translations' do
@@ -190,7 +189,7 @@ describe UserMailer do
 
     describe 'text version' do
       it 'should say the right thing' do
-        expect(get_message_part(email, /plain/)).to include("If you'd like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
       end
       
       it 'should not have missing translations' do
