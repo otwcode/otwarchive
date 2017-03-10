@@ -12,8 +12,7 @@ describe ChallengeAssignmentsController do
       
       it 'should error to login page' do
         get :no_challenge, collection_id: @collection.name
-        expect(response).to redirect_to(new_user_session_path)
-        expect(flash[:error]).to eq "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
   end
