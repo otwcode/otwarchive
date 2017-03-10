@@ -103,7 +103,7 @@ class WorksController < ApplicationController
 
       tag = @fandom || @tag
       # This strange dance is because there is an interaction between
-      # strong_parameters and dup, without the dance 
+      # strong_parameters and dup, without the dance
       # options[:filter_ids] << tag.id is ignored.
       filter_ids = options[:filter_ids] || []
       filter_ids << tag.id
@@ -882,7 +882,7 @@ class WorksController < ApplicationController
 
   # create
   def set_instance_variables_work
-    @work = Work.new(params[:work])
+    @work = Work.new(work_params)
   end
 
   # new
@@ -1061,5 +1061,23 @@ class WorksController < ApplicationController
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
     }
+  end
+
+  def work_params
+    params.require(:work).permit(
+      :rating_string, :fandom_string, :relationship_string, :character_string,
+      :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+      :moderated_commenting_enabled, :title,
+      category_string: [],
+      warning_strings: [],
+      author_attributes: [ids: []],
+      series_attributes: [:id, :title],
+      parent_attributes: [:url, :title, :author, :language_id, :translation],
+      chapter_attributes: [
+        :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
+        :content
+      ],
+    )
   end
 end
