@@ -112,7 +112,7 @@ Feature: Invite queue management
 
     # user uses email invite
     Given I am a visitor
-    Then the email should contain "You've been invited to join our beta!"
+    Then the email should contain "been invited to join our beta!" # "You've" removed from test due to escaping on apostrophes
       And the email should contain "fanart"
       And the email should contain "podfic"
     When I click the first link in the email
