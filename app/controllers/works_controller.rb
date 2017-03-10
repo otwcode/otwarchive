@@ -875,7 +875,7 @@ class WorksController < ApplicationController
                              false
                            end
 
-      @work.attributes = params[:work]
+      @work.attributes = work_params
       @work.save_parents if @work.preview_mode
     end
   end
@@ -1069,9 +1069,11 @@ class WorksController < ApplicationController
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title,
+      challenge_assignment_ids: [],
+      challenge_claim_ids: [],
       category_string: [],
       warning_strings: [],
-      author_attributes: [ids: []],
+      author_attributes: [:byline, ids: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
       chapter_attributes: [
