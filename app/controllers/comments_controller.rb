@@ -274,8 +274,8 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    comment_params[:edited_at] = Time.current
-    if @comment.update_attributes(comment_params)
+    updated_comment_params = comment_params.merge(edited_at: Time.current)
+    if @comment.update_attributes(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do
@@ -539,7 +539,7 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(
-      :pseud_id, :content, :name, :email
+      :pseud_id, :content, :name, :email, :edited_at, :unreviewed
     )
   end
 end
