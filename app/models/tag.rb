@@ -33,7 +33,7 @@ class Tag < ActiveRecord::Base
     target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4))
     return if large_tag == target_state
     tag = readonly? ? Tag.find(id) : self
-    tag.arge_tag = target_state
+    tag.large_tag = target_state
     tag.save
   end
 
