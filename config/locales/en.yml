@@ -65,7 +65,7 @@ en:
       hello: "Hello from the Archive of Our Own!"
       html:
         part1: "You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors} into the %{ao3} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account."
-        part2: "You can read announcements about recent archive moves at %{ao3_news}, and find additional information on Open Doors' %{open_doors_faq} or %{tutorial_page}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{support}"
+        part2: "You can read announcements about recent archive moves at %{ao3_news}, and find additional information on Open Doors' %{open_doors_faq} or %{tutorial_page}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{support}."
         part3: "If this is a mistake and these are not your works, please don't delete them! Please %{open_doors} and we will sort it out."
         part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{support}."
         part5: "These works were written under the e-mail: %{email}"
