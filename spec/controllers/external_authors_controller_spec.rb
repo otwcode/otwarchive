@@ -4,9 +4,9 @@ require 'spec_helper'
 describe ExternalAuthorsController do
   include LoginMacros
   include RedirectExpectationHelper
-  let(:user) { FactoryGirl.create(:user) }
-  let(:invitation) { FactoryGirl.create(:invitation, external_author: external_author) }
-  let(:external_author) { FactoryGirl.create(:external_author) }
+  let(:user) { create(:user) }
+  let(:invitation) { create(:invitation, external_author: external_author) }
+  let(:external_author) { create(:external_author) }
 
   before(:each) do
     fake_login_known_user(user)
@@ -32,7 +32,7 @@ describe ExternalAuthorsController do
 
     context "without works to claim" do
       it "redirects with an error" do
-        no_story_invitation = FactoryGirl.create(:invitation)
+        no_story_invitation = create(:invitation)
         get :get_external_author_from_invitation, invitation_token: no_story_invitation.token
         it_redirects_to_with_error(signup_path(no_story_invitation.token), "There are no stories to claim on this invitation. Did you want to sign up instead?")
       end
@@ -48,8 +48,8 @@ describe ExternalAuthorsController do
 
   describe "PUT #update" do
     it "redirects with an error if the user does not have permission" do
-      wrong_external_author = FactoryGirl.create(:external_author)
-      someone_elses_invitation = FactoryGirl.create(:invitation, external_author: wrong_external_author)
+      wrong_external_author = create(:external_author)
+      someone_elses_invitation = create(:invitation, external_author: wrong_external_author)
       put :update, invitation_token: someone_elses_invitation.token, id: external_author.id
       it_redirects_to_with_error(root_path, "You don't have permission to do that.")
     end
@@ -71,7 +71,7 @@ describe ExternalAuthorsController do
         context "when updating preferences" do
           xit "renders edit template with a success message for orphaning and an error for preferences" do
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
+            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan", do_not_email: true
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
