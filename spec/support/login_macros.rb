@@ -15,9 +15,20 @@ module LoginMacros
   end
 
   def fake_login_admin(admin)
+    @request.env["devise.mapping"] = Devise.mappings[:admin]
     @current_admin = admin
     allow(controller).to receive(:logged_in_as_admin?).and_return(true)
     allow(controller).to receive(:current_admin).and_return(@current_admin)
+    sign_in :admin, admin 
+  end
+
+  def fake_logout
+    @current_admin = nil
+    @current_user = nil
+    allow(controller).to receive(:logged_in_as_admin?).and_return(false)
+    allow(controller).to receive(:current_admin).and_return(@current_admin)
+    allow(controller).to receive(:logged_in?).and_return(false)
+    allow(controller).to receive(:current_user).and_return(@current_user)
   end
 
   def fake_logout

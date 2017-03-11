@@ -1,6 +1,7 @@
 include SkinCacheHelper
 
 class WorkSkin < Skin
+  include ActiveModel::ForbiddenAttributesProtection
 
   has_many :works
   after_save :skin_invalidate_cache
@@ -15,7 +16,7 @@ class WorkSkin < Skin
       end
       return true
     }
-    options = {:prefix => "#workskin", :caller_check => check}
+    options = {prefix: "#workskin", caller_check: check}
     self.css = clean_css_code(self.css, options)
   end
 
@@ -30,7 +31,7 @@ class WorkSkin < Skin
 
   def self.import_basic_formatting
     css = File.read(Rails.public_path + "/stylesheets/work_skins/basic_formatting.css")
-    skin = WorkSkin.find_or_create_by_title_and_official(:title => "Basic Formatting", :css => css, :role => "user", :public => true, :official => true)
+    skin = WorkSkin.find_or_create_by_title_and_official(title: "Basic Formatting", css: css, role: "user", public: true, official: true)
     File.open(Rails.public_path + '/images/skins/previews/basic_formatting.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
