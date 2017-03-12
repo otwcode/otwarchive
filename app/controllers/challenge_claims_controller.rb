@@ -12,7 +12,7 @@ class ChallengeClaimsController < ApplicationController
     if @collection
       @challenge = @collection.challenge
     elsif @challenge_claim
-      # What we want is the ruby &. operator
+      # TODO: Replace with &. operator after upgrading to Ruby 2.3
       @challenge = @challenge_claim.collection.challenge if @challenge_claim.collection
     end
     no_challenge && return unless @challenge
