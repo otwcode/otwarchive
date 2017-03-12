@@ -18,7 +18,7 @@
 <% if creation.is_a?(Work) %>
   <%=
     if this_work.backdate
-     t('.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count)
+     t('.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count )
     else
       t('.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
     end

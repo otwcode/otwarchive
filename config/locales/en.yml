@@ -79,12 +79,12 @@ en:
         new_chapter_of: "%{byline} posted a new chapter of %{title}:\n%{link}\n\n\
             %{chapter_title} (%{word_count} words)"
         work_backdated: "%{byline} backdated a new work:\n%{link}\n\n\
-            %{title} (%{word_count} words)"
+            %{title} ((%{word_count} words)"
         work_new: "%{byline} posted a new work:\n%{link}\n\n\
             %{title} (%{word_count} words)"
       html:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
-        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
+        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{pretty_title} (%{word_count} words)</p>"
         work_backdated: "<p>%{byline} backdated a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
         word_count: "<i>%{link}</i> (%{word_count} words)"
         collected_by: "<br>by %{pseud}"

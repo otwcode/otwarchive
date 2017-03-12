@@ -31,7 +31,7 @@
     <%= t('.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
 
     <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-      <%= t '.chapter_summary'%> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
+      <%= t '.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
     <% end %>
     <% unless @seen[this_work.id] %>
       <p>
