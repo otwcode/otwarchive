@@ -253,7 +253,9 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts("Comment was successfully updated.")
       respond_to do |format|
         format.html do
-          redirect_to comment_path(@comment) && return if @comment.unreviewed?
+          # Hound will tell you to replace and with &&
+          # Hound is wrong and the tests will fail.
+          redirect_to comment_path(@comment) and return if @comment.unreviewed?
           redirect_to_comment(@comment)
         end
         format.js # updating the comment in place
