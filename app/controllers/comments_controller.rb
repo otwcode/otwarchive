@@ -229,7 +229,7 @@ class CommentsController < ApplicationController
               elsif @comment.unreviewed?
                 redirect_to_all_comments(@commentable)
               else
-                redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+                redirect_to_comment(@comment, view_full_work: (params[:view_full_work] == "true"), page: params[:page])
               end
             end
           end
@@ -253,8 +253,7 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts("Comment was successfully updated.")
       respond_to do |format|
         format.html do
-          redirect_to comment_path(@comment)
-          return if @comment.unreviewed?
+          redirect_to comment_path(@comment) && return if @comment.unreviewed?
           redirect_to_comment(@comment)
         end
         format.js # updating the comment in place
