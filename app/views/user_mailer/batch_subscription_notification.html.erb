@@ -8,16 +8,16 @@
     <% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
     <% title = this_work.title.html_safe %>
     <%
-      if creation.is_a?(Work) 
-        link = style_link(this_work.title.html_safe,work_url(this_work))
+      if creation.is_a?(Work)
+        link = style_link(this_work.title.html_safe, work_url(this_work))
         word_count = this_work.word_count
       else
-        link = style_link(this_work.title.html_safe,work_chapter_url(this_work, creation))
+        link = style_link(this_work.title.html_safe, work_chapter_url(this_work, creation))
         chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe
       end
     %>
     <% if creation.is_a?(Work) %>
-      <%= 
+      <%=
         if this_work.backdate
           t('.html.work_backdated', byline: byline, title: title, link: link, word_count: word_count).html_safe
         else
@@ -30,7 +30,7 @@
     <%= t('.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
 
     <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-      <%= t '.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+      <%= t '.chapter_summary'%> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary)))  %>
     <% end %>
     <% unless @seen[this_work.id] %>
       <p>
