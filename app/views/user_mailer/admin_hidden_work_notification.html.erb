@@ -1,8 +1,8 @@
 <% content_for :message do %>
-<% @pretty_title = "<i>#{style_bold(@work.title.html_safe)}</i>".html_safe %>
+<% pretty_title = "<i>#{style_link(@work.title.html_safe, work_url(@work))}</i>".html_safe %>
     <p><%= t('.hello', user: @user.default_pseud.byline) %></p>
 
-    <p><%= t('.html.part1', title: @pretty_title, tos: style_link(t('.tos'), tos_url).html_safe).html_safe %></p>
+    <p><%= t('.html.part1', title: pretty_title, tos: style_link(t('.tos'), tos_url).html_safe).html_safe %></p>
 
     <p><%= t('.part2') %></p>
 
