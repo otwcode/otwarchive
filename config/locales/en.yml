@@ -84,11 +84,11 @@ en:
             %{title} (%{word_count} words)"
       html:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
-        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
-        work_backdated: "<p>%{byline} backdated a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
-        word_count: "<i>%{link}</i> (%{word_count} words)"
+        work_new: "<p>%{byline} posted a new work:<br>%{link}</p><p>%{title} (%{word_count} words)</p>"
+        work_backdated: "<p>%{byline} backdated a new work:<br>%{link}</p><p>%{title} (%{word_count} words)</p>"
+        word_count: "%{link} (%{word_count} words)"
         collected_by: "<br>by %{pseud}"
-        new_chapter_of: "<p>%{byline} posted a new chapter of %{title}:<br><b></i>%{link}</i></b></p><p>%{chapter_title} (%{word_count} words)</p>"
+        new_chapter_of: "<p>%{byline} posted a new chapter of %{title}:<br>%{link}</p><p>%{chapter_title} (%{word_count} words)</p>"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"

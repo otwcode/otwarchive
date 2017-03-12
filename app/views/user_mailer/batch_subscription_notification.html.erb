@@ -7,12 +7,13 @@
     <% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
     <% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
     <% title = this_work.title.html_safe %>
+    <% pretty_title = "<i>#{style_bold(title)}</i>".html_safe %>
     <%
       if creation.is_a?(Work)
-        link = style_link(this_work.title.html_safe, work_url(this_work))
+        link = style_link(pretty_title, work_url(this_work))
         word_count = this_work.word_count
       else
-        link = style_link(this_work.title.html_safe, work_chapter_url(this_work, creation))
+        link = style_link(pretty_title, work_chapter_url(this_work, creation))
         chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe
       end
     %>
