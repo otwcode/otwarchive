@@ -27,7 +27,6 @@ class CommentsController < ApplicationController
     return if pseud && current_user && current_user.pseuds.include?(pseud)
     flash[:error] = ts("You can't comment with that pseud.")
     redirect_to root_path
-    return
   end
 
   def load_comment
@@ -230,16 +229,14 @@ class CommentsController < ApplicationController
               elsif @comment.unreviewed?
                 redirect_to_all_comments(@commentable)
               else
-                redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+                redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
               end
-              return
             end
           end
         else
           # this shouldn't come up any more
           flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
           redirect_back_or_default(root_path)
-          return
         end
       else
         flash[:error] = ts("Couldn't save comment!")
@@ -256,9 +253,9 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do
-          redirect_to comment_path(@comment) && return if @comment.unreviewed?
+          redirect_to comment_path(@comment)
+          return if @comment.unreviewed?
           redirect_to_comment(@comment)
-          return
         end
         format.js # updating the comment in place
       end
@@ -287,7 +284,7 @@ class CommentsController < ApplicationController
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
-      redirect_to_all_comments(parent, show_comments: true)
+      redirect_to_all_comments(parent, { show_comments: true })
     end
   end
 
@@ -301,7 +298,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if params[:approved_from] == "inbox"
-          redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters]) && return
+          redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters])
         elsif params[:approved_from] == "home"
           redirect_to root_path
         else
@@ -317,6 +314,7 @@ class CommentsController < ApplicationController
     unless @commentable && current_user_owns?(@commentable)
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
+      return
     end
 
     @comments = @commentable.find_all_comments.unreviewed_only
@@ -328,7 +326,7 @@ class CommentsController < ApplicationController
   def approve
     @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.ultimate_parent, { show_comments: true })
   end
 
   def reject
@@ -339,6 +337,7 @@ class CommentsController < ApplicationController
 
   def show_comments
     @comments = @commentable.comments.reviewed.page(params[:page])
+
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
