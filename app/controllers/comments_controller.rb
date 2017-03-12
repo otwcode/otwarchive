@@ -229,7 +229,7 @@ class CommentsController < ApplicationController
               elsif @comment.unreviewed?
                 redirect_to_all_comments(@commentable)
               else
-                redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
+                redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
               end
             end
           end
@@ -284,7 +284,7 @@ class CommentsController < ApplicationController
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
-      redirect_to_all_comments(parent, { show_comments: true })
+      redirect_to_all_comments(parent, show_comments: true)
     end
   end
 
@@ -326,7 +326,7 @@ class CommentsController < ApplicationController
   def approve
     @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, { show_comments: true })
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   def reject
