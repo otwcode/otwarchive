@@ -3,28 +3,28 @@
 en:
   admin:
     blacklist:
-      emails_found:
+      emails_found: 
         one: "one email found"
         other: "%{count} emails found"
-
+  
   mailer:
-    general:
-      footer:
-        general:
+    general: 
+      footer: 
+        general: 
           html: |-
               <p>
                If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
               </p>
-
+              
               <p>
                The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
               </p>
           text: |-
               If you've received this message in error, please contact Support at %{support_url}.
-
+              
               The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
         sent_at: "Sent at %{sent_at}."
-        sent_by:
+        sent_by: 
           html: "Sent by <b>%{sent_by}</b>."
           text: "Sent by %{sent_by}."
     kudos:
@@ -68,11 +68,11 @@ en:
           We just wanted to let you know that you have %{total} new invitation(s),
           which can be used to create new accounts at the archive. You can invite a
           friend at %{invitation_page}.
-          Cheers,
+          Cheers, 
           %{archive_name}
     batch_subscription_notification:
       subject_linker: "and %{extra} more"
-      chapter_summary: "Chapter Summary:"
+      chapter_summary: "Chapter Summary:" 
       text:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates: %{url}"
         collected_by: "by %{pseud}"
@@ -84,7 +84,7 @@ en:
             %{title} (%{word_count} words)"
       html:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
-        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{pretty_title} (%{word_count} words)</p>"
+        work_new: "<p>%{byline} posted a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
         work_backdated: "<p>%{byline} backdated a new work:<br><b></i>%{link}</i></b></p><p>%{title} (%{word_count} words)</p>"
         word_count: "<i>%{link}</i> (%{word_count} words)"
         collected_by: "<br>by %{pseud}"
@@ -132,11 +132,11 @@ en:
       part1: "%{login}, the email associated with your account has been changed to %{email}"
     reset_password:
       subject: "[%{app_name}] Generated password"
-      part1: "%{user}, the following generated password has been created for you: %{password}"
+      part1: "%{user}, the following generated password has been created for you: %{password}" 
       part2: "After you log in using this generated password you will be asked to change your password to something you can remember. If you do not use this generated password within a week, it will expire, and you will have to request a new one."
       part3: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."
     signup_notification:
-      subject: "[%{app_name}] Confirmation"
+      subject: "[%{app_name}] Confirmation" 
       faq: "FAQ"
       admin_posts: "Archive admin posts"
       contact_support: "get in touch with our Support team"
@@ -172,4 +172,4 @@ en:
       blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
       veracity:
         allow_blank: "does not seem to be a valid address. Please use a different address or leave blank."
-        no_blank: "does not seem to be a valid address."
+        no_blank: "does not seem to be a valid address."  
