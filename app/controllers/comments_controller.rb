@@ -94,7 +94,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     return if @comment && @comment.count_all_comments == 0
-    flash[:error] = ts('Comments with replies cannot be edited')
+    flash[:error] = ts("Comments with replies cannot be edited")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -196,7 +196,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new(params[:comment])
       @comment.ip_address = request.remote_ip
-      @comment.user_agent = request.env['HTTP_USER_AGENT']
+      @comment.user_agent = request.env["HTTP_USER_AGENT"]
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
@@ -211,7 +211,7 @@ class CommentsController < ApplicationController
           if @comment.unreviewed?
             flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
           else
-            flash[:comment_notice] = ts('Comment created!')
+            flash[:comment_notice] = ts("Comment created!")
           end
           respond_to do |format|
             format.html do
@@ -235,7 +235,7 @@ class CommentsController < ApplicationController
           end
         else
           # this shouldn't come up any more
-          flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
+          flash[:comment_notice] = ts("Sorry, but this comment looks like spam to us.")
           redirect_back_or_default(root_path)
         end
       else
@@ -250,7 +250,7 @@ class CommentsController < ApplicationController
   def update
     params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
-      flash[:comment_notice] = ts('Comment was successfully updated.')
+      flash[:comment_notice] = ts("Comment was successfully updated.")
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment)
