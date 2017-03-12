@@ -4,6 +4,21 @@ When /^I follow the add new tag ?set link$/ do
 end
 
 # This takes strings like:
+# ...the fandom tags "x, y, z"
+# ...the category tags "a, b, c"
+# If you want ratings, warnings, or categories, first load basic or default tags for those types
+When /^I add (.*) to the tag ?set$/ do |tags|
+  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
+    if type == "category" || type == "rating" || type == "warning"
+      tags = scanned_tags.split(/, ?/)
+      tags.each { |tag| check(tag) }
+    else
+      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
+    end
+  end
+end
+
+# This takes strings like:
 # ...with a visible tag list
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
@@ -15,36 +30,23 @@ When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag 
     visibility ||= "invisible"
     check("owned_tag_set_visible") if visibility == "visible"
     uncheck("owned_tag_set_visible") if visibility == "invisible"
-    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
-      if type == "category" || type == "rating" || type == "warning"
-        tags = scanned_tags.split(/, ?/)
-        tags.each { |tag| check(tag) }
-      else
-        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
-      end
-    end
+    step %{I add #{tags} to the tag set}
     step %{I submit}
     step %{I should see a create confirmation message}
   end
 end
 
-# Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
-# If you want to use ratings, warnings, or categories, you must make sure you have loaded basic or default tags for those types
+# Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay".
+# Don't forget the extra s, even if it's singular.
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
-  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
-    if type == "category" || type == "rating" || type == "warning"
-      tags = scanned_tags.split(/, ?/)
-      tags.each { |tag| check(tag) }
-    else    
-      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
-    end
-  end
+  step %{I add #{tags} to the tag set}
   step %{I submit}
   step %{I should see an update confirmation message}
 end
 
-# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
+# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay". 
+# Don't forget the extra s, even if it's singular.
 When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
   tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|

@@ -9,7 +9,7 @@ class ArchiveFaqsController < ApplicationController
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
     unless logged_in_as_admin?
-      @archive_faqs = @archive_faqs.with_translations(I18n.locale) 
+      @archive_faqs = @archive_faqs.with_translations(I18n.locale)
     end
     respond_to do |format|
       format.html # index.html.erb
@@ -68,7 +68,7 @@ class ArchiveFaqsController < ApplicationController
 
   # POST /archive_faqs
   def create
-    @archive_faq = ArchiveFaq.new(params[:archive_faq])
+    @archive_faq = ArchiveFaq.new(archive_faq_params)
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
@@ -83,7 +83,7 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1
   def update
     @archive_faq = ArchiveFaq.find_by_slug(params[:id])
-      if @archive_faq.update_attributes(params[:archive_faq])
+      if @archive_faq.update_attributes(archive_faq_params)
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         redirect_to(@archive_faq)
       else
@@ -147,5 +147,16 @@ class ArchiveFaqsController < ApplicationController
     @archive_faq = ArchiveFaq.find_by_slug(params[:id])
     @archive_faq.destroy
     redirect_to(archive_faqs_url)
+  end
+
+  private
+
+  def archive_faq_params
+    params.require(:archive_faq).permit(
+      :title, :notify_translations,
+      questions_attributes: [
+        :id, :question, :anchor, :content, :screencast, :_destroy
+      ]
+    )
   end
 end
