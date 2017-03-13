@@ -16,6 +16,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   let(:collection) { signup.collection }
   let(:challenge) { signup.collection.challenge }
   let(:collection_owner) { User.find(collection.all_owners.first.user_id) }
+  let(:signup_owner) { Pseud.find(signup.pseud_id).user }
 
   let(:open_signup) do
     challenge = create(:gift_exchange, :open)
@@ -27,6 +28,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   end
   let(:open_collection) { open_signup.collection }
   let(:open_challenge) { open_signup.collection.challenge }
+  let(:open_signup_owner) { Pseud.find(open_signup.pseud_id).user }
 
   describe "new" do
     it "ensures signups are open" do
@@ -68,6 +70,53 @@ RSpec.describe ChallengeSignupsController, type: :controller do
       get :index, id: challenge, collection_id: collection.name, user_id: collection_owner
       it_redirects_to_with_error(root_path, \
                                  "You aren't allowed to see that user's sign-ups.")
+    end
+  end
+
+  describe "destroy" do
+    context "signups are open" do
+      it "checks that signups are open" do
+        fake_login_known_user(open_signup_owner)
+        delete :destroy, id: open_signup, collection_id: open_collection.name
+        it_redirects_to_with_notice(collection_path(open_collection), \
+                                    "Challenge sign-up was deleted.")
+      end
+    end
+    context "signups are closed" do
+      it "checks that signups are open" do
+        fake_login_known_user(signup_owner)
+        delete :destroy, id: signup, collection_id: collection.name
+        it_redirects_to_with_error(collection_path(collection), \
+                                   "You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.")
+      end
+    end
+  end
+
+  describe "update" do
+    context "signups are open" do
+      it "renders edit if update_attributes fails" do
+        fake_login_known_user(open_signup_owner)
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_return(false)
+        put :update, challenge_signup: { pseud_id: open_signup_owner.pseuds.first.id }, id: open_signup, collection_id: open_collection.name
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_call_original
+        expect(response).to render_template('edit')
+      end
+
+      it "checks ownership of the signup" do
+        fake_login_known_user(user)
+        put :update, challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name
+        it_redirects_to_with_error(collection, \
+                                   "You can't edit someone else's sign-up!")
+      end
+    end
+
+    context "signups are closed" do
+      it "does not allow edits when signups are closed" do
+        fake_login_known_user(signup_owner)
+        put :update, challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name
+        it_redirects_to_with_error(collection, \
+                                   "Sign-up is currently closed: please contact a moderator for help.")
+      end
     end
   end
 
