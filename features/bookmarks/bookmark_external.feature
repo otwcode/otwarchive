@@ -29,39 +29,36 @@ Feature: Create bookmarks of external works
       And I should see "Character 4"
 
   @bookmark_fandom_error
-  Scenario: Create a bookmark on an external work (fandom error)
+  Scenario: A user must enter a fandom to create a bookmark on an external work
     Given basic tags
       And I am logged in as "first_bookmark_user"
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
+      And I fill in "Creator" with "Sidra"
+      And I fill in "Title" with "Stuck with You"
+      And I fill in "URL" with "http://test.sidrasue.com/short.html"
       And I press "Create"
     Then I should see "Fandom tag is required"
-    When I fill in "bookmark_external_fandom_string" with "Popslash"
+    When I fill in "Fandoms" with "Popslash"
       And I press "Create"
     Then I should see "This work isn't hosted on the Archive"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "Stuck with You"
 
   @bookmark_url_error
-  Scenario: Create a bookmark on an external work (url error)
-    Given the following activated users exist
-      | login           | password   |
-      | first_bookmark_user   | password   |
-      And I am logged in as "first_bookmark_user"
+  Scenario: A user must enter a valid URL to create a bookmark on an external work
+    Given I am logged in as "first_bookmark_user"
       And the default ratings exist
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_fandom_string" with "Popslash"
+      And I fill in "Creator" with "Sidra"
+      And I fill in "Title" with "Stuck with You"
+      And I fill in "Fandoms" with "Popslash"
       And I press "Create"
     Then I should see "does not appear to be a valid URL"
-    When I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
+    When I fill in "URL" with "http://test.sidrasue.com/short.html"
       And I press "Create"
     Then I should see "This work isn't hosted on the Archive"
     When I go to first_bookmark_user's bookmarks page
