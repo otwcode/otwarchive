@@ -55,15 +55,6 @@ RSpec.describe ChallengeSignupsController, type: :controller do
     end
   end
 
-  describe "update" do
-    it "checks for the right owner" do
-      fake_login_known_user(user)
-      get :edit, id: signup, collection_id: collection.name
-      it_redirects_to_with_error(collection_path(collection), \
-                                 "You can't edit someone else's sign-up!")
-    end
-  end
-
   describe "index" do
     it "checks for the right owner" do
       fake_login_known_user(user)
