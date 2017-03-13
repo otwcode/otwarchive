@@ -5,14 +5,28 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
-  let(:signup) { create(:challenge_signup, collection_id: create(:collection, challenge: create(:gift_exchange, :closed))) }
-  let(:collection) { signup.collection}
-  let(:challenge) { collection.challenge }
+  let(:signup) do
+    challenge = create(:gift_exchange, :closed)
+    collection = create(:collection, challenge: challenge)
+    signup = build(:challenge_signup, collection_id: collection)
+    signup.collection = collection
+    signup.save
+    signup
+  end
+  let(:collection) { signup.collection }
+  let(:challenge) { signup.collection.challenge }
   let(:collection_owner) { User.find(collection.all_owners.first.user_id) }
 
-  let(:open_signup) { create(:challenge_signup, collection_id: create(:collection, challenge: create(:gift_exchange, :open))) }
+  let(:open_signup) do
+    challenge = create(:gift_exchange, :open)
+    collection = create(:collection, challenge: challenge)
+    signup = build(:challenge_signup, collection_id: collection)
+    signup.collection = collection
+    signup.save
+    signup
+  end
   let(:open_collection) { open_signup.collection }
-  let(:open_challenge) { open_collection.challenge }
+  let(:open_challenge) { open_signup.collection.challenge }
 
   describe "new" do
     it "ensures signups are open" do
@@ -64,7 +78,6 @@ RSpec.describe ChallengeSignupsController, type: :controller do
       ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT = 2
       ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 0
       get :summary, id: challenge, collection_id: collection.name
-      binding.pry
       expect(File.file?(expected_filename)).to be true
     end
   end

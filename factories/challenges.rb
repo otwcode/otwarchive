@@ -9,16 +9,8 @@ FactoryGirl.define do
   end
 
   factory :challenge_signup do
-    trait :open do
-      open_date Time.now - 1.day
-      close_date Time.now + 1.day
-    end
-
-    trait :closed do
-      open_date Time.now - 2.days
-      close_date Time.now - 1.day
-    end
-
+    assigned_as_request false
+    assigned_as_offer false
     after(:build) do |signup|
       signup.pseud_id = create(:pseud).id unless signup.pseud_id
       signup.collection_id = create(:collection, challenge: create(:gift_exchange)).id unless signup.collection_id
