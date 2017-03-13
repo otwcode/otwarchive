@@ -4,6 +4,30 @@ Feature: Create bookmarks of external works
   As a humble user
   I want to bookmark some works
 
+  @bookmark_external_work
+  Scenario: A user can bookmark an external work using all the Creator's Tags fields (fandoms, rating, category, relationships, character)
+    Given basic tags
+      And I am logged in as "bookmarker"
+      And I am on the new external work page
+    When I fill in "URL" with "https://ao3testing.dreamwidth.org/856.html"
+      And I fill in "Creator" with "ao3testing"
+      And I fill in "Title" with "Some External Work"
+      And I fill in "Fandoms" with "Test Fandom"
+      And I select "General Audiences" from "Rating"
+      And I check "M/M"
+      And I fill in "Relationships" with "Character 1/Character 2"
+      And I fill in "Characters" with "Character 3, Character 4"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And I should see "Some External Work"
+      And I should see "ao3testing"
+      And I should see "Test Fandom"
+      And I should see "General Audiences"
+      And I should see "M/M"
+      And I should see "Character 1/Character 2"
+      And I should see "Character 3"
+      And I should see "Character 4"
+
   @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
     Given basic tags
