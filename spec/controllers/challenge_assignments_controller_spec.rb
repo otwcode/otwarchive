@@ -3,10 +3,7 @@ require 'spec_helper'
 describe ChallengeAssignmentsController do
   include LoginMacros
   include RedirectExpectationHelper
-  
-  before(:each) do
-    let(:collection) { create(:collection) }
-  end
+  let(:collection) { create(:collection) }
 
   context "when not logged in" do
     describe 'no_challenge' do
