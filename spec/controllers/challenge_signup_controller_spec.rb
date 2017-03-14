@@ -31,7 +31,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   let(:open_signup_owner) { Pseud.find(open_signup.pseud_id).user }
 
   describe "new" do
-    it "ensures signups are open" do
+    it "directs and errors if sign-up is not open" do
       fake_login_known_user(user)
       get :new, collection_id: collection.name, pseud: user.pseuds.first
       it_redirects_to_with_error(collection_path(collection), \
@@ -40,14 +40,14 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   end
 
   describe "show" do
-    xit "checks that there is a challenge" do
+    xit "redirects and errors if there is no challenge associated with the collection" do
       fake_login_known_user(collection_owner)
       get :show, id: 999_999, collection_id: collection.name
       it_redirects_to_with_error(collection_path(collection), \
                                  "What sign-up did you want to work on?")
     end
 
-    it "checks ownership" do
+    it "redirects and errors if the user does not own the sign-up" do
       fake_login_known_user(user)
       get :show, id: signup, collection_id: collection.name
       it_redirects_to_with_error(collection_path(collection), \
@@ -56,7 +56,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   end
 
   describe "index" do
-    it "checks for the right owner" do
+    it "redirects and errors if the current user is not allowed to see the specified user's sign-ups" do
       fake_login_known_user(user)
       get :index, id: challenge, collection_id: collection.name, user_id: collection_owner
       it_redirects_to_with_error(root_path, \
@@ -66,7 +66,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
 
   describe "destroy" do
     context "signups are open" do
-      it "checks that signups are open" do
+      it "deletes the sign-up and redirects with notice" do
         fake_login_known_user(open_signup_owner)
         delete :destroy, id: open_signup, collection_id: open_collection.name
         it_redirects_to_with_notice(collection_path(open_collection), \
@@ -74,7 +74,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
       end
     end
     context "signups are closed" do
-      it "checks that signups are open" do
+      it "redirects and errors" do
         fake_login_known_user(signup_owner)
         delete :destroy, id: signup, collection_id: collection.name
         it_redirects_to_with_error(collection_path(collection), \
@@ -93,7 +93,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
         expect(response).to render_template('edit')
       end
 
-      it "checks ownership of the signup" do
+      it "redirects and errors if the current user can't edit the sign-up" do
         fake_login_known_user(user)
         put :update, challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name
         it_redirects_to_with_error(collection, \
@@ -102,7 +102,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
     end
 
     context "signups are closed" do
-      it "does not allow edits when signups are closed" do
+      it "redirects and errors without updating the sign-up" do
         fake_login_known_user(signup_owner)
         put :update, challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name
         it_redirects_to_with_error(collection, \

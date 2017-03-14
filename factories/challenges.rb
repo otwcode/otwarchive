@@ -26,5 +26,4 @@ FactoryGirl.define do
       potential_match.request_signup_id = create(:challenge_signup, collection_id: potential_match.collection_id)
     end
   end
-
 end
