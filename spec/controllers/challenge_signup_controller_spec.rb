@@ -40,7 +40,7 @@ RSpec.describe ChallengeSignupsController, type: :controller do
   end
 
   describe "show" do
-    xit "redirects and errors if there is no challenge associated with the collection" do
+    it "redirects and errors if there is no challenge associated with the collection" do
       fake_login_known_user(collection_owner)
       get :show, id: 999_999, collection_id: collection.name
       it_redirects_to_with_error(collection_path(collection), \
