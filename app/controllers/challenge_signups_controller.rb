@@ -243,11 +243,11 @@ protected
   def request_to_array(type, request)
     any_types = TagSet::TAG_TYPES.select { |this_type| request && request.send("any_#{this_type}") }
     any_types.map! { |this_type| ts("Any %{this_type}", type: this_type.capitalize) }
-    tags = request.nil? ? [] : request.tag_set.tags.map { |tag| tag.name }
+    tags = request.nil? ? [] : request.tag_set.tags.map(&:name)
     rarray = [(tags + any_types).join(", ")]
 
     if @challenge.send("#{type}_restriction").optional_tags_allowed
-      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map { |tag| tag.name }.join(", "))
+      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map(&:name).join(", "))
     end
 
     if @challenge.send("#{type}_restriction").description_allowed
