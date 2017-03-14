@@ -27,7 +27,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    return if (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
+    return if @challenge.signup_open || @collection.user_is_maintainer?(current_user)
     signup_closed
   end
 
@@ -47,7 +47,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def maintainer_or_signup_owner_only
-    return if (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    return if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
     not_allowed(@collection)
   end
 
@@ -74,13 +74,11 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_pseud_ownership
-    if params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
-      # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
-      unless current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
-        flash[:error] = ts("You can't sign up with that pseud.")
-        redirect_to root_path and return
-      end
-    end
+    return unless params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
+    # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
+    return if current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
+    flash[:error] = ts("You can't sign up with that pseud.")
+    redirect_to root_path
   end
 
   #### ACTIONS
@@ -103,7 +101,7 @@ class ChallengeSignupsController < ApplicationController
     # using respond_to in order to provide Excel output
     # see ExportsHelper for export_csv method
     respond_to do |format|
-      format.html {
+      format.html do
         if @challenge.user_allowed_to_see_signups?(current_user)
           @challenge_signups = @collection.signups.joins(:pseud)
           if params[:query]
@@ -116,8 +114,8 @@ class ChallengeSignupsController < ApplicationController
         else
           not_allowed(@collection)
         end
-      }
-      format.csv {
+      end
+      format.csv do
         if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
            (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
@@ -127,7 +125,7 @@ class ChallengeSignupsController < ApplicationController
           flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to root_path and return
         end
-      }
+      end
     end
   end
 
@@ -156,9 +154,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def show
-    unless @challenge_signup.valid?
-      flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
-    end
+    return if @challenge_signup.valid?
+    flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
   end
 
   protected
@@ -177,7 +174,7 @@ class ChallengeSignupsController < ApplicationController
         notice += ts("Set up %{num} #{prompt_type.pluralize}. ", num: num_to_build)
       end
       num_existing = @challenge_signup.send(prompt_type).count
-      num_existing.upto(num_to_build-1) do
+      num_existing.upto(num_to_build - 1) do
         @challenge_signup.send(prompt_type).build
       end
     end
@@ -226,11 +223,11 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def destroy
-    unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
-      flash[:error] = ts("You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.")
-    else
+    if @challenge.signup_open || @collection.user_is_maintainer?(current_user)
       @challenge_signup.destroy
       flash[:notice] = ts("Challenge sign-up was deleted.")
+    else
+      flash[:error] = ts("You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.")
     end
     if @collection.user_is_maintainer?(current_user) && !@collection.prompt_meme?
       redirect_to collection_signups_path(@collection)
