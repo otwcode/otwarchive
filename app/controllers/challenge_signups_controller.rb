@@ -241,17 +241,16 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
-
 protected
 
   def request_to_array(type, request)
-    any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
-    any_types.map! { |type| ts("Any %{type}", type: type.capitalize) }
-    tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
+    any_types = TagSet::TAG_TYPES.select { |this_type| request && request.send("any_#{this_type}") }
+    any_types.map! { |this_type| ts("Any %{this_type}", type: this_type.capitalize) }
+    tags = request.nil? ? [] : request.tag_set.tags.map { |tag| tag.name }
     rarray = [(tags + any_types).join(", ")]
 
     if @challenge.send("#{type}_restriction").optional_tags_allowed
-      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
+      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map { |tag| tag.name }.join(", "))
     end
 
     if @challenge.send("#{type}_restriction").description_allowed
@@ -267,21 +266,20 @@ protected
     rarray << (request.nil? ? "" : request.url) if
       @challenge.send("#{type}_restriction").url_allowed
 
-    return rarray
+    rarray
   end
-
 
   def gift_exchange_to_csv
     header = ["Pseud", "Email", "Sign-up URL"]
 
     %w(request offer).each do |type|
       @challenge.send("#{type.pluralize}_num_allowed").times do |i|
-        header << "#{type.capitalize} #{i+1} Tags"
-        header << "#{type.capitalize} #{i+1} Optional Tags" if
+        header << "#{type.capitalize} #{i + 1} Tags"
+        header << "#{type.capitalize} #{i + 1} Optional Tags" if
           @challenge.send("#{type}_restriction").optional_tags_allowed
-        header << "#{type.capitalize} #{i+1} Description" if
+        header << "#{type.capitalize} #{i + 1} Description" if
           @challenge.send("#{type}_restriction").description_allowed
-        header << "#{type.capitalize} #{i+1} URL" if
+        header << "#{type.capitalize} #{i + 1} URL" if
           @challenge.send("#{type}_restriction").url_allowed
       end
     end
@@ -303,7 +301,6 @@ protected
 
     csv_array
   end
-
 
   def prompt_meme_to_csv
     header = ["Pseud", "Email", "Sign-up URL", "Tags"]
