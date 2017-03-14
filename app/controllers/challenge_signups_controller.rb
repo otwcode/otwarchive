@@ -16,7 +16,8 @@ class ChallengeSignupsController < ApplicationController
 
   def load_challenge
     @challenge = @collection.challenge
-    no_challenge and return unless @challenge
+    return if @challenge
+    no_challenge
   end
 
   def no_challenge
@@ -26,7 +27,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
+    return if (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
+    signup_closed
   end
 
   def signup_closed
@@ -40,11 +42,13 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless @challenge_signup.pseud.user == current_user || signup_closed_owner?
+    return if @challenge_signup.pseud.user == current_user || signup_closed_owner?
+    not_signup_owner
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    return if (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    not_allowed(@collection)
   end
 
   def not_signup_owner
@@ -59,7 +63,8 @@ class ChallengeSignupsController < ApplicationController
 
   def load_signup_from_id
     @challenge_signup = ChallengeSignup.find(params[:id])
-    no_signup and return unless @challenge_signup
+    return if @challenge_signup
+    no_signup
   end
 
   def no_signup
@@ -99,22 +104,22 @@ class ChallengeSignupsController < ApplicationController
     # see ExportsHelper for export_csv method
     respond_to do |format|
       format.html {
-          if @challenge.user_allowed_to_see_signups?(current_user)
-            @challenge_signups = @collection.signups.joins(:pseud)
-            if params[:query]
-              @query = params[:query]
-              @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
-            end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-          elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-            @challenge_signups = @collection.signups.by_user(current_user)
-          else
-            not_allowed(@collection)
+        if @challenge.user_allowed_to_see_signups?(current_user)
+          @challenge_signups = @collection.signups.joins(:pseud)
+          if params[:query]
+            @query = params[:query]
+            @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
           end
+          @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+          @challenge_signups = @collection.signups.by_user(current_user)
+        else
+          not_allowed(@collection)
+        end
       }
       format.csv {
         if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
-        (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
+           (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
           filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
           send_csv_data(csv_data, filename)
@@ -127,12 +132,12 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
-    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT / 2)
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT / 2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
-      if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
-          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)
+      if !File.exist?(ChallengeSignup.summary_file(@collection)) ||
+         (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)
         # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
 
         # touch the file so we don't generate a second request
@@ -157,6 +162,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   protected
+
   def build_prompts
     notice = ""
     @challenge.class::PROMPT_TYPES.each do |prompt_type|
@@ -175,12 +181,11 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signup.send(prompt_type).build
       end
     end
-    unless notice.blank?
-      flash[:notice] = notice
-    end
+    flash[:notice] = notice unless notice.blank?
   end
 
   public
+
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your sign-up below.")
