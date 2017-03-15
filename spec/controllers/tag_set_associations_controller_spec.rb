@@ -86,6 +86,42 @@ describe TagSetAssociationsController do
         end
       end
 
+      context "multiple tag associations" do
+        let(:parent_tag) { create(:fandom) }
+        let(:child_tag_1) { create(:relationship) }
+        let(:child_tag_2) { create(:relationship) }
+        let(:child_tag_3) { create(:relationship) }
+
+        before do
+          params = {
+            tag_set_id: owned_tag_set.id,
+            "create_association_#{child_tag_1.id}_#{parent_tag.name}": "1",
+            "create_association_#{child_tag_2.id}_#{parent_tag.name}": "1",
+            "create_association_#{child_tag_3.id}_#{parent_tag.name}": "",
+          }
+          put :update_multiple, params
+        end
+
+        it "creates the new tag association" do
+          expect(TagSetAssociation.count).to eq(2)
+
+          assoc = TagSetAssociation.first
+          expect(assoc.owned_tag_set).to eq(owned_tag_set)
+          expect(assoc.tag).to eq child_tag_1
+          expect(assoc.parent_tag).to eq parent_tag
+
+          assoc = TagSetAssociation.last
+          expect(assoc.owned_tag_set).to eq(owned_tag_set)
+          expect(assoc.tag).to eq child_tag_2
+          expect(assoc.parent_tag).to eq parent_tag
+        end
+
+        it "redirects and returns a notice" do
+          it_redirects_to(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include("Nominated associations were added.")
+        end
+      end
+
       context "some tag associations cannot be saved" do
         it "redirects and returns an error message" do
           params = {
