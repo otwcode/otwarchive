@@ -62,7 +62,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def load_signup_from_id
-    @challenge_signup = ChallengeSignup.find(params[:id])
+    @challenge_signup = ChallengeSignup.find_by_id(params[:id])
     return if @challenge_signup
     no_signup
   end
