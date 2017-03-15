@@ -40,12 +40,6 @@ FactoryGirl.define do
     association :pseud
   end
 
-  factory :tag_set_association do
-    association :owned_tag_set
-    association :tag, factory: :relationship
-    association :parent_tag, factory: :fandom
-  end
-
   factory :tag_nomination do
     type 'FandomNomination'
 
