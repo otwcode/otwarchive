@@ -6,7 +6,7 @@ describe TagSetAssociationsController do
 
   let(:owned_tag_set) { create(:owned_tag_set) }
   let(:mod_pseud) {
-    create(:pseud).tap do |pseud|
+    create(:pseud) do |pseud|
       owned_tag_set.add_moderator(pseud)
       owned_tag_set.save!
     end
@@ -35,14 +35,11 @@ describe TagSetAssociationsController do
         end
       end
 
-      context "associated a relationship with a fandom" do
-        let(:random_fandom_tag) { create(:fandom) }
-        let(:random_relationship_tag) { create(:relationship) }
-
+      shared_examples "new tag association" do
         before do
           params = {
             tag_set_id: owned_tag_set.id,
-            "create_association_#{random_relationship_tag.id}_#{random_fandom_tag.name}": "1",
+            "create_association_#{tag.id}_#{parent_tag.name}": "1",
           }
           put :update_multiple, params
         end
@@ -51,8 +48,8 @@ describe TagSetAssociationsController do
           expect(TagSetAssociation.count).to eq(1)
           assoc = TagSetAssociation.last
           expect(assoc.owned_tag_set).to eq(owned_tag_set)
-          expect(assoc.tag).to eq random_relationship_tag
-          expect(assoc.parent_tag).to eq random_fandom_tag
+          expect(assoc.tag).to eq tag
+          expect(assoc.parent_tag).to eq parent_tag
         end
 
         it "redirects and returns a notice" do
@@ -61,29 +58,31 @@ describe TagSetAssociationsController do
         end
       end
 
-      context "associated a character with a fandom" do
-        let(:random_fandom_tag) { create(:fandom) }
-        let(:random_character_tag) { create(:character) }
-
-        before do
-          params = {
-            tag_set_id: owned_tag_set.id,
-            "create_association_#{random_character_tag.id}_#{random_fandom_tag.name}": "1",
-          }
-          put :update_multiple, params
+      describe "for a non-fandom parent tag" do
+        include_examples "new tag association" do
+          let(:parent_tag) { create(:character) }
+          let(:tag) { create(:character) }
         end
+      end
 
-        it "creates the new tag association" do
-          expect(TagSetAssociation.count).to eq(1)
-          assoc = TagSetAssociation.last
-          expect(assoc.owned_tag_set).to eq(owned_tag_set)
-          expect(assoc.tag).to eq random_character_tag
-          expect(assoc.parent_tag).to eq random_fandom_tag
+      describe "for a character child tag" do
+        include_examples "new tag association" do
+          let(:parent_tag) { create(:fandom) }
+          let(:tag) { create(:character) }
         end
+      end
 
-        it "redirects and returns a notice" do
-          it_redirects_to(tag_set_path(owned_tag_set))
-          expect(flash[:notice]).to include("Nominated associations were added.")
+      describe "for a fandom child tag" do
+        include_examples "new tag association" do
+          let(:parent_tag) { create(:fandom) }
+          let(:tag) { create(:fandom) }
+        end
+      end
+
+      describe "for a relationship child tag" do
+        include_examples "new tag association" do
+          let(:parent_tag) { create(:fandom) }
+          let(:tag) { create(:relationship) }
         end
       end
 
