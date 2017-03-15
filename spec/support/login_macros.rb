@@ -1,5 +1,4 @@
 module LoginMacros
-
   def fake_login
     # Stub out the current_user method
     @current_user = FactoryGirl.create(:user)
@@ -20,7 +19,7 @@ module LoginMacros
     @current_admin = admin
     allow(controller).to receive(:logged_in_as_admin?).and_return(true)
     allow(controller).to receive(:current_admin).and_return(@current_admin)
-    sign_in :admin, admin 
+    sign_in :admin, admin
   end
 
   def fake_logout
@@ -29,6 +28,6 @@ module LoginMacros
     allow(controller).to receive(:logged_in_as_admin?).and_return(false)
     allow(controller).to receive(:current_admin).and_return(@current_admin)
     allow(controller).to receive(:logged_in?).and_return(false)
-    allow(controller).to receive(:current_user).and_return(@current_user)
+    allow(controller).to receive(:current_user).and_return(nil)
   end
 end

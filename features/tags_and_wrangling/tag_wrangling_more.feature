@@ -24,7 +24,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Edit first fandom Tag"
     
     # assigning media to a fandom
-    When I fill in "Media" with "TV Shows"
+    When I fill in "tag[media_string]" with "TV Shows"
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Tag Wrangling"
