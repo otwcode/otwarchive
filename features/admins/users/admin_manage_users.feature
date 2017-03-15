@@ -2,7 +2,7 @@
 Feature: Admin Actions to manage users
   In order to manage user accounts
   As an an admin
-  I want to be able to look up and edit individual users
+  I want to be able to edit individual users
 
   Scenario: Admin can update a user's email address and roles
     Given the following activated user exists

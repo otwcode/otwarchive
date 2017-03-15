@@ -13,7 +13,7 @@ class FeedbacksController < ApplicationController
   end
 
   def create
-    @feedback = Feedback.new(params[:feedback])
+    @feedback = Feedback.new(feedback_params)
     language_name = Language.find_by_id(@feedback.language).name
     @feedback.language = language_name
     if @feedback.save
@@ -30,6 +30,15 @@ class FeedbacksController < ApplicationController
 
   def load_support_languages
     @support_languages = Language.where(support_available: true).order(:name)
+  end
+
+  private
+
+  def feedback_params
+    params.require(:feedback).permit(
+      :comment, :email, :summary, :user_agent,
+      :ip_address, :username, :language
+    )
   end
 
 end

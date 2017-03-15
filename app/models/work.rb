@@ -202,6 +202,9 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+    self.tags.each do |tag|
+      tag.update_tag_cache
+    end
     Work.expire_work_tag_groups_id(self.id)
   end
 
@@ -746,9 +749,13 @@ class Work < ActiveRecord::Base
   end
 
   # Set the value of word_count to reflect the length of the chapter content
+  # Called before_save
   def set_word_count
     if self.new_record?
-      self.word_count = self.chapters.first.set_word_count
+      self.word_count = 0
+      chapters.each do |chapter|
+        self.word_count += chapter.set_word_count
+      end
     else
       self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id, :posted => true).first.work_word_count
     end

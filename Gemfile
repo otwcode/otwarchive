@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 ruby '2.2.5'
 gem 'test-unit', '~> 3.0'
@@ -6,6 +6,10 @@ gem 'test-unit', '~> 3.0'
 gem 'bundler'
 
 gem 'rails', '3.2.22.3'
+
+# the published gem does not include fixes that are in Rails
+# specifically https://github.com/rails/strong_parameters/issues/16
+gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -59,6 +63,9 @@ gem 'paperclip'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
+# Gems for authentication
+gem 'devise', '~> 3.0'   # Lock on version 3 until we update to Rails 4
+gem 'devise-async'       # To mails through queues
 gem 'authlogic'
 gem 'bcrypt'
 

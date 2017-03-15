@@ -1,7 +1,7 @@
 # encoding: utf-8
 @tag_sets
 Feature: creating and editing tag sets
-  
+
   Scenario: A user should be able to create a tag set with a title
   Given I am logged in as "tagsetter"
     And I go to the tagsets page
@@ -11,21 +11,103 @@ Feature: creating and editing tag sets
   Then I should see a create confirmation message
     And I should see "About Empty Tag Set"
     And I should see "tagsetter" within ".meta"
-  
+
   Scenario: A user should be able to create a tag set with noncanonical tags
   Given I am logged in as "tagsetter"
     And I set up the tag set "Noncanonical Tags" with the fandom tags "Ywerwe, Blah di blah, Foooo"
   Then I should see a create confirmation message
     And I should see "Ywerwe"
-    
+
   Scenario: A user should be able to add additional tags to an existing set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Noncanonical Tags" with the fandom tags "Ywerwe, Blah di blah, Foooo"
-  When I follow "Edit"
-    And I add the character tags "Bababa, Lalala" and the freeform tags "wheee, gloopy" to the tag set "Noncanonical Tags"
+  When I add the character tags "Bababa, Lalala" and the freeform tags "wheee, gloopy" to the tag set "Noncanonical Tags"
   Then I should see an update confirmation message
     And I should see "wheee"
-    
+
+  Scenario: A user should be able to add and remove fandom tags for a tag set they own
+  Given I am logged in
+    And I set up the tag set "Fandoms" with the fandom tags "One, Two"
+  When I add the fandom tags "Three, Four" to the tag set "Fandoms"
+  Then I should see "One"
+    And I should see "Two"
+    And I should see "Three"
+    And I should see "Four"
+  When I remove the fandom tags "One, Three" from the tag set "Fandoms"
+  Then I should see "Two"
+    And I should see "Four"
+    And I should not see "One"
+    And I should not see "Three"
+
+  Scenario: A user should be able to add and remove character tags for a tag set they own
+  Given I am logged in
+    And I set up the tag set "Characters" with the character tags "Character 1, Character 2"
+  When I add the character tags "Character 3, Character 4" to the tag set "Characters"
+  Then I should see "Character 1"
+    And I should see "Character 2"
+    And I should see "Character 3"
+    And I should see "Character 4"
+  When I remove the character tags "Character 2, Character 4" from the tag set "Characters"
+  Then I should see "Character 1"
+    And I should see "Character 3"
+    And I should not see "Character 2"
+    And I should not see "Character 4"
+
+  Scenario: A user should be able to add and remove relationship tags for a tag set they own
+  Given I am logged in
+    And I set up the tag set "Relationships" with the relationship tags "One/Two, 1 & 2"
+  When I add the relationship tags "3/4, Three & Four" to the tag set "Relationships"
+  Then I should see "One/Two"
+    And I should see "1 & 2"
+    And I should see "3/4"
+    And I should see "Three & Four"
+  When I remove the relationship tags "One/Two, Three & Four" from the tag set "Relationships"
+  Then I should see "1 & 2"
+    And I should see "3/4"
+    And I should not see "One/Two"
+    And I should not see "Three & Four"
+
+  Scenario: A user should be able to add and remove rating tags for a tag set they own
+  Given the default ratings exist
+    And I am logged in
+    And I set up the tag set "Ratings" with the rating tags "Explicit, Mature"
+  When I add the rating tags "Teen And Up Audiences, General Audiences" to the tag set "Ratings"
+  Then I should see "Explicit"
+    And I should see "Mature"
+    And I should see "Teen And Up Audiences"
+    And I should see "General Audiences"
+  When I remove the rating tags "Explicit, Teen And Up Audiences" from the tag set "Ratings"
+  Then I should see "Mature"
+    And I should see "General Audiences"
+    And I should not see "Explicit"
+    And I should not see "Teen And Up Audiences"
+
+  Scenario: A user should be able to add and remove category tags for a tag set they own
+  Given the basic categories exist
+    And I am logged in
+    And I set up the tag set "Categories" with the category tags "Other, F/M"
+  When I add the category tags "F/F, M/M" to the tag set "Categories"
+  Then I should see "Other"
+    And I should see "F/M"
+    And I should see "M/M"
+    And I should see "F/F"
+  When I remove the category tags "F/F, Other" from the tag set "Categories"
+  Then I should see "M/M"
+    And I should see "F/M"
+    And I should not see "F/F"
+    And I should not see "Other"
+
+  Scenario: A user should be able to add and remove warning tags for a tag set they own
+  Given the basic warnings exist
+    And I am logged in
+    And I set up the tag set "Warnings" with the warning tags "Choose Not To Use Archive Warnings"
+  When I add the warning tags "No Archive Warnings Apply" to the tag set "Warnings"
+  Then I should see "Choose Not To Use Archive Warnings"
+    And I should see "No Archive Warnings Apply"
+  When I remove the warning tags "Choose Not To Use Archive Warnings" from the tag set "Warnings"
+  Then I should see "No Archive Warnings Apply"
+    And I should not see "Choose Not To Use Archive Warnings"
+
   Scenario: If a tag set does not have a visible tag list, only a moderator should be able to see the tags in the set, but everyone should be able to see the tag set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Tag Set with Non-visible Tag List" with an invisible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
@@ -42,7 +124,7 @@ Feature: creating and editing tag sets
     And I should not see "Knots Landing"
     And I should not see "Models Inc"
     And I should see "The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway)."
-    
+
   Scenario: If a tag set has a visible tag list, everyone should be able to see the tags in the set
   Given I am logged in as "tagsetter"
     And I set up the tag set "Tag Set with Visible Tag List" with a visible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
@@ -55,8 +137,32 @@ Feature: creating and editing tag sets
     And I should see "Knots Landing"
     And I should see "Models Inc"
 
-  Scenario: A moderator should be able to manually set up associations between tags in their set on the main tag set edit page
-
+  @javascript
+  Scenario: A moderator should be able to manually set up and remove associations between tags in their set on the main tag set edit page
+  Given I am logged in
+    And I set up the tag set "Associations" with the fandom tags "Major Crimes, The Closer" and the character tags "Brenda Leigh Johnson, Sharon Raydor"
+  When I go to the "Associations" tag set edit page
+    And I follow "Add Association"
+    And I select "Sharon Raydor" from "Tag"
+    And I select "The Closer" from "Parent tag"
+    And I press "Update"
+  Then I should see an update confirmation message
+    And I should see "Uncategorized Fandoms (2)"
+    And I should see "Unassociated Characters & Relationships (1)"
+  When I follow "Expand All"
+  Then I should see "The Closer (1)"
+    And I should see "Major Crimes (0)"
+    And "Sharon Raydor" should be associated with the "Uncategorized" fandom "The Closer"
+  When I go to the "Associations" tag set edit page
+    And I check "Sharon Raydor (The Closer)"
+    And I press "Update"
+  Then I should see an update confirmation message
+    And I should see "Unassociated Characters & Relationships (2)"
+  When I follow "Expand All"
+  Then I should see "The Closer (0)"
+    And I should see "Major Crimes (0)"
+  When I expand the unassociated characters and relationships
+  Then "Sharon Raydor" should be an unassociated tag
 
   # NOMINATIONS
   Scenario: A tag set should take nominations within the nomination limits
@@ -65,7 +171,7 @@ Feature: creating and editing tag sets
   Then I should see "Nominate"
   When I follow "Nominate"
   Then I should see "You can nominate up to 3 characters"
-  
+
   Scenario: Tag set nominations should nest characters under fandoms if fandoms are being nominated
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
@@ -79,7 +185,117 @@ Feature: creating and editing tag sets
   Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
     And I submit
   Then I should see "Your nominations were successfully submitted"
-    
+
+  Scenario: You should be able to nominate characters when the tagset doesn't allow fandom nominations
+  Given a canonical character "Common Character" in fandom "Canon"
+    And I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+  When I follow "Nominate"
+    And I fill in "Character 1" with "Obscure Character"
+    And I fill in "Character 2" with "Common Character"
+    And I press "Submit"
+  Then I should see "Sorry! We couldn't save this tag set nomination"
+    And I should see "We need to know what fandom Obscure Character belongs in."
+    But I should not see "We need to know what fandom Common Character belongs in."
+  When I fill in "Fandom?" with "Canon"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "Obscure Character"
+    And I should see "Common Character"
+
+  Scenario: You should be able to nominate relationships when the tagset doesn't allow fandom nominations
+  Given a canonical relationship "Common Pairing" in fandom "Canon"
+    And I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 relationship noms
+  When I follow "Nominate"
+    And I fill in "Relationship 1" with "Rare Pairing"
+    And I fill in "Relationship 2" with "Common Pairing"
+    And I press "Submit"
+  Then I should see "Sorry! We couldn't save this tag set nomination"
+    And I should see "We need to know what fandom Rare Pairing belongs in."
+    But I should not see "We need to know what fandom Common Pairing belongs in."
+  When I fill in "Fandom?" with "Canon"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "Rare Pairing"
+    And I should see "Common Pairing"
+
+  Scenario: You should be able to edit your nominated tag sets, but cannot delete them once they've been reviewed
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Mayfly" with 3 fandom noms and 3 character noms
+  When I nominate fandom "Floobry" and character "Barblah" in "Mayfly"
+  Then I should see "Not Yet Reviewed (may be edited or deleted)"
+    And I should see "Floobry"
+  When I follow "Edit"
+    And I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
+  When I press "Submit"
+  Then I should see "Your nominations were successfully updated"
+  Given I am logged in as "tagsetter"
+  When I review nominations for "Mayfly"
+  Then I should see "Bloob" within ".tagset"
+  When I check "fandom_approve_Bloob"
+    And I press "Submit"
+  Then I should see "Successfully added to set: Bloob"
+  Given I am logged in as "nominator"
+    And I go to the tagsets page
+    And I follow "Mayfly"
+    And I follow "My Nominations"
+  Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
+  When I follow "Edit"
+  Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+
+  Scenario: You should be able to edit your nominated characters when the tagset doesn't allow fandom nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+  When I follow "Nominate"
+    And I fill in "Character 1" with "My Aforvite Character"
+    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "My Aforvite Character"
+  When I follow "Edit"
+    And I fill in "Character 1" with "My Favorite Character"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully updated."
+    And I should see "My Favorite Character"
+    But I should not see "My Aforvite Character"
+
+  Scenario: You should be able to edit your nominated relationships when the tagset doesn't allow fandom nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 relationship noms
+  When I follow "Nominate"
+    And I fill in "Relationship 1" with "My Favorite Character & Their Best Friend"
+    And I fill in "Fandom?" with "My Favorite Fandom"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully submitted."
+    And I should see "My Favorite Character & Their Best Friend"
+  When I follow "Edit"
+    And I fill in "Relationship 1" with "My Favorite Character/Their Worst Enemy"
+    And I press "Submit"
+  Then I should see "Your nominations were successfully updated."
+    And I should see "My Favorite Character/Their Worst Enemy"
+    But I should not see "Their Best Friend"
+
+  Scenario: Owner of a tag set can clear all nominations
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+  Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
+    And I submit
+  Then I should see "Your nominations were successfully submitted"
+  Given I am logged in as "tagsetter"
+  When I review nominations for "Nominated Tags"
+    And I follow "Clear Nominations"
+    And I press "Yes, Clear Tag Set Nominations"
+  Then I should see "All nominations for this Tag Set have been cleared"
+
+  Scenario: Owner of a tag set with over 30 nominations sees a message that they can't all be displayed on one page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
+  When there are 36 unreviewed nominations
+  Given I am logged in as "tagsetter"
+    And I review nominations for "Nominated Tags"
+  Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
+
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
@@ -87,7 +303,7 @@ Feature: creating and editing tag sets
     And I follow "Review Nominations"
   Then I should see "left to review"
 
-  Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page 
+  Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
     And I nominate fandom "Floobry" and character "Barblah" in "Nominated Tags"
@@ -112,7 +328,7 @@ Feature: creating and editing tag sets
   Then I should see "Successfully rejected: Floobry"
     And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
-    
+
   Scenario: Tags with brackets should work with replacement
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
@@ -172,7 +388,7 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Nominated associations were added"
     And I should not see "don't seem to be associated"
-    
+
   Scenario: If a nominated tag and its parent are wrangled after approval it should still be possible to associate them
   Given I nominate and approve fandom "Floobry" and character "Zarrr" in "Nominated Tags"
     And a canonical character "Zarrr" in fandom "Floobry"
@@ -182,9 +398,9 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Nominated associations were added"
     And I should not see "don't seem to be associated"
-    
+
   Scenario: Tags with brackets should work in associations
-  
+
   Scenario: Batch load character tags should successfully load characters that are canonical and return characters that are not
   Given a fandom exists with name: "MASH (TV)", canonical: true
     And a fandom exists with name: "Dallas (TV)", canonical: true

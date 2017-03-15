@@ -8,7 +8,7 @@ class FavoriteTagsController < ApplicationController
 
   # POST /favorites_tags
   def create
-    @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
+    @favorite_tag = current_user.favorite_tags.build(favorite_tag_params)
     success_message = ts("You have successfully added %{tag_name} to your favorite tags. You can find them on the <a href='#{root_path}'>Archive homepage</a>.", tag_name: @favorite_tag.tag_name)
     if @favorite_tag.save
       respond_to do |format|
@@ -42,5 +42,11 @@ class FavoriteTagsController < ApplicationController
   def load_user
     @user = User.find_by_login(params[:user_id])
     @check_ownership_of = @user
+  end
+
+  def favorite_tag_params
+    params.require(:favorite_tag).permit(
+      :tag_id
+    )
   end
 end

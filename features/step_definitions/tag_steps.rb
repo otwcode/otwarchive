@@ -6,23 +6,10 @@ Given /^I have no tags$/ do
 end
 
 Given /^basic tags$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  ratings.each do |rating|
-    Rating.find_or_create_by_name_and_canonical(rating, true)
-  end
-  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
-  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  step %{the default ratings exist}
+  step %{the basic warnings exist}
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
-  Category.find_or_create_by_name_and_canonical("Gen", true)
-  Category.find_or_create_by_name_and_canonical("Other", true)
-  Category.find_or_create_by_name_and_canonical("F/F", true)
-  Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("F/M", true)
-  Category.find_or_create_by_name_and_canonical("M/M", true)
+  step %{the basic categories exist}
 end
 
 Given /^the default ratings exist$/ do
@@ -33,6 +20,17 @@ Given /^the default ratings exist$/ do
              ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
   ratings.each do |rating|
     Rating.find_or_create_by_name_and_canonical(rating, true)
+  end
+end
+
+Given /^the basic warnings exist$/ do
+  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+end
+
+Given /^the basic categories exist$/ do
+  %w(Gen Other F/F Multi F/M M/M).each do |category|
+    Category.find_or_create_by_name_and_canonical(category, true)
   end
 end
 
@@ -122,6 +120,13 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
     step %{I am logged in as a tag wrangler}
     step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
     step %{I am logged out}
+  end
+end
+
+Given /^the canonical fandom "([^"]*)" with (\d+) works$/ do |tag_name, number_of_works|
+  FactoryGirl.create(:fandom, name: tag_name, canonical: true)
+  number_of_works.to_i.times do
+    FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
   end
 end
 
@@ -261,6 +266,12 @@ end
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:wrangling_guideline, id: i)
+  end
+end
+
+When /^I flush the wrangling sidebar caches$/ do
+  [Fandom, Character, Relationship, Freeform].each do |klass|
+    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
 end
 
