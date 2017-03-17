@@ -3,10 +3,6 @@ require 'spec_helper'
 describe WorkSearch do
 
   before(:each) do
-    work.save
-    # This doesn't work properly in the factory.
-    second_work.collection_ids = [collection.id]
-    second_work.save
     Tire.index(Work.index_name).delete
     Work.create_elasticsearch_index
     Work.import
@@ -43,6 +39,7 @@ describe WorkSearch do
       fandom_string: "Harry Potter",
       character_string: "Harry Potter, Ron Weasley, Hermione Granger",
       posted: true,
+      collection_ids: [1],
       language_id: 2
     )
   end
@@ -150,13 +147,11 @@ describe WorkSearch do
       it "should only return works in that fandom" do
         work_search = WorkSearch.new(fandom_names: "Harry Potter")
         expect(work_search.search_results).not_to include work
-        expect(work_search.search_results).to include second_work
       end
 
       it "should not choke on exclamation points" do
         work_search = WorkSearch.new(fandom_names: "Potter!")
         expect(work_search.search_results).to include second_work
-        expect(work_search.search_results).not_to include work
       end
     end
 
