@@ -53,6 +53,7 @@ class Tag < ActiveRecord::Base
   end
 
   def write_taggings_count_to_db(value)
+    return if value == taggings_count_cache
     return if (taggings_count_cache - value).abs < (ArchiveConfig.TAGGINGS_COUNT_MAX_DIFF || 20) && \
               taggings_count_cache >= (ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN || 3) && \
               value >= (ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN || 3)
