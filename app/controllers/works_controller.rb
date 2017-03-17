@@ -908,7 +908,7 @@ class WorksController < ApplicationController
     if !params[:work][:author_attributes] || !params[:work][:author_attributes][:ids]
       flash.now[:notice] = sorry
       params[:work][:author_attributes] ||= {}
-      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
+      params[:work][:author_attributes][:ids] = [current_user.default_pseud.id]
     end
 
     # stuff new bylines into author attributes to be parsed by the work model
@@ -1074,7 +1074,7 @@ class WorksController < ApplicationController
       challenge_claim_ids: [],
       category_string: [],
       warning_strings: [],
-      author_attributes: [:byline, ids: []],
+      author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
       chapter_attributes: [
