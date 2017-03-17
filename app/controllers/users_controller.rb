@@ -141,14 +141,14 @@ class UsersController < ApplicationController
       redirect_to root_path
     else
       @user = User.new
-      @user.login = params[:user][:login]
-      @user.email = params[:user][:email]
+      @user.login = user_params[:login]
+      @user.email = user_params[:email]
       @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = params[:user][:age_over_13]
-      @user.terms_of_service = params[:user][:terms_of_service]
+      @user.age_over_13 = user_params[:age_over_13]
+      @user.terms_of_service = user_params[:terms_of_service]
 
-      @user.password = params[:user][:password] if params[:user][:password]
-      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
+      @user.password = user_params[:password] if user_params[:password]
+      @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
 
       @user.activation_code = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
 
@@ -221,7 +221,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update_attributes(params[:profile_attributes])
+    @user.profile.update_attributes(profile_params)
 
     if @user.profile.save
       flash[:notice] = ts('Your profile has been successfully updated')
@@ -457,5 +457,19 @@ class UsersController < ApplicationController
       flash[:error] = ts('Sorry, something went wrong! Please try again.')
       redirect_to(@user)
     end
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :login, :email, :age_over_13, :terms_of_service,
+      :password, :password_confirmation
+    )
+  end
+
+  def profile_params
+    params.require(:profile_attributes).permit(
+      :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
+      :"date_of_birth(3i)", :date_of_birth, :about_me
+    )
   end
 end
