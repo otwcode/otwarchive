@@ -18,7 +18,9 @@ describe Tag do
       # Set so that we need few uses of a tag to start caching it.
       ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
       # Set the minimum number of uses needed for before caching is started.
-      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
+      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 5
+      # Set the minumum number of uses before we stop writng the value to the database.
+      ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN = 3
       @fandom_tag = FactoryGirl.create(:fandom)
     end
 
@@ -31,18 +33,25 @@ describe Tag do
     end
 
     it 'will start caching a when tag when that tag is used significantly' do
-      (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1).each do |try|
+      (1..ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN).each do |try|
         work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
         work.save
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq try
         expect(@fandom_tag.taggings_count).to eq try
       end
+      (ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN + 1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1).each do |try|
+        work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        work.save
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN
+        expect(@fandom_tag.taggings_count).to eq try
+      end
       work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
       work.save
       @fandom_tag.reload
       # This value should be cached and wrong
-      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
+      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_SAVE_MIN
       expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
       expect(@fandom_tag.large_tag).not_to be_truthy
     end
