@@ -38,6 +38,7 @@ char1a:
   id: 9
   name: Persone A
   type: Character
+  taggings_count: 1
 ghostsoup:
   id: 10
   name: Ghost Soup
