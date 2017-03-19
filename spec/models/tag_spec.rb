@@ -11,54 +11,6 @@ describe Tag do
     User.current_user = nil
   end
 
-  context 'checking count caching' do
-    before(:each) do
-      # Set the minimal amount of time a tag can be cached for.
-      ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
-      # Set so that we need few uses of a tag to start caching it.
-      ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
-      # Set the minimum number of uses needed for before caching is started.
-      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
-      @fandom_tag = FactoryGirl.create(:fandom)
-    end
-
-    it 'should not cache tags which are not used much' do
-      work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-      @fandom_tag.reload
-      expect(@fandom_tag.taggings_count_cache).to eq 1
-      expect(@fandom_tag.taggings_count).to eq 1
-      expect(@fandom_tag.large_tag).not_to be_truthy
-    end
-
-    it 'will start caching a when tag when that tag is used significantly' do
-      (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1).each do |try|
-        work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-        work.save
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq try
-        expect(@fandom_tag.taggings_count).to eq try
-      end
-      work = FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
-      work.save
-      @fandom_tag.reload
-      # This value should be cached and wrong
-      expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
-      expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT + 1
-      expect(@fandom_tag.large_tag).not_to be_truthy
-    end
-
-    it "flags a tag as large based on its number of uses" do
-      (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
-        @fandom_tag.taggings_count = try
-        @fandom_tag.reload
-        expect(@fandom_tag.large_tag).not_to be_truthy
-      end
-      @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
-      @fandom_tag.reload
-      expect(@fandom_tag.large_tag).to be_truthy
-    end
-  end
-
   it "should not be valid without a name" do
     expect(@tag.save).not_to be_truthy
 

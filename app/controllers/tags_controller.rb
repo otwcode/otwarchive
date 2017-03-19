@@ -97,7 +97,7 @@ class TagsController < ApplicationController
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
         children[child_type] = tags.to_a.uniq unless tags.blank?
       end
       children
@@ -293,7 +293,7 @@ class TagsController < ApplicationController
       params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + ' ' + params[:sort_direction]
       # add a secondary sorting key when the main one is not discerning enough
-      if sort.include?('suggested') || sort.include?('taggings_count_cache')
+      if sort.include?('suggested') || sort.include?('taggings_count')
         sort += ', name ASC'
       end
       # this makes sure params[:status] is safe
