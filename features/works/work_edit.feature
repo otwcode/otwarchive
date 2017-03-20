@@ -153,3 +153,12 @@ Feature: Edit Works
       And I fill in "Fandoms" with ""
       And I press "Post Without Preview"
     Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
+
+  Scenario: User can cancel editing a work
+    Given I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+      And I edit the work "Work 1"
+      And I fill in "Fandoms" with ""
+      And I press "Cancel"
+    When I view the work "Work 1"
+      Then I should see "Fandom: testing"
