@@ -297,7 +297,7 @@ class BookmarksController < ApplicationController
       :tag_string, :collection_names,
       external: [
         :url, :author, :title, :summary, :fandom_string, :rating_string,
-        :relationship_string, :character_string
+        :relationship_string, :character_string, :category_string
       ]
     )
   end
