@@ -301,7 +301,7 @@ class WorksController < ApplicationController
     load_pseuds
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    @collection = Collection.find_by_name(work_params[:collection_names])
 
     @work.ip_address = request.remote_ip
     if params[:edit_button]
@@ -382,7 +382,7 @@ class WorksController < ApplicationController
     load_pseuds
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    @collection = Collection.find_by_name(work_params[:collection_names])
 
     render(:edit) && return unless @work.errors.empty?
 
@@ -860,8 +860,8 @@ class WorksController < ApplicationController
     @chapter = @work.first_chapter
 
     # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-    if params[:work] && params[:work][:chapter_attributes]
-      @chapter.attributes = params[:work][:chapter_attributes]
+    if params[:work] && work_params[:chapter_attributes]
+      @chapter.attributes = work_params[:chapter_attributes]
     end
   end
 
@@ -942,7 +942,7 @@ class WorksController < ApplicationController
         @work.preview_mode = false
       end
 
-      @work.attributes = params[:work]
+      @work.attributes = work_params
       @work.save_parents if @work.preview_mode
     end
   rescue
