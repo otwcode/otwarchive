@@ -20,7 +20,9 @@ class Admin::ApiController < ApplicationController
   end
 
   def create
-    @api_key = ApiKey.new(api_key_params)
+    # Use provided api key params if available otherwise fallback to empty
+    # ApiKey object
+    @api_key = params[:api_key].nil? ? ApiKey.new : ApiKey.new(api_key_params)
     if @api_key.save
       flash[:notice] = ts("New token successfully created")
       redirect_to action: "index"
