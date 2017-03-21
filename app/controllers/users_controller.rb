@@ -221,7 +221,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update_attributes(params[:profile_attributes])
+    @user.profile.update_attributes(profile_params[:profile_attributes])
 
     if @user.profile.save
       flash[:notice] = ts('Your profile has been successfully updated')
@@ -457,5 +457,14 @@ class UsersController < ApplicationController
       flash[:error] = ts('Sorry, something went wrong! Please try again.')
       redirect_to(@user)
     end
+  end
+
+  private
+
+  def profile_params
+    params.permit(profile_attributes: [
+      :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)", :"date_of_birth(3i)",
+      :date_of_birth, :about_me
+    ])
   end
 end
