@@ -462,7 +462,9 @@ class UsersController < ApplicationController
   private
 
   def profile_params
-    params.permit(profile_attributes: [
+    params.permit(
+    :utf8, :_method, :commit, :id,
+    profile_attributes: [
       :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)", :"date_of_birth(3i)",
       :date_of_birth, :about_me
     ])
