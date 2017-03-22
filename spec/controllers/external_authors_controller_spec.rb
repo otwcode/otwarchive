@@ -12,19 +12,17 @@ describe ExternalAuthorsController do
     fake_login_known_user(user)
   end
 
-  describe "GET #get_external_author_from_invitation" do
+  describe "GET #claim" do
     context "with invalid invitation token" do
       it "redirects with an error" do
-        get :get_external_author_from_invitation, invitation_token: "None existent"
+        get :claim, invitation_token: "None existent"
         it_redirects_to_with_error(root_path, "You need an invitation to do that.")
       end
     end
 
     context "with valid invitation token" do
-      xit "assigns invitation" do
-        # ActionView::MissingTemplate:
-        # Missing template external_authors/get_external_author_from_invitation, application/get_external_author_from_invitation with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder]}. Searched in:
-        get :get_external_author_from_invitation, invitation_token: invitation.token
+      it "assigns invitation" do
+        get :claim, invitation_token: invitation.token
         expect(assigns(:invitation)).to eq(invitation)
         assert_equal response.status, 200
       end
@@ -33,7 +31,7 @@ describe ExternalAuthorsController do
     context "without works to claim" do
       it "redirects with an error" do
         no_story_invitation = create(:invitation)
-        get :get_external_author_from_invitation, invitation_token: no_story_invitation.token
+        get :claim, invitation_token: no_story_invitation.token
         it_redirects_to_with_error(signup_path(no_story_invitation.token), "There are no stories to claim on this invitation. Did you want to sign up instead?")
       end
     end
@@ -41,8 +39,22 @@ describe ExternalAuthorsController do
 
   describe "GET #complete_claim" do
     it "redirects with a success message" do
+      expect(external_author.user).to be_nil
+      expect(external_author.claimed?).to be_falsy
+
+      expect(invitation.invitee).to be_nil
+      expect(invitation.redeemed_at).to be_nil
+
       get :complete_claim, invitation_token: invitation.token
       it_redirects_to_with_notice(user_external_authors_path(user), "We have added the stories imported under #{external_author.email} to your account.")
+
+      external_author.reload
+      expect(external_author.user).to eq(user)
+      expect(external_author.claimed?).to be_truthy
+
+      invitation.reload
+      expect(invitation.invitee).to eq(user)
+      expect(invitation.redeemed_at).not_to be_nil
     end
   end
 
@@ -54,11 +66,41 @@ describe ExternalAuthorsController do
       it_redirects_to_with_error(root_path, "You don't have permission to do that.")
     end
 
-    context "When the user has permission" do
+    context "when the logged in user is the external author" do
+      before(:each) do
+        external_author.claim!(user)
+      end
+
+      context "when doing nothing with imported works" do
+        it "redirects with a success message" do
+          put :update, user_id: user.login, id: external_author.id, imported_stories: "nothing"
+          it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
+        end
+      end
+
+      context "when orphaning imported works" do
+        it "redirects with a success message" do
+          put :update, user_id: user.login, id: external_author.id, imported_stories: "orphan"
+          it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
+        end
+      end
+
+      context "when deleting imported works" do
+        it "redirects with a success message" do
+          put :update, user_id: user.login, id: external_author.id, imported_stories: "delete"
+          it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been deleted. Your preferences have been saved.")
+        end
+      end
+    end
+
+    context "when the user has permission through an invitation" do
       context "when doing nothing with imported works" do
         it "redirects with a success message" do
           put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing"
           it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
+          invitation.reload
+          expect(invitation.invitee).to be_nil
+          expect(invitation.redeemed_at).to be_nil
         end
       end
 
@@ -66,6 +108,9 @@ describe ExternalAuthorsController do
         it "redirects with a success message" do
           put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
           it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
+          invitation.reload
+          expect(invitation.invitee).to be_nil
+          expect(invitation.redeemed_at).not_to be_nil
         end
 
         context "when updating preferences" do
@@ -77,6 +122,16 @@ describe ExternalAuthorsController do
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
             expect(flash[:error]).to eq "There were problems saving your preferences."
           end
+        end
+      end
+
+      context "when deleting imported works" do
+        it "redirects with a success message" do
+          put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "delete"
+          it_redirects_to_with_notice(root_path, "Your imported stories have been deleted. Your preferences have been saved.")
+          invitation.reload
+          expect(invitation.invitee).to be_nil
+          expect(invitation.redeemed_at).not_to be_nil
         end
       end
     end
