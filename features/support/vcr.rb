@@ -17,6 +17,7 @@ end
 
 VCR.cucumber_tags do |t|
   t.tags '@archivist_import'
+  t.tags '@bookmark_external_work'
   t.tags '@bookmark_fandom_error'
   t.tags '@bookmark_url_error'
 

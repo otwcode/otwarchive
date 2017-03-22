@@ -13,6 +13,10 @@ FactoryGirl.define do
     association :filterable, factory: :fandom
   end
 
+  factory :tag_set do
+    tags { [create(:fandom)] }
+  end
+
   factory :owned_tag_set do
     title { generate(:tag_title) }
     nominated true
