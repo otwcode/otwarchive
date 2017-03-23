@@ -23,18 +23,30 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  def check_if_large_tag(time_in_cache, time_to_count_sec)
+  def self.write_redis_to_database
+    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+      Tag.transaction do
+        batch.each do |id|
+          value, large_tag = REDIS_GENERAL.mget("tag_update_#{id}_value", "tag_update_#{id}_large_tag")
+          sql = []
+          sql.push("taggings_count_cache = #{value}") unless value.blank?
+          sql.push("large_tag = #{large_tag}") unless large_tag.blank?
+          Tag.where(id: id).update_all(sql.join(",")) unless sql.empty?
+        end
+        REDIS_GENERAL.srem("tag_update", batch)
+      end
+    end
+  end
+
+  def check_if_large_tag(time_in_cache)
     # A large tag is one which is periodically refreshed by a background task.
     # The task is defined in config/resque_schedule.yml
     # This refreshes the large tags every 30 minutes. It seemed sensible to
     # only allow tags which stay in the cache longer than the periodic refresh
-    # period. Additionally any tag that takes longer than 4 seconds to count then
-    # it seems reasonable to say that the tag is large.
-    target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4))
+    # period.
+    target_state = (time_in_cache >= 40)
     return if large_tag == target_state
-    tag = readonly? ? Tag.find(id) : self
-    tag.large_tag = target_state
-    tag.save
+    write_taggings_to_redis(nil, target_state)
   end
 
   def taggings_count_expiry(count)
@@ -52,41 +64,26 @@ class Tag < ActiveRecord::Base
     "/v1/taggings_count/#{id}"
   end
 
+  def write_taggings_to_redis(value, large_tag)
+    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.mset("tag_update_#{id}_value", value, "tag_update_#{id}_large_tag", large_tag)
+    value
+  end
+
   def taggings_count=(value)
     expiry_time = taggings_count_expiry(value)
     # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
-    tag = readonly? ? Tag.find(id) : self
-    tag.check_if_large_tag(expiry_time, 0)
-    if tag.taggings_count_cache != value
-      tag.taggings_count_cache = value
-      tag.save
-    end
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    check_if_large_tag(expiry_time)
+    write_taggings_to_redis(value, nil)
   end
 
   def taggings_count
     cache_read = Rails.cache.read(taggings_count_cache_key)
     return cache_read unless cache_read.nil?
-    # The following will drop the readonly flag
-    # http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
-    tag = readonly? ? Tag.find(id) : self
-    time_start = Time.now.to_i
-    real_value = tag.taggings.length
-    time_end = Time.now.to_i
-    # here we cache the value we have more than TAGGINGS_COUNT_MIN_CACHE_COUNT uses or
-    # if the amount of time taken to count the number of uses is more than TAGGINGS_COUNT_MAX_ALLOWED_TIME  seconds
-    # ( defaulting to 6 seconds ) this second check is a emergency feature which I would not expect to kick in
-    # but we want to know how long it takes to count the taggings to work out if it is a large tag
-    # for the scheduled background counts.
-    if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
-      tag.taggings_count = real_value
-      check_if_large_tag(taggings_count_expiry(real_value), time_end - time_start)
-    else
-      if tag.taggings_count_cache != real_value
-        tag.taggings_count_cache = real_value
-        tag.save
-      end
-    end
+    real_value = taggings.length
+    check_if_large_tag(taggings_count_expiry(real_value))
+    self.taggings_count = real_value
     real_value
   end
 
@@ -546,7 +543,7 @@ class Tag < ActiveRecord::Base
 
 
   def autocomplete_score
-    taggings_count
+    taggings_count_cache
   end
 
   # look up tags that have been wrangled into a given fandom
