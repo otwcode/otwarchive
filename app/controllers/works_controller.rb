@@ -306,7 +306,7 @@ class WorksController < ApplicationController
       render :new && return
     elsif params[:cancel_button]
       flash[:notice] = ts('New work posting canceled.')
-      redirect_to current_user && return
+      redirect_to current_user and return
     else
       # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       set_work_tag_error_messages
@@ -455,33 +455,37 @@ class WorksController < ApplicationController
   end
 
   def update_tags
-    render(:edit_tags) && return unless @work.errors.empty?
-
-    if params[:preview_button]
-      preview_mode(:edit_tags) do
-        render :preview_tags
-      end
+    # If Edit or Cancel is pressed, bail out and display relevant form
+    if params[:edit_button]
+      render :edit_tags
     elsif params[:cancel_button]
       cancel_posting_and_redirect
-    elsif params[:edit_button]
-      render :edit_tags
-    elsif params[:save_button]
-      Work.expire_work_tag_groups_id(@work.id)
-      flash[:notice] = ts('Tags were successfully updated.')
-      redirect_to(@work)
     else
-      saved = true
+      # Otherwise, check that the work is valid, contains no errors etc
+      set_work_tag_error_messages
 
-      if @work.has_required_tags? && @work.invalid_tags.blank?
-        @work.posted = true
-        @work.minor_version = @work.minor_version + 1
-        saved = @work.save
-        # @work.update_minor_version
-      end
-
-      preview_mode(:edit_tags, saved) do
-        flash[:notice] = ts('Work was successfully updated.')
-        redirect_to(@work)
+      if @work.errors.empty?
+        if params[:preview_button]
+          preview_mode(:edit_tags) do
+            render :preview_tags
+          end
+        elsif params[:save_button]
+          Work.expire_work_tag_groups_id(@work.id)
+          flash[:notice] = ts('Tags were successfully updated.')
+          redirect_to(@work)
+        else
+          if @work.has_required_tags? && @work.invalid_tags.blank?
+            @work.posted = true
+            @work.minor_version = @work.minor_version + 1
+            @work.save
+            flash[:notice] = ts('Work was successfully updated.')
+            redirect_to(@work) and return
+          else
+            render :edit_tags
+          end
+        end
+      else
+        render :edit_tags
       end
     end
   end
