@@ -15,7 +15,7 @@ class ChallengeClaimsController < ApplicationController
       # TODO: Replace with &. operator after upgrading to Ruby 2.3
       @challenge = @challenge_claim.collection.challenge if @challenge_claim.collection
     end
-    no_challenge && return unless @challenge
+    no_challenge and return unless @challenge
   end
 
   def no_challenge
