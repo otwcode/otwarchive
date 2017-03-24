@@ -272,7 +272,14 @@ class User < ActiveRecord::Base
     if query.present?
       users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
     end
-    users.paginate(:page => options[:page] || 1)
+    users.paginate(page: options[:page] || 1)
+  end
+
+  def self.search_multiple_by_email(emails = [])
+    users = User.where(email: emails)
+    found_emails = users.map(&:email)
+    not_found = emails - found_emails
+    [users, not_found]
   end
 
   ### AUTHENTICATION AND PASSWORDS

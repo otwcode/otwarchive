@@ -44,7 +44,7 @@ Given /^I am logged in as an admin$/ do
   if admin.blank?
     admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
-  visit admin_login_path
+  visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
@@ -52,8 +52,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
 end
 
 Given /^basic languages$/ do
@@ -81,6 +80,13 @@ Given /^guest downloading is on$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
   uncheck("Turn off downloading for guests")
+  click_button("Update")
+end
+
+Given /^downloads are off$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Allow downloads")
   click_button("Update")
 end
 

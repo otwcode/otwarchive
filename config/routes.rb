@@ -1,4 +1,14 @@
 Otwarchive::Application.routes.draw do
+
+  devise_for :admin,
+             module: 'admin',
+             only: :sessions,
+             controllers: { sessions: 'admin/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
+
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
@@ -120,10 +130,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -153,6 +159,8 @@ Otwarchive::Application.routes.draw do
       end
       collection do
         get :notify
+        get :bulk_search
+        post :bulk_search
         post :send_notification
         post :update_user
       end

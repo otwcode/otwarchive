@@ -307,15 +307,14 @@ class Collection < ActiveRecord::Base
   end
 
   def all_fandoms
-    Fandom.for_collections([self] + self.children).select("DISTINCT tags.*")
+    # We want filterable fandoms, but not inherited metatags:
+    Fandom.for_collections([self] + children).
+      where('filter_taggings.inherited = 0').uniq
   end
 
   def all_fandoms_count
-    # this is the only way to get this to be done with an actual efficient count query instead of
-    # actually loading the tags and then counting, because count on AR queries isn't respecting
-    # the selects :P
-    # see: https://rails.lighthouseapp.com/projects/8994/tickets/1334-count-calculations-should-respect-scoped-selects
-    Fandom.select("count(distinct tags.id) as count").for_collections([self] + self.children).first.count
+    # Rails now handles .uniq.count correctly, so we can make this simpler:
+    all_fandoms.count
   end
 
   def maintainers

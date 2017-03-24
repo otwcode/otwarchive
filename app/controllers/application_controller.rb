@@ -68,15 +68,6 @@ protected
     @current_user_session = UserSession.find
   end
 
-  def current_admin_session
-    return @current_admin_session if defined?(@current_admin_session)
-    @current_admin_session = AdminSession.find
-  end
-
-  def current_admin
-    @current_admin = current_admin_session && current_admin_session.record
-  end
-
   def logged_in?
     current_user.nil? ? false : true
   end
@@ -152,9 +143,23 @@ public
     end
   end
 
+  def after_sign_in_path_for(resource)
+    admin_users_path
+  end
+
+  def authenticate_admin!
+    if admin_signed_in?
+      super
+    else
+      redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
+      ## if you want render 404 page
+      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+    end
+  end
+
   # Filter method - keeps users out of admin areas
   def admin_only
-    logged_in_as_admin? || admin_only_access_denied
+    authenticate_admin! || admin_only_access_denied
   end
 
   # Filter method to prevent admin users from accessing certain actions
