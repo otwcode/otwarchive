@@ -1,7 +1,21 @@
 # encoding: utf-8
-
 When /^I follow the add new tag ?set link$/ do
   step %{I follow "New Tag Set"}
+end
+
+# This takes strings like:
+# ...the fandom tags "x, y, z"
+# ...the category tags "a, b, c"
+# If you want ratings, warnings, or categories, first load basic or default tags for those types
+When /^I add (.*) to the tag ?set$/ do |tags|
+  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
+    if type == "category" || type == "rating" || type == "warning"
+      tags = scanned_tags.split(/, ?/)
+      tags.each { |tag| check(tag) }
+    else
+      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
+    end
+  end
 end
 
 # This takes strings like:
@@ -9,28 +23,41 @@ end
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
 When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
-  unless OwnedTagSet.find_by_title("#{title}").present?
-    step %{I go to the new tag set page}
-      fill_in("owned_tag_set_title", :with => title)
-      fill_in("owned_tag_set_description", :with => "Here's my tagset")
-      visibility ||= "invisible"
-      check("owned_tag_set_visible") if visibility == "visible"
-      uncheck("owned_tag_set_visible") if visibility == "invisible"
-      tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags|
-        fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => tags)
-      end
+  unless OwnedTagSet.find_by_title(title).present?
+    visit new_tag_set_path
+    fill_in("owned_tag_set_title", with: title)
+    fill_in("owned_tag_set_description", with: "Here's my tagset")
+    visibility ||= "invisible"
+    check("owned_tag_set_visible") if visibility == "visible"
+    uncheck("owned_tag_set_visible") if visibility == "invisible"
+    step %{I add #{tags} to the tag set}
     step %{I submit}
     step %{I should see a create confirmation message}
   end
 end
 
-# Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay". Don't forget the extra s, even if it's singular.
+# Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay".
+# Don't forget the extra s, even if it's singular.
 When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
-    tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scannedtags|
-      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => scannedtags)
+  step %{I add #{tags} to the tag set}
+  step %{I submit}
+  step %{I should see an update confirmation message}
+end
+
+# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay". 
+# Don't forget the extra s, even if it's singular.
+When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
+  step %{I go to the "#{title}" tag set edit page}
+  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
+    tags = scanned_tags.split(/, ?/)
+    if type == "category" || type == "rating" || type == "warning"
+      tags.each { |tag| uncheck(tag) }
+    else
+      tags.each { |tag| check(tag) }
     end
-    step %{I submit}
+  end
+  step %{I submit}
   step %{I should see an update confirmation message}
 end
 
@@ -52,9 +79,9 @@ When /^I nominate (.*) fandoms and (.*) characters in the "([^\"]*)" tag ?set as
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
   1.upto(fandom_count.to_i) do |i|
-    fill_in("Fandom #{i}", :with => "Blah #{i}")
+    fill_in("Fandom #{i}", with: "Blah #{i}")
     0.upto(char_count.to_i - 1) do |j|
-      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", :with => "Foobar #{i} #{j}")
+      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i - 1}_character_nominations_attributes_#{j}_tagname", with: "Foobar #{i} #{j}")
     end
   end
 end
@@ -76,9 +103,9 @@ When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"/ 
   char_index = 0
   chars_per_fandom = @chars.size/@fandoms.size
   1.upto(@fandoms.size) do |i|
-    fill_in("Fandom #{i}", :with => @fandoms[i-1])
+    fill_in("Fandom #{i}", with: @fandoms[i - 1])
     0.upto(chars_per_fandom - 1) do |j|
-      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", :with => @chars[char_index])
+      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i - 1}_character_nominations_attributes_#{j}_tagname", with: @chars[char_index])
       char_index += 1
     end
   end
@@ -126,7 +153,7 @@ When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |ti
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
   tags.each_with_index do |tag, i|
-    fill_in("Fandom #{i+1}", :with => tag)
+    fill_in("Fandom #{i + 1}", with: tag)
   end
   step %{I submit}
   step %{I should see a success message}
@@ -150,8 +177,25 @@ When /^I view the tag set "([^\"]*)"/ do |tagset|
   visit tag_set_path(tagset)
 end
 
-When(/^I flush the wrangling sidebar caches$/) do
-  [Fandom, Character, Relationship, Freeform].each do |klass|
-    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
+When /^I view associations for a tag set that does not exist/ do
+  id = 1
+  tagset = OwnedTagSet.find_by_id(id)
+  tagset.destroy if tagset
+  visit tag_set_associations_path(id)
+end
+
+When /^I expand the unassociated characters and relationships$/ do
+  within('span[action_target="#list_for_unassociated_char_and_rel"]') do
+    click_link("↓")
   end
+end
+
+Then /^"([^\"]*)" should be associated with the "([^\"]*)" fandom "([^\"]*)"$/ do |tag, fandom_type, fandom_name|
+  name = fandom_name.tr(" ", "_")
+  type = fandom_type.tr(" ", "_")
+  step %{I should see "#{tag}" within "ol#list_for_fandom_#{name}_in_#{type}_Fandoms li"}
+end
+
+Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
+  step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
 end
