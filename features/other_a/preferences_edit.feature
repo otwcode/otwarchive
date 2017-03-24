@@ -119,6 +119,7 @@ Feature: Edit preferences
   When I log out
   When I am logged in as "mywarning2" with password "password"
     And I post the work "This also has warnings and tags" with fandom "Stargate SG-1, Stargate SG-2" with freeform "Scarier"
+    And The periodic tag count task is run
   When I view the work "This work has warnings and tags"
     And I follow "Bookmark"
     And I press "Create"
