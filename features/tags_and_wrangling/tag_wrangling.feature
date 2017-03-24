@@ -60,7 +60,6 @@ Feature: Tag wrangling
     
     # mass wrangling
     When I flush the wrangling sidebar caches
-      And The periodic tag count task is run
       And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
