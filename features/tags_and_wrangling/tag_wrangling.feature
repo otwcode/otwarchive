@@ -56,6 +56,7 @@ Feature: Tag wrangling
       And I fill in "content" with "That could be an amusing crossover."
       And I press "Preview"
       And I press "Post"
+      And The periodic tag count task is run
       Then I should see "Work was successfully posted."
     
     # mass wrangling
