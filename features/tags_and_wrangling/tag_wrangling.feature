@@ -60,7 +60,8 @@ Feature: Tag wrangling
     
     # mass wrangling
     When I flush the wrangling sidebar caches
-    When I follow "Tag Wrangling" within "#header"
+      And The periodic tag count task is run
+      And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
       And I should see "Fandoms by media (3)"
