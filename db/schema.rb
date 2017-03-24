@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 201604030319571) do
+ActiveRecord::Schema.define(:version => 20160706031054) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
