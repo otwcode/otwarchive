@@ -1,141 +1,231 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+---
 en:
   admin:
     blacklist:
-      emails_found: 
-        one: "one email found"
+      emails_found:
+        one: one email found
         other: "%{count} emails found"
-  
+  devise:
+    confirmations:
+      confirmed: Your email address has been successfully confirmed.
+      send_instructions: You will receive an email with instructions for how to confirm
+        your email address in a few minutes.
+      send_paranoid_instructions: If your email address exists in our database, you
+        will receive an email with instructions for how to confirm your email address
+        in a few minutes.
+    failure:
+      already_authenticated: You are already signed in.
+      inactive: Your account is not activated yet.
+      invalid: Invalid %{authentication_keys} or password.
+      last_attempt: You have one more attempt before your account is locked.
+      locked: Your account is locked.
+      not_found_in_database: Invalid %{authentication_keys} or password.
+      timeout: Your session expired. Please sign in again to continue.
+      unauthenticated: You need to sign in or sign up before continuing.
+      unconfirmed: You have to confirm your email address before continuing.
+    mailer:
+      confirmation_instructions:
+        subject: Confirmation instructions
+      password_change:
+        subject: Password Changed
+      reset_password_instructions:
+        subject: Reset password instructions
+      unlock_instructions:
+        subject: Unlock instructions
+    omniauth_callbacks:
+      failure: Could not authenticate you from %{kind} because "%{reason}".
+      success: Successfully authenticated from %{kind} account.
+    passwords:
+      no_token: You can't access this page without coming from a password reset email.
+        If you do come from a password reset email, please make sure you used the
+        full URL provided.
+      send_instructions: You will receive an email with instructions on how to reset
+        your password in a few minutes.
+      send_paranoid_instructions: If your email address exists in our database, you
+        will receive a password recovery link at your email address in a few minutes.
+      updated: Your password has been changed successfully. You are now signed in.
+      updated_not_active: Your password has been changed successfully.
+    registrations:
+      destroyed: Bye! Your account has been successfully cancelled. We hope to see
+        you again soon.
+      signed_up: Welcome! You have signed up successfully.
+      signed_up_but_inactive: You have signed up successfully. However, we could not
+        sign you in because your account is not yet activated.
+      signed_up_but_locked: You have signed up successfully. However, we could not
+        sign you in because your account is locked.
+      signed_up_but_unconfirmed: A message with a confirmation link has been sent
+        to your email address. Please follow the link to activate your account.
+      updated: Your account has been updated successfully.
+      update_needs_confirmation: You updated your account successfully, but we need
+        to verify your new email address. Please check your email and follow the confirm
+        link to confirm your new email address.
+    sessions:
+      already_signed_out: Successfully logged out.
+      signed_in: Successfully logged in.
+      signed_out: Successfully logged out.
+    unlocks:
+      send_instructions: You will receive an email with instructions for how to unlock
+        your account in a few minutes.
+      send_paranoid_instructions: If your account exists, you will receive an email
+        with instructions for how to unlock it in a few minutes.
+      unlocked: Your account has been unlocked successfully. Please sign in to continue.
+  errors:
+    messages:
+      already_confirmed: was already confirmed, please try signing in
+      confirmation_period_expired: needs to be confirmed within %{period}, please
+        request a new one
+      expired: has expired, please request a new one
+      not_found: not found
+      not_locked: was not locked
+      not_saved:
+        one: '1 error prohibited this %{resource} from being saved:'
+        other: "%{count} errors prohibited this %{resource} from being saved:"
   mailer:
-    general: 
-      footer: 
-        general: 
+    general:
+      footer:
+        general:
           html: |-
-              <p>
-               If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
-              </p>
-              
-              <p>
-               The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
-              </p>
+            <p>
+             If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
+            </p>
+
+            <p>
+             The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
+            </p>
           text: |-
-              If you've received this message in error, please contact Support at %{support_url}.
-              
-              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
-        sent_at: "Sent at %{sent_at}."
-        sent_by: 
-          html: "Sent by <b>%{sent_by}</b>."
-          text: "Sent by %{sent_by}."
+            If you've received this message in error, please contact Support at %{support_url}.
+
+            The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
+        sent_at: Sent at %{sent_at}.
+        sent_by:
+          html: Sent by <b>%{sent_by}</b>.
+          text: Sent by %{sent_by}.
     kudos:
-      guest:
-        one: a guest
-        other: "%{count} guests"
+      guest: a guest
+      guests: guests
+      html:
+        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+      text:
+        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
       you_have: "[%{app_name}] You've got kudos!"
-      html:
-        left_kudos:
-          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
-          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
-      text:
-        left_kudos:
-          one: "%{givers_list} left kudos on %{commentable_link}."
-          other: "%{givers_list} left kudos on %{commentable_link}."
   user_mailer:
-    invite_increase_notification:
-      subject: "[%{app_name}] New Invitations"
-      html:  "<p> Hi %{login}! </p>\n\
-          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
-          <p> Cheers, <br> %{archive_name} </p>"
-      txt: |-
-          Hi %{login}
-          We just wanted to let you know that you have %{total} new invitation(s),
-          which can be used to create new accounts at the archive. You can invite a
-          friend at %{invitation_page}.
-          Cheers, 
-          %{archive_name}
-    admin_deleted_work_notification:
-      subject: "[%{app_name}] Your work has been deleted by an admin"
-      hello: "Dear %{user},"
-      opendoors: "contact Open Doors"
-      abuse_committee: "contact our Abuse Committee"
-      bye: "Attached is a copy of your work for your reference."
-      html:
-        part1: "Your work %{title} was deleted from the Archive by a site admin."
-        part2: "If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions."
-        part3: "If it's possible your work violated the Archive's Terms of Service, please %{abuse_link}."
-      text:
-        part1: "Your work \"%{title}\" was deleted from the Archive by a site admin."
-        part2: "If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions."
-        part3: "If it's possible your work violated the Archive's Terms of Service, please contact our Abuse Committee (%{abuse_link})."
-    delete_work_notification:
-      subject: "[%{app_name}] Your work has been deleted"
-      support: "contact Support"
-      hello: "Dear %{user},"
-      part2: "If you have questions, please %{support}."
-      part3: "Attached is a copy of your work for your reference."
-      html:
-        part2: "If you have questions, please %{support}."
-        part1_other: "Your work %{title} was deleted at the request of %{pseud}."
-        part1_yourself: "Your work %{title} was deleted at your request."
-      text:
-        part2: "If you have questions, please %{support} (%{url})."
-        part1_other: "Your work \"%{title}\" was deleted at the request of %{pseud}."
-        part1_yourself: "Your work \"%{title}\" was deleted at your request."
-    coauthor_notification:
-      subject: "[%{app_name}] Co-creator Notification"
-      edit_the_work: "Edit the work"
-      edit_the_series: "Edit the series"
-      part1_work: "You have been listed as a co-creator on the following work:"
-      part1_series: "You have been listed as a co-creator on the following series:"
-      html:
-        part2_work: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
-        part2_series: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
-      text:
-        part2_work: "Edit the work to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
-        part2_series: "Edit the series to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
-    change_email:
-      subject: "[%{app_name}] Email changed"
-      part1: "%{login}, the email associated with your account has been changed to %{email}"
-    reset_password:
-      subject: "[%{app_name}] Generated password"
-      part1: "%{user}, the following generated password has been created for you: %{password}" 
-      part2: "After you log in using this generated password you will be asked to change your password to something you can remember. If you do not use this generated password within a week, it will expire, and you will have to request a new one."
-      part3: "If you did not request this password reset, you may ignore this email and your previous password will continue to work."
-    signup_notification:
-      subject: "[%{app_name}] Confirmation" 
-      faq: "FAQ"
-      admin_posts: "Archive admin posts"
-      contact_support: "get in touch with our Support team"
-      activate_your_account: "activate your account"
-      welcome: "Welcome to the Archive of Our Own, %{login}!"
-      bye: "We hope you enjoy using the Archive."
-      text:
-        part1: "Please activate your account: %{activate_account_url}"
-        part2: |-
-                  Once your account is up and running, you can post your fanworks, set up email
-                  subscriptions to let you know when your favorite creators or works have updated,
-                  set preferences to customize the way the site looks and works for you, keep
-                  track of the works you've viewed on the Archive via your history, and much more.
-        part3: |-
-                  There's lots of information and advice on how to use the Archive in our FAQ
-                  at %{faq_url}. You'll
-                  find the latest news about site developments in our Archive admin posts at
-                  %{admin_posts_url}. If you need more
-                  help, run into a bug, or have questions or comments, please get in touch with
-                  our Support team, who are always happy to help out:
-                  %{contact_support_url}.
-      html:
-        part1: "Please %{activate_account_link}."
-        part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
-        part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
     abuse_report:
+      description_para: 'Description of the abuse:'
+      para1: 'The following abuse report has been sent to the Abuse team:'
       subject: "[%{app_name}] Your Abuse Report"
-      para1: "The following abuse report has been sent to the Abuse team:"
-      url_para: "URL of the page the abuse is on:"
-      description_para: "Description of the abuse:"
+      url_para: 'URL of the page the abuse is on:'
+    admin_deleted_work_notification:
+      abuse_committee: contact our Abuse Committee
+      bye: Attached is a copy of your work for your reference.
+      hello: Dear %{user},
+      html:
+        part1: Your work %{title} was deleted from the Archive by a site admin.
+        part2: If your work was part of an import project managed by our Open Doors
+          team, please %{opendoors_link} with any further questions.
+        part3: If it's possible your work violated the Archive's Terms of Service,
+          please %{abuse_link}.
+      opendoors: contact Open Doors
+      subject: "[%{app_name}] Your work has been deleted by an admin"
+      text:
+        part1: Your work "%{title}" was deleted from the Archive by a site admin.
+        part2: If your work was part of an import project managed by our Open Doors
+          team, please contact Open Doors (%{opendoors_link}) with any further questions.
+        part3: If it's possible your work violated the Archive's Terms of Service,
+          please contact our Abuse Committee (%{abuse_link}).
+    change_email:
+      part1: "%{login}, the email associated with your account has been changed to
+        %{email}"
+      subject: "[%{app_name}] Email changed"
+    coauthor_notification:
+      edit_the_series: Edit the series
+      edit_the_work: Edit the work
+      html:
+        part2_series: "%{edit} to remove yourself as creator if you've been added
+          in error or don't want to be listed as a creator."
+        part2_work: "%{edit} to remove yourself as creator if you've been added in
+          error or don't want to be listed as a creator."
+      part1_series: 'You have been listed as a co-creator on the following series:'
+      part1_work: 'You have been listed as a co-creator on the following work:'
+      subject: "[%{app_name}] Co-creator Notification"
+      text:
+        part2_series: 'Edit the series to remove yourself as creator if you''ve been
+          added in error or don''t want to be listed as a creator: %{url}'
+        part2_work: 'Edit the work to remove yourself as creator if you''ve been added
+          in error or don''t want to be listed as a creator: %{url}'
+    delete_work_notification:
+      hello: Dear %{user},
+      html:
+        part1_other: Your work %{title} was deleted at the request of %{pseud}.
+        part1_yourself: Your work %{title} was deleted at your request.
+        part2: If you have questions, please %{support}.
+      part2: If you have questions, please %{support}.
+      part3: Attached is a copy of your work for your reference.
+      subject: "[%{app_name}] Your work has been deleted"
+      support: contact Support
+      text:
+        part1_other: Your work "%{title}" was deleted at the request of %{pseud}.
+        part1_yourself: Your work "%{title}" was deleted at your request.
+        part2: If you have questions, please %{support} (%{url}).
+    invite_increase_notification:
+      html: |-
+        <p> Hi %{login}! </p>
+        <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>
+        <p> Cheers, <br> %{archive_name} </p>
+      subject: "[%{app_name}] New Invitations"
+      txt: "Hi %{login}\nWe just wanted to let you know that you have %{total} new
+        invitation(s),\nwhich can be used to create new accounts at the archive. You
+        can invite a\nfriend at %{invitation_page}.\nCheers, \n%{archive_name}"
+    reset_password:
+      part1: "%{user}, the following generated password has been created for you:
+        %{password}"
+      part2: After you log in using this generated password you will be asked to change
+        your password to something you can remember. If you do not use this generated
+        password within a week, it will expire, and you will have to request a new
+        one.
+      part3: If you did not request this password reset, you may ignore this email
+        and your previous password will continue to work.
+      subject: "[%{app_name}] Generated password"
+    signup_notification:
+      activate_your_account: activate your account
+      admin_posts: Archive admin posts
+      bye: We hope you enjoy using the Archive.
+      contact_support: get in touch with our Support team
+      faq: FAQ
+      html:
+        part1: Please %{activate_account_link}.
+        part2: Once your account is up and running, you can post your fanworks, set
+          up email subscriptions to let you know when your favorite creators or works
+          have updated, set preferences to customize the way the site looks and works
+          for you, keep track of the works you've viewed on the Archive via your history,
+          and much more.
+        part3: There's lots of information and advice on how to use the Archive in
+          our %{faq_link}. You'll find the latest news about site developments in
+          our %{admin_posts_link}. If you need more help, run into a bug, or have
+          questions or comments, please %{contact_support_link}, who are always happy
+          to help out.
+      subject: "[%{app_name}] Confirmation"
+      text:
+        part1: 'Please activate your account: %{activate_account_url}'
+        part2: |-
+          Once your account is up and running, you can post your fanworks, set up email
+          subscriptions to let you know when your favorite creators or works have updated,
+          set preferences to customize the way the site looks and works for you, keep
+          track of the works you've viewed on the Archive via your history, and much more.
+        part3: |-
+          There's lots of information and advice on how to use the Archive in our FAQ
+          at %{faq_url}. You'll
+          find the latest news about site developments in our Archive admin posts at
+          %{admin_posts_url}. If you need more
+          help, run into a bug, or have questions or comments, please get in touch with
+          our Support team, who are always happy to help out:
+          %{contact_support_url}.
+      welcome: Welcome to the Archive of Our Own, %{login}!
   validators:
     email:
-      blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
+      blacklist: has been blocked at the owner's request. That means it can't be used
+        in guest comments. Please check the address to make sure it's yours to use
+        and contact AO3 Support if you have any questions.
       veracity:
-        allow_blank: "does not seem to be a valid address. Please use a different address or leave blank."
-        no_blank: "does not seem to be a valid address."  
+        allow_blank: does not seem to be a valid address. Please use a different address
+          or leave blank.
+        no_blank: does not seem to be a valid address.
