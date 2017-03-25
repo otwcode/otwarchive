@@ -27,10 +27,9 @@ class Tag < ActiveRecord::Base
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
       Tag.transaction do
         batch.each do |id|
-          value, large_tag = REDIS_GENERAL.mget("tag_update_#{id}_value", "tag_update_#{id}_large_tag")
+          value = REDIS_GENERAL.get("tag_update_#{id}_value")
           sql = []
           sql.push("taggings_count_cache = #{value}") unless value.blank?
-          sql.push("large_tag = #{large_tag}") unless large_tag.blank?
           Tag.where(id: id).update_all(sql.join(",")) unless sql.empty?
         end
         REDIS_GENERAL.srem("tag_update", batch)
@@ -38,18 +37,7 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  def check_if_large_tag(time_in_cache)
-    # A large tag is one which is periodically refreshed by a background task.
-    # The task is defined in config/resque_schedule.yml
-    # This refreshes the large tags every 30 minutes. It seemed sensible to
-    # only allow tags which stay in the cache longer than the periodic refresh
-    # period.
-    target_state = (time_in_cache >= 40)
-    return if large_tag == target_state
-    write_taggings_to_redis(nil, target_state)
-  end
-
-  def taggings_count_expiry(count)
+  def self.taggings_count_expiry(count)
     # What we are trying to do here is work out a resonable amount of time for a work to be cached for
     # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 2000 )
     # such that for example 2000, would be naturally be tagged for one minute while 140,000 would be cached for
@@ -64,25 +52,23 @@ class Tag < ActiveRecord::Base
     "/v1/taggings_count/#{id}"
   end
 
-  def write_taggings_to_redis(value, large_tag)
+  def write_taggings_to_redis(value)
     REDIS_GENERAL.sadd("tag_update", id)
-    REDIS_GENERAL.mset("tag_update_#{id}_value", value, "tag_update_#{id}_large_tag", large_tag)
+    REDIS_GENERAL.set("tag_update_#{id}_value", value)
     value
   end
 
   def taggings_count=(value)
-    expiry_time = taggings_count_expiry(value)
+    expiry_time = Tag.taggings_count_expiry(value)
     # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
     Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
-    check_if_large_tag(expiry_time)
-    write_taggings_to_redis(value, nil)
+    write_taggings_to_redis(value)
   end
 
   def taggings_count
     cache_read = Rails.cache.read(taggings_count_cache_key)
     return cache_read unless cache_read.nil?
     real_value = taggings.length
-    check_if_large_tag(taggings_count_expiry(real_value))
     self.taggings_count = real_value
     real_value
   end

@@ -27,7 +27,6 @@ describe Tag do
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 0
         expect(@fandom_tag.taggings_count).to eq 1
-        expect(@fandom_tag.large_tag).not_to be_truthy
       end
 
       it 'will start caching a when tag when that tag is used significantly' do
@@ -42,18 +41,6 @@ describe Tag do
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq 0
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
-        expect(@fandom_tag.large_tag).not_to be_truthy
-      end
-
-      it "flags a tag as large based on its number of uses" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
-          @fandom_tag.taggings_count = try
-          @fandom_tag.reload
-          expect(@fandom_tag.large_tag).not_to be_truthy
-        end
-        @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
-        @fandom_tag.reload
-        expect(@fandom_tag.large_tag).not_to be_truthy
       end
     end
 
@@ -64,7 +51,6 @@ describe Tag do
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 1
         expect(@fandom_tag.taggings_count).to eq 1
-        expect(@fandom_tag.large_tag).not_to be_truthy
       end
 
       it 'will start caching a when tag when that tag is used significantly' do
@@ -81,33 +67,17 @@ describe Tag do
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
-        expect(@fandom_tag.large_tag).not_to be_truthy
-      end
-
-      it "flags a tag as large based on its number of uses" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
-          @fandom_tag.taggings_count = try
-          Tag.write_redis_to_database
-          @fandom_tag.reload
-          expect(@fandom_tag.large_tag).not_to be_truthy
-        end
-        @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
-        Tag.write_redis_to_database
-        @fandom_tag.reload
-        expect(@fandom_tag.large_tag).not_to be_truthy
       end
 
       it "Writes to the database do not happen immeadiately" do
         (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
-          expect(@fandom_tag.large_tag).not_to be_truthy
           expect(@fandom_tag.taggings_count_cache).to eq 0
         end
         @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
         Tag.write_redis_to_database
         @fandom_tag.reload
-        expect(@fandom_tag.large_tag).not_to be_truthy
         expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
       end
     end
