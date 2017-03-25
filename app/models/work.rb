@@ -903,7 +903,7 @@ class Work < ActiveRecord::Base
   # Calls reset_filter_count on all the work's filters
   def adjust_filter_counts
     if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.reset_filter_count }
+      self.filters.reload.each {|filter| filter.sync(:reset_filter_count) }
     end
     return true
   end

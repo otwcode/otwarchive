@@ -805,27 +805,27 @@ class Tag < ActiveRecord::Base
     # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
     # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
-    if filter_tag  && !filter_tag.new_record?
-      # we collect tags for resetting count so that it's only done once after we've added all filters to works
-      tags_that_need_filter_count_reset = []
-      self.works.each do |work|
-        if work.filters.include?(filter_tag)
-          # If the work filters already included the filter tag (e.g. because the
-          # new filter tag is a meta tag of an existing tag) we make sure to set
-          # the inheritance to false, since the work is now directly tagged with
-          # the filter or one of its synonyms
-          ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
-          ft.update_attribute(:inherited, false)
-        else
-          work.filters << filter_tag
-          tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
-        end
-        unless filter_tag.meta_tags.empty?
-          filter_tag.meta_tags.each do |m|
-            unless work.filters.include?(m)
-              work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
-              tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
-            end
+    return unless filter_tag  && !filter_tag.new_record?
+
+    # we collect tags for resetting count so that it's only done once after we've added all filters to works
+    tags_that_need_filter_count_reset = []
+    self.works.each do |work|
+      if work.filters.include?(filter_tag)
+        # If the work filters already included the filter tag (e.g. because the
+        # new filter tag is a meta tag of an existing tag) we make sure to set
+        # the inheritance to false, since the work is now directly tagged with
+        # the filter or one of its synonyms
+        ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+        ft.update_attribute(:inherited, false)
+      else
+        work.filters << filter_tag
+        tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
+      end
+      unless filter_tag.meta_tags.empty?
+        filter_tag.meta_tags.each do |m|
+          unless work.filters.include?(m)
+            work.filter_taggings.create!(inherited: true, filter_id: m.id)
+            tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
           end
         end
       end
@@ -901,23 +901,21 @@ class Tag < ActiveRecord::Base
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    unless admin_settings.suspend_filter_counts?
-      current_filter = self.filter
-      # we only need to cache values for user-defined tags
-      # because they're the only ones we access
-      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-        attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
-          :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
-        if current_filter.filter_count
-          unless current_filter.filter_count.update_attributes(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        else
-          unless current_filter.create_filter_count(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        end
+    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    return if admin_settings.suspend_filter_counts?
+    current_filter = filter
+    # we only need to cache values for user-defined tags
+    # because they're the only ones we access
+    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
+    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
+                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
+    if current_filter.filter_count
+      unless current_filter.filter_count.update_attributes(attributes)
+        raise "Filter count error for #{current_filter.name}"
+      end
+    else
+      unless current_filter.create_filter_count(attributes)
+        raise "Filter count error for #{current_filter.name}"
       end
     end
   end
