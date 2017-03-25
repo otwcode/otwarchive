@@ -15,7 +15,8 @@ class ChallengeClaimsController < ApplicationController
       # TODO: Replace with &. operator after upgrading to Ruby 2.3
       @challenge = @challenge_claim.collection.challenge if @challenge_claim.collection
     end
-    no_challenge and return unless @challenge
+    return unless @challenge.nil?
+    no_challenge
   end
 
   def no_challenge
@@ -26,7 +27,8 @@ class ChallengeClaimsController < ApplicationController
 
   def load_claim_from_id
     @challenge_claim = ChallengeClaim.find_by_id(params[:id])
-    no_claim && return unless @challenge_claim
+    return unless @challenge_claim.nil?
+    no_claim
   end
 
   def no_claim
