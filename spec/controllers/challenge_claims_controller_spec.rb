@@ -33,24 +33,16 @@ RSpec.describe ChallengeClaimsController, type: :controller do
     it 'redirects logged in user to the prompt' do
       request_prompt = create(:prompt, collection_id: collection.id, challenge_signup_id: signup.id)
       claim_with_prompt = create(:challenge_claim, collection: collection, request_prompt_id: request_prompt.id)
-      get :show, id: claim_with_prompt.id, collection_id: collection.name
+      get :show, id: claim_with_prompt, collection_id: collection.name
       it_redirects_to(collection_prompt_path(collection, claim_with_prompt.request_prompt))
     end
 
     it 'redirects logged in users if no collection is given' do
       request_prompt = create(:prompt, collection_id: collection.id, challenge_signup_id: signup.id)
-      claim_with_prompt = create(:challenge_claim, collection: collection, request_prompt_id: request_prompt.id)
+      create(:challenge_claim, collection: collection, request_prompt_id: request_prompt.id)
       get :show, id: 999_999, collection_id: collection.name
       it_redirects_to_with_error(collection_path(collection), \
                                  "What claim did you want to work on?")
-    end
-
-    xit 'redirects logged in users if no challenge is given' do
-      request_prompt = create(:prompt, collection_id: collection.id, challenge_signup_id: signup.id)
-      claim_with_prompt = create(:challenge_claim, collection: collection, request_prompt_id: request_prompt.id)
-      get :show, claim_id: claim_with_prompt.id, collection_id: "nondsdsd"
-      it_redirects_to_with_error(root_path, \
-                                 "What challenge did you want to work with?")
     end
   end
 
@@ -71,6 +63,15 @@ RSpec.describe ChallengeClaimsController, type: :controller do
 
   describe 'destory' do
     context 'with a claim' do
+      it 'on an exception gives an error and redirects' do
+        fake_login_known_user(User.find(collection.all_owners.first.user_id))
+        collection.challenge = nil
+        collection.save
+        delete :destroy, id: claim.id, collection_id: collection.name
+        it_redirects_to_with_error(collection_path(collection), \
+                                   "What challenge did you want to work with?")
+      end
+
       it 'on an exception gives an error and redirects' do
         allow_any_instance_of(ChallengeClaim).to receive(:destroy) { raise ActiveRecord::RecordNotDestroyed }
         fake_login_known_user(User.find(collection.all_owners.first.user_id))
