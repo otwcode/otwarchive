@@ -104,7 +104,7 @@ gem 'audited-activerecord', '~> 3.0'
 # For controlling application behavour dynamically
 gem 'rollout'
 
-#  Place the New Relic gem as low in the list as possible, allowing the 
+#  Place the New Relic gem as low in the list as possible, allowing the
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm'
 gem 'newrelic-redis'
@@ -127,13 +127,15 @@ group :test do
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.4.3', require: false
-  gem 'gherkin' 
+  gem 'gherkin'
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
+  gem 'timecop'
+  gem 'cucumber-timecop', :require => false
   # Code coverage
   gem 'simplecov', '~> 0.12.0'
   gem 'coveralls', '~> 0.8.12'
