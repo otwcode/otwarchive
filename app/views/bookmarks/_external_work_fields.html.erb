@@ -1,25 +1,12 @@
 <fieldset>
-	<legend><%= ts('External Work') %></legend>
+  <legend><%= ts('External Work') %></legend>
   <dl>
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
     <dd class="required" title="URL">
       <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
+        <%= ew.text_field :url, value: params[:url_from_external] %>
       <% else %>
-        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1) %>
-      <% end %>
-      <%= hidden_field "fetched", "", :id => "fetched" %>
-      <%= content_for :footer_js do %>
-        <%= javascript_tag do %>
-          $j("#bookmark_external_url").blur(function() {
-            $j.ajax({
-              type: "get",
-              data: "external_work_url=" + $j("#bookmark_external_url").val(),
-              dataType: "script",
-              url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
-            })
-          })
-        <% end %>
+        <%= ew.text_field :url %>
       <% end %>
     </dd>
     <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
@@ -56,7 +43,7 @@
       <%= ew.label :fandom_string, Fandom::NAME.pluralize + '*' %> <%= link_to_help "fandom-help" %>
     </dt>
     <dd class="required" title="fandom">
-      <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
+      <%= ew.text_field :fandom_string %>
     </dd>
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
@@ -86,13 +73,13 @@
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>
     </dt>
     <dd title="relationships">
-      <%= ew.text_field :relationship_string, autocomplete_options('relationship_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
+      <%= ew.text_field :relationship_string  %>
     </dd>
     <dt>
       <%= ew.label :character_string, Character::NAME.pluralize %> <%= link_to_help "characters-help" %>
     </dt>
     <dd title="characters">
-      <%= ew.text_field :character_string, autocomplete_options('character_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
+      <%= ew.text_field :character_string %>
     </dd>
   </dl>
 </fieldset>
