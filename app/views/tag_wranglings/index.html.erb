@@ -89,7 +89,7 @@
                   </ul>
                 </th>
                 <th scope="col" title="<%= ts('sort by') %>">
-                  <%= sort_link ts('Taggings'), :taggings_count_cache, {desc_default: true} %>
+                  <%= sort_link ts('Taggings'), :taggings_count_cache, { desc_default: true } %>
                 </th>
                 <th scope="col"><%= ts('Manage') %></th>
               </tr>
@@ -120,7 +120,7 @@
                     <% end %>
                   </td>
 
-                  <td title="<%= ts('taggings') %>"><%= tag.taggings_count %></td>
+                  <td title="<%= ts('taggings') %>"><%= tag.taggings_count_cache %></td>
 
                   <td>
                     <ul class="actions" role="navigation">
