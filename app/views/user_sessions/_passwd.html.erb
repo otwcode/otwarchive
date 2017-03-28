@@ -1,5 +1,8 @@
 <% @user_session = UserSession.new unless @user_session %>
 <%= form_for @user_session do |f| %>
+  <% if params[:return_to_url] %>
+     <%= f.hidden_field :return_to_url, :value => params[:return_to_url] %>
+  <% end %>
   <dl>
   	<dt><%= f.label :login, ts("User name:") %></dt>
     <dd><%= f.text_field :login %></dd>

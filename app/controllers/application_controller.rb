@@ -31,14 +31,12 @@ class ApplicationController < ActionController::Base
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
-      logger.error "Forcing logout"
-      @user_session = UserSession.find
-      if @user_session
-        @user_session.destroy
-      end
-      redirect_to '/lost_cookie' and return
-    end
+    return unless logged_in? && cookies[:user_credentials] == nil && controller_name != "user_sessions"
+    path = request.fullpath
+    logger.error "Forcing logout #{path}"
+    @user_session = UserSession.find
+    @user_session.destroy if @user_session
+    redirect_to lost_cookie_path(return_to_url: path)
   end
 
 
@@ -99,7 +97,7 @@ public
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     end
   end
-  
+
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -107,7 +105,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do 
+      @admin_banner = Rails.cache.fetch("admin_banner") do
         banner = AdminBanner.where(:active => true).last
         banner.nil? ? "" : banner
       end
@@ -131,8 +129,13 @@ public
   # Redirect to the URI stored by the most recent store_location call or
   # to the passed default.
   def redirect_back_or_default(default = root_path)
+    back_url = params[:user_session][:return_to_url] if params[:user_session]
     back = session[:return_to]
     session.delete(:return_to)
+    if back_url
+      Rails.logger.debug "Returning over riding return to #{back} with #{back_url}"
+      back = back_url
+    end
     if back
       Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
