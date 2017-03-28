@@ -11,7 +11,7 @@
   <h3 class="heading"><%=h ts('What is orphaning?') %></h3>
   <p><%=h ts('Orphaning is an alternative to deleting a work that you no longer want to be associated with.') %>&nbsp;
      <%=h ts('It permanently detaches the work from your account and re-attaches it to the specially created orphan_account.') %>&nbsp;
-     <%=h ts('Please note that this is') %> <strong> <%= h ts('permanent and irreversible') %></strong>; 
+     <%=h ts('Please note that this is') %> <strong> <%= h ts('permanent and irreversible') %></strong>;
      <%= h ts('you are giving up control over the work, including the ability to edit or delete it.') %>
   </p>
   <p><%=h ts('Orphaning is a way to remove your connection to your works without taking them away from fandom altogether.') %>&nbsp;
@@ -21,7 +21,7 @@
   </p>
   <h3 class="heading"><%=h ts('What information is removed when a work is orphaned?') %></h3>
   <ul>
-    <li><%=h ts('Your name is removed from the author byline on the work and all its chapters') %></li>
+    <li><%=h ts('Your name is removed from the creators byline on the work and all its chapters') %></li>
     <li><%=h ts('Your name is removed from any comments you have left on the work') %></li>
   </ul>
   <h3 class="heading"><%=h ts('What options are available?') %></h3>
@@ -36,18 +36,19 @@
     <li><h4 class="heading"><%=h ts('Use the default orphan pseud') %>.</h4>
     <%=h ts('The work will be transferred to the orphan_account and the default orphan_account pseud.') %>&nbsp;
     <%=h ts("The byline on the work will read 'orphan_account'.") %></li>
-    <li><h4 class="heading"><%=h ts('Make a copy of my pseud under the orphan account') %>.</h4>&nbsp;
-    <%=h ts('The work will be transferred to the orphan_account, but a new pseud will be created with the same name as the pseud you used to author the work.') %>&nbsp;
-    <%=h ts("As an example: if you authored the work using the pseud 'awesomefangirl', after orphaning the byline will read 'awesomefangirl [orphan_account]'.") %>&nbsp;
-    <%=h ts('While the pseud will no longer link back to your account, if you have a very distinctive pseud this option might still allow a reader to identify you as the author.') %></li>
+    <li><h4 class="heading"><%=h ts('Make a copy of my pseud under the orphan account') %>.</h4>
+    <%=h ts('The work will be transferred to the orphan_account, but a new pseud will be created with the same name as the pseud you used to create the work.') %>&nbsp;
+    <%=h ts("As an example: if you created the work using the pseud 'awesomefangirl', after orphaning the byline will read 'awesomefangirl [orphan_account]'.") %>&nbsp;
+    <%=h ts('While the pseud will no longer link back to your account, if you have a very distinctive pseud this option might still allow a reader to identify you as the creator.') %></li>
   </ol>
-  <h3 class="heading"><%=h ts('Can I orphan a work which I have co-authored with someone else?') %></h3>
-  <p><%=h ts('You have the choice of either removing yourself as a co-author, or orphaning your part of the work (with the same).') %> <a href="#pseud-options">pseud options</a>.&nbsp;
-  <%=h ts('Your co-author will not be affected and will remain a co-author of the work.') %></p>
+  <h3 class="heading"><%=h ts('Can I orphan a work which I have co-created with someone else?') %></h3>
+
+
+  <p><%=h ts('You have the choice of either removing yourself as a co-creator, or orphaning your part of the work (with the same %{pseud_options}). Your co-creator will not be affected and will remain a co-creator of the work.', pseud_options: link_to(ts("pseud options"), "#pseud-options")).html_safe%></p>
   <h3 class="heading"><%=h ts('What happens if I want to orphan a single work in a series?') %></h3>
-  <p><%=h ts('You can orphan the work normally, and the byline will be changed to reflect the new author name.') %>&nbsp;
+  <p><%=h ts("You can orphan the work normally, and the byline will be changed to reflect the new creator's name.") %>&nbsp;
   <%=h ts('Please note that the work will') %> <strong> <%=h ts('not') %></strong> <%=h ts('be removed from the series - if you want it to be removed, you should do this before orphaning the work.') %>&nbsp;
-  <%=h ts('If the work is kept as part of the series, the orphan_account will be listed as one of the authors of the series.') %>
+  <%=h ts('If the work is kept as part of the series, the orphan_account will be listed as one of the creators of the series.') %>
   </p>
 </div>
 <!--/content-->
@@ -55,6 +56,5 @@
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <li><%= link_to ts('Back'), :back %></li>
-  <li><%= link_to ts('View Orphaned Works'), user_works_path(User.orphan_account) %></li>
 </ul>
 <!--/subnav-->
