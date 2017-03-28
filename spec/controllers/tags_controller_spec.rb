@@ -120,7 +120,7 @@ describe TagsController do
       end
 
       it "Only an admin can reindex a tag" do
-        get :reindex, id: @tag.name        
+        get :reindex, id: @tag.name
         expect(response).to redirect_to(root_path)
         expect(flash[:error]).to eq "Please log in as admin"
       end
@@ -165,7 +165,7 @@ describe TagsController do
       end
 
       it "you can wrangle" do
-        put :update, id: @tag.name, tag: {}, commit: :Wrangle
+        put :update, id: @tag.name, tag: {type: ""}, commit: :Wrangle
         expect(response).to redirect_to(tag_path(@tag) + "/wrangle?page=1&sort_column=name&sort_direction=ASC")
       end
     end
