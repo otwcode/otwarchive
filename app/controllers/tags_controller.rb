@@ -293,7 +293,7 @@ class TagsController < ApplicationController
       params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + ' ' + params[:sort_direction]
       # add a secondary sorting key when the main one is not discerning enough
-      if sort.include?('suggested') || sort.include?('taggings_count')
+      if sort.include?('suggested') || sort.include?('taggings_count_cache')
         sort += ', name ASC'
       end
       # this makes sure params[:status] is safe
