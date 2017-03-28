@@ -399,7 +399,9 @@ class TagsController < ApplicationController
   def tag_params
     params.require(:tag).permit(
       :name, :fix_taggings_count, :type, :canonical, :unwrangleable,
-      :fandom_string, :meta_tag_string, :syn_string,
+      :fandom_string, :meta_tag_string, :syn_string, :sortable_name, :media_string,
+      :character_string, :relationship_string, :freeform_string, :sub_tag_string,
+      :merger_string,
       associations_to_remove: []
     )
   end

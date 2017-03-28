@@ -165,7 +165,7 @@ describe TagsController do
       end
 
       it "you can wrangle" do
-        put :update, id: @tag.name, tag: {type: ""}, commit: :Wrangle
+        put :update, id: @tag.name, tag: {canonical: true}, commit: :Wrangle
         expect(response).to redirect_to(tag_path(@tag) + "/wrangle?page=1&sort_column=name&sort_direction=ASC")
       end
     end
