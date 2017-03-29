@@ -339,6 +339,7 @@ protected
       :id,
       :collection_id,
       :title,
+      :url,
       :any_fandom,
       :any_character,
       :any_relationship,
