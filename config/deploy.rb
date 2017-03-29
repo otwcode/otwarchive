@@ -69,7 +69,7 @@ namespace :deploy do
     find_servers(roles: [:app, :web]).each do |server|
       puts "restart on #{server.host}"
       run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , :hosts => server.host
-      run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
+      run "/home/ao3app/bin/unicorns_reload immediately", :hosts => server.host
     end
   end
 
