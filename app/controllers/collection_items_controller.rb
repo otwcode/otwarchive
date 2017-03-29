@@ -9,7 +9,7 @@ class CollectionItemsController < ApplicationController
 
   def load_item_and_collection
     if params[:collection_item]
-      @collection_item = CollectionItem.find(params[:collection_item][:id])
+      @collection_item = CollectionItem.find(collection_item_params[:id])
     else
       @collection_item = CollectionItem.find(params[:id])
     end
@@ -151,7 +151,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
+    @collection_items = CollectionItem.update(collection_items_params[:collection_items].keys, collection_items_params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
@@ -172,4 +172,18 @@ class CollectionItemsController < ApplicationController
     end
   end
 
+  private
+
+  def collection_item_params
+    params.permit(:collection_item).permit(:id)
+  end
+
+  def collection_items_params
+    params.permit(
+      :utf8, :_method, :authenticity_token, :commit, :collection_id,
+      collection_items: [
+        :id, :collection_id, :collection_approval_status, :remove
+      ]
+    )
+  end
 end
