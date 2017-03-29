@@ -329,7 +329,7 @@ protected
   def challenge_signup_params
     params.require(:challenge_signup).permit(
       :pseud_id,
-      requests_attributes: nested_prompt_params
+      requests_attributes: nested_prompt_params,
       offers_attributes: nested_prompt_params
     )
   end
