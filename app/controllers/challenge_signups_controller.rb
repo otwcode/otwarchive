@@ -293,7 +293,7 @@ protected
           row += request_to_array(type, signup.send(type.pluralize)[i])
         end
       end
-      csv << row
+      csv_array << row
     end
 
     csv_array

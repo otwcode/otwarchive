@@ -79,6 +79,13 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   synonym.save
 end
 
+Given /^"([^\"]*)" is a metatag of the fandom "([^\"]*)"$/ do |metatag, fandom|
+  fandom = Fandom.find_or_create_by_name(fandom)
+  metatag = Fandom.find_or_create_by_name(metatag)
+  fandom.meta_tags << metatag
+  fandom.save
+end
+
 Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"
@@ -168,6 +175,10 @@ Given(/^the following typed tags exists$/) do |table|
 end
 
 ### WHEN
+
+When /^the periodic tag count task is run$/i do
+  Tag.write_redis_to_database
+end
 
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)

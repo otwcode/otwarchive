@@ -1365,7 +1365,7 @@ describe TagSetNominationsController do
                             'character_change_New Character 2': '',
                             'relationship_change_New Relationship': '',
                             'fandom_change_New Fandom': '',
-                            'freeform_change_New Fandom': '' } }
+                            'freeform_change_New Freeform': '' } }
 
       before do
         fake_login_known_user(moderator.reload)
@@ -1386,9 +1386,9 @@ describe TagSetNominationsController do
                   'character_reject_New Character 2': 1,
                   'relationship_approve_New Relationship': 1,
                   'fandom_approve_New Fandom': 1,
-                  'freeform_reject_New Fandom': 1)
-          it_redirects_to(tag_set_nominations_path(owned_tag_set))
-          expect(flash[:notice]).to include('Still some nominations left to review!')
+                  'freeform_reject_New Freeform': 1)
+          it_redirects_to(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include('All nominations reviewed, yay!')
         end
       end
 

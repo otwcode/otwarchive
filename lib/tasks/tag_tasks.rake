@@ -11,8 +11,7 @@ namespace :Tag do
   desc "Reset tag count"
   task(:reset_count => :environment) do
     Tag.find(:all).each do |t|
-      Tag.update_counters t.id, :taggings_count => -t.taggings_count
-      Tag.update_counters t.id, :taggings_count => t.taggings.length
+      t.taggings_count
     end
     puts "Tag count reset."
   end
@@ -23,7 +22,7 @@ namespace :Tag do
     tag_count = tag_scope.count
     tag_scope.each_with_index do |tag, index|
       puts "#{index} / #{tag_count}"
-      Tag.reset_counters(tag.id, :taggings)
+      t.taggings_count
     end
     puts "Taggings count for less-than-zero counts has been reset."
   end
