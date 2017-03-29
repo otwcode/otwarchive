@@ -47,7 +47,7 @@ RSpec.describe ChallengeClaimsController, type: :controller do
   describe 'create' do
     it 'sets a notice and redirects' do
       fake_login_known_user(@user)
-      post :create, collection_id: collection.name
+      post :create, collection_id: collection.name, challenge_claim: {collection_id: collection.id}
       it_redirects_to_with_notice(collection_claims_path(collection, for_user: true), \
                                   "New claim made.")
     end
@@ -55,7 +55,7 @@ RSpec.describe ChallengeClaimsController, type: :controller do
     it 'on an exception gives an error and redirects' do
       fake_login_known_user(@user)
       allow_any_instance_of(ChallengeClaim).to receive(:save) { false }
-      post :create, collection_id: collection.name
+      post :create, collection_id: collection.name, challenge_claim: {collection_id: collection.id}
       it_redirects_to_with_error(collection_claims_path(collection, for_user: true), \
                                  "We couldn't save the new claim.")
     end
