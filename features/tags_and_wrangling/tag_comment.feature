@@ -34,10 +34,10 @@ I'd like to comment on a tag'
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
       And I press "Update"
     Then I should see "Comment was successfully updated."
-    When I should see "Yep, we should have a Stargate franchise metatag."
+      And I should see "Yep, we should have a Stargate franchise metatag."
       And I should not see "Shouldn't this be a metatag with Stargate?"
       And I should see Last Edited nowish
-      And I jump in our Delorean and return to the present
+    When I jump in our Delorean and return to the present
 
   Scenario: Multiple comments on a tag increment correctly
 
