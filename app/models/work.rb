@@ -1051,7 +1051,7 @@ class Work < ActiveRecord::Base
   scope :id_only, select("works.id")
 
   scope :ordered_by_author_desc, order("authors_to_sort_on DESC")
-  scope :ordered_by_author_asc, order("authors_to_sort_on ASC")
+1  scope :ordered_by_author_asc, order("authors_to_sort_on ASC")
   scope :ordered_by_title_desc, order("title_to_sort_on DESC")
   scope :ordered_by_title_asc, order("title_to_sort_on ASC")
   scope :ordered_by_word_count_desc, order("word_count DESC")

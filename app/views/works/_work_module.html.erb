@@ -18,6 +18,9 @@
         </span>
       <% end %>
       <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
+      <% if work.number_of_posted_chapters  > 1 %>
+      <%= link_to " » ", work.last_posted_chapter %>
+      <% end %>
       <%= ts('by') %>
         
       <!-- do not cache -->
