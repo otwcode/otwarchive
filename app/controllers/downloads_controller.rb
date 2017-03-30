@@ -121,7 +121,7 @@ protected
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
   def check_for_file(format)
-    File.exists?("#{@work.download_basename}.#{format}")
+    File.file?("#{@work.download_basename}.#{format}") && File.readable?("#{@work.download_basename}.#{format}")
   end
 
   def create_work_html
