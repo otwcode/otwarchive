@@ -38,9 +38,9 @@
   <% if @collection.challenge.user_allowed_to_see_assignments?(current_user) %>
     <% if @collection.challenge.assignments_sent_at.nil? %>
       <li><%= span_if_current ts("Matching"), collection_potential_matches_path(@collection) %></li>
-    <% else %>
-      <li><%= span_if_current ts("Assignments"), collection_assignments_path(@collection) %></li>
     <% end %>
+    <% # assignments link is needed for manual matching, too %>
+    <li><%= span_if_current ts("Assignments"), collection_assignments_path(@collection) %></li>
   <% end %>
 </ul>
 <% end %>
