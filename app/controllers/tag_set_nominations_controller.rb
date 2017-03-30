@@ -358,6 +358,12 @@ class TagSetNominationsController < ApplicationController
       ],
       freeform_nominations_attributes: [
         :id, :tagname
+      ],
+      character_nominations_attributes: [
+        :id, :tagname, :parent_tagname
+      ],
+      relationship_nominations_attributes: [
+        :id, :tagname, :parent_tagname
       ]
     )
   end
