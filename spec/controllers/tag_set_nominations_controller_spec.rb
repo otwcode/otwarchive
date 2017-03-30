@@ -396,8 +396,7 @@ describe TagSetNominationsController do
           end
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           let(:user) { random_user }
 
           it 'redirects and returns an error message' do
@@ -424,19 +423,17 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
-        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
-        xcontext 'no tag set nomination' do
+        context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             get :show, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), 'Which nominations did you want to work with?')
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -490,12 +487,11 @@ describe TagSetNominationsController do
 
     context 'user is logged in' do
       context 'invalid params' do
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
             fake_login_known_user(random_user)
             get :new, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
       end
@@ -605,19 +601,17 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
-        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
-        xcontext 'no tag set nomination' do
+        context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             get :edit, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), 'Which nominations did you want to work with?')
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -761,11 +755,10 @@ describe TagSetNominationsController do
           fake_login_known_user(random_user)
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
-            post :create, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            post :create, tag_set_id: nil, tag_set_nomination: { pseud_id: nil }
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
@@ -940,27 +933,25 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
-            put :update, tag_set_id: nil, id: tag_set_nomination.id, tag_set_nomination: {}
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            put :update, id: tag_set_nomination.id, tag_set_id: nil, tag_set_nomination: { pseud_id: nil }
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'pseud_id param does not match user' do
           it 'redirects and returns an error message' do
-            put :update, tag_set_id: owned_tag_set.id, id: tag_set_nomination.id,
+            put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id,
                 tag_set_nomination: { pseud_id: random_user.default_pseud.id }
             it_redirects_to_with_error(root_path, "You can't nominate tags with that pseud.")
           end
         end
 
-        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
-        xcontext 'no tag set nomination' do
+        context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-            put :update, id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: {}
-            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), 'Which nominations did you want to work with?')
+            put :update, id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil }
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -1181,26 +1172,24 @@ describe TagSetNominationsController do
           fake_login_known_user(tag_nominator)
         end
 
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
             delete :destroy, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
-        # TODO: how can TagSetNomination.find not raise an error but still return falsey?
-        xcontext 'no tag set nomination' do
+        context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             delete :destroy, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_error(user_tag_set_nominations_path(tag_nominator), 'Which nominations did you want to work with?')
+            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
 
       context 'valid params' do
         before do
-          allow(TagSetNomination).to receive(:find) { tag_set_nomination }
+          allow(TagSetNomination).to receive(:find_by_id) { tag_set_nomination }
         end
 
         context 'user is not moderator of tag set' do
@@ -1277,11 +1266,10 @@ describe TagSetNominationsController do
       end
 
       context 'invalid params' do
-        # TODO: how can OwnedTagSet.find not raise an error but still return falsey?
-        xcontext 'no tag set' do
+        context 'no tag set' do
           it 'redirects and returns an error message' do
             get :confirm_destroy_multiple, tag_set_id: nil
-            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
       end
@@ -1297,7 +1285,7 @@ describe TagSetNominationsController do
 
   describe 'DELETE destroy_multiple' do
     before do
-      allow(OwnedTagSet).to receive(:find).with(owned_tag_set.id.to_s) { owned_tag_set }
+      allow(OwnedTagSet).to receive(:find_by_id).with(owned_tag_set.id.to_s) { owned_tag_set }
       allow(owned_tag_set).to receive(:clear_nominations!)
     end
 
@@ -1427,7 +1415,7 @@ describe TagSetNominationsController do
 
         context 'approving the tag nomination fails' do
           before do
-            allow(OwnedTagSet).to receive(:find).with(owned_tag_set.id.to_s) { owned_tag_set }
+            allow(OwnedTagSet).to receive(:find_by_id).with(owned_tag_set.id.to_s) { owned_tag_set }
             allow(owned_tag_set).to receive(:add_tagnames).with('fandom', ['New Fandom']) { false }
             put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params).
               merge('fandom_approve_New Fandom': 1, 'character_approve_New Character 2': 1)
