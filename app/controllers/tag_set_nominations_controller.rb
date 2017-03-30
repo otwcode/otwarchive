@@ -106,7 +106,6 @@ class TagSetNominationsController < ApplicationController
     @tag_set_nomination = TagSetNomination.new(tag_set_nomination_params)
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
-      request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
@@ -118,19 +117,10 @@ class TagSetNominationsController < ApplicationController
   def update
     if @tag_set_nomination.update_attributes(tag_set_nomination_params)
       flash[:notice] = ts("Your nominations were successfully updated.")
-      request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
       render :action => "edit"
-    end
-  end
-
-  def request_noncanonical_info
-    if @tag_set_nomination.character_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?} ||
-      @tag_set_nomination.relationship_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?}
-
-      flash[:notice] += ts(" Please consider editing to add fandoms to any of your non-canonical tags!")
     end
   end
 

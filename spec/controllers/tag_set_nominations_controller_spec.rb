@@ -782,7 +782,74 @@ describe TagSetNominationsController do
           fake_login_known_user(random_user)
         end
 
-        context 'tag set nomination saves successfully' do
+        context "success when fandom_nomination_limit is 0" do
+          let(:owned_tag_set) do
+            create(:owned_tag_set,
+                   fandom_nomination_limit: 0,
+                   character_nomination_limit: 1,
+                   relationship_nomination_limit: 1)
+          end
+
+          let(:new_nomination) { owned_tag_set.tag_set_nominations.first }
+
+          before do
+            post :create,
+                 tag_set_id: owned_tag_set.id,
+                 tag_set_nomination: {
+                   pseud_id: random_user.default_pseud.id,
+                   owned_tag_set_id: owned_tag_set.id,
+                   character_nominations_attributes: {
+                     "0": {
+                       tagname: "Character A",
+                       parent_tagname: "Fandom A"
+                     }
+                   },
+                   relationship_nominations_attributes: {
+                     "0": {
+                       tagname: "Characters B & C",
+                       parent_tagname: "Fandom B"
+                     }
+                   }
+                 }
+
+            owned_tag_set.reload
+          end
+
+          it "creates the new tag set nomination" do
+            expect(owned_tag_set.tag_set_nominations.count).to eq 1
+            expect(new_nomination).not_to eq nil
+            expect(new_nomination.pseud).to eq random_user.default_pseud
+            expect(new_nomination.owned_tag_set).to eq owned_tag_set
+          end
+
+          it "creates the character and relationship nominations" do
+            expect(owned_tag_set.character_nominations.count).to eq 1
+            expect(new_nomination.character_nominations.count).to eq 1
+            character_nom = new_nomination.character_nominations.first
+            expect(character_nom.tagname).to eq "Character A"
+            expect(character_nom.parent_tagname).to eq "Fandom A"
+
+            expect(owned_tag_set.relationship_nominations.count).to eq 1
+            expect(new_nomination.relationship_nominations.count).to eq 1
+            relationship_nom = new_nomination.relationship_nominations.first
+            expect(relationship_nom.tagname).to eq "Characters B & C"
+            expect(relationship_nom.parent_tagname).to eq "Fandom B"
+          end
+
+          it "does not create a fandom nomination" do
+            expect(owned_tag_set.fandom_nominations.count).to eq 0
+            expect(new_nomination.fandom_nominations.count).to eq 0
+          end
+
+          it "redirects and returns a success message" do
+            it_redirects_to_with_notice(
+              tag_set_nomination_path(owned_tag_set, new_nomination),
+              "Your nominations were successfully submitted."
+            )
+          end
+        end
+
+        context "success when fandom_nomination_limit > 0" do
           before do
             owned_tag_set.update_column(:character_nomination_limit, 1)
             post :create,
@@ -918,7 +985,90 @@ describe TagSetNominationsController do
             fake_login_known_user(tag_nominator.reload)
           end
 
-          context 'tag set nomination saves successfully' do
+          context "success when fandom_nomination_limit is 0" do
+            let(:owned_tag_set) do
+              create(:owned_tag_set,
+                     fandom_nomination_limit: 0,
+                     character_nomination_limit: 1,
+                     relationship_nomination_limit: 1)
+            end
+
+            let(:tag_set_nom) do
+              TagSetNomination.create(owned_tag_set: owned_tag_set,
+                                      pseud: random_user.default_pseud)
+            end
+
+            let(:character_nom) do
+              CharacterNomination.create(tag_set_nomination: tag_set_nom,
+                                         tagname: "Character A",
+                                         parent_tagname: "Fandom A")
+            end
+
+            let(:relationship_nom) do
+              RelationshipNomination.create(tag_set_nomination: tag_set_nom,
+                                            tagname: "Characters B & C",
+                                            parent_tagname: "Fandom B")
+            end
+
+            before do
+              fake_login_known_user(tag_set_nom.pseud.user)
+
+              post :update,
+                   tag_set_id: owned_tag_set.id,
+                   id: tag_set_nom.id,
+                   tag_set_nomination: {
+                     pseud_id: tag_set_nom.pseud.id,
+                     owned_tag_set_id: owned_tag_set.id,
+                     character_nominations_attributes: {
+                       "0": {
+                         id: character_nom.id,
+                         tagname: "Character D",
+                         parent_tagname: "Fandom C"
+                       }
+                     },
+                     relationship_nominations_attributes: {
+                       "0": {
+                         id: relationship_nom.id,
+                         tagname: "Characters E & F",
+                         parent_tagname: "Fandom D"
+                       }
+                     }
+                   }
+
+              owned_tag_set.reload
+              tag_set_nom.reload
+              character_nom.reload
+              relationship_nom.reload
+            end
+
+            it "does not create new nominations" do
+              expect(owned_tag_set.tag_set_nominations.count).to eq 1
+              expect(owned_tag_set.fandom_nominations.count).to eq 0
+              expect(owned_tag_set.character_nominations.count).to eq 1
+              expect(owned_tag_set.relationship_nominations.count).to eq 1
+
+              expect(tag_set_nom.fandom_nominations.count).to eq 0
+              expect(tag_set_nom.character_nominations.count).to eq 1
+              expect(tag_set_nom.relationship_nominations.count).to eq 1
+            end
+
+            it "modifies the character and relationship nominations" do
+              expect(character_nom.tagname).to eq "Character D"
+              expect(character_nom.parent_tagname).to eq "Fandom C"
+
+              expect(relationship_nom.tagname).to eq "Characters E & F"
+              expect(relationship_nom.parent_tagname).to eq "Fandom D"
+            end
+
+            it "redirects and returns a success message" do
+              it_redirects_to_with_notice(
+                tag_set_nomination_path(owned_tag_set, tag_set_nom),
+                "Your nominations were successfully updated."
+              )
+            end
+          end
+
+          context "success when fandom_nomination_limit > 0" do
             let!(:character_nom) { CharacterNomination.create(tag_set_nomination: tag_set_nomination,
                                                               fandom_nomination: fandom_nom, tagname: 'New Character') }
 
@@ -1215,7 +1365,7 @@ describe TagSetNominationsController do
                             'character_change_New Character 2': '',
                             'relationship_change_New Relationship': '',
                             'fandom_change_New Fandom': '',
-                            'freeform_change_New Fandom': '' } }
+                            'freeform_change_New Freeform': '' } }
 
       before do
         fake_login_known_user(moderator.reload)
@@ -1236,9 +1386,9 @@ describe TagSetNominationsController do
                   'character_reject_New Character 2': 1,
                   'relationship_approve_New Relationship': 1,
                   'fandom_approve_New Fandom': 1,
-                  'freeform_reject_New Fandom': 1)
-          it_redirects_to(tag_set_nominations_path(owned_tag_set))
-          expect(flash[:notice]).to include('Still some nominations left to review!')
+                  'freeform_reject_New Freeform': 1)
+          it_redirects_to(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include('All nominations reviewed, yay!')
         end
       end
 
