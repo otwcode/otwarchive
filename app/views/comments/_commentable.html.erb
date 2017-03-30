@@ -61,6 +61,10 @@
         <li id="show_comments_link"><%= show_hide_comments_link(commentable, :show_count => true) %></li>
     <% end %>
   </ul>
+  
+        <% unless logged_in? %>
+        <p class="caution"><%= ts("Your comment or kudos may take up to 20 minutes to appear on the page.") %></p>
+      <% end %>
 
   <div id="kudos_message"></div>
 
