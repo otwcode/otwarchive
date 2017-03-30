@@ -369,7 +369,7 @@ protected
         fandom_tagnames: [],
       ],
       optional_tag_set_attributes: [
-        :tagnames
+        :tagnames, tagnames: []
       ]
     ]
   end

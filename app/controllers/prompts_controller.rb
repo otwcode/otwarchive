@@ -163,6 +163,7 @@ class PromptsController < ApplicationController
 
   def prompt_params
     params.require(:prompt).permit(
+      :id,
       :collection_id,
       :title,
       :url,
@@ -177,6 +178,7 @@ class PromptsController < ApplicationController
       :any_rating,
       :any_warning,
       tag_set_attributes: [
+        :id,
         :fandom_tagnames,
         :updated_at,
         :character_tagnames,
@@ -185,10 +187,16 @@ class PromptsController < ApplicationController
         :category_tagnames,
         :rating_tagnames,
         :warning_tagnames,
-        :id
+        fandom_tagnames: [],
+        character_tagnames: [],
+        relationship_tagnames: [],
+        freeform_tagnames: [],
+        category_tagnames: [],
+        rating_tagnames: [],
+        warning_tagnames: []
       ],
       optional_tag_set_attributes: [
-        :tagnames
+        :tagnames, tagnames: []
       ]
     )
   end
