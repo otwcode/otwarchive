@@ -44,14 +44,14 @@ RSpec.describe SeriesController, type: :controller do
                                  "Sorry, you cannot remove yourself entirely as an author of a series right now.")
     end
 
-    xit 'allows you to change the pseuds associated with the series' do
+    it 'allows you to change the pseuds associated with the series' do
       fake_login_known_user(user)
       new_pseud = create(:pseud)
-      put :update, series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline }
+        put :update, series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline }
       it_redirects_to_with_notice(series_path(series), \
                                   "Series was successfully updated.")
       series.reload
-      expect(series.pseuds).to eq([new_pseud])
+      expect(series.pseuds).to include(new_pseud)
     end
 
     it 'renders the edit template if the update fails' do

@@ -107,15 +107,16 @@ class SeriesController < ApplicationController
   # PUT /series/1
   # PUT /series/1.xml
   def update
-    unless series_params[:author_attributes][:ids]
+    unless params[:series][:author_attributes][:ids]
       flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
 
-    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && series_params[:author_attributes]
+    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && params[:series][:author_attributes]
       valid_pseuds = Pseud.parse_bylines(params[:pseud][:byline])[:pseuds] # an array
       valid_pseuds.each do |valid_pseud|
-        series_params[:author_attributes][:ids] << valid_pseud.id rescue nil
+        existing_ids = series_params[:author_attributes][:ids]
+        params[:series][:author_attributes][:ids] = existing_ids.push(valid_pseud.id) rescue nil
       end
       params[:pseud][:byline] = ""
     end
