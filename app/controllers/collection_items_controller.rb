@@ -182,8 +182,8 @@ class CollectionItemsController < ApplicationController
     params.permit(
       :utf8, :_method, :authenticity_token, :commit, :collection_id, :user_id,
       collection_items: [
-        :id, :collection_id, :collection_approval_status, :remove, :unrevealed,
-        :user_approval_status, :anonymous
+        :id, :collection_id, :collection_approval_status, :unrevealed,
+        :user_approval_status, :anonymous, :remove
       ]
     )
   end
