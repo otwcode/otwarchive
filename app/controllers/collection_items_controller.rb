@@ -175,7 +175,7 @@ class CollectionItemsController < ApplicationController
   private
 
   def collection_item_params
-    params.permit(:collection_item).permit(:id)
+    params.require(:collection_item).permit(:id)
   end
 
   def collection_items_params
