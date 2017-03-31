@@ -44,7 +44,7 @@ RSpec.describe SeriesController, type: :controller do
                                  "Sorry, you cannot remove yourself entirely as an author of a series right now.")
     end
 
-    it 'allows you to change the pseuds associated with the series' do
+    xit 'allows you to change the pseuds associated with the series' do
       fake_login_known_user(user)
       new_pseud = create(:pseud)
         put :update, series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline }
