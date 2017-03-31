@@ -663,7 +663,7 @@ CREATE TABLE `known_issues` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `kudos` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `pseud_id` int(11) DEFAULT NULL,
   `commentable_id` int(11) DEFAULT NULL,
   `commentable_type` varchar(255) DEFAULT NULL,
@@ -1025,7 +1025,7 @@ CREATE TABLE `questions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `readings` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `major_version_read` int(11) DEFAULT NULL,
   `minor_version_read` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -1276,7 +1276,7 @@ CREATE TABLE `tag_sets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `taggings` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `tagger_id` int(11) DEFAULT NULL,
   `taggable_id` int(11) NOT NULL,
   `taggable_type` varchar(100) DEFAULT '',
