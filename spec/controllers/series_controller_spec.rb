@@ -24,7 +24,7 @@ RSpec.describe SeriesController, type: :controller do
   describe 'create' do
     it 'renders new if the series is invalid' do
       fake_login_known_user(user)
-      post :create, series: {title: ""}
+      post :create, series: {summary: ""}
       expect(response).to render_template('new')
     end
 
