@@ -45,7 +45,11 @@ class BookmarksController < ApplicationController
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false    
     options[:show_restricted] = current_user.present?
-    @search = BookmarkSearch.new(options)
+    if use_new_search?
+      @search = BookmarkSearchForm.new(options)
+    else
+      @search = BookmarkSearch.new(options)
+    end
     @page_subtitle = ts("Search Bookmarks")
     if params[:bookmark_search].present? && params[:edit_search].blank?
       if @search.query.present?
@@ -77,14 +81,22 @@ class BookmarksController < ApplicationController
         if @admin_settings.disable_filtering?
           @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
-          @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          if use_new_search?
+            @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
+          else
+            @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          end
           results = @search.search_results
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
-          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          if use_new_search?
+            search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          else
+            search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          end
           results = search.search_results
           @bookmarks = search.search_results.to_a
         end

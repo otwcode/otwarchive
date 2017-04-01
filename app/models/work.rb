@@ -1365,6 +1365,10 @@ class Work < ActiveRecord::Base
     creatorships.value_of :pseud_id
   end
 
+  def user_ids
+    Pseud.where(id: pseud_ids).pluck(:id)
+  end
+
   def collection_ids
     approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end

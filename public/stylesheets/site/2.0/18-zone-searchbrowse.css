@@ -20,10 +20,10 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INTERACTION: SEARCH */
 
-.search input[type="text"] {
-  border-top-color: #999;
-  padding: 0.15em 0.25em;
-    border-radius: 1em;
+form.search input[type="text"] {		
+  border-top-color: #999;		
+  padding: 0.15em 0.25em;		
+    border-radius: 1em;		
 }
 
 .search p, li.search form p {
@@ -65,16 +65,12 @@ form.filters {
   float: right;
 }
 
-.filters .tags {
-  display: block;
+.filters h4 {
+  display: inline;
+  font-weight: 700;
 }
 
-.filters dt.autocomplete {
-  margin-top: 1.286em;
-}
-
-form.filters dl {
-  margin-top: 0.375em;
+.filters dl, .filters dt {
   padding: 0;
 }
 
@@ -82,19 +78,16 @@ form.filters dl {
   min-width: 0;
 }
 
-.filters dt a {
-  border: none;
+.filters fieldset > dl > dt {
+  margin-top: 1.929em;
 }
 
-.filters dt a:hover {
-  color: #111;
+.filters dt.sort, .filters dd, .filters .more dd.search {
+  margin: 0;
+  padding: 0;
 }
 
-.filters dt a:focus img {
-  outline: none;
-}
-
-.filters dd, .filters dt, .filters .submit input {
+.filters dt, .filters dd, .filters input[type="submit"], .filters .expander {
   width: 100%;
 }
 
@@ -102,23 +95,71 @@ form.filters dl {
   padding-left: 0;
 }
 
-.filters .submit {
-  text-align: center;
-  padding-right: 0;
+.filters button {
+  background: none transparent;
+  border: none;
+  outline: none;
+  padding: 0.25em 0;
+  text-align: left;
+    border-radius: 0;
 }
 
 .filters .submit input {
   height: 100%;
+  margin: 1em 0;
   min-height: 1.286em;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
   white-space: normal;
 }
 
-form.filters dl dl {
+.filters dl dl {
+  border: 0;
   margin: 0;
   padding: 0;
-  border: 0;
   background: none;
-  box-shadow: none;
+    box-shadow: none;
+}
+
+.filters dt.search, .filters dt.autocomplete {
+  border-bottom: none;
+}
+
+.filters dt.autocomplete {
+  padding: 0.25em 0;
+}
+
+.filters .more dt {
+  margin-top: 0.643em;
+}
+
+.filters dd.sort, .filters .more dd {
+  margin-top: 0.375em;
+}
+
+.filters .expander {
+  background: url("/images/arrow-right.gif") left center no-repeat;
+  color: #2a2a2a;
+  min-height: 1.786em; /* default button height plus 0.25 vertical padding */
+  padding-left: 14px;
+    box-sizing: border-box;
+}
+
+.filters .expander:focus {
+  outline: 1px dotted;
+}
+
+.filters .expanded .expander {
+  background-image: url("/images/arrow-down.gif");
+}
+
+.filters .warning {
+  font-weight: 500;
+}
+
+.filters .collapsed:after, .filters .expanded:after { 
+  content: none;
 }
 
 /*END== */

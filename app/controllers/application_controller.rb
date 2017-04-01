@@ -13,6 +13,11 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
+  before_filter :use_new_search?
+  def use_new_search?
+    current_user.present? && $rollout.active?(:use_new_search, current_user)
+  end
+
   # Title helpers
   helper_method :process_title
 
