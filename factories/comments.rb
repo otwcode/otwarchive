@@ -6,7 +6,7 @@ FactoryGirl.define do
     content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Work" }
-    commentable_id { FactoryGirl.create(:work).id }
+    commentable_id { create(:work).id }
     pseud
   end
 
@@ -15,7 +15,7 @@ FactoryGirl.define do
     content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "AdminPost" }
-    commentable_id { FactoryGirl.create(:admin_post).id }
+    commentable_id { create(:admin_post).id }
     pseud
   end
 
@@ -24,7 +24,7 @@ FactoryGirl.define do
     content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Tag" }
-    commentable_id { FactoryGirl.create(:fandom).id }
+    commentable_id { create(:fandom).id }
     pseud
   end
 
@@ -33,8 +33,13 @@ FactoryGirl.define do
     content { Faker::Lorem.sentence(25) }
     email { Faker::Internet.email }
     commentable_type { "Work" }
-    commentable_id { FactoryGirl.create(:work, moderated_commenting_enabled: true).id }
+    commentable_id { create(:work, moderated_commenting_enabled: true).id }
     pseud
     unreviewed true
+  end
+
+  factory :inbox_comment do
+    user { create(:user) }
+    feedback_comment { create(:comment) }
   end
 end
