@@ -26,8 +26,6 @@ services:
   - redis-server
   - memcached
 script:
-  - rm -f structure.sql
-  - RAILS_ENV=test bundle exec rake db:create:all --trace
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - travis_retry bundle exec $TEST_GROUP
