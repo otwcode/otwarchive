@@ -178,7 +178,6 @@ class PromptsController < ApplicationController
       :any_rating,
       :any_warning,
       tag_set_attributes: [
-        :id,
         :fandom_tagnames,
         :updated_at,
         :character_tagnames,
@@ -196,7 +195,7 @@ class PromptsController < ApplicationController
         warning_tagnames: []
       ],
       optional_tag_set_attributes: [
-        :tagnames, tagnames: []
+        :tagnames
       ]
     )
   end
