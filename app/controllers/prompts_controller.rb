@@ -163,7 +163,6 @@ class PromptsController < ApplicationController
 
   def prompt_params
     params.require(:prompt).permit(
-      :id,
       :collection_id,
       :title,
       :url,
