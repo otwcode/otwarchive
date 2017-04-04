@@ -57,7 +57,6 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
     fill_in("work[relationship_string]", with: relationship)
   end
   select(pseud, from: "work[author_attributes][ids][]") unless pseud.blank?
-  screenshot_and_save_page
   fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
 end
 
@@ -74,6 +73,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post Without Preview")
   end
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 # Again, same regexp, it just creates a draft and not a posted
@@ -229,6 +229,7 @@ When /^I post the chaptered work "([^"]*)"$/ do |title|
   click_button("Preview")
   step %{I press "Post"}
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^I post the chaptered draft "([^"]*)"$/ do |title|
@@ -245,6 +246,7 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
@@ -256,12 +258,14 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I fill in "content" with "la la la la la la la la la la la"}
   step %{I press "Preview"}
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 # meant to be used in conjunction with above step
 When /^I post the draft chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 Then /^I should see the default work content$/ do
@@ -338,6 +342,7 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   work = Work.find_by_title(title)
   work.update_attribute(:created_at, number.to_i.days.ago)
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^I post the locked work "([^"]*)"$/ do |title|
@@ -349,6 +354,7 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   visit preview_work_url(work)
   click_button("Post")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^the locked draft "([^"]*)"$/ do |title|
@@ -405,11 +411,13 @@ When /^I browse the "([^"]+)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
@@ -418,18 +426,22 @@ When /^I delete the work "([^"]*)"$/ do |work|
   step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 When /^I preview the work$/ do
   click_button("Preview")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 When /^I update the work$/ do
   click_button("Update")
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
   click_button "Post Without Preview"
   Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 When /^I post the work$/ do
   click_button "Post"

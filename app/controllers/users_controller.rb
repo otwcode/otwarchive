@@ -459,6 +459,8 @@ class UsersController < ApplicationController
     end
   end
 
+  private
+
   def user_params
     params.require(:user).permit(
       :login, :email, :age_over_13, :terms_of_service,
@@ -471,5 +473,4 @@ class UsersController < ApplicationController
       :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
       :"date_of_birth(3i)", :date_of_birth, :about_me
     )
-  end
 end

@@ -81,8 +81,8 @@ describe OwnedTagSetsController do
         it "then sets the correct tags with the type fandom" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "fandom"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to include(*tag_set.tags)
@@ -98,8 +98,8 @@ describe OwnedTagSetsController do
         it "sets the correct tags with the type character" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "character"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to_not include(*tag_set.tags)

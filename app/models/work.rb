@@ -186,15 +186,15 @@ class Work < ActiveRecord::Base
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
-  
+
   after_save :expire_caches
-  
+
   def expire_caches
     self.pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
     end
-    
+
     self.all_collections.each do |collection|
       collection.update_works_index_timestamp!
     end
@@ -252,7 +252,7 @@ class Work < ActiveRecord::Base
     pseuds = Pseud.select("pseuds.id, pseuds.user_id").
                     joins(:creatorships).
                     where(creatorships: {
-                      creation_id: ids, 
+                      creation_id: ids,
                       creation_type: 'Work'
                       }
                     )
@@ -346,7 +346,7 @@ class Work < ActiveRecord::Base
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
       if results[:banned_pseuds].present?
         self.errors.add(
-          :base, 
+          :base,
           ts("%{name} is currently banned and cannot be listed as a co-creator.",
              name: results[:banned_pseuds].to_sentence
           )
@@ -535,27 +535,27 @@ class Work < ActiveRecord::Base
   end
 
   def set_revised_at(date=nil)
-    date ||= self.chapters.where(:posted => true).maximum('published_at') || 
+    date ||= self.chapters.where(:posted => true).maximum('published_at') ||
         self.revised_at || self.created_at
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
-  
+
   def set_revised_at_by_chapter(chapter)
     return if self.posted? && !chapter.posted?
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? || 
-        chapter.published_at > self.revised_at.to_date || 
+    elsif self.revised_at.nil? ||
+        chapter.published_at > self.revised_at.to_date ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
       self.set_revised_at(max_date)
-    # else 
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't 
+    # else
+      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
       # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
       # work's position in date-sorted indexes, so don't do it unnecessarily.
     end
@@ -779,7 +779,7 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = string.to_ascii 
+    string = string.to_ascii
     string.gsub(/[^[\w _-]]+/, '')
   end
 
@@ -903,7 +903,7 @@ class Work < ActiveRecord::Base
   # Calls reset_filter_count on all the work's filters
   def adjust_filter_counts
     if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.reset_filter_count }
+      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
     end
     return true
   end
@@ -1351,11 +1351,11 @@ class Work < ActiveRecord::Base
       root: false,
       only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids, 
-        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, 
+      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
-      anonymous: anonymous?, 
+      anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work'
     )

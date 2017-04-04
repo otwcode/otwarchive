@@ -104,7 +104,7 @@ Feature: Invite queue management
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
-      And I fill in "invitee_email" with "test@archiveofourown.org"
+      And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
     When I follow "copy and use"
