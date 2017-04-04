@@ -103,7 +103,7 @@ class WorksController < ApplicationController
 
       tag = @fandom || @tag
       # This strange dance is because there is an interaction between
-      # strong_parameters and dup, without the dance 
+      # strong_parameters and dup, without the dance
       # options[:filter_ids] << tag.id is ignored.
       filter_ids = options[:filter_ids] || []
       filter_ids << tag.id
@@ -865,8 +865,8 @@ class WorksController < ApplicationController
     @chapter = @work.first_chapter
 
     # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-    if params[:work] && params[:work][:chapter_attributes]
-      @chapter.attributes = params[:work][:chapter_attributes]
+    if params[:work] && work_params[:chapter_attributes]
+      @chapter.attributes = work_params[:chapter_attributes]
     end
   end
 
@@ -880,14 +880,14 @@ class WorksController < ApplicationController
                              false
                            end
 
-      @work.attributes = params[:work]
+      @work.attributes = work_params
       @work.save_parents if @work.preview_mode
     end
   end
 
   # create
   def set_instance_variables_work
-    @work = Work.new(params[:work])
+    @work = Work.new(work_params)
   end
 
   # new
@@ -913,7 +913,7 @@ class WorksController < ApplicationController
     if !params[:work][:author_attributes] || !params[:work][:author_attributes][:ids]
       flash.now[:notice] = sorry
       params[:work][:author_attributes] ||= {}
-      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
+      params[:work][:author_attributes][:ids] = [current_user.default_pseud.id]
     end
 
     # stuff new bylines into author attributes to be parsed by the work model
@@ -947,7 +947,7 @@ class WorksController < ApplicationController
         @work.preview_mode = false
       end
 
-      @work.attributes = params[:work]
+      @work.attributes = work_params
       @work.save_parents if @work.preview_mode
     end
   rescue
@@ -1066,5 +1066,26 @@ class WorksController < ApplicationController
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
     }
+  end
+
+  def work_params
+    params.require(:work).permit(
+      :rating_string, :fandom_string, :relationship_string, :character_string,
+      :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
+      :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+      :moderated_commenting_enabled, :title,
+      challenge_assignment_ids: [],
+      challenge_claim_ids: [],
+      category_string: [],
+      warning_strings: [],
+      author_attributes: [:byline, ids: [], coauthors: []],
+      series_attributes: [:id, :title],
+      parent_attributes: [:url, :title, :author, :language_id, :translation],
+      chapter_attributes: [
+        :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
+        :published_at, :content
+      ],
+    )
   end
 end
