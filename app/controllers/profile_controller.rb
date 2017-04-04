@@ -1,5 +1,5 @@
 class ProfileController < ApplicationController
-  
+
   def show
     @user = User.find_by_login(params[:user_id])
     if @user.nil?
@@ -17,5 +17,5 @@ class ProfileController < ApplicationController
     end
     @page_subtitle = ts("%{username} - Profile", username: @user.login)
   end
-  
+
 end

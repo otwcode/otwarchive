@@ -14,7 +14,7 @@
     <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
       <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
     <% else %>
-      <% cache(single_comment, :expires_in => 1.week ) do %>
+      <% cache(key: "/v1/single_comment/#{single_comment.id}/#{single_comment.edited_at}/#{single_comment.updated_at}", expires_in: 1.week ) do %>
         <% # FRONT END, update this if a.user comes in %>
         <h4 class="heading byline">
           <% if !single_comment.pseud.nil? %>

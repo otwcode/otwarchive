@@ -177,6 +177,13 @@ When /^I view the tag set "([^\"]*)"/ do |tagset|
   visit tag_set_path(tagset)
 end
 
+When /^I view associations for a tag set that does not exist/ do
+  id = 1
+  tagset = OwnedTagSet.find_by_id(id)
+  tagset.destroy if tagset
+  visit tag_set_associations_path(id)
+end
+
 When /^I expand the unassociated characters and relationships$/ do
   within('span[action_target="#list_for_unassociated_char_and_rel"]') do
     click_link("↓")

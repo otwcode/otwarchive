@@ -120,7 +120,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
 
   Scenario: Logged out
     Given I have no users
@@ -149,4 +149,3 @@ Feature: User Authentication
       | sam   | dean  | see "Log Out"            |
       | sam   | dean  | not see "Preferences" within "#dashboard" |
       | sam   | dean  | not see "Log In"         |
-
