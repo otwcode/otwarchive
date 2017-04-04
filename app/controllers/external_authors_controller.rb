@@ -93,8 +93,8 @@ class ExternalAuthorsController < ApplicationController
 
   def external_author_params
     params.permit(
-      :id, :user_id, :utf8, :_commit, :authenticity_token, :invitation_token,
-      :imported_stories,
+      :id, :user_id, :utf8, :_method, :authenticity_token, :invitation_token,
+      :imported_stories, :commit,
       external_author: [
         :email, :do_not_email, :do_not_import
       ]
