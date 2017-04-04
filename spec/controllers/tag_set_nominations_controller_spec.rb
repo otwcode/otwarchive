@@ -426,14 +426,14 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             get :show, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -446,8 +446,8 @@ describe TagSetNominationsController do
 
           it 'redirects and returns an error message' do
             get :show, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
-                                        'You can only see your own nominations or nominations for a set you moderate.')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                       'You can only see your own nominations or nominations for a set you moderate.')
           end
         end
 
@@ -491,7 +491,7 @@ describe TagSetNominationsController do
           it 'redirects and returns an error message' do
             fake_login_known_user(random_user)
             get :new, tag_set_id: nil
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
       end
@@ -604,14 +604,14 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             get :edit, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -626,8 +626,8 @@ describe TagSetNominationsController do
 
           it 'redirects and returns an error message' do
             get :edit, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
-                                        'You can only see your own nominations or nominations for a set you moderate.')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                       'You can only see your own nominations or nominations for a set you moderate.')
           end
         end
 
@@ -758,7 +758,7 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             post :create, tag_set_id: nil, tag_set_nomination: { pseud_id: nil }
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
@@ -936,7 +936,7 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             put :update, id: tag_set_nomination.id, tag_set_id: nil, tag_set_nomination: { pseud_id: nil }
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
@@ -951,7 +951,7 @@ describe TagSetNominationsController do
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             put :update, id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil }
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -965,9 +965,9 @@ describe TagSetNominationsController do
           end
 
           it 'redirects and returns an error message' do
-            put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id, tag_set_nomination: {pseud_id: nil}
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set),
-                                        'You can only see your own nominations or nominations for a set you moderate.')
+            put :update, id: tag_set_nomination.id, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil }
+            it_redirects_to_with_error(tag_set_path(owned_tag_set),
+                                       'You can only see your own nominations or nominations for a set you moderate.')
           end
         end
 
@@ -1175,14 +1175,14 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             delete :destroy, id: tag_set_nomination.id, tag_set_id: nil
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
             delete :destroy, id: nil, tag_set_id: owned_tag_set.id
-            it_redirects_to_with_notice(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
+            it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
       end
@@ -1269,7 +1269,7 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             get :confirm_destroy_multiple, tag_set_id: nil
-            it_redirects_to_with_notice(tag_sets_path, 'What tag set did you want to nominate for?')
+            it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
       end

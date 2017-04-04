@@ -20,7 +20,7 @@ class TagSetNominationsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find_by_id(params[:tag_set_id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to nominate for?")
+      flash[:error] = ts("What tag set did you want to nominate for?")
       redirect_to tag_sets_path and return
     end
   end
@@ -28,11 +28,11 @@ class TagSetNominationsController < ApplicationController
   def load_nomination
     @tag_set_nomination = TagSetNomination.find_by_id(params[:id])
     unless @tag_set_nomination
-      flash[:notice] = ts("Which nominations did you want to work with?")
+      flash[:error] = ts("Which nominations did you want to work with?")
       redirect_to tag_set_path(@tag_set) and return
     end
     unless current_user.is_author_of?(@tag_set_nomination) || @tag_set.user_is_moderator?(current_user)
-      flash[:notice] = ts("You can only see your own nominations or nominations for a set you moderate.")
+      flash[:error] = ts("You can only see your own nominations or nominations for a set you moderate.")
       redirect_to tag_set_path(@tag_set) and return
     end
   end
