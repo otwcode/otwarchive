@@ -76,7 +76,7 @@ class ExternalAuthorsController < ApplicationController
     end
     @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params)
+    if @external_author.update_attributes(external_author_params[:external_author])
       flash[:notice] += "Your preferences have been saved."
       if @user
         redirect_to user_external_authors_path(@user)
@@ -92,8 +92,12 @@ class ExternalAuthorsController < ApplicationController
   private
 
   def external_author_params
-    params.require(:external_author).permit(
-      :email, :do_not_email, :do_not_import
+    params.permit(
+      :id, :user_id, :utf8, :_commit, :authenticity_token, :invitation_token,
+      :imported_stories,
+      external_author: [
+        :email, :do_not_email, :do_not_import
+      ]
     )
   end
 end
