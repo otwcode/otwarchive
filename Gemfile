@@ -44,7 +44,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.6.6.2'
+gem 'nokogiri', '>= 1.7.1'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'

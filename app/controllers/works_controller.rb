@@ -298,58 +298,66 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
+    set_edit_form_fields
+
+    @work.ip_address = request.remote_ip
+    # If Edit or Cancel is pressed, bail out and display relevant form
+    if params[:edit_button]
+      render :new && return
+    elsif params[:cancel_button]
+      flash[:notice] = ts('New work posting canceled.')
+      redirect_to current_user and return
+    else
+      # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
+      set_work_tag_error_messages
+
+      if @work.errors.empty?
+        if @work.invalid_pseuds.present? || @work.ambiguous_pseuds.present?
+          render :_choose_coauthor && return
+        else
+          @work.posted = @chapter.posted = true if params[:post_button]
+          @work.set_revised_at_by_chapter(@chapter)
+
+          if @work.set_challenge_info && @work.save
+            # HACK: for empty chapter authors in cucumber series tests
+            @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
+
+            if params[:preview_button] || params[:cancel_coauthor_button]
+              flash[:notice] = ts("Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}", deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+              in_moderated_collection
+              redirect_to preview_work_path(@work)
+            else
+              # We check here to see if we are attempting to post to moderated collection
+              flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
+              in_moderated_collection
+              redirect_to work_path(@work)
+            end
+          else
+            render :new
+          end
+        end
+      else
+        render :new
+      end
+    end
+  end
+
+  def set_work_tag_error_messages
+    unless @work.has_required_tags?
+      error_message = 'Please add all required tags.'
+      error_message << ' Fandom is missing.' if @work.fandoms.blank?
+
+      error_message << ' Warning is missing.' if @work.warnings.blank?
+
+      @work.errors.add(:base, error_message)
+    end
+  end
+
+  def set_edit_form_fields
     load_pseuds
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
-
-    @work.ip_address = request.remote_ip
-    if params[:edit_button]
-      render :new
-    elsif params[:cancel_button]
-      flash[:notice] = ts('New work posting canceled.')
-      redirect_to current_user
-    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
-      unless params[:preview_button] || params[:cancel_coauthor_button]
-        @work.posted = true
-        @chapter.posted = true
-      end
-
-      @work.set_revised_at_by_chapter(@chapter)
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
-
-      if valid && @work.set_challenge_info && @work.save
-        # HACK: for empty chapter authors in cucumber series tests
-        @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
-
-        if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
-          in_moderated_collection
-          redirect_to preview_work_path(@work)
-        else
-          # We check here to see if we are attempting to post to moderated collection
-          flash[:notice] = ts('Work was successfully posted. It should appear in work listings within the next few minutes.')
-          in_moderated_collection
-          redirect_to work_path(@work)
-        end
-      else
-        if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
-          render :_choose_coauthor
-          return
-        end
-
-        unless @work.has_required_tags?
-          error_message = 'Please add all required tags.'
-          error_message << ' Fandom is missing.' if @work.fandoms.blank?
-
-          error_message << ' Warning is missing.' if @work.warnings.blank?
-
-          @work.errors.add(:base, error_message)
-        end
-
-        render :new
-      end
-    end
   end
 
   # GET /works/1/edit
@@ -378,109 +386,106 @@ class WorksController < ApplicationController
 
   # PUT /works/1
   def update
-    # Need to get @pseuds and @series values before rendering edit
-    load_pseuds
-    @work.reset_published_at(@chapter)
-    @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    set_edit_form_fields
 
-    render(:edit) && return unless @work.errors.empty?
-
-    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-      @work.valid? ? (render :_choose_coauthor) : (render :new)
-    elsif params[:preview_button] || params[:cancel_coauthor_button]
-      preview_mode(:edit) do
-        unless @work.posted?
-          flash[:notice] = ts('Your changes have not been saved. Please post your work or save without posting if you want to keep them.')
-        end
-
-        in_moderated_collection
-        @chapter = @work.chapters.first unless @chapter
-        render :preview
-      end
+    @work.ip_address = request.remote_ip
+    # If Edit or Cancel is pressed, bail out and display relevant form
+    if params[:edit_button]
+      render :edit
     elsif params[:cancel_button]
       cancel_posting_and_redirect
-    elsif params[:edit_button]
-      render :edit
     else
-      @work.posted = @chapter.posted = true if params[:post_button]
-      posted_changed = @work.posted_changed?
-      @work.set_revised_at_by_chapter(@chapter)
-      saved = @chapter.save
-      @work.has_required_tags? || saved = false
+      # Otherwise, check that the work is valid, contains no errors etc
+      set_work_tag_error_messages
 
-      return unless saved
+      if @work.errors.empty?
+        if @work.invalid_pseuds.present? || @work.ambiguous_pseuds.present?
+          @work.valid? ? (render :_choose_coauthor) : (render :new)
+          return
+        elsif params[:preview_button] || params[:cancel_coauthor_button]
+          # If this is a preview, display the preview
+          preview_mode(:edit) do
+            unless @work.posted?
+              flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
+            end
 
-      unless @work.challenge_claims.empty?
-        @included = 0
-        @work.challenge_claims.each do |claim|
-          @work.collections.each do |collection|
-            @included = 1 if collection == claim.collection
+            in_moderated_collection
+            @chapter = @work.chapters.first unless @chapter
+            render :preview
+          end
+        else
+          @work.posted = @chapter.posted = true if params[:post_button]
+          @work.set_revised_at_by_chapter(@chapter)
+          posted_changed = @work.posted_changed?
+
+          unless @work.challenge_claims.empty?
+            @included = 0
+            @work.challenge_claims.each do |claim|
+              @work.collections.each do |collection|
+                @included = 1 if collection == claim.collection
+              end
+
+              @work.collections << claim.collection if @included.zero?
+
+              @included = 0
+            end
           end
 
-          @work.collections << claim.collection if @included.zero?
+          @work.minor_version = @work.minor_version + 1
+          @work.set_challenge_info
 
-          @included = 0
-        end
-      end
-
-      @work.minor_version = @work.minor_version + 1
-      @work.set_challenge_info
-      saved = @work.save
-
-      if saved
-        flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
-        if posted_changed
-          flash[:notice] << ts(' It should appear in work listings within the next few minutes.')
-        end
-        in_moderated_collection
-        redirect_to(@work)
-      else
-        unless @chapter.valid?
-          @chapter.errors.each { |err| @work.errors.add(:base, err) }
-        end
-
-        unless @work.has_required_tags?
-          if @work.fandoms.blank?
-            @work.errors.add(:base, 'Updating: Please add all required tags. Fandom is missing.')
+          if @chapter.save && @work.save
+            flash[:notice] = ts("Work was successfully #{posted_changed ? "posted" : "updated"}.")
+            if posted_changed
+              flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
+            end
+            in_moderated_collection
+            redirect_to(@work)
           else
-            @work.errors.add(:base, 'Updating: Required tags are missing.')
+            unless @chapter.valid?
+              @chapter.errors.each { |err| @work.errors.add(:base, err) }
+            end
+            render :edit
           end
         end
-
+      else
         render :edit
       end
     end
   end
 
   def update_tags
-    render(:edit_tags) && return unless @work.errors.empty?
-
-    if params[:preview_button]
-      preview_mode(:edit_tags) do
-        render :preview_tags
-      end
+    # If Edit or Cancel is pressed, bail out and display relevant form
+    if params[:edit_button]
+      render :edit_tags
     elsif params[:cancel_button]
       cancel_posting_and_redirect
-    elsif params[:edit_button]
-      render :edit_tags
-    elsif params[:save_button]
-      Work.expire_work_tag_groups_id(@work.id)
-      flash[:notice] = ts('Tags were successfully updated.')
-      redirect_to(@work)
     else
-      saved = true
+      # Otherwise, check that the work is valid, contains no errors etc
+      set_work_tag_error_messages
 
-      if @work.has_required_tags? && @work.invalid_tags.blank?
-        @work.posted = true
-        @work.minor_version = @work.minor_version + 1
-        saved = @work.save
-        # @work.update_minor_version
-      end
-
-      preview_mode(:edit_tags, saved) do
-        flash[:notice] = ts('Work was successfully updated.')
-        redirect_to(@work)
+      if @work.errors.empty?
+        if params[:preview_button]
+          preview_mode(:edit_tags) do
+            render :preview_tags
+          end
+        elsif params[:save_button]
+          Work.expire_work_tag_groups_id(@work.id)
+          flash[:notice] = ts('Tags were successfully updated.')
+          redirect_to(@work)
+        else
+          if @work.has_required_tags? && @work.invalid_tags.blank?
+            @work.posted = true
+            @work.minor_version = @work.minor_version + 1
+            @work.save
+            flash[:notice] = ts('Work was successfully updated.')
+            redirect_to(@work) and return
+          else
+            render :edit_tags
+          end
+        end
+      else
+        render :edit_tags
       end
     end
   end
