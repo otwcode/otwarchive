@@ -15,7 +15,8 @@ describe ChallengeAssignmentsController do
   end
 
   context "when logged in" do
-    let(:collection2) { create(:collection, challenge: GiftExchange.new) }
+    let(:gift_exchange) { create(:gift_exchange) }
+    let(:collection2) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let(:offer) { create(:challenge_signup, collection: collection2, pseud: user2.default_pseud) }
     let(:offer2) { create(:challenge_signup, collection: collection2, pseud: otheruser.default_pseud) }
     let(:open_assignment) { create(:challenge_assignment, collection: collection2, offer_signup: offer2) }
