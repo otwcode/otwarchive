@@ -3,7 +3,6 @@ class PromptMeme < ActiveRecord::Base
 
   PROMPT_TYPES = %w(requests)
   include ChallengeCore
-  include ActiveModel::ForbiddenAttributesProtection
 
   override_datetime_setters
 

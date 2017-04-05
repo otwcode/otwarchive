@@ -77,18 +77,6 @@ class Challenge::PromptMemeController < ChallengesController
 
   private
 
-  def prompt_meme_params
-    params.require(:prompt_meme).permit(
-      :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
-      :assignments_due_at_string, :anonymous, :signup_instructions_general,
-      :signup_instructions_requests, :request_url_label, :request_description_label,
-      request_restriction_attributes: [
-        :tag_sets_to_add, :character_restrict_to_fandom, :character_restrict_to_tag_set,
-        :relationship_restrict_to_fandom, :relationship_restrict_to_tag_set, :id
-      ]
-    )
-  end
-
   # creating automatic list of most popular or least popular tags on the archive
   def initializing_tag_sets?
     # uuughly :P but check params to see if we're initializing
@@ -100,55 +88,22 @@ class Challenge::PromptMemeController < ChallengesController
 
   def prompt_meme_params
     params.require(:prompt_meme).permit(
-      :signup_open,
-      :time_zone,
-      :signups_open_at_string,
-      :signups_close_at_string,
-      :assignments_due_at_string,
-      :anonymous,
-      :requests_num_required,
-      :requests_num_allowed,
-      :signup_instructions_general,
-      :signup_instructions_requests,
-      :request_url_label,
+      :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
+      :assignments_due_at_string, :anonymous, :requests_num_required, :requests_num_allowed,
+      :signup_instructions_general, :signup_instructions_requests, :request_url_label,
       :request_description_label,
-      request_restriction_attributes: [
-        :id,
-        :optional_tags_allowed,
-        :title_required,
-        :title_allowed,
-        :description_required,
-        :description_allowed,
-        :url_required,
-        :url_allowed,
-        :fandom_num_required,
-        :fandom_num_allowed,
-        :require_unique_fandom,
-        :character_num_required,
-        :character_num_allowed,
-        :category_num_required,
-        :category_num_allowed,
-        :require_unique_category,
-        :require_unique_character,
-        :relationship_num_required,
-        :relationship_num_allowed,
-        :require_unique_relationship,
-        :rating_num_required,
-        :rating_num_allowed,
-        :require_unique_rating,
-        :freeform_num_required,
-        :freeform_num_allowed,
-        :require_unique_freeform,
-        :warning_num_required,
-        :warning_num_allowed,
-        :require_unique_warning,
-        :tag_sets_to_remove,
-        :tag_sets_to_add,
-        :character_restrict_to_fandom,
-        :character_restrict_to_tag_set,
-        :relationship_restrict_to_fandom,
-        :relationship_restrict_to_tag_set,
-        tag_sets_to_remove: []
+      request_restriction_attributes: [ :id, :optional_tags_allowed, :title_required,
+        :title_allowed, :description_required, :description_allowed, :url_required,
+        :url_allowed, :fandom_num_required, :fandom_num_allowed, :require_unique_fandom,
+        :character_num_required, :character_num_allowed, :category_num_required,
+        :category_num_allowed, :require_unique_category, :require_unique_character,
+        :relationship_num_required, :relationship_num_allowed, :require_unique_relationship,
+        :rating_num_required, :rating_num_allowed, :require_unique_rating,
+        :freeform_num_required, :freeform_num_allowed, :require_unique_freeform,
+        :warning_num_required, :warning_num_allowed, :require_unique_warning,
+        :tag_sets_to_remove, :tag_sets_to_add, :character_restrict_to_fandom,
+        :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
+        :relationship_restrict_to_tag_set, tag_sets_to_remove: []
       ]
     )
   end
