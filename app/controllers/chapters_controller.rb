@@ -135,7 +135,7 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    @chapter.attributes = params[:chapter]
+    @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
 
@@ -271,7 +271,8 @@ class ChaptersController < ApplicationController
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       if params[:chapter]  # editing, save our changes
-        @chapter.attributes = params[:chapter]
+        # @chapter.attributes = params[:chapter]
+        @chapter.attributes = chapter_params
       end
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
@@ -299,5 +300,15 @@ class ChaptersController < ApplicationController
       @work.update_attribute(:posted, true)
     end
     flash[:notice] = ts('Chapter has been posted!')
+  end
+
+  private
+
+  def chapter_params
+    params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
+                                    :"published_at(2i)", :"published_at(1i)", :summary,
+                                    :notes, :endnotes, :content,
+                                    author_attributes: [:byline, ids: []])
+
   end
 end
