@@ -91,7 +91,7 @@ class Challenge::PromptMemeController < ChallengesController
       :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
       :assignments_due_at_string, :anonymous, :requests_num_required, :requests_num_allowed,
       :signup_instructions_general, :signup_instructions_requests, :request_url_label,
-      :request_description_label,
+      :request_description_label, :works_reveal_at_string, :authors_reveal_at_string,
       request_restriction_attributes: [ :id, :optional_tags_allowed, :title_required,
         :title_allowed, :description_required, :description_allowed, :url_required,
         :url_allowed, :fandom_num_required, :fandom_num_allowed, :require_unique_fandom,
