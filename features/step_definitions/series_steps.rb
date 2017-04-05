@@ -45,6 +45,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
     Work.tire.index.refresh
+    Tag.write_redis_to_database
   end
 
   count.to_i.times do |i|

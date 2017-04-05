@@ -44,7 +44,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.6.6.2'
+gem 'nokogiri', '>= 1.7.1'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
@@ -63,6 +63,9 @@ gem 'paperclip'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
+# Gems for authentication
+gem 'devise', '~> 3.0'   # Lock on version 3 until we update to Rails 4
+gem 'devise-async'       # To mails through queues
 gem 'authlogic'
 gem 'bcrypt'
 

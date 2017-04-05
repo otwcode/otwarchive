@@ -1,4 +1,4 @@
-class BookmarksController < ApplicationController 
+class BookmarksController < ApplicationController
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
@@ -7,12 +7,12 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
-  
+
   before_filter :check_pseud_ownership, :only => [:create, :update]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
-      pseud = Pseud.find(params[:bookmark][:pseud_id])
+      pseud = Pseud.find(bookmark_params[:pseud_id])
       unless pseud && current_user && current_user.pseuds.include?(pseud)
         flash[:error] = ts("You can't bookmark with that pseud.")
         redirect_to root_path and return
@@ -31,7 +31,7 @@ class BookmarksController < ApplicationController
     elsif params[:series_id]
       @bookmarkable = Series.find(params[:series_id])
     end
-  end  
+  end
 
   def load_bookmark
     @bookmark = Bookmark.find(params[:id])
@@ -43,7 +43,7 @@ class BookmarksController < ApplicationController
     @languages = Language.default_order
     options = params[:bookmark_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
-    options[:show_private] = false    
+    options[:show_private] = false
     options[:show_restricted] = current_user.present?
     @search = BookmarkSearch.new(options)
     @page_subtitle = ts("Search Bookmarks")
@@ -70,7 +70,7 @@ class BookmarksController < ApplicationController
       options[:show_private] = (@user.present? && @user == current_user)
       options[:show_restricted] = current_user.present?
 
-      options.merge!(page: params[:page])      
+      options.merge!(page: params[:page])
       @page_subtitle = index_page_title
 
       if @owner.present?
@@ -93,7 +93,7 @@ class BookmarksController < ApplicationController
       end
     end
   end
-  
+
   # GET    /:locale/bookmark/:id
   # GET    /:locale/users/:user_id/bookmarks/:id
   # GET    /:locale/works/:work_id/bookmark/:id
@@ -107,10 +107,10 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.new
     respond_to do |format|
       format.html
-      format.js { 
+      format.js {
         @button_name = ts("Create")
         @action = :create
-        render :action => "bookmark_form_dynamic" 
+        render :action => "bookmark_form_dynamic"
       }
     end
   end
@@ -120,19 +120,19 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.html
-      format.js { 
+      format.js {
         @button_name = ts("Update")
         @action = :update
-        render :action => "bookmark_form_dynamic" 
+        render :action => "bookmark_form_dynamic"
       }
-    end    
+    end
   end
 
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(params[:bookmark])
-    @bookmarkable = @bookmark.bookmarkable 
+    @bookmark = Bookmark.new(bookmark_params)
+    @bookmarkable = @bookmark.bookmarkable
     if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
@@ -153,7 +153,7 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
@@ -189,7 +189,7 @@ class BookmarksController < ApplicationController
       flash[:notice] += if unapproved_collections.size > 1
                           ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
                         else
-                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.map { |f| f.title })
+                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
                         end
     end
 
@@ -197,14 +197,14 @@ class BookmarksController < ApplicationController
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     if errors.empty?
-      if @bookmark.update_attributes(params[:bookmark])
+      if @bookmark.update_attributes(bookmark_params)
         flash[:notice] ||= ""
         flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
         flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
         redirect_to(@bookmark)
       end
     else
-      @bookmark.update_attributes(params[:bookmark])
+      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
     end
@@ -245,19 +245,19 @@ class BookmarksController < ApplicationController
   def load_owner
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
-      unless @user 
+      unless @user
         raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
       end
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
-        unless @pseud 
+        unless @pseud
           raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
         end
       end
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag 
+      unless @tag
         raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
       end
       unless @tag.canonical?
@@ -289,4 +289,16 @@ class BookmarksController < ApplicationController
     end
   end
 
+  private
+
+  def bookmark_params
+    params.require(:bookmark).permit(
+      :bookmarkable_type, :bookmarkable_id, :notes, :pseud_id, :private, :rec,
+      :tag_string, :collection_names,
+      external: [
+        :url, :author, :title, :summary, :fandom_string, :rating_string,
+        :relationship_string, :character_string, category_string: []
+      ]
+    )
+  end
 end
