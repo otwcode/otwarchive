@@ -30,13 +30,6 @@ describe ChaptersController do
   end
 
   describe "show" do
-#   let(:chapter) { create(:chapter) }
-#   let(:work) {
-#      work = Work.find(chapter.work_id)
-#      work.posted = true
-#      work.save
-#      work
-#    }
     let(:work) { create(:work, posted: true) }
     let(:chapter) { work.chapters.first }
 
