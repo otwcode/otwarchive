@@ -33,23 +33,14 @@ describe ChaptersController do
     let(:chapter) { create(:chapter) }
     let(:work) { Work.find(chapter.work_id) }
 
+    before do
+      allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return("1.1.1.1")
+    end
+
     context "when the chapter is the first chapter" do
-      context "when someone visits once" do
-        it "increases the work hit count" do
-          expect {
-            get :show, work_id: work.id, id: work.chapters.first.id
-          }.to change {REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i}.from(0).to(1)
-        end
-      end
-      
-      context "when someone visits twice in a row" do      
-        it "increases the work hit count by one" do
-        end
-      end
-        
-      context "when someone visits twice, but their visits are interrupted by another visitor" do
-        it "increases the work hit count by three" do
-        end
+      it "increases the hit count" do
+        get :show, work_id: work.id, id: work.chapters.first.id
+        expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 1
       end
     end
 
@@ -60,41 +51,26 @@ describe ChaptersController do
 
     context "when the chapter is the last chapter" do
       context "when the referrer is nil" do
-        context "when someone visits once" do
-          it "increases the work hit count by one" do
-          end
+        it "increases the work hit count" do
+          request.env["HTTP_REFERER"] = nil
+          get :show, work_id: work.id, id: work.chapters.last.id
+          expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 1
         end
+      end
 
-        context "when someone visits twice in a row" do
-          it "increases the work hit count by one" do
-          end
-        end      
-
-        context "when someone visits twice, but their visits are interrupted by another visitor" do
-          it "increases the work hit count by three" do
-          end
+      context "when the refferer contains the work path" do
+        it "does not increase the hit count" do
+          request.env["HTTP_REFERER"] = "#{work_url(work)}"
+          get :show, work_id: work.id, id: work.chapters.last.id
+          expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 0
         end
       end
 
       context "when the referrer does not contain the work path" do
-        context "when someone visits once" do
-          it "increases the work hit count by one" do
-          end
-        end
-
-        context "when someone visits twice in a row" do
-          it "increases the work hit count by one" do
-          end
-        end      
-
-        context "when someone visits twice, but their visits are interrupted by another visitor" do
-          it "increases the work hit count by three" do
-          end
-        end
-      end
-
-      context "when the referrer contains the work path" do
-        it "does not increase the hit count" do
+        it "increases the hit count" do
+          request.env["HTTP_REFERER"] = "#{root_url}"
+          get :show, work_id: work.id, id: work.chapters.last.id
+          expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 1
         end
       end
     end
