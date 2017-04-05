@@ -2,8 +2,6 @@
 # and put into the archive.
 #
 class StoryParser
-  include ActiveModel::ForbiddenAttributesProtection
-
   require 'timeout'
   require 'nokogiri'
   require 'mechanize'
