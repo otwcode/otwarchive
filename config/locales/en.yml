@@ -6,7 +6,107 @@ en:
       emails_found: 
         one: "one email found"
         other: "%{count} emails found"
-  
+
+  errors:
+    format: "%{attribute} %{message}"
+    messages: &errors_messages
+      inclusion: "is not included in the list"
+      exclusion: "is reserved"
+      invalid: "is invalid"
+      confirmation: "doesn't match confirmation"
+      accepted: "must be accepted"
+      empty: "can't be empty"
+      blank: "can't be blank" # this is a comment, can you see it in PhraseApp?
+      too_long:
+        one: "is too long (maximum is 1 character)"
+        other: "is too long (maximum is %{count} characters)"
+      too_short:
+        one: "is too short (minimum is 1 character)"
+        other: "is too short (minimum is %{count} characters)"
+      wrong_length:
+        one: "is the wrong length (should be 1 character)"
+        other: "is the wrong length (should be %{count} characters)"
+      not_a_number: "is not a number"
+      not_an_integer: "must be an integer"
+      greater_than: "must be greater than %{count}"
+      greater_than_or_equal_to: "must be greater than or equal to %{count}"
+      equal_to: "must be equal to %{count}"
+      less_than: "must be less than %{count}"
+      less_than_or_equal_to: "must be less than or equal to %{count}"
+      odd: "must be odd"
+      even: "must be even"
+      taken: "has already been taken"
+      record_invalid: "Validation failed: %{errors}"
+    template: &errors_template
+      header:
+        one: "1 error prohibited this %{model} from being saved"
+        other: "%{count} errors prohibited this %{model} from being saved"
+      body: "There were problems with the following fields:"
+
+  activerecord:
+    errors:
+      messages:
+        <<: *errors_messages
+      template:
+        <<: *errors_template
+      full_messages:
+        format: "%{attribute} %{message}"
+    models:
+      bookmark: "Bookmark"
+      category:
+        one: "Category"
+        other: "Categories"
+      chapter: "Chapter"
+      character:
+        one: "Character"
+        other: "Characters"
+      comment: "Comment"
+      fandom:
+        one: "Fandom"
+        other: "Fandoms"
+      freeform:
+        one: "Additional Tag"
+        other: "Additional Tags"
+      pseud: "Pseud"
+      rating: "Rating"
+      relationship:
+        one: "Relationship"
+        other: "Relationships"
+      tag:
+        one: "Tag"
+        other: "Tags"
+      warning:
+        one: "Warning"
+        other: "Warnings"
+      work: "Work"
+    attributes:
+      category:
+        name_with_colon:
+          one: "Category:"
+          other: "Categories:"
+      character:
+        name_with_colon:
+          one: "Character:"
+          other: "Characters:"
+      fandom:
+        name_with_colon:
+          one: "Fandom:"
+          other: "Fandoms:"
+      freeform:
+        name_with_colon:
+          one: "Additional Tag:"
+          other: "Additional Tags:"
+      rating:
+        name_with_colon: "Rating:"
+      relationship:
+        name_with_colon:
+          one: "Relationship:"
+          other: "Relationships:"
+      warning:
+        name_with_colon:
+          one: "Warning:"
+          other: "Warnings:"
+
   mailer:
     general: 
       footer: 
@@ -128,6 +228,18 @@ en:
         part1: "Please %{activate_account_link}."
         part2: "Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more."
         part3: "There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments in our %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out."
+    invitation:
+      greeting: "Hello from the %{app_name}!"
+      has_invited: "%{user_name} has invited you to join our beta!"
+      been_invited_html: "You've been invited to join our beta!"
+      part1: "The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks."
+      part2: "Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \\o/"
+      part3_html: "If you'd like to join us, please sign up at the following address:"
+      text:
+        faq_link: "For more information, please check out our FAQ at"
+      html:
+        faq_link: "For more information, please check out"
+        faq_link_text: "our FAQ"
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
