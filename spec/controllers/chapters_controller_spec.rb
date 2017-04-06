@@ -50,7 +50,7 @@ describe ChaptersController do
     context "when the chapter is neither first nor last" do
       it "does not increase the hit count" do
         expect {
-          get :show, work_id: work.id, id: last_chapter.id
+          get :show, work_id: work.id, id: middle_chapter.id
         }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
       end
     end
