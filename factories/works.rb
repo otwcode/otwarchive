@@ -22,6 +22,22 @@ FactoryGirl.define do
     factory :custom_work_skin do
       work_skin_id 1
     end
+
+    # create(:work_with_chapters) will create a work with 2 chapters by default
+    # create(:work_with_chapters, chapters_count: 3) lets you specify how many
+    # chapters the work should have
+    factory :work_with_chapters do
+      transient do
+        chapters_count 2
+      end
+
+      after(:create) do |work, evaluator|
+        # a work technically starts off with 1 chapter, so we need to make 1
+        # less than the desired total
+        chapters_to_create = evaluator.chapters_count.to_i - 1
+        create_list(:chapter, chapters_to_create, work_id: work.id, posted: true)
+      end
+    end
   end
 
   factory :external_work do

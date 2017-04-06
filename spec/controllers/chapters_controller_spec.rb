@@ -30,53 +30,56 @@ describe ChaptersController do
   end
 
   describe "show" do
-    let(:work) { create(:work, posted: true) }
-    let(:chapter) { work.chapters.first }
+    let(:work) { create(:work_with_chapters, chapters_count: 3, posted: true) }
+    let(:first_chapter) { work.first_chapter }
+    let(:middle_chapter) { work.chapters_in_order[1] }
+    let(:last_chapter) { work.last_chapter }
+
+    before(:each) do
+      clean_the_database
+    end
 
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
-        clean_the_database
-        allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return("1.1.1.1")
         expect {
-          get :show, work_id: work.id, id: work.chapters.first.id
-        }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.from(0).to(1)
+          get :show, work_id: work.id, id: first_chapter.id
+        }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
       end
     end
 
     context "when the chapter is neither first nor last" do
       it "does not increase the hit count" do
+        get :show, work_id: work.id, id: middle_chapter.id
+        expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 0
       end
     end
 
     context "when the chapter is the last chapter" do
       context "when the referrer is nil" do
         it "increases the work hit count" do
-          clean_the_database
-          allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return("1.1.1.1")
           request.env["HTTP_REFERER"] = nil
-          get :show, work_id: work.id, id: work.chapters.last.id
-          expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 1
+          expect {
+            get :show, work_id: work.id, id: last_chapter.id
+          }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
         end
       end
 
-      context "when the refferer contains the work path" do
+      context "when the referrer contains the work path" do
         it "does not increase the hit count" do
           request.env["HTTP_REFERER"] = work_url(work)
-          get :show, work_id: work.id, id: work.chapters.last.id
+          expect {
+            get :show, work_id: work.id, id: last_chapter.id
+          }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
           expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 0
         end
       end
 
       context "when the referrer does not contain the work path" do
-        before(:each) do
-          clean_the_database
-          allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return("1.1.1.1")
-        end
-
         it "increases the hit count" do
           request.env["HTTP_REFERER"] = root_url
-          get :show, work_id: work.id, id: work.chapters.last.id
-          expect(REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i).to eq 1
+          expect {
+            get :show, work_id: work.id, id: last_chapter.id
+          }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
         end
       end
     end
