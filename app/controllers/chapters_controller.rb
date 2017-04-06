@@ -275,7 +275,7 @@ class ChaptersController < ApplicationController
         @chapter.attributes = chapter_params
       end
     elsif params[:chapter] # create
-      @chapter = @work.chapters.build(params[:chapter])
+      @chapter = @work.chapters.build(chapter_params)
     else # new
       @chapter = @work.chapters.build(:position => @work.number_of_chapters + 1)
     end
@@ -307,7 +307,7 @@ class ChaptersController < ApplicationController
   def chapter_params
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
-                                    :notes, :endnotes, :content,
+                                    :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: []])
 
   end
