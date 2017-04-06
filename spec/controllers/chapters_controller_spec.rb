@@ -35,9 +35,9 @@ describe ChaptersController do
     let(:middle_chapter) { work.chapters_in_order[1] }
     let(:last_chapter) { work.last_chapter }
 
-    before(:each) do
-      clean_the_database
-    end
+    # before(:each) do
+      # clean_the_database
+    # end
 
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
