@@ -35,10 +35,6 @@ describe ChaptersController do
     let(:middle_chapter) { work.chapters_in_order[1] }
     let(:last_chapter) { work.last_chapter }
 
-    # before(:each) do
-      # clean_the_database
-    # end
-
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
         expect {
@@ -66,11 +62,40 @@ describe ChaptersController do
       end
 
       context "when the referrer contains the work path" do
-        it "does not increase the hit count" do
-          request.env["HTTP_REFERER"] = work_url(work)
-          expect {
-            get :show, work_id: work.id, id: last_chapter.id
-          }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+        context "with an exact match on the work id" do
+          it "does not increase the hit count" do
+            request.env["HTTP_REFERER"] = work_url(work)
+            expect {
+              get :show, work_id: work.id, id: last_chapter.id
+            }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+          end
+
+          context "with an additional path" do
+            it "does not increase the hit count" do
+              request.env["HTTP_REFERER"] = work_kudos_url(work)
+              expect {
+                get :show, work_id: work.id, id: last_chapter.id
+              }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+            end
+          end
+
+          context "with parameters" do
+            it "does not increase the hit count" do
+              request.env["HTTP_REFERER"] = work_url(work) + "?view_adult=true"
+              expect {
+                get :show, work_id: work.id, id: last_chapter.id
+              }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+            end
+          end
+        end
+
+        context "with an inexact match on the work id" do
+          it "increases the hit count" do
+            request.env["HTTP_REFERER"] = work_url(work) + "00"
+            expect {
+              get :show, work_id: work.id, id: last_chapter.id
+            }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+          end
         end
       end
 

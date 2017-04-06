@@ -76,7 +76,7 @@ class ChaptersController < ApplicationController
       # you followed the recent chapter link or came from a subscription email).
       if chapter_position == 0 || chapter_position == (@work.number_of_posted_chapters - 1) &&
                                   (request.referer.nil? ||
-                                  !request.referer.match(/#{work_path(@work)}/))
+                                  !request.referer.match(/#{work_path(@work)}\b/))
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
