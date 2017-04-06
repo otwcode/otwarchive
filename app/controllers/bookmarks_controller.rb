@@ -293,12 +293,13 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_type, :bookmarkable_id, :notes, :pseud_id, :private, :rec,
-      :tag_string, :collection_names,
+      :bookmarkable_id, :bookmarkable_type,
+      :pseud_id, :notes, :tag_string, :collection_names, :private, :rec,
       external: [
-        :url, :author, :title, :summary, :fandom_string, :rating_string,
-        :relationship_string, :character_string, category_string: []
+        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+        :character_string, :summary, category_string: []
       ]
     )
   end
+
 end

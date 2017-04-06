@@ -249,7 +249,9 @@ class TagsController < ApplicationController
       @tag = @tag.recategorize(new_tag_type)
     end
 
-    @tag.attributes = tag_params
+    unless params[:tag].empty?
+      @tag.attributes = tag_params
+    end
 
     @tag.syn_string = syn_string if @tag.save
 
