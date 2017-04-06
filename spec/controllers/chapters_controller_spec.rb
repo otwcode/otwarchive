@@ -5,12 +5,12 @@ describe ChaptersController do
   include RedirectExpectationHelper
 
   before do
-    @user = FactoryGirl.create(:user)
-    @work = FactoryGirl.create(:work, posted: true, authors: [@user.pseuds.first])
+    @user = create(:user)
+    @work = create(:work, posted: true, authors: [@user.pseuds.first])
   end
 
   describe "index" do
-    it "should redirect to work" do
+    it "redirects to work" do
       get :index, work_id: @work.id
       it_redirects_to work_path(@work.id)
     end
@@ -18,7 +18,7 @@ describe ChaptersController do
 
   describe "manage" do
     context "when user is logged out" do
-      it "should error and redirect to login" do
+      it "errors and redirects to login" do
         get :manage, work_id: @work.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -29,31 +29,31 @@ describe ChaptersController do
         fake_login_known_user(@user)
       end
 
-      it "should error and redirect to root path if work does not exist" do
+      it "errors and redirects to root path if work does not exist" do
         get :manage, work_id: nil
         it_redirects_to_with_error(root_path, "Sorry, we couldn't find the work you were looking for.")
       end
 
-      it "should render manage template" do
+      it "renders manage template" do
         get :manage, work_id: @work.id
         expect(response).to render_template(:manage)
       end
 
-      it "should assign @chapters to only posted chapters" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, posted: false)
+      it "assigns @chapters to only posted chapters" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, posted: false)
         get :manage, work_id: @work.id
         expect(assigns[:chapters]).to eq([@work.chapters.first])
       end
 
-      it "should assign @chapters to chapters in order" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+      it "assigns @chapters to chapters in order" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
         get :manage, work_id: @work.id
         expect(assigns[:chapters]).to eq([@work.chapters.first, @chapter])
       end
     end
 
     context "when other user is logged in" do
-      it "should error and redirect to work" do
+      it "errors and redirects to work" do
         fake_login
         get :manage, work_id: @work.id
         it_redirects_to_with_error(work_path(@work.id), "Sorry, you don't have permission to access the page you were trying to reach.")
@@ -63,25 +63,25 @@ describe ChaptersController do
 
   describe "show" do
     context "when user is logged out" do
-      it "should render show template" do
+      it "renders show template" do
         get :show, work_id: @work.id, id: @work.chapters.first
         expect(response).to render_template(:show)
       end
 
-      it "should error and redirect to login when work is restricted" do
-        @restricted_work = FactoryGirl.create(:work, posted: true, restricted: true)
+      it "errors and redirects to login when work is restricted" do
+        @restricted_work = create(:work, posted: true, restricted: true)
         get :show, work_id: @restricted_work.id, id: @restricted_work.chapters.first
         it_redirects_to(login_path(restricted: true))
       end
 
-      it "should assign @chapters to only posted chapters" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, posted: false)
+      it "assigns @chapters to only posted chapters" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, posted: false)
         get :show, work_id: @work.id, id: @chapter.id
         expect(assigns[:chapters]).to eq([@work.chapters.first])
       end
 
-      it "should error and redirect to login when trying to view unposted chapter" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, posted: false)
+      it "errors and redirects to login when trying to view unposted chapter" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, posted: false)
         get :show, work_id: @work.id, id: @chapter.id
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
@@ -94,17 +94,17 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:adult?).and_return true
       end
 
-      it "should store adult preference in sessions when given" do
+      it "stores adult preference in sessions when given" do
         get :show, work_id: @work.id, id: @work.chapters.first, view_adult: true
         expect(session[:adult]).to be true
       end
 
-      it "should render _adults template if work is adult and adult permission has not been given" do
+      it "renders _adults template if work is adult and adult permission has not been given" do
         get :show, work_id: @work.id, id: @work.chapters.first
         expect(response).to render_template("works/_adult")
       end
 
-      it "should not render _adults template if work is adult and adult permission has been given" do
+      it "does not render _adults template if work is adult and adult permission has been given" do
         get :show, work_id: @work.id, id: @work.chapters.first, view_adult: true
         expect(response).not_to render_template("works/_adult")
       end
@@ -112,96 +112,96 @@ describe ChaptersController do
 
     context "when work is not adult" do
       render_views
-      it "should not render _adults template if work is not adult" do
+      it "does not render _adults template if work is not adult" do
         get :show, work_id: @work.id, id: @work.chapters.first
         expect(response).not_to render_template("works/_adult")
       end
     end
 
-    it "should redirect to chapter with selected_id" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "redirects to chapter with selected_id" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @work.chapters.first, selected_id: @chapter.id
       it_redirects_to work_chapter_path(work_id: @work.id, id: @chapter.id)
     end
 
-    it "should error and redirect to work if chapter is not found" do
-      @chapter = FactoryGirl.create(:chapter)
+    it "errors and redirects to work if chapter is not found" do
+      @chapter = create(:chapter)
       get :show, work_id: @work.id, id: @chapter.id
       it_redirects_to_with_error(work_path(@work), "Sorry, we couldn't find the chapter you were looking for.")
     end
 
-    it "should assign @chapters to chapters in order" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "assigns @chapters to chapters in order" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @chapter.id
       expect(assigns[:chapters]).to eq([@work.chapters.first, @chapter])
     end
 
-    it "should assign @previous_chapter when not on first chapter" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "assigns @previous_chapter when not on first chapter" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @chapter.id
       expect(assigns[:previous_chapter]).to eq(@work.chapters.first)
     end
 
-    it "should not assign @previous_chapter when on first chapter" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "does not assign @previous_chapter when on first chapter" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:previous_chapter]).to be_nil
     end
 
-    it "should assign @next_chapter when not on last chapter" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "assigns @next_chapter when not on last chapter" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:next_chapter]).to eq(@chapter)
     end
 
-    it "should not assign @next_chapter when on last chapter" do
-      @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+    it "does not assign @next_chapter when on last chapter" do
+      @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
       get :show, work_id: @work.id, id: @chapter.id
       expect(assigns[:next_chapter]).to be_nil
     end
 
-    it "should assign @comments to only reviewed comments" do
-      @moderated_work = FactoryGirl.create(:work, posted: true, moderated_commenting_enabled: true)
-      @comment = FactoryGirl.create(:comment, commentable_type: "Chapter", commentable_id: @moderated_work.chapters.first.id)
+    it "assigns @comments to only reviewed comments" do
+      @moderated_work = create(:work, posted: true, moderated_commenting_enabled: true)
+      @comment = create(:comment, commentable_type: "Chapter", commentable_id: @moderated_work.chapters.first.id)
       @comment.unreviewed = false
       @comment.save
-      @unreviewed_comment = FactoryGirl.create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: @moderated_work.chapters.first.id)
+      @unreviewed_comment = create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: @moderated_work.chapters.first.id)
       get :show, work_id: @moderated_work.id, id: @moderated_work.chapters.first.id
       expect(assigns[:comments]).to eq [@comment]
     end
 
-    it "should assign @page_title with fandom, author name, work title, and chapter" do
+    it "assigns @page_title with fandom, author name, work title, and chapter" do
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", @user.pseuds.first.name, "My title is long enough - Chapter 1").and_return("page title")
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:page_title]).to eq("page title")
     end
 
-    it "should assign @page_title with unrevealed work" do
+    it "assigns @page_title with unrevealed work" do
       allow_any_instance_of(Work).to receive(:unrevealed?).and_return(true)
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:page_title]).to eq("Mystery Work - Chapter 1")
     end
 
-    it "should assign @page_title with anonymous work" do
+    it "assigns @page_title with anonymous work" do
       allow_any_instance_of(Work).to receive(:anonymous?).and_return(true)
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", "Anonymous", "My title is long enough - Chapter 1").and_return("page title")
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:page_title]).to eq("page title")
     end
 
-    it "should assign @kudos to non-anonymous kudos" do
-      @kudo = FactoryGirl.create(:kudo, commentable_id: @work.id, pseud: FactoryGirl.create(:pseud))
-      @anonymous_kudo = FactoryGirl.create(:kudo, commentable: @work)
+    it "assigns @kudos to non-anonymous kudos" do
+      @kudo = create(:kudo, commentable_id: @work.id, pseud: create(:pseud))
+      @anonymous_kudo = create(:kudo, commentable: @work)
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:kudos]).to eq [@kudo]
     end
 
-    it "should assign instance variables correctly" do
-      @second_chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
-      @third_chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 3, posted: true)
-      @comment = FactoryGirl.create(:comment, commentable_type: "Chapter", commentable_id: @second_chapter.id)
-      @kudo = FactoryGirl.create(:kudo, commentable_id: @work.id, pseud: FactoryGirl.create(:pseud))
-      @tag = FactoryGirl.create(:fandom)
+    it "assigns instance variables correctly" do
+      @second_chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: true)
+      @third_chapter = create(:chapter, work: @work, authors: @work.authors, position: 3, posted: true)
+      @comment = create(:comment, commentable_type: "Chapter", commentable_id: @second_chapter.id)
+      @kudo = create(:kudo, commentable_id: @work.id, pseud: create(:pseud))
+      @tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return({"Fandom" => [@tag]})
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", @user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
       get :show, re: @work.id, id: @second_chapter.id
@@ -218,11 +218,11 @@ describe ChaptersController do
       expect(assigns[:subscription]).to be_nil
     end
 
-    it "should increment the hit count when accessing the first chapter" do
-      allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return("0.0.0.1")
+    it "increments the hit count when accessing the first chapter" do
+      clean_the_database
       expect {
         get :show, work_id: @work.id, id: @work.chapters.first.id
-      }.to change {REDIS_GENERAL.get("work_stats:#{@work.id}:hit_count").to_i}.from(0).to(1)
+      }.to change { REDIS_GENERAL.get("work_stats:#{@work.id}:hit_count").to_i }.from(0).to(1)
     end
 
     context "when work owner is logged in" do
@@ -230,8 +230,8 @@ describe ChaptersController do
         fake_login_known_user @user
       end
 
-      it "should assign @chapters to all chapters" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, position: 2, posted: false)
+      it "assigns @chapters to all chapters" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, position: 2, posted: false)
         get :show, work_id: @work.id, id: @chapter.id
         expect(assigns[:chapters]).to eq([@work.chapters.first, @chapter])
       end
@@ -242,24 +242,24 @@ describe ChaptersController do
         fake_login
       end
 
-      it "should assign @chapters to only posted chapters" do
-        @chapter = FactoryGirl.create(:chapter, work: @work, authors: @work.authors, posted: false)
+      it "assigns @chapters to only posted chapters" do
+        @chapter = create(:chapter, work: @work, authors: @work.authors, posted: false)
         get :show, work_id: @work.id, id: @chapter.id
         expect(assigns[:chapters]).to eq([@work.chapters.first])
       end
 
-      it "should assign @subscription to user's subscription when user is subscribed to work" do
-        @subscription = FactoryGirl.create(:subscription, subscribable: @work, user: @current_user)
+      it "assigns @subscription to user's subscription when user is subscribed to work" do
+        @subscription = create(:subscription, subscribable: @work, user: @current_user)
         get :show, work_id: @work, id: @work.chapters.first.id
         expect(assigns[:subscription]).to eq(@subscription)
       end
 
-      it "should assign @subscription to unsaved subscription when user is not subscribed to work" do
+      it "assigns @subscription to unsaved subscription when user is not subscribed to work" do
         get :show, work_id: @work, id: @work.chapters.first.id
         expect(assigns[:subscription]).to be_new_record
       end
 
-      it "should update the reading history" do
+      it "updates the reading history" do
         expect(Reading).to receive(:update_or_create).with(@work, @current_user)
         get :show, work_id: @work.id, id: @work.chapters.first.id
       end
@@ -272,15 +272,15 @@ describe ChaptersController do
       @chapter_attributes = { content: "This doesn't matter" }
     end
     
-    it "should add a new chapter" do
+    it "adds a new chapter" do
       expect {
         post :create, { work_id: @work.id, chapter: @chapter_attributes }
       }.to change(Chapter, :count)
       expect(@work.chapters.count).to eq 2
     end
     
-    it "should not allow a user to submit only a pseud that is not theirs" do
-      @user2 = FactoryGirl.create(:user)
+    it "does not allow a user to submit only a pseud that is not theirs" do
+      @user2 = create(:user)
       @chapter_attributes[:author_attributes] = {:ids => [@user2.pseuds.first.id]}
       expect {
         post :create, { work_id: @work.id, chapter: @chapter_attributes }
