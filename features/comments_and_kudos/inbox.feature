@@ -98,7 +98,7 @@ Feature: Get messages in the inbox
   Scenario: A user can reply to a comment from the home page without JavaScript
     Given I am logged in as "sewwiththeflo"
       And I post the work "Cat Thor's Bizarre Adventure"
-    When I am logged in as "unbeatablesg"
+      And I am logged in as "unbeatablesg"
       And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
     When I am logged in as "sewwiththeflo"
       And I go to the homepage
@@ -118,7 +118,7 @@ Feature: Get messages in the inbox
   Scenario: A user can reply to a comment from the home page
     Given I am logged in as "sewwiththeflo"
       And I post the work "Cat Thor's Bizarre Adventure"
-    When I am logged in as "unbeatablesg"
+      And I am logged in as "unbeatablesg"
       And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
     When I am logged in as "sewwiththeflo"
       And I go to the homepage
