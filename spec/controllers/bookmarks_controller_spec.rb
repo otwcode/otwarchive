@@ -10,7 +10,11 @@ describe BookmarksController do
 
   describe "new" do
     context "without javascript" do
-      it "redirects anyone not logged in" do
+      let(:chapteredwork) { create(:work) }
+      let(:chapter2) { create(:chapter, work: chapteredwork) }
+      let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+
+      it "redirects and should not return the form for anyone not logged in" do
         get :new
         it_redirects_to_user_login
       end
@@ -20,20 +24,38 @@ describe BookmarksController do
         get :new
         expect(response).to render_template("new")
       end
+
+      it "with chapter" do
+        fake_login
+        get :new, params: { chapter_id: chapter2.id}
+        expect(response).to render_template('new')
+        expect(assigns(:bookmarkable)).to eq(chapteredwork)
+      end
     end
 
     context "with javascript" do
+      let(:chapteredwork) { create(:work) }
+      let(:chapter2) { create(:chapter, work: chapteredwork) }
+      let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+
       it "renders the bookmark_form_dynamic form if logged in" do
         fake_login
         get :new, params: { format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
+      end
+
+      it "with chapter" do
+        fake_login
+        get :new, params: { chapter_id: chapter2.id, format: :js }, xhr: true
+        expect(response).to render_template("bookmark_form_dynamic")
+        expect(assigns(:bookmarkable)).to eq(chapteredwork)
       end
     end
   end
 
   describe "edit" do
     context "with javascript" do
-      let(:bookmark) { FactoryBot.create(:bookmark) }
+      let(:bookmark) { create(:bookmark) }
 
       it "renders the bookmark_form_dynamic form if logged in" do
         fake_login_known_user(bookmark.pseud.user)
@@ -186,6 +208,21 @@ describe BookmarksController do
         expect(assigns(:bookmarks)).to include(work_bookmark)
         expect(assigns(:bookmarks)).not_to include(work_bookmark2)
       end
+    end
+  end
+
+  describe "show" do
+    let(:chapteredwork) { create(:work) }
+    let(:chapter2) { create(:chapter, work: chapteredwork) }
+    let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+    render_views
+
+    it "should find a work from a bookmark" do
+      fake_login_known_user(bookmark.pseud.user)
+      get :show, params: { id: bookmark }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(chapteredwork.title)
+      expect(assigns(:bookmark)).to eq(bookmark)
     end
   end
 end

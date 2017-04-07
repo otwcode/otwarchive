@@ -3,6 +3,7 @@ require 'faker'
 FactoryBot.define do
   factory :chapter do
     content { "Awesome content!" }
+	title { "Cool chapter title" }
     work
 
     transient do
