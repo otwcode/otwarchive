@@ -260,4 +260,41 @@ describe BookmarksController do
       end
     end
   end
+
+  describe "fetch recent" do
+    # need several bookmarks on the same work
+    let(:work) { create(:work) }
+    let(:bookmark1) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "Extra 1") }
+    let!(:bookmark2) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "Different") }
+    let!(:bookmark3) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "I think this is great") }
+    render_views
+
+    it "shows 4 most recent bookmarks in js" do
+      get :fetch_recent, params: { id: bookmark1, format: "js" }, xhr: true
+      expect(response).to have_http_status(:success)
+      expect(assigns(:bookmark)).to eq(bookmark1)
+      expect(assigns(:bookmarkable)).to eq(work)
+      expect(assigns(:bookmarks)).to eq([bookmark3, bookmark2])
+    end
+
+    it "redirects to work on non-js" do
+      get :fetch_recent, params: { id: bookmark1 }
+      it_redirects_to(work_bookmarks_path(work))
+    end
+  end
+
+  describe "show" do
+    let(:chapteredwork) { create(:work) }
+    let(:chapter2) { create(:chapter, work: chapteredwork) }
+    let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+    render_views
+
+    it "should find a work from a bookmark" do
+      fake_login_known_user(bookmark.pseud.user)
+      get :show, params: { id: bookmark }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(chapteredwork.title)
+      expect(assigns(:bookmark)).to eq(bookmark)
+    end
+  end
 end
