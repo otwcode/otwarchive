@@ -136,6 +136,9 @@ class Bookmark < ActiveRecord::Base
   end
 
   def tag_string=(tag_string)
+    # Make sure that we trigger the callback for our taggings.
+    self.taggings.destroy_all
+
     self.tags = []
 
     # Replace unicode full-width commas
