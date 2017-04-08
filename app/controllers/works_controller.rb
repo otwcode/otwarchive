@@ -72,7 +72,7 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    options = params[:work_search] || {}
+    options = params[:work_search].present? ? work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearch.new(options)
@@ -90,11 +90,7 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = if params[:work_search].present?
-                params[:work_search].dup
-              else
-                {}
-              end
+    options = params[:work_search].present? ? work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -158,12 +154,7 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = if params[:work_search].present?
-                params[:work_search].dup
-              else
-                {}
-              end
-
+    options = params[:work_search].present? ? work_search_params : {}
     options[:page] = params[:page]
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
@@ -1086,6 +1077,41 @@ class WorksController < ApplicationController
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content
       ],
+    )
+  end
+
+  def work_search_params
+    params.require(:work_search).permit(
+      :query,
+      :title,
+      :creator,
+      :revised_at,
+      :complete,
+      :single_chapter,
+      :word_count,
+      :language_id,
+      :fandom_names,
+      :rating_ids,
+      :character_names,
+      :relationship_names,
+      :freeform_names,
+      :hits,
+      :kudos_count,
+      :comments_count,
+      :bookmarks_count,
+      :sort_column,
+      :sort_direction,
+      :other_tag_names,
+
+      warning_ids: [],
+      category_ids: [],
+      rating_ids: [],
+      fandom_ids: [],
+      character_ids: [],
+      relationship_ids: [],
+      freeform_ids: [],
+
+      collection_ids: []
     )
   end
 end
