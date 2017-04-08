@@ -41,7 +41,7 @@ class BookmarksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    options = params[:bookmark_search] || {}
+    options = params[:bookmark_search].present? ? bookmark_search_params : {}
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false
     options[:show_restricted] = current_user.present?
@@ -61,12 +61,7 @@ class BookmarksController < ApplicationController
       access_denied unless is_admin? || @bookmarkable.visible
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
     else
-      if params[:bookmark_search].present?
-        options = params[:bookmark_search].dup
-      else
-        options = {}
-      end
-
+      options = params[:bookmark_search].present? ? bookmark_search_params : {}
       options[:show_private] = (@user.present? && @user == current_user)
       options[:show_restricted] = current_user.present?
 
@@ -302,4 +297,27 @@ class BookmarksController < ApplicationController
     )
   end
 
+  def bookmark_search_params
+    params.require(:bookmark_search).permit(
+      :query,
+      :bookmarker,
+      :notes,
+      :tag,
+      :rec,
+      :with_notes,
+      :bookmarkable_type,
+      :date,
+      :bookmarkable_date,
+      :sort_column,
+      :other_tag_names,
+      rating_ids: [],
+      warning_ids: [],
+      category_ids: [],
+      fandom_ids: [],
+      character_ids: [],
+      relationship_ids: [],
+      freeform_ids: [],
+      tag_ids: []
+    )
+  end
 end
