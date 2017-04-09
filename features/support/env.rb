@@ -7,6 +7,7 @@
 # This file has been edited by hand :(
 require 'simplecov'
 require 'coveralls'
+require 'cucumber/timecop'
 require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
 Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
