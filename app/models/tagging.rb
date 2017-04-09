@@ -6,7 +6,7 @@ class Tagging < ActiveRecord::Base
   before_destroy :remove_filter_tagging
   before_save :add_filter_taggings
 
-  # Tell the tag that the taggings count may have been updated.
+  # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
   after_destroy :update_taggings_count
 
@@ -32,8 +32,13 @@ class Tagging < ActiveRecord::Base
     Tagging.find_by_tagger_id_and_taggable_id_and_tagger_type_and_taggable_type(tag.id, taggable.id, 'Tag', taggable.class.name)
   end
 
-  # Tell the tag that the taggings count may have been updated, and the
-  # taggings count should be loaded into the cache if it isn't already.
+  # Most of the time, we don't need the taggings_count_cache stored in the
+  # database to be perfectly accurate. But because of the way Tag.in_use is
+  # defined and used, the difference between a value of 0 and a value of 1 is
+  # important. So we make sure to poke the taggings_count cache every time we
+  # create or destroy a tagging. If it's a large tag, it'll fall back on the
+  # cached value. If it's a small tag, it'll recompute -- and make sure that it
+  # handles the transition from 0 uses to 1 use properly.
   def update_taggings_count
     tagger.update_tag_cache unless tagger.blank? || tagger.destroyed?
   end
