@@ -11,7 +11,7 @@ class KudosController < ApplicationController
   end
 
   def create
-    @kudo = Kudo.new(params[:kudo])
+    @kudo = Kudo.new(kudo_params)
     if current_user.present?
       @kudo.pseud = current_user.default_pseud
     else
@@ -56,5 +56,11 @@ class KudosController < ApplicationController
         end
       end
     end
+  end
+
+  private
+
+  def kudo_params
+    params.require(:kudo).permit(:commentable_id, :commentable_type)
   end
 end
