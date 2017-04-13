@@ -127,7 +127,7 @@ class Pseud < ActiveRecord::Base
     where("user_id != ?", User.orphan_account)
   end
 
-  def reset_author_sorting
+  def update_author_sorting
     works.each do |work|
       work.set_author_sorting
       work.save!

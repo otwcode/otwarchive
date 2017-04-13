@@ -183,8 +183,10 @@ class User < ActiveRecord::Base
   after_update :expire_caches
 
   def expire_caches
-    if login_changed?
-      self.works.each{ |work| work.expire_caches }
+    return unless login_changed?
+    self.works.each do |work|
+      work.touch
+      work.expire_caches
     end
   end
 
@@ -545,22 +547,22 @@ class User < ActiveRecord::Base
 
   def update_pseud_name
     return unless login_changed? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
+    old_pseud = pseuds.where(name: login_was).first
     if login.downcase == login_was.downcase
       old_pseud.name = login
       old_pseud.save!
-      old_pseud.reset_author_sorting
+      old_pseud.update_author_sorting
     else
-      new_pseud = self.pseuds.where(name: login).first
+      new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
       return if new_pseud.present?
       if old_pseud.present?
         # change the old pseud to match
         old_pseud.update_attribute(:name, login)
-        old_pseud.reset_author_sorting
+        old_pseud.update_author_sorting
       else
         # shouldn't be able to get here, but just in case
-        Pseud.create(name: login, user_id: self.id)
+        Pseud.create(name: login, user_id: id)
       end
     end
   end
