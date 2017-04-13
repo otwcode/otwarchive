@@ -56,11 +56,12 @@ Feature: Tag wrangling
       And I fill in "content" with "That could be an amusing crossover."
       And I press "Preview"
       And I press "Post"
+      And The periodic tag count task is run
       Then I should see "Work was successfully posted."
     
     # mass wrangling
     When I flush the wrangling sidebar caches
-    When I follow "Tag Wrangling" within "#header"
+      And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
       And I should see "Fandoms by media (3)"
