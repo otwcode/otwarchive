@@ -176,6 +176,10 @@ end
 
 ### WHEN
 
+When /^the periodic tag count task is run$/i do
+  Tag.write_redis_to_database
+end
+
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   check("canonicals_#{tag.id}")

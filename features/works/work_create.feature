@@ -263,3 +263,21 @@ Feature: Create Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Author Chose Not To Use Archive Warnings"
       And I should see "It wasn't my fault, you know."
+
+  Scenario: Users can co-create a work with a co-creator who has multiple pseuds
+    Given basic tags
+      And "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "All Hell Breaks Loose"
+      And I check "co-authors-options-show"
+      And I fill in "pseud_byline" with "Me"
+      And I press "Post Without Preview"
+   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
+      And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+   Then I should see "Draft was successfully created."
+      And I press "Post"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Me (myself), testuser"

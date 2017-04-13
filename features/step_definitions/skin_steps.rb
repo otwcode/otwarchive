@@ -43,7 +43,7 @@ end
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
-  attach_file("skin_icon", "test/fixtures/skin_test_preview.png")
+  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
   check("skin_public")
   step %{I submit}
   step %{I should see "Skin was successfully created"}

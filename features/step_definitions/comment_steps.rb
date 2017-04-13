@@ -45,7 +45,7 @@ end
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
+  visit work_path(work)
   fill_in("comment[content]", with: comment_text)
 end
 

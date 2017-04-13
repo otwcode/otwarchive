@@ -1,5 +1,6 @@
 include UrlHelpers
 class ExternalWork < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   include Taggable
   include Bookmarkable
 
@@ -54,7 +55,7 @@ class ExternalWork < ActiveRecord::Base
   scope :visible_to_registered_user, where(hidden_by_admin: false)
   scope :visible_to_admin, where("")
 
-  # a complicated dynamic scope here: 
+  # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
   # if the user is not a logged-in User, we use the "visible_to_all" scope
   # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
@@ -90,7 +91,7 @@ class ExternalWork < ActiveRecord::Base
     unless filters_to_remove.empty?
       filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
     end
-    return true    
+    return true
   end
 
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
@@ -98,7 +99,7 @@ class ExternalWork < ActiveRecord::Base
     filter = tag.canonical? ? tag : tag.merger
     if filter && !self.filters.include?(filter)
       self.filters << filter
-      filter.reset_filter_count 
+      filter.reset_filter_count
     end
   end
 
@@ -108,7 +109,7 @@ class ExternalWork < ActiveRecord::Base
     if filter && (self.tags & tag.synonyms).empty? && self.filters.include?(filter)
       self.filters.delete(filter)
       filter.reset_filter_count
-    end  
+    end
   end
 
   def tag_groups
@@ -125,7 +126,7 @@ class ExternalWork < ActiveRecord::Base
       only: [
         :title, :summary, :hidden_by_admin, :created_at, :language_id
       ],
-      methods: [ 
+      methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at

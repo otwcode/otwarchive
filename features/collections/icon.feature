@@ -4,7 +4,7 @@ Feature: User icons
   Scenario: Users should be able to upload icons
 
   Given I am editing a pseud
-  When I attach the file "test/fixtures/icon.gif" to "icon"
+  When I attach the file "features/fixtures/icon.gif" to "icon"
     And I press "Update"
   Then I should see "Pseud was successfully updated"
     And I should see the image "alt" text ""
