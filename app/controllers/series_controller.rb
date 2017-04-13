@@ -1,18 +1,18 @@
-class SeriesController < ApplicationController 
+class SeriesController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy, :confirm_delete ] 
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ] 
+  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_filter :check_visibility, :only => [:show]
-  
+
   def load_series
     @series = Series.find_by_id(params[:id])
-    unless @series 
+    unless @series
       raise ActiveRecord::RecordNotFound, "Couldn't find series '#{params[:id]}'"
     end
     @check_ownership_of = @series
     @check_visibility_of = @series
   end
-  
+
   # GET /series
   # GET /series.xml
   def index
@@ -69,7 +69,7 @@ class SeriesController < ApplicationController
     @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
     to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-    
+
     if params["remove"] == "me"
       pseuds_with_author_removed = @series.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty?
@@ -81,21 +81,21 @@ class SeriesController < ApplicationController
           redirect_to @series
         rescue Exception => error
           flash[:error] = error.message
-          redirect_to @series        
+          redirect_to @series
         end
       end
-    end    
+    end
   end
-  
+
   # GET /series/1/manage
   def manage
-    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position)    
+    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position)
   end
 
   # POST /series
   # POST /series.xml
   def create
-    @series = Series.new(params[:series])
+    @series = Series.new(series_params)
     if @series.save
       flash[:notice] = ts('Series was successfully created.')
       redirect_to(@series)
@@ -111,16 +111,17 @@ class SeriesController < ApplicationController
       flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
-    
+
     if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && params[:series][:author_attributes]
       valid_pseuds = Pseud.parse_bylines(params[:pseud][:byline])[:pseuds] # an array
       valid_pseuds.each do |valid_pseud|
-        params[:series][:author_attributes][:ids] << valid_pseud.id rescue nil
+        existing_ids = series_params[:author_attributes][:ids]
+        params[:series][:author_attributes][:ids] = existing_ids.push(valid_pseud.id) rescue nil
       end
       params[:pseud][:byline] = ""
     end
 
-    if @series.update_attributes(params[:series])
+    if @series.update_attributes(series_params)
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
@@ -131,7 +132,7 @@ class SeriesController < ApplicationController
       render :action => "edit"
     end
   end
-  
+
   def update_positions
     if params[:serial_works]
       @series = Series.find(params[:id])
@@ -152,7 +153,7 @@ class SeriesController < ApplicationController
   # GET /series/1/confirm_delete
   def confirm_delete
   end
-  
+
   # DELETE /series/1
   # DELETE /series/1.xml
   def destroy
@@ -163,5 +164,17 @@ class SeriesController < ApplicationController
       flash[:error] = ts("Sorry, we couldn't delete the series. Please try again.")
       redirect_to(@series)
     end
+  end
+
+  private
+
+  def series_params
+    params.require(:series).permit(
+      :title, :summary, :notes, :complete,
+      author_attributes: [
+        ids: [],
+        coauthors: []
+      ]
+    )
   end
 end

@@ -1,4 +1,6 @@
 class PromptMeme < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   PROMPT_TYPES = %w(requests)
   include ChallengeCore
 
@@ -30,7 +32,7 @@ class PromptMeme < ActiveRecord::Base
   end
 
   before_validation :update_allowed_values, :update_allowed_prompts
-  
+
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
 

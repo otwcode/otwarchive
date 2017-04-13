@@ -8,16 +8,35 @@ FactoryGirl.define do
     "The #{n} Tag"
   end
 
+  factory :common_tagging do
+    association :common_tag, factory: :relationship
+    association :filterable, factory: :fandom
+  end
+
+  factory :tag_set do
+    tags { [create(:fandom)] }
+  end
+
   factory :owned_tag_set do
     title { generate(:tag_title) }
     nominated true
-
-    after(:build) do |owned_tag_set|
-      owned_tag_set.build_tag_set
-      owned_tag_set.add_owner(FactoryGirl.create(:pseud))
-      owned_tag_set.fandom_nomination_limit = 2
-      owned_tag_set.tags << FactoryGirl.create(:fandom)
+    transient do
+      owned_set_taggings { [create(:owned_set_tagging)] }
+      owner { create(:pseud) }
+      tags { [create(:fandom)] }
     end
+
+    after(:build) do |owned_tag_set, evaluator|
+      owned_tag_set.build_tag_set
+      owned_tag_set.add_owner(evaluator.owner)
+      owned_tag_set.fandom_nomination_limit = 2
+      owned_tag_set.owned_set_taggings << evaluator.owned_set_taggings
+      owned_tag_set.tags << evaluator.tags
+    end
+  end
+
+  factory :owned_set_tagging do
+    set_taggable { create(:prompt_restriction) }
   end
 
   factory :tag_set_nomination do
@@ -53,6 +72,7 @@ FactoryGirl.define do
   factory :character do
     canonical true
     sequence(:name) { |n| "Character #{n}" }
+    common_taggings { [create(:common_tagging)] }
   end
 
   factory :relationship do

@@ -407,14 +407,13 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
-
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
 
     When I go to the "My Gift Exchange" signups page
     And I follow "Download (CSV)"
-    Then I should get a file with ending and type csv
+    Then I should download a csv file with the header row "Pseud Email Sign-up URL Request 1 Tags Request 1 Description Offer 1 Tags Offer 1 Description"
 
   Scenario: View a signup summary with no tags
     Given the following activated users exist

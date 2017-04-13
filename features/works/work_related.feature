@@ -20,7 +20,7 @@ Scenario: Remixer can see their remix / related work on their related works page
   When I follow "Related Works"
   Then I should see "Works that inspired remixer"
     And I should see "Worldbuilding by inspiration"
-    
+
 Scenario: Creator of original work can see a remix on their related works page
 
   Given I have related works setup
@@ -47,7 +47,7 @@ Scenario: Translator can see their translation on their related works page
   Then I should see "Works translated by translator"
     And I should see "Worldbuilding by inspiration"
     And I should see "From English to Deutsch"
-    
+
 Scenario: Creator of original work can see a translation on their related works page
 
   Given I have related works setup
@@ -73,7 +73,7 @@ Scenario: Unapproved related works do not appear or produce an associations list
   When I view the work "Worldbuilding"
   Then I should not see the related work listed on the original work
     And I should not find a list for associations
-  
+
 Scenario: The creator of the original work can approve a related work that is NOT a translation and see it referenced in the beginning notes and linked in the end notes
 
   Given I have related works setup
@@ -97,7 +97,7 @@ Scenario: The creator of the original work can approve a translation and see it 
     And I should see the translation in the beginning notes
     And I should not see "Works inspired by this one:"
     And I should find a list for associations
-    
+
 Scenario: Translation, related work, and parent work links appear in the right places even when viewing a multi-chapter work with draft chapters in chapter-by-chapter mode
 
   Given I have related works setup
@@ -128,7 +128,7 @@ Scenario: The creator of the original work can see approved and unapproved relat
   When I view my related works
   Then I should see "Worldbuilding Approve"
     And I should see "Deutsch Remove"
-    
+
 Scenario: A user cannot see another user's related works page
 
   Given I have related works setup
@@ -150,7 +150,7 @@ Scenario: The creator of the original work can remove a previously approved rela
   When I press "Remove link"
   Then I should see "Link was successfully removed"
     And I should not see the related work listed on the original work
-    
+
 Scenario: The creator of the original work can remove a previously approved translation
 
   Given I have related works setup
@@ -185,7 +185,7 @@ Scenario: Remixer receives comments on remix, creator of original work doesn't
   When I post the comment "Blah" on the work "Followup"
   Then "remixer" should be emailed
     And "inspiration" should not be emailed
-    
+
 Scenario: Translator receives comments on translation, creator of original work doesn't
 
   Given I have related works setup
@@ -219,7 +219,7 @@ Scenario: Creator of original work doesn't receive comments if they haven't appr
   #When I am logged in as "commenter"
   #When I post the comment "Blah" on the work "Worldbuilding Translated"
   #Then "inspiration" should not be emailed
-  
+
 Scenario: Can post a translation of a mystery work
 
 Scenario: Posting a translation of a mystery work should not allow you to see the work
@@ -246,14 +246,14 @@ Scenario: Draft works should not show up on related works
   When I view my related works
   Then I should not see "Worldbuilding Translated"
 
-@work_external_parent
 Scenario: Listing external works as inspirations
 
   Given basic tags
+    And mock websites with no content
   When I am logged in as "remixer" with password "password"
     And I set up the draft "Followup"
     And I check "parent-options-show"
-    And I fill in "URL" with "google.com"
+    And I fill in "URL" with "http://example.org/200"
     And I press "Preview"
   Then I should see a save error message
     And I should see "A parent work outside the archive needs to have a title."
@@ -268,12 +268,11 @@ Scenario: Listing external works as inspirations
     And I should see "A translation of Worldbuilding by BNF"
   When I edit the work "Followup"
     And I check "parent-options-show"
-    And I fill in "URL" with "testarchive.transformativeworks.org"
-    And "AO3-1803" is fixed
-    # And I press "Preview"
-  # Then I should see a save error message
-    # And I should see "A parent work outside the archive needs to have a title."
-    # And I should see "A parent work outside the archive needs to have an author."
+    And I fill in "URL" with "http://example.org/301"
+    And I press "Preview"
+  Then I should see a save error message
+    And I should see "A parent work outside the archive needs to have a title."
+    And I should see "A parent work outside the archive needs to have an author."
   When I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
@@ -284,20 +283,20 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
-  #invalid URL should give a helpful message (issue 1786)
+  # inactive URL should give a helpful message (AO3-1783)
   When I edit the work "Followup"
     And I check "parent-options-show"
-    And I fill in "URL" with "this.is.an.invalid/URL"
+    And I fill in "URL" with "http://example.org/404"
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
   Then I should see "Parent work info would not save."
-    
-@work_external_language
-Scenario: External work language    
+
+Scenario: External work language
 
   Given basic tags
     And basic languages
+    And mock websites with no content
   When I am logged in as "remixer" with password "password"
     And I go to the new work page
     And I select "Not Rated" from "Rating"
@@ -306,11 +305,11 @@ Scenario: External work language
     And I fill in "Work Title" with "Followup 4"
     And I fill in "content" with "That could be an amusing crossover."
     And I check "parent-options-show"
-    And I fill in "URL" with "www.google.com"
+    And I fill in "URL" with "http://example.org/200"
     And I fill in "Title" with "German Worldbuilding"
     And I fill in "Author" with "BNF"
     And I select "Deutsch" from "Language"
-    And I check "This is a translation"    
+    And I check "This is a translation"
     And I press "Preview"
   Then I should see "Draft was successfully created"
   When I press "Post"
@@ -319,7 +318,7 @@ Scenario: External work language
   When I view my related works
   Then I should see "From Deutsch to English"
     And I should not see "From N/A to English"
-    
+
 # TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
@@ -361,4 +360,3 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
-  
