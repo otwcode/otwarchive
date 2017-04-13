@@ -31,7 +31,7 @@ class UserInviteRequestsController < ApplicationController
     if AdminSetting.request_invite_enabled?
       if logged_in?
         @user = current_user
-        @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
+        @user_invite_request = @user.user_invite_requests.build(user_invite_request_params)
       else
         flash[:error] = "Please log in."
         redirect_to login_path
@@ -73,5 +73,11 @@ class UserInviteRequestsController < ApplicationController
     end
     flash[:notice] = ts("Requests were successfully updated.")
     redirect_to user_invite_requests_url
+  end
+
+  private
+
+  def user_invite_request_params
+    params.require(:user_invite_request).permit(:quantity, :reason)
   end
 end

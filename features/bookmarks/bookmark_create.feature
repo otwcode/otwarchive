@@ -48,61 +48,6 @@ Scenario: Create a bookmark
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-    
-  @bookmark_fandom_error
-  Scenario: Create a bookmark on an external work (fandom error)
-    Given basic tags
-      And I am logged in as "first_bookmark_user"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should not see "Stuck with You"
-    When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
-      And I press "Create"
-    Then I should see "Fandom tag is required"
-    When I fill in "bookmark_external_fandom_string" with "Popslash"
-      And I press "Create"
-    Then I should see "This work isn't hosted on the Archive"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should see "Stuck with You"
-
-  @bookmark_url_error
-  Scenario: Create a bookmark on an external work (url error)
-    Given the following activated users exist
-      | login           | password   |
-      | first_bookmark_user   | password   |
-      And I am logged in as "first_bookmark_user"
-      And the default ratings exist
-    When I go to first_bookmark_user's bookmarks page
-    Then I should not see "Stuck with You"
-    When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_fandom_string" with "Popslash"
-      And I press "Create"
-    Then I should see "does not appear to be a valid URL"
-    When I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
-      And I press "Create"
-    Then I should see "This work isn't hosted on the Archive"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should see "Stuck with You"
-    
-    # edit external bookmark
-    When I follow "Edit"
-    Then I should see "Editing bookmark for Stuck with You"
-    When I fill in "Notes" with "I wish this author would join AO3"
-      And I fill in "Your tags" with "WIP"
-      And I press "Update"
-    Then I should see "Bookmark was successfully updated"
-    
-    # delete external bookmark
-    When I follow "Delete"
-    Then I should see "Are you sure you want to delete"
-      And I should see "Stuck with You"
-    When I press "Yes, Delete Bookmark"
-    Then I should see "Bookmark was successfully deleted."
-      And I should not see "Stuck with You"
       
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
@@ -405,27 +350,6 @@ Scenario: Delete bookmarks of a work and a series
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
   Then I should see "Bookmark was successfully deleted."
-
-
-Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
-  Given a fandom exists with name: "Testing BEW Button", canonical: true
-    And I am logged in as "markie" with password "theunicorn"
-    And I create the collection "Testing BEW Collection"
-  When I go to my bookmarks page
-  Then I should see "Bookmark External Work"
-  When I go to the bookmarks page
-  Then I should see "Bookmark External Work"
-  When I go to the bookmarks in collection "Testing BEW Collection"
-  Then I should see "Bookmark External Work"
-  When I log out
-    And I go to markie's bookmarks page
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks page
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks tagged "Testing BEW Button"
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks in collection "Testing BEW Collection"
-  Then I should not see "Bookmark External Work"
 
 Scenario: Editing a bookmark's tags should expire the bookmark cache
   Given I am logged in as "some_user"
