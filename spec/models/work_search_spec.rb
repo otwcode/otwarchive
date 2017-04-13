@@ -3,6 +3,10 @@ require 'spec_helper'
 describe WorkSearch do
 
   before(:each) do
+    work.save
+    # This doesn't work properly in the factory.
+    second_work.collection_ids = [collection.id]
+    second_work.save
     Tire.index(Work.index_name).delete
     Work.create_elasticsearch_index
     Work.import
@@ -19,33 +23,29 @@ describe WorkSearch do
 
   let!(:work) do
     FactoryGirl.create(:work,
-      title: "There and back again",
-      authors: [ Pseud.find_by_name("JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien") ],
-      summary: "An unexpected journey",
-      fandom_string: "The Hobbit",
-      character_string: "Bilbo Baggins",
-      posted: true,
-      expected_number_of_chapters: 3,
-      complete: false,
-      language_id: 1
-    )
+                       title: "There and back again",
+                       authors: [Pseud.find_by_name("JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
+                       summary: "An unexpected journey",
+                       fandom_string: "The Hobbit",
+                       character_string: "Bilbo Baggins",
+                       posted: true,
+                       expected_number_of_chapters: 3,
+                       complete: false,
+                       language_id: 1)
   end
 
   let!(:second_work) do
     FactoryGirl.create(:work,
-      title: "Harry Potter and the Sorcerer's Stone",
-      authors: [ Pseud.find_by_name("JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling") ],
-      summary: "Mr and Mrs Dursley, of number four Privet Drive...",
-      fandom_string: "Harry Potter",
-      character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-      posted: true,
-      collection_ids: [1],
-      language_id: 2
-    )
+                       title: "Harry Potter and the Sorcerer's Stone",
+                       authors: [Pseud.find_by_name("JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
+                       summary: "Mr and Mrs Dursley, of number four Privet Drive...",
+                       fandom_string: "Harry Potter",
+                       character_string: "Harry Potter, Ron Weasley, Hermione Granger",
+                       posted: true,
+                       language_id: 2)
   end
 
   describe '#search_results' do
-
     before(:each) do
       work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
       work.update_index
@@ -140,18 +140,19 @@ describe WorkSearch do
         expect(work_search.search_results).to include work
         expect(work_search.search_results).not_to include second_work
       end
-
     end
 
     describe "when searching by fandom" do
       it "should only return works in that fandom" do
         work_search = WorkSearch.new(fandom_names: "Harry Potter")
         expect(work_search.search_results).not_to include work
+        expect(work_search.search_results).to include second_work
       end
 
       it "should not choke on exclamation points" do
         work_search = WorkSearch.new(fandom_names: "Potter!")
         expect(work_search.search_results).to include second_work
+        expect(work_search.search_results).not_to include work
       end
     end
 
@@ -250,4 +251,3 @@ describe WorkSearch do
     end
   end
 end
-

@@ -22,8 +22,8 @@ class CollectionParticipantsController < ApplicationController
 
   def load_participant_and_collection
     if params[:collection_participant]
-      @participant = CollectionParticipant.find_by_id(params[:collection_participant][:id])
-      @new_role = params[:collection_participant][:participant_role]
+      @participant = CollectionParticipant.find_by_id(collection_participant_params[:id])
+      @new_role = collection_participant_params[:participant_role]
     else
       @participant = CollectionParticipant.find_by_id(params[:id])
     end
@@ -80,7 +80,7 @@ class CollectionParticipantsController < ApplicationController
   end
 
   def update
-    if @participant.update_attributes(params[:collection_participant])
+    if @participant.update_attributes(collection_participant_params)
       flash[:notice] = t('collection_participants.update_success', :default => "Updated %{participant}.", :participant => @participant.pseud.name)
     else
       flash[:error] = t('collection_participants.update_failure', :default => "Couldn't update %{participant}.", :participant => @participant.pseud.name)
@@ -134,6 +134,14 @@ class CollectionParticipantsController < ApplicationController
     end
 
     redirect_to collection_participants_path(@collection)
+  end
+
+  private
+
+  def collection_participant_params
+    params.require(:collection_participant).permit(
+      :id, :participant_role, :collection_id
+    )
   end
 
 end

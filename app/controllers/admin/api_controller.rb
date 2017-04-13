@@ -20,7 +20,9 @@ class Admin::ApiController < ApplicationController
   end
 
   def create
-    @api_key = ApiKey.new(params[:api_key])
+    # Use provided api key params if available otherwise fallback to empty
+    # ApiKey object
+    @api_key = params[:api_key].nil? ? ApiKey.new : ApiKey.new(api_key_params)
     if @api_key.save
       flash[:notice] = ts("New token successfully created")
       redirect_to action: "index"
@@ -35,7 +37,7 @@ class Admin::ApiController < ApplicationController
 
   def update
     @api_key = ApiKey.find(params[:id])
-    if @api_key.update_attributes(params[:api_key])
+    if @api_key.update_attributes(api_key_params)
       flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
     else
@@ -50,6 +52,12 @@ class Admin::ApiController < ApplicationController
   end
 
   private
+
+  def api_key_params
+    params.require(:api_key).permit(
+      :name, :access_token, :banned
+    )
+  end
 
   def check_for_cancel
     if params[:cancel_button]

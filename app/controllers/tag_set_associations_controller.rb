@@ -6,13 +6,13 @@ class TagSetAssociationsController < ApplicationController
   before_filter :moderators_only
 
   def load_tag_set
-    @tag_set = OwnedTagSet.find(params[:tag_set_id])
+    @tag_set = OwnedTagSet.find_by_id(params[:tag_set_id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to look at?")
+      flash[:error] = ts("What tag set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
-  
+
   def moderators_only
     @tag_set.user_is_moderator?(current_user) || access_denied
   end

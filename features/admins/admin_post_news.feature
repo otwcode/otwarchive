@@ -121,9 +121,9 @@ Feature: Admin Actions to Post News
       And the following admin exists
       | login      | password |
       | Elz        | secret   |
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Elz"
-      And I fill in "admin_session_password" with "secret"
+    When I go to the admin login page
+      And I fill in "admin_login" with "Elz"
+      And I fill in "admin_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
     When I follow "Admin Posts"

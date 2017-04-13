@@ -29,6 +29,8 @@ module NavigationHelpers
     when /^the external works with only duplicates page$/i
       external_works_path(show: :duplicates)
 
+    when /^the admin login page$/i
+      new_admin_session_path
 
     # the following are examples using path_to_pickle
 
@@ -154,7 +156,7 @@ module NavigationHelpers
       collection_requests_path(Collection.find_by_title($1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by_title($1))
-    when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
+    when /^the "(.*)" participants page$/i                     # e.g. when I go to the "Collection name" participants page
       collection_participants_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
@@ -216,6 +218,8 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
+    when /^the new external work page$/i
+      new_external_work_path
 
     # Admin Pages
     when /^the admin-posts page$/i
