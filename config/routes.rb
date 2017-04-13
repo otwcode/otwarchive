@@ -522,6 +522,12 @@ Otwarchive::Application.routes.draw do
       get :manage
       post :update_positions
     end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
+    end
   end
   resources :wrangling_guidelines do
     member do
