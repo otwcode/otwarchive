@@ -51,7 +51,7 @@ class UserMailer < BulletproofMailer::Base
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
       to: @invitation.invitee_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      subject: t("user_mailer.invitation.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
