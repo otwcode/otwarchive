@@ -90,6 +90,11 @@ FactoryGirl.define do
     f.sequence(:name) { |n| "Freeform #{n}" }
   end
 
+  factory :banned do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "Banned #{n}" }
+  end
+
   # works
   factory :chapter do |f|
     f.content "Awesome content!"

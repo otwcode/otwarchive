@@ -185,7 +185,8 @@ Feature: Create Gifts
       And I give the work to "giftee1"
       And I post the work without preview
     Then 1 email should be delivered to "gifter2"
-      And the email should contain "You have been listed as a coauthor on the following work"
+      And the email should contain "You have been listed as a co-creator on the following work"
+      And the email should not contain "translation missing"
     Then 1 email should be delivered to "giftee1"
       And the email should link to gifter's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"
@@ -269,3 +270,34 @@ Feature: Create Gifts
       And the gift for "giftee1" should still exist on "GiftStory1"
     When I have removed the recipients
     Then the gift for "giftee1" should still exist on "GiftStory1"
+
+  Scenario: Opt to disable notifications, then receive a gift (with no collection)
+ 
+    Given I am logged in as "giftee1" with password "something"
+      And I set my preferences to turn off notification emails for gifts
+    When I am logged in as "gifter" with password "something"
+      And I post the work "QuietGift" as a gift for "giftee1, giftee2"
+    Then 0 emails should be delivered to "giftee1@foo.com"
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
+ 
+  Scenario: Opt to disable notifications, then receive a gift posted to a non-hidden collection
+ 
+    Given I am logged in as "giftee1" with password "something"
+      And I set my preferences to turn off notification emails for gifts
+      And I have the collection "Open Skies"
+    When I am logged in as "gifter" with password "something"
+      And I post the work "QuietGift" in the collection "Open Skies" as a gift for "giftee1, giftee2"
+    Then 0 emails should be delivered to "giftee1@foo.com"
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
+ 
+  Scenario: Opt to disable notifications, then receive a gift posted to a hidden collection and later revealed
+ 
+    Given I am logged in as "giftee1" with password "something"
+      And I set my preferences to turn off notification emails for gifts
+      And I have the hidden collection "Hidden Treasures"
+    When I am logged in as "gifter" with password "something"
+      And I post the work "QuietGift" in the collection "Hidden Treasures" as a gift for "giftee1, giftee2"
+      And I reveal works for "Hidden Treasures"
+    Then 0 emails should be delivered to "giftee1@foo.com"
+      And "giftee2@foo.com" should be notified by email about their gift "QuietGift" 
+  

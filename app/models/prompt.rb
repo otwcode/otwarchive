@@ -1,4 +1,5 @@
 class Prompt < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   # -1 represents all matching
   ALL = -1
@@ -39,7 +40,7 @@ class Prompt < ActiveRecord::Base
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id) 
   }
-  
+
   # CALLBACKS
 
   before_destroy :clear_claims
@@ -154,7 +155,7 @@ class Prompt < ActiveRecord::Base
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please contact your challenge moderator who can then log a request with Support for the tags to be made canonical if appropriate.",
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
               :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
@@ -172,6 +173,7 @@ class Prompt < ActiveRecord::Base
     if restriction
       TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
         if restriction.send("#{tag_type}_restrict_to_fandom")
+          # tag_type is one of a set set so we know it is safe for constantize
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
           # check for tag set associations
@@ -229,41 +231,61 @@ class Prompt < ActiveRecord::Base
     super || tag_set.respond_to?(method, include_private)
   end
 
-  # Returns PotentialPromptMatch object if matches, otherwise nil
+  # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
+  # result as an instance variable for speed. This is used by the matching
+  # algorithm, which doesn't change any signup/prompt/tagset information, so
+  # it's okay to cache some information. (And if the info does change
+  # mid-matching process, it's okay that we're using the tag sets that were
+  # there when the moderator started the matching process.)
+  def full_tag_set
+    if @full_tag_set.nil?
+      @full_tag_set = optional_tag_set ? tag_set + optional_tag_set : tag_set
+    end
+
+    @full_tag_set
+  end
+
+  # Returns true if there's a match, false otherwise.
   # self is the request, other is the offer
-  def match(other, settings=nil)
+  def matches?(other, settings = nil)
+    return nil if challenge_signup.id == other.challenge_signup.id
     return nil if settings.nil?
-    potential_prompt_match_attributes = {:offer => other, :request => self}
-    full_request_tag_set = self.optional_tag_set ? self.tag_set + self.optional_tag_set : self.tag_set
-    full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
 
     TagSet::TAG_TYPES.each do |type|
-      if self.send("any_#{type}") || other.send("any_#{type}")
-        match_count = ALL
-      else
-        required_count = settings.send("num_required_#{type.pluralize}")
-        if settings.send("include_optional_#{type.pluralize}")
-          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
-        else
-          # we don't use optional tags to count towards required
-          match_count = self.tag_set.match_rank(other.tag_set, type)
-        end
+      # We definitely match in this type if the request or the offer accepts
+      # "any" for it. No need to check any more info for this type.
+      next if send("any_#{type}") || other.send("any_#{type}")
+
+      required_count = settings.send("num_required_#{type.pluralize}")
+      match_count = if settings.send("include_optional_#{type.pluralize}")
+                      full_tag_set.match_rank(other.full_tag_set, type)
+                    else
+                      # we don't use optional tags to count towards required
+                      tag_set.match_rank(other.tag_set, type)
+                    end
       
-        # if we have to match all and don't, not a match
-        return nil if required_count == ALL && match_count != ALL
+      # if we have to match all and don't, not a match
+      return false if required_count == ALL && match_count != ALL
 
-        # we are a match only if we either match all or at least as many as required
-        return nil if match_count != ALL && match_count < required_count
-
-        # now get the match rank including optional tags if we didn't before
-        if !settings.send("include_optional_#{type.pluralize}")
-          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
-        end
-      end
-
-      potential_prompt_match_attributes["num_#{type.pluralize}_matched"] = match_count
+      # we are a match only if we either match all or at least as many as required
+      return false if match_count != ALL && match_count < required_count
     end
-    return PotentialPromptMatch.new(potential_prompt_match_attributes)
+
+    true
+  end
+
+  # Count the number of overlapping tags of all types. Does not use ALL to
+  # indicate a 100% match, since the goal is to give a bonus to matches where
+  # both requester and offerer were specific about their desires, and had a lot
+  # of overlap.
+  def count_tags_matched(other)
+    self_tags = full_tag_set.tags.map(&:id)
+    other_tags = other.full_tag_set.tags.map(&:id)
+    (self_tags & other_tags).size
+  end
+
+  def accepts_any?(type)
+    send("any_#{type.downcase}")
   end
 
   def get_prompt_restriction

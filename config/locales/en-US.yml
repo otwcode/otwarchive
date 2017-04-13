@@ -1,14 +1,12 @@
 # US English translations for Ruby on Rails
 #
 # Use this as the base for the locale file of your language.
-
 "en-US":
   admin:
     blacklist:
       emails_found: 
         one: "one email found"
         other: "%{count} emails found"
-  
   date:
     formats:
       default: "%Y-%m-%d"
@@ -243,13 +241,15 @@
             If you've received this message in error, please contact Support at %{support_url} .
 
             The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url} .
-        sent_at: Sent at %{sent_at}.
+        sent_at: "Sent at %{sent_at}."
         sent_by:
-          html: Sent by <b>%{sent_by}</b>.
-          text: Sent by %{sent_by}.
+          html: "Sent by <b>%{sent_by}</b>."
+          text: "Sent by %{sent_by}."
     kudos:
-      guest: "A guest"
-      guests: "guests"
+      guest: 
+        one: a guest
+        other: "%{count} guests"
+      kudos_on: Kudos on
       you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:

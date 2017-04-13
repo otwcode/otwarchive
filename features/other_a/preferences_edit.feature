@@ -35,7 +35,7 @@ Feature: Edit preferences
     And I should see "Turn off copies of your own comments."
     And I should see "Turn off emails about kudos."
     And I should see "Turn off admin emails."
-    And I should see "Automatically agree to your work being collected by others in the archive."
+    And I should see "Automatically agree to your work being collected by others in the Archive."
     And I should see "Turn off emails from collections."
     And I should see "Turn off inbox messages from collections."
     And I should see "Turn off emails about gift works."

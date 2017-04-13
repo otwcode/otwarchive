@@ -70,7 +70,6 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
-
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -80,6 +79,18 @@ Feature: Gift Exchange Challenge
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
     Then I should see "sign-up is invalid"  
+
+  Scenario: I cannot sign up with a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to sign up for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully created"
+      And I should see "You can't sign up with that pseud"
+
+  Scenario: I cannot edit in a pseud that I don't own
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    When I attempt to update my signup for "Awesome Gift Exchange" with a pseud that is not mine
+    Then I should not see "Sign-up was successfully updated"
+      And I should see "You can't sign up with that pseud"
 
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -266,24 +277,17 @@ Feature: Gift Exchange Challenge
       And the email should link to myname1's user url
       And the email html body should link to the works tagged "Stargate Atlantis"
 
-  Scenario: User signs up for two gift exchanges at once #'
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
-    Given I have created the gift exchange "Second Challenge" with name "testcoll2"
-      And I open signups for "Second Challenge"
-      And everyone has signed up for the gift exchange "Second Challenge"
-      And I have generated matches for "Second Challenge"
-      And I have sent assignments for "Second Challenge"
+  Scenario: User signs up for two gift exchanges at once and can use the Fulfill
+  link to fulfill one assignment at a time
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      # This is in fact a bug - only one of them should be checked
-      # TODO: Uncomment when the intermittent bug has been fixed
-    #Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #  And the "Second Challenge (myname3)" checkbox should be checked
+      And "AO3-4571" is fixed
+    # "I start to fulfill" will use the first Fulfill option on the page
+    # which will be for the oldest assignment
+    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+    #   And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -308,11 +312,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: Mod can see everyone's assignments, includind users' emails
     Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+      And everyone has their assignments for "Awesome Gift Exchange"
     When I go to the "Awesome Gift Exchange" assignments page
       Then I should see "Assignments for Awesome"
     When I follow "Open"
@@ -321,12 +321,7 @@ Feature: Gift Exchange Challenge
       And I should see the image "alt" text "email myname1"
 
   Scenario: User can see their assignment, but no email links
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to my user page
       And I follow "Assignments"
@@ -339,12 +334,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
 
-    Given I am logged in as "mod1"
-      And I have created the gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-      And I have generated matches for "Awesome Gift Exchange"
-      And I have sent assignments for "Awesome Gift Exchange"
+    Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I fulfill my assignment
     When I go to my user page
@@ -357,9 +347,57 @@ Feature: Gift Exchange Challenge
       And I follow "Complete"
     Then I should see "myname1"
       And I should see "Fulfilled Story"
-      
+
+  Scenario: A mod can default all incomplete assignments
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And I am logged in as "myname1"
+      And I fulfill my assignment
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Default All Incomplete"
+    Then I should see "All unfulfilled assignments marked as defaulting."
+      And I should see "Undefault myname2"
+      And I should see "Undefault myname3"
+      And I should see "Undefault myname4"
+      And I should not see "Undefault myname1"
+
+  Scenario: User can default and a mod can undefault on their assignment 
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I check "Undefault myname1"
+      And I press "Submit"
+    Then I should see "Assignment updates complete!"
+      And I should not see "Undefault"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I should see "Default"
+
+  Scenario: User can default and a mod can assign a pinch hitter
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I fill in "Pinch Hitter:" with "nonexistent"
+      And I press "Submit"
+    Then I should see "We couldn't find the user nonexistent to assign that to."
+    When I fill in "Pinch Hitter:" with "myname1"
+      And I press "Submit"
+    Then I should see "No assignments to review!"
+      And I should see "Assignment updates complete!"
+
   Scenario: Refused story should still fulfill the assignment
-  
+
     Given an assignment has been fulfilled in a gift exchange
       And I reveal works for "Awesome Gift Exchange"
       And I refuse my gift story "Fulfilled Story"
@@ -368,7 +406,6 @@ Feature: Gift Exchange Challenge
       And I follow "Complete"
     Then I should see "myname1"
       And I should see "Fulfilled Story"
-  
 
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
@@ -376,7 +413,7 @@ Feature: Gift Exchange Challenge
 
     When I go to the "My Gift Exchange" signups page
     And I follow "Download (CSV)"
-    Then I should get a file with ending and type csv
+    Then I should download a csv file with the header row "Pseud Email Sign-up URL Request 1 Tags Request 1 Description Offer 1 Tags Offer 1 Description"
 
   Scenario: View a signup summary with no tags
     Given the following activated users exist
@@ -438,3 +475,105 @@ Feature: Gift Exchange Challenge
     When I am logged in as "myname2"
       And I delete my signup for the gift exchange "Awesome Gift Exchange"
     Then I should see "Challenge sign-up was deleted."
+
+  Scenario: Assignment emails should contain all the information in the request
+  # Note: tag names are lowercased for the test so we could borrow the potential
+  # match steps, and due to the HTML, each tag must be looked for separate from
+  # its label or other tags of its type
+    Given I create the gift exchange "EmailTest" with the following options
+        | value      | minimum | maximum | match |
+        | prompts    | 1       | 1       | 1     |
+        | fandoms    | 1       | 1       | 0     |
+        | characters | 1       | 1       | 0     |
+        | freeforms  | 0       | 2       | 0     |
+        | ratings    | 0       | 1       | 0     |
+        | categories | 0       | 1       | 0     |
+      And the user "badgirlsdoitwell" signs up for "EmailTest" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request | any        | the show | fic, art  | mature  |            |
+        | offer   | villain    | the show | fic       |         |            |
+      And the user "sweetiepie" signs up for "EmailTest" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request | protag     | the book |           |         | any        |
+        | offer   | protag     | the book | fic       |         |            |
+      When I have generated matches for "EmailTest"
+        And I have sent assignments for "EmailTest"
+      Then 1 email should be delivered to "sweetiepie"
+        And the email should contain "Fandom:"
+        And the email should contain "the show"
+        And the email should contain "Additional Tags:"
+        And the email should contain "fic"
+        And the email should contain "art"
+        And the email should contain "Characters:"
+        And the email should contain "Any"
+        And the email should contain "Rating:"
+        And the email should contain "mature"
+        And the email should not contain "Relationships:"
+        And the email should not contain "Warnings:"
+        And the email should not contain "Category:"
+        And the email should not contain "Optional Tags:"
+      Then 1 email should be delivered to "badgirlsdoitwell"
+        And the email should contain "Fandom:"
+        And the email should contain "the book"
+        And the email should contain "Characters:"
+        And the email should contain "protag"
+        And the email should contain "Category:"
+        And the email should contain "Any"
+        And the email should not contain "Additional Tags:"
+        And the email should not contain "Relationships:"
+        And the email should not contain "Rating:"
+        And the email should not contain "Warnings:"
+        And the email should not contain "Optional Tags:"
+
+  Scenario: A mod can delete a gift exchange and all the assignments and
+  sign-ups will be deleted with it, but the collection will remain
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I delete the challenge "Bad Gift Exchange"
+    Then I should see "Challenge settings were deleted."
+      And I should not see the gift exchange dashboard for "Bad Gift Exchange"
+      And no one should have an assignment for "Bad Gift Exchange"
+      And no one should be signed up for "Bad Gift Exchange"
+    When I am on the collections page
+    Then I should see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Sign-ups page after a gift exchange 
+  they were signed up for has been deleted
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Bad Gift Exchange"
+      And I open signups for "Bad Gift Exchange"
+      And everyone has signed up for the gift exchange "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my signups page
+    Then I should see "Challenge Sign-ups"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange
+  they had an unfulfilled assignment in has been deleted
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And the challenge "Bad Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Bad Gift Exchange"
+
+  Scenario: A user can still access their Assignments page after a gift exchange 
+  they had a fulfilled assignment in has been deleted
+    Given an assignment has been fulfilled in a gift exchange
+      And the challenge "Awesome Gift Exchange" is deleted
+    When I am logged in as "myname1"
+      And I go to my assignments page
+    Then I should see "My Assignments"
+      And I should not see "Awesome Gift Exchange"
+
+  Scenario: A mod can purge assignments after they have been sent, but must
+  first confirm the action
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I go to the "Bad Gift Exchange" assignments page
+      And I follow "Purge Assignments"
+    Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
+    When I press "Yes, Purge Assignments"
+    Then I should see "Assignments purged!"
+

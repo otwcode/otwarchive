@@ -1,4 +1,5 @@
 class CollectionItem < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
   APPROVED = 1
@@ -42,7 +43,7 @@ class CollectionItem < ActiveRecord::Base
   scope :include_for_works, :include => [{:work => :pseuds}]
   scope :unrevealed, :conditions => {:unrevealed => true}
   scope :anonymous, :conditions =>  {:anonymous => true}
-  
+
   def self.for_user(user=User.current_user)
     # get ids of user's bookmarks and works
     bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).value_of(:id)
@@ -52,27 +53,31 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def self.approved_by_user
-    where(:user_approval_status => APPROVED)
+    where(user_approval_status: APPROVED)
   end
 
   def self.rejected_by_user
-    where(:user_approval_status => REJECTED)
+    where(user_approval_status: REJECTED)
   end
 
   def self.unreviewed_by_user
-    where(:user_approval_status => NEUTRAL)
+    where(user_approval_status: NEUTRAL)
   end
-  
+
   def self.approved_by_collection
-    where(:collection_approval_status => APPROVED)
+    where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
+  end
+
+  def self.invited_by_collection
+    where(collection_approval_status: APPROVED).where(user_approval_status: NEUTRAL)
   end
 
   def self.rejected_by_collection
-    where(:collection_approval_status => REJECTED)
+    where(collection_approval_status: REJECTED)
   end
-  
+
   def self.unreviewed_by_collection
-    where(:collection_approval_status => NEUTRAL)    
+    where(collection_approval_status: NEUTRAL)
   end
 
   before_save :set_anonymous_and_unrevealed
@@ -82,13 +87,13 @@ class CollectionItem < ActiveRecord::Base
       self.anonymous = true if collection.anonymous?
     end
   end
-  
+
   after_save :update_work
   #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
   #  this is a has-many-through relationship!!!
-  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work
   # itself -- see collectible.rb
-  
+
   # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
@@ -109,7 +114,7 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  after_create :notify_of_association
+  after_commit :notify_of_association
   # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
     self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
@@ -145,14 +150,37 @@ class CollectionItem < ActiveRecord::Base
 
         users.each do |user|
           if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+            # if the work is being added by a collection maintainer and at
+            # least ONE of the works owners allows automatic inclusion in
+            # collections, add the work to the collection
             approve_by_user
+            users.each do |email_user|
+              unless email_user.preference.collection_emails_off
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+              end
+            end
             break
           end
         end
       end
     end
   end
-  
+
+  before_save :send_work_invitation
+  def send_work_invitation
+    if !approved_by_user? && approved_by_collection? && self.new_record?
+      if !User.current_user.is_author_of?(item)
+        # a maintainer is attempting to add this work to their collection
+        # so we send an email to all the works owners
+        item.users.each do |email_author|
+          unless email_author.preference.collection_emails_off
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+          end
+        end
+      end
+    end
+  end
+
   after_update :notify_of_status_change
   def notify_of_status_change
     if unrevealed_changed?
@@ -161,13 +189,10 @@ class CollectionItem < ActiveRecord::Base
         notify_of_reveal
       end
     end
-    if anonymous_changed?
-      notify_of_author_reveal
-    end
   end
-  
+
   after_destroy :expire_caches
-  
+
   def expire_caches
     if self.item.respond_to?(:expire_caches)
       CacheMaster.record(item_id, 'collection', collection_id)
@@ -244,7 +269,7 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
-    if user.nil? 
+    if user.nil?
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
@@ -252,7 +277,7 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
-  
+
   # Reveal an individual collection item
   # Can't use update_attribute because of potential validation issues
   # with closed collections
@@ -287,20 +312,4 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-
-  # When the authors of anonymous works are revealed, notify users
-  # subscribed to those authors
-  def notify_of_author_reveal
-    unless self.anonymous? || !self.posted?
-      if item_type == "Work"
-        subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
-                                  item.pseuds.map{|p| p.user_id}]).
-                            group(:user_id)
-        subs.each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, item)
-        end
-      end      
-    end
-  end
-
 end

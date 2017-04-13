@@ -3,8 +3,8 @@ class Admin::BannersController < ApplicationController
   before_filter :admin_only
 
   # GET /admin/banners
-  def index   
-    @admin_banners = AdminBanner.order("id DESC").paginate(:page => params[:page])
+  def index
+    @admin_banners = AdminBanner.order("id DESC").paginate(page: params[:page])
   end
 
   # GET /admin/banners/1
@@ -16,15 +16,15 @@ class Admin::BannersController < ApplicationController
   def new
     @admin_banner = AdminBanner.new
   end
-  
+
   # GET /admin/banners/1/edit
   def edit
     @admin_banner = AdminBanner.find(params[:id])
   end
-  
+
   # POST /admin/banners
   def create
-    @admin_banner = AdminBanner.new(params[:admin_banner])
+    @admin_banner = AdminBanner.new(admin_banner_params)
 
     if @admin_banner.save
       if @admin_banner.active?
@@ -43,7 +43,12 @@ class Admin::BannersController < ApplicationController
   def update
     @admin_banner = AdminBanner.find(params[:id])
 
-    if @admin_banner.update_attributes(params[:admin_banner])
+    if !@admin_banner.update_attributes(admin_banner_params)
+      render action: 'edit'
+    elsif params[:admin_banner_minor_edit]
+      flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')
+      redirect_to @admin_banner
+    else
       if @admin_banner.active?
         AdminBanner.banner_on
         flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
@@ -51,16 +56,14 @@ class Admin::BannersController < ApplicationController
         flash[:notice] = ts('Banner successfully updated.')
       end
       redirect_to @admin_banner
-    else
-      render action: 'edit'
     end
   end
-  
+
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
     @admin_banner = AdminBanner.find(params[:id])
-  end 
-  
+  end
+
   # DELETE /admin/banners/1
   def destroy
     @admin_banner = AdminBanner.find(params[:id])
@@ -68,6 +71,12 @@ class Admin::BannersController < ApplicationController
 
     flash[:notice] = ts('Banner successfully deleted.')
     redirect_to admin_banners_url
+  end
+
+  private
+
+  def admin_banner_params
+    params.require(:admin_banner).permit(:content, :banner_type, :active)
   end
 
 end

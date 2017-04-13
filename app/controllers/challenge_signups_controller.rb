@@ -2,6 +2,7 @@
 require 'csv'
 
 class ChallengeSignupsController < ApplicationController
+  include ExportsHelper
 
   before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
@@ -11,6 +12,7 @@ class ChallengeSignupsController < ApplicationController
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_filter :check_pseud_ownership, :only => [:create, :update]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -33,8 +35,12 @@ class ChallengeSignupsController < ApplicationController
     false
   end
 
+  def signup_closed_owner?
+    @collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)
+  end
+    
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless @challenge_signup.pseud.user == current_user || signup_closed_owner?
   end
 
   def maintainer_or_signup_owner_only
@@ -62,6 +68,16 @@ class ChallengeSignupsController < ApplicationController
     false
   end
 
+  def check_pseud_ownership
+    if params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
+      # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
+      unless current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
+        flash[:error] = ts("You can't sign up with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
+  
   #### ACTIONS
 
   def index
@@ -80,7 +96,7 @@ class ChallengeSignupsController < ApplicationController
     end
 
     # using respond_to in order to provide Excel output
-    # see below for export_csv method
+    # see ExportsHelper for export_csv method
     respond_to do |format|
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
@@ -99,7 +115,9 @@ class ChallengeSignupsController < ApplicationController
       format.csv {
         if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) || 
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
-          export_csv
+          csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
+          filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+          send_csv_data(csv_data, filename)
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to '/' and return
@@ -178,7 +196,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def create
-    @challenge_signup = ChallengeSignup.new(params[:challenge_signup])
+    @challenge_signup = ChallengeSignup.new(challenge_signup_params)
+
     @challenge_signup.pseud = current_user.default_pseud unless @challenge_signup.pseud
     @challenge_signup.collection = @collection
     # we check validity first to prevent saving tag sets if invalid
@@ -191,7 +210,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def update
-    if @challenge_signup.update_attributes(params[:challenge_signup])
+    if @challenge_signup.update_attributes(challenge_signup_params)
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
@@ -251,7 +270,7 @@ protected
   def gift_exchange_to_csv
     header = ["Pseud", "Email", "Sign-up URL"]
 
-    ["request", "offer"].each do |type|
+    %w(request offer).each do |type|
       @challenge.send("#{type.pluralize}_num_allowed").times do |i|
         header << "#{type.capitalize} #{i+1} Tags"
         header << "#{type.capitalize} #{i+1} Optional Tags" if
@@ -263,23 +282,22 @@ protected
       end
     end
 
-    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
-      csv << header
+    csv_array = []
+    csv_array << header
       
-      @collection.signups.each do |signup|
-        row = [signup.pseud.name, signup.pseud.user.email,
-               collection_signup_url(@collection, signup)]
+    @collection.signups.each do |signup|
+      row = [signup.pseud.name, signup.pseud.user.email,
+             collection_signup_url(@collection, signup)]
 
-        ["request", "offer"].each do |type|
-          @challenge.send("#{type.pluralize}_num_allowed").times do |i|
-            row += request_to_array(type, signup.send(type.pluralize)[i])
-          end
+      %w(request offer).each do |type|
+        @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+          row += request_to_array(type, signup.send(type.pluralize)[i])
         end
-        csv << row
       end
+      csv_array << row
     end
 
-    return csv_data
+    csv_array
   end
 
   
@@ -289,36 +307,70 @@ protected
     header << "Description" if @challenge.request_restriction.description_allowed
     header << "URL" if @challenge.request_restriction.url_allowed
 
-    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
-      csv << header
-      @collection.prompts.where(:type => 'Request').each do |request|
+    csv_array = []
+    csv_array << header
+    @collection.prompts.where(type: "Request").each do |request|
+      row =
         if request.anonymous?
-          row = ["(Anonymous)", "", ""]
+          ["(Anonymous)", "", ""]
         else
-          row = [request.challenge_signup.pseud.name,
-                 request.challenge_signup.pseud.user.email,
-                 collection_signup_url(@collection, request.challenge_signup)]
+          [request.challenge_signup.pseud.name,
+           request.challenge_signup.pseud.user.email,
+           collection_signup_url(@collection, request.challenge_signup)]
         end
-
-        csv << (row + request_to_array("request", request))
-      end
+      csv_array << (row + request_to_array("request", request))
     end
 
-    return csv_data
+    csv_array
   end
 
-  
-  # Tab-separated CSV with utf-16le encoding (unicode) and byte order
-  # mark. This seems to be the only variant Excel can get
-  # automatically into proper table format. OpenOffice handles it
-  # well, too.
-  def export_csv
-    csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
-    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+  private
 
-    byte_order_mark = "\uFEFF"
-    csv_data = (byte_order_mark + csv_data).encode("utf-16le", "utf-8", :invalid => :replace, :undef => :replace, :replace => "")
-    send_data(csv_data, :filename => filename, :type => :csv)
+  def challenge_signup_params
+    params.require(:challenge_signup).permit(
+      :pseud_id,
+      requests_attributes: nested_prompt_params,
+      offers_attributes: nested_prompt_params
+    )
   end
-  
+
+  def nested_prompt_params
+    [
+      :id,
+      :collection_id,
+      :title,
+      :url,
+      :any_fandom,
+      :any_character,
+      :any_relationship,
+      :any_freeform,
+      :any_category,
+      :any_rating,
+      :any_warning,
+      :anonymous,
+      :description,
+      :_destroy,
+      tag_set_attributes: [
+        :id,
+        :updated_at,
+        :character_tagnames,
+        :relationship_tagnames,
+        :freeform_tagnames,
+        :category_tagnames,
+        :rating_tagnames,
+        :warning_tagnames,
+        :fandom_tagnames,
+        character_tagnames: [],
+        relationship_tagnames: [],
+        freeform_tagnames: [],
+        category_tagnames: [],
+        rating_tagnames: [],
+        warning_tagnames: [],
+        fandom_tagnames: [],
+      ],
+      optional_tag_set_attributes: [
+        :tagnames
+      ]
+    ]
+  end
 end

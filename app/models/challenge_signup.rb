@@ -1,4 +1,6 @@
 class ChallengeSignup < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   # -1 represents all matching
   ALL = -1
 
@@ -52,6 +54,14 @@ class ChallengeSignup < ActiveRecord::Base
   
   scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
   scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
+
+  # Scopes used to include extra data when loading.
+  scope :with_request_tags, includes(
+    requests: [tag_set: :tags, optional_tag_set: :tags]
+  )
+  scope :with_offer_tags, includes(
+    offers: [tag_set: :tags, optional_tag_set: :tags]
+  )
 
   ### VALIDATION
 
@@ -244,29 +254,27 @@ class ChallengeSignup < ActiveRecord::Base
 
   # Returns nil if not a match otherwise returns PotentialMatch object
   # self is the request, other is the offer
-  def match(other, settings=nil)
-    no_match_required = settings.nil? || settings.no_match_required?
-    potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
-    prompt_matches = []
-    unless no_match_required
-      self.requests.each do |request|
-        other.offers.each do |offer|
-          if (match = request.match(offer, settings))
-            prompt_matches << match
-          end
-        end
-      end
-      return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
+  def match(other, settings = nil)
+    if settings.nil? || settings.no_match_required?
+      # No match is required, so everything matches everything, and the best
+      # match is perfect.
+      return PotentialMatch.new(
+        offer_signup: other,
+        request_signup: self,
+        collection_id: collection_id,
+        num_prompts_matched: ALL,
+        max_tags_matched: ALL
+      )
     end
-    if no_match_required || prompt_matches.size >= settings.num_required_prompts
-      # we have a match
-      potential_match_attributes[:num_prompts_matched] = prompt_matches.size
-      potential_match = PotentialMatch.new(potential_match_attributes)
-      potential_match.potential_prompt_matches = prompt_matches unless prompt_matches.empty?
-      potential_match
-    else
-      nil
-    end
-  end
 
+    builder = PotentialMatchBuilder.new(self, other, settings)
+
+    requests.each do |request|
+      other.offers.each do |offer|
+        builder.try_prompt_match(request, offer)
+      end
+    end
+
+    builder.build_potential_match
+  end
 end

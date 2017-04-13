@@ -1,7 +1,10 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
-#require File.expand_path('../../features/support/factories.rb', __FILE__)
+require 'simplecov'
+require 'coveralls'
+SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
+Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
@@ -20,44 +23,29 @@ FactoryGirl.find_definitions
 FactoryGirl.definition_file_paths = %w(factories)
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
-  #config.raise_errors_for_deprecations!
+
   config.include FactoryGirl::Syntax::Methods
-  config.include(EmailSpec::Helpers)
-  config.include(EmailSpec::Matchers)
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
+  config.include EmailSpec::Helpers
+  config.include EmailSpec::Matchers
+  config.include Devise::TestHelpers, type: :controller
   config.include Capybara::DSL
 
-  config.before(:suite) do
+  config.before :suite do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
   end
 
-  config.before(:each) do
+  config.before :each do
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after :each do
     DatabaseCleaner.clean
+  end
+
+  config.after :suite do
+    DatabaseCleaner.clean_with :truncation
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -85,6 +73,18 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
+def clean_the_database
+  # Now clear memcached
+  Rails.cache.clear
+  # Now reset redis ...
+  REDIS_GENERAL.flushall
+  REDIS_KUDOS.flushall
+  REDIS_RESQUE.flushall
+  REDIS_ROLLOUT.flushall
+  # Finally elastic search
+  Tire::Model::Search.index_prefix Time.now.to_f.to_s
+end
+
 def get_message_part (mail, content_type)
   mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
 end
@@ -94,4 +94,10 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.length).to eq(2)
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
+end
+
+def create_archivist
+  user = create(:user)
+  user.roles << Role.new(name: "archivist")
+  user
 end

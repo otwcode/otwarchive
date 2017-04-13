@@ -6,22 +6,10 @@ Given /^I have no tags$/ do
 end
 
 Given /^basic tags$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  ratings.each do |rating|
-    Rating.find_or_create_by_name_and_canonical(rating, true)
-  end
-  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
-  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  step %{the default ratings exist}
+  step %{the basic warnings exist}
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
-  Category.find_or_create_by_name_and_canonical("Other", true)
-  Category.find_or_create_by_name_and_canonical("F/F", true)
-  Category.find_or_create_by_name_and_canonical("Multi", true)
-  Category.find_or_create_by_name_and_canonical("M/F", true)
-  Category.find_or_create_by_name_and_canonical("M/M", true)
+  step %{the basic categories exist}
 end
 
 Given /^the default ratings exist$/ do
@@ -32,6 +20,17 @@ Given /^the default ratings exist$/ do
              ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
   ratings.each do |rating|
     Rating.find_or_create_by_name_and_canonical(rating, true)
+  end
+end
+
+Given /^the basic warnings exist$/ do
+  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+end
+
+Given /^the basic categories exist$/ do
+  %w(Gen Other F/F Multi F/M M/M).each do |category|
+    Category.find_or_create_by_name_and_canonical(category, true)
   end
 end
 
@@ -80,6 +79,13 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   synonym.save
 end
 
+Given /^"([^\"]*)" is a metatag of the fandom "([^\"]*)"$/ do |metatag, fandom|
+  fandom = Fandom.find_or_create_by_name(fandom)
+  metatag = Fandom.find_or_create_by_name(metatag)
+  fandom.meta_tags << metatag
+  fandom.save
+end
+
 Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"
@@ -124,6 +130,13 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
+Given /^the canonical fandom "([^"]*)" with (\d+) works$/ do |tag_name, number_of_works|
+  FactoryGirl.create(:fandom, name: tag_name, canonical: true)
+  number_of_works.to_i.times do
+    FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
+  end
+end
+
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
   step %{I am logged out}
@@ -141,12 +154,46 @@ Given /^the unsorted tags setup$/ do
   end
 end
 
-Given /^I have posted a Wrangling Guideline$/ do
-  step("I am logged in as an admin")
-  step(%{I make a 1st Wrangling Guideline})
+Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
+  step %{I am logged in as an admin}
+  visit new_wrangling_guideline_path
+  if title
+    fill_in("Guideline text", with: "This is a page about how we wrangle things.")
+    fill_in("Title", with: title)
+    click_button("Post")
+  else
+    step %{I make a 1st Wrangling Guideline}
+  end
+end
+
+Given(/^the following typed tags exists$/) do |table|
+  table.hashes.each do |hash|
+    type = hash["type"].classify.constantize
+    hash.delete("type")
+    FactoryGirl.create(type, hash)
+  end
 end
 
 ### WHEN
+
+When /^the periodic tag count task is run$/i do
+  Tag.write_redis_to_database
+end
+
+When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("canonicals_#{tag.id}")
+end
+
+When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
+  tag = Tag.find_by_name(tagname)
+  select(type, :from => "tags[#{tag.id}]")
+end
+
+When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  check("selected_tags_#{tag.id}")
+end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
@@ -227,9 +274,15 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   click_button("Post")
 end
 
-When /^(\d+) Wrangling Guidelines? exists?$/ do |n|	
+When /^(\d+) Wrangling Guidelines? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:wrangling_guideline, id: i)
+  end
+end
+
+When /^I flush the wrangling sidebar caches$/ do
+  [Fandom, Character, Relationship, Freeform].each do |klass|
+    Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
 end
 
@@ -249,4 +302,38 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     with_scope(selector) do
       page.has_no_text?(result)
     end
+end
+
+Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
+  user = User.find_by_login(username)
+  user.tag_wrangler.should be_falsey
+end
+
+Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
+  user = User.find_by_login(username)
+  fandom = Fandom.find_by_name(fandom)
+  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment.should_not be_nil
+end
+
+Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
+  user = User.find_by_login(username)
+  fandom = Fandom.find_by_name(fandom)
+  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment.should be_nil
+end
+
+Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
+  tag = Tag.find_by_name(tagname)
+  assert tag.type == tag_type
+end
+
+Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  assert tag.canonical?
+end
+
+Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
+  tag = Tag.find_by_name(tagname)
+  puts tag.inspect
 end

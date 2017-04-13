@@ -23,7 +23,7 @@
 <%= will_paginate @requests %>
 
 <!--main content-->
-<ul class="index group">
+<ul class="prompt index group">
   <% @requests.each do |request| %>
     <% # here we render each prompt as a blurb %>
     <%= render "prompts/prompt_blurb", :prompt => request %>

@@ -1,28 +1,26 @@
 class Collection < ActiveRecord::Base
-  
+  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
-  attr_protected :description_sanitizer_version
-
   has_attached_file :icon,
-  :styles => { :standard => "100x100>" },
-  :url => "/system/:class/:attachment/:id/:style/:basename.:extension",
-  :path => %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-  :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-  :s3_credentials => "#{Rails.root}/config/s3.yml",
-  :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-  :default_url => "/images/skins/iconsets/default/icon_collection.png"
+  styles: { standard: "100x100>" },
+  url: "/system/:class/:attachment/:id/:style/:basename.:extension",
+  path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
+  storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
+  s3_credentials: "#{Rails.root}/config/s3.yml",
+  bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+  default_url: "/images/skins/iconsets/default/icon_collection.png"
 
-  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
-  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
+  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
+  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
 
-  belongs_to :parent, :class_name => "Collection", :inverse_of => :children
-  has_many :children, :class_name => "Collection", :foreign_key => "parent_id", :inverse_of => :parent
+  belongs_to :parent, class_name: "Collection", inverse_of: :children
+  has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
 
-  has_one :collection_profile, :dependent => :destroy
+  has_one :collection_profile, dependent: :destroy
   accepts_nested_attributes_for :collection_profile
 
-  has_one :collection_preference, :dependent => :destroy
+  has_one :collection_preference, dependent: :destroy
   accepts_nested_attributes_for :collection_preference
 
   before_create :ensure_associated
@@ -32,13 +30,13 @@ class Collection < ActiveRecord::Base
   end
 
 
-  belongs_to :challenge, :dependent => :destroy, :polymorphic => true
-  has_many :prompts, :dependent => :destroy
+  belongs_to :challenge, dependent: :destroy, polymorphic: true
+  has_many :prompts, dependent: :destroy
 
-  has_many :signups, :class_name => "ChallengeSignup", :dependent => :destroy
-  has_many :potential_matches, :dependent => :destroy
-  has_many :assignments, :class_name => "ChallengeAssignment", :dependent => :destroy
-  has_many :claims, :class_name => "ChallengeClaim", :dependent => :destroy
+  has_many :signups, class_name: "ChallengeSignup", dependent: :destroy
+  has_many :potential_matches, dependent: :destroy
+  has_many :assignments, class_name: "ChallengeAssignment", dependent: :destroy
+  has_many :claims, class_name: "ChallengeClaim", dependent: :destroy
 
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
@@ -51,33 +49,33 @@ class Collection < ActiveRecord::Base
     end
   end
 
-  has_many :collection_items, :dependent => :destroy
-  accepts_nested_attributes_for :collection_items, :allow_destroy => true
-  has_many :approved_collection_items, :class_name => "CollectionItem",
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :collection_items, dependent: :destroy
+  accepts_nested_attributes_for :collection_items, allow_destroy: true
+  has_many :approved_collection_items, class_name: "CollectionItem",
+    conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-  has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
-  has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
-           :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :works, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :approved_works, through: :collection_items, source: :item, source_type: 'Work',
+           conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-  has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
-  has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-  
-  has_many :fandoms, :through => :approved_works, :uniq => true
-  has_many :filters, :through => :approved_works, :uniq => true
+  has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
+  has_many :approved_bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark',
+    conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-  has_many :collection_participants, :dependent => :destroy
-  accepts_nested_attributes_for :collection_participants, :allow_destroy => true
+  has_many :fandoms, through: :approved_works, uniq: true
+  has_many :filters, through: :approved_works, uniq: true
 
-  has_many :participants, :through => :collection_participants, :source => :pseud
-  has_many :users, :through => :participants, :source => :user
-  has_many :invited, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
-  has_many :owners, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
-  has_many :moderators, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::MODERATOR]
-  has_many :members, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::MEMBER]
-  has_many :posting_participants, :through => :collection_participants, :source => :pseud,
-      :conditions => ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
+  has_many :collection_participants, dependent: :destroy
+  accepts_nested_attributes_for :collection_participants, allow_destroy: true
+
+  has_many :participants, through: :collection_participants, source: :pseud
+  has_many :users, through: :participants, source: :user
+  has_many :invited, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
+  has_many :owners, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
+  has_many :moderators, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::MODERATOR]
+  has_many :members, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::MEMBER]
+  has_many :posting_participants, through: :collection_participants, source: :pseud,
+      conditions: ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
 
 
 
@@ -99,14 +97,14 @@ class Collection < ActiveRecord::Base
   validate :collection_depth
   def collection_depth
     if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
-      errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", :name => parent.name))
+      errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name))
     end
   end
 
   validate :parent_exists
   def parent_exists
     unless parent_name.blank? || Collection.find_by_name(parent_name)
-      errors.add(:base, ts("We couldn't find a collection with name %{name}.", :name => parent_name))
+      errors.add(:base, ts("We couldn't find a collection with name %{name}.", name: parent_name))
     end
   end
 
@@ -116,36 +114,36 @@ class Collection < ActiveRecord::Base
       if parent == self
         errors.add(:base, ts("You can't make a collection its own parent."))
       elsif parent_id_changed? && !parent.user_is_maintainer?(User.current_user)
-        errors.add(:base, ts("You have to be a maintainer of %{name} to make a subcollection.", :name => parent.name))
+        errors.add(:base, ts("You have to be a maintainer of %{name} to make a subcollection.", name: parent.name))
       end
     end
   end
 
-  validates_presence_of :name, :message => ts("Please enter a name for your collection.")
-  validates_uniqueness_of :name, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
+  validates_presence_of :name, message: ts("Please enter a name for your collection.")
+  validates_uniqueness_of :name, case_sensitive: false, message: ts('Sorry, that name is already taken. Try again, please!')
   validates_length_of :name,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
   validates_length_of :name,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
-    :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_COMMENT_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
+    message: ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
+    with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
+  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
-  validates :email, :email_veracity => {:allow_blank => true}
+  validates :email, email_veracity: {allow_blank: true}
 
-  validates_presence_of :title, :message => ts("Please enter a title to be displayed for your collection.")
+  validates_presence_of :title, message: ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
     errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
@@ -158,14 +156,14 @@ class Collection < ActiveRecord::Base
   end
 
   validates_length_of :description,
-    :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    allow_blank: true,
+    maximum: ArchiveConfig.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("is not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("can only point to a gif, jpg, or png file.")
+  validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
+  validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file.")
 
-  scope :top_level, where(:parent_id => nil)
+  scope :top_level, where(parent_id: nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
   scope :not_closed, joins(:collection_preference).where("collection_preferences.closed = ?", false)
   scope :moderated, joins(:collection_preference).where("collection_preferences.moderated = ?", true)
@@ -186,7 +184,7 @@ class Collection < ActiveRecord::Base
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
     table = challenge_type.tableize
-    not_closed.where(:challenge_type => challenge_type).
+    not_closed.where(challenge_type: challenge_type).
       joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
       where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
   end
@@ -223,7 +221,7 @@ class Collection < ActiveRecord::Base
       end
     end
   end
-  
+
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
@@ -246,7 +244,7 @@ class Collection < ActiveRecord::Base
   end
   ## END AUTOCOMPLETE
 
-  
+
   def parent_name=(name)
     @parent_name = name
     self.parent = Collection.find_by_name(name)
@@ -275,15 +273,15 @@ class Collection < ActiveRecord::Base
   def all_participants
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
-  
+
   def all_items
-    CollectionItem.where(:collection_id => ([self.id] + self.children.value_of(:id)))
+    CollectionItem.where(collection_id: ([self.id] + self.children.value_of(:id)))
   end
-  
+
   def all_approved_works
-    work_ids = all_items.where(:item_type => "Work", :user_approval_status => CollectionItem::APPROVED, 
-      :collection_approval_status => CollectionItem::APPROVED).value_of(:item_id)
-    Work.where(:id => work_ids, :posted => true)
+    work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
+      collection_approval_status: CollectionItem::APPROVED).value_of(:item_id)
+    Work.where(id: work_ids, posted: true)
   end
 
   def all_approved_works_count
@@ -292,8 +290,8 @@ class Collection < ActiveRecord::Base
       self.children.each {|child| count += child.approved_works.count}
       count
     else
-      count = self.approved_works.where(:restricted => false).count
-      self.children.each {|child| count += child.approved_works.where(:restricted => false).count}
+      count = self.approved_works.where(restricted: false).count
+      self.children.each {|child| count += child.approved_works.where(restricted: false).count}
       count
     end
   end
@@ -303,21 +301,20 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_bookmarks_count
-    count = self.approved_bookmarks.where(:private => false).count
-    self.children.each {|child| count += child.approved_bookmarks.where(:private => false).count}
+    count = self.approved_bookmarks.where(private: false).count
+    self.children.each {|child| count += child.approved_bookmarks.where(private: false).count}
     count
   end
 
   def all_fandoms
-    Fandom.for_collections([self] + self.children).select("DISTINCT tags.*")
+    # We want filterable fandoms, but not inherited metatags:
+    Fandom.for_collections([self] + children).
+      where('filter_taggings.inherited = 0').uniq
   end
 
   def all_fandoms_count
-    # this is the only way to get this to be done with an actual efficient count query instead of
-    # actually loading the tags and then counting, because count on AR queries isn't respecting
-    # the selects :P
-    # see: https://rails.lighthouseapp.com/projects/8994/tickets/1334-count-calculations-should-respect-scoped-selects
-    Fandom.select("count(distinct tags.id) as count").for_collections([self] + self.children).first.count
+    # Rails now handles .uniq.count correctly, so we can make this simpler:
+    all_fandoms.count
   end
 
   def maintainers
@@ -366,7 +363,7 @@ class Collection < ActiveRecord::Base
   def unrevealed? ; self.collection_preference.unrevealed ; end
   def anonymous? ; self.collection_preference.anonymous ; end
   def challenge? ; !self.challenge.nil? ; end
-  
+
   def gift_exchange?
     return self.challenge_type == "GiftExchange"
   end
@@ -388,7 +385,7 @@ class Collection < ActiveRecord::Base
     # send maintainers a notice via email
     UserMailer.collection_notification(self.id, subject, message).deliver
   end
-  
+
   @queue = :collection
   # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
@@ -400,7 +397,7 @@ class Collection < ActiveRecord::Base
   def async(method, *args)
     Resque.enqueue(Collection, id, method, *args)
   end
-  
+
   def reveal!
     async(:reveal_collection_items)
   end
@@ -408,35 +405,30 @@ class Collection < ActiveRecord::Base
   def reveal_authors!
     async(:reveal_collection_item_authors)
   end
-  
+
   def reveal_collection_items
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
   end
-  
+
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
-    send_author_reveal_notifications
   end
-  
+
   def send_reveal_notifications
     approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
   end
-  
-  def send_author_reveal_notifications
-    approved_collection_items.each {|collection_item| collection_item.notify_of_author_reveal}
-  end
 
   def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = {:page => page}
+    pagination_args = {page: page}
 
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
-    
+
     if !filters[:title].blank?
       # we get the matching collections out of autocomplete and use their ids
-      ids = Collection.autocomplete_lookup(:search_param => filters[:title], 
-                :autocomplete_prefix => (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
+      ids = Collection.autocomplete_lookup(search_param: filters[:title],
+                autocomplete_prefix: (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
              ).map {|result| Collection.id_from_autocomplete(result)}
       query = query.where("collections.id in (?)", ids)
     else
@@ -465,7 +457,7 @@ class Collection < ActiveRecord::Base
       query.paginate(pagination_args)
     end
   end
-  
+
   # Delete current icon (thus reverting to archive default icon)
   def delete_icon=(value)
     @delete_icon = !value.to_i.zero?

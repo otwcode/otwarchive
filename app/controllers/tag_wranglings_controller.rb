@@ -7,18 +7,24 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = {}
     [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
+      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
+        klass.unwrangled.in_use.count
+      end
     end
+    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do 
+      UnsortedTag.count
+    end 
     unless params[:show].blank?
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      sort = sort + ", name ASC" if sort.include?('taggings_count')
+      sort = sort + ", name ASC" if sort.include?('taggings_count_cache')
       if params[:show] == "fandoms"
         @media_names = Media.by_name.value_of(:name)
         @page_subtitle = ts("fandoms")
         @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       else # by fandom
+        raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
         klass = params[:show].classify.constantize
         @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       end

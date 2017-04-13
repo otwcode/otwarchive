@@ -1,5 +1,8 @@
 # options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
+AllCops:
+  TargetRubyVersion: 2.2
+
 # stop checking quotation marks
 Style/StringLiterals:
   Enabled: false

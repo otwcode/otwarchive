@@ -1,4 +1,6 @@
 class Kudo < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
 
@@ -35,10 +37,18 @@ class Kudo < ActiveRecord::Base
 
   def cannot_be_author
     if pseud
-      commentable = commentable_type.classify.constantize.
-                    find_by_id(commentable_id)
+      commentable = nil
+      if commentable_type == "Work" 
+       commentable = Work.find_by_id(commentable_id)
+      end
+      if commentable_type == "Chapter"
+       commentable = Chapter.find_by_id(commentable_id).work
+      end
       kudos_giver = User.find_by_id(pseud.user_id)
-      if kudos_giver.is_author_of?(commentable)
+      if commentable.nil? 
+        errors.add(:no_commentable,
+                   ts("^What did you want to leave kudos on?"))
+      elsif kudos_giver.is_author_of?(commentable)
         errors.add(:cannot_be_author,
                    ts("^You can't leave kudos on your own work."))
       end
@@ -46,9 +56,17 @@ class Kudo < ActiveRecord::Base
   end
 
   def guest_cannot_kudos_restricted_work
-    commentable = commentable_type.classify.constantize.
-                  find_by_id(commentable_id)
-    if pseud.nil? && commentable.restricted?
+    commentable = nil
+    if commentable_type == "Work"
+      commentable = Work.find_by_id(commentable_id)
+    end
+    if commentable_type == "Chapter"
+      commentable = Chapter.find_by_id(commentable_id).work
+    end
+    if commentable.nil?
+      errors.add(:no_commentable,
+                 ts("^What did you want to leave kudos on?"))
+    elsif pseud.nil? && commentable.restricted?
       errors.add(:guest_on_restricted,
                  ts("^You can't leave guest kudos on a restricted work."))
     end

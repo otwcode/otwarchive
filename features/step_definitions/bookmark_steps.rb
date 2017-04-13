@@ -1,8 +1,25 @@
+Given /^mock websites with no content$/ do
+  WebMock.disable_net_connect!
+  WebMock.stub_request(:head, "http://example.org/200")
+  WebMock.stub_request(:head, "http://example.org/301").to_return(status: 301)
+  WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
     step %{I press "Create"}
     Bookmark.tire.index.refresh
+end
+
+Given /^I have a bookmark of a deleted work$/ do
+  title = "Deleted Work For Bookmarking"
+  step %{I start a new bookmark for "#{title}"}
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  step %{I press "Create"}
+  work = Work.find_by_title(title)
+  work.destroy
+  Bookmark.tire.index.refresh
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
@@ -15,7 +32,7 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
-  step %{I open the bookmarkable work "#{title}"}  
+  step %{I open the bookmarkable work "#{title}"}
   click_link("Bookmark")
 end
 
@@ -57,6 +74,22 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+end
+
+When(/^I attempt to create a bookmark of "([^"]*)" with a pseud that is not mine$/) do |work|
+  step %{I am logged in as "commenter"}
+  step %{I start a new bookmark for "#{work}"}
+  pseud_id = User.first.pseuds.first.id
+  find("#bookmark_pseud_id", visible: false).set(pseud_id)
+  click_button "Create"
+end
+
+When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not mine$/) do |work|
+  step %{the user "not_the_bookmarker" exists and is activated}
+  step %{I edit the bookmark for "#{work}"}
+  pseud_id = User.find_by_login("not_the_bookmarker").pseuds.first.id
+  find("#bookmark_pseud_id", visible: false).set(pseud_id)
+  click_button "Edit"
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
