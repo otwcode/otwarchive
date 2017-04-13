@@ -304,7 +304,7 @@ class WorksController < ApplicationController
 
       if @work.errors.empty?
         if @work.invalid_pseuds.present? || @work.ambiguous_pseuds.present?
-          render :_choose_coauthor && return
+          render :_choose_coauthor and return
         else
           @work.posted = @chapter.posted = true if params[:post_button]
           @work.set_revised_at_by_chapter(@chapter)
