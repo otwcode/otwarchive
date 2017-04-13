@@ -1,13 +1,11 @@
 <% content_for :message do %>
-  <p>
-    You have been assigned the following request in the <%= style_link(@collection.title, collection_url(@collection)) %> challenge at the Archive of Our Own!
-  </p>
+  <p><%= t ".html.part1", link: style_link(@collection.title, collection_url(@collection)) %></p>
 
   <p>
-    <%= style_bold("Recipient:") %> <%= @request.nil? ? "None: contact a moderator for help!" : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
+    <%= style_bold(t(".recipient")) %> <%= @request.nil? ? t(".recipient_missing") : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
   </p>
 
-  <%= style_bold("Prompts:") %>
+  <%= style_bold(t(".prompts")) %>
   
   <% @request.requests.each_with_index do |prompt, index| %>
     <% tag_groups = prompt.tag_groups %>
@@ -30,17 +28,17 @@
     <%= index + 1 %>. <%= style_bold(prompt.title) %>
 
     <p>
-      <% if fandoms %><%= style_bold("Fandom:") %> <%= fandoms %><br><% end %>
-      <% if chars %><%= style_bold("Characters:") %> <%= chars %><br><% end %>
-      <% if ships %><%= style_bold("Relationships:") %> <%= ships %><br><% end %>
-      <% if ratings %><%= style_bold("Rating:") %> <%= ratings %><br><% end %>
-      <% if warnings %><%= style_bold("Warnings:") %> <%= warnings %><br><% end %>
-      <% if categories %><%= style_bold("Category:") %> <%= categories %><br><% end %>
-      <% if atags %><%= style_bold("Additional Tags:") %> <%= atags %><br><% end %>
-      <% if otags %><%= style_bold("Optional Tags:") %> <%= otags %><br><% end %>
-      <% if prompt.url && !prompt.url.blank? %><%= style_bold("Prompt URL:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
+      <% if fandoms %><%= style_bold(Fandom.human_attribute_name("name_with_colon", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count)) %> <%= fandoms %><br><% end %>      
+      <% if chars %><%= style_bold(Character.human_attribute_name("name_with_colon", count: prompt.any_character ? 1 : tag_groups["Character"].count)) %> <%= chars %><br><% end %>
+      <% if ships %><%= style_bold(Relationship.human_attribute_name("name_with_colon", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count)) %> <%= ships %><br><% end %>
+      <% if ratings %><%= style_bold(Rating.human_attribute_name("name_with_colon")) %> <%= ratings %><br><% end %>
+      <% if warnings %><%= style_bold(Warning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count)) %> <%= warnings %><br><% end %>
+      <% if categories %><%= style_bold(Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %> <%= categories %><br><% end %>
+      <% if atags %><%= style_bold(Freeform.human_attribute_name("name_with_colon", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count)) %> <%= atags %><br><% end %>
+      <% if otags %><%= style_bold("#{t(".optional_tags")}:") %> <%= otags %><br><% end %>
+      <% if prompt.url && !prompt.url.blank? %><%= style_bold("#{t(".prompt_url")}:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
       <% if prompt.description && !prompt.description.blank? %>
-        <%= style_bold("Description:") %>
+        <%= style_bold(t(".description")) %>
         <%= style_quote(prompt.description) %>
       <% end %>
     </p>
@@ -49,12 +47,10 @@
   <%= styled_divider %>
 
   <p>
-    <%= style_bold("This assignment is due at:") %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
+    <%= style_bold(t(".due")) %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
   </p>
 
-  <p>
-    You can look up this assignment from <%= style_link("your Assignments page", user_assignments_url(@assigned_user)) %>.
-  </p>
+  <p><%= t ".html.look_up", link: style_link(t(".html.look_up_link"), user_assignments_url(@assigned_user)) %></p>
 
   <% if @collection && !@collection.assignment_notification.blank? %>
     <p><%= escape_html_and_create_linebreaks(@collection.assignment_notification) %></p>
@@ -62,7 +58,7 @@
 <% end %>
 
 <% content_for :footer_note do %>
-  You're receiving this email because you signed up for the <%= style_footer_link(@collection.title, collection_url(@collection)) %> challenge. For more information about this challenge and contact information for the moderators, please visit <%= style_footer_link("the challenge profile page", collection_profile_url(@collection)) %>.
+  <%= t ".html.footer", title: style_footer_link(@collection.title, collection_url(@collection)),  profile_url: style_footer_link(t(".html.footer_link"), collection_profile_url(@collection)) %>
 <% end %>
 
 <% content_for :sent_at do %>
