@@ -112,9 +112,9 @@ describe OwnedTagSetsController do
 
   describe "show" do
     context "where tag set is not found" do
-      it "redirects and displays a notice" do
+      it "redirects and displays an error" do
         get :show, id: 12345
-        it_redirects_to_with_notice(tag_sets_path, "What Tag Set did you want to look at?")
+        it_redirects_to_with_error(tag_sets_path, "What Tag Set did you want to look at?")
       end
     end
 
