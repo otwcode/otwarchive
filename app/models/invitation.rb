@@ -1,6 +1,8 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :creator, :polymorphic => true
   belongs_to :invitee, :polymorphic => true
   belongs_to :external_author
@@ -13,9 +15,9 @@ class Invitation < ActiveRecord::Base
       return false
     end
   end
-  
+
   # ensure email is valid
-  validates :invitee_email, :email_veracity => true, :allow_blank => true  
+  validates :invitee_email, :email_veracity => true, :allow_blank => true
 
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
@@ -70,7 +72,7 @@ class Invitation < ActiveRecord::Base
           UserMailer.invitation_to_claim(self.id, archivist).deliver!
         else
           # send invitations actively sent by a user synchronously to avoid delays
-          UserMailer.invitation(self.id).deliver! 
+          UserMailer.invitation(self.id).deliver!
         end
         self.sent_at = Time.now
       rescue Exception => exception

@@ -1,4 +1,5 @@
 class ExternalAuthor < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
 
@@ -20,11 +21,11 @@ class ExternalAuthor < ActiveRecord::Base
     :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
-  
+
   def self.claimed
     where(:is_claimed => true)
   end
-  
+
   def self.unclaimed
     where(:is_claimed => false)
   end

@@ -230,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end

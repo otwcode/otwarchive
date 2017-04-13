@@ -9,6 +9,7 @@ class Work < ActiveRecord::Base
   include WorkStats
   include WorkChapterCountCaching
   include Tire::Model::Search
+  include ActiveModel::ForbiddenAttributesProtection
   # include Tire::Model::Callbacks
 
   ########################################################################
@@ -203,6 +204,9 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+    self.tags.each do |tag|
+      tag.update_tag_cache
+    end
     Work.expire_work_tag_groups_id(self.id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
@@ -212,7 +216,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.work_blurb_tag_cache(id)
-    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), :raw => true) { rand(1..1000) }
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), raw: true) { rand(1..1000) }
   end
 
   def self.expire_work_tag_groups_id(id)
@@ -926,7 +930,7 @@ class Work < ActiveRecord::Base
   # Calls reset_filter_count on all the work's filters
   def adjust_filter_counts
     if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.reset_filter_count }
+      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
     end
     return true
   end

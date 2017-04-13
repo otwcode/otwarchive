@@ -213,6 +213,8 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
+    when /^the new external work page$/i
+      new_external_work_path
 
     # Admin Pages
     when /^the admin-posts page$/i
