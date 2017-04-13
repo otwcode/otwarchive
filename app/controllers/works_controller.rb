@@ -1070,13 +1070,13 @@ class WorksController < ApplicationController
       challenge_claim_ids: [],
       category_string: [],
       warning_strings: [],
-      author_attributes: [:byline, ids: [], coauthors: []],
+      author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
       chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content
-      ],
+      ]
     )
   end
 
