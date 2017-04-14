@@ -12,7 +12,7 @@ Feature: Admin manage skins
     And I am logged in as an admin
   When I follow "Approved Skins"
     And I check "Cache"
-  Then I press "Update" 
+  Then I press "Update"
     And I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
     And I check "Uncache"
@@ -46,18 +46,6 @@ Feature: Admin manage skins
   Then I should see "The following skins were updated: public skin"
   When I follow "Rejected Skins"
   Then I should not see "public skin"
-
-  Scenario: An admin can feature and unfeature skin
-  Given the approved public skin "public skin"
-    And I am logged in as an admin
-  When I follow "Approved Skins"
-    And I check "Feature"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
-  When I follow "Approved Skins"
-    And I check "Unfeature"
-    And I submit
-  Then I should see "The following skins were updated: public skin"
 
   Scenario: Admins should be able to see public skins in the admin skins page
   Given the unapproved public skin "public skin"
@@ -121,7 +109,7 @@ Feature: Admin manage skins
   When I am on skinner's preferences page
     And I select "strange skin" from "preference_skin_id"
     And I submit
-  Then I should see "{ text-decoration: underline; }" 
+  Then I should see "{ text-decoration: underline; }"
   When I am logged in as an admin
   Then I should not see "{ text-decoration: blink; }"
   When I follow "Approved Skins"
