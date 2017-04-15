@@ -502,7 +502,7 @@ namespace :After do
   end
 
   desc "Fix comment threaded_left and threaded_right."
-  task(:fix_comment_threading => :environment) do
+  task(fix_comment_threading: :environment) do
     progress = 0
 
     # It's possible that the callback to fix threaded_left and threaded_right
@@ -510,10 +510,10 @@ namespace :After do
     # this task can be used to recalculate threaded_left and threaded_right for
     # all of the comments that need it.
     Comment.where("thread = id").includes(:thread_comments).find_each do |root|
-      print "." and STDOUT.flush if (progress += 1) % 1000 == 0
+      print "." and STDOUT.flush if ((progress += 1) % 1000).zero?
 
       # It only affects threads that have more than one comment.
-      next if root.children_count == 0
+      next if root.children_count.zero?
 
       # Get all threaded_left and threaded_right values.
       left_and_right_values = root.thread_comments.flat_map do |c|
@@ -553,7 +553,7 @@ namespace :After do
   end
 
   desc "Prune unnecessary deleted comment placeholders."
-  task(:prune_deleted_comment_placeholders => :environment) do
+  task(prune_deleted_comment_placeholders: :environment) do
     # This should be performed after the fix_comment_threading task, if that's
     # necessary. (It can be used without it, but unless threaded_left and
     # threaded_right are set correctly, it won't delete any existing
@@ -565,7 +565,6 @@ namespace :After do
       end
     end
   end
-
 end # this is the end that you have to put new tasks above
 
 ##################
