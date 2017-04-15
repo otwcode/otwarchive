@@ -18,7 +18,12 @@ class SubscriptionsController < ApplicationController
     if params[:type].present?
       @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
     end
-    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }    
+    begin
+      @subscriptions = @subscriptions.to_a.sort { |a, b| a.name.downcase <=> b.name.downcase }
+    rescue
+      @user.fix_user_subscriptions
+      @subscriptions = @subscriptions.to_a.sort { |a, b| a.name.downcase <=> b.name.downcase }
+    end
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
@@ -57,9 +62,9 @@ class SubscriptionsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
-  
+
   private
-  
+
   def subscription_params
     params.require(:subscription).permit(
       :subscribable_id, :subscribable_type
