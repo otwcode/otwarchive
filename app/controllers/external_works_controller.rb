@@ -6,6 +6,11 @@ class ExternalWorksController < ApplicationController
   def new
     @bookmarkable = ExternalWork.new
     @bookmark = Bookmark.new
+    #added below pre-assignment per issue 3127, might consider having this be an archive wide variable, ie def language,
+    # or alternatively have a default language preference per user, ie user preferences and use that, tho more complex
+    # stephanie - 9/15/2013
+    @bookmarkable.language = Language.find_by_short("en")
+
   end
 
   # Used with bookmark form to get an existing external work and return it via ajax
