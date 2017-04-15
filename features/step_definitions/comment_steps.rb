@@ -130,6 +130,11 @@ When /^I delete the comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I delete the reply comment$/ do
+  step %{I follow "Delete" within ".even"}
+  step %{I follow "Yes, delete!"}
+end
+
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}

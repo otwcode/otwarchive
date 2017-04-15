@@ -11,6 +11,8 @@ class Comment < ActiveRecord::Base
   has_many :inbox_comments, :foreign_key => 'feedback_comment_id', :dependent => :destroy
   has_many :users, :through => :inbox_comments
 
+  has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
+
   validates_presence_of :name, :unless => :pseud_id
   validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
