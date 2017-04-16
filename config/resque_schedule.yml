@@ -19,9 +19,17 @@ run_add_counts_to_queue:
   args: add_counts_to_queue
   description: "update the cache of counts of usage for tags"
 
+run_write_redis_to_database:
+  every: 2m
+  class: "ScheduledTagJob"
+  queue: utilities
+  args: write_redis_to_database
+  description: "Flush the count updates to mysql"
+
+
 run_stats_reindex_queue:
   every: 30m
   class: "ScheduledReindexJob"
   queue: utilities
-  args: stats 
+  args: stats
   description: "Kick off a reindex of works with stats updates"

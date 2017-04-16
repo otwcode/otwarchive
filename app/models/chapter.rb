@@ -1,6 +1,7 @@
 # encoding=utf-8
 
 class Chapter < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
   

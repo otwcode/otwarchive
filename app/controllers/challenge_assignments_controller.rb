@@ -120,7 +120,7 @@ class ChallengeAssignmentsController < ApplicationController
       @challenge = @collection.challenge if @collection
       signup_open and return unless !@challenge.signup_open
       access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
-      
+
       # we temporarily are ordering by requesting pseud to avoid left join
       @assignments = case
       when params[:pinch_hit]
@@ -170,14 +170,14 @@ class ChallengeAssignmentsController < ApplicationController
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    @assignments = ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values).reject {|a| a.errors.empty?}
+    @assignments = ChallengeAssignment.update(challenge_assignment_params[:challenge_assignments].keys, challenge_assignment_params[:challenge_assignments].values).reject {|a| a.errors.empty?}
     ChallengeAssignment.update_placeholder_assignments!(@collection)
     if @assignments.empty?
       flash[:notice] = "Assignments updated"
       redirect_to collection_potential_matches_path(@collection)
     else
       flash[:error] = ts("These assignments could not be saved because the two participants do not match. Did you mean to write in a giver?")
-      render template: "potential_matches/index" 
+      render template: "potential_matches/index"
     end
   end
 
@@ -229,7 +229,7 @@ class ChallengeAssignmentsController < ApplicationController
     else
       flash[:error] = @errors
       redirect_to collection_assignments_path(@collection)
-    end 
+    end
   end
 
   def default_all
@@ -248,6 +248,27 @@ class ChallengeAssignmentsController < ApplicationController
         "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(@user)
+  end
+
+  private
+
+  def challenge_assignment_params
+    # Ideally, the param structure would be updated to allow for a more secure
+    # method of permitting params. Currently based off a railscast for editing
+    # multiple records individually prior to the advent of strong params.
+    params.permit(
+      :utf8,
+      :_method,
+      :commit,
+      :collection_id,
+      challenge_assignments: [
+        :id,
+        :collection_id,
+        :request_signup_pseud,
+        :offer_signup_pseud,
+        :pinch_hitter_byline
+      ]
+    )
   end
 
 end

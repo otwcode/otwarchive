@@ -1,4 +1,5 @@
 class ExternalAuthor < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
 
@@ -20,11 +21,11 @@ class ExternalAuthor < ActiveRecord::Base
     :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
-  
+
   def self.claimed
     where(:is_claimed => true)
   end
-  
+
   def self.unclaimed
     where(:is_claimed => false)
   end
@@ -135,18 +136,17 @@ class ExternalAuthor < ActiveRecord::Base
 
   def find_or_invite(archivist = nil)
     if self.email
-      matching_user = User.find_by_email(self.email)
+      matching_user = User.find_by_email(self.email) || User.find_by_id(self.user_id)
       if matching_user
         self.claim!(matching_user)
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
+          @invitation = Invitation.new(invitee_email: self.email, external_author: self, creator: User.current_user)
           @invitation.save
         end
       end
     end
-    # eventually we may want to try finding authors by pseud?
   end
 
 end

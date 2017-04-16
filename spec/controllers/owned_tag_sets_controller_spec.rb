@@ -81,8 +81,8 @@ describe OwnedTagSetsController do
         it "then sets the correct tags with the type fandom" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "fandom"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to include(*tag_set.tags)
@@ -98,8 +98,8 @@ describe OwnedTagSetsController do
         it "sets the correct tags with the type character" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "character"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to_not include(*tag_set.tags)
@@ -112,9 +112,9 @@ describe OwnedTagSetsController do
 
   describe "show" do
     context "where tag set is not found" do
-      it "redirects and displays a notice" do
+      it "redirects and displays an error" do
         get :show, id: 12345
-        it_redirects_to_with_notice(tag_sets_path, "What Tag Set did you want to look at?")
+        it_redirects_to_with_error(tag_sets_path, "What Tag Set did you want to look at?")
       end
     end
 

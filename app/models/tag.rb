@@ -1,5 +1,6 @@
 class Tag < ActiveRecord::Base
 
+  include ActiveModel::ForbiddenAttributesProtection
   include Tire::Model::Search
   # include Tire::Model::Callbacks
   include Searchable
@@ -23,28 +24,28 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  def check_if_large_tag(time_in_cache, time_to_count_sec)
-    # A large tag is one which is periodically refreshed by a background task.
-    # The task is defined in config/resque_schedule.yml
-    # This refreshes the large tags every 30 minutes. It seemed sensible to
-    # only allow tags which stay in the cache longer than the periodic refresh
-    # period. Additionally any tag that takes longer than 4 seconds to count then
-    # it seems reasonable to say that the tag is large.
-    target_state = (time_in_cache >= 40 || time_to_count_sec > (ArchiveConfig.TAGGINGS_COUNT_DEFAULT_FOR_LARGE_TAGS || 4))
-    return if large_tag == target_state
-    tag = readonly? ? Tag.find(id) : self
-    tag.large_tag = target_state
-    tag.save
+  def self.write_redis_to_database
+    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+      Tag.transaction do
+        batch.each do |id|
+          value = REDIS_GENERAL.get("tag_update_#{id}_value")
+          sql = []
+          sql.push("taggings_count_cache = #{value}") unless value.blank?
+          Tag.where(id: id).update_all(sql.join(",")) unless sql.empty?
+        end
+        REDIS_GENERAL.srem("tag_update", batch)
+      end
+    end
   end
 
-  def taggings_count_expiry(count)
+  def self.taggings_count_expiry(count)
     # What we are trying to do here is work out a resonable amount of time for a work to be cached for
-    # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 2000 )
-    # such that for example 2000, would be naturally be tagged for one minute while 140,000 would be cached for
+    # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 1500 )
+    # such that for example 1500, would be naturally be tagged for one minute while 105,000 would be cached for
     # 70 minutes. However we then apply a filter such that the minimum amount of time we will cache something for
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
-    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 2000)
+    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
     [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
   end
 
@@ -52,41 +53,24 @@ class Tag < ActiveRecord::Base
     "/v1/taggings_count/#{id}"
   end
 
+  def write_taggings_to_redis(value)
+    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.set("tag_update_#{id}_value", value)
+    value
+  end
+
   def taggings_count=(value)
-    expiry_time = taggings_count_expiry(value)
+    expiry_time = Tag.taggings_count_expiry(value)
     # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
-    tag = readonly? ? Tag.find(id) : self
-    tag.check_if_large_tag(expiry_time, 0)
-    if tag.taggings_count_cache != value
-      tag.taggings_count_cache = value
-      tag.save
-    end
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    write_taggings_to_redis(value)
   end
 
   def taggings_count
     cache_read = Rails.cache.read(taggings_count_cache_key)
     return cache_read unless cache_read.nil?
-    # The following will drop the readonly flag
-    # http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
-    tag = readonly? ? Tag.find(id) : self
-    time_start = Time.now.to_i
-    real_value = tag.taggings.length
-    time_end = Time.now.to_i
-    # here we cache the value we have more than TAGGINGS_COUNT_MIN_CACHE_COUNT uses or
-    # if the amount of time taken to count the number of uses is more than TAGGINGS_COUNT_MAX_ALLOWED_TIME  seconds
-    # ( defaulting to 6 seconds ) this second check is a emergency feature which I would not expect to kick in
-    # but we want to know how long it takes to count the taggings to work out if it is a large tag
-    # for the scheduled background counts.
-    if (real_value > (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)) || (time_end - time_start > (ArchiveConfig.TAGGINGS_COUNT_MAX_ALLOWED_TIME || 6))
-      tag.taggings_count = real_value
-      check_if_large_tag(taggings_count_expiry(real_value), time_end - time_start)
-    else
-      if tag.taggings_count_cache != real_value
-        tag.taggings_count_cache = real_value
-        tag.save
-      end
-    end
+    real_value = taggings.length
+    self.taggings_count = real_value
     real_value
   end
 
@@ -546,7 +530,7 @@ class Tag < ActiveRecord::Base
 
 
   def autocomplete_score
-    taggings_count
+    taggings_count_cache
   end
 
   # look up tags that have been wrangled into a given fandom
@@ -718,7 +702,7 @@ class Tag < ActiveRecord::Base
 
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
-    Tag.find_each(conditions: "taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
+    Tag.find_each(:conditions => "taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
       if tag.filter
         to_add = tag.works - tag.filter.filtered_works
         to_add.each do |work|
@@ -808,27 +792,27 @@ class Tag < ActiveRecord::Base
     # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
     # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
-    if filter_tag  && !filter_tag.new_record?
-      # we collect tags for resetting count so that it's only done once after we've added all filters to works
-      tags_that_need_filter_count_reset = []
-      self.works.each do |work|
-        if work.filters.include?(filter_tag)
-          # If the work filters already included the filter tag (e.g. because the
-          # new filter tag is a meta tag of an existing tag) we make sure to set
-          # the inheritance to false, since the work is now directly tagged with
-          # the filter or one of its synonyms
-          ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
-          ft.update_attribute(:inherited, false)
-        else
-          work.filters << filter_tag
-          tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
-        end
-        unless filter_tag.meta_tags.empty?
-          filter_tag.meta_tags.each do |m|
-            unless work.filters.include?(m)
-              work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
-              tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
-            end
+    return unless filter_tag  && !filter_tag.new_record?
+
+    # we collect tags for resetting count so that it's only done once after we've added all filters to works
+    tags_that_need_filter_count_reset = []
+    self.works.each do |work|
+      if work.filters.include?(filter_tag)
+        # If the work filters already included the filter tag (e.g. because the
+        # new filter tag is a meta tag of an existing tag) we make sure to set
+        # the inheritance to false, since the work is now directly tagged with
+        # the filter or one of its synonyms
+        ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+        ft.update_attribute(:inherited, false)
+      else
+        work.filters << filter_tag
+        tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
+      end
+      unless filter_tag.meta_tags.empty?
+        filter_tag.meta_tags.each do |m|
+          unless work.filters.include?(m)
+            work.filter_taggings.create!(inherited: true, filter_id: m.id)
+            tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
           end
         end
       end
@@ -904,23 +888,21 @@ class Tag < ActiveRecord::Base
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    unless admin_settings.suspend_filter_counts?
-      current_filter = self.filter
-      # we only need to cache values for user-defined tags
-      # because they're the only ones we access
-      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-        attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
-          :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
-        if current_filter.filter_count
-          unless current_filter.filter_count.update_attributes(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        else
-          unless current_filter.create_filter_count(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        end
+    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    return if admin_settings.suspend_filter_counts?
+    current_filter = filter
+    # we only need to cache values for user-defined tags
+    # because they're the only ones we access
+    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
+    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
+                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
+    if current_filter.filter_count
+      unless current_filter.filter_count.update_attributes(attributes)
+        raise "Filter count error for #{current_filter.name}"
+      end
+    else
+      unless current_filter.create_filter_count(attributes)
+        raise "Filter count error for #{current_filter.name}"
       end
     end
   end
@@ -1066,7 +1048,12 @@ class Tag < ActiveRecord::Base
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = Tag.find_by_name(name)
-      self.add_association(parent) if parent && parent.canonical?
+      if parent && parent.canonical?
+        add_association(parent)
+      else
+        errors.add(:base, "Cannot add association: '#{name}' tag " +
+          (parent ? "is not canonical." : "does not exist."))
+      end
     end
   end
 
@@ -1210,4 +1197,3 @@ class Tag < ActiveRecord::Base
   end
 
 end
-

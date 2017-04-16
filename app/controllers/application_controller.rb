@@ -415,7 +415,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
+      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count_cache']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
