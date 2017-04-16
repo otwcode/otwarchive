@@ -38,9 +38,9 @@ module UsersHelper
   # Determine which icon to show on user pages
   def standard_icon(user = nil, pseud = nil)
     if pseud && pseud.icon
-      pseud.icon.url(:standard).gsub(/^http:/, "https")
+      pseud.icon.url(:standard).gsub(/^http:/, "https:")
     elsif user && user.default_pseud && user.default_pseud.icon
-      user.default_pseud.icon.url(:standard).gsub(/^http:/, "https")
+      user.default_pseud.icon.url(:standard).gsub(/^http:/, "https:")
     else
       '/images/skins/iconsets/default/icon_user.png'
     end
