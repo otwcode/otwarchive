@@ -237,7 +237,7 @@ class WorkSearch < Search
   end
 
   def should_include_drafts?
-    self.collected && User.current_user.present? && (User.current_user == self.works_parent)
+    false unless User.current_user.present? && (User.current_user == self.works_parent)
   end
   
   # Translate language abbreviations to numerical ids
