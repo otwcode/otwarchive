@@ -1,5 +1,40 @@
 @works
 Feature: Languages
+
+  Scenario: Add a language and check abuse and support available
+
+  Given basic languages
+    And I am logged in as an admin
+   When I go to the languages page
+   When I follow "Add a Language"
+    And I fill in "Name" with "Klingon"
+    And I fill in "Abbreviation" with "tlh"
+    And I check "Support available"
+    And I press "Create Language"
+   Then I should see "Language was successfully added."
+   When I follow "Add a Language"
+    And I fill in "Name" with "Sindarin"
+    And I fill in "Abbreviation" with "sj"
+    And I press "Create Language"
+   Then I should see "Language was successfully added."
+   When I am logged out
+    And I am on the home page
+   When I follow "Technical Support and Feedback"
+   Then I should see "Klingon" within "select#feedback_language"
+    And I should not see "Sindarin"
+
+  Scenario: Adding Support for a language
+
+  Given the following language exists
+    | name           | short |
+    | Francais       | fr    |
+  When I am logged in as an admin
+    And I go to the languages page
+    And I follow "Edit"
+    And I check "Support available"
+    And I press "Update Language"
+  When I follow "Technical Support and Feedback"
+    And I should see "Francais" within "select#feedback_language"
     
   Scenario: Browse works by language
   
