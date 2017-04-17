@@ -22,7 +22,7 @@
         </ul>
       </dd>
     <% end %>
-    <% if admin_post.tags.length > 0 %>
+    <% if admin_post.tags.present? %>
       <dt class="tags"><%= ts("Tags:") %></dt>
       <dd class="tags">
         <ul class="tags commas">
