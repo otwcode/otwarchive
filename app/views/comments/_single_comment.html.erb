@@ -59,10 +59,10 @@
         <% end %>
       <% end %><!-- end caching -->
 
-      <%= render "comments/comment_actions", comment: single_comment %>
-      <% if logged_in_as_admin?  %>
-          <p><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "None recorded" : single_comment.ip_address) %> </p>
+      <% if logged_in_as_admin? %>
+        <p class="comment ip"><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "No address recorded" : single_comment.ip_address) %></p>
       <% end %>
+      <%= render "comments/comment_actions", comment: single_comment %>
     <% end %>
   <% end %>
 </li>
