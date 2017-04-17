@@ -33,6 +33,6 @@
     </p>
   <% end %>
   <% if logged_in_as_admin? %>
-    <p class="comment ip"><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "No address recorded" : single_comment.ip_address) %></p>
+    <p class="ip"><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "No address recorded" : single_comment.ip_address) %></p>
   <% end %>
 </li>
