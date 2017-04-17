@@ -46,7 +46,7 @@ Feature: Work Drafts
 
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
-    When the work "old draft work" was created 31 days ago
+    When the work "old draft work" was created 32 days ago
     And the work "new draft work" was created 2 days ago
     When I am on drafter's works page
     Then I should see "Drafts (2)"
