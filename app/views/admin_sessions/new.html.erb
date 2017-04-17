@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for @admin_session do |form| %>
+<%= form_for @admin_session, :url => admin_sessions_url(:protocol => 'https')  do |form| %>
 	<dl>
 		<dt><%= form.label :login, ts("Admin user name") %></dt>
   	<dd><%= form.text_field :login %></dd>
