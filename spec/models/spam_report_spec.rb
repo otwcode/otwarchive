@@ -6,15 +6,22 @@ describe SpamReport do
   let (:second_spam) { create(:work, spam: true, posted: true, authors: first_spam.authors) }
   let (:third_spam) { create(:work, spam: true, posted: true, authors: second_spam.authors) }
 
+  before :all do
+          @existing = create(:user)
+  end
+
   it 'has a recent date after the new date' do
     spam_report = SpamReport.new
-    expect(spam_report.new_date).to be > spam_report.recent_date
+    ArchiveConfig.SPAM_THRESHOLD = 10
+    first_work
+    third_spam
   end
 
   it 'sends no email if there is no significant spam' do
     spam_report = SpamReport.new
     first_work
     third_spam
+    ArchiveConfig.SPAM_THRESHOLD = 70
     expect(AdminMailer).not_to receive(:send_spam_alert)
     spam_report.run
   end
