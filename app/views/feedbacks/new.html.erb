@@ -32,7 +32,7 @@
         <%= f.text_field :username %>
       </dd>
       <dt class="required"><%= f.label :email, ts("Your email (required)") %></dt>
-      <dd>
+      <dd class="required">
         <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
       </dd>
     </dl>
