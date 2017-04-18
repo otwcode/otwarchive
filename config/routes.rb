@@ -530,15 +530,12 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :wrangling_guidelines do
-    member do
-      get :confirm_delete
-    end
     collection do
       get :manage
-      post :reorder
+      post :update_positions
     end
   end
-  
+
   resource :redirect, controller: "redirect", only: [:show] do
     member do
       get :do_redirect
