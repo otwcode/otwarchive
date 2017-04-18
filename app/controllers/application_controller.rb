@@ -287,32 +287,6 @@ public
     @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
-  ### GLOBALIZATION ###
-
-#  before_filter :load_locales
-#  before_filter :set_preferred_locale
-
-#  I18n.backend = I18nDB::Backend::DBBased.new
-#  I18n.record_missing_keys = false # if you want to record missing translations
-  protected
-
-  def load_locales
-    @loaded_locales ||= Locale.order(:iso)
-  end
-
-  # Sets the locale
-  def set_preferred_locale
-    # Loading the current locale
-    if session[:locale] && @loaded_locales.detect { |loc| loc.iso == session[:locale]}
-      set_locale session[:locale].to_sym
-    else
-      set_locale Locale.find_main_cached.iso.to_sym
-    end
-    @current_locale = Locale.find_by_iso(I18n.locale.to_s)
-  end
-
-  ### -- END GLOBALIZATION -- ###
-
   public
 
   #### -- AUTHORIZATION -- ####
