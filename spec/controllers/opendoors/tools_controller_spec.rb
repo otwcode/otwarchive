@@ -8,12 +8,11 @@ describe Opendoors::ToolsController do
   let(:opendoors_user) { create(:opendoors_user) }
 
   describe "GET #index" do
-    it "denies access if not logged in" do
+    it "denies access if not logged in with Open Doors privileges" do
+      fake_logout
       get :index
       it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-    end
 
-    it "denies access if logged in without Open Doors privileges" do
       fake_login_known_user(user)
       get :index
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
@@ -38,18 +37,17 @@ describe Opendoors::ToolsController do
   end
 
   describe "POST #url_update" do
-    it "denies access if not logged in" do
+    it "denies access if not logged in with Open Doors privileges" do
+      fake_logout
       post :url_update
       it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-    end
 
-    it "denies access if logged in but not Open Doors" do
       fake_login_known_user(user)
       post :url_update
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
-    context "when logged in as Open Doors" do
+    context "when logged in with Open Doors privileges" do
       before { fake_login_known_user(opendoors_user) }
 
       it "redirects to tools if work URL is missing" do
