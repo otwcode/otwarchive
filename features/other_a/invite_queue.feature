@@ -104,7 +104,7 @@ Feature: Invite queue management
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
-      And I fill in "invitee_email" with "test@archiveofourown.org"
+      And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
     When I follow "copy and use"
@@ -112,7 +112,8 @@ Feature: Invite queue management
 
     # user uses email invite
     Given I am a visitor
-    Then the email should contain "You've been invited to join our beta!"
+    # "You've" removed from test due to escaping on apostrophes
+    Then the email should contain "been invited to join our beta!"
       And the email should contain "fanart"
       And the email should contain "podfic"
     When I click the first link in the email
@@ -129,6 +130,7 @@ Feature: Invite queue management
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
       And the email should contain "activate your account"
+      And the email should not contain "translation missing"
 
     # user activates account
     When all emails have been delivered

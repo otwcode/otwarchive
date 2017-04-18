@@ -51,7 +51,7 @@ class UserMailer < BulletproofMailer::Base
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
       to: @invitation.invitee_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      subject: t("user_mailer.invitation.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
@@ -230,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -244,7 +244,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
+        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -259,7 +259,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @old_email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
+        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -275,7 +275,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
+        subject: t('user_mailer.coauthor_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -343,7 +343,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+        subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -363,7 +363,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+        subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure

@@ -24,6 +24,8 @@ module NavigationHelpers
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the admin login page$/i
+      new_admin_session_path
 
     # the following are examples using path_to_pickle
 
@@ -177,14 +179,6 @@ module NavigationHelpers
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
-    when /^the admin-posts page$/i
-      admin_posts_path
-    when /^the admin-settings page$/i
-      admin_settings_path
-    when /^the admin-notices page$/i
-      notify_admin_users_path
-    when /^the admin-blacklist page$/i
-      admin_blacklisted_emails_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
@@ -203,10 +197,6 @@ module NavigationHelpers
       edit_tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by_title($1))
-    when /^the manage users page$/
-      admin_users_path
-    when /^the abuse administration page for "(.*)"$/i
-      admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
     when /^the Open Doors external authors page$/i
@@ -223,6 +213,24 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
+    when /^the new external work page$/i
+      new_external_work_path
+
+    # Admin Pages
+    when /^the admin-posts page$/i
+      admin_posts_path
+    when /^the admin-settings page$/i
+      admin_settings_path
+    when /^the admin-notices page$/i
+      notify_admin_users_path
+    when /^the admin-blacklist page$/i
+      admin_blacklisted_emails_path
+    when /^the manage users page$/
+      admin_users_path
+    when /^the bulk email search page$/i
+      bulk_search_admin_users_path
+    when /^the abuse administration page for "(.*)"$/i
+      admin_user_path(User.find_by_login($1))
 
     # Here is an example that pulls values out of the Regexp:
     #

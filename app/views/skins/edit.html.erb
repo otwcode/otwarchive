@@ -1,18 +1,17 @@
-<!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
-<h2 class="heading"><%= ts('Edit Archive Skin')  %></h2>
+<h2 class="heading"><%= ts('Edit Skin') %></h2>
 
 <%= error_messages_for :skin %>
 
 <!--subnav-->
-<%= render 'skin_top_navigation' %>
+<%= render 'skin_navigation' %>
 <!--/subnav-->
 
-<h3 class="landmark heading"><%= ts('Edit Archive Skin Form') %></h3>
-<%= form_for(@skin, :html => {:multipart => true, :class => "skin verbose post"}) do |f| %>
+<h3 class="landmark heading"><%= ts('Edit Skin Form') %></h3>
+<%= form_for(@skin, html: { multipart: true, class: "skin verbose post" }) do |f| %>
 
   <% if params[:wizard] %>
-    <%= render 'wizard_form', :f => f %>
+    <%= render 'wizard_form', f: f %>
   <% else %>
-    <%= render 'form', :f => f %>
+    <%= render 'form', f: f %>
   <% end %>
 <% end %>

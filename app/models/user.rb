@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   audited
+  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user
@@ -96,60 +97,60 @@ class User < ActiveRecord::Base
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
   has_many :comments, through: :pseuds
   has_many :kudos, through: :pseuds
-  
+
   # Nested associations through creatorships got weird after 3.0.x
-  
+
   def works
     Work.select("DISTINCT works.*").
-    joins("INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+    joins("INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
   end
-  
+
   def series
     Series.select("DISTINCT series.*").
-    joins("INNER JOIN `creatorships` ON `series`.`id` = `creatorships`.`creation_id` 
+    joins("INNER JOIN `creatorships` ON `series`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Series'", self.id)
   end
-  
+
   def chapters
-    Chapter.joins("INNER JOIN `creatorships` ON `chapters`.`id` = `creatorships`.`creation_id` 
+    Chapter.joins("INNER JOIN `creatorships` ON `chapters`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Chapter'", self.id)
   end
-  
+
   def related_works
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`parent_id` = `works`.`id` 
-      AND `related_works`.`parent_type` = 'Work' 
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`parent_id` = `works`.`id`
+      AND `related_works`.`parent_type` = 'Work'
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
   end
-  
+
   def parent_work_relationships
-    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`work_id` = `works`.`id` 
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`work_id` = `works`.`id`
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
   end
-  
+
   def tags
-    Tag.joins("INNER JOIN `taggings` ON `tags`.`id` = `taggings`.`tagger_id` 
-      INNER JOIN `works` ON `taggings`.`taggable_id` = `works`.`id` AND `taggings`.`taggable_type` = 'Work' 
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+    Tag.joins("INNER JOIN `taggings` ON `tags`.`id` = `taggings`.`tagger_id`
+      INNER JOIN `works` ON `taggings`.`taggable_id` = `works`.`id` AND `taggings`.`taggable_type` = 'Work'
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
   end
-  
+
   def filters
-    Tag.joins("INNER JOIN `filter_taggings` ON `tags`.`id` = `filter_taggings`.`filter_id` 
-      INNER JOIN `works` ON `filter_taggings`.`filterable_id` = `works`.`id` AND `filter_taggings`.`filterable_type` = 'Work' 
-      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+    Tag.joins("INNER JOIN `filter_taggings` ON `tags`.`id` = `filter_taggings`.`filter_id`
+      INNER JOIN `works` ON `filter_taggings`.`filterable_id` = `works`.`id` AND `filter_taggings`.`filterable_type` = 'Work'
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id`
       INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
     where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
   end
-  
+
   def direct_filters
     filters.where("filter_taggings.inherited = false")
   end
@@ -253,11 +254,11 @@ class User < ActiveRecord::Base
   end
 
 
-  def self.for_claims(claims_ids)    
+  def self.for_claims(claims_ids)
     joins(:request_claims).
     where("challenge_claims.id IN (?)", claims_ids)
   end
-  
+
   # Find users with a particular role and/or by name or email
   # Options: inactive, page
   def self.search_by_role(role, query, options = {})
@@ -272,7 +273,14 @@ class User < ActiveRecord::Base
     if query.present?
       users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
     end
-    users.paginate(:page => options[:page] || 1)
+    users.paginate(page: options[:page] || 1)
+  end
+
+  def self.search_multiple_by_email(emails = [])
+    users = User.where(email: emails)
+    found_emails = users.map(&:email)
+    not_found = emails - found_emails
+    [users, not_found]
   end
 
   ### AUTHENTICATION AND PASSWORDS
@@ -292,7 +300,7 @@ class User < ActiveRecord::Base
     temp_password = generate_password(20)
     User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
     # send synchronously to prevent getting caught in backed-up mail queue
-    UserMailer.reset_password(self.id, temp_password).deliver! 
+    UserMailer.reset_password(self.id, temp_password).deliver!
   end
 
   def activate
@@ -498,7 +506,7 @@ class User < ActiveRecord::Base
       end
     end
   end
- 
+
   def reindex_user_works
     # reindex the user's works to make sure they show up on the user's works page
     works.each do |work|

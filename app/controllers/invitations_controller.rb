@@ -1,3 +1,4 @@
+# coding: utf-8
 class InvitationsController < ApplicationController
 
   before_filter :check_permission
@@ -26,9 +27,10 @@ class InvitationsController < ApplicationController
   end
 
   def invite_friend
-    @invitation = @user.invitations.find(params[:id])
-    if !params[:invitee_email].blank?
-      @invitation.invitee_email = params[:invitee_email]
+    @invitation = @user.invitations.find(invitation_params[:id])
+
+    if !invitation_params[:invitee_email].blank?
+      @invitation.invitee_email = invitation_params[:invitee_email]
       if @invitation.save
         flash[:notice] = ts('Invitation was successfully sent.')
         redirect_to([@user, @invitation])
@@ -42,8 +44,8 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    if params[:number_of_invites].to_i > 0
-      params[:number_of_invites].to_i.times do
+    if invitation_params[:number_of_invites].to_i > 0
+      invitation_params[:number_of_invites].to_i.times do
         @user.invitations.create
       end
     end
@@ -57,7 +59,7 @@ class InvitationsController < ApplicationController
     if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
       flash[:notice] = ts('Invitation was successfully sent.')
       if logged_in_as_admin?
-        redirect_to find_admin_invitations_url(:token => @invitation.token)
+        redirect_to find_admin_invitations_url("invitation[token]" => @invitation.token)
       else
         redirect_to([@user, @invitation])
       end
@@ -80,5 +82,10 @@ class InvitationsController < ApplicationController
     else
       redirect_to admin_invitations_url
     end
+  end
+
+  private
+  def invitation_params
+    params.require(:invitation).permit(:id, :invitee_email, :number_of_invites)
   end
 end

@@ -44,7 +44,7 @@ Given /^I am logged in as an admin$/ do
   if admin.blank?
     admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
-  visit admin_login_path
+  visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
@@ -52,8 +52,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
 end
 
 Given /^basic languages$/ do
@@ -81,6 +80,13 @@ Given /^guest downloading is on$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
   uncheck("Turn off downloading for guests")
+  click_button("Update")
+end
+
+Given /^downloads are off$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Allow downloads")
   click_button("Update")
 end
 
@@ -216,6 +222,25 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
   fill_in("Category name*", with: "Number #{n} FAQ")
   fill_in("Anchor name*", with: "Number#{n}anchor")
+  click_button("Post")
+end
+
+When /^I make a multi-question FAQ post$/ do
+  visit new_archive_faq_path
+  fill_in("Question*", with: "Number 1 Question.")
+  fill_in("Answer*", with: "Number 1 posted FAQ, this is.")
+  fill_in("Category name*", with: "Standard FAQ Category")
+  fill_in("Anchor name*", with: "Number1anchor")
+  click_button("Post")
+  step %{I follow "Edit"}
+  step %{I fill in "Questions:" with "3"}
+  step %{I press "Update Form"}
+  fill_in("archive_faq_questions_attributes_1_question", with: "Number 2 Question.")
+  fill_in("archive_faq_questions_attributes_1_content", with: "This is an answer to the second question")
+  fill_in("archive_faq_questions_attributes_1_anchor", with: "whatisao32")
+  fill_in("archive_faq_questions_attributes_2_question", with: "Number 3 Question.")
+  fill_in("archive_faq_questions_attributes_2_content", with: "This is an answer to the third question")
+  fill_in("archive_faq_questions_attributes_2_anchor", with: "whatisao33")
   click_button("Post")
 end
 
