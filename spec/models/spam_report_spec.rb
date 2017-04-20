@@ -15,22 +15,22 @@ describe SpamReport do
     expect(spam_report.new_date).to be > spam_report.recent_date
   end
 
-  it 'sends no email if there is no significant spam' do
+  it 'does not send email if the spam score is lower than the spam threshold' do
     third_spam
     ArchiveConfig.SPAM_THRESHOLD = 70
     expect(AdminMailer).not_to receive(:send_spam_alert)
     SpamReport.run
   end
 
-  it 'sends email if there is significant spam' do
+  it 'sends email if the spam score is higher than the spam threshold' do
     expect(AdminMailer).to receive(:send_spam_alert).with(
-      third_spam.pseuds.first.user_id => { score: 13, \
+      third_spam.pseuds.first.user_id => { score: 13,
                                            work_ids: [first_spam.id, second_spam.id, third_spam.id] }
     ).and_return(double("AdminMailer", deliver: true))
     SpamReport.run
   end
 
-  it 'Using more than one ip address increases the score' do
+  it 'increases the spam score if the work creator has used more than one IP address"' do
     third_spam.ip_address = "192.168.11.1"
     third_spam.save
     expect(AdminMailer).to receive(:send_spam_alert).with(
@@ -40,7 +40,12 @@ describe SpamReport do
     SpamReport.run
   end
 
-  it 'Posting in the past decreases the score' do
+  it 'Posting works in the recent ( but not too recent ) past reduces the score' do
+    expect(AdminMailer).to receive(:send_spam_alert).with(
+      third_spam.pseuds.first.user_id => { score: 13, \
+                                           work_ids: [first_spam.id, second_spam.id, third_spam.id] }
+    ).and_return(double("AdminMailer", deliver: true))
+    SpamReport.run
     create(:work, spam: false, posted: true, authors: second_spam.authors, created_at: 3.days.ago)
     expect(AdminMailer).to receive(:send_spam_alert).with(
       third_spam.pseuds.first.user_id => { score: 11, \
