@@ -47,7 +47,7 @@ gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>= 1.7.1'
 gem 'mechanize'
 gem 'sanitize'
-# Until there is a working 
+# Until there is a working solution to
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
