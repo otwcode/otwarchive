@@ -428,11 +428,15 @@ class Tag < ActiveRecord::Base
 
   # We can pass this any Tag instance method that we want to run later.
   def async(method, *args)
-    if Rails.env.test?
-      send(method, *args)
-    else
-      Resque.enqueue(Tag, id, method, *args)
-    end
+    # Note that Resque calls are automatically inlined in the test environment.
+    # (see config/initializers/gem-plugin_config/resque.rb)
+    Resque.enqueue(Tag, id, method, *args)
+
+    # If switching from an inline call to an async call causes problems,
+    # remember that Tag.perform will reload the tag, so it will not work if
+    # you're relying on data that has not yet been written to the database.
+    # So be very careful when using async calls in before_create,
+    # before_update, and before_save hooks.
   end
 
   # Class methods
