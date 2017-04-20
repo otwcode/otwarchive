@@ -965,9 +965,7 @@ class Tag < ActiveRecord::Base
   def associations_to_remove=(taglist)
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
       tag_to_remove = Tag.find(tag_id)
-      if tag_to_remove
-        self.async(:remove_association, tag_to_remove.id)
-      end
+      remove_association(tag_to_remove.id) if tag_to_remove
     end
   end
 
@@ -1035,7 +1033,7 @@ class Tag < ActiveRecord::Base
   before_update :check_canonical
   def check_canonical
     if self.canonical_changed? && !self.canonical?
-      self.async(:remove_canonical_associations)
+      remove_canonical_associations
       async(:remove_favorite_tags)
     elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
@@ -1129,7 +1127,7 @@ class Tag < ActiveRecord::Base
         if new_merger && self.errors.empty?
           self.canonical = false
           self.merger_id = new_merger.id
-          async(:add_merger_associations)
+          add_merger_associations
         end
       end
     end
