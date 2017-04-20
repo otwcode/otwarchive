@@ -20,10 +20,10 @@
   </p>
 
   <p>
-    <%= t ".html.part3", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
+    <%= t(".html.part3", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token))).html_safe %>
   </p>
 
   <p>
-    <%= t ".html.faq_link", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url) %>
+    <%= t(".html.faq_link", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url)).html_safe %>
   </p>
 <% end %>
