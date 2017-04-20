@@ -522,4 +522,65 @@ describe Tag do
       end
     end
   end
+
+  describe "canonical" do
+    let!(:work) { create(:work, fandom_string: fandom.name) }
+
+    context "when the tag is non-canonical" do
+      let(:fandom) { create(:fandom, canonical: false) }
+
+      it "making it canonical adds filters to tagged works" do
+        fandom.attributes = { canonical: true }
+        fandom.save!
+        expect(fandom.filtered_works.reload).to contain_exactly(work)
+      end
+    end
+
+    context "when the tag is canonical" do
+      let(:fandom) { create(:fandom, canonical: true) }
+
+      it "making it non-canonical removes filters" do
+        fandom.attributes = { canonical: false }
+        fandom.save!
+        expect(fandom.filtered_works.reload).to contain_exactly()
+      end
+    end
+  end
+
+  describe "merger" do
+    let!(:work) { create(:work, fandom_string: synonym.name) }
+
+    let(:fandom) { create(:fandom, canonical: true) }
+    let(:synonym) { create(:fandom, canonical: false) }
+
+    context "when the tag has no synonym" do
+      it "adding a synonym adds filters" do
+        synonym.attributes = { syn_string: fandom.name }
+        synonym.save!
+        expect(fandom.filtered_works.reload).to contain_exactly(work)
+      end
+    end
+
+    context "when the tag is synned" do
+      before do
+        synonym.attributes = { syn_string: fandom.name }
+        synonym.save!
+        synonym.reload
+      end
+
+      it "changing the synonym adds and removes filters" do
+        new_fandom = create(:fandom, canonical: true)
+        synonym.attributes = { syn_string: new_fandom.name }
+        synonym.save!
+        expect(fandom.filtered_works.reload).to contain_exactly()
+        expect(new_fandom.filtered_works.reload).to contain_exactly(work)
+      end
+
+      it "removing the synonym removes filters" do
+        synonym.attributes = { syn_string: "" }
+        synonym.save!
+        expect(fandom.filtered_works.reload).to contain_exactly()
+      end
+    end
+  end
 end

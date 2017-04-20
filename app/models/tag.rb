@@ -189,7 +189,7 @@ class Tag < ActiveRecord::Base
     tire.update_index
   end
 
-  before_validation :check_synonym
+  validate :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
       # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
@@ -747,8 +747,8 @@ class Tag < ActiveRecord::Base
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
 
-  before_update :update_filters_for_canonical_change
-  before_update :update_filters_for_merger_change
+  after_update :update_filters_for_canonical_change
+  after_update :update_filters_for_merger_change
 
   # If a tag was not canonical but is now, it needs new filter_taggings
   # If it was canonical but isn't anymore, we need to change or remove
