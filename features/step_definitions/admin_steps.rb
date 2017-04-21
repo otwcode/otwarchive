@@ -182,6 +182,25 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^an FAQ category with multiple questions in the default language$/ do
+  step %{I am logged in as an admin}
+  visit new_archive_faq_path
+  # We have to make the first question before we can add more
+  fill_in("archive_faq_title", with: "Default Language FAQ")
+  fill_in("archive_faq_questions_attributes_0_question", with: "Is this question 1?")
+  fill_in("archive_faq_questions_attributes_0_anchor", with: "anchor1")
+  fill_in("archive_faq_questions_attributes_0_content", with: "Yes, and this is answer 1.")
+  click_button("Post")
+  click_link("Edit")
+  fill_in("num_questions", with: 2)
+  click_button("Update Form")
+  fill_in("archive_faq_questions_attributes_1_question", with: "Is this question 2?")
+  fill_in("archive_faq_questions_attributes_1_anchor", with: "anchor2")
+  fill_in("archive_faq_questions_attributes_1_content", with: "Yes, and this is answer 2.")
+  click_button("Post")
+  step %{I am logged out as an admin}
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -307,8 +326,6 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-### THEN
-
 When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Deutsch Ankuendigung")
@@ -317,6 +334,15 @@ When (/^I make a translation of an admin post$/) do
   fill_in("admin_post_translated_post_id", with: AdminPost.find_by(title: "Default Admin Post").id)
   click_button("Post")
 end
+
+When /^I translate question (\d+)$/ do |number|
+  question_number = number.to_i - 1
+  fill_in("archive_faq_questions_attributes_#{question_number}_question", with: "Is this Deutsch question 1?")
+  fill_in("archive_faq_questions_attributes_#{question_number}_anchor", with: "deutscheanchor1")
+  fill_in("archive_faq_questions_attributes_#{question_number}_content", with: "Yes, and this is Deutsch answer 1.")
+end
+
+### THEN
 
 Then (/^I should see a translated admin post$/) do
   step %{I go to the admin-posts page}
@@ -447,4 +473,13 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
   step %{I should not see "has been blocked at the owner's request"}
   step %{I should see "Comment created!"}
+end
+
+Then /^the FAQ fields should be populated with the default language version$/ do
+  step %{the "archive_faq_questions_attributes_0_question" field should contain "Is this question 1?"}
+  step %{the "archive_faq_questions_attributes_0_anchor" field should contain "anchor1"}
+  step %{the "archive_faq_questions_attributes_0_content" field should contain "Yes, and this is answer 1."}
+  step %{the "archive_faq_questions_attributes_1_question" field should contain "Is this question 2?"}
+  step %{the "archive_faq_questions_attributes_1_anchor" field should contain "anchor2"}
+  step %{the "archive_faq_questions_attributes_1_content" field should contain "Yes, and this is answer 2."}
 end
