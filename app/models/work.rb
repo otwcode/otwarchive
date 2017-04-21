@@ -797,7 +797,7 @@ class Work < ActiveRecord::Base
   end
 
   def download_title
-    string = title.to_ascii.gsub(/[^[\w _-]]+/, '')
+    string = title.to_ascii.gsub(/[^[\w _]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
