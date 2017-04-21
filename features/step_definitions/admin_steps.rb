@@ -338,7 +338,6 @@ end
 When /^I translate question (\d+)$/ do |number|
   question_number = number.to_i - 1
   fill_in("archive_faq_questions_attributes_#{question_number}_question", with: "Is this Deutsch question 1?")
-  fill_in("archive_faq_questions_attributes_#{question_number}_anchor", with: "deutscheanchor1")
   fill_in("archive_faq_questions_attributes_#{question_number}_content", with: "Yes, and this is Deutsch answer 1.")
 end
 
@@ -477,9 +476,9 @@ end
 
 Then /^the FAQ fields should be populated with the default language version$/ do
   step %{the "archive_faq_questions_attributes_0_question" field should contain "Is this question 1?"}
-  step %{the "archive_faq_questions_attributes_0_anchor" field should contain "anchor1"}
+  step %{the "archive_faq_questions_attributes_0_anchor" input should be disabled}
   step %{the "archive_faq_questions_attributes_0_content" field should contain "Yes, and this is answer 1."}
   step %{the "archive_faq_questions_attributes_1_question" field should contain "Is this question 2?"}
-  step %{the "archive_faq_questions_attributes_1_anchor" field should contain "anchor2"}
+  step %{the "archive_faq_questions_attributes_1_anchor" input should be disabled}
   step %{the "archive_faq_questions_attributes_1_content" field should contain "Yes, and this is answer 2."}
 end
