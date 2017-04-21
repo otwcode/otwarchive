@@ -542,7 +542,7 @@ describe Tag do
       it "making it non-canonical removes filters" do
         fandom.attributes = { canonical: false }
         fandom.save!
-        expect(fandom.filtered_works.reload).to contain_exactly()
+        expect(fandom.filtered_works.reload).to contain_exactly
       end
     end
   end
@@ -581,8 +581,8 @@ describe Tag do
 
           expect(fandom.sub_tags.reload).to contain_exactly(sub)
           expect(fandom.meta_tags.reload).to contain_exactly(meta)
-          expect(synonym.sub_tags.reload).to contain_exactly()
-          expect(synonym.meta_tags.reload).to contain_exactly()
+          expect(synonym.sub_tags.reload).to contain_exactly
+          expect(synonym.meta_tags.reload).to contain_exactly
         end
 
         it "adding a synonym transfers its associations", :pending do
@@ -598,7 +598,7 @@ describe Tag do
           expect(fandom.parents.reload).to contain_exactly(parent)
           expect(fandom.children.reload).to contain_exactly(child)
           expect(synonym.parents.reload).to contain_exactly(parent)
-          expect(synonym.children.reload).to contain_exactly()
+          expect(synonym.children.reload).to contain_exactly
         end
       end
     end
@@ -614,14 +614,14 @@ describe Tag do
         new_fandom = create(:fandom, canonical: true)
         synonym.attributes = { syn_string: new_fandom.name }
         synonym.save!
-        expect(fandom.filtered_works.reload).to contain_exactly()
+        expect(fandom.filtered_works.reload).to contain_exactly
         expect(new_fandom.filtered_works.reload).to contain_exactly(work)
       end
 
       it "removing the synonym removes filters" do
         synonym.attributes = { syn_string: "" }
         synonym.save!
-        expect(fandom.filtered_works.reload).to contain_exactly()
+        expect(fandom.filtered_works.reload).to contain_exactly
       end
     end
   end
