@@ -1138,17 +1138,17 @@ class Tag < ActiveRecord::Base
   # (subtags, meta tags, etc) over to that canonical tag.
   # We also need to make sure that the works under those other tags get reindexed
   def add_merger_associations
-    new_merger = self.merger
+    new_merger = merger
     return unless new_merger.present?
-    ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
+    ((parents + children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
     if new_merger.is_a?(Fandom)
-      (new_merger.medias - self.medias).each { |medium| self.add_association(medium) }
+      (new_merger.medias - medias).each { |medium| add_association(medium) }
     else
-      (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each { |fandom| self.add_association(fandom) }
+      (new_merger.parents.by_type("Fandom").canonical - fandoms).each { |fandom| add_association(fandom) }
     end
-    self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-    self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
-    self.mergers.each { |m| m.update_attributes(merger_id: new_merger.id) }
+    meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+    sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
+    mergers.each { |m| m.update_attributes(merger_id: new_merger.id) }
     self.children = []
     self.meta_tags = []
     self.sub_tags = []
