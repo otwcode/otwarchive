@@ -559,6 +559,48 @@ describe Tag do
         synonym.save!
         expect(fandom.filtered_works.reload).to contain_exactly(work)
       end
+
+      context "when the tag is canonical" do
+        let(:synonym) { create(:fandom, canonical: true) }
+
+        it "adding a synonym changes the tag to non-canonical" do
+          synonym.attributes = { syn_string: fandom.name }
+          synonym.save!
+          expect(synonym.reload.canonical).to be_falsey
+        end
+
+        it "adding a synonym transfers its metatags and subtags" do
+          sub = create(:fandom, canonical: true)
+          meta = create(:fandom, canonical: true)
+          synonym.sub_tags << sub
+          synonym.meta_tags << meta
+          synonym.reload
+
+          synonym.attributes = { syn_string: fandom.name }
+          synonym.save!
+
+          expect(fandom.sub_tags.reload).to contain_exactly(sub)
+          expect(fandom.meta_tags.reload).to contain_exactly(meta)
+          expect(synonym.sub_tags.reload).to contain_exactly()
+          expect(synonym.meta_tags.reload).to contain_exactly()
+        end
+
+        it "adding a synonym transfers its associations", :pending do
+          parent = create(:media, canonical: true)
+          child = create(:character, canonical: false)
+          synonym.parents << parent
+          synonym.children << child
+          synonym.reload
+
+          synonym.attributes = { syn_string: fandom.name }
+          synonym.save!
+
+          expect(fandom.parents.reload).to contain_exactly(parent)
+          expect(fandom.children.reload).to contain_exactly(child)
+          expect(synonym.parents.reload).to contain_exactly(parent)
+          expect(synonym.children.reload).to contain_exactly()
+        end
+      end
     end
 
     context "when the tag is synned" do

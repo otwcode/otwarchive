@@ -64,6 +64,11 @@ FactoryGirl.define do
     sequence(:name) { |n| "Unsorted Tag #{n}" }
   end
 
+  factory :media do
+    canonical true
+    sequence(:name) { |n| "Media #{n}" }
+  end
+
   factory :fandom do
     canonical true
     sequence(:name) { |n| "The #{n} Fandom" }
