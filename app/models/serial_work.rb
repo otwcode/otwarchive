@@ -1,4 +1,6 @@
 class SerialWork < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :series, :touch => true
   belongs_to :work, :touch => true
   validates_uniqueness_of :work_id, :scope => [:series_id]
