@@ -170,7 +170,7 @@ class ArchiveFaqsController < ApplicationController
     params.require(:archive_faq).permit(
       :title, :notify_translations,
       questions_attributes: [
-        :id, :question, :anchor, :content, :screencast, :_destroy
+        :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
       ]
     )
   end
