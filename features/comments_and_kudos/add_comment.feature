@@ -158,3 +158,31 @@ Scenario: Set preference and receive comment notifications of your own comments
   Then "author" should be emailed
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
+
+Scenario: Try to post a comment with a < angle bracket before a linebreak, without a space before the bracket
+
+    Given the work "Generic Work"
+      And I am logged in as "commenter"
+      And I view the work "Generic Work"
+    When I fill in "Comment" with
+      """
+      Here is a comment with a bracket
+      abc<
+      xyz
+      """
+      And I press "Comment"
+    Then I should see "Comment created!"
+
+Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket 
+
+    Given the work "Generic Work"
+      And I am logged in as "commenter"
+      And I view the work "Generic Work"
+    When I fill in "Comment" with
+      """
+      Here is a comment with a bracket
+      abc <
+      xyz
+      """
+      And I press "Comment"
+    Then I should see "Comment created!"
