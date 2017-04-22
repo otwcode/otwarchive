@@ -197,8 +197,13 @@ class Work < ActiveRecord::Base
       pseud.user.update_works_index_timestamp!
     end
 
-    self.all_collections.each do |collection|
-      collection.update_works_index_timestamp!
+    self.collections.each do |this_collection|
+      collection = this_collection
+      # Flush this collection and all its parents
+      begin
+        collection.update_works_index_timestamp!
+        collection = collection.parent
+      end while collection
     end
 
     self.filters.each do |tag|
