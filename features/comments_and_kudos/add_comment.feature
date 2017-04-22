@@ -181,7 +181,7 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
     When I fill in "Comment" with
       """
       Here is a comment with a bracket
-      abc<
+      abc <
       xyz
       """
       And I press "Comment"
