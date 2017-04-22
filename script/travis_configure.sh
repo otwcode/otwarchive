@@ -1,6 +1,4 @@
 #!/bin/bash
-uname -a
-cat /etc/issue
 mysql -e 'create database otwarchive_test;'
 cp config/database.travis.yml config/database.yml
 cp config/newrelic.example config/newrelic.yml
