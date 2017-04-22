@@ -310,20 +310,39 @@ class Work < ActiveRecord::Base
   # IMPORTING
   ########################################################################
 
+  def self.find_by_url_generation_key
+    "/v1/find_by_url_generation_key"
+  end
+
+  def self.find_by_url_generation
+    Rails.cache.fetch(Work.find_by_url_generation_key, :raw => true) { rand(1..1000) } 
+  end
+
+  def self.flush_find_by_url_cache
+    Rails.cache.increment(Work.find_by_url_generation_key)
+  end
+
+  def self.find_by_url_cache_key(url)
+    url = UrlFormatter.new(url)
+    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.minimal}"
+  end
+
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
   # 1. first exact match
   # 2. first exact match with variants of the provided url
   # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
   def self.find_by_url(url)
-    url = UrlFormatter.new(url)
-    Work.where(:imported_from_url => url.original).first ||
-      Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
-        work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
-          work_url.send(method) == url.send(method)
-        }
-      }.first
+    Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
+      url = UrlFormatter.new(url)
+      Work.where(:imported_from_url => url.original).first ||
+        Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+        Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+          work_url = UrlFormatter.new(w.imported_from_url)
+          ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+            work_url.send(method) == url.send(method)
+          }
+        }.first
+    end
   end
 
   ########################################################################

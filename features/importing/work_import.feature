@@ -220,3 +220,23 @@ Feature: Import Works
     When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
     Then I should see "Preview"
       And I should see "English"
+
+  Scenario: Searching for a work url should be cached
+    Then there should be no work_url cached for "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    Then I should see "Preview"
+    When I press "Post"
+    Then there should be no work_url cached for "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I look for a work with url "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    Then there should be a work_url cached for "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
+    Then I should see "Preview"
+    When I press "Post"
+    Then there should be no work_url cached for "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    Then there should be no work_url cached for "http://www.intimations.org/fanfic/idol/Huddling.html"
+    When I look for a work with url "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    Then there should be a work_url cached for "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    Then there should be no work_url cached for "http://www.intimations.org/fanfic/idol/Huddling.html"
+    When I look for a work with url "http://www.intimations.org/fanfic/idol/Huddling.html"
+    Then there should be a work_url cached for "http://www.intimations.org/fanfic/idol/Huddling.html"
+
