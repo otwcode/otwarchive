@@ -1,5 +1,5 @@
 language: ruby
-dist: trusty
+dist: xenial
 cache: bundler
 sudo: required
 env:
