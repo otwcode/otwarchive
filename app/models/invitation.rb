@@ -19,9 +19,9 @@ class Invitation < ActiveRecord::Base
   # ensure email is valid
   validates :invitee_email, :email_veracity => true, :allow_blank => true
 
-  scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
-  scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
-  scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
+  scope :unsent, -> { where(invitee_email: nil, redeemed_at: nil) }
+  scope :unredeemed, -> { where('invitee_email IS NOT NULL and redeemed_at IS NULL') }
+  scope :redeemed, -> { where('redeemed_at IS NOT NULL') }
 
   before_validation :generate_token, :on => :create
   after_save :send_and_set_date

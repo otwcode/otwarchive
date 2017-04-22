@@ -10,25 +10,25 @@ class FandomNomination < TagNomination
 
 
   def character_tagnames
-    CharacterNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).value_of :tagname
+    CharacterNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).pluck :tagname
   end
 
   def relationship_tagnames
-    RelationshipNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).value_of :tagname
+    RelationshipNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).pluck :tagname
   end
-  
+
   after_save :reject_children, :if => "rejected?"
   def reject_children
     character_nominations.each {|char| char.rejected = true; char.save}
     relationship_nominations.each {|rel| rel.rejected = true; rel.save}
     true
   end
-  
+
   after_save :update_child_parent_tagnames, :if => "tagname_changed?"
   def update_child_parent_tagnames
     self.character_nominations.readonly(false).each {|char| char.parent_tagname = self.tagname; char.save}
     self.relationship_nominations.readonly(false).each {|rel| rel.parent_tagname = self.tagname; rel.save}
     true
   end
-  
+
 end

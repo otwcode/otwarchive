@@ -5,11 +5,15 @@ gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.3'
+gem 'rails', '4.0.6'
+
+gem 'rails-observers'
+gem 'actionpack-page_caching'
+# gem 'activerecord-deprecated_finders'
 
 # the published gem does not include fixes that are in Rails
 # specifically https://github.com/rails/strong_parameters/issues/16
-gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
+# gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -50,7 +54,7 @@ gem 'sanitize'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
-gem 'resque-scheduler', :require => 'resque_scheduler'
+gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'elasticsearch'
@@ -58,7 +62,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip'
+gem 'paperclip', '4.3.6'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -76,7 +80,8 @@ gem 'permit_yo'
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem 'escape_utils', '1.2.1'
 
-gem 'valium'
+# Replaced by nativce pluck method as of Rails 4
+# gem 'valium'
 
 gem 'timeliness'
 
@@ -89,7 +94,7 @@ gem 'google_visualr', '>= 2.1'
 # gem 'copycopter_client', '~> 2.0.1'
 
 # Globalize for translations
-gem 'globalize', '~> 3.1.0'
+gem 'globalize', '~> 4.0.3'
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.5'
@@ -99,7 +104,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited-activerecord', '~> 3.0'
+gem 'audited', '~> 4.4'
 
 # For controlling application behavour dynamically
 gem 'rollout'

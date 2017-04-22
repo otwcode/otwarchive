@@ -1,7 +1,7 @@
 namespace :admin do
   desc "Unsuspend suspended users who have been suspended_until up to 12 hours from now"
   task(:unsuspend_users => :environment) do
-    User.update_all("suspended_until = NULL, suspended = false", ["suspended_until <= ?", 12.hours.from_now])
+    User.where(["suspended_until <= ?", 12.hours.from_now]).update_all("suspended_until = NULL, suspended = false")
     puts "Users unsuspended."
   end
 

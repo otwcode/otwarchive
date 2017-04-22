@@ -73,7 +73,7 @@
         <li>
           <% if (@participant ||= collection.get_participants_for_user(current_user).first) %>
             <%= link_to ts("Leave"), collection_participant_path(collection, @participant),
-              :confirm => ts('Are you certain you want to leave this collection?'),
+              data: {confirm: ts('Are you certain you want to leave this collection?')},
               :method => :delete %></li>
           <% else %>
             <%= link_to ts("Join"), join_collection_participants_path(collection) %>

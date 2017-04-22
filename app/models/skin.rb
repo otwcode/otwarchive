@@ -23,8 +23,8 @@ class Skin < ActiveRecord::Base
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
 
-  SKIN_PATH = '/stylesheets/skins/'
-  SITE_SKIN_PATH = '/stylesheets/site/'
+  SKIN_PATH = 'stylesheets/skins/'
+  SITE_SKIN_PATH = 'stylesheets/site/'
 
   belongs_to :author, class_name: 'User'
   has_many :preferences
@@ -35,7 +35,7 @@ class Skin < ActiveRecord::Base
   has_many :skin_parents, foreign_key: 'child_skin_id',
                           class_name: 'SkinParent',
                           dependent: :destroy, inverse_of: :child_skin
-  has_many :parent_skins, through: :skin_parents, order: "skin_parents.position ASC", inverse_of: :child_skins
+  has_many :parent_skins, -> { order("skin_parents.position ASC") }, through: :skin_parents, inverse_of: :child_skins
 
   has_many :skin_children, foreign_key: 'parent_skin_id',
                                   class_name: 'SkinParent', dependent: :destroy, inverse_of: :parent_skin
@@ -91,8 +91,6 @@ class Skin < ActiveRecord::Base
     return false
   end
 
-  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
-
   validates_presence_of :title
   validates_uniqueness_of :title, message: ts('must be unique')
 
@@ -125,12 +123,12 @@ class Skin < ActiveRecord::Base
     self.css = clean_css_code(self.css)
   end
 
-  scope :public_skins, where(public: true)
-  scope :approved_skins, where(official: true, public: true)
-  scope :unapproved_skins, where(public: true, official: false, rejected: false)
-  scope :rejected_skins, where(public: true, official: false, rejected: true)
-  scope :site_skins, where(type: nil)
-  scope :wizard_site_skins, where("type IS NULL AND (
+  scope :public_skins, -> { where(public: true) }
+  scope :approved_skins, -> { where(official: true, public: true) }
+  scope :unapproved_skins, -> { where(public: true, official: false, rejected: false) }
+  scope :rejected_skins, -> { where(public: true, official: false, rejected: true) }
+  scope :site_skins, -> { where(type: nil) }
+  scope :wizard_site_skins, -> { where("type IS NULL AND (
       margin IS NOT NULL OR
       background_color IS NOT NULL OR
       foreground_color IS NOT NULL OR
@@ -140,7 +138,7 @@ class Skin < ActiveRecord::Base
       headercolor IS NOT NULL OR
       accent_color IS NOT NULL
     )
-  ")
+  ") }
 
   def self.cached
     where(cached: true)
@@ -175,7 +173,7 @@ class Skin < ActiveRecord::Base
   end
 
   def remove_me_from_preferences
-    Preference.update_all("skin_id = #{Skin.default.id}", "skin_id = #{self.id}")
+    Preference.where("skin_id = #{self.id}").update_all("skin_id = #{Skin.default.id}")
   end
 
   def editable?
@@ -503,12 +501,12 @@ class Skin < ActiveRecord::Base
   end
 
   def self.create_default
-    skin = Skin.find_or_create_by_title_and_official(title: "Default", css: "", public: true, role: "user")
+    skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
-      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + current_version + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     else
-      File.open(Skin.site_skins_dir + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     end
     skin.official = true
     skin.save!

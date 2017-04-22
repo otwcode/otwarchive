@@ -38,7 +38,7 @@ end
 
 Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
-  role = Role.find_or_create_by_name(role)
+  role = Role.find_or_create_by(name: role)
   user.roles = [role]
   user.save
 end
@@ -173,7 +173,7 @@ end
 
 When /^I visit the change username page for (.*)$/ do |login|
   user = User.find_by_login(login)
-  visit change_username_user_path(user) 
+  visit change_username_user_path(user)
 end
 
 # THEN
@@ -230,7 +230,7 @@ def get_series_name(age, classname, name)
     owner.series.order("updated_at DESC").last.title
   end
 end
-  
+
 Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should see "#{title}"}
@@ -252,7 +252,7 @@ end
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
- 
+
 Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by_login(login)
   assert user.active?
@@ -261,4 +261,3 @@ end
 Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
 end
-

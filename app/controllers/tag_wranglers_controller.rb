@@ -5,7 +5,7 @@ class TagWranglersController < ApplicationController
   def index
     @wranglers = Role.find_by_name("tag_wrangler").users.alphabetical
     conditions = ["canonical = 1"]
-    joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id) 
+    joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
              LEFT JOIN users ON (users.id = wrangling_assignments.user_id)"
     unless params[:fandom_string].blank?
       conditions.first << " AND name LIKE ?"
@@ -24,12 +24,14 @@ class TagWranglersController < ApplicationController
     unless params[:media_id].blank?
       @media = Media.find_by_name(params[:media_id])
       if @media
-        joins << " INNER JOIN common_taggings ON (tags.id = common_taggings.common_tag_id)" 
+        joins << " INNER JOIN common_taggings ON (tags.id = common_taggings.common_tag_id)"
         conditions.first << " AND common_taggings.filterable_id = #{@media.id} AND common_taggings.filterable_type = 'Tag'"
       end
     end
-    @assignments = Fandom.in_use.find(:all, :select => 'tags.*, users.login AS wrangler', 
-    :joins => joins, :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)
+    @assignment = Fandom.in_use.joins(joins)
+                               .select('tags.*, users.login AS wranger')
+                               .where(conditions)
+                               .paginate(page: params[:page], per_page: 50)
   end
 
   def show
@@ -42,21 +44,21 @@ class TagWranglersController < ApplicationController
         klass.unwrangled.in_use.count
       end
     end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do 
-      UnsortedTag.count 
+    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
+      UnsortedTag.count
     end
   end
 
   def create
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
-      fandoms = Fandom.find(:all, :conditions => ['name IN (?)', names])
+      fandoms = Fandom.where('name IN (?)', names)
       unless fandoms.blank?
         for fandom in fandoms
           unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
             assignment = current_user.wrangling_assignments.build(:fandom_id => fandom.id)
             assignment.save!
-          end          
+          end
         end
       end
     end
@@ -71,16 +73,16 @@ class TagWranglersController < ApplicationController
               assignment.save!
             end
           end
-        end        
+        end
       end
       flash[:notice] = "Wranglers were successfully assigned!"
     end
     redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
   end
-  
+
   def destroy
     wrangler = User.find_by_login(params[:id])
-    assignment = WranglingAssignment.find(:first, :conditions => {:user_id => wrangler.id, :fandom_id => params[:fandom_id]})
+    assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy
     redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
   end

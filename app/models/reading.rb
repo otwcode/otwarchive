@@ -15,7 +15,7 @@ class Reading < ActiveRecord::Base
 
   # called from reading controller
   def self.mark_to_read_later(work, user, toread)
-    reading = Reading.find_or_initialize_by_work_id_and_user_id(work.id, user.id)
+    reading = Reading.find_or_initialize_by(work_id: work.id, user_id: user.id)
     reading.major_version_read = work.major_version
     reading.minor_version_read = work.minor_version
     reading.last_viewed = Time.now
@@ -38,7 +38,7 @@ class Reading < ActiveRecord::Base
   # history enabled and is not the author of the work
   def self.reading_object(reading_json)
     user_id, time, work_id, major_version, minor_version, later = ActiveSupport::JSON.decode(reading_json)
-    reading = Reading.find_or_initialize_by_work_id_and_user_id(work_id, user_id)
+    reading = Reading.find_or_initialize_by(work_id: work_id, user_id: user_id)
     reading.major_version_read = major_version
     reading.minor_version_read = minor_version
     reading.view_count = reading.view_count + 1 unless later

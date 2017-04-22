@@ -38,7 +38,7 @@ module WorksHelper
   end
 
   def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.value_of(:user_id), hide_public_hit_count: true).exists?
+    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)
@@ -111,7 +111,7 @@ module WorksHelper
       else
         chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
       end
-    else 
+    else
       "#work_endnotes"
     end
   end

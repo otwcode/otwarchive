@@ -100,7 +100,7 @@ class CollectionParticipantsController < ApplicationController
     pseud_results = Pseud.parse_bylines(params[:participants_to_invite], :assume_matching_login => true)
     pseud_results[:pseuds].each do |pseud|
       if @collection.participants.include?(pseud)
-        participant = CollectionParticipant.find(:first, :conditions => {:collection_id => @collection.id, :pseud_id => pseud.id})
+        participant = CollectionParticipant.where(collection_id: @collection.id, pseud_id: pseud.id).first
         if participant && participant.is_none?
           @participants_added << participant if participant.approve_membership!
         end

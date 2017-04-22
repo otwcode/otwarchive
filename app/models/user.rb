@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   has_many :user_invite_requests, dependent: :destroy
 
   attr_accessor :invitation_token
-  attr_accessible :invitation_token
+  # attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
 
   has_many :external_authors, dependent: :destroy
@@ -75,23 +75,19 @@ class User < ActiveRecord::Base
 
   has_many :collection_participants, through: :pseuds
   has_many :collections, through: :collection_participants
-  has_many :invited_collections, through: :collection_participants, source: :collection,
-           conditions: ["collection_participants.participant_role = ?", CollectionParticipant::INVITED]
-  has_many :participated_collections, through: :collection_participants, source: :collection,
-           conditions: ["collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]]
-  has_many :maintained_collections, through: :collection_participants, source: :collection,
-           conditions: ["collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
-  has_many :owned_collections, through: :collection_participants, source: :collection,
-           conditions: ["collection_participants.participant_role = ?", CollectionParticipant::OWNER]
+  has_many :invited_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::INVITED) }, through: :collection_participants, source: :collection
+  has_many :participated_collections, -> { where("collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]) }, through: :collection_participants, source: :collection
+  has_many :maintained_collections, -> { where("collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]) }, through: :collection_participants, source: :collection
+  has_many :owned_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::OWNER) }, through: :collection_participants, source: :collection
 
   has_many :challenge_signups, through: :pseuds
   has_many :offer_assignments, through: :pseuds
   has_many :pinch_hit_assignments, through: :pseuds
   has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "claiming_user_id", inverse_of: :claiming_user
-  has_many :gifts, through: :pseuds, conditions: { rejected: false }
-  has_many :gift_works, through: :pseuds, uniq: true
-  has_many :rejected_gifts, class_name: "Gift", through: :pseuds, conditions: { rejected: true }
-  has_many :rejected_gift_works, through: :pseuds, uniq: true
+  has_many :gifts, -> { where(rejected: false) }, through: :pseuds
+  has_many :gift_works, -> { uniq }, through: :pseuds
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
+  has_many :rejected_gift_works, -> { uniq }, through: :pseuds
   has_many :readings, dependent: :destroy
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
@@ -175,7 +171,7 @@ class User < ActiveRecord::Base
   has_many :wrangled_tags, class_name: "Tag", as: :last_wrangler
 
   has_many :inbox_comments, dependent: :destroy
-  has_many :feedback_comments, through: :inbox_comments, conditions: { is_deleted: false, approved: true }, order: "created_at DESC"
+  has_many :feedback_comments, -> { where(is_deleted: false, approved: true).order(created_at: :desc) }, through: :inbox_comments
 
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
@@ -191,7 +187,7 @@ class User < ActiveRecord::Base
   def remove_pseud_from_kudos
     ids = self.pseuds.collect(&:id).join(",")
     # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
-    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{ids})") if ids.present?
+    Kudo.where("pseud_id IN (#{ids})").update_all("pseud_id = NULL") if ids.present?
   end
 
   def read_inbox_comments
@@ -204,10 +200,10 @@ class User < ActiveRecord::Base
     unread_inbox_comments.with_feedback_comment.count
   end
 
-  scope :alphabetical, order: :login
+  scope :alphabetical, -> { order(:login) }
   scope :starting_with, -> (letter) { { conditions: ["SUBSTR(login,1,1) = ?", letter] } }
-  scope :valid, conditions: { banned: false, suspended: false }
-  scope :out_of_invites, conditions: { out_of_invites: true }
+  scope :valid, -> { where(banned: false, suspended: false) }
+  scope :out_of_invites, -> { where(out_of_invites: true) }
 
   ## used in app/views/users/new.html.erb
   validates_length_of :login,
@@ -235,9 +231,9 @@ class User < ActiveRecord::Base
   validates :email, email_veracity: true
 
   # Virtual attribute for age check and terms of service
-  attr_accessor :age_over_13
-  attr_accessor :terms_of_service
-  attr_accessible :age_over_13, :terms_of_service
+    attr_accessor :age_over_13
+    attr_accessor :terms_of_service
+    # attr_accessible :age_over_13, :terms_of_service
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
@@ -298,7 +294,7 @@ class User < ActiveRecord::Base
   # use update_all to force the update even if the user is invalid
   def reset_user_password
     temp_password = generate_password(20)
-    User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
+    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'")
     # send synchronously to prevent getting caught in backed-up mail queue
     UserMailer.reset_password(self.id, temp_password).deliver!
   end
@@ -366,7 +362,7 @@ class User < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_work_count
-    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.count(:id, :distinct => true)
+    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.distinct.count(:id)
   end
 
   # Gets the user account for authored objects if orphaning is enabled
@@ -536,7 +532,7 @@ class User < ActiveRecord::Base
 
   # Create and/or return a user account for holding orphaned works
   def self.fetch_orphan_account
-    orphan_account = User.find_or_create_by_login("orphan_account")
+    orphan_account = User.find_or_create_by(login: "orphan_account")
     if orphan_account.new_record?
       Rails.logger.fatal "You must have a User with the login 'orphan_account'. Please create one."
     end

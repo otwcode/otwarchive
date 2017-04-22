@@ -348,7 +348,7 @@ class WorksController < ApplicationController
     load_pseuds
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    @collection = Collection.find_by(name: params[:work][:collection_names])
   end
 
   # GET /works/1/edit
@@ -732,19 +732,19 @@ class WorksController < ApplicationController
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
-    work_params = params[:work].reject { |_key, value| value.blank? || value == '0' }
+    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
     # manually allow switching of anon/moderated comments
-    if work_params[:anon_commenting_disabled] == 'allow_anon'
-      work_params[:anon_commenting_disabled] = '0'
+    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
+      updated_work_params[:anon_commenting_disabled] = '0'
     end
-    if work_params[:moderated_commenting_enabled] == 'not_moderated'
-      work_params[:moderated_commenting_enabled] = '0'
+    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
+      updated_work_params[:moderated_commenting_enabled] = '0'
     end
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(work_params)
+      unless work.update_attributes(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
       end
     end
@@ -919,7 +919,7 @@ class WorksController < ApplicationController
     end
 
     # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).value_of(:user_id).uniq
+    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).pluck(:user_id).uniq
     unless user_ids.include?(current_user.id)
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       render :new and return
@@ -992,7 +992,7 @@ class WorksController < ApplicationController
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.value_of(:name).join(', ')}"
+        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
       end
 
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)

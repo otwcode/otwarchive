@@ -11,19 +11,17 @@ class Bookmark < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  attr_protected :notes_sanitizer_version
-
   validates_length_of :notes,
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
-  default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
+  default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
-  scope :is_public, where(:private => false, :hidden_by_admin => false)
-  scope :not_public, where(:private => true)
-  scope :not_private, where(:private => false)
+  scope :is_public, -> { where(:private => false, :hidden_by_admin => false) }
+  scope :not_public, -> { where(:private => true) }
+  scope :not_private, -> { where(:private => false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
-  scope :recs, where(:rec => true)
+  scope :recs, -> { where(:rec => true) }
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
@@ -32,38 +30,44 @@ class Bookmark < ActiveRecord::Base
             [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
-  scope :join_work,
+  scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
     merge(Work.visible_to_all)
+  }
 
-  scope :join_series,
+  scope :join_series, -> {
     joins("LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')").
     merge(Series.visible_to_all)
+  }
 
-  scope :join_external_works,
+  scope :join_external_works, -> {
     joins("LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')").
     merge(ExternalWork.visible_to_all)
+  }
 
-  scope :join_bookmarkable,
+  scope :join_bookmarkable, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')
            LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')
            LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')")
+  }
 
-  scope :visible_to_all,
+  scope :visible_to_all, -> {
     is_public.join_bookmarkable.
     where("(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
       (series.restricted = 0 AND series.hidden_by_admin = 0) OR
       (external_works.hidden_by_admin = 0)")
+  }
 
-  scope :visible_to_registered_user,
+  scope :visible_to_registered_user, -> {
     is_public.join_bookmarkable.
     where("(works.posted = 1 AND works.hidden_by_admin = 0) OR
       (series.hidden_by_admin = 0) OR
       (external_works.hidden_by_admin = 0)")
+  }
 
-  scope :visible_to_admin, not_private
+  scope :visible_to_admin, -> { not_private }
 
-  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work
+  scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -85,7 +89,7 @@ class Bookmark < ActiveRecord::Base
   }
 
   # Use the current user to determine what works are visible
-  scope :visible, visible_to_user(User.current_user)
+  scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
   after_save :invalidate_bookmark_count
@@ -223,7 +227,7 @@ class Bookmark < ActiveRecord::Base
     if bookmarkable.respond_to?(:creator)
       bookmarkable.creator
     elsif bookmarkable.respond_to?(:pseuds)
-      bookmarkable.pseuds.value_of(:name)
+      bookmarkable.pseuds.pluck(:name)
     elsif bookmarkable.respond_to?(:author)
       bookmarkable.author
     end
@@ -231,23 +235,23 @@ class Bookmark < ActiveRecord::Base
 
   def bookmarkable_pseud_ids
     if bookmarkable.respond_to?(:creatorships)
-      bookmarkable.creatorships.value_of(:pseud_id)
+      bookmarkable.creatorships.pluck(:pseud_id)
     end
   end
 
   def tag
-    names = self.tags.value_of(:name) + filter_names
+    names = self.tags.pluck(:name) + filter_names
     if bookmarkable.respond_to?(:tags)
-      names += bookmarkable.tags.where(canonical: false).value_of :name
+      names += bookmarkable.tags.where(canonical: false).pluck :name
     end
     if bookmarkable.respond_to?(:work_tags)
-      names += bookmarkable.work_tags.where(canonical: false).value_of :name
+      names += bookmarkable.work_tags.where(canonical: false).pluck :name
     end
     names.uniq
   end
 
   def tag_ids
-    self.tags.value_of(:id)
+    self.tags.pluck(:id)
   end
 
   def filters
@@ -307,12 +311,12 @@ class Bookmark < ActiveRecord::Base
   end
 
   def collection_ids
-    approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
+    approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
   def bookmarkable_collection_ids
     if bookmarkable.respond_to?(:approved_collections)
-      bookmarkable.approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
+      bookmarkable.approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
     end
   end
 

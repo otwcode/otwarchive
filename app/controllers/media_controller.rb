@@ -12,8 +12,8 @@ class MediaController < ApplicationController
       else
         @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ?
           # was losing the select trying to do this through the parents association
-          Fandom.unhidden_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}}) :
-          Fandom.public_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}})
+          Fandom.unhidden_top(5).joins(:common_taggings).where(canonical: true, common_taggings: {filterable_id: medium.id, filterable_type: 'Tag'})
+          Fandom.public_top(5).joins(:common_taggings).where(canonical: true, common_taggings: {filterable_id: medium.id, filterable_type: 'Tag'})
       end
     end
     @page_subtitle = ts("Fandoms")

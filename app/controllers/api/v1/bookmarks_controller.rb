@@ -103,7 +103,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
       errors << "This bookmark does not contain a fandom. Please specify a fandom."
     end
 
-    archivist_bookmarks = Bookmark.find_all_by_pseud_id(archivist.default_pseud.id)
+    archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud.id)
 
     unless archivist_bookmarks.empty?
       archivist_bookmarks.each do |bookmark|

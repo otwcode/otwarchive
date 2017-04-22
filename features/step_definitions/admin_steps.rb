@@ -57,7 +57,7 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  german = Language.find_or_create_by_short_and_name_and_support_available_and_abuse_support_available("DE", "Deutsch", true, true)
+  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
   de = Locale.new
   de.iso = 'de'
   de.name = 'Deutsch'
@@ -66,7 +66,7 @@ Given /^basic languages$/ do
 end
 
 Given /^advanced languages$/ do
-  Language.find_or_create_by_short_and_name("FR", "Francais")
+  Language.find_or_create_by(short: "FR", name: "Francais")
 end
 
 Given /^guest downloading is off$/ do

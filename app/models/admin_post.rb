@@ -28,10 +28,9 @@ class AdminPost < ActiveRecord::Base
 
   validate :translated_post_must_exist
 
-  scope :non_translated, where('translated_post_id IS NULL')
+  scope :non_translated, -> { where('translated_post_id IS NULL') }
 
-  scope :for_homepage, order: "created_at DESC",
-                       limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+  scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
   after_save :expire_cached_home_admin_posts
   after_destroy :expire_cached_home_admin_posts

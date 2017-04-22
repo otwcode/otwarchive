@@ -51,31 +51,27 @@ class Collection < ActiveRecord::Base
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, class_name: "CollectionItem",
-    conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, through: :collection_items, source: :item, source_type: 'Work',
-           conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark',
-    conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
 
-  has_many :fandoms, through: :approved_works, uniq: true
-  has_many :filters, through: :approved_works, uniq: true
+  has_many :fandoms, -> { uniq }, through: :approved_works
+  has_many :filters, -> { uniq }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
 
   has_many :participants, through: :collection_participants, source: :pseud
   has_many :users, through: :participants, source: :user
-  has_many :invited, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
-  has_many :owners, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
-  has_many :moderators, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::MODERATOR]
-  has_many :members, through: :collection_participants, source: :pseud, conditions: ['collection_participants.participant_role = ?', CollectionParticipant::MEMBER]
-  has_many :posting_participants, through: :collection_participants, source: :pseud,
-      conditions: ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
+  has_many :invited, -> { where('collection_participants.participant_role = ?', CollectionParticipant::INVITED) }, through: :collection_participants, source: :pseud
+  has_many :owners, -> { where('collection_participants.participant_role = ?', CollectionParticipant::OWNER) }, through: :collection_participants, source: :pseud
+  has_many :moderators, -> { where('collection_participants.participant_role = ?', CollectionParticipant::MODERATOR) }, through: :collection_participants, source: :pseud
+  has_many :members, -> { where('collection_participants.participant_role = ?', CollectionParticipant::MEMBER) }, through: :collection_participants, source: :pseud
+  has_many :posting_participants, -> { where('collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ) }, through: :collection_participants, source: :pseud
 
 
 
@@ -161,20 +157,20 @@ class Collection < ActiveRecord::Base
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
 
   validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
-  validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file.")
+  validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true
 
-  scope :top_level, where(parent_id: nil)
-  scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
-  scope :not_closed, joins(:collection_preference).where("collection_preferences.closed = ?", false)
-  scope :moderated, joins(:collection_preference).where("collection_preferences.moderated = ?", true)
-  scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
-  scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
-  scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
-  scope :no_challenge, where(challenge_type: nil)
-  scope :gift_exchange, where(challenge_type: 'GiftExchange')
-  scope :prompt_meme, where(challenge_type: 'PromptMeme')
-  scope :name_only, select("collections.name")
-  scope :by_title, order(:title)
+  scope :top_level, -> { where(parent_id: nil) }
+  scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }
+  scope :not_closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", false) }
+  scope :moderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", true) }
+  scope :unmoderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", false) }
+  scope :unrevealed, -> { joins(:collection_preference).where("collection_preferences.unrevealed = ?", true) }
+  scope :anonymous, -> { joins(:collection_preference).where("collection_preferences.anonymous = ?", true) }
+  scope :no_challenge, -> { where(challenge_type: nil) }
+  scope :gift_exchange, -> { where(challenge_type: 'GiftExchange') }
+  scope :prompt_meme, -> { where(challenge_type: 'PromptMeme') }
+  scope :name_only, -> { select("collections.name") }
+  scope :by_title, -> { order(:title) }
 
   before_validation :cleanup_url
   def cleanup_url
@@ -198,13 +194,14 @@ class Collection < ActiveRecord::Base
     where("collections.title LIKE ?", '%' + title + '%')
   }
 
-  scope :with_item_count,
+  scope :with_item_count, -> {
     select("collections.*, count(distinct collection_items.id) as item_count").
     joins("left join collections child_collections on child_collections.parent_id = collections.id
            left join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
                                      AND collection_items.user_approval_status = 1
                                      AND collection_items.collection_approval_status = 1)").
     group("collections.id")
+  }
 
   def to_param
    name_was
@@ -215,7 +212,7 @@ class Collection < ActiveRecord::Base
     for pseud in pseuds
       for collection in collections
         if pseud && collection && collection.owners.include?(pseud)
-          orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(pseud.name)
+          orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: pseud.name)
           pseud.change_membership(collection, orphan_pseud)
         end
       end
@@ -275,12 +272,12 @@ class Collection < ActiveRecord::Base
   end
 
   def all_items
-    CollectionItem.where(collection_id: ([self.id] + self.children.value_of(:id)))
+    CollectionItem.where(collection_id: ([self.id] + self.children.pluck(:id)))
   end
 
   def all_approved_works
     work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED).value_of(:item_id)
+      collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
     Work.where(id: work_ids, posted: true)
   end
 

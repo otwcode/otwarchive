@@ -15,21 +15,21 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   scope :for_request_signup, lambda {|signup|
-    {:conditions => ['request_signup_id = ?', signup.id]}
+    where('request_signup_id = ?', signup.id)
   }
 
   scope :by_claiming_user, lambda {|user|
-    {
-      :select => "DISTINCT challenge_claims.*",
-      :joins => "INNER JOIN users ON challenge_claims.claiming_user_id = users.id",
-      :conditions => ['users.id = ?', user.id]
-    }
+    select('DISTINCT challenge_claims.*')
+    .joins("INNER JOIN users ON challenge_claims.claiming_user_id = users.id")
+    .where('users.id = ?', user.id)
   }
 
-  scope :in_collection, lambda {|collection| {:conditions => ['challenge_claims.collection_id = ?', collection.id] }}
+  scope :in_collection, lambda {|collection|
+    where('challenge_claims.collection_id = ?', collection.id)
+  }
 
-  scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
-  scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
+  scope :with_request, -> { where('request_signup IS NOT NULL') }
+  scope :with_no_request, -> { where('request_signup_id IS NULL') }
 
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_claims.request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
@@ -45,7 +45,7 @@ class ChallengeClaim < ActiveRecord::Base
                                                                 collection_items.item_type = challenge_claims.creation_type)"
 
 
-  scope :order_by_date, order("created_at ASC")
+  scope :order_by_date, -> { order("created_at ASC") }
 
   def self.order_by_requesting_pseud(dir="ASC")
     joins(REQUESTING_PSEUD_JOIN).order("pseuds.name #{dir}")
@@ -58,46 +58,48 @@ class ChallengeClaim < ActiveRecord::Base
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_claims.creation_id AND challenge_claims.creation_type = 'Work'"
   WORKS_LEFT_JOIN = "LEFT JOIN works ON works.id = challenge_claims.creation_id AND challenge_claims.creation_type = 'Work'"
 
-  scope :fulfilled,
+  scope :fulfilled, -> {
     joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN).
     where('challenge_claims.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1',
                     CollectionItem::APPROVED, CollectionItem::APPROVED)
+  }
 
 
-  scope :posted, joins(WORKS_JOIN).where("challenge_claims.creation_id IS NOT NULL AND works.posted = 1")
+  scope :posted, -> { joins(WORKS_JOIN).where("challenge_claims.creation_id IS NOT NULL AND works.posted = 1") }
 
   # should be faster than unfulfilled scope because no giant left joins
   def self.unfulfilled_in_collection(collection)
-    fulfilled_ids = ChallengeClaim.in_collection(collection).fulfilled.value_of(:id)
+    fulfilled_ids = ChallengeClaim.in_collection(collection).fulfilled.pluck(:id)
     fulfilled_ids.empty? ? in_collection(collection) : in_collection(collection).where("challenge_claims.id NOT IN (?)", fulfilled_ids)
   end
 
   # faster than unposted scope because no left join!
   def self.unposted_in_collection(collection)
-    posted_ids = ChallengeClaim.in_collection(collection).posted.value_of(:id)
+    posted_ids = ChallengeClaim.in_collection(collection).posted.pluck(:id)
     posted_ids.empty? ? in_collection(collection) : in_collection(collection).where("challenge_claims.creation_id IS NULL OR challenge_claims.id NOT IN (?)", posted_ids)
   end
 
   # has to be a left join to get works that don't have a collection item
-  scope :unfulfilled,
+  scope :unfulfilled, -> {
     joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
     where('challenge_claims.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0', CollectionItem::APPROVED, CollectionItem::APPROVED)
+  }
 
   # ditto
-  scope :unposted, joins(WORKS_LEFT_JOIN).where("challenge_claims.creation_id IS NULL OR works.posted = 0")
+  scope :unposted, -> { joins(WORKS_LEFT_JOIN).where("challenge_claims.creation_id IS NULL OR works.posted = 0") }
 
-  scope :unstarted, where("challenge_claims.creation_id IS NULL")
+  scope :unstarted, -> { where("challenge_claims.creation_id IS NULL") }
 
   def self.unposted_for_user(user)
     all_claims = ChallengeClaim.by_claiming_user(user)
-    posted_ids = all_claims.posted.value_of(:id)
+    posted_ids = all_claims.posted.pluck(:id)
     all_claims.where("challenge_claims.id NOT IN (?)", posted_ids)
   end
 
 
   def get_collection_item
     return nil unless self.creation
-    CollectionItem.find(:first, :conditions => ["collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type])
+    CollectionItem.where('collection_id = ? AND item_id = ? AND item_type = ?', self.collection_id, self.creation_id, self.creation_type).first
   end
 
   def fulfilled?

@@ -13,7 +13,7 @@ class ExternalAuthor < ActiveRecord::Base
   validates_associated :external_author_names
 
   has_many :external_creatorships, :through => :external_author_names
-  has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :works, -> { uniq }, :through => :external_creatorships, :source => :creation, :source_type => 'Work'
 
   has_one :invitation
 
@@ -111,7 +111,7 @@ class ExternalAuthor < ActiveRecord::Base
         archivist = external_creatorship.archivist
         work = external_creatorship.creation
         archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
-        orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(external_author_name.name)
+        orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: external_author_name.name)
         work.change_ownership(archivist, User.orphan_account, orphan_pseud)
       end
     end

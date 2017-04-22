@@ -14,7 +14,7 @@ class ExternalAuthorsController < ApplicationController
     if @user && current_user == @user
       @external_authors = @user.external_authors
     elsif logged_in? && current_user.archivist
-      @external_authors = ExternalCreatorship.find_all_by_archivist_id(current_user).collect(&:external_author).uniq
+      @external_authors = ExternalCreatorship.where(archivist_id: current_user).collect(&:external_author).uniq
     elsif logged_in?
       redirect_to user_external_authors_path(current_user) and return
     else

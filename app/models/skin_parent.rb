@@ -37,7 +37,7 @@ class SkinParent < ActiveRecord::Base
   end
 
   def self.get_all_parent_ids(skin_id)
-    parent_ids = SkinParent.where(child_skin_id: skin_id).value_of(:parent_skin_id)
+    parent_ids = SkinParent.where(child_skin_id: skin_id).pluck(:parent_skin_id)
     ret = parent_ids
     parent_ids.each do |parent_id_val|
       ret += SkinParent.get_all_parent_ids(parent_id_val)
@@ -46,7 +46,7 @@ class SkinParent < ActiveRecord::Base
   end
 
   def self.get_all_child_ids(skin_id)
-    child_ids = SkinParent.where(parent_skin_id: skin_id).value_of(:child_skin_id)
+    child_ids = SkinParent.where(parent_skin_id: skin_id).pluck(:child_skin_id)
     ret = child_ids
     child_ids.each do |child_id_val|
       ret += SkinParent.get_all_child_ids(child_id_val)

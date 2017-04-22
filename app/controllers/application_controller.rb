@@ -99,7 +99,7 @@ public
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     end
   end
-  
+
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -107,7 +107,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do 
+      @admin_banner = Rails.cache.fetch("admin_banner") do
         banner = AdminBanner.where(:active => true).last
         banner.nil? ? "" : banner
       end
@@ -284,7 +284,7 @@ public
   before_filter :set_media
   def set_media
     uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @menu_media = Media.by_name - [Media.find_by(name: ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   ### GLOBALIZATION ###

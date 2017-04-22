@@ -47,7 +47,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
+    @serial_works = @series.serial_works.include(:work).where('works.posted = ?', true).order(:position).select{ |sw| sw.work.visible(User.current_user) }
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
     if current_user.respond_to?(:subscriptions)
@@ -146,7 +146,7 @@ class SeriesController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@series) and return }
-      format.js { render :nothing => true }
+      format.json { render :nothing => true }
     end
   end
 

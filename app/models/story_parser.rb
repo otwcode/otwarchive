@@ -419,7 +419,7 @@ class StoryParser
     def parse_author_common(email, name)
       # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
       name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
-      external_author = ExternalAuthor.find_or_create_by_email(email)
+      external_author = ExternalAuthor.find_or_create_by(email: email)
       unless name.blank?
         external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
                                ExternalAuthorName.new(name: name)

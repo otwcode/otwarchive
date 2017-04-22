@@ -1,6 +1,6 @@
 class ArchiveFaq < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
-  
+
   acts_as_list
   translates :title
 
@@ -9,7 +9,6 @@ class ArchiveFaq < ActiveRecord::Base
 
   validates :slug, presence: true, uniqueness: true
 
-  attr_protected :content_sanitizer_version
   attr_accessor :notify_translations
 
   belongs_to :language

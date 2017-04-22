@@ -35,8 +35,8 @@
   <% end %>
   <% unless @sole_owned_collections.empty? %>
     <% unless @sole_authored_works.empty? %><br /><% end %>
-    <%= t('.users.sole_owned_collections', :default => "You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.", 
-            :num_sole_collections => @sole_owned_collections.size, 
+    <%= t('.users.sole_owned_collections', :default => "You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.",
+            :num_sole_collections => @sole_owned_collections.size,
             :pseuds => @sole_owned_collections.collect(&:all_owners).flatten.uniq.collect(&:name).join(", ")) %>
   <% end %>
 </p>
@@ -59,7 +59,7 @@
 <% end %>
 <fieldset>
 <p class="submit cancel actions">
-		<%= submit_tag "Save", :confirm => "Are you sure? This can't be undone!" %> <%= submit_tag 'Cancel', :name => 'cancel_button', :class => 'cancel' %>
+		<%= submit_tag "Save", data: {confirm: "Are you sure? This can't be undone!"} %> <%= submit_tag 'Cancel', :name => 'cancel_button', :class => 'cancel' %>
 </p>
 </fieldset>
 <% end %>

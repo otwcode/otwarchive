@@ -5,13 +5,13 @@
 <% challenge = claim.collection.challenge %>
 <li class="collection claim picture blurb group">
   <div class="header module">
-    <h4 class="heading">  
+    <h4 class="heading">
       <%= prompt.title || ts("Request") %>
     </h4>
 
     <!--collection title and recipient forline-->
     <h5 class="heading">
-      <%= ts("by") %> 
+      <%= ts("by") %>
       <span class="byline">
         <% if claim.request_signup && !prompt.anonymous? %>
           <%= link_to(claim.request_signup.pseud.byline, collection_prompt_path(claim.collection, claim.request_prompt)) %>
@@ -24,7 +24,7 @@
         <%= claim.claiming_user.default_pseud.byline %>
       </span>
     </h5>
-    
+
     <!-- when claimed -->
     <p class="datetime">
       <%= ts("Claimed") %> <%= set_format_for_date(claim.created_at) %>
@@ -38,7 +38,7 @@
       <%= image_tag(claim.collection.icon.url(:standard), :size => "100x100", :alt => claim.collection.icon_alt_text, :class => "icon") %>
     </div>
   </div>
-  
+
   <!--prompt tags -->
   <%= prompt_tags(prompt) %>
 
@@ -49,12 +49,11 @@
       <%=raw sanitize_field(prompt, :description) %>
     </blockquote>
   <% end %>
-  
+
   <!--actions-->
-  <% if @collection.user_is_maintainer?(current_user) %>  
+  <% if @collection.user_is_maintainer?(current_user) %>
     <ul class="actions" role="menu">
-      <li><%= link_to ts("Delete"), collection_claim_path(claim.collection, claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %></li>
+      <li><%= link_to ts("Delete"), collection_claim_path(claim.collection, claim), data: {confirm: ts('Are you sure you want to delete this claim?')}, :method => :delete %></li>
     </ul>
   <% end %>
 </li>
-

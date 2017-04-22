@@ -5,27 +5,25 @@ module Collectible
 
       has_many :collection_items, as: :item, dependent: :destroy, inverse_of: :item
       accepts_nested_attributes_for :collection_items, allow_destroy: true
-      has_many :approved_collection_items, class_name: "CollectionItem", as: :item,
-               conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-      has_many :user_approved_collection_items, class_name: "CollectionItem", as: :item,
-               conditions: ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]
+      has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
+      has_many :user_approved_collection_items, -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
 
-      has_many :collections, 
-               through: :collection_items, 
+      has_many :collections,
+               through: :collection_items,
                after_add: [:set_visibility, :expire_item_caches],
                after_remove: [:update_visibility, :expire_item_caches]
-      has_many :approved_collections, 
-               through: :collection_items, 
-               source: :collection,
-               conditions: ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-      has_many :user_approved_collections, 
-               through: :collection_items, 
-               source: :collection,
-               conditions: ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]        
-      has_many :rejected_collections,
+      has_many :approved_collections,
+               -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) },
                through: :collection_items,
-               source: :collection,
-               conditions: ['collection_items.user_approval_status = ? ', CollectionItem::REJECTED]
+               source: :collection
+      has_many :user_approved_collections,
+               -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) },
+               through: :collection_items,
+               source: :collection
+      has_many :rejected_collections,
+               -> { where('collection_items.user_approval_status = ? ', CollectionItem::REJECTED) },
+               through: :collection_items,
+               source: :collection
     end
   end
 
@@ -34,7 +32,7 @@ module Collectible
     old_collections = self.collection_items.collect(&:collection_id)
     names = trim_collection_names(collection_names)
     names.each do |name|
-      c = Collection.find_by_name(name)
+      c = Collection.find_by(name: name)
       errors.add(:base, ts("We couldn't find the collection %{name}.", name: name)) and return if c.nil?
       if c.closed?
         errors.add(:base, ts("The collection %{name} is not currently open.", name: name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id)
@@ -49,7 +47,7 @@ module Collectible
       c = Collection.find(id) || nil
       remove_from_collection(c)
     end
-  end   
+  end
   def collections_to_add; nil; end
   def collections_to_remove; nil; end
 
@@ -64,7 +62,7 @@ module Collectible
       self.collections -= [collection]
     end
   end
-  
+
   private
   def trim_collection_names(names)
     names.split(',').map{ |name| name.strip }.reject {|name| name.blank?}
@@ -72,10 +70,10 @@ module Collectible
 
   public
   # Set ALL of an item's collections based on a list of collection names
-  # Refactored to use collections_to_(add,remove) above so we only have one set of code 
+  # Refactored to use collections_to_(add,remove) above so we only have one set of code
   #  performing the actual add/remove actions
   # This method now just does the convenience work of getting the removed ids -- any missing collections
-  # will be identified 
+  # will be identified
   # IMPORTANT: cannot delete all existing collections, or else items in closed collections
   # can't be edited
   def collection_names=(new_collection_names)
@@ -89,19 +87,19 @@ module Collectible
   def collection_names
     @collection_names ? @collection_names : self.collections.collect(&:name).uniq.join(",")
   end
-  
-  
+
+
   #### UNREVEALED/ANONYMOUS
 
   # Set the anonymous/unrevealed status of the collectible based on its collections
   # We can't check for user approval because the collection item doesn't exist
-  # and don't need to because this only gets called when the work is a new record and 
+  # and don't need to because this only gets called when the work is a new record and
   # therefore being created by its author
   def set_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
       # if we have collection items saved here then the collectible is not a new object
       if self.collection_items.empty?
-        self.in_anon_collection = !self.collections.select(&:anonymous?).empty? 
+        self.in_anon_collection = !self.collections.select(&:anonymous?).empty?
         self.in_unrevealed_collection = !self.collections.select(&:unrevealed?).empty?
       else
         update_anon_unrevealed
@@ -109,7 +107,7 @@ module Collectible
     end
     return true
   end
-  
+
   # TODO: need a better, DRY, long-term fix
   # Collection items can be revealed independently of a collection, so we don't want
   # to check the collection status when those are updated
@@ -125,30 +123,41 @@ module Collectible
   # save as well
   def set_anon_unrevealed!
     set_anon_unrevealed
-    save
+    begin
+      Rails.logger.info "WORK ATTRS: #{self.inspect}"
+      save!
+    rescue Exception => _e
+      Rails.logger.info "ERRORS: #{self.errors.full_messages}"
+    end
   end
-  
+
   def update_anon_unrevealed!
     update_anon_unrevealed
-    save
+    begin
+      Rails.logger.info "WORK ATTRS: #{self.inspect}"
+      save!
+    rescue Exception => _e
+      Rails.logger.info "ERRORS: #{self.errors.full_messages}"
+    end
   end
 
   def set_visibility(collection)
     set_anon_unrevealed
     return true
   end
-  
+
   def update_visibility(collection)
+    Rails.logger.info "UPDATING VISIBILITY"
     set_anon_unrevealed!
     return true
   end
-  
+
   def expire_item_caches(collection)
     if self.respond_to?(:expire_caches)
       CacheMaster.record(self.id, 'collection', collection.id)
       self.expire_caches
     end
   end
-  
-  
+
+
 end

@@ -5,8 +5,6 @@ class Question < ActiveRecord::Base
   #def update_sanitizer_version; end
   skip_callback :save, :before, :update_sanitizer_version
   belongs_to :archive_faq
-  attr_protected :content_sanitizer_version
-  attr_protected :screencast_sanitizer_version
 
   validates_presence_of :question, :before => :create
   validates_presence_of :anchor, :before => :create

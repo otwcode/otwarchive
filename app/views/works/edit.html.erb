@@ -19,16 +19,15 @@
     <li><%= link_to ts('Manage Chapters'), manage_work_chapters_path(@work) %></li>
   <% end %>
   <% unless (@work.pseuds - current_user.pseuds).empty? %>
-    <li><%= link_to ts('Remove Me As Author'), { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?' %></li>
+    <li><%= link_to ts('Remove Me As Author'), { :action => "edit", :remove => "me"}, data: {confirm: 'This will remove you from all chapters as well. Are you sure?') %></li>
   <% end %>
   <% if @work.posted? %>
     <li><%= link_to ts('Orphan Work'), {:controller => 'orphans', :action => 'new', :work_id => @work.id} %></li>
   <% end %>
-  <li><%= link_to ts("Delete Work"), confirm_delete_work_path(@work), :confirm => ts("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!") %></li>
-</ul>					
+  <li><%= link_to ts("Delete Work"), confirm_delete_work_path(@work), data: {confirm: ts("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!")} %></li>
+</ul>
 <!--/subnav-->
 
-<!--main content-->					
+<!--main content-->
 <%= render :partial => 'standard_form' %>
-<!--/content--> 
-
+<!--/content-->

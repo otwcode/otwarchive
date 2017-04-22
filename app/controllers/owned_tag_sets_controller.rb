@@ -58,7 +58,7 @@ class OwnedTagSetsController < ApplicationController
       redirect_to tag_sets_path and return
     end
     @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
-    @tag_set_ids = @tag_sets.value_of(:tag_set_id)
+    @tag_set_ids = @tag_sets.pluck(:tag_set_id)
     @tag_type = params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type]) ? params[:tag_type] : "fandom"
     # @tag_type is restricted by in_prompt_restriction and therefore safe to pass to constantize
     @tags = @tag_type.classify.constantize.joins(:set_taggings).where("set_taggings.tag_set_id IN (?)", @tag_set_ids).by_name_without_articles
@@ -93,7 +93,7 @@ class OwnedTagSetsController < ApplicationController
           remaining = @tag_set.with_type(tag_type).with_no_parents
           if remaining.count > 0
             @tag_hash[tag_type]["(No linked fandom - might need association)"] ||= []
-            @tag_hash[tag_type]["(No linked fandom - might need association)"] += remaining.value_of(:name)
+            @tag_hash[tag_type]["(No linked fandom - might need association)"] += remaining.pluck(:name)
           end
 
           # store the parents
@@ -112,7 +112,7 @@ class OwnedTagSetsController < ApplicationController
         # get any fandoms without a media
         if @tag_set.with_type("fandom").with_no_parents.count > 0
           @tag_hash[:fandom]["(No Media)"] ||= []
-          @tag_hash[:fandom]["(No Media)"] += @tag_set.with_type("fandom").with_no_parents.value_of(:name)
+          @tag_hash[:fandom]["(No Media)"] += @tag_set.with_type("fandom").with_no_parents.pluck(:name)
         end
 
         # we want to collect and warn about any chars or relationships not in the set's fandoms
@@ -210,8 +210,8 @@ class OwnedTagSetsController < ApplicationController
   # for manual associations
   def get_parent_child_tags
     @tags_in_set = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).order("tags.name ASC")
-    @parent_tags_in_set = @tags_in_set.where(:type => 'Fandom').value_of :name, :id
-    @child_tags_in_set = @tags_in_set.where("type IN ('Relationship', 'Character')").value_of :name, :id
+    @parent_tags_in_set = @tags_in_set.where(:type => 'Fandom').pluck :name, :id
+    @child_tags_in_set = @tags_in_set.where("type IN ('Relationship', 'Character')").pluck :name, :id
   end
 
   private

@@ -30,7 +30,7 @@ module WorkStats
     end
 
     def get_database_stat(statistic, work_id)
-      StatCounter.where(:work_id => work_id).value_of(statistic).first || 0
+      StatCounter.where(:work_id => work_id).pluck(statistic).first || 0
     end
 
   end # ClassMethods

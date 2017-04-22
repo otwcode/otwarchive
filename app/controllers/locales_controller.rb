@@ -13,11 +13,11 @@ class LocalesController < ApplicationController
   end
 
   def index
-    @locales = Locale.all(:order => :iso)
+    @locales = Locale.default_order
   end
 
   def show
-    @locale = Locale.find_by_iso(params[:id])
+    @locale = Locale.find_by(iso: params[:id])
   end
 
   def new
@@ -27,12 +27,12 @@ class LocalesController < ApplicationController
 
   # GET /locales/en/edit
   def edit
-    @locale = Locale.find_by_iso(params[:id])
+    @locale = Locale.find_by(iso: params[:id])
     @languages = Language.default_order
   end
 
   def update
-    @locale = Locale.find_by_iso(params[:id])
+    @locale = Locale.find_by(iso: params[:id])
     @locale.attributes = locale_params
     if @locale.save
       flash[:notice] = ts('Your locale was successfully updated.')
