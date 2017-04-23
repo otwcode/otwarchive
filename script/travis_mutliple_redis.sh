@@ -9,6 +9,3 @@ echo "/usr/bin/redis-server  /etc/redis/redis3.conf" | sudo sh
 echo "/usr/bin/redis-server  /etc/redis/redis4.conf" | sudo sh
 echo "/usr/bin/redis-server  /etc/redis/redis5.conf" | sudo sh
 echo "/usr/bin/redis-server  /etc/redis/redis6.conf" | sudo sh
-sleep 10
-ps -ef |grep redis
-
