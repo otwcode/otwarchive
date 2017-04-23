@@ -321,6 +321,63 @@ describe ChaptersController do
     end
   end
 
+  describe "edit" do
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        get :edit, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "renders new template" do
+        get :edit, work_id: @work.id, id: @work.chapters.first.id
+        expect(response).to render_template(:edit)
+      end
+
+      it "assigns instance variables correctly" do
+        get :edit, work_id: @work.id, id: @work.chapters.first.id
+        expect(assigns[:work]).to eq @work
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+      end
+
+      it "errors and redirects to user page when user is banned" do
+        current_user = create(:user, banned: true)
+        @banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
+        fake_login_known_user(current_user)
+        get :edit, work_id: @banned_users_work.id, id: @banned_users_work.chapters.first.id
+        it_redirects_to(user_path(current_user))
+        expect(flash[:error]).to include("Your account has been banned.")
+      end
+
+      it "removes user and redirects to work when user removes themselves" do
+        @other_user = create(:user)
+        @chapter = create(:chapter, work: @work, posted: true, authors: [user.pseuds.first, @other_user.pseuds.first])
+        get :edit, work_id: @work.id, id: @chapter.id, remove: "me"
+        expect(assigns[:chapter].pseuds).to eq [@other_user.pseuds.first]
+        it_redirects_to(work_path(@work))
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "gives an error when the user is not an owner of the work" do
+        get :edit, work_id: @work.id, id: @work.chapters.first.id
+        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+      end
+    end
+  end
+
   describe "create" do
     before do
       fake_login_known_user(user)
