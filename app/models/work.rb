@@ -192,27 +192,28 @@ class Work < ActiveRecord::Base
   after_destroy :expire_caches
 
   def expire_caches
-    self.pseuds.each do |pseud|
+    pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
     end
 
-    self.collections.each do |this_collection|
+    collections.each do |this_collection|
       collection = this_collection
       # Flush this collection and all its parents
-      begin
+      loop do
         collection.update_works_index_timestamp!
         collection = collection.parent
-      end while collection
+        break unless collection
+      end
     end
 
-    self.filters.each do |tag|
+    filters.each do |tag|
       tag.update_works_index_timestamp!
     end
-    self.tags.each do |tag|
+    tags.each do |tag|
       tag.update_tag_cache
     end
-    Work.expire_work_tag_groups_id(self.id)
+    Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
 
