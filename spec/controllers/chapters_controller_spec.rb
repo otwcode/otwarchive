@@ -4,9 +4,10 @@ describe ChaptersController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:user) { create(:user) }
+
   before do
-    @user = create(:user)
-    @work = create(:work, posted: true, authors: [@user.pseuds.first])
+    @work = create(:work, posted: true, authors: [user.pseuds.first])
   end
 
   describe "index" do
@@ -26,7 +27,7 @@ describe ChaptersController do
 
     context "when work owner is logged in" do
       before do
-        fake_login_known_user(@user)
+        fake_login_known_user(user)
       end
 
       it "errors and redirects to root path if work does not exist" do
@@ -171,7 +172,7 @@ describe ChaptersController do
     end
 
     it "assigns @page_title with fandom, author name, work title, and chapter" do
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", @user.pseuds.first.name, "My title is long enough - Chapter 1").and_return("page title")
+      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", user.pseuds.first.name, "My title is long enough - Chapter 1").and_return("page title")
       get :show, work_id: @work.id, id: @work.chapters.first.id
       expect(assigns[:page_title]).to eq("page title")
     end
@@ -203,7 +204,7 @@ describe ChaptersController do
       @kudo = create(:kudo, commentable_id: @work.id, pseud: create(:pseud))
       @tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return({"Fandom" => [@tag]})
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", @user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
+      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
       get :show, re: @work.id, id: @second_chapter.id
       expect(assigns[:work]).to eq @work
       expect(assigns[:tag_groups]).to eq "Fandom" => [@tag]
@@ -227,7 +228,7 @@ describe ChaptersController do
 
     context "when work owner is logged in" do
       before do
-        fake_login_known_user @user
+        fake_login_known_user user
       end
 
       it "assigns @chapters to all chapters" do
@@ -266,9 +267,63 @@ describe ChaptersController do
     end
   end
 
+  describe "new" do
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        get :new, work_id: @work.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "renders new template" do
+        get :new, work_id: @work.id
+        expect(response).to render_template(:new)
+      end
+
+      it "assigns instance variables correctly" do
+        get :new, work_id: @work.id
+        expect(assigns[:work]).to eq @work
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+      end
+
+      it "errors and redirects to user page when user is banned" do
+        current_user = create(:user, banned: true)
+        @banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
+        fake_login_known_user(current_user)
+        get :new, work_id: @banned_users_work.id
+        it_redirects_to(user_path(current_user))
+        expect(flash[:error]).to include("Your account has been banned.")
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "renders new template" do
+        get :new, work_id: @work.id
+        expect(response).to render_template(:new)
+      end
+
+      it "gives a error when the user is not an owner of the work" do
+        get :new, work_id: @work.id
+        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+      end
+    end
+  end
+
   describe "create" do
     before do
-      fake_login_known_user(@user)
+      fake_login_known_user(user)
       @chapter_attributes = { content: "This doesn't matter" }
     end
     
@@ -280,8 +335,8 @@ describe ChaptersController do
     end
     
     it "does not allow a user to submit only a pseud that is not theirs" do
-      @user2 = create(:user)
-      @chapter_attributes[:author_attributes] = {:ids => [@user2.pseuds.first.id]}
+      user2 = create(:user)
+      @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
       expect {
         post :create, { work_id: @work.id, chapter: @chapter_attributes }
       }.to_not change(Chapter, :count)
