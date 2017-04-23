@@ -198,7 +198,7 @@ describe UserMailer do
     end
   end
   
-  describe "invite request" do
+  describe "invitation" do
     token = 'abc123'
 
     before(:each) do
@@ -228,6 +228,10 @@ describe UserMailer do
       
       it 'should not have missing translations' do
         expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'should not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
