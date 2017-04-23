@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
                                               :cancel_comment_reply, :cancel_comment_edit,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
+  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :approve, :reject]
   before_filter :check_visibility, :only => [:show]
   before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access, :only => [:index, :show]
@@ -18,6 +18,7 @@ class CommentsController < ApplicationController
   before_filter :check_unreviewed, :only => [:add_comment_reply]
   before_filter :check_permission_to_review, :only => [:unreviewed]
   before_filter :check_permission_to_access_single_unreviewed, only: [:show]
+  before_filter :check_permission_to_moderate, only: [:approve, :reject]
 
   cache_sweeper :comment_sweeper
 
@@ -98,6 +99,14 @@ class CommentsController < ApplicationController
           redirect_to login_path and return
         end
       end
+    end
+  end
+
+  def check_permission_to_moderate
+    parent = find_parent
+    unless logged_in_as_admin? || current_user_owns?(parent)
+      flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
+      redirect_to(logged_in? ? root_path : login_path)
     end
   end
 
@@ -348,13 +357,11 @@ class CommentsController < ApplicationController
   end
 
   def approve
-    @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
     redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
 
   def reject
-   @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
    redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
