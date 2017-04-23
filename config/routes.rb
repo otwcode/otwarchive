@@ -230,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end
@@ -522,6 +521,12 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :update_positions
+    end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
     end
   end
   resources :wrangling_guidelines do

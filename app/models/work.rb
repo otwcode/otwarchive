@@ -9,6 +9,7 @@ class Work < ActiveRecord::Base
   include WorkStats
   include WorkChapterCountCaching
   include Tire::Model::Search
+  include ActiveModel::ForbiddenAttributesProtection
   # include Tire::Model::Callbacks
 
   ########################################################################

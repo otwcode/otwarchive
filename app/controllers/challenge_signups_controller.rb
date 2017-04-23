@@ -196,7 +196,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def create
-    @challenge_signup = ChallengeSignup.new(params[:challenge_signup])
+    @challenge_signup = ChallengeSignup.new(challenge_signup_params)
+
     @challenge_signup.pseud = current_user.default_pseud unless @challenge_signup.pseud
     @challenge_signup.collection = @collection
     # we check validity first to prevent saving tag sets if invalid
@@ -209,7 +210,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def update
-    if @challenge_signup.update_attributes(params[:challenge_signup])
+    if @challenge_signup.update_attributes(challenge_signup_params)
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
@@ -321,5 +322,55 @@ protected
     end
 
     csv_array
+  end
+
+  private
+
+  def challenge_signup_params
+    params.require(:challenge_signup).permit(
+      :pseud_id,
+      requests_attributes: nested_prompt_params,
+      offers_attributes: nested_prompt_params
+    )
+  end
+
+  def nested_prompt_params
+    [
+      :id,
+      :collection_id,
+      :title,
+      :url,
+      :any_fandom,
+      :any_character,
+      :any_relationship,
+      :any_freeform,
+      :any_category,
+      :any_rating,
+      :any_warning,
+      :anonymous,
+      :description,
+      :_destroy,
+      tag_set_attributes: [
+        :id,
+        :updated_at,
+        :character_tagnames,
+        :relationship_tagnames,
+        :freeform_tagnames,
+        :category_tagnames,
+        :rating_tagnames,
+        :warning_tagnames,
+        :fandom_tagnames,
+        character_tagnames: [],
+        relationship_tagnames: [],
+        freeform_tagnames: [],
+        category_tagnames: [],
+        rating_tagnames: [],
+        warning_tagnames: [],
+        fandom_tagnames: [],
+      ],
+      optional_tag_set_attributes: [
+        :tagnames
+      ]
+    ]
   end
 end
