@@ -11,8 +11,8 @@ hide_freeform?(@work)) %>
         <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
       <% end %>
     <% end %>
-    <% @series_list = @work.serial_works.reject{|x| x.series.nil?} %>
-    <% unless @series_list.blank? %>
+    <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
+    <% unless series_list.blank? %>
       <dt><%= ts("Series") %>:</dt>
       <dd><%= @series_list.map {|s| "#{ts('Part')} #{s.position} #{ts('of')}
 #{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
@@ -58,10 +58,10 @@ hide_freeform?(@work)) %>
     <dl>
       <dt><%= ts('This work was inspired by') %></dt>
       <dd>
-        <%= @work.parent_work_relationships.reject{|x| x.parent.nil?}.map{|rw| "#{link_to(rw.parent.title,
-url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
-:only_path => false))} #{ts('by')}
-#{byline(rw.parent)}"}.join(", ").html_safe %>
+        <% parent_work_list = @work.parent_work_relationships.reject{ |wr| wr.parent.nil? } %>
+        <%= parent_work_list.map{ |rw| "#{link_to(rw.parent.title,
+               url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
+                       only_path: false)) } #{ts('by')} #{byline(rw.parent)}" }.join(", ").html_safe %>
       </dd>
     </dl>
   <% end %>
