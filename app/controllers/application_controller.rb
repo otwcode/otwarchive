@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-before_filter :ensure_admin_credentials
+  before_filter :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
