@@ -48,6 +48,4 @@ Otwarchive::Application.configure do
   config.serve_static_assets = true
   config.eager_load = false
   config.assets.enabled = false
-
-  config.active_record.default_timezone = :utc
 end

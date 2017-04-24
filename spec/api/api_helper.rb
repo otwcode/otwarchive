@@ -19,7 +19,7 @@ module ApiHelper
       characters: "Detected 1, Detected 2", rating: "Explicit", relationships: "Detected 1/Detected 2",
       categories: "F/F", freeform: "Detected tag 1, Detected tag 2", external_author_name: "Detected Author",
       external_author_email: "detected@foo.com", notes: "This is a <i>content note</i>.",
-      date: Time.new(2002, 01, 12), chapter_title: "Detected chapter title"
+      date: "2002-01-12", chapter_title: "Detected chapter title"
     }
   end
 
@@ -29,7 +29,7 @@ module ApiHelper
       characters: "API 1, API 2", rating: "General", relationships: "bar 1/bar 2",
       categories: "M/M", freeform: "API tag 1, API tag 2", external_author_name: "API Author",
       external_author_email: "api@foo.com", notes: "This is an <i>API note</i>.",
-      date: Time.new(2002, 01, 12), chapter_title: "API chapter title (TBD)"
+      date: "2002-01-12", chapter_title: "API chapter title (TBD)"
     }
   end
 
