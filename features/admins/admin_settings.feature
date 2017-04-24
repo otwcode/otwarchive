@@ -26,6 +26,16 @@ Feature: Admin Settings Page
       And I follow "MOBI"
     Then I should see "Due to current high load"
 
+  Scenario: Turn off downloads
+    Given downloads are off
+      And I have a work "Storytime"
+    When I log out
+      And I view the work "Storytime"
+    Then I should not see "Download"
+    When I am logged in as "tester"
+      And I view the work "Storytime"
+    Then I should not see "Download"
+
   Scenario: Turn off tag wrangling
     Given tag wrangling is off
       And the following activated tag wrangler exists

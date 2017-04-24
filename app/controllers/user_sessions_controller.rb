@@ -41,17 +41,16 @@ class UserSessionsController < ApplicationController
               message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
             end
           elsif user.active?
-            if @user_session.being_brute_force_protected? 
-           
+            if @user_session.being_brute_force_protected?
               message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
             else
-              message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
+              message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
             end
           else
             message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
           end
         else
-          message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
+          message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])

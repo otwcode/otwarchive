@@ -29,6 +29,21 @@ Scenario: When logged in I can comment on a work
     And I follow "Entire Work"
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4.heading.byline"
+  
+Scenario: I cannot comment with a pseud that I don't own
+
+  Given the work "Random Work"
+  When I attempt to comment on "Random Work" with a pseud that is not mine
+  Then I should not see "Comment created!"
+    And I should not see "on Chapter 1"
+    And I should see "You can't comment with that pseud"
+
+Scenario: I cannot edit in a pseud that I don't own
+
+  Given the work "Random Work"
+  When I attempt to update a comment on "Random Work" with a pseud that is not mine
+  Then I should not see "Comment was successfully updated"
+    And I should see "You can't comment with that pseud"
 
 Scenario: Comment editing
 
@@ -80,8 +95,8 @@ Scenario: Comment threading, comment editing
     And I press "Update"
   Then I should see "Comment was successfully updated"
     #TODO Someone should figure out why this fails intermittently on Travis. Caching? The success message is there but the old comment text lingers.
-    #And I should see "Actually, I meant something different"
-    #And I should not see "Mistaken comment"
+    And I should see "Actually, I meant something different"
+    And I should not see "Mistaken comment"
     And I should see Last Edited in the right timezone
   When I am logged in as "commenter3"
     And I view the work "The One Where Neal is Awesome"
@@ -91,8 +106,8 @@ Scenario: Comment threading, comment editing
     And I press "Comment" within ".thread .even"
   Then I should see "Comment created!"
     # TODO Someone should figure out why this fails intermittently on Travis. Caching? The success message is there but the old comment text lingers.
-    # And I should not see "Mistaken comment"
-    # And I should see "Actually, I meant something different" within "ol.thread li ol.thread li ol.thread li ol.thread"
+    And I should not see "Mistaken comment"
+    And I should see "Actually, I meant something different" within "ol.thread li ol.thread li ol.thread li ol.thread"
     And I should see "I loved it, too." within "ol.thread"
     And I should see "Thank you." within "ol.thread li ol.thread li ol.thread"
     And I should see "This should be nested" within "ol.thread li ol.thread li ol.thread"
@@ -143,3 +158,31 @@ Scenario: Set preference and receive comment notifications of your own comments
   Then "author" should be emailed
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
+
+Scenario: Try to post a comment with a < angle bracket before a linebreak, without a space before the bracket
+
+    Given the work "Generic Work"
+      And I am logged in as "commenter"
+      And I view the work "Generic Work"
+    When I fill in "Comment" with
+      """
+      Here is a comment with a bracket
+      abc<
+      xyz
+      """
+      And I press "Comment"
+    Then I should see "Comment created!"
+
+Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket 
+
+    Given the work "Generic Work"
+      And I am logged in as "commenter"
+      And I view the work "Generic Work"
+    When I fill in "Comment" with
+      """
+      Here is a comment with a bracket
+      abc <
+      xyz
+      """
+      And I press "Comment"
+    Then I should see "Comment created!"

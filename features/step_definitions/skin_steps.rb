@@ -7,19 +7,18 @@ end
 
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_url
-  fill_in("Title", :with => skin_name)
-  fill_in("Description", :with => "Random description")
-  fill_in("CSS", :with => "#title { text-decoration: blink;}")
+  fill_in("Title", with: skin_name)
+  fill_in("Description", with: "Random description")
+  fill_in("CSS", with: "#title { text-decoration: blink;}")
 end
 
-Given /^I set up the skin "([^"]*)" with css$/ do |skin_name, css|
-  step "I set up the skin \"#{skin_name}\""
-  fill_in("CSS", :with => css)
+Given /^I set up the skin "([^"]*)" with some css$/ do |skin_name|
+  step %{I set up the skin "#{skin_name}" with css #{DEFAULT_CSS}}
 end
 
 Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step "I set up the skin \"#{skin_name}\""
-  fill_in("CSS", :with => css)
+  fill_in("CSS", with: css)
 end
 
 Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
@@ -27,7 +26,7 @@ Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step %{I submit}
 end
 
-Given /^I create the skin "([^"]*)" with css$/ do |skin_name, css|
+Given /^I create the skin "([^"]*)" with some css$/ do |skin_name, css|
   step "I set up the skin \"#{skin_name}\" with css \"#{css}\""
   step %{I submit}
 end
@@ -44,7 +43,7 @@ end
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
-  attach_file("skin_icon", "test/fixtures/skin_test_preview.png")
+  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
   check("skin_public")
   step %{I submit}
   step %{I should see "Skin was successfully created"}
@@ -57,7 +56,7 @@ end
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
   step "I am logged in as an admin"
   visit admin_skins_url
-  check("make_official_#{skin_name.gsub(/\s/, '_')}")
+  check("make_official_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
@@ -65,7 +64,7 @@ Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
   step "I am logged in as an admin"
   visit admin_skins_url
   step "I follow \"Approved Skins\""
-  check("make_unofficial_#{skin_name.gsub(/\s/, '_')}")
+  check("make_unofficial_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
@@ -87,7 +86,7 @@ Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"
   step "the approved public skin \"public skin\" with css \"#{css}\""
   step "I am logged in as \"#{login}\""
   step "I am on #{login}'s preferences page"
-  select("#{skin_name}", :from => "preference_skin_id")
+  select(skin_name, from: "preference_skin_id")
   step %{I submit}
 end
 
@@ -133,7 +132,45 @@ When /^I edit my pink header skin to have a purple logo$/ do
   click_button("Update")
 end
 
+When /^I view the skin "([^\"]*)"$/ do |skin|
+  skin = Skin.find_by_title!(skin)
+  visit skin_url(skin)
+end
+
+When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  skin.in_chooser = true
+  skin.save
+end
+
+When /^the skin "([^\"]*)" is cached$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  skin.cached = true
+  skin.save
+  skin.cache!
+end
+
+When /^I preview the skin "([^\"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  visit preview_skin_path(skin)
+end
+
+When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  visit set_skin_path(skin)
+end
+
 ### THEN
+
+Then /^the page should have the cached skin "([^"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  page.should have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+end
+
+Then /^the page should not have the cached skin "([^"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  page.should_not have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+end
 
 Then /^I should see a pink header$/ do
   step %{I should see "#header .primary" within "style"}
@@ -173,7 +210,7 @@ end
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
   skin = Skin.find_by_title(arg1)
   orig_skin_key = skin_cache_value(skin)
-  parent_id = SkinParent.where(:child_skin_id => skin.id).last.parent_skin_id
+  parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)
   parent.save!
   assert orig_skin_key != skin_cache_value(skin), "Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"

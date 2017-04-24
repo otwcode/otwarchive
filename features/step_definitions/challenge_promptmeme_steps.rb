@@ -50,6 +50,32 @@ Given /^an anon has signed up for Battle 12$/ do
   step %{I sign up for Battle 12 with combination B}
 end
 
+Given /^"([^\"]*)" has signed up for Battle 12 with combination ([^\"]*)$/ do |username, combo|
+  step %{I am logged in as "#{username}"}
+  step %{I sign up for Battle 12 with combination #{combo}}
+end
+
+Given /^"([^\"]*)" has signed up for Battle 12 with one more prompt than required$/ do |username|
+  step %{I am logged in as "#{username}"}
+  step %{I sign up for Battle 12 with combination C}
+  step %{I add a new prompt to my signup for a prompt meme}
+end
+
+Given /^"([^\"]*)" has fulfilled a claim from Battle 12$/ do |username|
+  step %{"#{username}" has claimed a prompt from Battle 12}
+  step %{I fulfill my claim}
+end
+
+Given /^"([^\"]*)" has deleted their sign up for the prompt meme "([^\"]*)"$/ do |username, challenge_title|
+  step %{I am logged in as "#{username}"}
+  step %{I delete my signup for the prompt meme "#{challenge_title}"}
+end
+
+Given /^"([^\"]*)" has claimed a prompt from Battle 12$/ do |username|
+  step %{I am logged in as "#{username}"}
+  step %{I claim a prompt from "Battle 12"}
+end
+
 When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
   step %{I am logged in as "mod1"}
   visit new_collection_path
@@ -163,6 +189,14 @@ When /^I fill in prompt meme challenge options$/ do
     step %{I check "Sign-up open?"}
     fill_in("Sign-up opens:", with: Date.yesterday)
     fill_in("Sign-up closes:", with: Date.tomorrow)
+end
+
+When /^I allow (\d+) prompts$/ do |number|
+  fill_in("prompt_meme_requests_num_allowed", with: number)
+end
+
+When /^I require (\d+) prompts$/ do |number|
+  fill_in("prompt_meme_requests_num_required", with: number)
 end
 
 When /^I sign up for Battle 12$/ do
@@ -389,13 +423,6 @@ When /^I edit the first prompt$/ do
   #step %{I follow "Edit Prompt"}
 end
 
-When /^I edit the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  click_link("#{participant}")
-  step %{I follow "Edit"}
-end
-
 Then /^I should see prompt meme options$/ do
   step %{I should not see "Offer Settings"}
     step %{I should see "Request Settings"}
@@ -491,5 +518,42 @@ end
 Then /^I should be editing the challenge settings$/ do
   step %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
+
+Then /^(\d+) prompts should be required$/ do |number|
+  find_field("prompt_meme_requests_num_required").value.should == number
+end
+
+Then /^(\d+) prompts should be allowed$/ do |number|
+  find_field("prompt_meme_requests_num_allowed").value.should == number
+end
+
+Then /^I should not see the prompt meme dashboard for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  visit collection_path(collection)
+  step %{I should not see "Prompt Meme" within "#dashboard"}
+  step %{I should not see "Prompts" within "#dashboard"}
+  step %{I should not see "My Prompts" within "#dashboard"}
+  step %{I should not see "Prompt Form" within "#dashboard"}
+  step %{I should not see "My Claims" within "#dashboard"}
+  step %{I should not see "Unposted Claims" within "#dashboard"}
+  step %{I should not see "Challenge Settings" within "#dashboard"}
+end
+
+Then /^no one should have a claim in "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by_title(challenge_title)
+  if collection.present?
+    User.all.each do |user|
+      user.request_claims.in_collection(collection).should be_empty
+    end
+  # we don't have a collection id because the collection has been deleted
+  # so let's make sure any remaining claims are for exisiting collections
+  else
+    ChallengeClaim.all.each do |claim|
+      collection_id = claim.collection_id
+      Collection.find_by_id(collection_id).should_not be_nil
+    end
+  end
+end
+
 
 
