@@ -4,17 +4,19 @@ Feature: Display autocomplete for tags
   I should be getting autocompletes for my tags
 
   @javascript
-  Scenario: Only matching canonical tags should appear in autocomplete, and searching for the same data twice should produce same results
+  Scenario: Only matching canonical tags should appear in autocomplete,
+    and searching for the same data twice should produce same results
     Given I am logged in
       And a set of tags for testing autocomplete
-       And I go to the new work page
+      And I go to the new work page
     Then the tag autocomplete fields should list only matching canonical tags
 
   @javascript
-  Scenario: For fandom-specific autocomplete, if a fandom is entered then only characters/relationships within the fandom should appear in autocomplete
+  Scenario: If a fandom is entered, only characters/relationships in the fandom
+    should appear in autocomplete
     Given I am logged in
       And a set of tags for testing autocomplete
-       And I go to the new work page
+      And I go to the new work page
      Then the fandom-specific tag autocomplete fields should list only fandom-specific canonical tags
 
   @javascript
@@ -47,7 +49,7 @@ Feature: Display autocomplete for tags
       And the collection item autocomplete field should list matching collections
 
   @javascript
-  Scenario: Collection autocomplete shows Collection Title and Name
+  Scenario: Collection autocomplete shows collection title and name
     Given I have the collection "Issue" with name "jb_fletcher"
       And I have the collection "Issue" with name "robert_stack"
       And I am logged in as "Scott" with password "password"
