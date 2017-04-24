@@ -197,7 +197,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date].to_time)
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
@@ -328,7 +328,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + api_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date].to_time)
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
@@ -390,7 +390,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date].to_time)
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
