@@ -78,9 +78,7 @@ describe Collectible do
         describe "when the work is removed from the collection" do
           before do
             work.collection_names = ""
-            binding.pry
             work.save
-            work.reload
           end
 
           it "should not be #{state}" do

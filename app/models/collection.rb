@@ -182,7 +182,7 @@ class Collection < ActiveRecord::Base
     table = challenge_type.tableize
     not_closed.where(challenge_type: challenge_type).
       joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
+      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
   end
 
   scope :with_name_like, lambda {|name|

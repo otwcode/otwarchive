@@ -123,22 +123,12 @@ module Collectible
   # save as well
   def set_anon_unrevealed!
     set_anon_unrevealed
-    begin
-      Rails.logger.info "WORK ATTRS: #{self.inspect}"
-      save!
-    rescue Exception => _e
-      Rails.logger.info "ERRORS: #{self.errors.full_messages}"
-    end
+    save!
   end
 
   def update_anon_unrevealed!
     update_anon_unrevealed
-    begin
-      Rails.logger.info "WORK ATTRS: #{self.inspect}"
-      save!
-    rescue Exception => _e
-      Rails.logger.info "ERRORS: #{self.errors.full_messages}"
-    end
+    save!
   end
 
   def set_visibility(collection)
@@ -147,7 +137,6 @@ module Collectible
   end
 
   def update_visibility(collection)
-    Rails.logger.info "UPDATING VISIBILITY"
     set_anon_unrevealed!
     return true
   end

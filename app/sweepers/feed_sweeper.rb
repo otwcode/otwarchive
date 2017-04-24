@@ -1,4 +1,5 @@
 class FeedSweeper < ActionController::Caching::Sweeper
+  include Rails.application.routes.url_helpers
 
   observe Chapter, Work
 

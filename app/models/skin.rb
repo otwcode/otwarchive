@@ -394,7 +394,7 @@ class Skin < ActiveRecord::Base
 
   def self.load_site_css
     Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).each do |version|
-      version_dir = Skin.site_skins_dir + version + '/'
+      version_dir = "#{Skin.site_skins_dir + version}/"
       if File.directory?(version_dir)
         # let's load up the file
         skins = []
