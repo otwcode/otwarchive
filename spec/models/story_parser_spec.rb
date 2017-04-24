@@ -149,8 +149,8 @@ describe StoryParser do
       urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
-      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
-      expected_date = Time.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      actual_date = work.revised_at.to_date
+      expected_date = Date.new(2001, 1, 22)
       expect(actual_date).to eq(expected_date)
     end
   end
