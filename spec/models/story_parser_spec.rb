@@ -9,7 +9,7 @@ describe StoryParser do
       public :get_source_if_known, :check_for_previous_import, :parse_common
     end
   end
-  
+
   after(:all) do
     class StoryParser
       protected :get_source_if_known, :check_for_previous_import, :parse_common
@@ -150,7 +150,7 @@ describe StoryParser do
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
       actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
-      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      expected_date = Time.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
       expect(actual_date).to eq(expected_date)
     end
   end
