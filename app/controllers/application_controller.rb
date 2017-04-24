@@ -31,7 +31,16 @@ class ApplicationController < ActionController::Base
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
+    if logged_in_as_admin?
+      # if we are logged in as an admin and we don't have the admin_credentials
+      # set then set that cookie
+      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+    else
+      # if we are NOT logged in as an admin and we have the admin_credentials
+      # set then delete that cookie
+      cookies.delete :admin_credentials unless cookies[:admin_credentials].nil?
+    end
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
       @user_session = UserSession.find
       if @user_session
@@ -99,7 +108,7 @@ public
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     end
   end
-  
+
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -107,7 +116,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do 
+      @admin_banner = Rails.cache.fetch("admin_banner") do
         banner = AdminBanner.where(:active => true).last
         banner.nil? ? "" : banner
       end
