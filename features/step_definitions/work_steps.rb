@@ -250,15 +250,19 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
+  step %{a chapter is set up for "#{work_title}"}
+  step %{I press "Preview"}
+  Work.tire.index.refresh
+  Tag.write_redis_to_database
+end
+
+When /^a chapter is set up for "([^"]*)"$/ do |work_title|
   work = Work.find_by_title(work_title)
   user = work.users.first
   step %{I am logged in as "#{user.login}"}
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
-  step %{I press "Preview"}
-  Work.tire.index.refresh
-  Tag.write_redis_to_database
 end
 
 # meant to be used in conjunction with above step
