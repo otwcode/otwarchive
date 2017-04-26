@@ -103,7 +103,7 @@ end
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
-  visit new_collection_url
+  visit new_collection_path
   fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
   fill_in("collection_title", with: title)
 end
