@@ -163,3 +163,14 @@ Feature: Creating and editing tag sets
     And I should see "Major Crimes (0)"
   When I expand the unassociated characters and relationships
   Then "Sharon Raydor" should be an unassociated tag
+
+  Scenario: A moderator can't change the tag set's nomination settings if there 
+  are already nominations
+  Given I have the nominated tag set "Nominated Tags"
+    And I am logged in as "tagsetter"
+  When I go to the "Nominated Tags" tag set edit page
+    And I fill in "Fandom nomination limit" with "1"
+    And I fill in "Character nomination limit" with "1"
+    And I submit
+  Then I should see "You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."
+  
