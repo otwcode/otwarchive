@@ -1,4 +1,6 @@
 class ChallengeSignup < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   # -1 represents all matching
   ALL = -1
 

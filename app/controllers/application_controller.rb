@@ -27,6 +27,19 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
+  before_filter :ensure_admin_credentials
+  def ensure_admin_credentials
+    if logged_in_as_admin?
+      # if we are logged in as an admin and we don't have the admin_credentials
+      # set then set that cookie
+      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+    else
+      # if we are NOT logged in as an admin and we have the admin_credentials
+      # set then delete that cookie
+      cookies.delete :admin_credentials unless cookies[:admin_credentials].nil?
+    end
+  end
+
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials

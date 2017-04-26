@@ -1,8 +1,10 @@
 class CollectionParticipant < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :pseud
   has_one :user, :through => :pseud
   belongs_to :collection
-  
+
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
   NONE = PARTICIPANT_ROLES[0]
   OWNER = PARTICIPANT_ROLES[1]
@@ -15,8 +17,8 @@ class CollectionParticipant < ActiveRecord::Base
                          [ts("Member"), MEMBER],
                          [ts("Moderator"), MODERATOR],
                          [ts("Owner"), OWNER] ]
-  
-  validates_uniqueness_of :pseud_id, :scope => [:collection_id], 
+
+  validates_uniqueness_of :pseud_id, :scope => [:collection_id],
     :message => ts("That person appears to already be a participant in that collection.")
 
   validates_presence_of :participant_role
@@ -50,7 +52,7 @@ class CollectionParticipant < ActiveRecord::Base
   def user_allowed_to_destroy?(user)
     self.collection.user_is_maintainer?(user) || self.pseud.user == user
   end
-  
+
   def user_allowed_to_promote?(user, role)
     (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
   end

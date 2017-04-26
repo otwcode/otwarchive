@@ -127,6 +127,10 @@ GEM
       mime-types (>= 1.16, < 4)
       nokogiri (~> 1.5)
       railties (>= 3, < 5)
+    cucumber-timecop (0.0.6)
+      chronic
+      cucumber
+      timecop
     cucumber-wire (0.0.1)
     dalli (2.7.6)
     database_cleaner (1.2.0)
@@ -234,7 +238,7 @@ GEM
     newrelic_rpm (3.14.1.311)
     nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
-    nokogumbo (1.4.10)
+    nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
@@ -388,6 +392,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timecop (0.8.1)
     timeliness (0.3.8)
     tins (1.12.0)
     tire (0.6.2)
@@ -467,6 +472,7 @@ DEPENDENCIES
   css_parser
   cucumber (~> 2.3.2)
   cucumber-rails (~> 1.4.3)
+  cucumber-timecop
   dalli
   database_cleaner (= 1.2.0)
   delorean
@@ -493,6 +499,7 @@ DEPENDENCIES
   newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.7.1)
+  nokogumbo (= 1.4.9)
   paperclip
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
@@ -519,6 +526,7 @@ DEPENDENCIES
   strong_parameters!
   test-unit (~> 3.0)
   test_after_commit
+  timecop
   timeliness
   tire
   transaction_retry

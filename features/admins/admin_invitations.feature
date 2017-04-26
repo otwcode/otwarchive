@@ -319,3 +319,19 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "There are 1 requests in the queue."
       And I should see "1 people from the invite queue were invited"
       And 1 email should be delivered
+
+ Scenario: An admin can edit an invitation
+   Given the user "dax" exists and is activated
+     And "dax" has "2" invitations
+     And I am logged in as an admin
+   When I follow "Invite New Users"
+     And I fill in "Enter a user name" with "dax"
+     And I press "Go"
+   Then I should see "copy and use"
+   When I follow "Invite New Users"
+     And I fill in "Enter an invite token" with "dax's" invite code
+     And I press "Go"
+   Then I should see "copy and use"
+   When I fill in "invitation_invitee_email" with "oldman@ds9.com"
+     And I press "Update Invitation"
+   Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
