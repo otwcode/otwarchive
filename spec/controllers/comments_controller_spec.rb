@@ -106,11 +106,138 @@ describe CommentsController do
   end
 
   describe "PUT #approve" do
-    it "redirects to the comment on the commentable without an error" do
-      put :approve, id: unreviewed_comment.id
-      expect(unreviewed_comment.approved).to be true
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(unreviewed_comment.ultimate_parent, show_comments: true, anchor: 'comments'))
+    before { comment.update_column(:approved, false) }
+
+    context "when logged-in as admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "marks the comment as not spam" do
+        put :approve, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_truthy
+      end
+    end
+
+    context "when logged-in as the work's creator" do
+      before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+      it "marks the comment as not spam" do
+        put :approve, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_truthy
+      end
+    end
+
+    context "when logged-in as the comment writer" do
+      before { fake_login_known_user(comment.pseud.user) }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when logged-in as a random user" do
+      before { fake_login }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when not logged-in" do
+      before { fake_logout }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          login_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+  end
+
+  describe "PUT #reject" do
+    context "when logged-in as admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "marks the comment as spam" do
+        put :reject, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_falsey
+      end
+    end
+
+    context "when logged-in as the work's creator" do
+      before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+      it "marks the comment as spam" do
+        put :reject, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_falsey
+      end
+    end
+
+    context "when logged-in as the comment writer" do
+      before { fake_login_known_user(comment.pseud.user) }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when logged-in as a random user" do
+      before { fake_login }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when not logged-in" do
+      before { fake_logout }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          login_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
     end
   end
 
