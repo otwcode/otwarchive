@@ -422,7 +422,7 @@ class Skin < ActiveRecord::Base
           end
 
           full_title = "Archive #{version}: (#{position}) #{title}"
-          skin = Skin.find_by_title(full_title)
+          skin = Skin.find_by(title: full_title)
           if skin.nil?
             skin = Skin.new
           end
@@ -443,7 +443,7 @@ class Skin < ActiveRecord::Base
         end
 
         # set up the parent relationship of all the skins in this version
-        top_skin = Skin.find_by_title("Archive #{version}")
+        top_skin = Skin.find_by(title: "Archive #{version}")
         if top_skin
           top_skin.clear_cache! if top_skin.cached?
           top_skin.skin_parents.delete_all
@@ -490,14 +490,14 @@ class Skin < ActiveRecord::Base
   def self.get_current_site_skin
     current_version = Skin.get_current_version
     if current_version
-      Skin.find_by_title_and_official("Archive #{Skin.get_current_version}", true)
+      Skin.find_by(title: "Archive #{Skin.get_current_version}", official: true)
     else
       nil
     end
   end
 
   def self.default
-    Skin.find_by_title_and_official("Default", true) || Skin.create_default
+    Skin.find_by(title: "Default", official: true) || Skin.create_default
   end
 
   def self.create_default

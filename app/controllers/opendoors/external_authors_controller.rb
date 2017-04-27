@@ -56,7 +56,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     # send the invitation to specified address
     @email = params[:email]
     @invitation.invitee_email = @email
-    @invitation.creator = User.find_by_login("open_doors") || current_user
+    @invitation.creator = User.find_by(login: "open_doors") || current_user
     if @invitation.save
       flash[:notice] = ts("Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!")
     else

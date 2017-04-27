@@ -35,7 +35,7 @@ class ChaptersController < ApplicationController
     if params[:selected_id]
       redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
     end
-    @chapter = @work.chapters.find_by_id(params[:id])
+    @chapter = @work.chapters.find_by(id: params[:id])
     unless @chapter
       flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
       redirect_to work_path(@work) and return
@@ -246,7 +246,7 @@ class ChaptersController < ApplicationController
 
   # fetch work these chapters belong to from db
   def load_work
-    @work = params[:work_id] ? Work.find_by_id(params[:work_id]) : Chapter.find_by_id(params[:id]).try(:work)
+    @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
     unless @work.present?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return

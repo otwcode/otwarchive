@@ -478,7 +478,7 @@ class User < ActiveRecord::Base
   #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
-      invitation = Invitation.find_by_token(self.invitation_token)
+      invitation = Invitation.find_by(token: self.invitation_token)
       if invitation
         self.update_attribute(:invitation_id, invitation.id)
         invitation.mark_as_redeemed(self)
@@ -488,7 +488,7 @@ class User < ActiveRecord::Base
 
   # Existing users should be removed from the invitations queue
   def remove_from_queue
-    invite_request = InviteRequest.find_by_email(self.email)
+    invite_request = InviteRequest.find_by(email: self.email)
     invite_request.destroy if invite_request
   end
 

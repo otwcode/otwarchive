@@ -78,7 +78,7 @@ class PromptRestriction < ActiveRecord::Base
   def tag_sets_to_add=(tag_set_titles)
     tag_set_titles.split(',').reject {|title| title.blank?}.each do |title|
       title.strip!
-      ots = OwnedTagSet.find_by_title(title)
+      ots = OwnedTagSet.find_by(title: title)
       errors.add(:base, ts("We couldn't find the tag set {{title}}.", :title => title)) and return if ots.nil?
       errors.add(:base, ts("The tag set {{title}} is not available for public use.", :title => title)) and return if (!ots.usable && !ots.user_is_moderator?(User.current_user))
       unless self.owned_tag_sets.include?(ots)

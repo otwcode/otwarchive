@@ -125,7 +125,7 @@ describe "API WorksController - Create works" do
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
-        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
+        @work = Work.find_by(url: parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -180,8 +180,8 @@ describe "API WorksController - Create works" do
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
-        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
-        created_user = ExternalAuthor.find_by_email(api_fields[:external_author_email])
+        @work = Work.find_by(url: parsed_body[:works].first[:original_url])
+        created_user = ExternalAuthor.find_by(email: api_fields[:external_author_email])
         created_user.destroy unless created_user.nil?
       end
 
@@ -240,7 +240,7 @@ describe "API WorksController - Create works" do
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
-        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
+        @work = Work.find_by(url: parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -313,7 +313,7 @@ describe "API WorksController - Create works" do
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
-        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
+        @work = Work.find_by(url: parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -375,7 +375,7 @@ describe "API WorksController - Create works" do
              valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
-        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
+        @work = Work.find_by(url: parsed_body[:works].first[:original_url])
       end
 
       after(:all) do

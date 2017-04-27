@@ -100,7 +100,7 @@ describe CommentsController do
   describe "PUT #review_all" do
     xit "redirects to root path with an error if current user does not own the commentable" do
       fake_login
-      put :review_all, work_id: unreviewed_comment.commentable_id 
+      put :review_all, work_id: unreviewed_comment.commentable_id
       it_redirects_to_with_error(root_path, "What did you want to review comments on?")
     end
   end
@@ -190,7 +190,7 @@ describe CommentsController do
         fake_login
         comment = create(:unreviewed_comment, pseud_id: @current_user.default_pseud.id)
         get :destroy, id: comment.id
-        expect(Comment.find_by_id(comment.id)).to_not be_present
+        expect(Comment.find_by(id: comment.id)).to_not be_present
         expect(response).to redirect_to("/where_i_came_from")
         expect(flash[:notice]).to eq "Comment deleted."
       end
@@ -200,7 +200,7 @@ describe CommentsController do
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_return(false)
         get :destroy, id: comment.id
         allow_any_instance_of(Comment).to receive(:destroy_or_mark_deleted).and_call_original
-        expect(Comment.find_by_id(comment.id)).to be_present
+        expect(Comment.find_by(id: comment.id)).to be_present
         expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end

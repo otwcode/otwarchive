@@ -243,7 +243,7 @@ class WorkSearch < Search
   # Translate language abbreviations to numerical ids
   def set_language!
     if options[:language_id].present? && options[:language_id].to_i == 0
-      language = Language.find_by_short(options[:language_id])
+      language = Language.find_by(short: options[:language_id])
       if language.present?
         options[:language_id] = language.id
       end
@@ -314,7 +314,7 @@ class WorkSearch < Search
       summary << "Single Chapter"
     end
     if options[:language_id].present?
-      language = Language.find_by_id(options[:language_id])
+      language = Language.find_by(id: options[:language_id])
       if language.present?
         summary << "Language: #{language.name}"
       end

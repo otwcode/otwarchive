@@ -10,7 +10,7 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
   step %{I press "Create"}
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   work.destroy
   Bookmark.tire.index.refresh
 end
@@ -25,7 +25,7 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
-  step %{I open the bookmarkable work "#{title}"}  
+  step %{I open the bookmarkable work "#{title}"}
   click_link("Bookmark")
 end
 
@@ -49,10 +49,10 @@ When /^I open a bookmarkable work$/ do
 end
 
 When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   if !work
     step %{I post the work "#{title}"}
-    work = Work.find_by_title(title)
+    work = Work.find_by(title: title)
   end
   visit work_url(work)
 end
@@ -80,20 +80,20 @@ end
 When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not mine$/) do |work|
   step %{the user "not_the_bookmarker" exists and is activated}
   step %{I edit the bookmark for "#{work}"}
-  pseud_id = User.find_by_login("not_the_bookmarker").pseuds.first.id
+  pseud_id = User.find_by(login: "not_the_bookmarker").pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
   click_button "Edit"
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   bookmark = work.bookmarks.first
   bookmark.reload
   bookmark.tags.collect(&:name).include?(tag)
 end
 
 Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bookmark tags$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   bookmark = work.bookmarks.first
   orig_cache_key = bookmark.cache_key
   Kernel::sleep 1
@@ -105,7 +105,7 @@ Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bo
 end
 
 Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not edited the bookmark$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   bookmark = work.bookmarks.first
   orig_cache_key = bookmark.cache_key
   Kernel::sleep 1

@@ -424,7 +424,7 @@ class Tag < ActiveRecord::Base
   def self.perform(id, method, *args)
     # we are doing this to step over issues when the tag is deleted.
     # in rails 4 this should be tag=find_by id: id
-    tag = find_by_id(id)
+    tag = find_by(id: id)
     tag.send(method, *args) unless tag.nil?
   end
 
@@ -782,14 +782,14 @@ class Tag < ActiveRecord::Base
     if self.merger_id_changed?
       # setting the merger_id doesn't update the merger so we do it here
       if self.merger_id
-        self.merger = Tag.find_by_id(self.merger_id)
+        self.merger = Tag.find_by(id: self.merger_id)
       else
         self.merger = nil
       end
       if self.merger && self.merger.canonical?
         self.async(:add_filter_taggings)
       end
-      old_merger = Tag.find_by_id(self.merger_id_was)
+      old_merger = Tag.find_by(id: self.merger_id_was)
       if old_merger && old_merger.canonical?
         self.async(:remove_filter_taggings, old_merger.id)
       end
@@ -887,7 +887,7 @@ class Tag < ActiveRecord::Base
 
   # Add filter taggings to this tag's works for one of its meta tags
   def inherit_meta_filters(meta_tag_id)
-    meta_tag = Tag.find_by_id(meta_tag_id)
+    meta_tag = Tag.find_by(id: meta_tag_id)
     return unless meta_tag.present?
     self.filtered_works.each do |work|
       unless work.filters.include?(meta_tag)

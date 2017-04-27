@@ -36,7 +36,7 @@ class CollectionItemsController < ApplicationController
                           else
                             @collection_items.unreviewed_by_collection
                           end
-    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
+    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
                           when params[:approved]
@@ -90,7 +90,7 @@ class CollectionItemsController < ApplicationController
     unapproved_collections = []
     errors = []
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
-      collection = Collection.find_by_name(collection_name)
+      collection = Collection.find_by(name: collection_name)
       if !collection
         errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", name: collection_name)
       elsif @item.collections.include?(collection)
@@ -161,7 +161,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def destroy
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
     flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)

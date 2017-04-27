@@ -58,7 +58,7 @@ class AdminPost < ActiveRecord::Base
   end
 
   def translated_post_must_exist
-    if translated_post_id.present? && AdminPost.find_by_id(translated_post_id).nil?
+    if translated_post_id.present? && AdminPost.find_by(id: translated_post_id).nil?
       errors.add(:translated_post_id, 'does not exist')
     end
   end

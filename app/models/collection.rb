@@ -99,7 +99,7 @@ class Collection < ActiveRecord::Base
 
   validate :parent_exists
   def parent_exists
-    unless parent_name.blank? || Collection.find_by_name(parent_name)
+    unless parent_name.blank? || Collection.find_by(name: parent_name)
       errors.add(:base, ts("We couldn't find a collection with name %{name}.", name: parent_name))
     end
   end
@@ -244,7 +244,7 @@ class Collection < ActiveRecord::Base
 
   def parent_name=(name)
     @parent_name = name
-    self.parent = Collection.find_by_name(name)
+    self.parent = Collection.find_by(name: name)
   end
 
   def parent_name

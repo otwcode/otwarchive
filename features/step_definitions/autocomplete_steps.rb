@@ -24,7 +24,7 @@ Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
   step %{I should not see "#{string.gsub(/\'/, '\'')}" within ".autocomplete"}
 end
 
-# this is needed for values like 'Allo 'Allo that can't be handled right 
+# this is needed for values like 'Allo 'Allo that can't be handled right
 # by Nokogiri in the typical find
 # note: this might only work for the first autocomplete in a page D:
 Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
@@ -80,7 +80,7 @@ When /^I specify two fandoms and enter text in the character autocomplete field$
     step %{I enter text in the "Characters" autocomplete field}
 end
 
-## Here's where we create the steps defining which tags should appear/not appear 
+## Here's where we create the steps defining which tags should appear/not appear
 ## based on the set of tags and the data entered
 
 Then /^I should only see matching canonical fandom tags in the autocomplete$/ do
@@ -89,7 +89,7 @@ Then /^I should only see matching canonical fandom tags in the autocomplete$/ do
 	  step %{I should not see "Battlestar Galactica" in the autocomplete}
 	  step %{I should not see "Superduper" in the autocomplete}
 end
-  
+
 Then /^I should only see matching canonical freeform tags in the autocomplete$/ do
   step %{I should see "Alternate Universe" in the autocomplete}
     step %{I should not see "alternate sundays" in the autocomplete}
@@ -204,7 +204,7 @@ Given /^a gift exchange for testing autocomplete$/ do
 end
 
 When /^I edit the gift exchange for testing autocomplete$/ do
-  visit(edit_collection_gift_exchange_path(Collection.find_by_name("autocomplete")))
+  visit(edit_collection_gift_exchange_path(Collection.find_by(name: "autocomplete")))
 end
 
 When /^I submit values in the tag autocomplete fields$/ do
@@ -213,7 +213,7 @@ When /^I submit values in the tag autocomplete fields$/ do
   step %{I submit}
 end
 
-Then /^the tag autocomplete fields should have the entered values$/ do 
+Then /^the tag autocomplete fields should have the entered values$/ do
   step %{I should see "Supernatural" in the autocomplete}
     step %{I should see "Smallville" in the autocomplete}
     step %{I should see "Clark Kent" in the autocomplete}

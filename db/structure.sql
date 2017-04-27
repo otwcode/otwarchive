@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.6.10, for osx10.8 (x86_64)
 --
--- Host: localhost    Database: otwarchive_development
+-- Host: localhost    Database: otwarchive_test
 -- ------------------------------------------------------
 -- Server version	5.6.10
 
@@ -184,7 +184,7 @@ CREATE TABLE `admin_settings` (
   `downloads_enabled` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_admin_settings_on_last_updated_by` (`last_updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +203,7 @@ CREATE TABLE `admins` (
   `encrypted_password` varchar(255) DEFAULT NULL,
   `password_salt` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +296,7 @@ CREATE TABLE `audits` (
   KEY `index_audits_on_created_at` (`created_at`),
   KEY `user_index` (`user_id`,`user_type`),
   KEY `index_audits_on_request_uuid` (`request_uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -325,7 +325,7 @@ CREATE TABLE `bookmarks` (
   KEY `index_bookmarks_on_private_and_hidden_by_admin_and_created_at` (`private`,`hidden_by_admin`,`created_at`),
   KEY `index_bookmarks_on_pseud_id` (`pseud_id`),
   KEY `fk_bookmarks_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,7 +407,7 @@ CREATE TABLE `challenge_signups` (
   PRIMARY KEY (`id`),
   KEY `index_challenge_signups_on_collection_id` (`collection_id`),
   KEY `signups_on_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,7 +439,7 @@ CREATE TABLE `chapters` (
   PRIMARY KEY (`id`),
   KEY `index_chapters_on_work_id` (`work_id`),
   KEY `works_chapter_index` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +466,7 @@ CREATE TABLE `collection_items` (
   KEY `index_collection_items_approval_status` (`collection_id`,`user_approval_status`,`collection_approval_status`),
   KEY `collection_items_item_id` (`item_id`),
   KEY `collection_items_unrevealed` (`unrevealed`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350800 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,7 +487,7 @@ CREATE TABLE `collection_participants` (
   UNIQUE KEY `by collection and pseud` (`collection_id`,`pseud_id`),
   KEY `participants_by_collection_and_role` (`collection_id`,`participant_role`),
   KEY `participants_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350797 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,7 +512,7 @@ CREATE TABLE `collection_preferences` (
   `email_notify` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_collection_preferences_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350797 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -537,7 +537,7 @@ CREATE TABLE `collection_profiles` (
   `assignment_notification` text,
   PRIMARY KEY (`id`),
   KEY `index_collection_profiles_on_collection_id` (`collection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018350797 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -569,7 +569,7 @@ CREATE TABLE `collections` (
   PRIMARY KEY (`id`),
   KEY `index_collections_on_name` (`name`),
   KEY `index_collections_on_parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -608,7 +608,7 @@ CREATE TABLE `comments` (
   KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `index_comments_on_pseud_id` (`pseud_id`),
   KEY `comments_by_thread` (`thread`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -628,7 +628,7 @@ CREATE TABLE `common_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_common_tags` (`common_tag_id`,`filterable_type`,`filterable_id`),
   KEY `index_common_taggings_on_filterable_id` (`filterable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3002 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -648,7 +648,7 @@ CREATE TABLE `creatorships` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `creation_id_creation_type_pseud_id` (`creation_id`,`creation_type`,`pseud_id`),
   KEY `index_creatorships_pseud` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=596033544 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -760,7 +760,7 @@ CREATE TABLE `external_works` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `language_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -840,7 +840,7 @@ CREATE TABLE `filter_counts` (
   UNIQUE KEY `index_filter_counts_on_filter_id` (`filter_id`),
   KEY `index_public_works_count` (`public_works_count`),
   KEY `index_unhidden_works_count` (`unhidden_works_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -861,7 +861,7 @@ CREATE TABLE `filter_taggings` (
   PRIMARY KEY (`id`),
   KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`),
   KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=455 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -925,7 +925,7 @@ CREATE TABLE `gifts` (
   KEY `index_gifts_on_pseud_id` (`pseud_id`),
   KEY `index_gifts_on_recipient_name` (`recipient_name`),
   KEY `index_gifts_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -947,7 +947,7 @@ CREATE TABLE `inbox_comments` (
   KEY `index_inbox_comments_on_feedback_comment_id` (`feedback_comment_id`),
   KEY `index_inbox_comments_on_read_and_user_id` (`read`,`user_id`),
   KEY `index_inbox_comments_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -977,7 +977,7 @@ CREATE TABLE `invitations` (
   KEY `index_invitations_on_external_author_id` (`external_author_id`),
   KEY `index_invitations_on_invitee_id_and_invitee_type` (`invitee_id`,`invitee_type`),
   KEY `index_invitations_on_token` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1054,7 +1054,7 @@ CREATE TABLE `languages` (
   `abuse_support_available` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_languages_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1078,7 +1078,7 @@ CREATE TABLE `locales` (
   KEY `index_locales_on_iso` (`iso`),
   KEY `index_locales_on_language_id` (`language_id`),
   KEY `index_locales_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1103,7 +1103,7 @@ CREATE TABLE `log_items` (
   KEY `index_log_items_on_admin_id` (`admin_id`),
   KEY `index_log_items_on_role_id` (`role_id`),
   KEY `index_log_items_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1304,7 +1304,7 @@ CREATE TABLE `preferences` (
   `preferred_locale` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_preferences_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=484751140 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1326,7 +1326,7 @@ CREATE TABLE `profiles` (
   `about_me_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_profiles_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=765128321 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1359,7 +1359,7 @@ CREATE TABLE `prompt_memes` (
   `updated_at` datetime DEFAULT NULL,
   `anonymous` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1414,7 +1414,7 @@ CREATE TABLE `prompt_restrictions` (
   `title_required` tinyint(1) NOT NULL DEFAULT '0',
   `title_allowed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1453,7 +1453,7 @@ CREATE TABLE `prompts` (
   KEY `index_prompts_on_optional_tag_set_id` (`optional_tag_set_id`),
   KEY `index_prompts_on_tag_set_id` (`tag_set_id`),
   KEY `index_prompts_on_type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1482,7 +1482,7 @@ CREATE TABLE `pseuds` (
   PRIMARY KEY (`id`),
   KEY `index_psueds_on_name` (`name`),
   KEY `index_pseuds_on_user_id_and_name` (`user_id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1502,6 +1502,7 @@ CREATE TABLE `question_translations` (
   `content` text,
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `screencast_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
+  `is_translated` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_question_translations_on_locale` (`locale`),
   KEY `index_question_translations_on_question_id` (`question_id`)
@@ -1527,7 +1528,7 @@ CREATE TABLE `questions` (
   `position` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_questions_on_archive_faq_id_and_position` (`archive_faq_id`,`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1573,7 +1574,7 @@ CREATE TABLE `related_works` (
   PRIMARY KEY (`id`),
   KEY `index_related_works_on_parent_id_and_parent_type` (`parent_id`,`parent_type`),
   KEY `index_related_works_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1594,7 +1595,7 @@ CREATE TABLE `roles` (
   KEY `index_roles_on_authorizable_id_and_authorizable_type` (`authorizable_id`,`authorizable_type`),
   KEY `index_roles_on_authorizable_type` (`authorizable_type`),
   KEY `index_roles_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1681,7 +1682,7 @@ CREATE TABLE `serial_works` (
   PRIMARY KEY (`id`),
   KEY `index_serial_works_on_series_id` (`series_id`),
   KEY `index_serial_works_on_work_id` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1704,7 +1705,7 @@ CREATE TABLE `series` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `notes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1723,7 +1724,7 @@ CREATE TABLE `set_taggings` (
   PRIMARY KEY (`id`),
   KEY `index_set_taggings_on_tag_id` (`tag_id`),
   KEY `index_set_taggings_on_tag_set_id` (`tag_set_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1741,7 +1742,7 @@ CREATE TABLE `skin_parents` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1794,7 +1795,7 @@ CREATE TABLE `skins` (
   KEY `index_skins_on_public_and_official` (`public`,`official`),
   KEY `index_skins_on_title` (`title`),
   KEY `index_skins_on_type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1816,7 +1817,7 @@ CREATE TABLE `stat_counters` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hit_counters_on_work_id` (`work_id`),
   KEY `index_hit_counters_on_hit_count` (`hit_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=1043096542 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1930,7 +1931,7 @@ CREATE TABLE `tag_sets` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1951,7 +1952,7 @@ CREATE TABLE `taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_taggings_polymorphic` (`tagger_id`,`tagger_type`,`taggable_id`,`taggable_type`),
   KEY `index_taggings_taggable` (`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=1067725788 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1967,7 +1968,7 @@ CREATE TABLE `tags` (
   `canonical` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `taggings_count_cache` int(11) DEFAULT NULL,
+  `taggings_count_cache` int(11) DEFAULT '0',
   `adult` tinyint(1) DEFAULT '0',
   `type` varchar(255) DEFAULT NULL,
   `merger_id` int(11) DEFAULT NULL,
@@ -1976,7 +1977,6 @@ CREATE TABLE `tags` (
   `last_wrangler_type` varchar(255) DEFAULT NULL,
   `unwrangleable` tinyint(1) NOT NULL DEFAULT '0',
   `sortable_name` varchar(255) NOT NULL DEFAULT '',
-  `large_tag` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_tags_on_name` (`name`),
   KEY `index_tags_on_canonical` (`canonical`),
@@ -1986,7 +1986,7 @@ CREATE TABLE `tags` (
   KEY `index_tags_on_sortable_name` (`sortable_name`),
   KEY `index_tags_on_type` (`type`),
   KEY `index_tags_on_taggings_count_cache` (`taggings_count_cache`)
-) ENGINE=InnoDB AUTO_INCREMENT=1063754172 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2039,7 +2039,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_activation_code` (`activation_code`),
   KEY `index_users_on_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2113,7 +2113,7 @@ CREATE TABLE `works` (
   KEY `visible_works` (`restricted`,`posted`,`hidden_by_admin`),
   KEY `index_works_on_revised_at` (`revised_at`),
   KEY `index_works_on_spam` (`spam`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2162,7 +2162,7 @@ CREATE TABLE `wrangling_guidelines` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-14 11:41:56
+-- Dump completed on 2017-04-25 15:49:41
 INSERT INTO schema_migrations (version) VALUES ('20141003204623');
 
 INSERT INTO schema_migrations (version) VALUES ('20141003205439');
@@ -2181,21 +2181,9 @@ INSERT INTO schema_migrations (version) VALUES ('20151018165632');
 
 INSERT INTO schema_migrations (version) VALUES ('20151129234505');
 
-INSERT INTO schema_migrations (version) VALUES ('20151130183602');
-
 INSERT INTO schema_migrations (version) VALUES ('20160331005706');
 
-INSERT INTO schema_migrations (version) VALUES ('201604030319571');
-
 INSERT INTO schema_migrations (version) VALUES ('20160706031054');
-
-INSERT INTO schema_migrations (version) VALUES ('20160724234958');
-
-INSERT INTO schema_migrations (version) VALUES ('20160916172116');
-
-INSERT INTO schema_migrations (version) VALUES ('20160918223157');
-
-INSERT INTO schema_migrations (version) VALUES ('20170215092920');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322092920');
 

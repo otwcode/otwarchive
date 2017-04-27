@@ -21,7 +21,7 @@ class Language < ActiveRecord::Base
   end
 
   def work_count
-    where(posted: true).count
+    self.works.where(posted: true).count
   end
 
   def fandom_count

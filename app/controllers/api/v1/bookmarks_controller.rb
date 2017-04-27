@@ -2,7 +2,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
   respond_to :json
 
   def create
-    archivist = User.find_by_login(params[:archivist])
+    archivist = User.find_by(login: params[:archivist])
     bookmarks = params[:bookmarks]
     bookmarks_responses = []
     @bookmarks = []

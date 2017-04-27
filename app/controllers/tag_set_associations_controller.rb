@@ -6,7 +6,7 @@ class TagSetAssociationsController < ApplicationController
   before_filter :moderators_only
 
   def load_tag_set
-    @tag_set = OwnedTagSet.find_by_id(params[:tag_set_id])
+    @tag_set = OwnedTagSet.find_by(id: params[:tag_set_id])
     unless @tag_set
       flash[:error] = ts("What tag set did you want to look at?")
       redirect_to tag_sets_path and return

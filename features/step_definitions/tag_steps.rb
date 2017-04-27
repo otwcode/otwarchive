@@ -24,19 +24,19 @@ Given /^the default ratings exist$/ do
 end
 
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by(name: "No Archive Warnings Apply", canonical: true)
-  Warning.find_or_create_by(name: "Choose Not To Use Archive Warnings", canonical: true)
+  Warning.find_or_create_by(name: "No Archive Warnings Apply").update(canonical: true)
+  Warning.find_or_create_by(name: "Choose Not To Use Archive Warnings").update(canonical: true)
 end
 
 Given /^the basic categories exist$/ do
   %w(Gen Other F/F Multi F/M M/M).each do |category|
-    Category.find_or_create_by(name: category, canonical: true)
+    Category.find_or_create_by(name: category).update(canonical: true)
   end
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
-  fandom = Fandom.find_or_create_by(name: fandom, canonical: true)
-  media = Media.find_or_create_by(name: media, canonical: true)
+  fandom = Fandom.find_or_create_by(name: fandom).update(canonical: true)
+  media = Media.find_or_create_by(name: media).update(canonical: true)
   fandom.add_association media
 end
 
@@ -90,12 +90,12 @@ Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
-  user = User.find_by_login(username)
+  user = User.find_by(login: username)
   user.tag_wrangler = '1'
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
-  tw = User.find_by_login(user)
+  tw = User.find_by(login: user)
   if tw.blank?
     tw = FactoryGirl.create(:user, {:login => user, :password => password})
     tw.activate
@@ -305,7 +305,7 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
-  user = User.find_by_login(username)
+  user = User.find_by(login: username)
   user.tag_wrangler.should be_falsey
 end
 

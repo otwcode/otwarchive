@@ -129,11 +129,11 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claiming_user
-    User.find_by_id(claiming_user_id)
+    User.find_by(id: claiming_user_id)
   end
 
   def claiming_pseud
-    User.find_by_id(claiming_user_id).default_pseud
+    User.find_by(id: claiming_user_id).default_pseud
   end
 
   def requesting_pseud
@@ -141,7 +141,7 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claim_byline
-    User.find_by_id(claiming_user_id).default_pseud.byline
+    User.find_by(id: claiming_user_id).default_pseud.byline
   end
 
   def request_byline

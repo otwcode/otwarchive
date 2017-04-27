@@ -5,11 +5,11 @@ gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '4.0.6'
+gem 'rails', '4.0.13'
 
 gem 'rails-observers'
 gem 'actionpack-page_caching'
-# gem 'activerecord-deprecated_finders'
+#gem 'activerecord-deprecated_finders'
 
 # the published gem does not include fixes that are in Rails
 # specifically https://github.com/rails/strong_parameters/issues/16

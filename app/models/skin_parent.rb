@@ -59,7 +59,7 @@ class SkinParent < ActiveRecord::Base
    end
 
    def parent_skin_title=(title)
-     self.parent_skin = Skin.find_by_title(title)
+     self.parent_skin = Skin.find_by(title: title)
    end
 
 end

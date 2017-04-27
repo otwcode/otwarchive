@@ -43,7 +43,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def load_user
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     no_user and return unless @user
   end
 
@@ -68,7 +68,7 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if !(@collection = Collection.find_by_name(params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
+    if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
       flash[:notice] = ts("This challenge is currently closed to new posts.")
     end
     if params[:collection_id]
@@ -87,13 +87,13 @@ class ChallengeClaimsController < ApplicationController
       else
         @claims = @claims.order(@sort_order)
       end
-    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
 				if params[:posted]
 					@claims = @user.request_claims.order_by_date.posted
 				end
-        if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
+        if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
           @claims = @claims.in_collection(@collection)
         end
       else

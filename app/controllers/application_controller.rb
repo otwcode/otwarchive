@@ -239,7 +239,7 @@ public
   end
 
   def load_collection
-    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+    @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
   def collection_maintainers_only
@@ -284,7 +284,7 @@ public
   before_filter :set_media
   def set_media
     uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by(name: ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   ### GLOBALIZATION ###
@@ -308,7 +308,7 @@ public
     else
       set_locale Locale.find_main_cached.iso.to_sym
     end
-    @current_locale = Locale.find_by_iso(I18n.locale.to_s)
+    @current_locale = Locale.find_by(iso: I18n.locale.to_s)
   end
 
   ### -- END GLOBALIZATION -- ###

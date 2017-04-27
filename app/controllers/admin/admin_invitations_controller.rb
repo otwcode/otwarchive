@@ -39,12 +39,12 @@ class Admin::AdminInvitationsController < ApplicationController
 
   def find
     unless invitation_params[:user_name].blank?
-      @user = User.find_by_login(invitation_params[:user_name])
+      @user = User.find_by(login: invitation_params[:user_name])
       @hide_dashboard = true
       @invitations = @user.invitations if @user
     end
     if !invitation_params[:token].blank?
-      @invitation = Invitation.find_by_token(invitation_params[:token])
+      @invitation = Invitation.find_by(token: invitation_params[:token])
     elsif !invitation_params[:invitee_email].blank?
       @invitations = Invitation.find(:all, conditions: ['invitee_email LIKE ?', '%' + invitation_params[:invitee_email] + '%'])
       @invitation = @invitations.first if @invitations.length == 1

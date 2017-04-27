@@ -5,7 +5,7 @@ class KudoMailer < ActionMailer::Base
   helper :mailer
   default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
-  # send a batched-up notification 
+  # send a batched-up notification
   # user_kudos is a hash of arrays converted to JSON string format
   # [commentable_type]_[commentable_id] =>
   #   names: [array of users who left kudos with the last entry being "# guests" if any]
@@ -20,7 +20,7 @@ class KudoMailer < ActionMailer::Base
       kudos_hash.each_pair do |commentable_info, kudo_givers_hash|
         # Parse the key to extract the type and id of the commentable - skip if no commentable
         commentable_type, commentable_id = commentable_info.split('_')
-        commentable = commentable_type.constantize.find_by_id(commentable_id)
+        commentable = commentable_type.constantize.find_by(id: commentable_id)
         next unless commentable
 
         # If we have a commentable, extract names and process guest kudos text - skip if no kudos givers

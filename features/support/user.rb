@@ -1,6 +1,6 @@
 module UserHelpers
   def find_or_create_new_user(login, password, activate: true)
-    user = User.find_by_login(login)
+    user = User.find_by(login: login)
     if user.blank?
       user = FactoryGirl.create(:user, login: login, password: password)
       user.activate if activate

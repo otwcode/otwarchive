@@ -16,7 +16,7 @@ class PromptsController < ApplicationController
   #     redirect_to collection_path(@collection) rescue redirect_to '/'
   #   end
   # end
-  
+
   def load_challenge
     @challenge = @collection.challenge
     no_challenge and return unless @challenge
@@ -27,17 +27,17 @@ class PromptsController < ApplicationController
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
-  
+
   def load_signup
     unless @challenge_signup
     	@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
     end
     no_signup and return unless @challenge_signup
   end
-  
+
   def no_signup
     flash[:error] = ts("Please submit a basic sign-up with the required fields first.")
-    redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' 
+    redirect_to new_collection_signup_path(@collection) rescue redirect_to '/'
     false
   end
 
@@ -70,7 +70,7 @@ class PromptsController < ApplicationController
   end
 
   def load_prompt_from_id
-    @prompt = Prompt.find_by_id(params[:id])
+    @prompt = Prompt.find_by(id: params[:id])
     if @prompt.nil?
       no_prompt
       return
@@ -88,7 +88,7 @@ class PromptsController < ApplicationController
 
   def index
     # this currently doesn't get called anywhere
-    # should probably list all the prompts in a given collection (instead of using challenge signup for that)    
+    # should probably list all the prompts in a given collection (instead of using challenge signup for that)
   end
 
   def show
@@ -116,7 +116,7 @@ class PromptsController < ApplicationController
     else
       @prompt = @challenge_signup.requests.build(prompt_params)
     end
-    
+
     if !@challenge_signup.valid?
       flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)

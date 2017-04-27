@@ -64,7 +64,7 @@ class TagSetNominationsController < ApplicationController
 
   def index
     if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       if @user != current_user
         flash[:error] = ts("You can only view your own nominations, sorry.")
         redirect_to tag_sets_path and return

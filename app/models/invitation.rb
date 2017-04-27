@@ -10,7 +10,7 @@ class Invitation < ActiveRecord::Base
   validate :recipient_is_not_registered, :on => :create
   def recipient_is_not_registered
     # we allow invitations to be sent to existing users if the purpose is to claim an external author
-    if self.invitee_email && User.find_by_email(self.invitee_email) && !self.external_author
+    if self.invitee_email && User.find_by(email: self.invitee_email) && !self.external_author
       errors.add :invitee_email, ts('is already being used by an account holder.')
       return false
     end

@@ -8,7 +8,7 @@ class PassingJob
 end
 class FailingJob
   def self.perform(string)
-    work = Work.find_by_id(1)
+    work = Work.find_by(id: 1)
     work.destroy if work
     Work.find 1
   end
@@ -73,4 +73,3 @@ describe "resque rake tasks" do
     end
   end
 end
-

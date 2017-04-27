@@ -1227,7 +1227,7 @@ class Work < ActiveRecord::Base
     # Need to support user + fandom and collection + tag pages
     if options[:fandom_id] || options[:filter_ids]
       id = options[:fandom_id] || options[:filter_ids].first
-      tag = Tag.find_by_id(id)
+      tag = Tag.find_by(id: id)
       if tag.present?
         works = works.with_filter(tag)
       end

@@ -7,7 +7,7 @@ class OwnedTagSetsController < ApplicationController
   before_filter :owners_only, :only => [ :destroy ]
 
   def load_tag_set
-    @tag_set = OwnedTagSet.find_by_id(params[:id])
+    @tag_set = OwnedTagSet.find_by(id: params[:id])
     unless @tag_set
       flash[:notice] = ts("What Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
@@ -30,7 +30,7 @@ class OwnedTagSetsController < ApplicationController
 
   def index
     if params[:user_id]
-      @user = User.find_by_login params[:user_id]
+      @user = User.find_by login: params[:user_id]
       @tag_sets = OwnedTagSet.owned_by(@user)
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
@@ -52,7 +52,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def show_options
-    @restriction = PromptRestriction.find_by_id(params[:restriction])
+    @restriction = PromptRestriction.find_by(id: params[:restriction])
     unless @restriction
       flash[:error] = ts("Which Tag Set did you want to look at?")
       redirect_to tag_sets_path and return

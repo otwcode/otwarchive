@@ -3,7 +3,7 @@ class TagWranglersController < ApplicationController
 	before_filter :check_permission_to_wrangle
 
   def index
-    @wranglers = Role.find_by_name("tag_wrangler").users.alphabetical
+    @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
     conditions = ["canonical = 1"]
     joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
              LEFT JOIN users ON (users.id = wrangling_assignments.user_id)"
@@ -15,7 +15,7 @@ class TagWranglersController < ApplicationController
       if params[:wrangler_id] == "No Wrangler"
         conditions.first << " AND users.id IS NULL"
       else
-        @wrangler = User.find_by_login(params[:wrangler_id])
+        @wrangler = User.find_by(login: params[:wrangler_id])
         if @wrangler
           conditions.first << " AND users.id = #{@wrangler.id}"
         end
@@ -35,7 +35,7 @@ class TagWranglersController < ApplicationController
   end
 
   def show
-    @wrangler = User.find_by_login(params[:id])
+    @wrangler = User.find_by(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
@@ -67,7 +67,7 @@ class TagWranglersController < ApplicationController
         fandom = Fandom.find(fandom_id)
         user_logins.uniq.each do |login|
           unless login.blank?
-            user = User.find_by_login(login)
+            user = User.find_by(login: login)
             unless user.nil? || user.fandoms.include?(fandom)
               assignment = user.wrangling_assignments.build(:fandom_id => fandom.id)
               assignment.save!
@@ -81,7 +81,7 @@ class TagWranglersController < ApplicationController
   end
 
   def destroy
-    wrangler = User.find_by_login(params[:id])
+    wrangler = User.find_by(login: params[:id])
     assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy
     redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])

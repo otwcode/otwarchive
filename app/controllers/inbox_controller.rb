@@ -3,7 +3,7 @@ class InboxController < ApplicationController
   before_filter :check_ownership
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -16,7 +16,7 @@ class InboxController < ApplicationController
   end
 
   def reply
-    @commentable = Comment.find(params[:comment_id]) 
+    @commentable = Comment.find(params[:comment_id])
     @comment = Comment.new
     respond_to do |format|
       format.html do

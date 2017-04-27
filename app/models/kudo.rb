@@ -37,12 +37,12 @@ class Kudo < ActiveRecord::Base
     if pseud
       commentable = nil
       if commentable_type == "Work"
-       commentable = Work.find_by_id(commentable_id)
+       commentable = Work.find_by(id: commentable_id)
       end
       if commentable_type == "Chapter"
-       commentable = Chapter.find_by_id(commentable_id).work
+       commentable = Chapter.find_by(id: commentable_id).work
       end
-      kudos_giver = User.find_by_id(pseud.user_id)
+      kudos_giver = User.find_by(id: pseud.user_id)
       if commentable.nil?
         errors.add(:no_commentable,
                    ts("^What did you want to leave kudos on?"))
@@ -56,10 +56,10 @@ class Kudo < ActiveRecord::Base
   def guest_cannot_kudos_restricted_work
     commentable = nil
     if commentable_type == "Work"
-      commentable = Work.find_by_id(commentable_id)
+      commentable = Work.find_by(id: commentable_id)
     end
     if commentable_type == "Chapter"
-      commentable = Chapter.find_by_id(commentable_id).work
+      commentable = Chapter.find_by(id: commentable_id).work
     end
     if commentable.nil?
       errors.add(:no_commentable,

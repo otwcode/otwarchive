@@ -218,8 +218,8 @@ Otwarchive::Application.routes.draw do
     resources :collections, only: [:index]
     resources :comments do
       member do
-        patch :approve
-        patch :reject
+        put :approve
+        put :reject
       end
     end
     resources :external_authors do
@@ -315,8 +315,8 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
     resources :comments do
       member do
-        patch :approve
-        patch :reject
+        put :approve
+        put :reject
       end
       collection do
         get :unreviewed
@@ -475,9 +475,9 @@ Otwarchive::Application.routes.draw do
 
   resources :comments do
     member do
-      patch :approve
-      patch :reject
-      patch :review
+      put :approve
+      put :reject
+      put :review
     end
     collection do
       get :hide_comments
@@ -561,7 +561,8 @@ Otwarchive::Application.routes.draw do
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
   get 'delete_confirmation' => 'users#delete_confirmation'
-  get 'activate/:id' => 'users#activate', as: 'activate'
+  post 'activate/:id' => 'users#activate', as: 'activate'
+  post 'send_activation/:id' => 'users#send_activation', as: 'send_activation'
   get 'devmode' => 'devmode#index'
   get 'donate' => 'home#donate'
   get 'lost_cookie' => 'home#lost_cookie'

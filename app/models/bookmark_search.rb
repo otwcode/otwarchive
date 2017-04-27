@@ -206,7 +206,7 @@ class BookmarkSearch < Search
   # Translate language abbreviations to numerical ids
   def set_language!
     if options[:language_id].present? && options[:language_id].to_i == 0
-      language = Language.find_by_short(options[:language_id])
+      language = Language.find_by(short: options[:language_id])
       if language.present?
         options[:language_id] = language.id
       end

@@ -23,7 +23,7 @@ end
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
 When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
-  unless OwnedTagSet.find_by_title(title).present?
+  unless OwnedTagSet.find_by(title: title).present?
     visit new_tag_set_path
     fill_in("owned_tag_set_title", with: title)
     fill_in("owned_tag_set_description", with: "Here's my tagset")
@@ -45,7 +45,7 @@ When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I should see an update confirmation message}
 end
 
-# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay". 
+# Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay".
 # Don't forget the extra s, even if it's singular.
 When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
@@ -62,7 +62,7 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
 end
 
 When /^I set up the nominated tag ?set "([^\"]*)" with (\d*) fandom noms? and (\d*) (character|relationship) noms?$/ do |title, fandom_count, nested_count, nested_type|
-  unless OwnedTagSet.find_by_title("#{title}").present?
+  unless OwnedTagSet.find_by(title: "#{title}").present?
     step %{I go to the new tag set page}
     fill_in("owned_tag_set_title", with: title)
     fill_in("owned_tag_set_description", with: "Here's my tagset")
@@ -173,13 +173,13 @@ When /^I should see the tags with Unicode characters/ do
 end
 
 When /^I view the tag set "([^\"]*)"/ do |tagset|
-  tagset = OwnedTagSet.find_by_title!(tagset)
+  tagset = OwnedTagSet.find_by(title: tagset)
   visit tag_set_path(tagset)
 end
 
 When /^I view associations for a tag set that does not exist/ do
   id = 1
-  tagset = OwnedTagSet.find_by_id(id)
+  tagset = OwnedTagSet.find_by(id: id)
   tagset.destroy if tagset
   visit tag_set_associations_path(id)
 end

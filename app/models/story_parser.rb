@@ -1049,7 +1049,7 @@ class StoryParser
     def get_collection_names(collection_string)
       cnames = ""
       collection_string.split(',').map {|cn| cn.squish}.each do |collection_name|
-        collection = Collection.find_by_name(collection_name) || Collection.find_by_title(collection_name)
+        collection = Collection.find_by(name: collection_name) || Collection.find_by(title: collection_name)
         if collection
           cnames += ", " unless cnames.blank?
           cnames += collection.name
