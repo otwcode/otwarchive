@@ -155,6 +155,8 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        post :activate
+        post :send_activation
         get :check_user
       end
       collection do
@@ -562,7 +564,6 @@ Otwarchive::Application.routes.draw do
   get 'first_login_help' => 'home#first_login_help'
   get 'delete_confirmation' => 'users#delete_confirmation'
   post 'activate/:id' => 'users#activate', as: 'activate'
-  post 'send_activation/:id' => 'users#send_activation', as: 'send_activation'
   get 'devmode' => 'devmode#index'
   get 'donate' => 'home#donate'
   get 'lost_cookie' => 'home#lost_cookie'
