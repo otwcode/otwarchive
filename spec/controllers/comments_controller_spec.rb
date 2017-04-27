@@ -114,8 +114,8 @@ describe CommentsController do
         it "renders the :new template if commentable is a valid tag" do
           post :new, tag_id: fandom.name
           it_redirects_to_with_error(user_path(@current_user),
-                                     "Sorry, you don't have permission to " +
-                                     "access the page you were trying to " +
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
                                      "reach.")
         end
       end
@@ -126,8 +126,8 @@ describe CommentsController do
         it "renders the :new template if commentable is a valid tag" do
           post :new, tag_id: fandom.name
           it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " +
-                                     "access the page you were trying to " +
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
                                      "reach. Please log in.")
         end
       end
