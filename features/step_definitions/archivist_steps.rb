@@ -31,6 +31,10 @@ When /^I make "([^\"]*)" an Open Doors committee member$/ do |name|
   @user.roles = [@role]
 end
 
+When /^(?:|I )fill in "([^"]*)" with the path to (.+)$/ do |field, page_name|
+  fill_in(field, with: path_to(page_name))
+end
+
 When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})

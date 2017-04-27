@@ -539,7 +539,7 @@ Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
 
-Then /^there should be (no|a) work_url cached for "([^"]*)"$/ do |sense, url|
+Then /^there is (no|a) cached work_url for "([^"]*)"$/ do |sense, url|
   work = Rails.cache.read(Work.find_by_url_cache_key(url))
   if sense == "no"
     assert work.nil?

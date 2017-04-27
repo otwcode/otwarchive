@@ -442,11 +442,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :admin_posts
   end
-  resources :locales do
-    collection do
-      get :set
-    end
-  end
+  resources :locales, except: :destroy
 
   #### SESSIONS ####
 
@@ -521,6 +517,12 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :update_positions
+    end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
     end
   end
   resources :wrangling_guidelines do

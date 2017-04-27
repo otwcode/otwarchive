@@ -16,7 +16,7 @@ class Opendoors::ToolsController < ApplicationController
     # extract the work id and find the work
     if params[:work_url] && params[:work_url].match(/works\/([0-9]+)\/?$/)
       work_id = $1
-      @work = Work.find(work_id)
+      @work = Work.find_by_id(work_id)
     end
     unless @work
       flash[:error] = ts("We couldn't find that work on the archive. Have you put in the full url?")

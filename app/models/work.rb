@@ -210,11 +210,14 @@ class Work < ActiveRecord::Base
     filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+
     tags.each do |tag|
       tag.update_tag_cache
     end
     Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
+
+    Work.expire_work_tag_groups_id(self.id)
   end
 
   def self.work_blurb_tag_cache_key(id)

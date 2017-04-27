@@ -1,36 +1,29 @@
 <% content_for :message do %>
   <p>
-    Hello from the <%= "#{ArchiveConfig.APP_NAME}" %>!
+    <%= t ".greeting", app_name: ArchiveConfig.APP_NAME %>
   </p>
 
   <p>
     <% if !@user_name.blank? %>
-      <%= style_bold(@user_name) %> has invited you to join our beta!
+      <%= t(".has_invited", user_name: style_bold(@user_name)).html_safe %>
     <% else %>
-      You've been invited to join our beta!
+      <%= t ".been_invited" %>
     <% end %>
   </p>
 
   <p>
-    The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are
-    multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and
-    podfic. We run on the open-source otwarchive software, and our servers are owned by the
-    nonprofit Organization for Transformative Works, which works to protect fan rights and
-    preserve fanworks.
+    <%= t ".part1" %>
   </p>
 
   <p>
-    Also, we have a lot of spiffy features for finding the fanworks you want, and for
-    posting and sharing your work with others. There are lots more coming soon! Your feedback now
-    during our beta can help us build an even better archive. \o/
+    <%= t ".part2" %>
   </p>
 
   <p>
-    If you'd like to join us, please sign up at the following address:
-    <%= style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
+    <%= t(".html.part3", invitation_link: style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token))).html_safe %>
   </p>
 
   <p>
-    For more information, please check out <%= style_link("our FAQ", archive_faqs_url) %>.
+    <%= t(".html.faq_link", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url)).html_safe %>
   </p>
 <% end %>
