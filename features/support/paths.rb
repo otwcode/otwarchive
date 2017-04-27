@@ -143,8 +143,12 @@ module NavigationHelpers
       edit_skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit wizard skin page/
       edit_skin_path(Skin.find_by_title($1), wizard: true)
+    when /^the new collection page/
+      new_collection_path
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
       collection_path(Collection.find_by_title($1))
+    when /^"(.*)" collection edit page$/i
+      edit_collection_path(Collection.find_by_title($1))
     when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
       collection_signups_path(Collection.find_by_title($1))
     when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page

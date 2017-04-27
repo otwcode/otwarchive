@@ -114,6 +114,16 @@ When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
   step %{I submit}
 end
 
+When /^I add (?:a|the) subcollection "([^"]*)"(?: with name "([^"]*)")? to (?:a|the) parent collection named "([^"]*)"$/ do |title, name, parent_name|
+  if Collection.find_by_name(parent_name).nil?
+    step %{I create the collection "#{parent_name}" with name "#{parent_name}"}
+  end
+  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I set up the collection "#{title}" with name "#{name}"}
+  fill_in("collection_parent_name", with: parent_name)
+  step %{I submit}
+end
+
 When /^I sort by fandom$/ do
   within(:xpath, "//li[a[contains(@title,'Sort')]]") do
     step %{I follow "Fandom 1"}
