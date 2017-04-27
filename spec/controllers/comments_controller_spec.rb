@@ -82,11 +82,55 @@ describe CommentsController do
       expect(assigns(:name)).to eq(admin_post.title)
     end
 
-    it "renders the :new template if commentable is a valid tag" do
-      fandom = create(:fandom)
-      post :new, tag_id: fandom.name
-      expect(response).to render_template("new")
-      expect(assigns(:name)).to eq("Fandom")
+    context "when the commentable is a valid tag" do
+      let(:fandom) { create(:fandom) }
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+
+        it "renders the :new template" do
+          post :new, tag_id: fandom.name
+          expect(response).to render_template("new")
+          expect(assigns(:name)).to eq("Fandom")
+        end
+      end
+
+      context "when logged in as a tag wrangler" do
+        before do
+          fake_login
+          @current_user.roles << Role.new(name: 'tag_wrangler')
+        end
+
+        it "renders the :new template" do
+          post :new, tag_id: fandom.name
+          expect(response).to render_template("new")
+          expect(assigns(:name)).to eq("Fandom")
+        end
+      end
+
+      context "when logged in as a random user" do
+        before { fake_login }
+
+        it "shows an error and redirects" do
+          post :new, tag_id: fandom.name
+          it_redirects_to_with_error(user_path(@current_user),
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach.")
+        end
+      end
+
+      context "when logged out" do
+        before { fake_logout }
+
+        it "shows an error and redirects" do
+          post :new, tag_id: fandom.name
+          it_redirects_to_with_error(new_user_session_path,
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach. Please log in.")
+        end
+      end
     end
 
     it "renders the :new template if commentable is a valid comment" do

@@ -130,6 +130,10 @@ When /^I delete the comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I view the latest comment$/ do
+  visit comment_path(Comment.last)
+end
+
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}
@@ -231,4 +235,9 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     click_link("Delete")
     click_link("Yes, delete!") # TODO: Fix along with comment deletion.
   end
+end
+
+When /^I try to use the cancel_comment_edit exploit$/ do
+  visit cancel_comment_edit_comments_path(id: Comment.last.id,
+                                          format: :js)
 end
