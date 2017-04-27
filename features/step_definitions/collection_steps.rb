@@ -36,9 +36,17 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
   click_button("Add")
 end
 
-When(/^I view the approved collection items page for "(.*?)"$/) do |collection|
+When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
   c = Collection.find_by_title(collection)
-  visit collection_items_path(c, approved: true)
+  if item_status == "approved"
+    visit collection_items_path(c, approved: true)
+  elsif item_status == "rejected"
+    visit collection_items_path(c, rejected: true)
+  elsif item_status == "invited"
+    visit collection_items_path(c, invited: true)  
+  else
+    visit collection_items_path(c)
+  end
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -95,7 +103,7 @@ end
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
-  visit new_collection_url
+  visit new_collection_path
   fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
   fill_in("collection_title", with: title)
 end

@@ -1,4 +1,14 @@
 Otwarchive::Application.routes.draw do
+
+  devise_for :admin,
+             module: 'admin',
+             only: :sessions,
+             controllers: { sessions: 'admin/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
+
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
@@ -48,6 +58,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :unassigned
     end
+    get :show
   end
   resources :tag_wranglings do
     member do
@@ -119,10 +130,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -152,6 +159,8 @@ Otwarchive::Application.routes.draw do
       end
       collection do
         get :notify
+        get :bulk_search
+        post :bulk_search
         post :send_notification
         post :update_user
       end
@@ -221,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end
@@ -399,17 +407,13 @@ Otwarchive::Application.routes.draw do
     end
     resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
       collection do
+        get :confirm_purge
         get :generate
         put :set
-        get :purge
+        post :purge
         get :send_out
         put :update_multiple
         get :default_all
-      end
-      member do
-        get :undefault
-        get :cover_default
-        get :uncover_default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -517,6 +521,12 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :update_positions
+    end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
     end
   end
   resources :wrangling_guidelines do

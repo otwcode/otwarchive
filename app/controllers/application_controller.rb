@@ -27,11 +27,24 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
+  before_filter :ensure_admin_credentials
+  def ensure_admin_credentials
+    if logged_in_as_admin?
+      # if we are logged in as an admin and we don't have the admin_credentials
+      # set then set that cookie
+      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+    else
+      # if we are NOT logged in as an admin and we have the admin_credentials
+      # set then delete that cookie
+      cookies.delete :admin_credentials unless cookies[:admin_credentials].nil?
+    end
+  end
+
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
       @user_session = UserSession.find
       if @user_session
@@ -68,15 +81,6 @@ protected
     @current_user_session = UserSession.find
   end
 
-  def current_admin_session
-    return @current_admin_session if defined?(@current_admin_session)
-    @current_admin_session = AdminSession.find
-  end
-
-  def current_admin
-    @current_admin = current_admin_session && current_admin_session.record
-  end
-
   def logged_in?
     current_user.nil? ? false : true
   end
@@ -108,7 +112,7 @@ public
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     end
   end
-  
+
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -116,7 +120,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do 
+      @admin_banner = Rails.cache.fetch("admin_banner") do
         banner = AdminBanner.where(:active => true).last
         banner.nil? ? "" : banner
       end
@@ -152,9 +156,23 @@ public
     end
   end
 
+  def after_sign_in_path_for(resource)
+    admin_users_path
+  end
+
+  def authenticate_admin!
+    if admin_signed_in?
+      super
+    else
+      redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
+      ## if you want render 404 page
+      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+    end
+  end
+
   # Filter method - keeps users out of admin areas
   def admin_only
-    logged_in_as_admin? || admin_only_access_denied
+    authenticate_admin! || admin_only_access_denied
   end
 
   # Filter method to prevent admin users from accessing certain actions
@@ -410,7 +428,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
+      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count_cache']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
