@@ -32,6 +32,6 @@ Given /^I bookmark the external work "([^\"]*)"$/ do |title|
 end
 
 When /^I view the external work "([^\"]*)"$/ do |external_work|
-  external_work = ExternalWork.find_by(title: external_work)
+  external_work = ExternalWork.find_by_title(external_work)
   visit external_work_url(external_work)
 end

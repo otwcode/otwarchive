@@ -194,7 +194,7 @@ When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
 end
 
 When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
-  work = Work.find_by(title: work)
+  work = Work.find_by_title(work)
   visit work_url(work).gsub("http://www.example.com","")
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
