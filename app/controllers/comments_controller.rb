@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
-                                              :cancel_comment_reply, :cancel_comment_edit,
+                                              :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
   before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access
   before_filter :check_pseud_ownership, :only => [:create, :update]
-  before_filter :check_ownership, :only => [:edit, :update]
+  before_filter :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
