@@ -88,7 +88,7 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "renders the :new template if commentable is a valid tag" do
+        it "renders the :new template" do
           post :new, tag_id: fandom.name
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
@@ -101,7 +101,7 @@ describe CommentsController do
           @current_user.roles << Role.new(name: 'tag_wrangler')
         end
 
-        it "renders the :new template if commentable is a valid tag" do
+        it "renders the :new template" do
           post :new, tag_id: fandom.name
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
@@ -111,7 +111,7 @@ describe CommentsController do
       context "when logged in as a random user" do
         before { fake_login }
 
-        it "renders the :new template if commentable is a valid tag" do
+        it "shows an error and redirects" do
           post :new, tag_id: fandom.name
           it_redirects_to_with_error(user_path(@current_user),
                                      "Sorry, you don't have permission to " \
@@ -123,7 +123,7 @@ describe CommentsController do
       context "when logged out" do
         before { fake_logout }
 
-        it "renders the :new template if commentable is a valid tag" do
+        it "shows an error and redirects" do
           post :new, tag_id: fandom.name
           it_redirects_to_with_error(new_user_session_path,
                                      "Sorry, you don't have permission to " \
