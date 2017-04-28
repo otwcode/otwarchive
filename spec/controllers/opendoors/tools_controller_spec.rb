@@ -52,17 +52,17 @@ describe Opendoors::ToolsController do
 
       it "redirects to tools if work URL is missing" do
         post :url_update
-        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the archive. Have you put in the full url?")
+        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the Archive. Have you put in the full URL?")
       end
 
       it "redirects to tools if work URL is invalid" do
         post :url_update, work_url: "/faq"
-        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the archive. Have you put in the full url?")
+        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the Archive. Have you put in the full URL?")
       end
 
       it "redirects to tools if work ID is not found" do
         post :url_update, work_url: "/works/7331278/"
-        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the archive. Have you put in the full url?")
+        it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the Archive. Have you put in the full URL?")
       end
 
       context "with a valid work ID" do
