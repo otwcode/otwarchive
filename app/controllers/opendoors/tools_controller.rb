@@ -19,7 +19,7 @@ class Opendoors::ToolsController < ApplicationController
       @work = Work.find_by_id(work_id)
     end
     unless @work
-      flash[:error] = ts("We couldn't find that work on the archive. Have you put in the full url?")
+      flash[:error] = ts("We couldn't find that work on the Archive. Have you put in the full URL?")
       redirect_to :action => :index and return
     end
 
