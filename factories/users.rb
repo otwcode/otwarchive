@@ -12,6 +12,9 @@ FactoryGirl.define do
     "testadmin#{n}"
   end
 
+  factory :role do
+  end
+
   factory :user do
     login {generate(:login)}
     password "password"
@@ -29,6 +32,10 @@ FactoryGirl.define do
     factory :invited_user do
       login {generate(:login)}
       invitation_token nil
+    end
+
+    factory :opendoors_user do
+      roles { [create(:role, name: "opendoors")] }
     end
   end
 end

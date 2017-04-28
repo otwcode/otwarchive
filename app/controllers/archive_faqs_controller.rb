@@ -25,7 +25,7 @@ class ArchiveFaqsController < ApplicationController
     else
       @archive_faq.questions.each do |question|
         question.translations.each do |translation|
-          if translation.is_translated == "1"
+          if translation.is_translated == "1" && params[:language_id].to_s == translation.locale.to_s
             @questions << question
           end
         end
@@ -170,7 +170,7 @@ class ArchiveFaqsController < ApplicationController
     params.require(:archive_faq).permit(
       :title, :notify_translations,
       questions_attributes: [
-        :id, :question, :anchor, :content, :screencast, :_destroy
+        :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
       ]
     )
   end

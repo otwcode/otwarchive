@@ -135,6 +135,10 @@ When /^I delete the reply comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I view the latest comment$/ do
+  visit comment_path(Comment.last)
+end
+
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}

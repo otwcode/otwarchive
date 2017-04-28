@@ -3,21 +3,22 @@ class CommentsController < ApplicationController
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
-                                              :cancel_comment_reply, :cancel_comment_edit,
+                                              :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
+  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
   before_filter :check_visibility, :only => [:show]
   before_filter :check_if_restricted
-  before_filter :check_tag_wrangler_access, :only => [:index, :show]
+  before_filter :check_tag_wrangler_access
   before_filter :check_pseud_ownership, :only => [:create, :update]
-  before_filter :check_ownership, :only => [:edit, :update]
+  before_filter :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
   before_filter :check_unreviewed, :only => [:add_comment_reply]
   before_filter :check_permission_to_review, :only => [:unreviewed]
   before_filter :check_permission_to_access_single_unreviewed, only: [:show]
+  before_filter :check_permission_to_moderate, only: [:approve, :reject]
 
   cache_sweeper :comment_sweeper
 
@@ -101,8 +102,16 @@ class CommentsController < ApplicationController
     end
   end
 
+  def check_permission_to_moderate
+    parent = find_parent
+    unless logged_in_as_admin? || current_user_owns?(parent)
+      flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
+      redirect_to(logged_in? ? root_path : login_path)
+    end
+  end
+
   def check_tag_wrangler_access
-    if @commentable.is_a?(Tag) || (@comment && @comment.commentable.is_a?(Tag))
+    if @commentable.is_a?(Tag) || (@comment && @comment.parent.is_a?(Tag))
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
@@ -314,7 +323,6 @@ class CommentsController < ApplicationController
   end
 
   def review
-    @comment = Comment.find(params[:id])
     if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
       @comment.toggle!(:unreviewed)
       # mark associated inbox comments as read
@@ -348,13 +356,11 @@ class CommentsController < ApplicationController
   end
 
   def approve
-    @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
     redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
 
   def reject
-   @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
    redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
@@ -446,7 +452,6 @@ class CommentsController < ApplicationController
   end
 
   def cancel_comment_edit
-    @comment = Comment.find(params[:id])
     respond_to do |format|
       format.html { redirect_to_comment(@comment) }
       format.js
@@ -466,7 +471,6 @@ class CommentsController < ApplicationController
   end
 
   def cancel_comment_delete
-    @comment = Comment.find(params[:id])
     respond_to do |format|
       format.html do
         options = {}
