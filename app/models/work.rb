@@ -189,20 +189,33 @@ class Work < ActiveRecord::Base
   after_update :adjust_series_restriction
 
   after_save :expire_caches
+  after_destroy :expire_caches
 
   def expire_caches
-    self.pseuds.each do |pseud|
+    pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
     end
 
-    self.all_collections.each do |collection|
-      collection.update_works_index_timestamp!
+    collections.each do |this_collection|
+      collection = this_collection
+      # Flush this collection and all its parents
+      loop do
+        collection.update_works_index_timestamp!
+        collection = collection.parent
+        break unless collection
+      end
     end
 
-    self.filters.each do |tag|
+    filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+
+    tags.each do |tag|
+      tag.update_tag_cache
+    end
+    Work.expire_work_tag_groups_id(id)
+    Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
   end
@@ -212,7 +225,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.work_blurb_tag_cache(id)
-    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), :raw => true) { rand(1..1000) }
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id), raw: true) { rand(1..1000) }
   end
 
   def self.expire_work_tag_groups_id(id)
@@ -308,20 +321,44 @@ class Work < ActiveRecord::Base
   # IMPORTING
   ########################################################################
 
+  def self.find_by_url_generation_key
+    "/v1/find_by_url_generation_key"
+  end
+
+  def self.find_by_url_generation
+    Rails.cache.fetch(Work.find_by_url_generation_key, raw: true) { rand(1..1000) }
+  end
+
+  def self.flush_find_by_url_cache
+    Rails.cache.increment(Work.find_by_url_generation_key)
+  end
+
+  def self.find_by_url_cache_key(url)
+    url = UrlFormatter.new(url)
+    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
+  end
+
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
   # 1. first exact match
   # 2. first exact match with variants of the provided url
   # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
-  def self.find_by_url(url)
+
+  def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
-    Work.where(:imported_from_url => url.original).first ||
-      Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+    Work.where(imported_from_url: url.original).first ||
+      Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
       Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
         work_url = UrlFormatter.new(w.imported_from_url)
         ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
           work_url.send(method) == url.send(method)
         }
       }.first
+  end
+
+  def self.find_by_url(url)
+    Rails.cache.fetch(Work.find_by_url_cache_key(url)) do
+      find_by_url_uncached(url)
+    end
   end
 
   ########################################################################
