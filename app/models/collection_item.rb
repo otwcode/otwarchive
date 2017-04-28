@@ -41,7 +41,7 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  scope :include_for_wolrks, -> { includes(work: :pseuds)}
+  scope :include_for_works, -> { includes(work: :pseuds)}
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 
