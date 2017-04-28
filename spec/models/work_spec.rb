@@ -186,7 +186,7 @@ describe Work do
 
     it "should find works imported with irrelevant query parameters" do
       work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
-      expect(Work.find_by_url("http://lj-site.com/thing1?style=other").to eq(work)
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
 
