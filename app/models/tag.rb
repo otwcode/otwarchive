@@ -599,7 +599,7 @@ class Tag < ActiveRecord::Base
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
       else
-        self.create(:name => new_name)
+        self.create(name: new_name, type: self.to_s)
       end
     end
   end
