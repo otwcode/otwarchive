@@ -1,7 +1,3 @@
-Before("@autocomplete") do
-  step %{I have flushed Redis}
-end
-
 Given /^a set of tags for testing autocomplete$/ do
   step %{basic tags}
   step %{a canonical fandom "Supernatural"}
