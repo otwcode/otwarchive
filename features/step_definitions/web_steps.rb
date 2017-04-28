@@ -37,6 +37,11 @@ When /^I limit myself to the Archive$/ do
   page.driver.browser.url_whitelist = ['http://127.0.0.1']
 end
 
+When /^I type in "([^"]*)" with "([^"]*)"$/ do |selector, contents|
+  Rails.cache.delete('/v1/autocomplete_hack/last_result')
+  find(selector).native.send_keys(contents)
+end
+
 When /^I clear the network traffic$/ do
   page.driver.clear_network_traffic
 end
@@ -122,6 +127,23 @@ Then /^visiting "([^"]*)" should fail with an error$/ do |path|
   expect {
     visit path
   }.to raise_error
+end
+
+Then(/^I should see "([^"]*)" in autocomplete hack$/) do |answer|
+  # This breaks the rule https://github.com/cucumber/cucumber/wiki/Given-When-Then
+  # While it might be tempting to implement Then steps to just look in the database 
+  # resist the temptation. You should only verify outcome that is observable for
+  # the user (or external system) and databases usually are not.
+  result = false
+  (1..20).each do 
+    next unless Rails.cache.read('/v1/autocomplete_hack/last_result').nil?
+    sleep 1
+  end
+  assert !Rails.cache.read('/v1/autocomplete_hack/last_result').nil? 
+  Rails.cache.read('/v1/autocomplete_hack/last_result').each do |autocomplete|
+    result = true if autocomplete == answer
+  end
+  assert result
 end
 
 Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
