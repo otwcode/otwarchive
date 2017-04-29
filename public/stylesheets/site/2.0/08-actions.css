@@ -148,10 +148,6 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 /* CONTEXTS */
 
-#new_work_search fieldset:first-of-type .submit {
-  padding-top: 0;
-}
-
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
   font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont',sans-serif;
