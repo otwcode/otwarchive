@@ -211,3 +211,23 @@ Feature: Nominating and reviewing nominations for a tag set
       And I should see "Delete Tag Set Nomination?"
     When I press "Yes, Delete Tag Set Nominations"
     Then I should see "Your nominations were deleted."
+
+  Scenario: Two users cannot nominate the same tag for different parents (e.g.
+  the same character in two fandoms)
+    Given I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 1 fandom nom and 1 character nom
+      And I nominate fandom "The Closer" and character "Sharon Raydor" in "Nominated Tags" as "nominator1"
+    When I start to nominate fandom "Major Crimes" and character "Sharon Raydor" in "Nominated Tags" as "nominator2"
+      And I submit
+    Then I should see "Someone else has already nominated the tag Sharon Raydor for this set but in fandom The Closer. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (Major Crimes)."
+
+  Scenario: If a tag already exists in the archive as one type of tag, it can't be
+  nominated as another type of tag (e.g. Veronica Mars can't be nominated as a fandom if
+  it exists as a character)
+    Given a noncanonical character "Veronica Mars"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 1 fandom nom and 1 character nom
+    When I start to nominate fandom "Veronica Mars" and character "Keith Mars" in "Nominated Tags"
+      And I submit
+    Then I should see "The tag Veronica Mars is already in the archive as a Character tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom."
+
