@@ -7,7 +7,7 @@
 
 <p class="message">
   <%= ts("If you would like to edit the work(s), or handle different work(s) separately, please claim them first.
-   You can then use the Edit Works feature on your personal archive home page to orphan, delete, or edit them either 
+   You can then use the Edit Works feature on your personal archive home page to orphan, delete, or edit them either
    in groups or one at a time. (You will be able to delete the account if you wish after editing.)") %>
 </p>
 
@@ -27,7 +27,7 @@
       these works under a different account (or create a new account to claim them with), log out and reload this
       page first.") %>
     </p>
-    <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %></p>
+    <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_path(:invitation_token => @invitation.token) %></p>
   <% else %>
     <p class="message">
       <%= ts("We invite you to join our beta and create an account! The works will automatically be added
@@ -48,7 +48,7 @@
   <% end %>
 </ul>
 <% if logged_in? %>
-  <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %></p>
+  <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_path(:invitation_token => @invitation.token) %></p>
 <% else %>
   <p class="actions"><%= button_to ts("Sign me up and give me my works! Yay!"), new_user_path(:invitation_token => @invitation.token) %></p>
 <% end %>

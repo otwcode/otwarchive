@@ -40,7 +40,7 @@ class InviteRequestsController < ApplicationController
     else
       flash[:error] = "Something went wrong. Please try that again."
     end
-    redirect_to manage_invite_requests_url
+    redirect_to manage_invite_requests_path
   end
 
   def destroy
@@ -50,7 +50,7 @@ class InviteRequestsController < ApplicationController
     else
       flash[:error] = "Request could not be removed. Please try again."
     end
-    redirect_to manage_invite_requests_url(page: params[:page])
+    redirect_to manage_invite_requests_path(page: params[:page])
   end
 
   private
