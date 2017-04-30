@@ -62,7 +62,7 @@ class UserInviteRequestsController < ApplicationController
         end
       end
       flash[:notice] = 'All Requests were declined.'
-      redirect_to user_invite_requests_url and return
+      redirect_to user_invite_requests_path and return
     end
     params[:requests].each_pair do |id, quantity|
       unless quantity.blank?
@@ -72,7 +72,7 @@ class UserInviteRequestsController < ApplicationController
       end
     end
     flash[:notice] = ts("Requests were successfully updated.")
-    redirect_to user_invite_requests_url
+    redirect_to user_invite_requests_path
   end
 
   private

@@ -11,7 +11,7 @@ class InviteRequestsController < ApplicationController
     @invite_request = InviteRequest.find_by_email(params[:email])
     unless (request.xml_http_request?) || @invite_request
       flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
-      redirect_to invite_requests_url and return
+      redirect_to invite_requests_path and return
     end
     respond_to do |format|
       format.html
