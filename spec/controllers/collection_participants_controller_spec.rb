@@ -215,7 +215,7 @@ describe CollectionParticipantsController do
 
           it "displays an error notice and and redirects to collection participants" do
             put :update, params
-            it_redirects_to_with_error(collection_participants_path(collection),\
+            it_redirects_to_with_error(collection_participants_path(collection),
                                        "Couldn't update #{participant.pseud.name}.")
           end
         end
@@ -406,8 +406,10 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params
-          expect(response).to have_http_status :redirect
-          expect(response).to redirect_to collection_participants_path(collection)
+          # We use it_redirects_to_internal as it_redirects_to
+          # checks that there are no extra error,notice flash messages set
+          # And in this case there are.
+          it_redirects_to_internal(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
@@ -422,7 +424,7 @@ describe CollectionParticipantsController do
 
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params
-          it_redirects_to_with_error(collection_participants_path(collection), \
+          it_redirects_to_with_error(collection_participants_path(collection),
                                      "#{users.last.default_pseud.name} is currently banned"\
                                      " and cannot participate in challenges.")
           users.each do |user|
@@ -439,7 +441,7 @@ describe CollectionParticipantsController do
           end
 
           get :add, params
-          it_redirects_to_with_error(collection_participants_path(collection),\
+          it_redirects_to_with_error(collection_participants_path(collection),
                                      "We couldn't find anyone new by that name to add.")
           pseud_ids.each do |pseud_id|
             expect(CollectionParticipant.where(pseud_id: pseud_id)).to be_empty

@@ -34,7 +34,7 @@ describe WorksController do
 
     context "with a valid user_id" do
       context "if the user_id requested doesn't belong to the current user" do
-        it "should display an error" do
+        it "should display an error and redirect" do
           get :drafts, user_id: other_drafts_user.login
           it_redirects_to_with_error(user_path(drafts_user), "You can only see your own drafts, sorry!")
         end
@@ -71,36 +71,36 @@ describe WorksController do
       put :post_draft, id: random_work.id
       # There is code to return a different message in the action, but it is unreachable using a web request
       # as the application_controller redirects the user first
-      it_redirects_to_with_error(work_path(random_work),\
+      it_redirects_to_with_error(work_path(random_work),
                                  "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
     context "if the work is already posted" do
-      it "should display an error" do
+      it "should display an error and redirects" do
         drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: true)
         put :post_draft, id: drafts_user_work.id
-        it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),\
+        it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),
                                    "That work is already posted. Do you want to edit it instead?")
       end
     end
 
-    it "should display an error if the work is invalid" do
+    it "should display an error and redirect if the work is invalid" do
       drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
       allow_any_instance_of(Work).to receive(:valid?).and_return(false)
       put :post_draft, id: drafts_user_work.id
-      it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),\
+      it_redirects_to_with_error(edit_user_work_path(drafts_user, drafts_user_work),
                                  "There were problems posting your work.")
       allow_any_instance_of(Work).to receive(:valid?).and_call_original
     end
 
-    it "should display a notice message if the work is in a moderated collection" do
+    it "should display a notice message and redirect if the work is in a moderated collection" do
       drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
       draft_collection = create(:collection)
       draft_collection.collection_preference.moderated = true
       drafts_user_work.collections << draft_collection
       controller.instance_variable_set("@collection", draft_collection)
       put :post_draft, id: drafts_user_work.id
-      it_redirects_to_with_notice(work_path(drafts_user_work),\
+      it_redirects_to_with_notice(work_path(drafts_user_work),
                                   "Work was submitted to a moderated collection."\
                                   " It will show up in the collection once approved.")
     end

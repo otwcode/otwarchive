@@ -13,11 +13,11 @@ describe Challenge::GiftExchangeController do
     end
 
     it "remove challenge variables on Collection" do
-      expect(@collection.reload.challenge_id).to eq(nil)
-      expect(@collection.reload.challenge_type).to eq(nil)
+      expect(@collection.reload.challenge_id).to be_nil
+      expect(@collection.reload.challenge_type).to be_nil
     end
 
-    it "redirects to the collection's main page" do
+    it "redirects to the collection's main page with a notice" do
       it_redirects_to_with_notice(@collection, "Challenge settings were deleted.")
     end
   end
