@@ -161,7 +161,7 @@ class ArchiveFaqsController < ApplicationController
   def destroy
     @archive_faq = ArchiveFaq.find_by_slug(params[:id])
     @archive_faq.destroy
-    redirect_to(archive_faqs_url)
+    redirect_to(archive_faqs_path)
   end
 
   private
