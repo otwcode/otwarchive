@@ -1362,8 +1362,7 @@ describe TagSetNominationsController do
       context 'not all tag nominations have an associated _approve, _reject, _change, or _synonym param value' do
         it 'redirects and returns a flash message' do
           put :update_multiple, { tag_set_id: owned_tag_set.id }.merge(base_params)
-          it_redirects_to(tag_set_nominations_path(owned_tag_set))
-          expect(flash[:notice]).to include('Still some nominations left to review!')
+          it_redirects_to_with_notice(tag_set_nominations_path(owned_tag_set),"Still some nominations left to review!")
         end
       end
 
@@ -1375,8 +1374,7 @@ describe TagSetNominationsController do
                   'relationship_approve_New Relationship': 1,
                   'fandom_approve_New Fandom': 1,
                   'freeform_reject_New Freeform': 1)
-          it_redirects_to(tag_set_path(owned_tag_set))
-          expect(flash[:notice]).to include('All nominations reviewed, yay!')
+          it_redirects_to_with_notice(tag_set_path(owned_tag_set),"All nominations reviewed, yay!")
         end
       end
 
