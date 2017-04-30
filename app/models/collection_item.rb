@@ -1,4 +1,5 @@
 class CollectionItem < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
   APPROVED = 1
@@ -42,7 +43,7 @@ class CollectionItem < ActiveRecord::Base
   scope :include_for_works, :include => [{:work => :pseuds}]
   scope :unrevealed, :conditions => {:unrevealed => true}
   scope :anonymous, :conditions =>  {:anonymous => true}
-  
+
   def self.for_user(user=User.current_user)
     # get ids of user's bookmarks and works
     bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).value_of(:id)
@@ -62,7 +63,7 @@ class CollectionItem < ActiveRecord::Base
   def self.unreviewed_by_user
     where(user_approval_status: NEUTRAL)
   end
-  
+
   def self.approved_by_collection
     where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
   end
@@ -74,7 +75,7 @@ class CollectionItem < ActiveRecord::Base
   def self.rejected_by_collection
     where(collection_approval_status: REJECTED)
   end
-  
+
   def self.unreviewed_by_collection
     where(collection_approval_status: NEUTRAL)
   end
@@ -86,13 +87,13 @@ class CollectionItem < ActiveRecord::Base
       self.anonymous = true if collection.anonymous?
     end
   end
-  
+
   after_save :update_work
   #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
   #  this is a has-many-through relationship!!!
-  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work
   # itself -- see collectible.rb
-  
+
   # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
@@ -189,9 +190,9 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-  
+
   after_destroy :expire_caches
-  
+
   def expire_caches
     if self.item.respond_to?(:expire_caches)
       CacheMaster.record(item_id, 'collection', collection_id)
@@ -268,7 +269,7 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
-    if user.nil? 
+    if user.nil?
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
@@ -276,7 +277,7 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
-  
+
   # Reveal an individual collection item
   # Can't use update_attribute because of potential validation issues
   # with closed collections

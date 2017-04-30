@@ -24,6 +24,8 @@ module NavigationHelpers
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the admin login page$/i
+      new_admin_session_path
 
     # the following are examples using path_to_pickle
 
@@ -211,6 +213,8 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
+    when /^the new external work page$/i
+      new_external_work_path
 
     # Admin Pages
     when /^the admin-posts page$/i

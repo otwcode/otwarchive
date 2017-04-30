@@ -1,4 +1,5 @@
 language: ruby
+dist: trusty
 cache: bundler
 sudo: required
 env:
@@ -15,6 +16,7 @@ env:
   - TEST_GROUP="cucumber -r features features/prompt_memes_a     -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/prompt_memes_b     -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/prompt_memes_c     -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/tag_sets           -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/users              -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/works              -f Ao3Cucumber::Formatter --color"
@@ -25,14 +27,13 @@ services:
   - redis-server
   - memcached
 script:
-  - rm -f structure.sql
-  - RAILS_ENV=test bundle exec rake db:create:all --trace
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - travis_retry bundle exec $TEST_GROUP
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
+  - bash script/travis_multiple_redis.sh
 notifications:
   email:
     recipients:

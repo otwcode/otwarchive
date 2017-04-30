@@ -47,3 +47,14 @@ Feature: Tag Wrangling - Unsorted Tags
      And the "Spike Spiegel" tag should be a "Character" tag
      And the "Annalise Keating & Bonnie Winterbottom" tag should be a "Relationship" tag
      And the "i love good omens" tag should be a "Freeform" tag
+
+  Scenario: Can return a tag to Unsorted after a different category has been set
+    Given I am logged in as a tag wrangler
+      And a unsorted_tag exists with name: "Unsorted Tag"
+    When I edit the tag "Unsorted Tag"
+      And I select "Fandom" from "tag_type"
+      And I press "Save changes"
+    Then I should see "Tag was updated."
+    When I select "UnsortedTag" from "tag_type"
+      And I press "Save changes"
+    Then I should see "Tag was updated."

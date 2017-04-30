@@ -52,7 +52,7 @@
     <% elsif logged_in_as_admin? %>
       <ul class="user navigation actions" role="navigation">
         <li><span class="current"><%= ts('Admin', key: 'header') %></span></li>
-        <li><%= link_to ts('Log Out', key: 'header'), admin_logout_path %></li>
+        <li><%= link_to ts('Log Out', key: 'header'), destroy_admin_session_path %></li>
       </ul>
     <% end %>
   <p class="icon"><%= icon_display(current_user) %></p>

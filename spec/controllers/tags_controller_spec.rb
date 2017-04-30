@@ -120,7 +120,7 @@ describe TagsController do
       end
 
       it "Only an admin can reindex a tag" do
-        get :reindex, id: @tag.name        
+        get :reindex, id: @tag.name
         it_redirects_to_with_error(root_path, "Please log in as admin")
       end
     end
@@ -149,22 +149,38 @@ describe TagsController do
 
   describe "update" do
     context "when updating a tag" do
-      before do
-        @tag = FactoryGirl.create(:freeform)
-      end
+      let(:tag) { create(:freeform) }
+      let(:unsorted_tag) { create(:unsorted_tag) }
 
-      it "should reset the taggings_count" do
+      it "resets the taggings count" do
         # manufacture a tag with borked taggings_count
-        @tag.taggings_count = 10
-        @tag.save
-        put :update, id: @tag.name, tag: { fix_taggings_count: true }
-        @tag.reload
-        expect(@tag.taggings_count).to eq(0)
+        tag.taggings_count = 10
+        tag.save
+
+        put :update, id: tag, tag: { fix_taggings_count: true }
+        it_redirects_to_with_notice edit_tag_path(tag), "Tag was updated."
+
+        tag.reload
+        expect(tag.taggings_count).to eq(0)
       end
 
-      it "you can wrangle" do
-        put :update, id: @tag.name, tag: {}, commit: :Wrangle
-        it_redirects_to_with_notice("#{tag_path(@tag)}/wrangle?page=1&sort_column=name&sort_direction=ASC", "Tag was updated.")
+      it "changes just the tag type" do
+        put :update, id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes"
+        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
+
+        put :update, id: unsorted_tag, tag: { type: "UnsortedTag" }, commit: "Save changes"
+        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        # The tag now has the original class, we can reload the original record without error.
+        unsorted_tag.reload
+      end
+
+      it "wrangles" do
+        expect(tag.canonical?).to be_truthy
+        put :update, id: tag, tag: { canonical: false }, commit: "Wrangle"
+        tag.reload
+        expect(tag.canonical?).to be_falsy
+        it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
       end
     end
   end

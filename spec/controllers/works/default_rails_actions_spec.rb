@@ -198,7 +198,7 @@ describe WorksController do
       fake_login_known_user(@user)
     end
 
-    it "should not allow a user to submit only a pseud that is not theirs" do
+    it "doesn't allow a user to submit only a pseud that is not theirs" do
       @user2 = create(:user)
       work_attributes = attributes_for(:work)
       work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
@@ -207,6 +207,22 @@ describe WorksController do
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
       expect(flash[:error]).to eq "You're not allowed to use that pseud."
+    end
+
+    it "renders the co-author view if a work has invalid pseuds" do
+      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
+      work_attributes = attributes_for(:work)
+      post :create, work: work_attributes
+      expect(response).to render_template("_choose_coauthor")
+      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_call_original
+    end
+
+    it "renders the co-author view if a work has ambiguous pseuds" do
+      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_return(@user.pseuds.first)
+      work_attributes = attributes_for(:work)
+      post :create, work: work_attributes
+      expect(response).to render_template("_choose_coauthor")
+      allow_any_instance_of(Work).to receive(:ambiguous_pseuds).and_call_original
     end
   end
 

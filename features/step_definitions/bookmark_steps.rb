@@ -1,3 +1,10 @@
+Given /^mock websites with no content$/ do
+  WebMock.disable_net_connect!
+  WebMock.stub_request(:head, "http://example.org/200")
+  WebMock.stub_request(:head, "http://example.org/301").to_return(status: 301)
+  WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
@@ -25,7 +32,7 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
-  step %{I open the bookmarkable work "#{title}"}  
+  step %{I open the bookmarkable work "#{title}"}
   click_link("Bookmark")
 end
 
@@ -54,7 +61,7 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
     step %{I post the work "#{title}"}
     work = Work.find_by_title(title)
   end
-  visit work_url(work)
+  visit work_path(work)
 end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|

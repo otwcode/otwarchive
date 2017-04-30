@@ -1,4 +1,6 @@
 class ApiKey < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+  
   validates :name, presence: true, uniqueness: true
   validates :access_token, presence: true, uniqueness: true
 

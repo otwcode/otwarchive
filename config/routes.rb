@@ -1,4 +1,14 @@
 Otwarchive::Application.routes.draw do
+
+  devise_for :admin,
+             module: 'admin',
+             only: :sessions,
+             controllers: { sessions: 'admin/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
+
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
@@ -120,10 +130,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -224,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end
@@ -437,11 +442,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :admin_posts
   end
-  resources :locales do
-    collection do
-      get :set
-    end
-  end
+  resources :locales, except: :destroy
 
   #### SESSIONS ####
 
@@ -516,6 +517,12 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :update_positions
+    end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
     end
   end
   resources :wrangling_guidelines do

@@ -44,9 +44,13 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.6.6.2'
+gem 'nokogiri', '>= 1.7.1'
 gem 'mechanize'
 gem 'sanitize'
+# Until there is a working solution to
+# https://otwarchive.atlassian.net/browse/AO3-4957
+# https://github.com/rubys/nokogumbo/issues/50
+gem 'nokogumbo', '1.4.9'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
@@ -63,6 +67,9 @@ gem 'paperclip'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
+# Gems for authentication
+gem 'devise', '~> 3.0'   # Lock on version 3 until we update to Rails 4
+gem 'devise-async'       # To mails through queues
 gem 'authlogic'
 gem 'bcrypt'
 
@@ -101,7 +108,7 @@ gem 'audited-activerecord', '~> 3.0'
 # For controlling application behavour dynamically
 gem 'rollout'
 
-#  Place the New Relic gem as low in the list as possible, allowing the 
+#  Place the New Relic gem as low in the list as possible, allowing the
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm'
 gem 'newrelic-redis'
@@ -124,13 +131,15 @@ group :test do
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.4.3', require: false
-  gem 'gherkin' 
+  gem 'gherkin'
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
+  gem 'timecop'
+  gem 'cucumber-timecop', :require => false
   # Code coverage
   gem 'simplecov', '~> 0.12.0'
   gem 'coveralls', '~> 0.8.12'

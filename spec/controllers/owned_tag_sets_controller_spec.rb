@@ -70,12 +70,19 @@ describe OwnedTagSetsController do
         get :show_options, params
       end
 
+      context "where the restriction isn't found" do
+        it "displays an error and redirects" do
+          get :show_options
+          it_redirects_to_with_error(tag_sets_path, "Which Tag Set did you want to look at?")
+        end
+      end
+
       context "where tag_type isn't specified" do
         it "then sets the correct tags with the type fandom" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "fandom"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to include(*tag_set.tags)
@@ -91,8 +98,8 @@ describe OwnedTagSetsController do
         it "sets the correct tags with the type character" do
           expect(assigns(:tag_sets)).to include(*fandom_tag_sets)
           expect(assigns(:tag_sets)).to include(character_tag_set)
-          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:id))
-          expect(assigns(:tag_set_ids)).to include character_tag_set.id
+          expect(assigns(:tag_set_ids)).to include(*fandom_tag_sets.map(&:tag_set_id))
+          expect(assigns(:tag_set_ids)).to include character_tag_set.tag_set_id
           expect(assigns(:tag_type)).to eq "character"
           fandom_tag_sets.each do |tag_set|
             expect(assigns(:tags)).to_not include(*tag_set.tags)
@@ -104,6 +111,13 @@ describe OwnedTagSetsController do
   end
 
   describe "show" do
+    context "where tag set is not found" do
+      it "redirects and displays an error" do
+        get :show, id: 12345
+        it_redirects_to_with_error(tag_sets_path, "What Tag Set did you want to look at?")
+      end
+    end
+
     context "where tag set is found" do
       let(:visible) { false }
       let(:tag) { create(:character) }
