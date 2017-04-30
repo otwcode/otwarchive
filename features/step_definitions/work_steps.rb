@@ -100,7 +100,6 @@ Given(/^I have the Battle set loaded$/) do
   step %{mod fulfills claim}
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
-  step %{I have flushed Redis}
   step %{the statistics_tasks rake task is run}
   step %{the work indexes are updated}
 end
