@@ -406,10 +406,10 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params
-          # We use it_redirects_to_internal as it_redirects_to
+          # We use it_redirects_to_simple as it_redirects_to
           # checks that there are no extra error,notice flash messages set
           # And in this case there are.
-          it_redirects_to_internal(collection_participants_path(collection))
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline

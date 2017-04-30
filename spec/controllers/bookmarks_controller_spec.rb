@@ -5,7 +5,7 @@ describe BookmarksController do
   include RedirectExpectationHelper
 
   def it_redirects_to_user_login
-    it_redirects_to_internal new_user_session_path
+    it_redirects_to_simple new_user_session_path
   end
 
   describe 'new' do

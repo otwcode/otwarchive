@@ -44,6 +44,7 @@ describe WorksController do
         it "should display no errors" do
           get :drafts, user_id: drafts_user.login
           expect(response).to have_http_status(200)
+          expect(flash[:error]).to be_nil
         end
 
         it "should display all the user's drafts if no pseud_id is specified" do

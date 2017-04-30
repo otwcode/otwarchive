@@ -30,7 +30,8 @@ describe TagSetAssociationsController do
       context "no tag associations are saved" do
         it "redirects and returns a notice" do
           put :update_multiple, tag_set_id: owned_tag_set.id
-          it_redirects_to_internal(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
 
@@ -52,7 +53,8 @@ describe TagSetAssociationsController do
         end
 
         it "redirects and returns a notice" do
-          it_redirects_to_internal(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
 
@@ -115,7 +117,8 @@ describe TagSetAssociationsController do
         end
 
         it "redirects and returns a notice" do
-          it_redirects_to_internal(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
+          expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
 
