@@ -50,7 +50,8 @@ describe LocalesController do
 
       it "redirects to the user page" do
         put :update
-        it_redirects_to user_path(user)
+        it_redirects_to_with_error user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach."
       end
     end
 
@@ -85,7 +86,8 @@ describe LocalesController do
 
       it "redirects to the user page" do
         post :create
-        it_redirects_to user_path(user)
+        it_redirects_to_with_error user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach."
       end
     end
 

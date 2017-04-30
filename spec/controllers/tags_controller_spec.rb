@@ -180,7 +180,8 @@ describe TagsController do
         put :update, id: tag, tag: { canonical: false }, commit: "Wrangle"
         tag.reload
         expect(tag.canonical?).to be_falsy
-        it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
+        it_redirects_to_with_notice wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
+                                    "Tag was updated."
       end
     end
   end

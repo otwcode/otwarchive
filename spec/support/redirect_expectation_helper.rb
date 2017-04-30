@@ -4,23 +4,35 @@ module RedirectExpectationHelper
     it_redirects_to_internal(path)
     expect(flash[:notice]).to eq notice
     expect(flash[:error]).blank?
+    expect(flash[:caution]).blank?
   end
 
   def it_redirects_to_with_caution(path, caution)
-    it_redirects_to(path)
+    it_redirects_to_internal(path)
     expect(flash[:caution]).to eq caution
+    expect(flash[:notice]).to eq notice
+    expect(flash[:error]).blank?
+  end
+
+  def it_redirects_to_with_caution_and_notice(path, caution, notice)
+    it_redirects_to_internal(path)
+    expect(flash[:caution]).to eq caution
+    expect(flash[:notice]).to eq notice
+    expect(flash[:error]).blank?
   end
 
   def it_redirects_to_with_error(path, error)
     it_redirects_to_internal(path)
     expect(flash[:error]).to eq error
     expect(flash[:notice]).blank?
+    expect(flash[:caution]).blank?
   end
 
-  def it_redirects_to_with_error_and_notice(path, error,notice)
+  def it_redirects_to_with_error_and_notice(path, error, notice)
     it_redirects_to_internal(path)
     expect(flash[:error]).to eq error
     expect(flash[:notice]).to eq notice
+    expect(flash[:caution]).blank?
   end
 
   def it_redirects_to_internal(path)
@@ -32,6 +44,7 @@ module RedirectExpectationHelper
     it_redirects_to_internal(path)
     expect(flash[:notice]).blank?
     expect(flash[:error]).blank?
-    expect(flash).to be_empty    
+    expect(flash[:caution]).blank?
+    expect(flash).to be_empty
   end
 end

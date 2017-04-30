@@ -8,13 +8,15 @@ describe InboxController do
   describe "GET #show" do
     it "redirects to user page when not logged in" do
       get :show, user_id: user.login
-      it_redirects_to user_path(user)
+      it_redirects_to_with_error user_path(user),
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     end
 
     it "redirects to user page when logged in as another user" do
       fake_login_known_user(create(:user))
       get :show, user_id: user.login
-      it_redirects_to user_path(user)
+      it_redirects_to_with_error user_path(user),
+                                 "Sorry, you don't have permission to access the page you were trying to reach."
     end
 
     context "when logged in as the same user" do
@@ -120,15 +122,13 @@ describe InboxController do
     context "with no comments selected" do
       it "redirects to inbox with caution" do
         put :update, user_id: user.login, read: "yeah"
-        it_redirects_to_with_caution user_inbox_path(user), "Please select something first"
-        # A notice also appears!
-        expect(flash[:notice]).to eq("Inbox successfully updated.")
+        it_redirects_to_with_caution_and_notice user_inbox_path(user), "Please select something first", "Inbox successfully updated."
       end
 
       it "redirects to the previously viewed page if HTTP_REFERER is set" do
         @request.env['HTTP_REFERER'] = root_path
         put :update, user_id: user.login, read: "yeah"
-        it_redirects_to_with_caution root_path, "Please select something first"
+        it_redirects_to_with_caution_and_notice root_path, "Please select something first", "Inbox successfully updated."
       end
     end
 
