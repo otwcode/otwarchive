@@ -25,7 +25,8 @@ describe CollectionParticipantsController do
       context "where there is no collection" do
         it "redirects to index and displays an error" do
           get :join, collection_id: nil
-          it_redirects_to_with_error(root_path, "Which collection did you want to join?")
+          it_redirects_to_with_error(root_path,
+                                     "Which collection did you want to join?")
         end
 
         context "where the HTTP_REFERER is set" do
@@ -35,7 +36,8 @@ describe CollectionParticipantsController do
 
           it "navigates back to the previously viewed page" do
             get :join
-            it_redirects_to_with_error(collections_path, "Which collection did you want to join?")
+            it_redirects_to_with_error(collections_path,
+                                       "Which collection did you want to join?")
           end
         end
       end
@@ -60,14 +62,16 @@ describe CollectionParticipantsController do
             it "approves the participant and redirects to the index" do
               get :join, collection_id: collection.name
               expect(CollectionParticipant.find(participant.id).participant_role).to eq CollectionParticipant::MEMBER
-              it_redirects_to_with_notice(root_path, "You are now a member of #{collection.title}.")
+              it_redirects_to_with_notice(root_path,
+                                          "You are now a member of #{collection.title}.")
             end
           end
 
           context "where the user is not currently invited" do
             it "redirects to the index and displays a notice that the user has already joined or applied" do
               get :join, collection_id: collection.name
-              it_redirects_to_with_notice(root_path, "You have already joined (or applied to) this collection.")
+              it_redirects_to_with_notice(root_path,
+                                          "You have already joined (or applied to) this collection.")
             end
           end
         end
@@ -78,7 +82,8 @@ describe CollectionParticipantsController do
             participant = CollectionParticipant.find_by_pseud_id(user.default_pseud.id)
             expect(participant).to be_present
             expect(participant.participant_role).to eq CollectionParticipant::NONE
-            it_redirects_to_with_notice(root_path, "You have applied to join #{collection.title}.")
+            it_redirects_to_with_notice(root_path,
+                                        "You have applied to join #{collection.title}.")
           end
         end
       end
@@ -93,8 +98,9 @@ describe CollectionParticipantsController do
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
         get :index, collection_id: collection.name
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the"\
-                                                          " page you were trying to reach. Please log in.")
+        it_redirects_to_with_error(new_user_session_path,
+                                   "Sorry, you don't have permission to access the"\
+                                   " page you were trying to reach. Please log in.")
       end
     end
 
@@ -116,8 +122,9 @@ describe CollectionParticipantsController do
       context "where the user is not a maintainer" do
         it "redirects to the index" do
           get :index, params
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access"\
-                                                      " the page you were trying to reach.")
+          it_redirects_to_with_error(user_path(user),
+                                     "Sorry, you don't have permission to access"\
+                                     " the page you were trying to reach.")
         end
       end
 
@@ -179,7 +186,8 @@ describe CollectionParticipantsController do
     context "where there is no participant" do
       it "displays an error and redirects to the index" do
         put :update, params
-        it_redirects_to_with_error(root_path, "Which participant did you want to work with?")
+        it_redirects_to_with_error(root_path,
+                                   "Which participant did you want to work with?")
       end
     end
 
@@ -195,7 +203,8 @@ describe CollectionParticipantsController do
       context "where the user is not a collection maintainer" do
         it "redirects to the collection page and displays an error" do
           put :update, params
-          it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
+          it_redirects_to_with_error(collection_path(collection),
+                                     "Sorry, you're not allowed to do that.")
         end
       end
 
@@ -204,7 +213,8 @@ describe CollectionParticipantsController do
         context "where the participant is updated successfully" do
           it "successfully updates and redirects to collection participants" do
             put :update, params
-            it_redirects_to_with_notice(collection_participants_path(collection), "Updated #{participant.pseud.name}.")
+            it_redirects_to_with_notice(collection_participants_path(collection),
+                                        "Updated #{participant.pseud.name}.")
           end
         end
 
@@ -249,7 +259,8 @@ describe CollectionParticipantsController do
 
       it "displays an error and redirects to the index" do
         delete :destroy, params
-        it_redirects_to_with_error(root_path, "Which participant did you want to work with?")
+        it_redirects_to_with_error(root_path,
+                                   "Which participant did you want to work with?")
       end
     end
 
@@ -258,7 +269,8 @@ describe CollectionParticipantsController do
         context "where the user is destroying their own participant" do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params
-            it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+            it_redirects_to_with_notice(root_path,
+                                        "Removed #{pseud_name} from collection.")
             expect(CollectionParticipant.find_by_pseud_id(user.default_pseud.id)).to_not be_present
           end
         end
@@ -276,7 +288,8 @@ describe CollectionParticipantsController do
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params
-            it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
+            it_redirects_to_with_error(collection_path(collection),
+                                       "Sorry, you're not allowed to do that.")
             expect(CollectionParticipant.find(other_participant)).to be_present
           end
         end
@@ -300,7 +313,8 @@ describe CollectionParticipantsController do
         context "where participant to be destroyed is not an owner" do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params
-            it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+            it_redirects_to_with_notice(root_path,
+                                        "Removed #{pseud_name} from collection.")
             expect(CollectionParticipant.find_by_pseud_id(other_participant.pseud_id)).to_not be_present
           end
         end
@@ -312,7 +326,8 @@ describe CollectionParticipantsController do
           context "where there are no other owners" do
             it "displays an error and redirects to the collection participants path" do
               delete :destroy, params
-              it_redirects_to_with_error(collection_participants_path(collection), "You can't remove the only owner!")
+              it_redirects_to_with_error(collection_participants_path(collection),
+                                         "You can't remove the only owner!")
               expect(CollectionParticipant.find(delete_participant_id)).to be_present
             end
           end
@@ -329,7 +344,8 @@ describe CollectionParticipantsController do
 
             it "destroys the participant successfully and redirects to index" do
               delete :destroy, params
-              it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+              it_redirects_to_with_notice(root_path,
+                                          "Removed #{pseud_name} from collection.")
               expect(CollectionParticipant.where(id: delete_participant_id)).to be_empty
             end
           end
@@ -365,8 +381,9 @@ describe CollectionParticipantsController do
     context "where the user is not a maintainer" do
       it "redirects and shows an error message" do
         get :add, params
-        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access"\
-                                                    " the page you were trying to reach.")
+        it_redirects_to_with_error(user_path(user),
+                                   "Sorry, you don't have permission to access"\
+                                   " the page you were trying to reach.")
       end
     end
 
@@ -406,8 +423,8 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params
-          # We use it_redirects_to_simple as it_redirects_to
-          # checks that there are no extra error,notice flash messages set
+          # We use it_redirects_to_simple because it_redirects_to
+          # checks that there are no extra errors, notice flash messages set
           # And in this case there are.
           it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"

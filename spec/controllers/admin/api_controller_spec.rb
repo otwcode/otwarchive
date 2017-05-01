@@ -9,7 +9,7 @@ describe Admin::ApiController do
     let(:params) { nil }
 
     context "where there is no user or admin logged in" do
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params
         it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
@@ -22,9 +22,9 @@ describe Admin::ApiController do
         fake_login_known_user(user)
       end
 
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params
-        it_redirects_to_with_notice(root_path,"I'm sorry, only an admin can look at that area")
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
     end
 
