@@ -137,3 +137,16 @@ Feature: Invite queue management
       And I click the first link in the email
     When I am logged in as "newuser" with password "password1"
     Then I should see "Successfully logged in."
+
+  Scenario: You can't request an invitation with an email address that is
+  already attached to an account
+    Given account creation requires an invitation
+      And the invitation queue is enabled
+      And the following activated users exist
+      | login | password    | email            |
+      | fred  | yabadabadoo | fred@bedrock.com |
+    When I am on the homepage
+      And I follow "Get an Invitation"
+      And I fill in "invite_request_email" with "fred@bedrock.com"
+      And I press "Add me to the list"
+    Then I should see "Email is already being used by an account holder."

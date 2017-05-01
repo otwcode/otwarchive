@@ -281,3 +281,14 @@ Feature: Create Works
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Me (myself), testuser"
+
+  Scenario: Users can't set a publication date that is in the future, e.g. set 
+  the date to April 30 when it is April 26
+    Given I am logged in
+      And it is currently Wed Apr 26 22:00:00 UTC 2017
+      And I set up a draft "Futuristic"
+    When I check "Set a different publication date"
+      And I select "30" from "work[chapter_attributes][published_at(3i)]"
+      And I press "Post Without Preview"
+    Then I should see "Publication date can't be in the future."
+    When I jump in our Delorean and return to the present
