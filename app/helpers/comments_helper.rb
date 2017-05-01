@@ -82,13 +82,13 @@ module CommentsHelper
     commentable_value = commentable.is_a?(Tag) ?
                           commentable.name :
                           commentable.id
-       
+
     comment_count = commentable.count_visible_comments.to_s
 
     link_action = options[:link_type] == "hide" || params[:show_comments] ?
                     :hide_comments :
                     :show_comments
-    
+
     link_text = ts("%{words} %{count}",
                   :words => options[:link_type] == "hide" || params[:show_comments] ?
                               "Hide Comments" :
@@ -96,10 +96,10 @@ module CommentsHelper
                   :count => options[:show_count] ?
                               "(" +comment_count+ ")" :
                               "")
-    
+
     link_to(
         link_text,
-        path_for(:controller => :comments,
+        url_for(:controller => :comments,
                 :action => link_action,
                 commentable_id => commentable_value,
                 :view_full_work => params[:view_full_work]),
@@ -108,11 +108,11 @@ module CommentsHelper
 
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
-  
+
   def no_anon_reply(comment)
     comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
   end
-  
+
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
       cancel_comment_reply_link(comment)
@@ -131,7 +131,7 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Reply"),
-      path_for(:controller => :comments,
+      url_for(:controller => :comments,
               :action => :add_comment_reply,
               :id => comment.id,
               :comment_id => params[:comment_id],
@@ -151,7 +151,7 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Cancel"),
-      path_for(:controller => :comments,
+      url_for(:controller => :comments,
               :action => :cancel_comment_reply,
               :id => comment.id,
               :comment_id => params[:comment_id],
@@ -176,7 +176,7 @@ module CommentsHelper
                               commentable.ultimate_parent.id
         link_to(
           ts("Cancel"),
-          path_for(:controller => :comments,
+          url_for(:controller => :comments,
                   :action => :cancel_comment_reply,
                   :id => commentable.id,
                   :comment_id => params[:comment_id],
@@ -192,7 +192,7 @@ module CommentsHelper
                               commentable.id
         link_to(
           ts("Cancel"),
-          path_for(:controller => :comments,
+          url_for(:controller => :comments,
                   :action => :cancel_comment,
                   commentable_id => commentable_value),
           :remote => true)
@@ -201,7 +201,7 @@ module CommentsHelper
       # canceling an edit
       link_to(
         ts("Cancel"),
-        path_for(:controller => :comments,
+        url_for(:controller => :comments,
                 :action => :cancel_comment_edit,
                 :id => (comment.id),
                 :comment_id => params[:comment_id]),
@@ -212,7 +212,7 @@ module CommentsHelper
   # return html link to edit comment
   def edit_comment_link(comment)
     link_to(ts("Edit"),
-            path_for(:controller => :comments,
+            url_for(:controller => :comments,
                     :action => :edit,
                     :id => comment,
                     :comment_id => params[:comment_id]),
@@ -226,12 +226,12 @@ module CommentsHelper
       delete_comment_link(comment)
     end
   end
-  
+
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
       ts("Delete"),
-      path_for(:controller => :comments,
+      url_for(:controller => :comments,
               :action => :delete_comment,
               :id => comment,
               :comment_id => params[:comment_id]),
@@ -242,7 +242,7 @@ module CommentsHelper
   def cancel_delete_comment_link(comment)
     link_to(
       ts("Cancel"),
-      pah_for(:controller => :comments,
+      url_for(:controller => :comments,
               :action => :cancel_comment_delete,
               :id => comment,
               :comment_id => params[:comment_id]),
@@ -275,7 +275,7 @@ module CommentsHelper
     default_options[:show_comments] = params[:show_comments] if params[:show_comments]
 
     options = default_options.merge(options)
-    path_for(options)
+    url_for(options)
   end
 
   def fallback_url_for_comment(comment, options = {})
@@ -288,7 +288,7 @@ module CommentsHelper
 
     if @thread_view # hopefully means we're on a Thread page
       options[:id] = @thread_root if @thread_root
-      path_for(options)
+      url_for(options)
     else # Top Level Commentable
       fallback_url_for_top_level(comment.ultimate_parent, options)
     end
