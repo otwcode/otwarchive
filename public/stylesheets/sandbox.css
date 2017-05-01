@@ -18,12 +18,11 @@ background:purple; color:#555;}
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
 
-/* Possible solution for AO3-3359
-add <p class="submit"><%= f.submit ts('Search') %></p>
-to line 5 of app/views/works/_search_form.html.erb
-then add #new_work_search fieldset:first-of-type .submit {padding-top: 0;}
-to public/stylesheets/site/2.0/08-actions.css
-*/
+/* styling for AO3-3359 to remove top padding from the new button
+and preserve the balance/symmetry of the page */
+#new_work_search fieldset:first-of-type .submit {
+  padding-top: 0;
+}
 
 /* Issue 3243 needs nested ul to be indented in external_authors/claim
 */
