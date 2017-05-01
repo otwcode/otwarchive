@@ -61,7 +61,7 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
     step %{I post the work "#{title}"}
     work = Work.find_by_title(title)
   end
-  visit work_url(work)
+  visit work_path(work)
 end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|

@@ -500,7 +500,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -510,7 +510,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -519,7 +519,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
       end
     end
   end
@@ -546,10 +546,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -697,37 +697,6 @@ class Tag < ActiveRecord::Base
     self.bookmarks.value_of(:id) +
       self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten +
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
-  end
-
-
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
-      if tag.filter
-        to_add = tag.works - tag.filter.filtered_works
-        to_add.each do |work|
-          tag.filter.filter_taggings.create!(:filterable => work)
-        end
-      end
-    end
-  end
-
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    i = Work.posted.count
-    Work.find_each(:conditions => "posted = 1") do |work|
-      begin
-        should_have = work.tags.collect(&:filter).compact.uniq
-        should_add = should_have - work.filters
-        unless should_add.empty?
-          puts "Fixing work #{i}"
-          work.filters = (work.filters + should_add).uniq
-        end
-      rescue
-        puts "Problem with work #{work.id}"
-      end
-      i = i - 1
-    end
   end
 
   # The version of the tag that should be used for filtering, if any

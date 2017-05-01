@@ -6,6 +6,9 @@ Feature: Prompt Meme Challenge
 
   Scenario: Prompt anonymously and be notified of the fills without the writer knowing who I am
   Given basic tags
+    And the following activated user exists
+      | login   | password | email     |
+      | myname1 | password | my1@e.org |
     And a fandom exists with name: "GhostSoup", canonical: true
     And I am logged in as "mod1"
     And I set up a basic promptmeme "The Kissing Game"
@@ -27,7 +30,6 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made"
     And I follow "Fulfill"
     And I check "No Archive Warnings Apply"
-  # Then I should see "GhostSoup" in the "Fandoms" input # feature was removed
     And I fill in "Fandoms" with "GhostSoup"
     And I should see "promptcollection" in the "work_collection_names" input
     And the "Untitled Prompt in The Kissing Game (Anonymous)" checkbox should be checked
@@ -39,9 +41,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Kinky Story"
     And I should find a list for associations
     And I should see "In response to a prompt by Anonymous in the promptcollection collection"
-  # TODO: Figure out why this isn't working
-  # email the anonymous prompter that they've received a fill!
-   # And 1 email should be delivered to "my1@e.org"
+    And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
 
   Scenario: Fulfilling a claim ticks the right boxes automatically

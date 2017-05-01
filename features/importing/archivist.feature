@@ -220,11 +220,18 @@ Feature: Archivist bulk imports
     When I go to the Open Doors tools page
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
-  Scenario: Open Doors committee members can see their tools
-    Given I have an Open Doors committee member "OpenDoors"
+  Scenario: Open Doors committee members can update the redirect URL of a work
+    Given the work "My Immortal"
+      And I have an Open Doors committee member "OpenDoors"
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
     Then I should see "Update Redirect URL"
+    When I fill in "imported_from_url" with "http://example.com/my-immortal"
+      And I fill in "work_url" with the path to the "My Immortal" work page
+      And I submit with the 2nd button
+    Then I should see "Updated imported-from url for My Immortal to http://example.com/my-immortal"
+    When I follow "http://example.com/my-immortal"
+    Then I should be on the "My Immortal" work page
 
   Scenario: Open Doors committee members can block an email address from having imports
     Given I have an Open Doors committee member "OpenDoors"
