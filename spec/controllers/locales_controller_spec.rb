@@ -50,8 +50,8 @@ describe LocalesController do
 
       it "redirects to the user page" do
         put :update
-        it_redirects_to_with_error (user_path(user),
-                                    "Sorry, you don't have permission to access the page you were trying to reach.")
+        it_redirects_to_with_error(user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
 
@@ -64,8 +64,8 @@ describe LocalesController do
         params = { name: "Tiếng Việt", email_enabled: true }
 
         put :update, id: locale.iso, locale: params
-        it_redirects_to_with_notice (locales_path,
-                                     "Your locale was successfully updated.")
+        it_redirects_to_with_notice(locales_path,
+                                    "Your locale was successfully updated.")
 
         locale.reload
         expect(locale.name).to eq(params[:name])
@@ -87,8 +87,8 @@ describe LocalesController do
 
       it "redirects to the user page" do
         post :create
-        it_redirects_to_with_error (user_path(user),
-                                    "Sorry, you don't have permission to access the page you were trying to reach.")
+        it_redirects_to_with_error(user_path(user),
+                                   "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
 
@@ -102,8 +102,8 @@ describe LocalesController do
         }
 
         post :create, locale: params
-        it_redirects_to_with_notice (locales_path,
-                                     "Locale was successfully added.")
+        it_redirects_to_with_notice(locales_path,
+                                    "Locale was successfully added.")
 
         locale = Locale.last
         expect(locale.iso).to eq(params[:iso])

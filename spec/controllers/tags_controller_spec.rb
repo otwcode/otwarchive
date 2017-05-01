@@ -159,7 +159,7 @@ describe TagsController do
         tag.save
 
         put :update, id: tag, tag: { fix_taggings_count: true }
-        it_redirects_to_with_notice (edit_tag_path(tag), "Tag was updated.")
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
 
         tag.reload
         expect(tag.taggings_count).to eq(0)
@@ -167,13 +167,13 @@ describe TagsController do
 
       it "changes just the tag type" do
         put :update, id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes"
-        it_redirects_to_with_notice (edit_tag_path(unsorted_tag),
-                                     "Tag was updated.")
+        it_redirects_to_with_notice(edit_tag_path(unsorted_tag),
+                                    "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
 
         put :update, id: unsorted_tag, tag: { type: "UnsortedTag" }, commit: "Save changes"
-        it_redirects_to_with_notice (edit_tag_path(unsorted_tag),
-                                     "Tag was updated.")
+        it_redirects_to_with_notice(edit_tag_path(unsorted_tag),
+                                    "Tag was updated.")
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
       end
@@ -183,7 +183,7 @@ describe TagsController do
         put :update, id: tag, tag: { canonical: false }, commit: "Wrangle"
         tag.reload
         expect(tag.canonical?).to be_falsy
-        it_redirects_to_with_notice (wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
+        it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
                                     "Tag was updated.")
       end
     end
