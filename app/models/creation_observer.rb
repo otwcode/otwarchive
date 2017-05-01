@@ -26,7 +26,7 @@ class CreationObserver < ActiveRecord::Observer
       notify_recipients(creation)
     end
   end
-  
+
   # send the appropriate notifications
   def do_notify(creation)
     if creation.is_a?(Work)

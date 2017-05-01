@@ -385,7 +385,7 @@ class Skin < ActiveRecord::Base
   end
 
   def stylesheet_link(file, media)
-    '<link rel="stylesheet" type="text/css" media="' + media + '" href="' + file + '" />'
+    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file + '" />'
   end
 
   def self.naturalized(string)

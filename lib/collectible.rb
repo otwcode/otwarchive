@@ -98,7 +98,7 @@ module Collectible
   def set_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
       # if we have collection items saved here then the collectible is not a new object
-      if self.collection_items.empty?
+      if self.id.nil? || self.collection_items.empty?
         self.in_anon_collection = !self.collections.select(&:anonymous?).empty?
         self.in_unrevealed_collection = !self.collections.select(&:unrevealed?).empty?
       else

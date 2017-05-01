@@ -392,6 +392,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :add
         get :join
+        patch :update
       end
     end
     resources :items, controller: "collection_items" do
@@ -563,7 +564,7 @@ Otwarchive::Application.routes.draw do
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
   get 'delete_confirmation' => 'users#delete_confirmation'
-  post 'activate/:id' => 'users#activate', as: 'activate'
+  get 'activate/:id' => 'users#activate', as: 'activate'
   get 'devmode' => 'devmode#index'
   get 'donate' => 'home#donate'
   get 'lost_cookie' => 'home#lost_cookie'
