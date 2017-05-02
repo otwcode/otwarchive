@@ -967,6 +967,12 @@ class Work < ActiveRecord::Base
     find_all_comments.count
   end
 
+  # Count the number of comment threads visible to the user (i.e. excluding
+  # threads that have been marked as spam). Used on the work stats page.
+  def count_visible_comment_threads
+    comments.where(approved: true).count
+  end
+
   # returns the top-level comments for all chapters in the work
   def comments
     Comment.where(

@@ -54,7 +54,7 @@
       <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
     <% end %>
     <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Comment Threads'), "count_visible_comment_threads", {:desc_default => true} %></li>
     <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
@@ -96,7 +96,7 @@
                   <dt class="kudos"><%= ts("Kudos:") %></dt>
                   <dd class="kudos"><%= work.kudos.count %></dd>
                   <dt class="comments"><%= ts("Comment Threads:") %></dt>
-                  <dd class="comments"><%= work.comments.count %></dd>
+                  <dd class="comments"><%= work.count_visible_comment_threads %></dd>
                   <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
                   <dd class="bookmarks"><%= work.bookmarks.count %></dd>
                   <% # dt ts("Newest Link:") /dt %>
