@@ -253,12 +253,7 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   step %{I add the co-author "#{coauthor}"}
   click_button("Post")
   Work.tire.index.refresh
-end
-
-When /^a draft chapter is added to "([^\"]*)"$/ do |work_title|
-  step %{a chapter is set up for "#{work_title}"}
-  step %{I press "Preview"}
-  Work.tire.index.refresh
+  Tag.write_redis_to_database
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
