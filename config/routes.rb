@@ -322,7 +322,7 @@ Otwarchive::Application.routes.draw do
       end
       collection do
         get :unreviewed
-        patch :review_all
+        put :review_all
       end
     end
     resources :kudos, only: [:index]
