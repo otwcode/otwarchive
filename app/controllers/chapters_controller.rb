@@ -263,11 +263,6 @@ class ChaptersController < ApplicationController
       params[:pseud][:byline] = ""
     end
 
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:chapter] && params[:chapter][:author_attributes] && params[:chapter][:author_attributes][:coauthors]
-      params[:chapter][:author_attributes][:ids].concat(params[:chapter][:author_attributes][:coauthors]).uniq!
-    end
-
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       if params[:chapter]  # editing, save our changes
