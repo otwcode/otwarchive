@@ -114,6 +114,26 @@ When /^I comment on an admin post$/ do
     step %{I press "Comment"}
 end
 
+When /^I post a spam comment$/ do
+  fill_in("comment[name]", with: "spammer")
+  fill_in("comment[email]", with: "spammer@example.org")
+  fill_in("comment[content]", with: "Buy my product! http://spam.org")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^I post a guest comment$/ do
+  fill_in("comment[name]", with: "guest")
+  fill_in("comment[email]", with: "guest@example.org")
+  fill_in("comment[content]", with: "This was really lovely!")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^all comments by "([^"]*)" are marked as spam$/ do |name|
+  Comment.where(name: name).update_all(approved: false)
+end
+
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   with_scope(selector) do
     fill_in("Comment", with: %/Sed mollis sapien ac massa pulvinar facilisis. Nulla rhoncus neque nisi. Integer sit amet nulla vel orci hendrerit aliquam. Proin vehicula bibendum vulputate. Nullam porttitor, arcu eu mollis accumsan, turpis justo ornare tellus, ac congue lectus purus ut risus. Phasellus feugiat, orci id tempor elementum, sapien nulla dignissim sapien, dictum eleifend nisl erat vitae urna. Cras imperdiet bibendum porttitor. Suspendisse vitae tellus nibh, vel facilisis magna. Quisque nec massa augue. Pellentesque in ipsum lacus. Aenean mauris leo, viverra sit amet fringilla sit amet, volutpat eu risus. Etiam scelerisque, nibh a condimentum eleifend, augue ipsum blandit tortor, lacinia pharetra ante felis eget lorem. Proin tristique dictum placerat. Aenean commodo imperdiet massa et auctor. Phasellus eleifend posuere varius.
