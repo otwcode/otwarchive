@@ -309,7 +309,7 @@ class ChaptersController < ApplicationController
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: [], coauthors: [],
-                                    ambiguous_pseuds: []])
+                                                        ambiguous_pseuds: []])
 
   end
 end
