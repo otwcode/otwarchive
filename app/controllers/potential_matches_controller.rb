@@ -70,7 +70,7 @@ class PotentialMatchesController < ApplicationController
 
       ### find assignments with no potential recipients
       # first get signups with no offer potential matches
-      no_opms = ChallengeSignup.in_collection(@collection).no_potential_offers.pluck(id)
+      no_opms = ChallengeSignup.in_collection(@collection).no_potential_offers.pluck(:id)
       @assignments_with_no_potential_recipients = @collection.assignments.where(:offer_signup_id => no_opms)
 
       ### find assignments with no potential giver

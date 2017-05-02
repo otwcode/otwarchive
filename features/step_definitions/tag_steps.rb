@@ -24,8 +24,8 @@ Given /^the default ratings exist$/ do
 end
 
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by(name: "No Archive Warnings Apply").update(canonical: true)
-  Warning.find_or_create_by(name: "Choose Not To Use Archive Warnings").update(canonical: true)
+  Warning.find_or_create_by_name("No Archive Warnings Apply").update(canonical: true)
+  Warning.find_or_create_by_name("Choose Not To Use Archive Warnings").update(canonical: true)
 end
 
 Given /^the basic categories exist$/ do

@@ -13,9 +13,9 @@
 <ul class="notes">
   <li><%= ts('Tag sets are used for running a challenge.') %></li>
   <li><%= ts('"Visible" tag sets are shown to all users.') %></li>
-  <li><%= ts('"Usable" tag sets can be used by others in their challenges.') %></li> 
-  <li><%= ts('Tag sets that are open to nominations can take nominations from the public.') %></li> 
-  <li><%= ts('Tag names have to be unique. If necessary the archive may add on the tag type. (For instance, if you entered a character "Firefly", you\'d see "Firefly - Character" in your tag set instead since the tag Firefly is already used for the show.') %></li>   
+  <li><%= ts('"Usable" tag sets can be used by others in their challenges.') %></li>
+  <li><%= ts('Tag sets that are open to nominations can take nominations from the public.') %></li>
+  <li><%= ts('Tag names have to be unique. If necessary the archive may add on the tag type. (For instance, if you entered a character "Firefly", you\'d see "Firefly - Character" in your tag set instead since the tag Firefly is already used for the show.') %></li>
 </ul>
 
 <h3 class="landmark heading"><%= ts('Tag Set Settings') %></h3>
@@ -25,7 +25,7 @@
 
   <fieldset>
     <legend><%= ts('Management') %></legend>
-    <%= render "tag_set_form_management", :form => tag_set_form %>
+    <%= render partial: "tag_set_form_management", locals: {form: tag_set_form} %>
   </fieldset>
 
   <fieldset class="tagset">
@@ -39,35 +39,35 @@
 
     <% end %>
   </fieldset>
-  
+
   <!--BACK END if pos can we not display this if blank-->
   <fieldset>
     <% associations_for_remove = @tag_set.tag_set_associations.reject {|assoc| assoc.new_record?} %>
     <% associations_for_add = @tag_set.tag_set_associations.select {|assoc| assoc.new_record?} %>
     <legend>Tag Associations <%= associations_for_remove.empty? ? '' : ts('(check to remove)') %> <%= link_to_help('tagset-tag-associations')%></legend>
-    
+
     <h3 class="landmark heading"><%= ts('Tag Associations') %> </h3>
     <% unless associations_for_remove.empty? %>
       <%= render "tag_set_associations_remove", :form => tag_set_form %>
     <% end %>
     <% unless @tag_set.new_record? || @child_tags_in_set.empty? || @parent_tags_in_set.empty? %>
-      <% 
-        # this next div is used to hold the last id for adding new associations via javascript 
-        # because we don't generate an initial tag set association form, we have to put one of these into the upper level form 
-        # with the right id to start from 
+      <%
+        # this next div is used to hold the last id for adding new associations via javascript
+        # because we don't generate an initial tag set association form, we have to put one of these into the upper level form
+        # with the right id to start from
       %>
       <% associations_for_add.each do |assoc| %>
         <%= tag_set_form.fields_for :tag_set_associations, assoc do |assoc_form| %>
           <%= render "tag_set_association_fields", :form => assoc_form %>
         <% end %>
       <% end %>
-      <div class="last_id" style="display:none;"><%= @tag_set.tag_set_associations.count %></div>        
+      <div class="last_id" style="display:none;"><%= @tag_set.tag_set_associations.count %></div>
       <p class="actions" role="button">
         <%= link_to_add_section(ts('Add Association'), tag_set_form, :tag_set_associations, "tag_set_association_fields") %>
       </p>
     <% end %>
   </fieldset>
-  
+
   <%= submit_fieldset tag_set_form %>
-    
+
 <% end %>

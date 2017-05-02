@@ -16,7 +16,7 @@
           <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup)) %>
         <% else %>
           <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup),
-            data: {confirm: ts("Note: Potential matches will need to be regenerated after your edits."))} %>
+            data: {confirm: ts("Note: Potential matches will need to be regenerated after your edits.")}) %>
         <% end %>
       </li>
     <% end %>
