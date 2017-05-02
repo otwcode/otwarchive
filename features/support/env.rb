@@ -7,6 +7,8 @@
 # This file has been edited by hand :(
 require 'simplecov'
 require 'coveralls'
+require 'cucumber/timecop'
+require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
 Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
 require 'cucumber/rails'
@@ -14,6 +16,9 @@ require 'email_spec'
 require 'email_spec/cucumber'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
+
+# Produce a screen shot for each failure
+require 'capybara-screenshot/cucumber'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -46,6 +51,11 @@ Capybara.configure do |config|
   config.default_max_wait_time = 25
 end
 
+@javascript = false
+Before '@javascript' do
+  @javascript = true
+end
+
 Before '@disable_caching' do
   ActionController::Base.perform_caching = false
 end
@@ -58,4 +68,8 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :transaction
+
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :poltergeist
+
 

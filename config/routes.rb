@@ -1,12 +1,20 @@
 Otwarchive::Application.routes.draw do
 
+  devise_for :admin,
+             module: 'admin',
+             only: :sessions,
+             controllers: { sessions: 'admin/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
+
   #### ERRORS ####
 
   match '/403', to: 'errors#403'
   match '/404', to: 'errors#404'
   match '/422', to: 'errors#422'
   match '/500', to: 'errors#500'
-
 
   #### DOWNLOADS ####
 
@@ -50,6 +58,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :unassigned
     end
+    get :show
   end
   resources :tag_wranglings do
     member do
@@ -71,6 +80,7 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
+      get :reindex
     end
     collection do
       get :show_hidden
@@ -86,7 +96,7 @@ Otwarchive::Application.routes.draw do
       collection do
         put  :update_multiple
         delete :destroy_multiple
-        get  :confirm_destroy_multiple
+        get :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
@@ -120,10 +130,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :activities, only: [:index, :show]
@@ -149,9 +155,12 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        get :check_user
       end
       collection do
         get :notify
+        get :bulk_search
+        post :bulk_search
         post :send_notification
         post :update_user
       end
@@ -221,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end
@@ -270,7 +278,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   #### WORKS ####
 
   resources :works do
@@ -289,6 +296,7 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
+      get :reindex
     end
     resources :bookmarks
     resources :chapters do
@@ -350,7 +358,7 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts, only: [:index]  do
+  resources :gifts, only: [:index] do
     member do
       post :toggle_rejected
     end
@@ -399,17 +407,13 @@ Otwarchive::Application.routes.draw do
     end
     resources :assignments, controller: "challenge_assignments", except: [:new, :edit, :update] do
       collection do
+        get :confirm_purge
         get :generate
         put :set
-        get :purge
+        post :purge
         get :send_out
         put :update_multiple
         get :default_all
-      end
-      member do
-        get :undefault
-        get :cover_default
-        get :uncover_default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -438,12 +442,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :admin_posts
   end
-  resources :locales do
-    collection do
-      get :set
-    end
-  end
-
+  resources :locales, except: :destroy
 
   #### SESSIONS ####
 
@@ -456,7 +455,6 @@ Otwarchive::Application.routes.draw do
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
-
   #### API ####
 
   namespace :api do
@@ -468,7 +466,6 @@ Otwarchive::Application.routes.draw do
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
-
 
   #### MISC ####
 
@@ -521,6 +518,12 @@ Otwarchive::Application.routes.draw do
       get :manage
       post :update_positions
     end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
+    end
   end
   resources :wrangling_guidelines do
     member do
@@ -547,7 +550,6 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-
 
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]

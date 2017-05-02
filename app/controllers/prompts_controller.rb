@@ -70,9 +70,12 @@ class PromptsController < ApplicationController
   end
 
   def load_prompt_from_id
-    @prompt = Prompt.find(params[:id])
+    @prompt = Prompt.find_by_id(params[:id])
+    if @prompt.nil?
+      no_prompt
+      return
+    end
     @challenge_signup = @prompt.challenge_signup
-    no_prompt and return unless @prompt
   end
 
   def no_prompt
@@ -107,10 +110,11 @@ class PromptsController < ApplicationController
 
   def create
     params[:prompt].merge!({:challenge_signup_id => @challenge_signup.id})
+
     if params[:prompt_type] == "offer"
-      @prompt = @challenge_signup.offers.build(params[:prompt])
+      @prompt = @challenge_signup.offers.build(prompt_params)
     else
-      @prompt = @challenge_signup.requests.build(params[:prompt])
+      @prompt = @challenge_signup.requests.build(prompt_params)
     end
     
     if !@challenge_signup.valid?
@@ -125,7 +129,7 @@ class PromptsController < ApplicationController
   end
 
   def update
-    if @prompt.update_attributes(params[:prompt])
+    if @prompt.update_attributes(prompt_params)
       flash[:notice] = 'Prompt was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
@@ -155,4 +159,43 @@ class PromptsController < ApplicationController
     end
   end
 
+  private
+
+  def prompt_params
+    params.require(:prompt).permit(
+      :collection_id,
+      :title,
+      :url,
+      :anonymous,
+      :description,
+      :challenge_signup_id,
+      :any_fandom,
+      :any_character,
+      :any_relationship,
+      :any_freeform,
+      :any_category,
+      :any_rating,
+      :any_warning,
+      tag_set_attributes: [
+        :fandom_tagnames,
+        :updated_at,
+        :character_tagnames,
+        :relationship_tagnames,
+        :freeform_tagnames,
+        :category_tagnames,
+        :rating_tagnames,
+        :warning_tagnames,
+        fandom_tagnames: [],
+        character_tagnames: [],
+        relationship_tagnames: [],
+        freeform_tagnames: [],
+        category_tagnames: [],
+        rating_tagnames: [],
+        warning_tagnames: []
+      ],
+      optional_tag_set_attributes: [
+        :tagnames
+      ]
+    )
+  end
 end

@@ -4,6 +4,14 @@ Given /^I have no collections$/ do
   Collection.delete_all
 end
 
+Given /^the collection "([^\"]*)" is deleted$/ do |collection_title|
+  step %{I am logged in as the owner of "#{collection_title}"}
+  visit edit_collection_path(Collection.find_by_title(collection_title))
+  click_link "Delete Collection"
+  click_button "Yes, Delete Collection"
+  page.should have_content("Collection was successfully deleted.")
+end
+
 When /^I am logged in as the owner of "([^\"]*)"$/ do |collection|
   c = Collection.find_by_title(collection)
   step %{I am logged in as "#{c.owners.first.user.login}"}
@@ -28,9 +36,17 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
   click_button("Add")
 end
 
-When(/^I view the approved collection items page for "(.*?)"$/) do |collection|
+When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
   c = Collection.find_by_title(collection)
-  visit collection_items_path(c, approved: true)
+  if item_status == "approved"
+    visit collection_items_path(c, approved: true)
+  elsif item_status == "rejected"
+    visit collection_items_path(c, rejected: true)
+  elsif item_status == "invited"
+    visit collection_items_path(c, invited: true)  
+  else
+    visit collection_items_path(c)
+  end
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -87,7 +103,7 @@ end
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
-  visit new_collection_url
+  visit new_collection_path
   fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
   fill_in("collection_title", with: title)
 end
@@ -95,6 +111,16 @@ end
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   name = title.gsub(/[^\w]/, '_') if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
+  step %{I submit}
+end
+
+When /^I add (?:a|the) subcollection "([^"]*)"(?: with name "([^"]*)")? to (?:a|the) parent collection named "([^"]*)"$/ do |title, name, parent_name|
+  if Collection.find_by_name(parent_name).nil?
+    step %{I create the collection "#{parent_name}" with name "#{parent_name}"}
+  end
+  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I set up the collection "#{title}" with name "#{name}"}
+  fill_in("collection_parent_name", with: parent_name)
   step %{I submit}
 end
 

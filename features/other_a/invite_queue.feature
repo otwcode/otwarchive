@@ -12,7 +12,7 @@ Feature: Invite queue management
       | user1 | password |
 
   Scenario: Can turn queue off in Admin Settings and it displays as off
-  
+
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "admin_setting_invite_from_queue_enabled"
@@ -21,9 +21,9 @@ Feature: Invite queue management
       And I am on the homepage
     Then I should not see "Get an Invite"
       And I should see "Archive of Our Own"
-  
+
   Scenario: Can turn queue on in Admin Settings and it displays as on
-  
+
     Given I am logged in as an admin
       And account creation requires an invitation
       And I go to the admin-settings page
@@ -34,6 +34,15 @@ Feature: Invite queue management
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
     Then I should see "Request an Invitation"
+
+  Scenario: An admin can delete people from the queue
+
+    Given an invitation request for "invitee@example.org"
+      And I am logged in as an admin
+    When I go to the manage invite queue page
+      And I follow "Delete"
+    Then I should see "Request was removed from the queue."
+      And I should be on the manage invite queue page
 
   Scenario: Visitors can join the queue and check status when invitations are required and the queue is enabled
 
@@ -48,27 +57,27 @@ Feature: Invite queue management
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
-    
+
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "You can search for the email address you signed up with below."
       And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
       And I should not see "You are currently number"
-    
+
     # check your place in the queue - correct address
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
 
   Scenario: Can't add yourself to the queue when queue is off
-  
+
     Given the invitation queue is disabled
     When I go to the invite_requests page
     Then I should not see "Add yourself to the list"
       And I should not see "invite_request_email"
-  
+
   Scenario: Can still check status when queue is off
-  
+
     Given the invitation queue is disabled
       And I am logged out as an admin
     When I go to the invite_requests page
@@ -91,11 +100,11 @@ Feature: Invite queue management
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "You can search for the email address you signed up with below."
       And I should see "If you can't find it, your invitation may have already been emailed to that address;"
-    
+
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
-      And I fill in "invitee_email" with "test@archiveofourown.org"
+      And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
     When I follow "copy and use"
@@ -103,7 +112,8 @@ Feature: Invite queue management
 
     # user uses email invite
     Given I am a visitor
-    Then the email should contain "You've been invited to join our beta!"
+    # "You've" removed from test due to escaping on apostrophes
+    Then the email should contain "been invited to join our beta!"
       And the email should contain "fanart"
       And the email should contain "podfic"
     When I click the first link in the email
@@ -120,9 +130,23 @@ Feature: Invite queue management
       And the email should contain "Welcome to the Archive of Our Own,"
       And the email should contain "newuser"
       And the email should contain "activate your account"
-    
+      And the email should not contain "translation missing"
+
     # user activates account
     When all emails have been delivered
       And I click the first link in the email
     When I am logged in as "newuser" with password "password1"
     Then I should see "Successfully logged in."
+
+  Scenario: You can't request an invitation with an email address that is
+  already attached to an account
+    Given account creation requires an invitation
+      And the invitation queue is enabled
+      And the following activated users exist
+      | login | password    | email            |
+      | fred  | yabadabadoo | fred@bedrock.com |
+    When I am on the homepage
+      And I follow "Get an Invitation"
+      And I fill in "invite_request_email" with "fred@bedrock.com"
+      And I press "Add me to the list"
+    Then I should see "Email is already being used by an account holder."

@@ -1,6 +1,8 @@
-OTW-Archive [![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) [![Codeship Status](https://www.codeship.io/projects/1f7468f0-7e15-0131-c059-7a8d26daf885/status?branch=master)](https://www.codeship.io/projects/14476)
+OTW-Archive
 =========
-The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids. 
+[![Build Status](https://img.shields.io/travis/otwcode/otwarchive/master.svg?label=travis-ci)](https://travis-ci.org/otwcode/otwarchive) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/coveralls/otwcode/otwarchive/master.svg)](https://coveralls.io/github/otwcode/otwarchive?branch=master)
+
+The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 
 Its development is sponsored and managed by the [Organization for Transformative Works](http://transformativeworks.org), a nonprofit organization by and for fans.
 
@@ -28,5 +30,7 @@ We benefit from software and services that are free to use for Open Source proje
 * [Travis CI](https://travis-ci.org/)
 * [Codeship](http://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
+* [BrowserStack](https://www.browserstack.com)
+* [Full list of acknowledgments](ACKNOWLEGMENTS.md)
 
 Thank you kindly!

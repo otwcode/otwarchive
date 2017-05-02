@@ -1,4 +1,5 @@
 class ExternalAuthor < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
 
@@ -20,11 +21,11 @@ class ExternalAuthor < ActiveRecord::Base
     :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
-  
+
   def self.claimed
     where(:is_claimed => true)
   end
-  
+
   def self.unclaimed
     where(:is_claimed => false)
   end
@@ -61,12 +62,22 @@ class ExternalAuthor < ActiveRecord::Base
     external_author_names.each do |external_author_name|
       external_author_name.external_work_creatorships.each do |external_creatorship|
         work = external_creatorship.creation
-        # if previously claimed, don't do it again
+        other_external_creators = work.external_creatorships - [external_creatorship]
+        other_unclaimed_creators = other_external_creators.reject(&:claimed?)
+
+        # if previously claimed by this user, don't do it again
         unless work.users.include?(claiming_user)
-          # remove archivist as owner if still on the work -- might not be if another coauthor already claimed, add user as owner
-          archivist = external_creatorship.archivist
+          # Get the pseud to associate with the work
           pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
-          work.change_ownership(archivist, claiming_user, pseud_to_add)
+
+          # If there are no other unclaimed authors, or if none of the other unclaimed authors have the same archivist,
+          # remove this user's archivist from the work creators, else just add the claiming user
+          claiming_user_archivist = external_creatorship.archivist
+          if other_unclaimed_creators.map(&:archivist).exclude?(claiming_user_archivist)
+            work.change_ownership(claiming_user_archivist, claiming_user, pseud_to_add)
+          else
+            work.add_creator(claiming_user, pseud_to_add)
+          end
           claimed_works << work.id
         end
       end
@@ -125,18 +136,17 @@ class ExternalAuthor < ActiveRecord::Base
 
   def find_or_invite(archivist = nil)
     if self.email
-      matching_user = User.find_by_email(self.email)
+      matching_user = User.find_by_email(self.email) || User.find_by_id(self.user_id)
       if matching_user
         self.claim!(matching_user)
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
+          @invitation = Invitation.new(invitee_email: self.email, external_author: self, creator: User.current_user)
           @invitation.save
         end
       end
     end
-    # eventually we may want to try finding authors by pseud?
   end
 
 end

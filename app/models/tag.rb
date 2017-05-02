@@ -1,5 +1,6 @@
 class Tag < ActiveRecord::Base
-  
+
+  include ActiveModel::ForbiddenAttributesProtection
   include Tire::Model::Search
   # include Tire::Model::Callbacks
   include Searchable
@@ -22,6 +23,66 @@ class Tag < ActiveRecord::Base
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+
+  def self.write_redis_to_database
+    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+      Tag.transaction do
+        batch.each do |id|
+          value = REDIS_GENERAL.get("tag_update_#{id}_value")
+          sql = []
+          sql.push("taggings_count_cache = #{value}") unless value.blank?
+          Tag.where(id: id).update_all(sql.join(",")) unless sql.empty?
+        end
+        REDIS_GENERAL.srem("tag_update", batch)
+      end
+    end
+  end
+
+  def self.taggings_count_expiry(count)
+    # What we are trying to do here is work out a resonable amount of time for a work to be cached for
+    # This should take the number of taggings and divide it by TAGGINGS_COUNT_CACHE_DIVISOR  ( defaults to 1500 )
+    # such that for example 1500, would be naturally be tagged for one minute while 105,000 would be cached for
+    # 70 minutes. However we then apply a filter such that the minimum amount of time we will cache something for
+    # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
+    # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
+    expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+  end
+
+  def taggings_count_cache_key
+    "/v1/taggings_count/#{id}"
+  end
+
+  def write_taggings_to_redis(value)
+    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.set("tag_update_#{id}_value", value)
+    value
+  end
+
+  def taggings_count=(value)
+    expiry_time = Tag.taggings_count_expiry(value)
+    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    write_taggings_to_redis(value)
+  end
+
+  def taggings_count
+    cache_read = Rails.cache.read(taggings_count_cache_key)
+    return cache_read unless cache_read.nil?
+    real_value = taggings.length
+    self.taggings_count = real_value
+    real_value
+  end
+
+  def update_tag_cache
+    cache_read = Rails.cache.read(taggings_count_cache_key)
+    taggings_count if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+  end
+
+  def update_counts_cache(id)
+    tag = Tag.find(id)
+    tag.taggings_count = tag.taggings.length
+  end
 
   acts_as_commentable
   def commentable_name
@@ -87,7 +148,7 @@ class Tag < ActiveRecord::Base
   has_many :set_taggings, :dependent => :destroy
   has_many :tag_sets, :through => :set_taggings
   has_many :owned_tag_sets, :through => :tag_sets
-  
+
   has_many :tag_set_associations, :dependent => :destroy
   has_many :parent_tag_set_associations, :class_name => 'TagSetAssociation', :foreign_key => 'parent_tag_id', :dependent => :destroy
 
@@ -102,7 +163,7 @@ class Tag < ActiveRecord::Base
     :message => 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_presence_of :sortable_name
-    
+
   validate :unwrangleable_status
   def unwrangleable_status
     if unwrangleable? && (canonical? || merger_id.present?)
@@ -201,7 +262,7 @@ class Tag < ActiveRecord::Base
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL")
-  scope :in_use, where("canonical = 1 OR taggings_count > 0")
+  scope :in_use, where("canonical = 1 OR taggings_count_cache > 0")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
 
   # Tags that have sub tags
@@ -225,7 +286,7 @@ class Tag < ActiveRecord::Base
 
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
-  scope :by_popularity, order('taggings_count DESC')
+  scope :by_popularity, order('taggings_count_cache DESC')
   scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
@@ -242,7 +303,7 @@ class Tag < ActiveRecord::Base
   scope :with_parents, lambda {|parents|
     joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:value_of) ? parents.value_of(:id) : parents.collect(&:id)))
   }
-  
+
   scope :with_no_parents,
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
@@ -345,9 +406,9 @@ class Tag < ActiveRecord::Base
   scope :offered_in_challenge, lambda {|collection|
     in_challenge(collection, 'Offer')
   }
-  
+
   # Resque
-  
+
   @queue = :utilities
   # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
@@ -375,9 +436,9 @@ class Tag < ActiveRecord::Base
            INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
            INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id
            INNER JOIN prompt_restrictions ON (prompt_restrictions.id = owned_set_taggings.set_taggable_id AND owned_set_taggings.set_taggable_type = 'PromptRestriction')").
-    where("prompt_restrictions.id = ?", restriction.id)           
+    where("prompt_restrictions.id = ?", restriction.id)
   end
-  
+
   def self.by_name_without_articles(fieldname = "name")
     fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
     order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
@@ -386,26 +447,26 @@ class Tag < ActiveRecord::Base
             else #{fieldname}
             end")
   end
-  
+
   def self.in_tag_set(tag_set)
     if tag_set.is_a?(OwnedTagSet)
       joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.tag_set_id)
     else
       joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.id)
-    end      
+    end
   end
-  
-  # gives you [parent_name, child_name], [parent_name, child_name], ...  
+
+  # gives you [parent_name, child_name], [parent_name, child_name], ...
   def self.parent_names(parent_type = 'fandom')
     joins(:parents).where("parents_tags.type = ?", parent_type.capitalize).
     select("parents_tags.name as parent_name, tags.name as child_name").
     by_name_without_articles("parent_name").
     by_name_without_articles("child_name")
   end
-  
+
   # Because this can be called by a gigantor tag set and all we need are names not objects,
-  # we do an end-run around ActiveRecord and just get the results straight from the db, but 
-  # we borrow the sql from parent_names above 
+  # we do an end-run around ActiveRecord and just get the results straight from the db, but
+  # we borrow the sql from parent_names above
   # returns a hash[parent_name] = child_names
   def self.names_by_parent(child_relation, parent_type = 'fandom')
     hash = {}
@@ -434,7 +495,7 @@ class Tag < ActiveRecord::Base
     prefixes = [ "autocomplete_tag_#{type.downcase}", "autocomplete_tag_all" ]
     prefixes
   end
-  
+
   def add_to_autocomplete(score = nil)
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
@@ -453,7 +514,7 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   def remove_stale_from_autocomplete
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
@@ -466,19 +527,19 @@ class Tag < ActiveRecord::Base
   def self.parse_autocomplete_value(current_autocomplete_value)
     current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
   end
-  
+
 
   def autocomplete_score
-    taggings_count
+    taggings_count_cache
   end
-  
+
   # look up tags that have been wrangled into a given fandom
   def self.autocomplete_fandom_lookup(options = {})
     options.reverse_merge!({:term => "", :tag_type => "character", :fandom => "", :fallback => true})
     search_param = options[:term]
     tag_type = options[:tag_type]
     fandoms = Tag.get_search_terms(options[:fandom])
-      
+
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
@@ -498,7 +559,7 @@ class Tag < ActiveRecord::Base
       results
     end
   end
-  
+
   ## END AUTOCOMPLETE
 
 
@@ -578,18 +639,18 @@ class Tag < ActiveRecord::Base
 
   # Usage is either:
   # reindex_taggables
-  # 
+  #
   # or:
-  # reindex taggables do 
+  # reindex taggables do
   #   # some other code
   # end
   #
-  # If you use the second method, what will happen is that the ids of the works and 
+  # If you use the second method, what will happen is that the ids of the works and
   # bookmarks that need to be re-indexed for the search engine will first be saved,
   # then the code will be executed, and then the works/bookmarks will be sent off for
   # reindexing. (that's what the "yield" does -- it yields to the block you pass in)
-  # 
-  # Otherwise, if you removed the works from this tag in the code, you wouldn't have 
+  #
+  # Otherwise, if you removed the works from this tag in the code, you wouldn't have
   # a way of finding their ids to reindex them. :)
   def reindex_taggables
     work_ids = all_filtered_work_ids
@@ -603,7 +664,7 @@ class Tag < ActiveRecord::Base
   # if work_ids are passed in, those will be used (eg if we need to save the ids before making changes, then
   # reindex after the changes are done)
   def reindex_all_works(work_ids = [])
-    if work_ids.empty? 
+    if work_ids.empty?
       work_ids = all_filtered_work_ids
     end
     RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
@@ -613,11 +674,11 @@ class Tag < ActiveRecord::Base
   # by this tag or its subtags/synonyms
   def all_filtered_work_ids
     # all synned and subtagged works should be under filter taggings
-    # add in the direct works for any noncanonical tags    
-    (self.filter_taggings.where(:filterable_type => "Work").value_of(:filterable_id) +      
+    # add in the direct works for any noncanonical tags
+    (self.filter_taggings.where(:filterable_type => "Work").value_of(:filterable_id) +
       self.works.value_of(:id)).uniq
   end
-  
+
   # Reindex all bookmarks (bookmark_ids argument works as above)
   def reindex_all_bookmarks(bookmark_ids = [])
     if bookmark_ids.empty?
@@ -625,48 +686,17 @@ class Tag < ActiveRecord::Base
     end
     RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
   end
-  
+
   # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
-  # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around 
+  # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around
   # Per discussion with TW chair Emilie, I'm limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop
   # That means that if we ever have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
   # have that much nesting anyway -- current max is 4 we think
   def all_bookmark_ids(depth = 0)
     return [] if depth == 10
-    self.bookmarks.value_of(:id) + 
-      self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten + 
+    self.bookmarks.value_of(:id) +
+      self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten +
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
-  end
-  
-  
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
-      if tag.filter
-        to_add = tag.works - tag.filter.filtered_works
-        to_add.each do |work|
-          tag.filter.filter_taggings.create!(:filterable => work)
-        end
-      end
-    end
-  end
-
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    i = Work.posted.count
-    Work.find_each(:conditions => "posted = 1") do |work|
-      begin
-        should_have = work.tags.collect(&:filter).compact.uniq
-        should_add = should_have - work.filters
-        unless should_add.empty?
-          puts "Fixing work #{i}"
-          work.filters = (work.filters + should_add).uniq
-        end
-      rescue
-        puts "Problem with work #{work.id}"
-      end
-      i = i - 1
-    end
   end
 
   # The version of the tag that should be used for filtering, if any
@@ -691,10 +721,10 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   # this tag was canonical and now isn't anymore
   # move the filter taggings from this tag to its new synonym and
-  # update the search index for the works under this tag and its subtags 
+  # update the search index for the works under this tag and its subtags
   def move_filter_taggings_to_merger
     # we pass the code to be done to reindex taggables so the work and bookmark ids that will need to be reindexed
     # get saved BEFORE we change the merger in all the filters!
@@ -726,40 +756,40 @@ class Tag < ActiveRecord::Base
   end
 
   # Add filter taggings for a given tag
-  # This is currently called only if this tag has just become canonical 
+  # This is currently called only if this tag has just become canonical
   def add_filter_taggings
     # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
     # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
-    if filter_tag  && !filter_tag.new_record?
-      # we collect tags for resetting count so that it's only done once after we've added all filters to works
-      tags_that_need_filter_count_reset = []
-      self.works.each do |work|
-        if work.filters.include?(filter_tag)
-          # If the work filters already included the filter tag (e.g. because the
-          # new filter tag is a meta tag of an existing tag) we make sure to set
-          # the inheritance to false, since the work is now directly tagged with
-          # the filter or one of its synonyms
-          ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
-          ft.update_attribute(:inherited, false)
-        else
-          work.filters << filter_tag
-          tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
-        end
-        unless filter_tag.meta_tags.empty?
-          filter_tag.meta_tags.each do |m|
-            unless work.filters.include?(m)
-              work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
-              tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
-            end
+    return unless filter_tag  && !filter_tag.new_record?
+
+    # we collect tags for resetting count so that it's only done once after we've added all filters to works
+    tags_that_need_filter_count_reset = []
+    self.works.each do |work|
+      if work.filters.include?(filter_tag)
+        # If the work filters already included the filter tag (e.g. because the
+        # new filter tag is a meta tag of an existing tag) we make sure to set
+        # the inheritance to false, since the work is now directly tagged with
+        # the filter or one of its synonyms
+        ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+        ft.update_attribute(:inherited, false)
+      else
+        work.filters << filter_tag
+        tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
+      end
+      unless filter_tag.meta_tags.empty?
+        filter_tag.meta_tags.each do |m|
+          unless work.filters.include?(m)
+            work.filter_taggings.create!(inherited: true, filter_id: m.id)
+            tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
           end
         end
       end
-      
+
       # make sure that all the works and bookmarks under this tag get reindexed
       # for filtering/searching
       async(:reindex_taggables)
-      
+
       tags_that_need_filter_count_reset.each do |tag_to_reset|
         tag_to_reset.reset_filter_count
       end
@@ -770,9 +800,9 @@ class Tag < ActiveRecord::Base
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter_id=nil)
-    # we're going to have to reindex all the taggables that WERE attached to this work after 
+    # we're going to have to reindex all the taggables that WERE attached to this work after
     # we do this
-    reindex_taggables do     
+    reindex_taggables do
       if old_filter_id
         old_filter = Tag.find(old_filter_id)
         # An old merger of a tag needs to be removed
@@ -818,7 +848,7 @@ class Tag < ActiveRecord::Base
   def inherit_meta_filters(meta_tag_id)
     meta_tag = Tag.find_by_id(meta_tag_id)
     return unless meta_tag.present?
-    self.filtered_works.each do |work|        
+    self.filtered_works.each do |work|
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
         RedisSearchIndexQueue.reindex(work, priority: :low)
@@ -827,23 +857,21 @@ class Tag < ActiveRecord::Base
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    unless admin_settings.suspend_filter_counts?
-      current_filter = self.filter
-      # we only need to cache values for user-defined tags
-      # because they're the only ones we access
-      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-        attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
-          :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
-        if current_filter.filter_count
-          unless current_filter.filter_count.update_attributes(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        else
-          unless current_filter.create_filter_count(attributes)
-            raise "Filter count error for #{current_filter.name}"
-          end
-        end
+    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    return if admin_settings.suspend_filter_counts?
+    current_filter = filter
+    # we only need to cache values for user-defined tags
+    # because they're the only ones we access
+    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
+    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
+                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
+    if current_filter.filter_count
+      unless current_filter.filter_count.update_attributes(attributes)
+        raise "Filter count error for #{current_filter.name}"
+      end
+    else
+      unless current_filter.create_filter_count(attributes)
+        raise "Filter count error for #{current_filter.name}"
       end
     end
   end
@@ -885,7 +913,7 @@ class Tag < ActiveRecord::Base
   def has_parent?(tag)
     self.common_taggings.where(:filterable_id => tag.id).count > 0
   end
-  
+
   def has_child?(tag)
     self.child_taggings.where(:common_tag_id => tag.id).count > 0
   end
@@ -899,7 +927,7 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag_id)
     tag = Tag.find(tag_id)
@@ -921,7 +949,7 @@ class Tag < ActiveRecord::Base
     tag.touch
     self.touch
   end
-  
+
   # Making this asynchronous
   def update_meta_filters(meta_tag)
     async(:remove_meta_filters, meta_tag.id)
@@ -971,7 +999,7 @@ class Tag < ActiveRecord::Base
     end
     true
   end
-  
+
   def remove_canonical_associations
     self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
     self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
@@ -989,7 +1017,12 @@ class Tag < ActiveRecord::Base
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = Tag.find_by_name(name)
-      self.add_association(parent) if parent && parent.canonical?
+      if parent && parent.canonical?
+        add_association(parent)
+      else
+        errors.add(:base, "Cannot add association: '#{name}' tag " +
+          (parent ? "is not canonical." : "does not exist."))
+      end
     end
   end
 
@@ -1061,11 +1094,11 @@ class Tag < ActiveRecord::Base
 
 
   # When we make this tag a synonym of another canonical tag, we want to move all the associations this tag has
-  # (subtags, meta tags, etc) over to that canonical tag. 
+  # (subtags, meta tags, etc) over to that canonical tag.
   # We also need to make sure that the works under those other tags get reindexed
   def add_merger_associations
-    # we want to pass this whole block to reindex_taggables so we get the right work_ids 
-    reindex_taggables do 
+    # we want to pass this whole block to reindex_taggables so we get the right work_ids
+    reindex_taggables do
       new_merger = self.merger
       return unless new_merger.present?
       ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
@@ -1082,7 +1115,7 @@ class Tag < ActiveRecord::Base
       self.sub_tags = []
     end
   end
-  
+
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
@@ -1107,7 +1140,7 @@ class Tag < ActiveRecord::Base
     series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
-  
+
   #################################
   ## SEARCH #######################
   #################################
@@ -1119,7 +1152,7 @@ class Tag < ActiveRecord::Base
     indexes :type
     indexes :canonical,    :type     => :boolean
   end
-  
+
   def self.search(options={})
     tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
       query do
@@ -1130,7 +1163,6 @@ class Tag < ActiveRecord::Base
         end
       end
     end
-  end  
+  end
 
 end
-
