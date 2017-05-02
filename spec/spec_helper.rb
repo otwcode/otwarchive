@@ -81,6 +81,7 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_AUTOCOMPLETE.flushall
   # Finally elastic search
   Tire::Model::Search.index_prefix Time.now.to_f.to_s
 end
