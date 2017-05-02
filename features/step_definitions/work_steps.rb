@@ -265,7 +265,7 @@ When /^a chapter is set up for "([^"]*)"$/ do |work_title|
 end
 
 # meant to be used in conjunction with above step
-When /^I post the draft chapter$/ do
+When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
   Tag.write_redis_to_database
@@ -462,7 +462,7 @@ end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
-  check("Add co-authors?")
+  check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 

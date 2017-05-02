@@ -279,6 +279,7 @@ Feature: Edit chapters
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
 
+
   Scenario: Users can't set a chapter publication date that is in the future, e.g. set 
   the date to April 30 when it is April 26
     Given I am logged in
@@ -289,3 +290,21 @@ Feature: Edit chapters
       And I press "Post Without Preview"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
+
+
+  Scenario: You should be able to add a chapter with a co-creator who has an
+  ambiguous pseud
+
+    Given "thebadmom" has the pseud "sharon"
+      And "thegoodmom" has the pseud "sharon"
+      And I am logged in as "rusty"
+      And I post the work "Rusty Has Two Moms"
+    When a chapter is set up for "Rusty Has Two Moms"
+      And I add the co-author "sharon"
+      And I post the chapter
+    When I select "thegoodmom" from "There's more than one user with the pseud sharon."
+      And I press "Preview"
+    Then I should see "Preview"
+      And I should see "Chapter by rusty, sharon (thegoodmom)"
+    When I press "Post"
+    Then I should see "rusty, sharon (thegoodmom)"
