@@ -321,7 +321,7 @@ Feature: Edit chapters
       And I post the work "Past Friends"
       And a chapter with the co-author "sabrina" is added to "Past Friends"
       And a chapter is added to "Past Friends"
-   When I view the work "Past Friends"
+    When I view the work "Past Friends"
       And I view the 3rd chapter
     Then I should see "Chapter by karma"
     When I follow "Edit Chapter"
@@ -342,6 +342,66 @@ Feature: Edit chapters
     Then I should see "Chapter co-creators"
       And the "sabrina" checkbox should be checked
       And the "sabrina" checkbox should be disabled
+
+
+  Scenario: You should be able to add a chapter with two co-creators, one of
+  whom is already on the work and the other of whom is not
+
+    Given I am logged in as "rusty"
+      And I set up the draft "Rusty Has Two Moms"
+      And I add the co-author "brenda"
+      And I post the work without preview
+    When a chapter is set up for "Rusty Has Two Moms"
+      And I add the co-author "sharon"
+      And I check "brenda"
+      And I post the chapter
+    Then I should see "brenda, rusty, sharon"
+    When I follow "Previous Chapter"
+    Then I should see "Chapter 1"
+      And I should see "by brenda, rusty"
+      And I should not see "by brenda, rusty, sharon"
+
+  Scenario: You should be able to add a chapter with two co-creators who are not
+  on the work, one of whom has an ambiguous pseud
+
+    Given "thebadmom" has the pseud "sharon"
+      And "thegoodmom" has the pseud "sharon"
+      And I am logged in as "rusty"
+      And I post the work "Rusty Has Two Moms"
+    When a chapter is set up for "Rusty Has Two Moms"
+      And I add the co-authors "sharon" and "brenda"
+      And I post the chapter
+    When "AO3-4998" is fixed
+    # Then I should see "Please verify the names of your co-authors"
+    # When I select "thegoodmom" from "There's more than one user with the pseud sharon."
+    #  And I press "Preview"
+    # Then I should see "Preview"
+    #  And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
+    # When I press "Post"
+    # Then I should see "brenda, rusty, sharon (thegoodmom)"
+
+
+  Scenario: You should be able to add a chapter with two co-creators, one of
+  whom is already on the work and the other of whom has an ambiguous pseud
+
+    Given "thebadmom" has the pseud "sharon"
+      And "thegoodmom" has the pseud "sharon"
+      And I am logged in as "rusty"
+      And I set up the draft "Rusty Has Two Moms"
+      And I add the co-author "brenda"
+      And I post the work without preview
+    When a chapter is set up for "Rusty Has Two Moms"
+      And I add the co-author "sharon"
+      And I check "brenda"
+      And I post the chapter
+    When "AO3-4998" is fixed
+    # Then I should see "Please verify the names of your co-authors"
+    # When I select "thegoodmom" from "There's more than one user with the pseud sharon."
+    #   And I press "Preview"
+    # Then I should see "Preview"
+    #   And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
+    # When I press "Post"
+    # Then I should see "brenda, rusty, sharon (thegoodmom)"
 
 
   Scenario: Users can't set a chapter publication date that is in the future, e.g. set 

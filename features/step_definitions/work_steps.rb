@@ -474,6 +474,12 @@ When /^I add the co-author "([^"]*)"$/ do |coauthor|
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
+When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
+  step %{the user "#{coauthor1}" exists and is activated}
+  step %{the user "#{coauthor2}" exists and is activated}
+  fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
+end
+
 When /^I give the work to "([^"]*)"$/ do |recipient|
   fill_in("work_recipients", with: "#{recipient}")
 end
