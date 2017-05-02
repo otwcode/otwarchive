@@ -27,7 +27,12 @@ module CommentableEntity
   # hidden-by-admin comments.
   # returns number of visible (not deleted) comments
   def count_visible_comments
-    self.total_comments.count(:all, conditions: {hidden_by_admin: false, is_deleted: false, unreviewed: false})
+    self.total_comments.where(
+      hidden_by_admin: false,
+      is_deleted: false,
+      unreviewed: false,
+      approved: true
+    ).count
   end  
 
   # Return the name of this commentable object
