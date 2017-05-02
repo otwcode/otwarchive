@@ -21,5 +21,5 @@ Before do
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  REDIS_AUTOCOMPETE.flushall
+  REDIS_AUTOCOMPLETE.flushall
 end
