@@ -245,7 +245,7 @@ class ChallengeAssignmentsController < ApplicationController
     @challenge_assignment.save
     @challenge_assignment.collection.notify_maintainers("Challenge default by #{@challenge_assignment.offer_byline}",
         "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " +
-        "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_path(@challenge_assignment.collection)}")
+        "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(@user)
   end
