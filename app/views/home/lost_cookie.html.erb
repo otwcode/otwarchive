@@ -3,5 +3,5 @@
 <div class="userstuff">
   <p><%= ts("You have been automatically logged out to protect your privacy.  Please make sure that your browser is set to accept cookies from archiveofourown.org and delete any existing Archive cookies.  If you continue to have problems logging in, please  <a href=\"#{new_feedback_report_url}\">contact Support</a>.".html_safe)  %></p>
   <% page = params[:return_to_url].blank? ? root_path : params[:return_to_url] %>
-  <p><%= link_to(ts('Login returning to %{path}', path: page), new_user_session_path(return_to_url: page)) %></p>
+  <p><%= link_to(ts('Log in and return to %{path}', path: page), new_user_session_path(return_to_url: page)) %></p>
 </div>

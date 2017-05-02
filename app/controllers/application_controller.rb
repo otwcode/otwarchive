@@ -146,7 +146,7 @@ public
     back = session[:return_to]
     session.delete(:return_to)
     if back_url
-      Rails.logger.debug "Returning over riding return to #{back} with #{back_url}"
+      Rails.logger.debug "Returning overriding return to #{back} with #{back_url}"
       back = back_url
     end
     if back
