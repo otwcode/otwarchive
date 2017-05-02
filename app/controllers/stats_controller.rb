@@ -28,10 +28,10 @@ class StatsController < ApplicationController
     sort_options = ""
     @sort = ""
     if current_user.preference.hide_hit_counts
-      sort_options = %w(date kudos.count count_visible_comment_threads bookmarks.count subscriptions.count word_count)
+      sort_options = %w(date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
     else
-      sort_options = %w(hits date kudos.count count_visible_comment_threads bookmarks.count subscriptions.count word_count)
+      sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     end
     

@@ -969,7 +969,7 @@ class Work < ActiveRecord::Base
 
   # Count the number of comment threads visible to the user (i.e. excluding
   # threads that have been marked as spam). Used on the work stats page.
-  def count_visible_comment_threads
+  def comment_thread_count
     comments.where(approved: true).count
   end
 
