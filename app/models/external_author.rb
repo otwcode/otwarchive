@@ -1,5 +1,4 @@
 class ExternalAuthor < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
 

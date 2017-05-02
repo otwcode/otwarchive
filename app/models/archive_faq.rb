@@ -1,5 +1,4 @@
 class ArchiveFaq < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   
   acts_as_list
   translates :title

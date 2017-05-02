@@ -1,5 +1,4 @@
 class Media < Tag
-  include ActiveModel::ForbiddenAttributesProtection
 
   NAME = ArchiveConfig.MEDIA_CATEGORY_NAME
   index_name Tag.index_name

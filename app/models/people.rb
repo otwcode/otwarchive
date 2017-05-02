@@ -1,5 +1,4 @@
 class People
-  include ActiveModel::ForbiddenAttributesProtection
   attr_reader :char
 
   def self.all

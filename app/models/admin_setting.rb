@@ -1,5 +1,4 @@
 class AdminSetting < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by

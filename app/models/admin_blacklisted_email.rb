@@ -1,5 +1,4 @@
 class AdminBlacklistedEmail < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   attr_accessible :email
 

@@ -1,5 +1,4 @@
 class SkinParent < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :child_skin, class_name: "Skin", inverse_of: :skin_parents, touch: true
   belongs_to :parent_skin, class_name: "Skin", inverse_of: :skin_children

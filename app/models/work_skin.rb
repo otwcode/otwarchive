@@ -1,7 +1,6 @@
 include SkinCacheHelper
 
 class WorkSkin < Skin
-  include ActiveModel::ForbiddenAttributesProtection
 
   has_many :works
   after_save :skin_invalidate_cache

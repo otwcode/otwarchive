@@ -1,7 +1,6 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :creator, :polymorphic => true
   belongs_to :invitee, :polymorphic => true
