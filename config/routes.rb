@@ -45,7 +45,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  get 'signup/:invitation_token' => 'users#new', as: 'signup'
+  post 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   get 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -412,10 +412,10 @@ Otwarchive::Application.routes.draw do
       collection do
         get :confirm_purge
         get :generate
-        patch :set
+        put :set
         post :purge
         get :send_out
-        patch :update_multiple
+        put :update_multiple
         get :default_all
       end
     end
