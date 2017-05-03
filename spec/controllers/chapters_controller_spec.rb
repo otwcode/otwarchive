@@ -220,10 +220,10 @@ describe ChaptersController do
     end
 
     it "increments the hit count when accessing the first chapter" do
-      clean_the_database
+      REDIS_GENERAL.set("work_stats:#{@work.id}:last_visitor", nil)
       expect {
         get :show, work_id: @work.id, id: @work.chapters.first.id
-      }.to change { REDIS_GENERAL.get("work_stats:#{@work.id}:hit_count").to_i }.from(0).to(1)
+      }.to change { REDIS_GENERAL.get("work_stats:#{@work.id}:hit_count").to_i }.by(1)
     end
 
     context "when work owner is logged in" do
@@ -334,7 +334,7 @@ describe ChaptersController do
         fake_login_known_user(user)
       end
 
-      it "renders new template" do
+      it "renders edit template" do
         get :edit, work_id: @work.id, id: @work.chapters.first.id
         expect(response).to render_template(:edit)
       end
@@ -380,25 +380,205 @@ describe ChaptersController do
 
   describe "create" do
     before do
-      fake_login_known_user(user)
       @chapter_attributes = { content: "This doesn't matter" }
     end
-    
-    it "adds a new chapter" do
-      expect {
-        post :create, { work_id: @work.id, chapter: @chapter_attributes }
-      }.to change(Chapter, :count)
-      expect(@work.chapters.count).to eq 2
+
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        post :create, work_id: @work.id, chapter: @chapter_attributes
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
     end
-    
-    it "does not allow a user to submit only a pseud that is not theirs" do
-      user2 = create(:user)
-      @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
-      expect {
-        post :create, { work_id: @work.id, chapter: @chapter_attributes }
-      }.to_not change(Chapter, :count)
-      expect(response).to render_template("new")
-      expect(flash[:error]).to eq "You're not allowed to use that pseud."
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "errors and redirects to user page when user is banned" do
+        current_user = create(:user, banned: true)
+        @banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
+        fake_login_known_user(current_user)
+        post :create, work_id: @banned_users_work.id, chapter: @chapter_attributes
+        it_redirects_to(user_path(current_user))
+        expect(flash[:error]).to include("Your account has been banned.")
+      end
+
+
+      it "does not allow a user to submit only a pseud that is not theirs" do
+        user2 = create(:user)
+        @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
+        expect {
+          post :create, work_id: @work.id, chapter: @chapter_attributes
+        }.to_not change(Chapter, :count)
+        expect(response).to render_template("new")
+        expect(flash[:error]).to eq "You're not allowed to use that pseud."
+      end
+
+      it "assigns instance variables correctly" do
+        post :create, work_id: @work.id, chapter: @chapter_attributes
+        expect(assigns[:work]).to eq @work
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+      end
+
+      it "adds a new chapter" do
+        expect {
+          post :create, work_id: @work.id, chapter: @chapter_attributes
+        }.to change(Chapter, :count)
+        expect(@work.chapters.count).to eq 2
+      end
+
+      it "updates the works wip length when given" do
+        @chapter_attributes[:wip_length] = 3
+        expect(@work.wip_length).to eq 1
+        post :create, work_id: @work.id, chapter: @chapter_attributes
+        expect(assigns[:work].wip_length).to eq 3
+      end
+
+      context "when chapter has invalid pseuds" do
+        before do
+          allow_any_instance_of(Chapter).to receive(:invalid_pseuds).and_return([user.pseuds.first])
+        end
+        it "renders choose coauthor if chapter if valid" do
+          post :create, work_id: @work.id, chapter: @chapter_attributes
+          expect(response).to render_template("_choose_coauthor")
+        end
+
+        it "renders new if chapter is not valid" do
+          post :create, work_id: @work.id, chapter: { content: "" }
+          expect(response).to render_template(:new)
+        end
+      end
+
+      context "when chapter has ambiguous pseuds" do
+        before do
+          allow_any_instance_of(Chapter).to receive(:ambiguous_pseuds).and_return([user.pseuds.first])
+        end
+        it "renders choose coauthor if chapter if valid" do
+          post :create, work_id: @work.id, chapter: @chapter_attributes
+          expect(response).to render_template("_choose_coauthor")
+        end
+
+        it "renders new if chapter is not valid" do
+          post :create, work_id: @work.id, chapter: { content: "" }
+          expect(response).to render_template(:new)
+        end
+      end
+
+      it "renders new if the edit button has been clicked" do
+        post :create, work_id: @work.id, chapter: @chapter_attributes, edit_button: true
+        expect(response).to render_template(:new)
+      end
+
+      it "redirects if the cancel button has been clicked" do
+        post :create, work_id: @work.id, chapter: @chapter_attributes, cancel_button: true
+        expect(response).to have_http_status :redirect
+      end
+
+      it "updates the work's major version" do
+        expect(@work.major_version).to eq(1)
+        post :create, work_id: @work.id, chapter: @chapter_attributes
+        expect(assigns[:work].major_version).to eq(2)
+      end
+
+      context "when the post without preview button is clicked" do
+        context "when the chapter and work are valid" do
+          it "posts the chapter" do
+            post :create, work_id: @work.id, chapter: @chapter_attributes, post_without_preview_button: true
+            expect(assigns[:chapter].posted).to be true
+          end
+
+          it "posts the work if the work was not posted before" do
+            @unposted_work = create(:work, authors: [user.pseuds.first])
+            post :create, work_id: @unposted_work.id, chapter: @chapter_attributes, post_without_preview_button: true
+            expect(assigns[:work].posted).to be true
+          end
+
+          it "give a notice and redirects to the posted chapter" do
+            post :create, work_id: @work.id, chapter: @chapter_attributes, post_without_preview_button: true
+            it_redirects_to_with_notice(work_chapter_path(work_id: @work.id, id: assigns[:chapter].id), "Chapter has been posted!")
+          end
+        end
+
+        context "when the chapter or work is not valid" do
+          it "does not add a chapter" do
+            expect {
+              post :create, work_id: @work.id, chapter: { content: "" }, post_without_preview_button: true
+            }.to_not change(Chapter, :count)
+          end
+
+          it "renders new" do
+            post :create, work_id: @work.id, chapter: { content: "" }, post_without_preview_button: true
+            expect(response).to render_template(:new)
+          end
+        end
+
+        it "updates the work's revision date" do
+          post :create, work_id: @work.id, chapter: @chapter_attributes, post_without_preview_button: true
+          expect(assigns[:work].updated_at).not_to eq(@work.updated_at)
+        end
+      end
+
+      context "when the preview button is clicked" do
+        context "when the chapter and work are valid" do
+          it "does not post the chapter" do
+            post :create, work_id: @work.id, chapter: @chapter_attributes, preview_button: true
+            expect(assigns[:chapter].posted).to be false
+          end
+
+          it "give a notice that the chapter is a draft and redirects to the chapter preview" do
+            post :create, work_id: @work.id, chapter: @chapter_attributes, preview_button: true
+            it_redirects_to_with_notice(preview_work_chapter_path(work_id: @work.id, id: assigns[:chapter].id), "This is a draft chapter in a posted work. It will be kept unless the work is deleted.")
+          end
+
+          it "give a notice that the work and chapter are drafts and redirects to the chapter preview" do
+            @unposted_work = create(:work, authors: [user.pseuds.first])
+            post :create, work_id: @unposted_work.id, chapter: @chapter_attributes, preview_button: true
+            it_redirects_to(preview_work_chapter_path(work_id: @unposted_work.id, id: assigns[:chapter].id))
+            expect(flash[:notice]).to include("This is a draft chapter in an unposted work")
+          end
+        end
+
+        context "when the chapter or work is not valid" do
+          it "does not add a chapter" do
+            expect {
+              post :create, work_id: @work.id, chapter: { content: "" }, preview_button: true
+            }.to_not change(Chapter, :count)
+          end
+
+          it "renders new" do
+            post :create, work_id: @work.id, chapter: { content: "" }, preview_button: true
+            expect(response).to render_template(:new)
+          end
+        end
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      context "when the user tries to add themselves as a coauthor" do
+        before do
+          @chapter_attributes[:author_attributes] = {:ids => [user.pseuds.first.id, @current_user.pseuds.first.id]}
+        end
+
+        it "adds a new chapter" do
+          expect {
+            post :create, work_id: @work.id, chapter: @chapter_attributes
+          }.to change(Chapter, :count)
+          expect(@work.chapters.count).to eq 2
+        end
+      end
+
+      it "gives an error when the user is not an owner of the work" do
+        post :create, work_id: @work.id, chapter: @chapter_attributes
+        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+      end
     end
   end
 end
