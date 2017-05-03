@@ -202,7 +202,7 @@ end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
-  visit tag_url(tag)
+  visit tag_path(tag)
   within(".header") do
     click_link("Edit")
   end
@@ -210,7 +210,7 @@ end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
-  visit tag_url(tag)
+  visit tag_path(tag)
 end
 
 When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
