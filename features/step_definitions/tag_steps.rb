@@ -174,6 +174,11 @@ Given(/^the following typed tags exists$/) do |table|
   end
 end
 
+Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
+  tag = Tag.find_by_name(tag_name)
+  tag.destroy if tag.present?
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do

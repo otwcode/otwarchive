@@ -309,14 +309,9 @@ describe ChaptersController do
         fake_login
       end
 
-      it "renders new template" do
+      it "errors and redirects to work" do
         get :new, work_id: @work.id
-        expect(response).to render_template(:new)
-      end
-
-      it "gives a error when the user is not an owner of the work" do
-        get :new, work_id: @work.id
-        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
   end
@@ -371,9 +366,9 @@ describe ChaptersController do
         fake_login
       end
 
-      it "gives an error when the user is not an owner of the work" do
+      it "errors and redirects to work" do
         get :edit, work_id: @work.id, id: @work.chapters.first.id
-        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
   end
@@ -567,17 +562,27 @@ describe ChaptersController do
           @chapter_attributes[:author_attributes] = {:ids => [user.pseuds.first.id, @current_user.pseuds.first.id]}
         end
 
-        it "adds a new chapter" do
-          expect {
-            post :create, work_id: @work.id, chapter: @chapter_attributes
-          }.to change(Chapter, :count)
-          expect(@work.chapters.count).to eq 2
+        it "errors and redirects to work" do
+          post :create, work_id: @work.id, chapter: @chapter_attributes
+          it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
+    end
+  end
+  
+  describe "update" do
+    before do
+      @chapter_attributes = { content: "This doesn't matter" }
+    end
 
-      it "gives an error when the user is not an owner of the work" do
-        post :create, work_id: @work.id, chapter: @chapter_attributes
-        expect(flash[:error]).to eq("You're not allowed to use that pseud.")
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "errors and redirects to work" do
+        put :update, work_id: @work.id, id: @work.chapters.first.id, chapter: @chapter_attributes
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
   end

@@ -1,4 +1,5 @@
 language: ruby
+dist: trusty
 cache: bundler
 sudo: required
 env:
@@ -32,6 +33,7 @@ script:
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
+  - bash script/travis_multiple_redis.sh
 notifications:
   email:
     recipients:
