@@ -12,7 +12,7 @@
 	  <% end %>
     <% if (@tag_set.nominated && @tag_set_nomination.unreviewed?) || @tag_set.user_is_moderator?(current_user) %>
       <li>
-        <%= link_to ts("Delete"), confirm_delete_tag_set_nomination_path(@tag_set),
+        <%= link_to ts("Delete"), confirm_delete_tag_set_nomination_path(@tag_set, @tag_set_nomination),
             data: {confirm: ts('Are you certain you want to delete these nominations?')} %>
       </li>
     <% end %>

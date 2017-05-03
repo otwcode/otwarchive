@@ -6,7 +6,7 @@
   <p><%= ts("Are you certain you want to delete these nominations?") %></p>
   <p>
     <%= f.submit ts("Yes, Delete Tag Set Nominations") %>
-    <%= link_to ts("Back to the Tag Set Nominations"), tag_set_nomination_path(@tag_set) %>
+    <%= link_to ts("Back to the Tag Set Nominations"), tag_set_nomination_path(@tag_set, @tag_set_nomination) %>
   </p>
 <% end %>
 <!--/content-->

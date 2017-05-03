@@ -94,7 +94,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        patch  :update_multiple
+        put  :update_multiple
         delete :destroy_multiple
         get :confirm_destroy_multiple
       end
@@ -104,12 +104,12 @@ Otwarchive::Application.routes.draw do
     end
     resources :associations, controller: 'tag_set_associations', only: [:index] do
       collection do
-        patch :update_multiple
+        put :update_multiple
       end
     end
     member do
       get :batch_load
-      patch :do_batch_load
+      put :do_batch_load
       get :confirm_delete
     end
     collection do
@@ -290,7 +290,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :preview
       post :post
-      patch :post_draft
+      put :post_draft
       get :navigate
       get :edit_tags
       get :preview_tags
