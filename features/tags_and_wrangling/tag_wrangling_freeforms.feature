@@ -56,12 +56,8 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # editing non-canonical freeform in order to syn it to existing canonical merger
   When I follow "Pirate AU"
     And I follow "Edit"
-    And I enter "Alternate Universe " in the "Synonym of" autocomplete field
-  Then I should see "Alternate Universe Pirates" in the autocomplete
-  When I fill in "Synonym of" with "Alternate Universe Pirates"
-    And I enter "No" in the "tag_fandom_string_autocomplete" autocomplete field
-  Then I should see "No Fandom" in the autocomplete
-  When I choose "No Fandom" from the "tag_fandom_string_autocomplete" autocomplete
+    And I choose "Alternate Universe Pirates" from the "Synonym of" autocomplete
+    And I choose "No Fandom" from the "tag_fandom_string_autocomplete" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
 
@@ -70,8 +66,6 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "No Fandom"
     And I should see "Pirate AU"
     And the "Canonical" checkbox should be disabled
-  When I enter "Arrr" in the "tag_merger_string_autocomplete" autocomplete field
-  Then I should see "Arrr-verse" in the autocomplete
   When I choose "Arrr-verse" from the "tag_merger_string_autocomplete" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -99,9 +93,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "Alternate Universe Pirates"
   Then I should see "Alternate Universe" within "div#parent_MetaTag_associations_to_remove_checkboxes"
   When I edit the tag "Alternate Universe Space Pirates"
-    And I enter "Alternate Universe P" in the "MetaTags" autocomplete field
-  Then I should see "Alternate Universe Pirates" in the autocomplete
-  When I fill in "MetaTags" with "Alternate Universe Pirates"
+    And I choose "Alternate Universe Pirates" from the "MetaTags" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I follow "Alternate Universe Pirates"

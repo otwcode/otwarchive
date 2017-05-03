@@ -80,12 +80,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   # editing non-canonical relationship in order to syn it to existing canonical merger AND add characters
   When I follow "Jack/Ianto"
     And I follow "Edit"
-    And I enter "Jack H" in the "Synonym of" autocomplete field
-  Then I should see "Jack Harkness/Ianto Jones" in the autocomplete
-  When I fill in "Synonym of" with "Jack Harkness/Ianto Jones"
-    And I enter "Jack H" in the "Characters" autocomplete field
-  Then I should see "Jack Harkness" in the autocomplete
-  When I fill in "Characters" with "Jack Harkness, Ianto Jones"
+    And I choose "Jack Harkness/Ianto Jones" from the "Synonym of" autocomplete
+    And I choose "Jack Harkness" from the "Characters" autocomplete
+    And I choose "Ianto Jones" from the "Characters" autocomplete
     And I choose "Torchwood" from the "Fandoms" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"

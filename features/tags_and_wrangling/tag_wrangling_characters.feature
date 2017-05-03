@@ -90,10 +90,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I enter "First" in the "Synonym of" autocomplete field
   Then I should see "First Doctor" in the autocomplete
     But I should not see "The First Doctor" in the autocomplete
-  When I fill in "Synonym of" with "First Doctor"
-    And I enter "Doc" in the "Fandoms" autocomplete field
-  Then I should see "Doctor Who" in the autocomplete
-  When I fill in "Fandoms" with "Doctor Who"
+  When I choose "First Doctor" from the "Synonym of" autocomplete
+    And I choose "Doctor Who" from the "Fandoms" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
 
@@ -122,9 +120,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I check "Canonical"
     And I choose "Character"
     And I press "Create Tag"
-    And I enter "First " in the "SubTags" autocomplete field
-  Then I should see "First Doctor" in the autocomplete
-  When I fill in "SubTags" with "First Doctor"
+    And I choose "First Doctor" from the "SubTags" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I follow "First Doctor"

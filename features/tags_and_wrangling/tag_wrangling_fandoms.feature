@@ -60,10 +60,8 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I enter "Stargate" in the "Synonym of" autocomplete field
   Then I should see "Stargate Atlantis" in the autocomplete
     And I should see "Stargate SG-1" in the autocomplete
-  When I fill in "Synonym of" with "Stargate SG-1"
-  When I enter "TV" in the "tag_media_string_autocomplete" autocomplete field
-    Then I should see "TV Shows" in the autocomplete
-  When I choose "TV Shows" from the "tag_media_string_autocomplete" autocomplete
+  When I choose "Stargate SG-1" from the "Synonym of" autocomplete
+    And I choose "TV Shows" from the "tag_media_string_autocomplete" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
 
