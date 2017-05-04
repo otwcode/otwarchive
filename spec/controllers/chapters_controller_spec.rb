@@ -596,7 +596,6 @@ describe ChaptersController do
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
-
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
         @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
@@ -694,8 +693,7 @@ describe ChaptersController do
             expect(assigns[:chapter].posted).to be true
           end
 
-          it "posts the work if the work was not posted before" do
-            pending "work should post if chapter is posted"
+          xit "posts the work if the work was not posted before" do
             @unposted_work = create(:work, authors: [user.pseuds.first])
             put :update, work_id: @unposted_work.id, id: @unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true
             expect(assigns[:work].posted).to be true
@@ -752,6 +750,50 @@ describe ChaptersController do
         it "errors and redirects to work" do
           put :update, work_id: @work.id, id: @work.chapters.first.id, chapter: @chapter_attributes
           it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+    end
+  end
+
+  describe "update_positions" do
+    before do
+      @chapter1 = @work.chapters.first
+      @chapter2 = create(:chapter, work: @work, posted: true, position: 2, authors: [user.pseuds.first])
+      @chapter3 = create(:chapter, work: @work, posted: true, position: 3, authors: [user.pseuds.first])
+    end
+
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        post :update_positions, work_id: @work.id, chapter: [ @chapter1, @chapter3, @chapter2 ]
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      context "when passing params[:chapters]" do
+        it "updates the positions of the chapters" do
+          post :update_positions, work_id: @work.id, chapters: [ 1, 3, 2]
+          expect(@chapter1.reload.position).to eq(1)
+          expect(@chapter2.reload.position).to eq(3)
+          expect(@chapter3.reload.position).to eq(2)
+        end
+
+        it "gives a notice and redirects to work" do
+          post :update_positions, work_id: @work.id, chapters: [ 1, 3, 2]
+          it_redirects_to_with_notice(@work, "Chapter order has been successfully updated.")
+        end
+      end
+
+      context "when passing params[:chapter]" do
+        it "updates the positions of the chapters" do
+          post :update_positions, work_id: @work.id, chapter: [ @chapter1, @chapter3, @chapter2 ], format: :json
+          expect(@chapter1.reload.position).to eq(1)
+          expect(@chapter2.reload.position).to eq(3)
+          expect(@chapter3.reload.position).to eq(2)
         end
       end
     end
