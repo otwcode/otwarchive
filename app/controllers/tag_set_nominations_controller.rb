@@ -4,7 +4,7 @@ class TagSetNominationsController < ApplicationController
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
   before_filter :check_pseud_ownership, :only => [:create, :update]
-  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]
+  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy, :confirm_delete]
   before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
@@ -185,6 +185,9 @@ class TagSetNominationsController < ApplicationController
     if @tag_set.tag_nominations.unreviewed.empty?
       flash[:notice] = ts("No nominations to review!")
     end
+  end
+
+  def confirm_delete
   end
 
   def confirm_destroy_multiple
