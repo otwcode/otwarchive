@@ -1,7 +1,7 @@
 <!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
 <li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% # remember to update collection_sweeper and challenge_signup_sweeper if you change this %>
-  <% cache("collection-blurb-#{collection.id}-v2") do %>
+  <% cache("collection-blurb-#{collection.id}-v3") do %>
     <div class="header module group">
       <h4 class="heading">
         <%= link_to collection.title, collection_path(collection) %>

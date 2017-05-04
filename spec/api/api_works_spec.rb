@@ -5,21 +5,15 @@ include ApiHelper
 
 describe "API WorksController - Create works" do
 
-  # Override is_archivist so all users are archivists from this point on
-  class User < ActiveRecord::Base
-    def is_archivist?
-      true
-    end
-  end
-
   describe "API import with a valid archivist" do
-    before do
+    before :all do
       mock_external
-      @user = create(:user)
+      @user = create_archivist
     end
 
-    after do
+    after :all do
       WebMock.reset!
+      @user.destroy
     end
 
     it "should not support the deprecated /import end-point", type: :routing do
@@ -111,9 +105,8 @@ describe "API WorksController - Create works" do
     describe "Provided API metadata should be used if present" do
       before(:all) do
         mock_external
-        user = create(:user)
         post "/api/v1/works",
-             { archivist: user.login,
+             { archivist: @user.login,
                works: [{ id: "123",
                          title: api_fields[:title],
                          summary: api_fields[:summary],
@@ -178,9 +171,8 @@ describe "API WorksController - Create works" do
     describe "Metadata should be extracted from content if no API metadata is supplied" do
       before(:all) do
         mock_external
-        user = create(:user)
         post "/api/v1/works",
-             { archivist: user.login,
+             { archivist: @user.login,
                works: [{ external_author_name: api_fields[:external_author_name],
                          external_author_email: api_fields[:external_author_email],
                          chapter_urls: ["http://foo"] }]
@@ -239,9 +231,8 @@ describe "API WorksController - Create works" do
     describe "Imports should use fallback values or nil if no metadata is supplied" do
       before(:all) do
         mock_external
-        user = create(:user)
         post "/api/v1/works",
-             { archivist: user.login,
+             { archivist: @user.login,
                works: [{ external_author_name: api_fields[:external_author_name],
                          external_author_email: api_fields[:external_author_email],
                          chapter_urls: ["http://no-metadata"] }]
@@ -301,9 +292,8 @@ describe "API WorksController - Create works" do
     describe "Provided API metadata should be used if present and tag detection is turned off" do
       before(:all) do
         mock_external
-        user = create(:user)
         post "/api/v1/works",
-             { archivist: user.login,
+             { archivist: @user.login,
                works: [{ id: "123",
                          title: api_fields[:title],
                          detect_tags: false,
@@ -375,9 +365,8 @@ describe "API WorksController - Create works" do
     describe "Some fields should be detected and others use fallback values or nil if no metadata is supplied and tag detection is turned off" do
       before(:all) do
         mock_external
-        user = create(:user)
         post "/api/v1/works",
-             { archivist: user.login,
+             { archivist: @user.login,
                works: [{ external_author_name: api_fields[:external_author_name],
                          external_author_email: api_fields[:external_author_email],
                          detect_tags: false,
@@ -440,6 +429,10 @@ end
 describe "API WorksController - Find Works" do
   before do
     @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
+  end
+
+  after do
+    @work.destroy
   end
 
   describe "valid work URL request" do

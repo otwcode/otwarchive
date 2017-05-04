@@ -45,7 +45,7 @@ end
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
+  visit work_path(work)
   fill_in("comment[content]", with: comment_text)
 end
 
@@ -128,6 +128,10 @@ end
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
   step %{I follow "Yes, delete!"}
+end
+
+When /^I view the latest comment$/ do
+  visit comment_path(Comment.last)
 end
 
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
