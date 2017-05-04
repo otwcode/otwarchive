@@ -9,10 +9,10 @@ describe WorksController do
     let(:work) { create(:work) }
 
     context "if the user is an admin or tag wrangler" do
-      let(:user) { create(:user) }
+      let(:admin) { create(:admin) }
 
       before do
-        fake_login_admin(user)
+        fake_login_admin(admin)
       end
 
       it "should queue the work for reindex" do
