@@ -61,10 +61,8 @@ Otwarchive::Application.routes.draw do
     get :show
   end
   resources :tag_wranglings do
-    member do
-      post :wrangle
-    end
     collection do
+      post :wrangle
       get :discuss
     end
   end

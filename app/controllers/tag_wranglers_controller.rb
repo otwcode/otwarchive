@@ -28,10 +28,10 @@ class TagWranglersController < ApplicationController
         conditions.first << " AND common_taggings.filterable_id = #{@media.id} AND common_taggings.filterable_type = 'Tag'"
       end
     end
-    @assignment = Fandom.in_use.joins(joins)
-                               .select('tags.*, users.login AS wranger')
-                               .where(conditions)
-                               .paginate(page: params[:page], per_page: 50)
+    @assignments = Fandom.in_use.joins(joins)
+                                .select('tags.*, users.login AS wrangler')
+                                .where(conditions)
+                                .paginate(page: params[:page], per_page: 50)
   end
 
   def show
