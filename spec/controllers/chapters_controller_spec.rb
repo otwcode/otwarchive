@@ -693,7 +693,8 @@ describe ChaptersController do
             expect(assigns[:chapter].posted).to be true
           end
 
-          xit "posts the work if the work was not posted before" do
+          it "posts the work if the work was not posted before" do
+            pending "multi-chapter works should post when chapter is posted"
             @unposted_work = create(:work, authors: [user.pseuds.first])
             put :update, work_id: @unposted_work.id, id: @unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true
             expect(assigns[:work].posted).to be true
@@ -795,6 +796,49 @@ describe ChaptersController do
           expect(@chapter2.reload.position).to eq(3)
           expect(@chapter3.reload.position).to eq(2)
         end
+      end
+    end
+  end
+
+  describe "preview" do
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        get :preview, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "renders preview template" do
+        get :preview, work_id: @work.id, id: @work.chapters.first.id
+        expect(response).to render_template(:preview)
+      end
+
+      it "assigns instance variables correctly" do
+        get :preview, work_id: @work.id, id: @work.chapters.first.id
+        expect(assigns[:work]).to eq @work
+        expect(assigns[:chapter]).to eq @work.chapters.first
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:preview_mode]).to be true
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "errors and redirects to work" do
+        pending "non-work owner should not be able to access preview"
+        get :preview, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
   end
