@@ -531,10 +531,10 @@ Otwarchive::Application.routes.draw do
     end
     collection do
       get :manage
-      post :reorder
+      post :update_positions
     end
   end
-  
+
   resource :redirect, controller: "redirect", only: [:show] do
     member do
       get :do_redirect
