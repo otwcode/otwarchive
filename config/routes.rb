@@ -45,7 +45,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  post 'signup/:invitation_token' => 'users#new', as: 'signup'
+  get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   get 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -118,7 +118,7 @@ Otwarchive::Application.routes.draw do
 
   resources :tag_wrangling_requests, only: [:index] do
     collection do
-      patch :update_multiple
+      put :update_multiple
     end
   end
 
@@ -202,7 +202,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
-        patch :update_multiple
+        put :update_multiple
       end
       member do
         get :default
@@ -212,7 +212,7 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :collection_items, only: [:index, :update, :destroy] do
       collection do
-        patch :update_multiple
+        put :update_multiple
       end
     end
     resources :collections, only: [:index]
@@ -272,7 +272,7 @@ Otwarchive::Application.routes.draw do
         get :collected
         get :show_multiple
         post :edit_multiple
-        patch :update_multiple
+        put :update_multiple
         post :delete_multiple
       end
     end
@@ -292,7 +292,7 @@ Otwarchive::Application.routes.draw do
       get :navigate
       get :edit_tags
       get :preview_tags
-      patch :update_tags
+      put :update_tags
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
@@ -390,12 +390,12 @@ Otwarchive::Application.routes.draw do
       collection do
         get :add
         get :join
-        patch :update
+        put :update
       end
     end
     resources :items, controller: "collection_items" do
       collection do
-        patch :update_multiple
+        put :update_multiple
       end
     end
     resources :signups, controller: "challenge_signups" do
@@ -419,7 +419,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :claims, controller: "challenge_claims" do
       collection do
-        patch :set
+        put :set
         get :purge
       end
     end
