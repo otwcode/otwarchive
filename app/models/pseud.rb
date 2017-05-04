@@ -323,8 +323,12 @@ class Pseud < ActiveRecord::Base
   # Options: skip_series -- if you begin by changing ownership of the series, you don't
   # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    creation.pseuds.delete(self)
-    creation.pseuds << pseud rescue nil
+    # Should only transfer creatorship if we're a co-creator.
+    if creation.pseuds.include?(self)
+      creation.pseuds.delete(self)
+      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
+    end
+
     if creation.is_a?(Work)
       creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
       unless options[:skip_series]
