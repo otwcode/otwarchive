@@ -2,6 +2,7 @@
   <fieldset>
     <legend><%= ts('Work Info') %></legend>
     <h3 class="landmark heading"><%= ts('Work Info') %></h3>
+    <p class="submit"><%= f.submit ts('Search') %></p>
     <dl>
       <dt>
         <%= f.label :query, ts('Any Field') %>
@@ -9,19 +10,19 @@
       </dt>
       <dd>
         <%= f.text_field :query %>
-      </dd>      
+      </dd>
       <dt>
         <%= f.label :title, ts('Title') %>
       </dt>
       <dd>
         <%= f.text_field :title %>
-      </dd>      
+      </dd>
       <dt>
         <%= f.label :creator, ts('Author/Artist') %>
       </dt>
       <dd>
         <%= f.text_field :creator %>
-      </dd>  
+      </dd>
       <dt>
         <%= f.label :revised_at, ts('Date') %>
         <%= link_to_help "work-search-date-help" %>
@@ -57,7 +58,7 @@
       </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Work Tags') %> <%= link_to_help "work-search-tags-help" %></legend>
     <h3 class="landmark heading"><%= ts('Work Tags') %></h3>
@@ -90,7 +91,7 @@
             </li>
           <% end %>
         </ul>
-      </dd>      
+      </dd>
       <dt>
         <%= ts('Categories') %>
       </dt>
@@ -103,19 +104,19 @@
             </li>
           <% end %>
         </ul>
-      </dd>    
+      </dd>
       <dt>
         <%= f.label :character_names, ts('Characters') %>
       </dt>
       <dd>
         <%= f.text_field :character_names, autocomplete_options("character") %>
-      </dd>      
+      </dd>
       <dt>
         <%= f.label :relationship_names, ts('Relationships') %>
       </dt>
       <dd>
         <%= f.text_field :relationship_names, autocomplete_options("relationship") %>
-      </dd>      
+      </dd>
       <dt>
         <%= f.label :freeform_names, ts('Additional Tags') %>
       </dt>
@@ -124,7 +125,7 @@
       </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Work Stats') %> <%= link_to_help "work-search-numerical-help" %></legend>
     <h3 class="landmark heading"><%= ts('Work Stats') %></h3>
@@ -155,7 +156,7 @@
       </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Search') %></legend>
     <h3 class="landmark heading"><%= ts('Search') %></h3>
@@ -170,12 +171,12 @@
         <%= f.label :sort_direction, ts("Sort direction") %>
       </dt>
       <dd>
-        <%= select_tag "work_search[sort_direction]", 
+        <%= select_tag "work_search[sort_direction]",
           '<option value="asc">Ascending</option><option value="desc">Descending</option>'.html_safe,
-          {:include_blank => true } %> 
+          {:include_blank => true } %>
       </dd>
     </dl>
     <p class="submit"><%= f.submit ts('Search') %></p>
   </fieldset>
-  
+
 <% end %>
