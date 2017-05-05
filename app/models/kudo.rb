@@ -14,7 +14,7 @@ class Kudo < ActiveRecord::Base
 
   validates_uniqueness_of :ip_address,
     :scope => [:commentable_id, :commentable_type],
-    :message => ts("^You have already left kudos here. :)"),
+    :message => ts("^Your IP has already left kudos here. :)"),
     :if => "!ip_address.blank?"
 
   scope :with_pseud, -> { where("pseud_id IS NOT NULL") }

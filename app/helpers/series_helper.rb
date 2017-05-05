@@ -13,6 +13,7 @@ module SeriesHelper
                            .includes(:work)
                            .where('works.posted = ?', true)
                            .order(:position)
+                           .references(:works)
                            .select { |sw| sw.work.visible(current_user) }
                            .map(&:work)
       visible_position = serial_works.index(work) || serial_works.length

@@ -39,7 +39,7 @@ class KudosController < ApplicationController
           error_message = "We couldn't save your kudos, sorry!"
           commentable = @kudo.commentable
           if @kudo.dup?
-            error_message = 'You have already left kudos here. :)'
+            error_message = @kudos.errors.full_messages.first
           end
           if @kudo.creator_of_work?
             error_message = "You can't leave kudos on your own work."
