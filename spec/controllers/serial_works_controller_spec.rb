@@ -17,7 +17,7 @@ describe SerialWorksController do
   it "redirects to series when destroying one of many" do
     fake_login_known_user(user)
     delete :destroy, id: first_work.id
-    # it doesn't give you any success message - this might be worth improving in future
+    # TODO: AO3-5006
     it_redirects_to(series_path(series))
   end
   
@@ -25,7 +25,7 @@ describe SerialWorksController do
     fake_login_known_user(user)
     delete :destroy, id: first_work.id
     delete :destroy, id: second_work.id
-    # it doesn't give you any success message - this might be worth improving in future
+    # TODO: AO3-5006
     it_redirects_to(user_path(user))
   end
 end
