@@ -74,7 +74,7 @@ describe ChallengeAssignmentsController do
         fake_login_known_user(user)
         gift_exchange.assignments_sent_at = Time.now
         gift_exchange.save
-        # tests :owener_only, but you can't access that directly or it won't load @challenge_assignment
+        # tests :owner_only, but you can't access that directly or it won't load @challenge_assignment
         get :default, collection_id: collection.name, id: open_assignment, user_id: user.login
         it_redirects_to_with_error(root_path, "You aren't the owner of that assignment.")
       end
