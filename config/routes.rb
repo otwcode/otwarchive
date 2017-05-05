@@ -272,7 +272,7 @@ Otwarchive::Application.routes.draw do
         get :collected
         get :show_multiple
         post :edit_multiple
-        patch :update_multiple
+        put :update_multiple
         post :delete_multiple
       end
     end
