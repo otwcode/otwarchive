@@ -234,7 +234,7 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :invitations do
-      member do
+      collection do
         post :invite_friend
       end
       collection do
