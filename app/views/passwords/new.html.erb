@@ -1,11 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
 <h3 class="heading"><%= ts("Forgotten your password?") %></h3>
 <p>
-  <%= ts("If you've forgotten your password, we can send you a temporary one.") %> 
+  <%= ts("If you've forgotten your password, we can send you a temporary one.") %>
   <%= ts("Please tell us the user name or email address you used when you signed up for your Archive account.") %>
 </p>
 <p>
-  <%= ts("If the temporary password doesn't work, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe) %>
+  <%= ts("If the temporary password doesn't work, please visit %{problems_when_logging_in} for help.", :problems_when_logging_in => link_to(ts("Problems When Logging In"), admin_posts_path("1277"))) %>
 </p>
 <!--/descriptions-->
 
@@ -13,7 +13,7 @@
 <%= form_tag passwords_path do %>
   <p>
     <%= label_tag 'reset_password_for', ts("Email address <strong>or</strong> user name:".html_safe) %>
-    <%= text_field_tag 'reset_password_for', '' %> 
+    <%= text_field_tag 'reset_password_for', '' %>
     <%= submit_tag ts('Reset Password') %>
   </p>
 <% end %>
