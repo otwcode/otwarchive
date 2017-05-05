@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+  class User < ActiveRecord::Base
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
@@ -294,7 +294,7 @@ class User < ActiveRecord::Base
   # use update_all to force the update even if the user is invalid
   def reset_user_password
     temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'")
+    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1")
     # send synchronously to prevent getting caught in backed-up mail queue
     UserMailer.reset_password(self.id, temp_password).deliver!
   end
