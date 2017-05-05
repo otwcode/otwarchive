@@ -8,7 +8,7 @@ end
 Given /^basic tags$/ do
   step %{the default ratings exist}
   step %{the basic warnings exist}
-  Fandom.find_or_create_by(name: "No Fandom", canonical: true)
+  Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
 end
 
@@ -49,14 +49,14 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
-  char = Character.find_or_create_by(name: character, canonical: true)
-  fand = Fandom.find_or_create_by(name: fandom, canonical: true)
+  char = Character.where(name: character, canonical: true).first_or_create
+  fand = Fandom.where(name: fandom, canonical: true).first_or_create
   char.add_association(fand)
 end
 
 Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relationship, fandom|
-  rel = Relationship.find_or_create_by(name: relationship, canonical: true)
-  fand = Fandom.find_or_create_by(name: fandom, canonical: true)
+  rel = Relationship.where(name: relationship, canonical: true).first_or_create
+  fand = Fandom.where(name: fandom, canonical: true).first_or_create
   rel.add_association(fand)
 end
 
@@ -77,7 +77,7 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger_type = merger.type
 
   synonym = merger_type.classify.constantize.find_or_create_by(name: synonym)
-  synonym.merger = merger
+  synonym.reload.merger = merger
   synonym.save
 end
 
@@ -115,7 +115,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   check "Remember Me"
   click_button "Log In"
   assert UserSession.find
-  fandom = Fandom.find_or_create_by(name: fandomname, canonical: true)
+  fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
   fill_in "tag_fandom_string", :with => fandomname
   click_button "Assign"

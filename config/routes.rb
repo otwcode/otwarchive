@@ -531,6 +531,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      post :update_positions
     end
   end
 

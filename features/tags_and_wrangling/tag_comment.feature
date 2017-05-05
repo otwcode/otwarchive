@@ -190,7 +190,7 @@ I'd like to comment on a tag'
         | login       | password      | email             |
         | dizmo       | wrangulator   | dizmo@example.org |
         | Enigel      | wrangulator   | enigel@example.org|
-      And a fandom exists with name: "Doctor Who", canonical: true
+      And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
       And a synonym "Dr Who" of the tag "Doctor Who"
     When I am logged in as "dizmo" with password "wrangulator"
