@@ -842,4 +842,129 @@ describe ChaptersController do
       end
     end
   end
+
+  describe "post" do
+    before do
+      @chapter_to_post = create(:chapter, work: @work, authors: [user.pseuds.first], position: 2)
+    end
+
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        post :post, work_id: @work.id, id: @chapter_to_post.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "redirects to work when cancel button is clicked" do
+        post :post, work_id: @work.id, id: @chapter_to_post.id, cancel_button: true
+        it_redirects_to(@work)
+      end
+
+      it "redirects to edit when edit button is clicked" do
+        post :post, work_id: @work.id, id: @chapter_to_post.id, edit_button: true
+        it_redirects_to(edit_work_chapter_path(work_id: @work.id, id: @chapter_to_post.id))
+      end
+
+      context "when the chapter and work are valid" do
+        it "posts the chapter and redirects to work" do
+          post :post, work_id: @work.id, id: @chapter_to_post.id
+          expect(assigns[:chapter].posted).to be true
+          it_redirects_to_with_notice(@work, "Chapter has been posted!")
+        end
+
+        it "posts the work if the work was not posted before" do
+          @unposted_work = create(:work, authors: [user.pseuds.first])
+          post :post, work_id: @unposted_work.id, id: @unposted_work.chapters.first.id
+          expect(assigns[:work].posted).to be true
+        end
+      end
+
+      context "when the chapter or work is not valid" do
+        before do
+          allow_any_instance_of(Chapter).to receive(:save).and_return(false)
+        end
+
+        it "does not update the chapter" do
+          post :post, work_id: @work.id, id: @chapter_to_post.id
+          expect(assigns[:chapter]).to eq @chapter_to_post
+        end
+
+        it "renders preview" do
+          post :post, work_id: @work.id, id: @chapter_to_post.id
+          expect(response).to render_template(:preview)
+        end
+      end
+
+      it "updates the work's revision date" do
+        post :post, work_id: @work.id, id: @chapter_to_post.id
+        expect(assigns[:work].updated_at).not_to eq(@work.updated_at)
+      end
+
+      it "assigns instance variables correctly" do
+        post :post, work_id: @work.id, id: @chapter_to_post.id
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "errors and redirects to work" do
+        pending "non-work owner should not be able to post works"
+        post :post, work_id: @work.id, id: @chapter_to_post.id
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
+
+  describe "confirm_delete" do
+    context "when user is logged out" do
+      it "errors and redirects to work" do
+        get :confirm_delete, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "renders confirm delete template" do
+        get :confirm_delete, work_id: @work.id, id: @work.chapters.first.id
+        expect(response).to render_template(:confirm_delete)
+      end
+
+      it "assigns instance variables correctly" do
+        get :confirm_delete, work_id: @work.id, id: @work.chapters.first.id
+        expect(assigns[:work]).to eq @work
+        expect(assigns[:chapter]).to eq @work.chapters.first
+        expect(assigns[:allpseuds]).to eq user.pseuds
+        expect(assigns[:pseuds]).to eq user.pseuds
+        expect(assigns[:coauthors]).to eq []
+        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "errors and redirects to work" do
+        get :confirm_delete, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
 end
