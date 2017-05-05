@@ -35,7 +35,7 @@
     </p>
     <p class="message">
       <%= ts("If you already have an archive account, log in and reload this page, and we'll assign you the works.") %>
-      <%= button_to ts("Sign me up and give me my works! Yay!"), signup_path(:invitation_token => @invitation.token) %>
+      <%= button_to ts("Sign me up and give me my works! Yay!"), signup_path(:invitation_token => @invitation.token), method: :get %>
     </p>
   <% end %>
 </div>

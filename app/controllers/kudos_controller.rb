@@ -18,7 +18,7 @@ class KudosController < ApplicationController
       @kudo.ip_address = request.remote_ip
     end
 
-    if @kudo.save
+    if @kudo.save!
       respond_to do |format|
         format.html do
           flash[:comment_notice] = ts("Thank you for leaving kudos!")

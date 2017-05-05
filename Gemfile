@@ -30,7 +30,7 @@ gem 'activerecord-mysql-reconnect'
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
 gem 'redis', ">=3.0"
-gem 'redis-namespace'
+gem 'redis-namespace', "1.3.0"
 
 # Here are all our application-specific gems
 
