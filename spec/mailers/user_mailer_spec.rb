@@ -141,6 +141,10 @@ describe UserMailer do
       it 'does not have exposed HTML' do
         expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
+
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
     end
 
     describe 'text version' do
@@ -154,6 +158,10 @@ describe UserMailer do
 
       it 'lists the second imported work with a leading hyphen' do
         expect(get_message_part(email, /plain/)).to include(title2)
+      end
+
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
       end
     end
   end

@@ -5,7 +5,7 @@
 
   <p><%= t('.html.part1_html', open_doors_link: style_link(t('.html.open_doors'), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)).html_safe %></p>
 
-  <p><%= t('.html.part2_html', news_link: style_link(t('.html.ao3_news'), root_url + "admin_posts?tag=18"), open_doors_faq_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), open_doors_tutorial_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), support_link: support_link(t '.html.contact_support')).html_safe %></p>
+  <p><%= t('.html.part2_html', news_link: style_link(t('.html.ao3_news'), admin_posts_url + "?tag=18"), open_doors_faq_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), open_doors_tutorial_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
   <p><%= t('.html.part3_html', open_doors_link: style_link(t('.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
@@ -26,9 +26,9 @@
 
   <p><%= t '.part8' %></p>
 
-  <p><%= t('.html.part9_html', open_doors_link: style_link(t('.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
+  <p><%= t('.html.part9_html', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
-  <p><%= t('.html.part10_html', open_doors_link: style_link(t('.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
+  <p><%= t('.html.part10_html', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
   <p><%= t('.html.part11_html', support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
