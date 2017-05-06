@@ -50,15 +50,15 @@ Feature: Search Bookmarks
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
   results by the note content
-    When I check "With Notes"
+    When I check "With notes"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: With Notes"
+      And I should see "You searched for: With notes"
       And I should see "2 Found"
       And I should see "fifth"
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
-    Then the "With Notes" checkbox should be checked
+    Then the "With notes" checkbox should be checked
     When I fill in "Notes" with "broken heart"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
@@ -68,7 +68,7 @@ Feature: Search Bookmarks
       # And I should see "fifth"
     When I follow "Edit Your Search"
     Then the field labeled "Notes" should contain "broken heart"
-      And the "With Notes" checkbox should be checked
+      And the "With notes" checkbox should be checked
 
   Scenario: If testuser has the pseud tester_pseud, searching for bookmarks by
   the bookmarker testuser does not return any of tester_pseud's bookmarks
