@@ -53,7 +53,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
     When I go to account creation page
     Then I should be on invite requests page
@@ -79,7 +79,7 @@ Feature: Admin Actions to Manage Invitations
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
-      And I uncheck "Users can request invitations"
+      And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
       And I am logged out as an admin
@@ -160,7 +160,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled
@@ -319,3 +319,19 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "There are 1 requests in the queue."
       And I should see "1 people from the invite queue were invited"
       And 1 email should be delivered
+
+ Scenario: An admin can edit an invitation
+   Given the user "dax" exists and is activated
+     And "dax" has "2" invitations
+     And I am logged in as an admin
+   When I follow "Invite New Users"
+     And I fill in "Enter a user name" with "dax"
+     And I press "Go"
+   Then I should see "copy and use"
+   When I follow "Invite New Users"
+     And I fill in "Enter an invite token" with "dax's" invite code
+     And I press "Go"
+   Then I should see "copy and use"
+   When I fill in "invitation_invitee_email" with "oldman@ds9.com"
+     And I press "Update Invitation"
+   Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input

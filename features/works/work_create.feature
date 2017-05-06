@@ -263,3 +263,32 @@ Feature: Create Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Author Chose Not To Use Archive Warnings"
       And I should see "It wasn't my fault, you know."
+
+  Scenario: Users can co-create a work with a co-creator who has multiple pseuds
+    Given basic tags
+      And "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "All Hell Breaks Loose"
+      And I check "co-authors-options-show"
+      And I fill in "pseud_byline" with "Me"
+      And I press "Post Without Preview"
+   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
+      And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+   Then I should see "Draft was successfully created."
+      And I press "Post"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Me (myself), testuser"
+
+  Scenario: Users can't set a publication date that is in the future, e.g. set 
+  the date to April 30 when it is April 26
+    Given I am logged in
+      And it is currently Wed Apr 26 22:00:00 UTC 2017
+      And I set up a draft "Futuristic"
+    When I check "Set a different publication date"
+      And I select "30" from "work[chapter_attributes][published_at(3i)]"
+      And I press "Post Without Preview"
+    Then I should see "Publication date can't be in the future."
+    When I jump in our Delorean and return to the present

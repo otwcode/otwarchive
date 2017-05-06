@@ -230,7 +230,6 @@ Otwarchive::Application.routes.draw do
     resource :inbox, controller: "inbox" do
       member do
         get :reply
-        get :cancel_reply
         post :delete
       end
     end
@@ -443,11 +442,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :admin_posts
   end
-  resources :locales do
-    collection do
-      get :set
-    end
-  end
+  resources :locales, except: :destroy
 
   #### SESSIONS ####
 
@@ -523,6 +518,12 @@ Otwarchive::Application.routes.draw do
       get :manage
       post :update_positions
     end
+    resources :questions do
+      collection do
+        get :manage
+        post :update_positions
+      end
+    end
   end
   resources :wrangling_guidelines do
     member do
@@ -530,10 +531,10 @@ Otwarchive::Application.routes.draw do
     end
     collection do
       get :manage
-      post :reorder
+      post :update_positions
     end
   end
-  
+
   resource :redirect, controller: "redirect", only: [:show] do
     member do
       get :do_redirect

@@ -177,7 +177,7 @@ class TagsController < ApplicationController
 
   # POST /tags
   def create
-    type = params[:tag][:type] if params[:tag]
+    type = tag_params[:type] if params[:tag]
     if type
       raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
       model = begin
@@ -185,20 +185,20 @@ class TagsController < ApplicationController
               rescue
                 nil
               end
-      @tag = model.find_or_create_by_name(params[:tag][:name]) if model.is_a? Class
+      @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
     else
       flash[:error] = ts('Please provide a category.')
-      @tag = Tag.new(name: params[:tag][:name])
+      @tag = Tag.new(name: tag_params[:name])
       render(action: 'new') && return
     end
     if @tag && @tag.valid?
-      if (@tag.name != params[:tag][:name]) && @tag.name.casecmp(params[:tag][:name].downcase).zero? # only capitalization different
-        @tag.update_attribute(:name, params[:tag][:name]) # use the new capitalization
+      if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
+        @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
         flash[:notice] = ts('Tag was successfully modified.')
       else
         flash[:notice] = ts('Tag was successfully created.')
       end
-      @tag.update_attribute(:canonical, params[:tag][:canonical])
+      @tag.update_attribute(:canonical, tag_params[:canonical])
       redirect_to url_for(controller: 'tags', action: 'edit', id: @tag)
     else
       render(action: 'new') && return
@@ -249,9 +249,11 @@ class TagsController < ApplicationController
       @tag = @tag.recategorize(new_tag_type)
     end
 
-    @tag.attributes = params[:tag]
+    unless params[:tag].empty?
+      @tag.attributes = tag_params
+    end
 
-    @tag.syn_string = syn_string if @tag.save
+    @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
     if @tag.errors.empty? && @tag.save
       # check if a resetting of the taggings_count was requsted
@@ -392,5 +394,17 @@ class TagsController < ApplicationController
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to url_for({ controller: :tags, action: :wrangle, id: params[:id] }.merge(options))
+  end
+
+  private
+
+  def tag_params
+    params.require(:tag).permit(
+      :name, :fix_taggings_count, :type, :canonical, :unwrangleable, :adult,
+      :fandom_string, :meta_tag_string, :syn_string, :sortable_name, :media_string,
+      :character_string, :relationship_string, :freeform_string, :sub_tag_string,
+      :merger_string,
+      associations_to_remove: []
+    )
   end
 end

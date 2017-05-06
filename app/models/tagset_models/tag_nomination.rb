@@ -1,7 +1,9 @@
 class TagNomination < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :tag_set_nomination, :inverse_of => :tag_nominations
   has_one :owned_tag_set, :through => :tag_set_nomination
-  
+
   attr_accessor :from_fandom_nomination
 
   validates_length_of :tagname,
@@ -24,7 +26,7 @@ class TagNomination < ActiveRecord::Base
   def not_already_reviewed
     # allow mods and the archive code to update
     unless (!User.current_user || (User.current_user && User.current_user.is_a?(User) && owned_tag_set.user_is_moderator?(User.current_user)))
-      if tagname_changed? && (self.approved || self.rejected) && (tagname != tagname_was)  && !tagname_was.blank? 
+      if tagname_changed? && (self.approved || self.rejected) && (tagname != tagname_was)  && !tagname_was.blank?
         errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
         tagname = self.tagname_was
       end
@@ -42,7 +44,7 @@ class TagNomination < ActiveRecord::Base
       errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", :tagname => self.tagname, :other_parent => other_parent, :fandom => self.get_parent_tagname || 'Fandom'))
     end
   end
-  
+
   after_save :destroy_if_blank
   def destroy_if_blank
     if tagname.blank?
@@ -70,28 +72,28 @@ class TagNomination < ActiveRecord::Base
   end
 
   before_save :set_parented
-  def set_parented    
+  def set_parented
     if type == "FreeformNomination"
       # skip freeforms
       self.parented = true
-    elsif (tag = Tag.find_by_name(tagname)) && 
+    elsif (tag = Tag.find_by_name(tagname)) &&
       ((!tag.parents.empty? && get_parent_tagname.blank?) || tag.parents.collect(&:name).include?(get_parent_tagname))
-      # if this is an existing tag and has matching parents, or no parent specified and it already has one 
+      # if this is an existing tag and has matching parents, or no parent specified and it already has one
       self.parented = true
       self.parent_tagname ||= get_parent_tagname
     else
       self.parented = false
-      self.parent_tagname ||= get_parent_tagname 
-    end   
+      self.parent_tagname ||= get_parent_tagname
+    end
     true
   end
-  
-  # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't 
+
+  # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
     set_noms = tag_set_nomination
-    set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination    
+    set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination
     self.rejected = set_noms.owned_tag_set.already_rejected?(tagname) || false
     if self.rejected
       self.approved = false
@@ -113,12 +115,12 @@ class TagNomination < ActiveRecord::Base
   def self.names_with_count
     select("tagname, count(*) as count").group("tagname").order("tagname")
   end
-  
+
   def self.unreviewed
     where(:approved => false).where(:rejected => false)
   end
-  
-  # returns an array of all the parent tagnames for the given tag 
+
+  # returns an array of all the parent tagnames for the given tag
   # can be chained with other queries but must come at the end
   def self.nominated_parents(child_tagname, parent_search_term="")
     parents = where(:tagname => child_tagname).where("parent_tagname != ''")
@@ -127,12 +129,12 @@ class TagNomination < ActiveRecord::Base
     end
     parents.group("parent_tagname").order("count_id DESC").count('id').keys
   end
-  
+
   # We need this manual join in order to do a query over multiple types of tags
   # (ie, via TagNomination.where(:type => ...))
   def self.join_fandom_nomination
-    joins("INNER JOIN tag_nominations fandom_nominations_tag_nominations ON 
-      fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND 
+    joins("INNER JOIN tag_nominations fandom_nominations_tag_nominations ON
+      fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND
       fandom_nominations_tag_nominations.type = 'FandomNomination'")
   end
 
@@ -155,16 +157,16 @@ class TagNomination < ActiveRecord::Base
     end
     return true
   end
-  
+
   # here so we can override it in char/relationship noms
   def get_parent_tagname
     self.parent_tagname.present? ? self.parent_tagname : nil
   end
-  
+
   def unreviewed?
     !approved && !rejected
   end
-  
+
   def reviewed?
     approved || rejected
   end
@@ -179,5 +181,5 @@ class TagNomination < ActiveRecord::Base
   def times_nominated(tag_set)
     TagNomination.for_tag_set(tag_set).where(:tagname => self.tagname).count
   end
-  
+
 end
