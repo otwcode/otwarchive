@@ -433,10 +433,10 @@ namespace :After do
   end
 
 
-  desc "Clean up work URLs for abuse reports from the last month"
-  task(:clean_abuse_report_work_urls => :environment) do
+  desc "Clean up URLs for abuse reports from the last month"
+  task(:clean_abuse_report_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
-      report.clean_work_url
+      report.clean_url
       puts report.url
       report.save
     end

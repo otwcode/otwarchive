@@ -133,6 +133,8 @@ IMPORT_MAX_WORKS: 25
 IMPORT_MAX_CHAPTERS: 200
 IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
+# max number of abuse reports to accept for a given user profile URL
+ABUSE_REPORTS_PER_USER_MAX: 5
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
 
