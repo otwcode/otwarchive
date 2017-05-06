@@ -22,6 +22,56 @@ Given /^I have a bookmark of a deleted work$/ do
   Bookmark.tire.index.refresh
 end
 
+Given /^I have bookmarks to search$/ do
+  # set up a user
+  user1 = FactoryGirl.create(:user, login: "testuser")
+
+  # set up the pseuds
+  pseud1 = FactoryGirl.create(:pseud, name: "testy", user_id: user1.id)
+  pseud2 = FactoryGirl.create(:pseud, name: "tester_pseud", user_id: user1.id)
+
+  # set up some works
+  work1 = FactoryGirl.create(:work, title: "First work", posted: true)
+  work2 = FactoryGirl.create(:work, title: "second work", posted: true)
+  work3 = FactoryGirl.create(:work, title: "third work", posted: true)
+  work4 = FactoryGirl.create(:work, title: "fourth", posted: true)
+  work5 = FactoryGirl.create(:work, title: "fifth", posted: true)
+
+  # set up an external work
+  external1 = FactoryGirl.create(:external_work, title: "Skies Grown Darker")
+
+  # set up a tag
+  freeform1 = FactoryGirl.create(:freeform, name: "classic")
+
+  # set up the bookmarks
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work1.id,
+                     pseud_id: user1.default_pseud.id,
+                     rec: true)
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work2.id,
+                     pseud_id: user1.default_pseud.id)
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work3.id,
+                     pseud_id: user1.default_pseud.id,
+                     tag_string: freeform1.name)
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: work4.id, pseud_id: pseud1.id)
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work5.id,
+                     pseud_id: pseud2.id,
+                     notes: "Left me with a broken heart")
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external1.id,
+                     bookmarkable_type: "ExternalWork",
+                     pseud_id: pseud2.id,
+                     notes: "I enjoyed this")
+end
+
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
   step %{I start a new bookmark for "#{title}"}
   unless pseud.nil?

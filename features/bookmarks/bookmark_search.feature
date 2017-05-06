@@ -1,11 +1,11 @@
 @no-txn @bookmarks @search
 Feature: Search Bookmarks
-  In order to find works I might consider good
+  In order to test search
   As a humble coder
   I have to use cucumber with elasticsearch
 
   Background:
-    Given I have loaded the fixtures
+    Given I have bookmarks to search
       And I am on the search bookmarks page
       And all search indexes are updated
 
