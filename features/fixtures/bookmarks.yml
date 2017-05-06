@@ -24,3 +24,10 @@ bookmark5:
   pseud_id: 3
   bookmarkable_id: 5
   bookmarkable_type: Work
+  notes: "Left me with a broken heart"
+bookmark6:
+  id: 6
+  pseud_id: 3
+  bookmarkable_id: 2
+  bookmarkable_type: ExternalWork
+  notes: "I enjoyed this"
