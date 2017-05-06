@@ -46,8 +46,7 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
-    When "AO3-3583" is fixed
-    # Then "External Work" should be selected within "Type"
+    Then "External Work" should be selected within "Type"
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
   results by the note content
