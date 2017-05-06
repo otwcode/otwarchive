@@ -1,4 +1,4 @@
-<%= form_for @search, :url => search_bookmarks_path, :html => {:class => 'search', :method => :get} do |f| %>
+<%= form_for @search, url: search_bookmarks_path, html: { class: "search", method: :get } do |f| %>
 <fieldset>
   <legend>Search bookmarks</legend>
   <dl>
@@ -49,7 +49,7 @@
       <%= link_to_help "bookmark-search-type-help" %>
     </dt>
     <dd>
-      <%= f.select :bookmarkable_type, options_for_select(["",  "Work", "Series", "External Work"]) %>
+      <%= f.select :bookmarkable_type, options_for_select(["",  "Work", "Series", "External Work"], @search.bookmarkable_type) %>
     </dd>
     <dt>
       <%= f.label :date, ts('Date Bookmarked') %>
