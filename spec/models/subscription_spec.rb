@@ -74,7 +74,7 @@ describe Subscription do
     end
 
     it "should raise error" do
-      expect{ subscription.save }.to raise_error NameError
+      expect { subscription.save }.to raise_error NameError
     end
   end
 end
