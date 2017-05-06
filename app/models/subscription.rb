@@ -4,7 +4,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscribable, :polymorphic => true
   
-  validates_presence_of :user, :subscribable_id, :subscribable_type
+  validates_presence_of :user, :subscribable
   
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
