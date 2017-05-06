@@ -54,7 +54,7 @@ describe Subscription do
     end
   end
 
-   context "when subscribable does not exist" do
+  context "when subscribable does not exist" do
     before do
       @work = create(:work)
       subscription.subscribable_id = @work.id
