@@ -6,7 +6,7 @@ class KudosController < ApplicationController
 
   def index
     @work = Work.find(params[:work_id])
-    @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+    @kudos = @work.kudos.includes(pseud: :user).with_pseud
     @guest_kudos_count = @work.kudos.by_guest.count
   end
 
@@ -18,7 +18,7 @@ class KudosController < ApplicationController
       @kudo.ip_address = request.remote_ip
     end
 
-    if @kudo.save!
+    if @kudo.save
       respond_to do |format|
         format.html do
           flash[:comment_notice] = ts("Thank you for leaving kudos!")
@@ -38,10 +38,10 @@ class KudosController < ApplicationController
         format.html do
           error_message = "We couldn't save your kudos, sorry!"
           commentable = @kudo.commentable
-          if @kudo.dup?
-            error_message = @kudos.errors.full_messages.first
+          if @kudo && @kudo.dup?
+            error_message = @kudo.errors.full_messages.first
           end
-          if @kudo.creator_of_work?
+          if @kudo && @kudo.creator_of_work?
             error_message = "You can't leave kudos on your own work."
           end
           if !current_user.present? && commentable.restricted?
