@@ -56,14 +56,25 @@ describe Subscription do
 
   context "when subscribable does not exist" do
     before do
-      @work = create(:work)
-      subscription.subscribable_id = @work.id
+      work = create(:work)
+      subscription.subscribable_id = work.id
       subscription.subscribable_type = "Work"
-      @work.destroy
+      work.destroy
     end
 
     it "should not save" do
       expect(subscription.save).to be_falsey
+    end
+  end
+
+  context "when subscribable_type is not a valid type" do
+    before do
+      subscription.subscribable_id = 1
+      subscription.subscribable_type = "Серия"
+    end
+
+    it "should raise error" do
+      expect{ subscription.save }.to raise_error NameError
     end
   end
 end
