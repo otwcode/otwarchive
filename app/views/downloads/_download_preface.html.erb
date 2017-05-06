@@ -1,24 +1,25 @@
-<p class="message"><%= ts("Posted originally on the") %> <%= link_to ArchiveConfig.APP_NAME, root_url %> 
+<p class="message"><%= ts("Posted originally on the") %> <%= link_to ArchiveConfig.APP_NAME, root_url %>
 <%= ts("at") %> <%= link_to work_url(@work), work_url(@work) %>.</p>
 
 <div class="meta">
   <dl class="tags">
     <% Tag::VISIBLE.each do |type| %>
       <% tags = @work.tag_groups[type] %>
-      <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" && 
+      <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" &&
 hide_freeform?(@work)) %>
         <dt><%= type.constantize::NAME %>:</dt>
         <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
       <% end %>
     <% end %>
-    <% unless @work.serial_works.blank? %>
+    <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
+    <% unless series_list.blank? %>
       <dt><%= ts("Series") %>:</dt>
-      <dd><%= @work.serial_works.map {|s| "#{ts('Part')} #{s.position} #{ts('of')} 
+      <dd><%= @series_list.map {|s| "#{ts('Part')} #{s.position} #{ts('of')}
 #{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
     <% end %>
     <% unless @work.approved_collections.empty? %>
       <dt><%= ts('Collections') %>:</dt>
-      <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(", 
+      <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(",
 ").html_safe %></dd>
     <% end %>
     <dt><%= ts("Stats") %>:</dt>
@@ -39,7 +40,7 @@ hide_freeform?(@work)) %>
     <p><%= ts('Summary') %></p>
     <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
   <% end %>
-  
+
   <% unless @work.notes.blank? && @work.endnotes.blank? %>
     <p><%= ts('Notes') %></p>
     <% unless @work.notes.blank? %>
@@ -47,21 +48,21 @@ hide_freeform?(@work)) %>
     <% end %>
     <% unless @work.endnotes.blank? %>
       <div class="endnote-link">
-        <%= ts("See the end of the work for") %> <% unless @work.notes.blank? %><%= ts("more") %><% end 
+        <%= ts("See the end of the work for") %> <% unless @work.notes.blank? %><%= ts("more") %><% end
 %> <%= link_to ts("notes"), "#endnotes" %>
       </div>
-    <% end %> 
+    <% end %>
   <% end %>
 
   <% unless @work.parents.blank? %>
     <dl>
       <dt><%= ts('This work was inspired by') %></dt>
       <dd>
-        <%= @work.parent_work_relationships.map{|rw| "#{link_to(rw.parent.title, 
-url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
-:only_path => false))} #{ts('by')} 
-#{byline(rw.parent)}"}.join(", ").html_safe %>
-      </dd>  
+        <% parent_work_list = @work.parent_work_relationships.reject{ |wr| wr.parent.nil? } %>
+        <%= parent_work_list.map{ |rw| "#{link_to(rw.parent.title,
+               url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
+                       only_path: false)) } #{ts('by')} #{byline(rw.parent)}" }.join(", ").html_safe %>
+      </dd>
     </dl>
   <% end %>
 

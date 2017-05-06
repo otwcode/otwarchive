@@ -247,6 +247,26 @@ en:
       para1: "The following abuse report has been sent to the Abuse team:"
       url_para: "URL of the page the abuse is on:"
       description_para: "Description of the abuse:"
+    challenge_assignment_notification:
+      subject: "[%{app_name}][%{collection_title}] Your Assignment!"
+      recipient: "Recipient:" # this is followed by the name of the gift recipient
+      recipient_missing: "None: contact a moderator for help!"
+      prompts: "Prompts:"
+      optional_tags: "Optional Tags:"
+      prompt_url: "Prompt URL:"
+      description: "Description:"
+      due: "This assignment is due at:"
+      any: "Any"
+      text:
+        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from your Assignments page at %{link}."
+        footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}."
+      html:
+        part1: "You have been assigned the following request in the %{link} challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from %{link}."
+        look_up_link: "your Assignments page"
+        footer: "You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}."
+        footer_link: "the challenge profile page"
   validators:
     email:
       blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."

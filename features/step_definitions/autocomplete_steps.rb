@@ -25,13 +25,6 @@ Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
   expect(find("input + .autocomplete", visible: true)).to have_no_content(string)
 end
 
-# this is needed for values like 'Allo 'Allo that can't be handled right
-# by Nokogiri in the typical find
-# note: this might only work for the first autocomplete in a page D:
-Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
-  string == page.find("input.autocomplete")['value']
-end
-
 # Define all values to be entered here depending on the fieldname
 When /^I enter text in the "([^\"]+)" autocomplete field$/ do |fieldname|
   text = case fieldname
