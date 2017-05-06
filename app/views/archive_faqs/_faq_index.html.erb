@@ -9,14 +9,14 @@
 <!--/subnav-->
 
 <!--main content-->
+<p class="notice">
+  <%= ts("The FAQs are currently being updated and translated by our volunteers. This is a work in progress and not all information will be up to date or available in languages other than English at this time. If your language doesn't list all FAQs yet, please consult the English list and check back later for updates.") %>
+</p>
 <p class="notes">
   <%= ts("Some commonly asked questions about the Archive are answered here.
   Questions and answers about our Terms of Service can be found in the") %> <%= link_to ts("TOS FAQ"), tos_faq_path %>.
   <%= ts("You may also like to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.
   <%= ts("If you need more help, please ") %> <%= link_to ts("contact Support"), feedbacks_path %>.
-</p>
-<p class="notice">
-  <%= ts("The FAQs are currently being updated and translated by our volunteers. This is a work in progress and not all information will be up to date or available in languages other than English at this time. If your language doesn't list all FAQs yet, please consult the English list and check back later for updates.") %>
 </p>
 
 <% if @archive_faqs.blank? %>
