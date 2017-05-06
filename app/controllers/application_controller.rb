@@ -46,12 +46,16 @@ class ApplicationController < ActionController::Base
   def logout_if_not_user_credentials
     return unless logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
     path = request.fullpath
-    logger.error "Forcing logout #{path}"
-    @user_session = UserSession.find
-    @user_session.destroy if @user_session
-    redirect_to lost_cookie_path(return_to_url: path)
+    if params[:try_to_set_user_credentials]
+      logger.error "Forcing logout #{path}"
+      @user_session = UserSession.find
+      @user_session.destroy if @user_session
+      redirect_to lost_cookie_path(return_to_url: path)
+    else
+      cookies[:user_credentials] = @current_user.persistence_token
+      redirect_to path, try_to_set_user_credentials: "true"
+    end
   end
-
 
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
