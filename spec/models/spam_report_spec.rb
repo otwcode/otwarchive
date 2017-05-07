@@ -6,7 +6,7 @@ describe SpamReport do
   let(:third_spam) { create(:work, spam: true, posted: true, authors: second_spam.authors) }
 
   before(:example) do
-    ArchiveConfig.SPAM_THRESHOLD = 10
+    allow(ArchiveConfig).to receive(:SPAM_THRESHOLD).and_return(10)
     create(:work, spam: false, posted: true)
   end
 
