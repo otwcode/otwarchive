@@ -116,7 +116,7 @@ describe ExternalAuthorsController do
         context "when updating preferences" do
           it "renders edit template with a success message for orphaning and an error for preferences" do
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan", do_not_email: true
+            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan"
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "

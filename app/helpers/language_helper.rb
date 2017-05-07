@@ -15,7 +15,7 @@ module LanguageHelper
     questions = []
     all_questions.each do |question|
       question.translations.each do |translation|
-        if translation.is_translated == "1"
+        if translation.is_translated == "1" && params[:language_id].to_s == translation.locale.to_s
           questions << question
         end
       end
