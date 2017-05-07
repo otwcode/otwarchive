@@ -53,7 +53,7 @@ Feature: Search Bookmarks
     When I check "With notes"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: With notes"
+      And I should see "You searched for: With Notes"
       And I should see "2 Found"
       And I should see "fifth"
       And I should see "Skies Grown Darker"
