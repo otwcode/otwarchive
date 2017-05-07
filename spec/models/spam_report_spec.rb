@@ -17,7 +17,7 @@ describe SpamReport do
 
   it "does not send email if the spam score is lower than the spam threshold" do
     third_spam
-    ArchiveConfig.SPAM_THRESHOLD = 70
+    allow(ArchiveConfig).to receive(:SPAM_THRESHOLD).and_return(70)
     expect(AdminMailer).not_to receive(:send_spam_alert)
     SpamReport.run
   end
