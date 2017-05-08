@@ -30,13 +30,13 @@
             <% # You should only be able to add co-creators %>
             <% author_is_coauthor = @chapter.new_record? ? false :
                                     @selected_pseuds.include?(author.id) %>
-            <%= label_tag "chapter_author_attributes_coauthors_#{author.id}",
+            <%= label_tag "chapter_author_attributes_ids_#{author.id}",
                           author.id, class: "action" do %>
-              <%= check_box_tag "chapter[author_attributes][coauthors][]",
+              <%= check_box_tag "chapter[author_attributes][ids][]",
                                 author.id,
                                 author_is_coauthor,
                                 disabled: author_is_coauthor,
-                                id: "chapter_author_attributes_coauthors_#{author.id}" %>
+                                id: "chapter_author_attributes_ids_#{author.id}" %>
               <%= author.byline %>
             <% end %>
           </li>

@@ -21,7 +21,7 @@ class InviteRequestsController < ApplicationController
 
   # POST /invite_requests
   def create
-    @invite_request = InviteRequest.new(params[:invite_request])
+    @invite_request = InviteRequest.new(invite_request_params)
     if @invite_request.save
       flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
@@ -51,5 +51,13 @@ class InviteRequestsController < ApplicationController
       flash[:error] = "Request could not be removed. Please try again."
     end
     redirect_to manage_invite_requests_url(page: params[:page])
+  end
+
+  private
+
+  def invite_request_params
+    params.require(:invite_request).permit(
+      :email
+    )
   end
 end

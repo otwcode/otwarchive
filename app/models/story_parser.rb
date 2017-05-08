@@ -284,12 +284,14 @@ class StoryParser
       pseuds = []
       pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
       pseuds << options[:archivist].default_pseud if options[:archivist]
-      pseuds += options[:pseuds] if options[:pseuds]
+      pseuds << options[:pseuds] if options[:pseuds]
       pseuds = pseuds.uniq
       raise Error, "A work must have at least one author specified" if pseuds.empty?
       pseuds.each do |pseud|
-        work.pseuds << pseud unless work.pseuds.include?(pseud)
-        work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
+        unless pseud.nil?
+          work.pseuds << pseud unless work.pseuds.include?(pseud)
+          work.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
+        end
       end
 
       # handle importing works for others

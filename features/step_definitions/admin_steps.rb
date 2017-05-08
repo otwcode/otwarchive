@@ -44,7 +44,7 @@ Given /^I am logged in as an admin$/ do
   if admin.blank?
     admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
-  visit admin_login_path
+  visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
@@ -52,8 +52,7 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
 end
 
 Given /^basic languages$/ do
@@ -84,6 +83,13 @@ Given /^guest downloading is on$/ do
   click_button("Update")
 end
 
+Given /^downloads are off$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Allow downloads")
+  click_button("Update")
+end
+
 Given /^tag wrangling is off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
@@ -102,23 +108,23 @@ end
 
 Given /^I have posted a FAQ$/ do
   step("I am logged in as an admin")
-  step(%{I make a 1st FAQ post})
+  step %{I make a 1st FAQ post}
 end
 
 Given /^I have posted known issues$/ do
-  step(%{I am logged in as an admin})
-    step(%{I follow "Admin Posts"})
-    step(%{I follow "Known Issues" within "#main"})
-    step(%{I follow "make a new known issues post"})
-    step(%{I fill in "known_issue_title" with "First known problem"})
-    step(%{I fill in "content" with "This is a bit of a problem"})
-    step(%{I press "Post"})
+  step %{I am logged in as an admin}
+  step %{I follow "Admin Posts"}
+  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "make a new known issues post"}
+  step %{I fill in "known_issue_title" with "First known problem"}
+  step %{I fill in "content" with "This is a bit of a problem"}
+  step %{I press "Post"}
 end
 
 Given /^I have posted an admin post$/ do
   step("I am logged in as an admin")
-    step("I make an admin post")
-    step("I am logged out as an admin")
+  step("I make an admin post")
+  step("I am logged out as an admin")
 end
 
 Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
@@ -219,9 +225,28 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   click_button("Post")
 end
 
+When /^I make a multi-question FAQ post$/ do
+  visit new_archive_faq_path
+  fill_in("Question*", with: "Number 1 Question.")
+  fill_in("Answer*", with: "Number 1 posted FAQ, this is.")
+  fill_in("Category name*", with: "Standard FAQ Category")
+  fill_in("Anchor name*", with: "Number1anchor")
+  click_button("Post")
+  step %{I follow "Edit"}
+  step %{I fill in "Questions:" with "3"}
+  step %{I press "Update Form"}
+  fill_in("archive_faq_questions_attributes_1_question", with: "Number 2 Question.")
+  fill_in("archive_faq_questions_attributes_1_content", with: "This is an answer to the second question")
+  fill_in("archive_faq_questions_attributes_1_anchor", with: "whatisao32")
+  fill_in("archive_faq_questions_attributes_2_question", with: "Number 3 Question.")
+  fill_in("archive_faq_questions_attributes_2_content", with: "This is an answer to the third question")
+  fill_in("archive_faq_questions_attributes_2_anchor", with: "whatisao33")
+  click_button("Post")
+end
+
 When /^there are (\d+) Archive FAQs$/ do |n|
   (1..n.to_i).each do |i|
-    step(%{I make a #{i} FAQ post})
+    step %{I make a #{i} FAQ post}
   end
 end
 
@@ -235,7 +260,7 @@ end
 
 When /^there are (\d+) Admin Posts$/ do |n|
   (1..n.to_i).each do |i|
-    step(%{I make a #{i} Admin Post})
+    step %{I make a #{i} Admin Post}
   end
 end
 
@@ -260,13 +285,20 @@ When /^the check_queue rake task is run$/ do
 end
 
 When /^I edit known issues$/ do
-  step(%{I am logged in as an admin})
-    step( %{I follow "Admin Posts"})
-    step(%{I follow "Known Issues" within "#main"})
-    step(%{I follow "Edit"})
-    step(%{I fill in "known_issue_title" with "More known problems"})
-    step(%{I fill in "content" with "This is a bit of a problem, and this is too"})
-    step(%{I press "Post"})
+  step %{I am logged in as an admin}
+  step %{I follow "Admin Posts"}
+  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Edit"}
+  step %{I fill in "known_issue_title" with "More known problems"}
+  step %{I fill in "content" with "This is a bit of a problem, and this is too"}
+  step %{I press "Post"}
+end
+
+When /^I delete known issues$/ do
+  step %{I am logged in as an admin}
+  step %{I follow "Admin Posts"}
+  step %{I follow "Known Issues" within "#main"}
+  step %{I follow "Delete"}
 end
 
 When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
@@ -281,79 +313,79 @@ When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Deutsch Ankuendigung")
   fill_in("content", with: "Deutsch Woerter")
-  step(%{I select "Deutsch" from "Choose a language"})
+  step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
 Then (/^I should see a translated admin post$/) do
-  step(%{I go to the admin-posts page})
-  step(%{I should see "Default Admin Post"})
-  step(%{I should see "Translations: Deutsch"})
-  step(%{I follow "Default Admin Post"})
-  step(%{I should see "Deutsch" within "dd.translations"})
-  step(%{I follow "Deutsch"})
-  step(%{I should see "Deutsch Woerter"})
+  step %{I go to the admin-posts page}
+  step %{I should see "Default Admin Post"}
+  step %{I should see "Translations: Deutsch"}
+  step %{I follow "Default Admin Post"}
+  step %{I should see "Deutsch" within "dd.translations"}
+  step %{I follow "Deutsch"}
+  step %{I should see "Deutsch Woerter"}
 end
 
 Then (/^I should see a translated admin post with tags$/) do
-  step(%{I go to the admin-posts page})
-  step(%{I should see "Default Admin Post"})
-  step(%{I should see "Tags: quotes futurama"})
-  step(%{I should see "Translations: Deutsch"})
-  step(%{I follow "Default Admin Post"})
-  step(%{I should see "Deutsch" within "dd.translations"})
-  step(%{I should see "futurama" within "dd.tags"})
+  step %{I go to the admin-posts page}
+  step %{I should see "Default Admin Post"}
+  step %{I should see "Tags: quotes futurama"}
+  step %{I should see "Translations: Deutsch"}
+  step %{I follow "Default Admin Post"}
+  step %{I should see "Deutsch" within "dd.translations"}
+  step %{I should see "futurama" within "dd.tags"}
 end
 
 Then (/^I should not see a translated admin post$/) do
-  step(%{I go to the admin-posts page})
-  step(%{I should see "Default Admin Post"})
-  step(%{I should see "Deutsch Ankuendigung"})
-  step(%{I follow "Default Admin Post"})
-  step(%{I should not see "Translations: Deutsch"})
+  step %{I go to the admin-posts page}
+  step %{I should see "Default Admin Post"}
+  step %{I should see "Deutsch Ankuendigung"}
+  step %{I follow "Default Admin Post"}
+  step %{I should not see "Translations: Deutsch"}
 end
 
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am logged out})
-  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+  step %{I am logged out}
+  step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
 Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am logged in as a random user})
-  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+  step %{I am logged in as a random user}
+  step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
 Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am on #{user}'s works page})
-  step(%{I should not see "#{work}"})
-  step(%{I view the work "#{work}"})
-  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+  step %{I am on #{user}'s works page}
+  step %{I should not see "#{work}"}
+  step %{I view the work "#{work}"}
+  step %{I should see "Sorry, you don't have permission to access the page you were trying to reach."}
 end
 
 Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
-  step(%{I am logged in as "#{user}"})
-  step(%{I am on my works page})
-  step(%{I should not see "#{work}"})
-  step(%{I view the work "#{work}"})
-  step(%{I should see the image "title" text "Hidden by Administrator"})
+  step %{I am logged in as "#{user}"}
+  step %{I am on my works page}
+  step %{I should not see "#{work}"}
+  step %{I view the work "#{work}"}
+  step %{I should see the image "title" text "Hidden by Administrator"}
 end
 
 Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am logged out})
-  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+  step %{I am logged out}
+  step %{I should see the unhidden work "#{work}" by "#{user}"}
 end
 
 Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am logged in as a random user})
-  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+  step %{I am logged in as a random user}
+  step %{I should see the unhidden work "#{work}" by "#{user}"}
 end
 
 Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
-  step(%{I am on #{user}'s works page})
-  step(%{I should see "#{work}"})
-  step(%{I view the work "#{work}"})
-  step(%{I should see "#{work}"})
+  step %{I am on #{user}'s works page}
+  step %{I should see "#{work}"}
+  step %{I view the work "#{work}"}
+  step %{I should see "#{work}"}
 end
 
 Then(/^the work "(.*?)" should not be deleted$/) do |work|
