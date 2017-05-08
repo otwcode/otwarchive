@@ -113,6 +113,9 @@ describe AbuseReport do
     # obviously
     it_behaves_like "enough already", work_url
 
+    # the same work, different protocol
+    it_behaves_like "enough already", "https://archiveofourown.org/works/789"
+
     # the same work, with parameters/anchors
     it_behaves_like "enough already", "http://archiveofourown.org/works/789?smut=yes"
     it_behaves_like "enough already", "http://archiveofourown.org/works/789?smut=yes#timeline"
@@ -172,6 +175,9 @@ describe AbuseReport do
 
     # obviously
     it_behaves_like "enough already", user_url
+
+    # the same user, different protocol
+    it_behaves_like "enough already", "https://archiveofourown.org/users/someone"
 
     # the same user, with parameters/anchors
     it_behaves_like "enough already", "http://archiveofourown.org/users/someone?sfw=yes"
