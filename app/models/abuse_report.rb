@@ -23,7 +23,7 @@ class AbuseReport < ActiveRecord::Base
   def clean_url
     # Work URLs: "works/123"
     # Profile URLs: "users/username"
-    if url.match(/(works\/\d+)/) || url.match(/(users\/\w+)/)
+    if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
       uri = Addressable::URI.parse url
       uri.query = nil
       uri.fragment = nil
@@ -67,7 +67,7 @@ class AbuseReport < ActiveRecord::Base
     message = ts('URL has already been reported. To make sure the Abuse Team
                  can handle reports quickly and efficiently, we limit the number
                  of times a URL can be reported.')
-    if url.match(/\/works\/\d+/)
+    if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
@@ -77,7 +77,7 @@ class AbuseReport < ActiveRecord::Base
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
         errors[:base] << message
       end
-    elsif url.match(/\/users\/\w+/)
+    elsif url =~ /\/users\/\w+/
       user_params_only = url.match(/\/users\/\w+\//).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
