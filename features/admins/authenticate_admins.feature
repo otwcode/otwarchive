@@ -19,11 +19,12 @@ Feature: Authenticate Admin Users
       | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
 
-  When I go to the admin_login page
-      And I fill in "admin_session_login" with "dizmo"
-      And I fill in "admin_session_password" with "wrangulator"
+  When I go to the admin login page
+      And I fill in "admin_login" with "dizmo"
+      And I fill in "admin_password" with "wrangulator"
       And I press "Log in as admin"
-    Then I should see "Authentication failed"
+    Then I should not see "Successfully logged in"
+      And I should see "Admin user name"
 
   Scenario: Admin can log in
 
@@ -32,8 +33,8 @@ Feature: Authenticate Admin Users
       | login       | password |
       | Zooey       | secret   |
       And I have loaded the "roles" fixture
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
+    When I go to the admin login page
+      And I fill in "admin_login" with "Zooey"
+      And I fill in "admin_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"

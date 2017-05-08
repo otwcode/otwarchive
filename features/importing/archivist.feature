@@ -220,8 +220,43 @@ Feature: Archivist bulk imports
     When I go to the Open Doors tools page
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
-  Scenario: Open Doors committee members can see their tools
-    Given I have an Open Doors committee member "OpenDoors"
+  Scenario: Open Doors committee members can update the redirect URL of a work
+    Given the work "My Immortal"
+      And I have an Open Doors committee member "OpenDoors"
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
     Then I should see "Update Redirect URL"
+    When I fill in "imported_from_url" with "http://example.com/my-immortal"
+      And I fill in "work_url" with the path to the "My Immortal" work page
+      And I submit with the 2nd button
+    Then I should see "Updated imported-from url for My Immortal to http://example.com/my-immortal"
+    When I follow "http://example.com/my-immortal"
+    Then I should be on the "My Immortal" work page
+
+  Scenario: Open Doors committee members can block an email address from having imports
+    Given I have an Open Doors committee member "OpenDoors"
+      And I have an archivist "archivist"
+      And the default ratings exist
+      And I am logged in as "OpenDoors"
+    When I go to the Open Doors tools page
+      And I fill in "external_author_email" with "random@example.com"
+      And I submit with the 3rd button
+    Then I should see "We have saved and blocked the email address random@example.com"
+    When I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
+    Then I should see "Author ao3testing at random@example.com does not allow importing their work to this archive."
+
+  Scenario: Open Doors committee members can supply a new email address for an already imported work.
+    Given I have an Open Doors committee member "OpenDoors"
+      And I have an archivist "archivist"
+      And the default ratings exist
+      And I am logged in as "archivist"
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+      And I am logged in as "OpenDoors"
+      And I go to the Open Doors external authors page
+    Then I should see "random@example.com"
+    When I fill in "email" with "random_person@example.com"
+      And I submit
+    Then I should see "Claim invitation for random@example.com has been forwarded to random_person@example.com"
+      And 1 email should be delivered to "random_person@example.com"

@@ -18,12 +18,14 @@ module NavigationHelpers
       search_tags_path
     when /^the search works page$/i
       Work.tire.index.refresh
-      search_works_path      
+      search_works_path
     when /^the search people page$/i
       Pseud.tire.index.refresh
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the admin login page$/i
+      new_admin_session_path
 
     # the following are examples using path_to_pickle
 
@@ -51,6 +53,8 @@ module NavigationHelpers
       new_user_path
     when /^invite requests page$/i
       invite_requests_path
+    when /^the manage invite queue page$/i
+      manage_invite_requests_path
     when /my pseuds page/
       user_pseuds_path(User.current_user)
     when /my user page/
@@ -66,9 +70,9 @@ module NavigationHelpers
     when /my edit multiple works page/
       show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
-      user_subscriptions_path(User.current_user)   
+      user_subscriptions_path(User.current_user)
     when /my stats page/
-      user_stats_path(User.current_user)   
+      user_stats_path(User.current_user)
     when /my profile page/
       user_profile_path(User.current_user)
     when /my claims page/
@@ -85,10 +89,14 @@ module NavigationHelpers
       user_gifts_path(User.current_user)
     when /my assignments page/
       user_assignments_path(User.current_user)
+    when /^my collection items page$/
+      user_collection_items_path(User.current_user)
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
+    when /the public skins page/
+      skins_path
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
@@ -124,23 +132,31 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? profile page$/i
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
-      skins_path(user_id: $1)
+      user_skins_path(user_id: $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
+    when /^the new skin page/
+      new_skin_path
     when /^the new wizard skin page/
       new_skin_path(wizard: true)
     when /^"(.*)" edit skin page/
       edit_skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit wizard skin page/
       edit_skin_path(Skin.find_by_title($1), wizard: true)
+    when /^the new collection page/
+      new_collection_path
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
       collection_path(Collection.find_by_title($1))
+    when /^"(.*)" collection edit page$/i
+      edit_collection_path(Collection.find_by_title($1))
     when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
       collection_signups_path(Collection.find_by_title($1))
     when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page
       collection_requests_path(Collection.find_by_title($1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by_title($1))
+    when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
+      collection_participants_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
@@ -167,14 +183,6 @@ module NavigationHelpers
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
-    when /^the admin-posts page$/i
-      admin_posts_path
-    when /^the admin-settings page$/i
-      admin_settings_path      
-    when /^the admin-notices page$/i
-      notify_admin_users_path
-    when /^the admin-blacklist page$/i
-      admin_blacklisted_emails_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
@@ -190,15 +198,13 @@ module NavigationHelpers
     when /^the new tag ?set page$/i
       new_tag_set_path
     when /^the "(.*)" tag ?set edit page$/i
-      edit_tag_set_path(OwnedTagSet.find_by_title($1))    
+      edit_tag_set_path(OwnedTagSet.find_by_title($1))
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by_title($1))
-    when /^the manage users page$/
-      admin_users_path
-    when /^the abuse administration page for "(.*)"$/i
-      admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
+    when /^the Open Doors external authors page$/i
+      opendoors_external_authors_path
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i
@@ -211,7 +217,25 @@ module NavigationHelpers
       tag_wranglings_path
     when /^the "(.*)" fandom relationship page$/i
       fandom_path($1)
-      
+    when /^the new external work page$/i
+      new_external_work_path
+
+    # Admin Pages
+    when /^the admin-posts page$/i
+      admin_posts_path
+    when /^the admin-settings page$/i
+      admin_settings_path
+    when /^the admin-notices page$/i
+      notify_admin_users_path
+    when /^the admin-blacklist page$/i
+      admin_blacklisted_emails_path
+    when /^the manage users page$/
+      admin_users_path
+    when /^the bulk email search page$/i
+      bulk_search_admin_users_path
+    when /^the abuse administration page for "(.*)"$/i
+      admin_user_path(User.find_by_login($1))
+
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
@@ -231,4 +255,3 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
-
