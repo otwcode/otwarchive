@@ -263,11 +263,6 @@ class ChaptersController < ApplicationController
       params[:pseud][:byline] = ""
     end
 
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:chapter] && params[:chapter][:author_attributes] && params[:chapter][:author_attributes][:coauthors]
-      params[:chapter][:author_attributes][:ids].concat(params[:chapter][:author_attributes][:coauthors]).uniq!
-    end
-
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       if params[:chapter]  # editing, save our changes
@@ -308,7 +303,7 @@ class ChaptersController < ApplicationController
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
-                                    author_attributes: [:byline, ids: [], coauthors: []])
+                                    author_attributes: [:byline, ids: []])
 
   end
 end

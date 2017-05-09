@@ -192,7 +192,7 @@ Given /^a set of users for testing autocomplete$/ do
 end
 
 Then /^the coauthor autocomplete field should list matching users$/ do
-  check("Add co-authors?")
+  check("co-authors-options-show")
   step %{I enter "coa" in the "pseud_byline_autocomplete" autocomplete field}
   step %{I should see "coauthor" in the autocomplete}
   step %{I should not see "giftee" in the autocomplete}
