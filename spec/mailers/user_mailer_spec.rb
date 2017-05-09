@@ -12,18 +12,18 @@ describe UserMailer do
 
     # Shared content tests for both email types
     shared_examples_for 'claim content' do
-      it 'should contain the text for a claim email' do
+      it 'contains the text for a claim email' do
         expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
       end
     end
 
     # Test the headers
-    it 'should have a valid from line' do
+    it 'has a valid from line' do
       text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
-    it 'should have the correct subject line' do
+    it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
       expect(email.subject).to eq(text)
     end
@@ -36,15 +36,15 @@ describe UserMailer do
         let(:part) { get_message_part(email, /html/) }
       end
 
-      it 'should list the first imported work in an unordered list in the HTML body' do
+      it 'lists the first imported work in an unordered list in the HTML body' do
         expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
       end
 
-      it 'should list the second imported work in an unordered list in the HTML body' do
+      it 'lists the second imported work in an unordered list in the HTML body' do
         expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
       end
 
-      it 'should only have style_to links in the HTML body' do
+      it 'only has style_to links in the HTML body' do
         expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
       end
     end
@@ -54,11 +54,11 @@ describe UserMailer do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'should list the first imported work as plain text' do
+      it 'lists the first imported work as plain text' do
         expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
       end
 
-      it 'should list the second imported work with a leading hyphen' do
+      it 'lists the second imported work with a leading hyphen' do
         expect(get_message_part(email, /plain/)).to include('- ' + title2)
       end
     end
@@ -102,18 +102,18 @@ describe UserMailer do
 
     # Shared content tests for both email types
     shared_examples_for 'invitation to claim content' do
-      it 'should contain the text for an invitation claim email' do
+      it 'contains the text for an invitation claim email' do
         expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
       end
     end
 
     # Test the headers
-    it 'should have a valid from line' do
+    it 'has a valid from line' do
       text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
-    it 'should have the correct subject line' do
+    it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
       expect(email.subject).to eq(text)
     end
@@ -126,15 +126,15 @@ describe UserMailer do
         let(:part) { get_message_part(email, /html/) }
       end
 
-      it 'should list the first imported work in an unordered list in the HTML body' do
+      it 'lists the first imported work in an unordered list in the HTML body' do
         expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
       end
 
-      it 'should list the second imported work in an unordered list in the HTML body' do
+      it 'lists the second imported work in an unordered list in the HTML body' do
         expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
       end
 
-      it 'should only have style_to links in the HTML body' do
+      it 'only has style_to links in the HTML body' do
         expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
       end
     end
@@ -144,11 +144,11 @@ describe UserMailer do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'should list the first imported work as plain text' do
+      it 'lists the first imported work as plain text' do
         expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
       end
 
-      it 'should list the second imported work with a leading hyphen' do
+      it 'lists the second imported work with a leading hyphen' do
         expect(get_message_part(email, /plain/)).to include(title2)
       end
     end
@@ -164,12 +164,12 @@ describe UserMailer do
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
 
     # Test the headers
-    it 'should have a valid from line' do
+    it 'has a valid from line' do
       text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
       expect(email.header['From'].to_s).to eq(text)
     end
 
-    it 'should have the correct subject line' do
+    it 'has the correct subject line' do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
       expect(email.subject).to eq(text)
     end
@@ -178,21 +178,21 @@ describe UserMailer do
     it_behaves_like "multipart email"
 
     describe 'HTML version' do
-      it 'should have text contents' do
+      it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
       end
       
-      it 'should not have missing translations' do
+      it 'does not have missing translations' do
         expect(get_message_part(email, /html/)).not_to include("translation missing")
       end
     end
 
     describe 'text version' do
-      it 'should say the right thing' do
+      it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
       end
       
-      it 'should not have missing translations' do
+      it 'does not have missing translations' do
         expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
@@ -241,6 +241,54 @@ describe UserMailer do
       end
       
       it 'should not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
+
+  describe "challenge assignment" do
+    let!(:gift_exchange) { create(:gift_exchange) }
+    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+    let!(:otheruser) { create(:user) }
+    let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
+    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
+
+    let(:email) { UserMailer.challenge_assignment_notification(collection.id, otheruser.id, open_assignment.id).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your Assignment!"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("You have been assigned the following request")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("You have been assigned the following request")
+      end
+      
+      it 'does not have missing translations' do
         expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end

@@ -1,7 +1,6 @@
-require 'faker'
+require "faker"
 
 FactoryGirl.define do
-
   sequence(:faq_title) do |n|
     "The #{n} FAQ"
   end
@@ -11,8 +10,6 @@ FactoryGirl.define do
   end
 
   factory :archive_faq do |f|
-    title {generate(:faq_title)}
-    content
+    title { generate(:faq_title) }
   end
-
 end
