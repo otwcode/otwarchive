@@ -370,6 +370,8 @@ class Work < ActiveRecord::Base
       end
       chapter.save
     end
+    # Update cache_key after chapter pseuds have been updated.
+    self.touch
   end
 
   def add_creator(creator_to_add, new_pseud = nil)
