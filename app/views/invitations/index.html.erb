@@ -19,7 +19,7 @@
     <p>Sorry, you have no unsent invitations right now. <%= link_to ts('Request invitations'), new_user_invite_request_path %></p>
   <% else %>
     <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
-    <%= form_tag url: invite_friend_user_invitations_path(@user) do  %>
+    <%= form_tag invite_friend_user_invitations_path(@user) do  %>
       <dl>
         <dt><%= label_tag "invitation[invitee_email]", t('.email address', :default => 'Email address') %></dt>
         <dd><%= text_field_tag "invitation[invitee_email]" %></dd>
