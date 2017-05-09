@@ -49,6 +49,19 @@ namespace :Tag do
     end
   end
 
+  desc "Reset non canonical warnings"
+  task(reset_non_canonical_warnings: :environment) do
+    Warning.where(canonical: [false, nil]).each do |warning|
+      if warning.taggings_count.zero?
+        warning.destroy
+      else
+        # Once we get becomes!  ( rails 4.0.2 ) use it
+        warning.type = "Freeform"
+        warning.save!
+      end
+    end
+  end
+
   desc "Delete unused admin post tags"
   task(delete_unused_admin_post_tags: :environment) do
     AdminPostTag.joins("LEFT JOIN `admin_post_taggings` ON admin_post_taggings.admin_post_tag_id = admin_post_tags.id").where("admin_post_taggings.id IS NULL").destroy_all
