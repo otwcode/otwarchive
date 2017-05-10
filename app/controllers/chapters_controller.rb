@@ -277,9 +277,9 @@ class ChaptersController < ApplicationController
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id }
+    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
+    @selected_pseuds = @to_select.collect { |pseud| pseud.id.to_i }
     
     # make sure at least one of the pseuds is actually owned by this user
     user_ids = Pseud.where(id: @selected_pseuds).value_of(:user_id).uniq

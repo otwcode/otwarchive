@@ -3,7 +3,11 @@
 </dt>
 <dd class="byline<%= @pseuds.size > 1 ? "" : " hidden" %>">
   <%= select_tag "#{type}[author_attributes][ids][]",
-      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), multiple: true %>
+                 options_from_collection_for_select(@pseuds,
+                                                   :id,
+                                                   :name,
+                                                   selected_pseuds(type)),
+                 multiple: true %>
 </dd>
 
 <% if @coauthors.size > 0 %>
@@ -46,9 +50,8 @@
   <% end %>
 <% end %>
 
-
 <dt class="byline coauthors">
- <%= label_tag "co-authors-options-show", ts("Add co-creators?") %> 
+ <%= label_tag "co-authors-options-show", ts("Add co-creators?") %>
 </dt>
 <dd class="byline coauthors">
   <%= check_box_tag "co-authors-options-show", "1", nil, class: "toggle_formfield" %>
