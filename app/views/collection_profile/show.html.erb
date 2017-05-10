@@ -44,7 +44,7 @@
   </div>
 
 
-  <% cache("collection-profile-#{@collection.id}") do %>
+  <% cache("collection-profile-#{@collection.id}", skip_digest: true) do %>
 
   <!--main content-->
 

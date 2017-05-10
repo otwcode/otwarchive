@@ -73,7 +73,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post Without Preview")
   end
   Work.tire.index.refresh
-  # Tag.write_redis_to_database
+  Tag.write_redis_to_database
 end
 
 # Again, same regexp, it just creates a draft and not a posted
