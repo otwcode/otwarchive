@@ -211,6 +211,10 @@ describe StoryParser do
       to_return(status: 200,
                 body: body.force_encoding("Windows-1252"),
                 headers: {})
+
+    WebMock.stub_request(:any, /non-sgml-character-number-3/).
+      to_return(status: 200,
+                body: "<body>\0When I get out of here</body>")
   end
 
   describe "Import" do
@@ -230,6 +234,11 @@ describe StoryParser do
           @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
         }.to_not raise_exception
       end
+    end
+
+    it "ignores string terminators (AO3-2251)" do
+      story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
+      expect(story.chapters[0].content).to include("When I get out of here")
     end
   end
 end

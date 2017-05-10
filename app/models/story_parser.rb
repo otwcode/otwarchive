@@ -912,7 +912,7 @@ class StoryParser
         raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
 
-      # clean up any erroneously included string terminator (Issue 785)
+      # clean up any erroneously included string terminator (AO3-2251)
       story.gsub!("\000", "")
 
       story
