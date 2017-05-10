@@ -23,6 +23,10 @@ Given /^the default ratings exist$/ do
   end
 end
 
+Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
+  Rating.find_or_create_by(name: rating, canonical: true, adult: true)
+end
+
 Given /^the basic warnings exist$/ do
   Warning.find_or_create_by_name("No Archive Warnings Apply").update(canonical: true)
   Warning.find_or_create_by_name("Choose Not To Use Archive Warnings").update(canonical: true)
