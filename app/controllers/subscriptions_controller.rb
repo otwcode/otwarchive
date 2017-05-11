@@ -14,12 +14,17 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions
   # GET /subscriptions.xml
   def index
+    retries ||= 0
     @subscriptions = @user.subscriptions.includes(:subscribable)
     if params[:type].present?
       @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
     end
-    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }    
+    @subscriptions = @subscriptions.to_a.sort { |a, b| a.name.downcase <=> b.name.downcase }
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
+  rescue
+    @user.fix_user_subscriptions
+    retry if (retries += 1) < 2
+    raise
   end
 
   # POST /subscriptions
@@ -57,9 +62,9 @@ class SubscriptionsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
-  
+
   private
-  
+
   def subscription_params
     params.require(:subscription).permit(
       :subscribable_id, :subscribable_type
