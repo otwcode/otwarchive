@@ -20,10 +20,16 @@ When /^I search for works containing "([^\"]*)"$/ do |term|
       step %{I press "Search"}
 end
 
-When /^I search for works by mod$/ do
+When /^I search for works by mod1$/ do
   step %{I am on the homepage}
-      step %{I fill in "site_search" with "author: mod"}
-      step %{I press "Search"}
+  step %{I fill in "site_search" with "creator: mod1"}
+  step %{I press "Search"}
+end
+
+When /^I search for works by Anonymous$/ do
+  step %{I am on the homepage}
+  step %{I fill in "site_search" with "creator: Anonymous"}
+  step %{I press "Search"}
 end
 
 ### THEN

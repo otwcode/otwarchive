@@ -4,24 +4,50 @@ Feature: Search Works
   As a humble coder
   I have to use Cucumber with Elasticsearch
 
-  Scenario: anon work doesn't show up in searches
+  Scenario: Works that are anonymous do not show up in searches for the
+  creator's name
     Given I have the Battle set loaded
-      
-      When I search for works containing "mod"
-      Then I should see "No results found"
-      When I search for works by mod
-      Then I should see "No results found"
-    
-  Scenario: reveal works doesn't show up in searches
+
+      When I search for works containing "mod1"
+      Then I should see "You searched for: mod1"
+        And I should see "No results found"
+      When I search for works by mod1
+      Then I should see "You searched for: creator: mod1"
+        And I should see "No results found"
+
+  Scenario: Works that are anonymous should show up in searches for the
+  creator Anonymous
+    Given I have the Battle set loaded
+
+    When I search for works containing "Anonymous"
+    Then I should see "You searched for: Anonymous"
+      And I should see "1 Found"
+    When I search for works by Anonymous
+    Then I should see "You searched for: creator: Anonymous"
+      And I should see "1 Found"
+    When I go to the search works page
+      And I fill in "Author/Artist" with Anonymous"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Author/Artist: Anonymous"
+      And I should see "1 Found"
+
+  Scenario: Works that used to be anonymous show up in searches for the
+  creator's name once the creator is revealed
     Given I have the Battle set loaded
 
     When I reveal the authors of the "Battle 12" challenge
       And all search indexes are updated
-      And I am logged in as "myname4"
-      And I search for works containing "mod"
-    Then I should see "No results found"
-    When I search for works by mod
-    Then I should see "No results found"
+    When I search for works containing "mod1"
+    Then I should see "You searched for: mod1"
+      And I should see "1 Found"
+    When I search for works by mod1
+    Then I should see "You searched for: creator: mod1"
+      And I should see "1 Found"
+    When I go to the search works page
+      And I fill in "Author/Artist" with "mod1"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Author/Artist: mod1"
+      And I should see "1 Found"
 
   Scenario:  do some valid searches
     Given I have the Battle set loaded
