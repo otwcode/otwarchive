@@ -1,4 +1,5 @@
 language: ruby
+dist: trusty
 cache: bundler
 sudo: required
 env:
