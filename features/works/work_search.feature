@@ -2,10 +2,8 @@
 Feature: Search Works
   In order to test search
   As a humble coder
-  I have to use cucumber with thinking sphinx
-  
-  # do everything that doesn't modify the works in one scenario
-  # so you only have to load the fixtures and update the sphinx indexes once
+  I have to use Cucumber with Elasticsearch
+
   Scenario: anon work doesn't show up in searches
     Given I have the Battle set loaded
       
