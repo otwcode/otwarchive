@@ -188,6 +188,7 @@ Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
     user = FactoryGirl.create(:user, login: username)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 

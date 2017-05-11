@@ -89,7 +89,7 @@ Scenario: Edit profile - change password - mistake in typing old password
 Scenario: Edit profile - change password - mistake in typing new password confirmation
 
   When I make a typing mistake confirming my new password
-    Then I should see "Password confirmation doesn't match Password"
+    Then I should see "Password confirmation doesn't match confirmation"
 
 Scenario: Edit profile - change password
 
