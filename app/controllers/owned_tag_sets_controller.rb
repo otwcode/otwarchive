@@ -9,7 +9,7 @@ class OwnedTagSetsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:id])
     unless @tag_set
-      flash[:notice] = ts("What Tag Set did you want to look at?")
+      flash[:error] = ts("What Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end

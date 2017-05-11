@@ -100,7 +100,6 @@ Given(/^I have the Battle set loaded$/) do
   step %{mod fulfills claim}
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
-  step %{I have flushed Redis}
   step %{the statistics_tasks rake task is run}
   step %{the work indexes are updated}
 end
@@ -249,20 +248,32 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
+  step %{a chapter is set up for "#{work_title}"}
+  step %{I add the co-author "#{coauthor}"}
+  click_button("Post")
+  Work.tire.index.refresh
+  Tag.write_redis_to_database
+end
+
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
+  step %{a chapter is set up for "#{work_title}"}
+  step %{I press "Preview"}
+  Work.tire.index.refresh
+  Tag.write_redis_to_database
+end
+
+When /^a chapter is set up for "([^"]*)"$/ do |work_title|
   work = Work.find_by(title: work_title)
   user = work.users.first
   step %{I am logged in as "#{user.login}"}
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
-  step %{I press "Preview"}
-  Work.tire.index.refresh
-  Tag.write_redis_to_database
 end
 
 # meant to be used in conjunction with above step
-When /^I post the draft chapter$/ do
+When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
   Tag.write_redis_to_database
@@ -459,8 +470,14 @@ end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
-  check("Add co-authors?")
+  check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
+end
+
+When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
+  step %{the user "#{coauthor1}" exists and is activated}
+  step %{the user "#{coauthor2}" exists and is activated}
+  fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
 end
 
 When /^I give the work to "([^"]*)"$/ do |recipient|

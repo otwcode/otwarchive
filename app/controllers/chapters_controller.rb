@@ -2,9 +2,9 @@ class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_filter :users_only, :except => [ :index, :show, :destroy, :confirm_delete ]
   before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :check_ownership, :only => [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
@@ -263,11 +263,6 @@ class ChaptersController < ApplicationController
       params[:pseud][:byline] = ""
     end
 
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:chapter] && params[:chapter][:author_attributes] && params[:chapter][:author_attributes][:coauthors]
-      params[:chapter][:author_attributes][:ids].concat(params[:chapter][:author_attributes][:coauthors]).uniq!
-    end
-
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       if params[:chapter]  # editing, save our changes
@@ -282,9 +277,9 @@ class ChaptersController < ApplicationController
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id }
+    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
+    @selected_pseuds = @to_select.collect { |pseud| pseud.id.to_i }
 
     # make sure at least one of the pseuds is actually owned by this user
     user_ids = Pseud.where(id: @selected_pseuds).pluck(:user_id).uniq
@@ -308,7 +303,7 @@ class ChaptersController < ApplicationController
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
-                                    author_attributes: [:byline, ids: [], coauthors: []])
+                                    author_attributes: [:byline, ids: []])
 
   end
 end

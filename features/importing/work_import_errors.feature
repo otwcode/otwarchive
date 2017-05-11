@@ -4,13 +4,13 @@ Feature: Import Works
   As an author
   I want to create new works by importing them
 
-  @work_import_errors
   Scenario: Entering a bogus URL
     Given basic tags
+      And I set up importing with a mock website
       And I am logged in as a random user
     When I go to the import page
-      And I fill in "urls" with "http://bogus.invalid"
+      And I fill in "urls" with "http://no-content"
     When I press "Import"
-    Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://bogus.invalid. Please make sure that the URL is correct and complete, and try again."
-    When I go to the works page
-    Then I should not see "bogus"
+    Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://no-content. Please make sure that the URL is correct and complete, and try again."
+    When I go to my works page
+    Then I should see "Drafts (0)"

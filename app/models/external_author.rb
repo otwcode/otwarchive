@@ -136,18 +136,17 @@ class ExternalAuthor < ActiveRecord::Base
 
   def find_or_invite(archivist = nil)
     if self.email
-      matching_user = User.find_by(email: self.email)
+      matching_user = User.find_by(email: self.email) || User.find_by_id(self.user_id)
       if matching_user
         self.claim!(matching_user)
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
+          @invitation = Invitation.new(invitee_email: self.email, external_author: self, creator: User.current_user)
           @invitation.save
         end
       end
     end
-    # eventually we may want to try finding authors by pseud?
   end
 
 end

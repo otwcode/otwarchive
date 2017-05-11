@@ -314,3 +314,17 @@ end
 Then /^show me the network traffic$/ do
   puts page.driver.network_traffic.to_yaml
 end
+
+Then /^cookie "([^\"]*)" should be like "([^\"]*)"$/ do |cookie, value|
+  cookie_value = Capybara.current_session.driver.request.cookies.[](cookie)
+  if cookie_value.respond_to? :should
+    cookie_value.should =~ /#{value}/
+  else
+    assert cookie_value =~ /#{value}/
+  end
+end
+
+Then /^cookie "([^"]*)" should be deleted$/ do |cookie|
+  cookie_value = Capybara.current_session.driver.request.cookies.[](cookie)
+  assert cookie_value.nil?
+end

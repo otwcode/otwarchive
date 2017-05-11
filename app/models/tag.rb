@@ -709,37 +709,6 @@ class Tag < ActiveRecord::Base
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
   end
 
-
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    Tag.where("taggings_count_cache != 0 AND (canonical = 1 OR merger_id IS NOT NULL)").find_each do |tag|
-      if tag.filter
-        to_add = tag.works - tag.filter.filtered_works
-        to_add.each do |work|
-          tag.filter.filter_taggings.create!(:filterable => work)
-        end
-      end
-    end
-  end
-
-  # Add any filter taggings that should exist but don't
-  def self.add_missing_filter_taggings
-    i = Work.posted.count
-    Work.where(posted: 1).find_each do |work|
-      begin
-        should_have = work.tags.collect(&:filter).compact.uniq
-        should_add = should_have - work.filters
-        unless should_add.empty?
-          puts "Fixing work #{i}"
-          work.filters = (work.filters + should_add).uniq
-        end
-      rescue
-        puts "Problem with work #{work.id}"
-      end
-      i = i - 1
-    end
-  end
-
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
@@ -1058,7 +1027,12 @@ class Tag < ActiveRecord::Base
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = Tag.find_by_name(name)
-      self.add_association(parent) if parent && parent.canonical?
+      if parent && parent.canonical?
+        add_association(parent)
+      else
+        errors.add(:base, "Cannot add association: '#{name}' tag " +
+          (parent ? "is not canonical." : "does not exist."))
+      end
     end
   end
 

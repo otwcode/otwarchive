@@ -107,12 +107,6 @@ form.filters dl {
   padding-right: 0;
 }
 
-.filters .submit input {
-  height: 100%;
-  min-height: 1.286em;
-  white-space: normal;
-}
-
 form.filters dl dl {
   margin: 0;
   padding: 0;
