@@ -72,7 +72,7 @@ gem 'paperclip', '4.3.6'
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise', '~> 3.0'   # Lock on version 3 until we update to Rails 4
+gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'authlogic', '~> 3.3.0'
 gem 'bcrypt'
