@@ -26,7 +26,7 @@ Feature: Search Works
     Then I should see "You searched for: creator: Anonymous"
       And I should see "1 Found"
     When I go to the search works page
-      And I fill in "Author/Artist" with Anonymous"
+      And I fill in "Author/Artist" with "Anonymous"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Author/Artist: Anonymous"
       And I should see "1 Found"
