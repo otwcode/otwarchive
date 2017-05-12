@@ -79,11 +79,11 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   synonym.save
 end
 
-Given /^"([^\"]*)" is a metatag of the fandom "([^\"]*)"$/ do |metatag, fandom|
-  fandom = Fandom.find_or_create_by_name(fandom)
-  metatag = Fandom.find_or_create_by_name(metatag)
-  fandom.meta_tags << metatag
-  fandom.save
+Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type, tag|
+  tag = tag_type.classify.constantize.find_or_create_by_name(tag)
+  metatag = tag_type.classify.constantize.find_or_create_by_name(metatag)
+  tag.meta_tags << metatag
+  tag.save
 end
 
 Given /^I am logged in as a tag wrangler$/ do
