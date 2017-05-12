@@ -261,7 +261,3 @@ end
 Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
 end
-
-When(/^I pry$/) do
-  binding.pry
-end

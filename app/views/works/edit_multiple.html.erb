@@ -13,7 +13,7 @@
 
 <%= render "works/work_abbreviated_list", :works => @works %>
 
-<%= form_for :work, :url => update_multiple_user_works_path(@user), method: :put, :html => { :class => "post" } do |form| %>
+<%= form_for :work, :url => update_multiple_user_works_path(@user), method: :patch, :html => { :class => "post" } do |form| %>
   <p class="required notice">
     <%= ts("* Required information") %>
     <% @works.each do |work| %>
