@@ -94,7 +94,7 @@ Feature: Search Works
       And the field labeled "Date" should contain "> 2 years ago"
     When I fill in "Word Count" with ">15000"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: word count: >1500 revised at: > 2 years ago"
+    Then I should see "You searched for: word count: >15000 revised at: > 2 years ago"
       And I should see "No results found"
 
   Scenario: Search by > hits
