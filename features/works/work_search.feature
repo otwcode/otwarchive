@@ -6,23 +6,21 @@ Feature: Search Works
 
   Scenario: Works that are anonymous do not show up in searches for the
   creator's name
-    Given I have the Battle set loaded
-
+      Given I have the Battle set loaded
       When I search for works containing "mod1"
       Then I should see "You searched for: mod1"
         And I should see "No results found"
-      When I search for works by mod1
+      When I search for works by "mod1"
       Then I should see "You searched for: creator: mod1"
         And I should see "No results found"
 
   Scenario: Works that are anonymous should show up in searches for the
   creator Anonymous
     Given I have the Battle set loaded
-
     When I search for works containing "Anonymous"
     Then I should see "You searched for: Anonymous"
       And I should see "1 Found"
-    When I search for works by Anonymous
+    When I search for works by "Anonymous"
     Then I should see "You searched for: creator: Anonymous"
       And I should see "1 Found"
     When I go to the search works page
@@ -34,13 +32,12 @@ Feature: Search Works
   Scenario: Works that used to be anonymous show up in searches for the
   creator's name once the creator is revealed
     Given I have the Battle set loaded
-
-    When I reveal the authors of the "Battle 12" challenge
+      And I reveal the authors of the "Battle 12" challenge
       And all search indexes are updated
     When I search for works containing "mod1"
     Then I should see "You searched for: mod1"
       And I should see "1 Found"
-    When I search for works by mod1
+    When I search for works by "mod1"
     Then I should see "You searched for: creator: mod1"
       And I should see "1 Found"
     When I go to the search works page
