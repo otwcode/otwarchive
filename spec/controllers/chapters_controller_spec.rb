@@ -967,4 +967,74 @@ describe ChaptersController do
       end
     end
   end
+
+  describe "destroy" do
+
+    context "when user is logged out" do
+      it "errors and redirects to login" do
+        pending "clean up chapter filters"
+        delete :destroy, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when work owner is logged in" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      context "when work has one chapter" do
+        it "redirects to edit work" do
+          delete :destroy, work_id: @work.id, id: @work.chapters.first.id
+          it_redirects_to_with_error(edit_work_path(@work), "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+        end
+      end
+
+      context "when work has more than one chapter" do
+        before do
+          @chapter2 = create(:chapter, work: @work, posted: true, position: 2, authors: [user.pseuds.first])
+        end
+
+        it "updates the work's minor version" do
+          expect(@work.minor_version).to eq(0)
+          delete :destroy, work_id: @work.id, id: @chapter2.id
+          expect(assigns[:work].minor_version).to eq(1)
+        end
+
+        it "updates the work's revision date" do
+          delete :destroy, work_id: @work.id, id: @chapter2.id
+          expect(assigns[:work].updated_at).not_to eq(@work.updated_at)
+        end
+
+        it "gives a notice that the chapter was deleted and redirects to work" do
+          delete :destroy, work_id: @work.id, id: @chapter2.id
+          it_redirects_to_with_notice(@work, "The chapter was successfully deleted.")
+        end
+
+        it "gives a notice that the chapter was a draft if the chapter was not posted" do
+          @chapter2.posted = false
+          @chapter2.save
+          delete :destroy, work_id: @work.id, id: @chapter2.id
+          it_redirects_to_with_notice(@work, "The chapter draft was successfully deleted.")
+        end
+
+        it "errors redirects to work when chapter is not deleted" do
+          allow_any_instance_of(Chapter).to receive(:destroy).and_return(false)
+          delete :destroy, work_id: @work.id, id: @chapter2.id
+          it_redirects_to_with_error(@work, "Something went wrong. Please try again.")
+        end
+      end
+    end
+
+    context "when other user is logged in" do
+      before do
+        fake_login
+      end
+
+      it "errors and redirects to work" do
+        delete :destroy, work_id: @work.id, id: @work.chapters.first.id
+        it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
 end
