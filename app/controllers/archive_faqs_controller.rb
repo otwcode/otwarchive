@@ -19,7 +19,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1
   def show
     @questions = []
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
     if params[:language_id] == "en"
       @questions = @archive_faq.questions
     else
@@ -69,7 +69,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/edit
   def edit
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
     build_questions
   end
 
@@ -94,7 +94,7 @@ class ArchiveFaqsController < ApplicationController
 
   # PUT /archive_faqs/1
   def update
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
       if @archive_faq.update_attributes(archive_faq_params)
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         redirect_to(@archive_faq)
@@ -154,12 +154,12 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
   end
 
   # DELETE /archive_faqs/1
   def destroy
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
     redirect_to(archive_faqs_url)
   end

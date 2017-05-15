@@ -155,7 +155,7 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, 
 end
 
 Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)") on the other work?$/ do |text, selector|
-  other_user = User.find_by_login("mywarning1")
+  other_user = User.find_by(login: "mywarning1")
   other_work = other_user.works.first.id
   selector = "#work_#{other_work}"
   with_scope(selector) do

@@ -18,7 +18,7 @@
       <% end %>
       <% if @user.preference.try(:date_of_birth_visible) %>
         <dt class="birthday"><%=h ts("My birthday:") %></dt>
-        <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd> 
+        <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd>
       <% end %>
       <% if @user.preference.try(:email_visible) %>
         <dt class="email"><%=h ts("My email address:") %></dt>
@@ -34,7 +34,7 @@
     </div>
   <% end %>
   <!--/content-->
-  
+
   <!--subnav-->
   <% if logged_in? && current_user == @user %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
@@ -43,7 +43,7 @@
     <li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
     <li><%= link_to ts("Set My Preferences"), user_preferences_path(@user) %></li>
     <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
-    <li><%= link_to ts("Delete My Account"), @user, :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+    <li><%= link_to ts("Delete My Account"), @user, data: {confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?')}, :method => :delete %></li>
   </ul>
   <% end %>
   <!--/subnav-->

@@ -14,7 +14,7 @@ class Admin::SkinsController < ApplicationController
     @approved_skins = Skin.approved_skins.usable.sort_by_recent
   end
 
-  def update    
+  def update
     flash[:notice] = []
     modified_skin_titles = []
     %w(official rejected cached featured in_chooser).each do |action|
@@ -38,7 +38,7 @@ class Admin::SkinsController < ApplicationController
           skin.cache! unless skin.cached?
           skin.update_attribute(:in_chooser, true)
         end
-        skin.update_attribute(:admin_note, params[:skin_admin_note]["#{skin.id}"]) if params[:skin_admin_note] && params[:skin_admin_note]["#{skin.id}"]        
+        skin.update_attribute(:admin_note, params[:skin_admin_note]["#{skin.id}"]) if params[:skin_admin_note] && params[:skin_admin_note]["#{skin.id}"]
         modified_skin_titles << skin.title
       end
 
@@ -65,10 +65,10 @@ class Admin::SkinsController < ApplicationController
     end
 
     flash[:notice] << ts("The following skins were updated: %{titles}", :titles => modified_skin_titles.join(', '))
-    
+
     # set default
     if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin.title
-      skin = Skin.find_by_title_and_official(params[:set_default], true)
+      skin = Skin.find_by(title: params[:set_default], official: true)
       @admin_setting = AdminSetting.first
       if skin && @admin_setting
         @admin_setting.default_skin = skin
@@ -80,7 +80,7 @@ class Admin::SkinsController < ApplicationController
         end
       end
     end
-    
+
     redirect_to admin_skins_path
   end
 

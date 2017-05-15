@@ -8,7 +8,7 @@ end
 Given /^basic tags$/ do
   step %{the default ratings exist}
   step %{the basic warnings exist}
-  Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
+  Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
 end
 
@@ -19,42 +19,48 @@ Given /^the default ratings exist$/ do
              ArchiveConfig.RATING_MATURE_TAG_NAME,
              ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
   ratings.each do |rating|
-    Rating.find_or_create_by_name_and_canonical(rating, true)
+    Rating.find_or_create_by(name: rating, canonical: true)
   end
 end
 
+Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
+  Rating.find_or_create_by(name: rating, canonical: true, adult: true)
+end
+
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
-  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  Warning.find_or_create_by_name("No Archive Warnings Apply").update(canonical: true)
+  Warning.find_or_create_by_name("Choose Not To Use Archive Warnings").update(canonical: true)
 end
 
 Given /^the basic categories exist$/ do
   %w(Gen Other F/F Multi F/M M/M).each do |category|
-    Category.find_or_create_by_name_and_canonical(category, true)
+    Category.find_or_create_by(name: category).update(canonical: true)
   end
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
-  fandom = Fandom.find_or_create_by_name_and_canonical(fandom, true)
-  media = Media.find_or_create_by_name_and_canonical(media, true)
+  fandom = Fandom.find_or_create_by_name(fandom)
+  fandom.update(canonical: true)
+  media = Media.find_or_create_by_name(media)
+  media.update(canonical: true)
   fandom.add_association media
 end
 
 Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by_name(character)
+  char = Character.find_or_create_by(name: character)
   fand = Fandom.find_or_create_by_name(fandom)
   char.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
-  char = Character.find_or_create_by_name_and_canonical(character, true)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
+  char = Character.where(name: character, canonical: true).first_or_create
+  fand = Fandom.where(name: fandom, canonical: true).first_or_create
   char.add_association(fand)
 end
 
 Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relationship, fandom|
-  rel = Relationship.find_or_create_by_name_and_canonical(relationship, true)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
+  rel = Relationship.where(name: relationship, canonical: true).first_or_create
+  fand = Fandom.where(name: fandom, canonical: true).first_or_create
   rel.add_association(fand)
 end
 
@@ -74,8 +80,8 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger = Tag.find_by_name(merger)
   merger_type = merger.type
 
-  synonym = merger_type.classify.constantize.find_or_create_by_name(synonym)
-  synonym.merger = merger
+  synonym = merger_type.classify.constantize.find_or_create_by(name: synonym)
+  synonym.reload.merger = merger
   synonym.save
 end
 
@@ -90,12 +96,12 @@ Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
-  user = User.find_by_login(username)
+  user = User.find_by(login: username)
   user.tag_wrangler = '1'
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
-  tw = User.find_by_login(user)
+  tw = User.find_by(login: user)
   if tw.blank?
     tw = FactoryGirl.create(:user, {:login => user, :password => password})
     tw.activate
@@ -113,7 +119,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   check "Remember Me"
   click_button "Log In"
   assert UserSession.find
-  fandom = Fandom.find_or_create_by_name_and_canonical(fandomname, true)
+  fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
   fill_in "tag_fandom_string", :with => fandomname
   click_button "Assign"
@@ -179,6 +185,11 @@ Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag.destroy if tag.present?
 end
 
+Given(/^a media exists with name: "([^"]*)", canonical: true$/) do |media|
+  media = Media.find_or_create_by_name(media)
+  media.update(canonical: true)
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
@@ -186,22 +197,22 @@ When /^the periodic tag count task is run$/i do
 end
 
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   check("canonicals_#{tag.id}")
 end
 
 When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   select(type, :from => "tags[#{tag.id}]")
 end
 
 When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   check("selected_tags_#{tag.id}")
 end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
-  tag = Tag.find_by_name!(tag)
+  tag = Tag.find_by!(name: tag)
   visit tag_path(tag)
   within(".header") do
     click_link("Edit")
@@ -209,7 +220,7 @@ When /^I edit the tag "([^\"]*)"$/ do |tag|
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|
-  tag = Tag.find_by_name!(tag)
+  tag = Tag.find_by!(name: tag)
   visit tag_path(tag)
 end
 
@@ -221,7 +232,7 @@ When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
 end
 
 When /^I set up the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
-  tag = Tag.find_by_name!(tag)
+  tag = Tag.find_by!(name: tag)
   visit tag_url(tag)
   click_link(" comment")
   fill_in("Comment", :with => comment_text)
@@ -266,7 +277,7 @@ When /^I remove "([^\"]*)" from my favorite tags$/ do |tag|
 end
 
 When /^the tag "([^\"]*)" is decanonized$/ do |tag|
-  tag = Tag.find_by_name!(tag)
+  tag = Tag.find_by!(name: tag)
   tag.canonical = false
   tag.save
 end
@@ -310,35 +321,35 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
-  user = User.find_by_login(username)
+  user = User.find_by(login: username)
   user.tag_wrangler.should be_falsey
 end
 
 Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
-  user = User.find_by_login(username)
-  fandom = Fandom.find_by_name(fandom)
+  user = User.find_by(login: username)
+  fandom = Fandom.find_by(name: fandom)
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should_not be_nil
 end
 
 Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
-  user = User.find_by_login(username)
-  fandom = Fandom.find_by_name(fandom)
+  user = User.find_by(login: username)
+  fandom = Fandom.find_by(name: fandom)
   assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
   assignment.should be_nil
 end
 
 Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname , tag_type|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   assert tag.type == tag_type
 end
 
 Then(/^the "([^"]*)" tag should be canonical$/) do |tagname|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   assert tag.canonical?
 end
 
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
-  tag = Tag.find_by_name(tagname)
+  tag = Tag.find_by(name: tagname)
   puts tag.inspect
 end

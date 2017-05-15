@@ -38,7 +38,7 @@ module WorksHelper
   end
 
   def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.value_of(:user_id), hide_public_hit_count: true).exists?
+    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)
@@ -92,7 +92,7 @@ module WorksHelper
 
   def marked_for_later?(work)
     return unless current_user
-    reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+    reading = Reading.find_by(work_id: work.id, user_id: current_user.id)
     reading && reading.toread?
   end
 
@@ -111,7 +111,7 @@ module WorksHelper
       else
         chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
       end
-    else 
+    else
       "#work_endnotes"
     end
   end

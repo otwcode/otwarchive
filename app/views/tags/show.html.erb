@@ -72,7 +72,7 @@
   <% unless @tag.direct_meta_tags.blank? %>
   <div class="meta listbox group">
     <h3 class="heading"><%= ts('Meta tags') %>:</h3>
-    <% cache "tag-#{@tag.cache_key}-metatags", :expires_in => 24.hours do %>
+    <% cache "tag-#{@tag.cache_key}-metatags", :expires_in => 24.hours, skip_digest: true do %>
       <%= meta_tag_tree(@tag) %>
     <% end %>
   </div>
@@ -81,7 +81,7 @@
   <% unless @tag.direct_sub_tags.blank? %>
   <div class="sub listbox group">
     <h3 class="heading"><%= ts('Sub tags') %>:</h3>
-    <% cache "tag-#{@tag.cache_key}-subtags", :expires_in => 24.hours do %>
+    <% cache "tag-#{@tag.cache_key}-subtags", :expires_in => 24.hours, skip_digest: true do %>
       <%= sub_tag_tree(@tag) %>
     <% end %>
   </div>
@@ -89,7 +89,7 @@
 
   <% unless (@tag_children.keys - ['Merger']).blank? %>
     <!-- caching -->
-    <% cache("tag-#{@tag.cache_key}-children-v2") do %>
+    <% cache("tag-#{@tag.cache_key}-children-v2", skip_digest: true) do %>
       <div class="child listbox group">
         <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
         <% %w(Character Relationship Freeform).each do |type| %>

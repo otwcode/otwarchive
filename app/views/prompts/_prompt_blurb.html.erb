@@ -31,7 +31,7 @@
     <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
   </div>
 
-  <h6 class="landmark heading"><%= ts("Tags") %></h6> 
+  <h6 class="landmark heading"><%= ts("Tags") %></h6>
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
@@ -58,13 +58,13 @@
       <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL:") : url_label %>
       <%= link_to(prompt.url, prompt.url) %>
     </p>
-  <% end %>   
+  <% end %>
 
   <% if logged_in? %>
     <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
   <% end %>
-  
-  <% unless (suppress_claims ||= false) %>  
+
+  <% unless (suppress_claims ||= false) %>
     <% # if prompt has been claimed list by whom %>
     <% unless prompt.unfulfilled_claims.empty? %>
       <div class="claims listbox group">
@@ -73,7 +73,7 @@
           <% if prompt.collection.anonymous? %>
             <%= ts("%{count} anonymous claimants", :count => prompt.unfulfilled_claims.count) %>
           <% else %>
-            <%= User.for_claims(prompt.unfulfilled_claims.value_of(:id)).value_of(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
+            <%= User.for_claims(prompt.unfulfilled_claims.pluck(:id)).pluck(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
           <% end %>
         </ul>
       </div>

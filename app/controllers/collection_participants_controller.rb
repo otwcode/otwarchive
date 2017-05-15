@@ -22,10 +22,10 @@ class CollectionParticipantsController < ApplicationController
 
   def load_participant_and_collection
     if params[:collection_participant]
-      @participant = CollectionParticipant.find_by_id(collection_participant_params[:id])
+      @participant = CollectionParticipant.find_by(id: collection_participant_params[:id])
       @new_role = collection_participant_params[:participant_role]
     else
-      @participant = CollectionParticipant.find_by_id(params[:id])
+      @participant = CollectionParticipant.find_by(id: params[:id])
     end
 
     no_participant and return unless @participant
@@ -100,7 +100,7 @@ class CollectionParticipantsController < ApplicationController
     pseud_results = Pseud.parse_bylines(params[:participants_to_invite], :assume_matching_login => true)
     pseud_results[:pseuds].each do |pseud|
       if @collection.participants.include?(pseud)
-        participant = CollectionParticipant.find(:first, :conditions => {:collection_id => @collection.id, :pseud_id => pseud.id})
+        participant = CollectionParticipant.where(collection_id: @collection.id, pseud_id: pseud.id).first
         if participant && participant.is_none?
           @participants_added << participant if participant.approve_membership!
         end

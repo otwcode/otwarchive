@@ -149,7 +149,7 @@ class BookmarksController < ApplicationController
     unapproved_collections = []
     errors = []
     bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
-      collection = Collection.find_by_name(collection_name)
+      collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
       else
@@ -239,12 +239,12 @@ class BookmarksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       unless @user
         raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
       end
       if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
         unless @pseud
           raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
         end
