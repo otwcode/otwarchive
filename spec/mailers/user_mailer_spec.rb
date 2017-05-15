@@ -159,7 +159,7 @@ describe UserMailer do
 
     before(:each) do
       @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token, creator_id: @user.id)
+      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
     end
 
     let(:email) { UserMailer.invitation(@invitation.id).deliver }
@@ -181,6 +181,7 @@ describe UserMailer do
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("has invited you")
       end
       
       it 'does not have missing translations' do
@@ -191,6 +192,7 @@ describe UserMailer do
     describe 'text version' do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("has invited you")
       end
       
       it 'does not have missing translations' do
@@ -225,6 +227,7 @@ describe UserMailer do
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("been invited")
       end
       
       it 'does not have missing translations' do
@@ -239,6 +242,7 @@ describe UserMailer do
     describe 'text version' do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("been invited")
       end
       
       it 'does not have missing translations' do
