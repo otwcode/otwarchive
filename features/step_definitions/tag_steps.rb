@@ -185,6 +185,11 @@ Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag.destroy if tag.present?
 end
 
+Given(/^a media exists with name: "([^"]*)", canonical: true$/) do |media|
+  media = Media.find_or_create_by_name(media)
+  media.update(canonical: true)
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
@@ -347,9 +352,4 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
-end
-
-Given(/^a media exists with name: "([^"]*)", canonical: true$/) do |media|
-  media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
 end
