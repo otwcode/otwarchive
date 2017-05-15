@@ -1,5 +1,4 @@
 class CollectionItem < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
   APPROVED = 1

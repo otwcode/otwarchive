@@ -1,5 +1,4 @@
 class AdminBanner < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   validates_presence_of :content
 

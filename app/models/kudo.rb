@@ -1,5 +1,4 @@
 class Kudo < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true

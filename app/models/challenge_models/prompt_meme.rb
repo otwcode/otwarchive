@@ -1,5 +1,4 @@
 class PromptMeme < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   PROMPT_TYPES = %w(requests)
   include ChallengeCore

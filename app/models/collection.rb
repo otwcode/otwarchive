@@ -1,5 +1,4 @@
 class Collection < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   has_attached_file :icon,

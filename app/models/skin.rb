@@ -5,7 +5,6 @@ include SkinCacheHelper
 include SkinWizard
 
 class Skin < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],

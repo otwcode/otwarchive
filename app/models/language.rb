@@ -1,5 +1,4 @@
 class Language < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   validates_presence_of :short
   validates_uniqueness_of :short

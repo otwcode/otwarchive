@@ -1,5 +1,4 @@
 class Locale < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   
   belongs_to :language
   validates_presence_of :iso

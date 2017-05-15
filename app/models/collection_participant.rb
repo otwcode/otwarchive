@@ -1,5 +1,4 @@
 class CollectionParticipant < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :pseud
   has_one :user, :through => :pseud

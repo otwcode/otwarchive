@@ -1,5 +1,4 @@
 class Comment < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
 
   attr_protected :content_sanitizer_version, :unreviewed

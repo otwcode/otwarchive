@@ -1,5 +1,4 @@
 class Profile < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   PROFILE_TITLE_MAX = 255
   LOCATION_MAX = 255

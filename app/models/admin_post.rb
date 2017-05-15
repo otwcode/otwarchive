@@ -1,5 +1,4 @@
 class AdminPost < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   self.per_page = 8 # option for WillPaginate
 

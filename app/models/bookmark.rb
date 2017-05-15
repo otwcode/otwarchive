@@ -1,6 +1,5 @@
 class Bookmark < ActiveRecord::Base
 
-  include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
   include Tire::Model::Search

@@ -1,5 +1,4 @@
 class AbuseReport < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   validates :email, email_veracity: { allow_blank: false }
   validates_presence_of :language

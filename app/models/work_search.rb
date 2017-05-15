@@ -1,5 +1,4 @@
 class WorkSearch < Search
-  include ActiveModel::ForbiddenAttributesProtection
   
   serialized_options :query, 
     :title, 

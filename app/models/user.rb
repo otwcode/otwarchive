@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   audited
-  include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user

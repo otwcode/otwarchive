@@ -1,5 +1,4 @@
 class UserInviteRequest < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   MAX_USER_INVITE_REQUEST = ArchiveConfig.MAX_USER_INVITE_REQUEST
 
