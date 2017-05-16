@@ -51,10 +51,14 @@ namespace :Tag do
 
   desc "Reset non canonical warnings"
   task(reset_non_canonical_warnings: :environment) do
+    choose_not_to_warn = Warning.find_by(name: "Choose Not To Use Archive Warnings")
     Warning.where(canonical: [false, nil]).each do |warning|
       if warning.taggings_count.zero?
         warning.destroy
       else
+        warning.works.each do |work|
+          work.warnings.count == 1
+        end
         # Once we get becomes!  ( rails 4.0.2 ) use it
         warning.type = "Freeform"
         warning.save!
