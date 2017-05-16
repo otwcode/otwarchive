@@ -1,6 +1,6 @@
 # Resque tasks
 require 'resque/tasks'
-require 'resque_scheduler/tasks'
+require 'resque/scheduler/tasks'
 
 namespace :resque do
   task :setup do

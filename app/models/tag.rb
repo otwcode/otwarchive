@@ -116,9 +116,10 @@ class Tag < ActiveRecord::Base
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
   has_one :filter_count, :foreign_key => 'filter_id'
   has_many :direct_filter_taggings,
+              -> { where(inherited: 0) },
               :class_name => "FilterTagging",
-              :foreign_key => 'filter_id',
-              :conditions => "inherited = 0"
+              :foreign_key => 'filter_id'
+
   # not used anymore? has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
@@ -130,11 +131,11 @@ class Tag < ActiveRecord::Base
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :update_meta_filters
   has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
-  has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
-  has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
+  has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, :through => :meta_taggings, :source => :meta_tag
+  has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, :through => :sub_taggings, :source => :sub_tag
 
-  has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
-  has_many :suggested_fandoms, :through => :works, :source => :fandoms, :uniq => true
+  has_many :same_work_tags, -> { uniq }, :through => :works, :source => :tags
+  has_many :suggested_fandoms, -> { uniq }, :through => :works, :source => :fandoms
 
   has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
@@ -250,25 +251,25 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  scope :id_only, select("tags.id")
+  scope :id_only, -> { select("tags.id") }
 
-  scope :canonical, where(:canonical => true)
-  scope :noncanonical, where(:canonical => false)
-  scope :nonsynonymous, noncanonical.where(:merger_id => nil)
-  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
-  scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
-  scope :unwrangleable, where(:unwrangleable => true)
+  scope :canonical, -> { where(:canonical => true) }
+  scope :noncanonical, -> { where(:canonical => false) }
+  scope :nonsynonymous, -> { noncanonical.where(:merger_id => nil) }
+  scope :synonymous, -> { noncanonical.where("merger_id IS NOT NULL") }
+  scope :unfilterable, -> { nonsynonymous.where(:unwrangleable => false) }
+  scope :unwrangleable, -> { where(:unwrangleable => true) }
 
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
-  scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL")
-  scope :in_use, where("canonical = 1 OR taggings_count_cache > 0")
-  scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
+  scope :unwrangled, -> { joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL") }
+  scope :in_use, -> { where("canonical = 1 OR taggings_count_cache > 0") }
+  scope :first_class, -> { joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL") }
 
   # Tags that have sub tags
-  scope :meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NOT NULL").group("tags.id")
+  scope :meta_tag, -> { joins(:sub_taggings).where("meta_taggings.id IS NOT NULL").group("tags.id") }
   # Tags that don't have sub tags
-  scope :non_meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NULL").group("tags.id")
+  scope :non_meta_tag, -> { joins(:sub_taggings).where("meta_taggings.id IS NULL").group("tags.id") }
 
 
   # Complicated query alert!
@@ -286,10 +287,10 @@ class Tag < ActiveRecord::Base
 
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
-  scope :by_popularity, order('taggings_count_cache DESC')
-  scope :by_name, order('sortable_name ASC')
-  scope :by_date, order('created_at DESC')
-  scope :visible, where('type in (?)', VISIBLE).by_name
+  scope :by_popularity, -> { order('taggings_count_cache DESC') }
+  scope :by_name, -> { order('sortable_name ASC') }
+  scope :by_date, -> { order('created_at DESC') }
+  scope :visible, -> { where('type in (?)', VISIBLE).by_name }
 
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
@@ -301,12 +302,13 @@ class Tag < ActiveRecord::Base
 
   # This will return all tags that have one of the given tags as a parent
   scope :with_parents, lambda {|parents|
-    joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:value_of) ? parents.value_of(:id) : parents.collect(&:id)))
+    joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:pluck) ? parents.pluck(:id) : parents.collect(&:id)))
   }
 
-  scope :with_no_parents,
+  scope :with_no_parents, -> {
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
+  }
 
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
@@ -318,15 +320,17 @@ class Tag < ActiveRecord::Base
     group(:id)
   }
 
-  scope :visible_to_all_with_count,
+  scope :visible_to_all_with_count, -> {
     joins(:filter_count).
     select("tags.*, filter_counts.public_works_count as count").
     where('filter_counts.public_works_count > 0 AND tags.canonical = 1')
+  }
 
-  scope :visible_to_registered_user_with_count,
+  scope :visible_to_registered_user_with_count, -> {
     joins(:filter_count).
     select("tags.*, filter_counts.unhidden_works_count as count").
     where('filter_counts.unhidden_works_count > 0 AND tags.canonical = 1')
+  }
 
   scope :public_top, lambda { |tag_count|
     visible_to_all_with_count.
@@ -340,16 +344,22 @@ class Tag < ActiveRecord::Base
     order('filter_counts.unhidden_works_count DESC')
   }
 
-  scope :popular, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
+  scope :popular, -> {
+    (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
       visible_to_registered_user_with_count.order('filter_counts.unhidden_works_count DESC') :
       visible_to_all_with_count.order('filter_counts.public_works_count DESC')
+  }
 
-  scope :random, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
+  scope :random, -> {
+    (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
     visible_to_registered_user_with_count.order("RAND()") :
     visible_to_all_with_count.order("RAND()")
+  }
 
-  scope :with_count, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
+  scope :with_count, -> {
+    (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
       visible_to_registered_user_with_count : visible_to_all_with_count
+  }
 
   # a complicated join -- we only want to get the tags on approved, posted works in the collection
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id )
@@ -414,7 +424,7 @@ class Tag < ActiveRecord::Base
   def self.perform(id, method, *args)
     # we are doing this to step over issues when the tag is deleted.
     # in rails 4 this should be tag=find_by id: id
-    tag = find_by_id(id)
+    tag = find_by(id: id)
     tag.send(method, *args) unless tag.nil?
   end
 
@@ -589,7 +599,7 @@ class Tag < ActiveRecord::Base
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
       else
-        self.create(:name => new_name)
+        self.create(name: new_name, type: self.to_s)
       end
     end
   end
@@ -675,8 +685,8 @@ class Tag < ActiveRecord::Base
   def all_filtered_work_ids
     # all synned and subtagged works should be under filter taggings
     # add in the direct works for any noncanonical tags
-    (self.filter_taggings.where(:filterable_type => "Work").value_of(:filterable_id) +
-      self.works.value_of(:id)).uniq
+    (self.filter_taggings.where(:filterable_type => "Work").pluck(:filterable_id) +
+      self.works.pluck(:id)).uniq
   end
 
   # Reindex all bookmarks (bookmark_ids argument works as above)
@@ -694,7 +704,7 @@ class Tag < ActiveRecord::Base
   # have that much nesting anyway -- current max is 4 we think
   def all_bookmark_ids(depth = 0)
     return [] if depth == 10
-    self.bookmarks.value_of(:id) +
+    self.bookmarks.pluck(:id) +
       self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten +
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
   end
@@ -741,14 +751,14 @@ class Tag < ActiveRecord::Base
     if self.merger_id_changed?
       # setting the merger_id doesn't update the merger so we do it here
       if self.merger_id
-        self.merger = Tag.find_by_id(self.merger_id)
+        self.merger = Tag.find_by(id: self.merger_id)
       else
         self.merger = nil
       end
       if self.merger && self.merger.canonical?
         self.async(:add_filter_taggings)
       end
-      old_merger = Tag.find_by_id(self.merger_id_was)
+      old_merger = Tag.find_by(id: self.merger_id_was)
       if old_merger && old_merger.canonical?
         self.async(:remove_filter_taggings, old_merger.id)
       end
@@ -846,7 +856,7 @@ class Tag < ActiveRecord::Base
 
   # Add filter taggings to this tag's works for one of its meta tags
   def inherit_meta_filters(meta_tag_id)
-    meta_tag = Tag.find_by_id(meta_tag_id)
+    meta_tag = Tag.find_by(id: meta_tag_id)
     return unless meta_tag.present?
     self.filtered_works.each do |work|
       unless work.filters.include?(meta_tag)
@@ -889,7 +899,7 @@ class Tag < ActiveRecord::Base
   end
 
   def visible_external_works_count
-    self.external_works.count(:all, :conditions => {:hidden_by_admin => false})
+    self.external_works.where(hidden_by_admin: false).count
   end
 
   def visible_taggables_count
@@ -1135,9 +1145,9 @@ class Tag < ActiveRecord::Base
 
   def indirect_bookmarks(rec=false)
     cond = rec ? {:rec => true, :private => false, :hidden_by_admin => false} : {:private => false, :hidden_by_admin => false}
-    work_bookmarks = Bookmark.find(:all, :conditions => {:bookmarkable_id => self.work_ids, :bookmarkable_type => 'Work'}.merge(cond))
-    ext_work_bookmarks = Bookmark.find(:all, :conditions => {:bookmarkable_id => self.external_work_ids, :bookmarkable_type => 'ExternalWork'}.merge(cond))
-    series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
+    work_bookmarks = Bookmark.where(bookmarkable_id: self.work_ids, bookmarkable_type: 'Work').merge(cond)
+    ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
+    series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
 
@@ -1163,6 +1173,80 @@ class Tag < ActiveRecord::Base
         end
       end
     end
+  end
+
+  after_create :after_create
+  def after_create
+    tag = self
+    if tag.canonical
+      tag.add_to_autocomplete
+    end
+    update_tag_nominations(tag)
+  end
+
+  after_update :after_update
+  def after_update
+    tag = self
+    if tag.canonical_changed?
+      if tag.canonical
+        # newly canonical tag
+        tag.add_to_autocomplete
+      else
+        # decanonicalised tag
+        tag.remove_from_autocomplete
+      end
+    elsif tag.canonical
+      # clean up the autocomplete
+      tag.remove_stale_from_autocomplete
+      tag.add_to_autocomplete
+    end
+
+    # Expire caching when a merger is added or removed
+    if tag.merger_id_changed?
+      if tag.merger_id_was.present?
+        old = Tag.find(tag.merger_id_was)
+        old.update_works_index_timestamp!
+      end
+      if tag.merger_id.present?
+        tag.merger.update_works_index_timestamp!
+      end
+    end
+
+    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
+    if tag.type_changed?
+      tag.parents.each do |parent_tag|
+        ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
+      end
+    end
+
+    update_tag_nominations(tag)
+  end
+
+  before_destroy :before_destroy
+  def before_destroy
+    tag = self
+    if Tag::USER_DEFINED.include?(tag.type) && tag.canonical
+      tag.remove_from_autocomplete
+    end
+    update_tag_nominations(tag, true)
+  end
+
+  private
+
+  def update_tag_nominations(tag, deleted=false)
+    values = {}
+    if deleted
+      values[:canonical] = false
+      values[:exists] = false
+      values[:parented] = false
+      values[:synonym] = nil
+    else
+      values[:canonical] = tag.canonical
+      values[:synonym] = tag.merger.nil? ? nil : tag.merger.name
+      values[:parented] = tag.parents.any? {|p| p.is_a?(Fandom)}
+      values[:exists] = true
+    end
+    TagNomination.where(:tagname => tag.name).update_all(values)
   end
 
 end

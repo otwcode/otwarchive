@@ -3,8 +3,6 @@ class KnownIssue < ActiveRecord::Base
   # why is this included here? FIXME?
   include HtmlCleaner
 
-  attr_protected :content_sanitizer_version
-
   validates_presence_of :title
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,

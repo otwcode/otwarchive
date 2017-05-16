@@ -1,6 +1,6 @@
 class AutocompleteController < ApplicationController
   respond_to :json
-  
+
   skip_before_filter :store_location
   skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_filter :fetch_admin_settings
@@ -128,12 +128,12 @@ class AutocompleteController < ApplicationController
 
   # For creating collections, autocomplete the name of a parent collection owned by the user only
   def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).value_of(:name).sort)
+    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).pluck(:name).sort)
   end
 
   # for looking up existing urls for external works to avoid duplication
   def external_work
-    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).value_of(:url))
+    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
   end
 
   # encodings for importing
@@ -164,9 +164,9 @@ class AutocompleteController < ApplicationController
   # Return matching potential requests or offers
   def potential_matches(return_requests=true)
     search_param = params[:term]
-    signup_id = params[:signup_id] 
+    signup_id = params[:signup_id]
     signup = ChallengeSignup.find(signup_id)
-    pmatches = return_requests ? 
+    pmatches = return_requests ?
       signup.offer_potential_matches.sort.reverse.map {|pm| pm.request_signup.pseud.byline} :
       signup.request_potential_matches.sort.reverse.map {|pm| pm.offer_signup.pseud.byline}
     pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
@@ -191,7 +191,7 @@ class AutocompleteController < ApplicationController
       else
         query = query.approved_skins
       end
-      render_output(query.value_of(:title))
+      render_output(query.pluck(:title))
     end
   end
 
@@ -211,7 +211,7 @@ class AutocompleteController < ApplicationController
     if params[:term].present?
       search_param = '%' + params[:term].strip + '%'
       query = AdminPostTag.where("name LIKE ?", search_param).limit(ArchiveConfig.MAX_RECENT)
-      render_output(query.value_of(:name))
+      render_output(query.pluck(:name))
     end
   end
 

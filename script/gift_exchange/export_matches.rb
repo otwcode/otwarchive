@@ -15,7 +15,7 @@ end
 
 challenge_name = ARGV[0]
 
-c = Collection.find_by_name(challenge_name)
+c = Collection.find_by(name: challenge_name)
 PotentialMatch.generate_in_background c.id
 all = PotentialMatch.where(collection_id: c.id)
 

@@ -2,8 +2,6 @@ class Comment < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
 
-  attr_protected :content_sanitizer_version, :unreviewed
-
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
   belongs_to :parent, :polymorphic => true
@@ -26,14 +24,14 @@ class Comment < ActiveRecord::Base
 
   validates :content, :uniqueness => {:scope => [:commentable_id, :commentable_type, :name, :email, :pseud_id], :message => ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
 
-  scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
+  scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {:limit => limit.kind_of?(Fixnum) ? limit : 5} }
-  scope :ordered_by_date, :order => "created_at DESC"
-  scope :top_level, :conditions => ["commentable_type in (?)", ["Chapter", "Bookmark"]]
-  scope :include_pseud, :include => :pseud
-  scope :not_deleted, :conditions => {:is_deleted => false}
-  scope :reviewed, conditions: {unreviewed: false}
-  scope :unreviewed_only, conditions: {unreviewed: true}
+  scope :ordered_by_date, -> { order('created_at DESC') }
+  scope :top_level, -> { where("commentable_type in (?)", ["Chapter", "Bookmark"]) }
+  scope :include_pseud, -> { includes(:pseud) }
+  scope :not_deleted, -> { where(is_deleted: false) }
+  scope :reviewed, -> { where(unreviewed: false) }
+  scope :unreviewed_only, -> { where(unreviewed: true) }
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable

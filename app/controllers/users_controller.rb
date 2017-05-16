@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
        @user && User.count(conditions: { login: @user.login }) > 0 &&
        # and that we can find the original, valid user record
-       (@user = User.find_by_login(@user.login))
+       (@user = User.find_by(login: @user.login))
       notify_and_show_confirmation_screen
     else
       # re-raise the exception and make it catchable by Rails and Airbrake
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
 
   def load_user
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     @check_ownership_of = @user
   end
 
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     @user = User.new
 
     if params[:invitation_token]
-      @invitation = Invitation.find_by_token(params[:invitation_token])
+      @invitation = Invitation.find_by(token: params[:invitation_token])
       @user.invitation_token = @invitation.token
       @user.email = @invitation.invitee_email
     end
@@ -180,7 +180,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @user = User.find_by_activation_code(params[:id])
+    @user = User.find_by(activation_code: params[:id])
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
@@ -204,7 +204,7 @@ class UsersController < ApplicationController
 
     # assign over any external authors that belong to this user
     external_authors = []
-    external_authors << ExternalAuthor.find_by_email(@user.email)
+    external_authors << ExternalAuthor.find_by(email: @user.email)
     @invitation = @user.invitation
     external_authors << @invitation.external_author if @invitation
     external_authors.compact!
@@ -338,7 +338,7 @@ class UsersController < ApplicationController
 
   def check_account_creation_invite(token)
     unless token.blank?
-      invitation = Invitation.find_by_token(token)
+      invitation = Invitation.find_by(token: token)
 
       if !invitation
         flash[:error] = ts('There was an error with your invitation token, please contact support')

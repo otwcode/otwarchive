@@ -280,8 +280,8 @@ Feature: Edit chapters
     Then "First work" should appear before "A Whole New Work"
 
 
-  Scenario: Posting a new chapter with a co-creator does not add them to previous or
-  subsequent chapters
+  Scenario: Posting a new chapter with a co-creator does not add them to
+  previous or subsequent chapters
 
     Given I am logged in as "karma" with password "the1nonly"
       And I post the work "Summer Friends"
@@ -299,8 +299,8 @@ Feature: Edit chapters
     Then I should see "Chapter by karma"
 
 
-  Scenario: You should be able to edit a chapter to add a co-creator who is not already
-  on the work
+  Scenario: You should be able to edit a chapter to add a co-creator who is not
+  already on the work
 
     Given I am logged in as "karma" with password "the1nonly"
       And I post the work "Forever Friends"
@@ -314,8 +314,8 @@ Feature: Edit chapters
     Then I should see "amy, karma"
 
 
-  Scenario: You should be able to edit a chapter to add a co-creator who is already on
-  the work
+  Scenario: You should be able to edit a chapter to add a co-creator who is
+  already on the work
 
     Given I am logged in as "karma" with password "the1noly"
       And I post the work "Past Friends"
@@ -332,8 +332,8 @@ Feature: Edit chapters
     Then I should not see "Chapter by karma"
 
 
-  Scenario: Editing a chapter with a co-creator should not give you the ability to
-  remove them as a co-creator
+  Scenario: Editing a chapter with a co-creator should not give you the ability
+  to remove them as a co-creator
 
     Given I am logged in as "karma" with password "the1noly"
       And I post the work "Camp Friends"
@@ -342,6 +342,26 @@ Feature: Edit chapters
     Then I should see "Chapter co-creators"
       And the "sabrina" checkbox should be checked
       And the "sabrina" checkbox should be disabled
+
+
+  Scenario: You should be able to edit a chapter you are not already co-creator
+  of, and you will be added to the chapter as a co-creator and your changes will
+  be saved
+
+    Given I am logged in as "originalposter"
+      And I post the work "OP's Work"
+      And a chapter with the co-author "opsfriend" is added to "OP's Work"
+    When I am logged in as "opsfriend"
+      And I view the work "OP's Work"
+    Then I should see "Chapter 1"
+      And I should see "Chapter by originalposter"
+    When I follow "Edit Chapter"
+      And "AO3-4699" is fixed 
+    # Then I should not see "You're not allowed to use that pseud."
+    When I fill in "content" with "opsfriend was here"
+      And I post the chapter
+    Then I should see "opsfriend was here"
+      And I should not see "Chapter by originalposter"
 
 
   Scenario: You should be able to add a chapter with two co-creators, one of
@@ -360,6 +380,7 @@ Feature: Edit chapters
     Then I should see "Chapter 1"
       And I should see "by brenda, rusty"
       And I should not see "by brenda, rusty, sharon"
+
 
   Scenario: You should be able to add a chapter with two co-creators who are not
   on the work, one of whom has an ambiguous pseud
@@ -404,8 +425,8 @@ Feature: Edit chapters
     # Then I should see "brenda, rusty, sharon (thegoodmom)"
 
 
-  Scenario: Users can't set a chapter publication date that is in the future, e.g. set 
-  the date to April 30 when it is April 26
+  Scenario: Users can't set a chapter publication date that is in the future,
+  e.g. set the date to April 30 when it is April 26
     Given I am logged in
       And it is currently Wed Apr 26 22:00:00 UTC 2017
       And I post the work "Futuristic"

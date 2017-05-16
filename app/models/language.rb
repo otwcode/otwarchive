@@ -10,22 +10,22 @@ class Language < ActiveRecord::Base
   has_many :admin_posts
   has_many :archive_faqs
 
-  scope :default_order, order(:short)
+  scope :default_order, -> { order(:short) }
 
   def to_param
     short
   end
 
   def self.default
-    self.find_or_create_by_short_and_name(:short => ArchiveConfig.DEFAULT_LANGUAGE_SHORT, :name => ArchiveConfig.DEFAULT_LANGUAGE_NAME)
+    self.find_or_create_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT, name: ArchiveConfig.DEFAULT_LANGUAGE_NAME)
   end
 
   def work_count
-    self.works.count(:conditions => {:posted => true})
+    self.works.where(posted: true).count
   end
 
   def fandom_count
-    Fandom.count(:joins => :works, :conditions => {:works => {:id => self.works.posted.collect(&:id)}}, :distinct => true, :select => 'tags.id')
+    Fandom.joins(:works).where(works: {id: self.works.posted.collect(&:id)}).distinct.select('tags.id').count
   end
 
 end

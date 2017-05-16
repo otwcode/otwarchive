@@ -17,7 +17,7 @@ module CommentsHelper
 
   def last_reply_by(comment)
     if comment.count_all_comments > 0
-      c = Comment.find(:first, :conditions => {:thread => comment.id}, :order => 'created_at DESC')
+      c = Comment.where(thread: comment.id).order(created_at: :desc).first
       if c.pseud
         link_to c.pseud.name, [c.pseud.user, c.pseud]
       else
@@ -82,13 +82,13 @@ module CommentsHelper
     commentable_value = commentable.is_a?(Tag) ?
                           commentable.name :
                           commentable.id
-       
+
     comment_count = commentable.count_visible_comments.to_s
 
     link_action = options[:link_type] == "hide" || params[:show_comments] ?
                     :hide_comments :
                     :show_comments
-    
+
     link_text = ts("%{words} %{count}",
                   :words => options[:link_type] == "hide" || params[:show_comments] ?
                               "Hide Comments" :
@@ -96,7 +96,7 @@ module CommentsHelper
                   :count => options[:show_count] ?
                               "(" +comment_count+ ")" :
                               "")
-    
+
     link_to(
         link_text,
         url_for(:controller => :comments,
@@ -108,11 +108,11 @@ module CommentsHelper
 
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
-  
+
   def no_anon_reply(comment)
     comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
   end
-  
+
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
       cancel_comment_reply_link(comment)
@@ -226,7 +226,7 @@ module CommentsHelper
       delete_comment_link(comment)
     end
   end
-  
+
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(

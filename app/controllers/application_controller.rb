@@ -252,7 +252,7 @@ public
   end
 
   def load_collection
-    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+    @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
   def collection_maintainers_only

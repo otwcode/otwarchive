@@ -4,7 +4,7 @@ class TagSetNominationsController < ApplicationController
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
   before_filter :check_pseud_ownership, :only => [:create, :update]
-  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]
+  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy, :confirm_delete]
   before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
@@ -64,7 +64,7 @@ class TagSetNominationsController < ApplicationController
 
   def index
     if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       if @user != current_user
         flash[:error] = ts("You can only view your own nominations, sorry.")
         redirect_to tag_sets_path and return
@@ -167,7 +167,7 @@ class TagSetNominationsController < ApplicationController
       @nominations[:character] = base_nom_query("character") if @limit[:character] > 0
       @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
       if more_noms
-        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).value_of(:parent_tagname).uniq.first(30)
+        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).pluck(:parent_tagname).uniq.first(30)
         @nominations[:character] = @nominations[:character].where(:parent_tagname => parent_tagnames) if @limit[:character] > 0
         @nominations[:relationship] = @nominations[:relationship].where(:parent_tagname => parent_tagnames) if @limit[:relationship] > 0
       end
@@ -185,6 +185,9 @@ class TagSetNominationsController < ApplicationController
     if @tag_set.tag_nominations.unreviewed.empty?
       flash[:notice] = ts("No nominations to review!")
     end
+  end
+
+  def confirm_delete
   end
 
   def confirm_destroy_multiple
@@ -231,9 +234,9 @@ class TagSetNominationsController < ApplicationController
       @tagnames_to_remove = @reject[tag_type]
 
       # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
-      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).value_of(:tagname).uniq
+      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).pluck(:tagname).uniq
       tagnames_to_change.each do |oldname|
-        synonym = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).value_of(:synonym).first
+        synonym = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).pluck(:synonym).first
         unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             :oldname => oldname, :newname => synonym)

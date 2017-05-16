@@ -24,7 +24,7 @@ class UserSessionsController < ApplicationController
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
-        if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
+        if params[:user_session][:login] && user = User.find_by(login: params[:user_session][:login])
           # we have a user
           if user.recently_reset? && params[:user_session][:password] == user.activation_code
             if user.updated_at > 1.week.ago

@@ -56,7 +56,7 @@ class Challenge::PromptMemeController < ChallengesController
       flash[:notice] = 'Challenge was successfully updated.'
 
       # expire the cache on the signup form
-      expire_fragment(:controller => 'challenge_signups', :action => 'new')
+      ActionController::Base.new.expire_fragment('challenge_signups/new')
 
       # see if we initialized the tag set
       if initializing_tag_sets?

@@ -1,18 +1,18 @@
 class TagSet < ActiveRecord::Base
-  
+
   # a complete match is numerically represented with ALL
   ALL = -1
-  
+
   TAG_TYPES = %w(fandom character relationship freeform category rating warning)
   TAG_TYPES_INITIALIZABLE = %w(fandom character relationship freeform)
   TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
   TAGS_AS_CHECKBOXES = %w(category rating warning)
-  
+
   attr_accessor :from_owned_tag_set
-  
+
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
-  
+
   has_one :owned_tag_set
 
   has_one :prompt
@@ -27,16 +27,16 @@ class TagSet < ActiveRecord::Base
   def taglist
     @tagnames ? tagnames_to_list(@tagnames) : tags
   end
-  
+
   attr_writer :tagnames_to_remove
   def tagnames_to_remove
     @tagnames_to_remove || ""
   end
-  
+
 
   # this code just sets up functions fandom_tagnames/fandom_tagnames=, character_tagnames... etc
-  # that work like tagnames above, except on separate types. 
-  # 
+  # that work like tagnames above, except on separate types.
+  #
   # NOTE: you can't use both these individual
   # setters and tagnames in the same form -- ie, if you set tagnames and then you set fandom_tagnames, you
   # will wipe out the fandom tagnames set in tagnames.
@@ -45,27 +45,27 @@ class TagSet < ActiveRecord::Base
     attr_writer "#{type}_tagnames".to_sym
 
     define_method("#{type}_tagnames") do
-      self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) : 
+      self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) :
                                                                              self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
     end
-    
+
     define_method("#{type}_taglist") do
       self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), type) : with_type(type)
     end
-    
+
     # _to_add/remove only
     attr_writer "#{type}_tagnames_to_add".to_sym
-    define_method("#{type}_tagnames_to_add") do 
+    define_method("#{type}_tagnames_to_add") do
       self.instance_variable_get("@#{type}_tagnames_to_add") || ""
     end
 
     attr_writer "#{type}_tags_to_remove".to_sym
-    define_method("#{type}_tags_to_remove") do 
+    define_method("#{type}_tags_to_remove") do
       self.instance_variable_get("@#{type}_tags_to_remove") || ""
     end
 
   end
-  
+
   # this actually runs and saves the tags and updates the autocomplete
   # NOTE: if more than one is set, the precedence is as follows:
   # tagnames=
@@ -96,7 +96,7 @@ class TagSet < ActiveRecord::Base
       end
     end
 
-    # This overrides the type-specific 
+    # This overrides the type-specific
     if !@tagnames_to_remove.blank?
       tags_to_remove = @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
     end
@@ -107,10 +107,10 @@ class TagSet < ActiveRecord::Base
       tags_to_add = new_tags - self.tags
       tags_to_remove = (self.tags - new_tags)
     end
-    
+
     tags_to_remove.uniq!
     tags_to_add.uniq!
-    
+
     # actually remove and add the tags, and update autocomplete
     self.tags -= tags_to_remove
     remove_tags_from_autocomplete(tags_to_remove)
@@ -139,8 +139,8 @@ class TagSet < ActiveRecord::Base
       errors.add(:tagnames, ts("^The following tags don't exist and can't be used: %{taglist}", :taglist => nonexist.join(", ") ))
     end
   end
-  
-  
+
+
   scope :matching, lambda {|tag_set_to_match|
     select("DISTINCT tag_sets.*").
     joins(:tags).
@@ -151,43 +151,43 @@ class TagSet < ActiveRecord::Base
 
 
   ### Various utility methods
-  
+
   def +(other)
     TagSet.new(:tags => (self.tags + other.tags))
   end
-  
+
   def -(other)
     TagSet.new(:tags => (self.tags - other.tags))
   end
-  
+
   def with_type(type)
     # this is required because otherwise tag sets created on the fly (eg with + during potential match generation)
-    # that are not saved in the database will return empty list. 
-    # We use Tag.where so that we can still chain this with other AR queries 
+    # that are not saved in the database will return empty list.
+    # We use Tag.where so that we can still chain this with other AR queries
     return self.new_record? ? Tag.where(:id => self.tags.select {|t| t.type == type.classify}.collect(&:id)) : self.tags.with_type(type)
   end
-  
+
   def has_type?(type)
     with_type(type).exists?
   end
-  
+
   def with_type_from_redis(type)
-    
+
   end
 
   def empty?
     self.tags.empty?
   end
-  
+
   # returns the topmost tag type we have in this set
   def topmost_tag_type
-    TagSet::TAG_TYPES.each do |tag_type| 
+    TagSet::TAG_TYPES.each do |tag_type|
       return tag_type if self.has_type?(tag_type)
     end
     ""
   end
-  
-  
+
+
   ### Matching
 
   # Computes the "match rank" of the two arrays. The match rank is ALL if the
@@ -222,7 +222,7 @@ class TagSet < ActiveRecord::Base
     offer = type ? another.tag_ids_by_type[type] : another.tags.map(&:id)
     TagSet.match_array_rank(request, offer)
   end
-  
+
   def exact_match?(another, type=nil)
     if type
       self.with_type(type).to_a == another.with_type(type).to_a
@@ -230,7 +230,7 @@ class TagSet < ActiveRecord::Base
       self.tags == another.tags
     end
   end
-    
+
   def no_match?(another, type=nil)
     if type
       (self.with_type(type).to_a & another.with_type(type).to_a).empty? && !self.tags.empty?
@@ -238,7 +238,7 @@ class TagSet < ActiveRecord::Base
       (self.tags & another.tags).empty? && !self.tags.empty?
     end
   end
-  
+
   def partial_match?(another, type=nil)
     if type
       !(self.with_type(type).to_a & another.with_type(type).to_a).empty?
@@ -246,10 +246,10 @@ class TagSet < ActiveRecord::Base
       !(self.tags & another.tags).empty?
     end
   end
-  
+
   # checks to see if this is a subset of another tagset
   # note: we have to cast with_type to an array because one of the tag sets may actually
-  # be an activequery object 
+  # be an activequery object
   def is_subset_of?(another, type=nil)
     if type
       (self.with_type(type).to_a & another.with_type(type).to_a) == self.with_type(type).to_a
@@ -257,10 +257,10 @@ class TagSet < ActiveRecord::Base
       (self.tags & another.tags) == self.tags
     end
   end
-  
+
   # checks to see if this is a superset of another tagset
   # note: we have to cast with_type to an array because one of the tag sets may actually
-  # be an activequery object 
+  # be an activequery object
   def is_superset_of?(another, type=nil)
     if type
       (self.with_type(type).to_a & another.with_type(type).to_a) == another.with_type(type).to_a
@@ -276,10 +276,10 @@ class TagSet < ActiveRecord::Base
     else
       self.tags & another.tags
     end
-  end  
-  
-  ### protected 
-  
+  end
+
+  ### protected
+
   protected
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
@@ -289,7 +289,7 @@ class TagSet < ActiveRecord::Base
           # allow users to create these
           taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)} # Safe constantize checked above
         else
-          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_by_name(tagname.squish)}.compact # Safe constantize checked above
+          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_by(name: tagname.squish)}.compact # Safe constantize checked above
         end
       else
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}
@@ -302,12 +302,12 @@ class TagSet < ActiveRecord::Base
 
   # set up autocomplete and override some methods
   include AutocompleteSource
-  
+
   def autocomplete_prefixes
     prefixes = [ ]
     prefixes
   end
-  
+
   def add_to_autocomplete(score = nil)
     add_tags_to_autocomplete(self.tags)
   end
@@ -315,23 +315,23 @@ class TagSet < ActiveRecord::Base
   def remove_from_autocomplete
     REDIS_GENERAL.del("autocomplete_tagset_#{self.id}")
   end
-  
+
   def add_tags_to_autocomplete(tags_to_add)
-    tags_to_add.each do |tag| 
+    tags_to_add.each do |tag|
       value = tag.autocomplete_value
       REDIS_GENERAL.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
       REDIS_GENERAL.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
     end
   end
-  
+
   def remove_tags_from_autocomplete(tags_to_remove)
-    tags_to_remove.each do |tag| 
+    tags_to_remove.each do |tag|
       value = tag.autocomplete_value
       REDIS_GENERAL.zrem("autocomplete_tagset_all_#{self.id}", value)
       REDIS_GENERAL.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
     end
   end
-    
+
   # returns tags that are in ANY or ALL of the specified tag sets
   def self.autocomplete_lookup(options={})
     options.reverse_merge!({:term => "", :tag_type => "all", :tag_set => "", :in_any => true})
@@ -343,7 +343,7 @@ class TagSet < ActiveRecord::Base
 
     # get the intersection of the wrangled fandom and the associations from the various tag sets
     keys_to_lookup = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
-    
+
     if options[:in_any]
       # get the union since we want tags in ANY of these sets
       REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
@@ -354,7 +354,7 @@ class TagSet < ActiveRecord::Base
     results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)
     # expire fast
     REDIS_GENERAL.expire combo_key, 1
-    
+
     unless search_param.blank?
       search_regex = Tag.get_search_regex(search_param)
       return results.select {|tag| tag.match(search_regex)}
@@ -362,5 +362,5 @@ class TagSet < ActiveRecord::Base
       return results
     end
   end
-  
+
 end

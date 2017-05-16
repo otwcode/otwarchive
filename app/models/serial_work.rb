@@ -8,7 +8,7 @@ class SerialWork < ActiveRecord::Base
   after_destroy :adjust_series_visibility
   after_destroy :delete_empty_series
 
-  scope :in_order, {:order => :position}
+  scope :in_order, -> { order(:position) }
 
   # If you add or remove a work from a series, make sure restricted? is still accurate
   def adjust_series_visibility
