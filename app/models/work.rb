@@ -1241,9 +1241,7 @@ class Work < ActiveRecord::Base
   # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
   def self.no_tags(tag_category, options = {})
     tags = tag_category.tags
-    with_scope :find => options do
-      find(:all).collect {|w| w if (w.tags & tags).empty? }.compact.uniq
-    end
+    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uni
   end
 
   # Used when admins have disabled filtering
