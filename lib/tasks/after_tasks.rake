@@ -153,17 +153,16 @@ namespace :After do
 #    end
 #  end
 
-
- #desc "Clear out old epub files"
- #task(:remove_old_epubs => :environment) do
- #  download_dir = Rails.public_path.join("downloads").to_s
- #  cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
- #  puts cmd
- #  `#{cmd}`
- #  cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
- #  puts cmd
- #  `#{cmd}`
- #end
+# desc "Clear out old epub files"
+# task(:remove_old_epubs => :environment) do
+#   download_dir = Rails.public_path.join("downloads").to_s
+#     cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
+#     puts cmd
+#     `#{cmd}`
+#  cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
+#  puts cmd
+#  `#{cmd}`
+# end
 
 #  desc "update filter taggings since nov 21"
 #  task(:update_filter_taggings => :environment) do

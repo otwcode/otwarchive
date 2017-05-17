@@ -506,7 +506,7 @@ class Skin < ActiveRecord::Base
     skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
-      File.open(Skin.site_skins_dir + current_version + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     else
       File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     end
