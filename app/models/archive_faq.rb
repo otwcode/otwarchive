@@ -4,7 +4,7 @@ class ArchiveFaq < ActiveRecord::Base
   acts_as_list
   translates :title
 
-  has_many :questions, dependent: :destroy, order: :position
+  has_many :questions, -> { order(:position) }, dependent: :destroy
   accepts_nested_attributes_for :questions, allow_destroy: true
 
   validates :slug, presence: true, uniqueness: true
