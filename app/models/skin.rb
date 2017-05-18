@@ -271,10 +271,10 @@ class Skin < ActiveRecord::Base
   end
 
   def get_css
-    if self.filename
-      File.read(Rails.public_path + self.filename)
+    if filename
+      File.read(Rails.public_path.join("." + filename))
     else
-      self.css
+      css
     end
   end
 
@@ -386,7 +386,8 @@ class Skin < ActiveRecord::Base
   end
 
   def stylesheet_link(file, media)
-    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file + '" />'
+    # we want one and only one / in the url path
+    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file.gsub(/^\/*/,"") + '" />'
   end
 
   def self.naturalized(string)
@@ -472,7 +473,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.skins_dir
-    Rails.public_path + SKIN_PATH
+    Rails.public_path.join(SKIN_PATH).to_s
   end
 
   def self.skin_dir_entries(dir, regex)
@@ -480,7 +481,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.site_skins_dir
-    Rails.public_path + SITE_SKIN_PATH
+    Rails.public_path.join(SITE_SKIN_PATH).to_s
   end
 
   # Get the most recent version and find the topmost skin
@@ -505,7 +506,7 @@ class Skin < ActiveRecord::Base
     skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
-      File.open(Skin.site_skins_dir + current_version + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     else
       File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     end
