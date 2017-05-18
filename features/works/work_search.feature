@@ -249,7 +249,42 @@ Feature: Search Works
 
   # TODO: Search by categories
 
-  # TODO: Search by characters
+  Scenario: Searching for a character in the header search returns works with (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching the search term; refining the search with the character field returns only works with the character tag or its syns
+    Given a set of Steve Rogers works for searching
+
+    When I search for works containing "Steve Rogers"
+    Then I should see "You searched for: Steve Rogers"
+      And I should see "6 Found"
+      And the results should contain the character tag "Steve Rogers"
+      And the results should contain the character tag "Captain America"
+      And the results should contain the relationship tag "Steve Rogers/Tony Stark"
+      And the results should contain a summary mentioning "Steve Rogers"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "Steve Rogers"
+    When I fill in "Characters" with "Steve Rogers"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Steve Rogers Tags: Steve Rogers"
+      And I should see "4 Found"
+      And the results should contain the character tag "Steve Rogers"
+      And the results should contain the character tag "Captain America"
+      And the results should not contain the relationship tag "Steve Rogers/Tony Stark"
+      And the results should not contain a summary mentioning "Steve Rogers"
+
+  Scenario: Searching by character for a tag with synonyms returns works using
+  the exact tag or its synonyms
+    Given a set of Steve Rogers works for searching
+
+    When I am on the search works page
+      And I fill in "Characters" with "Steve Rogers"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: Steve Rogers"
+      And I should see "4 Found"
+      And the results should contain the character tag "Steve Rogers"
+      And the results should contain the character tag "Captain America"
+      And the results should not contain the relationship tag "Steve Rogers/Tony Stark"
+      And the results should not contain a summary mentioning "Steve Rogers"
+    When I follow "Edit Your Search"
+    Then the field labeled "Characters" should contain "Steve Rogers"
 
   Scenario: Searching by relationship for a tag with synonyms returns works
   using the exact tag or its synonyms
@@ -260,9 +295,9 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Tags: James T. Kirk/Spock"
       And I should see "4 Found"
-      And I should see "James T. Kirk/Spock"
-      And I should see "Spirk"
-      And I should see "K/S"
+      And the results should contain the relationship tag "James T. Kirk/Spock"
+      And the results should contain the relationship tag "Spirk"
+      And the results should contain the relationship tag "K/S"
     When I follow "Edit Your Search"
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
 
@@ -287,14 +322,16 @@ Feature: Search Works
 
     When I search for works containing "Spock/Nyota Uhura"
     Then I should see "You searched for: Spock/Nyota Uhura"
-      And I should see "2 Found"
-      And I should see "James T. Kirk/Spock/Nyota Uhura"
+      And I should see "3 Found"
+      And the results should contain the relationship tag "Spock/Nyota Uhura"
+      And the results should contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "Spock/Nyota Uhura"
-    When I fill in "Relationship" with "Spock/Nyota Uhura"
+    When I fill in "Relationships" with "Spock/Nyota Uhura"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Spock/Nyota Uhura Tags: Spock/Nyota Uhura"
-      And I should not see "James T. Kirk/Spock/Nyota Uhura"
+      And the results should contain the relationship tag "Spock/Nyota Uhura"
+      And the results should not contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
 
   Scenario: Searching by additional tags (freeforms) for a metatag with synonyms
   and subtags should return works using the tag, its synonyms, its subtags, and
@@ -306,12 +343,11 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Tags: Alternate Universe"
       And I should see "4 Found"
-      And I should see "Alternate Universe"
-      And I should see "AU"
-      And I should see "High School AU"
-      And I should see "Alternate Universe - Coffee Shops & Cafés"
-      But I should not see "Alternate Universe - High School"
-      And I should not see "Coffee Shop AU"
+      And the results should contain the freeform tag "Alternate Universe"
+      And the results should contain the freeform tag "AU"
+      And the results should contain the freeform tag "High School AU"
+      And the results should contain the freeform tag "Alternate Universe - Coffee Shops & Cafés"
+      And the results should not contain the freeform tag "Coffee Shop AU"
     When I follow "Edit Your Search"
     Then the field labeled "Additional Tags" should contain "Alternate Universe"
 
@@ -324,7 +360,7 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Tags: Alternate Universe - High School"
       And I should see "1 Found"
-      And I should see "High School AU"
+      And the results should contain the freeform tag "High School AU"
     When I follow "Edit Your Search"
     Then the field labeled "Additional Tags" should contain "Alternate Universe - High School"
 
@@ -337,7 +373,8 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Tags: Coffee Shop AU"
       And I should see "1 Found"
-      But I should not see "Alternate Universe - Coffee Shops & Cafés"
+      And the results should contain the freeform tag "Coffee Shop AU"
+      And the results should not contain the freeform tag "Alternate Universe - Coffee Shops & Cafés"
 
   # TODO: Results for logged out user should not contain restricted work
 

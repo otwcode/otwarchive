@@ -29,23 +29,33 @@ Given /^a set of alternate universe works for searching$/ do
   step %{the work indexes are updated}
 end
 
-Given /^a set of Spock works for searching$/ do
+Given /^a set of Steve Rogers works for searching$/ do
   step %{basic tags}
 
-  # Create three fandoms
-  step %{a canonical fandom "Star Trek: TOS"}
-  step %{a canonical fandom "Star Trek: AOS"}
-  step %{a canonical fandom "Star Trek: TNG"}
+  # Create two fandoms
+  step %{a canonical fandom "Marvel Cinematic Universe"}
+  step %{a canonical fandom "The Avengers (Marvel Movies)"}
 
-  # Create a charcater
-  step %{a canonical character "Spock"}
+  # Create a character with a syn
+  step %{a canonical character "Steve Rogers"}
+  step %{a synonym "Captain America" of the tag "Steve Rogers"}
 
-  # Create a work for the character in each fandom
-  ["Star Trek: TOS", "Star Trek: AOS", "Star Trek: TNG"].each do |fandom|
+  # Create a work for each character tag in each fandom
+  ["Marvel Cinematic Universe", "The Avengers (Marvel Movies)"].each do |fandom|
+    ["Steve Rogers", "Captain America"].each do |character|
     FactoryGirl.create(:posted_work,
-                      fandom_strong: fandom,
-                      character_string: "Spock")
+                       fandom_string: fandom,
+                       character_string: character)
+    end
   end
+
+  # Create a work without Steve as a character but with him in a relationship
+  FactoryGirl.create(:posted_work,
+                     relationship_string: "Steve Rogers/Tony Stark")
+
+  # Create a work that only mentions Steve in the summary
+  FactoryGirl.create(:posted_work,
+                     summary: "Bucky thinks about his pal Steve Rogers.")
 
   step %{the work indexes are updated}
 end
@@ -112,6 +122,22 @@ When /^I search for works by "([^"]*)"$/ do |creator|
 end
 
 ### THEN
+
+Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
+  expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)
+end
+
+Then /^the results should not contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
+  expect(page).not_to have_css("ol.work .tags .#{type.pluralize}", text: tag)
+end
+
+Then /^the results should contain a summary mentioning "([^"]*)"$/ do |term|
+  expect(page).to have_css("ol.work .summary", text: term)
+end
+
+Then /^the results should not contain a summary mentioning "([^"]*)"$/ do |term|
+  expect(page).not_to have_css("ol.work .summary", text: term)
+end
 
 Then /^the ([\d]+)(?:st|nd|rd|th) result should contain "([^"]*)"$/ do |n, text|
   selector = "ol.work > li:nth-of-type(#{n})"
