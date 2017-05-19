@@ -315,9 +315,7 @@ Feature: Search Works
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
       And the "F/M" checkbox should be checked
 
-  Scenario: Searching for a pairing in the header search returns threesomes that
-  partially match the search, but refining it with the relationship field will
-  not
+  Scenario:  Searching for a relationship in the header search returns works with (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching the search term (e.g. a threesome); refining the search with the relationship field returns only works with the relationship tag or its syns
     Given a set of Spock/Uhura works for searching
 
     When I search for works containing "Spock/Nyota Uhura"
@@ -325,12 +323,15 @@ Feature: Search Works
       And I should see "3 Found"
       And the results should contain the relationship tag "Spock/Nyota Uhura"
       And the results should contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
+      And the results should contain the relationship tag "Uhura/Spock"
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "Spock/Nyota Uhura"
     When I fill in "Relationships" with "Spock/Nyota Uhura"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Spock/Nyota Uhura Tags: Spock/Nyota Uhura"
+      And I should see "2 Found"
       And the results should contain the relationship tag "Spock/Nyota Uhura"
+      And the results should contain the relationship tag "Uhura/Spock"
       And the results should not contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
 
   Scenario: Searching by additional tags (freeforms) for a metatag with synonyms

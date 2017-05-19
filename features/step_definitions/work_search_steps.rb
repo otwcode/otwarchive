@@ -85,8 +85,9 @@ end
 Given /^a set of Spock\/Uhura works for searching$/ do
   step %{basic tags}
 
-  # Create a two-character relationship
+  # Create a canonical two-character relationship with a syn
   step %{a canonical relationship "Spock/Nyota Uhura"}
+  step %{a synonym "Uhura/Spock" of the tag "Spock/Nyota Uhura"}
 
   # Create a threesome with a name that is a partial match for the relationship
   step %{a canonical relationship "James T. Kirk/Spock/Nyota Uhura"}
