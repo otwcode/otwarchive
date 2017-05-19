@@ -92,12 +92,25 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   # Create a threesome with a name that is a partial match for the relationship
   step %{a canonical relationship "James T. Kirk/Spock/Nyota Uhura"}
 
-  # Create a work for the pairing tag
-  FactoryGirl.create(:posted_work, relationship_string: "Spock/Nyota Uhura")
+  # Create a work for each tag
+  ["Spock/Nyota Uhura", "Uhura/Spock", "James T. Kirk/Spock/Nyota Uhura"].each do |relationship|
+    FactoryGirl.create(:posted_work,
+                       relationship_string: relationship)
+  end
 
-  # Create a work for the threesome tag
-  FactoryGirl.create(:posted_work,
-                     relationship_string: "James T. Kirk/Spock/Nyota Uhura")
+  step %{the work indexes are updated}
+end
+
+Given /^a set of works with various categories for searching$/ do
+  step %{basic tags}
+
+  # Create one work with each category
+  %w(Gen Other F/F Multi F/M M/M).each do |category|
+    FactoryGirl.create(:posted_work, category_string: category)
+  end
+
+  # Create one work using multiple categories
+  FactoryGirl.create(:posted_work, category_string: "M/M, F/F")
 
   step %{the work indexes are updated}
 end
@@ -123,6 +136,10 @@ When /^I search for works by "([^"]*)"$/ do |creator|
 end
 
 ### THEN
+
+Then /^the results should contain the category "([^"]*)"$/ do |category|
+  expect(page).to have_css("ol.work .required-tags .category", text: category)
+end
 
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)

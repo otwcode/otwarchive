@@ -247,7 +247,35 @@ Feature: Search Works
 
   # TODO: Search by warnings
 
-  # TODO: Search by categories
+  Scenario: Searching by category returns all works using that category; search can be refined to return works using only that category
+    Given a set of works with various categories for searching
+
+    When I am on the search works page
+      And I check "F/F"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: F/F"
+      And I should see "2 Found"
+      And the results should contain the category "F/F"
+      And the results should contain the category "M/M, F/F"
+    When I follow "Edit Your Search"
+    Then the "F/F" checkbox should be checked
+    When I fill in "Any Field" with "-M/M"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: -M/M Tags: F/F"
+      And I should see "1 Found"
+
+  Scenario: Searching for the Multi category only returns works tagged with the Multi category, not works tagged with multiple categories
+    Given a set of works with various categories for searching
+
+    When I am on the search works page
+      And I check "Multi"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: Multi"
+      And I should see "1 Found"
+      And the results should contain the category "Multi"
+      And the results should not contain the category "M/M, F/F"
+    When I follow "Edit Your Search"
+    Then the "Multi" checkbox should be checked
 
   Scenario: Searching for a character in the header search returns works with (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching the search term; refining the search with the character field returns only works with the character tag or its syns
     Given a set of Steve Rogers works for searching
@@ -315,12 +343,12 @@ Feature: Search Works
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
       And the "F/M" checkbox should be checked
 
-  Scenario:  Searching for a relationship in the header search returns works with (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching the search term (e.g. a threesome); refining the search with the relationship field returns only works with the relationship tag or its syns
+  Scenario:  Searching for a relationship in the header search returns works with (a) the exact tag and (b) the tag's syns, and (c) any other tags or text matching the search term (e.g. a threesome); refining the search with the relationship field returns only works with the relationship tag or its syns
     Given a set of Spock/Uhura works for searching
 
     When I search for works containing "Spock/Nyota Uhura"
     Then I should see "You searched for: Spock/Nyota Uhura"
-      And I should see "3 Found"
+      And I should see "2 Found"
       And the results should contain the relationship tag "Spock/Nyota Uhura"
       And the results should contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
       And the results should contain the relationship tag "Uhura/Spock"
