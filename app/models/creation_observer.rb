@@ -138,8 +138,10 @@ class CreationObserver < ActiveRecord::Observer
         if creation.is_a?(Chapter) && creation.work
           creation.work.pseuds << pseud unless creation.work.pseuds.include?(pseud)
         elsif creation.is_a?(Work)
-          if creation.chapters.first
-            creation.chapters.first.pseuds << pseud unless creation.chapters.first.pseuds.include?(pseud)
+          if creation.chapters.present?
+            creation.chapters.each { |chapter|
+              chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)
+            }
           end
           creation.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }
         end
