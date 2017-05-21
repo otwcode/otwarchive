@@ -57,7 +57,7 @@ namespace :Tag do
         warning.destroy
       else
         warning.works.each do |work|
-          work.warnings.count == 1
+          work.warnings = choose_not_to_warn if work.warnings.count <= 1
         end
         # Once we get becomes!  ( rails 4.0.2 ) use it
         warning.type = "Freeform"
