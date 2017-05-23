@@ -356,20 +356,20 @@ describe WorksController do
 
     context "where the coauthor is being updated" do
       let(:new_coauthor) { create(:user) }
-      let(:params) {
+      let(:params) do
         {
           work: { title: "New title" },
           pseud: { byline: new_coauthor.login },
           id: update_work.id
         }
-      }
+      end
       it "should update coauthors for each chapter when the work is updated" do
         put :update, params
         updated_work = Work.find(update_work.id)
         expect(updated_work.pseuds).to include new_coauthor.default_pseud
-        updated_work.chapters.each { |c|
+        updated_work.chapters.each do |c|
           expect(c.pseuds).to include new_coauthor.default_pseud
-        }
+        end
       end
     end
   end
