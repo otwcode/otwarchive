@@ -44,6 +44,7 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+  require 'authlogic/test_case'
   step("I am logged out")
   if hidden.present?
     user.preference.hide_warnings = true
@@ -51,10 +52,17 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
     user.preference.save
   end
   visit login_path
+  activate_authlogic
+  user = find_or_create_new_user(login, password)
+
   fill_in "User name", with: login
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
+
+  activate_authlogic
+  UserSession.create!(user)
+
   assert UserSession.find unless @javascript
 end
 
