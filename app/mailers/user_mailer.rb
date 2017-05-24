@@ -63,7 +63,7 @@ class UserMailer < BulletproofMailer::Base
     @token = @invitation.token
     mail(
       to: @invitation.invitee_email,
-      subject: t("user_mailer.invitation.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: t("user_mailer.invitation_to_claim.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
