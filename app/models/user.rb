@@ -201,7 +201,7 @@
   end
 
   scope :alphabetical, -> { order(:login) }
-  scope :starting_with, -> (letter) { { conditions: ["SUBSTR(login,1,1) = ?", letter] } }
+  scope :starting_with, -> (letter) { where('login like ?', "#{letter}%") }
   scope :valid, -> { where(banned: false, suspended: false) }
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
