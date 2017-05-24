@@ -161,7 +161,7 @@ describe UserMailer do
       end
 
       it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
