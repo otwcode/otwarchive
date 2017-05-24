@@ -19,7 +19,7 @@ class Admin::AdminInvitationsController < ApplicationController
   end
 
   def invite_from_queue
-    InviteRequest.find(:all, order: :position, limit: invitation_params[:invite_from_queue].to_i).each do |request|
+    InviteRequest.order(:position).limit(invitation_params[:invite_from_queue].to_i).each do |request|
       request.invite_and_remove(current_admin)
     end
     InviteRequest.reset_order
