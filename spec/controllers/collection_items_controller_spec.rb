@@ -56,7 +56,7 @@ describe CollectionItemsController do
         get :index, collection_id: @collection.name, invited: true
         expect(response).to have_http_status(:success)
         expect(response.body).to include @collection.title
-        expect(response.body).to include @invitedwork.title
+        expect(response.body).to include @invited_work.title
       end
 
       it "excludes approved and rejected items" do
@@ -117,8 +117,7 @@ describe CollectionItemsController do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
         delete :destroy, id: @approved_work_item.id
-        expect(response).to have_http_status(:redirect)
-        expect(flash[:notice]).to include "Item completely removed from collection"
+        it_redirects_with_notice("Item completely removed from collection")
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end
     end
