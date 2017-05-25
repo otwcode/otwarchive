@@ -66,20 +66,19 @@ describe CollectionItemsController do
 
     context "for collection with items in" do
       let(:owner) { @collection.owners.first.user }
-      render_views
 
       it "includes approved items" do
         fake_login_known_user(owner)
         get :index, collection_id: @collection.name, approved: true
         expect(response).to have_http_status(:success)
-        expect(response.body).to include @collection.title
-        expect(response.body).to include @approved_work.title
+        expect(assigns(:collection_items)).to include @approved_work_item
       end
 
       it "excludes invited and rejected items" do
+        fake_login_known_user(owner)
         get :index, collection_id: @collection.name, approved: true
-        expect(response.body).not_to include @invited_work.title
-        expect(response.body).not_to include @rejected_work.title
+        expect(assigns(:collection_items)).not_to include @rejected_work_item
+        expect(assigns(:collection_items)).not_to include @invited_work_item
       end
     end
   end
