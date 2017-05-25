@@ -159,31 +159,29 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { post: true, hidden_by_admin: false, restricted: false }
+      ).group('pseuds.id')
   }
 
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :posted_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
+      ).group('pseuds.id')
   }
 
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS rec_count",
-      joins: :bookmarks,
-      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_rec_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS rec_count')
+    .joins(:bookmarks)
+    .where(
+      pseuds: { id: pseud_ids }, bookmarks: { private: false, hidden_by_admin: false, rec: true }
+    )
+    .group('pseuds.id')
   }
 
   def self.rec_counts_for_pseuds(pseuds)

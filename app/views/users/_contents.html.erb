@@ -47,7 +47,7 @@
         <ul class="actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
       <% end %>
     <% else %>   
-      <% if @user.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+      <% if @user.works.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
         <ul class="actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
       <% end %>
     <% end %>
