@@ -36,12 +36,15 @@ describe CollectionItemsController do
         fake_login_known_user(owner)
         get :index, collection_id: @collection.name, rejected: true
         expect(response).to have_http_status(:success)
+        expect(assigns(:collection_items)).to include @rejected_work_item
         expect(response.body).to include @collection.title
         expect(response.body).to include @rejected_work.title
       end
 
       it "excludes approved and invited items" do
         get :index, collection_id: @collection.name, rejected: true
+        expect(assigns(:collection_items)).not_to include @approved_work_item
+        expect(assigns(:collection_items)).not_to include @invited_work_item
         expect(response.body).not_to include @approved_work.title
         expect(response.body).not_to include @invited_work.title
       end
