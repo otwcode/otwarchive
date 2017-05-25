@@ -5,21 +5,19 @@ describe CollectionItemsController do
   include RedirectExpectationHelper
   
   describe "GET #index" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { create(:user) }
     before(:each) do
-      @collection = FactoryGirl.create(:collection)
-      @rejectedwork = FactoryGirl.create(:work)
-      @approvedwork = FactoryGirl.create(:work)
-      @invitedwork = FactoryGirl.create(:work)
-      @approvedwork.add_to_collection(@collection) && @approvedwork.save
-      @rejectedworkitem = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @rejectedwork.id)
-      @rejectedworkitem.collection_approval_status = -1
-      @rejectedworkitem.item_type = "Work"
-      @rejectedworkitem.save
-      @invitedworkitem = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @invitedwork.id)
-      @invitedworkitem.user_approval_status = 0
-      @invitedworkitem.item_type = "Work"
-      @invitedworkitem.save
+      @collection = create(:collection)
+      @rejected_work = FactoryGirl.create(:work)
+      @approved_work = FactoryGirl.create(:work)
+      @invited_work = FactoryGirl.create(:work)
+      @approved_work.add_to_collection(@collection) && @approved_work.save
+      @rejected_work_item = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @rejected_work.id)
+      @rejected_work_item.collection_approval_status = -1
+      @rejected_work_item.save
+      @invited_work_item = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @invited_work.id)
+      @invited_work_item.user_approval_status = 0
+      @invited_work_item.save
     end
 
     context "where the user is not a maintainer" do
@@ -39,13 +37,13 @@ describe CollectionItemsController do
         get :index, collection_id: @collection.name, rejected: true
         expect(response).to have_http_status(:success)
         expect(response.body).to include @collection.title
-        expect(response.body).to include @rejectedwork.title
+        expect(response.body).to include @rejected_work.title
       end
 
       it "excludes approved and invited items" do
         get :index, collection_id: @collection.name, rejected: true
-        expect(response.body).not_to include @approvedwork.title
-        expect(response.body).not_to include @invitedwork.title
+        expect(response.body).not_to include @approved_work.title
+        expect(response.body).not_to include @invited_work.title
       end
     end
 
@@ -63,8 +61,8 @@ describe CollectionItemsController do
 
       it "excludes approved and rejected items" do
         get :index, collection_id: @collection.name, invited: true
-        expect(response.body).not_to include @approvedwork.title
-        expect(response.body).not_to include @rejectedwork.title
+        expect(response.body).not_to include @approved_work.title
+        expect(response.body).not_to include @rejected_work.title
       end
     end
 
@@ -77,13 +75,13 @@ describe CollectionItemsController do
         get :index, collection_id: @collection.name, approved: true
         expect(response).to have_http_status(:success)
         expect(response.body).to include @collection.title
-        expect(response.body).to include @approvedwork.title
+        expect(response.body).to include @approved_work.title
       end
 
       it "excludes invited and rejected items" do
         get :index, collection_id: @collection.name, approved: true
-        expect(response.body).not_to include @invitedwork.title
-        expect(response.body).not_to include @rejectedwork.title
+        expect(response.body).not_to include @invited_work.title
+        expect(response.body).not_to include @rejected_work.title
       end
     end
   end
@@ -107,8 +105,8 @@ describe CollectionItemsController do
   describe "#destroy" do
     before(:each) do
       @collection = FactoryGirl.create(:collection)
-      @approvedwork = FactoryGirl.create(:work)
-      @approvedwork.add_to_collection(@collection) && @approvedwork.save
+      @approved_work = FactoryGirl.create(:work)
+      @approved_work.add_to_collection(@collection) && @approved_work.save
     end
 
     context "destroy" do
@@ -116,12 +114,12 @@ describe CollectionItemsController do
       render_views
 
       it "removes things" do
-        @approvedworkitem = CollectionItem.find_by_item_id(@approvedwork.id)
+        @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
-        delete :destroy, id: @approvedworkitem.id
+        delete :destroy, id: @approved_work_item.id
         expect(response).to have_http_status(:redirect)
         expect(flash[:notice]).to include "Item completely removed from collection"
-        expect(CollectionItem.where(item_id: @approvedwork.id)).to be_empty
+        expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end
     end
   end
