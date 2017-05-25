@@ -2,6 +2,17 @@
 module ApplicationHelper
   include HtmlCleaner
 
+  def link_to_function(name, *args, &block)
+    html_options = args.extract_options!.symbolize_keys
+
+    function = block_given? ? update_page(&block) : args[0] || ''
+
+    onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
+    href = html_options[:href] || 'javascript:void(0)'
+
+    content_tag(:a, name, html_options.merge(:href => href, :onclick => onclick))
+  end
+
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
