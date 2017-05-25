@@ -115,7 +115,7 @@ describe CollectionItemsController do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
         delete :destroy, id: @approved_work_item.id
-        it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " & @collection.name)
+        it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " + @collection.name)
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end
     end
