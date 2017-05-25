@@ -12,6 +12,7 @@ describe CollectionItemsController do
       @approved_work = create(:work)
       @invited_work = create(:work)
       @approved_work.add_to_collection(@collection) && @approved_work.save
+      @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
       @rejected_work_item = create(:collection_item, collection_id: @collection.id, item_id: @rejected_work.id)
       @rejected_work_item.collection_approval_status = -1
       @rejected_work_item.save
@@ -114,7 +115,7 @@ describe CollectionItemsController do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
         delete :destroy, id: @approved_work_item.id
-        it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection")
+        it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " & @collection.name)
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end
     end
