@@ -8,14 +8,14 @@ describe CollectionItemsController do
     let(:user) { create(:user) }
     before(:each) do
       @collection = create(:collection)
-      @rejected_work = FactoryGirl.create(:work)
-      @approved_work = FactoryGirl.create(:work)
-      @invited_work = FactoryGirl.create(:work)
+      @rejected_work = create(:work)
+      @approved_work = create(:work)
+      @invited_work = create(:work)
       @approved_work.add_to_collection(@collection) && @approved_work.save
-      @rejected_work_item = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @rejected_work.id)
+      @rejected_work_item = create(:collection_item, collection_id: @collection.id, item_id: @rejected_work.id)
       @rejected_work_item.collection_approval_status = -1
       @rejected_work_item.save
-      @invited_work_item = FactoryGirl.create(:collection_item, collection_id: @collection.id, item_id: @invited_work.id)
+      @invited_work_item = create(:collection_item, collection_id: @collection.id, item_id: @invited_work.id)
       @invited_work_item.user_approval_status = 0
       @invited_work_item.save
     end
@@ -30,42 +30,37 @@ describe CollectionItemsController do
 
     context "rejected parameter for collection with items in" do
       let(:owner) { @collection.owners.first.user }
-      render_views
 
       it "includes rejected items" do
         fake_login_known_user(owner)
         get :index, collection_id: @collection.name, rejected: true
         expect(response).to have_http_status(:success)
         expect(assigns(:collection_items)).to include @rejected_work_item
-        expect(response.body).to include @collection.title
-        expect(response.body).to include @rejected_work.title
       end
 
       it "excludes approved and invited items" do
+        fake_login_known_user(owner)
         get :index, collection_id: @collection.name, rejected: true
         expect(assigns(:collection_items)).not_to include @approved_work_item
         expect(assigns(:collection_items)).not_to include @invited_work_item
-        expect(response.body).not_to include @approved_work.title
-        expect(response.body).not_to include @invited_work.title
       end
     end
 
     context "invited parameter for collection with items in" do
       let(:owner) { @collection.owners.first.user }
-      render_views
 
       it "includes invited items" do
         fake_login_known_user(owner)
         get :index, collection_id: @collection.name, invited: true
         expect(response).to have_http_status(:success)
-        expect(response.body).to include @collection.title
-        expect(response.body).to include @invited_work.title
+        expect(assigns(:collection_items)).to include @invited_work_item
       end
 
       it "excludes approved and rejected items" do
+        fake_login_known_user(owner)
         get :index, collection_id: @collection.name, invited: true
-        expect(response.body).not_to include @approved_work.title
-        expect(response.body).not_to include @rejected_work.title
+        expect(assigns(:collection_items)).not_to include @approved_work_item
+        expect(assigns(:collection_items)).not_to include @rejected_work_item
       end
     end
 
@@ -120,7 +115,7 @@ describe CollectionItemsController do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
         delete :destroy, id: @approved_work_item.id
-        it_redirects_to_with_notice(collection_path(@collection), "Item completely removed from collection")
+        it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection")
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end
     end
