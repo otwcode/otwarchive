@@ -216,14 +216,13 @@ class Pseud < ActiveRecord::Base
 
 
   # look up by byline
-  scope :by_byline, lambda {|byline|
-    {
-      conditions: ['users.login = ? AND pseuds.name = ?',
+  scope :by_byline, -> (byline) {
+    includes(:user)
+      .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      ],
-      include: :user
-    }
+      )
+      .references(:users)
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
