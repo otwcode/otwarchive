@@ -14,7 +14,7 @@ class PseudsController < ApplicationController
   # GET /pseuds.xml
   def index
     if @user
-      @pseuds = @user.pseuds.find(:all)
+      @pseuds = @user.pseuds
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login
