@@ -144,6 +144,22 @@ Feature: Edit Works
     Then I should see "ex_friend" within ".byline"
       And I should not see "coolperson" within ".byline"
 
+  Scenario: User applies a coauthor's work skin to their work
+    Given the following activated users with private work skins
+        | login       |
+        | lead_author |
+        | coauthor    |
+        | random_user |
+      And I coauthored the work "Shared" as "lead_author" with "coauthor"
+      And I am logged in as "lead_author"
+    When I edit the work "Shared"
+    Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
+      And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
+      And I should not see "Random User's Work Skin" within "#work_work_skin_id"
+    When I select "Coauthor's Work Skin" from "Select Work Skin"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully updated"
+
   Scenario: A work cannot be edited to remove its fandom
     Given basic tags
       And I am logged in as a random user
