@@ -27,7 +27,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work and posting without preview
     Given I am logged in as "newbie"
-    When I set up the draft "All Hell Breaks Loose" 
+    When I set up the draft "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
       And I press "Post Without Preview"
     Then I should see "Work was successfully posted."
@@ -36,7 +36,7 @@ Feature: Create Works
     Then I should see "All Hell Breaks Loose"
 
   Scenario: Creating a new minimally valid work when you have more than one pseud
-    Given I am logged in as "newbie"      
+    Given I am logged in as "newbie"
       And "newbie" creates the pseud "Pointless Pseud"
     When I set up the draft "All Hell Breaks Loose"
       And I unselect "newbie" from "work_author_attributes_ids_"
@@ -232,7 +232,7 @@ Feature: Create Works
   Then I should see "Post New Work"
     And I should see "Rich Text" within ".rtf-html-switch"
     And I should see "HTML" within ".rtf-html-switch"
-    
+
   Scenario: posting a backdated work
   Given I am logged in as "testuser" with password "testuser"
     And I post the work "This One Stays On Top"
@@ -246,7 +246,7 @@ Feature: Create Works
   Then I should see "Published:1990-01-01"
   When I go to the works page
   Then "This One Stays On Top" should appear before "Backdated"
-        
+
   Scenario: Users must set something as a warning and Author Chose Not To Use Archive Warnings should not be added automatically
     Given basic tags
       And I am logged in
@@ -282,7 +282,7 @@ Feature: Create Works
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Me (myself), testuser"
 
-  Scenario: Users can't set a publication date that is in the future, e.g. set 
+  Scenario: Users can't set a publication date that is in the future, e.g. set
   the date to April 30 when it is April 26
     Given I am logged in
       And it is currently Wed Apr 26 22:00:00 UTC 2017
@@ -292,3 +292,17 @@ Feature: Create Works
       And I press "Post Without Preview"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
+
+  Scenario: Adding a coauthor to a work adds the coauthor to all existing chapters.
+    Given the following activated users exists
+    | login             | password   | email                     |
+    | author            | password   | author@example.com        |
+    | coauthor          | password   | coauthor@example.com      |
+
+    Given I am logged in as "author"
+    And I post the chaptered work "Chaptered Work"
+      And I add the co-author "coauthor" to the work "Chaptered Work"
+      Then I should see "author, coauthor" within ".byline"
+    When I follow "Next Chapter →"
+      Then I should see "Chapter 2"
+      And I should see "author, coauthor" within ".byline"

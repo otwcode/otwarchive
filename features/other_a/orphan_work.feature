@@ -141,14 +141,11 @@ Feature: Orphan work
     And I should see "Lovely"
 
   Scenario: Orphaning a shared work should not affect chapters created solely by the other creator
-    # Set up a shared, chaptered work where orphaneer is not listed as a
-    # creator on Chapter 2. Currently, adding an author to a chaptered work
-    # only adds them to the first chapter. If that behavior ever changes (e.g.
-    # in response to issue AO3-2971), so should this test.
 
     Given I am logged in as "keeper"
-      And I post the chaptered work "Half-Orphaned"
+      And I post the work "Half-Orphaned"
       And I add the co-author "orphaneer" to the work "Half-Orphaned"
+      And I post a chapter for the work "Half-Orphaned"
 
     # Verify that the authorship has been set up properly
     Then "orphaneer" should be a co-creator of Chapter 1 of "Half-Orphaned"
