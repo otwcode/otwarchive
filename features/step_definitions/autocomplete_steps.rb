@@ -15,6 +15,15 @@ Given /^a set of tags for testing autocomplete$/ do
   step %{a noncanonical freeform "alternate sundays"}
 end
 
+Then /^I should see HTML "(.*)?" in the autocomplete$/ do |string|
+  # There should be only one visible autocomplete dropdown.
+  within("input + .autocomplete", visible: true) do
+    # Wait for results to appear, then check their HTML content
+    expect(current_scope).to have_selector("li")
+    expect(current_scope["innerHTML"]).to include(string)
+  end
+end
+
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
   expect(find("input + .autocomplete", visible: true)).to have_content(string)
