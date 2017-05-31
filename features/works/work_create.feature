@@ -294,15 +294,13 @@ Feature: Create Works
     When I jump in our Delorean and return to the present
 
   Scenario: Adding a coauthor to a work adds the coauthor to all existing chapters.
-    Given the following activated users exists
-    | login             | password   | email                     |
-    | author            | password   | author@example.com        |
-    | coauthor          | password   | coauthor@example.com      |
+    Given the user "author" exists and is activated
+      And the user "coauthor" exists and is activated
 
-    Given I am logged in as "author"
-    And I post the chaptered work "Chaptered Work"
+    When I am logged in as "author"
+      And I post the chaptered work "Chaptered Work"
       And I add the co-author "coauthor" to the work "Chaptered Work"
-      Then I should see "author, coauthor" within ".byline"
+    Then I should see "author, coauthor" within ".byline"
     When I follow "Next Chapter →"
-      Then I should see "Chapter 2"
+    Then I should see "Chapter 2"
       And I should see "author, coauthor" within ".byline"
