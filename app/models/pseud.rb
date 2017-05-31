@@ -217,12 +217,11 @@ class Pseud < ActiveRecord::Base
 
   # look up by byline
   scope :by_byline, -> (byline) {
-    includes(:user)
+    joins(:user)
       .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
       )
-      .references(:users)
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
@@ -255,7 +254,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.includes(:user).where(conditions).references(:user)
+    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines
