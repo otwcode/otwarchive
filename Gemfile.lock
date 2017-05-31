@@ -285,6 +285,8 @@ GEM
       sprockets-rails (~> 2.0)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
+    rails_select_on_includes (0.4.9)
+      activerecord (>= 4.1)
     railties (4.1.16)
       actionpack (= 4.1.16)
       activesupport (= 4.1.16)
@@ -502,6 +504,7 @@ DEPENDENCIES
   rack-dev-mark (>= 0.7.5)
   rails (= 4.1.16)
   rails-observers
+  rails_select_on_includes (~> 0.4.8)
   redis (>= 3.0)
   redis-namespace
   resque (>= 1.14.0)
