@@ -1,5 +1,5 @@
 # Queue the ids of works and bookmarks to be reindexed in resque
-# Usage: 
+# Usage:
 # RedisSearchIndexQueue.queue_work(work) or queue_bookmark(bookmark)
 # RedisSearchIndexQueue.queue_works(work_ids)
 # RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
@@ -12,7 +12,7 @@ class RedisSearchIndexQueue
     elsif item.is_a?(Bookmark)
       queue_bookmark(item, options)
     end
-  end 
+  end
 
   #### WORKS
 
@@ -20,15 +20,15 @@ class RedisSearchIndexQueue
   def self.queue_work(work, options={})
     IndexQueue.enqueue(work, :background)
     unless options[:without_bookmarks].present?
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id), options)
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).pluck(:id), options)
     end
   end
-  
+
   def self.queue_works(work_ids, options={})
     work_ids.each { |id| IndexQueue.enqueue_id('Work', id, :background) }
-    unless options[:without_bookmarks].present? 
+    unless options[:without_bookmarks].present?
       # queue their bookmarks also
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id), options)
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).pluck(:id), options)
     end
   end
 
@@ -37,7 +37,7 @@ class RedisSearchIndexQueue
   def self.queue_bookmark(bookmark, options={})
     IndexQueue.enqueue(bookmark, :background)
   end
-  
+
   def self.queue_bookmarks(ids, options={})
     ids.each { |id| IndexQueue.enqueue_id('Bookmark', id, :background) }
   end
@@ -45,9 +45,9 @@ class RedisSearchIndexQueue
   #########################
   ## DEPRECATED! ##########
   #########################
-  
+
   # Resque
-  
+
   # This will be called by a worker when a job needs to be processed
   def self.perform(method, *args)
     self.send(method, *args)
@@ -62,7 +62,7 @@ class RedisSearchIndexQueue
     end
     Resque::Job.create(queue, RedisSearchIndexQueue, method, id)
   end
-  
+
   def self.run_work_reindex(work_id)
     Work.find(work_id).update_index
   end
@@ -70,5 +70,5 @@ class RedisSearchIndexQueue
   def self.run_bookmark_reindex(bookmark_id)
     Bookmark.find(bookmark_id).update_index
   end
-  
+
 end

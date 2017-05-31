@@ -18,10 +18,10 @@
     <dd>
       <ul class="mods commas"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join("\n").html_safe =%></ul>
     </dd>
-  
+
     <dt><%= form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
     <dd><%= form.text_field :moderator_changes, autocomplete_options("pseud", :size => 80) %></dd>
-  </dl>   
+  </dl>
 </fieldset>
 
 <fieldset>
@@ -30,7 +30,7 @@
   <dl>
     <dt class="required"><%= form.label :title, ts("Title* (text only)") %></dt>
     <dd><%= form.text_field :title %></dd>
-  
+
     <dt><%= form.label :description, ts("Brief Description") %></dt>
     <dd><%= form.text_field :description %></dd>
 
@@ -49,9 +49,9 @@
   <legend><%= ts("Nomination Limits") %></legend>
   <h3 class="landmark heading"><%= ts("Nomination Limits") %></h3>
   <ul class="notes">
-    <li><%= ts("If you allow <em>both</em> fandoms and characters/relationships in the same tag set, 
+    <li><%= ts("If you allow <em>both</em> fandoms and characters/relationships in the same tag set,
   the number of characters/relationships is <strong>per fandom</strong>.").html_safe %></li>
-    <li><%= ts("If that's not what you want, you 
+    <li><%= ts("If that's not what you want, you
   can have users nominate fandoms in one tag set, and characters/relationships in another tag set. Then use both tag sets in your challenge settings.").html_safe %></li>
   </ul>
   <dl>

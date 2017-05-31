@@ -1,10 +1,12 @@
 class Locale < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :language
   validates_presence_of :iso
   validates_uniqueness_of :iso
   validates_presence_of :name
 
-  scope :default_order, order(:iso)
+  scope :default_order, -> { order(:iso) }
 
   def to_param
     iso
@@ -16,8 +18,8 @@ class Locale < ActiveRecord::Base
   end
 
   def self.set_base_locale(locale={:iso => "en", :name => "English"})
-    language = Language.find_by_short(ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
-    Locale.find_by_iso(locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
+    language = Language.find_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
+    Locale.find_by(iso: locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
   end
 
 end

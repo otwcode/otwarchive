@@ -17,7 +17,7 @@ Then /^"([^\"]*)" gift exchange should be correctly created$/ do |title|
   step %{I should see "Setting Up the #{title} Gift Exchange"}
   step %{I should see "Offer Settings"}
   step %{I should see "Request Settings"}
-  step %{I should see "If you plan to use automated matching"} 
+  step %{I should see "If you plan to use automated matching"}
   step %{I should see "Allow Any"}
 end
 
@@ -34,7 +34,7 @@ Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |c
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   step "I fill in gift exchange challenge options"
     step "I submit"
-  step %{I should see "Challenge was successfully created"}  
+  step %{I should see "Challenge was successfully created"}
 end
 
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
@@ -126,7 +126,7 @@ When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |t
   pseud_id = Pseud.where(name: "gooduser").first.id
   find("#challenge_signup_pseud_id", visible: false).set(pseud_id)
   click_button "Submit"
-end  
+end
 
 When /^I attempt to update my signup for "([^\"]*)" with a pseud that is not mine$/ do |title|
   step %{the user "gooduser" exists and is activated}
@@ -171,7 +171,7 @@ When /^I sign up for "([^\"]*)" with a mismatched combination$/ do |title|
     step %{I check the 2nd checkbox with the value "Bad Choice"}
     click_button "Submit"
 end
-  
+
 
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   step %{I start signing up for "#{title}"}
@@ -200,7 +200,7 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
 end
 
 When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
   step %{I fill in "Description" with "random text"}
   step %{I press "Submit"}
@@ -215,7 +215,7 @@ Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
 end
 
 Given /^I create an invalid signup in the gift exchange "([^\"]*)"$/ do |challengename|
-  collection = Collection.find_by_title(challengename)
+  collection = Collection.find_by(title: challengename)
   # create an invalid signup by deleting the first one's offers,
   # bypassing the validation checks
   collection.signups.first.offers.delete_all
@@ -236,7 +236,7 @@ When /^I assign a recipient to herself$/ do
 end
 
 When /^I manually destroy the assignments for "([^\"]*)"$/ do |title|
-  collection = Collection.find_by_title(title)
+  collection = Collection.find_by(title: title)
   collection.assignments.destroy_all
 end
 
@@ -246,7 +246,7 @@ end
 
 When /^I assign a pinch recipient$/ do
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
-  pseud = Pseud.find_by_name(name)
+  pseud = Pseud.find_by(name: name)
   request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
   step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
 end
@@ -315,7 +315,7 @@ end
 # we're not testing the process of rejection here, just that
 # it doesn't affect the completion status of the challenge assignment
 When /^I refuse my gift story "(.*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.gifts.first.toggle!(:rejected)
 end
 
@@ -338,7 +338,7 @@ end
 ### Deleting a gift exchange
 
 Then /^I should not see the gift exchange dashboard for "([^\"]*)"$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   visit collection_path(collection)
   step %{I should not see "Gift Exchange" within "#dashboard"}
   step %{I should not see "Sign-up Form" within "#dashboard"}
@@ -353,7 +353,7 @@ Then /^I should not see the gift exchange dashboard for "([^\"]*)"$/ do |challen
 end
 
 Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   User.all.each do |user|
     user.offer_assignments.in_collection(collection).should be_empty
     user.pinch_hit_assignments.in_collection(collection).should be_empty

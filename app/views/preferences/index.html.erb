@@ -15,7 +15,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
+<%= form_for(@preference, url: user_preference_path(@user, @preference)) do |f| %>
 <fieldset>
   <legend><%= ts('Privacy') %></legend>
   <h4 class="heading"><%= ts('Privacy') %> <%= link_to_help 'privacy-preferences' %></h4>
@@ -79,7 +79,7 @@
 
     <dt><%= f.label :time_zone, ts('Your time zone') %></dt>
     <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-    
+
     <% if Rails.env.test? || Rails.env.development? || $rollout.active?(:set_locale_preference, @user) %>
       <dt><%= f.label :preferred_locale, ts('Your locale') %> <%= link_to_help 'locale-preferences' %></dt>
       <dd><%= f.select :preferred_locale, @available_locales.collect{|locale| [locale.name, locale.id]}, :default => @preference.preferred_locale %></dd>

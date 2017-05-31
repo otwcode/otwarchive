@@ -44,15 +44,15 @@ end
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
-  work = Work.find_by_title!(work)
-  visit work_url(work)
+  work = Work.find_by(title: work)
+  visit work_path(work)
   fill_in("comment[content]", with: comment_text)
 end
 
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
   step %{I am logged in as "commenter"}
   step %{I set up the comment "This is a test" on the work "#{work}"}
-  work_id = Work.find_by_title!(work).id
+  work_id = Work.find_by(title: work).id
   pseud_id = User.first.pseuds.first.id
   find("#comment_pseud_id_for_#{work_id}", visible: false).set(pseud_id)
   click_button "Comment"
@@ -103,7 +103,7 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
 end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit new_work_comment_path(work, :only_path => false)
 end
 
@@ -130,6 +130,10 @@ When /^I delete the comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I view the latest comment$/ do
+  visit comment_path(Comment.last)
+end
+
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}
@@ -138,37 +142,37 @@ Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
 end
 
 Then /^comment moderation should be enabled on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.moderated_commenting_enabled?
 end
 
 Then /^comment moderation should not be enabled on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert !w.moderated_commenting_enabled?
 end
 
 Then /^the comment on "([^\"]*?)" should be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.comments.first.unreviewed?
 end
 
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert !w.comments.first.unreviewed?
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   visit unreviewed_work_comments_path(w)
 end
 
 When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   visit comment_path(w.comments.first)
 end
 
 Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.find_all_comments.count == num.to_i
 end
 
@@ -182,12 +186,12 @@ Given /^the moderated work "([^\"]*)" by "([^\"]*)" with the approved comment "(
 end
 
 When /^I reload the comments on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.find_all_comments.each { |c| c.reload }
 end
 
 When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   chapter = work.chapters[0]
   user = User.current_user
 
@@ -223,7 +227,7 @@ Then /^I (should|should not) see the deeply nested comments$/ do |should_or_shou
 end
 
 When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
 
   loop do
     visit work_url(work, show_comments: true)

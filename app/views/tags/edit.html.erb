@@ -41,7 +41,7 @@
           <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
         <% else %>
           <strong><%= @tag.type %></strong>
-        <% end %>  
+        <% end %>
       </dd>
 
       <% if @wranglers %>
@@ -54,7 +54,7 @@
         <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
         <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
         <% if logged_in_as_admin? && Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
-          <p class="actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
+          <p class="actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, data: {confirm: "Are you sure?"} %></p>
         <% end %>
       </dd>
 
@@ -150,8 +150,8 @@
                 <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
               <% end %>
               <div title="<%= ts("add tags") %>">
-                <%= f.text_field tag_type.underscore + '_string', 
-      							autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
+                <%= f.text_field tag_type.underscore + '_string',
+      							autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}",
       							:class => 'tags autocomplete') %>
               </div>
             </dd>

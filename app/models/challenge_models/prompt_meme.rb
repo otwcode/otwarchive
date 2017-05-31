@@ -1,4 +1,6 @@
 class PromptMeme < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   PROMPT_TYPES = %w(requests)
   include ChallengeCore
 
@@ -6,9 +8,6 @@ class PromptMeme < ActiveRecord::Base
 
   belongs_to :collection
   has_one :collection, :as => :challenge
-
-  attr_protected :signup_instructions_general_sanitizer_version
-  attr_protected :signup_instructions_requests_sanitizer_version
 
   # limits the kind of prompts users can submit
   belongs_to :prompt_restriction, :class_name => "PromptRestriction", :dependent => :destroy
@@ -30,7 +29,7 @@ class PromptMeme < ActiveRecord::Base
   end
 
   before_validation :update_allowed_values, :update_allowed_prompts
-  
+
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
 

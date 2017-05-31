@@ -20,19 +20,17 @@ describe "API BookmarksController" do
                private: "0",
                rec: "0" }
 
-  describe "Valid API bookmark import" do
-    before do
-      mock_external
-    end
+  before do
+    mock_external
+    @user = create_archivist
+  end
 
-    after do
-      WebMock.reset!
-    end
+  after do
+    WebMock.reset!
+    @user.destroy
+  end
 
-    before(:each) do
-      allow_any_instance_of(User).to receive(:is_archivist?).and_return(true)
-      @user = create(:user)
-    end
+  context "Valid API bookmark import" do
 
     it "should return 200 OK when all bookmarks are created" do
       post "/api/v1/bookmarks/import",
@@ -59,7 +57,7 @@ describe "API BookmarksController" do
              bookmarks: [ bookmark, bookmark ]
            }.to_json,
            valid_headers
-      bookmarks = Bookmark.find_all_by_pseud_id(pseud_id)
+      bookmarks = Bookmark.where(pseud_id: pseud_id)
       assert_equal bookmarks.count, 1
     end
 
@@ -81,7 +79,7 @@ describe "API BookmarksController" do
              bookmarks: [ bookmark ]
            }.to_json,
            valid_headers
-      first_bookmark = Bookmark.find_all_by_pseud_id(pseud_id).first
+      first_bookmark = Bookmark.where(pseud_id: pseud_id).first
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:archive_url], bookmark_url(first_bookmark)
     end
@@ -90,16 +88,6 @@ describe "API BookmarksController" do
   end
 
   describe "Invalid API bookmark import" do
-    before do
-      mock_external
-      @user = create(:user)
-    end
-
-    after do
-      WebMock.reset!
-    end
-
-
     it "should return 400 Bad Request if no bookmarks are specified" do
       post "/api/v1/bookmarks",
            { archivist: @user.login }.to_json,

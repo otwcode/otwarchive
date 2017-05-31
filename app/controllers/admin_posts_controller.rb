@@ -1,19 +1,19 @@
 class AdminPostsController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :admin_only, except: [:index, :show]
 
   # GET /admin_posts
   def index
     if params[:tag]
-      @tag = AdminPostTag.find_by_id(params[:tag])
+      @tag = AdminPostTag.find_by(id: params[:tag])
       if @tag
         @admin_posts = @tag.admin_posts
       end
     end
     @admin_posts ||= AdminPost
-    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-      @admin_posts = @admin_posts.where(:language_id => @language.id)
-      @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
+    if params[:language_id].present? && (@language = Language.find_by(short: params[:language_id]))
+      @admin_posts = @admin_posts.where(language_id: @language.id)
+      @tags = AdminPostTag.where(language_id: @language.id).order(:name)
     else
       @admin_posts = @admin_posts.non_translated
       @tags = AdminPostTag.order(:name)
@@ -25,7 +25,7 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/1
   def show
     admin_posts = AdminPost.non_translated
-    @admin_post = AdminPost.find_by_id(params[:id])
+    @admin_post = AdminPost.find_by(id: params[:id])
     unless @admin_post
       raise ActiveRecord::RecordNotFound, "Couldn't find admin post '#{params[:id]}'"
     end
@@ -56,12 +56,12 @@ class AdminPostsController < ApplicationController
 
   # POST /admin_posts
   def create
-    @admin_post = AdminPost.new(params[:admin_post])
+    @admin_post = AdminPost.new(admin_post_params)
     if @admin_post.save
       flash[:notice] = ts("Admin Post was successfully created.")
       redirect_to(@admin_post)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -69,11 +69,11 @@ class AdminPostsController < ApplicationController
   def update
     @admin_post = AdminPost.find(params[:id])
 
-    if @admin_post.update_attributes(params[:admin_post])
+    if @admin_post.update_attributes(admin_post_params)
       flash[:notice] = ts("Admin Post was successfully updated.")
       redirect_to(@admin_post)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -83,4 +83,13 @@ class AdminPostsController < ApplicationController
     @admin_post.destroy
     redirect_to(admin_posts_url)
   end
+
+  private
+
+  def admin_post_params
+    params.require(:admin_post).permit(
+      :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list
+    )
+  end
+
 end

@@ -1,4 +1,6 @@
 class ChallengeSignup < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   # -1 represents all matching
   ALL = -1
 
@@ -42,24 +44,24 @@ class ChallengeSignup < ActiveRecord::Base
 
   scope :by_pseud, lambda {|pseud| where('pseud_id = ?', pseud.id) }
 
-  scope :pseud_only, select(:pseud_id)
+  scope :pseud_only, -> { select(:pseud_id) }
 
-  scope :order_by_pseud, joins(:pseud).order("pseuds.name")
-  
-  scope :order_by_date, order("updated_at DESC")
+  scope :order_by_pseud, -> { joins(:pseud).order("pseuds.name") }
+
+  scope :order_by_date, -> { order("updated_at DESC") }
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
-  
-  scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
-  scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
+
+  scope :no_potential_offers, -> { where("id NOT IN (SELECT offer_signup_id FROM potential_matches)") }
+  scope :no_potential_requests, -> { where("id NOT IN (select request_signup_id FROM potential_matches)") }
 
   # Scopes used to include extra data when loading.
-  scope :with_request_tags, includes(
+  scope :with_request_tags, -> { includes(
     requests: [tag_set: :tags, optional_tag_set: :tags]
-  )
-  scope :with_offer_tags, includes(
+  ) }
+  scope :with_offer_tags, -> { includes(
     offers: [tag_set: :tags, optional_tag_set: :tags]
-  )
+  ) }
 
   ### VALIDATION
 
@@ -171,7 +173,7 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
-  
+
   def can_delete?(prompt)
     prompt_type = prompt.class.to_s.downcase.pluralize
     current_num_prompts = self.send(prompt_type).count
@@ -181,7 +183,7 @@ class ChallengeSignup < ActiveRecord::Base
     else
       false
     end
-  end  
+  end
 
   ### Code for generating signup summaries
 
@@ -215,7 +217,7 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   def self.summary_dir
-    "#{Rails.public_path}/static/challenge_signup_summaries"
+    Rails.public_path.join("static/challenge_signup_summaries").to_s
   end
 
   def self.summary_file(collection)

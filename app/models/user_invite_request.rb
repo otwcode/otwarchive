@@ -1,4 +1,6 @@
 class UserInviteRequest < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   MAX_USER_INVITE_REQUEST = ArchiveConfig.MAX_USER_INVITE_REQUEST
 
   belongs_to :user
@@ -8,7 +10,7 @@ class UserInviteRequest < ActiveRecord::Base
 
   before_update :check_status, :grant_request
 
-  scope :not_handled, :conditions => {:handled => false}
+  scope :not_handled, -> { where(handled: false) }
 
   private
 

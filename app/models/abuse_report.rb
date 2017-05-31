@@ -1,4 +1,6 @@
 class AbuseReport < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   validates :email, email_veracity: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
@@ -10,9 +12,7 @@ class AbuseReport < ActiveRecord::Base
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
-  scope :by_date, order('created_at DESC')
-
-  attr_protected :comment_sanitizer_version
+  scope :by_date, -> { order('created_at DESC') }
 
   # if the URL ends like "works/123", add a / at the end
   # if the URL contains "works/123?", remove the parameters and add a /
@@ -31,8 +31,9 @@ class AbuseReport < ActiveRecord::Base
 
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' +
                              ArchiveConfig.APP_HOST, true)
-  validates_format_of :url, with: app_url_regex, message: ts('does not appear to
-                                                              be on this site.')
+  validates_format_of :url, with: app_url_regex,
+                            message: ts('does not appear to be on this site.'),
+                            multiline: true
 
   def email_and_send
     AdminMailer.abuse_report(id).deliver
@@ -50,7 +51,6 @@ class AbuseReport < ActiveRecord::Base
       username: username,
       ip_address: ip_address,
       url: url
-
     )
     reporter.send_report!
   end

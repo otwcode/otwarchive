@@ -32,4 +32,7 @@
       <%= ts('Last Edited') %> <%= time_in_zone(single_comment.edited_at) %>
     </p>
   <% end %>
+  <% if logged_in_as_admin? %>
+    <p class="ip"><%= ts("IP Address: %{ip_address}", ip_address: single_comment.ip_address.blank? ? "No address recorded" : single_comment.ip_address) %></p>
+  <% end %>
 </li>

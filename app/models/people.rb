@@ -1,4 +1,5 @@
 class People
+  include ActiveModel::ForbiddenAttributesProtection
   attr_reader :char
 
   def self.all
@@ -19,26 +20,26 @@ class People
 
   def escaped
     if @char == "_"
-      return "\\_" 
+      return "\\_"
     else
       return @char
     end
   end
 
   def pseuds
-    Pseud.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
+    Pseud.include(:user).where('name LIKE ?', escaped + '%').order(:name)
   end
 
   def authors
     if User.current_user.nil?
-      Pseud.with_public_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")    
+      Pseud.with_public_works.include(:user).where('name LIKE ?', escaped + '%').order(:name)
     else
-      Pseud.with_posted_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
+      Pseud.with_posted_works.include(:user).where('name LIKE ?', escaped + '%').order(:name)
     end
   end
 
   def reccers
-    Pseud.with_public_recs.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
+    Pseud.with_public_recs.include(:user).where('name LIKE ?', escaped + '%').order(:name)
   end
 
 end

@@ -2,11 +2,11 @@ class PseudsController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_ownership, only: [:create, :edit, :destroy, :new, :update]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -28,7 +28,7 @@ class PseudsController < ApplicationController
     if @user.blank?
       raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
     end
-    @pseud = @user.pseuds.find_by_name(params[:id])
+    @pseud = @user.pseuds.find_by(name: params[:id])
     unless @pseud
       raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:id]}'"
     end
@@ -63,11 +63,11 @@ class PseudsController < ApplicationController
     @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    
+
     if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id, 
-                                                       :subscribable_type => 'User').first || 
-                      current_user.subscriptions.build(:subscribable => @user)
+      @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
+                                                       subscribable_type: 'User').first ||
+                      current_user.subscriptions.build(subscribable: @user)
     end
   end
 
@@ -79,14 +79,14 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
-    @pseud = @user.pseuds.find_by_name(params[:id])
+    @pseud = @user.pseuds.find_by(name: params[:id])
   end
 
   # POST /pseuds
   # POST /pseuds.xml
   def create
-    @pseud = Pseud.new(params[:pseud])
-    if @user.pseuds.where(:name => @pseud.name).blank?
+    @pseud = Pseud.new(pseud_params)
+    if @user.pseuds.where(name: @pseud.name).blank?
       @pseud.user_id = @user.id
       old_default = @user.default_pseud
       if @pseud.save
@@ -97,21 +97,21 @@ class PseudsController < ApplicationController
         end
         redirect_to([@user, @pseud])
       else
-        render :action => "new"
+        render action: "new"
       end
     else
       # user tried to add pseud he already has
       flash[:error] = ts('You already have a pseud with that name.')
-      render :action => "new"
+      render action: "new"
     end
   end
 
   # PUT /pseuds/1
   # PUT /pseuds/1.xml
   def update
-    @pseud = @user.pseuds.find_by_name(params[:id])
+    @pseud = @user.pseuds.find_by(name: params[:id])
     default = @user.default_pseud
-    if @pseud.update_attributes(params[:pseud])
+    if @pseud.update_attributes(pseud_params)
       # if setting this one as default, unset the attribute of the current default pseud
       if @pseud.is_default and not(default == @pseud)
         # if setting this one as default, unset the attribute of the current active pseud
@@ -120,7 +120,7 @@ class PseudsController < ApplicationController
       flash[:notice] = ts('Pseud was successfully updated.')
      redirect_to([@user, @pseud])
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -128,7 +128,7 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1.xml
   def destroy
     @hide_dashboard = true
-    @pseud = @user.pseuds.find_by_name(params[:id])
+    @pseud = @user.pseuds.find_by(name: params[:id])
     if @pseud.is_default
       flash[:error] = ts("You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
@@ -146,4 +146,14 @@ class PseudsController < ApplicationController
 
     redirect_to(user_pseuds_url(@user))
   end
+
+  private
+
+  def pseud_params
+    params.require(:pseud).permit(
+      :name, :description, :is_default, :icon, :delete_icon,
+      :icon_alt_text, :icon_comment_text
+    )
+  end
+
 end

@@ -7,7 +7,7 @@ class SubscriptionsController < ApplicationController
   before_filter :check_ownership
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -18,14 +18,14 @@ class SubscriptionsController < ApplicationController
     if params[:type].present?
       @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
     end
-    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }    
+    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   # POST /subscriptions
   # POST /subscriptions.xml
   def create
-    @subscription = @user.subscriptions.build(params[:subscription])
+    @subscription = @user.subscriptions.build(subscription_params)
 
     success_message = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_url}\">your Subscriptions page</a>.", name: @subscription.name).html_safe
     if @subscription.save
@@ -57,4 +57,13 @@ class SubscriptionsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
+
+  private
+
+  def subscription_params
+    params.require(:subscription).permit(
+      :subscribable_id, :subscribable_type
+    )
+  end
+
 end

@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
        @user && User.count(conditions: { login: @user.login }) > 0 &&
        # and that we can find the original, valid user record
-       (@user = User.find_by_login(@user.login))
+       (@user = User.find_by(login: @user.login))
       notify_and_show_confirmation_screen
     else
       # re-raise the exception and make it catchable by Rails and Airbrake
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
 
   def load_user
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     @check_ownership_of = @user
   end
 
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     @user = User.new
 
     if params[:invitation_token]
-      @invitation = Invitation.find_by_token(params[:invitation_token])
+      @invitation = Invitation.find_by(token: params[:invitation_token])
       @user.invitation_token = @invitation.token
       @user.email = @invitation.invitee_email
     end
@@ -141,14 +141,14 @@ class UsersController < ApplicationController
       redirect_to root_path
     else
       @user = User.new
-      @user.login = params[:user][:login]
-      @user.email = params[:user][:email]
+      @user.login = user_params[:login]
+      @user.email = user_params[:email]
       @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = params[:user][:age_over_13]
-      @user.terms_of_service = params[:user][:terms_of_service]
+      @user.age_over_13 = user_params[:age_over_13]
+      @user.terms_of_service = user_params[:terms_of_service]
 
-      @user.password = params[:user][:password] if params[:user][:password]
-      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
+      @user.password = user_params[:password] if user_params[:password]
+      @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
 
       @user.activation_code = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
 
@@ -180,7 +180,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @user = User.find_by_activation_code(params[:id])
+    @user = User.find_by(activation_code: params[:id])
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
@@ -204,7 +204,7 @@ class UsersController < ApplicationController
 
     # assign over any external authors that belong to this user
     external_authors = []
-    external_authors << ExternalAuthor.find_by_email(@user.email)
+    external_authors << ExternalAuthor.find_by(email: @user.email)
     @invitation = @user.invitation
     external_authors << @invitation.external_author if @invitation
     external_authors.compact!
@@ -221,7 +221,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.profile.update_attributes(params[:profile_attributes])
+    @user.profile.update_attributes(profile_params)
 
     if @user.profile.save
       flash[:notice] = ts('Your profile has been successfully updated')
@@ -338,7 +338,7 @@ class UsersController < ApplicationController
 
   def check_account_creation_invite(token)
     unless token.blank?
-      invitation = Invitation.find_by_token(token)
+      invitation = Invitation.find_by(token: token)
 
       if !invitation
         flash[:error] = ts('There was an error with your invitation token, please contact support')
@@ -457,5 +457,21 @@ class UsersController < ApplicationController
       flash[:error] = ts('Sorry, something went wrong! Please try again.')
       redirect_to(@user)
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(
+      :login, :email, :age_over_13, :terms_of_service,
+      :password, :password_confirmation
+    )
+  end
+
+  def profile_params
+    params.require(:profile_attributes).permit(
+      :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
+      :"date_of_birth(3i)", :date_of_birth, :about_me
+    )
   end
 end

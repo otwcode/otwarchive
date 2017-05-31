@@ -32,7 +32,7 @@ Scenario: Create a collection
     And I submit
     And I should see "Collection was successfully updated"
     And the name of the collection "My Collection Thing" should be "collection_thing2"
-    
+
 Scenario: Post to collection from the work edit page
   Given the collection "My Collection Thing" with name "collection_thing"
     And I am logged in as "first_user"
@@ -61,9 +61,9 @@ Scenario: Post to collection from the collection home page
   Then I should see "My Collection Thing" within "dd.collections"
   When I press "Post"
   Then I should see "My Collected Work"
-    And I should see "Collections: My Collection Thing" 
-        
-Scenario: Create a subcollection 
+    And I should see "Collections: My Collection Thing"
+
+Scenario: Create a subcollection
 
   Given I am logged in as "first_user"
     And I create the collection "My Collection Thing" with name "collection_thing"
@@ -74,7 +74,7 @@ Scenario: Create a subcollection
     And I fill in "Collection name" with "subcollection_thing"
     And I submit
   Then I should see "Collection was successfully created"
-  
+
 Scenario: Fill out new collection form with faulty data
 
    Given I am logged in as a random user
@@ -120,7 +120,7 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
   And I should see "Collection was successfully updated"
 
   Scenario: Delete a subcollection and then its parent collection
-  
+
   Given I am logged in as "collector"
     And I create the collection "Temporary Top" with name "temporary_top_collection"
   When I go to the collections page
@@ -141,9 +141,9 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
     And I press "Yes, Delete Collection"
   Then I should see "Collection was successfully deleted."
     And I should not see "Temporary Top"
-    
+
   Scenario: Delete a collection that has subcollections
-  
+
   Given I am logged in as "collector"
     And I create the collection "Parent" with name "parent_collection"
   When I go to the collections page
@@ -160,3 +160,55 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
     And I press "Yes, Delete Collection"
   Then I should see "Collection was successfully deleted."
     And I should not see "Parent"
+
+  Scenario: Moderator cannot list one collection's subcollection as another
+  collection's parent
+
+  Given I am logged in as "collector"
+    And I add the subcollection "Subcollection" to the parent collection named "parent_collection"
+  When I go to the new collection page 
+    And I fill in "Parent collection (that you maintain)" with "subcollection"
+    And I fill in "Display title" with "Sub-Subcollection"
+    And I fill in "Collection name" with "sub_subcollection"
+    And I press "Submit"
+  Then I should see "Sorry, but Subcollection is a subcollection, so it can't also be a parent collection."
+
+  Scenario: Moderator cannot specify a parent collection that does not exist
+
+  Given I am logged in
+  When I go to the new collection page 
+    And I fill in "Parent collection (that you maintain)" with "nonexistent_collection"
+    And I fill in "Display title" with "Collection"
+    And I fill in "Collection name" with "Collection"
+    And I press "Submit"
+  Then I should see "We couldn't find a collection with name nonexistent_collection."
+
+  Scenario: Moderator cannot make a collection its own parent
+
+  Given I am logged in
+    And I create the collection "Collection" with name "collection"
+  When I go to "Collection" collection edit page
+    And I fill in "Parent collection (that you maintain)" with "collection"
+    And I press "Update"
+  Then I should see "You can't make a collection its own parent."
+
+  Scenario: Moderator cannot list a parent collection they do not own
+
+  Given I am logged in as "collector"
+    And I create the collection "Collection" with name "collection"
+  When I am logged in as "other_collector"
+    And I go to the new collection page
+    And I fill in "Display title" with "Other Collection"
+    And I fill in "Collection name" with "other_collection"
+    And I fill in "Parent collection (that you maintain)" with "collection"
+    And I press "Submit"
+  Then I should see "You have to be a maintainer of collection to make a subcollection."
+
+  Scenario: Collection display title can't contain commas
+
+  Given I am logged in
+    And I am on the new collection page
+  When I fill in "Display title" with "Hey, You"
+    And I fill in "Collection name" with "hey_you"
+    And I press "Submit"
+  Then I should see "Sorry, the ',' character cannot be in a collection Display Title."

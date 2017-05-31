@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe TagsController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   before do
     fake_login
@@ -32,7 +33,8 @@ describe TagsController do
 
       @freeform1 = FactoryGirl.create(:freeform, canonical: false)
       @character1 = FactoryGirl.create(:character, canonical: false)
-      @character2 = FactoryGirl.create(:character, canonical: false, merger: FactoryGirl.create(:character, canonical: true))
+      @character3 = FactoryGirl.create(:character, canonical: false)
+      @character2 = FactoryGirl.create(:character, canonical: false, merger: @character3)
       @work = FactoryGirl.create(:work,
                                  posted: true,
                                  fandom_string: "#{@fandom1.name}",
@@ -101,22 +103,87 @@ describe TagsController do
         expect(@character2).not_to be_canonical
       end
     end
+
+    context "A wrangler can remove associated tag" do
+      it "should be successful" do
+        put :mass_update, id: @character3.name, remove_associated: [@character2.id]
+        expect(flash[:notice]).to eq "The following tags were successfully removed: #{@character2.name}"
+        expect(flash[:error]).to be_nil
+        expect(@character3.mergers).to eq []
+      end
+    end
+  end
+
+  describe "reindex" do
+    context "when reindexing a tag" do
+      before do
+        @tag = FactoryGirl.create(:freeform)
+      end
+
+      it "Only an admin can reindex a tag" do
+        get :reindex, id: @tag.name
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq "Please log in as admin"
+      end
+    end
+  end
+
+  describe "feed" do
+    it "You can only get a feed on Fandom, Character and Relationships" do
+      @tag = FactoryGirl.create(:banned, canonical: false)
+      get :feed, id: @tag.id, format: :atom
+      expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+    end
+  end
+
+  describe "edit" do
+    context "when editing a tag" do
+      before do
+        @tag = FactoryGirl.create(:banned)
+      end
+
+      it "Only an admin can edit a banned tag" do
+        get :edit, id: @tag.name
+        expect(flash[:error]).to eq "Please log in as admin"
+        expect(response).to redirect_to(tag_wranglings_path)
+      end
+    end
   end
 
   describe "update" do
-    context "when fixing a tag's taggings_count" do
-      before do
-        @tag = FactoryGirl.create(:freeform)
+    context "when updating a tag" do
+      let(:tag) { create(:freeform) }
+      let(:unsorted_tag) { create(:unsorted_tag) }
+
+      it "resets the taggings count" do
         # manufacture a tag with borked taggings_count
-        @tag.taggings_count = 10
-        @tag.save
+        tag.taggings_count = 10
+        tag.save
+
+        put :update, id: tag, tag: { fix_taggings_count: true }
+        it_redirects_to_with_notice edit_tag_path(tag), "Tag was updated."
+
+        tag.reload
+        expect(tag.taggings_count).to eq(0)
       end
 
-      it "should reset the taggings_count" do
-        put :update, id: @tag.name, tag: { fix_taggings_count: true }
+      it "changes just the tag type" do
+        put :update, id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes"
+        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
 
-        @tag.reload
-        expect(@tag.taggings_count).to eq(0)
+        put :update, id: unsorted_tag, tag: { type: "UnsortedTag" }, commit: "Save changes"
+        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        # The tag now has the original class, we can reload the original record without error.
+        unsorted_tag.reload
+      end
+
+      it "wrangles" do
+        expect(tag.canonical?).to be_truthy
+        put :update, id: tag, tag: { canonical: false }, commit: "Wrangle"
+        tag.reload
+        expect(tag.canonical?).to be_falsy
+        it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
       end
     end
   end

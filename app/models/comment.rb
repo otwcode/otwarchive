@@ -1,8 +1,6 @@
 class Comment < ActiveRecord::Base
-
+  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
-
-  attr_protected :content_sanitizer_version, :unreviewed
 
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
@@ -23,17 +21,17 @@ class Comment < ActiveRecord::Base
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
-  
+
   validates :content, :uniqueness => {:scope => [:commentable_id, :commentable_type, :name, :email, :pseud_id], :message => ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
 
-  scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
+  scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {:limit => limit.kind_of?(Fixnum) ? limit : 5} }
-  scope :ordered_by_date, :order => "created_at DESC"
-  scope :top_level, :conditions => ["commentable_type in (?)", ["Chapter", "Bookmark"]]
-  scope :include_pseud, :include => :pseud
-  scope :not_deleted, :conditions => {:is_deleted => false}
-  scope :reviewed, conditions: {unreviewed: false}
-  scope :unreviewed_only, conditions: {unreviewed: true}
+  scope :ordered_by_date, -> { order('created_at DESC') }
+  scope :top_level, -> { where("commentable_type in (?)", ["Chapter", "Bookmark"]) }
+  scope :include_pseud, -> { includes(:pseud) }
+  scope :not_deleted, -> { where(is_deleted: false) }
+  scope :reviewed, -> { where(unreviewed: false) }
+  scope :unreviewed_only, -> { where(unreviewed: true) }
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable
@@ -71,17 +69,17 @@ class Comment < ActiveRecord::Base
   def set_parent_and_unreviewed
     self.parent = self.reply_comment? ? self.commentable.parent : self.commentable
     # we only mark comments as unreviewed if moderated commenting is enabled on their parent
-    self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) && 
-                      self.parent.moderated_commenting_enabled? && 
+    self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) &&
+                      self.parent.moderated_commenting_enabled? &&
                       !User.current_user.try(:is_author_of?, self.ultimate_parent)
     return true # because if reviewed is the return value, when it's false the record won't save!
   end
-  
+
   # is this a comment by the creator of the ultimate parent
   def is_creator_comment?
     pseud && pseud.user && pseud.user.try(:is_author_of?, ultimate_parent)
   end
-  
+
   def moderated_commenting_enabled?
     parent.respond_to?(:moderated_commenting_enabled?) && parent.moderated_commenting_enabled?
   end

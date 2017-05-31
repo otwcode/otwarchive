@@ -1,4 +1,6 @@
 class FavoriteTag < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :user
   belongs_to :tag
 
@@ -20,7 +22,7 @@ class FavoriteTag < ActiveRecord::Base
   end
 
   def tag
-    Tag.find_by_id(tag_id)
+    Tag.find_by(id: tag_id)
   end
 
   def tag_name

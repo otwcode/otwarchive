@@ -1,4 +1,6 @@
 class ChallengeAssignment < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
+
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
@@ -8,15 +10,15 @@ class ChallengeAssignment < ActiveRecord::Base
   belongs_to :pinch_hitter, :class_name => "Pseud"
   belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
   belongs_to :creation, :polymorphic => true
-  
+
   # Make sure that the signups are an actual match if we're in the process of assigning
   # (post-sending, all potential matches have been deleted!)
   validate :signups_match, :on => :update
   def signups_match
-    if self.sent_at.nil? && 
+    if self.sent_at.nil? &&
       self.request_signup.present? &&
-      self.offer_signup.present? && 
-      !self.request_signup.request_potential_matches.value_of(:offer_signup_id).include?(self.offer_signup_id)
+      self.offer_signup.present? &&
+      !self.request_signup.request_potential_matches.pluck(:offer_signup_id).include?(self.offer_signup_id)
       errors.add(:base, ts("does not match. Did you mean to write-in a giver?"))
     end
   end
@@ -27,21 +29,21 @@ class ChallengeAssignment < ActiveRecord::Base
 
   scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
 
-  scope :defaulted, where("defaulted_at IS NOT NULL")
-  scope :undefaulted, where("defaulted_at IS NULL")
-  scope :uncovered, where("covered_at IS NULL")
-  scope :covered, where("covered_at IS NOT NULL")
-  scope :sent, where("sent_at IS NOT NULL")
-  
-  scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
+  scope :defaulted, -> { where("defaulted_at IS NOT NULL") }
+  scope :undefaulted, -> { where("defaulted_at IS NULL") }
+  scope :uncovered, -> { where("covered_at IS NULL") }
+  scope :covered, -> { where("covered_at IS NOT NULL") }
+  scope :sent, -> { where("sent_at IS NOT NULL") }
 
-  scope :with_offer, where("offer_signup_id IS NOT NULL OR pinch_hitter_id IS NOT NULL")
-  scope :with_request, where("request_signup_id IS NOT NULL")
-  scope :with_no_request, where("request_signup_id IS NULL")
-  scope :with_no_offer, where("offer_signup_id IS NULL AND pinch_hitter_id IS NULL")
+  scope :with_pinch_hitter, -> { where("pinch_hitter_id IS NOT NULL") }
+
+  scope :with_offer, -> { where("offer_signup_id IS NOT NULL OR pinch_hitter_id IS NOT NULL") }
+  scope :with_request, -> { where("request_signup_id IS NOT NULL") }
+  scope :with_no_request, -> { where("request_signup_id IS NULL") }
+  scope :with_no_offer, -> { where("offer_signup_id IS NULL AND pinch_hitter_id IS NULL") }
 
   # sorting by request/offer
-  
+
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id
                                                             OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
@@ -49,12 +51,12 @@ class ChallengeAssignment < ActiveRecord::Base
   OFFERING_PSEUD_JOIN = "LEFT JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
                          INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
 
-  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name")
+  scope :order_by_requesting_pseud, -> { joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") }
 
-  scope :order_by_offering_pseud, joins(OFFERING_PSEUD_JOIN).order("pseuds.name")
+  scope :order_by_offering_pseud, -> { joins(OFFERING_PSEUD_JOIN).order("pseuds.name") }
 
 
-  # Get all of a user's assignments 
+  # Get all of a user's assignments
   scope :by_offering_user, lambda {|user|
     select("DISTINCT challenge_assignments.*").
     joins(OFFERING_PSEUD_JOIN).
@@ -70,49 +72,51 @@ class ChallengeAssignment < ActiveRecord::Base
   COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
                                                                 collection_items.item_id = challenge_assignments.creation_id AND
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
-                                                                
+
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
   WORKS_LEFT_JOIN = "LEFT JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
-  
-  scope :fulfilled,
+
+  scope :fulfilled, -> {
     joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN).
     where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1',
                     CollectionItem::APPROVED, CollectionItem::APPROVED)
+  }
 
 
-  scope :posted, joins(WORKS_JOIN).where("challenge_assignments.creation_id IS NOT NULL AND works.posted = 1")
+  scope :posted, -> { joins(WORKS_JOIN).where("challenge_assignments.creation_id IS NOT NULL AND works.posted = 1") }
 
   # should be faster than unfulfilled scope because no giant left joins
   def self.unfulfilled_in_collection(collection)
-    fulfilled_ids = ChallengeAssignment.in_collection(collection).fulfilled.value_of(:id)
+    fulfilled_ids = ChallengeAssignment.in_collection(collection).fulfilled.pluck(:id)
     fulfilled_ids.empty? ? in_collection(collection) : in_collection(collection).where("challenge_assignments.id NOT IN (?)", fulfilled_ids)
   end
-  
+
   # faster than unposted scope because no left join!
   def self.unposted_in_collection(collection)
-    posted_ids = ChallengeAssignment.in_collection(collection).posted.value_of(:id)
+    posted_ids = ChallengeAssignment.in_collection(collection).posted.pluck(:id)
     posted_ids.empty? ? in_collection(collection) : in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
-  end    
-  
+  end
+
   def self.duplicate_givers(collection)
-    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").value_of(:offer_signup_id).compact
+    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").pluck(:offer_signup_id).compact
     ChallengeAssignment.where(:offer_signup_id => ids)
   end
-  
+
   def self.duplicate_recipients(collection)
-    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").value_of(:request_signup_id).compact
+    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").pluck(:request_signup_id).compact
     ChallengeAssignment.where(:request_signup_id => ids)
   end
 
   # has to be a left join to get assignments that don't have a collection item
-  scope :unfulfilled,
+  scope :unfulfilled, -> {
     joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
     where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0', CollectionItem::APPROVED, CollectionItem::APPROVED)
+  }
 
   # ditto
-  scope :unposted, joins(WORKS_LEFT_JOIN).where("challenge_assignments.creation_id IS NULL OR works.posted = 0")
+  scope :unposted, -> { joins(WORKS_LEFT_JOIN).where("challenge_assignments.creation_id IS NULL OR works.posted = 0") }
 
-  scope :unstarted, where("challenge_assignments.creation_id IS NULL")
+  scope :unstarted, -> { where("challenge_assignments.creation_id IS NULL") }
 
 
   before_destroy :clear_assignment
@@ -127,7 +131,7 @@ class ChallengeAssignment < ActiveRecord::Base
       request_signup.save
     end
   end
-  
+
   def request
     self.request_signup || self.pinch_request_signup
   end
@@ -136,7 +140,7 @@ class ChallengeAssignment < ActiveRecord::Base
     return nil unless self.creation
     CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
-  
+
   def started?
     !self.creation.nil?
   end
@@ -144,7 +148,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def fulfilled?
     self.posted? && (item = get_collection_item) && item.approved?
   end
-  
+
   def posted?
     self.creation && (creation.respond_to?(:posted?) ? creation.posted? : true)
   end
@@ -161,7 +165,7 @@ class ChallengeAssignment < ActiveRecord::Base
     !self.defaulted_at.nil?
   end
   alias_method :defaulted?, :defaulted
-  
+
   include Comparable
   # sort in order that puts assignments with no request ahead of assignments with no offer,
   # ahead of assignments with both request and offer, and within each group sorts by
@@ -185,14 +189,14 @@ class ChallengeAssignment < ActiveRecord::Base
         pseud = pseuds.first
         signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
         self.offer_signup = signup if signup
-      end  
+      end
     end
   end
-  
+
   def offer_signup_pseud
     self.offer_signup.try(:pseud).try(:byline) || ""
   end
-    
+
   def request_signup_pseud=(pseud_byline)
     if pseud_byline.blank?
       self.request_signup = nil
@@ -226,7 +230,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def requesting_pseud
     request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
   end
-  
+
 
   def offer_byline
     offer_signup && offer_signup.pseud ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
@@ -252,7 +256,7 @@ class ChallengeAssignment < ActiveRecord::Base
     pinch_pseud = Pseud.by_byline(byline).first
     self.pinch_request_signup = ChallengeSignup.in_collection(self.collection).by_pseud(pinch_pseud).first if pinch_pseud
   end
-  
+
   def default
     self.defaulted_at = Time.now
     save
@@ -324,7 +328,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def self.in_progress?(collection)
     REDIS_GENERAL.get(progress_key(collection)) ? true : false
   end
-  
+
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
     settings = collection.challenge.potential_match_settings
@@ -341,7 +345,7 @@ class ChallengeAssignment < ActiveRecord::Base
        @max_match_count = 1
        @request_match_buckets[1] = collection.signups
        @offer_match_buckets[1] = collection.signups
-    else    
+    else
       collection.signups.find_each do |signup|
         next if signup.nil?
         request_match_count = signup.request_potential_matches.count
@@ -463,7 +467,7 @@ class ChallengeAssignment < ActiveRecord::Base
   # or associations
   def self.clear!(collection)
     ChallengeAssignment.delete_all(:collection_id => collection.id)
-    ChallengeSignup.update_all({:assigned_as_offer => false, :assigned_as_request => false}, {:collection_id => collection.id})
+    ChallengeSignup.where(collection_id: collection.id).update_all(assigned_as_offer: false, assigned_as_request: false)
   end
 
   # create placeholders for any assignments left empty
@@ -474,7 +478,7 @@ class ChallengeAssignment < ActiveRecord::Base
     collection.assignments.each do |assignment|
       assignment.destroy if assignment.offer_signup.blank? && assignment.request_signup.blank?
     end
-    
+
     collection.signups.each do |signup|
       # if this signup has at least one giver now, get rid of any leftover placeholders
       if signup.request_assignments.count > 1
@@ -488,13 +492,13 @@ class ChallengeAssignment < ActiveRecord::Base
           assignment.destroy if assignment.request_signup.blank?
         end
       end
-      
+
       # if this signup doesn't have any giver now, create a placeholder
       if signup.request_assignments.empty?
         assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
         assignment.save
       end
-      
+
       # if this signup doesn't have any recipient now, create a placeholder
       if signup.offer_assignments.empty?
         assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => signup)

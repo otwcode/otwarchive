@@ -51,7 +51,7 @@ class UserMailer < BulletproofMailer::Base
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
       to: @invitation.invitee_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      subject: t("user_mailer.invitation.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
@@ -86,13 +86,13 @@ class UserMailer < BulletproofMailer::Base
     end
     ensure
       I18n.locale = I18n.default_locale
-  end  
-  
+  end
+
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    # Here we use find_by_id so that if the subscription is not found 
+    # Here we use find_by_id so that if the subscription is not found
     # then the resque job does not error and we just silently fail.
-    @subscription = Subscription.find_by_id(subscription_id)
+    @subscription = Subscription.find_by(id: subscription_id)
     return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
@@ -114,14 +114,14 @@ class UserMailer < BulletproofMailer::Base
 
       @creations << creation
     end
-    
+
     # die if we haven't got any creations to notify about
     # see lib/bulletproof_mailer.rb
     abort_delivery if @creations.empty?
 
     # make sure we only notify once per creation
     @creations.uniq!
-    
+
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"
@@ -195,7 +195,7 @@ class UserMailer < BulletproofMailer::Base
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
-  
+
   def invalid_signup_notification(collection_id, invalid_signup_ids)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
@@ -220,7 +220,7 @@ class UserMailer < BulletproofMailer::Base
     @request = (assignment.request_signup || assignment.pinch_request_signup)
     mail(
       to: @assigned_user.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your Assignment!"
+      subject: t("user_mailer.challenge_assignment_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
@@ -230,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -244,7 +244,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
+        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -259,7 +259,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @old_email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
+        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -275,7 +275,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
+        subject: t('user_mailer.coauthor_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -343,7 +343,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+        subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -363,7 +363,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+        subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -372,8 +372,8 @@ class UserMailer < BulletproofMailer::Base
 
   # Sends email to authors when a creation is hidden by an Admin
   def admin_hidden_work_notification(creation_id, user_id)
-    @user = User.find_by_id(user_id)
-    @work = Work.find_by_id(creation_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
 
     mail(
         to: @user.email,

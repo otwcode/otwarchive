@@ -9,7 +9,7 @@ class CollectionItemsController < ApplicationController
 
   def load_item_and_collection
     if params[:collection_item]
-      @collection_item = CollectionItem.find(params[:collection_item][:id])
+      @collection_item = CollectionItem.find(collection_item_params[:id])
     else
       @collection_item = CollectionItem.find(params[:id])
     end
@@ -36,7 +36,7 @@ class CollectionItemsController < ApplicationController
                           else
                             @collection_items.unreviewed_by_collection
                           end
-    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
+    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
                           when params[:approved]
@@ -90,7 +90,7 @@ class CollectionItemsController < ApplicationController
     unapproved_collections = []
     errors = []
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
-      collection = Collection.find_by_name(collection_name)
+      collection = Collection.find_by(name: collection_name)
       if !collection
         errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", name: collection_name)
       elsif @item.collections.include?(collection)
@@ -151,7 +151,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
+    @collection_items = CollectionItem.update(collection_items_params[:collection_items].keys, collection_items_params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
@@ -161,7 +161,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def destroy
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
     flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
@@ -172,4 +172,19 @@ class CollectionItemsController < ApplicationController
     end
   end
 
+  private
+
+  def collection_item_params
+    params.require(:collection_item).permit(:id)
+  end
+
+  def collection_items_params
+    params.permit(
+      :utf8, :_method, :authenticity_token, :commit, :collection_id, :user_id,
+      collection_items: [
+        :id, :collection_id, :collection_approval_status, :unrevealed,
+        :user_approval_status, :anonymous, :remove
+      ]
+    )
+  end
 end

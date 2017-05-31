@@ -14,7 +14,7 @@ class CommentObserver < ActiveRecord::Observer
       users << comment.comment_owner
     end
     if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-      CommentMailer.comment_sent_notification(comment.id).deliver
+      CommentMailer.comment_sent_notification(comment).deliver
     end
 
     # Reply to owner of parent comment if this is a reply comment
@@ -36,7 +36,7 @@ class CommentObserver < ActiveRecord::Observer
       users.each do |user|
         unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
           if notify_user_by_email?(user) || comment.ultimate_parent.is_a?(Tag)
-            CommentMailer.comment_notification(user.id, comment.id).deliver
+            CommentMailer.comment_notification(user, comment).deliver
           end
           if notify_user_by_inbox?(user)
             add_feedback_to_inbox(user, comment)
@@ -73,7 +73,7 @@ class CommentObserver < ActiveRecord::Observer
         users << comment.comment_owner
       end
       if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-        CommentMailer.comment_sent_notification(comment.id).deliver
+        CommentMailer.comment_sent_notification(comment).deliver
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
@@ -90,7 +90,7 @@ class CommentObserver < ActiveRecord::Observer
         users.each do |user|
           unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
             if notify_user_by_email?(user) || comment.ultimate_parent.is_a?(Tag)
-              CommentMailer.edited_comment_notification(user.id, comment.id).deliver
+              CommentMailer.edited_comment_notification(user, comment).deliver
             end
             if notify_user_by_inbox?(user)
               update_feedback_in_inbox(user, comment)
@@ -103,7 +103,7 @@ class CommentObserver < ActiveRecord::Observer
   end
 
   protected
-  
+
     def notify_parent_comment_owner(comment)
       if comment.reply_comment? && !comment.unreviewed?
         parent_comment = comment.commentable
@@ -111,18 +111,18 @@ class CommentObserver < ActiveRecord::Observer
 
         # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
         if comment.comment_owner
-          if (inbox_comment = comment.comment_owner.inbox_comments.find_by_feedback_comment_id(parent_comment.id))
+          if (inbox_comment = comment.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
             inbox_comment.update_attributes(:replied_to => true, :read => true)
           end
         end
-        
+
         # send notification to the owner of the original comment if they're not the same as the commenter
-        if (have_different_owner?(comment, parent_comment)) 
+        if (have_different_owner?(comment, parent_comment))
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || comment.ultimate_parent.is_a?(Tag)
             if comment.edited_at_changed?
-              CommentMailer.edited_comment_reply_notification(parent_comment.id, comment.id).deliver
+              CommentMailer.edited_comment_reply_notification(parent_comment, comment).deliver
             else
-              CommentMailer.comment_reply_notification(parent_comment.id, comment.id).deliver
+              CommentMailer.comment_reply_notification(parent_comment, comment).deliver
             end
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
@@ -139,20 +139,20 @@ class CommentObserver < ActiveRecord::Observer
       end
       return nil
     end
-    
+
     def have_different_owner?(comment, parent_comment)
       return not_user_commenter?(parent_comment) || (parent_comment.comment_owner != comment.comment_owner)
     end
-    
+
     def not_user_commenter?(parent_comment)
       (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
     end
-    
+
     def content_too_different?(new_content, old_content)
       # we added more than the threshold # of chars, just return
       return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
 
-      # quick and dirty iteration to compare the two strings 
+      # quick and dirty iteration to compare the two strings
       cost = 0
       new_i = 0
       old_i = 0
@@ -162,11 +162,11 @@ class CommentObserver < ActiveRecord::Observer
           old_i += 1
           next
         end
-        
+
         cost += 1
         # interrupt as soon as we have changed > threshold chars
         return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
-        
+
         # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
         if new_content[new_i + 1] == old_content[old_i]
           new_i += 1
@@ -175,13 +175,13 @@ class CommentObserver < ActiveRecord::Observer
         else
           # just keep going
           new_i += 1
-          old_i += 1 
+          old_i += 1
         end
       end
-      
+
       return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
     end
-  
+
     def add_feedback_to_inbox(user, comment)
       new_feedback = user.inbox_comments.build
       new_feedback.feedback_comment_id = comment.id
@@ -189,7 +189,7 @@ class CommentObserver < ActiveRecord::Observer
     end
 
     def update_feedback_in_inbox(user, comment)
-      if (edited_feedback = user.inbox_comments.find_by_feedback_comment_id(comment.id))
+      if (edited_feedback = user.inbox_comments.find_by(feedback_comment_id: comment.id))
         edited_feedback.update_attribute(:read, false)
       else # original inbox comment was deleted
         add_feedback_to_inbox(user, comment)
@@ -203,7 +203,7 @@ class CommentObserver < ActiveRecord::Observer
     def notify_user_by_email?(user)
       if user.nil? || user == User.orphan_account
         false
-      elsif user.is_a?(Admin) 
+      elsif user.is_a?(Admin)
         true
       else
         !user.preference.comment_emails_off?
@@ -213,7 +213,7 @@ class CommentObserver < ActiveRecord::Observer
     def notify_user_by_inbox?(user)
       if user.nil? || user == User.orphan_account
         false
-      elsif user.is_a?(Admin) 
+      elsif user.is_a?(Admin)
         true
       else
         !user.preference.comment_inbox_off?
@@ -223,7 +223,7 @@ class CommentObserver < ActiveRecord::Observer
     def notify_user_of_own_comments?(user)
       if user.nil? || user == User.orphan_account
         false
-      elsif user.is_a?(Admin) 
+      elsif user.is_a?(Admin)
         true
       else
         !user.preference.comment_copy_to_self_off?

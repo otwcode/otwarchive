@@ -2,6 +2,7 @@
 require 'csv'
 
 class ChallengeSignupsController < ApplicationController
+  include ExportsHelper
 
   before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
@@ -37,7 +38,7 @@ class ChallengeSignupsController < ApplicationController
   def signup_closed_owner?
     @collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)
   end
-    
+
   def signup_owner_only
     not_signup_owner and return unless @challenge_signup.pseud.user == current_user || signup_closed_owner?
   end
@@ -76,11 +77,11 @@ class ChallengeSignupsController < ApplicationController
       end
     end
   end
-  
+
   #### ACTIONS
 
   def index
-    if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
         render :action => :index and return
@@ -95,7 +96,7 @@ class ChallengeSignupsController < ApplicationController
     end
 
     # using respond_to in order to provide Excel output
-    # see below for export_csv method
+    # see ExportsHelper for export_csv method
     respond_to do |format|
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
@@ -104,17 +105,19 @@ class ChallengeSignupsController < ApplicationController
               @query = params[:query]
               @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
             end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)          
-          elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+          elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else
             not_allowed(@collection)
           end
       }
       format.csv {
-        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) || 
+        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
-          export_csv
+          csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
+          filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+          send_csv_data(csv_data, filename)
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to '/' and return
@@ -147,7 +150,7 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
-  def show    
+  def show
     unless @challenge_signup.valid?
       flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
     end
@@ -156,7 +159,7 @@ class ChallengeSignupsController < ApplicationController
   protected
   def build_prompts
     notice = ""
-    @challenge.class::PROMPT_TYPES.each do |prompt_type|      
+    @challenge.class::PROMPT_TYPES.each do |prompt_type|
       num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
       if num_to_build < @challenge.required(prompt_type)
         notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
@@ -193,7 +196,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def create
-    @challenge_signup = ChallengeSignup.new(params[:challenge_signup])
+    @challenge_signup = ChallengeSignup.new(challenge_signup_params)
+
     @challenge_signup.pseud = current_user.default_pseud unless @challenge_signup.pseud
     @challenge_signup.collection = @collection
     # we check validity first to prevent saving tag sets if invalid
@@ -206,7 +210,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def update
-    if @challenge_signup.update_attributes(params[:challenge_signup])
+    if @challenge_signup.update_attributes(challenge_signup_params)
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
@@ -241,11 +245,11 @@ protected
     any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
     tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
     rarray = [(tags + any_types).join(", ")]
-            
+
     if @challenge.send("#{type}_restriction").optional_tags_allowed
       rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
     end
-            
+
     if @challenge.send("#{type}_restriction").description_allowed
       description = (request.nil? ? "" : sanitize_field(request, :description))
       # Didn't find a way to get Excel 2007 to accept line breaks
@@ -255,18 +259,18 @@ protected
       # Thus stripping linebreaks.
       rarray << description.gsub(/[\n\r]/, " ")
     end
-     
+
     rarray << (request.nil? ? "" : request.url) if
       @challenge.send("#{type}_restriction").url_allowed
 
     return rarray
   end
-  
+
 
   def gift_exchange_to_csv
     header = ["Pseud", "Email", "Sign-up URL"]
 
-    ["request", "offer"].each do |type|
+    %w(request offer).each do |type|
       @challenge.send("#{type.pluralize}_num_allowed").times do |i|
         header << "#{type.capitalize} #{i+1} Tags"
         header << "#{type.capitalize} #{i+1} Optional Tags" if
@@ -278,62 +282,95 @@ protected
       end
     end
 
-    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
-      csv << header
-      
-      @collection.signups.each do |signup|
-        row = [signup.pseud.name, signup.pseud.user.email,
-               collection_signup_url(@collection, signup)]
+    csv_array = []
+    csv_array << header
 
-        ["request", "offer"].each do |type|
-          @challenge.send("#{type.pluralize}_num_allowed").times do |i|
-            row += request_to_array(type, signup.send(type.pluralize)[i])
-          end
+    @collection.signups.each do |signup|
+      row = [signup.pseud.name, signup.pseud.user.email,
+             collection_signup_url(@collection, signup)]
+
+      %w(request offer).each do |type|
+        @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+          row += request_to_array(type, signup.send(type.pluralize)[i])
         end
-        csv << row
       end
+      csv_array << row
     end
 
-    return csv_data
+    csv_array
   end
 
-  
+
   def prompt_meme_to_csv
     header = ["Pseud", "Email", "Sign-up URL", "Tags"]
     header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
     header << "Description" if @challenge.request_restriction.description_allowed
     header << "URL" if @challenge.request_restriction.url_allowed
 
-    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
-      csv << header
-      @collection.prompts.where(:type => 'Request').each do |request|
+    csv_array = []
+    csv_array << header
+    @collection.prompts.where(type: "Request").each do |request|
+      row =
         if request.anonymous?
-          row = ["(Anonymous)", "", ""]
+          ["(Anonymous)", "", ""]
         else
-          row = [request.challenge_signup.pseud.name,
-                 request.challenge_signup.pseud.user.email,
-                 collection_signup_url(@collection, request.challenge_signup)]
+          [request.challenge_signup.pseud.name,
+           request.challenge_signup.pseud.user.email,
+           collection_signup_url(@collection, request.challenge_signup)]
         end
-
-        csv << (row + request_to_array("request", request))
-      end
+      csv_array << (row + request_to_array("request", request))
     end
 
-    return csv_data
+    csv_array
   end
 
-  
-  # Tab-separated CSV with utf-16le encoding (unicode) and byte order
-  # mark. This seems to be the only variant Excel can get
-  # automatically into proper table format. OpenOffice handles it
-  # well, too.
-  def export_csv
-    csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
-    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+  private
 
-    byte_order_mark = "\uFEFF"
-    csv_data = (byte_order_mark + csv_data).encode("utf-16le", "utf-8", :invalid => :replace, :undef => :replace, :replace => "")
-    send_data(csv_data, :filename => filename, :type => :csv)
+  def challenge_signup_params
+    params.require(:challenge_signup).permit(
+      :pseud_id,
+      requests_attributes: nested_prompt_params,
+      offers_attributes: nested_prompt_params
+    )
   end
-  
+
+  def nested_prompt_params
+    [
+      :id,
+      :collection_id,
+      :title,
+      :url,
+      :any_fandom,
+      :any_character,
+      :any_relationship,
+      :any_freeform,
+      :any_category,
+      :any_rating,
+      :any_warning,
+      :anonymous,
+      :description,
+      :_destroy,
+      tag_set_attributes: [
+        :id,
+        :updated_at,
+        :character_tagnames,
+        :relationship_tagnames,
+        :freeform_tagnames,
+        :category_tagnames,
+        :rating_tagnames,
+        :warning_tagnames,
+        :fandom_tagnames,
+        character_tagnames: [],
+        relationship_tagnames: [],
+        freeform_tagnames: [],
+        category_tagnames: [],
+        rating_tagnames: [],
+        warning_tagnames: [],
+        fandom_tagnames: [],
+      ],
+      optional_tag_set_attributes: [
+        :tagnames
+      ]
+    ]
+  end
 end

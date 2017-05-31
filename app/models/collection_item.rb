@@ -1,4 +1,5 @@
 class CollectionItem < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
   APPROVED = 1
@@ -18,8 +19,9 @@ class CollectionItem < ActiveRecord::Base
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
 
-  has_many :approved_collections, :through => :collection_items, :source => :collection,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :approved_collections, -> {
+    where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
+   }, :through => :collection_items, :source => :collection
 
   validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type],
     :message => ts("already contains this item.")
@@ -39,14 +41,14 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  scope :include_for_works, :include => [{:work => :pseuds}]
-  scope :unrevealed, :conditions => {:unrevealed => true}
-  scope :anonymous, :conditions =>  {:anonymous => true}
-  
+  scope :include_for_works, -> { includes(work: :pseuds)}
+  scope :unrevealed, -> { where(unrevealed: true) }
+  scope :anonymous, -> { where(anonymous:  true) }
+
   def self.for_user(user=User.current_user)
     # get ids of user's bookmarks and works
-    bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).value_of(:id)
-    work_ids = Work.joins(:pseuds).where("pseuds.user_id = ?", user.id).value_of(:id)
+    bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).pluck(:id)
+    work_ids = Work.joins(:pseuds).where("pseuds.user_id = ?", user.id).pluck(:id)
     # now return the relation
     where("(item_id IN (?) AND item_type = 'Work') OR (item_id IN (?) AND item_type = 'Bookmark')", work_ids, bookmark_ids)
   end
@@ -62,7 +64,7 @@ class CollectionItem < ActiveRecord::Base
   def self.unreviewed_by_user
     where(user_approval_status: NEUTRAL)
   end
-  
+
   def self.approved_by_collection
     where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
   end
@@ -74,7 +76,7 @@ class CollectionItem < ActiveRecord::Base
   def self.rejected_by_collection
     where(collection_approval_status: REJECTED)
   end
-  
+
   def self.unreviewed_by_collection
     where(collection_approval_status: NEUTRAL)
   end
@@ -82,21 +84,21 @@ class CollectionItem < ActiveRecord::Base
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed
     if self.new_record? && collection
-      self.unrevealed = true if collection.unrevealed?
-      self.anonymous = true if collection.anonymous?
+      self.unrevealed = true if collection.reload.unrevealed?
+      self.anonymous = true if collection.reload.anonymous?
     end
   end
-  
-  after_save :update_work
+
+  after_commit :update_work
   #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
   #  this is a has-many-through relationship!!!
-  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work
   # itself -- see collectible.rb
-  
+
   # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
-    return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
+    return unless item_type == 'Work' && work.present? && !work.new_record?
     # Check if this is new - can't use new_record? with after_save
     if self.id_changed?
       work.set_anon_unrevealed!
@@ -189,9 +191,9 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-  
+
   after_destroy :expire_caches
-  
+
   def expire_caches
     if self.item.respond_to?(:expire_caches)
       CacheMaster.record(item_id, 'collection', collection_id)
@@ -268,7 +270,7 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
-    if user.nil? 
+    if user.nil?
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
@@ -276,12 +278,12 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
-  
+
   # Reveal an individual collection item
   # Can't use update_attribute because of potential validation issues
   # with closed collections
   def reveal!
-    collection.collection_items.update_all("unrevealed = 0", "id = #{self.id}")
+    collection.collection_items.where("id = #{self.id}").update_all("unrevealed = 0")
     notify_of_reveal
   end
 

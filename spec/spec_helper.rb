@@ -1,7 +1,6 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
-#require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'simplecov'
 require 'coveralls'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
@@ -24,18 +23,12 @@ FactoryGirl.find_definitions
 FactoryGirl.definition_file_paths = %w(factories)
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
-  #config.raise_errors_for_deprecations!
+
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
+  config.include Devise::TestHelpers, type: :controller
   config.include Capybara::DSL
 
   config.before :suite do
@@ -45,6 +38,7 @@ RSpec.configure do |config|
 
   config.before :each do
     DatabaseCleaner.start
+    User.current_user = nil
   end
 
   config.after :each do
@@ -80,6 +74,18 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
+def clean_the_database
+  # Now clear memcached
+  Rails.cache.clear
+  # Now reset redis ...
+  REDIS_GENERAL.flushall
+  REDIS_KUDOS.flushall
+  REDIS_RESQUE.flushall
+  REDIS_ROLLOUT.flushall
+  # Finally elastic search
+  Tire::Model::Search.index_prefix Time.now.to_f.to_s
+end
+
 def get_message_part (mail, content_type)
   mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
 end
@@ -89,4 +95,10 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.length).to eq(2)
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
+end
+
+def create_archivist
+  user = create(:user)
+  user.roles << Role.new(name: "archivist")
+  user
 end

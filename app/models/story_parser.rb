@@ -284,12 +284,14 @@ class StoryParser
       pseuds = []
       pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
       pseuds << options[:archivist].default_pseud if options[:archivist]
-      pseuds += options[:pseuds] if options[:pseuds]
+      pseuds << options[:pseuds] if options[:pseuds]
       pseuds = pseuds.uniq
       raise Error, "A work must have at least one author specified" if pseuds.empty?
       pseuds.each do |pseud|
-        work.pseuds << pseud unless work.pseuds.include?(pseud)
-        work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
+        unless pseud.nil?
+          work.pseuds << pseud unless work.pseuds.include?(pseud)
+          work.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
+        end
       end
 
       # handle importing works for others
@@ -417,7 +419,7 @@ class StoryParser
     def parse_author_common(email, name)
       # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
       name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
-      external_author = ExternalAuthor.find_or_create_by_email(email)
+      external_author = ExternalAuthor.find_or_create_by(email: email)
       unless name.blank?
         external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
                                ExternalAuthorName.new(name: name)
@@ -1047,7 +1049,7 @@ class StoryParser
     def get_collection_names(collection_string)
       cnames = ""
       collection_string.split(',').map {|cn| cn.squish}.each do |collection_name|
-        collection = Collection.find_by_name(collection_name) || Collection.find_by_title(collection_name)
+        collection = Collection.find_by(name: collection_name) || Collection.find_by(title: collection_name)
         if collection
           cnames += ", " unless cnames.blank?
           cnames += collection.name

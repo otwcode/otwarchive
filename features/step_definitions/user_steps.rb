@@ -38,7 +38,7 @@ end
 
 Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
-  role = Role.find_or_create_by_name(role)
+  role = Role.find_or_create_by(name: role)
   user.roles = [role]
   user.save
 end
@@ -86,8 +86,7 @@ end
 Given /^I am logged out$/ do
   visit logout_path
   assert UserSession.find.nil? unless @javascript
-  visit admin_logout_path
-  assert AdminSession.find.nil? unless @javascript
+  visit destroy_admin_session_path
 end
 
 Given /^I log out$/ do
@@ -116,15 +115,15 @@ Given /^I view the people page$/ do
 end
 
 Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
-  author1 = FactoryGirl.create(:pseud, user: User.find_by_login(login))
-  author2 = FactoryGirl.create(:pseud, user: User.find_by_login(coauthor))
+  author1 = User.find_by(login: login).default_pseud
+  author2 = User.find_by(login: coauthor).default_pseud
   FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
 end
 
 # WHEN
 
 When /^I follow the link for "([^"]*)" first invite$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   invite = user.invitations.first
   step(%{I follow "#{invite.token}"})
 end
@@ -137,7 +136,7 @@ When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
 end
 
 When /^I fill in "([^"]*)"'s temporary password$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   fill_in "Password", with: user.activation_code
 end
 
@@ -173,8 +172,8 @@ When /^I try to delete my account$/ do
 end
 
 When /^I visit the change username page for (.*)$/ do |login|
-  user = User.find_by_login(login)
-  visit change_username_user_path(user) 
+  user = User.find_by(login: login)
+  visit change_username_user_path(user)
 end
 
 # THEN
@@ -195,12 +194,12 @@ Then /^I should get a new user activation email$/ do
 end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
-   user = User.find_by_login(login)
+   user = User.find_by(login: login)
    assert !user.blank?
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   assert user.blank?
 end
 
@@ -214,7 +213,7 @@ end
 
 def get_work_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.works.order("revised_at DESC").first.title
   elsif age == "oldest"
@@ -224,14 +223,14 @@ end
 
 def get_series_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.series.order("updated_at DESC").first.title
   elsif age == "oldest"
     owner.series.order("updated_at DESC").last.title
   end
 end
-  
+
 Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should see "#{title}"}
@@ -253,13 +252,12 @@ end
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
- 
+
 Then /^the user "([^"]*)" should be activated$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   assert user.active?
 end
 
 Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
 end
-

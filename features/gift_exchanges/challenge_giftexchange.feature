@@ -52,10 +52,10 @@ Feature: Gift Exchange Challenge
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT+10:00) Port Moresby" from "gift_exchange_time_zone"
+    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "gift_exchange_time_zone"
       And I submit
     Then I should see "Challenge was successfully updated"
-    Then I should see "PGT"
+    Then I should see "PDT"
 
   Scenario: Add a co-mod
     Given the following activated users exist
@@ -78,7 +78,7 @@ Feature: Gift Exchange Challenge
     # Invalid signup should warn the user
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
-    Then I should see "sign-up is invalid"  
+    Then I should see "sign-up is invalid"
 
   Scenario: I cannot sign up with a pseud that I don't own
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -100,7 +100,7 @@ Feature: Gift Exchange Challenge
     When I am logged in as "myname1"
       And I sign up for "Awesome Gift Exchange" with combination A
       And I follow "Edit Sign-up"
-      And I fill in "Optional Tags:" with "My extra tag, Something else weird" 
+      And I fill in "Optional Tags:" with "My extra tag, Something else weird"
       And I submit
     Then I should see "Something else weird"
     When I follow "Edit Sign-up"
@@ -123,7 +123,7 @@ Feature: Gift Exchange Challenge
       And I go to the collections page
       And I follow "Awesome Gift Exchange"
     Then I should not see "Sign-ups" within "#dashboard"
-  
+
   Scenario: Mod can view signups
    Given the gift exchange "Awesome Gift Exchange" is ready for signups
      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
@@ -179,7 +179,7 @@ Feature: Gift Exchange Challenge
       And I wait 3 seconds
     Then 1 email should be delivered to "mod1"
       And the email should contain "invalid sign-up"
-    When I go to "Awesome Gift Exchange" gift exchange matching page  
+    When I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Generate Potential Matches"
       And I should see "invalid sign-ups"
 
@@ -211,9 +211,9 @@ Feature: Gift Exchange Challenge
     When I assign a recipient to herself
       And I press "Save Assignment Changes"
     Then I should not see "Assignments updated"
-      And I should see "do not match"  
+      And I should see "do not match"
     When I manually destroy the assignments for "Awesome Gift Exchange"
-      And I go to "Awesome Gift Exchange" gift exchange matching page  
+      And I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Regenerate Assignments"
       And I should see "Regenerate All Potential Matches"
       And I should see "try regenerating assignments"
@@ -270,6 +270,15 @@ Feature: Gift Exchange Challenge
       And 1 email should be delivered to "mod1"
       And the email should contain "You have received a message about your collection"
       And 1 email should be delivered to "myname1"
+      And the email should contain "You have been assigned the following request"
+      And the email should contain "Fandom:"
+      And the email should contain "Stargate SG-1"
+      # Ratings and warnings don't show unless they've been selected to be something other than the default
+      And the email should not contain "Rating:"
+      And the email should not contain "Choose Not To Use Archive Warnings"
+      And the email should contain "Additional Tag"
+      And the email should contain "Something else weird"
+      And the email should not contain "translation missing"
       And 1 email should be delivered to "myname2"
       And 1 email should be delivered to "myname3"
       And 1 email should be delivered to "myname4"
@@ -348,6 +357,54 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
+  Scenario: A mod can default all incomplete assignments
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And I am logged in as "myname1"
+      And I fulfill my assignment
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Default All Incomplete"
+    Then I should see "All unfulfilled assignments marked as defaulting."
+      And I should see "Undefault myname2"
+      And I should see "Undefault myname3"
+      And I should see "Undefault myname4"
+      And I should not see "Undefault myname1"
+
+  Scenario: User can default and a mod can undefault on their assignment
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I check "Undefault myname1"
+      And I press "Submit"
+    Then I should see "Assignment updates complete!"
+      And I should not see "Undefault"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I should see "Default"
+
+  Scenario: User can default and a mod can assign a pinch hitter
+
+    Given everyone has their assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my assignments page
+      And I follow "Default"
+    Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I fill in "Pinch Hitter:" with "nonexistent"
+      And I press "Submit"
+    Then I should see "We couldn't find the user nonexistent to assign that to."
+    When I fill in "Pinch Hitter:" with "myname1"
+      And I press "Submit"
+    Then I should see "No assignments to review!"
+      And I should see "Assignment updates complete!"
+
   Scenario: Refused story should still fulfill the assignment
 
     Given an assignment has been fulfilled in a gift exchange
@@ -359,14 +416,13 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
 
-
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
 
     When I go to the "My Gift Exchange" signups page
     And I follow "Download (CSV)"
-    Then I should get a file with ending and type csv
+    Then I should download a csv file with the header row "Pseud Email Sign-up URL Request 1 Tags Request 1 Description Offer 1 Tags Offer 1 Description"
 
   Scenario: View a signup summary with no tags
     Given the following activated users exist
@@ -424,7 +480,7 @@ Feature: Gift Exchange Challenge
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" signups page
       And I delete the signup by "myname1"
-    Then I should see "Challenge sign-up was deleted." 
+    Then I should see "Challenge sign-up was deleted."
     When I am logged in as "myname2"
       And I delete my signup for the gift exchange "Awesome Gift Exchange"
     Then I should see "Challenge sign-up was deleted."
@@ -457,7 +513,7 @@ Feature: Gift Exchange Challenge
         And the email should contain "Additional Tags:"
         And the email should contain "fic"
         And the email should contain "art"
-        And the email should contain "Characters:"
+        And the email should contain "Character:"
         And the email should contain "Any"
         And the email should contain "Rating:"
         And the email should contain "mature"
@@ -468,7 +524,7 @@ Feature: Gift Exchange Challenge
       Then 1 email should be delivered to "badgirlsdoitwell"
         And the email should contain "Fandom:"
         And the email should contain "the book"
-        And the email should contain "Characters:"
+        And the email should contain "Character:"
         And the email should contain "protag"
         And the email should contain "Category:"
         And the email should contain "Any"
@@ -490,7 +546,7 @@ Feature: Gift Exchange Challenge
     When I am on the collections page
     Then I should see "Bad Gift Exchange"
 
-  Scenario: A user can still access their Sign-ups page after a gift exchange 
+  Scenario: A user can still access their Sign-ups page after a gift exchange
   they were signed up for has been deleted
     Given I am logged in as "mod1"
       And I have created the gift exchange "Bad Gift Exchange"
@@ -511,7 +567,7 @@ Feature: Gift Exchange Challenge
     Then I should see "My Assignments"
       And I should not see "Bad Gift Exchange"
 
-  Scenario: A user can still access their Assignments page after a gift exchange 
+  Scenario: A user can still access their Assignments page after a gift exchange
   they had a fulfilled assignment in has been deleted
     Given an assignment has been fulfilled in a gift exchange
       And the challenge "Awesome Gift Exchange" is deleted
@@ -519,3 +575,13 @@ Feature: Gift Exchange Challenge
       And I go to my assignments page
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
+
+  Scenario: A mod can purge assignments after they have been sent, but must
+  first confirm the action
+    Given everyone has their assignments for "Bad Gift Exchange"
+      And I am logged in as "mod1"
+    When I go to the "Bad Gift Exchange" assignments page
+      And I follow "Purge Assignments"
+    Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
+    When I press "Yes, Purge Assignments"
+    Then I should see "Assignments purged!"

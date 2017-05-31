@@ -11,7 +11,7 @@
 	    <li><%= link_to t('.languages', :default => "Languages"), languages_path %></li>
 	   <li><%= link_to t('.collections', :default => "Collections and Challenges"), collections_path %></li>
 	  </ul>
-	
+
   <h3 class="heading">About the Archive of Our Own</h3>
 	  <ul>
 		  <li><%= link_to t('.terms_of_service', :default => "Terms of Service"), tos_path %></li>
@@ -20,7 +20,7 @@
 		  <li><%= link_to t('.known_issues', :default => "Known Issues"), known_issues_path %></li>
 		  <li>The Archive of Our Own is a project of the <a href="http://transformativeworks.org"><acronym title="Organization for Transformative Works">OTW</acronym></a></li>
 	  </ul>
-	
+
   <% if logged_in? %>
     <h3 class="heading">Access your account</h3>
 	    <ul>
@@ -38,16 +38,16 @@
 		    <li><%= link_to t('.my_subscriptions', :default =>"My Subscriptions"), user_subscriptions_path(current_user) %></li>
 		    <li><%= link_to t('.set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %>
 	    </ul>
-	
+
 	  <h3 class="heading">Change your account settings</h3>
 	    <ul>
       <li><%= link_to t('.edit_user_profile', :default =>"Edit My Profile"), edit_user_path(current_user) %></li>
       <li><%= link_to t('.my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
       <li><%= link_to t('.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
-      <li><%= link_to ts("Delete My Account"), user_path(current_user), :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+      <li><%= link_to ts("Delete My Account"), user_path(current_user), data: {confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?')}, :method => :delete %></li>
 	  </ul>
   <% end %>
-	
+
   <h3 class="heading">Contact Us</h3>
 	  <ul>
 		  <li><%= link_to t('.support_and_feedback', :default => "Support and Feedback"), new_feedback_report_path %></li>
@@ -55,4 +55,3 @@
       <li><%= link_to t('.donate', :default => "Donations"), donate_path %></li>
 	  </ul>
 </div>
-	

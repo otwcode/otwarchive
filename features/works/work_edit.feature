@@ -36,6 +36,7 @@ Feature: Edit Works
     When I press "Update"
     Then I should see "Work was successfully updated."
       And I should see "Additional Tags: new tag"
+      And I should see "Words:3"
     When all search indexes are updated
       And I go to testuser's works page
     Then I should see "First work"
@@ -51,6 +52,7 @@ Feature: Edit Works
     Then I should see "Chapter was successfully posted."
       And I should not see "first chapter content"
       And I should see "second chapter content"
+      And I should see "Words:6"
     When I edit the work "First work"
     Then I should not see "chapter content"
     When I follow "1"
@@ -61,6 +63,7 @@ Feature: Edit Works
     Then I should see "Chapter was successfully updated."
       And I should see "first chapter new content"
       And I should not see "second chapter content"
+      And I should see "Words:7"
     When I edit the work "First Work"
       And I follow "2"
       And I fill in "content" with "second chapter new content"
@@ -111,21 +114,6 @@ Feature: Edit Works
       And I should see "Work was successfully updated"
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
       
-  Scenario: Editing a work you created today should not bump its revised-at date
-      When "AO3-2539" is fixed    
-# Given I am logged in as "testuser" with password "testuser"
-#      And I post the work "Don't Bump Me"
-#      And I post the work "This One Stays On Top"
-#      And I edit the work "Don't Bump Me"
-#      And I press "Post Without Preview"
-#    When I go to the works page
-#    Then "This One Stays On Top" should appear before "Don't Bump Me"
-#    When I edit the work "Don't Bump Me"
-#      And I press "Preview"
-#      And I press "Update"
-#      And I go to the works page
-#    Then "This One Stays On Top" should appear before "Don't Bump Me"
-
   Scenario: Previewing edits to a posted work should not refer to the work as a draft
     Given I am logged in as "editor"
       And I post the work "Load of Typos"
@@ -149,10 +137,28 @@ Feature: Edit Works
       And I have coauthored a work as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
-    Then I should see "test pseud 1 (coolperson), test pseud 2 (ex_friend)" within ".byline"
+    Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"
     When I view the work "Shared"
     Then I should see "ex_friend" within ".byline"
       And I should not see "coolperson" within ".byline"
+
+  Scenario: A work cannot be edited to remove its fandom
+    Given basic tags
+      And I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+    When I edit the work "Work 1"
+      And I fill in "Fandoms" with ""
+      And I press "Post Without Preview"
+    Then I should see "Sorry! We couldn't save this work because:Please add all required tags. Fandom is missing."
+
+  Scenario: User can cancel editing a work
+    Given I am logged in as a random user
+      And I post the work "Work 1" with fandom "testing"
+      And I edit the work "Work 1"
+      And I fill in "Fandoms" with ""
+      And I press "Cancel"
+    When I view the work "Work 1"
+      Then I should see "Fandom: testing"

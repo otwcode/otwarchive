@@ -121,12 +121,12 @@ TAGS = {}
 
 # populate the hashes
 ArchiveConfig.DUMP_SEEDS.each do |seed|
-  user = User.find_by_login(seed)
+  user = User.find_by(login: seed)
   raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
   USERS[user.id] = user
 end
 # add all the tag wranglers
-Role.find_by_name("tag_wrangler").users.each { |u| USERS[u.id] = u }
+Role.find_by(name: "tag_wrangler").users.each { |u| USERS[u.id] = u }
 
 # add N extra random users
 User.find_in_batches(:batch_size => User.count/N ) do |users|
@@ -307,7 +307,7 @@ user_associations(USERS)
 
 if MULTI
   ArchiveConfig.DUMP_COLLECTION_SEEDS.each do |seed|
-    collection = Collection.find_by_name(seed)
+    collection = Collection.find_by(name: seed)
     raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
     COLLECTIONS[collection.id] = collection
   end

@@ -42,12 +42,12 @@ describe Collectible do
         expect(work.collections).not_to include(collection)
         expect(collection.works).not_to include(work)
       end
-      
-      it "should be automatically approved when there is no current user" do 
+
+      it "should be automatically approved when there is no current user" do
         work.save
         expect(work.approved_collections).to include(collection)
       end
-      
+
     end
 
     %w(unrevealed anonymous).each do |state|
@@ -59,7 +59,7 @@ describe Collectible do
         end
 
         it "should be #{state}" do
-          expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
+          expect(work.reload.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
         end
 
         describe "and when the collection is no longer #{state}" do
@@ -79,7 +79,6 @@ describe Collectible do
           before do
             work.collection_names = ""
             work.save
-            work.reload
           end
 
           it "should not be #{state}" do

@@ -1,4 +1,5 @@
 class ExternalAuthor < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
 
@@ -12,7 +13,7 @@ class ExternalAuthor < ActiveRecord::Base
   validates_associated :external_author_names
 
   has_many :external_creatorships, :through => :external_author_names
-  has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :works, -> { uniq }, :through => :external_creatorships, :source => :creation, :source_type => 'Work'
 
   has_one :invitation
 
@@ -20,11 +21,11 @@ class ExternalAuthor < ActiveRecord::Base
     :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
-  
+
   def self.claimed
     where(:is_claimed => true)
   end
-  
+
   def self.unclaimed
     where(:is_claimed => false)
   end
@@ -110,7 +111,7 @@ class ExternalAuthor < ActiveRecord::Base
         archivist = external_creatorship.archivist
         work = external_creatorship.creation
         archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
-        orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(external_author_name.name)
+        orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: external_author_name.name)
         work.change_ownership(archivist, User.orphan_account, orphan_pseud)
       end
     end
@@ -135,18 +136,17 @@ class ExternalAuthor < ActiveRecord::Base
 
   def find_or_invite(archivist = nil)
     if self.email
-      matching_user = User.find_by_email(self.email)
+      matching_user = User.find_by(email: self.email) || User.find_by_id(self.user_id)
       if matching_user
         self.claim!(matching_user)
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
+          @invitation = Invitation.new(invitee_email: self.email, external_author: self, creator: User.current_user)
           @invitation.save
         end
       end
     end
-    # eventually we may want to try finding authors by pseud?
   end
 
 end

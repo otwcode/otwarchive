@@ -8,7 +8,7 @@ Otwarchive::Application.configure do
   config.cache_classes = true
 
   # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  # config.whiny_nils = true
 
   # Show full error reports and enable caching
   config.consider_all_requests_local       = true
@@ -42,4 +42,10 @@ Otwarchive::Application.configure do
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
 
+  # Configure strong parameters to raise an exception if an unpermitted attribute is used
+  config.action_controller.action_on_unpermitted_parameters = :raise
+
+  config.serve_static_assets = true
+  config.eager_load = false
+  config.assets.enabled = false
 end

@@ -365,7 +365,7 @@ describe HtmlCleaner do
         value = "@im\port'\ja\vasc\ript:alert(\"XSS\")';"
         result = sanitize_value(:content, value)
         expect(result).not_to match(/style/i)
-        expect(result).to match(/@im\port/i)
+        expect(result).to match(/@import/i)
       end
 
       it "should strip javascript from img dynsrc" do
@@ -812,8 +812,8 @@ describe HtmlCleaner do
       expect(doc.xpath(".//i/p")).to be_empty
     end
 
-    xit "should deal with br tags at the beginning" do
-      result = add_paragraphs_to_text("<br/></br>text")
+    it "should deal with br tags at the beginning" do
+      result = add_paragraphs_to_text("</br>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//p").children.to_s.strip).to eq("text")
     end

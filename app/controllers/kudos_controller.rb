@@ -6,12 +6,12 @@ class KudosController < ApplicationController
 
   def index
     @work = Work.find(params[:work_id])
-    @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+    @kudos = @work.kudos.includes(pseud: :user).with_pseud
     @guest_kudos_count = @work.kudos.by_guest.count
   end
 
   def create
-    @kudo = Kudo.new(params[:kudo])
+    @kudo = Kudo.new(kudo_params)
     if current_user.present?
       @kudo.pseud = current_user.default_pseud
     else
@@ -38,10 +38,10 @@ class KudosController < ApplicationController
         format.html do
           error_message = "We couldn't save your kudos, sorry!"
           commentable = @kudo.commentable
-          if @kudo.dup?
-            error_message = 'You have already left kudos here. :)'
+          if @kudo && @kudo.dup?
+            error_message = @kudo.errors.full_messages.first
           end
-          if @kudo.creator_of_work?
+          if @kudo && @kudo.creator_of_work?
             error_message = "You can't leave kudos on your own work."
           end
           if !current_user.present? && commentable.restricted?
@@ -56,5 +56,11 @@ class KudosController < ApplicationController
         end
       end
     end
+  end
+
+  private
+
+  def kudo_params
+    params.require(:kudo).permit(:commentable_id, :commentable_type)
   end
 end
