@@ -344,6 +344,15 @@ When /^I edit multiple works with different anonymous commenting settings$/ do
   step %{I press "Edit"}
 end
 
+When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coauthor|
+  step %{I coauthored the work "Shared Work 1" as "#{author}" with "#{coauthor}"}
+  step %{I coauthored the work "Shared Work 2" as "#{author}" with "#{coauthor}"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Shared Work 1" for editing}
+  step %{I select "Shared Work 2" for editing}
+  step %{I press "Edit"}
+end
+
 When /^the purge_old_drafts rake task is run$/ do
   Work.purge_old_drafts
 end
