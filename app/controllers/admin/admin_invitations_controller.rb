@@ -46,7 +46,7 @@ class Admin::AdminInvitationsController < ApplicationController
     if !invitation_params[:token].blank?
       @invitation = Invitation.find_by(token: invitation_params[:token])
     elsif !invitation_params[:invitee_email].blank?
-      @invitations = Invitation.find(:all, conditions: ['invitee_email LIKE ?', '%' + invitation_params[:invitee_email] + '%'])
+      @invitations = Invitation.where('invitee_email LIKE ?', "%#{invitation_params[:invitee_email]}%")
       @invitation = @invitations.first if @invitations.length == 1
     end
     unless @user || @invitation || @invitations
