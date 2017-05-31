@@ -7,7 +7,6 @@ preference_484751134:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -27,8 +26,6 @@ preference_484751134:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751112: 
   history_enabled: true
@@ -38,7 +35,6 @@ preference_484751112:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 2
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -58,8 +54,6 @@ preference_484751112:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751123: 
   history_enabled: true
@@ -69,7 +63,6 @@ preference_484751123:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -89,8 +82,6 @@ preference_484751123:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751124: 
   history_enabled: true
@@ -100,7 +91,6 @@ preference_484751124:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 2
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -120,8 +110,6 @@ preference_484751124:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751113: 
   history_enabled: true
@@ -131,7 +119,6 @@ preference_484751113:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -151,8 +138,6 @@ preference_484751113:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751135: 
   history_enabled: true
@@ -162,7 +147,6 @@ preference_484751135:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -182,8 +166,6 @@ preference_484751135:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751136: 
   history_enabled: true
@@ -193,7 +175,6 @@ preference_484751136:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -213,8 +194,6 @@ preference_484751136:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751114: 
   history_enabled: true
@@ -224,7 +203,6 @@ preference_484751114:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -244,8 +222,6 @@ preference_484751114:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751125: 
   history_enabled: true
@@ -255,7 +231,6 @@ preference_484751125:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -275,8 +250,6 @@ preference_484751125:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751126: 
   history_enabled: true
@@ -286,7 +259,6 @@ preference_484751126:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -306,8 +278,6 @@ preference_484751126:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751115: 
   history_enabled: true
@@ -317,7 +287,6 @@ preference_484751115:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -337,8 +306,6 @@ preference_484751115:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_78869998: 
   history_enabled: true
@@ -348,7 +315,6 @@ preference_78869998:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -368,8 +334,6 @@ preference_78869998:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751116: 
   history_enabled: true
@@ -379,7 +343,6 @@ preference_484751116:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -399,8 +362,6 @@ preference_484751116:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751127: 
   history_enabled: true
@@ -410,7 +371,6 @@ preference_484751127:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -430,8 +390,6 @@ preference_484751127:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751128: 
   history_enabled: true
@@ -441,7 +399,6 @@ preference_484751128:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -461,8 +418,6 @@ preference_484751128:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751117: 
   history_enabled: true
@@ -472,7 +427,6 @@ preference_484751117:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -492,8 +446,6 @@ preference_484751117:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_78869999: 
   history_enabled: true
@@ -503,7 +455,6 @@ preference_78869999:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: false
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -523,8 +474,6 @@ preference_78869999:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751107: 
   history_enabled: true
@@ -534,7 +483,6 @@ preference_484751107:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -554,8 +502,6 @@ preference_484751107:
   minimize_search_engines: false
   hide_warnings: true
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_78870000: 
   history_enabled: true
@@ -565,7 +511,6 @@ preference_78870000:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -585,8 +530,6 @@ preference_78870000:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751118: 
   history_enabled: true
@@ -596,7 +539,6 @@ preference_484751118:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -616,8 +558,6 @@ preference_484751118:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751129: 
   history_enabled: true
@@ -627,7 +567,6 @@ preference_484751129:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -647,8 +586,6 @@ preference_484751129:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751130: 
   history_enabled: true
@@ -658,7 +595,6 @@ preference_484751130:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -678,8 +614,6 @@ preference_484751130:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751119: 
   history_enabled: true
@@ -689,7 +623,6 @@ preference_484751119:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -709,8 +642,6 @@ preference_484751119:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751108: 
   history_enabled: true
@@ -720,7 +651,6 @@ preference_484751108:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -740,8 +670,6 @@ preference_484751108:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751109: 
   history_enabled: true
@@ -751,7 +679,6 @@ preference_484751109:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -771,8 +698,6 @@ preference_484751109:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751120: 
   history_enabled: true
@@ -782,7 +707,6 @@ preference_484751120:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -802,8 +726,6 @@ preference_484751120:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751131: 
   history_enabled: true
@@ -813,7 +735,6 @@ preference_484751131:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -833,8 +754,6 @@ preference_484751131:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751132: 
   history_enabled: true
@@ -844,7 +763,6 @@ preference_484751132:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -864,8 +782,6 @@ preference_484751132:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751110: 
   history_enabled: true
@@ -875,7 +791,6 @@ preference_484751110:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -895,8 +810,6 @@ preference_484751110:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751122: 
   history_enabled: true
@@ -906,7 +819,6 @@ preference_484751122:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 2
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -926,8 +838,6 @@ preference_484751122:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751111: 
   history_enabled: true
@@ -937,7 +847,6 @@ preference_484751111:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -957,8 +866,6 @@ preference_484751111:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
 preference_484751133: 
   history_enabled: true
@@ -968,7 +875,6 @@ preference_484751133:
   collection_inbox_off: false
   collection_emails_off: false
   skin_id: 1
-  hide_all_hit_counts: false
   comment_inbox_off: false
   comment_copy_to_self_off: true
   work_title_format: TITLE - AUTHOR - FANDOM
@@ -988,6 +894,4 @@ preference_484751133:
   minimize_search_engines: false
   hide_warnings: false
   automatically_approve_collections: false
-  hide_public_hit_count: false
-  hide_private_hit_count: false
   disable_work_skins: false
