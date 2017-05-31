@@ -163,7 +163,7 @@ class Pseud < ActiveRecord::Base
     select('pseuds.id, count(pseuds.id) AS work_count')
       .joins(:works)
       .where(
-        pseuds: { id: pseud_ids }, works: { post: true, hidden_by_admin: false, restricted: false }
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false, restricted: false }
       ).group('pseuds.id')
   }
 
@@ -204,6 +204,7 @@ class Pseud < ActiveRecord::Base
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
       end
+
       count_hash = {}
       pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
       count_hash
