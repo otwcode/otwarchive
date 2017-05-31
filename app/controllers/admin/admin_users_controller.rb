@@ -5,7 +5,7 @@ class Admin::AdminUsersController < ApplicationController
 
   def index
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by_name(params[:role]) if params[:role]
+    @role = Role.find_by(name: params[:role]) if params[:role]
     @users = User.search_by_role(@role, params[:query], inactive: params[:inactive], page: params[:page])
   end
 
@@ -33,7 +33,7 @@ class Admin::AdminUsersController < ApplicationController
   # GET admin/users/1.xml
   def show
     @hide_dashboard = true
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role]
     end
@@ -42,7 +42,7 @@ class Admin::AdminUsersController < ApplicationController
 
   # GET admin/users/1/edit
   def edit
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role]
     end
@@ -51,7 +51,7 @@ class Admin::AdminUsersController < ApplicationController
   # POST admin/users/update_user
   def update_user
     if params[:id]
-      @user = User.find_by_login(params[:id])
+      @user = User.find_by(login: params[:id])
       if @user.admin_update(params[:user])
         flash[:notice] = ts("User was successfully updated.")
         redirect_to(request.env["HTTP_REFERER"] || root_path)
@@ -63,9 +63,9 @@ class Admin::AdminUsersController < ApplicationController
       @admin_note = params[:admin_note]
       # default note for spammers
       @admin_note = (@admin_note.blank? ? "Banned for spam" : @admin_note) if params[:admin_action] == "spamban"
-      
-      @user = User.find_by_login(params[:user_login])
-      submitted_kin_user = User.find_by_login(params[:next_of_kin_name])
+
+      @user = User.find_by(login: params[:user_login])
+      submitted_kin_user = User.find_by(login: params[:next_of_kin_name])
 
       # there is a next of kin username, but no email
       if params[:next_of_kin_name].present? && params[:next_of_kin_email].blank?
@@ -176,16 +176,16 @@ class Admin::AdminUsersController < ApplicationController
       end
     end
   end
-  
-  before_filter :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]  
+
+  before_filter :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
   def user_is_banned
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     unless @user && @user.banned?
       flash[:error] = ts("That user is not banned!")
       redirect_to admin_users_path and return
     end
   end
-  
+
   def confirm_delete_user_creations
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
@@ -260,7 +260,7 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def troubleshoot
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     @user.fix_user_subscriptions
     @user.reindex_user_works
     @user.set_user_work_dates
@@ -272,7 +272,7 @@ class Admin::AdminUsersController < ApplicationController
 
 
   def activate
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     @user.activate
     if @user.active?
       @user.create_log_item( options = { action: ArchiveConfig.ACTION_ACTIVATE, note: "Manually Activated", admin_id: current_admin.id })
@@ -285,12 +285,11 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def send_activation
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by(login: params[:id])
     # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver! 
+    UserMailer.signup_notification(@user.id).deliver!
     flash[:notice] = ts("Activation email sent")
     redirect_to action: :show
   end
 
 end
-

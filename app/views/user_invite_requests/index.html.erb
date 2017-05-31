@@ -9,7 +9,7 @@
   <!--/subnav-->
 
   <!--main content-->
-  <%= form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do %>
+  <%= form_tag url_for(:controller => 'user_invite_requests', :action => 'update'), method: :patch do %>
   <table summary="<%= ts('Requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity.') %>">
     <caption><%= ts('Allot Invites to Users') %></caption>
     <thead>
@@ -33,7 +33,7 @@
       <% end %>
     </tbody>
   </table>
-  <p class="submit"><%= submit_tag ts("Update") %><%= submit_tag ts("Decline All"), :name => 'decline_all', :confirm => "This will decline ALL requests. Are you sure?" %></p>
+  <p class="submit"><%= submit_tag ts("Update") %><%= submit_tag ts("Decline All"), :name => 'decline_all', data: {confirm: "This will decline ALL requests. Are you sure?"} %></p>
   <% end %>
   <!--/content-->
 

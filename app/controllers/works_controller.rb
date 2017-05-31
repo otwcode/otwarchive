@@ -94,7 +94,7 @@ class WorksController < ApplicationController
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
-        @fandom = Fandom.find_by_id(params[:fandom_id])
+        @fandom = Fandom.find_by(id: params[:fandom_id])
       end
 
       tag = @fandom || @tag
@@ -158,7 +158,7 @@ class WorksController < ApplicationController
     options[:page] = params[:page]
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
 
     return unless @user.present?
 
@@ -180,7 +180,7 @@ class WorksController < ApplicationController
       return
     end
 
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
 
     unless current_user == @user
       flash[:error] = ts('You can only see your own drafts, sorry!')
@@ -189,7 +189,7 @@ class WorksController < ApplicationController
     end
 
     if params[:pseud_id]
-      @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+      @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       @works = @pseud.unposted_works.paginate(page: params[:page])
     else
       @works = @user.unposted_works.paginate(page: params[:page])
@@ -348,7 +348,7 @@ class WorksController < ApplicationController
     load_pseuds
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    @collection = Collection.find_by(name: params[:work][:collection_names])
   end
 
   # GET /works/1/edit
@@ -732,19 +732,19 @@ class WorksController < ApplicationController
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
-    work_params = params[:work].reject { |_key, value| value.blank? || value == '0' }
+    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
     # manually allow switching of anon/moderated comments
-    if work_params[:anon_commenting_disabled] == 'allow_anon'
-      work_params[:anon_commenting_disabled] = '0'
+    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
+      updated_work_params[:anon_commenting_disabled] = '0'
     end
-    if work_params[:moderated_commenting_enabled] == 'not_moderated'
-      work_params[:moderated_commenting_enabled] = '0'
+    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
+      updated_work_params[:moderated_commenting_enabled] = '0'
     end
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(work_params)
+      unless work.update_attributes(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
       end
     end
@@ -764,7 +764,7 @@ class WorksController < ApplicationController
       RedisSearchIndexQueue.queue_works([params[:id]], priority: :high)
       flash[:notice] = ts('Work queued to be reindexed')
     else
-      flash[:notice] = ts("Sorry, you don't have permission to perform this action.")
+      flash[:error] = ts("Sorry, you don't have permission to perform this action.")
     end
     redirect_to(request.env['HTTP_REFERER'] || root_path)
   end
@@ -794,9 +794,9 @@ class WorksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       end
     end
     if params[:tag_id]
@@ -828,7 +828,7 @@ class WorksController < ApplicationController
   end
 
   def load_work
-    @work = Work.find_by_id(params[:id])
+    @work = Work.find_by(id: params[:id])
     unless @work
       raise ActiveRecord::RecordNotFound, "Couldn't find work with id '#{params[:id]}'"
     end
@@ -919,7 +919,7 @@ class WorksController < ApplicationController
     end
 
     # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).value_of(:user_id).uniq
+    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).pluck(:user_id).uniq
     unless user_ids.include?(current_user.id)
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       render :new and return
@@ -992,7 +992,7 @@ class WorksController < ApplicationController
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.value_of(:name).join(', ')}"
+        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
       end
 
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
@@ -1033,7 +1033,7 @@ class WorksController < ApplicationController
 
   def build_options(params)
     pseuds_to_apply =
-      (Pseud.find_by_name(params[:pseuds_to_apply]) if params[:pseuds_to_apply])
+      (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
 
     {
       pseuds: pseuds_to_apply,
@@ -1065,7 +1065,8 @@ class WorksController < ApplicationController
       :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
-      :moderated_commenting_enabled, :title,
+      :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
+      :unrestricted,
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],

@@ -51,7 +51,7 @@
     <h3 class="landmark heading"><%= ts("Listing Tags") %></h3>
 
     <% tagset_cache_key = @tag_type ? "tag_set_show_#{@tag_set.tag_set_id}_#{@tag_type}" : "tag_set_show_#{@tag_set.tag_set_id}" %>
-    <%= cache(tagset_cache_key) do %>
+    <%= cache(tagset_cache_key, skip_digest: true) do %>
       <%= render "show_tag_set_tags" %>
       <%= render "show_tag_set_associations" %>
     <% end %>

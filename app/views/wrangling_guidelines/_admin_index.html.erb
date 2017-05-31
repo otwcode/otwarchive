@@ -21,7 +21,7 @@
         <ul class="navigation actions">
           <li><%= link_to ts('Show'), wrangling_guideline %></li>
           <li><%= link_to ts('Edit'), edit_wrangling_guideline_path(wrangling_guideline) %></li>
-          <li><%= link_to ts('Delete'), wrangling_guideline, :confirm => ts('Are you sure you want to delete this Wrangling Guideline?'), :method => :delete %></td>
+          <li><%= link_to ts('Delete'), wrangling_guideline, data: {confirm: ts('Are you sure you want to delete this Wrangling Guideline?')}, :method => :delete %></td>
       </dd>
     <% end %>
   </dl>

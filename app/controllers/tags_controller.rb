@@ -7,7 +7,7 @@ class TagsController < ApplicationController
 
   caches_page :feed
 
-  cache_sweeper :tag_sweeper
+  # cache_sweeper :tag_sweeper
 
   def load_tag
     @tag = Tag.find_by_name(params[:id])

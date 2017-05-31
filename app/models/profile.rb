@@ -25,6 +25,4 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  attr_protected :about_me_sanitizer_version
-
 end

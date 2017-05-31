@@ -114,6 +114,7 @@ describe WorksController do
       drafts_user_work = create(:work, authors: [drafts_user.default_pseud], posted: false)
       draft_collection = create(:collection)
       draft_collection.collection_preference.moderated = true
+      draft_collection.collection_preference.save
       drafts_user_work.collections << draft_collection
       controller.instance_variable_set("@collection", draft_collection)
       put :post_draft, id: drafts_user_work.id

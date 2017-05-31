@@ -25,13 +25,6 @@ Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
   expect(find("input + .autocomplete", visible: true)).to have_no_content(string)
 end
 
-# this is needed for values like 'Allo 'Allo that can't be handled right
-# by Nokogiri in the typical find
-# note: this might only work for the first autocomplete in a page D:
-Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
-  string == page.find("input.autocomplete")['value']
-end
-
 # Define all values to be entered here depending on the fieldname
 When /^I enter text in the "([^\"]+)" autocomplete field$/ do |fieldname|
   text = case fieldname
@@ -195,6 +188,7 @@ Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
     user = FactoryGirl.create(:user, login: username)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
@@ -229,7 +223,7 @@ Given /^a gift exchange for testing autocomplete$/ do
 end
 
 When /^I edit the gift exchange for testing autocomplete$/ do
-  visit(edit_collection_gift_exchange_path(Collection.find_by_name("autocomplete")))
+  visit(edit_collection_gift_exchange_path(Collection.find_by(name: "autocomplete")))
 end
 
 Then(/^the pseud autocomplete should contain "([^\"]*)"$/) do |pseud|

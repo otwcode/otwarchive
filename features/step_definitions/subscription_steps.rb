@@ -16,7 +16,7 @@ When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type
     step %{I am logged in as "wip_author"}
     step %{I post the work "#{name}"}
     step %{I am logged in as "#{user}"}
-    visit work_url(Work.find_by_title(name))
+    visit work_url(Work.find_by(title: name))
   when "series"
     step %{I am logged in as "series_author"}
     step %{I add the work "Blah" to series "#{name}"}

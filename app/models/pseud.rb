@@ -10,6 +10,7 @@ class Pseud < ActiveRecord::Base
     styles: { standard: "100x100>" },
     path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
+    s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
     bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     default_url: "/images/skins/iconsets/default/icon_user.png"
@@ -25,28 +26,27 @@ class Pseud < ActiveRecord::Base
   delegate :login, to: :user, prefix: true
   has_many :kudos
   has_many :bookmarks, dependent: :destroy
-  has_many :recs, class_name: 'Bookmark', conditions: {rec: true}
+  has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
   has_many :creatorships
-  has_many :works, through: :creatorships, source: :creation, source_type: 'Work', readonly: false
+  has_many :works, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Work'
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, through: :creatorships, source: :creation, source_type: 'Chapter', readonly: false
-  has_many :series, through: :creatorships, source: :creation, source_type: 'Series', readonly: false
+  has_many :chapters, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Chapter'
+  has_many :series, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Series'
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, conditions: { rejected: false }
+  has_many :gifts, -> { where(rejected: false) }
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
-  has_many :offer_assignments, through: :challenge_signups, conditions: ["challenge_assignments.sent_at IS NOT NULL"]
-  has_many :pinch_hit_assignments, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id",
-    conditions: ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups
+  has_many :pinch_hit_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id"
 
   has_many :prompts, dependent: :destroy
 
@@ -81,32 +81,35 @@ class Pseud < ActiveRecord::Base
     order(:name)
   }
 
-  scope :with_works,
+  scope :with_works, -> {
     select("pseuds.*, count(pseuds.id) AS work_count").
     joins(:works).
     group(:id).
     order(:name)
+  }
 
-  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
-  scope :with_public_works, with_works.merge(Work.visible_to_all)
+  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
+  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
 
-  scope :with_bookmarks,
+  scope :with_bookmarks, -> {
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
     joins(:bookmarks).
     group(:id).
     order(:name)
+  }
 
   # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
+  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
 
-  scope :with_public_recs,
+  scope :with_public_recs, -> {
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
     order(:name).
     merge(Bookmark.is_public.recs)
+  }
 
-  scope :alphabetical, order(:name)
+  scope :alphabetical, -> { order(:name) }
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
   scope :coauthor_of, lambda {|pseuds|
@@ -210,7 +213,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def unposted_works
-    @unposted_works = self.works.find(:all, conditions: {posted: false}, order: 'works.created_at DESC')
+    @unposted_works = self.works.where(posted: false).order(created_at: :desc)
   end
 
 
@@ -255,7 +258,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.find(:all, include: :user, conditions: conditions)
+    Pseud.includes(:user).where(conditions).references(:user)
   end
 
   # Takes a comma-separated list of bylines
@@ -309,9 +312,9 @@ class Pseud < ActiveRecord::Base
 
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
+    Comment.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.comments.blank?
     # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.kudos.blank?
+    Kudo.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.kudos.blank?
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
@@ -322,8 +325,12 @@ class Pseud < ActiveRecord::Base
   # Options: skip_series -- if you begin by changing ownership of the series, you don't
   # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    creation.pseuds.delete(self)
-    creation.pseuds << pseud rescue nil
+    # Should only transfer creatorship if we're a co-creator.
+    if creation.pseuds.include?(self)
+      creation.pseuds.delete(self)
+      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
+    end
+
     if creation.is_a?(Work)
       creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
       unless options[:skip_series]
@@ -364,21 +371,21 @@ class Pseud < ActiveRecord::Base
       where("challenge_signups.pseud_id = #{id}").
       update_all("prompts.pseud_id = #{user.default_pseud.id}")
 
-    ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
-    ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
+    ChallengeSignup.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
+    ChallengeAssignment.where("pinch_hitter_id = #{self.id}").update_all("pinch_hitter_id = #{self.user.default_pseud.id}")
     return
   end
 
   def change_gift_recipients
-    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Gift.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_bookmarks_ownership
-    Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Bookmark.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_collections_membership
-    CollectionParticipant.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    CollectionParticipant.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def check_default_pseud
@@ -417,7 +424,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def collection_ids
-    collections.value_of(:id)
+    collections.pluck(:id)
   end
 
   self.include_root_in_json = false

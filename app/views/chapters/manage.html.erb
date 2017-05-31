@@ -30,14 +30,14 @@
           <% if @work.chapters.count > 1 %>
             <li>
               <%= link_to ts("Delete"), [@work, chapter],
-                                        confirm: ts("Are you sure?"),
+                                        data: { confirm: ts("Are you sure?") },
                                         method: :delete %>
             </li>
             <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 && current_user.is_author_of?(chapter) %>
               <li>
                 <%= link_to ts("Remove Me As Chapter Co-Creator"),
                             {action: "edit", id: chapter.id, remove: "me"},
-                            confirm: ts("Are you sure you want to remove yourself as a co-creator of this chapter?") %>
+                            data: { confirm: ts("Are you sure you want to remove yourself as a co-creator of this chapter?") } %>
               </li>
             <% end %> 
           <% end %>

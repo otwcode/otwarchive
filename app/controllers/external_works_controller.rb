@@ -15,7 +15,7 @@ class ExternalWorksController < ApplicationController
      @external_work = ExternalWork.where(:url => url).first
    end
    respond_to do |format|
-    format.js
+    format.json { render 'fetch.js.erb' }
    end
   end
 

@@ -47,7 +47,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def load_user
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     no_user and return unless @user
   end
 
@@ -103,9 +103,9 @@ class ChallengeAssignmentsController < ApplicationController
   # ACTIONS
 
   def index
-    if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
-        if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
+        if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
           @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
         else
           @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted

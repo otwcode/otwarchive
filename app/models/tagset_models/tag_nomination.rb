@@ -40,7 +40,7 @@ class TagNomination < ActiveRecord::Base
     # let people change their own!
     query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
     if query.exists?
-      other_parent = query.value_of(:parent_tagname).uniq.join(", ") # should only be one but just in case
+      other_parent = query.pluck(:parent_tagname).uniq.join(", ") # should only be one but just in case
       errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", :tagname => self.tagname, :other_parent => other_parent, :fandom => self.get_parent_tagname || 'Fandom'))
     end
   end
