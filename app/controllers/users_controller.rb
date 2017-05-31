@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 
     visible = visible_items(current_user)
 
-    @fandoms = @fandoms.order('work_count DESC') unless @fandoms.empty?
+    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
     @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
