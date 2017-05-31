@@ -174,6 +174,33 @@ class Collection < ActiveRecord::Base
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
 
+  scope :approved, -> {
+    joins(:collection_items)
+      .where(
+        collection_items: {
+          user_approval_status: CollectionItem::APPROVED,
+          collection_approval_status: CollectionItem::APPROVED
+        }
+      )
+  }
+  scope :user_approved, -> {
+    joins(:collection_items)
+      .where(
+        collection_items: {
+          user_approval_status: CollectionItem::APPROVED
+        }
+      )
+  }
+  scope :rejected, -> {
+    joins(:collection_items)
+      .where(
+        collection_items: {
+          user_approval_status: CollectionItem::REJECTED
+        }
+      )
+  }
+
+
   before_validation :cleanup_url
   def cleanup_url
     self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url

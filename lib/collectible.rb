@@ -12,16 +12,13 @@ module Collectible
                through: :collection_items,
                after_add: [:set_visibility, :expire_item_caches],
                after_remove: [:update_visibility, :expire_item_caches]
-      has_many :approved_collections,
-               -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) },
+      has_many :approved_collections, -> { Collection.approved },
                through: :collection_items,
                source: :collection
-      has_many :user_approved_collections,
-               -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) },
+      has_many :user_approved_collections, -> { Collection.user_approved },
                through: :collection_items,
                source: :collection
-      has_many :rejected_collections,
-               -> { where('collection_items.user_approval_status = ? ', CollectionItem::REJECTED) },
+      has_many :rejected_collections, -> { Collection.rejected },
                through: :collection_items,
                source: :collection
     end
