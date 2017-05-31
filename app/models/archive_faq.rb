@@ -52,8 +52,7 @@ class ArchiveFaq < ActiveRecord::Base
   end
 
   def self.reorder(positions)
-    SortableList.new(self.find(:all, order: 'position ASC')).
-      reorder_list(positions)
+    SortableList.new(self.order('position ASC')).reorder_list(positions)
   end
 
 end
