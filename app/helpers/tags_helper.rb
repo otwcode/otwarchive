@@ -190,7 +190,7 @@ module TagsHelper
     if count == "0"
       last_comment = ""
     else
-      last_comment = " (last comment: " + tag.total_comments.find(:first, :order => 'created_at DESC').created_at.to_s + ")"
+      last_comment = " (last comment: " + tag.total_comments.order('created_at DESC').first.created_at.to_s + ")"
     end
     link_text = count + " comments" + last_comment
     link_to link_text, {:controller => :comments, :action => :index, :tag_id => tag}
