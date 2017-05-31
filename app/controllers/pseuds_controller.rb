@@ -59,7 +59,7 @@ class PseudsController < ApplicationController
       visible_series = @pseud.series.visible_to_registered_user
       visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
     end
-    @fandoms = @fandoms.order('work-count DESC') unless @fandoms.empty?
+    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
     @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
