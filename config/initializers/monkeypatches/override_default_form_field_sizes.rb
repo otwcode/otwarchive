@@ -1,17 +1,19 @@
 # Rails default form helpers text_field etc use default sizes. Rails default form helpers text_field_tag etc do NOT. WHY.
-# Here we trash all the default options. 
+# Here we trash all the default options.
 #
 # We also add the css class "text" to all text input fields because we need a class on them to be
-# able to target them in ie6, alas. 
-module ActionView::Helpers
-  class InstanceTag
-    remove_const :DEFAULT_TEXT_AREA_OPTIONS
-    DEFAULT_TEXT_AREA_OPTIONS = { }
+# able to target them in ie6, alas.
 
-    remove_const :DEFAULT_FIELD_OPTIONS
-    DEFAULT_FIELD_OPTIONS = { "class" => "text" }
-  end
-end
+# InstanceTag no longer exists in Rails 4
+# module ActionView::Helpers
+#   class InstanceTag
+#     remove_const :DEFAULT_TEXT_AREA_OPTIONS
+#     DEFAULT_TEXT_AREA_OPTIONS = { }
+#
+#     remove_const :DEFAULT_FIELD_OPTIONS
+#     DEFAULT_FIELD_OPTIONS = { "class" => "text" }
+#   end
+# end
 
 
 module ActionView::Helpers::FormTagHelper

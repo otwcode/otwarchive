@@ -50,7 +50,7 @@ class Challenge::GiftExchangeController < ChallengesController
       flash[:notice] = ts('Challenge was successfully updated.')
 
       # expire the cache on the signup form
-      expire_fragment(:controller => 'challenge_signups', :action => 'new')
+      ActionController::Base.new.expire_fragment('challenge_signups/new')
 
       # see if we initialized the tag set
       redirect_to collection_profile_path(@collection)

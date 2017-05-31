@@ -50,7 +50,7 @@ class Challenge::PromptMemeController < ChallengesController
     if @challenge.update_attributes(prompt_meme_params)
       flash[:notice] = 'Challenge was successfully updated.'
       # expire the cache on the signup form
-      expire_fragment(:controller => 'challenge_signups', :action => 'new')
+      ActionController::Base.new.expire_fragment('challenge_signups/new')
       redirect_to @collection
     else
       render :action => :edit

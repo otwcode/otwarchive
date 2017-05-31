@@ -43,7 +43,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
     fill_in("work[character_string]", with: character + ( character2.blank? ? '' : ','+character2 ) )
   end
   unless collection.blank?
-    c = Collection.find_by_title(collection)
+    c = Collection.find_by(title: collection)
     fill_in("Collections", with: c.name)
   end
   unless series.blank?
@@ -63,7 +63,7 @@ end
 # This is the same regexp as above
 When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
   # If the work is already a draft then visit the preview page and post it
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   if work
     visit preview_work_url(work)
     click_button("Post")
@@ -112,7 +112,7 @@ end
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
   step %{I am logged in as a random user}
   step %{I post the work "#{title}"}
-  work = Work.find_by_title!(title)
+  work = Work.find_by(title: title)
   visit work_url(work)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
@@ -122,7 +122,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   end
   step %{I am logged out}
   n_comments ||= 0
-  work = Work.find_by_title!(title)
+  work = Work.find_by(title: title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
     visit work_url(work)
@@ -193,13 +193,13 @@ When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
 end
 
 When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
-  work = Work.find_by_title!(work)
+  work = Work.find_by_title(work)
   visit work_url(work).gsub("http://www.example.com","")
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit work_url(work, :anchor => "comments", :show_comments => true)
 end
 
@@ -209,12 +209,12 @@ end
 
 When /^I view a deleted chapter$/ do
   step "the draft \"DeletedChapterWork\""
-  work = Work.find_by_title("DeletedChapterWork")
+  work = Work.find_by(title: "DeletedChapterWork")
   visit "/works/#{work.id}/chapters/12345"
 end
 
 When /^I edit the work "([^"]*)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit edit_work_url(work)
 end
 When /^I edit the draft "([^"]*)"$/ do |draft|
@@ -248,6 +248,14 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
+  step %{a chapter is set up for "#{work_title}"}
+  step %{I add the co-author "#{coauthor}"}
+  click_button("Post")
+  Work.tire.index.refresh
+  Tag.write_redis_to_database
+end
+
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{a chapter is set up for "#{work_title}"}
   step %{I press "Preview"}
@@ -256,7 +264,7 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
 end
 
 When /^a chapter is set up for "([^"]*)"$/ do |work_title|
-  work = Work.find_by_title(work_title)
+  work = Work.find_by(title: work_title)
   user = work.users.first
   step %{I am logged in as "#{user.login}"}
   visit work_url(work)
@@ -265,7 +273,7 @@ When /^a chapter is set up for "([^"]*)"$/ do |work_title|
 end
 
 # meant to be used in conjunction with above step
-When /^I post the draft chapter$/ do
+When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   Work.tire.index.refresh
   Tag.write_redis_to_database
@@ -296,7 +304,7 @@ When /^I set the fandom to "([^"]*)"$/ do |fandom|
 end
 # on the edit multiple works page
 When /^I select "([^"]*)" for editing$/ do |title|
-  id = Work.find_by_title(title).id
+  id = Work.find_by(title: title).id
   check("work_ids_#{id}")
 end
 
@@ -342,17 +350,17 @@ end
 
 When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   step "the draft \"#{title}\""
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   work.update_attribute(:created_at, number.to_i.days.ago)
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
 When /^I post the locked work "([^"]*)"$/ do |title|
-  work = Work.find_by_title(work)
+  work = Work.find_by(title: work)
   if work.blank?
     step "the locked draft \"#{title}\""
-    work = Work.find_by_title(title)
+    work = Work.find_by(title: title)
   end
   visit preview_work_url(work)
   click_button("Post")
@@ -389,7 +397,7 @@ When /^I unlock the work "([^"]*)"$/ do |work|
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
-  work = Work.find_by_title!(title)
+  work = Work.find_by(title: title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("work_parent_attributes_url", with: url_of_work)
@@ -424,7 +432,7 @@ When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit edit_work_url(work)
   step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
@@ -462,8 +470,14 @@ end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
-  check("Add co-authors?")
+  check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
+end
+
+When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
+  step %{the user "#{coauthor1}" exists and is activated}
+  step %{the user "#{coauthor2}" exists and is activated}
+  fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
 end
 
 When /^I give the work to "([^"]*)"$/ do |recipient|
@@ -472,7 +486,7 @@ end
 
 When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipient|
   step %{the user "#{recipient}" exists and is activated}
-  visit edit_work_path(Work.find_by_title(work_title))
+  visit edit_work_path(Work.find_by(title: work_title))
   fill_in("work_recipients", with: "#{recipient}")
   click_button("Post Without Preview")
 end
@@ -500,7 +514,7 @@ When /^I add the end notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit work_url(work)
   step %{I follow "Mark for Later"}
   Reading.update_or_create_in_database

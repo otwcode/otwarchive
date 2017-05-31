@@ -17,10 +17,8 @@ class Kudo < ActiveRecord::Base
     :message => ts("^You have already left kudos here. :)"),
     :if => "!ip_address.blank?"
 
-  scope :with_pseud, where("pseud_id IS NOT NULL")
-  scope :by_guest, where("pseud_id IS NULL")
-
-  attr_accessible :commentable_id, :commentable_type
+  scope :with_pseud, -> { where("pseud_id IS NOT NULL") }
+  scope :by_guest, -> { where("pseud_id IS NULL") }
 
   # return either the name of the kudo-leaver or "guest"
   def name
@@ -38,14 +36,14 @@ class Kudo < ActiveRecord::Base
   def cannot_be_author
     if pseud
       commentable = nil
-      if commentable_type == "Work" 
-       commentable = Work.find_by_id(commentable_id)
+      if commentable_type == "Work"
+       commentable = Work.find_by(id: commentable_id)
       end
       if commentable_type == "Chapter"
-       commentable = Chapter.find_by_id(commentable_id).work
+       commentable = Chapter.find_by(id: commentable_id).work
       end
-      kudos_giver = User.find_by_id(pseud.user_id)
-      if commentable.nil? 
+      kudos_giver = User.find_by(id: pseud.user_id)
+      if commentable.nil?
         errors.add(:no_commentable,
                    ts("^What did you want to leave kudos on?"))
       elsif kudos_giver.is_author_of?(commentable)
@@ -58,10 +56,10 @@ class Kudo < ActiveRecord::Base
   def guest_cannot_kudos_restricted_work
     commentable = nil
     if commentable_type == "Work"
-      commentable = Work.find_by_id(commentable_id)
+      commentable = Work.find_by(id: commentable_id)
     end
     if commentable_type == "Chapter"
-      commentable = Chapter.find_by_id(commentable_id).work
+      commentable = Chapter.find_by(id: commentable_id).work
     end
     if commentable.nil?
       errors.add(:no_commentable,

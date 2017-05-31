@@ -120,7 +120,7 @@ describe OwnedTagSetsController do
 
     context "where tag set is found" do
       let(:visible) { false }
-      let(:tag) { create(:character) }
+      let(:tag) { create(:character, common_taggings: [create(:common_tagging)]) }
       let(:owned_tag_set) do
         create(
           :owned_tag_set,
@@ -252,7 +252,7 @@ describe OwnedTagSetsController do
     context "where the tag is successfully destroyed" do
       it "redirects with a notice" do
         post :destroy, id: tag_set.id
-        expect(OwnedTagSet.find_by_id(tag_set.id)).to_not be_present
+        expect(OwnedTagSet.find_by(id: tag_set.id)).to_not be_present
         it_redirects_to_with_notice(tag_sets_path, "Your Tag Set #{tag_set.title} was deleted.")
       end
     end

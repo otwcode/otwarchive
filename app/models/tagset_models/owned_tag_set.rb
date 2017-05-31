@@ -21,16 +21,14 @@ class OwnedTagSet < ActiveRecord::Base
 
   has_many :tag_set_nominations, :dependent => :destroy
   has_many :tag_nominations, :through => :tag_set_nominations, :dependent => :destroy
-  has_many :fandom_nominations, :through => :tag_set_nominations 
+  has_many :fandom_nominations, :through => :tag_set_nominations
   has_many :character_nominations, :through => :tag_set_nominations
   has_many :relationship_nominations, :through => :tag_set_nominations
   has_many :freeform_nominations, :through => :tag_set_nominations
 
-  attr_protected :featured
-
   has_many :tag_set_ownerships, :dependent => :destroy
-  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', false]
-  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+  has_many :moderators, -> { where('tag_set_ownerships.owner = ?', false) }, :through => :tag_set_ownerships, :source => :pseud
+  has_many :owners, -> { where('tag_set_ownerships.owner = ?', true) }, :through => :tag_set_ownerships, :source => :pseud
 
   has_many :owned_set_taggings, :dependent => :destroy
   has_many :set_taggables, :through => :owned_set_taggings
@@ -76,14 +74,14 @@ class OwnedTagSet < ActiveRecord::Base
     return false unless self.tag_set.save && self.save
 
     # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
-    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(:approved => true, :rejected => false)
+    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).where(:rejected => false).update_all(:approved => true)
     true
   end
 
   def remove_tagnames(tag_type, tagnames_to_remove)
     self.tag_set.tagnames_to_remove = tagnames_to_remove.join(',')
     return false unless self.save
-    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).update_all(:rejected => true, :approved => false)
+    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).where(:approved => false).update_all(:rejected => true)
 
     if tag_type == "fandom"
       # reject children of rejected fandom
@@ -224,7 +222,7 @@ class OwnedTagSet < ActiveRecord::Base
     association_lines.each do |line|
       children_names = line.split(',')
       parent_name = children_names.shift.strip
-      parent_tag_id = Fandom.where(:name => parent_name).value_of(:id).first
+      parent_tag_id = Fandom.where(:name => parent_name).pluck(:id).first
       unless parent_tag_id
         failed << line
         next
@@ -232,7 +230,7 @@ class OwnedTagSet < ActiveRecord::Base
       failed_children = []
       added_parent = false
       children_names.map {|c| c.strip}.each_with_index do |child_name|
-        child_tag_id = (options[:do_relationships] ? Relationship : Character).where(:name => child_name).value_of(:id).first
+        child_tag_id = (options[:do_relationships] ? Relationship : Character).where(:name => child_name).pluck(:id).first
         unless child_tag_id
           failed_children << child_name
           next

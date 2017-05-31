@@ -23,7 +23,7 @@ class InviteRequest < ActiveRecord::Base
 
   #Ensure that invite request is for a new user
   def compare_with_users
-    if User.find_by_email(self.email)
+    if User.find_by(email: self.email)
       errors.add(:email, "is already being used by an account holder.")
       return false
     end

@@ -3,7 +3,7 @@ Then /^I should see a not\-in\-fandom error message for "([^"]+)" in "([^"]+)"$/
   step %{I should see "are not in the selected fandom(s), #{fandom}: #{tag}"}
 end
 
-Then /^I should see a not\-in\-fandom error message$/ do 
+Then /^I should see a not\-in\-fandom error message$/ do
   step %{I should see "are not in the selected fandom(s)"}
 end
 
@@ -22,13 +22,13 @@ end
 ### CHALLENGE TAGS
 
 Given /^I have standard challenge tags set ?up$/ do
-  begin 
+  begin
     unless UserSession.find
       step %{I am logged in as "mod1"}
     end
   rescue
-    step %{I am logged in as "mod1"}    
-  end  
+    step %{I am logged in as "mod1"}
+  end
   step "I have no tags"
     step "basic tags"
     step %{a canonical fandom "Stargate Atlantis"}
@@ -56,7 +56,7 @@ end
 ### General Challenge Settings
 
 When /^I edit settings for "([^\"]*)" challenge$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Challenge Settings"}
 end
 
@@ -86,7 +86,7 @@ end
 
 When /^I open signups for "([^\"]*)"$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Challenge Settings"}
     step %{I check "Sign-up open?"}
     step %{I submit}
@@ -107,23 +107,23 @@ end
 ### Signup process
 
 When /^I start signing up for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
 end
 
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Edit Sign-up"}
 end
 
 ### WHEN other
 
 When /^I close signups for "([^\"]*)"$/ do |title|
-  collection = Collection.find_by_title(title)
+  collection = Collection.find_by(title: title)
   user_id = collection.all_owners.first.user_id
-  mod_login = User.find_by_id(user_id).login
+  mod_login = User.find_by(id: user_id).login
   step %{I am logged in as "#{mod_login}"}
   visit collection_path(collection)
   step %{I follow "Challenge Settings"}
@@ -133,13 +133,13 @@ When /^I close signups for "([^\"]*)"$/ do |title|
 end
 
 When /^I delete my signup for the prompt meme "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "My Prompts"}
   step %{I delete the signup}
 end
 
 When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "My Sign-up"}
   step %{I delete the signup}
 end
@@ -157,14 +157,14 @@ end
 
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is unrevealed"}
     step %{I press "Update"}
 end
 
 When /^I approve the first item in the collection "([^\"]*)"$/ do |collection|
-  collection = Collection.find_by_title(collection)
+  collection = Collection.find_by(title: collection)
   collection_item = collection.collection_items.first.id
   visit collection_path(collection)
   step %{I follow "Manage Items"}
@@ -175,7 +175,7 @@ end
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is anonymous"}
     step %{I press "Update"}
@@ -184,7 +184,7 @@ end
 # Notification messages
 
 When /^I create an assignment notification message with (an ampersand|linebreaks) for "([^\"]*)"$/ do |message_content, title|
-  c = Collection.find_by_title(title)
+  c = Collection.find_by(title: title)
   field = "collection_collection_profile_attributes_assignment_notification"
   message = if message_content == "an ampersand"
               "The first thing & the second thing."
@@ -203,7 +203,7 @@ When /^I create an assignment notification message with (an ampersand|linebreaks
 end
 
 Then /^the notification message to "([^\"]*)" should contain linebreaks$/ do |user|
-  @user = User.find_by_login(user)
+  @user = User.find_by(login: user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
   email.multipart?.should be == true
 
@@ -222,7 +222,7 @@ Then /^the notification message to "([^\"]*)" should contain linebreaks$/ do |us
 end
 
 Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |user|
-  @user = User.find_by_login(user)
+  @user = User.find_by(login: user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
   email.multipart?.should be == true
 
@@ -233,7 +233,7 @@ end
 # Delete challenge
 
 Given /^the challenge "([^\"]*)" is deleted$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   collection.challenge.destroy
 end
 
@@ -243,7 +243,7 @@ When /^I delete the challenge "([^\"]*)"$/ do |challenge_title|
 end
 
 Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
-  collection = Collection.find_by_title(challenge_title)
+  collection = Collection.find_by(title: challenge_title)
   if collection.present?
     User.all.each do |user|
       user.challenge_signups.in_collection(collection).should be_empty
@@ -253,7 +253,7 @@ Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
   else
     ChallengeSignup.all.each do |signup|
       collection_id = signup.collection_id
-      Collection.find_by_id(collection_id).should_not be_nil
+      Collection.find_by(id: collection_id).should_not be_nil
     end
   end
 end

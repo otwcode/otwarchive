@@ -9,7 +9,7 @@ Otwarchive::Application.configure do
                           { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
 
   # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  # config.whiny_nils = true
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -30,6 +30,10 @@ Otwarchive::Application.configure do
   # Make it clear we are on Dev
   config.rack_dev_mark.enable = true
   config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', color: 'green' , fixed: 'true' )]
+
+  config.eager_load = false
+  config.assets.enabled = false
+  config.serve_static_assets = true
 
   # Enable Bullet gem to monitor application performance
   config.after_initialize do

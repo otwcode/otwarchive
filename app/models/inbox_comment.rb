@@ -6,7 +6,7 @@ class InboxComment < ActiveRecord::Base
   belongs_to :feedback_comment, :class_name => 'Comment'
 
   # Filters inbox comments by read and/or replied to and sorts by date
-  scope :find_by_filters, lambda { |filters| 
+  scope :find_by_filters, lambda { |filters|
     read = case filters[:read]
       when 'true' then true
       when 'false' then false
@@ -17,18 +17,21 @@ class InboxComment < ActiveRecord::Base
       when 'false' then false
       else [true, false]
     end
-    { :order => 'created_at ' + (filters[:date] || 'DESC'),
-      :conditions => {:read => read, :replied_to => replied_to},
-      :include => [:feedback_comment => :pseud] }
+
+    includes(feedback_comment: :pseud)
+    .order("created_at #{filters[:date] || 'DESC'}")
+    .where(read: read, replied_to: replied_to)
   }
 
-  scope :for_homepage, conditions: { read: false },
-                       order: "created_at DESC",
-                       limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+  scope :for_homepage, -> {
+    where(read: false)
+    .order(created_at: :desc)
+    .limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
+  }
 
   # Gets the number of unread comments
   def self.count_unread
-    self.count(:conditions => {:read => false})
+    where(read: false).count
   end
 
   # Get only the comments with a feedback_comment that exists

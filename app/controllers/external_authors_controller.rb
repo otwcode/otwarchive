@@ -6,7 +6,7 @@ class ExternalAuthorsController < ApplicationController
   before_filter :users_only, :only => [:complete_claim]
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -14,7 +14,7 @@ class ExternalAuthorsController < ApplicationController
     if @user && current_user == @user
       @external_authors = @user.external_authors
     elsif logged_in? && current_user.archivist
-      @external_authors = ExternalCreatorship.find_all_by_archivist_id(current_user).collect(&:external_author).uniq
+      @external_authors = ExternalCreatorship.where(archivist_id: current_user).collect(&:external_author).uniq
     elsif logged_in?
       redirect_to user_external_authors_path(current_user) and return
     else
@@ -29,7 +29,7 @@ class ExternalAuthorsController < ApplicationController
 
   def get_external_author_from_invitation
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
-    @invitation = Invitation.find_by_token(token)
+    @invitation = Invitation.find_by(token: token)
     unless @invitation
       flash[:error] = ts("You need an invitation to do that.")
       redirect_to root_path and return
@@ -54,7 +54,7 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def update
-    @invitation = Invitation.find_by_token(params[:invitation_token])
+    @invitation = Invitation.find_by(token: params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
     unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
       flash[:error] = "You don't have permission to do that."

@@ -24,7 +24,7 @@ describe WorkSearch do
   let!(:work) do
     FactoryGirl.create(:work,
                        title: "There and back again",
-                       authors: [Pseud.find_by_name("JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
+                       authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
                        summary: "An unexpected journey",
                        fandom_string: "The Hobbit",
                        character_string: "Bilbo Baggins",
@@ -37,7 +37,7 @@ describe WorkSearch do
   let!(:second_work) do
     FactoryGirl.create(:work,
                        title: "Harry Potter and the Sorcerer's Stone",
-                       authors: [Pseud.find_by_name("JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
+                       authors: [Pseud.find_by(name: "JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
                        summary: "Mr and Mrs Dursley, of number four Privet Drive...",
                        fandom_string: "Harry Potter",
                        character_string: "Harry Potter, Ron Weasley, Hermione Granger",

@@ -6,7 +6,7 @@ class TagSetAssociationsController < ApplicationController
   before_filter :moderators_only
 
   def load_tag_set
-    @tag_set = OwnedTagSet.find_by_id(params[:tag_set_id])
+    @tag_set = OwnedTagSet.find_by(id: params[:tag_set_id])
     unless @tag_set
       flash[:error] = ts("What tag set did you want to look at?")
       redirect_to tag_sets_path and return
@@ -32,7 +32,7 @@ class TagSetAssociationsController < ApplicationController
 
         # fix back the tagnames if they have [] brackets -- see _review_individual_nom for details
         parent_tagname = parent_tagname.gsub('#LBRACKET', '[').gsub('#RBRACKET', ']')
-        
+
         assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
         if assoc.valid?
           assoc.save
@@ -41,7 +41,7 @@ class TagSetAssociationsController < ApplicationController
         end
       end
     end
-    
+
     if @errors.empty?
       flash[:notice] = ts("Nominated associations were added.")
       redirect_to tag_set_path(@tag_set)
@@ -56,22 +56,22 @@ class TagSetAssociationsController < ApplicationController
 
   protected
   def get_tags_to_associate
-    # get the tags for which we have a parent nomination which doesn't already exist in the database    
+    # get the tags for which we have a parent nomination which doesn't already exist in the database
     @tags_to_associate = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).
       joins("INNER JOIN tag_nominations ON tag_nominations.tagname = tags.name").
       joins("INNER JOIN tag_set_nominations ON tag_nominations.tag_set_nomination_id = tag_set_nominations.id").
       where("tag_set_nominations.owned_tag_set_id = ?", @tag_set.id).
-      where("tag_nominations.parented = 0 AND tag_nominations.rejected != 1 AND EXISTS 
+      where("tag_nominations.parented = 0 AND tag_nominations.rejected != 1 AND EXISTS
         (SELECT * from tags WHERE tags.name = tag_nominations.parent_tagname)")
-      
+
     # skip already associated tags
-    associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).value_of :tag_id    
+    associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).pluck :tag_id
     @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?
-          
-    # now get out just the tags and nominated parent tagnames 
+
+    # now get out just the tags and nominated parent tagnames
     @tags_to_associate = @tags_to_associate.select("DISTINCT tags.id, tags.name, tag_nominations.parent_tagname").
       order("tag_nominations.parent_tagname ASC, tags.name ASC")
-      
+
   end
 
 end

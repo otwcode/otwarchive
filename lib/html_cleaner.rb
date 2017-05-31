@@ -12,7 +12,7 @@ module HtmlCleaner
       attributes ||= {}
       self_closing = ""
     end
-    
+
     attr = ""
     attributes.each { |aname, avalue| attr += " #{aname}='#{avalue}'" }
     return "<#{name}#{attr}#{self_closing}>"
@@ -28,7 +28,7 @@ module HtmlCleaner
       attributes ||= {}
       self_closing = false
     end
-    
+
     self_closing ? "" : "</#{name}>"
   end
 
@@ -45,7 +45,7 @@ module HtmlCleaner
 
     def open_paragraph_tags
       result = ""
-      each do |tags| 
+      each do |tags|
         tags.each do |tag, attributes|
           next if result == "" && tag != "p"
           next if ignore_tag?(tag)
@@ -55,11 +55,11 @@ module HtmlCleaner
       end
       return result
     end
-    
+
     def close_paragraph_tags
       return "" if !inside_paragraph?
       result = ""
-      reverse.each do |tags| 
+      reverse.each do |tags|
         tags.reverse.each do |tag, attributes|
           next if ignore_tag?(tag)
           result += close_tag(tag, attributes)
@@ -83,7 +83,7 @@ module HtmlCleaner
     end
   end
 
-  # If we aren't sure that this field hasn't been sanitized since the last sanitizer version, 
+  # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
     return "" if object.send(fieldname).nil?
@@ -98,11 +98,11 @@ module HtmlCleaner
       Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
       object.send("#{fieldname}")
     else
-      # no sanitizer version information, so re-sanitize 
+      # no sanitizer version information, so re-sanitize
       Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
       sanitize_value(fieldname, object.send("#{fieldname}"))
     end
-  end 
+  end
 
   def get_white_list_sanitizer
     @white_list_sanitizer ||= HTML::WhiteListSanitizer.new
@@ -115,33 +115,33 @@ module HtmlCleaner
   # yank out bad end-of-line characters and evil msword curly quotes
   def fix_bad_characters(text)
     return "" if text.nil?
-    
+
     # get the text into UTF-8 and get rid of invalid characters
     text = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
-    
+
     text.gsub! "<3", "&lt;3"
 
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
-    
+
     # replace curlyquotes
     # note: turns out not to be necessary?
     # text.gsub! "\xE2\x80\x98", "'"
     # text.gsub! "\xE2\x80\x99", "'"
     # text.gsub! "\xE2\x80\x9C", '"'
     # text.gsub! "\xE2\x80\x9D", '"'
-    
+
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
-    
-    # trash a whole bunch of crappy non-printing format characters stuck 
+
+    # trash a whole bunch of crappy non-printing format characters stuck
     # in most commonly by MS Word
     # \p{Cf} matches all unicode char in the "other, format" category
     text.gsub!(/\p{Cf}/u, '')
 
     return text
   end
-  
+
   def sanitize_value(field, value)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
@@ -160,7 +160,7 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = []
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
-        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS 
+        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS
       end
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
@@ -267,7 +267,7 @@ module HtmlCleaner
     if node.name == "br" && node.next_sibling && node.next_sibling.name == "br"
       return [stack, out_html]
     end
-      
+
     # Don't decend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
@@ -314,13 +314,13 @@ module HtmlCleaner
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
-      
+
       # Convert double newlines into single paragraph break
       text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags + stack.open_paragraph_tags)
-      
+
       # Convert single newlines into br tags
       text.gsub!(/\n/, '<br/>')
-      
+
       out_html += text
     end
 
@@ -354,7 +354,7 @@ module HtmlCleaner
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
     doc.errors.each do |error|
       match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
-      
+
       text = close_unclosed_tag(text, match[1], match[2]) if match
 
       match = error.message.match(/Opening and ending tag mismatch: (\w+) line (\d+) and myroot/)
@@ -370,37 +370,37 @@ module HtmlCleaner
     out_html
   end
 
-  
+
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
   # These assume they are running on well-formed XHTML, which we can do
   # because they will only be used on already-cleaned fields.
-  
+
   # strip img tags
   def strip_images(value)
     value.gsub(/<img .*?>/, '')
   end
-    
+
   # strip style attributes
   def strip_styles(value)
     strip_attribute(value, "style")
   end
-  
+
   # strip class attributes
   def strip_classes(value)
     strip_attribute(value, "class")
   end
-  
+
   def strip_attribute(value, attribname)
     value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
   end
-  
+
   def strip_html_breaks_simple(value)
     return "" if value.blank?
     value.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
           gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
           gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
           strip
-  end      
-  
+  end
+
 end

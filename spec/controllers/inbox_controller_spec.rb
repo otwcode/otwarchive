@@ -160,7 +160,7 @@ describe InboxController do
         put :update, user_id: user.login, inbox_comments: [inbox_comment_1.id], delete: "yeah"
         it_redirects_to_with_notice user_inbox_path(user), "Inbox successfully updated."
 
-        expect(InboxComment.find_by_id(inbox_comment_1.id)).to be_nil
+        expect(InboxComment.find_by(id: inbox_comment_1.id)).to be_nil
         inbox_comment_2.reload
         expect(inbox_comment_2.read).to be_falsy
       end
