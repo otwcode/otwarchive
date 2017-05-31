@@ -223,9 +223,9 @@ class TagsController < ApplicationController
     @counts['External Works'] = @tag.visible_external_works_count
     @counts['Taggings Count'] = @tag.taggings_count
 
-    @parents = @tag.parents.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-    @children = @tag.children.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
 
