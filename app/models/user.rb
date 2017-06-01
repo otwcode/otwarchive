@@ -447,14 +447,14 @@
   # Returns true if user is the sole author of a work
   # Should also be true if the user has used more than one of their pseuds on a work
   def is_sole_author_of?(item)
-   other_pseuds = item.pseuds.find(:all) - self.pseuds
+   other_pseuds = item.pseuds - pseuds
    self.is_author_of?(item) && other_pseuds.blank?
  end
 
   # Returns array of works where the user is the sole author
   def sole_authored_works
     @sole_authored_works = []
-    works.find(:all, conditions: "posted = 1").each do |w|
+    works.where(posted: 1).each do |w|
       if self.is_sole_author_of?(w)
         @sole_authored_works << w
       end
@@ -465,7 +465,7 @@
   # Returns array of the user's co-authored works
   def coauthored_works
     @coauthored_works = []
-    works.find(:all, conditions: "posted = 1").each do |w|
+    works.where(posted: 1).each do |w|
       unless self.is_sole_author_of?(w)
         @coauthored_works << w
       end

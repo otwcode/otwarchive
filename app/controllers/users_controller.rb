@@ -444,7 +444,7 @@ class UsersController < ApplicationController
       @sole_owned_collections.each(&:destroy)
     end
 
-    @works = @user.works.find(:all, conditions: { posted: true })
+    @works = @user.works.where(posted: true)
 
     if @works.blank?
       @user.wipeout_unposted_works if @user.unposted_works
