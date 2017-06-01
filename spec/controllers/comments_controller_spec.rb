@@ -371,7 +371,7 @@ describe CommentsController do
         end
 
         it "loads the comments when the format is javascript" do
-          get :show_comments, tag_id: fandom.name, format: :js
+          xhr :get, :show_comments, tag_id: fandom.name, format: :js
           expect(response).to render_template(:show_comments)
         end
       end
@@ -388,7 +388,7 @@ describe CommentsController do
         end
 
         it "loads the comments when the format is javascript" do
-          get :show_comments, tag_id: fandom.name, format: :js
+          xhr :get, :show_comments, tag_id: fandom.name, format: :js
           expect(response).to render_template(:show_comments)
         end
       end
@@ -495,7 +495,7 @@ describe CommentsController do
 
       context "when the format is javascript" do
         it "loads the javascript to restore the comment" do
-          get :cancel_comment_edit, id: comment.id, format: :js
+          xhr :get, :cancel_comment_edit, id: comment.id, format: :js
           expect(response).to render_template("cancel_comment_edit")
         end
       end
