@@ -109,9 +109,11 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
+  require 'authlogic/test_case'
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
+  activate_authlogic
 end
 
 Given /^I am a visitor$/ do
@@ -217,6 +219,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
+  require 'authlogic/test_case'
+  activate_authlogic
   assert UserSession.find.nil? unless @javascript
 end
 
