@@ -129,7 +129,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   click_button "Log In"
 
   activate_authlogic
-  UserSession.create!(user)
+  UserSession.create!(user_record)
   assert UserSession.find
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
