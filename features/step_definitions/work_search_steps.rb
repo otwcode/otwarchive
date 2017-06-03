@@ -141,6 +141,10 @@ Then /^the results should contain the category "([^"]*)"$/ do |category|
   expect(page).to have_css("ol.work .required-tags .category", text: category)
 end
 
+Then /^the results should not contain the category "([^"]*)"$/ do |category|
+  expect(page).not_to have_css("ol.work .required-tags .category", text: category)
+end
+
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)
 end
