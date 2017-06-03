@@ -301,7 +301,8 @@ Feature: Search Works
     When "AO3-5020" is fixed
       # And "Descending" should be selected within "Sort direction"
 
-  Scenario: Search by > a number of comments and sort in descending order by title using the header search
+  Scenario: Search by > a number of comments and sort in ascending order by
+  title using the header search
     Given a set of works with comments for searching
     When I fill in "site_search" with "comments: > 2 sort: title ascending"
       And I press "Search"
@@ -443,7 +444,8 @@ Feature: Search Works
 
   # TODO: Search by warnings
 
-  Scenario: Searching by category returns all works using that category; search can be refined to return works using only that category
+  Scenario: Searching by category returns all works using that category; search
+  can be refined to return works using only that category
     Given a set of works with various categories for searching
 
     When I am on the search works page
@@ -460,7 +462,8 @@ Feature: Search Works
     Then I should see "You searched for: -M/M Tags: F/F"
       And I should see "1 Found"
 
-  Scenario: Searching for the Multi category only returns works tagged with the Multi category, not works tagged with multiple categories
+  Scenario: Searching for the Multi category only returns works tagged with the
+  Multi category, not works tagged with multiple categories
     Given a set of works with various categories for searching
 
     When I am on the search works page
@@ -473,7 +476,10 @@ Feature: Search Works
     When I follow "Edit Your Search"
     Then the "Multi" checkbox should be checked
 
-  Scenario: Searching for a character in the header search returns works with (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching the search term; refining the search with the character field returns only works with the character tag or its syns
+  Scenario: Searching for a character in the header search returns works with
+  (a) the exact tag, (b) the tag's syns, and (c) any other tags or text matching
+  the search term; refining the search with the character field returns only
+  works with the character tag or its syns
     Given a set of Steve Rogers works for searching
 
     When I search for works containing "Steve Rogers"
@@ -539,7 +545,10 @@ Feature: Search Works
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
       And the "F/M" checkbox should be checked
 
-  Scenario:  Searching for a relationship in the header search returns works with (a) the exact tag and (b) the tag's syns, and (c) any other tags or text matching the search term (e.g. a threesome); refining the search with the relationship field returns only works with the relationship tag or its syns
+  Scenario:  Searching for a relationship in the header search returns works
+  with (a) the exact tag and (b) the tag's syns, and (c) any other tags or text
+  matching the search term (e.g. a threesome); refining the search with the
+  relationship field returns only works with the relationship tag or its syns
     Given a set of Spock/Uhura works for searching
 
     When I search for works containing "Spock/Nyota Uhura"
