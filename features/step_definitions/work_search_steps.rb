@@ -165,6 +165,26 @@ Given /^a set of Star Trek works for searching$/ do
   FactoryGirl.create(:posted_work,
                      fandom_string: "Battlestar Galactica (2003)",
                      freeform_string: "Star Trek Fusion")
+
+  step %{the work indexes are updated}
+end
+
+Given /^a set of works with bookmarks for searching$/ do
+  step %{basic tags}
+
+  # Bookmarks created with factories are not added to a work's stat totals
+  # even after running the rake task, so we're doing it through steps that add
+  # bookmarks through the interface
+  step %{I have a work "Work 1"}
+  step %{the work "Work 2" with 1 bookmark setup}
+  step %{the work "Work 3" with 1 bookmark setup}
+  step %{the work "Work 4" with 2 bookmark setup}
+  step %{the work "Work 5" with 2 bookmarks setup}
+  step %{the work "Work 6" with 4 bookmarks setup}
+  step %{the work "Work 7" with 10 bookmarks setup}
+
+  step %{the statistics_tasks rake task is run}
+  step %{the work indexes are updated}
 end
 
 ### WHEN

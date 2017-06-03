@@ -316,7 +316,82 @@ Feature: Search Works
     When "AO3-5020" is fixed
       # And "Ascending" should be selected within "Sort direction"
 
-  # TODO: Search by bookmarks
+  Scenario: Search by exact number of bookmarks
+    Given a set of works with bookmarks for searching
+    When I am on the search works page
+      And I fill in "Bookmarks" with "1"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: bookmarks count: 1"
+      And I should see "2 Found"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarks" should contain "1"
+
+  Scenario: Search by a range of bookmarks
+    Given a set of works with bookmarks for searching
+    When I am on the search works page
+      And I fill in "Bookmarks" with "2 - 5"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: bookmarks count: 2 - 5"
+      And I should see "3 Found"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarks" should contain "2 - 5"
+
+  Scenario: Search by > a number of bookmarks and sort in ascending order by
+  bookmarks
+    Given a set of works with bookmarks for searching
+    When I am on the search works page
+      And I fill in "Bookmarks" with ">1"
+      And I select "Bookmarks" from "Sort by"
+      And I select "Ascending" from "Sort direction"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: bookmarks count: >1 sort by: bookmarks ascending"
+      And I should see "4 Found"
+      And the 1st result should contain "Bookmarks: 2"
+      And the 2nd result should contain "Bookmarks: 2"
+      And the 3rd result should contain "Bookmarks: 4"
+      And the 4th result should contain "Bookmarks: 10"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarks" should contain ">1"
+      And "Bookmarks" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Ascending" should be selected within "Sort direction"
+
+  Scenario: Search by < a number of bookmarks and sort in descending order by
+  bookmarks
+    Given a set of works with bookmarks for searching
+    When I am on the search works page
+      And I fill in "Bookmarks" with "< 20"
+      And I select "Bookmarks" from "Sort by"
+      And I select "Descending" from "Sort direction"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: bookmarks count: < 20 sort by: bookmarks descending"
+      And I should see "7 Found"
+      And the 1st result should contain "Bookmarks: 10"
+      And the 2nd result should contain "Bookmarks: 4"
+      And the 3rd result should contain "Bookmarks: 2"
+      And the 4th result should contain "Bookmarks: 2"
+      And the 5th result should contain "Bookmarks: 1"
+      And the 6th result should contain "Bookmarks: 1"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarks" should contain "< 20"
+      And "Bookmarks" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Descending" should be selected within "Sort direction"
+
+  Scenario: Search by > a number of bookmarks and sort in ascending order by
+  title using the header search
+    Given a set of works with bookmarks for searching
+    When I fill in "site_search" with "bookmarks: > 2 sort by: title ascending"
+      And I press "Search"
+    Then I should see "You searched for: bookmarks count: > 2 sort by: title ascending"
+      And I should see "2 Found"
+      And the 1st result should contain "Work 6"
+      And the 2nd result should contain "Work 7"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarks" should contain "> 2"
+      And "Title" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Ascending" should be selected within "Sort direction"
 
   Scenario: Searching for a fandom in the header search returns works with (a)
   the exact tag, (b) the tag's syns, and (c) any other tags or text matching the
