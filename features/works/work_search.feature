@@ -237,7 +237,84 @@ Feature: Search Works
     When "AO3-5020" is fixed
       # And "Ascending" should be selected within "Sort direction"
 
-  # TODO: Search by comments
+  Scenario: Search by exact number of comments
+    Given a set of works with comments for searching
+    When I am on the search works page
+      And I fill in "Comments" with "1"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: comments count: 1"
+      And I should see "3 Found"
+    When I follow "Edit Your Search"
+    Then the field labeled "Comments" should contain "1"
+
+  Scenario: Search by a range of comments
+    Given a set of works with comments for searching
+    When I am on the search works page
+      And I fill in "Comments" with "1-5"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: comments count: 1-5"
+      And I should see "5 Found"
+    When I follow "Edit Your Search"
+    Then the field labeled "Comments" should contain "1-5"
+
+  Scenario: Search by > a number of comments and sort in ascending order by
+  comments
+    Given a set of works with comments for searching
+    When I am on the search works page
+      And I fill in "Comments" with "> 0"
+      And I select "Comments" from "Sort by"
+      And I select "Ascending" from "Sort direction"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: comments count: > 0 sort by: comments ascending"
+      And I should see "6 Found"
+      And the 1st result should contain "Comments: 1"
+      And the 2nd result should contain "Comments: 1"
+      And the 3rd result should contain "Comments: 1"
+      And the 4th result should contain "Comments: 3"
+      And the 5th result should contain "Comments: 3"
+      And the 6th result should contain "Comments: 10"
+    When I follow "Edit Your Search"
+    Then the field labeled "Comments" should contain "> 0"
+      And "Comments" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Ascending" should be selected within "Sort direction"
+
+  Scenario: Search by < a number of comments and sort in descending order by
+  comments
+    Given a set of works with comments for searching
+    When I am on the search works page
+      And I fill in "Comments" with "<20"
+      And I select "Comments" from "Sort by"
+      And I select "Descending" from "Sort direction"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: comments count: <20 sort by: comments descending"
+      And I should see "7 Found"
+      And the 1st result should contain "Comments: 10"
+      And the 2nd result should contain "Comments: 3"
+      And the 3rd result should contain "Comments: 3"
+      And the 4th result should contain "Comments: 1"
+      And the 5th result should contain "Comments: 1"
+      And the 6th result should contain "Comments: 1"
+    When I follow "Edit Your Search"
+    Then the field labeled "Comments" should contain "<20"
+      And "Comments" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Descending" should be selected within "Sort direction"
+
+  Scenario: Search by > a number of comments and sort in descending order by title using the header search
+    Given a set of works with comments for searching
+    When I fill in "site_search" with "comments: > 2 sort: title ascending"
+      And I press "Search"
+    Then I should see "You searched for: comments count: > 2 sort by: title ascending"
+      And I should see "3 Found"
+      And the 1st result should contain "Work 5"
+      And the 2nd result should contain "Work 6"
+      And the 3rd result should contain "Work 7"
+    When I follow "Edit Your Search"
+    Then the field labeled "Comments" should contain "> 2"
+      And "Title" should be selected within "Sort by"
+    When "AO3-5020" is fixed
+      # And "Ascending" should be selected within "Sort direction"
 
   # TODO: Search by bookmarks
 

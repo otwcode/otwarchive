@@ -115,6 +115,20 @@ Given /^a set of works with various categories for searching$/ do
   step %{the work indexes are updated}
 end
 
+Given /^a set of works with comments for searching$/ do
+  step %{basic tags}
+  step %{I have a work "Work 1"}
+  step %{the work "Work 2" with 1 comments setup}
+  step %{the work "Work 3" with 1 comments setup}
+  step %{the work "Work 4" with 1 comments setup}
+  step %{the work "Work 5" with 3 comments setup}
+  step %{the work "Work 6" with 3 comments setup}
+  step %{the work "Work 7" with 10 comments setup}
+
+  step %{the statistics_tasks rake task is run}
+  step %{the work indexes are updated}
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do
