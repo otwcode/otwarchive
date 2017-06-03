@@ -117,6 +117,10 @@ end
 
 Given /^a set of works with comments for searching$/ do
   step %{basic tags}
+
+  # Comments created with factories are not added to a work's stat totals
+  # even after running the rake task, so we're doing it through steps that add
+  # comments through the interface
   step %{I have a work "Work 1"}
   step %{the work "Work 2" with 1 comments setup}
   step %{the work "Work 3" with 1 comments setup}
