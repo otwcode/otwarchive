@@ -129,6 +129,40 @@ Given /^a set of works with comments for searching$/ do
   step %{the work indexes are updated}
 end
 
+Given /^a set of Star Trek works for searching$/ do
+  step %{basic tags}
+
+  # Create three related canonical fandoms
+  step %{a canonical fandom "Star Trek"}
+  step %{a canonical fandom "Star Trek: The Original Series"}
+  step %{a canonical fandom "Star Trek: The Original Series (Movies)"}
+
+  # Create a syn for one of the fandoms
+  step %{a synonym "ST: TOS" of the tag "Star Trek: The Original Series"}
+
+  # Create an unrelated fourth fandom we'll use for a crossover
+  step %{a canonical fandom "Battlestar Galactica (2003)"}
+
+  # Set up the tree for the related fandoms
+  step %{"Star Trek" is a metatag of the fandom "Star Trek: The Original Series"}
+  step %{"Star Trek: The Original Series" is a metatag of the fandom "Star Trek: The Original Series (Movies)"}
+
+  # Create a work using each of the related fandoms
+  ["Star Trek", "Star Trek: The Original Series", "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
+    FactoryGirl.create(:posted_work, fandom_string: fandom)
+  end
+
+  # Create a work with two fandoms (e.g. a crossover)
+  FactoryGirl.create(:posted_work,
+                     fandom_string: "ST: TOS,
+                                    Battlestar Galactica (2003)")
+
+  # Create a work with an additional tag (freeform) that references the fandom
+  FactoryGirl.create(:posted_work,
+                     fandom_string: "Battlestar Galactica (2003)",
+                     freeform_string: "Star Trek Fusion")
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do
@@ -160,7 +194,11 @@ Then /^the results should not contain the category "([^"]*)"$/ do |category|
 end
 
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
-  expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)
+  if type == "fandom"
+    expect(page).to have_css("ol.work .fandoms", text: tag)
+  else
+    expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)
+  end
 end
 
 Then /^the results should not contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
@@ -179,5 +217,14 @@ Then /^the ([\d]+)(?:st|nd|rd|th) result should contain "([^"]*)"$/ do |n, text|
   selector = "ol.work > li:nth-of-type(#{n})"
   with_scope(selector) do
     page.should have_content(text)
+  end
+end
+
+# If JavaScript is enabled and we want to check that information is retained
+# when editing a search, we can't look at what is in the input -- we have to
+# look at the contents of the ul that contains both the field and the added tags
+Then /^"([^"]*)" should already be entered in the work search ([^"]*) autocomplete field$/ do |tag, field|
+  within(:xpath, "//input[@id=\"work_search_#{field.singularize}_names_autocomplete\"]/parent::li/parent::ul") do
+    page.should have_content(tag)
   end
 end

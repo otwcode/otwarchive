@@ -318,7 +318,51 @@ Feature: Search Works
 
   # TODO: Search by bookmarks
 
-  # TODO: Search by fandoms
+  Scenario: Searching for a fandom in the header search returns works with (a)
+  the exact tag, (b) the tag's syns, and (c) any other tags or text matching the
+  search term; refining the search with the fandom field returns only works with
+  the fandom tag or its syns
+    Given a set of Star Trek works for searching
+    When I search for works containing "Star Trek"
+    Then I should see "You searched for: Star Trek"
+      And I should see "6 Found"
+      And the results should contain the fandom tag "Star Trek"
+      And the results should contain the fandom tag "Star Trek: The Original Series"
+      And the results should contain the fandom tag "Star Trek: The Original Series (Movies)"
+      And the results should contain the fandom tag "ST: TOS"
+      And the results should contain the freeform tag "Star Trek Fusion"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "Star Trek"
+    When I fill in "Fandoms" with "Star Trek"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Star Trek Tags: Star Trek"
+      And I should see "5 Found"
+      And the results should contain the fandom tag "Star Trek"
+      And the results should contain the fandom tag "Star Trek: The Original Series"
+      And the results should contain the fandom tag "Star Trek: The Original Series (Movies)"
+      And the results should contain the fandom tag "ST: TOS"
+      And the results should not contain the freeform tag "Star Trek Fusion"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "Star Trek"
+      And the field labeled "Fandoms" should contain "Star Trek"
+
+  # We use JavaScript here because otherwise there is a minor spacing issue with
+  # "You searched for" on the results page and the coder who wrote this test was
+  # offended by it
+  @javascript
+  Scenario: Searching by fandom for two fandoms returns only works tagged with
+  both fandoms (or syns or subtags of those fandoms)
+    Given a set of Star Trek works for searching
+    When I am on the search works page
+      And I fill in "Fandoms" with "Star Trek, Battlestar Galactica (2003)"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: Star Trek, Battlestar Galactica (2003)"
+      And I should see "1 Found"
+      And the results should contain the fandom tag "ST: TOS"
+      And the results should contain the fandom tag "Battlestar Galactica (2003)"
+    When I follow "Edit Your Search"
+    Then "Star Trek" should already be entered in the work search fandom autocomplete field
+      And "Battlestar Galactica (2003)" should already be entered in the work search fandom autocomplete field
 
   # TODO: Search by rating
 
