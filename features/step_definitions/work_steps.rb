@@ -154,6 +154,18 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
   end
 end
 
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
+  step %{I am logged out}
+  n_bookmarks ||= 3
+  n_bookmarks.to_i.times do |i|
+    step %{I am logged in as a random user}
+    step %{I bookmark the work "#{title}"}
+    step %{I am logged out}
+  end
+end
+
 Given /^the chaptered work setup$/ do
   step %{the chaptered work with 3 chapters "BigBang"}
 end
