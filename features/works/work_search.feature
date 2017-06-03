@@ -348,7 +348,7 @@ Feature: Search Works
 
     When I search for works containing "Spock/Nyota Uhura"
     Then I should see "You searched for: Spock/Nyota Uhura"
-      And I should see "2 Found"
+      And I should see "3 Found"
       And the results should contain the relationship tag "Spock/Nyota Uhura"
       And the results should contain the relationship tag "James T. Kirk/Spock/Nyota Uhura"
       And the results should contain the relationship tag "Uhura/Spock"
