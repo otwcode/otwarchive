@@ -348,7 +348,7 @@ end
 Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by(login: username)
   fandom = Fandom.find_by(name: fandom)
-  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment = WranglingAssignment.where(user_id: user.id, fandom_id: fandom.id ).first
   assignment.should be_nil
 end
 
