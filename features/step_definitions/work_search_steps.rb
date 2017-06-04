@@ -178,7 +178,7 @@ Given /^a set of works with bookmarks for searching$/ do
   step %{I have a work "Work 1"}
   step %{the work "Work 2" with 1 bookmark setup}
   step %{the work "Work 3" with 1 bookmark setup}
-  step %{the work "Work 4" with 2 bookmark setup}
+  step %{the work "Work 4" with 2 bookmarks setup}
   step %{the work "Work 5" with 2 bookmarks setup}
   step %{the work "Work 6" with 4 bookmarks setup}
   step %{the work "Work 7" with 10 bookmarks setup}
