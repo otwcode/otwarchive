@@ -442,7 +442,49 @@ Feature: Search Works
     Then "Star Trek" should already be entered in the work search fandom autocomplete field
       And "Battlestar Galactica (2003)" should already be entered in the work search fandom autocomplete field
 
-  # TODO: Search by rating
+  Scenario: Searching by rating returns only works using that rating
+    Given a set of works with various ratings for searching
+    When I am on the search works page
+      And I select "Teen And Up Audiences" from "Rating"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: Teen And Up Audiences"
+      And I should see "1 Found"
+      And the results should contain the rating tag "Teen And Up Audiences"
+    When I follow "Edit Your Search"
+    Then "Teen And Up Audiences" should be selected within "Rating"
+
+  Scenario: Searching for Explicit or Mature in the header returns works with
+  (a) either rating or (b) other tags or text matching either rating; editing
+  the search to use the ratings' filter_ids returns only works with either
+  rating
+    Given a set of works with various ratings for searching
+    When I search for works containing "Mature || Explicit"
+    Then I should see "You searched for: Mature || Explicit"
+      And I should see "3 Found"
+      And the results should contain the rating tag "Mature"
+      And the results should contain the rating tag "Explicit"
+      And the results should contain a summary mentioning "explicit"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "Mature || Explicit"
+    When I exclude the tags "Mature" and "Explicit" by filter_id
+      And I press "Search" within "#new_work_search"
+    Then the search summary should include the filter_id for "Mature"
+      And the search summary should include the filter_id for "Explicit"
+      And the results should not contain the rating tag "Mature"
+      And the results should not contain the rating tag "Explicit"
+
+  Scenario: Using Any Field to exclude works that are one of two ratings
+    Given a set of works with various ratings for searching
+    When I am on the search works page
+      And I fill in "Any Field" with "-Mature -Explicit"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: -Mature -Explicit"
+      And I should see "3 Found"
+      And the results should contain the rating tag "General Audiences"
+      And the results should contain the rating tag "Teen And Up Audiences"
+      And the results should contain the rating tag "Not Rated"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "-Mature -Explicit"
 
   # TODO: Search by warnings
 

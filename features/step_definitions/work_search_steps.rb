@@ -187,6 +187,26 @@ Given /^a set of works with bookmarks for searching$/ do
   step %{the work indexes are updated}
 end
 
+Given /^a set of works with various ratings for searching$/ do
+  step %{basic tags}
+
+  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+             ArchiveConfig.RATING_GENERAL_TAG_NAME,
+             ArchiveConfig.RATING_TEEN_TAG_NAME,
+             ArchiveConfig.RATING_MATURE_TAG_NAME,
+             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
+
+  ratings.each do |rating|
+    FactoryGirl.create(:posted_work, rating_string: rating)
+  end
+
+  FactoryGirl.create(:posted_work,
+                     rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+                     summary: "Nothing explicit here.")
+
+  step %{the work indexes are updated}
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do
@@ -207,6 +227,16 @@ When /^I search for works by "([^"]*)"$/ do |creator|
   step %{I press "Search"}
 end
 
+When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag_1, tag_2|
+  filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
+  filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
+  if tag_2
+    fill_in("work_search_query", with: "-filter_ids: #{filter_id_1} -filter_ids: #{filter_id_2}")
+  else
+    fill_in("work_search_query", with: "-filter_ids: #{filter_id_1}")
+  end
+end
+
 ### THEN
 
 Then /^the results should contain the category "([^"]*)"$/ do |category|
@@ -218,11 +248,16 @@ Then /^the results should not contain the category "([^"]*)"$/ do |category|
 end
 
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
-  if type == "fandom"
-    expect(page).to have_css("ol.work .fandoms", text: tag)
-  else
-    expect(page).to have_css("ol.work .tags .#{type.pluralize}", text: tag)
-  end
+  selector = if type == "fandom"
+               "ol.work .fandoms"
+             elsif type == "warning"
+               "ol.work .required-tags .warnings"
+             elsif type == "rating" || type == "category"
+               "ol.work .required-tags .#{type}"
+             else
+               "ol.work .tags .#{type.pluralize}"
+             end
+  expect(page).to have_css(selector, text: tag)
 end
 
 Then /^the results should not contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
@@ -251,4 +286,9 @@ Then /^"([^"]*)" should already be entered in the work search ([^"]*) autocomple
   within(:xpath, "//input[@id=\"work_search_#{field.singularize}_names_autocomplete\"]/parent::li/parent::ul") do
     page.should have_content(tag)
   end
+end
+
+Then /^the search summary should include the filter_id for "([^"]*)"$/ do |tag|
+  filter_id = Tag.find_by_name(tag).filter_taggings.first.filter_id
+  step %{I should see "filter_ids: #{filter_id}" within "#main h4.heading"}
 end
