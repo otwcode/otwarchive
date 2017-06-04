@@ -247,6 +247,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Cowboy Bebop                           | Fandom       | true      |
         | Faye Valentine is a sweetie            | Freeform     | false     |
         | Ed is a sweetie                        | Freeform     | false     |
+        | Corgis are lovely                      | Freeform     | true      |
       And I limit myself to the Archive
       And I am logged in as "first_user"
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"

@@ -44,6 +44,7 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+  find_or_create_new_user(login, password)
   require 'authlogic/test_case'
   step("I am logged out")
   if hidden.present?
@@ -51,7 +52,8 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
     user.preference.hide_freeform = true
     user.preference.save
   end
-  visit login_path
+  step %{I am on the homepage}
+  find_link('login-dropdown').click
   activate_authlogic
   user = find_or_create_new_user(login, password)
 
