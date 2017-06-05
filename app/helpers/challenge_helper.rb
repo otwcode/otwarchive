@@ -16,12 +16,33 @@ module ChallengeHelper
 
   # count the number of tag sets used in a challenge
   def tag_set_count(collection)
-    if collection && collection.challenge_type.present?
-      if collection.challenge_type == "GiftExchange" && !collection.challenge.offer_restriction.owned_tag_sets.empty?
-        collection.challenge.offer_restriction.owned_tag_sets.count
-      elsif collection.challenge_type == "PromptMeme" && !collection.challenge.request_restriction.owned_tag_sets.empty?
-        collection.challenge.request_restriction.owned_tag_sets.count
-      end
+    if challenge_type_present?(collection)
+      tag_sets = determine_tag_sets(collection.challenge)
+
+      # use `blank?` instead of `empty?` since there is the possibility that
+      #   `tag_sets` will be nil, and nil does not respond to `blank?`
+      tag_sets.size unless tag_sets.blank?
+    end
+  end
+
+  private
+
+  # Private: Determines whether a collection has a challenge type
+  #
+  # Returns a boolean
+  def challenge_type_present?(collection)
+    collection && collection.challenge_type.present?
+  end
+
+  # Private: Determines the collection of owned_tag_sets based on a given
+  #           challenge's class
+  #
+  # Returns an ActiveRecord Collection object or nil
+  def determine_tag_sets(challenge)
+    if challenge.class.name == 'GiftExchange'
+      challenge.offer_restriction.owned_tag_sets
+    elsif challenge.class.name == 'PromptMeme'
+      challenge.request_restriction.owned_tag_sets
     end
   end
 end

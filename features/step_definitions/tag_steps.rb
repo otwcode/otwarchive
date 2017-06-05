@@ -101,7 +101,9 @@ Given /^I am logged in as a tag wrangler$/ do
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
+  require 'authlogic/test_case'
   tw = User.find_by(login: user)
+
   if tw.blank?
     tw = FactoryGirl.create(:user, {:login => user, :password => password})
     tw.activate
@@ -110,15 +112,26 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
     tw.password_confirmation = password
     tw.save
   end
+
   tw.tag_wrangler = '1'
+
   visit logout_path
+  activate_authlogic
   assert !UserSession.find
+
   visit login_path
+  activate_authlogic
+  user_record = find_or_create_new_user(user, password)
+
   fill_in "User name", :with => user
   fill_in "Password", :with => password
   check "Remember Me"
   click_button "Log In"
+
+  activate_authlogic
+  UserSession.create!(user_record)
   assert UserSession.find
+
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
   fill_in "tag_fandom_string", :with => fandomname
@@ -328,14 +341,14 @@ end
 Then /^"([^\"]*)" should be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by(login: username)
   fandom = Fandom.find_by(name: fandom)
-  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment = WranglingAssignment.where(user_id: user.id, fandom_id: fandom.id ).first
   assignment.should_not be_nil
 end
 
 Then /^"([^\"]*)" should not be assigned to the wrangler "([^\"]*)"$/ do |fandom, username|
   user = User.find_by(login: username)
   fandom = Fandom.find_by(name: fandom)
-  assignment = WranglingAssignment.find(:first, conditions: { user_id: user.id, fandom_id: fandom.id })
+  assignment = WranglingAssignment.where(user_id: user.id, fandom_id: fandom.id ).first
   assignment.should be_nil
 end
 

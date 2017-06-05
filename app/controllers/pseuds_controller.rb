@@ -14,7 +14,7 @@ class PseudsController < ApplicationController
   # GET /pseuds.xml
   def index
     if @user
-      @pseuds = @user.pseuds.find(:all)
+      @pseuds = @user.pseuds
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login
@@ -40,7 +40,7 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC").
+                   group("tags.id").
                    merge(Work.visible_to_all.revealed.non_anon).
                    merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
                                INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
@@ -51,7 +51,7 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC").
+                   group("tags.id").
                    merge(Work.visible_to_registered_user.revealed.non_anon).
                    merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
                                INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
@@ -59,7 +59,7 @@ class PseudsController < ApplicationController
       visible_series = @pseud.series.visible_to_registered_user
       visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
     end
-    @fandoms = @fandoms.all # force eager loading
+    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
     @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)

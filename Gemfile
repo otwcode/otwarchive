@@ -5,7 +5,7 @@ gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
 
-gem 'rails', '4.0.13'
+gem 'rails', '4.1.16'
 
 gem 'rails-observers'
 gem 'actionpack-page_caching'
@@ -74,7 +74,7 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.3.0'
+gem 'authlogic', '~> 3.4.6'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin

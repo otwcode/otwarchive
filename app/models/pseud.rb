@@ -159,31 +159,29 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false, restricted: false }
+      ).group('pseuds.id')
   }
 
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :posted_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
+      ).group('pseuds.id')
   }
 
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS rec_count",
-      joins: :bookmarks,
-      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_rec_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS rec_count')
+    .joins(:bookmarks)
+    .where(
+      pseuds: { id: pseud_ids }, bookmarks: { private: false, hidden_by_admin: false, rec: true }
+    )
+    .group('pseuds.id')
   }
 
   def self.rec_counts_for_pseuds(pseuds)
@@ -206,6 +204,7 @@ class Pseud < ActiveRecord::Base
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
       end
+
       count_hash = {}
       pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
       count_hash
@@ -218,14 +217,12 @@ class Pseud < ActiveRecord::Base
 
 
   # look up by byline
-  scope :by_byline, lambda {|byline|
-    {
-      conditions: ['users.login = ? AND pseuds.name = ?',
+  scope :by_byline, -> (byline) {
+    joins(:user)
+      .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      ],
-      include: :user
-    }
+      )
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
@@ -258,7 +255,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.includes(:user).where(conditions).references(:user)
+    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines

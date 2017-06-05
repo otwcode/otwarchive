@@ -107,7 +107,7 @@ describe InboxController do
     end
 
     it "renders the JS form" do
-      get :reply, user_id: inbox_comment.user.login, comment_id: feedback_comment.id, format: "js"
+      xhr :get, :reply, user_id: inbox_comment.user.login, comment_id: feedback_comment.id, format: 'js'
       expect(response).to render_template("reply")
       expect(assigns(:commentable)).to eq(feedback_comment)
       expect(assigns(:comment)).to be_a_new(Comment)

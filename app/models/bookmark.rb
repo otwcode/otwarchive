@@ -125,7 +125,7 @@ class Bookmark < ActiveRecord::Base
 
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
-    bookmarkable.bookmarks.visible.count
+    bookmarkable.bookmarks.visible.size
   end
 
   # Virtual attribute for external works

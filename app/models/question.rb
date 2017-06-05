@@ -18,7 +18,7 @@ class Question < ActiveRecord::Base
                       long.',
                       max: ArchiveConfig.CONTENT_MAX)
 
-  scope :in_order, order: :position
+  scope :in_order, -> { order(:position) }
 
   # Change the positions of the questions in the
   def self.reorder(positions)
