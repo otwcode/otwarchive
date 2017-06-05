@@ -24,8 +24,22 @@ Given /^the default ratings exist$/ do
 end
 
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
-  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
+              ArchiveConfig.WARNING_NONE_TAG_NAME]
+  warnings.each do |warning|
+    Warning.find_or_create_by_name_and_canonical(warning, true)
+  end
+end
+
+Given /^all warnings exist$/ do
+  step %{the basic warnings exist}
+  warnings = [ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
+              ArchiveConfig.WARNING_DEATH_TAG_NAME,
+              ArchiveConfig.WARNING_NONCON_TAG_NAME,
+              ArchiveConfig.WARNING_CHAN_TAG_NAME]
+  warnings.each do |warning|
+    Warning.find_or_create_by_name_and_canonical(warning, true)
+  end
 end
 
 Given /^the basic categories exist$/ do

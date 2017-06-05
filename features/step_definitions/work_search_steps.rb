@@ -207,6 +207,30 @@ Given /^a set of works with various ratings for searching$/ do
   step %{the work indexes are updated}
 end
 
+Given /^a set of works with various warnings for searching$/ do
+  step %{basic tags}
+  step %{all warnings exist}
+
+  warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
+              ArchiveConfig.WARNING_NONE_TAG_NAME,
+              ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
+              ArchiveConfig.WARNING_DEATH_TAG_NAME,
+              ArchiveConfig.WARNING_NONCON_TAG_NAME,
+              ArchiveConfig.WARNING_CHAN_TAG_NAME]
+
+  # Create a work for each warning
+  warnings.each do |warning|
+    FactoryGirl.create(:posted_work, warning_string: warning)
+  end
+
+  # Create a work that uses multiple warnings
+  FactoryGirl.create(:posted_work,
+                     warning_string: "#{ArchiveConfig.WARNING_DEFAULT_TAG_NAME},
+                                     #{ArchiveConfig.WARNING_NONE_TAG_NAME}")
+
+  step %{the work indexes are updated}
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do
@@ -227,7 +251,19 @@ When /^I search for works by "([^"]*)"$/ do |creator|
   step %{I press "Search"}
 end
 
-When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag_1, tag_2|
+When /^I search for works without the "([^"]*)"(?: and "([^"]*)")? filter_ids?$/ do |tag_1, tag_2|
+  filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
+  filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
+  step %{I am on the homepage}
+  if tag_2
+    fill_in("site_search", with: "-filter_ids: #{filter_id_1} -filter_ids: #{filter_id_2}")
+  else
+    fill_in("site_search", with: "-filter_ids: #{filter_id_1}")
+  end
+  step %{I press "Search"}
+end
+
+When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id( from the search box)?$/ do |tag_1, tag_2|
   filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
   filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
   if tag_2
@@ -250,8 +286,6 @@ end
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   selector = if type == "fandom"
                "ol.work .fandoms"
-             elsif type == "warning"
-               "ol.work .required-tags .warnings"
              elsif type == "rating" || type == "category"
                "ol.work .required-tags .#{type}"
              else

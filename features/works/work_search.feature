@@ -486,7 +486,25 @@ Feature: Search Works
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "-Mature -Explicit"
 
-  # TODO: Search by warnings
+  Scenario: Searching by warning returns all works using that warning
+    Given a set of works with various warnings for searching
+    When I am on the search works page
+      And I check "No Archive Warnings Apply"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Tags: No Archive Warnings Apply"
+      And I should see "2 Found"
+      And the results should contain the warning tag "No Archive Warnings Apply"
+    When I follow "Edit Your Search"
+    Then the "No Archive Warnings Apply" checkbox should be checked
+  
+  Scenario: Using the header search to exclude works with certain warnings using the warnings' filter_ids
+    Given a set of works with various warnings for searching
+    When I search for works without the "Rape/Non-Con" and "Underage" filter_ids
+    Then the search summary should include the filter_id for "Rape/Non-Con"
+      And the search summary should include the filter_id for "Underage"
+      And I should see "5 Found"
+      And the results should not contain the warning tag "Underage"
+      And the results should not contain the warning tag "Rape/Non-Con"
 
   Scenario: Searching by category returns all works using that category; search
   can be refined to return works using only that category
