@@ -76,7 +76,7 @@ class ExternalAuthorsController < ApplicationController
     end
     @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if !external_author_params[:external_author] || @external_author.update_attributes(external_author_params[:external_author])
+    if @external_author.update_attributes(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
       if @user
         redirect_to user_external_authors_path(@user)
