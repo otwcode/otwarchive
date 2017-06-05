@@ -2,6 +2,8 @@
 module ApplicationHelper
   include HtmlCleaner
 
+  # TODO: Official recommendation from Rails indicates we should switch to
+  # unobtrusive JavaScript instead of using anything like `link_to_function`
   def link_to_function(name, *args, &block)
     html_options = args.extract_options!.symbolize_keys
 
