@@ -127,10 +127,11 @@ Given /^I view the people page$/ do
   visit people_path
 end
 
-Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
+Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
+  step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
   author2 = User.find_by(login: coauthor).default_pseud
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
 end
 
 # WHEN

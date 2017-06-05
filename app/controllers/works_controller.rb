@@ -1067,6 +1067,7 @@ class WorksController < ApplicationController
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       :unrestricted,
+      pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],

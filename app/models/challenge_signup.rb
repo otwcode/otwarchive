@@ -217,7 +217,7 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   def self.summary_dir
-    "#{Rails.public_path}/static/challenge_signup_summaries"
+    Rails.public_path.join("static/challenge_signup_summaries").to_s
   end
 
   def self.summary_file(collection)
