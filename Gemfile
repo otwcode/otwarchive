@@ -9,7 +9,6 @@ gem 'rails', '4.1.16'
 
 gem 'rails-observers'
 gem 'actionpack-page_caching'
-# gem 'rails_select_on_includes', '~> 0.4.8'
 #gem 'activerecord-deprecated_finders'
 
 # the published gem does not include fixes that are in Rails
