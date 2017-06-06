@@ -18,6 +18,10 @@ System messages use the following colours:
   float: right;
 }
 
+.message.footnote {
+  clear: both;
+}
+
 .datetime {
   font-family: monospace;
 }
