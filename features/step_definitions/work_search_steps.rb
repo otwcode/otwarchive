@@ -18,13 +18,23 @@ Given /^a set of alternate universe works for searching$/ do
   step %{"Alternate Universe" is a metatag of the freeform "Alternate Universe - High School"}
   step %{"Alternate Universe" is a metatag of the freeform "Alternate Universe - Coffee Shops & Cafés"}
 
-  # Create an unwrangled tag
-  step %{a noncanonical freeform "Coffee Shop AU"}
-
-  # Create a work for every tag except Alternate Universe - High School
-  ["Alternate Universe", "AU", "High School AU", "Alternate Universe - Coffee Shops & Cafés", "Coffee Shop AU"].each do |freeform|
+  # Create a work with every tag except Alternate Universe - High School, and a
+  # work with the unwrangled tag Coffee Shop AU
+  ["Alternate Universe",
+   "AU",
+   "High School AU",
+   "Alternate Universe - Coffee Shops & Cafés",
+   "Coffee Shop AU"].each do |freeform|
     FactoryGirl.create(:posted_work, freeform_string: freeform)
   end
+
+  # Create a work with a summary that is a text match for both the unwrangled
+  # tag (Coffee Shop AU) and the metatag's syn (AU)
+  FactoryGirl.create(:posted_work, summary: "A humble Coffee Shop AU")
+
+  # Create a work with a character tag that is a text match for the metatag's
+  # syn (AU)
+  FactoryGirl.create(:posted_work, character_string: "AU Character")
 
   step %{the work indexes are updated}
 end
@@ -39,6 +49,10 @@ Given /^a set of Steve Rogers works for searching$/ do
   # Create a character with a syn
   step %{a canonical character "Steve Rogers"}
   step %{a synonym "Captain America" of the tag "Steve Rogers"}
+
+  # Create a meta tag for that character
+  step %{a canonical character "Steve"}
+  step %{"Steve" is a metatag of the character "Steve Rogers"}
 
   # Create a work for each character tag in each fandom
   ["Marvel Cinematic Universe", "The Avengers (Marvel Movies)"].each do |fandom|
@@ -263,7 +277,7 @@ When /^I search for works without the "([^"]*)"(?: and "([^"]*)")? filter_ids?$/
   step %{I press "Search"}
 end
 
-When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id( from the search box)?$/ do |tag_1, tag_2|
+When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag_1, tag_2|
   filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
   filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
   if tag_2
@@ -274,14 +288,6 @@ When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id( from the s
 end
 
 ### THEN
-
-Then /^the results should contain the category "([^"]*)"$/ do |category|
-  expect(page).to have_css("ol.work .required-tags .category", text: category)
-end
-
-Then /^the results should not contain the category "([^"]*)"$/ do |category|
-  expect(page).not_to have_css("ol.work .required-tags .category", text: category)
-end
 
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   selector = if type == "fandom"
@@ -295,16 +301,65 @@ Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
 end
 
 Then /^the results should not contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
-  expect(page).not_to have_css("ol.work .tags .#{type.pluralize}", text: tag)
+  selector = if type == "fandom"
+               "ol.work .fandoms"
+             elsif type == "rating" || type == "category"
+               "ol.work .required-tags .#{type}"
+             else
+               "ol.work .tags .#{type.pluralize}"
+             end
+  expect(page).not_to have_css(selector, text: tag)
 end
 
-Then /^the results should contain a summary mentioning "([^"]*)"$/ do |term|
-  expect(page).to have_css("ol.work .summary", text: term)
+Then /^the results should contain (?:a|the) synonyms? of "([^"]*)"$/ do |tag|
+  tag = Tag.find_by_name(tag)
+  type = tag.type.downcase.pluralize
+  synonyms = tag.synonyms.map(&:name)
+  selector = if type == "fandoms"
+               "ol.work .fandoms"
+             else
+               "ol.work .tags .#{type}"
+             end
+  synonyms.each do |synonym|
+    expect(page).to have_css(selector, text: synonym)
+  end
 end
 
-Then /^the results should not contain a summary mentioning "([^"]*)"$/ do |term|
-  expect(page).not_to have_css("ol.work .summary", text: term)
+Then /^the results should contain (?:a|the) subtags? of "([^"]*)"$/ do |tag|
+  tag = Tag.find_by_name(tag)
+  type = tag.type.downcase.pluralize
+  subtags = tag.sub_tags.map(&:name)
+  selector = if type == "fandoms"
+               "ol.work .fandoms"
+             else
+               "ol.work .tags .#{type}"
+             end
+  subtags.each do |subtag|
+    expect(page).to have_css(selector, text: subtag)
+  end
 end
+
+Then /^the results should contain a ([^"]*) mentioning "([^"]*)"$/ do |item, term|
+  selector = if item == "fandom"
+               "ol.work .fandoms"
+             elsif item == "summary"
+               "ol.work .summary"
+             else
+               "ol.work .tags .#{item.pluralize}"
+             end
+  expect(page).to have_css(selector, text: term)
+end 
+
+Then /^the results should not contain a ([^"]*) mentioning "([^"]*)"$/ do |item, term|
+  selector = if item == "fandom"
+               "ol.work .fandoms"
+             elsif item == "summary"
+               "ol.work .summary"
+             else
+               "ol.work .tags .#{item.pluralize}"
+             end
+  expect(page).not_to have_css(selector, text: term)
+end 
 
 Then /^the ([\d]+)(?:st|nd|rd|th) result should contain "([^"]*)"$/ do |n, text|
   selector = "ol.work > li:nth-of-type(#{n})"
