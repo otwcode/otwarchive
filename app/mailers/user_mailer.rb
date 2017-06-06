@@ -86,13 +86,13 @@ class UserMailer < BulletproofMailer::Base
     end
     ensure
       I18n.locale = I18n.default_locale
-  end  
-  
+  end
+
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    # Here we use find_by_id so that if the subscription is not found 
+    # Here we use find_by_id so that if the subscription is not found
     # then the resque job does not error and we just silently fail.
-    @subscription = Subscription.find_by_id(subscription_id)
+    @subscription = Subscription.find_by(id: subscription_id)
     return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
@@ -114,14 +114,14 @@ class UserMailer < BulletproofMailer::Base
 
       @creations << creation
     end
-    
+
     # die if we haven't got any creations to notify about
     # see lib/bulletproof_mailer.rb
     abort_delivery if @creations.empty?
 
     # make sure we only notify once per creation
     @creations.uniq!
-    
+
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"
@@ -195,7 +195,7 @@ class UserMailer < BulletproofMailer::Base
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
-  
+
   def invalid_signup_notification(collection_id, invalid_signup_ids)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
@@ -372,8 +372,8 @@ class UserMailer < BulletproofMailer::Base
 
   # Sends email to authors when a creation is hidden by an Admin
   def admin_hidden_work_notification(creation_id, user_id)
-    @user = User.find_by_id(user_id)
-    @work = Work.find_by_id(creation_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
 
     mail(
         to: @user.email,

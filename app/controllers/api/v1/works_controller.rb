@@ -28,7 +28,7 @@ class Api::V1::WorksController < Api::V1::BaseController
   # - send_claim_emails: false = don't send emails (for testing), true = send emails
   # - array of works to import
   def create
-    archivist = User.find_by_login(params[:archivist])
+    archivist = User.find_by(login: params[:archivist])
     external_works = params[:items] || params[:works]
     works_responses = []
     @works = []

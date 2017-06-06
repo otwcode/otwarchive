@@ -35,7 +35,7 @@ class ChaptersController < ApplicationController
     if params[:selected_id]
       redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
     end
-    @chapter = @work.chapters.find_by_id(params[:id])
+    @chapter = @work.chapters.find_by(id: params[:id])
     unless @chapter
       flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
       redirect_to work_path(@work) and return
@@ -116,7 +116,7 @@ class ChaptersController < ApplicationController
       redirect_back_or_default('/')
     else  # :post_without_preview, :preview or :cancel_coauthor_button
       @work.major_version = @work.major_version + 1
-      @chapter.posted = true if params[:post_without_preview_button] 
+      @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         if @chapter.posted
@@ -212,7 +212,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1/confirm_delete
   def confirm_delete
   end
-  
+
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
@@ -246,7 +246,7 @@ class ChaptersController < ApplicationController
 
   # fetch work these chapters belong to from db
   def load_work
-    @work = params[:work_id] ? Work.find_by_id(params[:work_id]) : Chapter.find_by_id(params[:id]).try(:work)
+    @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
     unless @work.present?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
@@ -277,12 +277,12 @@ class ChaptersController < ApplicationController
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-    
+    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id }
+    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
+    @selected_pseuds = @to_select.collect { |pseud| pseud.id.to_i }
+
     # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: @selected_pseuds).value_of(:user_id).uniq
+    user_ids = Pseud.where(id: @selected_pseuds).pluck(:user_id).uniq
     unless user_ids.include?(current_user.id)
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       render :new and return

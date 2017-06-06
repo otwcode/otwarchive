@@ -73,7 +73,7 @@ describe CollectionParticipantsController do
         context "where user isn't a participant yet" do
           it "creates a participant for the user, redirects to index and notifies them that they have applied" do
             get :join, collection_id: collection.name
-            participant = CollectionParticipant.find_by_pseud_id(user.default_pseud.id)
+            participant = CollectionParticipant.find_by(pseud_id: user.default_pseud.id)
             expect(participant).to be_present
             expect(participant.participant_role).to eq CollectionParticipant::NONE
             it_redirects_to_with_notice(root_path, "You have applied to join #{collection.title}.")
@@ -254,7 +254,7 @@ describe CollectionParticipantsController do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params
             it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
-            expect(CollectionParticipant.find_by_pseud_id(user.default_pseud.id)).to_not be_present
+            expect(CollectionParticipant.find_by(pseud_id: user.default_pseud.id)).to_not be_present
           end
         end
 
@@ -297,12 +297,12 @@ describe CollectionParticipantsController do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params
             it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
-            expect(CollectionParticipant.find_by_pseud_id(other_participant.pseud_id)).to_not be_present
+            expect(CollectionParticipant.find_by(pseud_id: other_participant.pseud_id)).to_not be_present
           end
         end
 
         context "where participant to be destroyed is an owner" do
-          let(:delete_participant_id) { CollectionParticipant.find_by_pseud_id(collection.owners.first.id) }
+          let(:delete_participant_id) { CollectionParticipant.find_by(pseud_id: collection.owners.first.id) }
           let(:params) { { id: delete_participant_id } }
 
           context "where there are no other owners" do
@@ -391,7 +391,7 @@ describe CollectionParticipantsController do
           expect(flash[:notice]).to include "Members added:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
-            participant = CollectionParticipant.find_by_pseud_id(user.default_pseud.id)
+            participant = CollectionParticipant.find_by(pseud_id: user.default_pseud.id)
             expect(participant.participant_role).to eq CollectionParticipant::MEMBER
           end
         end
@@ -404,7 +404,7 @@ describe CollectionParticipantsController do
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
-            participant = CollectionParticipant.find_by_pseud_id(user.default_pseud.id)
+            participant = CollectionParticipant.find_by(pseud_id: user.default_pseud.id)
             expect(participant.participant_role).to eq CollectionParticipant::MEMBER
           end
         end

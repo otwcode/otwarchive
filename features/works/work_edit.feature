@@ -129,12 +129,11 @@ Feature: Edit Works
       And I should see "coauthor, leadauthor" within ".byline"
 
   Scenario: You can remove yourself as coauthor from a work
-    Given basic tags
-      And the following activated users exist
+    Given the following activated users exist
         | login          |
         | coolperson     |
         | ex_friend      |
-      And I have coauthored a work as "coolperson" with "ex_friend"
+      And I coauthored the work "Shared" as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
     Then I should see "coolperson, ex_friend" within ".byline"

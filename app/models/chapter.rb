@@ -4,7 +4,7 @@ class Chapter < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
-  
+
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
 
@@ -14,24 +14,24 @@ class Chapter < ActiveRecord::Base
   acts_as_commentable
   has_many :kudos, :as => :commentable
 
-  validates_length_of :title, :allow_blank => true, :maximum => ArchiveConfig.TITLE_MAX, 
+  validates_length_of :title, :allow_blank => true, :maximum => ArchiveConfig.TITLE_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
-    
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
+
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
-  validates_length_of :endnotes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
+  validates_length_of :endnotes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
 
   validates_presence_of :content
-  validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN, 
+  validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN,
     :too_short => ts("must be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN)
 
-  validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
+  validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
     :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
-  
+
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
@@ -43,17 +43,12 @@ class Chapter < ActiveRecord::Base
   before_save :validate_authors, :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
-  
-  attr_protected :content_sanitizer_version
-  attr_protected :notes_sanitizer_version
-  attr_protected :summary_sanitizer_version
-  attr_protected :endnotes_sanitizer_version
-  
+
 #  before_update :clean_emdashes
 
-  scope :in_order, {:order => :position}
-  scope :posted, :conditions => {:posted => true}
-  
+  scope :in_order, -> { order(:position) }
+  scope :posted, -> { where(posted: true) }
+
   after_save :fix_positions
   def fix_positions
     if work
@@ -66,7 +61,7 @@ class Chapter < ActiveRecord::Base
         chapters.compact.each_with_index do |chapter, i|
           chapter.position = i+1
           if chapter.position_changed?
-            Chapter.update_all("position = #{chapter.position}", "id = #{chapter.id}")
+            Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
             positions_changed = true
           end
         end
@@ -78,7 +73,7 @@ class Chapter < ActiveRecord::Base
       end
     end
   end
-  
+
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.posted_changed? }
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
@@ -105,32 +100,32 @@ class Chapter < ActiveRecord::Base
       self.title = self.title.gsub(/^\s*/, '')
     end
   end
-  
+
   def chapter_header
     "#{ts("Chapter")} #{position}"
   end
-  
+
   def chapter_title
     self.title.blank? ? self.chapter_header : self.title
   end
-  
+
   def display_title
     self.position.to_s + '. ' + self.chapter_title
   end
-  
+
   def abbreviated_display_title
     self.display_title.length > 50 ? (self.display_title[0..50] + "...") : self.display_title
   end
- 
+
   # make em-dashes into html code
 #  def clean_emdashes
 #    self.content.gsub!(/\xE2\x80\"/, '&#8212;')
-#  end 
+#  end
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.count == 1
   end
-  
+
   # Virtual attribute for work wip_length
   # Chapter needed its own version for sense-checking purposes
   def wip_length
@@ -168,7 +163,7 @@ class Chapter < ActiveRecord::Base
     self.authors.flatten!
     self.authors.uniq!
   end
-  
+
   # Checks that chapter has at least one author
   # Skip the initial creation of the first chapter, since that's covered in the works model
   def validate_authors
@@ -178,7 +173,7 @@ class Chapter < ActiveRecord::Base
       return false
     end
   end
-  
+
   # Checks the chapter published_at date isn't in the future
   def validate_published_at
     if !self.published_at
@@ -203,10 +198,10 @@ class Chapter < ActiveRecord::Base
   def commentable_name
     self.work.title
   end
-  
+
    # private
-   # 
-   # def add_to_list_bottom    
+   #
+   # def add_to_list_bottom
    # end
-  
+
 end

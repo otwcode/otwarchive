@@ -2,7 +2,8 @@ class Tagging < ActiveRecord::Base
   belongs_to :tagger, polymorphic: true
   belongs_to :taggable, polymorphic: true, touch: true
 
-  validates_presence_of :tagger, :taggable
+  validates_presence_of :tagger
+  validates_associated :taggable
   before_destroy :remove_filter_tagging
   before_save :add_filter_taggings
 
@@ -29,7 +30,7 @@ class Tagging < ActiveRecord::Base
   end
 
   def self.find_by_tag(taggable, tag)
-    Tagging.find_by_tagger_id_and_taggable_id_and_tagger_type_and_taggable_type(tag.id, taggable.id, 'Tag', taggable.class.name)
+    Tagging.find_by(tagger_id: tag.id, taggable_id: taggable.id, tagger_type: 'Tag', taggable_type: taggable.class.name)
   end
 
   # Most of the time, we don't need the taggings_count_cache stored in the

@@ -32,7 +32,7 @@ Scenario: Create a collection
     And I submit
     And I should see "Collection was successfully updated"
     And the name of the collection "My Collection Thing" should be "collection_thing2"
-    
+
 Scenario: Post to collection from the work edit page
   Given the collection "My Collection Thing" with name "collection_thing"
     And I am logged in as "first_user"
@@ -61,9 +61,9 @@ Scenario: Post to collection from the collection home page
   Then I should see "My Collection Thing" within "dd.collections"
   When I press "Post"
   Then I should see "My Collected Work"
-    And I should see "Collections: My Collection Thing" 
-        
-Scenario: Create a subcollection 
+    And I should see "Collections: My Collection Thing"
+
+Scenario: Create a subcollection
 
   Given I am logged in as "first_user"
     And I create the collection "My Collection Thing" with name "collection_thing"
@@ -74,7 +74,7 @@ Scenario: Create a subcollection
     And I fill in "Collection name" with "subcollection_thing"
     And I submit
   Then I should see "Collection was successfully created"
-  
+
 Scenario: Fill out new collection form with faulty data
 
    Given I am logged in as a random user
@@ -120,7 +120,7 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
   And I should see "Collection was successfully updated"
 
   Scenario: Delete a subcollection and then its parent collection
-  
+
   Given I am logged in as "collector"
     And I create the collection "Temporary Top" with name "temporary_top_collection"
   When I go to the collections page
@@ -141,9 +141,9 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
     And I press "Yes, Delete Collection"
   Then I should see "Collection was successfully deleted."
     And I should not see "Temporary Top"
-    
+
   Scenario: Delete a collection that has subcollections
-  
+
   Given I am logged in as "collector"
     And I create the collection "Parent" with name "parent_collection"
   When I go to the collections page

@@ -15,13 +15,13 @@
         <%= link_to(ts('Edit Prompt'), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
-    
+
     <% # The delete link should show up if signups are open and the current user owns the prompt, OR if the current user is a maintainer, AND only if the signup has more than the minimum number of prompts %>
     <% if ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) && prompt.can_delete? %>
     <li>
-      <%= link_to ts("Delete Prompt"), 
-        collection_prompt_path(collection, prompt), 
-        :confirm => ts("Are you sure? All information in this prompt will be lost."), 
+      <%= link_to ts("Delete Prompt"),
+        collection_prompt_path(collection, prompt),
+        data: {confirm: ts("Are you sure? All information in this prompt will be lost.")},
         :method => :delete %>
     </li>
     <% end %>
@@ -29,11 +29,11 @@
     <% if collection.user_is_maintainer?(current_user) && collection.challenge_type == "PromptMeme" %>
       <li><%= link_to ts("Delete Sign-up"),
                   collection_signup_path(collection, challenge_signup),
-                  :confirm => ts("Are you sure? All prompts in this sign-up will be lost."),
+                  data: {confirm: ts("Are you sure? All prompts in this sign-up will be lost.")},
                   :method => :delete %>
       </li>
     <% end %>
-    
+
     <% # The claiming and fulfilling options should show up if the prompt is claimable %>
     <% if prompt.claimable? %>
       <% # The drop link should always show up if the user has claimed the prompt and the fulfil link should sometimes show up %>
@@ -43,7 +43,7 @@
           <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
         <% end %>
         <% # The drop claim link should show up if the current user has claimed the prompt %>
-        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %></li>
+        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), data: {confirm: ts('Do you really want to delete this claim?')}, :method => :delete %></li>
         <% # The claim link should show up if the user has not already claimed the prompt %>
         <% else %>
         <li>
@@ -58,6 +58,6 @@
         </li>
       <% end %>
     <% end %>
-    
+
   </ul>
 <% end %>

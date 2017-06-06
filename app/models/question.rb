@@ -4,8 +4,6 @@ class Question < ActiveRecord::Base
   translates :question, :content, :is_translated
   skip_callback :save, :before, :update_sanitizer_version
   belongs_to :archive_faq
-  attr_protected :content_sanitizer_version
-  attr_protected :screencast_sanitizer_version
 
   validates_presence_of :question, before: :create
   validates_presence_of :anchor, before: :create
@@ -20,7 +18,7 @@ class Question < ActiveRecord::Base
                       long.',
                       max: ArchiveConfig.CONTENT_MAX)
 
-  scope :in_order, order: :position
+  scope :in_order, -> { order(:position) }
 
   # Change the positions of the questions in the
   def self.reorder(positions)

@@ -16,7 +16,7 @@ class AbuseReportsController < ApplicationController
 
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
-    language_name = Language.find_by_id(@abuse_report.language).name
+    language_name = Language.find_by(id: @abuse_report.language).name
     @abuse_report.language = language_name
     if @abuse_report.save
       @abuse_report.email_and_send

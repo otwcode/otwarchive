@@ -181,7 +181,7 @@ describe "API WorksController - Create works" do
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
-        created_user = ExternalAuthor.find_by_email(api_fields[:external_author_email])
+        created_user = ExternalAuthor.find_by(email: api_fields[:external_author_email])
         created_user.destroy unless created_user.nil?
       end
 
@@ -197,7 +197,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date])
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
@@ -328,7 +328,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + api_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date])
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
@@ -390,7 +390,7 @@ describe "API WorksController - Create works" do
         expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
       end
       it "Date should be detected from the content" do
-        expect(@work.revised_at).to eq(content_fields[:date])
+        expect(@work.revised_at.to_date).to eq(content_fields[:date].to_date)
       end
       it "Chapter title should be detected from the content" do
         expect(@work.chapters.first.title).to eq(content_fields[:chapter_title])
@@ -450,7 +450,7 @@ describe "API WorksController - Find Works" do
       parsed_body = JSON.parse(response.body, symbolize_names: true)
       expect(parsed_body.first[:status]).to eq "ok"
       expect(parsed_body.first[:work_url]).to eq work_url(@work)
-      expect(parsed_body.first[:created]).to eq @work.created_at.as_json
+      expect(parsed_body.first[:created].to_date).to eq @work.created_at.to_date
     end
 
     it "should return the original reference if one was provided" do
@@ -516,11 +516,15 @@ describe "API WorksController - Unit Tests" do
     user = create(:user)
     author1 = create(:external_author)
     author2 = create(:external_author)
-    work = create(:work, external_authors: [author1, author2])
+    work = create(:work)
+    name1 = create(:external_author_name, name: 'n1', external_author: author1)
+    name2 = create(:external_author_name, name: 'n2', external_author: author2)
+    create(:external_creatorship, external_author_name: name1, creation: work)
+    create(:external_creatorship, external_author_name: name2, creation: work)
 
-    expect(author1).to receive(:find_or_invite).once
-    expect(author2).to receive(:find_or_invite).once
     @under_test.instance_eval { send_external_invites([work], user) }
+    expect(Invitation.all.map(&:invitee_email)).to include(author1.email)
+    expect(Invitation.all.map(&:invitee_email)).to include(author2.email)
   end
 
   describe "work_errors" do

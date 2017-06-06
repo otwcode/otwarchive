@@ -26,28 +26,27 @@ class Pseud < ActiveRecord::Base
   delegate :login, to: :user, prefix: true
   has_many :kudos
   has_many :bookmarks, dependent: :destroy
-  has_many :recs, class_name: 'Bookmark', conditions: {rec: true}
+  has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
   has_many :creatorships
-  has_many :works, through: :creatorships, source: :creation, source_type: 'Work', readonly: false
+  has_many :works, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Work'
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, through: :creatorships, source: :creation, source_type: 'Chapter', readonly: false
-  has_many :series, through: :creatorships, source: :creation, source_type: 'Series', readonly: false
+  has_many :chapters, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Chapter'
+  has_many :series, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Series'
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, conditions: { rejected: false }
+  has_many :gifts, -> { where(rejected: false) }
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
-  has_many :offer_assignments, through: :challenge_signups, conditions: ["challenge_assignments.sent_at IS NOT NULL"]
-  has_many :pinch_hit_assignments, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id",
-    conditions: ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups
+  has_many :pinch_hit_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, class_name: "ChallengeAssignment", foreign_key: "pinch_hitter_id"
 
   has_many :prompts, dependent: :destroy
 
@@ -82,32 +81,35 @@ class Pseud < ActiveRecord::Base
     order(:name)
   }
 
-  scope :with_works,
+  scope :with_works, -> {
     select("pseuds.*, count(pseuds.id) AS work_count").
     joins(:works).
     group(:id).
     order(:name)
+  }
 
-  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
-  scope :with_public_works, with_works.merge(Work.visible_to_all)
+  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
+  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
 
-  scope :with_bookmarks,
+  scope :with_bookmarks, -> {
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
     joins(:bookmarks).
     group(:id).
     order(:name)
+  }
 
   # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
+  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
 
-  scope :with_public_recs,
+  scope :with_public_recs, -> {
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
     order(:name).
     merge(Bookmark.is_public.recs)
+  }
 
-  scope :alphabetical, order(:name)
+  scope :alphabetical, -> { order(:name) }
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
   scope :coauthor_of, lambda {|pseuds|
@@ -157,31 +159,29 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false, restricted: false }
+      ).group('pseuds.id')
   }
 
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :posted_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
+      ).group('pseuds.id')
   }
 
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS rec_count",
-      joins: :bookmarks,
-      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_rec_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS rec_count')
+    .joins(:bookmarks)
+    .where(
+      pseuds: { id: pseud_ids }, bookmarks: { private: false, hidden_by_admin: false, rec: true }
+    )
+    .group('pseuds.id')
   }
 
   def self.rec_counts_for_pseuds(pseuds)
@@ -204,6 +204,7 @@ class Pseud < ActiveRecord::Base
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
       end
+
       count_hash = {}
       pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
       count_hash
@@ -211,19 +212,17 @@ class Pseud < ActiveRecord::Base
   end
 
   def unposted_works
-    @unposted_works = self.works.find(:all, conditions: {posted: false}, order: 'works.created_at DESC')
+    @unposted_works = self.works.where(posted: false).order(created_at: :desc)
   end
 
 
   # look up by byline
-  scope :by_byline, lambda {|byline|
-    {
-      conditions: ['users.login = ? AND pseuds.name = ?',
+  scope :by_byline, -> (byline) {
+    joins(:user)
+      .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      ],
-      include: :user
-    }
+      )
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
@@ -256,7 +255,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.find(:all, include: :user, conditions: conditions)
+    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines
@@ -310,9 +309,9 @@ class Pseud < ActiveRecord::Base
 
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
+    Comment.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.comments.blank?
     # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.kudos.blank?
+    Kudo.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.kudos.blank?
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
@@ -369,21 +368,21 @@ class Pseud < ActiveRecord::Base
       where("challenge_signups.pseud_id = #{id}").
       update_all("prompts.pseud_id = #{user.default_pseud.id}")
 
-    ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
-    ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
+    ChallengeSignup.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
+    ChallengeAssignment.where("pinch_hitter_id = #{self.id}").update_all("pinch_hitter_id = #{self.user.default_pseud.id}")
     return
   end
 
   def change_gift_recipients
-    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Gift.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_bookmarks_ownership
-    Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    Bookmark.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def change_collections_membership
-    CollectionParticipant.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    CollectionParticipant.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
   end
 
   def check_default_pseud
@@ -422,7 +421,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def collection_ids
-    collections.value_of(:id)
+    collections.pluck(:id)
   end
 
   self.include_root_in_json = false

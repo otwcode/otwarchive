@@ -5,7 +5,7 @@ class SeriesController < ApplicationController
   before_filter :check_visibility, :only => [:show]
 
   def load_series
-    @series = Series.find_by_id(params[:id])
+    @series = Series.find_by(id: params[:id])
     unless @series
       raise ActiveRecord::RecordNotFound, "Couldn't find series '#{params[:id]}'"
     end
@@ -17,14 +17,14 @@ class SeriesController < ApplicationController
   # GET /series.xml
   def index
     if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       unless @user
         raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
       end
       @page_subtitle = ts("%{username} - Series", username: @user.login)
       pseuds = @user.pseuds
       if params[:pseud_id]
-        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
         unless @pseud
           raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:pseud_id]}'"
         end
@@ -47,7 +47,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
+    @serial_works = @series.serial_works.includes(:work).where('works.posted = ?', true).references(:works).order(:position).select{ |sw| sw.work.visible(User.current_user) }
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
     if current_user.respond_to?(:subscriptions)
@@ -89,7 +89,7 @@ class SeriesController < ApplicationController
 
   # GET /series/1/manage
   def manage
-    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position)
+    @serial_works = @series.serial_works.includes(:work).order(:position)
   end
 
   # POST /series
@@ -146,7 +146,7 @@ class SeriesController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@series) and return }
-      format.js { render :nothing => true }
+      format.json { render :nothing => true }
     end
   end
 

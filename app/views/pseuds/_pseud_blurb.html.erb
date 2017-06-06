@@ -1,6 +1,6 @@
 <li class="user pseud picture blurb group" role="article">
   <div class="header module">
-    <h4 class="heading"><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
+    <h4 class="heading"><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %>
       <% if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) %>
         (<%= link_to(pseud.user_name, user_path(pseud.user)) %>)
       <% end %>
@@ -12,14 +12,14 @@
     <div class="icon">
       <%= icon_display(@user, pseud) %>
     </div>
-  </div>  
+  </div>
   <% unless pseud.description.blank? %>
     <blockquote class="userstuff">
       <%=raw sanitize_field(pseud, :description) %>
     </blockquote>
   <% end %>
   <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
-    
+
   <% if current_user == pseud.user %>
     <h6 class="landmark heading">User Actions</h6>
     <ul class="actions" role="navigation">
@@ -30,8 +30,8 @@
       <% if pseud.is_default? %>
         <li><span class="current">Default Pseud</span></li>
       <% elsif @user.login != pseud.name %>
-        <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], :confirm => ts('Are you sure?'), :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
+        <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], data: {confirm: ts('Are you sure?')}, :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
       <% end %>
     </ul>
-  <% end %>	
+  <% end %>
 </li>

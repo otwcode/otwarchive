@@ -6,6 +6,6 @@ class Role < ActiveRecord::Base
   has_many :roles_users
   has_many :users, :through => :roles_users
   belongs_to :authorizable, :polymorphic => true
-  
-  scope :assignable, where(:authorizable_id => nil, :authorizable_type => nil)
+
+  scope :assignable, -> { where(:authorizable_id => nil, :authorizable_type => nil) }
 end

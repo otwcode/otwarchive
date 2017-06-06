@@ -20,13 +20,11 @@ describe ValidationHelper do
         numericality: true,
         notANumberMessage: "not a number message.",
 
-        exclusion: ['one', 'two', 'three'],
-        failureMessage: "failure message.",
-        validMessage: "valid message."
+        exclusion: ['one', 'two', 'three']
       }
 
       expected = <<-EOF
-      | <script type="text/javascript">
+      | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
       | validation_for_10.add(Validate.Presence, {"failureMessage":"failure message.","validMessage":"valid message."});
@@ -55,7 +53,7 @@ describe ValidationHelper do
       options = {}
 
       expected = <<-EOF
-      | <script type="text/javascript">
+      | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
       | validation_for_10.add(Validate.Presence, {"failureMessage":"Must be present.","validMessage":""});
@@ -76,7 +74,7 @@ describe ValidationHelper do
       }
 
       expected = <<-EOF
-      | <script type="text/javascript">
+      | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
       |
