@@ -227,7 +227,7 @@ Feature: Search works by tag
     Then I should see "You searched for: Tags: F/M, James T. Kirk/Spock"
       And I should see "1 Found"
       And the results should contain the category tag "F/M"
-      And the results should contain "K/S"
+      And the results should contain the relationship tag "Spirk"
     When I follow "Edit Your Search"
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
       And the "F/M" checkbox should be checked
