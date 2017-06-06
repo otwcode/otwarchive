@@ -189,8 +189,6 @@ Feature: Search works by stats
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   bookmarks
     Given a set of works with bookmarks for searching
-      # Work blurb's stats are cached for an hour, so we need to time travel
-      And it is currently 1 day from now
     When I am on the search works page
       And I fill in "Bookmarks" with ">1"
       And I select "Bookmarks" from "Sort by"
@@ -207,13 +205,10 @@ Feature: Search works by stats
       And "Bookmarks" should be selected within "Sort by"
     When "AO3-5020" is fixed
       # And "Ascending" should be selected within "Sort direction"
-    Then I jump in our Delorean and return to the present
 
   Scenario: Search by < a number of bookmarks and sort in descending order by
   bookmarks
     Given a set of works with bookmarks for searching
-      # Work blurb's stats are cached for an hour, so we need to time travel
-      And it is currently 1 day from now
     When I am on the search works page
       And I fill in "Bookmarks" with "< 20"
       And I select "Bookmarks" from "Sort by"
@@ -232,7 +227,6 @@ Feature: Search works by stats
       And "Bookmarks" should be selected within "Sort by"
     When "AO3-5020" is fixed
       # And "Descending" should be selected within "Sort direction"
-    Then I jump in our Delorean and return to the present
 
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   title using the header search
