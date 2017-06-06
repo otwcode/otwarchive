@@ -76,7 +76,7 @@ Feature: Search Works
     Then I should see "2 Found"
       And I should see "First work"
       And I should see "third work"
-      And I should see "You searched for: hits: > 100"
+      And I should see 'You searched for: hits: &gt; 100'
 
   Scenario: search with the header search field and then refine it using the author/artist field
     Given I have the Battle set loaded
