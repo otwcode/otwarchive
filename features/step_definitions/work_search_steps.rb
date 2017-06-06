@@ -57,9 +57,9 @@ Given /^a set of Steve Rogers works for searching$/ do
   # Create a work for each character tag in each fandom
   ["Marvel Cinematic Universe", "The Avengers (Marvel Movies)"].each do |fandom|
     ["Steve Rogers", "Captain America"].each do |character|
-    FactoryGirl.create(:posted_work,
-                       fandom_string: fandom,
-                       character_string: character)
+      FactoryGirl.create(:posted_work,
+                         fandom_string: fandom,
+                         character_string: character)
     end
   end
 
@@ -286,25 +286,25 @@ When /^I search for works by "([^"]*)"$/ do |creator|
   step %{I press "Search"}
 end
 
-When /^I search for works without the "([^"]*)"(?: and "([^"]*)")? filter_ids?$/ do |tag_1, tag_2|
-  filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
-  filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
+When /^I search for works without the "([^"]*)"(?: and "([^"]*)")? filter_ids?$/ do |tag1, tag2|
+  filter_id1 = Tag.find_by_name(tag1).filter_taggings.first.filter_id
+  filter_id2 = Tag.find_by_name(tag2).filter_taggings.first.filter_id if tag2
   step %{I am on the homepage}
-  if tag_2
-    fill_in("site_search", with: "-filter_ids: #{filter_id_1} -filter_ids: #{filter_id_2}")
+  if tag2
+    fill_in("site_search", with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
   else
-    fill_in("site_search", with: "-filter_ids: #{filter_id_1}")
+    fill_in("site_search", with: "-filter_ids: #{filter_id1}")
   end
   step %{I press "Search"}
 end
 
-When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag_1, tag_2|
-  filter_id_1 = Tag.find_by_name(tag_1).filter_taggings.first.filter_id
-  filter_id_2 = Tag.find_by_name(tag_2).filter_taggings.first.filter_id if tag_2
-  if tag_2
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id_1} -filter_ids: #{filter_id_2}")
+When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag1, tag2|
+  filter_id1 = Tag.find_by_name(tag1).filter_taggings.first.filter_id
+  filter_id2 = Tag.find_by_name(tag2).filter_taggings.first.filter_id if tag2
+  if tag2
+    fill_in("work_search_query", with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
   else
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id_1}")
+    fill_in("work_search_query", with: "-filter_ids: #{filter_id1}")
   end
 end
 
@@ -313,7 +313,7 @@ end
 Then /^the results should contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   selector = if type == "fandom"
                "ol.work .fandoms"
-             elsif type == "rating" || type == "category"
+             elsif %w(rating category).include?(type)
                "ol.work .required-tags .#{type}"
              else
                "ol.work .tags .#{type.pluralize}"
@@ -324,7 +324,7 @@ end
 Then /^the results should not contain the ([^"]*) tag "([^"]*)"$/ do |type, tag|
   selector = if type == "fandom"
                "ol.work .fandoms"
-             elsif type == "rating" || type == "category"
+             elsif %w(rating category).include?(type)
                "ol.work .required-tags .#{type}"
              else
                "ol.work .tags .#{type.pluralize}"
