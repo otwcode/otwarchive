@@ -201,14 +201,6 @@ Given /^a set of works with bookmarks for searching$/ do
   step %{the work "Work 7" with 10 bookmarks setup}
 
   step %{the statistics_tasks rake task is run}
-
-  # The cache on work blurb stat lines expires every hour -- we need to expire
-  # them so we can check the results
-  7.times do |i|
-    work = Work.find_by_title("Work #{i + 1}")
-    Rails.cache.delete("#{work.cache_key}/stats")
-  end
-
   step %{the work indexes are updated}
 end
 

@@ -164,6 +164,9 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_
     step %{I bookmark the work "#{title}"}
     step %{I am logged out}
   end
+  # Delete the cache
+  work = Work.find_by_title("#{title}")
+  Rails.cache.delete("#{work.cache_key}/stats")
 end
 
 Given /^the chaptered work setup$/ do
