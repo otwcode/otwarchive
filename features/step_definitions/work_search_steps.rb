@@ -206,7 +206,7 @@ Given /^a set of works with bookmarks for searching$/ do
   # them so we can check the results
   7.times do |i|
     work = Work.find_by_title("Work #{i + 1}")
-    Rails.cache.delete("#{work.cache_key}/stats")
+    ActionController::Base.new.expire_fragment("#{work.cache_key}/stats")
   end
 
   step %{the work indexes are updated}
