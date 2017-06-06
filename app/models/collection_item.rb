@@ -14,30 +14,30 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
 
-  belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
-  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
-  belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
+  belongs_to :collection, inverse_of: :collection_items
+  belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
+  belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
+  belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
   has_many :approved_collections, -> {
     where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
-   }, :through => :collection_items, :source => :collection
+   }, through: :collection_items, source: :collection
 
-  validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type],
-    :message => ts("already contains this item.")
+  validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
+    message: ts("already contains this item.")
 
-  validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :user_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :user_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :collection_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :collection_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validate :collection_is_open, :on => :create
+  validate :collection_is_open, on: :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("The collection %{title} is not currently open.", :title => self.collection.title))
+      errors.add(:base, ts("The collection %{title} is not currently open.", title: self.collection.title))
     end
   end
 
@@ -293,7 +293,7 @@ class CollectionItem < ActiveRecord::Base
 
   def notify_of_reveal
     unless self.unrevealed? || !self.posted?
-      recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver

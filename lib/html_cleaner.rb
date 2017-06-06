@@ -117,7 +117,7 @@ module HtmlCleaner
     return "" if text.nil?
 
     # get the text into UTF-8 and get rid of invalid characters
-    text = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
+    text = text.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
 
     text.gsub! "<3", "&lt;3"
 
@@ -168,7 +168,7 @@ module HtmlCleaner
       # the screencast field shouldn't be wrapped in <p> tags
       unless field.to_s == "screencast"
         value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value),
-                               Sanitize::Config::ARCHIVE.merge(:transformers => transformers)))
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"

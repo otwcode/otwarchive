@@ -101,7 +101,7 @@ class Search < ActiveRecord::Base
       a = amount.to_i.day.ago.beginning_of_day
       a2 = a.end_of_day
     when /hour/
-      a = amount.to_i.hour.ago.change(:min => 0, :sec => 0, :usec => 0)
+      a = amount.to_i.hour.ago.change(min: 0, sec: 0, usec: 0)
       a2 = (a + 60.minutes)
     else
       raise "unknown period: " + period

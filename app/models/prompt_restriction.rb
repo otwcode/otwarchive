@@ -1,7 +1,7 @@
 class PromptRestriction < ActiveRecord::Base
-  has_many :owned_set_taggings, :as => :set_taggable, :dependent => :destroy
-  has_many :owned_tag_sets, -> { select("DISTINCT owned_tag_sets.*") }, :through => :owned_set_taggings
-  has_many :tag_sets, :through => :owned_tag_sets
+  has_many :owned_set_taggings, as: :set_taggable, dependent: :destroy
+  has_many :owned_tag_sets, -> { select("DISTINCT owned_tag_sets.*") }, through: :owned_set_taggings
+  has_many :tag_sets, through: :owned_tag_sets
 
   # note: there is no has_one/has_many association here because this class may or may not
   # be used by many different challenge classes. For convenience, if you use this class in
@@ -16,7 +16,7 @@ class PromptRestriction < ActiveRecord::Base
     relationship_num_required freeform_num_required warning_num_required
     fandom_num_allowed category_num_allowed rating_num_allowed character_num_allowed
     relationship_num_allowed freeform_num_allowed warning_num_allowed).each do |tag_limit_field|
-      validates_numericality_of tag_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_TAGS_MAX, :greater_than_or_equal_to => 0
+      validates_numericality_of tag_limit_field, only_integer: true, less_than_or_equal_to: ArchiveConfig.PROMPT_TAGS_MAX, greater_than_or_equal_to: 0
   end
 
   before_validation :update_allowed_values
@@ -79,8 +79,8 @@ class PromptRestriction < ActiveRecord::Base
     tag_set_titles.split(',').reject {|title| title.blank?}.each do |title|
       title.strip!
       ots = OwnedTagSet.find_by(title: title)
-      errors.add(:base, ts("We couldn't find the tag set {{title}}.", :title => title)) and return if ots.nil?
-      errors.add(:base, ts("The tag set {{title}} is not available for public use.", :title => title)) and return if (!ots.usable && !ots.user_is_moderator?(User.current_user))
+      errors.add(:base, ts("We couldn't find the tag set {{title}}.", title: title)) and return if ots.nil?
+      errors.add(:base, ts("The tag set {{title}} is not available for public use.", title: title)) and return if (!ots.usable && !ots.user_is_moderator?(User.current_user))
       unless self.owned_tag_sets.include?(ots)
         self.owned_tag_sets << ots
       end
@@ -102,7 +102,7 @@ class PromptRestriction < ActiveRecord::Base
 
   # Efficiently get ids of all tagsets thanks to Valium
   def owned_tag_set_ids
-    OwnedSetTagging.where(:set_taggable_type => self.class.name, :set_taggable_id => self.id).pluck(:owned_tag_set_id)
+    OwnedSetTagging.where(set_taggable_type: self.class.name, set_taggable_id: self.id).pluck(:owned_tag_set_id)
   end
 
   def tag_set_ids

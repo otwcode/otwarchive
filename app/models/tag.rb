@@ -106,62 +106,62 @@ class Tag < ActiveRecord::Base
 
   attr_accessor :fix_taggings_count
 
-  has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
-  belongs_to :merger, :class_name => 'Tag'
+  has_many :mergers, foreign_key: 'merger_id', class_name: 'Tag'
+  belongs_to :merger, class_name: 'Tag'
   belongs_to :fandom
   belongs_to :media
-  belongs_to :last_wrangler, :polymorphic => true
+  belongs_to :last_wrangler, polymorphic: true
 
-  has_many :filter_taggings, :foreign_key => 'filter_id', :dependent => :destroy
-  has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
-  has_one :filter_count, :foreign_key => 'filter_id'
+  has_many :filter_taggings, foreign_key: 'filter_id', dependent: :destroy
+  has_many :filtered_works, through: :filter_taggings, source: :filterable, source_type: 'Work'
+  has_one :filter_count, foreign_key: 'filter_id'
   has_many :direct_filter_taggings,
               -> { where(inherited: 0) },
-              :class_name => "FilterTagging",
-              :foreign_key => 'filter_id'
+              class_name: "FilterTagging",
+              foreign_key: 'filter_id'
 
-  # not used anymore? has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
+  # not used anymore? has_many :direct_filtered_works, through: :direct_filter_taggings, source: :filterable, source_type: 'Work'
 
-  has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
-  has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
-  has_many :children, :through => :child_taggings, :source => :common_tag
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :update_wrangler
+  has_many :common_taggings, foreign_key: 'common_tag_id', dependent: :destroy
+  has_many :child_taggings, class_name: 'CommonTagging', as: :filterable
+  has_many :children, through: :child_taggings, source: :common_tag
+  has_many :parents, through: :common_taggings, source: :filterable, source_type: 'Tag', after_remove: :update_wrangler
 
-  has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
-  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :update_meta_filters
-  has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
-  has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
-  has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, :through => :meta_taggings, :source => :meta_tag
-  has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, :through => :sub_taggings, :source => :sub_tag
+  has_many :meta_taggings, foreign_key: 'sub_tag_id', dependent: :destroy
+  has_many :meta_tags, through: :meta_taggings, source: :meta_tag, before_remove: :update_meta_filters
+  has_many :sub_taggings, class_name: 'MetaTagging', foreign_key: 'meta_tag_id', dependent: :destroy
+  has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :remove_sub_filters
+  has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
+  has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
 
-  has_many :same_work_tags, -> { uniq }, :through => :works, :source => :tags
-  has_many :suggested_fandoms, -> { uniq }, :through => :works, :source => :fandoms
+  has_many :same_work_tags, -> { uniq }, through: :works, source: :tags
+  has_many :suggested_fandoms, -> { uniq }, through: :works, source: :fandoms
 
-  has_many :taggings, :as => :tagger
-  has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
-  has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
-  has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'
-  has_many :approved_collections, :through => :filtered_works
+  has_many :taggings, as: :tagger
+  has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
+  has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
+  has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
+  has_many :approved_collections, through: :filtered_works
 
   # TODO Update favorite_tags for this tag_id when a canonical tag becomes a synonym of a new canonical tag
   has_many :favorite_tags, dependent: :destroy
 
-  has_many :set_taggings, :dependent => :destroy
-  has_many :tag_sets, :through => :set_taggings
-  has_many :owned_tag_sets, :through => :tag_sets
+  has_many :set_taggings, dependent: :destroy
+  has_many :tag_sets, through: :set_taggings
+  has_many :owned_tag_sets, through: :tag_sets
 
-  has_many :tag_set_associations, :dependent => :destroy
-  has_many :parent_tag_set_associations, :class_name => 'TagSetAssociation', :foreign_key => 'parent_tag_id', :dependent => :destroy
+  has_many :tag_set_associations, dependent: :destroy
+  has_many :parent_tag_set_associations, class_name: 'TagSetAssociation', foreign_key: 'parent_tag_id', dependent: :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  validates_length_of :name, :minimum => 1, :message => "cannot be blank."
+  validates_length_of :name, minimum: 1, message: "cannot be blank."
   validates_length_of :name,
-    :maximum => ArchiveConfig.TAG_MAX,
-    :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
+    maximum: ArchiveConfig.TAG_MAX,
+    message: "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
-    :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
+    with: /\A[^,*<>^{}=`\\%]+\z/,
+    message: 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_presence_of :sortable_name
 
@@ -235,11 +235,11 @@ class Tag < ActiveRecord::Base
   end
   def update_wrangler(tag)
     unless User.current_user.nil?
-      self.update_attributes(:last_wrangler => User.current_user)
+      self.update_attributes(last_wrangler: User.current_user)
     end
   end
 
-  before_save :check_type_changes, :if => :type_changed?
+  before_save :check_type_changes, if: :type_changed?
   def check_type_changes
     # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
     # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
@@ -253,12 +253,12 @@ class Tag < ActiveRecord::Base
 
   scope :id_only, -> { select("tags.id") }
 
-  scope :canonical, -> { where(:canonical => true) }
-  scope :noncanonical, -> { where(:canonical => false) }
-  scope :nonsynonymous, -> { noncanonical.where(:merger_id => nil) }
+  scope :canonical, -> { where(canonical: true) }
+  scope :noncanonical, -> { where(canonical: false) }
+  scope :nonsynonymous, -> { noncanonical.where(merger_id: nil) }
   scope :synonymous, -> { noncanonical.where("merger_id IS NOT NULL") }
-  scope :unfilterable, -> { nonsynonymous.where(:unwrangleable => false) }
-  scope :unwrangleable, -> { where(:unwrangleable => true) }
+  scope :unfilterable, -> { nonsynonymous.where(unwrangleable: false) }
+  scope :unwrangleable, -> { where(unwrangleable: true) }
 
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
@@ -293,12 +293,12 @@ class Tag < ActiveRecord::Base
   scope :visible, -> { where('type in (?)', VISIBLE).by_name }
 
   scope :by_pseud, lambda {|pseud|
-    joins(:works => :pseuds).
-    where(:pseuds => {:id => pseud.id})
+    joins(works: :pseuds).
+    where(pseuds: {id: pseud.id})
   }
 
-  scope :by_type, lambda {|*types| where(types.first.blank? ? "" : {:type => types.first})}
-  scope :with_type, lambda {|type| where({:type => type}) }
+  scope :by_type, lambda {|*types| where(types.first.blank? ? "" : {type: types.first})}
+  scope :with_type, lambda {|type| where({type: type}) }
 
   # This will return all tags that have one of the given tags as a parent
   scope :with_parents, lambda {|parents|
@@ -545,7 +545,7 @@ class Tag < ActiveRecord::Base
 
   # look up tags that have been wrangled into a given fandom
   def self.autocomplete_fandom_lookup(options = {})
-    options.reverse_merge!({:term => "", :tag_type => "character", :fandom => "", :fallback => true})
+    options.reverse_merge!({term: "", tag_type: "character", fandom: "", fallback: true})
     search_param = options[:term]
     tag_type = options[:tag_type]
     fandoms = Tag.get_search_terms(options[:fandom])
@@ -564,7 +564,7 @@ class Tag < ActiveRecord::Base
     end
     if options[:fallback] && results.empty? && search_param.length > 0
       # do a standard tag lookup instead
-      Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}")
+      Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
     else
       results
     end
@@ -685,7 +685,7 @@ class Tag < ActiveRecord::Base
   def all_filtered_work_ids
     # all synned and subtagged works should be under filter taggings
     # add in the direct works for any noncanonical tags
-    (self.filter_taggings.where(:filterable_type => "Work").pluck(:filterable_id) +
+    (self.filter_taggings.where(filterable_type: "Work").pluck(:filterable_id) +
       self.works.pluck(:id)).uniq
   end
 
@@ -860,7 +860,7 @@ class Tag < ActiveRecord::Base
     return unless meta_tag.present?
     self.filtered_works.each do |work|
       unless work.filters.include?(meta_tag)
-        work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
+        work.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
         RedisSearchIndexQueue.reindex(work, priority: :low)
       end
     end
@@ -921,11 +921,11 @@ class Tag < ActiveRecord::Base
   end
 
   def has_parent?(tag)
-    self.common_taggings.where(:filterable_id => tag.id).count > 0
+    self.common_taggings.where(filterable_id: tag.id).count > 0
   end
 
   def has_child?(tag)
-    self.child_taggings.where(:common_tag_id => tag.id).count > 0
+    self.child_taggings.where(common_tag_id: tag.id).count > 0
   end
 
   def associations_to_remove; @associations_to_remove ? @associations_to_remove : []; end
@@ -943,7 +943,7 @@ class Tag < ActiveRecord::Base
     tag = Tag.find(tag_id)
     if tag.class == self.class
       if self.mergers.include?(tag)
-        tag.update_attributes(:merger_id => nil)
+        tag.update_attributes(merger_id: nil)
       elsif self.meta_tags.include?(tag)
         self.meta_tags.delete(tag)
       elsif self.sub_tags.include?(tag)
@@ -1011,7 +1011,7 @@ class Tag < ActiveRecord::Base
   end
 
   def remove_canonical_associations
-    self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
+    self.mergers.each {|tag| tag.update_attributes(merger_id: nil) if tag.merger_id == self.id }
     self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
     self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
     self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
@@ -1046,7 +1046,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       parent = self.class.find_by_name(name)
       if parent
-        meta_tagging = self.meta_taggings.build(:meta_tag => parent, :direct => true)
+        meta_tagging = self.meta_taggings.build(meta_tag: parent, direct: true)
         unless meta_tagging.valid? && meta_tagging.save
           self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
         end
@@ -1059,7 +1059,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       sub = self.class.find_by_name(name)
       if sub
-        meta_tagging = sub.meta_taggings.build(:meta_tag => self, :direct => true)
+        meta_tagging = sub.meta_taggings.build(meta_tag: self, direct: true)
         unless meta_tagging.valid? && meta_tagging.save
           self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
         end
@@ -1088,7 +1088,7 @@ class Tag < ActiveRecord::Base
         elsif new_merger && new_merger.class != self.class
           self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
         elsif !new_merger
-          new_merger = self.class.new(:name => tag_string, :canonical => true)
+          new_merger = self.class.new(name: tag_string, canonical: true)
           unless new_merger.save
             self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
           end
@@ -1119,7 +1119,7 @@ class Tag < ActiveRecord::Base
       end
       self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
       self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
-      self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+      self.mergers.each {|m| m.update_attributes(merger_id: new_merger.id)}
       self.children = []
       self.meta_tags = []
       self.sub_tags = []
@@ -1131,7 +1131,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       syn = Tag.find_by_name(name)
       if syn && !syn.canonical?
-        syn.update_attributes(:merger_id => self.id)
+        syn.update_attributes(merger_id: self.id)
         if syn.is_a?(Fandom)
           syn.medias.each {|medium| self.add_association(medium)}
           self.medias.each {|medium| syn.add_association(medium)}
@@ -1144,7 +1144,7 @@ class Tag < ActiveRecord::Base
   end
 
   def indirect_bookmarks(rec=false)
-    cond = rec ? {:rec => true, :private => false, :hidden_by_admin => false} : {:private => false, :hidden_by_admin => false}
+    cond = rec ? {rec: true, private: false, hidden_by_admin: false} : {private: false, hidden_by_admin: false}
     work_bookmarks = Bookmark.where(bookmarkable_id: self.work_ids, bookmarkable_type: 'Work').merge(cond)
     ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
     series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
@@ -1157,10 +1157,10 @@ class Tag < ActiveRecord::Base
 
 
   mapping do
-    indexes :id,           :index    => :not_analyzed
-    indexes :name,         :analyzer => 'snowball', :boost => 100
+    indexes :id,           index: :not_analyzed
+    indexes :name,         analyzer: 'snowball', boost: 100
     indexes :type
-    indexes :canonical,    :type     => :boolean
+    indexes :canonical,    type: :boolean
   end
 
   def self.search(options={})
@@ -1246,7 +1246,7 @@ class Tag < ActiveRecord::Base
       values[:parented] = tag.parents.any? {|p| p.is_a?(Fandom)}
       values[:exists] = true
     end
-    TagNomination.where(:tagname => tag.name).update_all(values)
+    TagNomination.where(tagname: tag.name).update_all(values)
   end
 
 end

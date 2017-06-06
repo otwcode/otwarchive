@@ -18,8 +18,8 @@ class Admin::SkinsController < ApplicationController
     flash[:notice] = []
     modified_skin_titles = []
     %w(official rejected cached featured in_chooser).each do |action|
-      skins_to_set = params["make_#{action}"] ? Skin.where(:id => params["make_#{action}"].map {|id| id.to_i}) : []
-      skins_to_unset = params["make_un#{action}"] ? Skin.where(:id => params["make_un#{action}"].map {|id| id.to_i}) : []
+      skins_to_set = params["make_#{action}"] ? Skin.where(id: params["make_#{action}"].map {|id| id.to_i}) : []
+      skins_to_unset = params["make_un#{action}"] ? Skin.where(id: params["make_un#{action}"].map {|id| id.to_i}) : []
       skins_to_set.each do |skin|
         case action
         when "official"
@@ -64,7 +64,7 @@ class Admin::SkinsController < ApplicationController
       end
     end
 
-    flash[:notice] << ts("The following skins were updated: %{titles}", :titles => modified_skin_titles.join(', '))
+    flash[:notice] << ts("The following skins were updated: %{titles}", titles: modified_skin_titles.join(', '))
 
     # set default
     if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin.title

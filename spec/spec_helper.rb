@@ -68,7 +68,7 @@ RSpec.configure do |config|
   # To explicitly tag specs without using automatic inference, set the `:type`
   # metadata manually:
   #
-  #     describe ThingsController, :type => :controller do
+  #     describe ThingsController, type: :controller do
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!

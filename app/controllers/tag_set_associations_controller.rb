@@ -33,7 +33,7 @@ class TagSetAssociationsController < ApplicationController
         # fix back the tagnames if they have [] brackets -- see _review_individual_nom for details
         parent_tagname = parent_tagname.gsub('#LBRACKET', '[').gsub('#RBRACKET', ']')
 
-        assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
+        assoc = @tag_set.tag_set_associations.build(tag_id: tag_id, parent_tagname: parent_tagname, create_association: true)
         if assoc.valid?
           assoc.save
         else
@@ -48,7 +48,7 @@ class TagSetAssociationsController < ApplicationController
     else
       flash[:error] = ts("We couldn't add all of your specified associations. See more detailed errors below!")
       get_tags_to_associate
-      render :action => :index
+      render action: :index
     end
   end
 
@@ -65,7 +65,7 @@ class TagSetAssociationsController < ApplicationController
         (SELECT * from tags WHERE tags.name = tag_nominations.parent_tagname)")
 
     # skip already associated tags
-    associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).pluck :tag_id
+    associated_tag_ids = TagSetAssociation.where(owned_tag_set_id: @tag_set.id).pluck :tag_id
     @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?
 
     # now get out just the tags and nominated parent tagnames

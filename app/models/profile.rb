@@ -7,12 +7,12 @@ class Profile < ActiveRecord::Base
 
   belongs_to :user
 
-  validates_length_of :location, :allow_blank => true, :maximum => LOCATION_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => LOCATION_MAX)
-  validates_length_of :title, :allow_blank => true, :maximum => PROFILE_TITLE_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => PROFILE_TITLE_MAX)
-  validates_length_of :about_me, :allow_blank => true, :maximum => ABOUT_ME_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ABOUT_ME_MAX)
+  validates_length_of :location, allow_blank: true, maximum: LOCATION_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: LOCATION_MAX)
+  validates_length_of :title, allow_blank: true, maximum: PROFILE_TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: PROFILE_TITLE_MAX)
+  validates_length_of :about_me, allow_blank: true, maximum: ABOUT_ME_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ABOUT_ME_MAX)
 
   before_update :validate_date_of_birth
   # Checks date of birth when user updates profile

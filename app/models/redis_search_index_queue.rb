@@ -20,7 +20,7 @@ class RedisSearchIndexQueue
   def self.queue_work(work, options={})
     IndexQueue.enqueue(work, :background)
     unless options[:without_bookmarks].present?
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).pluck(:id), options)
+      queue_bookmarks(Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id).pluck(:id), options)
     end
   end
 
@@ -28,7 +28,7 @@ class RedisSearchIndexQueue
     work_ids.each { |id| IndexQueue.enqueue_id('Work', id, :background) }
     unless options[:without_bookmarks].present?
       # queue their bookmarks also
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).pluck(:id), options)
+      queue_bookmarks(Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work_ids).pluck(:id), options)
     end
   end
 

@@ -5,15 +5,15 @@ class ChallengeAssignment < ActiveRecord::Base
   ALL = -1
 
   belongs_to :collection
-  belongs_to :offer_signup, :class_name => "ChallengeSignup"
-  belongs_to :request_signup, :class_name => "ChallengeSignup"
-  belongs_to :pinch_hitter, :class_name => "Pseud"
-  belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
-  belongs_to :creation, :polymorphic => true
+  belongs_to :offer_signup, class_name: "ChallengeSignup"
+  belongs_to :request_signup, class_name: "ChallengeSignup"
+  belongs_to :pinch_hitter, class_name: "Pseud"
+  belongs_to :pinch_request_signup, class_name: "ChallengeSignup"
+  belongs_to :creation, polymorphic: true
 
   # Make sure that the signups are an actual match if we're in the process of assigning
   # (post-sending, all potential matches have been deleted!)
-  validate :signups_match, :on => :update
+  validate :signups_match, on: :update
   def signups_match
     if self.sent_at.nil? &&
       self.request_signup.present? &&
@@ -99,12 +99,12 @@ class ChallengeAssignment < ActiveRecord::Base
 
   def self.duplicate_givers(collection)
     ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").pluck(:offer_signup_id).compact
-    ChallengeAssignment.where(:offer_signup_id => ids)
+    ChallengeAssignment.where(offer_signup_id: ids)
   end
 
   def self.duplicate_recipients(collection)
     ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").pluck(:request_signup_id).compact
-    ChallengeAssignment.where(:request_signup_id => ids)
+    ChallengeAssignment.where(request_signup_id: ids)
   end
 
   # has to be a left join to get assignments that don't have a collection item
@@ -187,7 +187,7 @@ class ChallengeAssignment < ActiveRecord::Base
       pseuds = Pseud.parse_byline(pseud_byline)
       if pseuds.size == 1
         pseud = pseuds.first
-        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        signup = ChallengeSignup.in_collection(self.collection).where(pseud_id: pseud.id).first
         self.offer_signup = signup if signup
       end
     end
@@ -204,7 +204,7 @@ class ChallengeAssignment < ActiveRecord::Base
       pseuds = Pseud.parse_byline(pseud_byline)
       if pseuds.size == 1
         pseud = pseuds.first
-        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        signup = ChallengeSignup.in_collection(self.collection).where(pseud_id: pseud.id).first
         # If there's an existing assignment then this is a pinch recipient
         self.request_signup = signup if signup
       end
@@ -388,7 +388,7 @@ class ChallengeAssignment < ActiveRecord::Base
 
   # go through the request's potential matches in order from best to worst and try and assign
   def self.assign_request!(collection, request_signup)
-    assignment = ChallengeAssignment.new(:collection => collection, :request_signup => request_signup)
+    assignment = ChallengeAssignment.new(collection: collection, request_signup: request_signup)
     last_choice = nil
     assigned = false
     request_signup.request_potential_matches.sort.reverse.each do |potential_match|
@@ -420,7 +420,7 @@ class ChallengeAssignment < ActiveRecord::Base
 
   # go through the offer's potential matches in order from best to worst and try and assign
   def self.assign_offer!(collection, offer_signup)
-    assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => offer_signup)
+    assignment = ChallengeAssignment.new(collection: collection, offer_signup: offer_signup)
     last_choice = nil
     assigned = false
     offer_signup.offer_potential_matches.sort.reverse.each do |potential_match|
@@ -466,7 +466,7 @@ class ChallengeAssignment < ActiveRecord::Base
   # note: this does NOT invoke callbacks because ChallengeAssignments don't have any dependent=>destroy
   # or associations
   def self.clear!(collection)
-    ChallengeAssignment.delete_all(:collection_id => collection.id)
+    ChallengeAssignment.delete_all(collection_id: collection.id)
     ChallengeSignup.where(collection_id: collection.id).update_all(assigned_as_offer: false, assigned_as_request: false)
   end
 
@@ -495,13 +495,13 @@ class ChallengeAssignment < ActiveRecord::Base
 
       # if this signup doesn't have any giver now, create a placeholder
       if signup.request_assignments.empty?
-        assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
+        assignment = ChallengeAssignment.new(collection: collection, request_signup: signup)
         assignment.save
       end
 
       # if this signup doesn't have any recipient now, create a placeholder
       if signup.offer_assignments.empty?
-        assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => signup)
+        assignment = ChallengeAssignment.new(collection: collection, offer_signup: signup)
         assignment.save
       end
     end

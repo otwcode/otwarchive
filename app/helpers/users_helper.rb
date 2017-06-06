@@ -133,7 +133,7 @@ module UsersHelper
 
   #  def print_pseud_drafts_link(pseud)
   #    total = pseud.unposted_works.size
-  #    link_to_unless_current t('my_drafts', :default =>"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+  #    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
   #  end
 
   def authors_header(collection, what = 'People')

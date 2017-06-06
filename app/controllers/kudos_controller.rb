@@ -28,7 +28,7 @@ class KudosController < ApplicationController
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+          @kudos = @commentable.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
 
           render :create, status: :created
         end

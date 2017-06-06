@@ -30,7 +30,7 @@ class StoryParser
   end
 
   # These attributes need to be moved from the work to the chapter
-  # format: {:work_attribute_name => :chapter_attribute_name} (can be the same)
+  # format: {work_attribute_name: :chapter_attribute_name} (can be the same)
   CHAPTER_ATTRIBUTES_ONLY = {}
 
   # These attributes need to be copied from the work to the chapter
@@ -342,7 +342,7 @@ class StoryParser
       work.chapters.each do |chapter|
         if chapter.content.length > ArchiveConfig.CONTENT_MAX
           # TODO: eventually: insert a new chapter
-          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
         end
 
         chapter.posted = true
@@ -942,7 +942,7 @@ class StoryParser
 
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-      storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
+      storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 

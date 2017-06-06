@@ -1,14 +1,14 @@
 class PromptsController < ApplicationController
 
   before_filter :users_only
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
-  before_filter :load_signup, :except => [:index, :destroy, :show]
-  # before_filter :promptmeme_only, :except => [:index, :new]
-  before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_prompt_from_id, only: [:show, :edit, :update, :destroy]
+  before_filter :load_signup, except: [:index, :destroy, :show]
+  # before_filter :promptmeme_only, except: [:index, :new]
+  before_filter :allowed_to_destroy, only: [:destroy]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -109,7 +109,7 @@ class PromptsController < ApplicationController
   end
 
   def create
-    params[:prompt].merge!({:challenge_signup_id => @challenge_signup.id})
+    params[:prompt].merge!({challenge_signup_id: @challenge_signup.id})
 
     if params[:prompt_type] == "offer"
       @prompt = @challenge_signup.offers.build(prompt_params)
@@ -124,7 +124,7 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -133,7 +133,7 @@ class PromptsController < ApplicationController
       flash[:notice] = 'Prompt was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 

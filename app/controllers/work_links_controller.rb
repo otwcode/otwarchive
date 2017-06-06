@@ -12,7 +12,7 @@ class WorkLinksController < ApplicationController
   end
 
   def index
-    @work_links = WorkLink.where(:work_id => @work.id).order(:created_at).paginate(:page => params[:page])
+    @work_links = WorkLink.where(work_id: @work.id).order(:created_at).paginate(page: params[:page])
   end
 
 end
