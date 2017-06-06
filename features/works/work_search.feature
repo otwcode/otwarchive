@@ -332,6 +332,8 @@ Feature: Search Works
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   bookmarks
     Given a set of works with bookmarks for searching
+      # Work blurb's stats are cached for an hour, so we need to time travel
+      And it is currently 1 day from now
     When I am on the search works page
       And I fill in "Bookmarks" with ">1"
       And I select "Bookmarks" from "Sort by"
@@ -339,20 +341,22 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: >1 sort by: bookmarks ascending"
       And I should see "4 Found"
-      # TODO: Figure out how to fix caching issue
-      # And the 1st result should contain "Bookmarks: 2"
-      # And the 2nd result should contain "Bookmarks: 2"
-      # And the 3rd result should contain "Bookmarks: 4"
-      # And the 4th result should contain "Bookmarks: 10"
+      And the 1st result should contain "Bookmarks: 2"
+      And the 2nd result should contain "Bookmarks: 2"
+      And the 3rd result should contain "Bookmarks: 4"
+      And the 4th result should contain "Bookmarks: 10"
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarks" should contain ">1"
       And "Bookmarks" should be selected within "Sort by"
     When "AO3-5020" is fixed
       # And "Ascending" should be selected within "Sort direction"
+    Then I jump in our Delorean and return to the present
 
   Scenario: Search by < a number of bookmarks and sort in descending order by
   bookmarks
     Given a set of works with bookmarks for searching
+      # Work blurb's stats are cached for an hour, so we need to time travel
+      And it is currently 1 day from now
     When I am on the search works page
       And I fill in "Bookmarks" with "< 20"
       And I select "Bookmarks" from "Sort by"
@@ -360,18 +364,18 @@ Feature: Search Works
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: < 20 sort by: bookmarks descending"
       And I should see "7 Found"
-      # TODO: Figure out how to fix caching issue
-      # And the 1st result should contain "Bookmarks: 10"
-      # And the 2nd result should contain "Bookmarks: 4"
-      # And the 3rd result should contain "Bookmarks: 2"
-      # And the 4th result should contain "Bookmarks: 2"
-      # And the 5th result should contain "Bookmarks: 1"
-      # And the 6th result should contain "Bookmarks: 1"
+      And the 1st result should contain "Bookmarks: 10"
+      And the 2nd result should contain "Bookmarks: 4"
+      And the 3rd result should contain "Bookmarks: 2"
+      And the 4th result should contain "Bookmarks: 2"
+      And the 5th result should contain "Bookmarks: 1"
+      And the 6th result should contain "Bookmarks: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarks" should contain "< 20"
       And "Bookmarks" should be selected within "Sort by"
     When "AO3-5020" is fixed
       # And "Descending" should be selected within "Sort direction"
+    Then I jump in our Delorean and return to the present
 
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   title using the header search
@@ -612,7 +616,7 @@ Feature: Search Works
     Then I should see "You searched for: Tags: F/M, James T. Kirk/Spock"
       And I should see "1 Found"
       And the results should contain the category tag "F/M"
-      And the results should contain a synonym of "James T. Kirk/Spock"
+      And the results should contain "K/S"
     When I follow "Edit Your Search"
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
       And the "F/M" checkbox should be checked

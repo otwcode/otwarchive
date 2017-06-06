@@ -107,7 +107,9 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   step %{a canonical relationship "James T. Kirk/Spock/Nyota Uhura"}
 
   # Create a work for each tag
-  ["Spock/Nyota Uhura", "Uhura/Spock", "James T. Kirk/Spock/Nyota Uhura"].each do |relationship|
+  ["Spock/Nyota Uhura",
+   "Uhura/Spock",
+   "James T. Kirk/Spock/Nyota Uhura"].each do |relationship|
     FactoryGirl.create(:posted_work,
                        relationship_string: relationship)
   end
@@ -166,7 +168,8 @@ Given /^a set of Star Trek works for searching$/ do
   step %{"Star Trek: The Original Series" is a metatag of the fandom "Star Trek: The Original Series (Movies)"}
 
   # Create a work using each of the related fandoms
-  ["Star Trek", "Star Trek: The Original Series", "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
+  ["Star Trek", "Star Trek: The Original Series", 
+   "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
     FactoryGirl.create(:posted_work, fandom_string: fandom)
   end
 
@@ -259,6 +262,8 @@ Given /^a set of works with various access levels for searching$/ do
   FactoryGirl.create(:posted_work,
                      hidden_by_admin: true,
                      title: "Work Hidden by Admin")
+
+  step %{the work indexes are updated}
 end
 
 ### WHEN
