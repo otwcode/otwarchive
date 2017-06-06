@@ -308,7 +308,7 @@ end
 
 Then /^show me the page$/ do
   save_and_open_page
-  sleep 3
+  sleep 120
 end
 
 Then /^show me the network traffic$/ do
