@@ -245,6 +245,22 @@ Given /^a set of works with various warnings for searching$/ do
   step %{the work indexes are updated}
 end
 
+Given /^a set of works with various access levels for searching$/ do
+  # Create a draft
+  FactoryGirl.create(:work, title: "Draft Work")
+
+  # Create a work
+  FactoryGirl.create(:posted_work, title: "Posted Work")
+
+  # Create a work restricted to registered users
+  FactoryGirl.create(:posted_work, restricted: true, title: "Restricted Work")
+
+  # Create a work hidden by an admin
+  FactoryGirl.create(:posted_work,
+                     hidden_by_admin: true,
+                     title: "Work Hidden by Admin")
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do
@@ -380,4 +396,11 @@ end
 Then /^the search summary should include the filter_id for "([^"]*)"$/ do |tag|
   filter_id = Tag.find_by_name(tag).filter_taggings.first.filter_id
   step %{I should see "filter_ids: #{filter_id}" within "#main h4.heading"}
+end
+
+Then /^the results should contain only the restricted work$/ do
+  step %{I should see "Restricted Work"}
+  step %{I should not see "Posted Work"}
+  step %{I should not see "Work Hidden by Admin"}
+  step %{I should not see "Draft Work"}
 end
