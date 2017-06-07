@@ -113,9 +113,9 @@ module UsersHelper
 
   def print_gifts_link(user)
     if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_all.uniq.count
     else
-      gift_number = user.gift_works.visible_to_registered_user.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_registered_user.uniq.count
     end
     span_if_current ts('Gifts (%{gift_number})', gift_number: gift_number.to_s), user_gifts_path(user)
   end
