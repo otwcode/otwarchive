@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
 ruby '2.2.5'
-gem 'test-unit', '~> 3.0'
+gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '4.2.8'
+gem 'rails', '5.0.3'
 
-gem 'rails-observers'
+gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
 #gem 'activerecord-deprecated_finders'
 
@@ -66,7 +66,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '4.3.6'
+gem 'paperclip', '~> 5'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -98,7 +98,9 @@ gem 'google_visualr', '>= 2.1'
 # gem 'copycopter_client', '~> 2.0.1'
 
 # Globalize for translations
-gem 'globalize', '~> 5.0.0'
+# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
+gem 'globalize', git: 'https://github.com/globalize/globalize'
+gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.5'
@@ -126,11 +128,11 @@ gem 'kgio', '2.10.0'
 group :test do
   gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
-  gem 'rspec-rails', '~> 3.4.2'
+  gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '1.2.0'
+  gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.3.2'
   gem 'selenium-webdriver'
   gem 'poltergeist'
@@ -146,7 +148,7 @@ group :test do
   gem 'timecop'
   gem 'cucumber-timecop', :require => false
   # Code coverage
-  gem 'simplecov', '~> 0.12.0'
+  gem 'simplecov', '~> 0.14.0'
   gem 'coveralls', '~> 0.8.12'
   gem 'email_spec', '1.6.0'
 end
@@ -154,7 +156,7 @@ end
 group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_girl', '~> 4.5.0'
+  gem 'factory_girl', '~> 4.8.0'
   gem 'minitest'
 end
 
@@ -164,7 +166,7 @@ group :development do
 end
 
 group :test, :development, :staging  do
-  gem 'bullet', '~> 5.0.0'
+  gem 'bullet', '~> 5.2.0'
 end
 
 # Deploy with Capistrano
