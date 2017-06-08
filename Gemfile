@@ -92,7 +92,7 @@ gem 'timeliness'
 # gem 'rpm_contrib', '2.2.0' TODO: Come back to this
 
 # for generating graphs
-gem 'google_visualr', '>= 2.1'
+gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'

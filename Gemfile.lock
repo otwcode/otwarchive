@@ -14,6 +14,12 @@ GIT
     rails-observers (0.1.4)
       activemodel (>= 4.0)
 
+GIT
+  remote: https://github.com/stephendolan/google_visualr
+  revision: 1c5f087a0c4412e08b5c15fd2593c0e0c311a3ab
+  specs:
+    google_visualr (2.5.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -207,7 +213,6 @@ GEM
     gherkin (3.2.0)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    google_visualr (2.5.1)
     hashdiff (0.3.4)
     hashr (0.0.22)
     highline (1.7.8)
@@ -519,7 +524,7 @@ DEPENDENCIES
   fastimage
   gherkin
   globalize!
-  google_visualr (>= 2.1)
+  google_visualr!
   htmlentities
   httparty
   kgio (= 2.10.0)
