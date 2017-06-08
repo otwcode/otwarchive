@@ -26,7 +26,6 @@ VCR.cucumber_tags do |t|
   t.tags '@work_import_special_characters_man_latin', record: :all
   t.tags '@work_import_special_characters_man_cp', record: :all
   t.tags '@work_import_special_characters_man_utf'
-  t.tags '@work_import_nul_character'
 
   # need to run this every time for the devart features, because the recorded responses run into an encoding error I don't have time to investigate
   t.tags '@import_da_title_link', record: :all
