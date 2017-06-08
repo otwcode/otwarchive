@@ -357,8 +357,6 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rollout (2.4.1)
-    rpm_contrib (2.2.0)
-      newrelic_rpm (>= 3.1.1)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
@@ -550,7 +548,6 @@ DEPENDENCIES
   resque_mailer
   rest-client (~> 1.8.0)
   rollout
-  rpm_contrib (= 2.2.0)
   rspec (~> 3.4)
   rspec-rails (~> 3.6.0)
   rvm-capistrano
