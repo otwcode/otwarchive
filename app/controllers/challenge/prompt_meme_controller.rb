@@ -2,9 +2,9 @@ class Challenge::PromptMemeController < ChallengesController
 
   before_filter :users_only
   before_filter :load_collection
-  before_filter :load_challenge, :except => [:new, :create]
-  before_filter :collection_owners_only, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :set_time_zone, :only => [:create, :edit, :update]
+  before_filter :load_challenge, except: [:new, :create]
+  before_filter :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
+  before_filter :set_time_zone, only: [:create, :edit, :update]
 
   # ACTIONS
 
@@ -47,7 +47,7 @@ class Challenge::PromptMemeController < ChallengesController
       end
       redirect_to collection_profile_path(@collection)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -65,7 +65,7 @@ class Challenge::PromptMemeController < ChallengesController
       end
       redirect_to @collection
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 

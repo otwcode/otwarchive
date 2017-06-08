@@ -75,7 +75,7 @@ end
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
   step %{I start a new bookmark for "#{title}"}
   unless pseud.nil?
-    select(pseud, :from => "bookmark_pseud_id")
+    select(pseud, from: "bookmark_pseud_id")
   end
   click_button("Create")
   Bookmark.tire.index.refresh
@@ -116,7 +116,7 @@ end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", :with => "#{collection_name}")
+    fill_in("collection_names", with: "#{collection_name}")
     click_button("Add")
 end
 

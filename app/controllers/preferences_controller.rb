@@ -32,7 +32,7 @@ class PreferencesController < ApplicationController
       redirect_to @user
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
-      render :action => :index
+      render action: :index
     end
   end
 

@@ -1,6 +1,6 @@
 class MediaController < ApplicationController
   before_filter :load_collection
-  skip_before_filter :store_location, :only => [:show]
+  skip_before_filter :store_location, only: [:show]
 
   def index
     uncategorized = Media.uncategorized
@@ -20,6 +20,6 @@ class MediaController < ApplicationController
   end
 
   def show
-    redirect_to medium_fandoms_path(:medium_id => params[:id])
+    redirect_to medium_fandoms_path(medium_id: params[:id])
   end
 end

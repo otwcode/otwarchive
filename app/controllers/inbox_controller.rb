@@ -20,7 +20,7 @@ class InboxController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html do
-        redirect_to comment_path(@commentable, :add_comment_reply_id => @commentable.id, :anchor => 'comment_' + @commentable.id.to_s)
+        redirect_to comment_path(@commentable, add_comment_reply_id: @commentable.id, anchor: 'comment_' + @commentable.id.to_s)
       end
       format.js
     end

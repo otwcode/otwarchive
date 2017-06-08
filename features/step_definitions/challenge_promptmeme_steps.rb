@@ -89,7 +89,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
     check("This collection is unrevealed")
     check("This collection is anonymous")
   end
-  select("Prompt Meme", :from => "challenge_type")
+  select("Prompt Meme", from: "challenge_type")
   step %{I submit}
   step "I should see \"Collection was successfully created\""
 
@@ -114,7 +114,7 @@ When /^I set up Battle 12 promptmeme collection$/ do
   fill_in("Rules", with: "Be nicer to people")
   check("This collection is unrevealed")
   check("This collection is anonymous")
-  select("Prompt Meme", :from => "challenge_type")
+  select("Prompt Meme", from: "challenge_type")
   step %{I submit}
   step "I should see \"Collection was successfully created\""
 end

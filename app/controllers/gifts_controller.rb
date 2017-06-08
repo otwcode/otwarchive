@@ -21,7 +21,7 @@ class GiftsController < ApplicationController
         end
       end
     else
-      pseud = Pseud.parse_byline(@recipient_name, :assume_matching_login => true).first
+      pseud = Pseud.parse_byline(@recipient_name, assume_matching_login: true).first
       if pseud
         if current_user.nil?
           @works = pseud.gift_works.visible_to_all
@@ -37,7 +37,7 @@ class GiftsController < ApplicationController
       end
     end
     @works = @works.in_collection(@collection) if @collection
-    @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    @works = @works.order('revised_at DESC').paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   def toggle_rejected

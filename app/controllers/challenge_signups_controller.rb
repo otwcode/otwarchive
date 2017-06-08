@@ -4,15 +4,15 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :allowed_to_destroy, :only => [:destroy, :confirm_delete]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :check_pseud_ownership, :only => [:create, :update]
+  before_filter :users_only, except: [:summary, :display_summary, :requests_summary]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, only: [:show]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
+  before_filter :check_pseud_ownership, only: [:create, :update]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -84,7 +84,7 @@ class ChallengeSignupsController < ApplicationController
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
-        render :action => :index and return
+        render action: :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's sign-ups.")
         redirect_to '/' and return
@@ -128,7 +128,7 @@ class ChallengeSignupsController < ApplicationController
 
   def summary
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
@@ -162,13 +162,13 @@ class ChallengeSignupsController < ApplicationController
     @challenge.class::PROMPT_TYPES.each do |prompt_type|
       num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
       if num_to_build < @challenge.required(prompt_type)
-        notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
+        notice += ts("You must submit at least %{required} #{prompt_type}. ", required: @challenge.required(prompt_type))
         num_to_build = @challenge.required(prompt_type)
       elsif num_to_build > @challenge.allowed(prompt_type)
-        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", :allowed => @challenge.allowed(prompt_type))
+        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", allowed: @challenge.allowed(prompt_type))
         num_to_build = @challenge.allowed(prompt_type)
       elsif params["num_#{prompt_type}"]
-        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
+        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", num: num_to_build)
       end
       num_existing = @challenge_signup.send(prompt_type).count
       num_existing.upto(num_to_build-1) do
@@ -205,7 +205,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully created.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -214,7 +214,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -242,7 +242,7 @@ protected
 
   def request_to_array(type, request)
     any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
-    any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+    any_types.map! { |type| ts("Any %{type}", type: type.capitalize) }
     tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
     rarray = [(tags + any_types).join(", ")]
 

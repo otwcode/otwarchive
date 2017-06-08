@@ -6,7 +6,7 @@
 # end
 
 # This should occur after the logfiles have rolled over for the day. 
-every 1.days, :at => "4am" do
+every 1.days, at: "4am" do
   rake "statistics:update_hitcounts_from_squid"
 end
 

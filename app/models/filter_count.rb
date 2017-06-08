@@ -1,5 +1,5 @@
 class FilterCount < ActiveRecord::Base
-  belongs_to :filter, :class_name => 'Tag' 
+  belongs_to :filter, class_name: 'Tag' 
   validates_presence_of :filter_id
   validates_uniqueness_of :filter_id
   

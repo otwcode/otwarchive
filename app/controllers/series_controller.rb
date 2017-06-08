@@ -1,8 +1,8 @@
 class SeriesController < ApplicationController
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :check_visibility, :only => [:show]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_filter :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :check_visibility, only: [:show]
 
   def load_series
     @series = Series.find_by(id: params[:id])
@@ -41,7 +41,7 @@ class SeriesController < ApplicationController
     if pseuds.present?
       @series = @series.exclude_anonymous.for_pseuds(pseuds)
     end
-    @series = @series.paginate(:page => params[:page])
+    @series = @series.paginate(page: params[:page])
   end
 
   # GET /series/1
@@ -51,9 +51,9 @@ class SeriesController < ApplicationController
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
     if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @series.id,
-                                                       :subscribable_type => 'Series').first ||
-                      current_user.subscriptions.build(:subscribable => @series)
+      @subscription = current_user.subscriptions.where(subscribable_id: @series.id,
+                                                       subscribable_type: 'Series').first ||
+                      current_user.subscriptions.build(subscribable: @series)
     end
   end
 
@@ -73,7 +73,7 @@ class SeriesController < ApplicationController
     if params["remove"] == "me"
       pseuds_with_author_removed = @series.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty?
-        redirect_to :controller => 'orphans', :action => 'new', :series_id => @series.id
+        redirect_to controller: 'orphans', action: 'new', series_id: @series.id
       else
         begin
           @series.remove_author(current_user)
@@ -100,7 +100,7 @@ class SeriesController < ApplicationController
       flash[:notice] = ts('Series was successfully created.')
       redirect_to(@series)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -129,7 +129,7 @@ class SeriesController < ApplicationController
       @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
       to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
       @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -140,13 +140,13 @@ class SeriesController < ApplicationController
       flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]
       params[:serial].each_with_index do |id, position|
-        SerialWork.update(id, :position => position + 1)
+        SerialWork.update(id, position: position + 1)
         (@serial_works ||= []) << SerialWork.find(id)
       end
     end
     respond_to do |format|
       format.html { redirect_to(@series) and return }
-      format.json { render :nothing => true }
+      format.json { render nothing: true }
     end
   end
 

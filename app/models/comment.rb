@@ -3,29 +3,29 @@ class Comment < ActiveRecord::Base
   include HtmlCleaner
 
   belongs_to :pseud
-  belongs_to :commentable, :polymorphic => true
-  belongs_to :parent, :polymorphic => true
+  belongs_to :commentable, polymorphic: true
+  belongs_to :parent, polymorphic: true
 
-  has_many :inbox_comments, :foreign_key => 'feedback_comment_id', :dependent => :destroy
-  has_many :users, :through => :inbox_comments
+  has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
+  has_many :users, through: :inbox_comments
 
-  validates_presence_of :name, :unless => :pseud_id
+  validates_presence_of :name, unless: :pseud_id
   validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
   validates_presence_of :content
   validates_length_of :content,
-    :maximum => ArchiveConfig.COMMENT_MAX,
-    :too_long => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)
+    maximum: ArchiveConfig.COMMENT_MAX,
+    too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
   validate :check_for_spam
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
-  validates :content, :uniqueness => {:scope => [:commentable_id, :commentable_type, :name, :email, :pseud_id], :message => ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
+  validates :content, uniqueness: {scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id], message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
-  scope :limited, lambda {|limit| {:limit => limit.kind_of?(Fixnum) ? limit : 5} }
+  scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
   scope :ordered_by_date, -> { order('created_at DESC') }
   scope :top_level, -> { where("commentable_type in (?)", ["Chapter", "Bookmark"]) }
   scope :include_pseud, -> { includes(:pseud) }
@@ -39,13 +39,13 @@ class Comment < ActiveRecord::Base
 
   def akismet_attributes
     {
-      :key => ArchiveConfig.AKISMET_KEY,
-      :blog => ArchiveConfig.AKISMET_NAME,
-      :user_ip => ip_address,
-      :user_agent => user_agent,
-      :comment_author => name,
-      :comment_author_email => email,
-      :comment_content => content
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      user_agent: user_agent,
+      comment_author: name,
+      comment_author_email: email,
+      comment_content: content
     }
   end
 
@@ -53,7 +53,7 @@ class Comment < ActiveRecord::Base
   before_create :set_thread_for_replies
   before_create :set_parent_and_unreviewed
   after_create :update_thread
-  before_create :adjust_threading, :if => :reply_comment?
+  before_create :adjust_threading, if: :reply_comment?
 
   # Set the depth of the comment: 0 for a first-class comment, increasing with each level of nesting
   def set_depth

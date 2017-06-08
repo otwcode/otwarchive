@@ -51,7 +51,7 @@ module TagsHelper
 
   # Displays a list of links for navigating the tag wrangling section of the site
   def tag_wrangler_footer
-    render :partial => 'tag_wranglings/footer'
+    render partial: 'tag_wranglings/footer'
   end
 
   def wrangler_list(wranglers, tag)
@@ -61,7 +61,7 @@ module TagsHelper
       elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
         sign_up_fandoms = tag.fandoms.collect(&:name).join(', ')
       end
-      link_to "Sign Up", tag_wranglers_path(:sign_up_fandoms => sign_up_fandoms)
+      link_to "Sign Up", tag_wranglers_path(sign_up_fandoms: sign_up_fandoms)
     else
       wranglers.collect(&:login).join(', ')
     end
@@ -88,8 +88,8 @@ module TagsHelper
   end
 
   def tag_with_link_to_edit(tag, options = {})
-    options.reverse_merge!({:target => "_blank"})
-    content_tag(:span, tag.name, :class=>"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
+    options.reverse_merge!({target: "_blank"})
+    content_tag(:span, tag.name, class:"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
@@ -126,7 +126,7 @@ module TagsHelper
     taggable_things = ["bookmarks", "works"]
     list = []
     taggable_things.each do |tt|
-      list << link_to(h(ts(tt.titlecase)), {:controller => tt, :action => :index, :tag_id => tag}) unless tt == controller_class
+      list << link_to(h(ts(tt.titlecase)), {controller: tt, action: :index, tag_id: tag}) unless tt == controller_class
     end
     list.map{|li| "<li>" + li + "</li>"}.join.html_safe
   end
@@ -143,9 +143,9 @@ module TagsHelper
 
   # Link to show tags if they're currently hidden
   def show_hidden_tags_link(creation, tag_type)
-    text = ts("Show %{tag_type}", :tag_type => (tag_type == 'freeforms' ? "additional tags" : tag_type))
-    url = {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id, :tag_type => tag_type }
-    link_to text, url, :remote => true
+    text = ts("Show %{tag_type}", tag_type: (tag_type == 'freeforms' ? "additional tags" : tag_type))
+    url = {controller: 'tags', action: 'show_hidden', creation_type: creation.class.to_s, creation_id: creation.id, tag_type: tag_type }
+    link_to text, url, remote: true
   end
 
   # Makes filters show warnings display name
@@ -193,7 +193,7 @@ module TagsHelper
       last_comment = " (last comment: " + tag.total_comments.order('created_at DESC').first.created_at.to_s + ")"
     end
     link_text = count + " comments" + last_comment
-    link_to link_text, {:controller => :comments, :action => :index, :tag_id => tag}
+    link_to link_text, {controller: :comments, action: :index, tag_id: tag}
   end
 
   def show_wrangling_dashboard
@@ -213,7 +213,7 @@ module TagsHelper
         end
       end
     end
-    content_tag(:ul, meta_ul, :class => 'tags tree index')
+    content_tag(:ul, meta_ul, class: 'tags tree index')
   end
 
   # Returns a nested list of sub tags

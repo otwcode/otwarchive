@@ -2,10 +2,10 @@ class TagSetNominationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
   before_filter :users_only
-  before_filter :load_tag_set, :except => [ :index ]
-  before_filter :check_pseud_ownership, :only => [:create, :update]
-  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
+  before_filter :load_tag_set, except: [ :index ]
+  before_filter :check_pseud_ownership, only: [:create, :update]
+  before_filter :load_nomination, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :set_limit, only: [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
     if tag_set_nomination_params[:pseud_id]
@@ -92,7 +92,7 @@ class TagSetNominationsController < ApplicationController
     if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first
       redirect_to edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
-      @tag_set_nomination = TagSetNomination.new(:pseud => current_user.default_pseud, :owned_tag_set => @tag_set)
+      @tag_set_nomination = TagSetNomination.new(pseud: current_user.default_pseud, owned_tag_set: @tag_set)
       build_nominations
     end
   end
@@ -109,7 +109,7 @@ class TagSetNominationsController < ApplicationController
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -120,7 +120,7 @@ class TagSetNominationsController < ApplicationController
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -136,7 +136,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def base_nom_query(tag_type)
-    TagNomination.where(:type => (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).
+    TagNomination.where(type: (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).
       for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
   end
 
@@ -168,8 +168,8 @@ class TagSetNominationsController < ApplicationController
       @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
       if more_noms
         parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).pluck(:parent_tagname).uniq.first(30)
-        @nominations[:character] = @nominations[:character].where(:parent_tagname => parent_tagnames) if @limit[:character] > 0
-        @nominations[:relationship] = @nominations[:relationship].where(:parent_tagname => parent_tagnames) if @limit[:relationship] > 0
+        @nominations[:character] = @nominations[:character].where(parent_tagname: parent_tagnames) if @limit[:character] > 0
+        @nominations[:relationship] = @nominations[:relationship].where(parent_tagname: parent_tagnames) if @limit[:relationship] > 0
       end
       @nominations[:character] = @nominations[:character].order(:parent_tagname, :tagname) if @limit[:character] > 0
       @nominations[:relationship] = @nominations[:relationship].order(:parent_tagname, :tagname) if @limit[:relationship] > 0
@@ -224,7 +224,7 @@ class TagSetNominationsController < ApplicationController
 
     # If we have errors don't move ahead
     unless @errors.empty?
-      render :action => "index" and return
+      render action: "index" and return
     end
 
     # OK, now we're going ahead and making piles of db changes! eep! D:
@@ -234,13 +234,13 @@ class TagSetNominationsController < ApplicationController
       @tagnames_to_remove = @reject[tag_type]
 
       # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
-      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).pluck(:tagname).uniq
+      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).pluck(:tagname).uniq
       tagnames_to_change.each do |oldname|
-        synonym = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).pluck(:synonym).first
+        synonym = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination", tagname: oldname).pluck(:synonym).first
         unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
-            :oldname => oldname, :newname => synonym)
-          render :action => "index" and return
+            oldname: oldname, newname: synonym)
+          render action: "index" and return
         end
       end
 
@@ -251,8 +251,8 @@ class TagSetNominationsController < ApplicationController
         else
           # ughhhh
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
-            :oldname => oldname, :newname => newname)
-          render :action => "index" and return
+            oldname: oldname, newname: newname)
+          render action: "index" and return
         end
       end
 
@@ -260,12 +260,12 @@ class TagSetNominationsController < ApplicationController
       unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
-        render :action => "index" and return
+        render action: "index" and return
       end
 
       @notice ||= []
-      @notice << ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
-      @notice << ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
+      @notice << ts("Successfully added to set: %{approved}", approved: @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
+      @notice << ts("Successfully rejected: %{rejected}", rejected: @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
     end
 
     # If we got here we made it through, YAY
@@ -308,12 +308,12 @@ class TagSetNominationsController < ApplicationController
           when "synonym", "change"
             next if val == name
             # this is the tricky one: make sure we can do this name change
-            tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{type.classify}Nomination", :tagname => name).first
+            tagnom = TagNomination.for_tag_set(@tag_set).where(type: "#{type.classify}Nomination", tagname: name).first
             if !tagnom
               @errors << ts("Couldn't find a #{type} nomination for #{name}")
               @force_expand[type] = true
             elsif !tagnom.change_tagname?(val)
-              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", :msg => tagnom.errors.full_messages.join(', '))
+              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", msg: tagnom.errors.full_messages.join(', '))
               @force_expand[type] = true
             elsif action == "synonym"
               @synonym[type] << val
@@ -327,7 +327,7 @@ class TagSetNominationsController < ApplicationController
 
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       unless (intersect = @approve[tag_type] & @reject[tag_type]).empty?
-        @errors << ts("You have both approved and rejected the following %{type} tags: %{intersect}", :type => tag_type, :intersect => intersect.join(", "))
+        @errors << ts("You have both approved and rejected the following %{type} tags: %{intersect}", type: tag_type, intersect: intersect.join(", "))
         @force_expand[tag_type] = true
       end
     end

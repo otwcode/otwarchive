@@ -8,26 +8,26 @@ class ExternalAuthor < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :external_author_names, :dependent => :destroy
-  accepts_nested_attributes_for :external_author_names, :allow_destroy => true
+  has_many :external_author_names, dependent: :destroy
+  accepts_nested_attributes_for :external_author_names, allow_destroy: true
   validates_associated :external_author_names
 
-  has_many :external_creatorships, :through => :external_author_names
-  has_many :works, -> { uniq }, :through => :external_creatorships, :source => :creation, :source_type => 'Work'
+  has_many :external_creatorships, through: :external_author_names
+  has_many :works, -> { uniq }, through: :external_creatorships, source: :creation, source_type: 'Work'
 
   has_one :invitation
 
-  validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true,
-    :message => ts('There is already an external author with that email.')
+  validates_uniqueness_of :email, case_sensitive: false, allow_blank: true,
+    message: ts('There is already an external author with that email.')
 
-  validates :email, :email_veracity => true
+  validates :email, email_veracity: true
 
   def self.claimed
-    where(:is_claimed => true)
+    where(is_claimed: true)
   end
 
   def self.unclaimed
-    where(:is_claimed => false)
+    where(is_claimed: false)
   end
 
   after_create :create_default_name

@@ -6,56 +6,56 @@ module Taggable
       attr_accessor :preview_mode, :placeholder_tags
       after_update :reset_placeholders
 
-      has_many :filter_taggings, :as => :filterable
-      has_many :filters, :through => :filter_taggings
-      has_many :direct_filter_taggings, -> { where(inherited: 0) }, :class_name => "FilterTagging", :as => :filterable
-      has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
+      has_many :filter_taggings, as: :filterable
+      has_many :filters, through: :filter_taggings
+      has_many :direct_filter_taggings, -> { where(inherited: 0) }, class_name: "FilterTagging", as: :filterable
+      has_many :direct_filters, source: :filter, through: :direct_filter_taggings
 
-      has_many :taggings, :as => :taggable, :dependent => :destroy
-      has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+      has_many :taggings, as: :taggable, dependent: :destroy
+      has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
       has_many :ratings,
         -> { where("tags.type = 'Rating'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :categories,
         -> { where("tags.type = 'Category'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :warnings,
         -> { where("tags.type = 'Warning'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :fandoms,
         -> { where("tags.type = 'Fandom'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :relationships,
         -> { where("tags.type = 'Relationship'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :characters,
         -> { where("tags.type = 'Character'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :freeforms,
         -> { where("tags.type = 'Freeform'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
     end
   end
 
@@ -68,13 +68,13 @@ module Taggable
     tag_category_string(:categories)
   end
   def category_strings
-    tag_category_string(:categories, :return_array => true)
+    tag_category_string(:categories, return_array: true)
   end
   def warning_string
     tag_category_string(:warnings)
   end
   def warning_strings
-    tag_category_string(:warnings, :return_array => true)
+    tag_category_string(:warnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)

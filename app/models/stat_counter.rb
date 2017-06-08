@@ -40,7 +40,7 @@ class StatCounter < ActiveRecord::Base
 
     # Create hit counters for works that don't have them yet
     (work_ids - found_works).each do |work_id|
-      stat_counter = StatCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
+      stat_counter = StatCounter.create(work_id: work_id, hit_count: get_stat(:hit_count, work_id))
       REDIS_GENERAL.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
 
