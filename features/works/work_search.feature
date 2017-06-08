@@ -76,7 +76,7 @@ Feature: Search Works
     Then I should see "2 Found"
       And I should see "First work"
       And I should see "third work"
-      And I should see 'You searched for: hits: &gt; 100'
+      And I should see "You searched for: hits: > 100"
 
   Scenario: search with the header search field and then refine it using the author/artist field
     Given I have the Battle set loaded
@@ -98,7 +98,7 @@ Feature: Search Works
     When I am on the search works page
       And I fill in "Kudos" with ">0"
       And I press "Search" within "form#new_work_search"
-    Then I should see "You searched for: kudos count: &gt;0"
+    Then I should see "You searched for: kudos count: >0"
       And I should see "2 Found"
     When I follow "Edit Your Search"
       And I fill in "Kudos" with "5"
@@ -113,10 +113,10 @@ Feature: Search Works
     When I follow "Edit Your Search"
       And I fill in "Kudos" with "<2"
       And I press "Search" within "form#new_work_search"
-    Then I should see "You searched for: kudos count: &lt;2"
+    Then I should see "You searched for: kudos count: <2"
       And I should see "6 Found"
     When I follow "Edit Your Search"
       And I check "Complete"
       And I press "Search" within "form#new_work_search"
-    Then I should see "You searched for: Complete kudos count: &lt;2"
+    Then I should see "You searched for: Complete kudos count: <2"
       And I should see "4 Found"
