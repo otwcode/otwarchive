@@ -66,7 +66,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '4.3.6'
+gem 'paperclip', '>= 5.1.0'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
