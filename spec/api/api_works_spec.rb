@@ -30,7 +30,7 @@ describe "API WorksController - Create works" do
         ]
       }
 
-      post "api/v1/works", params: valid_params.to_json, headers: valid_headers
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
 
       assert_equal 200, response.status
     end
@@ -541,7 +541,7 @@ describe "API WorksController - Find Works" do
     end
 
     it "should only do an exact match on the original url" do
-      valid_params = { original_urls: %(fo food) }
+      valid_params = { original_urls: %w(fo food) }
 
       post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
