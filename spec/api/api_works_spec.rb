@@ -21,110 +21,140 @@ describe "API WorksController - Create works" do
     end
 
     it "should return 200 OK when all stories are created" do
-      post "/api/v1/works",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        works: [
+          { external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "api/v1/works", params: valid_params.to_json, headers: valid_headers
+
       assert_equal 200, response.status
     end
 
     it "should return 200 OK with an error message when no stories are created" do
-      post "/api/v1/works",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://bar"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        works: [
+          { external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://bar"] }
+        ]
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
+
       assert_equal 200, response.status
     end
 
     it "should return 200 OK with an error message when only some stories are created" do
-      post "/api/v1/works",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] },
-                     { external_author_name: "bar2",
-                       external_author_email: "bar2@foo.com",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        works: [
+          { external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://foo"] },
+          { external_author_name: "bar2",
+            external_author_email: "bar2@foo.com",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
+
       assert_equal 200, response.status
     end
 
     it "should return the original id" do
-      post "/api/v1/works",
-           { archivist: @user.login,
-             works: [{ id: "123",
-                       external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        works: [
+          { id: "123",
+            external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body[:works].first[:original_id]).to eq("123")
     end
 
     it "should send claim emails if send_claim_email is true" do
       # This test hits the call to #send_external_invites in #create for coverage
       # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
-      post "/api/v1/works",
-           { archivist: @user.login,
-             send_claim_emails: 1,
-             works: [{ id: "123",
-                       external_author_name: "bar",
-                       external_author_email: "send_invite@ao3.org",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        send_claim_emails: 1,
+        works: [
+          { id: "123",
+            external_author_name: "bar",
+            external_author_email: "send_invite@ao3.org",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
     end
 
     it "should return 400 Bad Request if no works are specified" do
-      post "/api/v1/works",
-           { archivist: @user.login }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
+
       assert_equal 400, response.status
     end
 
     it "should return a helpful message if the external work contains no text" do
-      post "/api/v1/works",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://no-content"] }]
-           }.to_json,
-           valid_headers
+      valid_params = {
+        archivist: @user.login,
+        works: [
+          { external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://no-content"] }
+        ]
+      }
+
+      post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body[:works].first[:messages].first).to start_with("We couldn't")
     end
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
         mock_external
-        post "/api/v1/works",
-             { archivist: @user.login,
-               works: [{ id: "123",
-                         title: api_fields[:title],
-                         summary: api_fields[:summary],
-                         fandoms: api_fields[:fandoms],
-                         warnings: api_fields[:warnings],
-                         characters: api_fields[:characters],
-                         rating: api_fields[:rating],
-                         relationships: api_fields[:relationships],
-                         categories: api_fields[:categories],
-                         additional_tags: api_fields[:freeform],
-                         external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         notes: api_fields[:notes],
-                         chapter_urls: ["http://foo"] }]
-             }.to_json,
-             valid_headers
 
+        valid_params = {
+          archivist: @user.login,
+          works: [
+            { id: "123",
+              title: api_fields[:title],
+              summary: api_fields[:summary],
+              fandoms: api_fields[:fandoms],
+              warnings: api_fields[:warnings],
+              characters: api_fields[:characters],
+              rating: api_fields[:rating],
+              relationships: api_fields[:relationships],
+              categories: api_fields[:categories],
+              additional_tags: api_fields[:freeform],
+              external_author_name: api_fields[:external_author_name],
+              external_author_email: api_fields[:external_author_email],
+              notes: api_fields[:notes],
+              chapter_urls: ["http://foo"] }
+          ]
+        }
+
+        post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
         parsed_body = JSON.parse(response.body, symbolize_names: true)
+
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
@@ -171,13 +201,17 @@ describe "API WorksController - Create works" do
     describe "Metadata should be extracted from content if no API metadata is supplied" do
       before(:all) do
         mock_external
-        post "/api/v1/works",
-             { archivist: @user.login,
-               works: [{ external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         chapter_urls: ["http://foo"] }]
-             }.to_json,
-             valid_headers
+
+        valid_params = {
+          archivist: @user.login,
+          works: [
+            { external_author_name: api_fields[:external_author_name],
+              external_author_email: api_fields[:external_author_email],
+              chapter_urls: ["http://foo"] }
+          ]
+        }
+
+        post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
@@ -231,13 +265,16 @@ describe "API WorksController - Create works" do
     describe "Imports should use fallback values or nil if no metadata is supplied" do
       before(:all) do
         mock_external
-        post "/api/v1/works",
-             { archivist: @user.login,
-               works: [{ external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         chapter_urls: ["http://no-metadata"] }]
-             }.to_json,
-             valid_headers
+        valid_params = {
+          archivist: @user.login,
+          works: [
+            { external_author_name: api_fields[:external_author_name],
+              external_author_email: api_fields[:external_author_email],
+              chapter_urls: ["http://no-metadata"] }
+          ]
+        }
+
+        post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
@@ -292,25 +329,29 @@ describe "API WorksController - Create works" do
     describe "Provided API metadata should be used if present and tag detection is turned off" do
       before(:all) do
         mock_external
-        post "/api/v1/works",
-             { archivist: @user.login,
-               works: [{ id: "123",
-                         title: api_fields[:title],
-                         detect_tags: false,
-                         summary: api_fields[:summary],
-                         fandoms: api_fields[:fandoms],
-                         warnings: api_fields[:warnings],
-                         characters: api_fields[:characters],
-                         rating: api_fields[:rating],
-                         relationships: api_fields[:relationships],
-                         categories: api_fields[:categories],
-                         additional_tags: api_fields[:freeform],
-                         external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         notes: api_fields[:notes],
-                         chapter_urls: ["http://foo"] }]
-             }.to_json,
-             valid_headers
+
+        valid_params = {
+          archivist: @user.login,
+          works: [
+            { id: "123",
+              title: api_fields[:title],
+              detect_tags: false,
+              summary: api_fields[:summary],
+              fandoms: api_fields[:fandoms],
+              warnings: api_fields[:warnings],
+              characters: api_fields[:characters],
+              rating: api_fields[:rating],
+              relationships: api_fields[:relationships],
+              categories: api_fields[:categories],
+              additional_tags: api_fields[:freeform],
+              external_author_name: api_fields[:external_author_name],
+              external_author_email: api_fields[:external_author_email],
+              notes: api_fields[:notes],
+              chapter_urls: ["http://foo"] }
+          ]
+        }
+
+        post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
@@ -365,14 +406,18 @@ describe "API WorksController - Create works" do
     describe "Some fields should be detected and others use fallback values or nil if no metadata is supplied and tag detection is turned off" do
       before(:all) do
         mock_external
-        post "/api/v1/works",
-             { archivist: @user.login,
-               works: [{ external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         detect_tags: false,
-                         chapter_urls: ["http://foo"] }]
-             }.to_json,
-             valid_headers
+
+        valid_params = {
+          archivist: @user.login,
+          works: [
+            { external_author_name: api_fields[:external_author_name],
+              external_author_email: api_fields[:external_author_email],
+              detect_tags: false,
+              chapter_urls: ["http://foo"] }
+          ]
+        }
+
+        post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
 
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
@@ -437,63 +482,70 @@ describe "API WorksController - Find Works" do
 
   describe "valid work URL request" do
     it "should return 200 OK" do
-      post "/api/v1/works/urls",
-           { original_urls: %w(bar foo) }.to_json,
-           valid_headers
+      valid_params = { original_urls: %w(bar foo) }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
+
       assert_equal 200, response.status
     end
 
     it "should return the work URL for an imported work" do
-      post "/api/v1/works/urls",
-           { original_urls: %w(foo) }.to_json,
-           valid_headers
+      valid_params = { original_urls: %(foo) }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:status]).to eq "ok"
       expect(parsed_body.first[:work_url]).to eq work_url(@work)
       expect(parsed_body.first[:created].to_date).to eq @work.created_at.to_date
     end
 
     it "should return the original reference if one was provided" do
-      post "/api/v1/works/urls",
-           { original_urls: [{ id: "123", url: "foo" }] }.to_json,
-           valid_headers
+      valid_params = { original_urls: [{ id: "123", url: "foo" }] }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:status]).to eq "ok"
       expect(parsed_body.first[:original_id]).to eq "123"
       expect(parsed_body.first[:original_url]).to eq "foo"
     end
 
     it "should return an error when no URLs are provided" do
-      post "/api/v1/works/urls",
-           { original_urls: [] }.to_json,
-           valid_headers
+      valid_params = { original_urls: [] }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:error]).to eq "Please provide a list of URLs to find."
     end
 
     it "should return an error when too many URLs are provided" do
       loads_of_items = Array.new(210) { |_| "url" }
-      post "/api/v1/works/urls",
-           { original_urls: loads_of_items }.to_json,
-           valid_headers
+      valid_params = { original_urls: loads_of_items }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:error]).to start_with "Please provide no more than"
     end
 
     it "should return an error for a work that wasn't imported" do
-      post "/api/v1/works/urls",
-           { original_urls: %w(bar) }.to_json,
-           valid_headers
+      valid_params = { original_urls: %w(bar) }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:status]).to eq("not_found")
       expect(parsed_body.first).to include(:error)
     end
 
     it "should only do an exact match on the original url" do
-      post "/api/v1/works/urls",
-           { original_urls: %w(fo food) }.to_json,
-           valid_headers
+      valid_params = { original_urls: %(fo food) }
+
+      post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+
       expect(parsed_body.first[:status]).to eq("not_found")
       expect(parsed_body.first).to include(:error)
       expect(parsed_body.second[:status]).to eq("not_found")
