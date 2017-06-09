@@ -1,8 +1,8 @@
 class FavoriteTagsController < ApplicationController
-  skip_before_filter :store_location, only: [:create, :destroy]
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  skip_before_action :store_location, only: [:create, :destroy]
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   respond_to :html, :json
 

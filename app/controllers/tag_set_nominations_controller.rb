@@ -1,11 +1,11 @@
 class TagSetNominationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :users_only
-  before_filter :load_tag_set, except: [ :index ]
-  before_filter :check_pseud_ownership, only: [:create, :update]
-  before_filter :load_nomination, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :set_limit, only: [:new, :edit, :show, :create, :update, :review]
+  before_action :users_only
+  before_action :load_tag_set, except: [ :index ]
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :load_nomination, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action :set_limit, only: [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
     if tag_set_nomination_params[:pseud_id]

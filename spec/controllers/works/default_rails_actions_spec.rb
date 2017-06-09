@@ -5,7 +5,7 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "before_filter #clean_work_search_params" do
+  describe "before_action #clean_work_search_params" do
     let(:params) { nil }
 
     def call_with_params(params)

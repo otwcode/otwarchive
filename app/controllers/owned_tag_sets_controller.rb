@@ -1,10 +1,10 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set, except: [ :index, :new, :create, :show_options ]
-  before_filter :users_only, only: [ :new, :create, :nominate ]
-  before_filter :moderators_only, except: [ :index, :new, :create, :show, :show_options ]
-  before_filter :owners_only, only: [ :destroy ]
+  before_action :load_tag_set, except: [ :index, :new, :create, :show_options ]
+  before_action :users_only, only: [ :new, :create, :nominate ]
+  before_action :moderators_only, except: [ :index, :new, :create, :show, :show_options ]
+  before_action :owners_only, only: [ :destroy ]
 
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:id])

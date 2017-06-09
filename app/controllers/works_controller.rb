@@ -2,23 +2,23 @@
 
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
-  before_filter :load_collection
-  before_filter :load_owner, only: [:index]
-  before_filter :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
-  before_filter :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
-  before_filter :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
+  before_action :load_collection
+  before_action :load_owner, only: [:index]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
+  before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
-  before_filter :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_filter :log_admin_activity, only: [:update_tags]
-  before_filter :check_visibility, only: [:show, :navigate]
+  before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
+  before_action :log_admin_activity, only: [:update_tags]
+  before_action :check_visibility, only: [:show, :navigate]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
-  before_filter :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
-  before_filter :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
-  before_filter :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
+  before_action :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
+  before_action :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
+  before_action :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
-  before_filter :clean_work_search_params, only: [:search, :index, :collected]
+  before_action :clean_work_search_params, only: [:search, :index, :collected]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper

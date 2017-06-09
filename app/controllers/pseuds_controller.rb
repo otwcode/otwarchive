@@ -1,9 +1,9 @@
 class PseudsController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :load_user
-  before_filter :check_ownership, only: [:create, :edit, :destroy, :new, :update]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :load_user
+  before_action :check_ownership, only: [:create, :edit, :destroy, :new, :update]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
 
   def load_user
     @user = User.find_by(login: params[:user_id])

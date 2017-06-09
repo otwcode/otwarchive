@@ -1,8 +1,8 @@
 # Controller for Serial Works
 class SerialWorksController < ApplicationController
 
-  before_filter :load_serial_work
-  before_filter :check_ownership
+  before_action :load_serial_work
+  before_action :check_ownership
 
   def load_serial_work
     @serial_work = SerialWork.find(params[:id])

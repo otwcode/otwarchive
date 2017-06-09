@@ -5,8 +5,8 @@ class UserSessionsController < ApplicationController
   rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
 
   layout "session"
-  before_filter :admin_logout_required
-  skip_before_filter :store_location
+  before_action :admin_logout_required
+  skip_before_action :store_location
 
 
   def show_auth_error

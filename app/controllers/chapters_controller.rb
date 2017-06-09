@@ -1,12 +1,12 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_filter :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
+  before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_action :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, only: [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
-  before_filter :check_visibility, only: [ :show]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_ownership, only: [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_action :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
+  before_action :check_visibility, only: [ :show]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
 
   cache_sweeper :feed_sweeper
 
