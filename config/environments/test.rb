@@ -41,11 +41,13 @@ Otwarchive::Application.configure do
   config.active_record.execution_retry_wait = 0.3 # sec
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
+  # Raise error raised within `after_rollback`/`after_commit` callbacks
+  config.active_record.raise_in_transactional_callbacks = true
 
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 
-  config.serve_static_assets = true
+  config.serve_static_files = true
   config.eager_load = false
   config.assets.enabled = false
 end

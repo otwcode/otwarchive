@@ -33,7 +33,7 @@ Otwarchive::Application.configure do
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
-  config.serve_static_assets = false
+  config.serve_static_files = false
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -65,6 +65,8 @@ Otwarchive::Application.configure do
   config.active_record.execution_retry_wait = 0.3 # sec
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
+  # Raise error raised within `after_rollback`/`after_commit` callbacks
+  config.active_record.raise_in_transactional_callbacks = true
 
 
 end

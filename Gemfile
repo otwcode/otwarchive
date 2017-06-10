@@ -131,7 +131,7 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
-  gem 'cucumber', '~> 2.3.2'
+  gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'

@@ -114,16 +114,16 @@ GEM
     crass (1.0.2)
     css_parser (1.5.0)
       addressable
-    cucumber (2.3.3)
+    cucumber (2.4.0)
       builder (>= 2.1.2)
-      cucumber-core (~> 1.4.0)
+      cucumber-core (~> 1.5.0)
       cucumber-wire (~> 0.0.1)
       diff-lcs (>= 1.1.3)
-      gherkin (~> 3.2.0)
+      gherkin (~> 4.0)
       multi_json (>= 1.7.5, < 2.0)
       multi_test (>= 0.1.2)
-    cucumber-core (1.4.0)
-      gherkin (~> 3.2.0)
+    cucumber-core (1.5.0)
+      gherkin (~> 4.0)
     cucumber-rails (1.4.5)
       capybara (>= 1.1.2, < 3)
       cucumber (>= 1.3.8, < 4)
@@ -181,7 +181,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    gherkin (3.2.0)
+    gherkin (4.1.3)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     globalize (5.0.1)
@@ -485,7 +485,7 @@ DEPENDENCIES
   connection_pool
   coveralls (~> 0.8.12)
   css_parser
-  cucumber (~> 2.3.2)
+  cucumber (~> 2.4.0)
   cucumber-rails (~> 1.4.3)
   cucumber-timecop
   dalli
@@ -558,4 +558,4 @@ RUBY VERSION
    ruby 2.2.5p319
 
 BUNDLED WITH
-   1.14.6
+   1.15.1

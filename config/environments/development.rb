@@ -33,7 +33,10 @@ Otwarchive::Application.configure do
 
   config.eager_load = false
   config.assets.enabled = false
-  config.serve_static_assets = true
+  config.serve_static_files = true
+
+  # Raise error raised within `after_rollback`/`after_commit` callbacks
+  config.active_record.raise_in_transactional_callbacks = true
 
   # Enable Bullet gem to monitor application performance
   config.after_initialize do

@@ -146,7 +146,11 @@ module ApplicationHelper
   end
 
   def pseud_link(pseud, only_path = true)
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: only_path), rel: "author")
+    if only_path
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
+    else
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: false), rel: "author")
+    end
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
