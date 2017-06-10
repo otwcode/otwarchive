@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.5'
+ruby '2.3.4'
 gem 'test-unit', '~> 3.0'
 
 gem 'bundler'
