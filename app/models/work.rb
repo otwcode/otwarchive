@@ -154,6 +154,9 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
+    # In the case that the work is being deleted then we will not 
+    # have a first chapter
+    return if self.first_chapter.nil?
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
