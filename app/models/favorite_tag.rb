@@ -12,6 +12,8 @@ class FavoriteTag < ActiveRecord::Base
 
   validate :within_limit, on: :create
 
+  validate :is_canonical, on: :create
+
   after_save :expire_cached_home_favorite_tags
   after_destroy :expire_cached_home_favorite_tags
 
@@ -19,6 +21,10 @@ class FavoriteTag < ActiveRecord::Base
     if user.favorite_tags(:reload).count >= ArchiveConfig.MAX_FAVORITE_TAGS
       errors.add(:base, ts('Sorry, you can only save %{maximum} favorite tags.', maximum: ArchiveConfig.MAX_FAVORITE_TAGS))
     end
+  end
+
+  def is_canonical
+    errors.add(:base, "Sorry, you can only add canonical tags to your favorite tags.") unless tag.canonical?
   end
 
   def tag
