@@ -18,21 +18,26 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
   before_filter :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
-  before_filter :clean_work_search_params, only: [:search, :index, :collected]
-
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    if params[:work_search].present? && params[:work_search][:query].present?
+    #https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
+    clean_params = work_search_params&.dup
+    clean_params[:query] = clean_params[:query].dup  unless clean_params[:query].nil?
+    clean_params[:term] = clean_params[:term].dup unless clean_params[:term].nil?
+    clean_params[:sort_column] = clean_params[:sort_column].dup unless clean_params[:sort_column].nil?
+    clean_params[:sort_direction] = clean_params[:sort_direction].dup unless clean_params[:sort_direction].nil?
+
+    if clean_params.present? && clean_params[:query].present?
       # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      params[:work_search][:query].gsub!('&gt;', '>')
-      params[:work_search][:query].gsub!('&lt;', '<')
+      clean_params[:query].gsub!('&gt;', '>')
+      clean_params[:query].gsub!('&lt;', '<')
 
       # extract countable params
       %w(word kudo comment bookmark hit).each do |term|
-        next unless params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+        next unless clean_params[:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
         # pluralize, add _count, convert to symbol
         term = term.pluralize unless term == 'word'
         term += '_count' unless term == 'hits'
@@ -40,39 +45,39 @@ class WorksController < ApplicationController
 
         value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
         # don't overwrite if submitting from advanced search?
-        params[:work_search][term] = value unless params[:work_search][term].present?
+        clean_params[term] = value unless clean_params[term].present?
       end
 
       # get sort-by
-      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+      if clean_params[:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
         sortdir = Regexp.last_match(3) || Regexp.last_match(1)
         sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
 
         _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        params[:work_search][:sort_column] = sort_column unless sort_column.nil?
-
-        params[:work_search][:sort_direction] = sort_direction(sortdir)
+        clean_params[:sort_column] = sort_column unless sort_column.nil?
+        clean_params[:sort_direction] = sort_direction(sortdir)
       end
 
       # put categories into quotes
       qr = Regexp.new('(?:"|\')?')
       %w(m/m f/f f/m m/f).each do |cat|
         cr = Regexp.new("#{qr}#{cat}#{qr}")
-        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
+        clean_params[:query].gsub!(cr, "\"#{cat}\"")
       end
 
       # swap out gt/lt
-      params[:work_search][:query].gsub!('>', '&gt;')
-      params[:work_search][:query].gsub!('<', '&lt;')
+      clean_params[:query].gsub!('>', '&gt;')
+      clean_params[:query].gsub!('<', '&lt;')
 
       # get rid of empty queries
-      params[:work_search][:query] = nil if params[:work_search][:query] =~ /^\s*$/
+      clean_params[:query] = nil if clean_params[:query] =~ /^\s*$/
     end
+    clean_params
   end
 
   def search
     @languages = Language.default_order
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearch.new(options)
@@ -90,7 +95,7 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -154,7 +159,7 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page]
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 

@@ -10,29 +10,13 @@ describe WorksController do
 
     def call_with_params(params)
       controller.params = { work_search: params }
-      controller.clean_work_search_params
+      controller.params[:work_search] = controller.clean_work_search_params
     end
 
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params
         it_redirects_to new_user_session_path
-      end
-
-      it "returns a nil" do
-        fake_login
-        controller.params = params
-        controller.clean_work_search_params
-        expect(controller.params[:work_search]).to be_nil
-      end
-    end
-
-    context "when search parameters are empty" do
-      let(:params) { [] }
-
-      it "returns a RecordNotFound exception" do
-        call_with_params params
-        expect(controller.params[:work_search]).to be_empty
       end
     end
 
