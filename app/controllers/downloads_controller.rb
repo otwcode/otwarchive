@@ -2,9 +2,9 @@ class DownloadsController < ApplicationController
 
   include XhtmlSplitter
 
-  skip_before_filter :store_location, :only => :show
-  before_filter :guest_downloading_off, :only => :show
-  before_filter :check_visibility, :only => :show
+  skip_before_filter :store_location, only: :show
+  before_filter :guest_downloading_off, only: :show
+  before_filter :check_visibility, only: :show
 
   # once a format has been created, we want nginx to be able to serve
   # it directly, without going through rails again (until the work changes).
@@ -33,7 +33,7 @@ class DownloadsController < ApplicationController
 
     Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
-    @chapters = @work.chapters.order('position ASC').where(:posted => true)
+    @chapters = @work.chapters.order('position ASC').where(posted: true)
     create_work_html
 
     respond_to do |format|
@@ -52,7 +52,7 @@ protected
     create_work_html
 
     # send as HTML
-    send_file("#{@work.download_basename}.html", :type => "text/html")
+    send_file("#{@work.download_basename}.html", type: "text/html")
   end
 
   def download_pdf
@@ -70,7 +70,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
+    send_file("#{@work.download_basename}.pdf", type: "application/pdf")
   end
 
   def download_mobi
@@ -95,7 +95,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", :type => "application/x-mobipocket-ebook")
+    send_file("#{@work.download_basename}.mobi", type: "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -116,7 +116,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", :type => "application/epub+zip")
+    send_file("#{@work.download_basename}.epub", type: "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
@@ -131,7 +131,7 @@ protected
     @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
 
     # render template
-    html = render_to_string(:template => "downloads/show.html", :layout => 'barebones.html')
+    html = render_to_string(template: "downloads/show.html", layout: 'barebones.html')
 
     # write to file
     File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
@@ -161,7 +161,7 @@ protected
 
   def render_mobi_html(template, basename)
     @mobi = true
-    html = render_to_string(:template => "downloads/#{template}.html", :layout => 'barebones.html')
+    html = render_to_string(template: "downloads/#{template}.html", layout: 'barebones.html')
     html = html.to_ascii 
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
@@ -180,7 +180,7 @@ protected
 
     # write the OEBPS content files
     FileUtils.mkdir_p "#{epubdir}/OEBPS"
-    preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
+    preface = render_to_string(template: "downloads/_download_preface.html", layout: 'barebones.html')
     render_xhtml(preface, "preface")
 
     @parts = []
@@ -196,17 +196,17 @@ protected
         # part of a chapter
         @suppress_chapter_meta = @chapters.size == 1 || partindex > 0
         @suppress_chapter_endnotes = @chapters.size == 1 || partindex < @parts[-1].size
-        html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
+        html = render_to_string(template: "downloads/_download_chapter.html", layout: "barebones.html")
         render_xhtml(html, "chapter#{index + 1}_#{partindex + 1}")
       end
     end
 
-    afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
+    afterword = render_to_string(template: "downloads/_download_afterword.html", layout: 'barebones.html')
     render_xhtml(afterword, "afterword")
 
     # write the OEBPS navigation files
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/toc.ncx"))}
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/content.opf"))}
 
 
   end
@@ -219,7 +219,7 @@ protected
 
   def guest_downloading_off
     if !logged_in? && @admin_settings.guest_downloading_off?
-      redirect_to login_path(:high_load => true)
+      redirect_to login_path(high_load: true)
     end
   end
 

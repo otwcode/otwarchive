@@ -2,20 +2,20 @@ class Kudo < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :pseud
-  belongs_to :commentable, :polymorphic => true
+  belongs_to :commentable, polymorphic: true
 
   validate :cannot_be_author
   validate :guest_cannot_kudos_restricted_work
 
   validates_uniqueness_of :pseud_id,
-    :scope => [:commentable_id, :commentable_type],
-    :message => ts("^You have already left kudos here. :)"),
-    :if => "!pseud.nil?"
+    scope: [:commentable_id, :commentable_type],
+    message: ts("^You have already left kudos here. :)"),
+    if: "!pseud.nil?"
 
   validates_uniqueness_of :ip_address,
-    :scope => [:commentable_id, :commentable_type],
-    :message => ts("^You have already left kudos here. :)"),
-    :if => "!ip_address.blank?"
+    scope: [:commentable_id, :commentable_type],
+    message: ts("^You have already left kudos here. :)"),
+    if: "!ip_address.blank?"
 
   scope :with_pseud, -> { where("pseud_id IS NOT NULL") }
   scope :by_guest, -> { where("pseud_id IS NULL") }

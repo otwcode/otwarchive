@@ -10,8 +10,8 @@ class TagSet < ActiveRecord::Base
 
   attr_accessor :from_owned_tag_set
 
-  has_many :set_taggings, :dependent => :destroy
-  has_many :tags, :through => :set_taggings
+  has_many :set_taggings, dependent: :destroy
+  has_many :tags, through: :set_taggings
 
   has_one :owned_tag_set
 
@@ -120,23 +120,23 @@ class TagSet < ActiveRecord::Base
   end
 
   # Tags must already exist unless they are being added to an owned tag set
-  validate :tagnames_must_exist, :unless => :from_owned_tag_set
+  validate :tagnames_must_exist, unless: :from_owned_tag_set
   def tagnames_must_exist
     nonexist = []
     if @tagnames
-      nonexist += @tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
+      nonexist += @tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(name: t.squish).exists?}
     end
     if owned_tag_set.nil?
       TAG_TYPES.each do |type|
         if (tagnames = self.instance_variable_get("@#{type}_tagnames_to_add"))
           tagnames = (tagnames.is_a?(Array) ? tagnames : tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT)).map {|t| t.squish}
-          nonexist += tagnames.select {|t| !t.blank? && !Tag.where(:name => t).exists?}
+          nonexist += tagnames.select {|t| !t.blank? && !Tag.where(name: t).exists?}
         end
       end
     end
 
     unless nonexist.empty?
-      errors.add(:tagnames, ts("^The following tags don't exist and can't be used: %{taglist}", :taglist => nonexist.join(", ") ))
+      errors.add(:tagnames, ts("^The following tags don't exist and can't be used: %{taglist}", taglist: nonexist.join(", ") ))
     end
   end
 
@@ -153,18 +153,18 @@ class TagSet < ActiveRecord::Base
   ### Various utility methods
 
   def +(other)
-    TagSet.new(:tags => (self.tags + other.tags))
+    TagSet.new(tags: (self.tags + other.tags))
   end
 
   def -(other)
-    TagSet.new(:tags => (self.tags - other.tags))
+    TagSet.new(tags: (self.tags - other.tags))
   end
 
   def with_type(type)
     # this is required because otherwise tag sets created on the fly (eg with + during potential match generation)
     # that are not saved in the database will return empty list.
     # We use Tag.where so that we can still chain this with other AR queries
-    return self.new_record? ? Tag.where(:id => self.tags.select {|t| t.type == type.classify}.collect(&:id)) : self.tags.with_type(type)
+    return self.new_record? ? Tag.where(id: self.tags.select {|t| t.type == type.classify}.collect(&:id)) : self.tags.with_type(type)
   end
 
   def has_type?(type)
@@ -334,7 +334,7 @@ class TagSet < ActiveRecord::Base
 
   # returns tags that are in ANY or ALL of the specified tag sets
   def self.autocomplete_lookup(options={})
-    options.reverse_merge!({:term => "", :tag_type => "all", :tag_set => "", :in_any => true})
+    options.reverse_merge!({term: "", tag_type: "all", tag_set: "", in_any: true})
     tag_type = options[:tag_type]
     search_param = options[:term]
     tag_sets = TagSet.get_search_terms(options[:tag_set])
@@ -346,10 +346,10 @@ class TagSet < ActiveRecord::Base
 
     if options[:in_any]
       # get the union since we want tags in ANY of these sets
-      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, aggregate: :max)
     else
       # take the intersection of ALL of these sets
-      REDIS_GENERAL.zinterstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zinterstore(combo_key, keys_to_lookup, aggregate: :max)
     end
     results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)
     # expire fast

@@ -2,9 +2,9 @@ class Challenge::GiftExchangeController < ChallengesController
 
   before_filter :users_only
   before_filter :load_collection
-  before_filter :load_challenge, :except => [:new, :create]
-  before_filter :collection_owners_only, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :set_time_zone, :only => [:create, :edit, :update]
+  before_filter :load_challenge, except: [:new, :create]
+  before_filter :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
+  before_filter :set_time_zone, only: [:create, :edit, :update]
 
   # ACTIONS
 
@@ -41,7 +41,7 @@ class Challenge::GiftExchangeController < ChallengesController
       flash[:notice] = ts('Challenge was successfully created.')
       redirect_to collection_profile_path(@collection)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -55,7 +55,7 @@ class Challenge::GiftExchangeController < ChallengesController
       # see if we initialized the tag set
       redirect_to collection_profile_path(@collection)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 

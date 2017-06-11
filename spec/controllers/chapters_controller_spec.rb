@@ -55,7 +55,7 @@ describe ChaptersController do
       
       it "should not allow a user to submit only a pseud that is not theirs" do
         @user2 = FactoryGirl.create(:user)
-        @chapter_attributes[:author_attributes] = {:ids => [@user2.pseuds.first.id]}
+        @chapter_attributes[:author_attributes] = {ids: [@user2.pseuds.first.id]}
         expect {
           post :create, { work_id: @work.id, chapter: @chapter_attributes }
         }.to_not change(Chapter, :count)

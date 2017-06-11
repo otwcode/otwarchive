@@ -99,7 +99,7 @@ module AutocompleteSource
     end
 
     def autocomplete_lookup(options = {})
-      options.reverse_merge!({:search_param => "", :autocomplete_prefix => "", :sort => "down"})
+      options.reverse_merge!({search_param: "", autocomplete_prefix: "", sort: "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
       if REDIS_GENERAL.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
@@ -136,10 +136,10 @@ module AutocompleteSource
           if lastpiece && search_piece.length < 3
             # use a limit
             phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
-              'inf', 0, :withscores => true, :limit => [0, 50])
+              'inf', 0, withscores: true, limit: [0, 50])
           else
             phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
-              'inf', 0, :withscores => true)
+              'inf', 0, withscores: true)
           end
 
           phrases_with_scores.each do |phrase, score|

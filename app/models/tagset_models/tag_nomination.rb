@@ -1,33 +1,33 @@
 class TagNomination < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  belongs_to :tag_set_nomination, :inverse_of => :tag_nominations
-  has_one :owned_tag_set, :through => :tag_set_nomination
+  belongs_to :tag_set_nomination, inverse_of: :tag_nominations
+  has_one :owned_tag_set, through: :tag_set_nomination
 
   attr_accessor :from_fandom_nomination
 
   validates_length_of :tagname,
-    :maximum => ArchiveConfig.TAG_MAX,
-    :message => ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
+    maximum: ArchiveConfig.TAG_MAX,
+    message: ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
 
   validates_format_of :tagname,
-    :if => "!tagname.blank?",
-    :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
+    if: "!tagname.blank?",
+    with: /\A[^,*<>^{}=`\\%]+\z/,
+    message: ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
 
   validate :type_validity
   def type_validity
     if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", :tagname => self.tagname))
+      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", tagname: self.tagname))
     end
   end
 
-  validate :not_already_reviewed, :on => :update
+  validate :not_already_reviewed, on: :update
   def not_already_reviewed
     # allow mods and the archive code to update
     unless (!User.current_user || (User.current_user && User.current_user.is_a?(User) && owned_tag_set.user_is_moderator?(User.current_user)))
       if tagname_changed? && (self.approved || self.rejected) && (tagname != tagname_was)  && !tagname_was.blank?
-        errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
+        errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", tagname_was: self.tagname_was, tagname: self.tagname))
         tagname = self.tagname_was
       end
     end
@@ -36,12 +36,12 @@ class TagNomination < ActiveRecord::Base
   # This makes sure no tagnames are nominated for different parents in this tag set
   validate :require_unique_tagname_with_parent
   def require_unique_tagname_with_parent
-    query = TagNomination.for_tag_set(get_owned_tag_set).where(:tagname => self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
+    query = TagNomination.for_tag_set(get_owned_tag_set).where(tagname: self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
     # let people change their own!
     query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
     if query.exists?
       other_parent = query.pluck(:parent_tagname).uniq.join(", ") # should only be one but just in case
-      errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", :tagname => self.tagname, :other_parent => other_parent, :fandom => self.get_parent_tagname || 'Fandom'))
+      errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", tagname: self.tagname, other_parent: other_parent, fandom: self.get_parent_tagname || 'Fandom'))
     end
   end
 
@@ -108,7 +108,7 @@ class TagNomination < ActiveRecord::Base
   end
 
   def self.for_tag_set(tag_set)
-    joins(:tag_set_nomination => :owned_tag_set).
+    joins(tag_set_nomination: :owned_tag_set).
     where("owned_tag_sets.id = ?", tag_set.id)
   end
 
@@ -117,13 +117,13 @@ class TagNomination < ActiveRecord::Base
   end
 
   def self.unreviewed
-    where(:approved => false).where(:rejected => false)
+    where(approved: false).where(rejected: false)
   end
 
   # returns an array of all the parent tagnames for the given tag
   # can be chained with other queries but must come at the end
   def self.nominated_parents(child_tagname, parent_search_term="")
-    parents = where(:tagname => child_tagname).where("parent_tagname != ''")
+    parents = where(tagname: child_tagname).where("parent_tagname != ''")
     unless parent_search_term.blank?
       parents = parents.where("parent_tagname LIKE ?", "%#{parent_search_term}%")
     end
@@ -131,7 +131,7 @@ class TagNomination < ActiveRecord::Base
   end
 
   # We need this manual join in order to do a query over multiple types of tags
-  # (ie, via TagNomination.where(:type => ...))
+  # (ie, via TagNomination.where(type: ...))
   def self.join_fandom_nomination
     joins("INNER JOIN tag_nominations fandom_nominations_tag_nominations ON
       fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND
@@ -150,7 +150,7 @@ class TagNomination < ActiveRecord::Base
 
   # If the mod is changing our name, change all other noms in this set as well
   def self.change_tagname!(owned_tag_set_to_change, old_tagname, new_tagname)
-    TagNomination.for_tag_set(owned_tag_set_to_change).where(:tagname => old_tagname).readonly(false).each do |tagnom|
+    TagNomination.for_tag_set(owned_tag_set_to_change).where(tagname: old_tagname).readonly(false).each do |tagnom|
       tagnom.tagname = new_tagname
       Rails.logger.info "Tagnom: #{tagnom.tagname} #{tagnom.valid?}"
       tagnom.save or return false
@@ -179,7 +179,7 @@ class TagNomination < ActiveRecord::Base
   end
 
   def times_nominated(tag_set)
-    TagNomination.for_tag_set(tag_set).where(:tagname => self.tagname).count
+    TagNomination.for_tag_set(tag_set).where(tagname: self.tagname).count
   end
 
 end

@@ -131,7 +131,7 @@ class CollectionItemsController < ApplicationController
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
-                            :collections => new_collections.collect(&:title).join(", "))
+                            collections: new_collections.collect(&:title).join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
@@ -156,7 +156,7 @@ class CollectionItemsController < ApplicationController
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
     else
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -164,7 +164,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
+    flash[:notice] = ts("Item completely removed from collection %{title}.", title: @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

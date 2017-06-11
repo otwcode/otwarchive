@@ -1,8 +1,8 @@
 class OrphansController < ApplicationController
   # You must be logged in to orphan works - relies on current_user data 
-  before_filter :users_only, :except => [:index, :about]
+  before_filter :users_only, except: [:index, :about]
   
-  before_filter :load_orphans, :except => [:index, :about]
+  before_filter :load_orphans, except: [:index, :about]
   
   def index
     @user = User.orphan_account
@@ -15,7 +15,7 @@ class OrphansController < ApplicationController
       @pseuds = (current_user.pseuds & work.pseuds)
       @orphans = [work]
     elsif params[:work_ids]
-      @orphans = Work.joins(:pseuds => :user).where("users.id = ?", current_user.id).where(:id => params[:work_ids]).readonly(false)
+      @orphans = Work.joins(pseuds: :user).where("users.id = ?", current_user.id).where(id: params[:work_ids]).readonly(false)
       @pseuds = current_user.pseuds & (@orphans.collect(&:pseuds).flatten)
     elsif params[:series_id]
       series = Series.find(params[:series_id])

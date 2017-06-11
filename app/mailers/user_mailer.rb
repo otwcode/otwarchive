@@ -77,7 +77,7 @@ class UserMailer < BulletproofMailer::Base
       locale = I18n.default_locale
     end
     @external_email = creator.email
-    @claimed_works = Work.where(:id => claimed_work_ids)
+    @claimed_works = Work.where(id: claimed_work_ids)
     I18n.with_locale(locale) do
       mail(
         to: creator.email,
@@ -99,7 +99,7 @@ class UserMailer < BulletproofMailer::Base
     # look up all the creations that have generated updates for this subscription
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
-      creation = creation_type.constantize.where(:id => creation_id).first
+      creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
@@ -286,8 +286,8 @@ class UserMailer < BulletproofMailer::Base
   def related_work_notification(user_id, related_work_id)
     @user = User.find(user_id)
     @related_work = RelatedWork.find(related_work_id)
-    @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
-    @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
+    @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
+    @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
@@ -338,8 +338,8 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -358,8 +358,8 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -386,8 +386,8 @@ class UserMailer < BulletproofMailer::Base
     @signup = challenge_signup
     signup_copy = generate_attachment_content_from_signup(@signup)
     filename = @signup.collection.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => signup_copy}
-    attachments["#{filename}.html"] = {:content => signup_copy}
+    attachments["#{filename}.txt"] = {content: signup_copy}
+    attachments["#{filename}.html"] = {content: signup_copy}
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -455,7 +455,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
         unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
+          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
           attachment_string += "<br />\nOptional: "
@@ -484,7 +484,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
         unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
+          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
           attachment_string += "<br />\nOptional: "

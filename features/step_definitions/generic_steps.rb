@@ -1,5 +1,5 @@
 When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
-  unselect(item, :from => selector)
+  unselect(item, from: selector)
 end
 
 Then /^debug$/ do
@@ -61,15 +61,15 @@ Then /^I should see Posted now$/ do
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with `([^\`]*)`$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 Then /^I should see a create confirmation message$/ do
@@ -102,7 +102,7 @@ Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
-  page.has_select?(field, :selected => value).should == true
+  page.has_select?(field, selected: value).should == true
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
@@ -127,7 +127,7 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, :disabled => true)
+    field_disabled = find_field(label, disabled: true)
     if field_disabled.respond_to? :should
       field_disabled.should be_truthy
     else
@@ -183,7 +183,7 @@ When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ 
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
+  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], with: value)
 end
 
 

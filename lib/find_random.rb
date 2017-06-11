@@ -4,7 +4,7 @@ module FindRandom
       count = self.count
       return nil if count == 0
       offset = rand(count)
-      self.find(:first, :offset => offset)
+      self.find(:first, offset: offset)
     end
   end
 end

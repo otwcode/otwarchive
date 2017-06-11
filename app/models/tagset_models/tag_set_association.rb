@@ -1,9 +1,9 @@
 class TagSetAssociation < ActiveRecord::Base
   belongs_to :owned_tag_set
   belongs_to :tag
-  belongs_to :parent_tag, :class_name => "Tag"
+  belongs_to :parent_tag, class_name: "Tag"
 
-  validates_uniqueness_of :tag_id, :scope => [:owned_tag_set_id, :parent_tag_id], :message => ts("^You have already associated those tags in your set.")
+  validates_uniqueness_of :tag_id, scope: [:owned_tag_set_id, :parent_tag_id], message: ts("^You have already associated those tags in your set.")
   validates_presence_of :tag_id, :parent_tag_id, :owned_tag_set_id
 
   attr_accessor :create_association
@@ -23,7 +23,7 @@ class TagSetAssociation < ActiveRecord::Base
   end
   
   def self.for_tag_set(tagset)
-    where(:owned_tag_set_id => tagset.id)
+    where(owned_tag_set_id: tagset.id)
   end
 
   # almost exactly like the same code in tag.rb
@@ -90,7 +90,7 @@ class TagSetAssociation < ActiveRecord::Base
     
   # returns tags that have been associated with a given fandom OR wrangled
   def self.autocomplete_lookup(options = {})
-    options.reverse_merge!({:term => "", :tag_type => "character", :tag_set => "", :fandom => "", :include_wrangled => "true"})
+    options.reverse_merge!({term: "", tag_type: "character", tag_set: "", fandom: "", include_wrangled: "true"})
     search_param = options[:term]
     tag_type = options[:tag_type]    
     fandoms = TagSetAssociation.get_search_terms(options[:fandom])
@@ -110,13 +110,13 @@ class TagSetAssociation < ActiveRecord::Base
       combo_key2 = combo_key + "2"
       combo_key3 = combo_key + "3"
       keys_for_intersect = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
-      REDIS_GENERAL.zunionstore(combo_key2, keys_to_lookup, :aggregate => :max)
-      REDIS_GENERAL.zunionstore(combo_key3, keys_for_intersect, :aggregate => :max)
-      REDIS_GENERAL.zinterstore(combo_key, [combo_key2, combo_key3], :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key2, keys_to_lookup, aggregate: :max)
+      REDIS_GENERAL.zunionstore(combo_key3, keys_for_intersect, aggregate: :max)
+      REDIS_GENERAL.zinterstore(combo_key, [combo_key2, combo_key3], aggregate: :max)
       REDIS_GENERAL.expire combo_key2, 1
       REDIS_GENERAL.expire combo_key3, 1
     else
-      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, aggregate: :max)
     end
     
     results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)

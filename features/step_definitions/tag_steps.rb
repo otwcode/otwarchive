@@ -119,7 +119,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   tw = User.find_by(login: user)
 
   if tw.blank?
-    tw = FactoryGirl.create(:user, {:login => user, :password => password})
+    tw = FactoryGirl.create(:user, {login: user, password: password})
     tw.activate
   else
     tw.password = password
@@ -137,8 +137,8 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   activate_authlogic
   user_record = find_or_create_new_user(user, password)
 
-  fill_in "User name", :with => user
-  fill_in "Password", :with => password
+  fill_in "User name", with: user
+  fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
 
@@ -148,7 +148,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
-  fill_in "tag_fandom_string", :with => fandomname
+  fill_in "tag_fandom_string", with: fandomname
   click_button "Assign"
 end
 
@@ -230,7 +230,7 @@ end
 
 When /^I select "([^"]*)" for the unsorted tag "([^"]*)"$/ do |type, tagname|
   tag = Tag.find_by(name: tagname)
-  select(type, :from => "tags[#{tag.id}]")
+  select(type, from: "tags[#{tag.id}]")
 end
 
 When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
@@ -252,7 +252,7 @@ When /^I view the tag "([^\"]*)"$/ do |tag|
 end
 
 When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
- tag = Fandom.new(:name => name)
+ tag = Fandom.new(name: name)
  tag.id = id.to_i
  tag.canonical = true
  tag.save
@@ -262,7 +262,7 @@ When /^I set up the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, t
   tag = Tag.find_by!(name: tag)
   visit tag_url(tag)
   click_link(" comment")
-  fill_in("Comment", :with => comment_text)
+  fill_in("Comment", with: comment_text)
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
@@ -312,8 +312,8 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
   visit new_wrangling_guideline_path
-  fill_in("Guideline text", :with => "Number #{n} posted Wrangling Guideline, this is.")
-  fill_in("Title", :with => "Number #{n} Wrangling Guideline")
+  fill_in("Guideline text", with: "Number #{n} posted Wrangling Guideline, this is.")
+  fill_in("Title", with: "Number #{n} Wrangling Guideline")
   click_button("Post")
 end
 

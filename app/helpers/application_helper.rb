@@ -12,7 +12,7 @@ module ApplicationHelper
     onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
     href = html_options[:href] || 'javascript:void(0)'
 
-    content_tag(:a, name, html_options.merge(:href => href, :onclick => onclick))
+    content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
   end
 
   # Generates class names for the main div in the application layout

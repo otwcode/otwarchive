@@ -129,7 +129,7 @@ end
 Role.find_by(name: "tag_wrangler").users.each { |u| USERS[u.id] = u }
 
 # add N extra random users
-User.find_in_batches(:batch_size => User.count/N ) do |users|
+User.find_in_batches(batch_size: User.count/N ) do |users|
   user = users.sample
   USERS[user.id] = user
 end if MULTI
@@ -164,7 +164,7 @@ if MULTI
   write_model(AdminSetting.first)
   puts ""
   puts "Dumping official skins"
-  Skin.where(:official => true).each{|s| write_model(s)}
+  Skin.where(official: true).each{|s| write_model(s)}
   puts ""
   puts "Dumping FAQs"
   ArchiveFaq.find_each {|f| write_model(f)}
@@ -173,7 +173,7 @@ if MULTI
   KnownIssue.find_each {|ki| write_model(ki)}
   puts ""
   puts "Dumping every #{N} feedback"
-  Feedback.find_in_batches(:batch_size => N ) {|b| write_model(b.last)}
+  Feedback.find_in_batches(batch_size: N ) {|b| write_model(b.last)}
 end
 
 # dump models from USERS, COLLECTIONS, WORKS, TAGS & PSEUDS
@@ -204,19 +204,19 @@ def user_associations(users)
     u.invitations.each { |x| write_model(x) }
 
     # get some readings to read, and some read
-    u.readings.where(:toread => true).find_in_batches(:batch_size => u.readings.size/N/2 + 1) do |readings|
+    u.readings.where(toread: true).find_in_batches(batch_size: u.readings.size/N/2 + 1) do |readings|
       reading = readings.sample
       write_model(reading)
       WORKS[reading.work.id] = reading.work if reading.work && MULTI
     end
-    u.readings.where(:toread => false).find_in_batches(:batch_size => u.readings.size/N/2 + 1) do |readings|
+    u.readings.where(toread: false).find_in_batches(batch_size: u.readings.size/N/2 + 1) do |readings|
       reading = readings.sample
       write_model(reading)
       WORKS[reading.work.id] = reading.work if reading.work && MULTI
     end
 
     # comments need associations
-    u.inbox_comments.find_in_batches(:batch_size => u.inbox_comments.size/N + 1) do |batch|
+    u.inbox_comments.find_in_batches(batch_size: u.inbox_comments.size/N + 1) do |batch|
       inbox_comment = batch.sample
       next if inbox_comment.nil? or inbox_comment.feedback_comment.nil? or inbox_comment.feedback_comment.ultimate_parent.nil?
       write_model(inbox_comment)
@@ -236,7 +236,7 @@ def user_associations(users)
       WORKS[commentable.id] = commentable if (MULTI && commentable.is_a?(Work))
     end
 
-    u.subscriptions.find_in_batches(:batch_size => u.subscriptions.size/N + 1) do |subscriptions|
+    u.subscriptions.find_in_batches(batch_size: u.subscriptions.size/N + 1) do |subscriptions|
       subscription = subscriptions.sample
       write_model(subscription)
       subscription.subscribable.pseuds.each {|p| PSEUDS[p.id] = p } if subscription.subscribable.is_a?(User)
@@ -244,12 +244,12 @@ def user_associations(users)
 
     # most of the associations are actually through the pseuds
     u.pseuds.each do |p|
-      p.collections.find_in_batches(:batch_size => p.collections.size/5 + 1) do |collections|
+      p.collections.find_in_batches(batch_size: p.collections.size/5 + 1) do |collections|
         collection = collections.sample
         COLLECTIONS[collection.id] = collection
         COLLECTIONS[collection.parent.id] = collection.parent if collection.parent
       end
-      p.comments.find_in_batches(:batch_size => N) do |comments|
+      p.comments.find_in_batches(batch_size: N) do |comments|
         comment = comments.sample
         write_model(comment)
         if MULTI
@@ -263,7 +263,7 @@ def user_associations(users)
           end
         end
       end
-      p.bookmarks.find_in_batches(:batch_size => p.bookmarks.size/N + 1) do |bookmarks|
+      p.bookmarks.find_in_batches(batch_size: p.bookmarks.size/N + 1) do |bookmarks|
         bookmark = bookmarks.sample
         if !bookmark.private? || !MULTI
           write_model(bookmark)
@@ -285,7 +285,7 @@ def user_associations(users)
         end
       end
 
-      p.creatorships.where(:creation_type => 'Work').find_in_batches(:batch_size => p.works.size/N + 1) do |creatorships|
+      p.creatorships.where(creation_type: 'Work').find_in_batches(batch_size: p.works.size/N + 1) do |creatorships|
         work = creatorships.sample.creation
         if work && (work.posted? || !MULTI)
           WORKS[work.id] = work
@@ -325,7 +325,7 @@ def collection_associations(items)
     # add related works.
     # if the work is private or unrevealed it will get culled in the works_associations task
     if MULTI
-      collection.collection_items.find_in_batches(:batch_size => collection.collection_items.size/N + 1 ) do |items|
+      collection.collection_items.find_in_batches(batch_size: collection.collection_items.size/N + 1 ) do |items|
         item = items.sample
         write_model(item)
         work = item.work

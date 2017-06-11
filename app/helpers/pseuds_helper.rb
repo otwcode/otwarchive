@@ -15,8 +15,8 @@ module PseudsHelper
   # For tag list on /people page
   def link_to_tag_with_count(pseud, tag_w_count)
     name = tag_w_count.first.name + " (" + tag_w_count.last.to_s + ")" 
-    url = user_pseud_works_path(pseud.user, pseud, :selected_tags => [tag_w_count.first.id])
-    link_to name, url, :class => 'tag'  
+    url = user_pseud_works_path(pseud.user, pseud, selected_tags: [tag_w_count.first.id])
+    link_to name, url, class: 'tag'  
   end
 
   # Controls which of current_user's pseuds is selected when posting or editing 

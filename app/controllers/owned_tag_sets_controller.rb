@@ -1,10 +1,10 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set, :except => [ :index, :new, :create, :show_options ]
-  before_filter :users_only, :only => [ :new, :create, :nominate ]
-  before_filter :moderators_only, :except => [ :index, :new, :create, :show, :show_options ]
-  before_filter :owners_only, :only => [ :destroy ]
+  before_filter :load_tag_set, except: [ :index, :new, :create, :show_options ]
+  before_filter :users_only, only: [ :new, :create, :nominate ]
+  before_filter :moderators_only, except: [ :index, :new, :create, :show, :show_options ]
+  before_filter :owners_only, only: [ :destroy ]
 
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:id])
@@ -36,7 +36,7 @@ class OwnedTagSetsController < ApplicationController
       @restriction = PromptRestriction.find(params[:restriction])
       @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
       if @tag_sets.count == 1
-        redirect_to tag_set_path(@tag_sets.first, :tag_type => (params[:tag_type] || "fandom")) and return
+        redirect_to tag_set_path(@tag_sets.first, tag_type: (params[:tag_type] || "fandom")) and return
       end
     else
       @tag_sets = OwnedTagSet
@@ -48,7 +48,7 @@ class OwnedTagSetsController < ApplicationController
         @tag_sets = @tag_sets.order("created_at DESC")
       end
     end
-    @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+    @tag_sets = @tag_sets.paginate(per_page: (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), page: (params[:page] || 1))
   end
 
   def show_options
@@ -149,7 +149,7 @@ class OwnedTagSetsController < ApplicationController
       flash[:notice] = ts('Tag Set was successfully created.')
       redirect_to tag_set_path(@tag_set)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -163,7 +163,7 @@ class OwnedTagSetsController < ApplicationController
       redirect_to tag_set_path(@tag_set)
     else
       get_parent_child_tags
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -175,7 +175,7 @@ class OwnedTagSetsController < ApplicationController
     begin
       name = @tag_set.title
       @tag_set.destroy
-      flash[:notice] = ts("Your Tag Set %{name} was deleted.", :name => name)
+      flash[:notice] = ts("Your Tag Set %{name} was deleted.", name: name)
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
@@ -187,18 +187,18 @@ class OwnedTagSetsController < ApplicationController
 
   def do_batch_load
     if params[:batch_associations]
-      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationships] ? true : false))
+      failed = @tag_set.load_batch_associations!(params[:batch_associations], do_relationships: (params[:batch_do_relationships] ? true : false))
       if failed.empty?
         flash[:notice] = ts("Tags and associations loaded!")
         redirect_to tag_set_path(@tag_set) and return
       else
         flash.now[:notice] = ts("We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!")
         @failed_batch_associations = failed.join("\n")
-        render :action => :batch_load and return
+        render action: :batch_load and return
       end
     else
       flash[:error] = ts("What did you want to load?")
-      redirect_to :action => :batch_load and return
+      redirect_to action: :batch_load and return
     end
   end
 
@@ -210,7 +210,7 @@ class OwnedTagSetsController < ApplicationController
   # for manual associations
   def get_parent_child_tags
     @tags_in_set = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).order("tags.name ASC")
-    @parent_tags_in_set = @tags_in_set.where(:type => 'Fandom').pluck :name, :id
+    @parent_tags_in_set = @tags_in_set.where(type: 'Fandom').pluck :name, :id
     @child_tags_in_set = @tags_in_set.where("type IN ('Relationship', 'Character')").pluck :name, :id
   end
 

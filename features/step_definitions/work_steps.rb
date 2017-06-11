@@ -117,7 +117,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
-    fill_in("content", :with => "Yet another chapter.")
+    fill_in("content", with: "Yet another chapter.")
     click_button("Post Without Preview")
   end
   step %{I am logged out}
@@ -213,7 +213,7 @@ When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |wo
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by(title: work)
-  visit work_url(work, :anchor => "comments", :show_comments => true)
+  visit work_url(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do
@@ -237,7 +237,7 @@ end
 When /^I post the chaptered work "([^"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
-  fill_in("content", :with => "Another Chapter.")
+  fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
   Work.tire.index.refresh
@@ -301,13 +301,13 @@ Then /^I should not see the default work content$/ do
 end
 
 When /^I fill in basic work tags$/ do
-  select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Additional Tags", :with => DEFAULT_FREEFORM)
+  select(DEFAULT_RATING, from: "Rating")
+  fill_in("Fandoms", with: DEFAULT_FANDOM)
+  fill_in("Additional Tags", with: DEFAULT_FREEFORM)
 end
 
 When /^I fill in basic external work tags$/ do
-  select(DEFAULT_RATING, :from => "Rating")
+  select(DEFAULT_RATING, from: "Rating")
   fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
   fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
@@ -430,13 +430,13 @@ When /^I set the publication date to today$/ do
 
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")
-    select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
-    select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
-    select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+    select("#{today.day}", from: "work[chapter_attributes][published_at(3i)]")
+    select("#{month}", from: "work[chapter_attributes][published_at(2i)]")
+    select("#{today.year}", from: "work[chapter_attributes][published_at(1i)]")
   else
-    select("#{today.day}", :from => "chapter[published_at(3i)]")
-    select("#{month}", :from => "chapter[published_at(2i)]")
-    select("#{today.year}", :from => "chapter[published_at(1i)]")
+    select("#{today.day}", from: "chapter[published_at(3i)]")
+    select("#{month}", from: "chapter[published_at(2i)]")
+    select("#{today.year}", from: "chapter[published_at(1i)]")
   end
 end
 
@@ -448,7 +448,7 @@ When /^I browse the "([^"]+)" works$/ do |tagname|
 end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, :page => "")
+  visit tag_works_path(tag, page: "")
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end

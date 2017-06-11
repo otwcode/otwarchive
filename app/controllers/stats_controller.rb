@@ -12,7 +12,7 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(posted: true)
+    user_works = Work.joins(pseuds: :user).where("users.id = ?", @user.id).where(posted: true)
     work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom,
@@ -72,7 +72,7 @@ class StatsController < ApplicationController
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
-    @totals[:user_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
+    @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: 'User').count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new
@@ -98,15 +98,15 @@ class StatsController < ApplicationController
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
-    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {:isVertical => true}).uri({
-     :chtt => chart_title,
-     :chs => "800x350",
-     :chbh => "a",
-     :chxt => "x",
-     :chm => "N,000000,0,-1,11"
+    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {isVertical: true}).uri({
+     chtt: chart_title,
+     chs: "800x350",
+     chbh: "a",
+     chxt: "x",
+     chm: "N,000000,0,-1,11"
     })
 
-    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, :title => chart_title)
+    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, title: chart_title)
 
   end
 
