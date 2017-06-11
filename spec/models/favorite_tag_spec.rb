@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe FavoriteTag do
   let(:noncanonical_favorite) { build(:favorite_tag,
-                                tag_id: create(:freeform, canonical: false).id) }
+                                      tag_id: create(:freeform,
+                                                     canonical: false).id) }
   let(:no_tag_favorite) { build(:favorite_tag, tag_id: nil) }
   let(:no_user_favorite) { build(:favorite_tag, user_id: nil) }
 
