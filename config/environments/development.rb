@@ -35,9 +35,6 @@ Otwarchive::Application.configure do
   config.assets.enabled = false
   config.serve_static_files = true
 
-  # Raise error raised within `after_rollback`/`after_commit` callbacks
-  config.active_record.raise_in_transactional_callbacks = true
-
   # Enable Bullet gem to monitor application performance
   config.after_initialize do
     Bullet.enable = true

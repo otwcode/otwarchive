@@ -80,7 +80,4 @@ Otwarchive::Application.configure do
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
 
-  # Raise error raised within `after_rollback`/`after_commit` callbacks
-  config.active_record.raise_in_transactional_callbacks = true
-
 end
