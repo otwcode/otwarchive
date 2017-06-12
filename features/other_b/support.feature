@@ -26,8 +26,7 @@ Feature: Filing a support request
     And all emails have been delivered
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
-    And 1 email should be delivered
-    And the email should contain "you suck"
+    And 2 emails should be delivered
 
   Scenario: Not logged in, with and without email
   
