@@ -18,7 +18,11 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(params[:user_session])
+      @user_session = UserSession.new(
+        login: params[:user_session][:login],
+        password: params[:user_session][:password]
+      )
+
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
