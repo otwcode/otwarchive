@@ -33,7 +33,7 @@ Otwarchive::Application.configure do
 
   config.eager_load = false
   config.assets.enabled = false
-  config.serve_static_assets = true
+  config.serve_static_files = true
 
   # Enable Bullet gem to monitor application performance
   config.after_initialize do
