@@ -28,7 +28,8 @@
   <% end %>
  
   <p class="actions">
-    <%= submit_tag ts("Yes, Delete All Spammer Creations"), confirm: ts("Are you sure? Remember this will destroy ALL these objects!") %>
+    <%= submit_tag ts("Yes, Delete All Spammer Creations"),
+                   data: { confirm: ts("Are you sure? Remember this will destroy ALL these objects!") } %>
   </p>
 <% end %>
 <!--/content-->
