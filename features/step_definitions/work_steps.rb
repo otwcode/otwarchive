@@ -142,13 +142,26 @@ Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I post the locked work "#{work}"}
 end
 
-Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
-  step %{I have a work "Blabla"}
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
   step %{I am logged out}
   n_comments ||= 3
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "Blabla"}
+    step %{I post the comment "Keep up the good work" on the work "#{title}"}
+    step %{I am logged out}
+  end
+end
+
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
+  step %{I am logged out}
+  n_bookmarks ||= 3
+  n_bookmarks.to_i.times do |i|
+    step %{I am logged in as a random user}
+    step %{I bookmark the work "#{title}"}
     step %{I am logged out}
   end
 end
