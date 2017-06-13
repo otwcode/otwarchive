@@ -28,7 +28,7 @@ class Work < ActiveRecord::Base
   has_many :external_authors, -> { uniq }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters, -> { where("work_id IS NOT NULL") }
+  has_many :chapters
   validates_associated :chapters
 
   has_many :serial_works, dependent: :destroy
@@ -141,6 +141,7 @@ class Work < ActiveRecord::Base
 
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
+
   def clean_and_validate_title
     unless self.title.blank?
       self.title = self.title.strip
@@ -181,6 +182,7 @@ class Work < ActiveRecord::Base
   before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
+
   before_create :set_anon_unrevealed, :set_author_sorting
   before_update :set_author_sorting
 
