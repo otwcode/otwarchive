@@ -49,7 +49,7 @@
       <% if @work.posted? %>
         <li><%= submit_tag ts('Update'), :name => 'update_button' %></li>
       <% else %>
-        <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with => ts("Please wait...") %></li>
+        <li><%= submit_tag ts('Post'), :name => 'post_button', data: { disable_with: ts("Please wait...") } %></li>
         <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
       <% end %>
       <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
