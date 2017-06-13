@@ -142,7 +142,7 @@
                       </li>
                       <li>
                         <%= link_to ts("Remove"), related_work,
-                                confirm: ts("Are you sure you want to delete the connection to this work?"),
+                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
                                 method: :delete %>
                       </li>
                     </ul>
