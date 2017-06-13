@@ -44,7 +44,7 @@
         <ol class="emails index group">
           <% @admin_blacklisted_emails.each do |blacklisted_email| %>
           <li>
-            <%= link_to ts("Remove %{email}", email: blacklisted_email.email), blacklisted_email, method: :delete, confirm: ts("Are you sure you want to remove %{email} from the blacklist?", email: blacklisted_email.email) %>
+            <%= link_to ts("Remove %{email}", email: blacklisted_email.email), blacklisted_email, method: :delete, data: { confirm: ts("Are you sure you want to remove %{email} from the blacklist?", email: blacklisted_email.email) } %>
           </li>
           <% end %>
         </ul>
