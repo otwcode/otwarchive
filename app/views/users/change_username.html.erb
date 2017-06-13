@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('Change My User Name') %></h2>
+<h2 class="heading"><%= ts("Change My User Name") %></h2>
 <%= error_messages_for :user %>
 <p class="caution">
   <%= ts("Please use this feature with caution. We will not redirect your old user name to your new one. Bookmarks and external links to your user page and your pseud pages under the old name will no longer work and the old name may be used by someone else unless all you are changing is capitalization.") %>
@@ -10,7 +10,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render 'edit_header_navigation' %>
+<%= render "edit_header_navigation" %>
 <!--/subnav-->
 
 <!--main content-->
@@ -21,7 +21,7 @@
     <dd><p class="important informational"><%= @user.login %></p></dd>
     <dt><%= label_tag :new_login, ts("New user name") %></dt>
     <dd>
-      <%= text_field_tag :new_login, @new_login, autocomplete: 'off', "aria-describedby" => "new-login-field-description" %>
+      <%= text_field_tag :new_login, @new_login, autocomplete: "off", "aria-describedby" => "new-login-field-description" %>
       <p class="footnote" id="new-login-field-description">
         <%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)",
                minimum: ArchiveConfig.LOGIN_LENGTH_MIN,
@@ -42,9 +42,9 @@
     <%= ts("If you've forgotten your password, we can send you a temporary one.") %>
   </p>
   <%= form_tag passwords_path do %>
-    <%= hidden_field_tag 'login', @user.login %>
+    <%= hidden_field_tag "login", @user.login %>
     <p class="footnote">
-      <%= submit_tag ts('Reset My Password') %>
+      <%= submit_tag ts("Reset My Password") %>
     </p>
   <% end %>
 <% end %>
