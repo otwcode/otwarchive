@@ -22,7 +22,7 @@
         <tr>
           <td><%= request.position %></td>
           <td><%= request.email %></td>
-          <td><%= link_to ts('Delete'), invite_request_path(request, page: params[:page]), data" { confirm: ts('Are you sure?') }, method: :delete %></td>
+          <td><%= link_to ts('Delete'), invite_request_path(request, page: params[:page]), data: { confirm: ts('Are you sure?') }, method: :delete %></td>
         </tr>
       <% end %>
     </tbody>
