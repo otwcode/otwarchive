@@ -65,7 +65,7 @@ describe CollectionItemsController do
       end
     end
 
-    context "for collection with items in" do
+    context "for collection with items in, default approved parameter" do
       let(:owner) { @collection.owners.first.user }
 
       it "includes approved items" do
@@ -109,7 +109,6 @@ describe CollectionItemsController do
 
     context "destroy" do
       let(:owner) { @collection.owners.first.user }
-      render_views
 
       it "removes things" do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
