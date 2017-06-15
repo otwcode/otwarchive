@@ -225,8 +225,6 @@ module NavigationHelpers
       admin_posts_path
     when /^the admin-settings page$/i
       admin_settings_path
-    when /^the admin-notices page$/i
-      notify_admin_users_path
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
