@@ -142,7 +142,7 @@
                       </li>
                       <li>
                         <%= link_to ts("Remove"), related_work,
-                                confirm: ts("Are you sure you want to delete the connection to this work?"),
+                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
                                 method: :delete %>
                       </li>
                     </ul>
@@ -339,7 +339,7 @@
       </li>
       <li>
         <%= submit_tag ts("Post Without Preview"), name: "post_button",
-              disable_with: ts("Please wait...") %>
+              data: { disable_with: ts("Please wait...") } %>
       </li>
       <li>
         <%= submit_tag ts("Cancel"), name: "cancel_button" %>
