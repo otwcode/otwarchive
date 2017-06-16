@@ -386,12 +386,7 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
     And I am logged in as "bookmarker2"
     And I bookmark the work "Popular Work"
   When I am on the bookmarks page
-  Then I should see "Recent Bookmarks"
-    And I should see "Popular Work"
-    And I should see "bookmarker1"
-    And I should see "bookmarker2"
-    And I should see "Show Most Recent Bookmarks"
-  When I show most recent bookmarks on bookmarker2's bookmark of "Popular Work"
+    And I show most recent bookmarks on bookmarker2's bookmark of "Popular Work"
   # Again, we're relying on the fact that it will use the first element that
   # matches the specified selector, since each bookmark on the page will have a
   # div with the class .recent
