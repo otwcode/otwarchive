@@ -377,8 +377,8 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
 
-@javascript
-Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+  @javascript
+  Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   Given the work "Popular Work"
     And I am logged in as "bookmarker1"
     And I bookmark the work "Popular Work" with the note "Love it"
@@ -386,16 +386,12 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
     And I am logged in as "bookmarker2"
     And I bookmark the work "Popular Work"
   When I am on the bookmarks page
-  # Travis is inexplicably failing, so let's try making sure we're on the right # page
   Then I should see "Recent Bookmarks"
     And I should see "Popular Work"
     And I should see "bookmarker1"
     And I should see "bookmarker2"
     And I should see "Show Most Recent Bookmarks"
-    # We're relying on the fact that Capybara will use the first link that
-    # matches the specified text, since the page will have two bookmarks and
-    # each bookmark will have a "Show Most Recent Bookmarks" link
-  When I follow "Show Most Recent Bookmarks"
+  When I show most recent bookmarks on bookmarker2's bookmark of "Popular Work"
   # Again, we're relying on the fact that it will use the first element that
   # matches the specified selector, since each bookmark on the page will have a
   # div with the class .recent
