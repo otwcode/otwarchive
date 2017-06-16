@@ -11,6 +11,7 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
+    addTestCrap();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -239,6 +240,10 @@ function hideHideMe() {
 
 function showShowMe() {
     $j('.showme').each(function() { $j(this).show(); });
+}
+
+function addTestCrap() {
+  $j("h1.heading span").text("If you see me, the application JS file loads");
 }
 
 function handlePopUps() {
