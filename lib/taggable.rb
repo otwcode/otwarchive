@@ -132,8 +132,10 @@ module Taggable
   end
 
   def validate_tags
-    errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
-    self.has_required_tags?
+    unless self.has_required_tags?
+      errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
+      throw :abort
+    end
   end
 
   # Add an error message if the user tried to add invalid tags to the work
@@ -145,8 +147,9 @@ module Taggable
           errors.add(:base, error)
         end
       end
+
+      throw :abort
     end
-    self.invalid_tags.blank?
   end
 
   def cast_tags

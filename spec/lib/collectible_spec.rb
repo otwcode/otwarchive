@@ -30,6 +30,7 @@ describe Collectible do
     describe "once added" do
 
       it "should be in that collection" do
+        work.authors = [build(:pseud)]
         work.save
         expect(work.collections).to include(collection)
         expect(collection.works).to include(work)

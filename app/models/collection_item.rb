@@ -111,7 +111,7 @@ class CollectionItem < ActiveRecord::Base
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if user_approval_status_changed? || collection_approval_status_changed?
-      item.save
+      item.save!
     end
   end
 

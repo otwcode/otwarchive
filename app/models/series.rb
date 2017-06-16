@@ -126,7 +126,7 @@ class Series < ActiveRecord::Base
   def adjust_restricted
     unless self.restricted? == !(self.works.where(restricted: false).count > 0)
       self.restricted = !(self.works.where(restricted: false).count > 0)
-      self.save(validate: false)
+      self.save!(validate: false)
     end
   end
 

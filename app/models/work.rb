@@ -122,9 +122,10 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank? && self.pseuds.blank?
       errors.add(:base, ts("Work must have at least one author."))
-      return false
+      throw :abort
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
+      throw :abort
     end
   end
 
@@ -147,7 +148,7 @@ class Work < ActiveRecord::Base
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", min: ArchiveConfig.TITLE_MIN))
-        return false
+        throw :abort
       else
         self.title_to_sort_on = self.sorted_title
       end
@@ -159,7 +160,7 @@ class Work < ActiveRecord::Base
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 
@@ -576,7 +577,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at
+        self.revised_at || self.created_at || DateTime.now
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
@@ -662,7 +663,7 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    self.chapters.first.save(validate: false)
+    !self.chapters.first.save(validate: false)
   end
 
   # If the work is posted, the first chapter should be posted too

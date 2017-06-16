@@ -189,17 +189,21 @@ class Tag < ActiveRecord::Base
       # admins can change tags with no restriction
       unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s)
         self.errors.add(:name, "can only be changed by an admin.")
+        throw :abort
       end
     end
     if self.merger_id
       if self.canonical?
         self.errors.add(:base, "A canonical can't be a synonym")
+        throw :abort
       end
       if self.merger_id == self.id
         self.errors.add(:base, "A tag can't be a synonym of itself.")
+        throw :abort
       end
       unless self.merger.class == self.class
         self.errors.add(:base, "A tag can only be a synonym of a tag in the same category as itself.")
+        throw :abort
       end
     end
   end

@@ -388,7 +388,7 @@ class Pseud < ActiveRecord::Base
   def check_default_pseud
     if !self.is_default? && self.user.pseuds.to_enum.find(&:is_default?) == nil
       default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
-      default_pseud.update_attribute(:is_default, true)
+      default_pseud.update_attribute!(:is_default, true)
     end
   end
 

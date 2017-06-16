@@ -72,7 +72,6 @@ class Comment < ActiveRecord::Base
     self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) &&
                       self.parent.moderated_commenting_enabled? &&
                       !User.current_user.try(:is_author_of?, self.ultimate_parent)
-    return true # because if reviewed is the return value, when it's false the record won't save!
   end
 
   # is this a comment by the creator of the ultimate parent
