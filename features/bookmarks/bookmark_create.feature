@@ -385,7 +385,6 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
     And I log out
     And I am logged in as "bookmarker2"
     And I bookmark the work "Popular Work"
-  Then I should see "If you see me, the application JS file loads"
   When I am on the bookmarks page
     And I show most recent bookmarks on bookmarker2's bookmark of "Popular Work"
   # Again, we're relying on the fact that it will use the first element that
