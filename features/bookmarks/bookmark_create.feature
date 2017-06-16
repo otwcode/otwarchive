@@ -376,3 +376,27 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
+
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+  Given the work "Popular Work"
+    And I am logged in as "bookmarker1"
+    And I bookmark the work "Popular Work" with the note "Love it"
+    And I log out
+    And I am logged in as "bookmarker2"
+    And I bookmark the work "Popular Work"
+  When I am on the bookmarks page
+    # We're relying on the fact that Capybara will use the first link that
+    # matches the specified text, since the page will have two bookmarks and
+    # each bookmark will have a "Show Most Recent Bookmarks" link
+    And I follow "Show Most Recent Bookmarks"
+  # Again, we're relying on the fact that it will use the first element that
+  # matches the specified selector, since each bookmark on the page will have a
+  # div with the class .recent
+  Then I should see "bookmarker1" within ".recent"
+    And I should see "Love it" within ".recent"
+    And I should see "Hide Most Recent Bookmarks" within ".recent"
+  When I follow "Hide Most Recent Bookmarks"
+  Then I should not see "bookmarker1" within ".recent"
+    And I should not see "Love it" within ".recent"
+    And I should see "Show Most Recent Bookmarks" within "li.bookmark"
