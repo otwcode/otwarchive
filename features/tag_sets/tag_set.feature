@@ -142,6 +142,8 @@ Feature: Creating and editing tag sets
   Given I am logged in
     And I set up the tag set "Associations" with the fandom tags "Major Crimes, The Closer" and the character tags "Brenda Leigh Johnson, Sharon Raydor"
   When I go to the "Associations" tag set edit page
+  # Temporarily forcing it to fail so I can see what happens
+  Then I should see "Banana phone"
     And I follow "Add Association"
     And I select "Sharon Raydor" from "Tag"
     And I select "The Closer" from "Parent tag"
