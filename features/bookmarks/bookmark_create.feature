@@ -387,8 +387,11 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
     And I bookmark the work "Popular Work"
     And the statistics for the work "Popular Work" are updated
   When I am on the bookmarks page
-    And I show most recent bookmarks on bookmarker2's bookmark of "Popular Work" 
-  # We're relying on the fact that it will use the first element that
+    # There are two of these links, but bookmarker2's bookmark is more recent,
+    # and it follows the first link matching the specified text
+    And I follow "Show Most Recent Boomarks"
+  Then I should see 
+  # Again, we're relying on the fact that it uses the first element that
   # matches the specified selector, since each bookmark on the page will have a
   # div with the class .recent
   Then I should see "bookmarker1" within ".recent"

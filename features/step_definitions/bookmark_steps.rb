@@ -141,13 +141,6 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   click_button "Edit"
 end
 
-When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, title|
-  pseud_id = User.find_by(login: user).default_pseud.id
-  work_id = Work.find_by(title: title).id
-  bookmark_id = Bookmark.find_by(bookmarkable_type: "Work", bookmarkable_id: work_id, pseud_id: pseud_id).id
-  step %{I follow "Show Most Recent Bookmarks" within "#recent_link_work_#{bookmark_id}"}
-end
-
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   work = Work.find_by(title: title)
   bookmark = work.bookmarks.first
