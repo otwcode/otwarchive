@@ -144,7 +144,7 @@ end
 When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |title|
   work = Work.find_by(title: title)
   ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
-  count = Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id)
+  count = Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id).size
   puts "Bookmark count from database: #{count}"
   puts "Bookmark count for work #{title}: #{work.public_bookmark_count}"
 end
