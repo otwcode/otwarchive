@@ -541,6 +541,15 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   step %{I follow "Mark for Later"}
   Reading.update_or_create_in_database
 end
+
+When /^the statistics for the work "([^"]*)" are updated$/ do |title|
+  step %{the statistics_tasks rake task is run}
+  step %{all search indexes are updated}
+  work = Work.find_by(title: title)
+  # Touch the work to actually expire the cache
+  work.touch
+end
+
 ### THEN
 Then /^I should see Updated today$/ do
   today = Time.zone.today.to_s

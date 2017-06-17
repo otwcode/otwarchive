@@ -377,19 +377,18 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
 
-  @javascript
-  Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   Given the work "Popular Work"
     And I am logged in as "bookmarker1"
     And I bookmark the work "Popular Work" with the note "Love it"
     And I log out
     And I am logged in as "bookmarker2"
     And I bookmark the work "Popular Work"
-    And the cached public bookmark count for the work "Popular Work" has expired
-    # And the cache for the bookmarks page has expired
+    And the statistics for the work "Popular Work" are updated
   When I am on the bookmarks page
-    And I show most recent bookmarks on bookmarker2's bookmark of "Popular Work"
-  # Again, we're relying on the fact that it will use the first element that
+    And I show most recent bookmarks on bookmarker2's bookmark of "Popular Work" 
+  # We're relying on the fact that it will use the first element that
   # matches the specified selector, since each bookmark on the page will have a
   # div with the class .recent
   Then I should see "bookmarker1" within ".recent"

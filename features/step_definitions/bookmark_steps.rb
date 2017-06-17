@@ -141,24 +141,10 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   click_button "Edit"
 end
 
-When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |title|
-  step %{the statistics_tasks rake task is run}
-  step %{all search indexes are updated}
-  work = Work.find_by(title: title)
-  puts "Cache key before expiration: #{work.cache_key}"
-  ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
-  count = Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id).size
-  puts "Cache key after expiration: #{work.cache_key}"
-  puts "Bookmark count from database: #{count}"
-  puts "Bookmark count for work #{title}: #{work.public_bookmark_count}"
-end
-
 When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, title|
   pseud_id = User.find_by(login: user).default_pseud.id
   work_id = Work.find_by(title: title).id
-  bookmark = Bookmark.find_by(bookmarkable_type: "Work", bookmarkable_id: work_id, pseud_id: pseud_id)
-  puts "Bookmark count for bookmark of #{title}: #{bookmark.bookmarkable.public_bookmark_count}"
-  bookmark_id = bookmark.id
+  bookmark_id = Bookmark.find_by(bookmarkable_type: "Work", bookmarkable_id: work_id, pseud_id: pseud_id).id
   step %{I follow "Show Most Recent Bookmarks" within "#recent_link_work_#{bookmark_id}"}
 end
 
