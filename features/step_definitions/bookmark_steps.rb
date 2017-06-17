@@ -141,6 +141,11 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   click_button "Edit"
 end
 
+When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |work|
+  work = Work.find_by(title: work)
+  ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
+end
+
 When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, work|
   pseud_id = User.find_by(login: user).default_pseud.id
   work_id = Work.find_by(title: work).id
