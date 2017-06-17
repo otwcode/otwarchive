@@ -175,29 +175,32 @@ class Collection < ActiveRecord::Base
   scope :by_title, -> { order(:title) }
 
   scope :approved, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::APPROVED,
           collection_approval_status: CollectionItem::APPROVED
         }
       )
+      .references(:collection_items)
   }
   scope :user_approved, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::APPROVED
         }
       )
+      .references(:collection_items)
   }
   scope :rejected, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::REJECTED
         }
       )
+      .references(:collection_items)
   }
 
 
