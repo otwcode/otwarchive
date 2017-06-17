@@ -141,16 +141,18 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   click_button "Edit"
 end
 
-When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |work|
-  work = Work.find_by(title: work)
+When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |title|
+  work = Work.find_by(title: title)
   ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
-  puts "Bookmark count for #{work}: #{work.public_bookmark_count}"
+  puts "Bookmark count for work #{title}: #{work.public_bookmark_count}"
 end
 
-When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, work|
+When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, title|
   pseud_id = User.find_by(login: user).default_pseud.id
-  work_id = Work.find_by(title: work).id
-  bookmark_id = Bookmark.find_by(bookmarkable_type: "Work", bookmarkable_id: work_id, pseud_id: pseud_id).id
+  work_id = Work.find_by(title: title).id
+  bookmark = Bookmark.find_by(bookmarkable_type: "Work", bookmarkable_id: work_id, pseud_id: pseud_id)
+  puts "Bookmark count for bookmark of #{title}: #{bookmark.bookmarkable.public_bookmark_count}"
+  bookmark_id = bookmark.id
   step %{I follow "Show Most Recent Bookmarks" within "#recent_link_work_#{bookmark_id}"}
 end
 
