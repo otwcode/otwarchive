@@ -389,8 +389,7 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   When I am on the bookmarks page
     # There are two of these links, but bookmarker2's bookmark is more recent,
     # and it follows the first link matching the specified text
-    And I follow "Show Most Recent Boomarks"
-  Then I should see 
+    And I follow "Show Most Recent Bookmarks"
   # Again, we're relying on the fact that it uses the first element that
   # matches the specified selector, since each bookmark on the page will have a
   # div with the class .recent
