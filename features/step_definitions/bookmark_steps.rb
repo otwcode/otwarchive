@@ -144,6 +144,7 @@ end
 When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |work|
   work = Work.find_by(title: work)
   ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
+  puts "Bookmark count for #{work}: #{work.public_bookmark_count}"
 end
 
 When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, work|
