@@ -146,16 +146,11 @@ When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do 
   step %{all search indexes are updated}
   work = Work.find_by(title: title)
   puts "Cache key before expiration: #{work.cache_key}"
-  work.touch
   ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
   count = Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id).size
   puts "Cache key after expiration: #{work.cache_key}"
   puts "Bookmark count from database: #{count}"
   puts "Bookmark count for work #{title}: #{work.public_bookmark_count}"
-end
-
-When /^the cache for the bookmarks? page has expired$/ do
-  ActionController::Base.new.expire_fragment("bookmarks/index/latest/v1")
 end
 
 When /^I show most recent bookmarks on ([^"]*)'s bookmark of "([^"]*)"$/ do |user, title|
