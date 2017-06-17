@@ -142,9 +142,14 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
 end
 
 When /^the cached public bookmark count for the work "([^"]*)" has expired$/ do |title|
+  step %{the statistics_tasks rake task is run}
+  step %{all search indexes are updated}
   work = Work.find_by(title: title)
+  puts "Cache key before expiration: #{work.cache_key}"
+  work.touch
   ActionController::Base.new.expire_fragment("#{work.cache_key}/bookmark_count")
   count = Bookmark.where(bookmarkable_type: "Work", bookmarkable_id: work.id).size
+  puts "Cache key after expiration: #{work.cache_key}"
   puts "Bookmark count from database: #{count}"
   puts "Bookmark count for work #{title}: #{work.public_bookmark_count}"
 end
