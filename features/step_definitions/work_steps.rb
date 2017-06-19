@@ -582,3 +582,16 @@ end
 Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
+
+Then(/^I should receive an? (MOBI|EPUB|PDF) file "(.*)?"$/) do |type, title|
+  type.downcase!
+  if type == "mobi"
+    mime_type = "application/x-mobipocket-ebook"
+  elsif type == "epub"
+    mime_type = "application/epub+zip"
+  elsif type == "pdf"
+    mime_type = "application/pdf"
+  end
+  expect(page.response_headers["Content-Type"]).to eq(mime_type)
+  expect(page.response_headers["Content-Disposition"]).to eq("attachment; filename=\"#{title}.#{type}\"")
+end

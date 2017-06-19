@@ -35,6 +35,7 @@ before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
+  - bash script/travis_ebook_converters.sh
 notifications:
   email:
     recipients:

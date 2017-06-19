@@ -107,9 +107,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^(.*?)(?:'s)? bookmarks page$/i
       Bookmark.tire.index.refresh
       user_bookmarks_path(user_id: $1)

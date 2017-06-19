@@ -1,31 +1,25 @@
-# encoding=utf-8
-
 @works
-
 Feature: Download a work
-  @wip
+
   Scenario: Download an ordinary work
 
   Given the work "Tittle with doubble letters"
   When I view the work "Tittle with doubble letters"
-  Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
-  When I follow "MOBI"
-  Then I should see "Tittle with doubble letters"
-    And I should see the text with tags "Tittle with doubble letters"
+    And I follow "MOBI"
+  Then I should receive a MOBI file "Tittle with doubble letters"
   When I view the work "Tittle with doubble letters"
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "Tittle with doubble letters"
   When I view the work "Tittle with doubble letters"
     And I follow "HTML"
   Then I should see "Tittle with doubble letters"
   When I view the work "Tittle with doubble letters"
     And I follow "EPUB"
-  # Then...
+  Then I should receive an EPUB file "Tittle with doubble letters"
 
-  @wip
   Scenario: Download works with quotation marks in the title doesn't bomb
 
-  Given I am logged in as a random user
+  Given I am logged in
     And I set up the draft "Title I'll Replace In A Sec"
     And I fill in "Work Title" with
       """
@@ -33,137 +27,118 @@ Feature: Download a work
       """
   When I press "Post Without Preview"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "Has double quotes"
   When I go to the work page with title "Has double quotes"
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "Has double quotes"
   When I go to the work page with title "Has double quotes"
     And I follow "HTML"
-  # Then...
+  Then I should see /"Has double quotes"/
   When I go to the work page with title "Has double quotes"
     And I follow "EPUB"
-  # Then...
+  Then I should receive an EPUB file "Has double quotes"
 
-  @wip
   Scenario: Download works with Cyrillic in the title doesn't bomb
 
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      Первый_маг
-      """
-  When I press "Post Without Preview"
-  # TODO: Think about whether we can invent a better name than this
-  Then I should see the text with tags "_.mobi"
-  When I follow "MOBI"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "PDF"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "HTML"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "EPUB"
-  # Then...
-
-  @wip
-  Scenario: Download works with curly quotes in the title doesn't bomb
-
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      Has curly’d quotes
-      """
+  Given I am logged in
+    And I set up the draft "Title I'll Replace In A Sec"
+    And I fill in "Work Title" with "Первый_маг"
   When I press "Post Without Preview"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "Piervyi_magh"
+  When I go to the work page with title Первый_маг
+    And I follow "PDF"
+  Then I should receive a PDF file "Piervyi_magh"
+  When I go to the work page with title Первый_маг
+    And I follow "HTML"
+  Then I should see "Первый_маг"
+  When I go to the work page with title Первый_маг
+    And I follow "EPUB"
+  Then I should receive an EPUB file "Piervyi_magh"
+
+  Scenario: Download works with curly quotes in the title doesn't bomb
+
+  Given I am logged in
+    And I set up the draft "Title I'll Replace In A Sec"
+    And I fill in "Work Title" with "Has curly’d quotes"
+  When I press "Post Without Preview"
+    And I follow "MOBI"
+  Then I should receive a MOBI file "Has curlyd quotes"
   When I go to the work page with title Has curly’d quotes
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "Has curlyd quotes"
   When I go to the work page with title Has curly’d quotes
     And I follow "HTML"
-  # Then...
+  Then I should see "Has curly’d quotes"
   When I go to the work page with title Has curly’d quotes
     And I follow "EPUB"
-  # Then...
+  Then I should receive an EPUB file "Has curlyd quotes"
 
-  @wip
-  Scenario: Download works with curly and straight quotes and accented 
+  Scenario: Download works with curly and straight quotes and accented
   characters in the title doesn't bomb
 
-  Given I set up the draft "Title I'll Replace In A Sec"
+  Given I am logged in
+    And I set up the draft "Title I'll Replace In A Sec"
     And I fill in "Work Title" with
       """
       "Hàs curly’d quotes"
       """
   When I press "Post Without Preview"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "Has curlyd quotes"
   When I go to the work page with title "Hàs curly’d quotes"
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "Has curlyd quotes"
   When I go to the work page with title "Hàs curly’d quotes"
     And I follow "HTML"
-  # Then...
+  Then I should see /"Hàs curly’d quotes"/
   When I go to the work page with title "Hàs curly’d quotes"
     And I follow "EPUB"
-  # Then...
+  Then I should receive an EPUB file "Has curlyd quotes"
 
-  @wip
   Scenario: Download chaptered works doesn't bomb
  
   Given the chaptered work "Epic Novel"
   When I view the work "Epic Novel"
     And I follow "HTML"
   Then I should see "Epic Novel"
-    And I should see "Another Chapter"
+    # AO3-2725: should have chapter headings
+    And I should see "Chapter 2"
+    And I should see "Yet another chapter."
     And I should not see "Comments"
   When I view the work "Epic Novel"
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "Epic Novel"
   When I view the work "Epic Novel"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "Epic Novel"
   When I view the work "Epic Novel"
     And I follow "EPUB"
+  Then I should receive an EPUB file "Epic Novel"
 
-  @wip
   Scenario: Download MOBI and PDF for works with unusual characters in the title
 
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
-      """
+  Given I am logged in
+    And I set up the draft "Title I'll Replace In A Sec"
+    And I fill in "Work Title" with "♥ and é Türkçe Karakterler başlıkta nasıl görünüyor"
   When I press "Post Without Preview"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "and e Turkce Karakterler"
   When I go to the work page with title ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
     And I follow "PDF"
-  # Then...
+  Then I should receive a PDF file "and e Turkce Karakterler"
 
-  @wip
   Scenario: Download MOBI and PDF for works with more unusual characters in the title
 
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      à ø something
-      """
+  Given I am logged in
+    And I set up the draft "Title I'll Replace In A Sec"
+    And I fill in "Work Title" with "à ø something"
   When I press "Post Without Preview"
     And I follow "MOBI"
-  # Then...
+  Then I should receive a MOBI file "a o something"
   When I go to the work page with title à ø something
     And I follow "PDF"
-  # Then...
-
-  Scenario: Download chaptered works as HTML
-
-  Given the chaptered work "Bazinga"
-  When I view the work "Bazinga"
-    And I follow "HTML"
-  Then I should see "Chapter 2"
+  Then I should receive a PDF file "a o something"
 
   Scenario: Unrevealed works cannot be downloaded
 
