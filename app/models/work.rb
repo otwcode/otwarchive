@@ -10,6 +10,7 @@ class Work < ActiveRecord::Base
   include WorkChapterCountCaching
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
+  include Creatable
   # include Tire::Model::Callbacks
 
   ########################################################################
@@ -194,6 +195,27 @@ class Work < ActiveRecord::Base
 
   after_save :expire_caches
   after_destroy :expire_caches
+  before_destroy :before_destroy
+
+  def before_destroy
+    if self.posted?
+      users = self.pseuds.collect(&:user).uniq
+      orphan_account = User.orphan_account
+      unless users.blank?
+        for user in users
+          next if user == orphan_account
+          # Check to see if this work is being deleted by an Admin
+          if User.current_user.is_a?(Admin)
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.admin_deleted_work_notification(user, self).deliver!
+          else
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.delete_work_notification(user, self).deliver!
+          end
+        end
+      end
+    end
+  end
 
   def expire_caches
     pseuds.each do |pseud|

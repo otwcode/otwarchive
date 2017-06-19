@@ -4,6 +4,7 @@ class Bookmark < ActiveRecord::Base
   include Collectible
   include Searchable
   include Tire::Model::Search
+  include Responder
   # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, polymorphic: true

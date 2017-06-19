@@ -1,6 +1,7 @@
 class Series < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Creatable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works

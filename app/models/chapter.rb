@@ -4,6 +4,7 @@ class Chapter < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include Creatable
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
