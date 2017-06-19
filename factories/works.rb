@@ -10,7 +10,7 @@ FactoryGirl.define do
     chapter_attributes chapter_info
 
     after(:build) do |work|
-      work.authors = [FactoryGirl.build(:pseud)] if work.authors.blank?
+      work.pseuds = [FactoryGirl.build(:pseud)] if work.pseuds.blank?
     end
 
     factory :no_authors do
