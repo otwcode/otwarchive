@@ -4,7 +4,6 @@ module Taggable
     taggable.class_eval do
       attr_accessor :invalid_tags
       attr_accessor :preview_mode, :placeholder_tags
-      after_update :reset_placeholders
 
       has_many :filter_taggings, as: :filterable
       has_many :filters, through: :filter_taggings
@@ -56,6 +55,8 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
+
+      after_update :reset_placeholders
     end
   end
 

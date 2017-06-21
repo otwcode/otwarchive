@@ -47,6 +47,9 @@ class Chapter < ActiveRecord::Base
 
 #  before_update :clean_emdashes
 
+  after_create :notify_after_creation
+  before_update :notify_before_update
+
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 

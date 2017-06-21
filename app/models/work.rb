@@ -1,6 +1,6 @@
 class Work < ActiveRecord::Base
 
-  include Taggable
+  include Creatable
   include Collectible
   include Bookmarkable
   include Pseudable
@@ -10,7 +10,6 @@ class Work < ActiveRecord::Base
   include WorkChapterCountCaching
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  include Creatable
   # include Tire::Model::Callbacks
 
   ########################################################################
@@ -62,7 +61,6 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-
   # statistics
   has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
@@ -187,13 +185,14 @@ class Work < ActiveRecord::Base
   after_save :save_chapters, :save_parents, :save_new_recipients
 
   before_create :set_anon_unrevealed, :set_author_sorting
+  after_create :notify_after_creation
   before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
-  before_update :validate_tags
+  before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :expire_caches
+  after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
   before_destroy :before_destroy
 
@@ -1503,4 +1502,5 @@ class Work < ActiveRecord::Base
     (filter_ids & nonfiction_tags).present?
   end
 
+  include Taggable
 end

@@ -1,19 +1,11 @@
 module Creatable
-  def self.included(creatable)
-    creatable.class_eval do
-      after_create :after_create
-      before_update :before_update
-      after_save :after_save
-    end
-  end
-
-  def after_create
+  def notify_after_creation # after_create
     notify_co_authors
     return unless !self.is_a?(Series) && self.posted?
     do_notify
   end
 
-  def before_update
+  def notify_before_update # before_update
     notify_co_authors
     return unless !self.is_a?(Series) && self.valid? && self.posted?
 
@@ -24,11 +16,11 @@ module Creatable
     end
   end
 
-  def after_save
-    if self.is_a?(Work)
-      notify_recipients(self)
-    end
-  end
+  # def after_save
+  #   if self.is_a?(Work)
+  #     notify_recipients(self)
+  #   end
+  # end
 
   # send the appropriate notifications
   def do_notify
@@ -59,18 +51,18 @@ module Creatable
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
-  def notify_recipients(work)
-    if work.posted && !work.new_recipients.blank? && !work.unrevealed?
-      recipient_pseuds = Pseud.parse_bylines(work.new_recipients, assume_matching_login: true)[:pseuds]
+  def notify_recipients
+    if self.posted && !self.new_recipients.blank? && !self.unrevealed?
+      recipient_pseuds = Pseud.parse_bylines(self.new_recipients, assume_matching_login: true)[:pseuds]
       # check user prefs to see which recipients want to get gift notifications
       # (since each user has only one preference item, this removes duplicates)
       recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
                                    recipient_emails_off: false).pluck(:user_id)
       recip_ids.each do |userid|
-        if work.collections.empty? || work.collections.first.nil?
-          UserMailer.recipient_notification(userid, work.id).deliver
+        if self.collections.empty? || self.collections.first.nil?
+          UserMailer.recipient_notification(userid, self.id).deliver
         else
-          UserMailer.recipient_notification(userid, work.id, work.collections.first.id).deliver
+          UserMailer.recipient_notification(userid, self.id, work.collections.first.id).deliver
         end
       end
     end
@@ -89,24 +81,24 @@ module Creatable
   # Check whether the work's creator has just been revealed (whether because
   # a collection has just revealed its works, or a collection has just revealed
   # creators). If so, queue up creator subscription emails.
-  def notify_subscribers_on_reveal(work)
+  def notify_subscribers_on_reveal
     # Double-check that it's a posted work.
-    return unless work.is_a?(Work) && work.posted
+    return unless self.is_a?(Work) && self.posted
 
     # Bail out if the work or its creator is currently unrevealed.
-    return if work.in_anon_collection || work.in_unrevealed_collection
+    return if self.in_anon_collection || self.in_unrevealed_collection
 
     # If we've reached here, the creator of the work must be public.
     # So now we want to check whether that's a recent thing.
-    if work.in_anon_collection_changed? || work.in_unrevealed_collection_changed?
+    if self.in_anon_collection_changed? || self.in_unrevealed_collection_changed?
       # Prior to this save, the work was either anonymous or unrevealed.
       # Either way, the author was just revealed, so we should trigger
       # a creator subscription email.
       Subscription.where(
-        subscribable_id: work.pseuds.pluck(:user_id),
+        subscribable_id: self.pseuds.pluck(:user_id),
         subscribable_type: "User"
       ).each do |subscription|
-        RedisMailQueue.queue_subscription(subscription, work)
+        RedisMailQueue.queue_subscription(subscription, self)
       end
     end
   end

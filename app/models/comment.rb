@@ -1,7 +1,6 @@
 class Comment < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
-  include Responder
 
   belongs_to :pseud
   belongs_to :commentable, polymorphic: true
@@ -19,6 +18,7 @@ class Comment < ActiveRecord::Base
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
   validate :check_for_spam
+
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
@@ -55,6 +55,9 @@ class Comment < ActiveRecord::Base
   before_create :set_parent_and_unreviewed
   after_create :update_thread
   before_create :adjust_threading, if: :reply_comment?
+
+  after_create :update_work_stats
+  after_destroy :update_work_stats
 
   after_update :after_update
   def after_update
@@ -129,7 +132,7 @@ class Comment < ActiveRecord::Base
     end
 
     # Reply to owner of parent comment if this is a reply comment
-    if (parent_comment_owner = notify_parent_comment_owner(self))
+    if (parent_comment_owner = notify_parent_comment_owner)
       users << parent_comment_owner
     end
 
@@ -296,6 +299,7 @@ class Comment < ActiveRecord::Base
     self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) &&
                       self.parent.moderated_commenting_enabled? &&
                       !User.current_user.try(:is_author_of?, self.ultimate_parent)
+    true
   end
 
   # is this a comment by the creator of the ultimate parent
@@ -386,4 +390,6 @@ class Comment < ActiveRecord::Base
   def sanitized_content
     sanitize_field self, :content
   end
+  include Responder
+
 end

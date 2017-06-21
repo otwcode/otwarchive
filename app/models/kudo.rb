@@ -21,7 +21,8 @@ class Kudo < ActiveRecord::Base
   scope :with_pseud, -> { where("pseud_id IS NOT NULL") }
   scope :by_guest, -> { where("pseud_id IS NULL") }
 
-  after_create :after_create
+  after_destroy :update_work_stats
+  after_create :after_create, :update_work_stats
   def after_create
     users = self.commentable.pseuds.map(&:user).uniq
 

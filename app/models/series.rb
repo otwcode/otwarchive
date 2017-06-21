@@ -26,6 +26,9 @@ class Series < ActiveRecord::Base
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  after_create :notify_after_creation
+  before_update :notify_before_update
+
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
