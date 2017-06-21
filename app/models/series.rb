@@ -1,6 +1,7 @@
 class Series < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Creatable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -24,6 +25,9 @@ class Series < ActiveRecord::Base
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
+
+  after_create :notify_after_creation
+  before_update :notify_before_update
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -126,7 +130,7 @@ class Series < ActiveRecord::Base
   def adjust_restricted
     unless self.restricted? == !(self.works.where(restricted: false).count > 0)
       self.restricted = !(self.works.where(restricted: false).count > 0)
-      self.save(validate: false)
+      self.save!(validate: false)
     end
   end
 

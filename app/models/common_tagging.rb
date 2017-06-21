@@ -16,7 +16,7 @@ class CommonTagging < ActiveRecord::Base
   
   def update_wrangler
     unless User.current_user.nil?
-      common_tag.update_attributes(last_wrangler: User.current_user)
+      common_tag.update_attributes!(last_wrangler: User.current_user)
     end
   end
   

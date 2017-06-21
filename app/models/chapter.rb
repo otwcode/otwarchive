@@ -4,6 +4,7 @@ class Chapter < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include Creatable
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
@@ -45,6 +46,9 @@ class Chapter < ActiveRecord::Base
   before_save :validate_published_at
 
 #  before_update :clean_emdashes
+
+  after_create :notify_after_creation
+  before_update :notify_before_update
 
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
@@ -170,7 +174,7 @@ class Chapter < ActiveRecord::Base
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
       errors.add(:base, ts("Chapter must have at least one author."))
-      return false
+      throw :abort
     end
   end
 
@@ -180,7 +184,7 @@ class Chapter < ActiveRecord::Base
       self.published_at = Date.today
     elsif self.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 

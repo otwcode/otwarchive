@@ -1,6 +1,6 @@
 class Work < ActiveRecord::Base
 
-  include Taggable
+  include Creatable
   include Collectible
   include Bookmarkable
   include Pseudable
@@ -61,7 +61,6 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-
   # statistics
   has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
@@ -122,9 +121,10 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank? && self.pseuds.blank?
       errors.add(:base, ts("Work must have at least one author."))
-      return false
+      throw :abort
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
+      throw :abort
     end
   end
 
@@ -147,7 +147,7 @@ class Work < ActiveRecord::Base
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", min: ArchiveConfig.TITLE_MIN))
-        return false
+        throw :abort
       else
         self.title_to_sort_on = self.sorted_title
       end
@@ -159,7 +159,7 @@ class Work < ActiveRecord::Base
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 
@@ -177,6 +177,7 @@ class Work < ActiveRecord::Base
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
+
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   before_save :post_first_chapter, :set_word_count
@@ -184,14 +185,36 @@ class Work < ActiveRecord::Base
   after_save :save_chapters, :save_parents, :save_new_recipients
 
   before_create :set_anon_unrevealed, :set_author_sorting
+  after_create :notify_after_creation
   before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
-  before_update :validate_tags
+  before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :expire_caches
+  after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
+  before_destroy :before_destroy
+
+  def before_destroy
+    if self.posted?
+      users = self.pseuds.collect(&:user).uniq
+      orphan_account = User.orphan_account
+      unless users.blank?
+        for user in users
+          next if user == orphan_account
+          # Check to see if this work is being deleted by an Admin
+          if User.current_user.is_a?(Admin)
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.admin_deleted_work_notification(user, self).deliver!
+          else
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.delete_work_notification(user, self).deliver!
+          end
+        end
+      end
+    end
+  end
 
   def expire_caches
     pseuds.each do |pseud|
@@ -576,7 +599,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at
+        self.revised_at || self.created_at || DateTime.now
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
@@ -662,7 +685,7 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    self.chapters.first.save(validate: false)
+    !self.chapters.first.save(validate: false)
   end
 
   # If the work is posted, the first chapter should be posted too
@@ -1479,4 +1502,5 @@ class Work < ActiveRecord::Base
     (filter_ids & nonfiction_tags).present?
   end
 
+  include Taggable
 end

@@ -28,7 +28,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Capybara::DSL
 
   config.before :suite do

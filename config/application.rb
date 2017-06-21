@@ -80,5 +80,6 @@ module Otwarchive
     # Bring the log under control
     config.lograge.enabled = true
 
+    config.active_support.halt_callback_chains_on_return_false = false
   end
 end

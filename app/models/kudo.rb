@@ -1,5 +1,6 @@
 class Kudo < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
+  include Responder
 
   belongs_to :pseud
   belongs_to :commentable, polymorphic: true
@@ -19,6 +20,23 @@ class Kudo < ActiveRecord::Base
 
   scope :with_pseud, -> { where("pseud_id IS NOT NULL") }
   scope :by_guest, -> { where("pseud_id IS NULL") }
+
+  after_destroy :update_work_stats
+  after_create :after_create, :update_work_stats
+  def after_create
+    users = self.commentable.pseuds.map(&:user).uniq
+
+    users.each do |user|
+      if notify_user_by_email?(user)
+        RedisMailQueue.queue_kudo(user, self)
+      end
+    end
+  end
+
+  def notify_user_by_email?(user)
+    user.nil? ? false : ( user.is_a?(Admin) ? true :
+      !(user == User.orphan_account || user.preference.kudos_emails_ff?) )
+  end
 
   # return either the name of the kudo-leaver or "guest"
   def name

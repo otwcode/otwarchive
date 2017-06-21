@@ -9,6 +9,7 @@ gem 'rails', '5.0.3'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
+gem 'rails-controller-testing'
 #gem 'activerecord-deprecated_finders'
 
 # the published gem does not include fixes that are in Rails

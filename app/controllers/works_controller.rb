@@ -256,7 +256,7 @@ class WorksController < ApplicationController
   def new
     @hide_dashboard = true
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
     @unposted = current_user.unposted_work
 
     @work.ip_address = request.remote_ip
@@ -347,7 +347,7 @@ class WorksController < ApplicationController
   def set_edit_form_fields
     load_pseuds
     @work.reset_published_at(@chapter)
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
     @collection = Collection.find_by(name: params[:work][:collection_names])
   end
 
@@ -356,7 +356,7 @@ class WorksController < ApplicationController
     @hide_dashboard = true
     @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
 
     return unless params['remove'] == 'me'
 
@@ -580,7 +580,7 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
-      @series = current_user.series.uniq
+      @series = current_user.series.distinct
       render(:new) && return
     end
 
@@ -620,7 +620,7 @@ class WorksController < ApplicationController
   def send_external_invites(works)
     return unless params[:importing_for_others]
 
-    @external_authors = works.collect(&:external_authors).flatten.uniq
+    @external_authors = works.collect(&:external_authors).flatten.distinct
     unless @external_authors.empty?
       @external_authors.each do |external_author|
         external_author.find_or_invite(current_user)
@@ -956,7 +956,7 @@ class WorksController < ApplicationController
 
   # Takes an array of tags and returns a comma-separated list, without the markup
   def tag_list(tags)
-    tags = tags.uniq.compact
+    tags = tags.distinct.compact
     if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
       tag_list = tags.collect { |tag| tag.name + ', ' }.join
