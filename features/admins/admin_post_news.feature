@@ -117,7 +117,8 @@ Feature: Admin Actions to Post News
     Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
-    Given I have no users
+    Given I have an AdminSetting
+      And I have no users
       And the following admin exists
       | login      | password |
       | Elz        | secret   |
