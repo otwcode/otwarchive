@@ -307,7 +307,7 @@
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new
+    self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
   protected
