@@ -29,8 +29,7 @@ Scenario: Remove email address from blacklist
     And the address "foo@bar.com" should not be in the blacklist
 
 Scenario: Blacklisted email addresses should not be usable in guest comments
-  Given I have loaded the "locales" fixture
-    And I am logged in as an admin
+  Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
     And I am logged in as "author"
     And I post the work "New Work"
@@ -42,8 +41,7 @@ Scenario: Blacklisted email addresses should not be usable in guest comments
   Then I should see "Comments (1)"
 
 Scenario: Variants of blacklisted email addresses should not be usable
-  Given I have loaded the "locales" fixture
-    And I am logged in as an admin
+  Given I am logged in as an admin
   When I have blacklisted the address "foo.bar+gloop@googlemail.com"
   Then the address "foobar@gmail.com" should be in the blacklist
   When I am logged out
