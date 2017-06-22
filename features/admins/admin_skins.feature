@@ -7,7 +7,8 @@ Feature: Admin manage skins
   Then I should see "I'm sorry, only an admin can look at that area"
 
   Scenario: Admin can cache and uncache a public skin
-  Given basic skins
+  Given I have an AdminSetting
+    And basic skins
     And the approved public skin "public skin"
     And I am logged in as an admin
   When I follow "Approved Skins"
@@ -20,7 +21,8 @@ Feature: Admin manage skins
   Then I should see "The following skins were updated: public skin"
 
   Scenario: Admin can add a public skin to the chooser and then remove it
-  Given the approved public skin "public skin"
+  Given I have an AdminSetting
+    And the approved public skin "public skin"
     And the skin "public skin" is cached
     And I am logged in as an admin
   When I follow "Approved Skins"
@@ -33,7 +35,8 @@ Feature: Admin manage skins
   Then I should see "The following skins were updated: public skin"
 
   Scenario: An admin can reject and unreject a skin
-  Given the unapproved public skin "public skin"
+  Given I have an AdminSetting
+    And the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to admin's skins page
     And I check "make_rejected_public_skin"
@@ -48,7 +51,8 @@ Feature: Admin manage skins
   Then I should not see "public skin"
 
   Scenario: An admin can feature and unfeature skin
-  Given the approved public skin "public skin"
+  Given I have an AdminSetting
+    And the approved public skin "public skin"
     And I am logged in as an admin
   When I follow "Approved Skins"
     And I check "Feature"
@@ -60,13 +64,15 @@ Feature: Admin manage skins
   Then I should see "The following skins were updated: public skin"
 
   Scenario: Admins should be able to see public skins in the admin skins page
-  Given the unapproved public skin "public skin"
+  Given I have an AdminSetting
+    And the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to admin's skins page
   Then I should see "public skin" within "table#unapproved_skins"
 
   Scenario: Admins should not be able to edit unapproved skins
-  Given the unapproved public skin "public skin"
+  Given I have an AdminSetting
+    And the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to "public skin" skin page
   Then I should not see "Edit"
@@ -75,7 +81,8 @@ Feature: Admin manage skins
   Then I should see "Sorry, you don't have permission"
 
   Scenario: Admins should be able to approve public skins
-  Given the unapproved public skin "public skin"
+  Given I have an AdminSetting
+    And the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to admin's skins page
     And I check "public skin"
@@ -85,7 +92,8 @@ Feature: Admin manage skins
   Then I should see "public skin" within "table#approved_skins"
 
   Scenario: Admins should be able to edit but not delete public approved skins
-  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+  Given I have an AdminSetting
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I am logged in as an admin
   When I go to "public skin" skin page
   Then I should see "Edit"
@@ -102,7 +110,8 @@ Feature: Admin manage skins
 
   Scenario: Admins should be able to unapprove public skins, which should also
   remove them from preferences
-  Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+  Given I have an AdminSetting
+    And "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
   When I unapprove the skin "public skin"
   Then I should see "The following skins were updated: public skin"
     And I should see "public skin" within "table#unapproved_skins"
@@ -113,7 +122,8 @@ Feature: Admin manage skins
     And I should not see "text-decoration: blink;"
 
   Scenario: Admin can change the default skin
-  Given basic skins
+  Given I have an AdminSetting
+    And basic skins
     And the approved public skin "strange skin" with css "#title { text-decoration: underline;}"
     And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I am logged in as "skinner"
