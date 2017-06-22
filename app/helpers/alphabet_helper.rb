@@ -1,7 +1,7 @@
 module AlphabetHelper
 
   def link_to_letter(letter, text = "")
-    link_to_unless_current(text.blank? ? letter : text, url_for(params.merge letter: letter, page: 1))
+    link_to_unless_current(text.blank? ? letter : text, url_for(params.permit!.merge letter: letter, page: 1))
   end
 
   def alpha_paginated_section(alphabet = People.all.map(&:char))
