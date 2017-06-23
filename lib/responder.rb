@@ -12,7 +12,7 @@ module Responder
     elsif self.respond_to?(:commentable)
       work = self.commentable
     elsif self.respond_to?(:bookmarkable)
-      work = response.bookmarkable
+      work = self.bookmarkable
     end
 
     work.is_a?(Work) ? work : nil

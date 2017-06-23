@@ -4,14 +4,16 @@ Feature: Admin Actions for Works and Bookmarks
   I should be able to perform special actions on works
 
   Scenario: Can reindex works
-    Given I am logged in as "regular_user"
+    Given I have an AdminSetting
+      And I am logged in as "regular_user"
       And I post the work "Just a work you know"
     When I am logged in as an admin
       And I view the work "Just a work you know"
       And I follow "Reindex Work"
 
   Scenario: Can hide works
-    Given I am logged in as "regular_user"
+    Given I have an AdminSetting
+      And I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -24,7 +26,8 @@ Feature: Admin Actions for Works and Bookmarks
       And the email should contain "We are investigating the matter and will contact you"
 
   Scenario: Can unhide works
-    Given I am logged in as "regular_user"
+    Given I have an AdminSetting
+      And I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -38,7 +41,8 @@ Feature: Admin Actions for Works and Bookmarks
       And 0 emails should be delivered
 
   Scenario: Can delete works
-    Given I am logged in as "regular_user"
+    Given I have an AdminSetting
+      And I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -55,7 +59,8 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should not see "ToS Violation"
 
   Scenario: Can hide bookmarks
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And I am logged in as "regular_user" with password "password1"
       And I post the work "A Nice Work"
     When I am logged in as "bad_user"
@@ -73,7 +78,8 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should not see "Rude comment"
 
   Scenario: Can edit tags on works
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And I am logged in as "regular_user"
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as an admin
@@ -110,7 +116,8 @@ Feature: Admin Actions for Works and Bookmarks
       And I should not see "Admin-Added Fandom"
 
   Scenario: Can edit external works
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
@@ -138,7 +145,8 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "M/M"
 
   Scenario: Can delete external works
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
@@ -147,7 +155,8 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Item was successfully deleted."
 
   Scenario: Can mark a comment as spam
-    Given I have no works or comments
+    Given I have an AdminSetting
+      And I have no works or comments
       And the following activated users exist
       | login         | password   |
       | author        | password   |
@@ -207,7 +216,8 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "I loved this!"
 
   Scenario: Admin can edit language on works when posting without previewing
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
@@ -221,7 +231,8 @@ Feature: Admin Actions for Works and Bookmarks
       And I should not see "English"
 
   Scenario: Admin can edit language on works when previewing first
-    Given basic tags
+    Given I have an AdminSetting
+      And basic tags
       And basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
