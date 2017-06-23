@@ -552,7 +552,8 @@
 
       if old_pseud.present?
         # change the old pseud to match
-        old_pseud.update_attribute!(:name, login)
+        old_pseud.name = login
+        old_pseud.save!(validate: false)
       else
         # shouldn't be able to get here, but just in case
         Pseud.create!(name: login, user_id: self.id)
