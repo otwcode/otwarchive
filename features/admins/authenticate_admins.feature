@@ -2,7 +2,6 @@
 Feature: Authenticate Admin Users
 
   Scenario: admin cannot log in as an ordinary user - it is a different type of account
-
   Given the following admin exists
       | login       | password |
       | Zooey       | secret   |
@@ -13,8 +12,8 @@ Feature: Authenticate Admin Users
     Then I should see "The password or user name you entered doesn't match our records"
 
   Scenario: Ordinary user cannot log in as admin
-
-  Given the following activated user exists
+  Given I have an AdminSetting
+    And the following activated user exists
       | login       | password      |
       | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
@@ -27,9 +26,9 @@ Feature: Authenticate Admin Users
       And I should see "Admin user name"
 
   Scenario: Admin can log in
-
-  Given I have no users
-      And the following admin exists
+  Given I have an AdminSetting
+    And I have no users
+    And the following admin exists
       | login       | password |
       | Zooey       | secret   |
       And I have loaded the "roles" fixture
