@@ -22,7 +22,7 @@ namespace :Tag do
     tag_count = tag_scope.count
     tag_scope.each_with_index do |tag, index|
       puts "#{index} / #{tag_count}"
-      tag.taggings_counts
+      tag.taggings_count
     end
     puts "Taggings count for less-than-zero counts has been reset."
   end
