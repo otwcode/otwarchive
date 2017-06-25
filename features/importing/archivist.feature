@@ -205,10 +205,11 @@ Feature: Archivist bulk imports
       And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
     Then I should see "Your imported stories have been deleted. Your preferences have been saved."
+    When no emails have been sent
     When I am logged in as "archivist"
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
       And the system processes jobs
-    # Then 0 emails should be delivered to "random@example.com"
+     Then 0 emails should be delivered to "random@example.com"
 
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
