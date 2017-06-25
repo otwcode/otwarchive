@@ -2,8 +2,8 @@ Feature: Archivist bulk imports
 
   Background:
     Given I have an archivist "archivist"
-    And the default ratings exist
-    When I am logged in as "archivist"
+      And the default ratings exist
+      And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others
     Given I am logged in as a random user
@@ -40,7 +40,7 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     When the system processes jobs
     Then 1 email should be delivered to "a@ao3.org"
-    And 1 email should be delivered to "b@ao3.org"
+      And 1 email should be delivered to "b@ao3.org"
 
   Scenario: Import a work for multiple authors with and without accounts should display all in the byline
     Given the following activated users exist
@@ -96,6 +96,23 @@ Feature: Archivist bulk imports
       And I should not see "[archived by archivist]"
       And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should contain claim information
+    When I go to ao3's works page
+    Then I should see "Story"
+
+  Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
+    Given the user "creator" exists and is activated
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
+      And the system processes jobs
+    Then 1 email should be delivered to "not_creators_account_email@example.com"
+    When I am logged in as "creator"
+      # Use the URL because we get logged out if we follow the link in the email
+      And I go to the claim page for "not_creators_account_email@example.com"
+    Then I should see "Claim your works with your logged-in account."
+    When I press "Add these works to my currently-logged-in account"
+    Then I should see "Author Identities for creator"
+      And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
+    When I go to creator's works page
+    Then I should see "Story"
 
   Scenario: Importing sends an email to a guessed address if it can't find the author
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
@@ -148,47 +165,50 @@ Feature: Archivist bulk imports
     When I am logged out
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
-    And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "imported_stories_orphan"
-    And I press "Update"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
+    When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
-    And I view the work "Story"
-    Then I should see "randomtestname"
-    And I should see "orphan_account"
+      And I view the work "Story"
+    Then I should see "randomtestname (orphan_account)"
 
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-    And the system processes jobs
+      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
-    And the email should contain "Claim or remove your works"
+      And the email should contain "Claim or remove your works"
     When I am logged out
-    And I follow "Claim or remove your works" in the email
+      And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
-    And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "imported_stories_orphan"
-    And I check "remove_pseud"
-    And I press "Update"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
+    When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
+      And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
-    And I view the work "Story"
+      And I view the work "Story"
     Then I should not see "randomtestname"
-    And I should see "orphan_account"
+      And I should see "orphan_account"
 
-  Scenario: Refuse all further contact
+  Scenario: Delete an imported work and choose not to be notified of future imports of your works
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
-    And the system processes jobs
+      And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
-    And the email should contain "Claim or remove your works"
+      And the email should contain "Claim or remove your works"
     When I am logged out
-    And I follow "Claim or remove your works" in the email
+      And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
-    And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "imported_stories_delete"
-    And I check "external_author_do_not_email"
-    And I press "Update"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Please remove my works from the archive entirely."
+      And I check "Do not email me in the future when works are imported with this email address."
+      And I press "Update"
     Then I should see "Your imported stories have been deleted. Your preferences have been saved."
+    When I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+    # Then 0 emails should be delivered to "random@example.com"
 
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
