@@ -206,7 +206,7 @@ module NavigationHelpers
     when /^the Open Doors external authors page$/i
       opendoors_external_authors_path
     when /^the claim page for "(.*)"$/i
-      claim_path(:invitation_token => Invitation.find_by(invitee_email: $1).token)
+      claim_path(invitation_token: Invitation.find_by(invitee_email: $1).token)
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i
