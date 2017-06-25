@@ -1,4 +1,4 @@
-Given /^(?:a clear email queue|no emails have been sent)$/ do
+Given /^(?:a clear email queue|no emails have been sent|the email queue is clear)$/ do
   reset_mailer
 end
 
