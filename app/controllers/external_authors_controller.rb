@@ -63,8 +63,7 @@ class ExternalAuthorsController < ApplicationController
 
     flash[:notice] = ""
     if params[:imported_stories] == "nothing"
-      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
-      redirect_to root_path and return
+      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
     elsif params[:imported_stories] == "orphan"
       # orphan the works
       @external_author.orphan(params[:remove_pseud])
@@ -74,7 +73,10 @@ class ExternalAuthorsController < ApplicationController
       @external_author.delete_works
       flash[:notice] += "Your imported stories have been deleted. "
     end
-    @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
+
+    if @invitation && params[:imported_stories].present? && params[:imported_stories] != "nothing"
+      @invitation.mark_as_redeemed 
+    end
 
     if @external_author.update_attributes(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
@@ -84,7 +86,7 @@ class ExternalAuthorsController < ApplicationController
         redirect_to root_path
       end
     else
-      flash[:error] += "There were problems saving your preferences."
+      flash[:error] = "There were problems saving your preferences."
       render action: "edit"
     end
   end
