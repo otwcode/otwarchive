@@ -204,12 +204,68 @@ Feature: Archivist bulk imports
     When I choose "Please remove my works from the archive entirely."
       And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
-    Then I should see "Your imported stories have been deleted. Your preferences have been saved."
+    Then I should be on the homepage
+      And I should see "Your imported stories have been deleted. Your preferences have been saved."
     When the email queue is clear
       And I am logged in as "archivist"
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
       And the system processes jobs
      Then 0 emails should be delivered to "random@example.com"
+
+  Scenario: Leave an imported work in the archivist's care
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I press "Update"
+      And the system processes jobs
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+
+  Scenario: Leave an imported work in the archivist's care and choose not to be notified of future imports of your works
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I check "Do not email me in the future when works are imported with this email address."
+      And I press "Update"
+      And the system processes jobs
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+    When the email queue is clear
+      And I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+     Then 0 emails should be delivered to "random@example.com"
+
+  Scenario: Leave an imported work in the archivist's care and do not allow future imports with your email address
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+    Then 1 email should be delivered to "random@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "Leave my works in the care of the archivist."
+      And I check "From now on, do not import works with this email address."
+      And I press "Update"
+      And the system processes jobs
+    Then I should be on the homepage
+      And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
+    When I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+    Then I should see "We couldn't successfully import that work, sorry: Author randomtestname at random@example.com does not allow importing their work to this archive."
 
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
