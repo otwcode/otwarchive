@@ -35,7 +35,7 @@ class Kudo < ActiveRecord::Base
 
   def notify_user_by_email?(user)
     user.nil? ? false : ( user.is_a?(Admin) ? true :
-      !(user == User.orphan_account || user.preference.kudos_emails_ff?) )
+      !(user == User.orphan_account || user.preference.kudos_emails_off?) )
   end
 
   # return either the name of the kudo-leaver or "guest"
