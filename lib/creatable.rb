@@ -25,9 +25,9 @@ module Creatable
   # send the appropriate notifications
   def do_notify
     if self.is_a?(Work)
-      notify_parents(self)
+      notify_parents
       notify_subscribers
-      notify_prompters(self)
+      notify_prompters
     elsif self.is_a?(Chapter) && self.position != 1
       notify_subscribers
     end
@@ -62,7 +62,7 @@ module Creatable
         if self.collections.empty? || self.collections.first.nil?
           UserMailer.recipient_notification(userid, self.id).deliver
         else
-          UserMailer.recipient_notification(userid, self.id, work.collections.first.id).deliver
+          UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver
         end
       end
     end
@@ -104,20 +104,20 @@ module Creatable
   end
 
   # notify prompters of response to their prompt
-  def notify_prompters(work)
-    if !work.challenge_claims.empty? && !work.unrevealed?
-      if work.collections.first.nil?
-        UserMailer.prompter_notification(work.id,).deliver
+  def notify_prompters
+    if !self.challenge_claims.empty? && !self.unrevealed?
+      if self.collections.first.nil?
+        UserMailer.prompter_notification(self.id,).deliver
       else
-        UserMailer.prompter_notification(work.id, work.collections.first.id).deliver
+        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver
       end
     end
   end
 
   # notify authors of related work
-  def notify_parents(work)
-    if !work.parent_work_relationships.empty? && !work.unrevealed?
-      work.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
+  def notify_parents
+    if !self.parent_work_relationships.empty? && !self.unrevealed?
+      self.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
     end
   end
 
