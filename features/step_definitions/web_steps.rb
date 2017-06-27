@@ -138,6 +138,12 @@ end
 
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
+    page.should have_content(text)
+  end
+end
+
+Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+  with_scope(selector) do
     page.body.should =~ /#{Regexp.escape(text)}/m
   end
 end
