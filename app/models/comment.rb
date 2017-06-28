@@ -153,7 +153,7 @@ class Comment < ActiveRecord::Base
             CommentMailer.comment_notification(user, self).deliver
           end
           if notify_user_by_inbox?(user)
-            add_feedback_to_inbox(user, self)
+            add_feedback_to_inbox(user)
           end
         end
       end
@@ -171,7 +171,7 @@ class Comment < ActiveRecord::Base
   end
 
   def notify_user_by_inbox?(user)
-    if user.nil? || user = User.orphan_account
+    if user.nil? || user == User.orphan_account
       false
     elsif user.is_a?(Admin)
       true
