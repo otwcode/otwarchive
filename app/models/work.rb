@@ -1,5 +1,5 @@
 class Work < ActiveRecord::Base
-
+  include Taggable
   include Creatable
   include Collectible
   include Bookmarkable
@@ -180,7 +180,8 @@ class Work < ActiveRecord::Base
 
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :post_first_chapter, :set_word_count
+  after_initialize :post_first_chapter
+  before_save :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
 
@@ -1501,6 +1502,4 @@ class Work < ActiveRecord::Base
     nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
     (filter_ids & nonfiction_tags).present?
   end
-
-  include Taggable
 end
