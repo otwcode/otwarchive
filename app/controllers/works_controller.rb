@@ -620,7 +620,7 @@ class WorksController < ApplicationController
   def send_external_invites(works)
     return unless params[:importing_for_others]
 
-    @external_authors = works.collect(&:external_authors).flatten.distinct
+    @external_authors = works.collect(&:external_authors).flatten.uniq
     unless @external_authors.empty?
       @external_authors.each do |external_author|
         external_author.find_or_invite(current_user)
