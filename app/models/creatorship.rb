@@ -7,7 +7,12 @@ class Creatorship < ActiveRecord::Base
   validate :unique_index
 
   def unique_index
-    if Creatorship.where(creation_id: creation_id, creation_type: creation_type, pseud_id: pseud_id).any?
+    duplicate_creatorships = Creatorship.where(
+      'creation_id = ? AND creation_type = ? AND pseud_id = ? AND id != ?',
+      creation_id, creation_type, pseud_id, id
+    )
+
+    if duplicate_creatorships.any?
       errors.add(:base, 'Cannot be a duplicate entry')
     end
   end
