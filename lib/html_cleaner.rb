@@ -192,7 +192,7 @@ module HtmlCleaner
     hash.keys.each do |key|
       if hash[key].is_a? String
         hash[key] = sanitize_value(key, hash[key])
-      elsif hash[key].is_a? Hash
+      elsif hash[key].is_a?(Hash) || hash[key].is_a?(ActionController::Parameters)
         hash[key] = walk_hash(hash[key])
       elsif hash[key].is_a? Array
         hash[key] = walk_array(hash[key])
