@@ -26,7 +26,7 @@ class Admin::AdminUsersController < ApplicationController
 
   before_action :set_roles, only: [:index, :bulk_search]
   def set_roles
-    @roles = Role.assignable.uniq
+    @roles = Role.assignable.distinct
   end
 
   # GET admin/users/1
@@ -213,7 +213,7 @@ class Admin::AdminUsersController < ApplicationController
     end
 
     @all_users = User.alphabetical.starting_with(letter)
-    @roles = Role.assignable.uniq
+    @roles = Role.assignable.distinct
   end
 
   def send_notification

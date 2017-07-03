@@ -20,12 +20,12 @@ class Work < ActiveRecord::Base
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
   has_many :external_author_names, through: :external_creatorships, inverse_of: :works
-  has_many :external_authors, -> { uniq }, through: :external_author_names
+  has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
   has_many :chapters
