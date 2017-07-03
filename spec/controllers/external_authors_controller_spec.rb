@@ -115,7 +115,7 @@ describe ExternalAuthorsController do
 
     context "when the user has permission through an invitation" do
       context "when doing nothing with imported works" do
-        it "does not mark invtiation redeemed and redirects with a success message" do
+        it "does not mark invitation redeemed and redirects with a success message" do
           put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing"
           it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
           invitation.reload
