@@ -313,7 +313,7 @@ class Work < ActiveRecord::Base
 
   after_destroy :clean_up_filter_taggings
   def clean_up_filter_taggings
-    FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
+    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
   end
 
   after_destroy :clean_up_assignments
