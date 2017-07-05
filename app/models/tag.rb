@@ -134,8 +134,8 @@ class Tag < ActiveRecord::Base
   has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
 
-  has_many :same_work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { uniq }, through: :works, source: :fandoms
+  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
 
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
