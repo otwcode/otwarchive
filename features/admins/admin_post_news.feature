@@ -152,17 +152,17 @@ Feature: Admin Actions to Post News
       And I fill in "admin_post_title" with "App News & a <strong> Warning"
       And I fill in "content" with "We're delaying it a week for every question we get."
       When I press "Post"
-    Then I should see the raw html page title "App News & a <strong> Warning"
+    Then I should see the page title "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
     When I go to the admin-posts page
-    Then I should see the raw text "App News & a <strong> Warning"
+    Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
     When I go to the home page
-    Then I should see the raw text "App News & a <strong> Warning"
+    Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
     When I am logged out as an admin
       And I go to the admin-posts page
-    Then I should see the raw text "App News & a <strong> Warning"
+    Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
 
   Scenario: Admin post should be shown on the homepage
