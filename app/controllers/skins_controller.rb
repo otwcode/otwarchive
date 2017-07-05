@@ -192,7 +192,7 @@ class SkinsController < ApplicationController
   # if we've been asked to load the archive parents, we do so and add them to params
   def load_archive_parents
     if params[:add_site_parents]
-      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
+      params[:skin][:skin_parents_attributes] ||= ActionController::Parameters.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
       skin_parent_titles = params[:skin][:skin_parents_attributes].values.map {|v| v[:parent_skin_title]}
       skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
@@ -205,8 +205,8 @@ class SkinsController < ApplicationController
       last_position ||= 0
       archive_parents.each do |parent_skin|
         last_position += 1
-        new_skin_parent_hash = HashWithIndifferentAccess.new({position: last_position, parent_skin_id: parent_skin.id})
-        params[:skin][:skin_parents_attributes].merge!({last_position => new_skin_parent_hash})
+        new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
+        params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
       end
       return true
     end
