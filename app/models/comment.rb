@@ -149,7 +149,7 @@ class Comment < ActiveRecord::Base
       end
       users.each do |user|
         unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || comment.ultimate_parent.is_a?(Tag)
+          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
             CommentMailer.comment_notification(user, self).deliver
           end
           if notify_user_by_inbox?(user)
