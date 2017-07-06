@@ -788,7 +788,22 @@ class Tag < ActiveRecord::Base
         ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
         ft.update_attribute(:inherited, false)
       else
-        work.filters << filter_tag
+        FilterTagging.create(
+          filter: filter_tag,
+          filterable: work
+        )
+        # As of Rails 5 upgrade, this triggers a stack level too deep error
+        # because it triggers the `before_update
+        # :update_filters_for_canonical_change` callback. In 4.2 and before,
+        # after this point `canonical_changed?` has been reset and returns
+        # false. Now it returns true and causes an endless loop.
+        #
+        # Reference: https://github.com/rails/rails/issues/28908
+        #
+        # TODO: Keep an eye on this issue. We should not have to create the
+        # FilterTagging directly.
+        #
+        # work.filters << filter_tag
         tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
       end
       unless filter_tag.meta_tags.empty?
