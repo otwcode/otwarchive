@@ -216,28 +216,7 @@ class StoryParser
         work.chapters << set_chapter_attributes(work, new_chapter, location, options)
       end
     end
-    return set_work_attributes(work, location, options)
-  end
-
-  # tries to create an external author for a given url
-  def parse_author(location,external_author_name,external_author_email)
-    #If e_email option value is present (archivist importing from somewhere not supported for auto autho grab)
-    #will have value there, otherwise continue as usual. If filled, just pass values to create or find external author
-    #Stephanie 8-1-2013
-
-    #might want to add check for external author name also here, steph 12/10/2013
-    if external_author_email.present?
-      return parse_author_common(external_author_email,external_author_name)
-
-    else
-      source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
-      if !source.nil?
-        return eval("parse_author_from_#{source.downcase}(location)")
-      end
-      return parse_author_from_unknown(location)
-
-    end
-
+    set_work_attributes(work, location, options)
   end
 
 
@@ -246,6 +225,19 @@ class StoryParser
 
   protected
 
+  # tries to create an external author for a given url
+  def parse_author(location, external_author_name, external_author_email)
+    if location.present? && external_author_name.blank? && external_author_email.blank?
+      source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
+      if source.nil?
+        raise Error, "No external author name or email specified, and unable to generate email based on source location"
+      else
+        eval("parse_author_from_#{source.downcase}(location)")
+      end
+    else
+      parse_author_common(external_author_email, external_author_name)
+    end
+  end
 
     # download an entire story from an archive type where we know how to parse multi-chaptered works
     # this should only be called from download_and_parse_story
@@ -352,7 +344,7 @@ class StoryParser
       return work
     end
 
-  def parse_author_from_lj(location)
+    def parse_author_from_lj(location)
       if location.match( /^(http:\/\/)?([^\.]*).(livejournal.com|dreamwidth.org|insanejournal.com|journalfen.net)/)
         email = name = ""
         lj_name = $2
@@ -417,17 +409,26 @@ class StoryParser
     end
 
     def parse_author_common(email, name)
-      # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
-      name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
-      external_author = ExternalAuthor.find_or_create_by(email: email)
-      unless name.blank?
-        external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
-                               ExternalAuthorName.new(name: name)
-        external_author.external_author_names << external_author_name
-        external_author.save
+      if name.present? && email.present?
+        # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
+        name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
+        external_author = ExternalAuthor.find_or_create_by(email: email)
+        external_author_name = external_author.default_name
+        unless name.blank?
+          external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
+                                 ExternalAuthorName.new(name: name)
+          external_author.external_author_names << external_author_name
+          external_author.save
+        end
+        external_author_name
+      else
+        messages = []
+        messages << "No author name specified" if name.blank?
+        messages << "No author email specified" if email.blank?
+        raise Error, messages.join("\n")
       end
-      external_author_name || external_author.default_name
     end
+
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new(work_params[:chapter_attributes])
