@@ -549,6 +549,7 @@ class Tag < ActiveRecord::Base
 
   # look up tags that have been wrangled into a given fandom
   def self.autocomplete_fandom_lookup(options = {})
+    options = options.to_hash
     options.reverse_merge!({term: "", tag_type: "character", fandom: "", fallback: true})
     search_param = options[:term]
     tag_type = options[:tag_type]
