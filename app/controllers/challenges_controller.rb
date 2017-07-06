@@ -55,7 +55,7 @@ class ChallengesController < ApplicationController
   end
 
   def load_collection
-    @collection ||= Collection.find_by_name(params[:collection_id]) if
+    @collection ||= Collection.find_by(name: params[:collection_id]) if
         params[:collection_id]
     no_collection && return unless @collection
   end

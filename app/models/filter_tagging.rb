@@ -4,8 +4,8 @@
 class FilterTagging < ActiveRecord::Base
   self.primary_key = 'id'
 
-  belongs_to :filter, :class_name => 'Tag' # , :dependent => :destroy # TODO: poke this separately
-  belongs_to :filterable, :polymorphic => true
+  belongs_to :filter, class_name: 'Tag' # , dependent: :destroy # TODO: poke this separately
+  belongs_to :filterable, polymorphic: true
 
   validates_presence_of :filter, :filterable
 
@@ -14,7 +14,7 @@ class FilterTagging < ActiveRecord::Base
   def self.find(*args)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
-  def self.find_by_id(id)
+  def self.find_by(id: id_arg)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
 
@@ -73,7 +73,7 @@ class FilterTagging < ActiveRecord::Base
       if tagging.tagger && tagging.taggable
         tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger
         if tag && tag.canonical?
-          tag.filter_taggings.create!(:filterable => tagging.taggable)
+          tag.filter_taggings.create!(filterable: tagging.taggable)
         end
       end
     end

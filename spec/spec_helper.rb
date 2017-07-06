@@ -38,6 +38,8 @@ RSpec.configure do |config|
 
   config.before :each do
     DatabaseCleaner.start
+    User.current_user = nil
+    clean_the_database
   end
 
   config.after :each do
@@ -67,7 +69,7 @@ RSpec.configure do |config|
   # To explicitly tag specs without using automatic inference, set the `:type`
   # metadata manually:
   #
-  #     describe ThingsController, :type => :controller do
+  #     describe ThingsController, type: :controller do
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
@@ -82,7 +84,17 @@ def clean_the_database
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
   # Finally elastic search
-  Tire::Model::Search.index_prefix Time.now.to_f.to_s
+  Work.tire.index.delete
+  Work.create_elasticsearch_index
+
+  Bookmark.tire.index.delete
+  Bookmark.create_elasticsearch_index
+
+  Tag.tire.index.delete
+  Tag.create_elasticsearch_index
+
+  Pseud.tire.index.delete
+  Pseud.create_elasticsearch_index
 end
 
 def get_message_part (mail, content_type)

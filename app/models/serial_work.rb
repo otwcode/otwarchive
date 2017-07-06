@@ -1,14 +1,14 @@
 class SerialWork < ActiveRecord::Base
-  belongs_to :series, :touch => true
-  belongs_to :work, :touch => true
-  validates_uniqueness_of :work_id, :scope => [:series_id]
-  acts_as_list :scope => :series
+  belongs_to :series, touch: true
+  belongs_to :work, touch: true
+  validates_uniqueness_of :work_id, scope: [:series_id]
+  acts_as_list scope: :series
 
   after_create :adjust_series_visibility
   after_destroy :adjust_series_visibility
   after_destroy :delete_empty_series
 
-  scope :in_order, {:order => :position}
+  scope :in_order, -> { order(:position) }
 
   # If you add or remove a work from a series, make sure restricted? is still accurate
   def adjust_series_visibility

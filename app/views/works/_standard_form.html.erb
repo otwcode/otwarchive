@@ -121,7 +121,7 @@
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.collection_select(:language_id, Language.all(order: :short), :id, :name, prompt: " ") %>
+                <%= p.collection_select(:language_id, Language.order(:short), :id, :name, prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
@@ -142,7 +142,7 @@
                       </li>
                       <li>
                         <%= link_to ts("Remove"), related_work,
-                                confirm: ts("Are you sure you want to delete the connection to this work?"),
+                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
                                 method: :delete %>
                       </li>
                     </ul>
@@ -339,7 +339,7 @@
       </li>
       <li>
         <%= submit_tag ts("Post Without Preview"), name: "post_button",
-              disable_with: ts("Please wait...") %>
+              data: { disable_with: ts("Please wait...") } %>
       </li>
       <li>
         <%= submit_tag ts("Cancel"), name: "cancel_button" %>

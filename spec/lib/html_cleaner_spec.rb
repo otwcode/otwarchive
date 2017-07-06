@@ -365,7 +365,7 @@ describe HtmlCleaner do
         value = "@im\port'\ja\vasc\ript:alert(\"XSS\")';"
         result = sanitize_value(:content, value)
         expect(result).not_to match(/style/i)
-        expect(result).to match(/@im\port/i)
+        expect(result).to match(/@import/i)
       end
 
       it "should strip javascript from img dynsrc" do

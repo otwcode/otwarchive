@@ -82,7 +82,7 @@ Scenario: Delete a user who has coauthored a work
     | login     | password |
     | otheruser | password |
     And I am logged in as "testuser"
-    And I have coauthored a work as "testuser" with "otheruser"
+    And I coauthored the work "Shared" as "testuser" with "otheruser"
   When I try to delete my account
   Then I should see "What do you want to do with your works?"
   When I choose "Remove me completely as co-author"

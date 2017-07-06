@@ -57,7 +57,7 @@ describe "API BookmarksController" do
              bookmarks: [ bookmark, bookmark ]
            }.to_json,
            valid_headers
-      bookmarks = Bookmark.find_all_by_pseud_id(pseud_id)
+      bookmarks = Bookmark.where(pseud_id: pseud_id)
       assert_equal bookmarks.count, 1
     end
 
@@ -79,7 +79,7 @@ describe "API BookmarksController" do
              bookmarks: [ bookmark ]
            }.to_json,
            valid_headers
-      first_bookmark = Bookmark.find_all_by_pseud_id(pseud_id).first
+      first_bookmark = Bookmark.where(pseud_id: pseud_id).first
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:archive_url], bookmark_url(first_bookmark)
     end

@@ -174,7 +174,7 @@ describe Admin::ApiController do
 
       context "where the api key can't be found" do
         it "raises an error" do
-          assert_raise do
+          assert_raises ActiveRecord::RecordNotFound do
             get :edit, id: 123
           end
         end
@@ -225,7 +225,7 @@ describe Admin::ApiController do
 
       context "where the api key doesn't exist" do
         it "raises an error" do
-          assert_raise do
+          assert_raises ActiveRecord::RecordNotFound do
             post :update, id: 123, api_key: { name: "new_name" }
           end
         end
@@ -264,7 +264,7 @@ describe Admin::ApiController do
 
       context "where the api key doesn't exist" do
         it "raises an error" do
-          assert_raise do
+          assert_raises ActiveRecord::RecordNotFound do
             post :destroy, id: 123
           end
         end

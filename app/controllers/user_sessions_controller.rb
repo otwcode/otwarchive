@@ -2,7 +2,7 @@ class UserSessionsController < ApplicationController
 
   # I hope this isn't catching unwanted exceptions; it's hard to locate
   # where exactly the exception is thrown in case of no cookies. --rebecca
-  rescue_from ActionController::InvalidAuthenticityToken, :with => :show_auth_error
+  rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
 
   layout "session"
   before_filter :admin_logout_required
@@ -24,7 +24,7 @@ class UserSessionsController < ApplicationController
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
-        if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
+        if params[:user_session][:login] && user = User.find_by(login: params[:user_session][:login])
           # we have a user
           if user.recently_reset? && params[:user_session][:password] == user.activation_code
             if user.updated_at > 1.week.ago
@@ -54,7 +54,7 @@ class UserSessionsController < ApplicationController
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
-        render :action => 'new'
+        render action: 'new'
       end
     end
   end

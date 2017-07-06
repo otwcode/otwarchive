@@ -399,7 +399,6 @@ describe ChaptersController do
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
-
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
         @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}

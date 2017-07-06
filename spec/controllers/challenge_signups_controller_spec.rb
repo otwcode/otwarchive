@@ -38,10 +38,11 @@ describe ChallengeSignupsController, type: :controller do
     let(:prompt_meme) { create(:prompt_meme) }
     let(:collection) { create(:collection,
                               challenge: prompt_meme,
-                              challenge_type: "PromptMeme",
-                              signups: [signup]) }
+                              challenge_type: "PromptMeme")
+    }
 
     before do
+      collection.signups << signup
       signup.requests = [create(:request,
                                 collection_id: collection.id,
                                 challenge_signup_id: signup.id,

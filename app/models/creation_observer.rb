@@ -26,7 +26,7 @@ class CreationObserver < ActiveRecord::Observer
       notify_recipients(creation)
     end
   end
-  
+
   # send the appropriate notifications
   def do_notify(creation)
     if creation.is_a?(Work)
@@ -58,7 +58,7 @@ class CreationObserver < ActiveRecord::Observer
   # only notify a recipient once for each work
   def notify_recipients(work)
     if work.posted && !work.new_recipients.blank? && !work.unrevealed?
-      recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(work.new_recipients, assume_matching_login: true)[:pseuds]
       # check user prefs to see which recipients want to get gift notifications
       # (since each user has only one preference item, this removes duplicates)
       recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),

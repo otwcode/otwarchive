@@ -4,15 +4,15 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :allowed_to_destroy, :only => [:destroy, :confirm_delete]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :check_pseud_ownership, :only => [:create, :update]
+  before_filter :users_only, except: [:summary, :display_summary, :requests_summary]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, only: [:show]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
+  before_filter :check_pseud_ownership, only: [:create, :update]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -38,7 +38,7 @@ class ChallengeSignupsController < ApplicationController
   def signup_closed_owner?
     @collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)
   end
-    
+
   def signup_owner_only
     not_signup_owner and return unless @challenge_signup.pseud.user == current_user || signup_closed_owner?
   end
@@ -77,14 +77,14 @@ class ChallengeSignupsController < ApplicationController
       end
     end
   end
-  
+
   #### ACTIONS
 
   def index
-    if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
-        render :action => :index and return
+        render action: :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's sign-ups.")
         redirect_to '/' and return
@@ -105,15 +105,15 @@ class ChallengeSignupsController < ApplicationController
               @query = params[:query]
               @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
             end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)          
-          elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+          elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else
             not_allowed(@collection)
           end
       }
       format.csv {
-        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) || 
+        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
           filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
@@ -128,7 +128,7 @@ class ChallengeSignupsController < ApplicationController
 
   def summary
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
@@ -150,7 +150,7 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
-  def show    
+  def show
     unless @challenge_signup.valid?
       flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
     end
@@ -159,16 +159,16 @@ class ChallengeSignupsController < ApplicationController
   protected
   def build_prompts
     notice = ""
-    @challenge.class::PROMPT_TYPES.each do |prompt_type|      
+    @challenge.class::PROMPT_TYPES.each do |prompt_type|
       num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
       if num_to_build < @challenge.required(prompt_type)
-        notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
+        notice += ts("You must submit at least %{required} #{prompt_type}. ", required: @challenge.required(prompt_type))
         num_to_build = @challenge.required(prompt_type)
       elsif num_to_build > @challenge.allowed(prompt_type)
-        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", :allowed => @challenge.allowed(prompt_type))
+        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", allowed: @challenge.allowed(prompt_type))
         num_to_build = @challenge.allowed(prompt_type)
       elsif params["num_#{prompt_type}"]
-        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
+        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", num: num_to_build)
       end
       num_existing = @challenge_signup.send(prompt_type).count
       num_existing.upto(num_to_build-1) do
@@ -205,7 +205,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully created.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -214,7 +214,7 @@ class ChallengeSignupsController < ApplicationController
       flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -242,14 +242,14 @@ protected
 
   def request_to_array(type, request)
     any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
-    any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+    any_types.map! { |type| ts("Any %{type}", type: type.capitalize) }
     tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
     rarray = [(tags + any_types).join(", ")]
-            
+
     if @challenge.send("#{type}_restriction").optional_tags_allowed
       rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
     end
-            
+
     if @challenge.send("#{type}_restriction").description_allowed
       description = (request.nil? ? "" : sanitize_field(request, :description))
       # Didn't find a way to get Excel 2007 to accept line breaks
@@ -259,13 +259,13 @@ protected
       # Thus stripping linebreaks.
       rarray << description.gsub(/[\n\r]/, " ")
     end
-     
+
     rarray << (request.nil? ? "" : request.url) if
       @challenge.send("#{type}_restriction").url_allowed
 
     return rarray
   end
-  
+
 
   def gift_exchange_to_csv
     header = ["Pseud", "Email", "Sign-up URL"]
@@ -284,7 +284,7 @@ protected
 
     csv_array = []
     csv_array << header
-      
+
     @collection.signups.each do |signup|
       row = [signup.pseud.name, signup.pseud.user.email,
              collection_signup_url(@collection, signup)]
@@ -300,7 +300,7 @@ protected
     csv_array
   end
 
-  
+
   def prompt_meme_to_csv
     header = ["Pseud", "Email", "Sign-up URL", "Tags"]
     header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
