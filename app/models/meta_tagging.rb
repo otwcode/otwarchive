@@ -43,7 +43,7 @@ class MetaTagging < ActiveRecord::Base
       self.meta_tag.meta_tags.each do |m|
         if self.sub_tag.meta_tags.include?(m)
           meta_tagging = self.sub_tag.meta_taggings.where(meta_tag_id: m.id).first
-          meta_tagging.update_attribute!(:direct, false)
+          meta_tagging.update_attribute(:direct, false)
         else
           MetaTagging.create!(meta_tag: m, sub_tag: self.sub_tag, direct: false)
         end
