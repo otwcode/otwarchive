@@ -312,7 +312,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_to :back
+      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -511,8 +511,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  def redirect_to_all_comments(commentable, options = {})
-    default_options = {anchor: "comments"}
+  def redirect_to_all_comments(commentable, options = {}) default_options = {anchor: "comments"}
     options = default_options.merge(options)
 
     if commentable.is_a?(Tag)
