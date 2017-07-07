@@ -14,7 +14,7 @@ describe AutocompleteController do
 
       # we need to set this to make the controller return the JSON-encoded data we want
       @request.env['HTTP_ACCEPT'] = "application/json"
-      get :tag, term: "Ma"
+      get :tag, params: { term: "Ma" }
       expect(response.body).to include("Match")
       expect(response.body).not_to include("Blargh")
     end

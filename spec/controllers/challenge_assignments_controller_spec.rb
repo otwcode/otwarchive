@@ -8,7 +8,7 @@ describe ChallengeAssignmentsController do
   context "when not logged in" do
     describe 'no_challenge' do
       it 'error to login page' do
-        get :no_challenge, collection_id: collection.name
+        get :no_challenge, params: { collection_id: collection.name }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -28,7 +28,7 @@ describe ChallengeAssignmentsController do
     describe 'no_challenge' do
       it 'show an error, redirect and return false' do
         fake_login_known_user(user)
-        get :no_challenge, collection_id: collection.name
+        get :no_challenge, params: { collection_id: collection.name }
         it_redirects_to_with_error(collection_path(collection), "What challenge did you want to work with?")
       end
     end
@@ -36,7 +36,7 @@ describe ChallengeAssignmentsController do
     describe 'no_assignment with collection' do
       it 'show an error, redirect and return false' do
         fake_login_known_user(user2)
-        get :no_assignment, collection_id: collection2.name
+        get :no_assignment, params: { collection_id: collection2.name }
         it_redirects_to_with_error(collection_path(collection2), "What assignment did you want to work on?")
       end
     end
@@ -52,13 +52,13 @@ describe ChallengeAssignmentsController do
     describe "show" do
       it "won't show if you're not the right user" do
         fake_login_known_user(otheruser)
-        get :show, id: defaulted_assignment.id
+        get :show, params: { id: defaulted_assignment.id }
         it_redirects_to_with_error(root_path, "You aren't allowed to see that assignment!")
       end
 
       it "will tell you if you've defaulted" do
         fake_login_known_user(user2)
-        get :show, id: defaulted_assignment.id
+        get :show, params: { id: defaulted_assignment.id }
         expect(response).to have_http_status(:success)
         expect(flash[:notice]).to include "This assignment has been defaulted-on."
       end
@@ -69,7 +69,7 @@ describe ChallengeAssignmentsController do
 
       it "errors if you're not a mod and try to see someone else's assignment" do
         fake_login_known_user(otheruser)
-        get :index, collection_id: collection2.name, user_id: user2.default_pseud
+        get :index, params: { collection_id: collection2.name, user_id: user2.default_pseud }
         it_redirects_to_with_error(root_path, "You aren't allowed to see that user's assignments.")
       end
     end

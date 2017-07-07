@@ -10,12 +10,12 @@ describe ExternalWorksController do
 
     context "URL that has an external work" do
       it "responds with json" do
-        get :fetch, external_work_url: url, format: :json
+        get :fetch, params: { external_work_url: url, format: :json }
         expect(response.content_type).to eq "application/json"
       end
 
       it "responds with the matching work" do
-        get :fetch, external_work_url: url, format: :json
+        get :fetch, params: { external_work_url: url, format: :json }
         expect(assigns(:external_work)).to eq(@external_work)
       end
 
@@ -24,7 +24,7 @@ describe ExternalWorksController do
       end
 
       it "responds with the first matching work" do
-        get :fetch, external_work_url: url, format: :json
+        get :fetch, params: { external_work_url: url, format: :json }
         expect(assigns(:external_work)).to eq(@external_work)
         expect(assigns(:external_work)).not_to eq(@external_work2)
       end
@@ -34,12 +34,12 @@ describe ExternalWorksController do
       url_2 = "http://ao3testing.dreamwidth.org"
 
       it "responds with json" do
-        get :fetch, external_work_url: url_2, format: :json
+        get :fetch, params: { external_work_url: url_2, format: :json }
         expect(response.content_type).to eq "application/json"
       end
 
       it "responds with blank" do
-        get :fetch, external_work_url: url_2, format: :json
+        get :fetch, params: { external_work_url: url_2, format: :json }
         expect(assigns(:external_work)).to be_nil
       end
     end

@@ -24,7 +24,7 @@ describe CollectionItemsController do
       end
 
       it "fails if items missing" do
-        get :create, collection_names: collection.name
+        get :create, params: { collection_names: collection.name }
         it_redirects_to_with_error(root_path, "What did you want to add to a collection?")
       end
     end

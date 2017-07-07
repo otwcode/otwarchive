@@ -19,14 +19,14 @@ describe PromptsController do
 
   describe "no_challenge" do
     it "should show an error and redirect" do
-      get :show, collection_id: collection.name
+      get :show, params: { collection_id: collection.name }
       it_redirects_to_with_error(collection_path(collection), "What challenge did you want to sign up for?")
     end
   end
 
   describe "no_signup" do
     it "should show an error and redirect" do
-      post :create, collection_id: signup.collection.name
+      post :create, params: { collection_id: signup.collection.name }
       it_redirects_to_with_error(collection_signups_path(signup.collection) + "/new",\
                                  "Please submit a basic sign-up with the required fields first.")
     end
@@ -35,7 +35,7 @@ describe PromptsController do
   describe "signups_closed" do
     let(:user) { Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user }
     it "should show an error and redirect" do
-      post :create, collection_id: signup.collection.name
+      post :create, params: { collection_id: signup.collection.name }
       it_redirects_to_with_error(signup.collection, "Signup is currently closed: please contact a moderator for help.")
     end
   end
@@ -43,7 +43,7 @@ describe PromptsController do
   describe "not_signup_owner" do
     it "should show an error and redirect" do
       prompt = signup.collection.prompts.first
-      post :edit, id: prompt.id, collection_id: signup.collection.name
+      post :edit, params: { id: prompt.id, collection_id: signup.collection.name }
       it_redirects_to_with_error(signup.collection, "You can't edit someone else's sign-up!")
     end
   end
@@ -52,7 +52,7 @@ describe PromptsController do
     context "when prompt_type is offer" do
       let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "should have no errors" do
-        post :new, collection_id: open_signup.collection.name, prompt_type: "offer"
+        post :new, params: { collection_id: open_signup.collection.name, prompt_type: "offer" }
         expect(response).to have_http_status(200)
         expect(flash[:error]).blank?
         expect(assigns(:index)).to eq(open_signup.offers.count)
@@ -63,7 +63,7 @@ describe PromptsController do
   describe "create" do
     let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
     it "should have no errors and redirect to the edit page" do
-      post :create, collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {}
+      post :create, params: { collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {} }
       it_redirects_to "#{collection_signups_path(open_signup.collection)}/"\
                       "#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
       expect(flash[:error]).blank?
@@ -75,8 +75,16 @@ describe PromptsController do
     context "when prompt is valid" do
       let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "should save the prompt and redirect with a success message" do
-        put :update, collection_id: open_signup.collection.name, prompt_type: "offer",\
-                     prompt: { description: "This is a description" }, id: open_signup.collection.prompts.first.id
+        parameters = {
+          collection_id: open_signup.collection.name,
+          prompt_type: "offer",
+          prompt: {
+            description: "This is a description"
+          },
+          id: open_signup.collection.prompts.first.id
+        }
+
+        put :update, params: parameters
         it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
                                     "Prompt was successfully updated.")
         new_prompt = open_signup.collection.prompts.first
@@ -89,7 +97,7 @@ describe PromptsController do
     let(:user) { Pseud.find(ChallengeSignup.in_collection(signup.collection).first.pseud_id).user }
     it "redirects with an error when sign-ups are closed" do
       prompt = signup.collection.prompts.first
-      delete :destroy, collection_id: signup.collection.name, id: prompt.id
+      delete :destroy, params: { collection_id: signup.collection.name, id: prompt.id }
       it_redirects_to_with_error("#{collection_signups_path(signup.collection)}/#{signup.id}",
                                  "You cannot delete a prompt after sign-ups are closed."\
                                   " Please contact a moderator for help.")
@@ -98,7 +106,12 @@ describe PromptsController do
     context "where current_user is signup owner" do
       let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "redirects with an error when it would make a sign-up invalid" do
-        delete :destroy, collection_id: open_signup.collection.name, id: open_signup.collection.prompts.first.id
+        parameters = {
+          collection_id: open_signup.collection.name,
+          id: open_signup.collection.prompts.first.id
+        }
+
+        delete :destroy, params: parameters
         it_redirects_to_with_error("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
                                    "That would make your sign-up invalid, sorry! Please edit instead.")
       end
@@ -107,7 +120,7 @@ describe PromptsController do
         prompt = open_signup.offers.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
                                           collection_id: open_signup.collection.id)
         prompt.save
-        delete :destroy, collection_id: open_signup.collection.name, id: prompt.id
+        delete :destroy, params: { collection_id: open_signup.collection.name, id: prompt.id }
         it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
                                     "Prompt was deleted.")
       end
@@ -117,7 +130,7 @@ describe PromptsController do
   describe "edit" do
     context "no prompt" do
       it "should show an error and redirect" do
-        post :edit, collection_id: signup.collection.name
+        post :edit, params: { collection_id: signup.collection.name }
         it_redirects_to_with_error(collection_path(signup.collection), "What prompt did you want to work on?")
       end
     end

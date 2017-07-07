@@ -17,7 +17,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        get :new, work_id: @work.id
+        get :new, params: { work_id: @work.id }
         it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -30,7 +30,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        get :edit, work_id: @work.id, id: @work.chapters.first.id
+        get :edit, params: { work_id: @work.id, id: @work.chapters.first.id }
         it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -48,7 +48,7 @@ describe ChaptersController do
     
       it "should add a new chapter" do
         expect {
-          post :create, { work_id: @work.id, chapter: @chapter_attributes }
+          post :create, params: { work_id: @work.id, chapter: @chapter_attributes }
         }.to change(Chapter, :count)
         expect(@work.chapters.count).to eq 2
       end
@@ -57,7 +57,7 @@ describe ChaptersController do
         @user2 = FactoryGirl.create(:user)
         @chapter_attributes[:author_attributes] = {ids: [@user2.pseuds.first.id]}
         expect {
-          post :create, { work_id: @work.id, chapter: @chapter_attributes }
+          post :create, params: { work_id: @work.id, chapter: @chapter_attributes }
         }.to_not change(Chapter, :count)
         expect(response).to render_template("new")
         expect(flash[:error]).to eq "You're not allowed to use that pseud."
@@ -70,7 +70,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        post :create, work_id: @work.id, chapter: @chapter_attributes
+        post :create, params: { work_id: @work.id, chapter: @chapter_attributes }
         it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -87,7 +87,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        put :update, work_id: @work.id, id: @work.chapters.first.id, chapter: @chapter_attributes
+        put :update, params: { work_id: @work.id, id: @work.chapters.first.id, chapter: @chapter_attributes }
         it_redirects_to_with_error(work_path(@work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
