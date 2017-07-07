@@ -146,7 +146,7 @@ class SeriesController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@series) and return }
-      format.json { render nothing: true }
+      format.json { head :ok }
     end
   end
 

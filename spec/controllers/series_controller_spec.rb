@@ -39,7 +39,7 @@ RSpec.describe SeriesController, type: :controller do
   describe 'update' do
     it 'redirects and errors if removing the last author of a series' do
       fake_login_known_user(user)
-      put :update, params: { series: { author_attributes: {} }, id: series }
+      put :update, params: { series: { author_attributes: { id: nil } }, id: series }
       it_redirects_to_with_error(edit_series_path(series), \
                                  "Sorry, you cannot remove yourself entirely as an author of a series right now.")
     end
