@@ -41,7 +41,9 @@
                       action: "destroy",
                       id: item,
                       creation_type: item.class },
-                    confirm: ts("Are you sure you want to delete this?"),
+                    data: {
+                            confirm: ts("Are you sure you want to delete this?")
+                          },
                     method: :delete %>
     </li>
   </ul>

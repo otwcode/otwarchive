@@ -17,7 +17,7 @@ namespace :skins do
     end
     skin
   end
-  
+
   def set_parents(skin, parent_names)
     # clear existing ones
     SkinParent.where(:child_skin_id => skin.id).delete_all
@@ -41,16 +41,16 @@ namespace :skins do
         skin.role = "override"
         skin.save or puts "Problem updating skin #{skin.title} to be replacement skin: #{skin.errors.full_messages.join(', ')}"
         next
-      end      
+      end
       p = skin.skin_parents.build(:parent_skin => parent_skin, :position => parent_position)
       if p.save
         parent_position += 1
       else
         puts "Skipping skin parent #{parent_name}: #{p.errors.full_messages.join(', ')}"
       end
-    end    
+    end
   end
-  
+
   def get_user_skins
     dir = Skin.site_skins_dir + 'user_skins_to_load'
     default_preview_filename = "#{dir}/previews/default_preview.png"
@@ -61,7 +61,7 @@ namespace :skins do
     end
     skins.flatten!
   end
-    
+
   desc "Purge user skins parents"
   task(:purge_user_skins_parents => :environment) do
     get_user_skins.each do |skin_content|
@@ -72,15 +72,15 @@ namespace :skins do
       skin.skin_parents.delete_all
     end
   end
-  
+
   desc "Load user skins"
   task(:load_user_skins => :environment) do
     replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
     Rake::Task['skins:purge_user_skins_parents'].invoke if replace
-    
+
     author = User.find_by_login("lim")
     dir = Skin.site_skins_dir + 'user_skins_to_load'
-    
+
     skins = get_user_skins
     skins.each do |skin_content|
       next if skin_content.blank?
@@ -90,7 +90,7 @@ namespace :skins do
 
       # set the title and preview
       if skin_content.match(/SKIN:\s*(.*)\s*\*\//)
-        title = $1.strip 
+        title = $1.strip
         if (oldskin = Skin.find_by_title(title)) && oldskin.id != skin.id
           if replace
             skin = oldskin
@@ -98,7 +98,7 @@ namespace :skins do
             puts "Existing skin with title #{title} - did you mean to replace? Skipping."
             next
           end
-        end 
+        end
         skin.title = title
         preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
         unless File.exists?(preview_filename)
@@ -116,7 +116,7 @@ namespace :skins do
       skin.public = true
       skin.official = true
       skin.author = author unless skin.author
-      
+
       if skin_content.match(/DESCRIPTION:\s*(.*?)\*\//m)
         skin.description = "<pre>#{$1}</pre>"
       end
@@ -135,15 +135,15 @@ namespace :skins do
       # recache any cached skins
       if skin.cached?
         skin.cache!
-      end      
-      
+      end
+
       # set parents
       if skin_content.match(/PARENTS:\s*(.*)\s*\*\//)
         parent_string = $1
         set_parents(skin, parent_string)
       end
     end
-    
+
   end
 
   desc "Load site skins"
@@ -153,15 +153,15 @@ namespace :skins do
 
   desc "Cache all site skins"
   task(:cache_all_site_skins => :environment) do
-    Skin.where(cached: true).each{|skin| skin.cache!} 
+    Skin.where(cached: true).each{|skin| skin.cache!}
   end
-  
+
   desc "Remove all existing skins from preferences"
   task(:disable_all => :environment) do
     default_id = Skin.default.id
     Preference.update_all(:skin_id => default_id)
   end
-  
+
   desc "Unapprove all existing official skins"
   task(:unapprove_all => :environment) do
     default_id = Skin.default.id

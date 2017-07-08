@@ -1,11 +1,12 @@
 class RelatedWork < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   belongs_to :work
-  belongs_to :parent, :polymorphic => true
-  
-  scope :posted, 
+  belongs_to :parent, polymorphic: true
+
+  scope :posted, -> {
     joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
     where("child_works.posted = 1")
+  }
 
   def notify_parent_owners
     if parent.respond_to?(:pseuds)

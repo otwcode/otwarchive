@@ -2,6 +2,19 @@
 module ApplicationHelper
   include HtmlCleaner
 
+  # TODO: Official recommendation from Rails indicates we should switch to
+  # unobtrusive JavaScript instead of using anything like `link_to_function`
+  def link_to_function(name, *args, &block)
+    html_options = args.extract_options!.symbolize_keys
+
+    function = block_given? ? update_page(&block) : args[0] || ''
+
+    onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
+    href = html_options[:href] || 'javascript:void(0)'
+
+    content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
+  end
+
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
@@ -133,7 +146,11 @@ module ApplicationHelper
   end
 
   def pseud_link(pseud, only_path = true)
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: only_path), rel: "author")
+    if only_path
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
+    else
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: false), rel: "author")
+    end
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.

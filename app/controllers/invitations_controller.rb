@@ -2,11 +2,11 @@
 class InvitationsController < ApplicationController
 
   before_filter :check_permission
-  before_filter :admin_only, :only => [:create, :destroy]
-  before_filter :check_user_status, :only => [:index, :manage, :invite_friend, :update]
+  before_filter :admin_only, only: [:create, :destroy]
+  before_filter :check_user_status, only: [:index, :manage, :invite_friend, :update]
 
   def check_permission
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
   end
 
@@ -35,11 +35,11 @@ class InvitationsController < ApplicationController
         flash[:notice] = 'Invitation was successfully sent.'
         redirect_to([@user, @invitation])
       else
-        render :action => "show"
+        render action: "show"
       end
     else
       flash[:error] = "Please enter an email address."
-      render :action => "show"
+      render action: "show"
     end
   end
 
@@ -66,7 +66,7 @@ class InvitationsController < ApplicationController
       end
     else
       flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
-      render :action => "show"
+      render action: "show"
     end
   end
 

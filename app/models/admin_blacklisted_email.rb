@@ -1,8 +1,6 @@
 class AdminBlacklistedEmail < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  attr_accessible :email
-
   before_validation :canonicalize_email
 
   validates :email, presence: true, uniqueness: true, email_veracity: true

@@ -14,7 +14,7 @@ class FeedbacksController < ApplicationController
 
   def create
     @feedback = Feedback.new(feedback_params)
-    language_name = Language.find_by_id(@feedback.language).name
+    language_name = Language.find_by(id: @feedback.language).name
     @feedback.language = language_name
     if @feedback.save
       @feedback.email_and_send
