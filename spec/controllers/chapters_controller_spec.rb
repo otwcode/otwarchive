@@ -200,7 +200,7 @@ describe ChaptersController do
       comment = create(:comment, commentable_type: "Chapter", commentable_id: second_chapter.id)
       kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
       tag = create(:fandom)
-      expect_any_instance_of(Work).to receive(:tag_groups).and_return({"Fandom" => [tag]})
+      expect_any_instance_of(Work).to receive(:tag_groups).and_return({ "Fandom" => [tag] })
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
       get :show, work_id: work.id, id: second_chapter.id
       expect(assigns[:work]).to eq work
@@ -218,9 +218,7 @@ describe ChaptersController do
 
     it "increments the hit count when accessing the first chapter" do
       REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
-      expect {
-        get :show, work_id: work.id, id: work.chapters.first.id
-      }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+      expect { get :show, work_id: work.id, id: work.chapters.first.id }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
     end
 
     context "when work owner is logged in" do
@@ -398,10 +396,8 @@ describe ChaptersController do
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = {ids: [user2.pseuds.first.id]}
-        expect {
-          post :create, work_id: work.id, chapter: @chapter_attributes
-        }.to_not change(Chapter, :count)
+        @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
+        expect { post :create, work_id: work.id, chapter: @chapter_attributes }.to_not change(Chapter, :count)
         expect(response).to render_template("new")
         expect(flash[:error]).to eq "You're not allowed to use that pseud."
       end
@@ -416,9 +412,7 @@ describe ChaptersController do
       end
 
       it "adds a new chapter" do
-        expect {
-          post :create, work_id: work.id, chapter: @chapter_attributes
-        }.to change(Chapter, :count)
+        expect { post :create, work_id: work.id, chapter: @chapter_attributes }.to change(Chapter, :count)
         expect(work.chapters.count).to eq 2
       end
 
@@ -496,9 +490,7 @@ describe ChaptersController do
 
         context "when the chapter or work is not valid" do
           it "does not add a chapter" do
-            expect {
-              post :create, work_id: work.id, chapter: { content: "" }, post_without_preview_button: true
-            }.to_not change(Chapter, :count)
+            expect { post :create, work_id: work.id, chapter: { content: "" }, post_without_preview_button: true }.to_not change(Chapter, :count)
           end
 
           it "renders new" do
@@ -535,9 +527,7 @@ describe ChaptersController do
 
         context "when the chapter or work is not valid" do
           it "does not add a chapter" do
-            expect {
-              post :create, work_id: work.id, chapter: { content: "" }, preview_button: true
-            }.to_not change(Chapter, :count)
+            expect { post :create, work_id: work.id, chapter: { content: "" }, preview_button: true }.to_not change(Chapter, :count)
           end
 
           it "renders new" do
@@ -555,7 +545,7 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = {ids: [user.pseuds.first.id, @current_user.pseuds.first.id]}
+          @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, @current_user.pseuds.first.id] }
         end
 
         it "errors and redirects to work" do
@@ -594,7 +584,7 @@ describe ChaptersController do
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = {ids: [user2.pseuds.first.id]}
+        @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
         put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes
         expect(response).to render_template("new")
         expect(flash[:error]).to eq "You're not allowed to use that pseud."
@@ -741,7 +731,7 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = {ids: [user.pseuds.first.id, @current_user.pseuds.first.id]}
+          @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id, @current_user.pseuds.first.id] }
         end
 
         it "errors and redirects to work" do
