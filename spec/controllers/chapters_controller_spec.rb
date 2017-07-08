@@ -163,7 +163,7 @@ describe ChaptersController do
       comment = create(:comment, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
       comment.unreviewed = false
       comment.save
-      unreviewed_comment = create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
+      create(:comment, unreviewed: true, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
       get :show, work_id: moderated_work.id, id: moderated_work.chapters.first.id
       expect(assigns[:comments]).to eq [comment]
     end
@@ -189,7 +189,7 @@ describe ChaptersController do
 
     it "assigns @kudos to non-anonymous kudos" do
       kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
-      anonymous_kudo = create(:kudo, commentable: work)
+      create(:kudo, commentable: work)
       get :show, work_id: work.id, id: work.chapters.first.id
       expect(assigns[:kudos]).to eq [kudo]
     end
@@ -200,7 +200,7 @@ describe ChaptersController do
       comment = create(:comment, commentable_type: "Chapter", commentable_id: second_chapter.id)
       kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
       tag = create(:fandom)
-      expect_any_instance_of(Work).to receive(:tag_groups).and_return({ "Fandom" => [tag] })
+      expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
       expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
       get :show, work_id: work.id, id: second_chapter.id
       expect(assigns[:work]).to eq work
