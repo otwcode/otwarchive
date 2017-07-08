@@ -288,7 +288,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
 
       it "errors and redirects to user page when user is banned" do
@@ -337,7 +337,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
 
       it "errors and redirects to user page when user is banned" do
@@ -398,7 +398,7 @@ describe ChaptersController do
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
+        @chapter_attributes[:author_attributes] = {ids: [user2.pseuds.first.id]}
         expect {
           post :create, work_id: work.id, chapter: @chapter_attributes
         }.to_not change(Chapter, :count)
@@ -412,7 +412,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
 
       it "adds a new chapter" do
@@ -555,7 +555,7 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = {:ids => [user.pseuds.first.id, @current_user.pseuds.first.id]}
+          @chapter_attributes[:author_attributes] = {ids: [user.pseuds.first.id, @current_user.pseuds.first.id]}
         end
 
         it "errors and redirects to work" do
@@ -594,7 +594,7 @@ describe ChaptersController do
 
       it "does not allow a user to submit only a pseud that is not theirs" do
         user2 = create(:user)
-        @chapter_attributes[:author_attributes] = {:ids => [user2.pseuds.first.id]}
+        @chapter_attributes[:author_attributes] = {ids: [user2.pseuds.first.id]}
         put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes
         expect(response).to render_template("new")
         expect(flash[:error]).to eq "You're not allowed to use that pseud."
@@ -606,7 +606,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
 
       it "updates the works wip length when given" do
@@ -741,7 +741,7 @@ describe ChaptersController do
 
       context "when the user tries to add themselves as a coauthor" do
         before do
-          @chapter_attributes[:author_attributes] = {:ids => [user.pseuds.first.id, @current_user.pseuds.first.id]}
+          @chapter_attributes[:author_attributes] = {ids: [user.pseuds.first.id, @current_user.pseuds.first.id]}
         end
 
         it "errors and redirects to work" do
@@ -761,7 +761,7 @@ describe ChaptersController do
 
     context "when user is logged out" do
       it "errors and redirects to login" do
-        post :update_positions, work_id: work.id, chapter: [ @chapter1, @chapter3, @chapter2 ]
+        post :update_positions, work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2]
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -773,21 +773,21 @@ describe ChaptersController do
 
       context "when passing params[:chapters]" do
         it "updates the positions of the chapters" do
-          post :update_positions, work_id: work.id, chapters: [ 1, 3, 2]
+          post :update_positions, work_id: work.id, chapters: [1, 3, 2]
           expect(@chapter1.reload.position).to eq(1)
           expect(@chapter2.reload.position).to eq(3)
           expect(@chapter3.reload.position).to eq(2)
         end
 
         it "gives a notice and redirects to work" do
-          post :update_positions, work_id: work.id, chapters: [ 1, 3, 2]
+          post :update_positions, work_id: work.id, chapters: [1, 3, 2]
           it_redirects_to_with_notice(work, "Chapter order has been successfully updated.")
         end
       end
 
       context "when passing params[:chapter]" do
         it "updates the positions of the chapters" do
-          post :update_positions, work_id: work.id, chapter: [ @chapter1, @chapter3, @chapter2], format: :js
+          post :update_positions, work_id: work.id, chapter: [@chapter1, @chapter3, @chapter2], format: :js
           expect(@chapter1.reload.position).to eq(1)
           expect(@chapter2.reload.position).to eq(3)
           expect(@chapter3.reload.position).to eq(2)
@@ -821,7 +821,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
         expect(assigns[:preview_mode]).to be true
       end
     end
@@ -906,7 +906,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
     end
 
@@ -948,7 +948,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [ user.pseuds.first.id.to_i ]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
       end
     end
 
@@ -965,7 +965,6 @@ describe ChaptersController do
   end
 
   describe "destroy" do
-
     context "when user is logged out" do
       it "errors and redirects to login" do
         pending "clean up chapter filters"
