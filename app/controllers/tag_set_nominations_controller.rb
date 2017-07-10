@@ -8,7 +8,7 @@ class TagSetNominationsController < ApplicationController
   before_action :set_limit, only: [:new, :edit, :show, :create, :update, :review]
 
   def check_pseud_ownership
-    if tag_set_nomination_params[:pseud_id]
+    if !tag_set_nomination_params[:pseud_id].blank?
       pseud = Pseud.find(tag_set_nomination_params[:pseud_id])
       unless pseud && current_user && current_user.pseuds.include?(pseud)
         flash[:error] = ts("You can't nominate tags with that pseud.")
