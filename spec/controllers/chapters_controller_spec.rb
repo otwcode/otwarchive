@@ -6,6 +6,10 @@ describe ChaptersController do
 
   let(:user) { create(:user) }
   let!(:work) { create(:work, posted: true, authors: [user.pseuds.first]) }
+  let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
+  let(:banned_user) { create(:user, banned: true) }
+  let(:banned_users_work) { create(:work, posted: true, authors: [banned_user.pseuds.first]) }
+
 
   describe "index" do
     it "redirects to work" do
@@ -141,7 +145,7 @@ describe ChaptersController do
     end
 
     it "does not assign @previous_chapter when on first chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
       get :show, work_id: work.id, id: work.chapters.first.id
       expect(assigns[:previous_chapter]).to be_nil
     end
@@ -201,7 +205,7 @@ describe ChaptersController do
       kudo = create(:kudo, commentable_id: work.id, pseud: create(:pseud))
       tag = create(:fandom)
       expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("The 1 Fandom", user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
+      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with(tag.name, user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
       get :show, work_id: work.id, id: second_chapter.id
       expect(assigns[:work]).to eq work
       expect(assigns[:tag_groups]).to eq "Fandom" => [tag]
@@ -223,7 +227,7 @@ describe ChaptersController do
 
     context "when work owner is logged in" do
       before do
-        fake_login_known_user user
+        fake_login_known_user(user)
       end
 
       it "assigns @chapters to all chapters" do
@@ -286,15 +290,13 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
 
       it "errors and redirects to user page when user is banned" do
-        current_user = create(:user, banned: true)
-        banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
-        fake_login_known_user(current_user)
+        fake_login_known_user(banned_user)
         get :new, work_id: banned_users_work.id
-        it_redirects_to(user_path(current_user))
+        it_redirects_to(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
     end
@@ -335,24 +337,22 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
 
       it "errors and redirects to user page when user is banned" do
-        current_user = create(:user, banned: true)
-        banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
-        fake_login_known_user(current_user)
+        fake_login_known_user(banned_user)
         get :edit, work_id: banned_users_work.id, id: banned_users_work.chapters.first.id
-        it_redirects_to(user_path(current_user))
+        it_redirects_to(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
-      it "removes user and redirects to work when user removes themselves" do
+      it "removes user, gives notice, and redirects to work when user removes themselves" do
         other_user = create(:user)
         chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
         get :edit, work_id: work.id, id: chapter.id, remove: "me"
         expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to(work_path(work))
+        it_redirects_to_with_notice(work_path(work), "You have been removed as an author from the chapter")
       end
     end
 
@@ -386,11 +386,9 @@ describe ChaptersController do
       end
 
       it "errors and redirects to user page when user is banned" do
-        current_user = create(:user, banned: true)
-        banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
-        fake_login_known_user(current_user)
+        fake_login_known_user(banned_user)
         post :create, work_id: banned_users_work.id, chapter: @chapter_attributes
-        it_redirects_to(user_path(current_user))
+        it_redirects_to(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -408,7 +406,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
 
       it "adds a new chapter" do
@@ -427,7 +425,7 @@ describe ChaptersController do
         before do
           allow_any_instance_of(Chapter).to receive(:invalid_pseuds).and_return([user.pseuds.first])
         end
-        it "renders choose coauthor if chapter if valid" do
+        it "renders choose coauthor if chapter is valid" do
           post :create, work_id: work.id, chapter: @chapter_attributes
           expect(response).to render_template("_choose_coauthor")
         end
@@ -442,7 +440,7 @@ describe ChaptersController do
         before do
           allow_any_instance_of(Chapter).to receive(:ambiguous_pseuds).and_return([user.pseuds.first])
         end
-        it "renders choose coauthor if chapter if valid" do
+        it "renders choose coauthor if chapter is valid" do
           post :create, work_id: work.id, chapter: @chapter_attributes
           expect(response).to render_template("_choose_coauthor")
         end
@@ -477,12 +475,11 @@ describe ChaptersController do
           end
 
           it "posts the work if the work was not posted before" do
-            @unposted_work = create(:work, authors: [user.pseuds.first])
-            post :create, work_id: @unposted_work.id, chapter: @chapter_attributes, post_without_preview_button: true
+            post :create, work_id: unposted_work.id, chapter: @chapter_attributes, post_without_preview_button: true
             expect(assigns[:work].posted).to be true
           end
 
-          it "give a notice and redirects to the posted chapter" do
+          it "gives a notice and redirects to the posted chapter" do
             post :create, work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: assigns[:chapter].id), "Chapter has been posted!")
           end
@@ -512,13 +509,12 @@ describe ChaptersController do
             expect(assigns[:chapter].posted).to be false
           end
 
-          it "give a notice that the chapter is a draft and redirects to the chapter preview" do
+          it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
             post :create, work_id: work.id, chapter: @chapter_attributes, preview_button: true
             it_redirects_to_with_notice(preview_work_chapter_path(work_id: work.id, id: assigns[:chapter].id), "This is a draft chapter in a posted work. It will be kept unless the work is deleted.")
           end
 
-          it "give a notice that the work and chapter are drafts and redirects to the chapter preview" do
-            unposted_work = create(:work, authors: [user.pseuds.first])
+          it "gives a notice that the work and chapter are drafts and redirects to the chapter preview" do
             post :create, work_id: unposted_work.id, chapter: @chapter_attributes, preview_button: true
             it_redirects_to(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
             expect(flash[:notice]).to include("This is a draft chapter in an unposted work")
@@ -574,11 +570,9 @@ describe ChaptersController do
       end
 
       it "errors and redirects to user page when user is banned" do
-        current_user = create(:user, banned: true)
-        banned_users_work = create(:work, posted: true, authors: [current_user.pseuds.first])
-        fake_login_known_user(current_user)
+        fake_login_known_user(banned_user)
         put :update, work_id: banned_users_work.id, id: banned_users_work.chapters.first.id, chapter: @chapter_attributes
-        it_redirects_to(user_path(current_user))
+        it_redirects_to(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -596,10 +590,10 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
 
-      it "updates the works wip length when given" do
+      it "updates the work's wip length when given" do
         @chapter_attributes[:wip_length] = 3
         expect(work.wip_length).to eq 1
         put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes
@@ -610,7 +604,7 @@ describe ChaptersController do
         before do
           allow_any_instance_of(Chapter).to receive(:invalid_pseuds).and_return([user.pseuds.first])
         end
-        it "renders choose coauthor if chapter if valid" do
+        it "renders choose coauthor if chapter is valid" do
           put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes
           expect(response).to render_template("_choose_coauthor")
         end
@@ -625,7 +619,7 @@ describe ChaptersController do
         before do
           allow_any_instance_of(Chapter).to receive(:ambiguous_pseuds).and_return([user.pseuds.first])
         end
-        it "renders choose coauthor if chapter if valid" do
+        it "renders choose coauthor if chapter is valid" do
           put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes
           expect(response).to render_template("_choose_coauthor")
         end
@@ -681,18 +675,17 @@ describe ChaptersController do
 
           it "posts the work if the work was not posted before" do
             pending "multi-chapter works should post when chapter is posted"
-            unposted_work = create(:work, authors: [user.pseuds.first])
             put :update, work_id: unposted_work.id, id: unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true
             expect(assigns[:work].posted).to be true
           end
 
-          it "give a notice if the chapter was already posted and redirects to the posted chapter" do
+          it "gives a notice if the chapter was already posted and redirects to the posted chapter" do
             put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: work.chapters.first.id), "Chapter was successfully updated.")
           end
 
-          it "give a notice if the chapter was not already posted and redirects to the posted chapter" do
-            unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first],)
+          it "gives a notice if the chapter was not already posted and redirects to the posted chapter" do
+            unposted_chapter = create(:chapter, work: work, authors: [user.pseuds.first])
             put :update, work_id: work.id, id: unposted_chapter.id, chapter: @chapter_attributes, post_button: true
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: unposted_chapter.id), "Chapter was successfully posted.")
           end
@@ -718,7 +711,7 @@ describe ChaptersController do
 
       context "when the post without preview button is clicked" do
         it "posts the chapter" do
-          put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true
+          put :update, work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_without_preview_button: true
           expect(assigns[:chapter].posted).to be true
         end
       end
@@ -811,7 +804,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
         expect(assigns[:preview_mode]).to be true
       end
     end
@@ -864,7 +857,6 @@ describe ChaptersController do
         end
 
         it "posts the work if the work was not posted before" do
-          unposted_work = create(:work, authors: [user.pseuds.first])
           post :post, work_id: unposted_work.id, id: unposted_work.chapters.first.id
           expect(assigns[:work].posted).to be true
         end
@@ -896,7 +888,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
     end
 
@@ -938,7 +930,7 @@ describe ChaptersController do
         expect(assigns[:allpseuds]).to eq user.pseuds
         expect(assigns[:pseuds]).to eq user.pseuds
         expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id.to_i]
+        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
     end
 
@@ -996,14 +988,14 @@ describe ChaptersController do
           it_redirects_to_with_notice(work, "The chapter was successfully deleted.")
         end
 
-        it "gives a notice that the chapter was a draft if the chapter was not posted" do
+        it "gives a notice that the draft chapter was deleted if the chapter was a draft and redirects to work" do
           @chapter2.posted = false
           @chapter2.save
           delete :destroy, work_id: work.id, id: @chapter2.id
           it_redirects_to_with_notice(work, "The chapter draft was successfully deleted.")
         end
 
-        it "errors redirects to work when chapter is not deleted" do
+        it "errors and redirects to work when chapter is not deleted" do
           allow_any_instance_of(Chapter).to receive(:destroy).and_return(false)
           delete :destroy, work_id: work.id, id: @chapter2.id
           it_redirects_to_with_error(work, "Something went wrong. Please try again.")
