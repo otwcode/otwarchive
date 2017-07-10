@@ -108,7 +108,7 @@ describe InboxController do
 
     it "renders the JS form" do
       parameters = {
-        user_id: inbox_comment,
+        user_id: inbox_comment.user.login,
         comment_id: feedback_comment.id,
         format: :js
       }
