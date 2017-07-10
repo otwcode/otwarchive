@@ -63,7 +63,7 @@ describe PromptsController do
   describe "create" do
     let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
     it "should have no errors and redirect to the edit page" do
-      post :create, params: { collection_id: open_signup.collection.name, prompt_type: "offer", prompt: {} }
+      post :create, params: { collection_id: open_signup.collection.name, prompt_type: "offer", prompt: { collection_id: nil } }
       it_redirects_to "#{collection_signups_path(open_signup.collection)}/"\
                       "#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
       expect(flash[:error]).blank?
