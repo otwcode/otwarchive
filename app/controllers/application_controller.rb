@@ -5,7 +5,25 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
-  before_action :sanitize_params
+  before_action :sanitize_ac_params
+
+  def sanitize_ac_params
+    sanitize_params(params.to_unsafe_h).each do |key, value|
+      params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def transform_sanitized_hash_to_ac_params(key, value)
+    if value.is_a?(Hash)
+      ActionController::Parameters.new(value)
+    elsif value.is_a?(Array)
+      value.map.with_index do |val, index|
+        value[index] = transform_sanitized_hash_to_ac_params(key,  val)
+      end
+    else
+      value
+    end
+  end
 
   # Authlogic login helpers
   helper_method :current_user
