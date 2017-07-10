@@ -130,6 +130,8 @@ describe "API WorksController - Create works" do
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
+        Rails.cache.clear
+
         mock_external
 
         valid_params = {
@@ -159,16 +161,18 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
         WebMock.reset!
       end
+
 
       it "API should override content for Title" do
         expect(@work.title).to eq(api_fields[:title])
       end
+
       it "API should override content for Summary" do
         expect(@work.summary).to eq("<p>" + api_fields[:summary] + "</p>")
       end
+
       it "API should override content for Fandoms" do
         expect(@work.fandoms.first.name).to eq(api_fields[:fandoms])
       end
