@@ -494,7 +494,7 @@ describe "API WorksController - Find Works" do
     end
 
     it "should return the work URL for an imported work" do
-      valid_params = { original_urls: %(foo) }
+      valid_params = { original_urls: %w(foo) }
 
       post "/api/v1/works/urls", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
