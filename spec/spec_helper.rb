@@ -99,6 +99,6 @@ end
 
 def create_archivist
   user = create(:user)
-  user.roles << Role.new(name: "archivist")
+  user.roles << Role.create(name: "archivist")
   user
 end
