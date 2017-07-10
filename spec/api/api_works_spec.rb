@@ -161,6 +161,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
+        @work.destroy
         WebMock.reset!
       end
 
