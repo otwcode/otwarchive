@@ -1,3 +1,4 @@
+=begin
 class KudoObserver < ActiveRecord::Observer
 
   def after_create(kudo)
@@ -18,3 +19,4 @@ class KudoObserver < ActiveRecord::Observer
     end
 
 end
+=end

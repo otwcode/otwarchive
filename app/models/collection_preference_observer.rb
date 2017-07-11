@@ -1,3 +1,4 @@
+=begin
 class CollectionPreferenceObserver < ActiveRecord::Observer
 
   # must be AFTER update or else the collection still returns true for being unrevealed/anonymous!
@@ -14,3 +15,4 @@ class CollectionPreferenceObserver < ActiveRecord::Observer
   end
 
 end
+=end

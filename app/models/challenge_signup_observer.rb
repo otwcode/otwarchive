@@ -1,3 +1,4 @@
+=begin
 class ChallengeSignupObserver < ActiveRecord::Observer
 
   # Email a copy of the deleted signup to the user, to cover accidental deletions or modly deletions
@@ -7,3 +8,4 @@ class ChallengeSignupObserver < ActiveRecord::Observer
   end
 
 end
+=end

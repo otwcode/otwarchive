@@ -1,3 +1,4 @@
+=begin
 class ResponseObserver < ActiveRecord::Observer
   observe Kudo, Comment, Bookmark
   
@@ -28,3 +29,4 @@ class ResponseObserver < ActiveRecord::Observer
   end
   
 end
+=end

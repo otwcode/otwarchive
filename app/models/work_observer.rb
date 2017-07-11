@@ -1,3 +1,4 @@
+=begin
 class WorkObserver < ActiveRecord::Observer
 
   # Email a copy of the deleted work to all co-authors
@@ -22,3 +23,4 @@ class WorkObserver < ActiveRecord::Observer
   end
 
 end
+=end

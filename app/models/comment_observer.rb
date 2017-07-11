@@ -1,3 +1,4 @@
+=begin
 class CommentObserver < ActiveRecord::Observer
 
   # Add new comments to the inbox of the person to whom they're directed
@@ -231,3 +232,4 @@ class CommentObserver < ActiveRecord::Observer
     end
 
 end
+=end

@@ -1,3 +1,4 @@
+=begin
 class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
 
@@ -154,3 +155,4 @@ class CreationObserver < ActiveRecord::Observer
   end
 
 end
+=end
