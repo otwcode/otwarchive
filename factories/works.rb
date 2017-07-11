@@ -22,6 +22,10 @@ FactoryGirl.define do
     factory :custom_work_skin do
       work_skin_id 1
     end
+
+    factory :posted_work do
+      posted true
+    end
   end
 
   factory :external_work do

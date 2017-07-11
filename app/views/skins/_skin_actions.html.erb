@@ -12,9 +12,14 @@
     <% end %>
 
     <% if skin.editable? %>
-      <li><%= span_if_current ts('Edit'), edit_skin_url(skin) %></li>
+      <li><%= span_if_current ts("Edit"), edit_skin_url(skin) %></li>
       <% unless logged_in_as_admin? %>
-        <li><%= link_to ts('Delete'), skin, confirm: ts('Are you sure?'), method: :delete %></li>
+        <li>
+          <%= link_to ts("Delete"),
+                      skin,
+                      data: { confirm: ts("Are you sure?") },
+                      method: :delete %>
+        </li>
       <% end %>
     <% end %>
   </ul>

@@ -205,10 +205,8 @@ protected
     render_xhtml(afterword, "afterword")
 
     # write the OEBPS navigation files
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/toc.ncx"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/content.opf"))}
-
-
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') { |f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/toc.ncx", layout: false)) }
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') { |f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/content.opf", layout: false)) }
   end
 
   def render_xhtml(html, filename)

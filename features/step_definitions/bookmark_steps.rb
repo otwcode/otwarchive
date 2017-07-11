@@ -72,11 +72,10 @@ Given /^I have bookmarks to search$/ do
                      notes: "I enjoyed this")
 end
 
-When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
+When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
   step %{I start a new bookmark for "#{title}"}
-  unless pseud.nil?
-    select(pseud, from: "bookmark_pseud_id")
-  end
+  select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
+  fill_in("bookmark_notes", with: note) unless note.nil?
   click_button("Create")
   Bookmark.tire.index.refresh
 end

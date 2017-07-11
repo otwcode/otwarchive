@@ -205,10 +205,14 @@ module NavigationHelpers
       opendoors_tools_path
     when /^the Open Doors external authors page$/i
       opendoors_external_authors_path
+    when /^the claim page for "(.*)"$/i
+      claim_path(invitation_token: Invitation.find_by(invitee_email: $1).token)
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i
       tag_wranglers_path
+    when /^my wrangling page$/i
+      tag_wrangler_path(User.current_user)
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i

@@ -67,7 +67,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '~> 5'
+gem 'paperclip', '>= 5.1.0'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -134,7 +134,7 @@ group :test do
   gem 'shoulda'
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.5.2'
-  gem 'cucumber', '~> 2.3.2'
+  gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
