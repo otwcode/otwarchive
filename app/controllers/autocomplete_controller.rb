@@ -5,7 +5,7 @@ class AutocompleteController < ApplicationController
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_action :fetch_admin_settings
   skip_before_action :set_redirects
-  skip_before_action :sanitize_params # can we dare!
+  skip_before_action :sanitize_ac_params # can we dare!
 
   #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
   # # If you have an autocomplete that should fire without a term add it here
