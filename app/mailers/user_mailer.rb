@@ -167,7 +167,7 @@ class UserMailer < BulletproofMailer::Base
 
   # Sends an admin message to a user
   def archive_notification(admin_login, user_id, subject, message)
-    @user = User.find(user_id.id)
+    @user = User.find(user_id)
     @message = message
     @admin_login = admin_login
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
