@@ -524,14 +524,15 @@ class WorksController < ApplicationController
       render(:new_import) && return
     end
 
+    importing_for_others = params[:importing_for_others] != "false" && params[:importing_for_others]
+
     # is external author information entered when import for others is not checked?
-    if (params[:external_author_name].present? || params[:external_author_email].present?) && params[:importing_for_others] == "false"
+    if (params[:external_author_name].present? || params[:external_author_email].present?) && !importing_for_others
       flash.now[:error] = ts('You have entered an external author name or e-mail address but did not select "Import for others." Please select the "Import for others" option or remove the external author information to continue.')
       render(:new_import) && return
     end
 
     # is this an archivist importing?
-    importing_for_others = params[:importing_for_others] != "false"
     if importing_for_others && !current_user.archivist
       flash.now[:error] = ts('You may not import stories by other users unless you are an approved archivist.')
       render(:new_import) && return
