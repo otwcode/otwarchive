@@ -235,7 +235,7 @@ describe ChaptersController do
         get :show, params: { work_id: work.id, id: chapter.id }
         expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
       end
-    end     
+    end
 
     context "when other user is logged in" do
       before do
@@ -497,7 +497,10 @@ describe ChaptersController do
         end
 
         it "updates the work's revision date" do
-          work.save
+          Delorean.time_travel_to("1 day ago") do
+            work.touch
+          end
+
           post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
           expect(assigns[:work].updated_at).not_to eq(work.updated_at)
         end
@@ -552,7 +555,7 @@ describe ChaptersController do
       end
     end
   end
-  
+
   describe "update" do
     before do
       @chapter_attributes = { content: "This doesn't matter" }
@@ -705,7 +708,10 @@ describe ChaptersController do
         end
 
         it "updates the work's revision date" do
-          work.save
+          Delorean.time_travel_to("1 day ago") do
+            work.touch
+          end
+
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
           expect(assigns[:work].updated_at).not_to eq(work.updated_at)
         end
@@ -881,7 +887,10 @@ describe ChaptersController do
       end
 
       it "updates the work's revision date" do
-        work.save
+        Delorean.time_travel_to("1 day ago") do
+          work.touch
+        end
+
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
         expect(assigns[:work].updated_at).not_to eq(work.updated_at)
       end
@@ -982,6 +991,10 @@ describe ChaptersController do
         end
 
         it "updates the work's revision date" do
+          Delorean.time_travel_to("1 day ago") do
+            work.touch
+          end
+
           delete :destroy, params: { work_id: work.id, id: @chapter2.id }
           expect(assigns[:work].updated_at).not_to eq(work.updated_at)
         end
