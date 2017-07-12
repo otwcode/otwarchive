@@ -16,12 +16,6 @@ module Creatable
     end
   end
 
-  # def after_save
-  #   if self.is_a?(Work)
-  #     notify_recipients(self)
-  #   end
-  # end
-
   # send the appropriate notifications
   def do_notify
     if self.is_a?(Work)
@@ -126,6 +120,7 @@ module Creatable
     if self.nil?
       raise "Bad creation..."
     end
+
     if !self.authors.blank?
       new_authors = (self.authors - self.pseuds).uniq
       new_authors.each do |pseud|

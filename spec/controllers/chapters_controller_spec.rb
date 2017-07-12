@@ -497,6 +497,7 @@ describe ChaptersController do
         end
 
         it "updates the work's revision date" do
+          work.save
           post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
           expect(assigns[:work].updated_at).not_to eq(work.updated_at)
         end
@@ -704,6 +705,7 @@ describe ChaptersController do
         end
 
         it "updates the work's revision date" do
+          work.save
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
           expect(assigns[:work].updated_at).not_to eq(work.updated_at)
         end
@@ -879,6 +881,7 @@ describe ChaptersController do
       end
 
       it "updates the work's revision date" do
+        work.save
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
         expect(assigns[:work].updated_at).not_to eq(work.updated_at)
       end

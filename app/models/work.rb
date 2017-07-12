@@ -182,7 +182,7 @@ class Work < ActiveRecord::Base
 
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  after_initialize :post_first_chapter
+  after_save :post_first_chapter
   before_save :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
@@ -614,7 +614,7 @@ class Work < ActiveRecord::Base
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? ||
-        chapter.published_at > self.revised_at.to_date ||
+        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
@@ -696,7 +696,7 @@ class Work < ActiveRecord::Base
     if self.posted_changed? || (self.chapters.first && self.chapters.first.posted != self.posted)
       self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
-      self.chapters.first.save!
+      self.chapters.first.save
     end
   end
 
