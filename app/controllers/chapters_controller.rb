@@ -182,7 +182,7 @@ class ChaptersController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@work) and return }
-      format.js { render nothing: true }
+      format.js { head :ok }
     end
   end
 
