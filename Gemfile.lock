@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails-observers
-  revision: 206cb17bc14f4f5ac6f83da4204013a69549b9dc
+  revision: 5f09c070933219c388c17c6c26c931cba8fcf4e9
   specs:
     rails-observers (0.1.4)
       activemodel (>= 4.0)

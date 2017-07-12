@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
   include HtmlCleaner
   before_action :sanitize_ac_params
 
+  # sanitize_params works best with a hash, and will convert
+  # ActionController::Parameters to a hash in order to work with them anyway.
+  #
+  # Controllers need to deal with ActionController::Parameters, not hashes.
+  # These methods hand the params as a hash to sanitize_params, and then
+  # transforms the results back into ActionController::Parameters.
   def sanitize_ac_params
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)

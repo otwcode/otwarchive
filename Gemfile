@@ -90,7 +90,13 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-# gem 'rpm_contrib', '2.2.0' TODO: Come back to this
+# TODO: rpm_contrib is deprecated and needs to be replaced
+# Here is a list of possible alternatives:
+# https://github.com/newrelic/extends_newrelic_rpm
+#
+# The last working version is not compatible with Rails 5
+#
+# gem 'rpm_contrib', '2.2.0'
 
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
@@ -127,7 +133,6 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  # gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
