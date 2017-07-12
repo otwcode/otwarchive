@@ -693,10 +693,10 @@ class Work < ActiveRecord::Base
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted_changed?
+    if self.posted_changed? || (self.chapters.first && self.chapters.first.posted != self.posted)
       self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
-      self.chapters.first.save
+      self.chapters.first.save!
     end
   end
 
