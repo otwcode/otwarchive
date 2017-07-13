@@ -501,8 +501,10 @@ describe ChaptersController do
             work.touch
           end
 
+          old_updated_at = work.updated_at
+
           post :create, params: { work_id: work.id, chapter: @chapter_attributes, post_without_preview_button: true }
-          expect(assigns[:work].updated_at).not_to eq(work.updated_at)
+          expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
       end
 
@@ -712,8 +714,10 @@ describe ChaptersController do
             work.touch
           end
 
+          old_updated_at = work.updated_at
+
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
-          expect(assigns[:work].updated_at).not_to eq(work.updated_at)
+          expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
       end
 
@@ -891,8 +895,10 @@ describe ChaptersController do
           work.touch
         end
 
+        old_updated_at = work.updated_at
+
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
-        expect(assigns[:work].updated_at).not_to eq(work.updated_at)
+        expect(assigns[:work].updated_at).not_to eq(old_updated_at)
       end
 
       it "assigns instance variables correctly" do
@@ -995,8 +1001,10 @@ describe ChaptersController do
             work.touch
           end
 
+          old_updated_at = work.updated_at
+
           delete :destroy, params: { work_id: work.id, id: @chapter2.id }
-          expect(assigns[:work].updated_at).not_to eq(work.updated_at)
+          expect(assigns[:work].updated_at).not_to eq(old_updated_at)
         end
 
         it "gives a notice that the chapter was deleted and redirects to work" do
