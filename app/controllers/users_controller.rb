@@ -414,7 +414,7 @@ class UsersController < ApplicationController
         pseuds_with_author_removed = w.pseuds - @user.pseuds
         w.pseuds = pseuds_with_author_removed
 
-        w.save
+        w.save && w.touch # force cache_key to bust
 
         w.chapters.each do |c|
           c.pseuds = c.pseuds - @user.pseuds
