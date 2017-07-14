@@ -1,37 +1,37 @@
 <!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose post work" }) do |f| %>
 
-  <p class="required notice">* <%= ts('Required information') %></p>
+  <p class="required notice">* <%= ts("Required information") %></p>
 
-  <%= render 'work_form_tags', include_blank: false %>
+  <%= render "work_form_tags", include_blank: false %>
 
   <fieldset class="preface" role="article">
-    <legend><%= ts('Preface') %></legend>
-    <h3 class="landmark heading"><%= ts('Preface') %></h3>
+    <legend><%= ts("Preface") %></legend>
+    <h3 class="landmark heading"><%= ts("Preface") %></h3>
     <dl>
       <dt class="title required">
-        <%= f.label :title, ts('Work Title') + "*" %>
+        <%= f.label :title, ts("Work Title") + "*" %>
       </dt>
       <dd class="title required">
         <%= f.text_field :title, class: "observe_textlength text" %>
-        <%= live_validation_for_field('work_title',
+        <%= live_validation_for_field("work_title",
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
-              failureMessage: ts('We need a title! (At least %{min_length} characters long, please.)',
+              failureMessage: ts("We need a title! (At least %{min_length} characters long, please.)",
                 min_length: ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
 
       <!-- Add coauthors-->
-      <%= render 'pseuds/byline', form: f, type: 'work' %>
+      <%= render "pseuds/byline", form: f, type: "work" %>
 
       <dt class="summary">
-        <%= f.label :summary, ts('Summary', max: ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, class: "observe_textlength" %>
-        <%= live_validation_for_field('work_summary', presence: false,
+        <%= live_validation_for_field("work_summary", presence: false,
               maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
@@ -43,17 +43,17 @@
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= ts('Associations') %></legend>
-    <h3 class="landmark heading"><%= ts('Associations') %></h3>
+    <legend><%= ts("Associations") %></legend>
+    <h3 class="landmark heading"><%= ts("Associations") %></h3>
     <dl>
       <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted.sent).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
-          <%= f.label "challenge_assignment_ids[]", ts('Does this fulfill a challenge assignment') %>
+          <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
           <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection listbox group">
-          <h4 class="heading"><%= ts('Open Assignments') %></h4>
+          <h4 class="heading"><%= ts("Open Assignments") %></h4>
           <%= checkbox_section f, :challenge_assignment_ids, (@work.challenge_assignments + @assignments).uniq,
                 :checked_method => "challenge_assignments", :name_method => "title" %>
         </dd>
@@ -62,30 +62,30 @@
       <% if !(@claims = current_user.request_claims.unstarted).empty? || !@work.challenge_claims.empty? %>
         <!-- if the user has open claims? -->
         <dt class="collection">
-          <%= f.label "challenge_claim_ids[]", ts('Fulfill a Claim') %>
+          <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %>
           <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection listbox group">
-          <h4 class="heading"><%= ts('Open Claims') %></h4>
+          <h4 class="heading"><%= ts("Open Claims") %></h4>
           <%= checkbox_section f, :challenge_claim_ids, (@work.challenge_claims + @claims).uniq,
               :checked_method => "challenge_claims", :name_helper_method => "claim_title" %>
         </dd>
       <% end %>
 
       <!-- Add collection -->
-      <dt class="collection" title="<%= ts('post to collection or challenge') %>">
-        <%= f.label :collection_names, ts('Post to Collections / Challenges') %>
+      <dt class="collection" title="<%= ts("post to collection or challenge") %>">
+        <%= f.label :collection_names, ts("Post to Collections / Challenges") %>
         <%= link_to_help "add-collectible-to-collection" %>
       </dt>
-      <dd class="collection" title="<%= ts('post to collection or challenge') %>">
+      <dd class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
 
-      <dt class="recipient" title="<%= ts('gift to') %>">
-        <%= f.label :recipients, ts('Gift this work to') %>
+      <dt class="recipient" title="<%= ts("gift to") %>">
+        <%= f.label :recipients, ts("Gift this work to") %>
         <%= link_to_help "recipients" %>
       </dt>
-      <dd class="recipient" title="<%= ts('gift to') %>">
+      <dd class="recipient" title="<%= ts("gift to") %>">
         <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
       </dd>
 
@@ -94,7 +94,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts('This work is a remix, a translation, a podfic, or was inspired by another work') %>
+        <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -106,7 +106,7 @@
                 <%= p.text_field :url, value: work_parent_value(:url),
                       "aria-describedby" => "parent-attributes-url-field-description" %>
                 <p class="important footnote" id="parent-attributes-url-field-description">
-                  <%= ts('For a work in the Archive, only the URL is required.') %>
+                  <%= ts("For a work in the Archive, only the URL is required.") %>
                 </p>
               </dd>
 
@@ -117,22 +117,22 @@
               <dd><%= p.text_field :author, value: work_parent_value(:author) %></dd>
 
               <dt>
-                <%= p.label :language_id, ts('Language') %>
+                <%= p.label :language_id, ts("Language") %>
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.collection_select(:language_id, Language.all(order: :short), :id, :name, prompt: " ") %>
+                <%= p.collection_select(:language_id, Language.order(:short), :id, :name, prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
-                <%= p.label :translation, ts('This is a translation') %>
+                <%= p.label :translation, ts("This is a translation") %>
                 <%= link_to_help "translation-link" %>
               </dd>
             <% end %>
 
             <% unless @work.parent_work_relationships.blank? %>
-              <dt><%= ts('Current parent works') %></dt>
+              <dt><%= ts("Current parent works") %></dt>
               <% for related_work in @work.parent_work_relationships %>
                 <% if related_work.parent %>
                   <dd>
@@ -141,8 +141,8 @@
                         <%= link_to related_work.parent.title, related_work.parent %>
                       </li>
                       <li>
-                        <%= link_to ts('Remove'), related_work,
-                                confirm: ts('Are you sure you want to delete the connection to this work?'),
+                        <%= link_to ts("Remove"), related_work,
+                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
                                 method: :delete %>
                       </li>
                     </ul>
@@ -160,24 +160,24 @@
         <%= check_box_tag "series-options-show", "1", !@work.series.blank?, class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
-        <%= label_tag 'series-options-show', ts('This work is part of a series') %>
+        <%= label_tag "series-options-show", ts("This work is part of a series") %>
         <%= link_to_help "choosing-series" %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
           <dl>
             <%= fields_for "work[series_attributes]" do |s| %>
-              <dt><%= s.label 'id', ts('Choose one of your existing series:') %></dt>
+              <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
               <dd>
                 <%= s.collection_select(:id, @series, :id, :title, { :prompt => true }) %>
               </dd>
 
-              <dt><%= s.label :title, ts('Or create and use a new one:') %></dt>
+              <dt><%= s.label :title, ts("Or create and use a new one:") %></dt>
               <dd><%= s.text_field :title %></dd>
             <% end %>
 
             <% unless @serial_works.blank? %>
-              <dt><%= ts('Current Series') %></dt>
+              <dt><%= ts("Current Series") %></dt>
               <% for serial in @serial_works %>
                 <dd>
                   <ul class="actions" role="navigation">
@@ -185,12 +185,7 @@
                       <%= link_to serial.series.title, serial.series %>
                     </li>
                     <li>
-                      <%= link_to ts('Remove'), serial_work_path(serial),
-                              method: :delete %>
-                    </li>
-                    <li>
-                      <%= link_to ts('Delete'), serial.series,
-                              confirm: ts('Delete series from all works?'),
+                      <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
                               method: :delete %>
                     </li>
                   </ul>
@@ -208,13 +203,13 @@
           <%= check_box_tag "chapters-options-show", "1", @work.chaptered?, class: "toggle_formfield" %>
         </dt>
         <dd class="chaptered wip">
-          <%= label_tag "chapters-options-show", ts('This work has multiple chapters') %>
+          <%= label_tag "chapters-options-show", ts("This work has multiple chapters") %>
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= ts('Chapter 1 of') %></dt>
+              <dt><%= ts("Chapter 1 of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= ts('Chapter Title:') %></dt>
+              <dt><%= ts("Chapter Title:") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>
@@ -225,13 +220,13 @@
           <%= f.check_box :backdate, { id: "backdate-options-show", class: "toggle_formfield" } %>
         </dt>
         <dd class="backdate">
-          <%= label_tag "backdate-options-show", ts('Set a different publication date') %>
+          <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
           <%= link_to_help "backdating-help" %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>
-              <dt><%= label_tag "published_at", ts('Set publication date') %></dt>
-              <dd id="managePublicationDate" class="datetime" title="<%= ts('set date') %>">
+              <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
+              <dd id="managePublicationDate" class="datetime" title="<%= ts("set date") %>">
                 <!--BACK END, this select box does not seem to be acquiring the label published_at -->
                 <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
               </dd>
@@ -239,10 +234,10 @@
           </fieldset>
         </dd>
 
-        <%= render 'work_form_associations_language', f: f %>
+        <%= render "work_form_associations_language", f: f %>
 
         <dt class="skin">
-          <%= f.label :work_skin_id, ts('Select Work Skin') %>
+          <%= f.label :work_skin_id, ts("Select Work Skin") %>
           <%= link_to_help "work-skins" %>
         </dt>
         <dd class="skin">
@@ -251,7 +246,7 @@
                 :title,
                 { :selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), include_blank: true } %>
           <p class="actions" role="navigation">
-            <%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %>
+            <%= link_to ts("Public Work Skins"), skins_path(:skin_type => "WorkSkin") %>
           </p>
         </dd>
       </dl>
@@ -260,8 +255,8 @@
 
   <!-- privacy settings -->
   <fieldset class="privacy" role="article">
-    <legend><%= ts('Privacy') %></legend>
-    <h3 class="landmark heading"><%= ts('Privacy') %></h3>
+    <legend><%= ts("Privacy") %></legend>
+    <h3 class="landmark heading"><%= ts("Privacy") %></h3>
     <dl>
       <!-- Privacy dropdown (storyprivacy) -->
       <dt class="restrict">
@@ -269,7 +264,7 @@
       </dt>
 
       <dd class="restrict">
-        <%= f.label :restricted, ts('Only show your work to registered users') %>
+        <%= f.label :restricted, ts("Only show your work to registered users") %>
         <%= link_to_help "registered-users" %>
       </dd>
 
@@ -293,15 +288,15 @@
   <% unless @chapters %>
     <!-- Work text field (chapter_attributes_content) -->
     <fieldset class="work text" role="article">
-      <legend class="required"><%= ts('Work Text') %>*</legend>
+      <legend class="required"><%= ts("Work Text") %>*</legend>
       <ul class="hidden rtf-html-switch actions" role="menu">
-        <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
-        <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+        <li><a class="rtf-link" href="#"><%= ts("Rich Text") %></a></li>
+        <li><a class="html-link" href="#"><%= ts("HTML") %></a></li>
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
         <span class="hidden rtf-notes">
-          <%= ts('Type or paste formatted text.') %><%= link_to_help "rte-help" %>
+          <%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %>
         </span>
       </p>
       <p class="notice">
@@ -310,17 +305,17 @@
 
       <% use_tinymce %>
         <div class="rtf-html-field">
-          <h4 class="landmark heading"><%= ts('Work Text') %>*</h4>
+          <h4 class="landmark heading"><%= ts("Work Text") %>*</h4>
           <%= c.text_area :content, value: @chapter.content,
                 class: "mce-editor observe_textlength large", id: "content" %>
-          <%= live_validation_for_field('content',
+          <%= live_validation_for_field("content",
             maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
             minimum_length: ArchiveConfig.CONTENT_MIN,
-            tooLongMessage: ts('We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)',
+            tooLongMessage: ts("We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)",
               max: ArchiveConfig.CONTENT_MAX_DISPLAYED.to_s),
-            tooShortMessage: ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.',
+            tooShortMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.",
               min: ArchiveConfig.CONTENT_MIN.to_s),
-            failureMessage: ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.',
+            failureMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.",
               min: ArchiveConfig.CONTENT_MIN.to_s))
           %>
 
@@ -332,22 +327,22 @@
   <% end %><!-- end of fields for chapters -->
 
   <fieldset class="create">
-    <legend><%= ts('Post') %></legend>
+    <legend><%= ts("Post") %></legend>
     <ul class="actions">
       <% unless @work.new_record? || @work.posted? %>
         <li>
-          <%= submit_tag ts('Save Without Posting'), name: 'save_button' %>
+          <%= submit_tag ts("Save Without Posting"), name: "save_button" %>
         </li>
       <% end %>
       <li>
-        <%= submit_tag ts('Preview'), name: 'preview_button' %>
+        <%= submit_tag ts("Preview"), name: "preview_button" %>
       </li>
       <li>
-        <%= submit_tag ts('Post Without Preview'), name: 'post_button',
-              disable_with: ts('Please wait...') %>
+        <%= submit_tag ts("Post Without Preview"), name: "post_button",
+              data: { disable_with: ts("Please wait...") } %>
       </li>
       <li>
-        <%= submit_tag ts('Cancel'), name: 'cancel_button' %>
+        <%= submit_tag ts("Cancel"), name: "cancel_button" %>
       </li>
     </ul>
   </fieldset>

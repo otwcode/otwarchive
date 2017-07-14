@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CacheMaster do
- let(:cache_master) { CacheMaster.new(123456) }
+  let(:cache_master) { CacheMaster.new(123_456) }
 
   it "should have a key" do
     expect(cache_master.key).to eq("works:123456:assocs")
@@ -13,7 +13,6 @@ describe CacheMaster do
   end
 
   it "should combine multiple deleted associations" do
-    clean_the_database   
     cache_master.record('tag', 5)
     cache_master.record('tag', 6)
     cache_master.record('pseud', 7)
@@ -21,7 +20,6 @@ describe CacheMaster do
   end
 
   it "should expire caches" do
-    clean_the_database
     cache_master.record('tag', 5)
     cache_master.record('tag', 6)
     cache_master.record('pseud', 7)
@@ -36,5 +34,4 @@ describe CacheMaster do
     cache_master.expire
     expect(cache_master.get_hash).to eq({})
   end
-
 end

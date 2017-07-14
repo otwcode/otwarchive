@@ -38,9 +38,9 @@ module UsersHelper
   # Determine which icon to show on user pages
   def standard_icon(user = nil, pseud = nil)
     if pseud && pseud.icon
-      pseud.icon.url(:standard)
+      pseud.icon.url(:standard).gsub(/^http:/, "https:")
     elsif user && user.default_pseud && user.default_pseud.icon
-      user.default_pseud.icon.url(:standard)
+      user.default_pseud.icon.url(:standard).gsub(/^http:/, "https:")
     else
       '/images/skins/iconsets/default/icon_user.png'
     end
@@ -113,9 +113,9 @@ module UsersHelper
 
   def print_gifts_link(user)
     if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_all.uniq.count
     else
-      gift_number = user.gift_works.visible_to_registered_user.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_registered_user.uniq.count
     end
     span_if_current ts('Gifts (%{gift_number})', gift_number: gift_number.to_s), user_gifts_path(user)
   end
@@ -133,7 +133,7 @@ module UsersHelper
 
   #  def print_pseud_drafts_link(pseud)
   #    total = pseud.unposted_works.size
-  #    link_to_unless_current t('my_drafts', :default =>"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+  #    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
   #  end
 
   def authors_header(collection, what = 'People')

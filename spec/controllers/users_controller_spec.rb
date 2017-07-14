@@ -1,18 +1,16 @@
 require 'spec_helper'
 
-class UsersController < ApplicationController
-
-  def check_account_creation_status
-    true
-  end
-
-end
-
 describe UsersController do
 
   def valid_user_attributes
-    { email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
-      terms_of_service: "1", password: "password" }
+    {
+      email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
+      terms_of_service: "1", password: "password"
+    }
+  end
+
+  before do
+    allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
   end
 
   describe "create" do

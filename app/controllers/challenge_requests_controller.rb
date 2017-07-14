@@ -26,14 +26,14 @@ class ChallengeRequestsController < ApplicationController
       query = "SELECT prompts.*, GROUP_CONCAT(tags.name) AS tagnames FROM prompts INNER JOIN set_taggings ON prompts.tag_set_id = set_taggings.tag_set_id 
       INNER JOIN tags ON tags.id = set_taggings.tag_id 
       WHERE prompts.type = 'Request' AND tags.type = 'Fandom' AND prompts.collection_id = " + @collection.id.to_s + " GROUP BY prompts.id ORDER BY tagnames " + @sort_direction
-      @requests = Prompt.paginate_by_sql(query, :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
-    elsif @sort_column == "prompter" && !@collection.prompts.where(:anonymous => true).exists?
+      @requests = Prompt.paginate_by_sql(query, page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+    elsif @sort_column == "prompter" && !@collection.prompts.where(anonymous: true).exists?
       @requests = @collection.prompts.where("type = 'Request'").
-                              joins(:challenge_signup => :pseud).
+                              joins(challenge_signup: :pseud).
                               order("pseuds.name #{@sort_direction}").
-                              paginate(:page => params[:page])
+                              paginate(page: params[:page])
     else
-      @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+      @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     end
   end
 

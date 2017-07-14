@@ -1,23 +1,12 @@
 class LocalesController < ApplicationController
-  before_filter :check_permission, :only => [:new, :create, :update, :edit]
+  before_filter :check_permission, only: [:new, :create, :update, :edit]
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
   end
 
-  def set
-    if params[:locale_id]
-      session[:locale] = params[:locale_id]
-    end
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
-  end
-
   def index
-    @locales = Locale.all(:order => :iso)
-  end
-
-  def show
-    @locale = Locale.find_by_iso(params[:id])
+    @locales = Locale.default_order
   end
 
   def new
@@ -27,12 +16,12 @@ class LocalesController < ApplicationController
 
   # GET /locales/en/edit
   def edit
-    @locale = Locale.find_by_iso(params[:id])
+    @locale = Locale.find_by(iso: params[:id])
     @languages = Language.default_order
   end
 
   def update
-    @locale = Locale.find_by_iso(params[:id])
+    @locale = Locale.find_by(iso: params[:id])
     @locale.attributes = locale_params
     if @locale.save
       flash[:notice] = ts('Your locale was successfully updated.')
@@ -47,11 +36,11 @@ class LocalesController < ApplicationController
   def create
     @locale = Locale.new(locale_params)
     if @locale.save
-      flash[:notice] = t('successfully_added', :default => 'Locale was successfully added.')
+      flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
       redirect_to locales_path
     else
       @languages = Language.default_order
-      render :action => "new"
+      render action: "new"
     end
   end
 

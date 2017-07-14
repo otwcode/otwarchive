@@ -24,7 +24,7 @@ RSpec.describe SeriesController, type: :controller do
   describe 'create' do
     it 'renders new if the series is invalid' do
       fake_login_known_user(user)
-      post :create
+      post :create, series: {summary: ""}
       expect(response).to render_template('new')
     end
 
@@ -47,11 +47,11 @@ RSpec.describe SeriesController, type: :controller do
     xit 'allows you to change the pseuds associated with the series' do
       fake_login_known_user(user)
       new_pseud = create(:pseud)
-      put :update, series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline }
+        put :update, series: { author_attributes: { ids: [user.id] } }, id: series, pseud: { byline: new_pseud.byline }
       it_redirects_to_with_notice(series_path(series), \
                                   "Series was successfully updated.")
       series.reload
-      expect(series.pseuds).to eq([new_pseud])
+      expect(series.pseuds).to include(new_pseud)
     end
 
     it 'renders the edit template if the update fails' do

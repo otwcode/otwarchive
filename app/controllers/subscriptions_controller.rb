@@ -1,13 +1,13 @@
 class SubscriptionsController < ApplicationController
 
-  skip_before_filter :store_location, :only => [:create, :destroy]
+  skip_before_filter :store_location, only: [:create, :destroy]
 
   before_filter :users_only
   before_filter :load_user
   before_filter :check_ownership
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -18,7 +18,7 @@ class SubscriptionsController < ApplicationController
     if params[:type].present?
       @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
     end
-    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }    
+    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
@@ -57,9 +57,9 @@ class SubscriptionsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
-  
+
   private
-  
+
   def subscription_params
     params.require(:subscription).permit(
       :subscribable_id, :subscribable_type

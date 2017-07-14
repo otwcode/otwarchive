@@ -16,11 +16,11 @@ class Opendoors::ToolsController < ApplicationController
     # extract the work id and find the work
     if params[:work_url] && params[:work_url].match(/works\/([0-9]+)\/?$/)
       work_id = $1
-      @work = Work.find(work_id)
+      @work = Work.find_by_id(work_id)
     end
     unless @work
-      flash[:error] = ts("We couldn't find that work on the archive. Have you put in the full url?")
-      redirect_to :action => :index and return
+      flash[:error] = ts("We couldn't find that work on the Archive. Have you put in the full URL?")
+      redirect_to action: :index and return
     end
 
     # check validity of the new redirecting url
@@ -46,7 +46,7 @@ class Opendoors::ToolsController < ApplicationController
       flash[:error] = ts("The imported-from url you are trying to set doesn't seem valid.")
     else
       # check for any other works 
-      works = Work.where(:imported_from_url => @imported_from_url)
+      works = Work.where(imported_from_url: @imported_from_url)
       if works.count > 0 
         flash[:error] = ts("There is already a work imported from the url #{@imported_from_url}.")
       else
@@ -55,7 +55,7 @@ class Opendoors::ToolsController < ApplicationController
         flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
       end
     end    
-    redirect_to :action => :index, :imported_from_url => @imported_from_url and return
+    redirect_to action: :index, imported_from_url: @imported_from_url and return
   end
   
 end

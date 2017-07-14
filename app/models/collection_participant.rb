@@ -2,7 +2,7 @@ class CollectionParticipant < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :pseud
-  has_one :user, :through => :pseud
+  has_one :user, through: :pseud
   belongs_to :collection
 
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
@@ -18,16 +18,16 @@ class CollectionParticipant < ActiveRecord::Base
                          [ts("Moderator"), MODERATOR],
                          [ts("Owner"), OWNER] ]
 
-  validates_uniqueness_of :pseud_id, :scope => [:collection_id],
-    :message => ts("That person appears to already be a participant in that collection.")
+  validates_uniqueness_of :pseud_id, scope: [:collection_id],
+    message: ts("That person appears to already be a participant in that collection.")
 
   validates_presence_of :participant_role
-  validates_inclusion_of :participant_role, :in => PARTICIPANT_ROLES,
-    :message => ts("That is not a valid participant role.")
+  validates_inclusion_of :participant_role, in: PARTICIPANT_ROLES,
+    message: ts("That is not a valid participant role.")
 
   scope :for_user, lambda {|user|
     select("DISTINCT collection_participants.*").
-    joins(:pseud => :user).
+    joins(pseud: :user).
     where('users.id = ?', user.id)
   }
 

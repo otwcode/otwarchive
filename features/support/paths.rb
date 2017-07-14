@@ -36,10 +36,10 @@ module NavigationHelpers
       path_to_pickle $1, $2
 
     when /^#{capture_model}(?:'s)? #{capture_model}'s (.+?) page$/  # eg. the forum's post's comments page
-      path_to_pickle $1, $2, :extra => $3                           #  or the forum's post's edit page
+      path_to_pickle $1, $2, extra: $3                           #  or the forum's post's edit page
 
     when /^#{capture_model}(?:'s)? (.+?) page$/                     # eg. the forum's posts page
-      path_to_pickle $1, :extra => $2                               #  or the forum's edit page
+      path_to_pickle $1, extra: $2                               #  or the forum's edit page
 
     # Add more mappings here.
 
@@ -94,11 +94,11 @@ module NavigationHelpers
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
-      new_work_path(:import => 'true')
+      new_work_path(import: 'true')
     when /the public skins page/
       skins_path
     when /the work-skins page/
-      skins_path(:skin_type => "WorkSkin")
+      skins_path(skin_type: "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? user url$/i
@@ -107,9 +107,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
-      work_path(Work.find_by_title($1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^(.*?)(?:'s)? bookmarks page$/i
       Bookmark.tire.index.refresh
       user_bookmarks_path(user_id: $1)
@@ -134,31 +134,35 @@ module NavigationHelpers
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
     when /^"(.*)" skin page/
-      skin_path(Skin.find_by_title($1))
+      skin_path(Skin.find_by(title: $1))
     when /^the new skin page/
       new_skin_path
     when /^the new wizard skin page/
       new_skin_path(wizard: true)
     when /^"(.*)" edit skin page/
-      edit_skin_path(Skin.find_by_title($1))
+      edit_skin_path(Skin.find_by(title: $1))
     when /^"(.*)" edit wizard skin page/
-      edit_skin_path(Skin.find_by_title($1), wizard: true)
+      edit_skin_path(Skin.find_by(title: $1), wizard: true)
+    when /^the new collection page/
+      new_collection_path
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
-      collection_path(Collection.find_by_title($1))
+      collection_path(Collection.find_by(title: $1))
+    when /^"(.*)" collection edit page$/i
+      edit_collection_path(Collection.find_by(title: $1))
     when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
-      collection_signups_path(Collection.find_by_title($1))
+      collection_signups_path(Collection.find_by(title: $1))
     when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page
-      collection_requests_path(Collection.find_by_title($1))
+      collection_requests_path(Collection.find_by(title: $1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
-      collection_assignments_path(Collection.find_by_title($1))
+      collection_assignments_path(Collection.find_by(title: $1))
     when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
-      collection_participants_path(Collection.find_by_title($1))
+      collection_participants_path(Collection.find_by(title: $1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
-      collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      collection_url(Collection.find_by(title: $1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
-      edit_collection_gift_exchange_path(Collection.find_by_title($1))
+      edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
-      collection_potential_matches_path(Collection.find_by_title($1))
+      collection_potential_matches_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
@@ -170,13 +174,13 @@ module NavigationHelpers
       tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the bookmarks in collection "(.*)"$/i
       Bookmark.tire.index.refresh
-      collection_bookmarks_path(Collection.find_by_title($1))
+      collection_bookmarks_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
-      collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
+      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
-      collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the FAQ reorder page$/i
@@ -194,17 +198,21 @@ module NavigationHelpers
     when /^the new tag ?set page$/i
       new_tag_set_path
     when /^the "(.*)" tag ?set edit page$/i
-      edit_tag_set_path(OwnedTagSet.find_by_title($1))
+      edit_tag_set_path(OwnedTagSet.find_by(title: $1))
     when /^the "(.*)" tag ?set page$/i
-      tag_set_path(OwnedTagSet.find_by_title($1))
+      tag_set_path(OwnedTagSet.find_by(title: $1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
     when /^the Open Doors external authors page$/i
       opendoors_external_authors_path
+    when /^the claim page for "(.*)"$/i
+      claim_path(invitation_token: Invitation.find_by(invitee_email: $1).token)
     when /^the languages page$/i
       languages_path
     when /^the wranglers page$/i
       tag_wranglers_path
+    when /^my wrangling page$/i
+      tag_wrangler_path(User.current_user)
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i
@@ -230,12 +238,12 @@ module NavigationHelpers
     when /^the bulk email search page$/i
       bulk_search_admin_users_path
     when /^the abuse administration page for "(.*)"$/i
-      admin_user_path(User.find_by_login($1))
+      admin_user_path(User.find_by(login: $1))
 
     # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
-    #     user_profile_path(User.find_by_login($1))
+    #     user_profile_path(User.find_by(login: $1))
 
     else
       begin
