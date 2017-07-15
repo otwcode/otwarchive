@@ -161,6 +161,9 @@ class ChaptersController < ApplicationController
       posted_changed = @chapter.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
+        if @chapter.posted
+          post_chapter
+        end
         flash[:notice] = ts("Chapter was successfully #{posted_changed ? 'posted' : 'updated'}.")
         redirect_to [@work, @chapter]
       else
