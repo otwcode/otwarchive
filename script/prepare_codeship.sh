@@ -35,3 +35,5 @@ echo "http.port: ${PORT}" >> config/elasticsearch.yml
 nohup bash -c "./bin/elasticsearch 2>&1" &
 cd ~/clone
 echo "BCRYPT_COST: 4"  >> config/config.yml
+
+bash ./script/codeship_ebook_converters.sh
