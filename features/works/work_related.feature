@@ -344,7 +344,32 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
 
-  Scenario: When a user is notified that a co-authored work has been inspired by a work they posted, the e-mail should link to each author's URL instead of showing escaped HTML
+Scenario: Anonymous works listed as inspiration should have links to the authors,
+  but only for the authors themselves and admins
+  Given I have related works setup
+    And I have the anonymous collection "Muppets Anonymous"
+    And a related work has been posted and approved
+
+  When I am logged in as "remixer"
+    And I add the work "Followup" to the collection "Muppets Anonymous"
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on my "remixer" pseud page
+
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on remixer's "remixer" pseud page
+
+  When I am logged out
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous"
+    And I should not see "remixer" within ".afterword .children"
+
+Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
+  the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"

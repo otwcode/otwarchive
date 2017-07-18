@@ -57,6 +57,8 @@ module NavigationHelpers
       manage_invite_requests_path
     when /my pseuds page/
       user_pseuds_path(User.current_user)
+    when /my "(.*)" pseud page/
+      user_pseud_path(user_id: User.current_user, id: $1)
     when /my user page/
       user_path(User.current_user)
     when /my preferences page/
@@ -101,6 +103,8 @@ module NavigationHelpers
       skins_path(skin_type: "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
+    when /^(.*?)(?:'s)? "(.*)" pseud page$/i
+      user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^(.*?)(?:'s)? works page$/i

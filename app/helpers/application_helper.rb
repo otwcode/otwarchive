@@ -98,7 +98,7 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = ts("Anonymous").html_safe
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
