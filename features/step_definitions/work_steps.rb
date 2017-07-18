@@ -276,6 +276,15 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+# Posts a chapter for the current user
+When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+  work = Work.find_by(title: work_title)
+  visit work_url(work)
+  step %{I follow "Add Chapter"}
+  step %{I fill in "content" with "la la la la la la la la la la la"}
+  step %{I post the chapter}
+end
+
 When /^a chapter is set up for "([^"]*)"$/ do |work_title|
   work = Work.find_by(title: work_title)
   user = work.users.first
