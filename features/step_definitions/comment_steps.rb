@@ -11,7 +11,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
   user.preference.kudos_emails_off = true
-  user.preference.admin_emails_off = true
   user.preference.save
 end
 
