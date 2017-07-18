@@ -1,22 +1,28 @@
-/*==SANDBOX: All temporary, development, and unreviewed css lives here. 
-Rules will be incorporated into the main cascade by Front End before deploy. 
-If you've just coded up a new feature and put in some layout, put that layout here, 
-with a comment, and the Front End Santa will make your wishes come true. 
-Or if you've put in a fix and you've not yet read the Front End Docs? 
+/*==SANDBOX: All temporary, development, and unreviewed css lives here.
+Rules will be incorporated into the main cascade by Front End before deploy.
+If you've just coded up a new feature and put in some layout, put that layout here,
+with a comment, and the Front End Santa will make your wishes come true.
+Or if you've put in a fix and you've not yet read the Front End Docs?
 Put your fix in here.
 Examples:
 
-/*Fix for issue 996 
+/*Fix for issue 996
 .bookmark .header {float:left;}
 
-/*Draft layout for views/shiny/new by astolat. 
+/*Draft layout for views/shiny/new by astolat.
 It has to be purple, see wiki, ADT meeting 25
-.shiny-happy-people table {display:table-cell; 
+.shiny-happy-people table {display:table-cell;
 background:purple; color:#555;}
 
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
+
+/* styling for AO3-3359 to remove top padding from the new button
+and preserve the balance/symmetry of the page */
+#new_work_search fieldset:first-of-type .submit {
+  padding-top: 0;
+}
 
 /* Issue 3243 needs nested ul to be indented in external_authors/claim
 */

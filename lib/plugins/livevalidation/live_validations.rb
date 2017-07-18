@@ -1,47 +1,47 @@
 module ActiveModel
   module Validations
     LIVE_VALIDATIONS_OPTIONS = {
-      :failureMessage => :message,
-      :pattern => :with,
-      :onlyInteger => :only_integer
+      failureMessage: :message,
+      pattern: :with,
+      onlyInteger: :only_integer
     }
     # more complicated mappings in map_configuration method
 
     VALIDATION_METHODS = {
-      :presence => { :method => "Validate.Presence", 
-  		  :messages => { 
-  			  :failureMessage => "live_validation.presence.failure" 
+      presence: { method: "Validate.Presence", 
+  		  messages: { 
+  			  failureMessage: "live_validation.presence.failure" 
   			} 
   		},
-      :numericality =>  { :method => "Validate.Numericality",
-		    :messages => { 
-    			:notANumberMessage => "live_validation.numericality.not_a_number", 
-    			:notAnIntegerMessage => "live_validation.numericality.not_an_integer",
-    			:wrongNumberMessage => "live_validation.numericality.wrong_number",
-    			:tooLowMessage => "live_validation.numericality.too_low",
-    			:tooHighMessage => "live_validation.numericality.too_high"
+      numericality:  { method: "Validate.Numericality",
+		    messages: { 
+    			notANumberMessage: "live_validation.numericality.not_a_number", 
+    			notAnIntegerMessage: "live_validation.numericality.not_an_integer",
+    			wrongNumberMessage: "live_validation.numericality.wrong_number",
+    			tooLowMessage: "live_validation.numericality.too_low",
+    			tooHighMessage: "live_validation.numericality.too_high"
     		} 
 		  },
-      :format => { :method => "Validate.Format",
-    		:messages => { 
-    			:failureMessage => "live_validation.format.failure"
+      format: { method: "Validate.Format",
+    		messages: { 
+    			failureMessage: "live_validation.format.failure"
     		} 
     	},
-      :length => { :method => "Validate.Length",
-    		:messages => { 
-    			:wrongLengthMessage => "live_validation.length.wrong_length", 
-    			:tooShortMessage => "live_validation.length.too_short",
-    			:tooLongMessage => "live_validation.length.too_long" 
+      length: { method: "Validate.Length",
+    		messages: { 
+    			wrongLengthMessage: "live_validation.length.wrong_length", 
+    			tooShortMessage: "live_validation.length.too_short",
+    			tooLongMessage: "live_validation.length.too_long" 
     		}
     	},
-      :acceptance => { :method => "Validate.Acceptance",
-    		:messages => { 
-    			:failureMessage => "live_validation.acceptance.failure"
+      acceptance: { method: "Validate.Acceptance",
+    		messages: { 
+    			failureMessage: "live_validation.acceptance.failure"
     		}
     	},
-      :confirmation => { :method => "Validate.Confirmation",
-    		:messages => { 
-    			:failureMessage => "live_validation.confirmation.failure"
+      confirmation: { method: "Validate.Confirmation",
+    		messages: { 
+    			failureMessage: "live_validation.confirmation.failure"
     		} 
     	}
     }

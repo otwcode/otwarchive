@@ -1,6 +1,6 @@
 class UserInviteRequestsController < ApplicationController
-  before_filter :admin_only, :except => [:new, :create]
-  before_filter :check_user_status, :only => [:new, :create]
+  before_filter :admin_only, except: [:new, :create]
+  before_filter :check_user_status, only: [:new, :create]
 
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
@@ -40,7 +40,7 @@ class UserInviteRequestsController < ApplicationController
         flash[:notice] = 'Request was successfully created.'
         redirect_to(@user)
       else
-        render :action => "new"
+        render action: "new"
       end
     else
       flash[:error] = ts("Sorry, new invitations are temporarily unavailable. If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_url}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact-open-doors/\">Open Doors</a>".html_safe)

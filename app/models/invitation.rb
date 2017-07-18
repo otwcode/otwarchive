@@ -3,27 +3,27 @@
 class Invitation < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  belongs_to :creator, :polymorphic => true
-  belongs_to :invitee, :polymorphic => true
+  belongs_to :creator, polymorphic: true
+  belongs_to :invitee, polymorphic: true
   belongs_to :external_author
 
-  validate :recipient_is_not_registered, :on => :create
+  validate :recipient_is_not_registered, on: :create
   def recipient_is_not_registered
     # we allow invitations to be sent to existing users if the purpose is to claim an external author
-    if self.invitee_email && User.find_by_email(self.invitee_email) && !self.external_author
+    if self.invitee_email && User.find_by(email: self.invitee_email) && !self.external_author
       errors.add :invitee_email, ts('is already being used by an account holder.')
       return false
     end
   end
 
   # ensure email is valid
-  validates :invitee_email, :email_veracity => true, :allow_blank => true
+  validates :invitee_email, email_veracity: true, allow_blank: true
 
-  scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
-  scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
-  scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
+  scope :unsent, -> { where(invitee_email: nil, redeemed_at: nil) }
+  scope :unredeemed, -> { where('invitee_email IS NOT NULL and redeemed_at IS NULL') }
+  scope :redeemed, -> { where('redeemed_at IS NOT NULL') }
 
-  before_validation :generate_token, :on => :create
+  before_validation :generate_token, on: :create
   after_save :send_and_set_date
   after_save :adjust_user_invite_status
 
@@ -85,7 +85,7 @@ class Invitation < ActiveRecord::Base
   def adjust_user_invite_status
     if self.creator.respond_to?(:out_of_invites)
       self.creator.out_of_invites = (self.creator.invitations.unredeemed.count < 1)
-      self.creator.save(:validate => false)
+      self.creator.save(validate: false)
     end
   end
 

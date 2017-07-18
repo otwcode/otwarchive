@@ -5,10 +5,7 @@ describe InboxHelper do
   describe "commentable_description_link" do
     context "for Deleted Objects" do
       it "should return the String 'Deleted Object'" do
-        @commentable = FactoryGirl.create(:comment)
-        @work = @commentable.ultimate_parent
-        @work.destroy
-        @commentable.reload
+        @commentable = FactoryGirl.build(:comment, commentable_id: nil, commentable_type: nil)
         expect(commentable_description_link(@commentable)).to eq "Deleted Object"
       end
     end

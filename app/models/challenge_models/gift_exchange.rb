@@ -6,34 +6,30 @@ class GiftExchange < ActiveRecord::Base
   override_datetime_setters
 
   belongs_to :collection
-  has_one :collection, :as => :challenge
-
-  attr_protected :signup_instructions_general_sanitizer_version
-  attr_protected :signup_instructions_requests_sanitizer_version
-  attr_protected :signup_instructions_offers_sanitizer_version
+  has_one :collection, as: :challenge
 
   # limits the kind of prompts users can submit
-  belongs_to :prompt_restriction, :class_name => "PromptRestriction", :dependent => :destroy
+  belongs_to :prompt_restriction, class_name: "PromptRestriction", dependent: :destroy
   accepts_nested_attributes_for :prompt_restriction
 
-  belongs_to :request_restriction, :class_name => "PromptRestriction", :dependent => :destroy
+  belongs_to :request_restriction, class_name: "PromptRestriction", dependent: :destroy
   accepts_nested_attributes_for :request_restriction
 
-  belongs_to :offer_restriction, :class_name => "PromptRestriction", :dependent => :destroy
+  belongs_to :offer_restriction, class_name: "PromptRestriction", dependent: :destroy
   accepts_nested_attributes_for :offer_restriction
 
-  belongs_to :potential_match_settings, :dependent => :destroy
+  belongs_to :potential_match_settings, dependent: :destroy
   accepts_nested_attributes_for :potential_match_settings
 
   validates_length_of :signup_instructions_general, :signup_instructions_requests, :signup_instructions_offers, {
-    :allow_blank => true,
-    :maximum => ArchiveConfig.INFO_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.INFO_MAX)
+    allow_blank: true,
+    maximum: ArchiveConfig.INFO_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.INFO_MAX)
   }
 
   PROMPT_TYPES.each do |type|
     %w(required allowed).each do |setting|
       prompt_limit_field = "#{type}_num_#{setting}"
-      validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPTS_MAX, :greater_than_or_equal_to => 0
+      validates_numericality_of prompt_limit_field, only_integer: true, less_than_or_equal_to: ArchiveConfig.PROMPTS_MAX, greater_than_or_equal_to: 0
     end
   end
 

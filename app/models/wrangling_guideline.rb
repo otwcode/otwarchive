@@ -7,6 +7,6 @@ class WranglingGuideline < ActiveRecord::Base
                                 too_long: ts('cannot be more than %{max} characters long.', max: ArchiveConfig.CONTENT_MAX)
 
   def self.reorder(positions)
-    SortableList.new(find(:all, order: 'position ASC')).reorder_list(positions)
+    SortableList.new(self.all.order(position: :asc)).reorder_list(positions)
   end
 end

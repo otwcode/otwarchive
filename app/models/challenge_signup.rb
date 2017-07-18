@@ -7,17 +7,17 @@ class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :collection
 
-  has_many :prompts, :dependent => :destroy, :inverse_of => :challenge_signup
-  has_many :requests, :dependent => :destroy, :inverse_of => :challenge_signup
-  has_many :offers, :dependent => :destroy, :inverse_of => :challenge_signup
+  has_many :prompts, dependent: :destroy, inverse_of: :challenge_signup
+  has_many :requests, dependent: :destroy, inverse_of: :challenge_signup
+  has_many :offers, dependent: :destroy, inverse_of: :challenge_signup
 
-  has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
-  has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
+  has_many :offer_potential_matches, class_name: "PotentialMatch", foreign_key: 'offer_signup_id', dependent: :destroy
+  has_many :request_potential_matches, class_name: "PotentialMatch", foreign_key: 'request_signup_id', dependent: :destroy
 
-  has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
-  has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
+  has_many :offer_assignments, class_name: "ChallengeAssignment", foreign_key: 'offer_signup_id'
+  has_many :request_assignments, class_name: "ChallengeAssignment", foreign_key: 'request_signup_id'
 
-  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_signup_id'
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_signup_id'
 
   before_destroy :clear_assignments_and_claims
   def clear_assignments_and_claims
@@ -28,8 +28,8 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   # we reject prompts if they are empty except for associated references
-  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true,
-    :reject_if => proc { |attrs|
+  accepts_nested_attributes_for :offers, :prompts, :requests, {allow_destroy: true,
+    reject_if: proc { |attrs|
                           attrs[:url].blank? && attrs[:description].blank? &&
                           (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? {|k,v| v.blank?}) &&
                           (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? {|k,v| v.blank?})
@@ -38,37 +38,37 @@ class ChallengeSignup < ActiveRecord::Base
 
   scope :by_user, lambda {|user|
     select("DISTINCT challenge_signups.*").
-    joins(:pseud => :user).
+    joins(pseud: :user).
     where('users.id = ?', user.id)
   }
 
   scope :by_pseud, lambda {|pseud| where('pseud_id = ?', pseud.id) }
 
-  scope :pseud_only, select(:pseud_id)
+  scope :pseud_only, -> { select(:pseud_id) }
 
-  scope :order_by_pseud, joins(:pseud).order("pseuds.name")
-  
-  scope :order_by_date, order("updated_at DESC")
+  scope :order_by_pseud, -> { joins(:pseud).order("pseuds.name") }
+
+  scope :order_by_date, -> { order("updated_at DESC") }
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
-  
-  scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
-  scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
+
+  scope :no_potential_offers, -> { where("id NOT IN (SELECT offer_signup_id FROM potential_matches)") }
+  scope :no_potential_requests, -> { where("id NOT IN (select request_signup_id FROM potential_matches)") }
 
   # Scopes used to include extra data when loading.
-  scope :with_request_tags, includes(
+  scope :with_request_tags, -> { includes(
     requests: [tag_set: :tags, optional_tag_set: :tags]
-  )
-  scope :with_offer_tags, includes(
+  ) }
+  scope :with_offer_tags, -> { includes(
     offers: [tag_set: :tags, optional_tag_set: :tags]
-  )
+  ) }
 
   ### VALIDATION
 
   validates_presence_of :pseud, :collection
 
   # only one signup per challenge!
-  validates_uniqueness_of :pseud_id, :scope => [:collection_id], :message => ts("^You seem to already have signed up for this challenge.")
+  validates_uniqueness_of :pseud_id, scope: [:collection_id], message: ts("^You seem to already have signed up for this challenge.")
 
   # we validate number of prompts/requests/offers at the challenge
   validate :number_of_prompts
@@ -84,10 +84,10 @@ class ChallengeSignup < ActiveRecord::Base
             errors_to_add << ts("You cannot submit any #{prompt_type.pluralize} for this challenge.")
           elsif required == allowed
             errors_to_add << ts("You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
-              :required => required, :count => count)
+              required: required, count: count)
           else
             errors_to_add << ts("You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
-              :required => required, :allowed => allowed, :count => count)
+              required: required, allowed: allowed, count: count)
           end
         end
       end
@@ -120,7 +120,7 @@ class ChallengeSignup < ActiveRecord::Base
                 new_tags = prompt.tag_set.send("#{tag_type}_taglist")
                 unless (all_tags_used & new_tags).empty?
                   errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
-                                      :prompt_type => prompt_type.singularize, :tag_type => tag_type)
+                                      prompt_type: prompt_type.singularize, tag_type: tag_type)
                   break
                 end
                 all_tags_used += new_tags
@@ -145,7 +145,7 @@ class ChallengeSignup < ActiveRecord::Base
                 new_tags = prompt.tag_set.send("#{tag_type}_taglist")
                 unless (all_tags_used & new_tags).empty?
                   errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
-                                      :prompt_type => prompt_type.singularize, :tag_type => tag_type)
+                                      prompt_type: prompt_type.singularize, tag_type: tag_type)
                   break
                 end
                 all_tags_used += new_tags
@@ -173,7 +173,7 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
-  
+
   def can_delete?(prompt)
     prompt_type = prompt.class.to_s.downcase.pluralize
     current_num_prompts = self.send(prompt_type).count
@@ -183,7 +183,7 @@ class ChallengeSignup < ActiveRecord::Base
     else
       false
     end
-  end  
+  end
 
   ### Code for generating signup summaries
 
@@ -209,15 +209,15 @@ class ChallengeSignup < ActiveRecord::Base
     view.class_eval do
       include ApplicationHelper
     end
-    content = view.render(:partial => "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_signups_summary",
-                          :locals => {:challenge_collection => collection, :tag_type => tag_type, :summary_tags => summary_tags, :generated_live => false})
+    content = view.render(partial: "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_signups_summary",
+                          locals: {challenge_collection: collection, tag_type: tag_type, summary_tags: summary_tags, generated_live: false})
     summary_dir = ChallengeSignup.summary_dir
     FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
     File.open(ChallengeSignup.summary_file(collection), "w:UTF-8") {|f| f.write(content)}
   end
 
   def self.summary_dir
-    "#{Rails.public_path}/static/challenge_signup_summaries"
+    Rails.public_path.join("static/challenge_signup_summaries").to_s
   end
 
   def self.summary_file(collection)

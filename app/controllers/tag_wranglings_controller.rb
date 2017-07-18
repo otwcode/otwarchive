@@ -1,5 +1,5 @@
 class TagWranglingsController < ApplicationController
-  cache_sweeper :tag_sweeper
+  # cache_sweeper :tag_sweeper
 
   before_filter :check_user_status
   before_filter :check_permission_to_wrangle
@@ -11,22 +11,22 @@ class TagWranglingsController < ApplicationController
         klass.unwrangled.in_use.count
       end
     end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do 
+    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
       UnsortedTag.count
-    end 
+    end
     unless params[:show].blank?
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
       sort = sort + ", name ASC" if sort.include?('taggings_count_cache')
       if params[:show] == "fandoms"
-        @media_names = Media.by_name.value_of(:name)
+        @media_names = Media.by_name.pluck(:name)
         @page_subtitle = ts("fandoms")
-        @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = Fandom.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else # by fandom
         raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
         klass = params[:show].classify.constantize
-        @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = klass.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end
@@ -116,7 +116,7 @@ class TagWranglingsController < ApplicationController
   end
 
   def discuss
-    @comments = Comment.where(:commentable_type => 'Tag').order('updated_at DESC').paginate(:page => params[:page])
+    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
 
 end

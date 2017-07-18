@@ -2,7 +2,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
 
   before_filter :users_only
   before_filter :opendoors_only
-  before_filter :load_external_author, :only => [:show, :edit, :update, :forward]
+  before_filter :load_external_author, only: [:show, :edit, :update, :forward]
 
   def load_external_author
     @external_author = ExternalAuthor.find(params[:id])
@@ -17,7 +17,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
       @external_authors = ExternalAuthor.unclaimed
     end
     # list in reverse order
-    @external_authors = @external_authors.order("created_at DESC").paginate(:page => params[:page])
+    @external_authors = @external_authors.order("created_at DESC").paginate(page: params[:page])
   end
 
   def show
@@ -46,17 +46,17 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     end
 
     # get the invitation
-    @invitation = Invitation.where(:external_author_id => @external_author.id).first
+    @invitation = Invitation.where(external_author_id: @external_author.id).first
 
     unless @invitation
       # if there is no invite we create one
-      @invitation = Invitation.new(:external_author => @external_author)
+      @invitation = Invitation.new(external_author: @external_author)
     end
 
     # send the invitation to specified address
     @email = params[:email]
     @invitation.invitee_email = @email
-    @invitation.creator = User.find_by_login("open_doors") || current_user
+    @invitation.creator = User.find_by(login: "open_doors") || current_user
     if @invitation.save
       flash[:notice] = ts("Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!")
     else
@@ -64,7 +64,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     end
 
     # redirect to external author listing for that user
-    redirect_to opendoors_external_authors_path(:query => @external_author.email)
+    redirect_to opendoors_external_authors_path(query: @external_author.email)
   end
 
   private

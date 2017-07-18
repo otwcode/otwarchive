@@ -4,7 +4,7 @@ require 'rails/all'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
@@ -36,7 +36,7 @@ module Otwarchive
     #
 
     I18n.config.enforce_available_locales = false
-    I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id, 
+    I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id,
       :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
 
     # Activate observers that should always be running.
@@ -58,7 +58,7 @@ module Otwarchive
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
-    config.action_mailer.default_url_options = { :host => "archiveofourown.org" }
+    config.action_mailer.default_url_options = { host: "archiveofourown.org" }
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
@@ -73,7 +73,7 @@ module Otwarchive
     config.active_record.schema_format = :sql
 
     ### end of preservation section
-    
+
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
 

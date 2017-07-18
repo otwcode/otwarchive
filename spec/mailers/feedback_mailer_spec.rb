@@ -27,30 +27,4 @@ describe AdminMailer do
      end
 
   end
-
-
-  context 'feedback without email' do
-    let(:feedback) {create(:feedback, email: nil)}
-    let(:mail) {AdminMailer.feedback(feedback.id)}
-
-    it "has the correct subject" do
-      expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{feedback.summary}"
-    end
-
-    it "delivers to the correct address" do
-      expect(mail).to deliver_to ArchiveConfig.FEEDBACK_ADDRESS
-    end
-
-    it "delivers from the correct address" do
-      expect(mail).to deliver_from ArchiveConfig.RETURN_ADDRESS
-    end
-
-    it "body text contains the comment" do
-      expect(mail).to have_body_text(/#{feedback.comment}/)
-    end
-
-    it "body text contains the summary" do
-      expect(mail).to have_body_text(/#{feedback.summary}/)
-    end
-  end
 end

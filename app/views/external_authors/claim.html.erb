@@ -35,7 +35,7 @@
     </p>
     <p class="message">
       <%= ts("If you already have an archive account, log in and reload this page, and we'll assign you the works.") %>
-      <%= button_to ts("Sign me up and give me my works! Yay!"), new_user_path(:invitation_token => @invitation.token) %>
+      <%= button_to ts("Sign me up and give me my works! Yay!"), signup_path(:invitation_token => @invitation.token), method: :get %>
     </p>
   <% end %>
 </div>
@@ -50,7 +50,7 @@
 <% if logged_in? %>
   <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_path(:invitation_token => @invitation.token) %></p>
 <% else %>
-  <p class="actions"><%= button_to ts("Sign me up and give me my works! Yay!"), new_user_path(:invitation_token => @invitation.token) %></p>
+  <p class="actions"><%= button_to ts("Sign me up and give me my works! Yay!"), signup_path(:invitation_token => @invitation.token) %></p>
 <% end %>
 </div>
 
@@ -117,4 +117,3 @@
   <li><%= ts("You can also tell us not to email you or import works with this email address in the future.") %></li>
 </ul>
 </div>
-

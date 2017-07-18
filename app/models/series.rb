@@ -2,28 +2,28 @@ class Series < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
 
-  has_many :serial_works, :dependent => :destroy
-  has_many :works, :through => :serial_works
-  has_many :work_tags, :through => :works, :uniq => true, :source => :tags
-  has_many :work_pseuds, :through => :works, :uniq => true, :source => :pseuds
+  has_many :serial_works, dependent: :destroy
+  has_many :works, through: :serial_works
+  has_many :work_tags, -> { uniq }, through: :works, source: :tags
+  has_many :work_pseuds, -> { uniq }, through: :works, source: :pseuds
 
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  has_many :creatorships, :as => :creation
-  has_many :pseuds, :through => :creatorships
-  has_many :users, :through => :pseuds, :uniq => true
+  has_many :creatorships, as: :creation
+  has_many :pseuds, through: :creatorships
+  has_many :users, -> { uniq }, through: :pseuds
 
-  has_many :subscriptions, :as => :subscribable, :dependent => :destroy
+  has_many :subscriptions, as: :subscribable, dependent: :destroy
 
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN,
+    too_short: ts("must be at least %{min} letters long.", min: ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX,
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -31,31 +31,29 @@ class Series < ActiveRecord::Base
   end
 
   validates_length_of :summary,
-    :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    allow_blank: true,
+    maximum: ArchiveConfig.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :notes,
-    :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    allow_blank: true,
+    maximum: ArchiveConfig.NOTES_MAX,
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
 
   attr_accessor :authors
   attr_accessor :authors_to_remove
 
-  attr_protected :summary_sanitizer_version
-  attr_protected :notes_sanitizer_version
+  scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
+  scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
 
-  scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'series.updated_at DESC'}
-  scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'series.updated_at DESC'}
-
-  scope :exclude_anonymous,
+  scope :exclude_anonymous, -> {
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`)
            INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`)").
     group("series.id").
     having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
+  }
 
   scope :for_pseuds, lambda {|pseuds|
     joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
@@ -107,10 +105,10 @@ class Series < ActiveRecord::Base
   def visible_word_count
     if User.current_user.nil?
       # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.unrestricted.value_of(:word_count).compact.sum
+      visible_works_wordcount = self.works.posted.unrestricted.pluck(:word_count).compact.sum
     else
       # visible_works_wordcount = self.works.posted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.value_of(:word_count).compact.sum
+      visible_works_wordcount = self.works.posted.pluck(:word_count).compact.sum
     end
     visible_works_wordcount
   end
@@ -126,9 +124,9 @@ class Series < ActiveRecord::Base
   # if the series includes an unrestricted work, restricted should be false
   # if the series includes no unrestricted works, restricted should be true
   def adjust_restricted
-    unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
-      self.restricted = !(self.works.where(:restricted => false).count > 0)
-      self.save(:validate => false)
+    unless self.restricted? == !(self.works.where(restricted: false).count > 0)
+      self.restricted = !(self.works.where(restricted: false).count > 0)
+      self.save(validate: false)
     end
   end
 
@@ -158,7 +156,7 @@ class Series < ActiveRecord::Base
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], :keep_ambiguous => true)
+      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
@@ -246,7 +244,7 @@ class Series < ActiveRecord::Base
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.value_of :id
+    filters.pluck :id
   end
 
   # Index only direct filters (non meta-tags) for facets
@@ -276,7 +274,7 @@ class Series < ActiveRecord::Base
   end
 
   def pseud_ids
-    creatorships.value_of :pseud_id
+    creatorships.pluck :pseud_id
   end
 
   def creators

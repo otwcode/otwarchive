@@ -15,7 +15,7 @@ class SkinsController < ApplicationController
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
     end
-    if params[:user_id] && @user = User.find_by_login(params[:user_id])
+    if params[:user_id] && @user = User.find_by(login: params[:user_id])
       redirect_to new_user_session_path and return unless logged_in?
       if (@user != current_user)
         flash[:error] = "You can only browse your own skins and approved public skins."
@@ -138,7 +138,7 @@ class SkinsController < ApplicationController
   end
 
   def destroy
-    @skin = Skin.find_by_id(params[:id])
+    @skin = Skin.find_by(id: params[:id])
     begin
       @skin.destroy
       flash[:notice] = ts("The skin was deleted.")
@@ -166,7 +166,7 @@ class SkinsController < ApplicationController
   end
 
   def load_skin
-    @skin = Skin.find_by_id(params[:id])
+    @skin = Skin.find_by(id: params[:id])
     unless @skin
       flash[:error] = "Skin not found"
       redirect_to skins_path and return
@@ -195,7 +195,7 @@ class SkinsController < ApplicationController
       params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
       skin_parent_titles = params[:skin][:skin_parents_attributes].values.map {|v| v[:parent_skin_title]}
-      skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).value_of(:id)
+      skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
       skin_parents += @skin.get_all_parents.collect(&:id) if @skin
       if !(skin_parents.uniq & archive_parents.collect(&:id)).empty?
         flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!")

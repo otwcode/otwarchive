@@ -5,7 +5,7 @@ class ReadingsController < ApplicationController
   before_filter :check_history_enabled
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -13,7 +13,7 @@ class ReadingsController < ApplicationController
     @readings = @user.readings
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
-      @readings = @readings.where(:toread => true)
+      @readings = @readings.where(toread: true)
       @page_subtitle = ts("Saved For Later")
     end
     @readings = @readings.order("last_viewed DESC").page(params[:page])

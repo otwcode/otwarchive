@@ -6,11 +6,11 @@ module ValidationHelper
   # the `options` Hash passed to `validation_for_field`, returns the corresponding
   # key for the validation_for_X.add(Validate[key], ...) JavaScript function call.
   VALIDATION_NAME_MAPPING =   {
-    :presence       => "Presence",
-    :maximum_length => "Length",
-    :minimum_length => "Length",
-    :numericality   => "Numericality",
-    :exclusion      => "Exclusion",
+    presence: "Presence",
+    maximum_length: "Length",
+    minimum_length: "Length",
+    numericality: "Numericality",
+    exclusion: "Exclusion",
   }
 
   # Set a custom error-message handler that puts the errors on 
@@ -36,7 +36,7 @@ module ValidationHelper
     
     if object && object.errors.any?
       errors = object.errors.full_messages
-      intro = content_tag(:h4, h(ts("Sorry! We couldn't save this %{objectname} because:", :objectname => object.class.model_name.human.to_s.downcase.gsub(/_/, ' '))))
+      intro = content_tag(:h4, h(ts("Sorry! We couldn't save this %{objectname} because:", objectname: object.class.model_name.human.to_s.downcase.gsub(/_/, ' '))))
       error_messages_formatted(errors, intro)
     end
   end
@@ -44,7 +44,7 @@ module ValidationHelper
   def error_messages_formatted(errors, intro = "")
     return unless errors && !errors.empty?
     error_messages = errors.map {|msg| content_tag(:li, msg.gsub(/^(.+)\^/, '').html_safe)}.join("\n").html_safe
-    content_tag(:div, intro.html_safe + content_tag(:ul, error_messages), :id =>"error", :class=>"error")    
+    content_tag(:div, intro.html_safe + content_tag(:ul, error_messages), id:"error", class:"error")    
   end
   
   # use to make sure we have consistent name throughout
@@ -61,13 +61,13 @@ module ValidationHelper
 
   # Generate javascript call for live validation. All the messages have default translated values. 
   # Options:
-  # :presence => true/false -- ensure the field is not blank. (default TRUE)
-  # :failureMessage => msg -- shown if field is blank (default "Must be present.")
-  # :validMessage => msg -- shown when field is ok (default has been set to empty in the actual livevalidation.js file)
-  # :maximum_length => [max value] -- field must be no more than this many characters long 
-  # :tooLongMessage => msg -- shown if too long
-  # :minimum_length => [min value] -- field must be at least this many characters long 
-  # :tooShortMessage => msg -- shown if too short
+  # presence: true/false -- ensure the field is not blank. (default TRUE)
+  # failureMessage: msg -- shown if field is blank (default "Must be present.")
+  # validMessage: msg -- shown when field is ok (default has been set to empty in the actual livevalidation.js file)
+  # maximum_length: [max value] -- field must be no more than this many characters long 
+  # tooLongMessage: msg -- shown if too long
+  # minimum_length: [min value] -- field must be at least this many characters long 
+  # tooShortMessage: msg -- shown if too short
   #
   # Most basic usage: 
   #   <input type=text id="field_to_validate">
@@ -75,28 +75,28 @@ module ValidationHelper
   # This will make sure this field is present and use translated error messages. 
   # 
   # More custom usage (from work form): 
-  #    <%= c.text_area :content, :class => "mce-editor", :id => "content" %>
+  #    <%= c.text_area :content, class: "mce-editor", id: "content" %>
   #    <%= live_validation_for_field('content', 
-  #        :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  #        :tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
-  #        :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
-  #        :failureMessage => 'You did want to post a story here, right?')
+  #        maximum_length: ArchiveConfig.CONTENT_MAX, minimum_length: ArchiveConfig.CONTENT_MIN, 
+  #        tooLongMessage: 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
+  #        tooShortMessage: 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
+  #        failureMessage: 'You did want to post a story here, right?')
   #    %>
   # 
   # Add more default values here! There are many more live validation options, see the code in
   # the javascripts folder for details. 
   def live_validation_for_field(id, options = {})
-    defaults = {:presence => true,
-                :failureMessage => 'Must be present.',
-                :validMessage => ''}                
+    defaults = {presence: true,
+                failureMessage: 'Must be present.',
+                validMessage: ''}                
     if options[:maximum_length]
-      defaults.merge!(:tooLongMessage => 'Must be less than ' + options[:maximum_length].to_s + ' letters long.') #/
+      defaults.merge!(tooLongMessage: 'Must be less than ' + options[:maximum_length].to_s + ' letters long.') #/
     end
     if options[:minimum_length]
-      defaults.merge!(:tooShortMessage => 'Must be at least ' + options[:minimum_length].to_s + ' letters long.') #/
+      defaults.merge!(tooShortMessage: 'Must be at least ' + options[:minimum_length].to_s + ' letters long.') #/
     end
     if options[:notANumberMessage]
-      defaults.merge!(:notANumberMessage => 'Please enter a number') #/
+      defaults.merge!(notANumberMessage: 'Please enter a number') #/
     end
 
     options = defaults.merge(options)

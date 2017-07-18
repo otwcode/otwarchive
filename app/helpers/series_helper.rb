@@ -9,13 +9,13 @@ module SeriesHelper
   def series_data_for_work(work)
     series = work.series.select { |s| s.visible?(current_user) }
     series.map do |serial|
-      serial_works = serial.serial_works.
-                           find(:all,
-                                include: :work,
-                                conditions: ['works.posted = ?', true],
-                                order: :position).
-                           select { |sw| sw.work.visible(current_user) }.
-                     map(&:work)
+      serial_works = serial.serial_works
+                           .includes(:work)
+                           .where('works.posted = ?', true)
+                           .order(:position)
+                           .references(:works)
+                           .select { |sw| sw.work.visible(current_user) }
+                           .map(&:work)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra
@@ -56,7 +56,7 @@ module SeriesHelper
   end
 
   def work_series_description(work, series)
-    serial = SerialWork.where(:work_id => work.id, :series_id => series.id).first
+    serial = SerialWork.where(work_id: work.id, series_id: series.id).first
     ts("Part <strong>#{serial.position}</strong> of #{link_to(series.title, series)}").html_safe
   end
 

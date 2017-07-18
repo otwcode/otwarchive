@@ -8,7 +8,7 @@
   <li><%= link_to ts("Bookmarks"), tag_bookmarks_path(@fandom) %></li>
 </ul>
 <!--subnav-->
-<% cache("/v1/#{@fandom.name}", :expires_in => 20.minutes) do %>
+<% cache("/v1/#{@fandom.name}", :expires_in => 20.minutes, skip_digest: true) do %>
 <!--main content-->
 <h3 class="heading"><%= ts('Relationships by Character') %></h3>
 <% unless @characters.blank? %>
