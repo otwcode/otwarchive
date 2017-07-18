@@ -1,4 +1,4 @@
-<%= form_for @search, :url => search_works_path, :html => {:method => :get, :class => 'verbose search'} do |f| %>
+<%= form_for @search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
   <fieldset>
     <legend><%= ts('Work Info') %></legend>
     <h3 class="landmark heading"><%= ts('Work Info') %></h3>
@@ -171,8 +171,8 @@
         <%= f.label :sort_direction, ts("Sort direction") %>
       </dt>
       <dd>
-        <%= select_tag "work_search[sort_direction]",
-          '<option value="asc">Ascending</option><option value="desc">Descending</option>'.html_safe,
+        <%= f.select :sort_direction,
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction),
           {:include_blank => true } %>
       </dd>
     </dl>
