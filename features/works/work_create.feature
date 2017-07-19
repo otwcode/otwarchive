@@ -197,6 +197,29 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
+  Scenario: Creating a new work in a series with some invalid things should not 500
+    Given basic tags
+      And the following activated users exist
+        | login          | password    | email                   |
+        | coauthor       | something   | coauthor@example.org |
+        | badcoauthor    | something   | badcoauthor@example.org |
+      And I am logged in as "thorough" with password "something"
+      And user "badcoauthor" is banned
+    When I set up the draft "Bad Draft"
+      And I fill in "Fandoms" with "Invalid12./"
+      And I fill in "Work Title" with "/"
+      And I fill in "content" with "T"
+      And I check "chapters-options-show"
+      And I fill in "work_wip_length" with "text"
+      And I fill in "work_collection_names" with "collection1, collection2"
+      And I check "series-options-show"
+      And I fill in "work_series_attributes_title" with "My new series"
+      And I press "Preview"
+    Then I should see "Sorry! We couldn't save this work because:"
+      And I should see a collection not found message for "collection1"
+      And I should see "My new series"
+      And I should not see "Remove Work From Series"
+
   Scenario: test for integer title and multiple fandoms
     Given I am logged in
     When I set up the draft "02138"
