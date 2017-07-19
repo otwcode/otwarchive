@@ -144,7 +144,7 @@ class PseudsController < ApplicationController
       render 'delete_preview' and return
    end
 
-    redirect_to(user_pseuds_url(@user))
+    redirect_to(user_pseuds_path(@user))
   end
 
   private
