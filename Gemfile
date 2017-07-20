@@ -5,7 +5,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '5.0.3'
+gem 'rails', '~> 5.1'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -26,7 +26,7 @@ gem 'mysql2', '0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
-gem 'activerecord-mysql-reconnect'
+gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -43,7 +43,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list', '>=0.7.6'
+gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
@@ -75,7 +75,7 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.5.0'
+gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
@@ -143,7 +143,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.4.3', require: false
+  gem 'cucumber-rails', '~> 1.5', require: false
   gem 'gherkin'
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
