@@ -10,12 +10,10 @@ class TagNomination < ActiveRecord::Base
     maximum: ArchiveConfig.TAG_MAX,
     message: ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
 
-  validate :tagname_format
-  def tagname_format
-    if !tagname.blank? && tagname.match?(/\A[^,*<>^{}=`\\%]+\z/)
-      errors.add(:base, ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"))
-    end
-  end
+  validates_format_of :tagname,
+    if: Proc.new { |tag_nomination| !tag_nomination.tagname.blank? },
+    with: /\A[^,*<>^{}=`\\%]+\z/,
+    message: ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
 
   validate :type_validity
   def type_validity

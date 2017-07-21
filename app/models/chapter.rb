@@ -79,7 +79,7 @@ class Chapter < ActiveRecord::Base
   end
 
   after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.posted_changed? }
+    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position

@@ -693,7 +693,7 @@ class Work < ActiveRecord::Base
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted_changed? || (self.chapters.first && self.chapters.first.posted != self.posted)
+    if self.saved_change_to_posted? || (self.chapters.first && self.chapters.first.posted != self.posted)
       self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
       self.chapters.first.save
@@ -793,7 +793,7 @@ class Work < ActiveRecord::Base
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
+    if self.saved_change_to_complete?
       Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
     end
   end
