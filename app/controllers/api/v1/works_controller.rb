@@ -42,7 +42,8 @@ class Api::V1::WorksController < Api::V1::BaseController
 
       # Process the works, updating the flags
       external_works.each do |external_work|
-        works_responses << import_work(archivist, external_work.merge(params))
+        # params are whitelisted in the `options` method
+        works_responses << import_work(archivist, external_work.merge(params.permit!))
       end
 
       # Send claim notification emails if required
