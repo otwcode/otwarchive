@@ -6,7 +6,7 @@ describe Admin::ApiController do
   include RedirectExpectationHelper
 
   describe "GET #index" do
-    let(:params) { nil }
+    let(:params) { {} }
 
     context "where there is no user or admin logged in" do
       it "redirects to the homepage" do
@@ -99,7 +99,7 @@ describe Admin::ApiController do
   describe "POST #create" do
     context "where an admin is logged in" do
       let(:admin) { FactoryGirl.create(:admin) }
-      let(:params) { nil }
+      let(:params) { {} }
 
       before do
         fake_login_admin(admin)
