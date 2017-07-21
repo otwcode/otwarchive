@@ -7,7 +7,7 @@
 # Devise can handle authlogic password hash, so we don't have to force all
 # admins to regenerate their passwords! Phew! :)
 #
-class MoveAdminsToDevise < ActiveRecord::Migration
+class MoveAdminsToDevise < ActiveRecord::Migration[4.2]
   def self.up
     # Rename default devise columns:
     rename_column :admins, :crypted_password, :encrypted_password

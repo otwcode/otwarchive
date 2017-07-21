@@ -1,4 +1,4 @@
-class CreateAdminBlacklistedEmails < ActiveRecord::Migration
+class CreateAdminBlacklistedEmails < ActiveRecord::Migration[4.2]
   def change
     create_table :admin_blacklisted_emails do |t|
       t.string :email
