@@ -259,7 +259,7 @@ class Collection < ActiveRecord::Base
     "#{name} #{title}"
   end
 
-  def autocomplete_search_string_was
+  def autocomplete_search_string_before_last_save
     "#{name_was} #{title_was}"
   end
 

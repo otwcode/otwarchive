@@ -6,7 +6,7 @@ describe WorksController do
   include RedirectExpectationHelper
 
   describe "before_action #clean_work_search_params" do
-    let(:params) { nil }
+    let(:params) { {} }
 
     def call_with_params(params)
       controller.params = { work_search: params }

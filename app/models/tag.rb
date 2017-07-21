@@ -133,12 +133,12 @@ class Tag < ActiveRecord::Base
   has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :remove_sub_filters
   has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
+  has_many :taggings, as: :tagger
+  has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
 
   has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
   has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
 
-  has_many :taggings, as: :tagger
-  has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
@@ -1218,8 +1218,8 @@ class Tag < ActiveRecord::Base
 
     # Expire caching when a merger is added or removed
     if tag.saved_change_to_merger_id?
-      if tag.merger_id_was.present?
-        old = Tag.find(tag.merger_id_was)
+      if tag.merger_id_before_last_save.present?
+        old = Tag.find(tag.merger_id_before_last_save)
         old.update_works_index_timestamp!
       end
       if tag.merger_id.present?

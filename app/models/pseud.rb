@@ -297,8 +297,8 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
-  def autocomplete_value_was
-    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
   end
 
   ## END AUTOCOMPLETE
