@@ -46,27 +46,25 @@ module ActiveModel
     	}
     }
 
-  end
-end
-
-ActiveModel::Validations::VALIDATION_METHODS.keys.each do |type|
-  ActiveSupport.class_eval <<RUBY
-    module Validates#{type.capitalize}OfWithLiveValidations
-      def validates_#{type}_of(*attr_names)
-        super(*attr_names)
-        define_validations(#{type}, attr_names)
-      end
-    end
-RUBY
-end
-
-module ActiveModel
-  module Validations
 
     module HelperMethods
 
       def live_validations
         @live_validations ||= {}
+      end
+
+      VALIDATION_METHODS.keys.each do |type|
+        define_method "validates_#{type}_of_with_live_validations".to_sym do |*attr_names|
+          send "validates_#{type}_of_without_live_validations".to_sym, *attr_names
+          define_validations(type, attr_names)
+        end
+
+        # alias_method_chain "validates_#{type}_of".to_sym, :live_validations
+        # see form_helpers for explanation
+        #
+        alias_method "validates_#{type}_of_without_live_validations".to_sym, :live_validations
+        alias_method :live_validations, "validates_#{type}_of_with_live_validations".to_sym
+
       end
 
       private
@@ -103,13 +101,9 @@ module ActiveModel
         if type == :confirmation
           configuration[:match] = self.to_s.underscore + '_' + attr_name.to_s + '_confirmation'
         end
+#        configuration[:validMessage] ||= ''
         configuration.reject {|k, v| v.nil? }
       end
-
-    end
-
-    VALIDATION_METHODS.keys.each do |type|
-      HelperMethods.prepend "ActiveSupport::Validates#{type.capitalize}OfWithLiveValidations".constantize
     end
   end
 end
