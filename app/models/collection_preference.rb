@@ -4,10 +4,10 @@ class CollectionPreference < ActiveRecord::Base
 
   def after_update
     if self.collection.valid? && self.valid?
-      if self.unrevealed_changed? && !self.unrevealed?
+      if self.saved_change_to_unrevealed? && !self.unrevealed?
         self.collection.reveal!
       end
-      if self.anonymous_changed? && !self.anonymous?
+      if self.saved_change_to_anonymous? && !self.anonymous?
         collection.reveal_authors!
       end
     end

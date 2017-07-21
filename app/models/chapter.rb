@@ -64,7 +64,7 @@ class Chapter < ActiveRecord::Base
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
           chapter.position = i+1
-          if chapter.position_changed?
+          if chapter.saved_change_to_position?
             Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
             positions_changed = true
           end
@@ -190,7 +190,7 @@ class Chapter < ActiveRecord::Base
 
   # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
-    if self.new_record? || self.content_changed? || self.word_count.nil?
+    if self.new_record? || self.saved_change_to_content? || self.word_count.nil?
       counter = WordCounter.new(self.content)
       self.word_count = counter.count
     else

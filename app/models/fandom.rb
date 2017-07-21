@@ -34,7 +34,7 @@ class Fandom < Tag
 
   before_update :check_wrangling_status
   def check_wrangling_status
-    if self.canonical_changed? && !self.canonical?
+    if self.saved_change_to_canonical? && !self.canonical?
       if !self.canonical? && self.merger_id
         self.merger.wranglers = (self.wranglers + self.merger.wranglers).uniq
       end

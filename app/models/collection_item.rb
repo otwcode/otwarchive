@@ -100,7 +100,7 @@ class CollectionItem < ActiveRecord::Base
   def update_work
     return unless item_type == 'Work' && work.present? && !work.new_record?
     # Check if this is new - can't use new_record? with after_save
-    if self.id_changed?
+    if self.saved_change_to_id?
       work.set_anon_unrevealed!
     else
       work.update_anon_unrevealed!
@@ -110,7 +110,7 @@ class CollectionItem < ActiveRecord::Base
   # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
   after_update :update_item_for_status_change
   def update_item_for_status_change
-    if user_approval_status_changed? || collection_approval_status_changed?
+    if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
       item.save!
     end
   end
@@ -187,7 +187,7 @@ class CollectionItem < ActiveRecord::Base
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    if unrevealed_changed?
+    if saved_change_to_unrevealed?
       # making sure that creation_observer.rb has not already notified the user
       if !work.new_recipients.blank?
         notify_of_reveal

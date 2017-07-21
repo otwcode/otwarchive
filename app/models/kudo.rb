@@ -11,7 +11,7 @@ class Kudo < ActiveRecord::Base
   validates_uniqueness_of :pseud_id,
     scope: [:commentable_id, :commentable_type],
     message: ts("^You have already left kudos here. :)"),
-    if: Proc.new { |kudo| !kudo.!pseud.nil? }
+    if: Proc.new { |kudo| !kudo.pseud.nil? }
 
   validates_uniqueness_of :ip_address,
     scope: [:commentable_id, :commentable_type],

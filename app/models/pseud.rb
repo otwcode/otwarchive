@@ -393,7 +393,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def expire_caches
-    if name_changed?
+    if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
   end

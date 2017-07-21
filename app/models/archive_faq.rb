@@ -32,7 +32,7 @@ class ArchiveFaq < ActiveRecord::Base
         end
       end
       # A Question or the Title of the FAQ Category could have changed
-      if @changed_questions.present? || self.title_changed?
+      if @changed_questions.present? || self.saved_change_to_title?
         AdminMailer.edited_faq(self.id, User.current_user.login).deliver
       end
     end
