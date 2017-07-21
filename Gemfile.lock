@@ -95,7 +95,7 @@ GEM
     aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
     builder (3.2.3)
-    bullet (5.2.1)
+    bullet (5.6.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     bundler-audit (0.5.0)
@@ -248,7 +248,7 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.2.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     mono_logger (1.1.0)
     multi_json (1.12.1)
     multi_test (0.1.2)
@@ -500,7 +500,7 @@ DEPENDENCIES
   authlogic (~> 3.6.0)
   aws-sdk
   bcrypt
-  bullet (~> 5.2.0)
+  bullet (~> 5.6.0)
   bundler
   bundler-audit
   capistrano-gitflow_version (>= 0.0.3)
