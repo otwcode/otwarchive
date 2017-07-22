@@ -26,6 +26,8 @@ module NavigationHelpers
       bookmarks_path
     when /^the admin login page$/i
       new_admin_session_path
+    when /^the redirect page$/i
+      redirect_path
 
     # the following are examples using path_to_pickle
 
