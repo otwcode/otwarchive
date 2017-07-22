@@ -226,5 +226,5 @@ Feature: Import Works
       And I press "Post"
       And I go to the redirect page
       And I fill in "original_url" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
-    When I press "Go"
+      And I press "Go"
     Then I should see "This is what Blaine's been thinking written in poems."
