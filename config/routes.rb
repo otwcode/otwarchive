@@ -537,7 +537,6 @@ Otwarchive::Application.routes.draw do
   resource :redirect, controller: "redirect", only: [:show] do
     member do
       get :do_redirect
-      get :show
     end
   end
 
