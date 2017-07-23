@@ -34,10 +34,11 @@ class Admin::AdminUsersController < ApplicationController
   def show
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
-    unless @user
+    if @user
+      @log_items = @user.log_items.sort_by(&:created_at).reverse if @user
+    else @user
       redirect_to action: "index", query: params[:query], role: params[:role]
     end
-    @log_items = @user.log_items.sort_by(&:created_at).reverse if @user
   end
 
   # GET admin/users/1/edit
