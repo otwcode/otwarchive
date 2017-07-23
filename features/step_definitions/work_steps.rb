@@ -464,9 +464,10 @@ end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  click_button("Yes, Delete Work")
+  # If JavaScript is enabled, window.confirm will be used and this button will not appear
+  click_button("Yes, Delete Work") unless @javascript
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
