@@ -30,14 +30,15 @@ Feature: Gift Exchange Challenge with Tag Sets
       And I should not see "Standard Challenge Tags"
       And I should not see "Angela Lansbury"
 
+  @javascript
   Scenario: Run a single-fandom exchange
 
   Given basic tags
+    And I am logged in as "mod1"
     And I have a canonical "Celebrities & Real People" fandom tag named "Hockey RPF"
     And I have a canonical "Celebrities & Real People" fandom tag named "Bandom"
     And a canonical character "Alexander Ovechkin" in fandom "Hockey RPF"
     And a canonical character "Gerard Way" in fandom "Bandom"
-    And I am logged in as "mod1"
     And I set up the tag set "HockeyExchangeTags" with the fandom tags "Hockey RPF"
   When I go to the "HockeyExchangeTags" tag set page
   Then I should see "About HockeyExchangeTags"
@@ -54,13 +55,15 @@ Feature: Gift Exchange Challenge with Tag Sets
   When I follow "Sign-up Form"
     And I check the 1st checkbox with the value "Hockey RPF"
     And I check the 2nd checkbox with the value "Hockey RPF"
-    And I fill in the 1st field with id matching "character_tagnames" with "Gerard Way"
-    # TODO: Once autocomplete testing is working again, check that it only shows characters from the right fandom
-    And I fill in the 2nd field with id matching "character_tagnames" with "Alexander Ovechkin"
+    And I enter "Gerard Way" in the "Characters" autocomplete field
+  Then I should see "No suggestions found" in the autocomplete
+  # "Gerard Way" from a different fandom cannot appear in autocomplete; let's force it anyway.
+  When I fill in the 1st field with id matching "character_tagnames" with "Gerard Way"
     And I submit
   Then I should see "Sorry! We couldn't save this challenge signup because"
     And I should see "These character tags in your request are not in the selected fandom(s), Hockey RPF: Gerard Way (Your moderator may be able to fix this.)"
     And I should not see "Sign-up was successfully created."
-  When I fill in the 1st field with id matching "character_tagnames" with "Alexander Ovechkin"
+  When I follow "remove Gerard Way"
+    And I choose "Alexander Ovechkin" from the "Characters" autocomplete
     And I submit
   Then I should see "Sign-up was successfully created."
