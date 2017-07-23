@@ -815,7 +815,6 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        pending "non-work owner should not be able to access preview"
         get :preview, work_id: work.id, id: work.chapters.first.id
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
