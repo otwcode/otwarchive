@@ -144,15 +144,13 @@ Feature: Orphan work
 
     Given I am logged in as "keeper"
       And I post the work "Half-Orphaned"
+      And I wait 1 second
       And I add the co-author "orphaneer" to the work "Half-Orphaned"
       And I post a chapter for the work "Half-Orphaned"
-
     # Verify that the authorship has been set up properly
     Then "orphaneer" should be a co-creator of Chapter 1 of "Half-Orphaned"
       But "orphaneer" should not be a co-creator of Chapter 2 of "Half-Orphaned"
-
     When I am logged in as "orphaneer"
       And I orphan the work "Half-Orphaned"
-
     Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
       But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"
