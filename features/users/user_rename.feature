@@ -115,6 +115,7 @@ Feature:
     Given I have no users
       And I am logged in as "oldusername" with password "password"
       And I post a work "Epic story"
+      And I wait 1 second
     When I visit the change username page for oldusername
       And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
