@@ -35,7 +35,7 @@ class Admin::AdminUsersController < ApplicationController
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
     unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role]
+      redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
