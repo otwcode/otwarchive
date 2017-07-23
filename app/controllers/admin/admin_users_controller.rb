@@ -37,7 +37,7 @@ class Admin::AdminUsersController < ApplicationController
     unless @user
       redirect_to action: "index", query: params[:query], role: params[:role]
     end
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    @log_items = @user.log_items.sort_by(&:created_at).reverse if @user
   end
 
   # GET admin/users/1/edit
