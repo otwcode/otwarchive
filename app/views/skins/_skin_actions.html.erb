@@ -12,7 +12,7 @@
     <% end %>
 
     <% if skin.editable? %>
-      <li><%= span_if_current ts("Edit"), edit_skin_url(skin) %></li>
+      <li><%= span_if_current ts('Edit'), edit_skin_path(skin) %></li>
       <% unless logged_in_as_admin? %>
         <li>
           <%= link_to ts("Delete"),

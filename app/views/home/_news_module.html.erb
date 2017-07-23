@@ -16,7 +16,7 @@
               <%= ts('Published:') %> <%= time_in_zone(admin_post.created_at) %>
             </span>
             <span class="comments">
-              <%= ts('Comments:') %> <%= link_to(admin_post.count_visible_comments, polymorphic_url(admin_post, show_comments: true, anchor: :comments)) %>
+              <%= ts('Comments:') %> <%= link_to(admin_post.count_visible_comments, polymorphic_path(admin_post, show_comments: true, anchor: :comments)) %>
             </span>
           </p>
         </div>

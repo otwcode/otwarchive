@@ -47,7 +47,7 @@ Otwarchive::Application.routes.draw do
 
   get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
-  get 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
+  post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
   #### TAGS ####
 

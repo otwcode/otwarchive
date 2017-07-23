@@ -238,7 +238,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.tag_groups_key_id(id)
-    "/v2/work_tag_groups/#{id}"
+    "/v3/work_tag_groups/#{id}"
   end
 
   def tag_groups_key
@@ -1038,7 +1038,7 @@ class Work < ActiveRecord::Base
           if ew.save
             self.new_parent = {parent: ew, translation: translation}
           else
-            self.errors.add(:base, "Parent work info would not save.")
+            self.errors.add(:base, "Parent work " + ew.errors.full_messages[0])
           end
         end
       end

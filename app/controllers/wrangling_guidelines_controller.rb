@@ -64,7 +64,7 @@ class WranglingGuidelinesController < ApplicationController
     @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
 
-    redirect_to(wrangling_guidelines_url)
+    redirect_to(wrangling_guidelines_path)
   end
 
   private

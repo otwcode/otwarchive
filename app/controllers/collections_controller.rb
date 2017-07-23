@@ -70,11 +70,11 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
       visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
       # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
       visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
@@ -162,7 +162,7 @@ class CollectionsController < ApplicationController
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to(collections_url)
+    redirect_to(collections_path)
   end
 
   private

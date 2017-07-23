@@ -31,4 +31,8 @@ FactoryGirl.define do
       collection.collection_participants.build(pseud_id: FactoryGirl.create(:pseud).id, participant_role: "Owner")
     end
   end
+  
+  factory :collection_item do
+    item_type "Work"
+  end
 end
