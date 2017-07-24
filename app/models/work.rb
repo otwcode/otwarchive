@@ -242,6 +242,7 @@ class Work < ActiveRecord::Base
     tags.each do |tag|
       tag.update_tag_cache
     end
+
     Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
@@ -878,7 +879,7 @@ class Work < ActiveRecord::Base
 
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags
+      if self.placeholder_tags && !self.placeholder_tags.empty?
         result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
         result = self.tags.group_by { |t| t.type.to_s }
