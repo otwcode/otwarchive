@@ -169,14 +169,14 @@
             <%= fields_for "work[series_attributes]" do |s| %>
               <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
               <dd>
-                <%= s.collection_select(:id, @series, :id, :title, { :prompt => true }) %>
+                <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_value(:id), prompt: true }) %>
               </dd>
 
               <dt><%= s.label :title, ts("Or create and use a new one:") %></dt>
-              <dd><%= s.text_field :title %></dd>
+              <dd><%= s.text_field :title, value: work_series_value(:title) %></dd>
             <% end %>
 
-            <% unless @serial_works.blank? %>
+            <% unless @serial_works.blank? || @work.new_record? %>
               <dt><%= ts("Current Series") %></dt>
               <% for serial in @serial_works %>
                 <dd>
