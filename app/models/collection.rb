@@ -111,7 +111,7 @@ class Collection < ActiveRecord::Base
     if parent
       if parent == self
         errors.add(:base, ts("You can't make a collection its own parent."))
-      elsif saved_change_to_parent_id? && !parent.user_is_maintainer?(User.current_user)
+      elsif parent_id_changed? && !parent.user_is_maintainer?(User.current_user)
         errors.add(:base, ts("You have to be a maintainer of %{name} to make a subcollection.", name: parent.name))
       end
     end
@@ -260,7 +260,7 @@ class Collection < ActiveRecord::Base
   end
 
   def autocomplete_search_string_before_last_save
-    "#{name_was} #{title_was}"
+    "#{name_before_last_save} #{title_before_last_save}"
   end
 
   def autocomplete_prefixes
