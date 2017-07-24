@@ -1,10 +1,10 @@
 class PseudSweeper < ActionController::Caching::Sweeper
   observe User, Pseud
-  
+
   def after_create(record)
     record.add_to_autocomplete if record.is_a?(Pseud)
   end
-  
+
   def before_update(record)
     if record.changed.include?("name") || record.changed.include?("login")
       if record.is_a?(User)
@@ -14,9 +14,9 @@ class PseudSweeper < ActionController::Caching::Sweeper
       end
     end
   end
-  
+
   def after_update(record)
-    if record.changed.include?("name") || record.changed.include?("login")
+    if record.saved_changes.keys.include?("name") || record.saved_changes.keys.include?("login")
       if record.is_a?(User)
         record.pseuds.each do |pseud|
           # have to reload the pseud from the db otherwise it has the outdated login
@@ -32,5 +32,5 @@ class PseudSweeper < ActionController::Caching::Sweeper
   def before_destroy(record)
     record.remove_from_autocomplete if record.is_a?(Pseud)
   end
-  
+
 end
