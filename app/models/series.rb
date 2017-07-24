@@ -5,15 +5,15 @@ class Series < ActiveRecord::Base
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
-  has_many :work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :work_pseuds, -> { uniq }, through: :works, source: :pseuds
+  has_many :work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
