@@ -540,9 +540,9 @@
   end
 
   def update_pseud_name
-    return unless saved_change_to_login? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
-    if login.downcase == login_was.downcase
+    return unless saved_change_to_login? && login_before_last_save.present?
+    old_pseud = self.pseuds.where(name: login_before_last_save).first
+    if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
     else
@@ -562,6 +562,6 @@
   end
 
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if saved_change_to_login?
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
 end
