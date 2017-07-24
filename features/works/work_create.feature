@@ -199,8 +199,6 @@ Feature: Create Works
 
   Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and series information still filled in
     Given basic tags
-      And the following activated users exist
-        | login          | password    | email                   |
       And I am logged in as "thorough" with password "something"
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
@@ -217,9 +215,7 @@ Feature: Create Works
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
-    Given basic tags
-      And the following activated users exist
-        | login          | password    | email                   |
+    Given basic tags              |
       And I am logged in as "thorough" with password "something"
       And I post the work "Work one" as part of a series "My existing series"
     When I set up the draft "Bad Draft"
