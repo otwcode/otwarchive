@@ -176,7 +176,7 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  before_update :remove_index_for_type_change, if: :saved_change_to_type?
+  before_update :remove_index_for_type_change, if: :type_changed?
   def remove_index_for_type_change
     @destroyed = true
     tire.update_index
@@ -184,7 +184,7 @@ class Tag < ActiveRecord::Base
 
   before_validation :check_synonym
   def check_synonym
-    if !self.new_record? && self.saved_change_to_name?
+    if !self.new_record? && self.name_changed?
       # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
       # admins can change tags with no restriction
       unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s)
@@ -239,7 +239,7 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  before_save :check_type_changes, if: :saved_change_to_type?
+  before_save :check_type_changes, if: :type_changed?
   def check_type_changes
     # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
     # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
@@ -494,7 +494,7 @@ class Tag < ActiveRecord::Base
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
     # can't find a tag with a name that hasn't been saved yet
-    saved_name = self.saved_change_to_name? ? self.name_was : self.name
+    saved_name = self.name_changed? ? self.name_was : self.name
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
 
@@ -721,7 +721,7 @@ class Tag < ActiveRecord::Base
   # If it was canonical but isn't anymore, we need to change or remove
   # the filter_taggings as appropriate
   def update_filters_for_canonical_change
-    if self.saved_change_to_canonical?
+    if self.canonical_changed?
       if self.canonical?
         self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
@@ -748,7 +748,7 @@ class Tag < ActiveRecord::Base
   # If a tag has a new merger but had an old merger, add new filter_taggings
   # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
-    if self.saved_change_to_merger_id?
+    if self.merger_id_changed?
       # setting the merger_id doesn't update the merger so we do it here
       if self.merger_id
         self.merger = Tag.find_by(id: self.merger_id)
@@ -791,7 +791,7 @@ class Tag < ActiveRecord::Base
         # As of Rails 5 upgrade, this triggers a stack level too deep error
         # because it triggers the `before_update
         # :update_filters_for_canonical_change` callback. In 4.2 and before,
-        # after this point `saved_change_to_canonical?` has been reset and returns
+        # after this point `canonical_changed?` has been reset and returns
         # false. Now it returns true and causes an endless loop.
         #
         # Reference: https://github.com/rails/rails/issues/28908
@@ -1016,10 +1016,10 @@ class Tag < ActiveRecord::Base
   # If we're making a tag non-canonical, we need to update its synonyms and children and favorite tags
   before_update :check_canonical
   def check_canonical
-    if self.saved_change_to_canonical? && !self.canonical?
+    if self.canonical_changed? && !self.canonical?
       self.async(:remove_canonical_associations)
       async(:remove_favorite_tags)
-    elsif self.saved_change_to_canonical? && self.canonical?
+    elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
     true
