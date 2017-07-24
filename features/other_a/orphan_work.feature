@@ -144,7 +144,6 @@ Feature: Orphan work
 
     Given I am logged in as "keeper"
       And I post the work "Half-Orphaned"
-      And I wait 1 second
       And I add the co-author "orphaneer" to the work "Half-Orphaned"
       And I post a chapter for the work "Half-Orphaned"
     # Verify that the authorship has been set up properly

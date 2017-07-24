@@ -494,7 +494,9 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
+
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
+  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
   step %{I post the work without preview}
