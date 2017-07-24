@@ -106,7 +106,7 @@ gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
 
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/globalize/globalize'
+gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
