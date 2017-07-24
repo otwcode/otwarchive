@@ -2,7 +2,7 @@
 <h2 class="heading">
 	<%= @series.title %>
 	<% if @series.restricted %>
-		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted", skip_pipeline: true) %>
 	<% end %>
 </h2>
 <!--/descriptions-->
