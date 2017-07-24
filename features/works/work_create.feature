@@ -197,27 +197,47 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: Creating a new work in a series with some invalid things should not 500
+  Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and series information still filled in
     Given basic tags
       And the following activated users exist
         | login          | password    | email                   |
         | coauthor       | something   | coauthor@example.org |
         | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
-      And user "badcoauthor" is banned
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
       And I fill in "Work Title" with "/"
       And I fill in "content" with "T"
-      And I check "chapters-options-show"
-      And I fill in "work_wip_length" with "text"
-      And I fill in "work_collection_names" with "collection1, collection2"
-      And I check "series-options-show"
-      And I fill in "work_series_attributes_title" with "My new series"
+      And I check "This work has multiple chapters"
+      And I fill in "Post to Collections / Challenges" with "collection1, collection2"
+      And I check "This work is part of a series"
+      And I fill in "Or create and use a new one:" with "My new series"
       And I press "Preview"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
-      And I should see "My new series"
+      And the field labeled "Or create and use a new one:" should contain "My new series"
+      And I should not see "Remove Work From Series"
+
+  Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
+    Given basic tags
+      And the following activated users exist
+        | login          | password    | email                   |
+        | coauthor       | something   | coauthor@example.org |
+        | badcoauthor    | something   | badcoauthor@example.org |
+      And I am logged in as "thorough" with password "something"
+      And I post the work "Work one" as part of a series "My existing series"
+    When I set up the draft "Bad Draft"
+      And I fill in "Fandoms" with "Invalid12./"
+      And I fill in "Work Title" with "/"
+      And I fill in "content" with "T"
+      And I check "This work has multiple chapters"
+      And I fill in "Post to Collections / Challenges" with "collection1, collection2"
+      And I check "This work is part of a series"
+      And I select "My existing series" from "Choose one of your existing series:"
+      And I press "Preview"
+    Then I should see "Sorry! We couldn't save this work because:"
+      And I should see a collection not found message for "collection1"
+      And "My existing series" should be selected within "Choose one of your existing series:"
       And I should not see "Remove Work From Series"
 
   Scenario: test for integer title and multiple fandoms
