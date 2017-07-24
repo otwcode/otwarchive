@@ -215,7 +215,7 @@ Feature: Create Works
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
-    Given basic tags              |
+    Given basic tags
       And I am logged in as "thorough" with password "something"
       And I post the work "Work one" as part of a series "My existing series"
     When I set up the draft "Bad Draft"
