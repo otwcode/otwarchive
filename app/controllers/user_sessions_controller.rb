@@ -57,7 +57,7 @@ class UserSessionsController < ApplicationController
           message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
         end
         flash.now[:error] = message
-        @user_session = UserSession.new(params[:user_session])
+        @user_session = UserSession.new(user_session_params)
         render action: 'new'
       end
     end
@@ -84,6 +84,16 @@ class UserSessionsController < ApplicationController
       format.html { redirect_to login_path }
       format.js
     end
+  end
+
+  private
+
+  def user_session_params
+    params.require(:user_session).permit(
+      :login,
+      :password,
+      :remember_me
+    )
   end
 
 end
