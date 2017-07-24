@@ -201,8 +201,6 @@ Feature: Create Works
     Given basic tags
       And the following activated users exist
         | login          | password    | email                   |
-        | coauthor       | something   | coauthor@example.org |
-        | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
@@ -222,8 +220,6 @@ Feature: Create Works
     Given basic tags
       And the following activated users exist
         | login          | password    | email                   |
-        | coauthor       | something   | coauthor@example.org |
-        | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
       And I post the work "Work one" as part of a series "My existing series"
     When I set up the draft "Bad Draft"
