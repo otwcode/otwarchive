@@ -138,11 +138,11 @@ Feature: Edit Works
     When I view the work "Shared"
     Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
+      And I wait 1 second
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"
-    When I view the work "Shared"
-    Then I should see "ex_friend" within ".byline"
-      And I should not see "coolperson" within ".byline"
+      And "ex_friend" should be the creator on the work "Shared"
+      And "coolperson" should not be a creator on the work "Shared"
 
   Scenario: A work cannot be edited to remove its fandom
     Given basic tags
