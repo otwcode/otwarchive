@@ -67,14 +67,25 @@ describe Subscription do
     end
   end
 
-  context "when subscribable_type is not a valid type" do
+  context "when subscribable is not a valid object to subscribe to" do
+    before do
+      subscription.subscribable_id = 1
+      subscription.subscribable_type = "Pseud"
+    end
+
+    it "should not save" do
+      expect { subscription.save }.to be_falsey
+    end
+  end
+
+  context "when subscribable_type is not a real model name" do
     before do
       subscription.subscribable_id = 1
       subscription.subscribable_type = "Серия"
     end
 
-    it "should raise error" do
-      expect { subscription.save }.to raise_error NameError
+    it "should not save" do
+      expect { subscription.save }.to be_falsey
     end
   end
 end
