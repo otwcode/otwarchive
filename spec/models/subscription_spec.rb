@@ -63,7 +63,7 @@ describe Subscription do
     end
 
     it "should not save" do
-      expect(subscription.save).to be_falsey
+      expect(subscription.valid?).to be_falsey
     end
   end
 
@@ -74,7 +74,7 @@ describe Subscription do
     end
 
     it "should not save" do
-      expect { subscription.save }.to be_falsey
+      expect(subscription.valid?).to be_falsey
     end
   end
 
@@ -85,7 +85,7 @@ describe Subscription do
     end
 
     it "should not save" do
-      expect { subscription.save }.to be_falsey
+      expect(subscription.valid?).to be_falsey
     end
   end
 end
