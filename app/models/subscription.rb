@@ -1,7 +1,7 @@
 class Subscription < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
 
-  VALID_SUBSCRIBABLES = %w(Work User Series)
+  VALID_SUBSCRIBABLES = %w(Work User Series).freeze
 
   belongs_to :user
   belongs_to :subscribable, polymorphic: true
@@ -12,7 +12,7 @@ class Subscription < ActiveRecord::Base
   # Without the condition, you get a 500 error instead of a validation error
   # if there's an invalid subscribable type
   validates :subscribable, presence: true,
-    if: Proc.new { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
+                           if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
   
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
