@@ -62,7 +62,7 @@ describe Subscription do
       work.destroy
     end
 
-    it "should not save" do
+    it "should be invalid" do
       expect(subscription.valid?).to be_falsey
     end
   end
@@ -73,7 +73,7 @@ describe Subscription do
       subscription.subscribable_type = "Pseud"
     end
 
-    it "should not save" do
+    it "should be invalid" do
       expect(subscription.valid?).to be_falsey
     end
   end
@@ -84,7 +84,7 @@ describe Subscription do
       subscription.subscribable_type = "Серия"
     end
 
-    it "should not save" do
+    it "should be invalid" do
       expect(subscription.valid?).to be_falsey
     end
   end
