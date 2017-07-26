@@ -135,7 +135,7 @@ class BookmarksController < ApplicationController
     if @bookmark.errors.empty?
       if @bookmarkable.save && @bookmark.save
         flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(@bookmark) and return
+        redirect_to bookmark_path(@bookmark) and return
       end
     end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
