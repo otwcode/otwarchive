@@ -15,7 +15,7 @@ class TagSet < ActiveRecord::Base
 
   has_one :owned_tag_set
 
-  has_one :prompt
+  has_one :prompt, autosave: false
 
   # how this works: we don't want to set the actual "tags" variable initially because that will
   # create SetTaggings even if the tags are not canonical or wrong. So we need to create a temporary

@@ -282,4 +282,5 @@ class ChallengeSignup < ActiveRecord::Base
 
     builder.build_potential_match
   end
+
 end
