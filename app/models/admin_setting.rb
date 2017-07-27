@@ -94,7 +94,7 @@ class AdminSetting < ActiveRecord::Base
   end
 
   def check_filter_status
-    if self.saved_change_to_suspend_filter_counts?
+    if self.suspend_filter_counters_changed?
       if self.suspend_filter_counts?
         self.suspend_filter_counts_at = Time.now
       else
@@ -104,7 +104,7 @@ class AdminSetting < ActiveRecord::Base
   end
 
   def update_invite_date
-    if self.saved_change_to_invite_from_queue_frequency?
+    if self.invite_from_queue_frequency_changed?
       self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
     end
   end
