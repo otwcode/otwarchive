@@ -466,7 +466,7 @@ class ChallengeAssignment < ActiveRecord::Base
   # note: this does NOT invoke callbacks because ChallengeAssignments don't have any dependent=>destroy
   # or associations
   def self.clear!(collection)
-    ChallengeAssignment.delete_all(collection_id: collection.id)
+    ChallengeAssignment.where(collection_id: collection.id).delete_all
     ChallengeSignup.where(collection_id: collection.id).update_all(assigned_as_offer: false, assigned_as_request: false)
   end
 
