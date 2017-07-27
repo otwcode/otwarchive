@@ -198,7 +198,7 @@ module NavigationHelpers
     when /^the faq page$/i
       archive_faqs_path
     when /^the de faq page$/i
-      archive_faqs_path(:language_id => "de")
+      archive_faqs_path(language_id: "de")
     when /^the wrangling guidelines page$/i
       wrangling_guidelines_path
     when /^the support page$/i
