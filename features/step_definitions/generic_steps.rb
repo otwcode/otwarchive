@@ -125,6 +125,17 @@ When /^"([^\"]*)" is fixed$/ do |what|
   puts "\nDEFERRED (#{what})"
 end
 
+Then /^the "([^"]*)" input(?: within "([^"]*)")? should be disabled$/ do |label, selector|
+  with_scope(selector) do
+    field_disabled = find_field(label, disabled: true)
+    if field_disabled.respond_to? :should
+      field_disabled.should be_truthy
+    else
+      assert field_disabled
+    end
+  end
+end
+
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
     field_disabled = find_field(label, disabled: true)
