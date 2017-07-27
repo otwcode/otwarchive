@@ -94,7 +94,7 @@ class AdminSetting < ActiveRecord::Base
   end
 
   def check_filter_status
-    if self.suspend_filter_counters_changed?
+    if self.suspend_filter_counts_changed?
       if self.suspend_filter_counts?
         self.suspend_filter_counts_at = Time.now
       else
