@@ -259,8 +259,8 @@ class Collection < ActiveRecord::Base
     "#{name} #{title}"
   end
 
-  def autocomplete_search_string_before_last_save
-    "#{name_before_last_save} #{title_before_last_save}"
+  def autocomplete_search_string_was
+    "#{name_was} #{title_was}"
   end
 
   def autocomplete_prefixes

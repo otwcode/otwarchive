@@ -21,7 +21,7 @@ module AutocompleteSource
   end
 
   def autocomplete_search_string_was
-    "#{name_before_last_save}"
+    "#{name_was}"
   end
 
   def autocomplete_value
@@ -29,7 +29,7 @@ module AutocompleteSource
   end
 
   def autocomplete_value_was
-    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : "")
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : "")
   end
 
   def autocomplete_score
