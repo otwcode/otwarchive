@@ -63,9 +63,8 @@ class Chapter < ActiveRecord::Base
         chapters = chapters - [self]
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
-          chapter.position = i+1
-          if chapter.saved_change_to_position?
-            Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
+          if chapter.position != i+1
+            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
             positions_changed = true
           end
         end

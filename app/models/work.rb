@@ -790,12 +790,11 @@ class Work < ActiveRecord::Base
     self.number_of_chapters > 1
   end
 
-  before_save :update_complete_status
+  after_save :update_complete_status
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
-    self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+    if self.chapters.posted.count == expected_number_of_chapters
+      Work.where("id = #{self.id}").update_all("complete = true")
     end
   end
 
