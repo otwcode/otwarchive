@@ -31,7 +31,7 @@
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In', key: 'header'), {:controller => :user_sessions, :action => 'new'}, id: "login-dropdown" %>
+        <%= link_to ts('Log In', key: 'header'), login_path, id: "login-dropdown" %>
       </p>
       <%= render 'user_sessions/login' %>
     </div>
