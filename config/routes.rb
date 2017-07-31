@@ -586,4 +586,9 @@ Otwarchive::Application.routes.draw do
   # TODO: Replace or get rid of this by Rails 5.2, as both :controller and
   #         :action are deprecated
   # get ':controller(/:action(/:id(.:format)))'
+  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
+  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
+  get '/invite_requests/show' => 'bookmarks#show', as: :show_invite_request
+  get '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
 end

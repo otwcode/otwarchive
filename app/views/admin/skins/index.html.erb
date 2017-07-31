@@ -10,7 +10,7 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts('Manage Skins') %></h3>
 
-<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
+<%= form_tag update_admin_skin_path, {:method => :put} do %>
 
   <!-- approval queue -->
   <fieldset>
