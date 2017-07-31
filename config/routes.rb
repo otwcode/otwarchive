@@ -591,4 +591,13 @@ Otwarchive::Application.routes.draw do
   get '/invite_requests/show' => 'bookmarks#show', as: :show_invite_request
   get '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
   get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+  get '/autocomplete/fandom' => 'autocomplete#fandom'
+  get '/autocomplete/pseud' => 'autocomplete#pseud'
+  get '/autocomplete/open_collection_names' => 'autocomplete#open_collection_names'
+  get '/autocomplete/character_in_fandom' => 'autocomplete#character_in_fandom'
+  get '/autocomplete/tag' => 'autocomplete#tag'
+  get '/autocomplete/relationship_in_fandom' => 'autocomplete#relationship_in_fandom'
+  get '/autocomplete/freeform' => 'autocomplete#freeform'
+  get '/autocomplete/external_work' => 'autocomplete#external_work'
+  get '/user_invite_requests/update' => 'user_invite_requests#update'
 end
