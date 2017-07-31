@@ -66,21 +66,6 @@ describe Admin::ApiController do
     end
   end
 
-  describe "GET #show" do
-    context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
-
-      before do
-        fake_login_admin(admin)
-      end
-
-      it "redirects to the homepage" do
-        get :show
-        it_redirects_to admin_api_index_path
-      end
-    end
-  end
-
   describe "GET #new" do
     context "where an admin is logged in" do
       let(:admin) { FactoryGirl.create(:admin) }
