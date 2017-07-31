@@ -588,7 +588,7 @@ Otwarchive::Application.routes.draw do
   # get ':controller(/:action(/:id(.:format)))'
   get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
   get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-  get '/invite_requests/show' => 'bookmarks#show', as: :show_invite_request
+  # get '/invite_requests/show' => 'bookmarks#show', as: :show_invite_request
   get '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
   get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
   get '/autocomplete/fandom' => 'autocomplete#fandom'
@@ -600,4 +600,9 @@ Otwarchive::Application.routes.draw do
   get '/autocomplete/freeform' => 'autocomplete#freeform'
   get '/autocomplete/external_work' => 'autocomplete#external_work'
   get '/user_invite_requests/update' => 'user_invite_requests#update'
+  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
+  get '/assignments/no_user' => 'challenge_assignments#no_user'
+  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+  get '/challenges/no_collection' => 'challenges#no_collection'
+  get '/challenges/no_challenge' => 'challenges#no_challenge'
 end
