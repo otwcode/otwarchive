@@ -73,7 +73,7 @@ RSpec.describe SeriesController, type: :controller do
       second_work = create(:serial_work, series: series)
       expect(first_work.position).to eq(1)
       expect(second_work.position).to eq(2)
-      post :update_positions, params: { serial: [second_work, first_work], format: :json }
+      post :update_positions, params: { id: series.id, serial: [second_work, first_work], format: :json }
       first_work.reload
       second_work.reload
       expect(first_work.position).to eq(2)

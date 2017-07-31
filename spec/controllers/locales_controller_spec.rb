@@ -49,7 +49,7 @@ describe LocalesController do
       before { fake_login_known_user(user) }
 
       it "redirects to the user page" do
-        put :update
+        put :update, params: { id: 0 }
         it_redirects_to user_path(user)
       end
     end
