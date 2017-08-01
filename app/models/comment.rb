@@ -160,127 +160,131 @@ class Comment < ActiveRecord::Base
     end
   end
 
-  def notify_user_of_own_comments?(user)
-    if user.nil? || user == User.orphan_account
-      false
-    elsif user.is_a?(Admin)
-      true
-    else
-      !user.preference.comment_copy_to_self_off?
-    end
-  end
+  protected
 
-  def notify_user_by_inbox?(user)
-    if user.nil? || user == User.orphan_account
-      false
-    elsif user.is_a?(Admin)
-      true
-    else
-      !user.preference.comment_inbox_off?
-    end
-  end
-
-  def notify_user_by_email?(user)
-    if user.nil? || user == User.orphan_account
-      false
-    elsif user.is_a?(Admin)
-      true
-    else
-      !user.preference.comment_emails_off?
-    end
-  end
-
-  def update_feedback_in_inbox(user)
-    if (edited_feedback = user.inbox_comments.find_by(feedback_comment_id: self.id))
-      edited_feedback.update_attribute(:read, false)
-    else # original inbox comment was deleted
-      add_feedback_to_inbox(user)
-    end
-  end
-
-  def add_feedback_to_inbox(user)
-    new_feedback = user.inbox_comments.build
-    new_feedback.feedback_comment_id = self.id
-    new_feedback.save
-  end
-
-  def content_too_different?(new_content, old_content)
-    # we added more than the threshold # of chars, just return
-    return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
-
-    # quick and dirty iteration to compare the two strings
-    cost = 0
-    new_i = 0
-    old_i = 0
-    while new_i < new_content.length && old_i < old_content.length
-      if new_content[new_i] == old_content[old_i]
-        new_i += 1
-        old_i += 1
-        next
-      end
-
-      cost += 1
-      # interrupt as soon as we have changed > threshold chars
-      return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
-
-      # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
-      if new_content[new_i + 1] == old_content[old_i]
-        new_i += 1
-      elsif new_content[new_i] == old_content[old_i + 1]
-        old_i += 1
+    def notify_user_of_own_comments?(user)
+      if user.nil? || user == User.orphan_account
+        false
+      elsif user.is_a?(Admin)
+        true
       else
-        # just keep going
-        new_i += 1
-        old_i += 1
+        !user.preference.comment_copy_to_self_off?
       end
     end
 
-    return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
-  end
-
-  def not_user_commenter?(parent_comment)
-    (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
-  end
-
-  def have_different_owner?(parent_comment)
-    return not_user_commenter?(parent_comment) || (parent_comment.comment_owner != self.comment_owner)
-  end
-
-  def notify_parent_comment_owner
-    if self.reply_comment? && !self.unreviewed?
-      parent_comment = self.commentable
-      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
-
-      # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
-      if self.comment_owner
-        if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-          inbox_comment.update_attributes(replied_to: true, read: true)
-        end
-      end
-
-      # send notification to the owner of the original comment if they're not the same as the commenter
-      if (have_different_owner?(parent_comment))
-        if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-          if self.edited_at_changed?
-            CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver
-          else
-            CommentMailer.comment_reply_notification(parent_comment, self).deliver
-          end
-        end
-        if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
-          if self.edited_at_changed?
-            update_feedback_in_inbox(parent_comment_owner)
-          else
-            add_feedback_to_inbox(parent_comment_owner)
-          end
-        end
-        if parent_comment_owner
-          return parent_comment_owner
-        end
+    def notify_user_by_inbox?(user)
+      if user.nil? || user == User.orphan_account
+        false
+      elsif user.is_a?(Admin)
+        true
+      else
+        !user.preference.comment_inbox_off?
       end
     end
-    return nil
-  end
+
+    def notify_user_by_email?(user)
+      if user.nil? || user == User.orphan_account
+        false
+      elsif user.is_a?(Admin)
+        true
+      else
+        !user.preference.comment_emails_off?
+      end
+    end
+
+    def update_feedback_in_inbox(user)
+      if (edited_feedback = user.inbox_comments.find_by(feedback_comment_id: self.id))
+        edited_feedback.update_attribute(:read, false)
+      else # original inbox comment was deleted
+        add_feedback_to_inbox(user)
+      end
+    end
+
+    def add_feedback_to_inbox(user)
+      new_feedback = user.inbox_comments.build
+      new_feedback.feedback_comment_id = self.id
+      new_feedback.save
+    end
+
+    def content_too_different?(new_content, old_content)
+      # we added more than the threshold # of chars, just return
+      return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
+
+      # quick and dirty iteration to compare the two strings
+      cost = 0
+      new_i = 0
+      old_i = 0
+      while new_i < new_content.length && old_i < old_content.length
+        if new_content[new_i] == old_content[old_i]
+          new_i += 1
+          old_i += 1
+          next
+        end
+
+        cost += 1
+        # interrupt as soon as we have changed > threshold chars
+        return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+
+        # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
+        if new_content[new_i + 1] == old_content[old_i]
+          new_i += 1
+        elsif new_content[new_i] == old_content[old_i + 1]
+          old_i += 1
+        else
+          # just keep going
+          new_i += 1
+          old_i += 1
+        end
+      end
+
+      return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+    end
+
+    def not_user_commenter?(parent_comment)
+      (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
+    end
+
+    def have_different_owner?(parent_comment)
+      return not_user_commenter?(parent_comment) || (parent_comment.comment_owner != self.comment_owner)
+    end
+
+    def notify_parent_comment_owner
+      if self.reply_comment? && !self.unreviewed?
+        parent_comment = self.commentable
+        parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
+
+        # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
+        if self.comment_owner
+          if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
+            inbox_comment.update_attributes(replied_to: true, read: true)
+          end
+        end
+
+        # send notification to the owner of the original comment if they're not the same as the commenter
+        if (have_different_owner?(parent_comment))
+          if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
+            if self.edited_at_changed?
+              CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver
+            else
+              CommentMailer.comment_reply_notification(parent_comment, self).deliver
+            end
+          end
+          if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
+            if self.edited_at_changed?
+              update_feedback_in_inbox(parent_comment_owner)
+            else
+              add_feedback_to_inbox(parent_comment_owner)
+            end
+          end
+          if parent_comment_owner
+            return parent_comment_owner
+          end
+        end
+      end
+      return nil
+    end
+
+  public
 
   # Set the depth of the comment: 0 for a first-class comment, increasing with each level of nesting
   def set_depth
