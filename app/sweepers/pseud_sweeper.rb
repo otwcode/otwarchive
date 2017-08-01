@@ -8,9 +8,16 @@ class PseudSweeper < ActionController::Caching::Sweeper
   def before_update(record)
     if record.changed.include?("name") || record.changed.include?("login")
       if record.is_a?(User)
-        record.pseuds.each(&:remove_stale_from_autocomplete)
+        record.pseuds.each(&:remove_stale_from_autocomplete_before_save)
       else
-        record.remove_stale_from_autocomplete
+        if record.user.saved_changes.any?
+          # In this case, `remove_stale_from_autocomplete` needs to look at the
+          # changed attributes on the pseud's user as if it were an after_*
+          # callback on the user instead of a before_* callback on the pseud.
+          record.remove_stale_from_autocomplete
+        else
+          record.remove_stale_from_autocomplete_before_save
+        end
       end
     end
   end

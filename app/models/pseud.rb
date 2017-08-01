@@ -297,9 +297,43 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
+  # This method is for use in before_* callbacks
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
+
+  # See byline_before_last_save for the reasoning behind why both this and
+  # autocomplete_value_was exist in this model
+  #
+  # This method is for use in after_* callbacks
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
+  end
+
+  def byline_before_last_save
+    past_name = name_before_last_save.blank? ? name : name_before_last_save
+
+    # In this case, self belongs to a user that has already been saved
+    # during it's (self's) callback cycle, which means we need to
+    # look *back* at the user's [attributes]_before_last_save, since
+    # [attribute]_was for the pseud's user will behave as if this were an
+    # after_* callback on the user, instead of a before_* callback on self.
+    #
+    # see psued_sweeper.rb:13 for more context
+    #
+    past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
+  # This method is for removing stale autocomplete records in a before_*
+  # callback, such as the one used in PseudSweeper
+  #
+  # This is a particular case for the Pseud model
+  def remove_stale_from_autocomplete_before_save
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 
   ## END AUTOCOMPLETE
 
