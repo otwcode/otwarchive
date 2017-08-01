@@ -511,7 +511,8 @@ class CommentsController < ApplicationController
     end
   end
 
-  def redirect_to_all_comments(commentable, options = {}) default_options = {anchor: "comments"}
+  def redirect_to_all_comments(commentable, options = {})
+    default_options = {anchor: "comments"}
     options = default_options.merge(options)
 
     if commentable.is_a?(Tag)
