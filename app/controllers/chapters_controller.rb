@@ -3,7 +3,7 @@ class ChaptersController < ApplicationController
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
   before_action :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
   # only authors of a work should be able to edit its chapters
-  before_action :check_ownership, only: [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_action :check_ownership, only: [ :new, :create, :edit, :update, :manage, :preview, :destroy, :confirm_delete ]
   before_action :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   before_action :check_visibility, only: [ :show]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
@@ -219,7 +219,7 @@ class ChaptersController < ApplicationController
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
-      redirect_to(edit_work_url(@work))
+      redirect_to(edit_work_path(@work))
     else
       was_draft = !@chapter.posted?
       if @chapter.destroy

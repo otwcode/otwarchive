@@ -69,7 +69,7 @@ class UserSessionsController < ApplicationController
       @user_session.destroy
       flash[:notice] = ts("Successfully logged out.")
     end
-    redirect_back_or_default root_url
+    redirect_back_or_default root_path
   end
 
   def passwd_small

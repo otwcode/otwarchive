@@ -31,6 +31,7 @@ class TagWranglersController < ApplicationController
     @assignments = Fandom.in_use.joins(joins)
                                 .select('tags.*, users.login AS wrangler')
                                 .where(conditions)
+                                .order(:name)
                                 .paginate(page: params[:page], per_page: 50)
   end
 

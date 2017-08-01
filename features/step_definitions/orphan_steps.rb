@@ -11,11 +11,13 @@ When /^I choose to (?:keep|leave) my pseud on$/ do
 end
 
 When /^I begin orphaning the work "([^"]*)"$/ do |name|
+  step %{I wait 1 second}
   step %{I edit the work "#{name}"}
   step %{I follow "Orphan Work"}
 end
 
 When /^I begin orphaning the series "([^"]*)"$/ do |name|
+  step %{I wait 1 second}
   step %{I view the series "#{name}"}
   step %{I follow "Orphan Series"}
 end

@@ -24,15 +24,15 @@
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
     <p class="notice" id="email-field-description">
-      <%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %>
+      <%= ts("Our spam filter does collect IP addresses, but we never see them.") %>
     </p>
     <dl>
       <dt><%= f.label :username, ts("Your name (optional)") %></dt>
       <dd>
         <%= f.text_field :username %>
       </dd>
-      <dt><%= f.label :email, ts("Your email (optional)") %></dt>
-      <dd>
+      <dt class="required"><%= f.label :email, ts("Your email (required)") %></dt>
+      <dd class="required">
         <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
       </dd>
     </dl>

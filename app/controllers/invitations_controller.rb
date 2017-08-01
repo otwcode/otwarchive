@@ -50,7 +50,7 @@ class InvitationsController < ApplicationController
       end
     end
     flash[:notice] = "Invitations were successfully created."
-    redirect_to user_invitations_url(@user)
+    redirect_to user_invitations_path(@user)
   end
 
   def update
@@ -60,7 +60,7 @@ class InvitationsController < ApplicationController
     if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
-        redirect_to find_admin_invitations_url("invitation[token]" => @invitation.token)
+        redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)
       else
         redirect_to([@user, @invitation])
       end
@@ -79,9 +79,9 @@ class InvitationsController < ApplicationController
       flash[:error] = "Invitation was not destroyed."
     end
     if @user.is_a?(User)
-      redirect_to user_invitations_url(@user)
+      redirect_to user_invitations_path(@user)
     else
-      redirect_to admin_invitations_url
+      redirect_to admin_invitations_path
     end
   end
 

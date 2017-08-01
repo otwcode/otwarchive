@@ -128,9 +128,7 @@ module Creatable
         if self.is_a?(Chapter) && self.work
           self.work.pseuds << pseud unless self.work.pseuds.include?(pseud)
         elsif self.is_a?(Work)
-          if self.chapters.first
-            self.chapters.first.pseuds << pseud unless self.chapters.first.pseuds.include?(pseud)
-          end
+          self.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
           self.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }
         end
       end

@@ -26,6 +26,8 @@ module NavigationHelpers
       bookmarks_path
     when /^the admin login page$/i
       new_admin_session_path
+    when /^the redirect page$/i
+      redirect_path
 
     # the following are examples using path_to_pickle
 
@@ -57,6 +59,8 @@ module NavigationHelpers
       manage_invite_requests_path
     when /my pseuds page/
       user_pseuds_path(User.current_user)
+    when /my "(.*)" pseud page/
+      user_pseud_path(user_id: User.current_user, id: $1)
     when /my user page/
       user_path(User.current_user)
     when /my preferences page/
@@ -101,6 +105,8 @@ module NavigationHelpers
       skins_path(skin_type: "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
+    when /^(.*?)(?:'s)? "(.*)" pseud page$/i
+      user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^(.*?)(?:'s)? works page$/i
@@ -229,8 +235,6 @@ module NavigationHelpers
       admin_posts_path
     when /^the admin-settings page$/i
       admin_settings_path
-    when /^the admin-notices page$/i
-      notify_admin_users_path
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
