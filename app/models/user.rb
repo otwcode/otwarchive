@@ -1,4 +1,4 @@
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner

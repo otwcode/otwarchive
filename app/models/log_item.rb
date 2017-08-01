@@ -1,4 +1,4 @@
-class LogItem < ActiveRecord::Base
+class LogItem < ApplicationRecord
 
   belongs_to :user
   belongs_to :admin

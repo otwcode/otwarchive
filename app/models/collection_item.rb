@@ -1,4 +1,4 @@
-class CollectionItem < ActiveRecord::Base
+class CollectionItem < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0

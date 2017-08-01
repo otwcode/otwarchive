@@ -1,4 +1,4 @@
-class Admin < ActiveRecord::Base
+class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   devise :database_authenticatable,

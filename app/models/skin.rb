@@ -4,7 +4,7 @@ include CssCleaner
 include SkinCacheHelper
 include SkinWizard
 
-class Skin < ActiveRecord::Base
+class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [

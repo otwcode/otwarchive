@@ -1,4 +1,4 @@
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Tire::Model::Search

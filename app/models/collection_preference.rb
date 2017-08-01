@@ -1,4 +1,4 @@
-class CollectionPreference < ActiveRecord::Base
+class CollectionPreference < ApplicationRecord
   belongs_to :collection
   after_update :after_update
 

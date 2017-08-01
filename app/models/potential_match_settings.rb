@@ -1,4 +1,4 @@
-class PotentialMatchSettings < ActiveRecord::Base
+class PotentialMatchSettings < ApplicationRecord
   ALL = -1
   REQUIRED_MATCH_OPTIONS =  [
                               [ts("All"), ALL],

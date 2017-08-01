@@ -1,4 +1,4 @@
-class PotentialMatch < ActiveRecord::Base
+class PotentialMatch < ApplicationRecord
 
   # We use "-1" to represent all the requested items matching
   ALL = -1

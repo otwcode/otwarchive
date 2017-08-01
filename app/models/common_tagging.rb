@@ -2,7 +2,7 @@
 # It should probably be renamed "ChildTagging" and have the flip tagging called "ParentTagging"?
 # Also it doesn't need to be polymorphic -- in practice, all the types are Tag
 # -- NN 11/2012
-class CommonTagging < ActiveRecord::Base
+class CommonTagging < ApplicationRecord
   # we need "touch" here so that when a common tagging changes, the tag(s) themselves are updated and 
   # they get noticed by the tag sweeper (which then updates their autocomplete data)
   belongs_to :common_tag, class_name: 'Tag', touch: true

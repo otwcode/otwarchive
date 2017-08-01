@@ -1,4 +1,4 @@
-class Locale < ActiveRecord::Base
+class Locale < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :language

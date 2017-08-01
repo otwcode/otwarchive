@@ -1,4 +1,4 @@
-class CollectionProfile < ActiveRecord::Base
+class CollectionProfile < ApplicationRecord
   belongs_to :collection
 
   validates_length_of :intro, 

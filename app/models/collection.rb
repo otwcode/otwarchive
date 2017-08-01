@@ -1,4 +1,4 @@
-class Collection < ActiveRecord::Base
+class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include UrlHelpers
   include WorksOwner

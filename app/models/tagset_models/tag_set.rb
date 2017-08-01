@@ -1,4 +1,4 @@
-class TagSet < ActiveRecord::Base
+class TagSet < ApplicationRecord
 
   # a complete match is numerically represented with ALL
   ALL = -1

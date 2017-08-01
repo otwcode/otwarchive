@@ -1,4 +1,4 @@
-class TagNomination < ActiveRecord::Base
+class TagNomination < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :tag_set_nomination, inverse_of: :tag_nominations

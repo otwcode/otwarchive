@@ -1,4 +1,4 @@
-class CollectionParticipant < ActiveRecord::Base
+class CollectionParticipant < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :pseud

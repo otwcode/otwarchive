@@ -1,7 +1,7 @@
 # This is essentially a mirror of the taggings table as applied to works (right now)
 # except with all works connected to canonical tags instead of their synonyms for
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
-class FilterTagging < ActiveRecord::Base
+class FilterTagging < ApplicationRecord
   self.primary_key = 'id'
 
   belongs_to :filter, class_name: 'Tag' # , dependent: :destroy # TODO: poke this separately

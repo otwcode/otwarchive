@@ -1,4 +1,4 @@
-class Kudo < ActiveRecord::Base
+class Kudo < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Responder
 

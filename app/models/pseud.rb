@@ -1,4 +1,4 @@
-class Pseud < ActiveRecord::Base
+class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   include Tire::Model::Search

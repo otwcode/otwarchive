@@ -1,4 +1,4 @@
-class ChallengeAssignment < ActiveRecord::Base
+class ChallengeAssignment < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # We use "-1" to represent all the requested items matching
