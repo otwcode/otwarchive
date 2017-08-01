@@ -580,17 +580,26 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
+  # These are whitelisted routes that are proven to be used throughout the
+  # application, which previously relied on a deprecated catch-all route definition
+  # (`get ':controller(/:action(/:id(.:format)))'`) to work.
   #
-  # TODO: Replace or get rid of this by Rails 5.2, as both :controller and
-  #         :action are deprecated
-  # get ':controller(/:action(/:id(.:format)))'
+  # They are generally not RESTful and in some cases are *almost* duplicates of
+  # existing routes defined above, but due to how extensively they are used
+  # throughout the application must exist until forms, controllers, and tests
+  # can be refactored to not rely on their existence.
+  #
+  # Note written on August 1, 2017 during upgrade to Rails 5.1.
   get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
   get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
+
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
-  get '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+  get '/user_invite_requests/update' => 'user_invite_requests#update'
+
+  patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+
   get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+
   get '/autocomplete/fandom' => 'autocomplete#fandom'
   get '/autocomplete/pseud' => 'autocomplete#pseud'
   get '/autocomplete/open_collection_names' => 'autocomplete#open_collection_names'
@@ -599,12 +608,23 @@ Otwarchive::Application.routes.draw do
   get '/autocomplete/relationship_in_fandom' => 'autocomplete#relationship_in_fandom'
   get '/autocomplete/freeform' => 'autocomplete#freeform'
   get '/autocomplete/external_work' => 'autocomplete#external_work'
-  get '/user_invite_requests/update' => 'user_invite_requests#update'
+  get '/autocomplete/noncanonical_tag' => 'autocomplete#noncanonical_tag'
+  get '/autocomplete/character' => 'autocomplete#character'
+  get '/autocomplete/relationship' => 'autocomplete#relationship'
+
   get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
   get '/assignments/no_user' => 'challenge_assignments#no_user'
   get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+
   get '/challenges/no_collection' => 'challenges#no_collection'
   get '/challenges/no_challenge' => 'challenges#no_challenge'
+
   get '/works/clean_work_search_params' => 'works#clean_work_search_params'
   get '/works/collected' => 'works#collected'
+  get '/works/drafts' => 'works#drafts'
+
+  post '/works/edit_multiple/:id' => 'works#edit_multiple'
+  post '/works/confirm_delete_multiple/:id' => 'works#confirm_delete_multiple'
+  post '/works/delete_multiple/:id' => 'works#delete_multiple'
+  put '/works/update_multiple' => 'works#update_multiple'
 end

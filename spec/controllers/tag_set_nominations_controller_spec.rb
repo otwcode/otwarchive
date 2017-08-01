@@ -952,7 +952,7 @@ describe TagSetNominationsController do
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-            put :update, params: { id: 0, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: 0 } }
+            put :update, params: { id: 0, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil } }
             it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
