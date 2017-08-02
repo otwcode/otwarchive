@@ -1,6 +1,7 @@
 class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 
-  before_save :udpate_sanitizer_version
+  before_save :update_sanitizer_version
 
   def update_sanitizer_version
     ArchiveConfig.FIELDS_ALLOWING_HTML.each do |field|
