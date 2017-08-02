@@ -83,6 +83,7 @@ Scenario: Delete a user who has coauthored a work
     | otheruser | password |
     And I am logged in as "testuser"
     And I coauthored the work "Shared" as "testuser" with "otheruser"
+    And I wait 1 second
   When I try to delete my account
   Then I should see "What do you want to do with your works?"
   When I choose "Remove me completely as co-author"
@@ -90,7 +91,6 @@ Scenario: Delete a user who has coauthored a work
   Then I should see "You have successfully deleted your account"
     And a user account should not exist for "testuser"
     And I should be logged out
-  # TODO - make this confirmation step better
   When I go to the works page
   Then I should see "otheruser"
     And I should not see "testuser"

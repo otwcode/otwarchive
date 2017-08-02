@@ -162,7 +162,7 @@ class CollectionsController < ApplicationController
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to(collections_url)
+    redirect_to(collections_path)
   end
 
   private

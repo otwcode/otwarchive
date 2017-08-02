@@ -67,24 +67,20 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
       And "Kudos" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"
     When I check "Complete"
       And I press "Search" within "#new_work_search"
-    When "AO3-5020" is fixed
-    # Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
+    Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
       And I should see "4 Found"
       And I should see "second work"
       And I should see "third work"
       And I should see "fourth"
       And I should see "Fulfilled Story-thing"
-    When "AO3-5020" is fixed
-      # And the 4th result should contain "Kudos: 1"
+      And the 4th result should contain "Kudos: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
       And the "Complete" checkbox should be checked
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by exact number of comments
     Given a set of works with comments for searching
@@ -125,8 +121,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Comments" should contain "> 0"
       And "Comments" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by < a number of comments and sort in descending order by
   comments
@@ -147,8 +142,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Comments" should contain "<20"
       And "Comments" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Descending" should be selected within "Sort direction"
+      And "Descending" should be selected within "Sort direction"
 
   Scenario: Search by > a number of comments and sort in ascending order by
   title using the header search
@@ -163,8 +157,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Comments" should contain "> 2"
       And "Title" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by exact number of bookmarks
     Given a set of works with bookmarks for searching
@@ -203,8 +196,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarks" should contain ">1"
       And "Bookmarks" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by < a number of bookmarks and sort in descending order by
   bookmarks
@@ -225,8 +217,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarks" should contain "< 20"
       And "Bookmarks" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Descending" should be selected within "Sort direction"
+      And "Descending" should be selected within "Sort direction"
 
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   title using the header search
@@ -240,5 +231,4 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarks" should contain "> 2"
       And "Title" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"

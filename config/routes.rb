@@ -158,10 +158,8 @@ Otwarchive::Application.routes.draw do
         get :check_user
       end
       collection do
-        get :notify
         get :bulk_search
         post :bulk_search
-        post :send_notification
         post :update_user
       end
     end

@@ -35,7 +35,7 @@ class Admin::AdminUsersController < ApplicationController
     @hide_dashboard = true
     @user = User.find_by(login: params[:id])
     unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role]
+      redirect_to action: "index", query: params[:query], role: params[:role] and return
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
@@ -205,61 +205,6 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to(admin_users_path)
   end
 
-  def notify
-    if params[:letter] && params[:letter].is_a?(String)
-      letter = params[:letter][0,1]
-    else
-      letter = "0"
-    end
-
-    @all_users = User.alphabetical.starting_with(letter)
-    @roles = Role.assignable.distinct
-  end
-
-  def send_notification
-    if !params[:notify_all].blank?
-      if params[:notify_all].include?("0")
-        # exclude users who've opted out of admin emails, if the message is one to all users
-        @users = User.joins(:preference).where("preferences.admin_emails_off = 0")
-      else
-        # do not exclude users if they are part of a targeted group, like translations, wranglers or individually selected users
-        # don't call .count on queries obtained with .group! you'll get a hash instead of an integer
-        @users = User.select("users.*").joins(:roles).where("roles.name IN (?)", params[:notify_all]).group("users.id")
-      end
-    elsif params[:user_ids]
-      @users = User.find(params[:user_ids])
-    end
-
-    if @users.nil? || @users.length == 0
-      flash[:error] = ts("Who did you want to notify?")
-      redirect_to action: :notify and return
-    end
-
-    unless params[:subject] && !params[:subject].blank?
-      flash[:error] = ts("Please enter a subject.")
-      redirect_to action: :notify and return
-    else
-      @subject = params[:subject]
-    end
-
-    # We need to use content because otherwise html will be stripped
-    unless params[:content] && !params[:content].blank?
-      flash[:error] = ts("What message did you want to send?")
-      redirect_to action: :notify and return
-    else
-      @message = params[:content]
-    end
-
-    @users.each do |user|
-      UserMailer.archive_notification(current_admin.login, user.id, @subject, @message).deliver
-    end
-
-    AdminMailer.archive_notification(current_admin.login, @users.map(&:id), @subject, @message).deliver
-
-    flash[:notice] = ts("Notification sent to %{count} user(s).", count: @users.size)
-    redirect_to action: :notify
-  end
-
   def troubleshoot
     @user = User.find_by(login: params[:id])
     @user.fix_user_subscriptions
@@ -270,7 +215,6 @@ class Admin::AdminUsersController < ApplicationController
     flash[:notice] = ts("User account troubleshooting complete.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) && return
   end
-
 
   def activate
     @user = User.find_by(login: params[:id])
