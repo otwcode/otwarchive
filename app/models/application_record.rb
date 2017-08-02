@@ -1,5 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  self.per_page = ArchiveConfig.ITEMS_PER_PAGE
 
   before_save :update_sanitizer_version
 
