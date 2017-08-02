@@ -609,6 +609,7 @@ Otwarchive::Application.routes.draw do
   get '/autocomplete/noncanonical_tag' => 'autocomplete#noncanonical_tag'
   get '/autocomplete/character' => 'autocomplete#character'
   get '/autocomplete/relationship' => 'autocomplete#relationship'
+  get '/autocomplete/associated_tags' => 'autocomplete#associated_tags'
 
   get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
   get '/assignments/no_user' => 'challenge_assignments#no_user'
