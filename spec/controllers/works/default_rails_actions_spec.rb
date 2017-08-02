@@ -364,7 +364,7 @@ describe WorksController do
         }
       end
       it "should update coauthors for each chapter when the work is updated" do
-        put :update, params
+        put :update, params: params
         updated_work = Work.find(update_work.id)
         expect(updated_work.pseuds).to include new_coauthor.default_pseud
         updated_work.chapters.each do |c|
