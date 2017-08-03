@@ -184,9 +184,9 @@ class CollectionItem < ActiveRecord::Base
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    if unrevealed_changed?
+    if unrevealed_changed? && item.respond_to?(:new_recipients)
       # making sure that creation_observer.rb has not already notified the user
-      if !work.new_recipients.blank?
+      if !item.new_recipients.blank?
         notify_of_reveal
       end
     end
