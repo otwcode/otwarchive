@@ -392,14 +392,13 @@ Feature: Edit chapters
     When a chapter is set up for "Rusty Has Two Moms"
       And I add the co-authors "sharon" and "brenda"
       And I post the chapter
-    When "AO3-4998" is fixed
-    # Then I should see "Please verify the names of your co-authors"
-    # When I select "thegoodmom" from "There's more than one user with the pseud sharon."
-    #  And I press "Preview"
-    # Then I should see "Preview"
-    #  And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
-    # When I press "Post"
-    # Then I should see "brenda, rusty, sharon (thegoodmom)"
+    Then I should see "Please verify the names of your co-authors"
+    When I select "thegoodmom" from "There's more than one user with the pseud sharon."
+      And I press "Preview"
+    Then I should see "Preview"
+      And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
+    When I press "Post"
+    Then I should see "brenda, rusty, sharon (thegoodmom)"
 
 
   Scenario: You should be able to add a chapter with two co-creators, one of
@@ -415,14 +414,13 @@ Feature: Edit chapters
       And I add the co-author "sharon"
       And I check "brenda"
       And I post the chapter
-    When "AO3-4998" is fixed
-    # Then I should see "Please verify the names of your co-authors"
-    # When I select "thegoodmom" from "There's more than one user with the pseud sharon."
-    #   And I press "Preview"
-    # Then I should see "Preview"
-    #   And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
-    # When I press "Post"
-    # Then I should see "brenda, rusty, sharon (thegoodmom)"
+    Then I should see "Please verify the names of your co-authors"
+    When I select "thegoodmom" from "There's more than one user with the pseud sharon."
+      And I press "Preview"
+    Then I should see "Preview"
+      And I should see "Chapter by brenda, rusty, sharon (thegoodmom)"
+    When I press "Post"
+    Then I should see "brenda, rusty, sharon (thegoodmom)"
 
 
   Scenario: Users can't set a chapter publication date that is in the future,
