@@ -12,18 +12,18 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(posted: true)
+    user_works = Work.joins(pseuds: :user).where("users.id = ?", @user.id).where(posted: true)
     work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, 
-              works.id as id, 
-              works.title as title, 
+      select("distinct tags.name as fandom,
+              works.id as id,
+              works.title as title,
               works.revised_at as date,
               works.word_count as word_count")
 
-    # sort 
-    
-    # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is 
+    # sort
+
+    # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is
     # checked against the whitelist of valid options
     sort_options = ""
     @sort = ""
@@ -34,13 +34,13 @@ class StatsController < ApplicationController
       sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     end
-    
+
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
     params[:sort_column] = @sort
     params[:sort_direction] = @dir
 
     # gather works and sort by specified count
-    @years = ["All Years"] + user_works.value_of(:revised_at).map {|date| date.year.to_s}.uniq.sort
+    @years = ["All Years"] + user_works.pluck(:revised_at).map {|date| date.year.to_s}.uniq.sort
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
     if @current_year != "All Years"
       next_year = @current_year.to_i + 1
@@ -51,20 +51,20 @@ class StatsController < ApplicationController
     # NOTE: eval is used here instead of send only because you can't send "bookmarks.count" -- avoid eval
     # wherever possible and be extremely cautious of its security implications (we whitelist the contents of
     # @sort above, so this should never contain potentially dangerous user input)
-    works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0 - (eval("w.#{@sort}") || 0).to_i)}    
+    works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0 - (eval("w.#{@sort}") || 0).to_i)}
 
     # on the off-chance a new user decides to look at their stats and have no works
     if works.blank?
       render "no_stats" and return
     end
-    
+
     # group by fandom or flat view
     if params[:flat_view]
       @works = {ts("All Fandoms") => works.uniq}
     else
       @works = works.group_by(&:fandom)
     end
-    
+
     # gather totals for all works
     @totals = {}
     (sort_options - ["date"]).each do |value|
@@ -72,10 +72,10 @@ class StatsController < ApplicationController
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
-    @totals[:user_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
+    @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: 'User').count
 
     # graph top 5 works
-    @chart_data = GoogleVisualr::DataTable.new    
+    @chart_data = GoogleVisualr::DataTable.new
     @chart_data.new_column('string', 'Title')
 
     # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
@@ -84,30 +84,30 @@ class StatsController < ApplicationController
     if @sort == "date" && @dir == "ASC"
       chart_title = ts("Oldest")
     elsif @sort == "date" && @dir == "DESC"
-      chart_title = ts("Most Recent") 
+      chart_title = ts("Most Recent")
     elsif @dir == "ASC"
       chart_title = ts("Bottom Five By #{chart_col_title}")
     else
       chart_title = ts("Top Five By #{chart_col_title}")
     end
     @chart_data.new_column('number', chart_col_title)
-      
-    # Add Rows and Values 
+
+    # Add Rows and Values
     # see explanation above about the eval here
     @chart_data.add_rows(works.uniq[0..4].map {|w| [w.title, eval("w.#{chart_col}")]})
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
-    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {:isVertical => true}).uri({
-     :chtt => chart_title,
-     :chs => "800x350",
-     :chbh => "a",
-     :chxt => "x",
-     :chm => "N,000000,0,-1,11"
+    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {isVertical: true}).uri({
+     chtt: chart_title,
+     chs: "800x350",
+     chbh: "a",
+     chxt: "x",
+     chm: "N,000000,0,-1,11"
     })
 
-    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, :title => chart_title)
-    
+    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, title: chart_title)
+
   end
 
 end

@@ -17,6 +17,7 @@ Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
@@ -25,6 +26,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
@@ -38,24 +40,32 @@ end
 
 Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
-  role = Role.find_or_create_by_name(role)
+  role = Role.find_or_create_by(name: role)
   user.roles = [role]
   user.save
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
-  step("I am logged out")
   user = find_or_create_new_user(login, password)
+  require 'authlogic/test_case'
+  step("I am logged out")
   if hidden.present?
     user.preference.hide_warnings = true
     user.preference.hide_freeform = true
     user.preference.save
   end
-  visit login_path
+  step %{I am on the homepage}
+  find_link('login-dropdown').click
+  activate_authlogic
+
   fill_in "User name", with: login
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
+
+  activate_authlogic
+  UserSession.create!(user)
+
   assert UserSession.find unless @javascript
 end
 
@@ -84,7 +94,9 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
+  require 'authlogic/test_case'
   visit logout_path
+  activate_authlogic
   assert UserSession.find.nil? unless @javascript
   visit destroy_admin_session_path
 end
@@ -100,9 +112,11 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
+  require 'authlogic/test_case'
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
+  activate_authlogic
 end
 
 Given /^I am a visitor$/ do
@@ -114,16 +128,17 @@ Given /^I view the people page$/ do
   visit people_path
 end
 
-Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
-  author1 = FactoryGirl.create(:pseud, user: User.find_by_login(login))
-  author2 = FactoryGirl.create(:pseud, user: User.find_by_login(coauthor))
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
+Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
+  step %{basic tags}
+  author1 = User.find_by(login: login).default_pseud
+  author2 = User.find_by(login: coauthor).default_pseud
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
 end
 
 # WHEN
 
 When /^I follow the link for "([^"]*)" first invite$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   invite = user.invitations.first
   step(%{I follow "#{invite.token}"})
 end
@@ -136,7 +151,7 @@ When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
 end
 
 When /^I fill in "([^"]*)"'s temporary password$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   fill_in "Password", with: user.activation_code
 end
 
@@ -172,8 +187,8 @@ When /^I try to delete my account$/ do
 end
 
 When /^I visit the change username page for (.*)$/ do |login|
-  user = User.find_by_login(login)
-  visit change_username_user_path(user) 
+  user = User.find_by(login: login)
+  visit change_username_user_path(user)
 end
 
 # THEN
@@ -194,12 +209,12 @@ Then /^I should get a new user activation email$/ do
 end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
-   user = User.find_by_login(login)
+   user = User.find_by(login: login)
    assert !user.blank?
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   assert user.blank?
 end
 
@@ -208,12 +223,14 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
+  require 'authlogic/test_case'
+  activate_authlogic
   assert UserSession.find.nil? unless @javascript
 end
 
 def get_work_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.works.order("revised_at DESC").first.title
   elsif age == "oldest"
@@ -223,14 +240,14 @@ end
 
 def get_series_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.series.order("updated_at DESC").first.title
   elsif age == "oldest"
     owner.series.order("updated_at DESC").last.title
   end
 end
-  
+
 Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should see "#{title}"}
@@ -252,13 +269,12 @@ end
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
- 
+
 Then /^the user "([^"]*)" should be activated$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   assert user.active?
 end
 
 Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
 end
-

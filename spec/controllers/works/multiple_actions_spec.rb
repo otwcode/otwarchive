@@ -87,27 +87,80 @@ describe WorksController do
       {
         work_ids: [multiple_work1.id, multiple_work2.id],
         work: {
-          anon_commenting_disabled: "allow_anon",
-          moderated_commenting_enabled: "not_moderated"
+          rating_string: "",
+          fandom_string: "",
+          relationship_string: "",
+          character_string: "",
+          freeform_string: "",
+          pseuds_to_remove: [""],
+          pseuds_to_add: "",
+          collections_to_add: "",
+          language_id: "",
+          work_skin_id: "",
+          restricted: "0",
+          unrestricted: "0",
+          anon_commenting_disabled: "",
+          moderated_commenting_enabled: ""
         }
-      }
+      }.merge(work_params)
     }
 
     before do
       fake_login_known_user(multiple_works_user)
     end
 
-    it "should convert the anon_commenting_disabled parameter to false" do
-      put :update_multiple, params
-      assigns(:works).each do |work|
-        expect(work.anon_commenting_disabled).to be false
+    context 'adjusting commenting ability' do
+      let(:work_params) {
+        {
+          work: {
+            anon_commenting_disabled: "allow_anon",
+            moderated_commenting_enabled: "not_moderated"
+          }
+        }
+      }
+
+      it "should convert the anon_commenting_disabled parameter to false" do
+        put :update_multiple, params
+        assigns(:works).each do |work|
+          expect(work.anon_commenting_disabled).to be false
+        end
+      end
+
+      it "should convert the moderated_commenting_enabled parameter to false" do
+        put :update_multiple, params
+        assigns(:works).each do |work|
+          expect(work.moderated_commenting_enabled).to be false
+        end
       end
     end
 
-    it "should convert the moderated_commenting_enabled parameter to false" do
-      put :update_multiple, params
-      assigns(:works).each do |work|
-        expect(work.moderated_commenting_enabled).to be false
+    context 'adding and removing coauthors' do
+      let(:coauthor_to_remove_pseud) { FactoryGirl.create(:pseud) }
+      let(:coauthor_to_add_pseud) { FactoryGirl.create(:pseud) }
+      let(:work_params) {
+        {
+          work: {
+            pseuds_to_remove: [coauthor_to_remove_pseud.id.to_s, ""],
+            pseuds_to_add: coauthor_to_add_pseud.name
+          }
+        }
+      }
+
+      before do
+        multiple_work2.update_attribute(:authors, [multiple_works_user.default_pseud, coauthor_to_remove_pseud])
+        put :update_multiple, params
+      end
+
+      it "removes coauthors when pseuds_to_remove param exists" do
+        assigns(:works).each do |work|
+          expect(work.pseuds).not_to include(coauthor_to_remove_pseud)
+        end
+      end
+
+      it "adds coauthors when pseuds_to_add param exists" do
+        assigns(:works).each do |work|
+          expect(work.pseuds).to include(coauthor_to_add_pseud)
+        end
       end
     end
   end

@@ -38,7 +38,7 @@ module WorksHelper
   end
 
   def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.value_of(:user_id), hide_public_hit_count: true).exists?
+    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)
@@ -73,6 +73,13 @@ module WorksHelper
     end
   end
 
+  # Passes value of fields for series back to form when an error occurs on posting
+  def work_series_value(field)
+    if params[:work] && params[:work][:series_attributes]
+      params[:work][:series_attributes][field]
+    end
+  end
+
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
@@ -92,7 +99,7 @@ module WorksHelper
 
   def marked_for_later?(work)
     return unless current_user
-    reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+    reading = Reading.find_by(work_id: work.id, user_id: current_user.id)
     reading && reading.toread?
   end
 
@@ -105,19 +112,19 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(:controller => 'chapters', :action => 'show')
+    if current_page?(controller: 'chapters', action: 'show')
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
         chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
       end
-    else 
+    else
       "#work_endnotes"
     end
   end
 
   def get_related_works_url
-    current_page?(:controller => 'chapters', :action => 'show') ?
+    current_page?(controller: 'chapters', action: 'show') ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end

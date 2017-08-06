@@ -1,9 +1,9 @@
 class GiftsController < ApplicationController
-  
+
   before_filter :load_collection
-  
+
   def index
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
     @page_subtitle = ts("Gifts for %{name}", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
@@ -21,7 +21,7 @@ class GiftsController < ApplicationController
         end
       end
     else
-      pseud = Pseud.parse_byline(@recipient_name, :assume_matching_login => true).first
+      pseud = Pseud.parse_byline(@recipient_name, assume_matching_login: true).first
       if pseud
         if current_user.nil?
           @works = pseud.gift_works.visible_to_all
@@ -37,7 +37,7 @@ class GiftsController < ApplicationController
       end
     end
     @works = @works.in_collection(@collection) if @collection
-    @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    @works = @works.order('revised_at DESC').paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   def toggle_rejected
@@ -55,6 +55,6 @@ class GiftsController < ApplicationController
       # user doesn't have permission
       access_denied
     end
-    redirect_to user_gifts_url(current_user) and return
+    redirect_to user_gifts_path(current_user) and return
   end
 end

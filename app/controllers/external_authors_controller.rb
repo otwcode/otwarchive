@@ -1,12 +1,12 @@
 class ExternalAuthorsController < ApplicationController
   before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
-  before_filter :check_user_status, :only => [:new, :create, :edit]
-  before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
-  before_filter :users_only, :only => [:complete_claim]
+  before_filter :check_ownership, only: [:create, :edit, :destroy, :new]
+  before_filter :check_user_status, only: [:new, :create, :edit]
+  before_filter :get_external_author_from_invitation, only: [:claim, :complete_claim]
+  before_filter :users_only, only: [:complete_claim]
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -14,7 +14,7 @@ class ExternalAuthorsController < ApplicationController
     if @user && current_user == @user
       @external_authors = @user.external_authors
     elsif logged_in? && current_user.archivist
-      @external_authors = ExternalCreatorship.find_all_by_archivist_id(current_user).collect(&:external_author).uniq
+      @external_authors = ExternalCreatorship.where(archivist_id: current_user).collect(&:external_author).uniq
     elsif logged_in?
       redirect_to user_external_authors_path(current_user) and return
     else
@@ -29,7 +29,7 @@ class ExternalAuthorsController < ApplicationController
 
   def get_external_author_from_invitation
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
-    @invitation = Invitation.find_by_token(token)
+    @invitation = Invitation.find_by(token: token)
     unless @invitation
       flash[:error] = ts("You need an invitation to do that.")
       redirect_to root_path and return
@@ -49,12 +49,12 @@ class ExternalAuthorsController < ApplicationController
     # go ahead and give the user the works
     @external_author.claim!(current_user)
     @invitation.mark_as_redeemed(current_user) if @invitation
-    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under %{email} to your account.", :email => @external_author.email)
+    flash[:notice] = t('external_author_claimed', default: "We have added the stories imported under %{email} to your account.", email: @external_author.email)
     redirect_to user_external_authors_path(current_user)
   end
 
   def update
-    @invitation = Invitation.find_by_token(params[:invitation_token])
+    @invitation = Invitation.find_by(token: params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
     unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
       flash[:error] = "You don't have permission to do that."
@@ -76,7 +76,7 @@ class ExternalAuthorsController < ApplicationController
     end
     @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params[:external_author])
+    if @external_author.update_attributes(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
       if @user
         redirect_to user_external_authors_path(@user)
@@ -85,7 +85,7 @@ class ExternalAuthorsController < ApplicationController
       end
     else
       flash[:error] += "There were problems saving your preferences."
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

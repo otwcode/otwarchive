@@ -72,7 +72,6 @@ FactoryGirl.define do
   factory :character do
     canonical true
     sequence(:name) { |n| "Character #{n}" }
-    common_taggings { [create(:common_tagging)] }
   end
 
   factory :relationship do

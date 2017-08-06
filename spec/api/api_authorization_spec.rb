@@ -4,7 +4,7 @@ require "api/api_helper"
 
 describe "API Authorization" do
   include ApiHelper
-  end_points = %w(api/v1/works api/v1/bookmarks)
+  end_points = %w(/api/v1/works /api/v1/bookmarks)
 
   describe "API POST with invalid request" do
     it "should return 401 Unauthorized if no token is supplied" do

@@ -5,7 +5,7 @@ class ReadingsController < ApplicationController
   before_filter :check_history_enabled
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -13,7 +13,7 @@ class ReadingsController < ApplicationController
     @readings = @user.readings
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
-      @readings = @readings.where(:toread => true)
+      @readings = @readings.where(toread: true)
       @page_subtitle = ts("Saved For Later")
     end
     @readings = @readings.order("last_viewed DESC").page(params[:page])
@@ -24,14 +24,14 @@ class ReadingsController < ApplicationController
     if @reading.destroy
       success_message = ts('Work successfully deleted from your history.')
       respond_to do |format|
-        format.html { redirect_to request.referer || user_readings_url(current_user, page: params[:page]), notice: success_message }
+        format.html { redirect_to request.referer || user_readings_path(current_user, page: params[:page]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
       end
     else
       respond_to do |format|
         format.html do
           flash.keep
-          redirect_to request.referer || user_readings_url(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages }
+          redirect_to request.referer || user_readings_path(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages }
         end
         format.json { render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity }
       end
@@ -47,7 +47,7 @@ class ReadingsController < ApplicationController
        end
      end
     flash[:notice] = ts("Your history is now cleared.")
-    redirect_to user_readings_url(current_user)
+    redirect_to user_readings_path(current_user)
   end
 
   protected

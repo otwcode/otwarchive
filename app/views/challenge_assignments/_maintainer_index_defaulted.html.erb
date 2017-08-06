@@ -6,14 +6,13 @@
     <dt class="assignment">
       <!-- the recipient and if THEY have defaulted on their own assignment -->
       <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
-      <% if 
-          ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).defaulted.count ==
-            ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).count %>
+      <% assignments = ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user) %>
+      <% if (defaulted = assignments.defaulted) && assignments && defaulted.size == assignments.size %>
         <span class="defaulter"><%= ts("(Also defaulted)") %></span>
       <% end %>
-    </dt>          
+    </dt>
     <dd>
-     <%= label_tag "undefault_#{assignment.id}", :class => 'action' do %>            
+     <%= label_tag "undefault_#{assignment.id}", :class => 'action' do %>
         <%= ts("Undefault") %> <%= assignment.offer_byline %>  <%= check_box_tag "undefault_#{assignment.id}" %>
       <% end %>
        <label class="autocomplete substitute" title="<%= ts('choose pinch hitter') %>"><%= ts("Pinch Hitter:") %> <%= text_field_tag "cover_#{assignment.id}", nil, autocomplete_options("pseud", :autocomplete_token_limit => 1) %></label>

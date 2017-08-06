@@ -107,11 +107,11 @@ class WorkQuery < Query
   def language_filter
     { term: { language_id: options[:language_id] } } if options[:language_id]
   end
-  
+
   def crossover_filter
     { term: { crossover: options[:crossover] } } if options[:crossover]
   end
-  
+
   def type_filter
     { terms: { work_type: options[:work_types] } } if options[:work_types]
   end
@@ -159,7 +159,7 @@ class WorkQuery < Query
     return @pseud_ids if @pseud_ids.present?
     @pseud_ids = options[:pseud_ids] || []
     if options[:user_id].present?
-      @pseud_ids += Pseud.where(user_id: options[:user_id]).value_of(:id)
+      @pseud_ids += Pseud.where(user_id: options[:user_id]).pluck(:id)
     end
     @pseud_ids.uniq
   end

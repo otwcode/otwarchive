@@ -21,6 +21,50 @@ describe Collectible do
     expect(work.collection_names).not_to include(fake_name)
   end
 
+  it "should return collections for approved_collections scope" do
+    work = create(:work)
+    collection1 = create(:collection)
+    collection2 = create(:collection)
+
+    work.collections << [collection1, collection2]
+    work.collection_items.update_all(
+      user_approval_status: CollectionItem::APPROVED,
+      collection_approval_status: CollectionItem::APPROVED
+    )
+
+    expect(work.approved_collections.count).to eq(2)
+    expect(work.approved_collections).to include(collection1)
+    expect(work.approved_collections).to include(collection2)
+  end
+
+  context "approved_collections have more than one work" do
+    it "should return distinct collections for approved_collections scope" do
+      work1 = create(:work)
+      work2 = create(:work)
+
+      collection = create(:collection)
+
+      work1.collections << [collection]
+      work2.collections << [collection]
+
+      work1.collection_items.first.update(
+        user_approval_status: CollectionItem::APPROVED,
+        collection_approval_status: CollectionItem::APPROVED
+      )
+
+      work2.collection_items.first.update(
+        user_approval_status: CollectionItem::APPROVED,
+        collection_approval_status: CollectionItem::APPROVED
+      )
+
+      expect(work1.approved_collections.count).to eq(1)
+      expect(work2.approved_collections.count).to eq(1)
+
+      expect(work1.approved_collections).to include(collection)
+      expect(work2.approved_collections).to include(collection)
+    end
+  end
+
   context "being posted to a collection", focus: true do
     let(:collection) { create(:collection) }
     # build but don't save so we can change the collection settings
@@ -42,12 +86,12 @@ describe Collectible do
         expect(work.collections).not_to include(collection)
         expect(collection.works).not_to include(work)
       end
-      
-      it "should be automatically approved when there is no current user" do 
+
+      it "should be automatically approved when there is no current user" do
         work.save
         expect(work.approved_collections).to include(collection)
       end
-      
+
     end
 
     %w(unrevealed anonymous).each do |state|
@@ -59,7 +103,7 @@ describe Collectible do
         end
 
         it "should be #{state}" do
-          expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
+          expect(work.reload.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
         end
 
         describe "and when the collection is no longer #{state}" do
@@ -79,7 +123,6 @@ describe Collectible do
           before do
             work.collection_names = ""
             work.save
-            work.reload
           end
 
           it "should not be #{state}" do

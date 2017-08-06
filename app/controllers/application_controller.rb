@@ -42,7 +42,14 @@ class ApplicationController < ActionController::Base
 
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
-  before_filter :logout_if_not_user_credentials
+  # before_filter :logout_if_not_user_credentials
+  # this was disabled when we found issues:
+  # https://github.com/nbudin/devise_openid_authenticatable/issues/21
+  # https://github.com/binarylogic/authlogic/issues/532
+  # 
+  # We will look back in to this back once we have devises.
+  # if we believe the caching is worth the extra support tickets.
+  # 
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
@@ -72,7 +79,7 @@ protected
   def record_not_found (exception)
     @message=exception.message
     respond_to do |f|
-      f.html{ render :template => "errors/404", :status => 404 }
+      f.html{ render template: "errors/404", status: 404 }
     end
   end
 
@@ -116,12 +123,12 @@ public
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
-      @admin_banner = AdminBanner.where(:active => true).last
+      @admin_banner = AdminBanner.where(active: true).last
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
       @admin_banner = Rails.cache.fetch("admin_banner") do
-        banner = AdminBanner.where(:active => true).last
+        banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end
       @admin_banner = nil if @admin_banner == ""
@@ -166,7 +173,7 @@ public
     else
       redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
       ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      ## render file: File.join(Rails.root, 'public/404'), formats: [:html], status: 404, layout: false
     end
   end
 
@@ -252,7 +259,7 @@ public
   end
 
   def load_collection
-    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+    @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
   def collection_maintainers_only
@@ -308,7 +315,7 @@ public
   before_filter :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({:controller => 'session', :action => 'new'})
+    @logged_out_redirect = url_for({controller: 'session', action: 'new'})
   end
 
   def is_registered_user?
@@ -355,18 +362,18 @@ public
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-  	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+  	access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
   def check_ownership_or_admin
      return true if logged_in_as_admin?
-     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+     access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      redirect_to login_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else

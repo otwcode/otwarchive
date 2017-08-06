@@ -5,13 +5,13 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts
   def index
     if params[:tag]
-      @tag = AdminPostTag.find_by_id(params[:tag])
+      @tag = AdminPostTag.find_by(id: params[:tag])
       if @tag
         @admin_posts = @tag.admin_posts
       end
     end
     @admin_posts ||= AdminPost
-    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
+    if params[:language_id].present? && (@language = Language.find_by(short: params[:language_id]))
       @admin_posts = @admin_posts.where(language_id: @language.id)
       @tags = AdminPostTag.where(language_id: @language.id).order(:name)
     else
@@ -25,7 +25,7 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/1
   def show
     admin_posts = AdminPost.non_translated
-    @admin_post = AdminPost.find_by_id(params[:id])
+    @admin_post = AdminPost.find_by(id: params[:id])
     unless @admin_post
       raise ActiveRecord::RecordNotFound, "Couldn't find admin post '#{params[:id]}'"
     end
@@ -81,7 +81,7 @@ class AdminPostsController < ApplicationController
   def destroy
     @admin_post = AdminPost.find(params[:id])
     @admin_post.destroy
-    redirect_to(admin_posts_url)
+    redirect_to(admin_posts_path)
   end
 
   private

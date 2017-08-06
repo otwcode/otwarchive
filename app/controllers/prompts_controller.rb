@@ -1,14 +1,14 @@
 class PromptsController < ApplicationController
 
   before_filter :users_only
-  before_filter :load_collection, :except => [:index]
-  before_filter :load_challenge, :except => [:index]
-  before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
-  before_filter :load_signup, :except => [:index, :destroy, :show]
-  # before_filter :promptmeme_only, :except => [:index, :new]
-  before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_filter :load_collection, except: [:index]
+  before_filter :load_challenge, except: [:index]
+  before_filter :load_prompt_from_id, only: [:show, :edit, :update, :destroy]
+  before_filter :load_signup, except: [:index, :destroy, :show]
+  # before_filter :promptmeme_only, except: [:index, :new]
+  before_filter :allowed_to_destroy, only: [:destroy]
+  before_filter :signup_owner_only, only: [:edit, :update]
+  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -16,7 +16,7 @@ class PromptsController < ApplicationController
   #     redirect_to collection_path(@collection) rescue redirect_to '/'
   #   end
   # end
-  
+
   def load_challenge
     @challenge = @collection.challenge
     no_challenge and return unless @challenge
@@ -27,17 +27,17 @@ class PromptsController < ApplicationController
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
-  
+
   def load_signup
     unless @challenge_signup
     	@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
     end
     no_signup and return unless @challenge_signup
   end
-  
+
   def no_signup
     flash[:error] = ts("Please submit a basic sign-up with the required fields first.")
-    redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' 
+    redirect_to new_collection_signup_path(@collection) rescue redirect_to '/'
     false
   end
 
@@ -70,7 +70,7 @@ class PromptsController < ApplicationController
   end
 
   def load_prompt_from_id
-    @prompt = Prompt.find_by_id(params[:id])
+    @prompt = Prompt.find_by(id: params[:id])
     if @prompt.nil?
       no_prompt
       return
@@ -88,7 +88,7 @@ class PromptsController < ApplicationController
 
   def index
     # this currently doesn't get called anywhere
-    # should probably list all the prompts in a given collection (instead of using challenge signup for that)    
+    # should probably list all the prompts in a given collection (instead of using challenge signup for that)
   end
 
   def show
@@ -109,14 +109,14 @@ class PromptsController < ApplicationController
   end
 
   def create
-    params[:prompt].merge!({:challenge_signup_id => @challenge_signup.id})
+    params[:prompt].merge!({challenge_signup_id: @challenge_signup.id})
 
     if params[:prompt_type] == "offer"
       @prompt = @challenge_signup.offers.build(prompt_params)
     else
       @prompt = @challenge_signup.requests.build(prompt_params)
     end
-    
+
     if !@challenge_signup.valid?
       flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
@@ -124,7 +124,7 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -133,7 +133,7 @@ class PromptsController < ApplicationController
       flash[:notice] = 'Prompt was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 

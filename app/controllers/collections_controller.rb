@@ -17,18 +17,18 @@ class CollectionsController < ApplicationController
   end
 
   def load_collection_from_id
-    @collection = Collection.find_by_name(params[:id])
+    @collection = Collection.find_by(name: params[:id])
     unless @collection
         raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
     end
   end
 
   def index
-    if params[:work_id] && (@work = Work.find_by_id(params[:work_id]))
+    if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-    elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
+    elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
       @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
       @page_subtitle = ts("created by ") + @user.login
     else
@@ -70,13 +70,13 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible(order: 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
+      visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
       # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible(order: 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
     @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
@@ -86,7 +86,7 @@ class CollectionsController < ApplicationController
   def new
     @hide_dashboard = true
     @collection = Collection.new
-    if params[:collection_id] && (@collection_parent = Collection.find_by_name(params[:collection_id]))
+    if params[:collection_id] && (@collection_parent = Collection.find_by(name: params[:collection_id]))
       @collection.parent_name = @collection_parent.name
     end
   end
@@ -155,14 +155,14 @@ class CollectionsController < ApplicationController
 
   def destroy
     @hide_dashboard = true
-    @collection = Collection.find_by_name(params[:id])
+    @collection = Collection.find_by(name: params[:id])
     begin
       @collection.destroy
       flash[:notice] = ts("Collection was successfully deleted.")
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to(collections_url)
+    redirect_to(collections_path)
   end
 
   private

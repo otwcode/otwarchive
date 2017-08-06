@@ -1,13 +1,13 @@
 class ChallengeClaimsController < ApplicationController
 
   before_filter :users_only
-  before_filter :load_collection, :except => [:index]
-  before_filter :collection_owners_only, :except => [:index, :show, :create, :destroy]
-  before_filter :load_claim_from_id, :only => [:show, :destroy]
+  before_filter :load_collection, except: [:index]
+  before_filter :collection_owners_only, except: [:index, :show, :create, :destroy]
+  before_filter :load_claim_from_id, only: [:show, :destroy]
 
-  before_filter :load_challenge, :except => [:index]
+  before_filter :load_challenge, except: [:index]
 
-  before_filter :allowed_to_destroy, :only => [:destroy]
+  before_filter :allowed_to_destroy, only: [:destroy]
 
 
   # PERMISSIONS AND STATUS CHECKING
@@ -43,7 +43,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def load_user
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @user = User.find_by(login: params[:user_id]) if params[:user_id]
     no_user and return unless @user
   end
 
@@ -68,7 +68,7 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if !(@collection = Collection.find_by_name(params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
+    if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
       flash[:notice] = ts("This challenge is currently closed to new posts.")
     end
     if params[:collection_id]
@@ -76,7 +76,7 @@ class ChallengeClaimsController < ApplicationController
       @challenge = @collection.challenge if @collection
       @claims = ChallengeClaim.unposted_in_collection(@collection)
       if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
-        @claims = @claims.where(:claiming_user_id => current_user.id)
+        @claims = @claims.where(claiming_user_id: current_user.id)
       end
 
       # sorting
@@ -87,13 +87,13 @@ class ChallengeClaimsController < ApplicationController
       else
         @claims = @claims.order(@sort_order)
       end
-    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
 				if params[:posted]
 					@claims = @user.request_claims.order_by_date.posted
 				end
-        if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
+        if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
           @claims = @claims.in_collection(@collection)
         end
       else
@@ -101,7 +101,7 @@ class ChallengeClaimsController < ApplicationController
         redirect_to '/' and return
       end
     end
-    @claims = @claims.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+    @claims = @claims.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   def show
@@ -117,7 +117,7 @@ class ChallengeClaimsController < ApplicationController
     else
       flash[:error] = "We couldn't save the new claim."
     end
-    redirect_to collection_claims_path(@collection, :for_user => true)
+    redirect_to collection_claims_path(@collection, for_user: true)
   end
 
   def destroy

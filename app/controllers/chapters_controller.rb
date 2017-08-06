@@ -1,12 +1,12 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :index, :show, :destroy, :confirm_delete ]
-  before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
+  before_filter :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_filter :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, :only => [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
-  before_filter :check_visibility, :only => [ :show]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_ownership, only: [ :new, :create, :edit, :update, :manage, :preview, :destroy, :confirm_delete ]
+  before_filter :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
+  before_filter :check_visibility, only: [ :show]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
 
   cache_sweeper :feed_sweeper
 
@@ -29,13 +29,13 @@ class ChaptersController < ApplicationController
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
-      render "works/_adult", :layout => "application" and return
+      render "works/_adult", layout: "application" and return
     end
 
     if params[:selected_id]
-      redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
+      redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
     end
-    @chapter = @work.chapters.find_by_id(params[:id])
+    @chapter = @work.chapters.find_by(id: params[:id])
     unless @chapter
       flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
       redirect_to work_path(@work) and return
@@ -55,17 +55,17 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments.reviewed
 
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
+      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
         get_page_title(@tag_groups["Fandom"][0].name,
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
 
       if current_user.respond_to?(:subscriptions)
-        @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
-                                                         :subscribable_type => 'Work').first ||
-                        current_user.subscriptions.build(:subscribable => @work)
+        @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
+                                                         subscribable_type: 'Work').first ||
+                        current_user.subscriptions.build(subscribable: @work)
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
@@ -116,7 +116,7 @@ class ChaptersController < ApplicationController
       redirect_back_or_default('/')
     else  # :post_without_preview, :preview or :cancel_coauthor_button
       @work.major_version = @work.major_version + 1
-      @chapter.posted = true if params[:post_without_preview_button] 
+      @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         if @chapter.posted
@@ -176,13 +176,13 @@ class ChaptersController < ApplicationController
       flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
-        Chapter.update(id, :position => position + 1)
+        Chapter.update(id, position: position + 1)
         (@chapters ||= []) << Chapter.find(id)
       end
     end
     respond_to do |format|
       format.html { redirect_to(@work) and return }
-      format.js { render :nothing => true }
+      format.js { render nothing: true }
     end
   end
 
@@ -212,14 +212,14 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1/confirm_delete
   def confirm_delete
   end
-  
+
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
-      redirect_to(edit_work_url(@work))
+      redirect_to(edit_work_path(@work))
     else
       was_draft = !@chapter.posted?
       if @chapter.destroy
@@ -230,7 +230,7 @@ class ChaptersController < ApplicationController
       else
         flash[:error] = ts("Something went wrong. Please try again.")
       end
-      redirect_to :controller => 'works', :action => 'show', :id => @work
+      redirect_to controller: 'works', action: 'show', id: @work
     end
   end
 
@@ -246,7 +246,7 @@ class ChaptersController < ApplicationController
 
   # fetch work these chapters belong to from db
   def load_work
-    @work = params[:work_id] ? Work.find_by_id(params[:work_id]) : Chapter.find_by_id(params[:id]).try(:work)
+    @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
     unless @work.present?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
@@ -263,11 +263,6 @@ class ChaptersController < ApplicationController
       params[:pseud][:byline] = ""
     end
 
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:chapter] && params[:chapter][:author_attributes] && params[:chapter][:author_attributes][:coauthors]
-      params[:chapter][:author_attributes][:ids].concat(params[:chapter][:author_attributes][:coauthors]).uniq!
-    end
-
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       if params[:chapter]  # editing, save our changes
@@ -277,17 +272,17 @@ class ChaptersController < ApplicationController
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(chapter_params)
     else # new
-      @chapter = @work.chapters.build(:position => @work.number_of_chapters + 1)
+      @chapter = @work.chapters.build(position: @work.number_of_chapters + 1)
     end
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-    
+    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id }
+    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
+    @selected_pseuds = @to_select.collect { |pseud| pseud.id.to_i }
+
     # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: @selected_pseuds).value_of(:user_id).uniq
+    user_ids = Pseud.where(id: @selected_pseuds).pluck(:user_id).uniq
     unless user_ids.include?(current_user.id)
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       render :new and return
@@ -308,8 +303,7 @@ class ChaptersController < ApplicationController
     params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
-                                    author_attributes: [:byline, ids: [], coauthors: [],
+                                    author_attributes: [:byline, ids: [],
                                                         ambiguous_pseuds: []])
-
   end
 end
