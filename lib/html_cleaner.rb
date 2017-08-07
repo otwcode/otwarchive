@@ -168,15 +168,15 @@ module HtmlCleaner
       end
       # the screencast field shouldn't be wrapped in <p> tags
       unless field.to_s == "screencast"
-        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value),
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
                                Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
-      unfrozen_value = doc.fragment(value).to_xhtml
+      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
     else
       # clean out all tags
-      unfrozen_value = Sanitize.clean(fix_bad_characters(value))
+      unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
     end
 
     # Plain text fields can't contain &amp; entities:
