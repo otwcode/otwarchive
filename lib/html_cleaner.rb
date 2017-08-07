@@ -147,7 +147,8 @@ module HtmlCleaner
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
-    unfrozen_value = value.strip
+    unfrozen_value = value&.dup
+    unfrozen_value.strip!
     if field.to_s == 'title'
       # prevent invisible titles
       unfrozen_value.gsub!("<", "&lt;")
