@@ -25,11 +25,11 @@ class UserManager
 
   def save
     validate_user_and_admin &&
-    validate_admin_note &&
-    validate_suspension &&
-    validate_next_of_kin &&
-    save_next_of_kin &&
-    save_admin_action
+      validate_admin_note &&
+      validate_suspension &&
+      validate_next_of_kin &&
+      save_next_of_kin &&
+      save_admin_action
   end
 
   def success_message
@@ -44,10 +44,10 @@ class UserManager
 
   def validate_user_and_admin
     if user && admin
-      return true
+      true
     else
-      errors << "Must have a valid user and admin account to proceed"
-      return false
+      errors << "Must have a valid user and admin account to proceed."
+      false
     end
   end
 
@@ -57,16 +57,16 @@ class UserManager
       @admin_note = "Banned for spam"
     elsif admin_action.present?
       errors << "You must include notes in order to perform this action."
-      return false
+      false
     end
   end
 
   def validate_suspension
     if admin_action == "suspend" && suspension_length.blank?
       errors << "Please enter the number of days for which the user should be suspended."
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
@@ -86,9 +86,9 @@ class UserManager
     end
     if error
       errors << error
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
@@ -97,8 +97,8 @@ class UserManager
     if FannishNextOfKin.update_for_user(user, kin_name, kin_email)
       successes << "Fannish next of kin was updated."
     else
-      errors << "Fannish next of kin failed to update"
-      return false
+      errors << "Fannish next of kin failed to update."
+      false
     end
   end
 
@@ -146,7 +146,7 @@ class UserManager
     successes << "Suspension has been lifted."
   end
 
-  def log_action(message, options={})
+  def log_action(message, options = {})
     options.merge!(
       action: message, 
       note: admin_note, 

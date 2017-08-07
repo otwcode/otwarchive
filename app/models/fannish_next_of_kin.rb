@@ -14,7 +14,7 @@ class FannishNextOfKin < ActiveRecord::Base
     current_fnok = user.fannish_next_of_kin
     # first scenario: user has no existing FNOK
     if current_fnok.nil? && kin_user.present? && kin_email.present?
-      self.create(
+      create(
         user_id: user.id,
         kin_id: kin_user.id,
         kin_email: kin_email

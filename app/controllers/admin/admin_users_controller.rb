@@ -53,11 +53,10 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by(login: params[:id])
     if @user.admin_update(params[:user])
       flash[:notice] = ts("User was successfully updated.")
-      redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       flash[:error] = ts("There was an error updating user %{name}", name: params[:id])
-      redirect_to(request.env["HTTP_REFERER"] || root_path)
     end
+    redirect_to request.referer || root_path
   end
 
   def update_status
