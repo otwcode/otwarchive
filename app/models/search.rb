@@ -1,4 +1,4 @@
-class Search < ActiveRecord::Base
+class Search < ApplicationRecord
   belongs_to :user
   
   validates_presence_of :name

@@ -1,4 +1,4 @@
-class Subscription < ActiveRecord::Base
+class Subscription < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   VALID_SUBSCRIBABLES = %w(Work User Series).freeze

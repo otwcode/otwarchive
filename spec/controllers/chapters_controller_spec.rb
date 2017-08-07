@@ -32,7 +32,7 @@ describe ChaptersController do
       end
 
       it "errors and redirects to root path if work does not exist" do
-        get :manage, params: { work_id: nil }
+        get :manage, params: { work_id: 0 }
         it_redirects_to_with_error(root_path, "Sorry, we couldn't find the work you were looking for.")
       end
 

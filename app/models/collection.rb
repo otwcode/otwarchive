@@ -1,4 +1,4 @@
-class Collection < ActiveRecord::Base
+class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include UrlHelpers
   include WorksOwner
@@ -259,8 +259,8 @@ class Collection < ActiveRecord::Base
     "#{name} #{title}"
   end
 
-  def autocomplete_search_string_was
-    "#{name_was} #{title_was}"
+  def autocomplete_search_string_before_last_save
+    "#{name_before_last_save} #{title_before_last_save}"
   end
 
   def autocomplete_prefixes

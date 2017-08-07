@@ -1,4 +1,4 @@
-class TagSetNomination < ActiveRecord::Base
+class TagSetNomination < ApplicationRecord
   belongs_to :pseud
   belongs_to :owned_tag_set, inverse_of: :tag_set_nominations
   

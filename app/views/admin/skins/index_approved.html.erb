@@ -8,7 +8,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
+<%=  form_tag update_admin_skin_path, {:method => :put} do %>
 
   <!-- review of approved skins -->
   <fieldset>

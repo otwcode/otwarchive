@@ -1,4 +1,4 @@
-class Gift < ActiveRecord::Base
+class Gift < ApplicationRecord
   NAME_LENGTH_MAX = 100
 
   belongs_to :work, touch: true

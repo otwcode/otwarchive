@@ -1,4 +1,4 @@
-class TagNomination < ActiveRecord::Base
+class TagNomination < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :tag_set_nomination, inverse_of: :tag_nominations
@@ -11,7 +11,7 @@ class TagNomination < ActiveRecord::Base
     message: ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
 
   validates_format_of :tagname,
-    if: "!tagname.blank?",
+    if: Proc.new { |tag_nomination| !tag_nomination.tagname.blank? },
     with: /\A[^,*<>^{}=`\\%]+\z/,
     message: ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
 

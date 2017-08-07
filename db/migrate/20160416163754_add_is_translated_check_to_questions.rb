@@ -1,4 +1,4 @@
-class AddIsTranslatedCheckToQuestions < ActiveRecord::Migration
+class AddIsTranslatedCheckToQuestions < ActiveRecord::Migration[4.2]
   def up
     Question.add_translation_fields! is_translated: :string
   end

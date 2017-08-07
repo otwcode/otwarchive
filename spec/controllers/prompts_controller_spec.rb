@@ -19,7 +19,7 @@ describe PromptsController do
 
   describe "no_challenge" do
     it "should show an error and redirect" do
-      get :show, params: { collection_id: collection.name }
+      get :show, params: { id: 0, collection_id: collection.name }
       it_redirects_to_with_error(collection_path(collection), "What challenge did you want to sign up for?")
     end
   end
@@ -130,7 +130,7 @@ describe PromptsController do
   describe "edit" do
     context "no prompt" do
       it "should show an error and redirect" do
-        post :edit, params: { collection_id: signup.collection.name }
+        post :edit, params: { id: 0, collection_id: signup.collection.name }
         it_redirects_to_with_error(collection_path(signup.collection), "What prompt did you want to work on?")
       end
     end

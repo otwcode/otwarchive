@@ -1,4 +1,4 @@
-class SerialWork < ActiveRecord::Base
+class SerialWork < ApplicationRecord
   belongs_to :series, touch: true
   belongs_to :work, touch: true
   validates_uniqueness_of :work_id, scope: [:series_id]

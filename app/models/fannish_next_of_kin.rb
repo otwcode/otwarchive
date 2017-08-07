@@ -1,4 +1,4 @@
-class FannishNextOfKin < ActiveRecord::Base
+class FannishNextOfKin < ApplicationRecord
   belongs_to :user
 
   validates :user_id, presence: true

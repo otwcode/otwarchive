@@ -1,4 +1,4 @@
-class InboxComment < ActiveRecord::Base
+class InboxComment < ApplicationRecord
   validates_presence_of :user_id
   validates_presence_of :feedback_comment_id
 

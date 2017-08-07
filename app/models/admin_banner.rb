@@ -1,4 +1,4 @@
-class AdminBanner < ActiveRecord::Base
+class AdminBanner < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   validates_presence_of :content
@@ -17,7 +17,7 @@ class AdminBanner < ActiveRecord::Base
 
   # we should expire the cache when an active banner is changed or when a banner starts or stops being active
   def should_expire_cache?
-    self.active_changed? || self.active?
+    self.saved_change_to_active? || self.active?
   end
 
   private

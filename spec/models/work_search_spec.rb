@@ -177,6 +177,7 @@ describe WorkSearch do
 
       it "should find the right works less than a given number" do
         work_search = WorkSearch.new(word_count: "<13")
+
         expect(work_search.search_results).to include work
         expect(work_search.search_results).not_to include second_work
       end

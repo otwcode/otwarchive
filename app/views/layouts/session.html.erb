@@ -27,7 +27,7 @@
     <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
       <%= flash_div :error, :caution, :notice %>
       <p id="logo">
-        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
+        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO, skip_pipeline: true) %>
       </p>
       <div id="signin" role="main">
         <%= yield %>

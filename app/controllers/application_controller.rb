@@ -341,7 +341,7 @@ public
   before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({controller: 'session', action: 'new'})
+    @logged_out_redirect = login_url
   end
 
   def is_registered_user?
