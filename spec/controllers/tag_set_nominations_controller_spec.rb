@@ -425,22 +425,14 @@ describe TagSetNominationsController do
 
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            get :show, params: { id: tag_set_nomination.id, tag_set_id: nil }
-=======
             get :show, params: { id: tag_set_nomination.id, tag_set_id: 0 }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            get :show, params: { id: nil, tag_set_id: owned_tag_set.id }
-=======
             get :show, params: { id: 0, tag_set_id: owned_tag_set.id }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
@@ -498,11 +490,7 @@ describe TagSetNominationsController do
         context 'no tag set' do
           it 'redirects and returns an error message' do
             fake_login_known_user(random_user)
-<<<<<<< HEAD
-            get :new, params: { tag_set_id: nil }
-=======
             get :new, params: { tag_set_id: 0 }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
@@ -615,22 +603,14 @@ describe TagSetNominationsController do
 
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            get :edit, params: { id: tag_set_nomination.id, tag_set_id: nil }
-=======
             get :edit, params: { id: tag_set_nomination.id, tag_set_id: 0 }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            get :edit, params: { id: nil, tag_set_id: owned_tag_set.id }
-=======
             get :edit, params: { id: 0, tag_set_id: owned_tag_set.id }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
@@ -777,11 +757,7 @@ describe TagSetNominationsController do
 
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            post :create, params: { tag_set_id: nil, tag_set_nomination: { pseud_id: nil } }
-=======
             post :create, params: { tag_set_id: 0, tag_set_nomination: { pseud_id: 0 } }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
@@ -961,11 +937,7 @@ describe TagSetNominationsController do
 
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            put :update, params: { id: tag_set_nomination.id, tag_set_id: nil, tag_set_nomination: { pseud_id: nil } }
-=======
             put :update, params: { id: tag_set_nomination.id, tag_set_id: 0, tag_set_nomination: { pseud_id: 0 } }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
@@ -980,11 +952,7 @@ describe TagSetNominationsController do
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            put :update, params: { id: nil, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil } }
-=======
             put :update, params: { id: 0, tag_set_id: owned_tag_set.id, tag_set_nomination: { pseud_id: nil } }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
@@ -1212,22 +1180,14 @@ describe TagSetNominationsController do
 
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: nil }
-=======
             delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: 0 }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
 
         context 'no tag set nomination' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            delete :destroy, params: { id: nil, tag_set_id: owned_tag_set.id }
-=======
             delete :destroy, params: { id: 0, tag_set_id: owned_tag_set.id }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_set_path(owned_tag_set), 'Which nominations did you want to work with?')
           end
         end
@@ -1314,11 +1274,7 @@ describe TagSetNominationsController do
       context 'invalid params' do
         context 'no tag set' do
           it 'redirects and returns an error message' do
-<<<<<<< HEAD
-            get :confirm_destroy_multiple, params: { tag_set_id: nil }
-=======
             get :confirm_destroy_multiple, params: { tag_set_id: 0 }
->>>>>>> 81ac9e9c2d9eeb12077c8982751d9ad078977ff0
             it_redirects_to_with_error(tag_sets_path, 'What tag set did you want to nominate for?')
           end
         end
