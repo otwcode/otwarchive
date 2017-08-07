@@ -38,7 +38,7 @@ class ChallengesController < ApplicationController
   # be closed, whether we take user suggestions for prompts, etc.
   #
 
-  before_filter :load_collection
+  before_action :load_collection
 
   def no_collection
     flash[:error] = t('challenge.no_collection',

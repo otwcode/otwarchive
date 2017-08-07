@@ -142,6 +142,12 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
+Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+  with_scope(selector) do
+    page.body.should =~ /#{Regexp.escape(text)}/m
+  end
+end
+
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, selector|
   my_work = User.current_user.works.first.id
   selector = "#work_#{my_work}"

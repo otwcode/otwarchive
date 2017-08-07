@@ -9,7 +9,7 @@ describe ChallengeAssignmentsController do
       let(:collection) { create(:collection) }
 
       it 'error to login page' do
-        get :no_challenge, collection_id: collection.name
+        get :no_challenge, params: { collection_id: collection.name }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -34,13 +34,13 @@ describe ChallengeAssignmentsController do
 
       it 'show an error, redirect to collection and return false for mod' do
         fake_login_known_user(usernochallenge)
-        get :no_challenge, collection_id: collectionwithoutchallenge.name
+        get :no_challenge, params: { collection_id: collectionwithoutchallenge.name }
         it_redirects_to_with_error(collection_path(collectionwithoutchallenge), "What challenge did you want to work with?")
       end
 
       it 'show an error, redirect to user and return false for non-mod' do
         fake_login_known_user(user)
-        get :no_challenge, collection_id: collectionwithoutchallenge.name
+        get :no_challenge, params: { collection_id: collectionwithoutchallenge.name }
         it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -48,7 +48,7 @@ describe ChallengeAssignmentsController do
     describe 'no_assignment with collection' do
       it 'show an error, redirect and return false' do
         fake_login_known_user(user)
-        get :no_assignment, collection_id: collection.name
+        get :no_assignment, params: { collection_id: collection.name }
         it_redirects_to_with_error(collection_path(collection), "What assignment did you want to work on?")
       end
     end
@@ -66,7 +66,7 @@ describe ChallengeAssignmentsController do
 
       it "fails if user not specified" do
         fake_login_known_user(user)
-        get :no_user, collection_id: collection.name
+        get :no_user, params: { collection_id: collection.name }
         it_redirects_to_with_error(root_path, "What user were you trying to work with?")
       end
       
@@ -75,7 +75,7 @@ describe ChallengeAssignmentsController do
         gift_exchange.assignments_sent_at = Time.now
         gift_exchange.save
         # tests :owner_only, but you can't access that directly or it won't load @challenge_assignment
-        get :default, collection_id: collection.name, id: open_assignment, user_id: user.login
+        get :default, params: { collection_id: collection.name, id: open_assignment, user_id: user.login }
         it_redirects_to_with_error(root_path, "You aren't the owner of that assignment.")
       end
     end
@@ -85,13 +85,13 @@ describe ChallengeAssignmentsController do
 
       it "won't show if you're not the right user" do
         fake_login_known_user(otheruser)
-        get :show, id: defaulted_assignment.id
+        get :show, params: { id: defaulted_assignment.id }
         it_redirects_to_with_error(root_path, "You aren't allowed to see that assignment!")
       end
 
       it "will tell you if you've defaulted" do
         fake_login_known_user(defaulted_assignment.offering_user)
-        get :show, id: defaulted_assignment.id
+        get :show, params: { id: defaulted_assignment.id }
         expect(response).to have_http_status(:success)
         expect(flash[:notice]).to include "This assignment has been defaulted-on."
       end
@@ -104,13 +104,13 @@ describe ChallengeAssignmentsController do
 
       it "errors if you're not a mod and try to see someone else's assignment" do
         fake_login_known_user(otheruser)
-        get :index, collection_id: collection.name, user_id: user.default_pseud
+        get :index, params: { collection_id: collection.name, user_id: user.default_pseud }
         it_redirects_to_with_error(root_path, "You aren't allowed to see that user's assignments.")
       end
 
       it "shows defaulted assignments within a collection" do
         fake_login_known_user(user)
-        get :index, collection_id: collection.name
+        get :index, params: { collection_id: collection.name }
         expect(response).to have_http_status(:success)
         expect(response.body).to include "Assignments for"
         expect(response.body).to include collection.title
@@ -120,7 +120,7 @@ describe ChallengeAssignmentsController do
       
       it "shows unfulfilled assignments within a collection" do
         fake_login_known_user(user)
-        get :index, collection_id: collection.name, unfulfilled: true
+        get :index, params: { collection_id: collection.name, unfulfilled: true }
         expect(response).to have_http_status(:success)
         expect(response.body).to include "Assignments for"
         expect(response.body).to include collection.title
@@ -131,13 +131,13 @@ describe ChallengeAssignmentsController do
       it "won't show specific to that user and collection for offering user" do
         # this could still do with further expansion
         fake_login_known_user(open_assignment.offering_user)
-        get :index, collection_id: collection.name, user_id: open_assignment.offering_user.id
+        get :index, params: { collection_id: collection.name, user_id: open_assignment.offering_user.id }
         it_redirects_to_with_error(user_path(open_assignment.offering_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
 
       it "shows specific to that user and collection for mod" do
         fake_login_known_user(user)
-        get :index, collection_id: collection.name, user_id: open_assignment.offering_user.id
+        get :index, params: { collection_id: collection.name, user_id: open_assignment.offering_user.id }
         expect(response).to have_http_status(:success)
       end
     end

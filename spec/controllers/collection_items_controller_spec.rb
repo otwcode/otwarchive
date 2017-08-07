@@ -34,14 +34,14 @@ describe CollectionItemsController do
 
       it "includes rejected items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, rejected: true
+        get :index, params: { collection_id: @collection.name, rejected: true }
         expect(response).to have_http_status(:success)
         expect(assigns(:collection_items)).to include @rejected_work_item
       end
 
       it "excludes approved and invited items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, rejected: true
+        get :index, params: { collection_id: @collection.name, rejected: true }
         expect(assigns(:collection_items)).not_to include @approved_work_item
         expect(assigns(:collection_items)).not_to include @invited_work_item
       end
@@ -52,14 +52,14 @@ describe CollectionItemsController do
 
       it "includes invited items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, invited: true
+        get :index, params: { collection_id: @collection.name, invited: true }
         expect(response).to have_http_status(:success)
         expect(assigns(:collection_items)).to include @invited_work_item
       end
 
       it "excludes approved and rejected items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, invited: true
+        get :index, params: { collection_id: @collection.name, invited: true }
         expect(assigns(:collection_items)).not_to include @approved_work_item
         expect(assigns(:collection_items)).not_to include @rejected_work_item
       end
@@ -70,14 +70,14 @@ describe CollectionItemsController do
 
       it "includes approved items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, approved: true
+        get :index, params: { collection_id: @collection.name, approved: true }
         expect(response).to have_http_status(:success)
         expect(assigns(:collection_items)).to include @approved_work_item
       end
 
       it "excludes invited and rejected items" do
         fake_login_known_user(owner)
-        get :index, collection_id: @collection.name, approved: true
+        get :index, params: { collection_id: @collection.name, approved: true }
         expect(assigns(:collection_items)).not_to include @rejected_work_item
         expect(assigns(:collection_items)).not_to include @invited_work_item
       end
@@ -94,7 +94,7 @@ describe CollectionItemsController do
       end
 
       it "fails if items missing" do
-        get :create, collection_names: collection.name
+        get :create, params: { collection_names: collection.name }
         it_redirects_to_with_error(root_path, "What did you want to add to a collection?")
       end
     end
@@ -113,7 +113,7 @@ describe CollectionItemsController do
       it "removes things" do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
-        delete :destroy, id: @approved_work_item.id
+        delete :destroy, params: { id: @approved_work_item.id }
         it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " + @collection.title + ".")
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end

@@ -1,15 +1,15 @@
 class AutocompleteController < ApplicationController
   respond_to :json
 
-  skip_before_filter :store_location
-  skip_before_filter :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
-  skip_before_filter :fetch_admin_settings
-  skip_before_filter :set_redirects
-  skip_before_filter :sanitize_params # can we dare!
+  skip_before_action :store_location
+  skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
+  skip_before_action :fetch_admin_settings
+  skip_before_action :set_redirects
+  skip_before_action :sanitize_ac_params # can we dare!
 
   #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
   # # If you have an autocomplete that should fire without a term add it here
-  # before_filter :require_term, except: [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :nominated_parents]
+  # before_action :require_term, except: [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :nominated_parents]
   #
   # def require_term
   #   if params[:term].blank?

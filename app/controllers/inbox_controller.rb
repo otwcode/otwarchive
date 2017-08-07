@@ -1,6 +1,6 @@
 class InboxController < ApplicationController
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :load_user
+  before_action :check_ownership
 
   def load_user
     @user = User.find_by(login: params[:user_id])

@@ -1,11 +1,11 @@
 class CollectionParticipantsController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_participant_and_collection, only: [:update, :destroy]
-  before_filter :allowed_to_promote, only: [:update]
-  before_filter :allowed_to_destroy, only: [:destroy]
-  before_filter :has_other_owners, only: [:update, :destroy]
-  before_filter :collection_maintainers_only, only: [:index, :add, :update]
-  before_filter :users_only, only: [:join]
+  before_action :load_collection
+  before_action :load_participant_and_collection, only: [:update, :destroy]
+  before_action :allowed_to_promote, only: [:update]
+  before_action :allowed_to_destroy, only: [:destroy]
+  before_action :has_other_owners, only: [:update, :destroy]
+  before_action :collection_maintainers_only, only: [:index, :add, :update]
+  before_action :users_only, only: [:join]
 
   cache_sweeper :collection_sweeper
 

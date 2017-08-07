@@ -222,6 +222,12 @@ Then /^I should see the page title "(.*)"$/ do |text|
   end
 end
 
+Then /^I should see the raw html page title "(.*)"$/ do |text|
+  within('head title') do
+    page.body.should =~ /#{Regexp.escape(text)}/m
+  end
+end
+
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should

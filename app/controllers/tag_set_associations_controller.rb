@@ -1,9 +1,9 @@
 class TagSetAssociationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set
-  before_filter :users_only
-  before_filter :moderators_only
+  before_action :load_tag_set
+  before_action :users_only
+  before_action :moderators_only
 
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:tag_set_id])

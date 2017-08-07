@@ -308,10 +308,10 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
-    Given an invitation request for "fred@bedrock.com"
+    Given I am logged in as an admin
+      And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
-    When I am logged in as an admin
       And I follow "Invite New Users"
     Then I should see "There are 2 requests in the queue."
     When I fill in "Number of people to invite" with "1"

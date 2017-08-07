@@ -39,6 +39,7 @@ Given /the following admins? exists?/ do |table|
 end
 
 Given /^I am logged in as an admin$/ do
+  step("I have an AdminSetting")
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?

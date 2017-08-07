@@ -1,24 +1,24 @@
 class CommentsController < ApplicationController
-  skip_before_filter :store_location, except: [:show, :index, :new]
-  before_filter :load_commentable, only: [ :index, :new, :create, :edit, :update,
+  skip_before_action :store_location, except: [:show, :index, :new]
+  before_action :load_commentable, only: [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
                                               :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
-  before_filter :check_visibility, only: [:show]
-  before_filter :check_if_restricted
-  before_filter :check_tag_wrangler_access
-  before_filter :check_pseud_ownership, only: [:create, :update]
-  before_filter :check_ownership, only: [:edit, :update, :cancel_comment_edit]
-  before_filter :check_permission_to_edit, only: [:edit, :update ]
-  before_filter :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_filter :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
-  before_filter :check_unreviewed, only: [:add_comment_reply]
-  before_filter :check_permission_to_review, only: [:unreviewed]
-  before_filter :check_permission_to_access_single_unreviewed, only: [:show]
-  before_filter :check_permission_to_moderate, only: [:approve, :reject]
+  before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
+  before_action :check_visibility, only: [:show]
+  before_action :check_if_restricted
+  before_action :check_tag_wrangler_access
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
+  before_action :check_permission_to_edit, only: [:edit, :update ]
+  before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
+  before_action :check_unreviewed, only: [:add_comment_reply]
+  before_action :check_permission_to_review, only: [:unreviewed]
+  before_action :check_permission_to_access_single_unreviewed, only: [:show]
+  before_action :check_permission_to_moderate, only: [:approve, :reject]
 
   cache_sweeper :comment_sweeper
 
@@ -312,7 +312,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_to :back
+      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
