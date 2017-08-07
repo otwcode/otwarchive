@@ -48,7 +48,7 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
 
-  # POST admin/users/update_user
+  # POST admin/users/update
   def update
     @user = User.find_by(login: params[:id])
     if @user.admin_update(params[:user])
@@ -71,7 +71,7 @@ class Admin::AdminUsersController < ApplicationController
         redirect_to request.referer || root_path
       end
     else
-      flash[:error] = @user_manager.error_message || "WHAT"
+      flash[:error] = @user_manager.error_message
       redirect_to request.referer || root_path
     end
   end
