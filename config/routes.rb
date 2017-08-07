@@ -160,7 +160,8 @@ Otwarchive::Application.routes.draw do
       collection do
         get :bulk_search
         post :bulk_search
-        post :update_user
+        post :update
+        post :update_status
       end
     end
     resources :invitations, controller: 'admin_invitations' do

@@ -22,7 +22,7 @@
 
   <!--main content-->
   <h3 class="heading"><%= ts("Abuse Administration") %></h3>
-  <%= form_tag :action => "update_user", :controller => "admin/admin_users" do %>
+  <%= form_tag :action => "update_status", :controller => "admin/admin_users" do %>
     <%= hidden_field_tag "user_login", @user.login %>
     <fieldset>
       <legend><%= ts("Fannish Next of Kin") %></legend>
