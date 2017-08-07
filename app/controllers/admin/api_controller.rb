@@ -1,6 +1,6 @@
 class Admin::ApiController < ApplicationController
-  before_filter :admin_only
-  before_filter :check_for_cancel, only: [:create, :update]
+  before_action :admin_only
+  before_action :check_for_cancel, only: [:create, :update]
 
   def index
     @api_keys = if params[:query]

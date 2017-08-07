@@ -21,16 +21,16 @@ describe InviteRequestsController do
         get :show
         it_redirects_to_with_error(invite_requests_path, message)
         expect(assigns(:invite_request)).to be_nil
-        get :show, email: "mistressofallevil@example.org"
+        get :show, params: { email: "mistressofallevil@example.org" }
         it_redirects_to_with_error(invite_requests_path, message)
         expect(assigns(:invite_request)).to be_nil
       end
 
       it "renders for an ajax call" do
-        xhr :get, :show
+        get :show, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
-        xhr :get, :show, email: "mistressofallevil@example.org"
+        get :show, params: { email: "mistressofallevil@example.org" }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
       end
@@ -40,13 +40,13 @@ describe InviteRequestsController do
       let(:invite_request) { create(:invite_request) }
 
       it "renders" do
-        get :show, email: invite_request.email
+        get :show, params: { email: invite_request.email }
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
       end
 
       it "renders for an ajax call" do
-        xhr :get, :show, email: invite_request.email
+        get :show, params: { email: invite_request.email }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
       end
@@ -55,13 +55,13 @@ describe InviteRequestsController do
 
   describe "POST #create" do
     it "redirects to index with error given invalid emails" do
-      post :create, invite_request: { email: "wat" }
+      post :create, params: { invite_request: { email: "wat" } }
       expect(response).to render_template("index")
     end
 
     it "redirects to index with error given valid emails" do
       email = generate(:email)
-      post :create, invite_request: { email: email }
+      post :create, params: { invite_request: { email: email } }
       invite_request = InviteRequest.find_by_email(email)
       it_redirects_to_with_notice(invite_requests_path, "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider.")
     end
@@ -83,26 +83,26 @@ describe InviteRequestsController do
       before { fake_login_admin(admin) }
 
       it "redirects to manage with notice" do
-        delete :destroy, id: invite_request.id
+        delete :destroy, params: { id: invite_request.id }
         it_redirects_to_with_notice(manage_invite_requests_path, "Request was removed from the queue.")
       end
 
       it "redirects to manage at a specified page" do
         page = 45_789
-        delete :destroy, id: invite_request.id, page: page
+        delete :destroy, params: { id: invite_request.id, page: page }
         it_redirects_to_with_notice(manage_invite_requests_path(page: page), "Request was removed from the queue.")
       end
 
       it "redirects to manage with error when deletion fails" do
         allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
-        delete :destroy, id: invite_request.id
+        delete :destroy, params: { id: invite_request.id }
         it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
       end
 
       xit "redirects to manage with error when request cannot be found" do
         # TODO: AO3-4971
         invite_request.destroy
-        delete :destroy, id: invite_request.id
+        delete :destroy, params: { id: invite_request.id }
         # it_redirects_to_with_error(manage_invite_requests_path, "?")
       end
     end

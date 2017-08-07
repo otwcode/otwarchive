@@ -1,8 +1,8 @@
 class OrphansController < ApplicationController
   # You must be logged in to orphan works - relies on current_user data 
-  before_filter :users_only, except: [:index, :about]
+  before_action :users_only, except: [:index, :about]
   
-  before_filter :load_orphans, except: [:index, :about]
+  before_action :load_orphans, except: [:index, :about]
   
   def index
     @user = User.orphan_account

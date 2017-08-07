@@ -1,6 +1,6 @@
 class Admin::UserCreationsController < ApplicationController
   
-  before_filter :admin_only
+  before_action :admin_only
   
   # Removes an object from public view
   def hide

@@ -85,9 +85,9 @@
   has_many :pinch_hit_assignments, through: :pseuds
   has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "claiming_user_id", inverse_of: :claiming_user
   has_many :gifts, -> { where(rejected: false) }, through: :pseuds
-  has_many :gift_works, -> { uniq }, through: :pseuds
+  has_many :gift_works, -> { distinct }, through: :pseuds
   has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
-  has_many :rejected_gift_works, -> { uniq }, through: :pseuds
+  has_many :rejected_gift_works, -> { distinct }, through: :pseuds
   has_many :readings, dependent: :destroy
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
@@ -307,7 +307,7 @@
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new
+    self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
   protected
@@ -552,10 +552,11 @@
 
       if old_pseud.present?
         # change the old pseud to match
-        old_pseud.update_attribute(:name, login)
+        old_pseud.name = login
+        old_pseud.save!(validate: false)
       else
         # shouldn't be able to get here, but just in case
-        Pseud.create(name: login, user_id: self.id)
+        Pseud.create!(name: login, user_id: self.id)
       end
     end
   end

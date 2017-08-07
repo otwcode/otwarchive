@@ -1,6 +1,6 @@
 class PeopleController < ApplicationController
 
-  before_filter :load_collection
+  before_action :load_collection
   
   def do_search
     options = { query: params[:query], page: params[:page] || 1 }

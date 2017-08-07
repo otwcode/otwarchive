@@ -111,7 +111,7 @@ class CollectionItem < ActiveRecord::Base
   after_update :update_item_for_status_change
   def update_item_for_status_change
     if user_approval_status_changed? || collection_approval_status_changed?
-      item.save
+      item.save!
     end
   end
 
@@ -119,7 +119,10 @@ class CollectionItem < ActiveRecord::Base
   # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
     self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
-    if self.collection.collection_preference.email_notify && !self.collection.email.blank?
+    email_notify = self.collection.collection_preference &&
+                    self.collection.collection_preference.email_notify
+
+    if email_notify && !self.collection.email.blank?
       CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
     end
   end

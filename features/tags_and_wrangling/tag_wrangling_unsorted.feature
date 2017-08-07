@@ -23,7 +23,7 @@ Feature: Tag Wrangling - Unsorted Tags
       And I go to the unsorted_tags page
       And I follow "2"
       And I press "Update"
-    Then I should see "2" within ".pagination span.current"
+    Then I should see "2" within ".pagination .current"
 
   Scenario: Updating multiple tags works.
     Given I am logged in as a tag wrangler

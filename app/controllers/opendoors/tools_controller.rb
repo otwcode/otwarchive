@@ -1,7 +1,7 @@
 class Opendoors::ToolsController < ApplicationController
   
-  before_filter :users_only
-  before_filter :opendoors_only
+  before_action :users_only
+  before_action :opendoors_only
   
   def index
     @imported_from_url = params[:imported_from_url]

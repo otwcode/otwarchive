@@ -5,8 +5,8 @@ class UserSessionsController < ApplicationController
   rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
 
   layout "session"
-  before_filter :admin_logout_required
-  skip_before_filter :store_location
+  before_action :admin_logout_required
+  skip_before_action :store_location
 
 
   def show_auth_error
@@ -18,7 +18,11 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(params[:user_session])
+      @user_session = UserSession.new(
+        login: params[:user_session][:login],
+        password: params[:user_session][:password]
+      )
+
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
