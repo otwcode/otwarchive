@@ -5,7 +5,6 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-
 gem 'rails', '~> 5.1'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
@@ -76,7 +75,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-
 gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
@@ -108,9 +106,7 @@ gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
 
 # Globalize for translations
 # Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-
 gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
-
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test

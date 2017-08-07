@@ -72,7 +72,6 @@ class Comment < ApplicationRecord
       end
     end
 
-
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
       # Potentially we are notifying the original commenter of a newly-approved reply to their comment
