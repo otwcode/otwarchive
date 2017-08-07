@@ -98,7 +98,7 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = ts("Anonymous").html_safe
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
@@ -108,7 +108,7 @@ module ApplicationHelper
   end
 
   def non_anonymous_byline(creation, url_path = nil)
-    only_path = url_path.nil? ? true : url_path 
+    only_path = url_path.nil? ? true : url_path
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -146,7 +146,11 @@ module ApplicationHelper
   end
 
   def pseud_link(pseud, only_path = true)
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: only_path), rel: "author")
+    if only_path
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
+    else
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: false), rel: "author")
+    end
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.

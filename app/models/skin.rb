@@ -89,7 +89,6 @@ class Skin < ActiveRecord::Base
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
-    return false
   end
 
   validates_presence_of :title

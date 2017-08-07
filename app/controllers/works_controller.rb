@@ -2,21 +2,21 @@
 
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
-  before_filter :load_collection
-  before_filter :load_owner, only: [:index]
-  before_filter :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
-  before_filter :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
-  before_filter :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
+  before_action :load_collection
+  before_action :load_owner, only: [:index]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
+  before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
-  before_filter :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_filter :log_admin_activity, only: [:update_tags]
-  before_filter :check_visibility, only: [:show, :navigate]
+  before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
+  before_action :log_admin_activity, only: [:update_tags]
+  before_action :check_visibility, only: [:show, :navigate]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
-  before_filter :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
-  before_filter :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
-  before_filter :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
+  before_action :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
+  before_action :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
+  before_action :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
@@ -124,7 +124,7 @@ class WorksController < ApplicationController
 
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).list_without_filters(@owner, options)
+        @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
@@ -151,10 +151,10 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
     end
   end
 
@@ -261,7 +261,7 @@ class WorksController < ApplicationController
   def new
     @hide_dashboard = true
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
     @unposted = current_user.unposted_work
 
     @work.ip_address = request.remote_ip
@@ -352,7 +352,7 @@ class WorksController < ApplicationController
   def set_edit_form_fields
     load_pseuds
     @work.reset_published_at(@chapter)
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
     @collection = Collection.find_by(name: params[:work][:collection_names])
   end
 
@@ -361,7 +361,7 @@ class WorksController < ApplicationController
     @hide_dashboard = true
     @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
 
     return unless params['remove'] == 'me'
 
@@ -529,14 +529,16 @@ class WorksController < ApplicationController
       render(:new_import) && return
     end
 
+    importing_for_others = params[:importing_for_others] != "false" && params[:importing_for_others]
+
     # is external author information entered when import for others is not checked?
-    if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
+    if (params[:external_author_name].present? || params[:external_author_email].present?) && !importing_for_others
       flash.now[:error] = ts('You have entered an external author name or e-mail address but did not select "Import for others." Please select the "Import for others" option or remove the external author information to continue.')
       render(:new_import) && return
     end
 
     # is this an archivist importing?
-    if params[:importing_for_others] && !current_user.archivist
+    if importing_for_others && !current_user.archivist
       flash.now[:error] = ts('You may not import stories by other users unless you are an approved archivist.')
       render(:new_import) && return
     end
@@ -585,7 +587,7 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
-      @series = current_user.series.uniq
+      @series = current_user.series.distinct
       render(:new) && return
     end
 
@@ -961,7 +963,7 @@ class WorksController < ApplicationController
 
   # Takes an array of tags and returns a comma-separated list, without the markup
   def tag_list(tags)
-    tags = tags.uniq.compact
+    tags = tags.distinct.compact
     if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
       tag_list = tags.collect { |tag| tag.name + ', ' }.join

@@ -123,12 +123,12 @@ class ChallengeAssignment < ActiveRecord::Base
   def clear_assignment
     if offer_signup
       offer_signup.assigned_as_offer = false
-      offer_signup.save
+      offer_signup.save!
     end
 
     if request_signup
       request_signup.assigned_as_request = false
-      request_signup.save
+      request_signup.save!
     end
   end
 

@@ -1,6 +1,6 @@
 # Use for resetting lost passwords
 class PasswordsController < ApplicationController
-  skip_before_filter :store_location
+  skip_before_action :store_location
   layout "session"
 
   def new

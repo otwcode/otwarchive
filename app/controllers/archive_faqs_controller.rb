@@ -1,9 +1,9 @@
 class ArchiveFaqsController < ApplicationController
 
-  before_filter :admin_only, except: [:index, :show]
-  before_filter :set_locale
-  before_filter :require_language_id
-  around_filter :with_locale
+  before_action :admin_only, except: [:index, :show]
+  before_action :set_locale
+  before_action :require_language_id
+  around_action :with_locale
 
   # GET /archive_faqs
   def index
@@ -161,7 +161,7 @@ class ArchiveFaqsController < ApplicationController
   def destroy
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
-    redirect_to(archive_faqs_url)
+    redirect_to(archive_faqs_path)
   end
 
   private

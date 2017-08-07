@@ -220,3 +220,11 @@ Feature: Import Works
     When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
     Then I should see "Preview"
       And I should see "English"
+
+  Scenario: Searching for an imported work by URL will redirect you to the work
+    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I press "Post"
+      And I go to the redirect page
+      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I press "Go"
+    Then I should see "This is what Blaine's been thinking written in poems."

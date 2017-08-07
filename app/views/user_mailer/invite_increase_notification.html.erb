@@ -1,3 +1,3 @@
 <% content_for :message do %>
-<%= t 'user_mailer.invite_increase_notification.html', login: style_bold(@user.login), total: @total, invitation_page:   style_link("your invitations page", user_invitations_url(@user)) , archive_name: style_link(ArchiveConfig.APP_SHORT_NAME, root_path)  %>
+<%= t 'user_mailer.invite_increase_notification.html', login: style_bold(@user.login), total: @total, invitation_page:   style_link("your invitations page", user_invitations_url(@user)) , archive_name: style_link(ArchiveConfig.APP_SHORT_NAME, root_url)  %>
 <% end %>

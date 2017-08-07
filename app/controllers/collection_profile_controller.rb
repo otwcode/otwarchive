@@ -1,6 +1,6 @@
 class CollectionProfileController < ApplicationController
 
-  before_filter :load_collection
+  before_action :load_collection
 
   def show
     unless @collection

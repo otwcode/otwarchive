@@ -61,8 +61,8 @@ class Collection < ActiveRecord::Base
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
 
-  has_many :fandoms, -> { uniq }, through: :approved_works
-  has_many :filters, -> { uniq }, through: :approved_works
+  has_many :fandoms, -> { distinct }, through: :approved_works
+  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -175,29 +175,32 @@ class Collection < ActiveRecord::Base
   scope :by_title, -> { order(:title) }
 
   scope :approved, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::APPROVED,
           collection_approval_status: CollectionItem::APPROVED
         }
       )
+      .references(:collection_items)
   }
   scope :user_approved, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::APPROVED
         }
       )
+      .references(:collection_items)
   }
   scope :rejected, -> {
-    joins(:collection_items)
+    includes(:collection_items)
       .where(
         collection_items: {
           user_approval_status: CollectionItem::REJECTED
         }
       )
+      .references(:collection_items)
   }
 
 
@@ -335,7 +338,7 @@ class Collection < ActiveRecord::Base
   def all_fandoms
     # We want filterable fandoms, but not inherited metatags:
     Fandom.for_collections([self] + children).
-      where('filter_taggings.inherited = 0').uniq
+      where('filter_taggings.inherited = 0').distinct
   end
 
   def all_fandoms_count

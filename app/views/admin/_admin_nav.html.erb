@@ -1,30 +1,36 @@
-<h3 class="landmark heading"><%= ts('Admin Navigation') %></h3>
+<h3 class="landmark heading"><%= ts("Admin Navigation") %></h3>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current ts('AO3 News', key: 'header'), admin_posts_path %>
+    <%= span_if_current ts("AO3 News", key: "header"), admin_posts_path %>
    </li>
   <li>
-    <%= span_if_current ts('Post AO3 News', key: 'header'), new_admin_post_path %>
+    <%= span_if_current ts("Post AO3 News", key: "header"),
+                        new_admin_post_path %>
   </li>
-  <% if current_page?(controller: 'admin_posts', action: 'edit') %>
+  <% if current_page?(controller: "admin_posts", action: "edit") %>
     <li>
-      <%= link_to t('admin.admin_nav.delete', default: 'Delete Post'), @admin_post, confirm: 'Are you sure you want to delete this news post?', method: :delete %>
+      <%= link_to t("admin.admin_nav.delete", default: "Delete Post"),
+                  @admin_post,
+                  data: { confirm: "Are you sure you want to delete this news post?" },
+                  method: :delete %>
     </li>
   <% end %>
-  <% if current_page?(controller: 'archive_faqs', action: 'edit') && Globalize.locale.to_s == "en" %>
-    <li><%= link_to ts('Reorder Questions'), manage_archive_faq_questions_path(@archive_faq) %></li>
+  <% if current_page?(controller: "archive_faqs", action: "edit") &&
+        Globalize.locale.to_s == "en" %>
+    <li>
+      <%= link_to ts("Reorder Questions"),
+                  manage_archive_faq_questions_path(@archive_faq) %>
+    </li>
   <% end %>
 
   <li>
-    <%= span_if_current ts('Archive FAQ', key: 'header'), archive_faqs_path %>
+    <%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %>
   </li>
   <li>
-    <%= span_if_current ts('Known Issues', key: 'header'), known_issues_path %>
+    <%= span_if_current ts("Known Issues", key: "header"), known_issues_path %>
   </li>
   <li>
-    <%= span_if_current ts('Wrangling Guidelines', key: 'header'), wrangling_guidelines_path %>
+    <%= span_if_current ts("Wrangling Guidelines", key: "header"),
+                        wrangling_guidelines_path %>
   </li>
 </ul>
-
-
-  

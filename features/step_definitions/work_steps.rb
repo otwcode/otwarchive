@@ -142,13 +142,26 @@ Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I post the locked work "#{work}"}
 end
 
-Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
-  step %{I have a work "Blabla"}
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
   step %{I am logged out}
   n_comments ||= 3
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "Blabla"}
+    step %{I post the comment "Keep up the good work" on the work "#{title}"}
+    step %{I am logged out}
+  end
+end
+
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
+  step %{I am logged out}
+  n_bookmarks ||= 3
+  n_bookmarks.to_i.times do |i|
+    step %{I am logged in as a random user}
+    step %{I bookmark the work "#{title}"}
     step %{I am logged out}
   end
 end
@@ -261,6 +274,15 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   Work.tire.index.refresh
   Tag.write_redis_to_database
+end
+
+# Posts a chapter for the current user
+When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+  work = Work.find_by(title: work_title)
+  visit work_url(work)
+  step %{I follow "Add Chapter"}
+  step %{I fill in "content" with "la la la la la la la la la la la"}
+  step %{I post the chapter}
 end
 
 When /^a chapter is set up for "([^"]*)"$/ do |work_title|
@@ -442,9 +464,10 @@ end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  click_button("Yes, Delete Work")
+  # If JavaScript is enabled, window.confirm will be used and this button will not appear
+  click_button("Yes, Delete Work") unless @javascript
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
@@ -471,7 +494,9 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
+
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
+  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
   step %{I post the work without preview}
@@ -528,6 +553,15 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   step %{I follow "Mark for Later"}
   Reading.update_or_create_in_database
 end
+
+When /^the statistics for the work "([^"]*)" are updated$/ do |title|
+  step %{the statistics_tasks rake task is run}
+  step %{all search indexes are updated}
+  work = Work.find_by(title: title)
+  # Touch the work to actually expire the cache
+  work.touch
+end
+
 ### THEN
 Then /^I should see Updated today$/ do
   today = Time.zone.today.to_s

@@ -16,9 +16,7 @@ describe "API Authorization" do
 
     it "should return 403 Forbidden if the specified user isn't an archivist" do
       end_points.each do |url|
-        post url,
-             { archivist: "mr_nobody" }.to_json,
-             valid_headers
+        post url, params: { archivist: "mr_nobody" }.to_json, headers: valid_headers
         assert_equal 403, response.status
       end
     end

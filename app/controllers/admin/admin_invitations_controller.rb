@@ -1,6 +1,6 @@
 class Admin::AdminInvitationsController < ApplicationController
 
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
   end
@@ -12,7 +12,7 @@ class Admin::AdminInvitationsController < ApplicationController
       render action: 'index'
     elsif @invitation.save
       flash[:notice] = t('sent', default: "An invitation was sent to %{email_address}", email_address: @invitation.invitee_email)
-      redirect_to admin_invitations_url
+      redirect_to admin_invitations_path
     else
       render action: 'index'
     end
@@ -24,7 +24,7 @@ class Admin::AdminInvitationsController < ApplicationController
     end
     InviteRequest.reset_order
     flash[:notice] = t('invited_from_queue', default: "%{count} people from the invite queue were invited.", count: invitation_params[:invite_from_queue].to_i)
-    redirect_to admin_invitations_url
+    redirect_to admin_invitations_path
   end
 
   def grant_invites_to_users
@@ -34,7 +34,7 @@ class Admin::AdminInvitationsController < ApplicationController
       Invitation.grant_empty(invitation_params[:number_of_invites].to_i)
     end
     flash[:notice] = t('invites_created', default: 'Invitations successfully created.')
-    redirect_to admin_invitations_url
+    redirect_to admin_invitations_path
   end
 
   def find

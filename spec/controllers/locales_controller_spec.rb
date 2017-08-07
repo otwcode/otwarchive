@@ -36,7 +36,7 @@ describe LocalesController do
       before { fake_login_known_user(translation_admin) }
 
       it "displays the form to update a locale" do
-        get :edit, id: locale.iso
+        get :edit, params: { id: locale.iso }
         expect(response).to render_template("edit")
         expect(assigns(:locale)).to eq(locale)
         expect(assigns(:languages)).to eq(Language.default_order)
@@ -62,7 +62,7 @@ describe LocalesController do
       it "updates an existing locale" do
         params = { name: "Tiếng Việt", email_enabled: true }
 
-        put :update, id: locale.iso, locale: params
+        put :update, params: { id: locale.iso, locale: params }
         it_redirects_to_with_notice locales_path, "Your locale was successfully updated."
 
         locale.reload
@@ -71,7 +71,7 @@ describe LocalesController do
       end
 
       it "redirects to the edit form for the same locale if the new iso is not unique" do
-        put :update, id: locale.iso, locale: { iso: Locale.default.iso }
+        put :update, params: { id: locale.iso, locale: { iso: Locale.default.iso } }
         expect(response).to render_template("edit")
         expect(assigns(:locale)).to eq(locale)
         expect(assigns(:languages)).to eq(Language.default_order)
@@ -98,7 +98,7 @@ describe LocalesController do
           email_enabled: true, interface_enabled: false,
         }
 
-        post :create, locale: params
+        post :create, params: { locale: params }
         it_redirects_to_with_notice locales_path, "Locale was successfully added."
 
         locale = Locale.last
@@ -115,7 +115,7 @@ describe LocalesController do
           email_enabled: true, interface_enabled: false,
         }
 
-        post :create, locale: params
+        post :create, params: { locale: params }
         expect(response).to render_template("new")
         expect(assigns(:languages)).to eq(Language.default_order)
         expect(Locale.last).to eq(Locale.default)

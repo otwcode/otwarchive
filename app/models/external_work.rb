@@ -1,7 +1,6 @@
 include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
-  include Taggable
   include Bookmarkable
 
   has_many :related_works, as: :parent
@@ -149,5 +148,6 @@ class ExternalWork < ActiveRecord::Base
   def revised_at
     created_at
   end
+  include Taggable
 
 end

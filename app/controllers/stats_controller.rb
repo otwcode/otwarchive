@@ -1,8 +1,8 @@
 class StatsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   # only the current user
   def load_user

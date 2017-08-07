@@ -3,7 +3,7 @@ Feature: Admin email blacklist
   In order to prevent the use of certain email addresses in guest comments
   As an an admin
   I want to be able to manage a blacklist of email addresses
-  
+
 Scenario: Add email address to blacklist
   Given I am logged in as an admin
   Then I should see "Blacklist"
@@ -27,7 +27,7 @@ Scenario: Remove email address from blacklist
   When I follow "Remove"
   Then I should see "Email address foo@bar.com removed from blacklist"
     And the address "foo@bar.com" should not be in the blacklist
-    
+
 Scenario: Blacklisted email addresses should not be usable in guest comments
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"

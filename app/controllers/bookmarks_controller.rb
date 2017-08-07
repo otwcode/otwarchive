@@ -1,14 +1,14 @@
 class BookmarksController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_owner, only: [ :index ]
-  before_filter :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
-  before_filter :users_only, only: [:new, :create, :edit, :update]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update]
-  before_filter :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_filter :check_visibility, only: [ :show ]
-  before_filter :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :load_collection
+  before_action :load_owner, only: [ :index ]
+  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :users_only, only: [:new, :create, :edit, :update]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
+  before_action :check_visibility, only: [ :show ]
+  before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
 
-  before_filter :check_pseud_ownership, only: [:create, :update]
+  before_action :check_pseud_ownership, only: [:create, :update]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -223,7 +223,7 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible(order: "created_at DESC").offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym

@@ -4,7 +4,6 @@ module Taggable
     taggable.class_eval do
       attr_accessor :invalid_tags
       attr_accessor :preview_mode, :placeholder_tags
-      after_update :reset_placeholders
 
       has_many :filter_taggings, as: :filterable
       has_many :filters, through: :filter_taggings
@@ -56,6 +55,8 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
+
+      after_update :reset_placeholders
     end
   end
 
@@ -132,8 +133,10 @@ module Taggable
   end
 
   def validate_tags
-    errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
-    self.has_required_tags?
+    unless self.has_required_tags?
+      errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
+      throw :abort
+    end
   end
 
   # Add an error message if the user tried to add invalid tags to the work
@@ -145,8 +148,9 @@ module Taggable
           errors.add(:base, error)
         end
       end
+
+      throw :abort
     end
-    self.invalid_tags.blank?
   end
 
   def cast_tags

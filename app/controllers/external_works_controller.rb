@@ -1,7 +1,7 @@
 class ExternalWorksController < ApplicationController
-  before_filter :admin_only, only: [:edit, :update, :compare, :merge]
-  before_filter :users_only, only: [:new]
-  before_filter :check_user_status, only: [:new]
+  before_action :admin_only, only: [:edit, :update, :compare, :merge]
+  before_action :users_only, only: [:new]
+  before_action :check_user_status, only: [:new]
 
   def new
     @bookmarkable = ExternalWork.new

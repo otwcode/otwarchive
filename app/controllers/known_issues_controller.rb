@@ -1,6 +1,6 @@
 class KnownIssuesController < ApplicationController
 
-  before_filter :admin_only, except: [:index]
+  before_action :admin_only, except: [:index]
 
   # GET /known_issues
   def index
@@ -50,7 +50,7 @@ class KnownIssuesController < ApplicationController
   def destroy
     @known_issue = KnownIssue.find(params[:id])
     @known_issue.destroy
-    redirect_to(known_issues_url)
+    redirect_to(known_issues_path)
   end
 
   private

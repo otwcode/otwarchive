@@ -4,6 +4,7 @@ class Bookmark < ActiveRecord::Base
   include Collectible
   include Searchable
   include Tire::Model::Search
+  include Responder
   # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, polymorphic: true
@@ -93,6 +94,8 @@ class Bookmark < ActiveRecord::Base
 
   before_destroy :invalidate_bookmark_count
   after_save :invalidate_bookmark_count
+  after_create :update_work_stats
+  after_destroy :update_work_stats
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
