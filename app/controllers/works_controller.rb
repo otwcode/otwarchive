@@ -23,7 +23,11 @@ class WorksController < ApplicationController
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    #https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
+    # https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
+    # While nearly identical, clone does one more thing than dup.
+    # In clone, the frozen state of the object is also copied.
+    # In dup, it’ll always be thawed.
+
     clean_params = work_search_params&.dup
     clean_params[:query] = clean_params[:query].dup  unless clean_params[:query].nil?
     clean_params[:term] = clean_params[:term].dup unless clean_params[:term].nil?
