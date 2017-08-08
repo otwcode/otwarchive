@@ -30,7 +30,7 @@ class CollectionsController < ApplicationController
       @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-      @page_subtitle = ts("created by ") + @user.login
+      @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
         flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
