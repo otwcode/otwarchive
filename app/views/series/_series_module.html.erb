@@ -8,11 +8,13 @@
     <%= byline(series) %>
     <% if series.restricted %>
       <%= image_tag("lockblue.png", size: "15x15", alt: ts("(Restricted)"),
-                                    title: ts("Restricted")) %>
+                    title: ts("Restricted"),
+                    skip_pipeline: true) %>
     <% end %>
     <% if series.hidden_by_admin %>
       <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
-                                   title: ts("Hidden by Administrator")) %>
+                    title: ts("Hidden by Administrator"),
+                    skip_pipeline: true) %>
     <% end %>
   </h4>
   <h5 class="fandoms heading">

@@ -1,4 +1,4 @@
-class WorkLink < ActiveRecord::Base
+class WorkLink < ApplicationRecord
   belongs_to :work
 
   def self.create_or_increment(work_id, full_url, count_to_add=1)

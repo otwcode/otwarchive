@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
 
@@ -64,7 +64,7 @@ class Comment < ActiveRecord::Base
     users = []
     admins = []
 
-    if self.edited_at_changed? && self.content_changed? && self.moderated_commenting_enabled? && !self.is_creator_comment?
+    if self.saved_change_to_edited_at? && self.saved_change_to_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
       # we might need to put it back into moderation
       if content_too_different?(self.content, self.content_was)
         # we use update_column because we don't want to invoke this callback again
@@ -72,7 +72,7 @@ class Comment < ActiveRecord::Base
       end
     end
 
-    if self.edited_at_changed? || (self.unreviewed_changed? && !self.unreviewed?)
+    if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
       # Potentially we are notifying the original commenter of a newly-approved reply to their comment
       if (parent_comment_owner = notify_parent_comment_owner)
@@ -80,7 +80,7 @@ class Comment < ActiveRecord::Base
       end
     end
 
-    if self.edited_at_changed?
+    if self.saved_change_to_edited_at?
       # notify the commenter
       if self.comment_owner && notify_user_of_own_comments?(self.comment_owner)
         users << self.comment_owner
@@ -263,25 +263,22 @@ class Comment < ActiveRecord::Base
         # send notification to the owner of the original comment if they're not the same as the commenter
         if (have_different_owner?(parent_comment))
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-            if self.edited_at_changed?
+            if self.saved_change_to_edited_at?
               CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver
             else
               CommentMailer.comment_reply_notification(parent_comment, self).deliver
             end
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
-            if self.edited_at_changed?
+            if self.saved_change_to_edited_at?
               update_feedback_in_inbox(parent_comment_owner)
             else
               add_feedback_to_inbox(parent_comment_owner)
             end
           end
-          if parent_comment_owner
-            return parent_comment_owner
-          end
         end
+        return nil
       end
-      return nil
     end
 
   public

@@ -1,4 +1,4 @@
-class AdminSetting < ActiveRecord::Base
+class AdminSetting < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by

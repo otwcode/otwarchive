@@ -36,7 +36,8 @@
           <% if params[:tag_id] || (@owner.blank? && @bookmarkable.blank?) %>
             <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
               <%= link_to ts("Show Most Recent Bookmarks"),
-              url_for({ controller: "bookmarks", action: "fetch_recent", id: bookmark.id }), class: "actions", remote: true %>
+                fetch_recent_bookmarks_path(bookmark.id),
+                class: "actions", remote: true %>
             </li>
           <% end %>
         <% end %>

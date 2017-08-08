@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Question < ApplicationRecord
   acts_as_list
 
   translates :question, :content, :is_translated

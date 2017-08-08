@@ -1,8 +1,8 @@
-class Reading < ActiveRecord::Base
+class Reading < ApplicationRecord
   belongs_to :user
   belongs_to :work
 
-  after_save :expire_cached_home_marked_for_later, if: :toread_changed?
+  after_save :expire_cached_home_marked_for_later, if: :saved_change_to_toread?
   after_destroy :expire_cached_home_marked_for_later, if: :toread?
 
   # called from show in work controller

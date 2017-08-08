@@ -8,7 +8,7 @@ describe CollectionParticipantsController do
   describe "join" do
     context "where user isn't logged in" do
       it "redirects to new user session" do
-        get :join
+        get :join, params: { collection_id: 1 }
         it_redirects_to new_user_session_path
       end
     end
@@ -22,7 +22,7 @@ describe CollectionParticipantsController do
 
       context "where there is no collection" do
         it "redirects to index and displays an error" do
-          get :join, params: { collection_id: nil }
+          get :join, params: { collection_id: 0 }
           it_redirects_to_with_error(root_path, "Which collection did you want to join?")
         end
 
@@ -32,7 +32,7 @@ describe CollectionParticipantsController do
           end
 
           it "navigates back to the previously viewed page" do
-            get :join
+            get :join, params: { collection_id: 0 }
             it_redirects_to_with_error(collections_path, "Which collection did you want to join?")
           end
         end
@@ -161,6 +161,7 @@ describe CollectionParticipantsController do
     let(:id_to_update) { nil }
     let(:params) do
       {
+        collection_id: collection.id,
         collection_participant: {
           participant_role:  CollectionParticipant::MEMBER,
           id: id_to_update
@@ -232,7 +233,7 @@ describe CollectionParticipantsController do
       )
     end
     let(:params) do
-      { id: user_participant.id }
+      { id: user_participant.id, collection_id: collection.id }
     end
 
     before do
@@ -240,7 +241,7 @@ describe CollectionParticipantsController do
     end
 
     context "where there is no participant found" do
-      let(:params) { { id: nil } }
+      let(:params) { { id: 0, collection_id: create(:collection).id } }
 
       it "displays an error and redirects to the index" do
         delete :destroy, params: params
@@ -267,7 +268,7 @@ describe CollectionParticipantsController do
             )
           end
           let(:pseud_name) { other_participant.pseud.name }
-          let(:params) { { id: other_participant.id } }
+          let(:params) { { id: other_participant.id, collection_id: collection.id } }
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params: params
@@ -290,7 +291,7 @@ describe CollectionParticipantsController do
         end
         let(:pseud_name) { other_participant.pseud.name }
         let(:params) do
-          { id: other_participant.id }
+          { id: other_participant.id, collection_id: collection.id }
         end
 
         context "where participant to be destroyed is not an owner" do
@@ -303,7 +304,7 @@ describe CollectionParticipantsController do
 
         context "where participant to be destroyed is an owner" do
           let(:delete_participant_id) { CollectionParticipant.find_by(pseud_id: collection.owners.first.id) }
-          let(:params) { { id: delete_participant_id } }
+          let(:params) { { id: delete_participant_id, collection_id: collection.id } }
 
           context "where there are no other owners" do
             it "displays an error and redirects to the collection participants path" do

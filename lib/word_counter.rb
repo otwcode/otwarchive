@@ -5,11 +5,11 @@ require 'nokogiri'
 class WordCounter
 
   attr_accessor :text
-  
+
   def initialize(text)
     @text = text
   end
-  
+
   # only count actual text
   # scan by word boundaries after stripping hyphens and apostrophes
   # so one-word and one's will be counted as one word, not two.
@@ -24,5 +24,5 @@ class WordCounter
     end
     count
   end
-  
+
 end

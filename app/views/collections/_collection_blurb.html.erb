@@ -11,7 +11,7 @@
       </h4>
       <!--collections header iconised header image-->
       <div class="icon">
-        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => collection.icon_alt_text, :class => "icon") %>
+        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => collection.icon_alt_text, :class => "icon", skip_pipeline: true) %>
       </div>
       <p class="datetime"><%= set_format_for_date(collection.updated_at) %></p>
       <% if collection.all_moderators.length > 0%>

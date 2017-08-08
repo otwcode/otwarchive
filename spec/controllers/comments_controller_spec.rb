@@ -46,13 +46,13 @@ describe CommentsController do
     let(:comment) { create(:unreviewed_comment, commentable_id: work.id) }
 
     it "redirects logged out users to login path with an error" do
-      get :unreviewed, params: { comment_id: comment.id }
+      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
       it_redirects_to_with_error(login_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
     it "redirects to root path with an error when logged in user does not own the commentable" do
       fake_login
-      get :unreviewed, params: { comment_id: comment.id }
+      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
       it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 

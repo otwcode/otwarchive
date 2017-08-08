@@ -1,5 +1,5 @@
 class SearchResult
-  
+
   include Enumerable
 
   attr_reader :klass, :tire_response
@@ -9,7 +9,7 @@ class SearchResult
     @klass = model_name.classify.constantize
     @tire_response = response
   end
-    
+
   # Find results with where rather than find in order to avoid ActiveRecord::RecordNotFound
   def items
     if @items.nil?
@@ -19,7 +19,7 @@ class SearchResult
     end
     @items
   end
-  
+
   def each(&block)
     items.each(&block)
   end
@@ -40,7 +40,7 @@ class SearchResult
   def to_ary
     self
   end
-  
+
   def facets
     return if tire_response.facets.nil?
     if @facets.nil?
@@ -69,27 +69,27 @@ class SearchResult
     end
     @facets
   end
-  
+
   def total_pages
     tire_response.total_pages
   end
-  
+
   def total_entries
     tire_response.total_entries
   end
-  
+
   def per_page
     tire_response.per_page
   end
-  
+
   def offset
     tire_response.offset
   end
-  
+
   def current_page
     tire_response.current_page
   end
-  
+
 end
 
 class SearchFacet < Struct.new(:id, :name, :count)

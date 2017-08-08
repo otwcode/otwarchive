@@ -8,7 +8,7 @@
 <% end %>
 
 <!--sandbox for developers	-->
-<%= stylesheet_link_tag 'sandbox' %>
-<%= javascript_include_tag 'livevalidation_standalone' %>
+<%= stylesheet_link_tag 'sandbox', skip_pipeline: true %>
+<%= javascript_include_tag 'livevalidation_standalone', skip_pipeline: true %>
 
 <%= csrf_meta_tag %>
