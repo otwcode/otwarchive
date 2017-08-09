@@ -3,7 +3,8 @@ class Bookmark < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
-  include Tire::Model::Search
+  include Elasticsearch::Model if $rollout.active?(:elasticsearch_upgrade)
+  include Tire::Model::Search unless $rollout.active?(:elasticsearch_upgrade)
   include Responder
   # include Tire::Model::Callbacks
 

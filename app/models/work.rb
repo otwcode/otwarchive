@@ -8,7 +8,8 @@ class Work < ActiveRecord::Base
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
-  include Tire::Model::Search
+  include Elasticsearch::Model if $rollout.active?(:elasticsearch_upgrade)
+  include Tire::Model::Search unless $rollout.active?(:elasticsearch_upgrade)
   include ActiveModel::ForbiddenAttributesProtection
   # include Tire::Model::Callbacks
 

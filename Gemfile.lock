@@ -186,6 +186,10 @@ GEM
       elasticsearch-transport (= 5.0.4)
     elasticsearch-api (5.0.4)
       multi_json
+    elasticsearch-model (5.0.1)
+      activesupport (> 3)
+      elasticsearch (~> 5)
+      hashie
     elasticsearch-transport (5.0.4)
       faraday
       multi_json
@@ -214,6 +218,7 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     hashdiff (0.3.4)
+    hashie (3.5.6)
     hashr (0.0.22)
     highline (1.7.8)
     htmlentities (4.3.4)
@@ -519,6 +524,7 @@ DEPENDENCIES
   devise
   devise-async
   elasticsearch
+  elasticsearch-model
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
   factory_girl (~> 4.8.0)
