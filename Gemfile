@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.3.4'
+ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'

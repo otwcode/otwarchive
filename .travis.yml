@@ -22,7 +22,7 @@ env:
   - TEST_GROUP="cucumber -r features features/users              -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/works              -f Ao3Cucumber::Formatter --color"
 rvm:
-  - "2.3.4"
+  - "`cat .ruby_version| sed -e 's/ruby //'`"
 services:
   - elasticsearch
   - redis-server
