@@ -6,18 +6,26 @@ class Indexer
   # CLASS METHODS
   ##################
 
+  def self.elasticsearch
+    if $rollout.active?(:elasticsearch_ugprade)
+      $new_elasticsearch
+    else
+      $elasticsearch
+    end
+  end
+
   def self.klass
     raise "Must be defined in subclass"
   end
 
   def self.delete_index
-    if $elasticsearch.indices.exists(index: index_name)
-      $elasticsearch.indices.delete(index: index_name)
+    if elasticsearch.indices.exists(index: index_name)
+      elasticsearch.indices.delete(index: index_name)
     end
   end
 
   def self.create_index
-    $elasticsearch.indices.create(
+    elasticsearch.indices.create(
       index: index_name,
       type: document_type,
       body: {
@@ -33,7 +41,7 @@ class Indexer
 
   # Note that the index must exist before you can set the mapping
   def self.create_mapping
-    $elasticsearch.indices.put_mapping(
+    elasticsearch.indices.put_mapping(
       index: index_name,
       type: document_type,
       body: mapping
@@ -126,7 +134,7 @@ class Indexer
   end
 
   def index_documents
-    $elasticsearch.bulk(body: batch)
+    elasticsearch.bulk(body: batch)
   end
 
   def routing_info(id)

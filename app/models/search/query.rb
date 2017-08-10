@@ -6,8 +6,12 @@ class Query
     @options = options
   end
 
+  def elasticsearch
+    Indexer.elasticsearch
+  end
+
   def search
-    $elasticsearch.search(
+    elasticsearch.search(
       index: index_name,
       type: document_type,
       body: generated_query
