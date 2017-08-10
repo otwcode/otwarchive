@@ -53,6 +53,7 @@ OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes
 REVISION: ''
 ELASTICSEARCH_URL: 'http://localhost:9200'
 ELASTICSEARCH_1_URL: 'http://localhost:9200'
+UPGRADED_ELASTICSEARCH_URL: ''
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
