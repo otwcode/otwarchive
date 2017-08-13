@@ -430,4 +430,4 @@ Feature: Prompt Meme Challenge
     When I fill in "Sign-up opens:" with ""
       And I use tomorrow as the "Sign-up closes" date
       And I submit
-    Then I should see "Challenge successfully created."
+    Then I should see "Challenge was successfully created."
