@@ -428,6 +428,6 @@ Feature: Prompt Meme Challenge
       And I submit
     Then I should see "Close date cannot be before open date."
     When I fill in "Sign-up opens:" with ""
-      And I fill in "Sign-up closes:" with "2010-09-20 12:40AM"
+      And I use tomorrow as the "Sign-up closes" date
       And I submit
     Then I should see "Challenge successfully updated."
