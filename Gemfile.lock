@@ -85,6 +85,7 @@ GEM
       activesupport (>= 3.2, < 5.1)
       request_store (~> 1.0)
       scrypt (>= 1.2, < 4.0)
+    awesome_print (1.8.0)
     aws-sdk (2.9.35)
       aws-sdk-resources (= 2.9.35)
     aws-sdk-core (2.9.35)
@@ -503,6 +504,7 @@ DEPENDENCIES
   akismetor
   audited (~> 4.4)
   authlogic (~> 3.5.0)
+  awesome_print
   aws-sdk
   bcrypt
   bullet (~> 5.2.0)

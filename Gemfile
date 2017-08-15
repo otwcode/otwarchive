@@ -161,6 +161,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.8.0'
