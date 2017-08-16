@@ -1,7 +1,7 @@
 class Tag < ActiveRecord::Base
 
   include ActiveModel::ForbiddenAttributesProtection
-  include Tire::Model::Search unless $rollout.active?(:elasticsearch_upgrade)
+  include Tire::Model::Search
   # include Tire::Model::Callbacks
   include Searchable
   include StringCleaner
