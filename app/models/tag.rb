@@ -1,7 +1,6 @@
 class Tag < ActiveRecord::Base
 
   include ActiveModel::ForbiddenAttributesProtection
-  include Elasticsearch::Model if $rollout.active?(:elasticsearch_upgrade)
   include Tire::Model::Search unless $rollout.active?(:elasticsearch_upgrade)
   # include Tire::Model::Callbacks
   include Searchable
@@ -1174,7 +1173,7 @@ class Tag < ActiveRecord::Base
 
   mapping do
     indexes :id,           index: :not_analyzed
-    indexes :name,         analyzer: 'snowball', boost: 100
+    indexes :name#,         analyzer: 'snowball', boost: 100
     indexes :type
     indexes :canonical,    type: :boolean
   end

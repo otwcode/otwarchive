@@ -1,7 +1,5 @@
 class Pseud < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
-
-  include Elasticsearch::Model if $rollout.active?(:elasticsearch_ugprade)
   include Tire::Model::Search unless $rollout.active?(:elasticsearch_upgrade)
   # include Tire::Model::Callbacks
   include Searchable
