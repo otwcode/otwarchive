@@ -7,11 +7,12 @@ class Indexer
   ##################
 
   def self.elasticsearch
-    if $rollout.active?(:elasticsearch_ugprade)
-      $new_elasticsearch
-    else
-      $elasticsearch
-    end
+    $elasticsearch
+    # if $rollout.active?(:elasticsearch_ugprade)
+    #   $new_elasticsearch
+    # else
+    #   $elasticsearch
+    # end
   end
 
   def self.klass
@@ -148,4 +149,9 @@ class Indexer
   def document(object)
     object.as_json(root: false)
   end
+
+  def elasticsearch
+    self.class.elasticsearch
+  end
+
 end
