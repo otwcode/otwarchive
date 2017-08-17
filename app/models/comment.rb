@@ -276,6 +276,9 @@ class Comment < ApplicationRecord
               add_feedback_to_inbox(parent_comment_owner)
             end
           end
+          if parent_comment_owner
+            return parent_comment_owner
+          end
         end
         return nil
       end
