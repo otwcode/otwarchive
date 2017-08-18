@@ -1,4 +1,4 @@
-class InviteRequest < ActiveRecord::Base
+class InviteRequest < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
   validates :email, presence: true, email_veracity: true

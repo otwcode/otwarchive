@@ -1,6 +1,6 @@
 # encoding=utf-8
 
-class Chapter < ActiveRecord::Base
+class Chapter < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
@@ -63,9 +63,8 @@ class Chapter < ActiveRecord::Base
         chapters = chapters - [self]
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
-          chapter.position = i+1
-          if chapter.position_changed?
-            Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
+          if chapter.position != i+1
+            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
             positions_changed = true
           end
         end
@@ -79,7 +78,7 @@ class Chapter < ActiveRecord::Base
   end
 
   after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.posted_changed? }
+    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position

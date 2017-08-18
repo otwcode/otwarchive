@@ -1,4 +1,4 @@
-class WranglingAssignment < ActiveRecord::Base
+class WranglingAssignment < ApplicationRecord
   belongs_to :user
   belongs_to :fandom
   

@@ -1,4 +1,4 @@
-class FavoriteTag < ActiveRecord::Base
+class FavoriteTag < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :user

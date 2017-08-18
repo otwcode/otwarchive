@@ -95,12 +95,13 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1
   def update
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
-      if @archive_faq.update_attributes(archive_faq_params)
-        flash[:notice] = 'ArchiveFaq was successfully updated.'
-        redirect_to(@archive_faq)
-      else
-        render action: "edit"
-      end
+
+    if @archive_faq.update_attributes(archive_faq_params)
+      flash[:notice] = 'ArchiveFaq was successfully updated.'
+      redirect_to(@archive_faq)
+    else
+      render action: "edit"
+    end
   end
 
   # reorder FAQs
