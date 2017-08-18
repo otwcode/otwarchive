@@ -529,7 +529,7 @@ class Tag < ApplicationRecord
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_before_last_save)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_before_last_save) if parent.is_a?(Fandom)
       end
     end
   end
