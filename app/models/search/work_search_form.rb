@@ -1,4 +1,4 @@
-class WorkSearchForm
+class WorkSearchForm < SearchForm
 
   extend ActiveModel::Naming
   include ActiveModel::Conversion
@@ -7,7 +7,7 @@ class WorkSearchForm
   ATTRIBUTES = [
     :query,
     :title,
-    :creator,
+    :creators,
     :revised_at,
     :language_id,
     :complete,
@@ -62,8 +62,8 @@ class WorkSearchForm
     if @options[:title].present?
       summary << "Title: #{@options[:title]}"
     end
-    if @options[:creator].present?
-      summary << "Author/Artist: #{@options[:creator]}"
+    if @options[:creators].present?
+      summary << "Author/Artist: #{@options[:creators]}"
     end
     tags = []
     if @options[:tag].present?

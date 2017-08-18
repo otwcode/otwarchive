@@ -18,21 +18,21 @@ class WorksController < ApplicationController
   before_action :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
   before_action :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
-  before_action :clean_work_search_params, only: [:search, :index, :collected]
+  before_action :clean_work_search_form_params, only: [:search, :index, :collected]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
-  def clean_work_search_params
-    if params[:work_search].present? && params[:work_search][:query].present?
+  def clean_work_search_form_params
+    if params[:work_search_form].present? && params[:work_search_form][:query].present?
       # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      params[:work_search][:query].gsub!('&gt;', '>')
-      params[:work_search][:query].gsub!('&lt;', '<')
+      params[:work_search_form][:query].gsub!('&gt;', '>')
+      params[:work_search_form][:query].gsub!('&lt;', '<')
 
       # extract countable params
       %w(word kudo comment bookmark hit).each do |term|
-        next unless params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+        next unless params[:work_search_form][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
         # pluralize, add _count, convert to symbol
         term = term.pluralize unless term == 'word'
         term += '_count' unless term == 'hits'
@@ -40,45 +40,45 @@ class WorksController < ApplicationController
 
         value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
         # don't overwrite if submitting from advanced search?
-        params[:work_search][term] = value unless params[:work_search][term].present?
+        params[:work_search_form][term] = value unless params[:work_search_form][term].present?
       end
 
       # get sort-by
-      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+      if params[:work_search_form][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
         sortdir = Regexp.last_match(3) || Regexp.last_match(1)
         sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
 
         _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        params[:work_search][:sort_column] = sort_column unless sort_column.nil?
+        params[:work_search_form][:sort_column] = sort_column unless sort_column.nil?
 
-        params[:work_search][:sort_direction] = sort_direction(sortdir)
+        params[:work_search_form][:sort_direction] = sort_direction(sortdir)
       end
 
       # put categories into quotes
       qr = Regexp.new('(?:"|\')?')
       %w(m/m f/f f/m m/f).each do |cat|
         cr = Regexp.new("#{qr}#{cat}#{qr}")
-        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
+        params[:work_search_form][:query].gsub!(cr, "\"#{cat}\"")
       end
 
       # swap out gt/lt
-      params[:work_search][:query].gsub!('>', '&gt;')
-      params[:work_search][:query].gsub!('<', '&lt;')
+      params[:work_search_form][:query].gsub!('>', '&gt;')
+      params[:work_search_form][:query].gsub!('<', '&lt;')
 
       # get rid of empty queries
-      params[:work_search][:query] = nil if params[:work_search][:query] =~ /^\s*$/
+      params[:work_search_form][:query] = nil if params[:work_search_form][:query] =~ /^\s*$/
     end
   end
 
   def search
     @languages = Language.default_order
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search_form].present? ? work_search_form_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearchForm.new(options)
     @page_subtitle = ts("Search Works")
 
-    if params[:work_search].present? && params[:edit_search].blank?
+    if params[:work_search_form].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
@@ -90,7 +90,7 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search_form].present? ? work_search_form_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -126,7 +126,7 @@ class WorksController < ApplicationController
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
-        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
+        if use_caching? && params[:work_search_form].blank? && params[:fandom_id].blank? &&
            (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
@@ -154,7 +154,7 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search_form].present? ? work_search_form_params : {}
     options[:page] = params[:page]
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
@@ -1084,11 +1084,11 @@ class WorksController < ApplicationController
     )
   end
 
-  def work_search_params
-    params.require(:work_search).permit(
+  def work_search_form_params
+    params.require(:work_search_form).permit(
       :query,
       :title,
-      :creator,
+      :creators,
       :revised_at,
       :complete,
       :single_chapter,

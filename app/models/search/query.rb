@@ -4,7 +4,7 @@ class Query
 
   # Options: page, per_page, 
   def initialize(options={})
-    @options = options
+    @options = HashWithIndifferentAccess.new(options)
   end
 
   def search
@@ -60,7 +60,7 @@ class Query
 
   # Boolean query
   def query_bool
-    { bool: { must: queries } } if queries.present?
+    queries if !queries.blank?
   end
 
   # Define specifics in subclasses
@@ -99,6 +99,26 @@ class Query
   def pagination_offset
     page = options[:page] || 1
     (page * per_page) - per_page
+  end
+
+  # Only escape if it isn't already escaped
+  def escape_slashes(word)
+    word = word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
+  end
+
+  def escape_reserved_characters(word)
+    word = escape_slashes(word)
+    word.gsub!('!', '\\!')
+    word.gsub!('+', '\\+')
+    word.gsub!('-', '\\-')
+    word.gsub!('?', '\\?')
+    word.gsub!("~", '\\~')
+    word.gsub!("(", '\\(')
+    word.gsub!(")", '\\)')
+    word.gsub!("[", '\\[')
+    word.gsub!("]", '\\]')
+    word.gsub!(':', '\\:')
+    word
   end
 
 end

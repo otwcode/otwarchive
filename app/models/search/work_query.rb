@@ -32,7 +32,7 @@ class WorkQuery < Query
   # Combine the available queries
   # In this case, name is the only text field
   def queries
-    @queries = [general_query] if options[:q] || options[:query].present?
+    @queries = [general_query] #if options[:q] || options[:query].present?
   end
 
   def add_owner
@@ -158,7 +158,7 @@ class WorkQuery < Query
 
   def filter_id_filter
     if filter_ids.present?
-      filter_ids.map{ |filter_id| term_filter(:filter_ids, filter_id) }
+      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
     end
   end
 
@@ -172,13 +172,47 @@ class WorkQuery < Query
 
   # Search for a tag by name
   def general_query
-    { query_string: { query: options[:q] || options[:query] } }
+    # TODO: Create an alias for creators, perhaps? Or use 'copy_to' as suggested
+    # in Elasticsearch as a replacement for index_name in the mapping definition
+    input = (options[:q] || options[:query])
+    input = input.gsub('creator:', 'creators:') if !input.blank?
+    query = generate_search_text( input || '' )
+
+    { query_string: { query: query } }
   end
+
+  def generate_search_text(query = '')
+    search_text = query
+    [:title, :creators, :tag].each do |field|
+      if self.options[field].present?
+        self.options[field].split(" ").each do |word|
+          if word[0] == "-"
+            search_text << " NOT "
+            word.slice!(0)
+          end
+          word = escape_reserved_characters(word)
+          search_text << " #{field.to_s}: #{word}"
+        end
+      end
+    end
+    # if self.options[:collection_ids].blank? #&& self.collected
+    #   search_text << " collection_ids:*"
+    # end
+    search_text.strip
+  end
+
+
 
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : 'revised_at'
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-    { column => { order: direction, unmapped_type: "date" } }
+    sort_hash = { column => { order: direction } }
+
+    if column == 'revised_at'
+      sort_hash[column][:unmapped_type] = 'date'
+    end
+
+    sort_hash
   end
 
   def aggregations
@@ -266,6 +300,6 @@ class WorkQuery < Query
     names = options[:excluded_tag_names].split(",")
     Tag.where(name: names, canonical: true).value_of(:id)
   end
-  
+
 
 end
