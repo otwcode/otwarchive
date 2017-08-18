@@ -1,4 +1,4 @@
-class SkinParent < ActiveRecord::Base
+class SkinParent < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :child_skin, class_name: "Skin", inverse_of: :skin_parents, touch: true

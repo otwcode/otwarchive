@@ -1,4 +1,4 @@
-class ArchiveFaq < ActiveRecord::Base
+class ArchiveFaq < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   acts_as_list

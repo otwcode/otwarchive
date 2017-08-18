@@ -13,7 +13,7 @@ describe ChallengeAssignmentsController do
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
-    
+
     describe "defaulting" do
       it "fails because no user specified" do
         get :no_user
@@ -60,7 +60,7 @@ describe ChallengeAssignmentsController do
         it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
-    
+
     describe "defaulting" do
       let(:open_assignment) { create(:challenge_assignment, collection_id: collection.id) }
 
@@ -69,7 +69,7 @@ describe ChallengeAssignmentsController do
         get :no_user, params: { collection_id: collection.name }
         it_redirects_to_with_error(root_path, "What user were you trying to work with?")
       end
-      
+
       it "fails if you're not the owner of the assignment you're defaulting on" do
         fake_login_known_user(user)
         gift_exchange.assignments_sent_at = Time.now
@@ -85,13 +85,13 @@ describe ChallengeAssignmentsController do
 
       it "won't show if you're not the right user" do
         fake_login_known_user(otheruser)
-        get :show, params: { id: defaulted_assignment.id }
+        get :show, params: { id: defaulted_assignment.id, collection_id: collection.id }
         it_redirects_to_with_error(root_path, "You aren't allowed to see that assignment!")
       end
 
       it "will tell you if you've defaulted" do
         fake_login_known_user(defaulted_assignment.offering_user)
-        get :show, params: { id: defaulted_assignment.id }
+        get :show, params: { id: defaulted_assignment.id, collection_id: collection.id }
         expect(response).to have_http_status(:success)
         expect(flash[:notice]).to include "This assignment has been defaulted-on."
       end
@@ -117,7 +117,7 @@ describe ChallengeAssignmentsController do
         expect(response.body).to include defaulted_assignment.request_byline
         expect(response.body).not_to include "No assignments to review!"
       end
-      
+
       it "shows unfulfilled assignments within a collection" do
         fake_login_known_user(user)
         get :index, params: { collection_id: collection.name, unfulfilled: true }
@@ -127,7 +127,7 @@ describe ChallengeAssignmentsController do
         expect(response.body).to include open_assignment.request_byline
         expect(response.body).not_to include "No assignments to review!"
       end
-      
+
       it "won't show specific to that user and collection for offering user" do
         # this could still do with further expansion
         fake_login_known_user(open_assignment.offering_user)
