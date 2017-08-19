@@ -55,7 +55,8 @@ class Chapter < ApplicationRecord
 
   after_save :fix_positions
   def fix_positions
-    if work
+    # Without reloading, we were losing the work id post-Rails 5
+    if work && work.reload
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
