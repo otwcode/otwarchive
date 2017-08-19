@@ -98,7 +98,7 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = ts("Anonymous").html_safe
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
@@ -108,7 +108,7 @@ module ApplicationHelper
   end
 
   def non_anonymous_byline(creation, url_path = nil)
-    only_path = url_path.nil? ? true : url_path 
+    only_path = url_path.nil? ? true : url_path
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -258,11 +258,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = ""
     content_for :tinymce do
-      javascript_include_tag "tinymce/tinymce.min.js"
+      javascript_include_tag "tinymce/tinymce.min.js", skip_pipeline: true
     end
     @content_for_tinymce_init = ""
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor.min.js"
+      javascript_include_tag "mce_editor.min.js", skip_pipeline: true
     end
   end
 

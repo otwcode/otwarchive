@@ -1,4 +1,4 @@
-class Prompt < ActiveRecord::Base
+class Prompt < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # -1 represents all matching

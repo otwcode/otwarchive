@@ -1,12 +1,12 @@
 class SkinsController < ApplicationController
 
-  before_filter :users_only, only: [:new, :create, :destroy]
-  before_filter :load_skin, except: [:index, :new, :create, :unset]
-  before_filter :check_title, only: [:create, :update]
-  before_filter :check_ownership_or_admin, only: [:edit, :update]
-  before_filter :check_ownership, only: [:destroy]
-  before_filter :check_visibility, only: [:show]
-  before_filter :check_editability, only: [:edit, :update, :destroy]
+  before_action :users_only, only: [:new, :create, :destroy]
+  before_action :load_skin, except: [:index, :new, :create, :unset]
+  before_action :check_title, only: [:create, :update]
+  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :check_ownership, only: [:destroy]
+  before_action :check_visibility, only: [:show]
+  before_action :check_editability, only: [:edit, :update, :destroy]
 
   #### ACTIONS
 
@@ -169,7 +169,7 @@ class SkinsController < ApplicationController
     @skin = Skin.find_by(id: params[:id])
     unless @skin
       flash[:error] = "Skin not found"
-      redirect_to skins_url and return
+      redirect_to skins_path and return
     end
     @check_ownership_of = @skin
     @check_visibility_of = @skin
@@ -192,7 +192,7 @@ class SkinsController < ApplicationController
   # if we've been asked to load the archive parents, we do so and add them to params
   def load_archive_parents
     if params[:add_site_parents]
-      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
+      params[:skin][:skin_parents_attributes] ||= ActionController::Parameters.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
       skin_parent_titles = params[:skin][:skin_parents_attributes].values.map {|v| v[:parent_skin_title]}
       skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
@@ -205,24 +205,11 @@ class SkinsController < ApplicationController
       last_position ||= 0
       archive_parents.each do |parent_skin|
         last_position += 1
-        new_skin_parent_hash = HashWithIndifferentAccess.new({position: last_position, parent_skin_id: parent_skin.id})
-        params[:skin][:skin_parents_attributes].merge!({last_position => new_skin_parent_hash})
+        new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
+        params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
       end
       return true
     end
     return false
-  end
-end
-
-# https://github.com/rails/strong_parameters/pull/221
-# where the key is converted to a string
-# but the pull was closed due to:
-# "parameter keys [already] arrive as strings when submitted via HTTP requests"
-# but, at least with our cucumber tests, nested attribute keys are, in fact, integers
-module ActionController
-  class Parameters
-    def fields_for_style?(object)
-      object.is_a?(Hash) && object.all? { |k, v| k.to_s =~ /\A-?\d+\z/ && v.is_a?(Hash) }
-    end
   end
 end

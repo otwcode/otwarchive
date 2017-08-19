@@ -1,4 +1,4 @@
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Tire::Model::Search
@@ -133,12 +133,12 @@ class Tag < ActiveRecord::Base
   has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :remove_sub_filters
   has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
-
-  has_many :same_work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { uniq }, through: :works, source: :fandoms
-
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
+
+  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
+
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
@@ -529,7 +529,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_before_last_save) if parent.is_a?(Fandom)
       end
     end
   end
@@ -784,7 +784,22 @@ class Tag < ActiveRecord::Base
         ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
         ft.update_attribute(:inherited, false)
       else
-        work.filters << filter_tag
+        FilterTagging.create(
+          filter: filter_tag,
+          filterable: work
+        )
+        # As of Rails 5 upgrade, this triggers a stack level too deep error
+        # because it triggers the `before_update
+        # :update_filters_for_canonical_change` callback. In 4.2 and before,
+        # after this point `canonical_changed?` has been reset and returns
+        # false. Now it returns true and causes an endless loop.
+        #
+        # Reference: https://github.com/rails/rails/issues/28908
+        #
+        # TODO: Keep an eye on this issue. We should not have to create the
+        # FilterTagging directly.
+        #
+        # work.filters << filter_tag
         tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
       end
       unless filter_tag.meta_tags.empty?
@@ -1187,7 +1202,7 @@ class Tag < ActiveRecord::Base
   after_update :after_update
   def after_update
     tag = self
-    if tag.canonical_changed?
+    if tag.saved_change_to_canonical?
       if tag.canonical
         # newly canonical tag
         tag.add_to_autocomplete
@@ -1202,7 +1217,7 @@ class Tag < ActiveRecord::Base
     end
 
     # Expire caching when a merger is added or removed
-    if tag.merger_id_changed?
+    if tag.saved_change_to_merger_id?
       if tag.merger_id_was.present?
         old = Tag.find(tag.merger_id_was)
         old.update_works_index_timestamp!
@@ -1213,7 +1228,7 @@ class Tag < ActiveRecord::Base
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
-    if tag.type_changed?
+    if tag.saved_change_to_type?
       tag.parents.each do |parent_tag|
         ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
       end

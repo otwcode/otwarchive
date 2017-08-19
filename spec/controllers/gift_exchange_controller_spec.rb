@@ -8,7 +8,7 @@ describe Challenge::GiftExchangeController do
       @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
       @collection.save
       fake_login_known_user(@collection.owners.first.user)
-      delete :destroy, id: @collection.challenge.id, collection_id: @collection.name
+      delete :destroy, params: { id: @collection.challenge.id, collection_id: @collection.name }
     end
 
     it "remove challenge variables on Collection" do

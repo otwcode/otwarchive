@@ -1,4 +1,4 @@
-class ExternalCreatorship < ActiveRecord::Base
+class ExternalCreatorship < ApplicationRecord
   belongs_to :external_author_name, inverse_of: :external_creatorships
   belongs_to :archivist, class_name: 'User', foreign_key: 'archivist_id'
   belongs_to :creation, polymorphic: true  , inverse_of: :external_creatorships

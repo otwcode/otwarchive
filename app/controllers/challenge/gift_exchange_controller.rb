@@ -1,10 +1,10 @@
 class Challenge::GiftExchangeController < ChallengesController
 
-  before_filter :users_only
-  before_filter :load_collection
-  before_filter :load_challenge, except: [:new, :create]
-  before_filter :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :set_time_zone, only: [:create, :edit, :update]
+  before_action :users_only
+  before_action :load_collection
+  before_action :load_challenge, except: [:new, :create]
+  before_action :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_time_zone, only: [:create, :edit, :update]
 
   # ACTIONS
 

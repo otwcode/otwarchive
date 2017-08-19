@@ -17,7 +17,7 @@ describe UsersController do
 
     context "with valid parameters" do
       it "should be successful" do
-        post :create, user: valid_user_attributes
+        post :create, params: { user: valid_user_attributes }
 
         expect(response).to be_success
         expect(assigns(:user)).to be_a(User)

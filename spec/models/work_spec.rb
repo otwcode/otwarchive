@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+  # see lib/collectible_spec for collection-related tests
 
   it "creates a minimally work" do
     expect(create(:work)).to be_valid

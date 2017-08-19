@@ -1,4 +1,4 @@
-class TagSetAssociation < ActiveRecord::Base
+class TagSetAssociation < ApplicationRecord
   belongs_to :owned_tag_set
   belongs_to :tag
   belongs_to :parent_tag, class_name: "Tag"

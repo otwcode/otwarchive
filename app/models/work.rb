@@ -1,6 +1,6 @@
-class Work < ActiveRecord::Base
-
+class Work < ApplicationRecord
   include Taggable
+  include Creatable
   include Collectible
   include Bookmarkable
   include Pseudable
@@ -20,15 +20,15 @@ class Work < ActiveRecord::Base
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
   has_many :external_author_names, through: :external_creatorships, inverse_of: :works
-  has_many :external_authors, -> { uniq }, through: :external_author_names
+  has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters, -> { where("work_id IS NOT NULL") }
+  has_many :chapters
   validates_associated :chapters
 
   has_many :serial_works, dependent: :destroy
@@ -61,7 +61,6 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-
   # statistics
   has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
@@ -122,9 +121,10 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank? && self.pseuds.blank?
       errors.add(:base, ts("Work must have at least one author."))
-      return false
+      throw :abort
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
+      throw :abort
     end
   end
 
@@ -141,12 +141,13 @@ class Work < ActiveRecord::Base
 
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
+
   def clean_and_validate_title
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", min: ArchiveConfig.TITLE_MIN))
-        return false
+        throw :abort
       else
         self.title_to_sort_on = self.sorted_title
       end
@@ -154,11 +155,13 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
+    return unless first_chapter
+
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 
@@ -176,20 +179,45 @@ class Work < ActiveRecord::Base
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
+
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :post_first_chapter, :set_word_count
+  after_save :post_first_chapter
+  before_save :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
+
   before_create :set_anon_unrevealed, :set_author_sorting
+  after_create :notify_after_creation
   before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
-  before_update :validate_tags
+  before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :expire_caches
+  after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
+  before_destroy :before_destroy
+
+  def before_destroy
+    if self.posted?
+      users = self.pseuds.collect(&:user).uniq
+      orphan_account = User.orphan_account
+      unless users.blank?
+        for user in users
+          next if user == orphan_account
+          # Check to see if this work is being deleted by an Admin
+          if User.current_user.is_a?(Admin)
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.admin_deleted_work_notification(user, self).deliver!
+          else
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.delete_work_notification(user, self).deliver!
+          end
+        end
+      end
+    end
+  end
 
   def expire_caches
     pseuds.each do |pseud|
@@ -214,6 +242,7 @@ class Work < ActiveRecord::Base
     tags.each do |tag|
       tag.update_tag_cache
     end
+
     Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
@@ -287,7 +316,7 @@ class Work < ActiveRecord::Base
 
   after_destroy :clean_up_filter_taggings
   def clean_up_filter_taggings
-    FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
+    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
   end
 
   after_destroy :clean_up_assignments
@@ -574,7 +603,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at
+        self.revised_at || self.created_at || DateTime.now
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
@@ -586,7 +615,7 @@ class Work < ActiveRecord::Base
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? ||
-        chapter.published_at > self.revised_at.to_date ||
+        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
@@ -660,12 +689,12 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    self.chapters.first.save(validate: false)
+    !self.chapters.first.save(validate: false)
   end
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted_changed?
+    if self.saved_change_to_posted? || (self.chapters.first && self.chapters.first.posted != self.posted)
       self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
       self.chapters.first.save
@@ -764,9 +793,8 @@ class Work < ActiveRecord::Base
   after_save :update_complete_status
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
-    self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+    if self.chapters.posted.count == expected_number_of_chapters
+      Work.where("id = #{self.id}").update_all("complete = true")
     end
   end
 
@@ -850,7 +878,7 @@ class Work < ActiveRecord::Base
 
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags
+      if self.placeholder_tags && !self.placeholder_tags.empty?
         result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
         result = self.tags.group_by { |t| t.type.to_s }
@@ -1038,7 +1066,7 @@ class Work < ActiveRecord::Base
           if ew.save
             self.new_parent = {parent: ew, translation: translation}
           else
-            self.errors.add(:base, "Parent work info would not save.")
+            self.errors.add(:base, "Parent work " + ew.errors.full_messages[0])
           end
         end
       end
@@ -1476,5 +1504,4 @@ class Work < ActiveRecord::Base
     nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
     (filter_ids & nonfiction_tags).present?
   end
-
 end
