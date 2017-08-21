@@ -69,7 +69,7 @@ class Tag < ApplicationRecord
   def taggings_count
     cache_read = Rails.cache.read(taggings_count_cache_key)
     return cache_read unless cache_read.nil?
-    real_value = taggings.length
+    real_value = taggings.count
     self.taggings_count = real_value
     real_value
   end
@@ -81,7 +81,7 @@ class Tag < ApplicationRecord
 
   def update_counts_cache(id)
     tag = Tag.find(id)
-    tag.taggings_count = tag.taggings.length
+    tag.taggings_count = tag.taggings.count
   end
 
   acts_as_commentable
