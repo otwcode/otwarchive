@@ -20,6 +20,13 @@ describe ChallengeAssignmentsController do
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
+    
+    describe "defaulting" do
+      it "fails because no user specified" do
+        get :no_user
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
   end
 
   context "when logged in" do
@@ -58,6 +65,25 @@ describe ChallengeAssignmentsController do
         fake_login_known_user(user)
         get :no_assignment
         it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+    
+    describe "defaulting" do
+      let(:open_assignment) { create(:challenge_assignment, collection_id: collection.id) }
+
+      it "fails if user not specified" do
+        fake_login_known_user(user)
+        get :no_user, params: { collection_id: collection.name }
+        it_redirects_to_with_error(root_path, "What user were you trying to work with?")
+      end
+      
+      it "fails if you're not the owner of the assignment you're defaulting on" do
+        fake_login_known_user(user)
+        gift_exchange.assignments_sent_at = Time.now
+        gift_exchange.save
+        # tests :owner_only, but you can't access that directly or it won't load @challenge_assignment
+        get :default, params: { collection_id: collection.name, id: open_assignment, user_id: user.login }
+        it_redirects_to_with_error(root_path, "You aren't the owner of that assignment.")
       end
     end
 
