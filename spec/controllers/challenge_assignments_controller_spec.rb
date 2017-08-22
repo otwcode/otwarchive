@@ -73,7 +73,7 @@ describe ChallengeAssignmentsController do
 
       it "fails if user not specified" do
         fake_login_known_user(user)
-        get :no_user, collection_id: collection.name
+        get :no_user, params: { collection_id: collection.name }
         it_redirects_to_with_error(root_path, "What user were you trying to work with?")
       end
       
@@ -82,7 +82,7 @@ describe ChallengeAssignmentsController do
         gift_exchange.assignments_sent_at = Time.now
         gift_exchange.save
         # tests :owner_only, but you can't access that directly or it won't load @challenge_assignment
-        get :default, collection_id: collection.name, id: open_assignment, user_id: user.login
+        get :default, params: { collection_id: collection.name, id: open_assignment, user_id: user.login }
         it_redirects_to_with_error(root_path, "You aren't the owner of that assignment.")
       end
     end
