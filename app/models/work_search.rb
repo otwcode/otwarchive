@@ -99,6 +99,77 @@ class WorkSearch < Search
     self.options.delete_if { |key, value| value.blank? }
   end
 
+  def search_query
+    self.options ||= {}
+    search_opts = self.options
+    search_text = generate_search_text
+    facet_tags = self.faceted
+    facet_collections = self.collected
+    work_search = self
+
+    search = Tire.search 'work' do
+      query do
+        boolean do
+          must { string search_text, default_operator: "AND" } if search_text.present?
+
+          must { term :posted, 'T' } unless work_search.should_include_drafts?
+          must { term :hidden_by_admin, 'F' }
+          must { term :restricted, 'F' } unless search_opts[:show_restricted]
+          must { term :complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
+          must { term :expected_number_of_chapters, 1 } if %w(1 true).include?(search_opts[:single_chapter].to_s)
+          must { term :in_unrevealed_collection, 'F' } unless work_search.should_include_unrevealed?
+          must { term :in_anon_collection, 'F' } unless work_search.should_include_anon?
+          must { term :language_id, search_opts[:language_id].to_i } if search_opts[:language_id].present?
+
+          if search_opts[:pseud_ids].present?
+            must { terms :pseud_ids, search_opts[:pseud_ids] }
+          end
+
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[:filter_ids] ||= []
+              search_opts[:filter_ids] += search_opts[id_list]
+            end
+          end
+
+          [:filter_ids, :collection_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[id_list].each do |id|
+                must { term id_list, id }
+              end
+            end
+          end
+        end
+      end
+
+      [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
+        if search_opts[countable].present?
+          filter :range, countable => Search.range_to_search(search_opts[countable])
+        end
+      end
+
+      if search_opts[:sort_column].present?
+        sort { by search_opts[:sort_column], search_opts[:sort_direction] }
+      end
+
+      if facet_collections
+        facet 'collections' do
+          terms "collection_ids".to_sym, size: 50
+        end
+      end
+
+      if facet_tags
+        %w(rating warning category fandom character relationship freeform).each do |facet_type|
+          facet facet_type do
+            terms "#{facet_type}_ids".to_sym
+          end
+        end
+      end
+    end
+
+    JSON.parse(search.to_json)
+  end
+
   # Search for works based on options
   # Note that tire redefines 'self' for the scope of the method
   def search_results

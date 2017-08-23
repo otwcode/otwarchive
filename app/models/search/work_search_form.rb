@@ -45,9 +45,16 @@ class WorkSearchForm < SearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(options={})
-    @options = options
-    @searcher = WorkQuery.new(options.delete_if { |k, v| v.blank? })
+  def initialize(opts={})
+    @options = self.options = process_options(opts)
+    @searcher = WorkQuery.new(@options.delete_if { |k, v| v.blank? })
+  end
+
+  def process_options(opts = {})
+    opts[:creator] = opts[:creators] if opts[:creators]
+    opts.delete :creators
+
+    WorkSearch.new(opts).options
   end
 
   def persisted?
@@ -104,7 +111,6 @@ class WorkSearchForm < SearchForm
           (@options[:sort_direction] == "asc" ? " ascending" : " descending") : "")
     end
     summary.join(" ")
-
   end
 
   def search_results

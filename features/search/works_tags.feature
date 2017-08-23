@@ -19,7 +19,7 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "Star Trek"
     When I fill in "Fandoms" with "Star Trek"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Star Trek Tags: Star Trek"
       And I should see "5 Found"
       And the results should contain the fandom tag "Star Trek"
@@ -35,7 +35,7 @@ Feature: Search works by tag
     Given a set of Star Trek works for searching
     When I am on the search works page
       And I fill in "Fandoms" with "Star Trek: The Next Generation"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Star Trek: The Next Generation"
       And I should see "No results found."
       And I should see "You may want to edit your search to make it less specific."
@@ -49,21 +49,21 @@ Feature: Search works by tag
     Given a set of Star Trek works for searching
     When I am on the search works page
       And I fill in "Fandoms" with "Star Trek, Battlestar Galactica (2003)"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Star Trek, Battlestar Galactica (2003)"
       And I should see "1 Found"
       # A synonym of one of the Star Trek subtags
       And the results should contain the fandom tag "ST: TOS"
       And the results should contain the fandom tag "Battlestar Galactica (2003)"
     When I follow "Edit Your Search"
-    Then "Star Trek" should already be entered in the work search fandom autocomplete field
+      Then "Star Trek" should already be entered in the work search fandom autocomplete field
       And "Battlestar Galactica (2003)" should already be entered in the work search fandom autocomplete field
 
   Scenario: Searching by rating returns only works using that rating
     Given a set of works with various ratings for searching
     When I am on the search works page
       And I select "Teen And Up Audiences" from "Rating"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Teen And Up Audiences"
       And I should see "1 Found"
       And the results should contain the rating tag "Teen And Up Audiences"
@@ -83,7 +83,7 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "Mature || Explicit"
     When I exclude the tags "Mature" and "Explicit" by filter_id
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then the search summary should include the filter_id for "Mature"
       And the search summary should include the filter_id for "Explicit"
       And the results should not contain the rating tag "Mature"
@@ -93,7 +93,7 @@ Feature: Search works by tag
     Given a set of works with various ratings for searching
     When I am on the search works page
       And I fill in "Any Field" with "-Mature -Explicit"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: -Mature -Explicit"
       And I should see "3 Found"
       And the results should contain the rating tag "General Audiences"
@@ -107,7 +107,7 @@ Feature: Search works by tag
     Given a set of works with various warnings for searching
     When I am on the search works page
       And I check "No Archive Warnings Apply"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: No Archive Warnings Apply"
       And I should see "2 Found"
       And the 1st result should contain "No Archive Warnings Apply"
@@ -129,7 +129,7 @@ Feature: Search works by tag
     Given a set of works with various categories for searching
     When I am on the search works page
       And I check "F/F"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: F/F"
       And I should see "2 Found"
       And the results should contain the category tag "F/F"
@@ -137,7 +137,7 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the "F/F" checkbox should be checked
     When I fill in "Any Field" with "-M/M"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: -M/M Tags: F/F"
       And I should see "1 Found"
 
@@ -146,7 +146,7 @@ Feature: Search works by tag
     Given a set of works with various categories for searching
     When I am on the search works page
       And I check "Multi"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Multi"
       And I should see "1 Found"
       And the results should contain the category tag "Multi"
@@ -173,7 +173,7 @@ Feature: Search works by tag
     Given a set of Steve Rogers works for searching
     When I am on the search works page
       And I fill in "Characters" with "Steve Rogers"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Steve Rogers"
       And I should see "4 Found"
       And the results should contain the character tag "Steve Rogers"
@@ -197,7 +197,7 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "Spock/Nyota Uhura"
     When I fill in "Relationships" with "Spock/Nyota Uhura"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Spock/Nyota Uhura Tags: Spock/Nyota Uhura"
       And I should see "2 Found"
       And the results should contain the relationship tag "Spock/Nyota Uhura"
@@ -209,7 +209,7 @@ Feature: Search works by tag
     Given a set of Kirk/Spock works for searching
     When I am on the search works page
       And I fill in "Relationships" with "James T. Kirk/Spock"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: James T. Kirk/Spock"
       And I should see "4 Found"
       And the results should contain the relationship tag "James T. Kirk/Spock"
@@ -223,7 +223,7 @@ Feature: Search works by tag
     When I am on the search works page
       And I fill in "Relationships" with "James T. Kirk/Spock"
       And I check "F/M"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: F/M, James T. Kirk/Spock"
       And I should see "1 Found"
       And the results should contain the category tag "F/M"
@@ -238,7 +238,7 @@ Feature: Search works by tag
     Given a set of alternate universe works for searching
     When I am on the search works page
       And I fill in "Additional Tags" with "Alternate Universe"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Alternate Universe"
       And I should see "4 Found"
       And the results should contain the freeform tag "Alternate Universe"
@@ -255,7 +255,7 @@ Feature: Search works by tag
     Given a set of alternate universe works for searching
     When I am on the search works page
       And I fill in "Additional Tags" with "AU"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: AU"
       And I should see "4 Found"
       And the results should contain the freeform tag "AU"
@@ -270,7 +270,7 @@ Feature: Search works by tag
     Given a set of alternate universe works for searching
     When I am on the search works page
       And I fill in "Additional Tags" with "Alternate Universe - High School"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Alternate Universe - High School"
       And I should see "1 Found"
       And the results should contain a synonym of "Alternate Universe - High School"
@@ -283,7 +283,7 @@ Feature: Search works by tag
     Given a set of alternate universe works for searching
     When I am on the search works page
       And I fill in "Additional Tags" with "Coffee Shop AU"
-      And I press "Search" within "#new_work_search"
+      And I press "Search" within "#new_work_search_form"
     Then I should see "You searched for: Tags: Coffee Shop AU"
       And I should see "1 Found"
       And the results should contain the freeform tag "Coffee Shop AU"

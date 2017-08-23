@@ -32,7 +32,7 @@ class WorkQuery < Query
   # Combine the available queries
   # In this case, name is the only text field
   def queries
-    @queries = [general_query] #if options[:q] || options[:query].present?
+    @queries = [general_query] unless general_query.blank? #if options[:q] || options[:query].present?
   end
 
   def add_owner
@@ -178,7 +178,7 @@ class WorkQuery < Query
     input = input.gsub('creator:', 'creators:') if !input.blank?
     query = generate_search_text( input || '' )
 
-    { query_string: { query: query } }
+    return { query_string: { query: query, default_operator: "AND" } } unless query.blank?
   end
 
   def generate_search_text(query = '')
@@ -198,7 +198,7 @@ class WorkQuery < Query
     # if self.options[:collection_ids].blank? #&& self.collected
     #   search_text << " collection_ids:*"
     # end
-    search_text.strip
+    escape_slashes(search_text.strip)
   end
 
 
@@ -272,7 +272,8 @@ class WorkQuery < Query
     @filter_ids = options[:filter_ids] || []
     %w(fandom rating warning category character relationship freeform).each do |tag_type|
       if options["#{tag_type}_ids".to_sym].present?
-        @filter_ids += options["#{tag_type}_ids".to_sym]
+        ids = options["#{tag_type}_ids".to_sym]
+        @filter_ids += ids.is_a?(Array) ? ids : [ids]
       end
     end
     @filter_ids += named_tags
