@@ -43,7 +43,7 @@ describe InboxController do
 
         it "renders oldest first" do
           get :show, params: { user_id: user.login, filters: { date: "asc" } }
-          expect(assigns(:select_date)).to eq("asc")
+          expect(assigns(:filters)[:date]).to eq("asc")
           expect(assigns(:inbox_comments)).to eq(inbox_comments)
           expect(assigns(:inbox_total)).to eq(3)
           expect(assigns(:unread)).to eq(3)
@@ -56,7 +56,7 @@ describe InboxController do
 
         it "renders only unread" do
           get :show, params: { user_id: user.login, filters: { read: "false" } }
-          expect(assigns(:select_read)).to eq("false")
+          expect(assigns(:filters)[:read]).to eq("false")
           expect(assigns(:inbox_comments)).to eq([unread_comment])
           expect(assigns(:inbox_total)).to eq(2)
           expect(assigns(:unread)).to eq(1)
@@ -69,7 +69,7 @@ describe InboxController do
 
         it "renders only unreplied" do
           get :show, params: { user_id: user.login, filters: { replied_to: "false" } }
-          expect(assigns(:select_replied_to)).to eq("false")
+          expect(assigns(:filters)[:replied_to]).to eq("false")
           expect(assigns(:inbox_comments)).to eq([unreplied_comment])
           expect(assigns(:inbox_total)).to eq(2)
           expect(assigns(:unread)).to eq(2)
