@@ -60,6 +60,8 @@ module Otwarchive
 
     config.action_mailer.default_url_options = { host: "archiveofourown.org" }
 
+    config.action_view.automatically_disable_submit_tag = false
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
