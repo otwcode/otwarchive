@@ -462,6 +462,6 @@ public
 
   #### -- AUTHORIZATION -- ####
 
-  protect_from_forgery
+  protect_from_forgery with: :exception, prepend: true
 
 end
