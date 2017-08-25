@@ -188,7 +188,8 @@ class CollectionItem < ApplicationRecord
   after_update :notify_of_status_change
   def notify_of_status_change
     if saved_change_to_unrevealed?
-      # making sure that creation_observer.rb has not already notified the user
+      # making sure notify_recipients in the work model has not already notified 
+      # the user
       if !work.new_recipients.blank?
         notify_of_reveal
       end
