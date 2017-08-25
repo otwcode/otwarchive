@@ -78,8 +78,6 @@ class WorksController < ApplicationController
     @search = WorkSearchForm.new(options)
     @page_subtitle = ts("Search Works")
 
-    # binding.pry
-
     if params[:work_search_form].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)

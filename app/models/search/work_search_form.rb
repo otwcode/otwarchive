@@ -52,7 +52,13 @@ class WorkSearchForm < SearchForm
 
   def process_options(opts = {})
     opts[:creator] = opts[:creators] if opts[:creators]
-    opts.delete :creators
+    opts[:creators] = opts[:creator] if opts[:creator]
+
+    opts.keys.each do |key|
+      if opts[key] == "0"
+        opts[key] = nil
+      end
+    end
 
     WorkSearch.new(opts).options
   end
@@ -133,12 +139,16 @@ class WorkSearchForm < SearchForm
     ['Bookmarks', 'bookmarks_count']
   ]
 
-  def sort_column
-    @sort_column || 'revised_at'
+  def sort_columns
+    return 'revised_at' if options[:sort_column].blank?
+
+    options[:sort_column]
   end
 
   def sort_direction
-    @sort_direction || default_sort_direction
+    return default_sort_direction if options[:sort_direction].blank?
+
+    options[:sort_direction]
   end
 
   def sort_options

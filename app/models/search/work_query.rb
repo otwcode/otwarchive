@@ -172,10 +172,7 @@ class WorkQuery < Query
 
   # Search for a tag by name
   def general_query
-    # TODO: Create an alias for creators, perhaps? Or use 'copy_to' as suggested
-    # in Elasticsearch as a replacement for index_name in the mapping definition
     input = (options[:q] || options[:query])
-    input = input.gsub('creator:', 'creators:') if !input.blank?
     query = generate_search_text( input || '' )
 
     return { query_string: { query: query, default_operator: "AND" } } unless query.blank?
@@ -191,7 +188,7 @@ class WorkQuery < Query
             word.slice!(0)
           end
           word = escape_reserved_characters(word)
-          search_text << " #{field.to_s}: #{word}"
+          search_text << " #{field.to_s}:#{word}"
         end
       end
     end

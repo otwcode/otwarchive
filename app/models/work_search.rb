@@ -4,6 +4,7 @@ class WorkSearch < Search
   serialized_options :query,
     :title,
     :creator,
+    :creators,
     :revised_at,
     :language_id,
     :complete,

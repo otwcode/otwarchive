@@ -14,7 +14,7 @@ class WorkIndexer < Indexer
           },
           creators: {
             type: 'string',
-            analyzer: 'simple',
+            index: 'not_analyzed',
           },
           tag: {
             type: 'string',
