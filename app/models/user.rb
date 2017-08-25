@@ -345,6 +345,10 @@
     self.pseuds.where(is_default: true).first
   end
 
+  def default_pseud_id
+    pseuds.where(is_default: true).pluck(:id).first
+  end
+
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:user)
