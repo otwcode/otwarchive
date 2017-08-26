@@ -1,0 +1,8 @@
+<% if bookmark.bookmarkable.is_a?(Work) %>
+<% if bookmark.tags.exists? %>
+<%= ts("Bookmarker's Tags: ") %><%= bookmark.tags.pluck(:name).join(", ") %><br />
+<% end %>
+<% if bookmark.notes.present? %>
+<%= ts("Bookmarker's Notes: ") %><%= raw(sanitize_field(bookmark, :notes)) %>
+<% end %>
+<% end %>

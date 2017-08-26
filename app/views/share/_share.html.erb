@@ -4,7 +4,8 @@
   
   <% # HTML share code %>
   <p>
-    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= shareable.is_a?(Bookmark) ? get_bookmark_embed_link(bookmark) : get_embed_link(@work) %></textarea>
+    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= render "share/embed_link_#{shareable.class.to_s.downcase}", item: shareable %>
+    </textarea>
   </p>
   
   <ul>
@@ -18,7 +19,11 @@
       
     <% # Tumblr share %>
     <li>
-      <a href="http://tumblr.com/widgets/share/tool?canonicalUrl=<%=u shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>&title=<%=u shareable.is_a?(Bookmark) ? get_tumblr_embed_link_title(bookmark.bookmarkable) : get_tumblr_embed_link_title(@work) %>&caption=<%=u shareable.is_a?(Bookmark) ? get_tumblr_bookmark_embed_link(bookmark) : get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('//platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+      <% tumblr_url = shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work)%>
+      <% tumblr_title = get_tumblr_embed_link_title(shareable.is_a?(Bookmark) ? bookmark.bookmarkable : @work) %>
+      <% tumblr_caption = shareable.is_a?(Bookmark) ? render('share/embed_link_bookmark', item: bookmark) : render('share/embed_meta', work: @work) %>
+
+      <a href="http://tumblr.com/widgets/share/tool?canonicalUrl=<%=u tumblr_url %>&title=<%=u tumblr_title %>&caption=<%=u tumblr_caption %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('//platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
         <%= ts('Share on Tumblr') %>
       </a>
     </li>
