@@ -100,7 +100,7 @@ class CollectionsController < ApplicationController
 
     # add the owner
     owner_attributes = []
-    (params[:owner_pseuds] || [current_user.default_pseud]).each do |pseud_id|
+    (params[:owner_pseuds] || [current_user.default_pseud_id]).each do |pseud_id|
       pseud = Pseud.find(pseud_id)
       owner_attributes << {pseud: pseud, participant_role: CollectionParticipant::OWNER} if pseud
     end
