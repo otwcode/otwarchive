@@ -19,11 +19,6 @@ class ChallengeSignup < ApplicationRecord
 
   has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_signup_id'
 
-  before_destroy :before_destroy
-  def before_destroy
-    UserMailer.delete_signup_notification(user, self).deliver!
-  end
-
   before_destroy :clear_assignments_and_claims
   def clear_assignments_and_claims
     # remove this signup reference from any existing assignments
