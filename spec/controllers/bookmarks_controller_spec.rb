@@ -25,7 +25,7 @@ describe BookmarksController do
     context 'with javascript' do
       it 'should render the bookmark_form_dynamic form if logged in' do
         fake_login
-        xhr :get, :new, format: :js
+        get :new, params: { format: :js }, xhr: true
         expect(response).to render_template('bookmark_form_dynamic')
       end
     end
@@ -37,7 +37,7 @@ describe BookmarksController do
 
       it 'should render the bookmark_form_dynamic form' do
         fake_login_known_user(bookmark.pseud.user)
-        xhr :get, :edit, id: bookmark.id, format: :js
+        get :edit, params: { id: bookmark.id, format: :js }, xhr: true
         expect(response).to render_template('bookmark_form_dynamic')
       end
     end

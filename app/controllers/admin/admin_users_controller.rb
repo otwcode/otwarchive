@@ -1,7 +1,7 @@
 class Admin::AdminUsersController < ApplicationController
   include ExportsHelper
 
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
@@ -24,9 +24,9 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
 
-  before_filter :set_roles, only: [:index, :bulk_search]
+  before_action :set_roles, only: [:index, :bulk_search]
   def set_roles
-    @roles = Role.assignable.uniq
+    @roles = Role.assignable.distinct
   end
 
   # GET admin/users/1
@@ -177,7 +177,7 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
 
-  before_filter :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
+  before_action :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
   def user_is_banned
     @user = User.find_by(login: params[:id])
     unless @user && @user.banned?

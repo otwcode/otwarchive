@@ -1,4 +1,4 @@
-class OwnedTagSet < ActiveRecord::Base
+class OwnedTagSet < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   # Rather than use STI or polymorphic associations, since really what we want to do here
   # is build an extra layer of functionality on top of the generic tag set structure,

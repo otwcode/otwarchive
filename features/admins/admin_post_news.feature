@@ -8,15 +8,15 @@ Feature: Admin Actions to Post News
     Given I am logged in as an admin
     When I make an admin post
     Then I should see "Admin Post was successfully created."
-  
+
   Scenario: Receive comment notifications for comments posted to an admin post
     Given I have posted an admin post
-    
+
     # regular user replies to admin post
     When I am logged out as an admin
       And I am logged in as "happyuser"
       And I go to the admin-posts page
-    Given all emails have been delivered    
+    Given all emails have been delivered
     When I follow "Comment"
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
@@ -29,7 +29,7 @@ Feature: Admin Actions to Post News
       And I am logged in as an admin
       And I go to the admin-posts page
       And I follow "Default Admin Post"
-    Given all emails have been delivered    
+    Given all emails have been delivered
     When I follow "Comments (1)"
       And I follow "Reply"
       And I fill in "Comment" with "Thank you very much!" within ".odd"
@@ -42,12 +42,12 @@ Feature: Admin Actions to Post News
       And 1 email should be delivered to "admin@example.org"
     # reply to the user
       And 1 email should be delivered to "happyuser"
-  
+
     # regular user replies to comment of admin
     Given I am logged out as an admin
       And I am logged in as a random user
       And I go to the admin-posts page
-    Given all emails have been delivered    
+    Given all emails have been delivered
     When I follow "Read 2 Comments"
       And I follow "Reply" within ".even"
       And I fill in "Comment" with "Oh, don't grow too big a head, you." within ".even"
@@ -58,7 +58,7 @@ Feature: Admin Actions to Post News
       And 1 email should be delivered to "admin@example.org"
 
     # regular user edits their comment
-    Given all emails have been delivered    
+    Given all emails have been delivered
     When I follow "Edit"
       And I press "Update"
     # reply to the admin as a regular user
@@ -164,7 +164,7 @@ Feature: Admin Actions to Post News
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
-      
+
   Scenario: Admin post should be shown on the homepage
     Given I have posted an admin post
     When I am on the homepage

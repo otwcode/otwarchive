@@ -1,9 +1,9 @@
 class TagsController < ApplicationController
-  before_filter :load_collection
-  before_filter :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_filter :load_tag_and_subtags, only: [:show]
+  before_action :load_collection
+  before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
+  before_action :load_tag_and_subtags, only: [:show]
 
   caches_page :feed
 

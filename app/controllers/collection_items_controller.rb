@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_user, only: [:update_multiple]
-  before_filter :load_item_and_collection, only: [:destroy]
-  before_filter :load_collectible_item, only: [:new, :create]
-  before_filter :allowed_to_destroy, only: [:destroy]
+  before_action :load_collection
+  before_action :load_user, only: [:update_multiple]
+  before_action :load_item_and_collection, only: [:destroy]
+  before_action :load_collectible_item, only: [:new, :create]
+  before_action :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 

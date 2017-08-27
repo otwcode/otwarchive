@@ -1,17 +1,17 @@
 class ChallengeAssignmentsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_collection, except: [:index, :default]
-  before_filter :collection_owners_only, except: [:index, :show, :default]
-  before_filter :load_assignment_from_id, only: [:show, :default]
+  before_action :users_only
+  before_action :load_collection, except: [:index, :default]
+  before_action :collection_owners_only, except: [:index, :show, :default]
+  before_action :load_assignment_from_id, only: [:show, :default]
 
-  before_filter :load_challenge, except: [:index]
-  before_filter :check_signup_closed, except: [:index]
-  before_filter :check_assignments_not_sent, only: [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, only: [:create, :default, :purge, :confirm_purge]
+  before_action :load_challenge, except: [:index]
+  before_action :check_signup_closed, except: [:index]
+  before_action :check_assignments_not_sent, only: [:generate, :set, :send_out]
+  before_action :check_assignments_sent, only: [:create, :default, :purge, :confirm_purge]
 
-  before_filter :load_user, only: [:default]
-  before_filter :owner_only, only: [:default]
+  before_action :load_user, only: [:default]
+  before_action :owner_only, only: [:default]
 
 
   # PERMISSIONS AND STATUS CHECKING

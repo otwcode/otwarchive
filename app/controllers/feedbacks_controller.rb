@@ -1,6 +1,6 @@
 class FeedbacksController < ApplicationController
-  skip_before_filter :store_location
-  before_filter :load_support_languages
+  skip_before_action :store_location
+  before_action :load_support_languages
 
   def new
     @feedback = Feedback.new

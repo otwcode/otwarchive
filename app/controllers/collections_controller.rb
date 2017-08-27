@@ -1,10 +1,10 @@
 class CollectionsController < ApplicationController
 
-  before_filter :users_only, only: [:new, :edit, :create, :update]
-  before_filter :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :validate_challenge_type
+  before_action :users_only, only: [:new, :edit, :create, :update]
+  before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
+  before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_action :validate_challenge_type
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type

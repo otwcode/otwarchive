@@ -165,21 +165,6 @@ class UserMailer < BulletproofMailer::Base
       I18n.locale = I18n.default_locale
   end
 
-  # Sends an admin message to a user
-  def archive_notification(admin_login, user_id, subject, message)
-    @user = User.find(user_id)
-    @message = message
-    @admin_login = admin_login
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
   # Sends an admin message to an array of users
   def mass_archive_notification(admin, users, subject, message)
     users.each do |user|
@@ -391,7 +376,8 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted",
+        body: ""
       )
     end
     ensure
@@ -447,7 +433,7 @@ class UserMailer < BulletproofMailer::Base
   end
 
   def generate_attachment_content_from_signup(signup)
-    attachment_string =  "Collection: " + signup.collection + "<br />\n"
+    attachment_string = "Collection: #{signup.collection}<br/>\n"
     signup.requests.each_with_index do |prompt, index|
       attachment_string += "Request " + index+1 + ":<br />\n"
       any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}

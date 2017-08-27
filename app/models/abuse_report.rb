@@ -1,4 +1,4 @@
-class AbuseReport < ActiveRecord::Base
+class AbuseReport < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   validates :email, email_veracity: { allow_blank: false }

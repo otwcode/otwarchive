@@ -30,7 +30,7 @@ describe Opendoors::ToolsController do
 
       it "optionally recognizes the imported-from URL" do
         url = "http://example.com"
-        get :index, imported_from_url: url
+        get :index, params: { imported_from_url: url }
         expect(assigns(:imported_from_url)).to eq(url)
       end
     end
@@ -56,12 +56,12 @@ describe Opendoors::ToolsController do
       end
 
       it "redirects to tools if work URL is invalid" do
-        post :url_update, work_url: "/faq"
+        post :url_update, params: { work_url: "/faq" }
         it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the Archive. Have you put in the full URL?")
       end
 
       it "redirects to tools if work ID is not found" do
-        post :url_update, work_url: "/works/7331278/"
+        post :url_update, params: { work_url: "/works/7331278/" }
         it_redirects_to_with_error(opendoors_tools_path, "We couldn't find that work on the Archive. Have you put in the full URL?")
       end
 
@@ -70,24 +70,24 @@ describe Opendoors::ToolsController do
         let(:work_with_imported_from_url) { create(:work, imported_from_url: "http://example.org/my-immortal") }
 
         it "redirects to tools if imported-from URL is missing" do
-          post :url_update, work_url: "/works/#{work.id}/"
+          post :url_update, params: { work_url: "/works/#{work.id}/" }
           it_redirects_to_with_error(opendoors_tools_path, "The imported-from url you are trying to set doesn't seem valid.")
         end
 
         it "redirects to tools if imported-from URL is invalid" do
-          post :url_update, work_url: "/works/#{work.id}/", imported_from_url: " "
+          post :url_update, params: { work_url: "/works/#{work.id}/", imported_from_url: " " }
           it_redirects_to_with_error(opendoors_tools_path, "The imported-from url you are trying to set doesn't seem valid.")
         end
 
         it "redirects to tools if imported-from URL is already used in another work" do
           url = work_with_imported_from_url.imported_from_url
-          post :url_update, work_url: "/works/#{work.id}/", imported_from_url: url
+          post :url_update, params: { work_url: "/works/#{work.id}/", imported_from_url: url }
           it_redirects_to_with_error(opendoors_tools_path(imported_from_url: url), "There is already a work imported from the url #{url}.")
         end
 
         it "updates work if imported-from URL is valid" do
           url = "https://example.com/share/?url=https://example.com/dead-archive"
-          post :url_update, work_url: "http://example.org/works/#{work.id}/", imported_from_url: url
+          post :url_update, params: { work_url: "http://example.org/works/#{work.id}/", imported_from_url: url }
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: url), "Updated imported-from url for #{work.title} to #{url}")
           work.reload
           expect(work.imported_from_url).to eq(url)
@@ -95,7 +95,7 @@ describe Opendoors::ToolsController do
 
         it "updates work if imported-from URL has non-ASCII characters" do
           url = "https://example.com/work/resurrección"
-          post :url_update, work_url: "http://example.org/works/#{work.id}/", imported_from_url: url
+          post :url_update, params: { work_url: "http://example.org/works/#{work.id}/", imported_from_url: url }
           encoded_url = URI.encode(url)
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: encoded_url), "Updated imported-from url for #{work.title} to #{encoded_url}")
           work.reload

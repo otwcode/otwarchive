@@ -1,4 +1,4 @@
-class SetTagging < ActiveRecord::Base
+class SetTagging < ApplicationRecord
   belongs_to :tag
   belongs_to :tag_set
   

@@ -1,4 +1,4 @@
-class PromptMeme < ActiveRecord::Base
+class PromptMeme < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   PROMPT_TYPES = %w(requests)

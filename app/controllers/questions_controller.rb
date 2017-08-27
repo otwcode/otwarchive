@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_filter :load_archive_faq, except: [:index, :update_positions]
+  before_action :load_archive_faq, except: [:index, :update_positions]
 
   # GET /archive_faq/:archive_faq_id/questions/manage
   def manage

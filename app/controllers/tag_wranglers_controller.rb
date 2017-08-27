@@ -1,6 +1,6 @@
 class TagWranglersController < ApplicationController
-  before_filter :check_user_status
-	before_filter :check_permission_to_wrangle
+  before_action :check_user_status
+	before_action :check_permission_to_wrangle
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
