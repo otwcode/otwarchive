@@ -7,7 +7,6 @@ Feature: Search anonymous works
   Scenario: Works that are anonymous do not show up in searches for the
   creator's name
     Given I have the Battle set loaded
-      And all search indexes are updated
     When I search for works containing "mod1"
     Then I should see "You searched for: mod1"
       And I should see "No results found"
@@ -18,7 +17,6 @@ Feature: Search anonymous works
   Scenario: Works that are anonymous should show up in searches for the
   creator Anonymous
     Given I have the Battle set loaded
-      And all search indexes are updated
     When I search for works containing "Anonymous"
     Then I should see "You searched for: Anonymous"
       And I should see "1 Found"

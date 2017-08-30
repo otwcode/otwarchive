@@ -15,6 +15,7 @@ class WorkIndexer < Indexer
           creators: {
             type: 'string',
             index: 'not_analyzed',
+            # copy_to: 'creator'
           },
           tag: {
             type: 'string',

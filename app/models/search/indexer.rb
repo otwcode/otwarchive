@@ -79,7 +79,7 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}" 
+    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}"
     klass.constantize
   end
 
@@ -93,7 +93,7 @@ class Indexer
 
   ####################
   # INSTANCE METHODS
-  ####################     
+  ####################
 
   attr_reader :ids
 

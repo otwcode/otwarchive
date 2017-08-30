@@ -1,5 +1,5 @@
 class QueryResult
-  
+
   include Enumerable
 
   attr_reader :klass, :response, :current_page, :per_page
@@ -14,7 +14,7 @@ class QueryResult
   def hits
   	response['hits']['hits']
   end
-    
+
   # Find results with where rather than find in order to avoid ActiveRecord::RecordNotFound
   def items
     if @items.nil?
@@ -24,7 +24,7 @@ class QueryResult
     end
     @items
   end
-  
+
   def each(&block)
     items.each(&block)
   end
@@ -45,7 +45,7 @@ class QueryResult
   def to_ary
     self
   end
-  
+
   def facets
     return if response['aggregations'].nil?
     if @facets.nil?
@@ -74,19 +74,19 @@ class QueryResult
     end
     @facets
   end
-  
+
   def total_pages
     (total_entries / per_page.to_f).ceil rescue 0
   end
-  
+
   def total_entries
     response['hits']['total']
   end
-  
+
   def offset
     (current_page * per_page) - per_page
   end
-  
+
 end
 
 class QueryFacet < Struct.new(:id, :name, :count)

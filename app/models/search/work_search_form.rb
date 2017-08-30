@@ -60,6 +60,8 @@ class WorkSearchForm < SearchForm
       end
     end
 
+    opts[:query].gsub!('creator:', 'creators:') if opts[:query]
+
     WorkSearch.new(opts).options
   end
 
@@ -70,7 +72,7 @@ class WorkSearchForm < SearchForm
   def summary
     summary = []
     if @options[:query].present?
-      summary << @options[:query]
+      summary << @options[:query].gsub('creators:', 'creator:')
     end
     if @options[:title].present?
       summary << "Title: #{@options[:title]}"

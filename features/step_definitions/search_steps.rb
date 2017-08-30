@@ -5,8 +5,14 @@ Given /^all search indexes are updated$/ do
     # klass.tire.index.refresh
     #
     # Elasticsearch
+    if $elasticsearch.indices.exists? index: "ao3_test_#{klass.to_s.downcase}s"
+      $elasticsearch.indices.delete index: "ao3_test_#{klass.to_s.downcase}s"
+    end
+
+    "#{klass}Indexer".constantize.create_index
+
     indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
-    indexer.index_documents
+    indexer.index_documents rescue nil
   end
 end
 
