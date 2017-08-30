@@ -23,7 +23,11 @@ class Comment < ApplicationRecord
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
-  validates :content, uniqueness: {scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id], message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
+  validates :content, uniqueness: {
+    scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
+    unless: :is_deleted?,
+    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+  }
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
