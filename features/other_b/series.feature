@@ -218,3 +218,11 @@ Feature: Create and Edit Series
     Then I should see "Part 2 of the Ponies series" within "dd.series"
     When "AO3-3455" is fixed
     # And I should see "Part 1 of the Black Beauty series" within "dd.series"
+
+  Scenario: When editing a series, the title field should not escape HTML
+    Given I am logged in as "whoever"
+      And I post the work "whatever" as part of a series "What a title! :< :& :>"
+      And I go to whoever's series page
+      And I follow "What a title! :< :& :>"
+      And I follow "Edit Series"
+    Then I should see "What a title! :< :& :>" in the "Series Title" input
