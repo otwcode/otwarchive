@@ -105,6 +105,14 @@ Feature: Admin Actions to Post News
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
 
+  Scenario: Make a translation of an admin post that doesn't exist
+    Given basic languages
+      And I am logged in as an admin
+    When I make a translation of an admin post
+    Then I should see "Sorry! We couldn't save this admin post because:"
+      And I should see "Translated post does not exist"
+      And the translation information should still be filled in
+
   Scenario: Make a translation of an admin post stop being a translation
     Given I have posted an admin post
       And basic languages

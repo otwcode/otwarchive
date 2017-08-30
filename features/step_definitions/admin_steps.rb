@@ -311,12 +311,21 @@ end
 ### THEN
 
 When (/^I make a translation of an admin post$/) do
+  admin_post = AdminPost.find_by(title: "Default Admin Post")
+  # If post doesn't exist, assume we want to reference a non-existent post
+  admin_post_id = !admin_post.nil? ? admin_post.id : 0
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Deutsch Ankuendigung")
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
-  fill_in("admin_post_translated_post_id", with: AdminPost.find_by(title: "Default Admin Post").id)
+  fill_in("admin_post_translated_post_id", with: admin_post_id)
   click_button("Post")
+end
+
+Then (/^the translation information should still be filled in$/) do
+  step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
+  step %{the "content" field should contain "Deutsch Woerter"}
+  step %{"Deutsch" should be selected within "Choose a language"}
 end
 
 Then (/^I should see a translated admin post$/) do
