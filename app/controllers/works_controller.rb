@@ -676,6 +676,12 @@ class WorksController < ApplicationController
     end
 
     @work.posted = true
+    if @work.chaptered?
+      @work.chapters.each do |chapter|
+        chapter.posted = true
+        chapter.save
+      end
+    end
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
 
