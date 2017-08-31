@@ -16,12 +16,6 @@ describe Chapter do
     chapter.posted.should == false
   end
 
-  it "is posted on a posted work" do
-    work = create(:posted_work)
-    chapter = work.first_chapter
-    chapter.posted.should == true
-  end
-
   describe "save" do
 
     before(:each) do
