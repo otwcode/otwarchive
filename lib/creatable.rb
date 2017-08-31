@@ -30,12 +30,12 @@ module Creatable
   # Notify new co-authors that they've been added to a creation
   def notify_co_authors
     this_creation = self
-    creation = self.work if self.is_a?(Chapter)
+    creation = self.is_a?(Chapter) ? self.work : self
     if self && !self.authors.blank? && User.current_user.is_a?(User)
       new_authors = (self.authors - (self.pseuds + User.current_user.pseuds)).uniq
       unless new_authors.blank?
         for pseud in new_authors
-          UserMailer.coauthor_notification(pseud.user.id, self.id, self.class.name).deliver
+          UserMailer.coauthor_notification(pseud.user.id, creation.id, creation.class.name).deliver
         end
       end
     end
