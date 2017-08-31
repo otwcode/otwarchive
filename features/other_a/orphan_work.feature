@@ -135,7 +135,9 @@ Feature: Orphan work
   Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
   When I press "Yes, I'm sure"
   Then I should see "Orphaning was successful."
-  When I go to my works page
+  When the work indexes are updated
+    And the work indexes are reindexed
+    And I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
