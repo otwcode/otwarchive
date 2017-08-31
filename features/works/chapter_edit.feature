@@ -312,6 +312,9 @@ Feature: Edit chapters
     When I add the co-author "amy"
       And I post the chapter
     Then I should see "amy, karma"
+      And 1 email should be delivered to "amy"
+      And the email should contain "You have been listed as a co-creator on the following work"
+      And the email should not contain "translation missing"
 
 
   Scenario: You should be able to edit a chapter to add a co-creator who is
