@@ -96,13 +96,16 @@ Feature: Archivist bulk imports
       And I should not see "[archived by archivist]"
       And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should contain claim information
-    When I go to ao3's works page
+    When the work indexes are updated
+      And the work indexes are reindexed
+      And I go to ao3's works page
     Then I should see "Story"
 
   Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
       And the system processes jobs
+      And the work indexes are reindexed
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
@@ -111,7 +114,9 @@ Feature: Archivist bulk imports
     When I press "Add these works to my currently-logged-in account"
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
-    When I go to creator's works page
+    When the work indexes are updated
+      And the work indexes are reindexed
+      And I go to creator's works page
     Then I should see "Story"
 
   Scenario: Importing sends an email to a guessed address if it can't find the author
