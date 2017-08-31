@@ -25,12 +25,6 @@ FactoryGirl.define do
 
     factory :posted_work do
       posted true
-
-      after(:create) do |work|
-        chapter = Chapter.find(work.first_chapter.id)
-        chapter.posted = true
-        chapter.save
-      end
     end
   end
 
