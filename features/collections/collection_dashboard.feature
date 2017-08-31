@@ -3,9 +3,9 @@ Feature: Collection
   In order to browse a collection
   As a humble user
   I want to see a collection dashboard
-  
+
   Scenario: When a collection has more works or bookmarks than the maximum displayed on dashboards (5), the listbox for that type of item should contain a link to the collection's page for that type of item (e.g. Works (6) or Bookmarks (10)).
-  
+
   Given I have a collection "Dashboard Light" with name "dashboard_light"
     And I am logged in as "user"
   When I post the work "Work 1" in the collection "Dashboard Light"
@@ -14,6 +14,7 @@ Feature: Collection
     And I post the work "Work 4" in the collection "Dashboard Light"
     And I post the work "Work 5" in the collection "Dashboard Light"
     And I post the work "Work 6" in the collection "Dashboard Light"
+    And the work indexes are updated
   When I go to "Dashboard Light" collection's page
   Then I should see "Works (6)" within "#collection-works"
   When I follow "Works (6)" within "#collection-works"

@@ -6,7 +6,7 @@ Feature: Create bookmarks
 
 Scenario: Create a bookmark
   Given I am logged in as "first_bookmark_user"
-    When I am on first_bookmark_user's user page 
+    When I am on first_bookmark_user's user page
       Then I should see "have anything posted under this name yet"
     When I am logged in as "another_bookmark_user"
       And I post the work "Revenge of the Sith"
@@ -30,7 +30,7 @@ Scenario: Create a bookmark
       And I should see "and another tag"
       And I should see "I liked this story"
     When I am logged in as "first_bookmark_user"
-      And I go to first_bookmark_user's user page 
+      And I go to first_bookmark_user's user page
     Then I should not see "You don't have anything posted under this name yet"
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
@@ -41,14 +41,14 @@ Scenario: Create a bookmark
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "I liked this story"
-    
+
     # privacy check for the private bookmark '
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-      
+
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           |
