@@ -32,3 +32,9 @@ Given /^the (\w+) indexes are updated$/ do |model|
   indexer.index_documents
 end
 
+Given /^the (\w+) indexes are reindexed$/ do |model|
+  $elasticsearch.indices.refresh index: "ao3_test_#{model}s"
+end
+
+Given /^all search indexes are reindexed$/ do
+end
