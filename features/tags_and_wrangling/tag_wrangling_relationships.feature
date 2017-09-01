@@ -198,7 +198,9 @@ Scenario: AO3-959 Non-canonical merger pairings
     And I press "Update"
   Then I should see "Work was successfully updated"
 
-  When I go to Enigel's works page
+  When the work indexes are updated
+    And the work indexes are reindexed
+    And I go to Enigel's works page
   Then I should see "Testypants/Testyskirt"
      And I should see "Testing McTestypants/Testing McTestySkirt"
   When I view the tag "Testing"
