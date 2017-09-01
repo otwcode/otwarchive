@@ -18,10 +18,11 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(
-        login: params[:user_session][:login],
-        password: params[:user_session][:password]
-      )
+      @user_session = UserSession.new(user_session_params)
+      # Authlogic isn't saving this unless we set it explicitly
+      if user_session_params['remember_me'] == '1'
+        @user_session.remember_me = true
+      end
 
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
@@ -34,7 +35,7 @@ class UserSessionsController < ApplicationController
             if user.updated_at > 1.week.ago
               # we sent out a generated password and they're using it
               # log them in
-              @current_user = UserSession.create(user, params[:remember_me]).record
+              @current_user = UserSession.create(user, user_sesssion_params['remember_me']).record
               # flash a notice telling user to change password, and redirect them
               # to the correct form
               flash[:notice] = ts('You used a temporary password to log in.
