@@ -20,6 +20,7 @@ Feature: Reading count
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
+      And the work indexes are reindexed
     When I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Viewed once"
@@ -47,7 +48,9 @@ Feature: Reading count
       And I uncheck "Turn on Viewing History"
       And I press "Update"
     Then I should not see "My History"
-    When I am on writer's works page
+    When the work indexes are updated
+      And the work indexes are reindexed
+      And I am on writer's works page
       And I follow "some work"
     When I am on writer's works page
       And I follow "some work"
