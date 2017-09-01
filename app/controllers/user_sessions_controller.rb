@@ -18,11 +18,8 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(user_session_params)
-      # Authlogic isn't saving this unless we set it explicitly
-      if user_session_params[:remember_me] == '1'
-        @user_session.remember_me = true
-      end
+      # Need to convert params back to a hash for Authlogic bug
+      @user_session = UserSession.new(user_session_params.to_hash)
 
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
