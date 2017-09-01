@@ -694,10 +694,11 @@ class Work < ApplicationRecord
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.saved_change_to_posted? || (self.chapters.first && self.chapters.first.posted != self.posted)
-      self.chapters.first.published_at = Date.today unless self.backdate
-      self.chapters.first.posted = self.posted
-      self.chapters.first.save
+    chapter_one = self.first_chapter
+    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
+      chapter_one.published_at = Date.today unless self.backdate
+      chapter_one.posted = self.posted
+      chapter_one.save
     end
   end
 

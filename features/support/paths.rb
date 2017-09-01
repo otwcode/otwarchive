@@ -71,6 +71,8 @@ module NavigationHelpers
     when /my works page/
       Work.tire.index.refresh
       user_works_path(User.current_user)
+    when /my drafts page/
+      drafts_user_works_path(User.current_user)
     when /my edit multiple works page/
       show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
