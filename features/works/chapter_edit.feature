@@ -438,3 +438,14 @@ Feature: Edit chapters
       And I press "Post Without Preview"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
+
+
+  Scenario: The Post Draft option on your drafts page only posts the first
+  chapter of a multi-chapter draft
+    Given I have a multi-chapter draft
+      And I am on my drafts page
+    When I follow "Post Draft"
+    Then I should see "Your work was successfully posted."
+      And I should not see "This chapter is a draft and hasn't been posted yet!"
+    When I follow "Next Chapter"
+    Then I should see "This chapter is a draft and hasn't been posted yet!"

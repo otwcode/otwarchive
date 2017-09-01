@@ -7,6 +7,13 @@ describe Work do
     expect(create(:work)).to be_valid
   end
 
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
+  end
+
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
       expect {
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do
