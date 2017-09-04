@@ -30,5 +30,4 @@ class Warning < Tag
   def display_name
     DISPLAY_NAME_MAPPING[name] || name
   end
-
 end

@@ -1,7 +1,1 @@
-<%= link_to(content_tag(:strong, work.title.html_safe), work_url(work)) %><%= "(#{work.word_count} #{ts('words')})" %>
-<%= ts(" by ") %>
-<% if work.anonymous? %>
-<%= ts("Anonymous") %>
-<% else %>
-<%= work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe %>
-<% end %>
+<%= link_to(content_tag(:strong, work.title.html_safe), work_url(work)) %><%= " (#{work.word_count} #{ts('words')})" %><%= ts(" by ") %><%= work.anonymous? ? ts("Anonymous") : work.pseuds.map { |pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user)) }.join(', ').html_safe %>
