@@ -152,4 +152,8 @@ class ChallengeClaim < ApplicationRecord
     (self.claiming_user == current_user) || self.collection.user_is_maintainer?(current_user)
   end
 
+  def prompt_description
+    request_prompt.try(:description) || ""
+  end
+
 end
