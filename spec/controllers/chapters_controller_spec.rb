@@ -1116,5 +1116,4 @@ describe ChaptersController do
       end
     end
   end
->>>>>>> master
 end
