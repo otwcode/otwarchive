@@ -1,13 +1,13 @@
 class ChallengeClaimsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_collection, except: [:index]
-  before_filter :collection_owners_only, except: [:index, :show, :create, :destroy]
-  before_filter :load_claim_from_id, only: [:show, :destroy]
+  before_action :users_only
+  before_action :load_collection, except: [:index]
+  before_action :collection_owners_only, except: [:index, :show, :create, :destroy]
+  before_action :load_claim_from_id, only: [:show, :destroy]
 
-  before_filter :load_challenge, except: [:index]
+  before_action :load_challenge, except: [:index]
 
-  before_filter :allowed_to_destroy, only: [:destroy]
+  before_action :allowed_to_destroy, only: [:destroy]
 
 
   # PERMISSIONS AND STATUS CHECKING

@@ -17,6 +17,7 @@ Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
@@ -25,6 +26,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
+    user.pseuds.first.add_to_autocomplete
   end
 end
 

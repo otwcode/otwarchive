@@ -1,4 +1,4 @@
-class ChallengeSignup < ActiveRecord::Base
+class ChallengeSignup < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # -1 represents all matching
@@ -277,4 +277,5 @@ class ChallengeSignup < ActiveRecord::Base
 
     builder.build_potential_match
   end
+
 end

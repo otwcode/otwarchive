@@ -2,7 +2,7 @@ class KudosController < ApplicationController
 
   cache_sweeper :kudos_sweeper
 
-  skip_before_filter :store_location
+  skip_before_action :store_location
 
   def index
     @work = Work.find(params[:work_id])

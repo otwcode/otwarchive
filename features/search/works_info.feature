@@ -84,7 +84,7 @@ Feature: Search works by work info
     When I follow "Edit Your Search"
     Then the field labeled "Title" should contain "work"
       And "Title" should be selected within "Sort by"
-    When I select "Ascending" from "Sort direction" 
+    When I select "Ascending" from "Sort direction"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Title: work sort by: title ascending"
       And I should see "3 Found"
@@ -94,5 +94,4 @@ Feature: Search works by work info
     When I follow "Edit Your Search"
     Then the field labeled "Title" should contain "work"
       And "Title" should be selected within "Sort by"
-    When "AO3-5020" is fixed
-      # And "Ascending" should be selected within "Sort direction"
+      And "Ascending" should be selected within "Sort direction"

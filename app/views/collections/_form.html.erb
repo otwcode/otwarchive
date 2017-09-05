@@ -10,7 +10,7 @@
           <%= label_tag "owner_pseuds[]", ts("Owner pseud(s)") %>
         </dt>
         <dd>
-          <%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), multiple: true %>
+          <%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud_id), multiple: true %>
         </dd>
       <% else %>
         <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
@@ -66,7 +66,7 @@
         <ul class="notes">
           <% unless @collection.new_record? %>
             <li>
-              <%= image_tag(@collection.icon.url(:standard), size: "100x100", alt: @collection.icon_alt_text) %>
+              <%= image_tag(@collection.icon.url(:standard), size: "100x100", alt: @collection.icon_alt_text, skip_pipeline: true) %>
               <%= ts("This is the collection's icon.") %>
             </li>
           <% end %>
