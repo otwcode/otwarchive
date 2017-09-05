@@ -125,8 +125,9 @@ Feature:
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"
-    # Has old name until indexes are updated
-    When I search for works containing "oldusername"
+      # Has old name until indexes are updated
+    When the work indexes are updated
+      And I search for works containing "oldusername"
     Then I should see "Epic story"
       And I should see "newusername"
     # Still doesn't yet work due to bug AO3-3468

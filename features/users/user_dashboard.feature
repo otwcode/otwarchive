@@ -64,7 +64,9 @@ Feature: User dashboard
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"
-  When I follow "Works (6)" within "#user-works"
+  When the work indexes are updated
+    And the work indexes are reindexed
+    And I follow "Works (6)" within "#user-works"
   Then I should see "6 Works by meatloaf"
     And I should see "Oldest Work"
     And I should see "Newest Work"
@@ -133,6 +135,7 @@ Feature: User dashboard
     And I post the work "Excellent" with fandom "Star Trek"
     And I post the work "Even more Excellent" with fandom "Star Trek"
     And I post the work "Exciting" with fandom "Star Trek: Discovery"
+    And the work indexes are updated
   When I go to meatloaf's user page
     And I follow "Star Trek"
   Then I should see "2 Works by meatloaf in Star Trek"
