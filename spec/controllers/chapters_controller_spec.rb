@@ -9,7 +9,10 @@ describe ChaptersController do
   let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
   let(:banned_user) { create(:user, banned: true) }
   let(:banned_users_work) { create(:work, posted: true, authors: [banned_user.pseuds.first]) }
-
+  let(:chaptered_work) { create(:work_with_chapters, chapters_count: 3, posted: true) }
+  let(:first_chapter) { chaptered_work.first_chapter }
+  let(:middle_chapter) { chaptered_work.chapters_in_order[1] }
+  let(:last_chapter) { chaptered_work.last_chapter }
 
   describe "index" do
     it "redirects to work" do
@@ -64,11 +67,6 @@ describe ChaptersController do
   end
 
   describe "show" do
-    let(:work) { create(:work_with_chapters, chapters_count: 3, posted: true) }
-    let(:first_chapter) { work.first_chapter }
-    let(:middle_chapter) { work.chapters_in_order[1] }
-    let(:last_chapter) { work.last_chapter }
-
     context "when user is logged out" do
       it "renders show template" do
         get :show, params: { work_id: work.id, id: work.chapters.first }
@@ -126,9 +124,8 @@ describe ChaptersController do
     end
 
     it "redirects to chapter with selected_id" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: work.chapters.first, selected_id: chapter.id }
-      it_redirects_to work_chapter_path(work_id: work.id, id: chapter.id)
+      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id, selected_id: middle_chapter.id }
+      it_redirects_to work_chapter_path(work_id: chaptered_work.id, id: middle_chapter.id)
     end
 
     it "errors and redirects to work if chapter is not found" do
@@ -138,32 +135,27 @@ describe ChaptersController do
     end
 
     it "assigns @chapters to chapters in order" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: chapter.id }
-      expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
+      get :show, params: { work_id: chaptered_work.id, id: middle_chapter.id }
+      expect(assigns[:chapters]).to eq([first_chapter, middle_chapter, last_chapter])
     end
 
     it "assigns @previous_chapter when not on first chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: chapter.id }
-      expect(assigns[:previous_chapter]).to eq(work.chapters.first)
+      get :show, params: { work_id: chaptered_work.id, id: middle_chapter.id }
+      expect(assigns[:previous_chapter]).to eq(first_chapter)
     end
 
     it "does not assign @previous_chapter when on first chapter" do
-      create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: work.chapters.first.id }
+      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
       expect(assigns[:previous_chapter]).to be_nil
     end
 
     it "assigns @next_chapter when not on last chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:next_chapter]).to eq(chapter)
+      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
+      expect(assigns[:next_chapter]).to eq(middle_chapter)
     end
 
     it "does not assign @next_chapter when on last chapter" do
-      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
-      get :show, params: { work_id: work.id, id: chapter.id }
+      get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
       expect(assigns[:next_chapter]).to be_nil
     end
 
@@ -267,18 +259,18 @@ describe ChaptersController do
 
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
-        REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
+        REDIS_GENERAL.set("work_stats:#{chaptered_work.id}:last_visitor", nil)
         expect {
-          get :show, params: { work_id: work.id, id: first_chapter.id }
-        }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+          get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
+        }.to change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count").to_i }.by(1)
       end
     end
 
     context "when the chapter is neither first nor last" do
       it "does not increase the hit count" do
         expect {
-          get :show, params: { work_id: work.id, id: middle_chapter.id }
-        }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+          get :show, params: { work_id: chaptered_work.id, id: middle_chapter.id }
+        }.to_not change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count") }
       end
     end
 
@@ -287,45 +279,45 @@ describe ChaptersController do
         it "increases the work hit count" do
           request.env["HTTP_REFERER"] = nil
           expect {
-            get :show, params: { work_id: work.id, id: last_chapter.id }
-          }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+            get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+          }.to change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count").to_i }.by(1)
         end
       end
 
       context "when the referrer contains the work path" do
         context "with an exact match on the work id" do
           it "does not increase the hit count" do
-            request.env["HTTP_REFERER"] = work_url(work)
+            request.env["HTTP_REFERER"] = work_url(chaptered_work)
             expect {
-              get :show, params: { work_id: work.id, id: last_chapter.id }
-            }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+              get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+            }.to_not change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count") }
           end
 
           context "with an additional path" do
             it "does not increase the hit count" do
-              request.env["HTTP_REFERER"] = work_kudos_url(work)
+              request.env["HTTP_REFERER"] = work_kudos_url(chaptered_work)
               expect {
-                get :show, params: { work_id: work.id, id: last_chapter.id }
-              }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+                get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+              }.to_not change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count") }
             end
           end
 
           context "with parameters" do
             it "does not increase the hit count" do
-              request.env["HTTP_REFERER"] = work_url(work) + "?view_adult=true"
+              request.env["HTTP_REFERER"] = work_url(chaptered_work) + "?view_adult=true"
               expect {
-                get :show, params: { work_id: work.id, id: last_chapter.id }
-              }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
+                get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+              }.to_not change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count") }
             end
           end
         end
 
         context "with an inexact match on the work id" do
           it "increases the hit count" do
-            request.env["HTTP_REFERER"] = work_url(work) + "00"
+            request.env["HTTP_REFERER"] = work_url(chaptered_work) + "00"
             expect {
-              get :show, params: { work_id: work.id, id: last_chapter.id }
-            }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+              get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+            }.to change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count").to_i }.by(1)
           end
         end
       end
@@ -334,8 +326,8 @@ describe ChaptersController do
         it "increases the hit count" do
           request.env["HTTP_REFERER"] = root_url
           expect {
-            get :show, params: { work_id: work.id, id: last_chapter.id }
-          }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
+            get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+          }.to change { REDIS_GENERAL.get("work_stats:#{chaptered_work.id}:hit_count").to_i }.by(1)
         end
       end
     end
