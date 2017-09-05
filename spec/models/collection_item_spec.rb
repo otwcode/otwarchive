@@ -10,7 +10,7 @@ describe CollectionItem, :ready do
       ci = CollectionItem.create(
         item_id: 1,
         item_type: 'Bookmark',
-        collection_id: 1,
+        collection_id: create(:collection).id,
         unrevealed: true)
       ci.unrevealed = false
       expect(ci.save).to be_truthy

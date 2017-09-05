@@ -34,5 +34,6 @@ FactoryGirl.define do
   
   factory :collection_item do
     item_type "Work"
+    collection
   end
 end
