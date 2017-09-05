@@ -124,8 +124,9 @@ describe ChaptersController do
     end
 
     it "redirects to chapter with selected_id" do
-      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id, selected_id: middle_chapter.id }
-      it_redirects_to work_chapter_path(work_id: chaptered_work.id, id: middle_chapter.id)
+      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: work.chapters.first, selected_id: chapter.id }
+      it_redirects_to work_chapter_path(work_id: work.id, id: chapter.id)
     end
 
     it "errors and redirects to work if chapter is not found" do
@@ -135,27 +136,32 @@ describe ChaptersController do
     end
 
     it "assigns @chapters to chapters in order" do
-      get :show, params: { work_id: chaptered_work.id, id: middle_chapter.id }
-      expect(assigns[:chapters]).to eq([first_chapter, middle_chapter, last_chapter])
+      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: chapter.id }
+      expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
     end
 
     it "assigns @previous_chapter when not on first chapter" do
-      get :show, params: { work_id: chaptered_work.id, id: middle_chapter.id }
-      expect(assigns[:previous_chapter]).to eq(first_chapter)
+      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: chapter.id }
+      expect(assigns[:previous_chapter]).to eq(work.chapters.first)
     end
 
     it "does not assign @previous_chapter when on first chapter" do
-      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
+      create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: work.chapters.first.id }
       expect(assigns[:previous_chapter]).to be_nil
     end
 
     it "assigns @next_chapter when not on last chapter" do
-      get :show, params: { work_id: chaptered_work.id, id: first_chapter.id }
-      expect(assigns[:next_chapter]).to eq(middle_chapter)
+      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: work.chapters.first.id }
+      expect(assigns[:next_chapter]).to eq(chapter)
     end
 
     it "does not assign @next_chapter when on last chapter" do
-      get :show, params: { work_id: chaptered_work.id, id: last_chapter.id }
+      chapter = create(:chapter, work: work, authors: work.authors, position: 2, posted: true)
+      get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:next_chapter]).to be_nil
     end
 
