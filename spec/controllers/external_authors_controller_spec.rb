@@ -73,13 +73,8 @@ describe ExternalAuthorsController do
 
       context "when doing nothing with imported works" do
         it "redirects with a success message" do
-<<<<<<< HEAD
-          put :update, user_id: user.login, id: external_author.id, imported_stories: "nothing"
-          it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
-=======
           put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing" }
           it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
->>>>>>> master
         end
       end
 
