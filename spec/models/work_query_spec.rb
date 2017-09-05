@@ -5,8 +5,14 @@ describe WorkQuery do
   it "should return raw json for a simple search" do
     q = WorkQuery.new(query: "unicorns")
     search_body = q.generated_query
+    expected_query_string_arr = [{
+      query_string: {
+        query: "unicorns",
+        default_operator: "AND"
+      }
+    }]
 
-    expect(search_body[:query][:bool][:must]).to eq([{query_string: {query: "unicorns"}}])
+    expect(search_body[:query][:bool][:must]).to eq(expected_query_string_arr)
   end
 
   it "should never return drafts" do
