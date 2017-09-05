@@ -7,14 +7,27 @@ describe WorkSearch do
     # This doesn't work properly in the factory.
     second_work.collection_ids = [collection.id]
     second_work.save
+
+    # TIRE
     Tire.index(Work.index_name).delete
     Work.create_elasticsearch_index
     Work.import
+
+    # Elasticsearch
+    if $elasticsearch.indices.exists? index: 'ao3_test_works'
+      $elasticsearch.indices.delete index: 'ao3_test_works'
+    end
+
+    WorkIndexer.create_index
+    indexer = WorkIndexer.new(Work.all.pluck(:id))
+    indexer.index_documents
   end
 
   after(:each) do
     Work.destroy_all
     Tire.index(Work.index_name).delete
+
+    $elasticsearch.indices.delete index: 'ao3_test_works'
   end
 
   let!(:collection) do

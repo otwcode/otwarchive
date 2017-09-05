@@ -84,6 +84,7 @@ def clean_the_database
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
   # Finally elastic search
+  # TIRE
   Work.tire.index.delete
   Work.create_elasticsearch_index
 
@@ -95,6 +96,18 @@ def clean_the_database
 
   Pseud.tire.index.delete
   Pseud.create_elasticsearch_index
+
+  # Elasticsearch
+  [Work, Bookmark, Pseud, Tag].each do |klass|
+    if $elasticsearch.indices.exists? index: "ao3_test_#{klass.to_s.downcase}s"
+      $elasticsearch.indices.delete index: "ao3_test_#{klass.to_s.downcase}s"
+    end
+
+    "#{klass}Indexer".constantize.create_index
+
+    indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
+    indexer.index_documents rescue nil
+  end
 end
 
 def get_message_part (mail, content_type)
