@@ -26,10 +26,6 @@ When /^I search for works by mod$/ do
       step %{I press "Search"}
 end
 
-When /^I have flushed Redis$/ do
-  REDIS_GENERAL.flushdb
-end
-
 ### THEN
 
 Then /^I should see appropriate results for that complex term$/ do

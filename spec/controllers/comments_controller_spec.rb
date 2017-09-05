@@ -82,11 +82,55 @@ describe CommentsController do
       expect(assigns(:name)).to eq(admin_post.title)
     end
 
-    it "renders the :new template if commentable is a valid tag" do
-      fandom = create(:fandom)
-      post :new, tag_id: fandom.name
-      expect(response).to render_template("new")
-      expect(assigns(:name)).to eq("Fandom")
+    context "when the commentable is a valid tag" do
+      let(:fandom) { create(:fandom) }
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+
+        it "renders the :new template" do
+          post :new, tag_id: fandom.name
+          expect(response).to render_template("new")
+          expect(assigns(:name)).to eq("Fandom")
+        end
+      end
+
+      context "when logged in as a tag wrangler" do
+        before do
+          fake_login
+          @current_user.roles << Role.new(name: 'tag_wrangler')
+        end
+
+        it "renders the :new template" do
+          post :new, tag_id: fandom.name
+          expect(response).to render_template("new")
+          expect(assigns(:name)).to eq("Fandom")
+        end
+      end
+
+      context "when logged in as a random user" do
+        before { fake_login }
+
+        it "shows an error and redirects" do
+          post :new, tag_id: fandom.name
+          it_redirects_to_with_error(user_path(@current_user),
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach.")
+        end
+      end
+
+      context "when logged out" do
+        before { fake_logout }
+
+        it "shows an error and redirects" do
+          post :new, tag_id: fandom.name
+          it_redirects_to_with_error(new_user_session_path,
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach. Please log in.")
+        end
+      end
     end
 
     it "renders the :new template if commentable is a valid comment" do
@@ -94,6 +138,75 @@ describe CommentsController do
       post :new, comment_id: comment.id
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq("Previous Comment")
+    end
+  end
+
+  describe "POST #create" do
+    let(:anon_comment_attributes) do
+      attributes_for(:comment).slice(:name, :email, :content)
+    end
+
+    context "when the commentable is a valid tag" do
+      let(:fandom) { create(:fandom) }
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+
+        it "posts the comment and shows it in context" do
+          post :create, tag_id: fandom.name, comment: anon_comment_attributes
+          comment = Comment.last
+          expect(comment.commentable).to eq fandom
+          expect(comment.name).to eq anon_comment_attributes[:name]
+          expect(comment.email).to eq anon_comment_attributes[:email]
+          expect(comment.content).to include anon_comment_attributes[:content]
+          path = comments_path(tag_id: fandom.to_param,
+                               anchor: "comment_#{comment.id}")
+          expect(response).to redirect_to path
+        end
+      end
+
+      context "when logged in as a tag wrangler" do
+        before do
+          fake_login
+          @current_user.roles << Role.new(name: 'tag_wrangler')
+        end
+
+        it "posts the comment and shows it in context" do
+          post :create, tag_id: fandom.name, comment: anon_comment_attributes
+          comment = Comment.last
+          expect(comment.commentable).to eq fandom
+          expect(comment.name).to eq anon_comment_attributes[:name]
+          expect(comment.email).to eq anon_comment_attributes[:email]
+          expect(comment.content).to include anon_comment_attributes[:content]
+          path = comments_path(tag_id: fandom.to_param,
+                               anchor: "comment_#{comment.id}")
+          expect(response).to redirect_to path
+        end
+      end
+
+      context "when logged in as a random user" do
+        before { fake_login }
+
+        it "shows an error and redirects" do
+          post :create, tag_id: fandom.name, comment: anon_comment_attributes
+          it_redirects_to_with_error(user_path(@current_user),
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach.")
+        end
+      end
+
+      context "when logged out" do
+        before { fake_logout }
+
+        it "shows an error and redirects" do
+          post :create, tag_id: fandom.name, comment: anon_comment_attributes
+          it_redirects_to_with_error(new_user_session_path,
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach. Please log in.")
+        end
+      end
     end
   end
 
@@ -106,11 +219,203 @@ describe CommentsController do
   end
 
   describe "PUT #approve" do
-    it "redirects to the comment on the commentable without an error" do
-      put :approve, id: unreviewed_comment.id
-      expect(unreviewed_comment.approved).to be true
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(unreviewed_comment.ultimate_parent, show_comments: true, anchor: 'comments'))
+    before { comment.update_column(:approved, false) }
+
+    context "when logged-in as admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "marks the comment as not spam" do
+        put :approve, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_truthy
+      end
+    end
+
+    context "when logged-in as the work's creator" do
+      before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+      it "marks the comment as not spam" do
+        put :approve, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_truthy
+      end
+    end
+
+    context "when logged-in as the comment writer" do
+      before { fake_login_known_user(comment.pseud.user) }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when logged-in as a random user" do
+      before { fake_login }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when not logged-in" do
+      before { fake_logout }
+
+      it "leaves the comment marked as spam and redirects with an error" do
+        put :approve, id: comment.id
+        expect(comment.reload.approved).to be_falsey
+        it_redirects_to_with_error(
+          login_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+  end
+
+  describe "PUT #reject" do
+    context "when logged-in as admin" do
+      before { fake_login_admin(create(:admin)) }
+
+      it "marks the comment as spam" do
+        put :reject, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_falsey
+      end
+    end
+
+    context "when logged-in as the work's creator" do
+      before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+      it "marks the comment as spam" do
+        put :reject, id: comment.id
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                  show_comments: true,
+                                                  anchor: 'comments'))
+        expect(comment.reload.approved).to be_falsey
+      end
+    end
+
+    context "when logged-in as the comment writer" do
+      before { fake_login_known_user(comment.pseud.user) }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when logged-in as a random user" do
+      before { fake_login }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          root_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+
+    context "when not logged-in" do
+      before { fake_logout }
+
+      it "doesn't mark the comment as spam and redirects with an error" do
+        put :reject, id: comment.id
+        expect(comment.reload.approved).to be_truthy
+        it_redirects_to_with_error(
+          login_path,
+          "Sorry, you don't have permission to moderate that comment."
+        )
+      end
+    end
+  end
+
+  describe "GET #show_comments" do
+    context "when the commentable is a valid tag" do
+      let(:fandom) { create(:fandom) }
+
+      let(:all_comments_path) do
+        comments_path(tag_id: fandom.to_param, anchor: "comments")
+      end
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+
+        it "redirects to the tag comments page when the format is html" do
+          get :show_comments, tag_id: fandom.name
+          expect(response).to redirect_to all_comments_path
+        end
+
+        it "loads the comments when the format is javascript" do
+          get :show_comments, tag_id: fandom.name, format: :js
+          expect(response).to render_template(:show_comments)
+        end
+      end
+
+      context "when logged in as a tag wrangler" do
+        before do
+          fake_login
+          @current_user.roles << Role.new(name: 'tag_wrangler')
+        end
+
+        it "redirects to the tag comments page when the format is html" do
+          get :show_comments, tag_id: fandom.name
+          expect(response).to redirect_to all_comments_path
+        end
+
+        it "loads the comments when the format is javascript" do
+          get :show_comments, tag_id: fandom.name, format: :js
+          expect(response).to render_template(:show_comments)
+        end
+      end
+
+      context "when logged in as a random user" do
+        before { fake_login }
+
+        it "shows an error and redirects" do
+          get :show_comments, tag_id: fandom.name
+          it_redirects_to_with_error(user_path(@current_user),
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach.")
+        end
+      end
+
+      context "when logged out" do
+        before { fake_logout }
+
+        it "shows an error and redirects" do
+          get :show_comments, tag_id: fandom.name
+          it_redirects_to_with_error(new_user_session_path,
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach. Please log in.")
+        end
+      end
     end
   end
 
@@ -177,10 +482,47 @@ describe CommentsController do
   end
 
   describe "GET #cancel_comment_edit" do
-    it "redirects to the comment on the commentable without an error" do
-      get :cancel_comment_edit, id: comment.id
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+    context "when logged in as the comment writer" do
+      before { fake_login_known_user(comment.pseud.user) }
+
+      context "when the format is html" do
+        it "redirects to the comment on the commentable without an error" do
+          get :cancel_comment_edit, id: comment.id
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(work_path(comment.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"))
+        end
+      end
+
+      context "when the format is javascript" do
+        it "loads the javascript to restore the comment" do
+          get :cancel_comment_edit, id: comment.id, format: :js
+          expect(response).to render_template("cancel_comment_edit")
+        end
+      end
+    end
+
+    context "when logged in as a random user" do
+      before { fake_login }
+
+      it "shows an error and redirects" do
+        get :cancel_comment_edit, id: comment.id
+        it_redirects_to_with_error(comment,
+                                   "Sorry, you don't have permission to " \
+                                   "access the page you were trying to " \
+                                   "reach.")
+      end
+    end
+
+    context "when logged out" do
+      before { fake_logout }
+
+      it "shows an error and redirects" do
+        get :cancel_comment_edit, id: comment.id
+        it_redirects_to_with_error(comment,
+                                   "Sorry, you don't have permission to " \
+                                   "access the page you were trying to " \
+                                   "reach. Please log in.")
+      end
     end
   end
 

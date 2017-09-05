@@ -5,19 +5,8 @@ class LocalesController < ApplicationController
     logged_in_as_admin? || permit?("translation_admin") || access_denied
   end
 
-  def set
-    if params[:locale_id]
-      session[:locale] = params[:locale_id]
-    end
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
-  end
-
   def index
     @locales = Locale.all(:order => :iso)
-  end
-
-  def show
-    @locale = Locale.find_by_iso(params[:id])
   end
 
   def new

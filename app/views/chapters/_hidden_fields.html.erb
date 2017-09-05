@@ -4,9 +4,6 @@
 <select name="chapter[author_attributes][ids][]" multiple="multiple" style="display:none;">
 <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>  
 </select>
-<select name="chapter[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
-<%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
-</select>
 
 <%= form.hidden_field :title, :value => "#{@chapter.title}" %>
 <%= form.hidden_field :summary, :value => "#{@chapter.summary}" %>
