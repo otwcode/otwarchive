@@ -220,3 +220,24 @@ Feature: Import Works
     When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
     Then I should see "Preview"
       And I should see "English"
+
+  Scenario: Searching for an imported work by URL will redirect you to the work
+    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I press "Post"
+      And I go to the redirect page
+      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I press "Go"
+    Then I should see "This is what Blaine's been thinking written in poems."
+
+  Scenario: Import URLs as chapters of a single work and post from drafts page
+    Given I import the urls with mock websites as chapters
+      """
+      http://import-site-without-tags
+      http://second-import-site-without-tags
+      """
+    When I go to my drafts page
+      And I follow "Post Draft"
+    Then I should see "Your work was successfully posted."
+      And I should not see "This chapter is a draft and hasn't been posted yet!"
+    When I follow "Next Chapter"
+    Then I should not see "This chapter is a draft and hasn't been posted yet!"
