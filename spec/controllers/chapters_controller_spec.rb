@@ -225,11 +225,6 @@ describe ChaptersController do
       expect(assigns[:subscription]).to be_nil
     end
 
-    it "increments the hit count when accessing the first chapter" do
-      REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
-      expect { get :show, params: { work_id: work.id, id: work.chapters.first.id } }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
-    end
-
     context "when work owner is logged in" do
       before do
         fake_login_known_user(user)
@@ -272,8 +267,9 @@ describe ChaptersController do
 
     context "when the chapter is the first chapter" do
       it "increases the hit count" do
+        REDIS_GENERAL.set("work_stats:#{work.id}:last_visitor", nil)
         expect {
-          get :show, work_id: work.id, id: first_chapter.id
+          get :show, params: { work_id: work.id, id: first_chapter.id }
         }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
       end
     end
@@ -281,7 +277,7 @@ describe ChaptersController do
     context "when the chapter is neither first nor last" do
       it "does not increase the hit count" do
         expect {
-          get :show, work_id: work.id, id: middle_chapter.id
+          get :show, params: { work_id: work.id, id: middle_chapter.id }
         }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
       end
     end
@@ -291,7 +287,7 @@ describe ChaptersController do
         it "increases the work hit count" do
           request.env["HTTP_REFERER"] = nil
           expect {
-            get :show, work_id: work.id, id: last_chapter.id
+            get :show, params: { work_id: work.id, id: last_chapter.id }
           }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
         end
       end
@@ -301,7 +297,7 @@ describe ChaptersController do
           it "does not increase the hit count" do
             request.env["HTTP_REFERER"] = work_url(work)
             expect {
-              get :show, work_id: work.id, id: last_chapter.id
+              get :show, params: { work_id: work.id, id: last_chapter.id }
             }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
           end
 
@@ -309,7 +305,7 @@ describe ChaptersController do
             it "does not increase the hit count" do
               request.env["HTTP_REFERER"] = work_kudos_url(work)
               expect {
-                get :show, work_id: work.id, id: last_chapter.id
+                get :show, params: { work_id: work.id, id: last_chapter.id }
               }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
             end
           end
@@ -318,7 +314,7 @@ describe ChaptersController do
             it "does not increase the hit count" do
               request.env["HTTP_REFERER"] = work_url(work) + "?view_adult=true"
               expect {
-                get :show, work_id: work.id, id: last_chapter.id
+                get :show, params: { work_id: work.id, id: last_chapter.id }
               }.to_not change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count") }
             end
           end
@@ -328,7 +324,7 @@ describe ChaptersController do
           it "increases the hit count" do
             request.env["HTTP_REFERER"] = work_url(work) + "00"
             expect {
-              get :show, work_id: work.id, id: last_chapter.id
+              get :show, params: { work_id: work.id, id: last_chapter.id }
             }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
           end
         end
@@ -338,7 +334,7 @@ describe ChaptersController do
         it "increases the hit count" do
           request.env["HTTP_REFERER"] = root_url
           expect {
-            get :show, work_id: work.id, id: last_chapter.id
+            get :show, params: { work_id: work.id, id: last_chapter.id }
           }.to change { REDIS_GENERAL.get("work_stats:#{work.id}:hit_count").to_i }.by(1)
         end
       end
