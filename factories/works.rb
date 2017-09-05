@@ -38,6 +38,10 @@ FactoryGirl.define do
         create_list(:chapter, chapters_to_create, work_id: work.id, posted: true)
       end
     end
+
+    factory :posted_work do
+      posted true
+    end
   end
 
   factory :external_work do

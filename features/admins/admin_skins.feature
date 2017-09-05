@@ -12,7 +12,7 @@ Feature: Admin manage skins
     And I am logged in as an admin
   When I follow "Approved Skins"
     And I check "Cache"
-  Then I press "Update" 
+  Then I press "Update"
     And I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
     And I check "Uncache"
@@ -121,7 +121,7 @@ Feature: Admin manage skins
   When I am on skinner's preferences page
     And I select "strange skin" from "preference_skin_id"
     And I submit
-  Then I should see "{ text-decoration: underline; }" 
+  Then I should see "{ text-decoration: underline; }"
   When I am logged in as an admin
   Then I should not see "{ text-decoration: blink; }"
   When I follow "Approved Skins"

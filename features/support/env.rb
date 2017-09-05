@@ -7,6 +7,7 @@
 # This file has been edited by hand :(
 require 'simplecov'
 require 'coveralls'
+require 'cucumber/timecop'
 require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
 Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
@@ -55,6 +56,18 @@ Before '@javascript' do
   @javascript = true
 end
 
+Before do
+    settings = AdminSetting.new(invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+          invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+          invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+          account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
+          days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
+    settings.save(validate: false)
+
+    language = Language.find_or_create_by(short: 'en', name: 'English')
+    Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
+end
+
 Before '@disable_caching' do
   ActionController::Base.perform_caching = false
 end
@@ -70,5 +83,3 @@ Cucumber::Rails::Database.javascript_strategy = :transaction
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = :poltergeist
-
-

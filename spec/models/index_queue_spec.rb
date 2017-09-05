@@ -1,13 +1,6 @@
 require 'spec_helper'
 
 describe IndexQueue do
-
-  before(:each) do
-    IndexQueue.all.each do |key|
-      REDIS_GENERAL.del(key)
-    end
-  end
-
   it "should build correct keys" do
     expect(IndexQueue.get_key('StatCounter', :stats)).to eq("index:stat_counter:stats")
   end
@@ -39,5 +32,4 @@ describe IndexQueue do
 
     expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
   end
-
 end

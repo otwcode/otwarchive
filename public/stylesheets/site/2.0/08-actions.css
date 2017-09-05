@@ -55,7 +55,8 @@ label.action {
 }
 
 input[type="submit"] {
-  height: 1.929em;
+  height: auto;
+  white-space: normal;
 }
 
 p.submit, input.submit, dd.submit {
@@ -72,7 +73,7 @@ p.submit, input.submit, dd.submit {
   padding: 0;
 }
 
-/*subtypes and modes 
+/*subtypes and modes
 test note: this pagination clear needs to be kept an eye on*/
 
 ol.pagination, div.pagination, ol.year {
@@ -186,13 +187,13 @@ dl.stats + .landmark + .actions {
   padding: 0 0 0.15em 0;
 }
 
-.many p.actions { 
-  float: none; 
-  text-align: right; 
+.many p.actions {
+  float: none;
+  text-align: right;
 }
 
-.concise label.action { 
-  float: left; 
+.concise label.action {
+  float: left;
 }
 
 dd.any label.action {

@@ -9,7 +9,7 @@
 require 'capistrano/gitflow_version'
 
 server "test-app01.transformativeworks.org", :app, :db
-server "test-app02.transformativeworks.org", :app, :workers, :schedulers, :primary => true
+server "test-app02.transformativeworks.org", :app, :workers, :schedulers, primary: true
 server "test-front01.transformativeworks.org", :web
 
 set :rails_env, 'staging'

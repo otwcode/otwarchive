@@ -22,7 +22,7 @@ class RedirectController < ApplicationController
 
   def show
     if params[:original_url].present?
-      redirect_to :action => :do_redirect, :original_url => params[:original_url] and return
+      redirect_to action: :do_redirect, original_url: params[:original_url] and return
     end
   end
 

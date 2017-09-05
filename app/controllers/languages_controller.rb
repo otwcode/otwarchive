@@ -1,5 +1,5 @@
 class LanguagesController < ApplicationController
-  before_filter :check_permission, only: [:new, :create, :edit, :update]
+  before_action :check_permission, only: [:new, :create, :edit, :update]
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
@@ -10,7 +10,7 @@ class LanguagesController < ApplicationController
   end
 
   def show
-    @language = Language.find_by_short(params[:id])
+    @language = Language.find_by(short: params[:id])
     @works = @language.works.recent.visible.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
   end
 
@@ -29,11 +29,11 @@ class LanguagesController < ApplicationController
   end
 
   def edit
-    @language = Language.find_by_short(params[:id])
+    @language = Language.find_by(short: params[:id])
   end
 
   def update
-    @language = Language.find_by_short(params[:id])
+    @language = Language.find_by(short: params[:id])
     if @language.update_attributes(language_params)
       flash[:notice] = t('successfully_updated', default: 'Language was successfully updated.')
       redirect_to @language

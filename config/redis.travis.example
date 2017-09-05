@@ -1,8 +1,8 @@
 redis_resque:
   test: localhost:6379
 redis_kudos:
-  test: localhost:6379
+  test: localhost:6380
 redis_general:
-  test: localhost:6379
+  test: localhost:6381
 redis_rollout:
-  test: localhost:6379
+  test: localhost:6382
