@@ -34,6 +34,6 @@ Then /^"(.*?)" should not be listed as a recipient in the form/ do |recipient|
 end
 
 Then(/^the gift for "(.*?)" should still exist on "(.*?)"$/) do |recipient, work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.gifts.map(&:recipient).include?(recipient)
 end

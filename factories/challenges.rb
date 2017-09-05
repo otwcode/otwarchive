@@ -24,5 +24,22 @@ FactoryGirl.define do
       potential_match.request_signup_id = FactoryGirl.create(:challenge_signup, collection_id: potential_match.collection_id)
     end
   end  
-  
+
+  factory :gift_exchange do
+    after(:build) do |ge|
+      ge.offer_restriction_id = create(:prompt_restriction).id
+      ge.request_restriction_id = create(:prompt_restriction).id
+      ge.prompt_restriction_id = create(:prompt_restriction).id
+    end
+  end
+
+  factory :offer
+  factory :request
+
+  factory :prompt_meme do
+    after(:build) do |pm|
+      pm.request_restriction_id = create(:prompt_restriction).id
+      pm.prompt_restriction_id = create(:prompt_restriction).id
+    end
+  end
 end

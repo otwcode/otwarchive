@@ -28,7 +28,7 @@
 
 <h3 class="heading"><%= ts("Wondering how long you'll have to wait?") %></h3>
 
-<%= form_tag url_for(action: :show), {remote: true, method: :get, class: "simple"} do %>
+<%= form_tag show_invite_request_path, { remote: true, method: :get, class: "simple"} do %>
 <fieldset>
   <p>
     <%= label_tag :email %>

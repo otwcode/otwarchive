@@ -25,14 +25,14 @@
           <%= ts("#{@archive_faq.title}") %>
         </h3>
         <ul role="navigation">
-          <% for q in @archive_faq.questions %>
+          <% for q in @questions %>
             <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
           <% end %>
         </ul>
       </div>
 
       <div id="faq">
-        <% for q in @archive_faq.questions %>
+        <% for q in @questions %>
           <h3 id="<%= q.anchor %>">
             <%= q.question %>
           </h3>

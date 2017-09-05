@@ -39,12 +39,13 @@ Given /the following admins? exists?/ do |table|
 end
 
 Given /^I am logged in as an admin$/ do
+  step("I have an AdminSetting")
   step("I am logged out")
-  admin = Admin.find_by_login("testadmin")
+  admin = Admin.find_by(login: "testadmin")
   if admin.blank?
     admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
-  visit admin_login_path
+  visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
@@ -52,13 +53,12 @@ Given /^I am logged in as an admin$/ do
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
 end
 
 Given /^basic languages$/ do
   Language.default
-  german = Language.find_or_create_by_short_and_name_and_support_available_and_abuse_support_available("DE", "Deutsch", true, true)
+  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
   de = Locale.new
   de.iso = 'de'
   de.name = 'Deutsch'
@@ -67,7 +67,7 @@ Given /^basic languages$/ do
 end
 
 Given /^advanced languages$/ do
-  Language.find_or_create_by_short_and_name("FR", "Francais")
+  Language.find_or_create_by(short: "FR", name: "Francais")
 end
 
 Given /^guest downloading is off$/ do
@@ -158,7 +158,7 @@ Given /^the user "([^\"]*)" is banned$/ do |user|
 end
 
 Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
-  u = User.find_by_login(user)
+  u = User.find_by(login: user)
   assert u.banned?
 end
 
@@ -190,7 +190,7 @@ When /^I visit the last activities item$/ do
 end
 
 When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   token = user.invitations.first.token
   fill_in(field, with: token)
 end
@@ -223,6 +223,25 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
   fill_in("Category name*", with: "Number #{n} FAQ")
   fill_in("Anchor name*", with: "Number#{n}anchor")
+  click_button("Post")
+end
+
+When /^I make a multi-question FAQ post$/ do
+  visit new_archive_faq_path
+  fill_in("Question*", with: "Number 1 Question.")
+  fill_in("Answer*", with: "Number 1 posted FAQ, this is.")
+  fill_in("Category name*", with: "Standard FAQ Category")
+  fill_in("Anchor name*", with: "Number1anchor")
+  click_button("Post")
+  step %{I follow "Edit"}
+  step %{I fill in "Questions:" with "3"}
+  step %{I press "Update Form"}
+  fill_in("archive_faq_questions_attributes_1_question", with: "Number 2 Question.")
+  fill_in("archive_faq_questions_attributes_1_content", with: "This is an answer to the second question")
+  fill_in("archive_faq_questions_attributes_1_anchor", with: "whatisao32")
+  fill_in("archive_faq_questions_attributes_2_question", with: "Number 3 Question.")
+  fill_in("archive_faq_questions_attributes_2_content", with: "This is an answer to the third question")
+  fill_in("archive_faq_questions_attributes_2_anchor", with: "whatisao33")
   click_button("Post")
 end
 
@@ -285,19 +304,28 @@ end
 
 When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   role_name = role.parameterize.underscore
-  role_id = Role.find_by_name(role_name).id
+  role_id = Role.find_by(name: role_name).id
   uncheck("user_roles_#{role_id}")
 end
 
 ### THEN
 
 When (/^I make a translation of an admin post$/) do
+  admin_post = AdminPost.find_by(title: "Default Admin Post")
+  # If post doesn't exist, assume we want to reference a non-existent post
+  admin_post_id = !admin_post.nil? ? admin_post.id : 0
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Deutsch Ankuendigung")
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
-  fill_in("admin_post_translated_post_id", with: AdminPost.find_by_title("Default Admin Post").id)
+  fill_in("admin_post_translated_post_id", with: admin_post_id)
   click_button("Post")
+end
+
+Then (/^the translation information should still be filled in$/) do
+  step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
+  step %{the "content" field should contain "Deutsch Woerter"}
+  step %{"Deutsch" should be selected within "Choose a language"}
 end
 
 Then (/^I should see a translated admin post$/) do
@@ -371,22 +399,22 @@ Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
 end
 
 Then(/^the work "(.*?)" should not be deleted$/) do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w && w.posted?
 end
 
 Then(/^there should be no bookmarks on the work "(.*?)"$/) do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.bookmarks.count == 0
 end
 
 Then(/^there should be no comments on the work "(.*?)"$/) do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.comments.count == 0
 end
 
 When(/^the user "(.*?)" is unbanned in the background/) do |user|
-  u = User.find_by_login(user)
+  u = User.find_by(login: user)
   u.update_attribute(:banned, false)
 end
 
@@ -398,7 +426,7 @@ end
 
 Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
   visit admin_blacklisted_emails_url
-  u = User.find_by_login(user)
+  u = User.find_by(login: user)
   fill_in("admin_blacklisted_email_email", with: u.email)
   click_button("Add To Blacklist")
 end

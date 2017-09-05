@@ -13,6 +13,10 @@ FactoryGirl.define do
     association :filterable, factory: :fandom
   end
 
+  factory :tag_set do
+    tags { [create(:fandom)] }
+  end
+
   factory :owned_tag_set do
     title { generate(:tag_title) }
     nominated true
@@ -68,7 +72,6 @@ FactoryGirl.define do
   factory :character do
     canonical true
     sequence(:name) { |n| "Character #{n}" }
-    common_taggings { [create(:common_tagging)] }
   end
 
   factory :relationship do
