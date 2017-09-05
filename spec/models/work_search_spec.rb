@@ -14,20 +14,14 @@ describe WorkSearch do
     Work.import
 
     # Elasticsearch
-    if $elasticsearch.indices.exists? index: 'ao3_test_works'
-      $elasticsearch.indices.delete index: 'ao3_test_works'
-    end
-
-    WorkIndexer.create_index
-    indexer = WorkIndexer.new(Work.all.pluck(:id))
-    indexer.index_documents
+    update_and_refresh_indexes('work')
   end
 
   after(:each) do
     Work.destroy_all
     Tire.index(Work.index_name).delete
 
-    $elasticsearch.indices.delete index: 'ao3_test_works'
+    delete_index 'works'
   end
 
   let!(:collection) do

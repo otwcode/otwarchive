@@ -119,6 +119,13 @@ def update_and_refresh_indexes(klass_name)
   $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
+def delete_index(index)
+  index_name = "ao3_test_#{index}"
+  if $elasticsearch.indices.exists? index: index_name
+    $elasticsearch.indices.delete index: index_name
+  end
+end
+
 def get_message_part (mail, content_type)
   mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
 end
