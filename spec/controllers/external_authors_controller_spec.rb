@@ -74,7 +74,7 @@ describe ExternalAuthorsController do
       context "when doing nothing with imported works" do
         it "redirects with a success message" do
           put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing" }
-          it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
+          it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
         end
       end
 
@@ -94,7 +94,16 @@ describe ExternalAuthorsController do
 
       context "when successfully updating preferences" do
         it "saves preferences and redirects with a success message" do
-          put :update, user_id: user.login, id: external_author.id, external_author: { do_not_email: 1, do_not_import: 1 }
+          parameters = {
+            user_id: user.login,
+            id: external_author.id,
+            external_author: {
+              do_not_email: 1,
+              do_not_import: 1
+            }
+          }
+
+          put :update, params: parameters
           it_redirects_to_with_notice(user_external_authors_path(user), "Your preferences have been saved.")       
           external_author.reload
           expect(external_author.do_not_email).to be_truthy
@@ -104,9 +113,17 @@ describe ExternalAuthorsController do
 
       context "when unsuccessfully updating preferences" do
         it "renders edit template and an error" do
-          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-          put :update, user_id: user.login, id: external_author.id, external_author: { do_not_email: true, do_not_import: true }
+          parameters = {
+            user_id: user.login,
+            id: external_author.id,
+            external_author: {
+              do_not_email: true,
+              do_not_import: true
+            }
+          }
+
           allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
+          put :update, params: parameters
           expect(response).to render_template :edit
           expect(flash[:error]).to eq "There were problems saving your preferences."
         end
@@ -116,7 +133,7 @@ describe ExternalAuthorsController do
     context "when the user has permission through an invitation" do
       context "when doing nothing with imported works" do
         it "does not mark invitation redeemed and redirects with a success message" do
-          parameters =  {
+          parameters = {
             invitation_token: invitation.token,
             id: external_author.id,
             imported_stories: "nothing"
@@ -131,7 +148,17 @@ describe ExternalAuthorsController do
 
         context "when successfully updating preferences" do
           it "does not mark invitation redeemed, saves preferences, and redirects with a success message" do
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing", external_author: { do_not_email: 1, do_not_import: 1 }
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "nothing",
+              external_author: { 
+                do_not_email: 1,
+                do_not_import: 1
+              }
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
             invitation.reload
             expect(invitation.invitee).to be_nil
@@ -144,8 +171,18 @@ describe ExternalAuthorsController do
 
         context "when unsuccessfully updating preferences" do
           it "does not mark invitation redeemed and renders edit template with a success message for doing nothing and an error for preferences" do
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "nothing",
+              external_author: { 
+                do_not_email: 1,
+                do_not_import: 1
+              }
+            }
+
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "nothing", external_author: { do_not_email: 1, do_not_import: 1 }
+            put :update, params: parameters
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
@@ -174,7 +211,17 @@ describe ExternalAuthorsController do
 
         context "when successfully updating preferences" do
           it "marks invitation redeemed, saves preferences, and redirects with a success message" do
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "orphan", external_author: { do_not_email: true, do_not_import: true }
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "orphan",
+              external_author: { 
+                do_not_email: true,
+                do_not_import: true
+              }
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
             invitation.reload
             expect(invitation.invitee).to be_nil
@@ -223,7 +270,17 @@ describe ExternalAuthorsController do
 
         context "when successfully updating preferences" do
           it "marks invitation redeemed, saves preferences, and redirects with a success message" do
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "delete", external_author: { do_not_email: true, do_not_import: true }
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "delete",
+              external_author: { 
+                do_not_email: true,
+                do_not_import: true
+              }
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(root_path, "Your imported stories have been deleted. Your preferences have been saved.")
             invitation.reload
             expect(invitation.invitee).to be_nil
@@ -236,8 +293,16 @@ describe ExternalAuthorsController do
 
         context "when unsuccessfully updating preferences" do
           it "marks invitation redeemed and renders edit template with a success message for deleting and an error for preferences" do
-            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
-            put :update, invitation_token: invitation.token, id: external_author.id, imported_stories: "delete", external_author: { do_not_email: true }
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "delete",
+              external_author: { 
+                do_not_email: true
+              }
+            }
+
+            put :update, params: parameters
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
             expect(flash[:notice]).to eq "Your imported stories have been deleted. "
