@@ -292,12 +292,7 @@ describe WorksController do
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
           @work2.index.refresh
 
-          if $elasticsearch.indices.exists? index: 'ao3_test_works'
-            $elasticsearch.indices.delete(index:  'ao3_test_works')
-          end
-          WorkIndexer.create_index
-          WorkIndexer.new(Work.all.pluck(:id)).index_documents
-          $elasticsearch.indices.refresh(index: 'ao3_test_works')
+          update_and_refresh_indexes('work')
         end
 
         it "should only get works under that tag" do
@@ -325,13 +320,7 @@ describe WorksController do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
             @work2.index.refresh
-            if $elasticsearch.indices.exists? index: 'ao3_test_works'
-              $elasticsearch.indices.delete(index:  'ao3_test_works')
-            end
-            WorkIndexer.create_index
-            WorkIndexer.new(Work.all.pluck(:id)).index_documents
-
-            $elasticsearch.indices.refresh(index: 'ao3_test_works')
+            update_and_refresh_indexes('work')
           end
 
           it "should not show restricted works to guests" do

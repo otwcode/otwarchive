@@ -110,6 +110,15 @@ def clean_the_database
   end
 end
 
+def update_and_refresh_indexes(klass_name)
+  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
+  indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
+  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
+  indexer.index_documents
+
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+end
+
 def get_message_part (mail, content_type)
   mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
 end

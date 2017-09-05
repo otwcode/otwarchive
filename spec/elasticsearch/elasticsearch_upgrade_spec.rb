@@ -3,10 +3,6 @@ require 'spec_helper'
 describe 'Elasticsearch' do
 
   before(:each) do
-    if $elasticsearch.indices.exists? index: 'ao3_test_works'
-      $elasticsearch.indices.delete index: 'ao3_test_works'
-    end
-
     anon_collection.collection_preference.update(anonymous: true)
 
     anon_work.collections << anon_collection
@@ -14,9 +10,7 @@ describe 'Elasticsearch' do
     work.collections << collection
     work.save
 
-    WorkIndexer.create_index unless $elasticsearch.indices.exists? index: 'ao3_test_works'
-    indexer = WorkIndexer.new(Work.all.pluck(:id))
-    indexer.index_documents
+    update_and_refresh_indexes('work')
   end
 
   let!(:anon_collection) do
@@ -52,6 +46,8 @@ describe 'Elasticsearch' do
 
   it "should find works that change authors" do
     work.pseuds << create(:pseud, name: 'a new pseud name yay')
+    update_and_refresh_indexes('work')
+
     search = WorkSearchForm.new({"query" => "yay"})
 
     expect(search.search_results).to include work
