@@ -74,7 +74,7 @@ describe ExternalAuthorsController do
       context "when doing nothing with imported works" do
         it "redirects with a success message" do
           put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing" }
-          it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind.")
+          it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. ")
         end
       end
 
@@ -121,9 +121,9 @@ describe ExternalAuthorsController do
               do_not_import: true
             }
           }
-
-          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
+          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
           put :update, params: parameters
+          allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
           expect(response).to render_template :edit
           expect(flash[:error]).to eq "There were problems saving your preferences."
         end
@@ -241,6 +241,7 @@ describe ExternalAuthorsController do
               external_author: { do_not_email: true }
             }
 
+            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
@@ -302,6 +303,7 @@ describe ExternalAuthorsController do
               }
             }
 
+            allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_return(false)
             put :update, params: parameters
             allow_any_instance_of(ExternalAuthor).to receive(:update_attributes).and_call_original
             expect(response).to render_template :edit
