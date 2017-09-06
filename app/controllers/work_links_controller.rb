@@ -1,8 +1,8 @@
 class WorkLinksController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_user_and_work
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user_and_work
+  before_action :check_ownership
 
   # only let users look at stats for their own work
   def load_user_and_work

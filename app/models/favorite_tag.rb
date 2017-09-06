@@ -1,4 +1,4 @@
-class FavoriteTag < ActiveRecord::Base
+class FavoriteTag < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :user
@@ -12,7 +12,7 @@ class FavoriteTag < ActiveRecord::Base
 
   validate :within_limit, on: :create
   def within_limit
-    if user && user.favorite_tags(:reload).count >= ArchiveConfig.MAX_FAVORITE_TAGS
+    if user && user.favorite_tags.reload.count >= ArchiveConfig.MAX_FAVORITE_TAGS
       errors.add(:base,
                  ts("Sorry, you can only save %{maximum} favorite tags.",
                     maximum: ArchiveConfig.MAX_FAVORITE_TAGS))

@@ -1,4 +1,4 @@
-class Preference < ActiveRecord::Base
+class Preference < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :user

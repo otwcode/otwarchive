@@ -1,7 +1,7 @@
 # options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 
 # stop checking quotation marks
 Style/StringLiterals:
@@ -10,11 +10,15 @@ Style/StringLiterals:
 # stop checking line length
 Metrics/LineLength:
   Enabled: false
-  
+
+# prefer template tokens (like %{foo}) over annotated tokens (like %s)
+Style/FormatStringToken:
+  EnforcedStyle: template
+
 # stop checking for trailing whitespace
 Style/TrailingWhitespace:
   Enabled: false
-  
+
 # stop checking for ambiguous regexp literal
 Lint/AmbiguousRegexpLiteral:
   Enabled: false

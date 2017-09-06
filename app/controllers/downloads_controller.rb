@@ -2,9 +2,9 @@ class DownloadsController < ApplicationController
 
   include XhtmlSplitter
 
-  skip_before_filter :store_location, only: :show
-  before_filter :guest_downloading_off, only: :show
-  before_filter :check_visibility, only: :show
+  skip_before_action :store_location, only: :show
+  before_action :guest_downloading_off, only: :show
+  before_action :check_visibility, only: :show
 
   # once a format has been created, we want nginx to be able to serve
   # it directly, without going through rails again (until the work changes).
@@ -205,10 +205,8 @@ protected
     render_xhtml(afterword, "afterword")
 
     # write the OEBPS navigation files
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/toc.ncx"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/content.opf"))}
-
-
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') { |f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/toc.ncx", layout: false)) }
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') { |f| f.write(render_to_string(file: "#{Rails.root}/app/views/epub/content.opf", layout: false)) }
   end
 
   def render_xhtml(html, filename)

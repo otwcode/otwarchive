@@ -1,9 +1,9 @@
 class TagsController < ApplicationController
-  before_filter :load_collection
-  before_filter :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_filter :load_tag_and_subtags, only: [:show]
+  before_action :load_collection
+  before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
+  before_action :load_tag_and_subtags, only: [:show]
 
   caches_page :feed
 
@@ -304,7 +304,7 @@ class TagsController < ApplicationController
       elsif params[:status] == 'unwrangled'
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else
-        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end

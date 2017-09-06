@@ -74,7 +74,7 @@
           <li><%= submit_tag ts("Save Without Posting"), name: "save_button" %></li>
         <% end %>
         <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
-        <li><%= submit_tag ts("Post Without Preview"), name: "post_without_preview_button", disable_with: ts("Please wait...") %></li>
+        <li><%= submit_tag ts("Post Without Preview"), name: "post_without_preview_button", data: { disable_with: ts("Please wait...") } %></li>
         <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
       </ul>
     </fieldset>

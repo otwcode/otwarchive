@@ -1,7 +1,7 @@
 # This is essentially a mirror of the taggings table as applied to works (right now)
 # except with all works connected to canonical tags instead of their synonyms for
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
-class FilterTagging < ActiveRecord::Base
+class FilterTagging < ApplicationRecord
   self.primary_key = 'id'
 
   belongs_to :filter, class_name: 'Tag' # , dependent: :destroy # TODO: poke this separately
@@ -14,7 +14,7 @@ class FilterTagging < ActiveRecord::Base
   def self.find(*args)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
-  def self.find_by(id: id)
+  def self.find_by(id: id_arg)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
 

@@ -4,7 +4,7 @@
 
 <ul class="actions" role="navigation">
   <li>
-    <%= link_to ts('Proceed'), url_for(params.merge :view_adult => true, :anchor => params[:anchor]) %>
+    <%= link_to ts('Proceed'), url_for(params.permit!.merge :view_adult => true, :anchor => params[:anchor]) %>
   </li>
   <li>
     <%= link_to ts('Go Back'), :back %>

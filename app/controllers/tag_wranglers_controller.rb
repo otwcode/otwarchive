@@ -1,6 +1,6 @@
 class TagWranglersController < ApplicationController
-  before_filter :check_user_status
-	before_filter :check_permission_to_wrangle
+  before_action :check_user_status
+	before_action :check_permission_to_wrangle
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
@@ -31,6 +31,7 @@ class TagWranglersController < ApplicationController
     @assignments = Fandom.in_use.joins(joins)
                                 .select('tags.*, users.login AS wrangler')
                                 .where(conditions)
+                                .order(:name)
                                 .paginate(page: params[:page], per_page: 50)
   end
 

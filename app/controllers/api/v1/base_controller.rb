@@ -4,7 +4,8 @@ module Api
   # with the new version.
   module V1
     class BaseController < ApplicationController
-      before_filter :restrict_access
+      skip_before_action :verify_authenticity_token
+      before_action :restrict_access
 
       private
 

@@ -28,8 +28,22 @@ Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
 end
 
 Given /^the basic warnings exist$/ do
-  Warning.find_or_create_by_name("No Archive Warnings Apply").update(canonical: true)
-  Warning.find_or_create_by_name("Choose Not To Use Archive Warnings").update(canonical: true)
+  warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
+              ArchiveConfig.WARNING_NONE_TAG_NAME]
+  warnings.each do |warning|
+    Warning.find_or_create_by_name(warning).update(canonical: true)
+  end
+end
+
+Given /^all warnings exist$/ do
+  step %{the basic warnings exist}
+  warnings = [ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
+              ArchiveConfig.WARNING_DEATH_TAG_NAME,
+              ArchiveConfig.WARNING_NONCON_TAG_NAME,
+              ArchiveConfig.WARNING_CHAN_TAG_NAME]
+  warnings.each do |warning|
+    Warning.find_or_create_by_name(warning).update(canonical: true)
+  end
 end
 
 Given /^the basic categories exist$/ do
@@ -85,11 +99,11 @@ Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   synonym.save
 end
 
-Given /^"([^\"]*)" is a metatag of the fandom "([^\"]*)"$/ do |metatag, fandom|
-  fandom = Fandom.find_or_create_by_name(fandom)
-  metatag = Fandom.find_or_create_by_name(metatag)
-  fandom.meta_tags << metatag
-  fandom.save
+Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type, tag|
+  tag = tag_type.classify.constantize.find_or_create_by_name(tag)
+  metatag = tag_type.classify.constantize.find_or_create_by_name(metatag)
+  tag.meta_tags << metatag
+  tag.save
 end
 
 Given /^I am logged in as a tag wrangler$/ do
@@ -187,7 +201,7 @@ end
 
 Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
-    type = hash["type"].classify.constantize
+    type = hash["type"].downcase.to_sym
     hash.delete("type")
     FactoryGirl.create(type, hash)
   end

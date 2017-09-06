@@ -1,6 +1,6 @@
 class GiftsController < ApplicationController
 
-  before_filter :load_collection
+  before_action :load_collection
 
   def index
     @user = User.find_by(login: params[:user_id]) if params[:user_id]
@@ -55,6 +55,6 @@ class GiftsController < ApplicationController
       # user doesn't have permission
       access_denied
     end
-    redirect_to user_gifts_url(current_user) and return
+    redirect_to user_gifts_path(current_user) and return
   end
 end
