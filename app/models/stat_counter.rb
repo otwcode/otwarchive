@@ -1,4 +1,4 @@
-class StatCounter < ActiveRecord::Base
+class StatCounter < ApplicationRecord
   include LogfileReader
   include WorkStats
 

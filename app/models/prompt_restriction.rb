@@ -1,4 +1,4 @@
-class PromptRestriction < ActiveRecord::Base
+class PromptRestriction < ApplicationRecord
   has_many :owned_set_taggings, as: :set_taggable, dependent: :destroy
   has_many :owned_tag_sets, -> { select("DISTINCT owned_tag_sets.*") }, through: :owned_set_taggings
   has_many :tag_sets, through: :owned_tag_sets

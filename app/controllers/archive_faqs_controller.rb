@@ -1,9 +1,9 @@
 class ArchiveFaqsController < ApplicationController
 
-  before_filter :admin_only, except: [:index, :show]
-  before_filter :set_locale
-  before_filter :require_language_id
-  around_filter :with_locale
+  before_action :admin_only, except: [:index, :show]
+  before_action :set_locale
+  before_action :require_language_id
+  around_action :with_locale
 
   # GET /archive_faqs
   def index
@@ -95,12 +95,13 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1
   def update
     @archive_faq = ArchiveFaq.find_by(slug: params[:id])
-      if @archive_faq.update_attributes(archive_faq_params)
-        flash[:notice] = 'ArchiveFaq was successfully updated.'
-        redirect_to(@archive_faq)
-      else
-        render action: "edit"
-      end
+
+    if @archive_faq.update_attributes(archive_faq_params)
+      flash[:notice] = 'ArchiveFaq was successfully updated.'
+      redirect_to(@archive_faq)
+    else
+      render action: "edit"
+    end
   end
 
   # reorder FAQs

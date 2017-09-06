@@ -201,7 +201,7 @@ end
 
 Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
-    type = hash["type"].classify.constantize
+    type = hash["type"].downcase.to_sym
     hash.delete("type")
     FactoryGirl.create(type, hash)
   end

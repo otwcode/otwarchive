@@ -161,3 +161,10 @@ Feature: Edit Works
       And I press "Cancel"
     When I view the work "Work 1"
       Then I should see "Fandom: testing"
+
+  Scenario: When editing a work, the title field should not escape HTML
+    Given I have a work "What a title! :< :& :>"
+      And I go to the works page
+      And I follow "What a title! :< :& :>"
+      And I follow "Edit"
+    Then I should see "What a title! :< :& :>" in the "Work Title" input

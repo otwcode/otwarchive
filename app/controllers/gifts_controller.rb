@@ -1,6 +1,6 @@
 class GiftsController < ApplicationController
 
-  before_filter :load_collection
+  before_action :load_collection
 
   def index
     @user = User.find_by(login: params[:user_id]) if params[:user_id]

@@ -1,14 +1,16 @@
 source 'https://rubygems.org'
 
-ruby '2.2.5'
-gem 'test-unit', '~> 3.0'
+ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+
+gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '4.2.8'
+gem 'rails', '~> 5.1'
 
-gem 'rails-observers'
+gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
+gem 'rails-controller-testing'
 #gem 'activerecord-deprecated_finders'
 
 # the published gem does not include fixes that are in Rails
@@ -25,7 +27,7 @@ gem 'mysql2', '0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
-gem 'activerecord-mysql-reconnect'
+gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -42,7 +44,7 @@ gem 'unidecoder'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
-gem 'acts_as_list', '>=0.7.6'
+gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
@@ -74,7 +76,7 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.4.6'
+gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
@@ -89,16 +91,24 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-gem 'rpm_contrib'
+# TODO: rpm_contrib is deprecated and needs to be replaced
+# Here is a list of possible alternatives:
+# https://github.com/newrelic/extends_newrelic_rpm
+#
+# The last working version is not compatible with Rails 5
+#
+# gem 'rpm_contrib', '2.2.0'
 
 # for generating graphs
-gem 'google_visualr', '>= 2.1'
+gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
 
 # Globalize for translations
-gem 'globalize', '~> 5.0.0'
+# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
+gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
+gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.5'
@@ -124,18 +134,17 @@ gem 'dalli'
 gem 'kgio', '2.10.0'
 
 group :test do
-  gem 'test_after_commit'
   gem 'rspec', '~> 3.4'
-  gem 'rspec-rails', '~> 3.4.2'
+  gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '1.2.0'
+  gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', '~> 1.4.3', require: false
+  gem 'cucumber-rails', '~> 1.5', require: false
   gem 'gherkin'
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
@@ -146,7 +155,7 @@ group :test do
   gem 'timecop'
   gem 'cucumber-timecop', :require => false
   # Code coverage
-  gem 'simplecov', '~> 0.12.0'
+  gem 'simplecov', '~> 0.14.0'
   gem 'coveralls', '~> 0.8.12'
   gem 'email_spec', '1.6.0'
 end
@@ -154,7 +163,7 @@ end
 group :test, :development do
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_girl', '~> 4.5.0'
+  gem 'factory_girl', '~> 4.8.0'
   gem 'minitest'
 end
 
@@ -163,8 +172,8 @@ group :development do
   gem 'bundler-audit'
 end
 
-group :test, :development, :staging  do
-  gem 'bullet', '~> 5.0.0'
+group :test, :development, :staging do
+  gem 'bullet', '~> 5.6.0'
 end
 
 # Deploy with Capistrano

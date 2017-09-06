@@ -6,8 +6,8 @@
   <li>
     <%= span_if_current ts("Post AO3 News", key: "header"),
                         new_admin_post_path %>
-  </li>
-  <% if current_page?(controller: "admin_posts", action: "edit") %>
+</li>
+  <% if params[:controller] == "admin_posts" && params[:action] == "edit" %>
     <li>
       <%= link_to t("admin.admin_nav.delete", default: "Delete Post"),
                   @admin_post,
@@ -15,8 +15,8 @@
                   method: :delete %>
     </li>
   <% end %>
-  <% if current_page?(controller: "archive_faqs", action: "edit") &&
-        Globalize.locale.to_s == "en" %>
+  <% if params[:controller] == "archive_faqs" && params[:action] == "edit" &&
+      Globalize.locale.to_s == "en" %>
     <li>
       <%= link_to ts("Reorder Questions"),
                   manage_archive_faq_questions_path(@archive_faq) %>

@@ -1,4 +1,4 @@
-class WranglingGuideline < ActiveRecord::Base
+class WranglingGuideline < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
 

@@ -1,6 +1,6 @@
 # Relationships between meta and sub tags
 # Meta tags represent a superset of sub tags
-class MetaTagging < ActiveRecord::Base
+class MetaTagging < ApplicationRecord
   belongs_to :meta_tag, class_name: 'Tag'
   belongs_to :sub_tag, class_name: 'Tag'
 
@@ -45,7 +45,7 @@ class MetaTagging < ActiveRecord::Base
           meta_tagging = self.sub_tag.meta_taggings.where(meta_tag_id: m.id).first
           meta_tagging.update_attribute(:direct, false)
         else
-          MetaTagging.create(meta_tag: m, sub_tag: self.sub_tag, direct: false)
+          MetaTagging.create!(meta_tag: m, sub_tag: self.sub_tag, direct: false)
         end
       end
     end
@@ -53,9 +53,9 @@ class MetaTagging < ActiveRecord::Base
       self.sub_tag.sub_tags.each do |s|
         if s.meta_tags.include?(self.meta_tag)
           meta_tagging = s.meta_taggings.where(meta_tag_id: self.meta_tag.id).first
-          meta_tagging.update_attribute(:direct, false)
+          meta_tagging.update_attribute!(:direct, false)
         else
-          MetaTagging.create(meta_tag: self.meta_tag, sub_tag: s, direct: false)
+          MetaTagging.create!(meta_tag: self.meta_tag, sub_tag: s, direct: false)
         end
       end
     end
