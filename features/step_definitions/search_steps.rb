@@ -30,6 +30,12 @@ Given /^the (\w+) indexes are updated$/ do |model|
 
   indexer = "#{model.classify}Indexer".constantize.new(model.classify.constantize.all.pluck(:id))
   indexer.index_documents
+
+  if model == 'bookmark'
+    BookmarkedExternalWorkIndexer.new(ExternalWork.all.pluck(:id)).index_documents if ExternalWork.any?
+    BookmarkedSeriesIndexer.new(Series.all.pluck(:id)).index_documents if Series.any?
+    BookmarkedWorkIndexer.new(Work.all.pluck(:id)).index_documents if Work.any?
+  end
 end
 
 Given /^the (\w+) indexes are reindexed$/ do |model|
@@ -37,4 +43,7 @@ Given /^the (\w+) indexes are reindexed$/ do |model|
 end
 
 Given /^all search indexes are reindexed$/ do
+  ['work', 'bookmark', 'pseud', 'tag'].each do |model|
+    step %{the #{model} indexes are reindexed}
+  end
 end

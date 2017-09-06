@@ -2,7 +2,7 @@ class Query
 
   attr_reader :options
 
-  # Options: page, per_page, 
+  # Options: page, per_page
   def initialize(options={})
     @options = HashWithIndifferentAccess.new(options)
   end

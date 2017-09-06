@@ -140,12 +140,12 @@ describe WorkQuery do
     q = WorkQuery.new(sort_column: 'title_to_sort_on')
     expect(q.generated_query[:sort]).to eq({'title_to_sort_on' => { order: 'desc'}})
   end
-  
+
   it "should allow you to sort by kudos" do
     q = WorkQuery.new(sort_column: 'kudos_count')
     expect(q.generated_query[:sort]).to eq({'kudos_count' => { order: 'desc'}})
   end
-  
+
   it "should allow you to sort by comments" do
     q = WorkQuery.new(sort_column: 'comments_count')
     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})

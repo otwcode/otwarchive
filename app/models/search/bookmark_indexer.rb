@@ -17,6 +17,26 @@ class BookmarkIndexer < Indexer
 
   def self.mapping
     {
+      'bookmarkable' => {
+        properties: {
+          title: {
+            type: 'string',
+            analyzer: 'simple'
+          },
+          creators: {
+            type: 'string',
+            analyzer: 'simple',
+          },
+          tag: {
+            type: 'string',
+            analyzer: 'simple'
+          },
+          work_types: {
+            type: 'string',
+            index: 'not_analyzed',
+          }
+        }
+      },
       "bookmark" => {
         "_parent" => {
           type: 'bookmarkable'
@@ -50,8 +70,8 @@ class BookmarkIndexer < Indexer
   # TODO: Make this work for deleted bookmarks
   def routing_info(id)
     object = objects[id.to_i]
-    { 
-      '_index' => index_name, 
+    {
+      '_index' => index_name,
       '_type' => document_type,
       '_id' => id,
       'parent' => "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"

@@ -41,13 +41,13 @@ class BookmarksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    options = params[:bookmark_search].present? ? bookmark_search_params : {}
+    options = params[:bookmark_search_form].present? ? bookmark_search_form_params : {}
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false
     options[:show_restricted] = current_user.present?
-    @search = BookmarkSearch.new(options)
+    @search = BookmarkSearchForm.new(options)
     @page_subtitle = ts("Search Bookmarks")
-    if params[:bookmark_search].present? && params[:edit_search].blank?
+    if params[:bookmark_search_form].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
@@ -61,7 +61,7 @@ class BookmarksController < ApplicationController
       access_denied unless is_admin? || @bookmarkable.visible
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
-      options = params[:bookmark_search].present? ? bookmark_search_params : {}
+      options = params[:bookmark_search_form].present? ? bookmark_search_form_params : {}
       options[:show_private] = (@user.present? && @user == current_user)
       options[:show_restricted] = current_user.present?
 
@@ -297,8 +297,8 @@ class BookmarksController < ApplicationController
     )
   end
 
-  def bookmark_search_params
-    params.require(:bookmark_search).permit(
+  def bookmark_search_form_params
+    params.require(:bookmark_search_form).permit(
       :query,
       :bookmarker,
       :notes,

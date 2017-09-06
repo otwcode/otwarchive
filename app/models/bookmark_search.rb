@@ -77,6 +77,71 @@ class BookmarkSearch < Search
     self.options.delete_if { |key, value| value.blank? }
   end
 
+  def search_query
+    self.options ||= {}
+    search_opts = self.options
+    search_text = generate_search_text
+    include_facets = self.faceted
+
+    search = Tire.search 'bookmark' do
+      query do
+        boolean do
+          must { string search_text, default_operator: "AND" } if search_text.present?
+
+          must { term :private, 'F' } unless search_opts[:show_private]
+          must { term :hidden_by_admin, 'F' }
+          must { term :rec, 'T' } if %w(1 true).include?(search_opts[:rec].to_s)
+          must { term :with_notes, 'T' } if %w(1 true).include?(search_opts[:with_notes].to_s)
+
+          must { term :bookmarkable_posted, 'T' }
+          must { term :bookmarkable_hidden, 'F' }
+          must { term :bookmarkable_restricted, 'F' } unless search_opts[:show_restricted]
+          must { term :bookmarkable_complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
+          must { term :bookmarkable_language_id, search_opts[:language_id].to_i } if search_opts[:language_id].present?
+          must { term :bookmarkable_type, search_opts[:bookmarkable_type].gsub(" ", "").downcase} if search_opts[:bookmarkable_type].present?
+
+          if search_opts[:pseud_ids].present?
+            must { terms :pseud_id, search_opts[:pseud_ids] }
+          end
+
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[:filter_ids] ||= []
+              search_opts[:filter_ids] += search_opts[id_list]
+            end
+          end
+
+          [:filter_ids, :tag_ids, :collection_ids, :bookmarkable_collection_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[id_list].each do |id|
+                must { term id_list, id }
+              end
+            end
+          end
+        end
+      end
+
+      [:bookmarkable_word_count, :date, :bookmarkable_date].each do |countable|
+        if search_opts[countable].present?
+          key = (countable == :date) ? :created_at : countable
+          filter :range, key => Search.range_to_search(search_opts[countable])
+        end
+      end
+
+      if search_opts[:sort_column].present?
+        sort { by search_opts[:sort_column], search_opts[:sort_direction] }
+      end
+
+      if include_facets
+        %w(tag rating warning category fandom character relationship freeform).each do |facet_type|
+          facet facet_type do
+            terms "#{facet_type}_ids".to_sym
+          end
+        end
+      end
+    end
+  end
+
   # Search for works based on options
   # Note that tire redefines 'self' for the scope of the method
   def search_results
