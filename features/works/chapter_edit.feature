@@ -439,24 +439,6 @@ Feature: Edit chapters
     When I jump in our Delorean and return to the present
 
 
-  Scenario: You should be able to add a chapter with a co-creator who has an
-  ambiguous pseud
-
-    Given "thebadmom" has the pseud "sharon"
-      And "thegoodmom" has the pseud "sharon"
-      And I am logged in as "rusty"
-      And I post the work "Rusty Has Two Moms"
-    When a chapter is set up for "Rusty Has Two Moms"
-      And I add the co-author "sharon"
-      And I post the chapter
-    When I select "thegoodmom" from "There's more than one user with the pseud sharon."
-      And I press "Preview"
-    Then I should see "Preview"
-      And I should see "Chapter by rusty, sharon (thegoodmom)"
-    When I press "Post"
-    Then I should see "rusty, sharon (thegoodmom)"
-
-
   Scenario: The Post Draft option on your drafts page only posts the first
   chapter of a multi-chapter draft
 
