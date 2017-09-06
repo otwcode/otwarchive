@@ -79,9 +79,7 @@ class ExternalAuthorsController < ApplicationController
     end
 
     if @external_author.update_attributes(external_author_params[:external_author]) 
-      if @external_author.changed?
-        flash[:notice] += "Your preferences have been saved."
-      end
+      flash[:notice] += "Your preferences have been saved."
       if @user
         redirect_to user_external_authors_path(@user)
       else
