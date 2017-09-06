@@ -74,21 +74,51 @@ describe ExternalAuthorsController do
       context "when not modifying preferences" do
         context "when doing nothing with imported works" do
           it "redirects with a success message" do
-            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            parameters = {
+              user_id: user.login,
+              id: external_author.id,
+              imported_stories: "nothing",
+              external_author: {
+                do_not_email: external_author.do_not_email, 
+                do_not_import: external_author.do_not_import
+              } 
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
           end
         end
 
         context "when orphaning imported works" do
           it "redirects with a success message" do
-            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "orphan", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            parameters = {
+              user_id: user.login,
+              id: external_author.id,
+              imported_stories: "orphan",
+              external_author: {
+                do_not_email: external_author.do_not_email, 
+                do_not_import: external_author.do_not_import
+              } 
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
           end
         end
 
         context "when deleting imported works" do
           it "redirects with a success message" do
-            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "delete", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            parameters = {
+              user_id: user.login,
+              id: external_author.id,
+              imported_stories: "delete",
+              external_author: {
+                do_not_email: external_author.do_not_email, 
+                do_not_import: external_author.do_not_import
+              } 
+            }
+
+            put :update, params: parameters
             it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been deleted. Your preferences have been saved.")
           end
         end
