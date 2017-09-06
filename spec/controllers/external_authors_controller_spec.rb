@@ -71,24 +71,26 @@ describe ExternalAuthorsController do
         external_author.claim!(user)
       end
 
-      context "when doing nothing with imported works" do
-        it "redirects with a success message" do
-          put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing" }
-          it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. ")
+      context "when not modifying preferences" do
+        context "when doing nothing with imported works" do
+          it "redirects with a success message" do
+            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "nothing", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            it_redirects_to_with_notice(user_external_authors_path(user), "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. ")
+          end
         end
-      end
 
-      context "when orphaning imported works" do
-        it "redirects with a success message" do
-          put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "orphan" }
-          it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
+        context "when orphaning imported works" do
+          it "redirects with a success message" do
+            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "orphan", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been orphaned. Thank you for leaving them in the archive! ")
+          end
         end
-      end
 
-      context "when deleting imported works" do
-        it "redirects with a success message" do
-          put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "delete" }
-          it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been deleted. Your preferences have been saved.")
+        context "when deleting imported works" do
+          it "redirects with a success message" do
+            put :update, params: { user_id: user.login, id: external_author.id, imported_stories: "delete", external_author: { do_not_email: external_author.do_not_email, do_not_import: external_author.do_not_import } }
+            it_redirects_to_with_notice(user_external_authors_path(user), "Your imported stories have been deleted. ")
+          end
         end
       end
 
@@ -131,19 +133,25 @@ describe ExternalAuthorsController do
     end
 
     context "when the user has permission through an invitation" do
-      context "when doing nothing with imported works" do
-        it "does not mark invitation redeemed and redirects with a success message" do
-          parameters = {
-            invitation_token: invitation.token,
-            id: external_author.id,
-            imported_stories: "nothing"
-          }
+      context "when not modifying preferences" do
+        context "when doing nothing with imported works" do
+          it "does not mark invitation redeemed and redirects with a success message" do
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "nothing",
+              external_author: {
+                do_not_email: external_author.do_not_email,
+                do_not_import: external_author.do_not_import    
+              }
+            }
 
-          put :update, params: parameters
-          it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
-          invitation.reload
-          expect(invitation.invitee).to be_nil
-          expect(invitation.redeemed_at).to be_nil
+            put :update, params: parameters
+            it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. ")
+            invitation.reload
+            expect(invitation.invitee).to be_nil
+            expect(invitation.redeemed_at).to be_nil
+          end
         end
 
         context "when successfully updating preferences" do
@@ -159,7 +167,7 @@ describe ExternalAuthorsController do
             }
 
             put :update, params: parameters
-            it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved.")
+            it_redirects_to_with_notice(root_path, "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. ")
             invitation.reload
             expect(invitation.invitee).to be_nil
             expect(invitation.redeemed_at).to be_nil
@@ -195,18 +203,24 @@ describe ExternalAuthorsController do
       end
 
       context "when orphaning imported works" do
-        it "marks invitation redeemed and redirects with a success message" do
-          parameters = {
-            invitation_token: invitation.token,
-            id: external_author.id,
-            imported_stories: "orphan"
-          }
+        context "when not modifying preferences" do
+          it "marks invitation redeemed and redirects with a success message" do
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "orphan",
+              external_author: {
+                do_not_email: external_author.do_not_email,
+                do_not_import: external_author.do_not_import    
+              }
+            }
 
-          put :update, params: parameters
-          it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved.")
-          invitation.reload
-          expect(invitation.invitee).to be_nil
-          expect(invitation.redeemed_at).not_to be_nil
+            put :update, params: parameters
+            it_redirects_to_with_notice(root_path, "Your imported stories have been orphaned. Thank you for leaving them in the archive! ")
+            invitation.reload
+            expect(invitation.invitee).to be_nil
+            expect(invitation.redeemed_at).not_to be_nil
+          end
         end
 
         context "when successfully updating preferences" do
@@ -255,18 +269,24 @@ describe ExternalAuthorsController do
       end
 
       context "when deleting imported works" do
-        it "marks invitation redeemed and redirects with a success message" do
-          parameters = {
-            invitation_token: invitation.token,
-            id: external_author.id,
-            imported_stories: "delete"
-          }
+        context "when not modifying preferences" do
+          it "marks invitation redeemed and redirects with a success message" do
+            parameters = {
+              invitation_token: invitation.token,
+              id: external_author.id,
+              imported_stories: "delete",
+              external_author: {
+                do_not_email: external_author.do_not_email,
+                do_not_import: external_author.do_not_import    
+              }
+            }
 
-          put :update, params: parameters
-          it_redirects_to_with_notice(root_path, "Your imported stories have been deleted. Your preferences have been saved.")
-          invitation.reload
-          expect(invitation.invitee).to be_nil
-          expect(invitation.redeemed_at).not_to be_nil
+            put :update, params: parameters
+            it_redirects_to_with_notice(root_path, "Your imported stories have been deleted. ")
+            invitation.reload
+            expect(invitation.invitee).to be_nil
+            expect(invitation.redeemed_at).not_to be_nil
+          end
         end
 
         context "when successfully updating preferences" do

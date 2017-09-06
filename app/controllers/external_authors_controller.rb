@@ -78,8 +78,10 @@ class ExternalAuthorsController < ApplicationController
       @invitation.mark_as_redeemed 
     end
 
-    if @external_author.update_attributes(external_author_params[:external_author] || {})
-      flash[:notice] += "Your preferences have been saved." unless @external_author.update_attributes({})
+    if @external_author.update_attributes(external_author_params[:external_author]) 
+      if @external_author.changed?
+        flash[:notice] += "Your preferences have been saved."
+      end
       if @user
         redirect_to user_external_authors_path(@user)
       else
