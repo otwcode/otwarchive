@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+  # see lib/collectible_spec for collection-related tests
 
   it "creates a minimally work" do
     expect(create(:work)).to be_valid
+  end
+
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
   end
 
   context "create_stat_counter" do
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do
@@ -152,7 +159,7 @@ describe Work do
     end
 
     it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name 
+      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
 
@@ -185,8 +192,17 @@ describe Work do
     end
 
     it "should find works imported with irrelevant query parameters" do
-      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
-      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "gets the work from cache when searching for an imported work by URL" do
+      url = "http://lj-site.com/thing2"
+      work = create(:work, imported_from_url: url)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to be_nil
+      expect(Work.find_by_url(url)).to eq(work)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
       work.destroy
     end
   end

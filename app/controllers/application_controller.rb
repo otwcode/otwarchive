@@ -5,7 +5,31 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
-  before_filter :sanitize_params
+  before_action :sanitize_ac_params
+
+  # sanitize_params works best with a hash, and will convert
+  # ActionController::Parameters to a hash in order to work with them anyway.
+  #
+  # Controllers need to deal with ActionController::Parameters, not hashes.
+  # These methods hand the params as a hash to sanitize_params, and then
+  # transforms the results back into ActionController::Parameters.
+  def sanitize_ac_params
+    sanitize_params(params.to_unsafe_h).each do |key, value|
+      params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def transform_sanitized_hash_to_ac_params(key, value)
+    if value.is_a?(Hash)
+      ActionController::Parameters.new(value)
+    elsif value.is_a?(Array)
+      value.map.with_index do |val, index|
+        value[index] = transform_sanitized_hash_to_ac_params(key,  val)
+      end
+    else
+      value
+    end
+  end
 
   # Authlogic login helpers
   helper_method :current_user
@@ -17,17 +41,17 @@ class ApplicationController < ActionController::Base
   helper_method :process_title
 
   # clear out the flash-being-set
-  before_filter :clear_flash_cookie
+  before_action :clear_flash_cookie
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
 
-  after_filter :check_for_flash
+  after_action :check_for_flash
   def check_for_flash
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  before_filter :ensure_admin_credentials
+  before_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
@@ -42,7 +66,16 @@ class ApplicationController < ActionController::Base
 
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
-  before_filter :logout_if_not_user_credentials
+
+  # before_action :logout_if_not_user_credentials
+  # this was disabled when we found issues:
+  # https://github.com/nbudin/devise_openid_authenticatable/issues/21
+  # https://github.com/binarylogic/authlogic/issues/532
+  # 
+  # We will look back in to this back once we have devises.
+  # if we believe the caching is worth the extra support tickets.
+  # 
+
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
@@ -72,7 +105,7 @@ protected
   def record_not_found (exception)
     @message=exception.message
     respond_to do |f|
-      f.html{ render :template => "errors/404", :status => 404 }
+      f.html{ render template: "errors/404", status: 404 }
     end
   end
 
@@ -104,7 +137,7 @@ protected
 
 public
 
-  before_filter :fetch_admin_settings
+  before_action :fetch_admin_settings
   def fetch_admin_settings
     if Rails.env.development?
       @admin_settings = AdminSetting.first
@@ -113,15 +146,15 @@ public
     end
   end
 
-  before_filter :load_admin_banner
+  before_action :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
-      @admin_banner = AdminBanner.where(:active => true).last
+      @admin_banner = AdminBanner.where(active: true).last
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
       @admin_banner = Rails.cache.fetch("admin_banner") do
-        banner = AdminBanner.where(:active => true).last
+        banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end
       @admin_banner = nil if @admin_banner == ""
@@ -130,7 +163,7 @@ public
 
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
-  before_filter :store_location
+  before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
@@ -166,7 +199,7 @@ public
     else
       redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
       ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      ## render file: File.join(Rails.root, 'public/404'), formats: [:html], status: 404, layout: false
     end
   end
 
@@ -230,7 +263,7 @@ public
   end
 
   # Hide admin banner via cookies
-  before_filter :hide_banner
+  before_action :hide_banner
   def hide_banner
     if params[:hide_banner]
       session[:hide_banner] = true
@@ -239,7 +272,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_filter :set_current_user
+  before_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -252,7 +285,7 @@ public
   end
 
   def load_collection
-    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+    @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
   def collection_maintainers_only
@@ -294,47 +327,21 @@ public
   end
 
   # Define media for fandoms menu
-  before_filter :set_media
+  before_action :set_media
   def set_media
     uncategorized = Media.uncategorized
     @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
-
-  ### GLOBALIZATION ###
-
-#  before_filter :load_locales
-#  before_filter :set_preferred_locale
-
-#  I18n.backend = I18nDB::Backend::DBBased.new
-#  I18n.record_missing_keys = false # if you want to record missing translations
-  protected
-
-  def load_locales
-    @loaded_locales ||= Locale.order(:iso)
-  end
-
-  # Sets the locale
-  def set_preferred_locale
-    # Loading the current locale
-    if session[:locale] && @loaded_locales.detect { |loc| loc.iso == session[:locale]}
-      set_locale session[:locale].to_sym
-    else
-      set_locale Locale.find_main_cached.iso.to_sym
-    end
-    @current_locale = Locale.find_by_iso(I18n.locale.to_s)
-  end
-
-  ### -- END GLOBALIZATION -- ###
 
   public
 
   #### -- AUTHORIZATION -- ####
 
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
-  before_filter :set_redirects
+  before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({:controller => 'session', :action => 'new'})
+    @logged_out_redirect = login_url
   end
 
   def is_registered_user?
@@ -381,18 +388,18 @@ public
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-  	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+  	access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
   def check_ownership_or_admin
      return true if logged_in_as_admin?
-     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+     access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      redirect_to login_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -455,6 +462,6 @@ public
 
   #### -- AUTHORIZATION -- ####
 
-  protect_from_forgery
+  protect_from_forgery with: :exception, prepend: true
 
 end

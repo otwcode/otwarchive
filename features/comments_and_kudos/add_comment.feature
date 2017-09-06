@@ -1,5 +1,5 @@
 @comments
-Feature: Comment on work 
+Feature: Comment on work
   In order to give feedback
   As a reader
   I'd like to comment on a work
@@ -20,8 +20,8 @@ Scenario: When logged in I can comment on a work
   When I am logged in as "commenter"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved this!"
-    And I press "Comment" 
-  Then I should see "Comment created!" 
+    And I press "Comment"
+  Then I should see "Comment created!"
     And I should see "I loved this!" within ".odd"
     And I should not see "on Chapter 1" within ".odd"
   When I am logged in as "author"
@@ -29,7 +29,26 @@ Scenario: When logged in I can comment on a work
     And I follow "Entire Work"
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4.heading.byline"
-  
+
+  Scenario: IP address of the commenter are displayed only to an admin
+
+  Given I have no works or comments
+  When I am logged in as "author"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "I loved this!"
+    And I press "Comment"
+  Then I should see "Comment created!"
+    And I should not see "IP Address"
+  When I am logged in as "author"
+    And I view the work "The One Where Neal is Awesome"
+  Then I should not see "IP Address"
+  When I am logged in as an admin
+    And I view the work "The One Where Neal is Awesome"
+  Then I should see "IP Address"
+
+
 Scenario: I cannot comment with a pseud that I don't own
 
   Given the work "Random Work"
@@ -138,7 +157,7 @@ Scenario: Comment threading, comment editing
       And I press "Update"
     Then I should see "must be less than"
       And I should see "Sed mollis sapien ac massa pulvinar facilisis"
-      
+
 Scenario: Don't receive comment notifications of your own comments by default
 
   When I am logged in as "author"
@@ -147,7 +166,7 @@ Scenario: Don't receive comment notifications of your own comments by default
     And I post the comment "Something" on the work "Generic Work"
   Then "author" should be emailed
     And "commenter" should not be emailed
-    
+
 Scenario: Set preference and receive comment notifications of your own comments
 
   When I am logged in as "author"

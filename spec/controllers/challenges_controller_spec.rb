@@ -20,7 +20,7 @@ describe ChallengesController do
     end
     context 'when a collection is available' do
       it 'should show an error message, redirect and return false' do
-        get :no_challenge, collection_id: @collection.name
+        get :no_challenge, params: { collection_id: @collection.name }
         expect(response).to redirect_to(collection_path(@collection))
         expect(flash[:error]).to eq "What challenge did you want to work on?"
       end
