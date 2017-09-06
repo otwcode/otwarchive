@@ -1,7 +1,5 @@
-class AdminBlacklistedEmail < ActiveRecord::Base
+class AdminBlacklistedEmail < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
-  attr_accessible :email
 
   before_validation :canonicalize_email
 

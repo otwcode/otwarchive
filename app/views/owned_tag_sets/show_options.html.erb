@@ -1,4 +1,4 @@
-<% cache("tagsets_#{@tag_set_ids.join('-')}_#{@tag_sets.collect(&:updated_at).sort.last}") do %>
+<% cache("tagsets_#{@tag_set_ids.join('-')}_#{@tag_sets.collect(&:updated_at).sort.last}", skip_digest: true) do %>
   <h2>
     <%= ts("#{@tag_type.classify} Options") %>
     <%= ts("From") %>:</h2>
@@ -7,13 +7,13 @@
         <li><%= link_to ts.title, tag_set_path(ts) %></li>
       <% end %>
     </ul>
- 
-  
+
+
   <% if @tags.empty? %>
     <p class="note"><%= ts("None to list!") %></p>
   <% else %>
     <ol class="tagset index group">
-      <%= render "show_tags_alpha_listbox", :tagname_list => @tags.value_of(:name), :tag_type => @tag_type %>
+      <%= render "show_tags_alpha_listbox", :tagname_list => @tags.pluck(:name), :tag_type => @tag_type %>
     </ol>
   <% end %>
 <% end %>

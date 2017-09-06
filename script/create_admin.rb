@@ -11,7 +11,7 @@ login = gets.chomp
 print "Enter admin password: "
 password = gets.chomp
 
-a=Admin.new(:email => email, :login => login, :password => password, :password_confirmation => password)
+a=Admin.new(email: email, login: login, password: password, password_confirmation: password)
 
 if a.save
   print "Admin created\n"
