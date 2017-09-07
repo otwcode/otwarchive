@@ -181,7 +181,7 @@ class BookmarkQuery < Query
   end
 
   def current_user_is_parent?
-    User.current_user &&
+    User.current_user && User.current_user.respond_to?(:pseuds) &&
       (User.current_user.pseuds.include?(options[:parent]) ||
        options[:parent] == User.current_user)
   end

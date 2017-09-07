@@ -66,10 +66,14 @@ Feature: Admin Actions for Works and Bookmarks
       And I press "Create"
     Then I should see "Bookmark was successfully created"
     When I am logged in as an admin
+      And the bookmark indexes are updated
+      And the bookmark indexes are reindexed
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
     Then I should see "Item has been hidden."
-    When I am logged in as "regular_user" with password "password1"
+    When the bookmark indexes are updated
+      And the bookmark indexes are reindexed
+      And I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
     Then I should not see "Rude comment"
 
