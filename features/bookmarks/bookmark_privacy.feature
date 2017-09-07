@@ -3,7 +3,7 @@ Feature: Private bookmarks
   In order to have an archive full of bookmarks
   As a humble user
   I want to bookmark some works privately
-      
+
   Scenario: private bookmarks on public and restricted works
 
     Given the following activated users exist
@@ -36,19 +36,21 @@ Feature: Private bookmarks
       And I should not see "Rec"
       And I should see "Private Bookmark"
       And I should see "0"
-    
+
     # Private bookmarks should not show on the main bookmark page, but should show on your own bookmark page
-    
+
     When I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-    When I am on bookmarker's bookmarks page
+    When the bookmark indexes are updated
+      And the bookmark indexes are reindexed
+      And I am on bookmarker's bookmarks page
     Then I should see "2 Bookmarks by bookmarker"
       And I should see "Public Masterpiece"
       And I should see "Secret Masterpiece"
-      
+
     # Private bookmarks should not be visible when logged out
-    
+
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -65,9 +67,9 @@ Feature: Private bookmarks
     When I view the work "Public Masterpiece"
     Then I should not see "Bookmarks:"
       And I should not see "Bookmarks:1"
-      
+
     # Private bookmarks should not be visible to other users
-    
+
     When I am logged in as "otheruser"
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -80,9 +82,9 @@ Feature: Private bookmarks
       And I should not see "Secret Masterpiece"
       And I should not see "Bookmarks:"
       And I should not see "Bookmarks: 1"
-      
+
     # Private bookmarks should not be visible even to the author
-    
+
     When I am logged in as "workauthor"
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -119,8 +121,10 @@ Feature: Private bookmarks
       And I should see "otheruser"
       And I should not see "bookmarker"
 
-    # Private bookmarks should not show on tag's page
-    When I go to the bookmarks tagged "Stargate SG-1"
+      # Private bookmarks should not show on tag's page
+    When the bookmark indexes are updated
+      And the bookmark indexes are reindexed
+      And I go to the bookmarks tagged "Stargate SG-1"
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
       And I should not see "bookmarker"
