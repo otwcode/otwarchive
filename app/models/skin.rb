@@ -271,7 +271,7 @@ class Skin < ApplicationRecord
 
   def get_css
     if filename
-      File.read(Rails.public_path.join("." + filename))
+      File.read(Rails.public_path.join(filename))
     else
       css
     end
