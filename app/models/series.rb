@@ -231,6 +231,10 @@ class Series < ActiveRecord::Base
     )
   end
 
+  def word_count
+    self.works.posted.pluck(:word_count).compact.sum
+  end
+
   # FIXME: should series have their own language?
   def language_id
     works.first.language_id if works.present?

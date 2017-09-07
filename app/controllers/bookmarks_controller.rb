@@ -72,7 +72,7 @@ class BookmarksController < ApplicationController
         if @admin_settings.disable_filtering?
           @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
-          @search = BookmarkSearchForm.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
           results = @search.search_results
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets

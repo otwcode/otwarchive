@@ -43,13 +43,19 @@ class BookmarkQuery < Query
             when Pseud
               :pseud_ids
             when User
-              :user_ids
+              # :user_ids
+              :pseud_ids
             when Collection
               :collection_ids
             end
     return unless field.present?
     options[field] ||= []
-    options[field] << owner.id
+
+    if owner.is_a?(User)
+      options[:pseud_ids] << owner.pseuds.pluck(:id)
+    else
+      options[field] << owner.id
+    end
   end
 
   ####################
@@ -84,7 +90,13 @@ class BookmarkQuery < Query
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-    { column => { order: direction } }
+    sort_hash = { column => { order: direction } }
+
+    if column == 'created_at'
+      sort_hash[column][:unmapped_type] = 'date'
+    end
+
+    sort_hash
   end
 
   def aggregations
@@ -158,12 +170,20 @@ class BookmarkQuery < Query
     term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type]
   end
 
+  # don't include these if the current user is looking at their own bookmarks,
+  # so they can see bookmarks that belong to deleted bookmarkable objects
   def posted_filter
-    parent_term_filter(:posted, 'T')
+    parent_term_filter(:posted, 'T') unless current_user_is_parent?
   end
 
   def hidden_parent_filter
-    parent_term_filter(:hidden_by_admin, 'F')
+    parent_term_filter(:hidden_by_admin, 'F') unless current_user_is_parent?
+  end
+
+  def current_user_is_parent?
+    User.current_user &&
+      (User.current_user.pseuds.include?(options[:parent]) ||
+       options[:parent] == User.current_user)
   end
 
   def restricted_filter
@@ -179,11 +199,17 @@ class BookmarkQuery < Query
   end
 
   def pseud_filter
-    terms_filter(:pseud_id, options[:pseud_ids]) if options[:pseud_ids].present?
+    if options[:pseud_ids].present?
+      options[:pseud_ids].flatten.uniq.map { |pseud_id| term_filter(:pseud_id, pseud_id) }
+    end
+    # terms_filter(:pseud_id, options[:pseud_ids].flatten.uniq) if options[:pseud_ids].present?
   end
 
   def user_filter
-    terms_filter(:user_id, options[:user_ids]) if options[:user_ids].present?
+    if options[:user_ids].present?
+      options[:user_ids].flatten.uniq.map { |user_id| term_filter(:user_id, user_id) }
+    end
+    # terms_filter(:user_id, options[:user_ids]) if options[:user_ids].present?
   end
 
   def filter_id_filter
@@ -221,11 +247,13 @@ class BookmarkQuery < Query
   end
 
   def include_private?
-    User.current_user && user_ids.include?(User.current_user.id)
+    options[:show_private] ||
+      User.current_user && user_ids.include?(User.current_user.id)
   end
 
   def include_restricted?
-    User.current_user.present?
+    options[:show_restricted] ||
+      User.current_user.present?
   end
 
   def user_ids
