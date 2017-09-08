@@ -548,6 +548,6 @@ class CommentsController < ApplicationController
   end
 
   def filter_params
-    params.permit(filters: {})
+    params.permit!
   end
 end
