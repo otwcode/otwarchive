@@ -10,7 +10,7 @@
           <%= label_tag "owner_pseuds[]", ts("Owner pseud(s)") %>
         </dt>
         <dd>
-          <%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), multiple: true %>
+          <%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud_id), multiple: true %>
         </dd>
       <% else %>
         <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>

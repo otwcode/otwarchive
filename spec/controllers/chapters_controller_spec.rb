@@ -5,7 +5,7 @@ describe ChaptersController do
   include RedirectExpectationHelper
 
   let(:user) { create(:user) }
-  let!(:work) { create(:work, posted: true, authors: [user.pseuds.first]) }
+  let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
   let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
   let(:banned_user) { create(:user, banned: true) }
   let(:banned_users_work) { create(:work, posted: true, authors: [banned_user.pseuds.first]) }
@@ -163,7 +163,7 @@ describe ChaptersController do
     end
 
     it "assigns @comments to only reviewed comments" do
-      moderated_work = create(:work, posted: true, moderated_commenting_enabled: true)
+      moderated_work = create(:posted_work, moderated_commenting_enabled: true)
       comment = create(:comment, commentable_type: "Chapter", commentable_id: moderated_work.chapters.first.id)
       comment.unreviewed = false
       comment.save

@@ -55,7 +55,7 @@ class Chapter < ApplicationRecord
 
   after_save :fix_positions
   def fix_positions
-    if work
+    if work && !work.new_record?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)

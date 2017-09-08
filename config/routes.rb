@@ -598,18 +598,9 @@ Otwarchive::Application.routes.draw do
 
   get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
 
-  get '/autocomplete/fandom' => 'autocomplete#fandom'
-  get '/autocomplete/pseud' => 'autocomplete#pseud'
-  get '/autocomplete/open_collection_names' => 'autocomplete#open_collection_names'
-  get '/autocomplete/character_in_fandom' => 'autocomplete#character_in_fandom'
-  get '/autocomplete/tag' => 'autocomplete#tag'
-  get '/autocomplete/relationship_in_fandom' => 'autocomplete#relationship_in_fandom'
-  get '/autocomplete/freeform' => 'autocomplete#freeform'
-  get '/autocomplete/external_work' => 'autocomplete#external_work'
-  get '/autocomplete/noncanonical_tag' => 'autocomplete#noncanonical_tag'
-  get '/autocomplete/character' => 'autocomplete#character'
-  get '/autocomplete/relationship' => 'autocomplete#relationship'
-  get '/autocomplete/associated_tags' => 'autocomplete#associated_tags'
+  # TODO: rewrite the autocomplete controller to deal with the fact that
+  # there are fifty different actions going on in there
+  get '/autocomplete/:action' => 'autocomplete#%{action}'
 
   get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
   get '/assignments/no_user' => 'challenge_assignments#no_user'

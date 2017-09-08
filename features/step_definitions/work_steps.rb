@@ -142,6 +142,11 @@ Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I post the locked work "#{work}"}
 end
 
+Given /^I have a multi-chapter draft$/ do
+  step %{I am logged in as a random user}
+  step %{I post the chaptered draft "Multi-chapter Draft"}
+end
+
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
   title ||= "Blabla"
   step %{I have a work "#{title}"}
