@@ -38,6 +38,7 @@ Feature: Search anonymous works
     Given I have the Battle set loaded
       And I reveal the authors of the "Battle 12" challenge
       And the work indexes are updated
+      And the work indexes are reindexed
     When I search for works containing "mod1"
     Then I should see "You searched for: mod1"
       And I should see "1 Found"
