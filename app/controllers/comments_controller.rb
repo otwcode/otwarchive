@@ -250,9 +250,9 @@ class CommentsController < ApplicationController
           end
           respond_to do |format|
             format.html do
-              if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user, filters: params[:filters], page: params[:page])
-              elsif request.referer.match(/new/)
+              if request.referer&.match(/inbox/)
+                redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+              elsif request.referer&.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
@@ -331,7 +331,7 @@ class CommentsController < ApplicationController
       respond_to do |format|
         format.html do
           if params[:approved_from] == "inbox"
-            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters]) and return
+            redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters]) and return
           elsif params[:approved_from] == "home"
             redirect_to root_path and return
           else
@@ -545,5 +545,9 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(
       :pseud_id, :content, :name, :email, :edited_at
     )
+  end
+
+  def filter_params
+    params.permit!
   end
 end

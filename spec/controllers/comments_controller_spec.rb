@@ -146,6 +146,26 @@ describe CommentsController do
       attributes_for(:comment).slice(:name, :email, :content)
     end
 
+    context "when replying from the inbox" do
+      let!(:user) { create(:user) }
+      let!(:comment) { create(:comment) }
+
+      before do
+        fake_login_known_user(user)
+        request.env["HTTP_REFERER"] = user_inbox_path(user)
+      end
+
+      it "creates the reply and redirects to user inbox path" do
+        comment_attributes = {
+          pseud_id: user.default_pseud_id,
+          content: "Hello fellow human!"
+        }
+        post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: 'asc' } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
+        expect(flash[:comment_notice]).to eq "Comment created!"
+      end
+    end
+
     context "when the commentable is a valid tag" do
       let(:fandom) { create(:fandom) }
 
@@ -562,6 +582,16 @@ describe CommentsController do
       it "marks comment reviewed and redirects to user inbox path with success message" do
         put :review, params: { id: comment.id, approved_from: "inbox" }
         expect(response).to redirect_to(user_inbox_path(user))
+        expect(flash[:notice]).to eq "Comment approved."
+        comment.reload
+        expect(comment.unreviewed).to be false
+      end
+    end
+
+    context "when recipient approves comment from inbox with filters" do
+      it "marks comment reviewed and redirects to user inbox path with success message" do
+        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: 'asc' } }
+        expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
         expect(flash[:notice]).to eq "Comment approved."
         comment.reload
         expect(comment.unreviewed).to be false
