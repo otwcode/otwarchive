@@ -1150,8 +1150,12 @@ class Tag < ApplicationRecord
 
     if new_merger.is_a?(Fandom)
       (new_merger.medias - self.medias).each { |medium| self.add_association(medium) }
-    elsif new_merger.respond_to?(:fandoms) && self.respond_to?(:fandoms)
-      (new_merger.fandoms.canonical - self.fandoms).each { |fandom| self.add_association(fandom) }
+    else
+      # Use parents instead of fandoms because Freeform tags handle their
+      # fandoms field differently from Character and Relationship tags.
+      (new_merger.parents.canonical - self.parents).each do |parent|
+        self.add_association(parent) if parent.is_a?(Fandom)
+      end
     end
     self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
     self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
