@@ -11,4 +11,8 @@
 <%= stylesheet_link_tag 'sandbox', skip_pipeline: true %>
 <%= javascript_include_tag 'livevalidation_standalone', skip_pipeline: true %>
 
-<%= csrf_meta_tag %>
+<% if !logged_in? && ArchiveConfig.USE_SSI %>
+  <!--#include virtual="/csrf_meta_tags.html" -->
+<% else %>
+  <%= csrf_meta_tag %>
+<% end %>
