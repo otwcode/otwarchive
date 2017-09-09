@@ -113,31 +113,33 @@ Feature: Invite queue management
     When I follow "copy and use"
     Then I should see "You are already logged in!"
 
-    # Given I am a visitor
-    # # "You've" removed from test due to escaping on apostrophes
-    # Then the email should contain "been invited to join our beta!"
-    #   And the email should contain "fanart"
-    #   And the email should contain "podfic"
-    # When I click the first link in the email
-    #   And I fill in the sign up form with valid data
-    #   And I fill in the following:
-    #     | user_login                 | newuser                  |
-    #     | user_email                 | test@archiveofourown.org |
-    #     | user_password              | password1                |
-    #     | user_password_confirmation | password1                |
-    #   And all emails have been delivered
-    # When I press "Create Account"
-    # Then I should see "Account Created!"
-    # Then 1 email should be delivered
-    #   And the email should contain "Welcome to the Archive of Our Own,"
-    #   And the email should contain "newuser"
-    #   And the email should contain "activate your account"
-    #   And the email should not contain "translation missing"
+    # user uses email invite
+    Given I am a visitor
+    # "You've" removed from test due to escaping on apostrophes
+    Then the email should contain "been invited to join our beta!"
+      And the email should contain "fanart"
+      And the email should contain "podfic"
+    When I click the first link in the email
+      And I fill in the sign up form with valid data
+      And I fill in the following:
+        | user_login                 | newuser                  |
+        | user_email                 | test@archiveofourown.org |
+        | user_password              | password1                |
+        | user_password_confirmation | password1                |
+      And all emails have been delivered
+    When I press "Create Account"
+    Then I should see "Account Created!"
+    Then 1 email should be delivered
+      And the email should contain "Welcome to the Archive of Our Own,"
+      And the email should contain "newuser"
+      And the email should contain "activate your account"
+      And the email should not contain "translation missing"
+
     # user activates account
-    # When all emails have been delivered
-    #   And I click the first link in the email
-    # When I am logged in as "newuser" with password "password1"
-    # Then I should see "Successfully logged in."
+    When all emails have been delivered
+      And I click the first link in the email
+    When I am logged in as "newuser" with password "password1"
+    Then I should see "Successfully logged in."
 
   Scenario: You can't request an invitation with an email address that is
   already attached to an account
