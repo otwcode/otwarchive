@@ -983,7 +983,7 @@ class Tag < ApplicationRecord
   def remove_association(tag_id)
     tag = Tag.find(tag_id)
     if tag.class == self.class
-      if self.mergers.include?(tag)
+      if tag.merger_id == self.id
         tag.update_attributes(merger_id: nil)
       elsif self.meta_tags.include?(tag)
         self.meta_tags.delete(tag)
