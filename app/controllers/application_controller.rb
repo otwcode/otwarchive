@@ -466,7 +466,7 @@ public
                       :set_redirects,
                       :set_media,
                       :store_location,
-                      unless: proc {|c| request.format == 'html' }
+                      unless: proc { %w(js json).include?(request.format) }
 
   #### -- AUTHORIZATION -- ####
 
