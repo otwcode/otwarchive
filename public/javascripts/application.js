@@ -11,6 +11,7 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
+    updateCachedTokens();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -642,4 +643,19 @@ function thermometer() {
       });
     }
   });
+}
+
+function updateCachedTokens() {
+  // we only do full page caching when users are logged out
+  if ($j('#small_login').length > 0) {
+    $j.getJSON("/token_dispenser.json", function( data ) {
+      var token = data.token;
+      //set token on fields
+      $j('input[name=authenticity_token]').each(function(){
+        $j(this).attr('value', token);
+      });
+      $j('meta[name=csrf-token]').attr('value', token);
+      console.log("I got a token: " + token);
+    });
+  }
 }

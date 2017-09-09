@@ -561,6 +561,7 @@ Otwarchive::Application.routes.draw do
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
+  get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
   get 'devmode' => 'devmode#index'
