@@ -2,6 +2,9 @@ if ($j("#small_login form").length === 0) {
   $j("#small_login").html(
     "<%= escape_javascript(render :partial => "user_sessions/passwd_small") %>"
   );
+  // update the authenticity token based on the good value in the meta tags
+  var validToken = $j("meta[name=csrf-token]").attr('content');
+  $j("#small_login input[name=authenticity_token]").attr('value', validToken);
   $j("#login-dropdown").text("Close");
   $j("#small_login").show();
 } else {
