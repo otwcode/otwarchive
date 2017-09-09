@@ -460,6 +460,14 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
+  # Don't get unnecessary data for json requests
+  skip_before_action  :fetch_admin_settings,
+                      :load_admin_banner,
+                      :set_redirects,
+                      :set_media,
+                      :store_location,
+                      unless: proc {|c| request.format == 'html' }
+
   #### -- AUTHORIZATION -- ####
 
   protect_from_forgery with: :exception, prepend: true
