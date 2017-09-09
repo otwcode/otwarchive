@@ -585,11 +585,11 @@ describe Tag do
           expect(synonym.meta_tags.reload).to contain_exactly
         end
 
-        it "adding a synonym transfers its associations", :pending do
+        it "adding a synonym transfers its associations" do
           parent = create(:media, canonical: true)
           child = create(:character, canonical: false)
-          synonym.parents << parent
-          synonym.children << child
+          synonym.add_association(parent)
+          synonym.add_association(child)
           synonym.reload
 
           synonym.attributes = { syn_string: fandom.name }
