@@ -733,7 +733,7 @@ class Tag < ApplicationRecord
   # If it was canonical but isn't anymore, we need to change or remove
   # the filter_taggings as appropriate
   def update_filters_for_canonical_change
-    if self.canonical_changed?
+    if self.saved_change_to_canonical?
       if self.canonical?
         self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
@@ -760,7 +760,7 @@ class Tag < ApplicationRecord
   # If a tag has a new merger but had an old merger, add new filter_taggings
   # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
-    if self.merger_id_changed?
+    if self.saved_change_to_merger_id?
       # setting the merger_id doesn't update the merger so we do it here
       if self.merger_id
         self.merger = Tag.find_by(id: self.merger_id)
@@ -770,7 +770,7 @@ class Tag < ApplicationRecord
       if self.merger && self.merger.canonical?
         self.async(:add_filter_taggings)
       end
-      old_merger = Tag.find_by(id: self.merger_id_was)
+      old_merger = Tag.find_by(id: self.merger_id_before_last_save)
       if old_merger && old_merger.canonical?
         self.async(:remove_filter_taggings, old_merger.id)
       end
@@ -1225,8 +1225,8 @@ class Tag < ApplicationRecord
 
     # Expire caching when a merger is added or removed
     if tag.saved_change_to_merger_id?
-      if tag.merger_id_was.present?
-        old = Tag.find(tag.merger_id_was)
+      if tag.merger_id_before_last_save.present?
+        old = Tag.find(tag.merger_id_before_last_save)
         old.update_works_index_timestamp!
       end
       if tag.merger_id.present?
