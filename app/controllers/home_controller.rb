@@ -21,10 +21,6 @@ class HomeController < ApplicationController
     render action: "dmca", layout: "application"
   end
 
-  def csrf_meta_tags
-    render layout: false
-  end
-
   # lost cookie
   def lost_cookie
     render action: 'lost_cookie', layout: 'application'

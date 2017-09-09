@@ -1,5 +1,4 @@
 @admin
-@javascript
 Feature: Authenticate Admin Users
 
   Scenario: admin cannot log in as an ordinary user - it is a different type of account
@@ -7,7 +6,6 @@ Feature: Authenticate Admin Users
       | login       | password |
       | Zooey       | secret   |
   When I go to the home page
-      And I follow "Log In"
       And I fill in "user_session_login" with "Zooey"
       And I fill in "user_session_password" with "secret"
       And I press "Log In"

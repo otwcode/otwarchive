@@ -571,7 +571,6 @@ Otwarchive::Application.routes.draw do
   get 'menu/fandoms' => 'menu#fandoms'
   get 'menu/search' => 'menu#search'
   get 'menu/about' => 'menu#about'
-  get 'csrf_meta_tags' => 'home#csrf_meta_tags'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
