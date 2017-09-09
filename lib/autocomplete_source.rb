@@ -24,12 +24,20 @@ module AutocompleteSource
     "#{name_was}"
   end
 
+  def autocomplete_search_string_before_last_save
+    "#{name_before_last_save}"
+  end
+
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : "")
   end
 
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : "")
+  end
+
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_before_last_save}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_before_last_save}" : "")
   end
 
   def autocomplete_score
@@ -60,8 +68,8 @@ module AutocompleteSource
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
-    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_before_last_save}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_before_last_save, self.autocomplete_prefixes, self.autocomplete_value_before_last_save)
   end
 
   module ClassMethods
@@ -99,7 +107,7 @@ module AutocompleteSource
     end
 
     def autocomplete_lookup(options = {})
-      options.reverse_merge!({:search_param => "", :autocomplete_prefix => "", :sort => "down"})
+      options.reverse_merge!({search_param: "", autocomplete_prefix: "", sort: "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
       if REDIS_GENERAL.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
@@ -136,10 +144,10 @@ module AutocompleteSource
           if lastpiece && search_piece.length < 3
             # use a limit
             phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
-              'inf', 0, :withscores => true, :limit => [0, 50])
+              'inf', 0, withscores: true, limit: [0, 50])
           else
             phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
-              'inf', 0, :withscores => true)
+              'inf', 0, withscores: true)
           end
 
           phrases_with_scores.each do |phrase, score|

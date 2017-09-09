@@ -92,7 +92,7 @@ module ChallengeCore
           self.send(datetime_attr).try(:strftime, ArchiveConfig.DEFAULT_DATETIME_FORMAT)
         end
         define_method("#{datetime_attr}_string=") do |datetimestring|
-          self.send("#{datetime_attr}=", Timeliness.parse(datetimestring, :zone => (self.time_zone || Time.zone)))
+          self.send("#{datetime_attr}=", Timeliness.parse(datetimestring, zone: (self.time_zone || Time.zone)))
         end
       end
     end

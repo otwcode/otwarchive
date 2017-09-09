@@ -129,15 +129,14 @@ Feature: Edit Works
       And I should see "coauthor, leadauthor" within ".byline"
 
   Scenario: You can remove yourself as coauthor from a work
-    Given basic tags
-      And the following activated users exist
+    Given the following activated users exist
         | login          |
         | coolperson     |
         | ex_friend      |
-      And I have coauthored a work as "coolperson" with "ex_friend"
+      And I coauthored the work "Shared" as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
-    Then I should see "test pseud 1 (coolperson), test pseud 2 (ex_friend)" within ".byline"
+    Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"
@@ -162,3 +161,10 @@ Feature: Edit Works
       And I press "Cancel"
     When I view the work "Work 1"
       Then I should see "Fandom: testing"
+
+  Scenario: When editing a work, the title field should not escape HTML
+    Given I have a work "What a title! :< :& :>"
+      And I go to the works page
+      And I follow "What a title! :< :& :>"
+      And I follow "Edit"
+    Then I should see "What a title! :< :& :>" in the "Work Title" input

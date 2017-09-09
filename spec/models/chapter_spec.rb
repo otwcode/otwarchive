@@ -3,6 +3,19 @@ require 'spec_helper'
 
 describe Chapter do
 
+  it "has a valid factory" do
+    expect(build(:chapter)).to be_valid
+  end
+
+  it "is invalid without content" do
+    expect(build(:chapter, content: nil)).to be_invalid
+  end
+
+  it "is unposted by default" do
+    chapter = create(:chapter)
+    chapter.posted.should == false
+  end
+
   describe "save" do
 
     before(:each) do
