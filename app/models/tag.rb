@@ -730,13 +730,15 @@ class Tag < ApplicationRecord
 
   # If we have a new merger, transfer our old associations to the merger.
   # If we're newly non-canonical, clean up the associations that relied on us
-  # being canonical: favorite tags, child tags, meta/sub tags.
+  # being canonical: mergers, child tags, meta/sub tags, favorite tags.
   def update_associations
     if self.saved_change_to_merger_id? && self.merger
       async(:add_merger_associations)
-    elsif self.saved_change_to_canonical? && ! self.canonical?
+      # TODO Should this transfer favorite tags to the merger instead?
       async(:remove_favorite_tags)
+    elsif self.saved_change_to_canonical? && ! self.canonical?
       async(:remove_canonical_associations)
+      async(:remove_favorite_tags)
     end
   end
 
