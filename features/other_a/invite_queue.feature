@@ -1,5 +1,4 @@
 @admin
-@javascript
 Feature: Invite queue management
 
   Background:
@@ -33,8 +32,8 @@ Feature: Invite queue management
     When I am logged out as an admin
       And I am on the homepage
       And I follow "Log In"
-    Then I should see "Get an Invitation"
-    When I follow "Get an Invitation"
+    Then I should see "Create an account now."
+    When I follow "Create an account now."
     Then I should see "Request an Invitation"
 
   Scenario: An admin can delete people from the queue
@@ -55,7 +54,7 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Log In"
-      And I follow "Get an Invitation"
+      And I follow "Create an account now."
     Then I should see "We are sending out 10 invitations per day."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
@@ -63,7 +62,8 @@ Feature: Invite queue management
 
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "Sorry, we can't find the email address you entered"
+    Then I should see "You can search for the email address you signed up with below."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -95,49 +95,51 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Log In"
-      And I follow "Get an Invitation"
+      And I follow "Create an account now."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
       And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "Sorry, we can't find the email address you entered"
+    Then I should see "You can search for the email address you signed up with below."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address;"
 
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
-      And I follow "Invite New Users"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
 
-    # Given I am a visitor
-    # # "You've" removed from test due to escaping on apostrophes
-    # Then the email should contain "been invited to join our beta!"
-    #   And the email should contain "fanart"
-    #   And the email should contain "podfic"
-    # When I click the first link in the email
-    #   And I fill in the sign up form with valid data
-    #   And I fill in the following:
-    #     | user_login                 | newuser                  |
-    #     | user_email                 | test@archiveofourown.org |
-    #     | user_password              | password1                |
-    #     | user_password_confirmation | password1                |
-    #   And all emails have been delivered
-    # When I press "Create Account"
-    # Then I should see "Account Created!"
-    # Then 1 email should be delivered
-    #   And the email should contain "Welcome to the Archive of Our Own,"
-    #   And the email should contain "newuser"
-    #   And the email should contain "activate your account"
-    #   And the email should not contain "translation missing"
+    # user uses email invite
+    Given I am a visitor
+    # "You've" removed from test due to escaping on apostrophes
+    Then the email should contain "been invited to join our beta!"
+      And the email should contain "fanart"
+      And the email should contain "podfic"
+    When I click the first link in the email
+      And I fill in the sign up form with valid data
+      And I fill in the following:
+        | user_login                 | newuser                  |
+        | user_email                 | test@archiveofourown.org |
+        | user_password              | password1                |
+        | user_password_confirmation | password1                |
+      And all emails have been delivered
+    When I press "Create Account"
+    Then I should see "Account Created!"
+    Then 1 email should be delivered
+      And the email should contain "Welcome to the Archive of Our Own,"
+      And the email should contain "newuser"
+      And the email should contain "activate your account"
+      And the email should not contain "translation missing"
+
     # user activates account
-    # When all emails have been delivered
-    #   And I click the first link in the email
-    # When I am logged in as "newuser" with password "password1"
-    # Then I should see "Successfully logged in."
+    When all emails have been delivered
+      And I click the first link in the email
+    When I am logged in as "newuser" with password "password1"
+    Then I should see "Successfully logged in."
 
   Scenario: You can't request an invitation with an email address that is
   already attached to an account
@@ -148,7 +150,7 @@ Feature: Invite queue management
       | fred  | yabadabadoo | fred@bedrock.com |
     When I am on the homepage
       And I follow "Log In"
-      And I follow "Get an Invitation"
+      And I follow "Create an account now."
       And I fill in "invite_request_email" with "fred@bedrock.com"
       And I press "Add me to the list"
     Then I should see "Email is already being used by an account holder."
