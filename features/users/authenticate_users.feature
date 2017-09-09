@@ -1,6 +1,5 @@
 @users
 @admin
-@javascript
 Feature: User Authentication
 
   Scenario: Forgot password
@@ -10,7 +9,6 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I follow "Log In"
       And I fill in "User name" with "sam"
       And I fill in "Password" with "test"
       And I press "Log In"
@@ -27,7 +25,6 @@ Feature: User Authentication
 
     # old password should still work
     When I am on the homepage
-    And I follow "Log In"
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
     And I press "Log In"
@@ -35,7 +32,6 @@ Feature: User Authentication
 
     # password from email should also work
     When I am logged out
-    And I follow "Log In"
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
     And I press "Log In"
@@ -51,7 +47,6 @@ Feature: User Authentication
     # old password should no longer work
     When I am logged out
     When I am on the homepage
-    And I follow "Log In"
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
     And I press "Log In"
@@ -60,7 +55,6 @@ Feature: User Authentication
     # generated password should no longer work
     When I am logged out
     When I am on the homepage
-    And I follow "Log In"
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
     And I press "Log In"
@@ -69,7 +63,6 @@ Feature: User Authentication
     # new password should work
     When I am logged out
     When I am on the homepage
-    And I follow "Log In"
     And I fill in "User name" with "sam"
     And I fill in "Password" with "newpass"
     And I press "Log In"
@@ -78,7 +71,6 @@ Feature: User Authentication
   Scenario: invalid user
     Given I have loaded the fixtures
     When I am on the home page
-    And I follow "Log In"
     And I follow "Forgot password?"
     When I fill in "reset_password_for" with "testuser"
       And I press "Reset Password"
@@ -86,9 +78,7 @@ Feature: User Authentication
       And 1 email should be delivered
 
     # password from email should work
-    When I am on the home page
-    And I follow "Log In"
-    And I fill in "User name" with "testuser"
+    When I fill in "User name" with "testuser"
     And I fill in "testuser"'s temporary password
     And I press "Log In"
     Then I should see "Hi, testuser"
@@ -103,7 +93,6 @@ Feature: User Authentication
     # new password should work
     When I am logged out
     When I am on the homepage
-    And I follow "Log In"
     And I fill in "User name" with "testuser"
     And I fill in "Password" with "newpas"
     And I press "Log In"
@@ -116,7 +105,6 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I follow "Log In"
       And I fill in "User name" with "sammy"
       And I fill in "Password" with "test"
       And I press "Log In"
@@ -129,7 +117,6 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I follow "Log In"
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log In"

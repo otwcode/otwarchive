@@ -29,11 +29,11 @@
   <% if logged_in? || logged_in_as_admin? %>
     <%= render 'user_sessions/greeting' %>
   <% else %>
-    <div id="login">
+    <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In', key: 'header'), login_path, remote: true, id: "login-dropdown" %>
+        <%= link_to ts('Log In', key: 'header'), login_path, id: "login-dropdown" %>
       </p>
-      <div id="small_login" class="simple login"></div>
+      <%= render 'user_sessions/login' %>
     </div>
   <% end %>
 
