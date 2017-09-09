@@ -149,7 +149,7 @@ module ApplicationHelper
     if only_path
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: false), rel: "author")
+      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
     end
   end
 
