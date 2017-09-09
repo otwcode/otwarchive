@@ -1,4 +1,5 @@
 @admin
+@javascript
 Feature: Invite queue management
 
   Background:
@@ -31,6 +32,7 @@ Feature: Invite queue management
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage
+      And I follow "Log In"
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
     Then I should see "Request an Invitation"
@@ -52,6 +54,7 @@ Feature: Invite queue management
       And the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
+      And I follow "Log In"
       And I follow "Get an Invitation"
     Then I should see "We are sending out 10 invitations per day."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
@@ -60,8 +63,7 @@ Feature: Invite queue management
 
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "You can search for the email address you signed up with below."
-      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+    Then I should see "Sorry, we can't find the email address you entered"
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -92,18 +94,19 @@ Feature: Invite queue management
       And the invite_from_queue_at is yesterday
     When I am on the homepage
       And all emails have been delivered
+      And I follow "Log In"
       And I follow "Get an Invitation"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
       And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "You can search for the email address you signed up with below."
-      And I should see "If you can't find it, your invitation may have already been emailed to that address;"
+    Then I should see "Sorry, we can't find the email address you entered"
 
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
+      And I follow "Invite New Users"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
@@ -146,6 +149,7 @@ Feature: Invite queue management
       | login | password    | email            |
       | fred  | yabadabadoo | fred@bedrock.com |
     When I am on the homepage
+      And I follow "Log In"
       And I follow "Get an Invitation"
       And I fill in "invite_request_email" with "fred@bedrock.com"
       And I press "Add me to the list"
