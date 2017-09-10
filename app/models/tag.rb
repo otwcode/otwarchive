@@ -810,14 +810,14 @@ class Tag < ApplicationRecord
           end
         end
       end
+    end
 
-      # make sure that all the works and bookmarks under this tag get reindexed
-      # for filtering/searching
-      async(:reindex_taggables)
+    # make sure that all the works and bookmarks under this tag get reindexed
+    # for filtering/searching
+    async(:reindex_taggables)
 
-      tags_that_need_filter_count_reset.each do |tag_to_reset|
-        tag_to_reset.reset_filter_count
-      end
+    tags_that_need_filter_count_reset.each do |tag_to_reset|
+      tag_to_reset.reset_filter_count
     end
   end
 
