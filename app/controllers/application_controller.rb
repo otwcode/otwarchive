@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
 
-  # before_action :logout_if_not_user_credentials
+  before_action :logout_if_not_user_credentials
   # this was disabled when we found issues:
   # https://github.com/nbudin/devise_openid_authenticatable/issues/21
   # https://github.com/binarylogic/authlogic/issues/532
