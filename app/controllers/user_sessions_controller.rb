@@ -1,17 +1,8 @@
 class UserSessionsController < ApplicationController
 
-  # I hope this isn't catching unwanted exceptions; it's hard to locate
-  # where exactly the exception is thrown in case of no cookies. --rebecca
-  rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
-
   layout "session"
   before_action :admin_logout_required
   skip_before_action :store_location
-
-
-  def show_auth_error
-    redirect_to "/auth_error.html"
-  end
 
   def new
   end

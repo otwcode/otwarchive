@@ -1,6 +1,8 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception, prepend: true
+  rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   helper :all # include all helpers, all the time
 
@@ -17,6 +19,10 @@ class ApplicationController < ActionController::Base
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)
     end
+  end
+
+  def display_auth_error
+    redirect_to '/auth_error'
   end
 
   def transform_sanitized_hash_to_ac_params(key, value)
@@ -467,9 +473,5 @@ public
                       :set_media,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
-
-  #### -- AUTHORIZATION -- ####
-
-  protect_from_forgery with: :exception, prepend: true
 
 end
