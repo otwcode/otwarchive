@@ -35,6 +35,11 @@ stubbed response", headers: {})
               body: "stubbed response",
               headers: {})
 
+  WebMock.stub_request(:any, /second-import-site-without-tags/).
+    to_return(status: 200,
+              body: "second stubbed response",
+              headers: {})
+
   WebMock.stub_request(:any, /no-content/).
     to_return(status: 200,
               body: "",
@@ -69,8 +74,14 @@ When /^I import the urls$/ do |urls|
   step %{I press "Import"}
 end
 
-When /^I import the urls with mock websites$/ do |urls|
+When /^I import the urls with mock websites( as chapters)?( without preview)?$/ do |chapters, no_preview, urls|
   step %{I set up importing with a mock website}
   step %{I fill in "urls" with "#{urls}"}
+  if chapters
+    step %{I choose "import_multiple_chapters"}
+  end
+  if no_preview
+    step %{I check "post_without_preview"}
+  end
   step %{I press "Import"}
 end

@@ -139,7 +139,7 @@ Feature: Invite requests
       And the user "steven" exists and is activated
     When I go to steven's invitations page
     Then I should see "Create more invitations for this user"
-    When I fill in "number_of_invites" with "4"
+    When I fill in "invitation[number_of_invites]" with "4"
      And press "Create"
     Then I should see "Invitations were successfully created."
 
@@ -148,7 +148,7 @@ Feature: Invite requests
       And "user1" has "5" invitations
       And I am logged in as an admin
     When I follow "Invite New Users"
-      And I fill in "user_name" with "user1"
+      And I fill in "invitation[user_name]" with "user1"
       And I press "Go"
     Then I should see "Token"
     When I follow "Delete"

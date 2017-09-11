@@ -38,7 +38,7 @@ class ChallengesController < ApplicationController
   # be closed, whether we take user suggestions for prompts, etc.
   #
 
-  before_filter :load_collection
+  before_action :load_collection
 
   def no_collection
     flash[:error] = t('challenge.no_collection',
@@ -55,7 +55,7 @@ class ChallengesController < ApplicationController
   end
 
   def load_collection
-    @collection ||= Collection.find_by_name(params[:collection_id]) if
+    @collection ||= Collection.find_by(name: params[:collection_id]) if
         params[:collection_id]
     no_collection && return unless @collection
   end

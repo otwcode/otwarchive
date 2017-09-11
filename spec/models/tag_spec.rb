@@ -2,13 +2,85 @@
 require 'spec_helper'
 
 describe Tag do
-
   before(:each) do
     @tag = Tag.new
   end
 
   after(:each) do
     User.current_user = nil
+  end
+
+  context 'checking count caching' do
+    before(:each) do
+      # Set the minimal amount of time a tag can be cached for.
+      ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
+      # Set so that we need few uses of a tag to start caching it.
+      ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
+      # Set the minimum number of uses needed for before caching is started.
+      ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
+      @fandom_tag = FactoryGirl.create(:fandom)
+    end
+
+    context 'without updating taggings_count_cache' do
+      it 'should not cache tags which are not used much' do
+        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq 0
+        expect(@fandom_tag.taggings_count).to eq 1
+      end
+
+      it 'will start caching a when tag when that tag is used significantly' do
+        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+          FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+          @fandom_tag.reload
+          expect(@fandom_tag.taggings_count_cache).to eq 0
+          expect(@fandom_tag.taggings_count).to eq try
+        end
+        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        @fandom_tag.reload
+        # This value should be cached and wrong
+        expect(@fandom_tag.taggings_count_cache).to eq 0
+        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+      end
+    end
+
+    context 'updating taggings_count_cache' do
+      it 'should not cache tags which are not used much' do
+        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq 1
+        expect(@fandom_tag.taggings_count).to eq 1
+      end
+
+      it 'will start caching a when tag when that tag is used significantly' do
+        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
+          FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+          Tag.write_redis_to_database
+          @fandom_tag.reload
+          expect(@fandom_tag.taggings_count_cache).to eq try
+          expect(@fandom_tag.taggings_count).to eq try
+        end
+        FactoryGirl.create(:work, fandom_string: @fandom_tag.name)
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        # This value should be cached and wrong
+        expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+      end
+
+      it "Writes to the database do not happen immeadiately" do
+        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+          @fandom_tag.taggings_count = try
+          @fandom_tag.reload
+          expect(@fandom_tag.taggings_count_cache).to eq 0
+        end
+        @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+        Tag.write_redis_to_database
+        @fandom_tag.reload
+        expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+      end
+    end
   end
 
   it "should not be valid without a name" do
@@ -47,9 +119,7 @@ describe Tag do
   end
 
   context "when checking for synonym/name change" do
-
     context "when logged in as a regular user" do
-
       before(:each) do
         User.current_user = FactoryGirl.create(:user)
       end
@@ -108,14 +178,14 @@ describe Tag do
         tag_character = FactoryGirl.create(:character, canonical: true, name: 'kirk')
         tag_fandom = FactoryGirl.create(:fandom, name: 'Star Trek', canonical: true)
         tag_fandom.add_to_autocomplete
-        results=Tag.autocomplete_fandom_lookup(term: 'ki', fandom: 'Star Trek' )
+        results = Tag.autocomplete_fandom_lookup(term: 'ki', fandom: 'Star Trek')
         expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
         expect(results.include?("brave_sire_robin")).to be_falsey
       end
 
       it 'old tag maker still works' do
-        tag_adult=Rating.create_canonical('adult', true)
-        tag_normal=Warning.create_canonical('other')
+        tag_adult = Rating.create_canonical('adult', true)
+        tag_normal = Warning.create_canonical('other')
         expect(tag_adult.name).to eq('adult')
         expect(tag_normal.name).to eq('other')
         expect(tag_adult.adult).to be_truthy
@@ -187,7 +257,7 @@ describe Tag do
       tag = Fandom.create(name: "Fandom")
       expect(tag.can_change_type?).to be_truthy
 
-      work = FactoryGirl.create(:work, fandom_string: tag.name)
+      FactoryGirl.create(:work, fandom_string: tag.name)
       expect(tag.can_change_type?).to be_falsey
     end
 
@@ -209,10 +279,12 @@ describe Tag do
 
       # TODO: use factories when they stop giving validation errors and stack too deep errors
       creator = User.new(terms_of_service: '1', age_over_13: '1')
-      creator.login = "Creator"; creator.email = "creator@muse.net"
+      creator.login = "Creator"
+      creator.email = "creator@muse.net"
       creator.save
       bookmarker = User.new(terms_of_service: '1', age_over_13: '1')
-      bookmarker.login = "Bookmarker"; bookmarker.email = "bookmarker@avidfan.net"
+      bookmarker.login = "Bookmarker"
+      bookmarker.email = "bookmarker@avidfan.net"
       bookmarker.save
       chapter = Chapter.new(content: "Whatever 10 characters", authors: [creator.pseuds.first])
       work = Work.new(title: "Work", fandom_string: "Whatever", authors: [creator.pseuds.first], chapters: [chapter])
@@ -225,7 +297,7 @@ describe Tag do
     end
 
     it "should be true for a tag used on an external work" do
-      external_work = FactoryGirl.create(:external_work, character_string: "Jane Smith")
+      FactoryGirl.create(:external_work, character_string: "Jane Smith")
       tag = Tag.find_by_name("Jane Smith")
 
       expect(tag.can_change_type?).to be_truthy
@@ -368,7 +440,7 @@ describe Tag do
   describe "find_or_create_by_name" do
     it "should sort unsorted tags that get used on works" do
       tag = FactoryGirl.create(:unsorted_tag)
-      work = FactoryGirl.create(:work, character_string: tag.name)
+      FactoryGirl.create(:work, character_string: tag.name)
 
       tag = Tag.find(tag.id)
       expect(tag).to be_a(Character)
@@ -376,7 +448,7 @@ describe Tag do
 
     it "should sort unsorted tags that get used on external works" do
       tag = FactoryGirl.create(:unsorted_tag)
-      external_work = FactoryGirl.create(:external_work, character_string: tag.name)
+      FactoryGirl.create(:external_work, character_string: tag.name)
 
       tag = Tag.find(tag.id)
       expect(tag).to be_a(Character)
@@ -431,7 +503,6 @@ describe Tag do
           # make sure the canonical tag continues to have the right ids even if set to non-canonical
           @canonical_tag.canonical = false
           expect(@canonical_tag.all_filtered_work_ids).to match_array([@direct_work.id, @syn_work.id, @sub_work.id])
-
         end
       end
 
@@ -446,10 +517,9 @@ describe Tag do
         it "should find all bookmarks that would need to be reindexed" do
           expect(@syn_tag.all_bookmark_ids).to eq([@syn_bm.id])
           expect(@sub_tag.all_bookmark_ids).to eq([@sub_bm.id])
-          expect(@canonical_tag.all_bookmark_ids).to  match_array([@direct_bm.id, @syn_bm.id, @sub_bm.id])
+          expect(@canonical_tag.all_bookmark_ids).to match_array([@direct_bm.id, @syn_bm.id, @sub_bm.id])
         end
       end
     end
   end
-
 end

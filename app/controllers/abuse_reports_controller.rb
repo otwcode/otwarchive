@@ -1,6 +1,6 @@
 class AbuseReportsController < ApplicationController
-  skip_before_filter :store_location
-  before_filter :load_abuse_languages
+  skip_before_action :store_location
+  before_action :load_abuse_languages
 
   def new
     @abuse_report = AbuseReport.new
@@ -15,8 +15,8 @@ class AbuseReportsController < ApplicationController
   end
 
   def create
-    @abuse_report = AbuseReport.new(params[:abuse_report])
-    language_name = Language.find_by_id(@abuse_report.language).name
+    @abuse_report = AbuseReport.new(abuse_report_params)
+    language_name = Language.find_by(id: @abuse_report.language).name
     @abuse_report.language = language_name
     if @abuse_report.save
       @abuse_report.email_and_send
@@ -30,6 +30,13 @@ class AbuseReportsController < ApplicationController
   def load_abuse_languages
     @abuse_languages = Language.where(abuse_support_available: true).order(
       :name
+    )
+  end
+
+  private
+  def abuse_report_params
+    params.require(:abuse_report).permit(
+      :username, :email, :ip_address, :language, :summary, :url, :comment
     )
   end
 end

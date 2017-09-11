@@ -1,11 +1,13 @@
 All mailers include Resque::Mailer
 
-This uses the resque_mailer gem to send email asyncronously by default when using deliver (puts it into a background job)
+This uses the resque_mailer gem to send email asyncronously by default when
+using deliver (puts it into a background job)
 
-Jobs are persisted to queues as JSON objects. Because of this all jobs must only accept arguments that can be JSON encoded.
+Jobs are persisted to queues as JSON objects.
 
-This is why most methods pass object IDs instead of passing around the objects.
+The latest version of resque_mailer supports this for active record structures
+this is recomended as it gets round the horrible message which is 
+create_after and the resque job running before the data is commited.
 
-While this is less convenient than passing the object, it gives you a slight advantage: your jobs will be run against the most recent version of an object because they need to pull from the DB or cache. If your jobs were run against objects, they could potentially be operating on a stale record with out-of-date information.
-
-The only exception to this are methods which are called with deliver! (instead of deliver). These methods are not put into a queue, but are instead run immediately (synchronously). Only do this if the state of the current object is important, and the up-to-date record cannot be used. Although it's better to pass the information that may change as a string, and refactor the method to send asynchronously.
+Additionally if the thing passed is deleted before the email is sent
+the data in the email would have been correct.

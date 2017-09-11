@@ -9,7 +9,7 @@ require 'capistrano/gitflow_version'
 # define servers and their roles and attributes
 server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app98.ao3.org",  :app , :workers , :schedulers
-server "ao3-app02.ao3.org",  :app , :primary => true
+server "ao3-app02.ao3.org",  :app , primary: true
 server "ao3-app03.ao3.org",  :app , :workers , :schedulers
 server "ao3-app04.ao3.org",  :app
 server "ao3-app99.ao3.org",  :app , :workers , :schedulers
@@ -22,7 +22,7 @@ server "ao3-front01.ao3.org", :web
 server "ao3-app09.ao3.org",  :app 
 server "ao3-app91.ao3.org",  :app , :workers , :schedulers
 server "ao3-app11.ao3.org",  :app , :workers , :schedulers
-#server "ao3-app10.ao3.org",  :app
+server "ao3-app12.ao3.org",  :app
 server "ao3-front02.ao3.org", :web
 
 # ORDER OF EVENTS
@@ -37,7 +37,7 @@ server "ao3-front02.ao3.org", :web
 # our tasks which are production specific
 namespace :production_only do
   desc "Set up production robots.txt file"
-  task :update_robots, :roles => :web do
+  task :update_robots, roles: :web do
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
 
@@ -47,7 +47,7 @@ namespace :production_only do
   end
 
   desc "Rebalance nginx and squid"
-  task :rebalance_unicorns, :roles => :web do
+  task :rebalance_unicorns, roles: :web do
     logger.info "Rebalancing in a minute"
     sleep(60)
     run "/usr/bin/sudo /var/cfengine/files/scripts/rebalance"
@@ -55,7 +55,7 @@ namespace :production_only do
   end
 
   desc "Update the crontab on the primary app machine"
-  task :update_cron_email, :roles => :app, :only => {:primary => true} do
+  task :update_cron_email, roles: :app, only: {primary: true} do
     # run "bundle exec whenever --update-crontab production -f config/schedule_production.rb"
   end
 end
