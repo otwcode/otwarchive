@@ -1,5 +1,5 @@
 class PseudSearch < Search
-  
+
   def self.search(options={})
     query_string = self.new.escape_slashes(options[:query] || '')
     response = Pseud.tire.search(page: options[:page], per_page: 50, type: nil, load: false) do
@@ -12,5 +12,5 @@ class PseudSearch < Search
     end
     SearchResult.new('Pseud', response)
   end
-  
+
 end

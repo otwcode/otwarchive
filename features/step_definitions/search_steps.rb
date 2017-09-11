@@ -29,7 +29,7 @@ Given /^the (\w+) indexes are updated$/ do |model|
   "#{model.classify}Indexer".constantize.create_index
 
   indexer = "#{model.classify}Indexer".constantize.new(model.classify.constantize.all.pluck(:id))
-  indexer.index_documents
+  indexer.index_documents if model.classify.constantize.any?
 
   if model == 'bookmark'
     BookmarkedExternalWorkIndexer.new(ExternalWork.all.pluck(:id)).index_documents if ExternalWork.any?
