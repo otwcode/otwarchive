@@ -21,6 +21,8 @@ Scenario: Create a bookmark
       And I fill in "bookmark_tag_string" with "This is a tag, and another tag,"
       And I check "bookmark_rec"
       And I press "Create"
+      And the bookmark indexes are updated
+      And the bookmark indexes are reindexed
     Then I should see "Bookmark was successfully created"
       And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"

@@ -106,7 +106,7 @@ class WorksController < ApplicationController
       options[:filter_ids] = filter_ids
     end
 
-    options[:page] = params[:page]
+    options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
 
@@ -122,7 +122,6 @@ class WorksController < ApplicationController
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them

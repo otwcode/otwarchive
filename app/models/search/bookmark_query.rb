@@ -200,9 +200,16 @@ class BookmarkQuery < Query
   end
 
   def user_filter
-    if options[:user_ids].present?
-      options[:user_ids].flatten.uniq.map { |user_id| term_filter(:user_id, user_id) }
-    end
+    return unless options[:user_ids]
+
+    options[:user_ids].flatten.uniq.map do |user_id|
+      user = User.find_by id: user_id
+      if user && user.pseuds.any?
+        user.pseuds.map { |pseud| term_filter(:pseud_id, pseud.id) }
+      else
+        term_filter(:user_id, user_id)
+      end
+    end.flatten.compact
     # terms_filter(:user_id, options[:user_ids]) if options[:user_ids].present?
   end
 

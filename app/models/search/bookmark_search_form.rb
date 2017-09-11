@@ -12,6 +12,7 @@ class BookmarkSearchForm
     :date,
     :show_private,
     :pseud_ids,
+    :user_ids,
     :bookmarker,
     :bookmarkable_pseud_names,
     :bookmarkable_pseud_ids,
