@@ -797,7 +797,7 @@ class Work < ApplicationRecord
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
+    if self.will_save_change_to_attribute?(:complete)
       Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
     end
   end
