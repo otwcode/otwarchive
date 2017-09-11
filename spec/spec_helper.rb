@@ -106,7 +106,7 @@ def clean_the_database
     "#{klass}Indexer".constantize.create_index
 
     indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
-    indexer.index_documents if klass.constantize.any?
+    indexer.index_documents if klass.any?
   end
 end
 
