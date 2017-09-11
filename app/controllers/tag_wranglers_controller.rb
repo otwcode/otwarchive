@@ -51,6 +51,7 @@ class TagWranglersController < ApplicationController
   end
 
   def create
+    success_message = "Wranglers were successfully assigned!"
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
@@ -58,7 +59,11 @@ class TagWranglersController < ApplicationController
         for fandom in fandoms
           unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
             assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
-            assignment.save!
+            if assignment.errors.empty? && assignment.save
+              flash[:notice] = success_message
+            else
+              flash[:error] = assignment.errors.full_messages
+            end
           end
         end
       end
@@ -76,7 +81,7 @@ class TagWranglersController < ApplicationController
           end
         end
       end
-      flash[:notice] = "Wranglers were successfully assigned!"
+      flash[:notice] = success_message
     end
     redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
