@@ -106,7 +106,7 @@ def clean_the_database
     "#{klass}Indexer".constantize.create_index
 
     indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
-    indexer.index_documents rescue nil
+    indexer.index_documents if klass.constantize.any?
   end
 end
 
@@ -114,7 +114,7 @@ def update_and_refresh_indexes(klass_name)
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
   indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
   indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents
+  indexer.index_documents if klass_name.capitalize.constantize.any?
 
   $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
