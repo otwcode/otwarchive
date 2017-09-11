@@ -165,7 +165,7 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
       @works = @search.search_results
       @facets = @works.facets
     end
