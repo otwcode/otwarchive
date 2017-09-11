@@ -680,7 +680,7 @@ describe ChaptersController do
           end
 
           it "posts the work if the work was not posted before" do
-            put :update, work_id: unposted_work.id, id: unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true
+            put :update, params: { work_id: unposted_work.id, id: unposted_work.chapters.first.id, chapter: @chapter_attributes, post_button: true }
             expect(assigns[:work].posted).to be true
           end
 
