@@ -9,9 +9,9 @@ describe WorkSearch do
     second_work.save
 
     # TIRE
-    Tire.index(Work.index_name).delete
-    Work.create_elasticsearch_index
-    Work.import
+    # Tire.index(Work.index_name).delete
+    # Work.create_elasticsearch_index
+    # Work.import
 
     # Elasticsearch
     update_and_refresh_indexes('work')
@@ -19,7 +19,7 @@ describe WorkSearch do
 
   after(:each) do
     Work.destroy_all
-    Tire.index(Work.index_name).delete
+    # Tire.index(Work.index_name).delete
 
     delete_index 'works'
   end
@@ -60,7 +60,8 @@ describe WorkSearch do
       second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       second_work.update_index
 
-      Work.tire.index.refresh
+      # Work.tire.index.refresh
+      update_and_refresh_indexes 'work'
     end
 
     it "should find works that match" do
@@ -76,7 +77,8 @@ describe WorkSearch do
     describe "when searching unposted works" do
       before(:each) do
         work.update_attribute(:posted, false)
-        Work.tire.index.refresh
+        # Work.tire.index.refresh
+        update_and_refresh_indexes 'work'
       end
 
       it "should not return them by default" do
@@ -88,7 +90,8 @@ describe WorkSearch do
     describe "when searching restricted works" do
       before(:each) do
         work.update_attribute(:restricted, true)
-        Work.tire.index.refresh
+        # Work.tire.index.refresh
+        update_and_refresh_indexes 'work'
       end
 
       it "should not return them by default" do
@@ -179,7 +182,8 @@ describe WorkSearch do
         second_work.chapters.first.update_attributes(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
         second_work.save
 
-        Work.tire.index.refresh
+        # Work.tire.index.refresh
+        update_and_refresh_indexes 'work'
       end
 
       it "should find the right works less than a given number" do

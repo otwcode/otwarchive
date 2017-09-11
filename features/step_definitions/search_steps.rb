@@ -1,8 +1,8 @@
 Given /^all search indexes are updated$/ do
   [Work, Bookmark, Pseud, Tag].each do |klass|
     # TIRE
-    klass.import
-    klass.tire.index.refresh
+    # klass.import
+    # klass.tire.index.refresh
     #
     # Elasticsearch
     if $elasticsearch.indices.exists? index: "ao3_test_#{klass.to_s.downcase}s"
@@ -18,8 +18,8 @@ end
 
 Given /^the (\w+) indexes are updated$/ do |model|
   # TIRE
-  model.classify.constantize.import
-  model.classify.constantize.tire.index.refresh
+  # model.classify.constantize.import
+  # model.classify.constantize.tire.index.refresh
   #
   # Elasticsearch
   if $elasticsearch.indices.exists? index: "ao3_test_#{model}s"

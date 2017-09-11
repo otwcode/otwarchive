@@ -44,7 +44,9 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     visit preview_work_url(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
-    Work.tire.index.refresh
+    # Work.tire.index.refresh
+    step %{the work indexes are updated}
+    step %{the work indexes are reindexed}
     Tag.write_redis_to_database
   end
 

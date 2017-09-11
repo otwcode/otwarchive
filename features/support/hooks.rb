@@ -1,17 +1,17 @@
 Before do
   # Reset Elasticsearch - TIRE
-  Work.tire.index.delete
-  Work.create_elasticsearch_index
+  # Work.tire.index.delete
+  # Work.create_elasticsearch_index
 
-  Bookmark.tire.index.delete
-  Bookmark.create_elasticsearch_index
-  Bookmark.import
+  # Bookmark.tire.index.delete
+  # Bookmark.create_elasticsearch_index
+  # Bookmark.import
 
-  Tag.tire.index.delete
-  Tag.create_elasticsearch_index
+  # Tag.tire.index.delete
+  # Tag.create_elasticsearch_index
 
-  Pseud.tire.index.delete
-  Pseud.create_elasticsearch_index
+  # Pseud.tire.index.delete
+  # Pseud.create_elasticsearch_index
 
   # Reset Elasticsearch
 
