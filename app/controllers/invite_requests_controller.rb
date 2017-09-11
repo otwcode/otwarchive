@@ -8,6 +8,7 @@ class InviteRequestsController < ApplicationController
 
   # GET /invite_requests/1
   def show
+    fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
     unless (request.xml_http_request?) || @invite_request
       flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
