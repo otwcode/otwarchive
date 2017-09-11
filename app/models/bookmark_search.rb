@@ -47,7 +47,7 @@ class BookmarkSearch < Search
       { term: { hidden_by_admin: 'F' } },
       { terms: { pseud_id: pseuds.map(&:id) } }
     ]
-    unless pseuds.map(&:user).uniq == [User.current_user]
+    unless User.current_user.is_a?(Admin) || pseuds.map(&:user).uniq == [User.current_user]
       terms << { term: { private: 'F' } }
     end
     query = { bool: { must: terms } }
