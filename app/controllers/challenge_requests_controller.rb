@@ -1,7 +1,7 @@
 class ChallengeRequestsController < ApplicationController
 
-  before_filter :load_collection
-  before_filter :check_visibility
+  before_action :load_collection
+  before_action :check_visibility
 
   def check_visibility
     unless @collection

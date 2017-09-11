@@ -1,4 +1,4 @@
-class GiftExchange < ActiveRecord::Base
+class GiftExchange < ApplicationRecord
   PROMPT_TYPES = %w(requests offers)
   include ActiveModel::ForbiddenAttributesProtection
   include ChallengeCore

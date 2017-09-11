@@ -1,4 +1,4 @@
-class ExternalAuthor < ActiveRecord::Base
+class ExternalAuthor < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # send :include, Activation # eventually we will let users create new identities
@@ -13,7 +13,7 @@ class ExternalAuthor < ActiveRecord::Base
   validates_associated :external_author_names
 
   has_many :external_creatorships, through: :external_author_names
-  has_many :works, -> { uniq }, through: :external_creatorships, source: :creation, source_type: 'Work'
+  has_many :works, -> { distinct }, through: :external_creatorships, source: :creation, source_type: 'Work'
 
   has_one :invitation
 

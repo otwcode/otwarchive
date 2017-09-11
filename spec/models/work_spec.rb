@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+  # see lib/collectible_spec for collection-related tests
 
   it "creates a minimally work" do
     expect(create(:work)).to be_valid
+  end
+
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
   end
 
   context "create_stat_counter" do
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do

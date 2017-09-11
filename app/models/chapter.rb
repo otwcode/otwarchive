@@ -1,9 +1,10 @@
 # encoding=utf-8
 
-class Chapter < ActiveRecord::Base
+class Chapter < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include Creatable
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
@@ -46,12 +47,15 @@ class Chapter < ActiveRecord::Base
 
 #  before_update :clean_emdashes
 
+  after_create :notify_after_creation
+  before_update :notify_before_update
+
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 
   after_save :fix_positions
   def fix_positions
-    if work
+    if work && !work.new_record?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
@@ -59,9 +63,8 @@ class Chapter < ActiveRecord::Base
         chapters = chapters - [self]
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
-          chapter.position = i+1
-          if chapter.position_changed?
-            Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
+          if chapter.position != i+1
+            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
             positions_changed = true
           end
         end
@@ -75,7 +78,7 @@ class Chapter < ActiveRecord::Base
   end
 
   after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.posted_changed? }
+    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
@@ -170,7 +173,7 @@ class Chapter < ActiveRecord::Base
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
       errors.add(:base, ts("Chapter must have at least one author."))
-      return false
+      throw :abort
     end
   end
 
@@ -180,7 +183,7 @@ class Chapter < ActiveRecord::Base
       self.published_at = Date.today
     elsif self.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 

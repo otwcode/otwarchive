@@ -1,12 +1,12 @@
 class PotentialMatchesController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_collection
-  before_filter :collection_maintainers_only
-  before_filter :load_challenge
-  before_filter :check_assignments_not_sent
-  before_filter :check_signup_closed, only: [:generate]
-  before_filter :load_potential_match_from_id, only: [:show]
+  before_action :users_only
+  before_action :load_collection
+  before_action :collection_maintainers_only
+  before_action :load_challenge
+  before_action :check_assignments_not_sent
+  before_action :check_signup_closed, only: [:generate]
+  before_action :load_potential_match_from_id, only: [:show]
 
 
   def load_challenge

@@ -1,10 +1,10 @@
 class SubscriptionsController < ApplicationController
 
-  skip_before_filter :store_location, only: [:create, :destroy]
+  skip_before_action :store_location, only: [:create, :destroy]
 
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   def load_user
     @user = User.find_by(login: params[:user_id])
@@ -27,7 +27,7 @@ class SubscriptionsController < ApplicationController
   def create
     @subscription = @user.subscriptions.build(subscription_params)
 
-    success_message = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_url}\">your Subscriptions page</a>.", name: @subscription.name).html_safe
+    success_message = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_path}\">your Subscriptions page</a>.", name: @subscription.name).html_safe
     if @subscription.save
       respond_to do |format|
         format.html { redirect_to request.referer || @subscription.subscribable, notice: success_message }

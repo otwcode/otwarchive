@@ -1,4 +1,4 @@
-class InviteRequest < ActiveRecord::Base
+class InviteRequest < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
   validates :email, presence: true, email_veracity: true
@@ -25,7 +25,7 @@ class InviteRequest < ActiveRecord::Base
   def compare_with_users
     if User.find_by(email: self.email)
       errors.add(:email, "is already being used by an account holder.")
-      return false
+      throw :abort
     end
   end
 

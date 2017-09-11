@@ -30,7 +30,6 @@ class Fandom < Tag
     if self.medias.empty? && self.type == "Fandom" # type could be something else if the tag is in the process of being re-categorised (re-sorted)
       self.parents << Media.uncategorized
     end
-    true
   end
 
   before_update :check_wrangling_status

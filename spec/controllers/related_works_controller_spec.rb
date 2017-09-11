@@ -10,7 +10,7 @@ describe RelatedWorksController do
   describe "GET #index" do
     context "for a blank user" do
       before(:each) do
-        get :index, user_id: ""
+        get :index, params: { user_id: "" }
       end
 
       it "sets a flash message" do
@@ -24,7 +24,7 @@ describe RelatedWorksController do
 
     context "for a nonexistent user" do
       before(:each) do
-        get :index, user_id: "user"
+        get :index, params: { user_id: "user" }
       end
 
       it "sets a flash message" do
@@ -42,7 +42,7 @@ describe RelatedWorksController do
       before(:each) do
         @related_work = FactoryGirl.create(:related_work, work_id: child_work.id)
         fake_login_known_user(child_creator)
-        put :update, id: @related_work
+        put :update, params: { id: @related_work }
       end
 
       it "sets a flash message" do
@@ -58,7 +58,7 @@ describe RelatedWorksController do
       before(:each) do
         @related_work = FactoryGirl.create(:related_work)
         fake_login
-        put :update, id: @related_work
+        put :update, params: { id: @related_work }
       end
 
       it "sets a flash message" do
@@ -78,7 +78,7 @@ describe RelatedWorksController do
 
       context "with valid parameters" do
         before(:each) do
-          put :update, id: @related_work
+          put :update, params: { id: @related_work }
         end
 
         it "updates the related work attributes" do
@@ -112,7 +112,7 @@ describe RelatedWorksController do
       before(:each) do
         @related_work = FactoryGirl.create(:related_work, parent_id: parent_work.id, reciprocal: true)
         fake_login_known_user(parent_creator)
-        delete :destroy, id: @related_work
+        delete :destroy, params: { id: @related_work }
       end
 
       it "sets a flash message" do
@@ -128,7 +128,7 @@ describe RelatedWorksController do
       before(:each) do
         @related_work = FactoryGirl.create(:related_work)
         fake_login
-        delete :destroy, id: @related_work
+        delete :destroy, params: { id: @related_work }
       end
 
       it "sets a flash message" do
@@ -148,12 +148,12 @@ describe RelatedWorksController do
 
       it "deletes the related work" do
         expect {
-          delete :destroy, id: @related_work
+          delete :destroy, params: { id: @related_work }
         }.to change(RelatedWork, :count).by(-1)
       end
 
       it "redirects the requester" do
-        delete :destroy, id: @related_work
+        delete :destroy, params: { id: @related_work }
         expect(response).to have_http_status(:redirect)
       end
     end

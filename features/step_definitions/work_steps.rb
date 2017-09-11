@@ -142,6 +142,11 @@ Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I post the locked work "#{work}"}
 end
 
+Given /^I have a multi-chapter draft$/ do
+  step %{I am logged in as a random user}
+  step %{I post the chaptered draft "Multi-chapter Draft"}
+end
+
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
   title ||= "Blabla"
   step %{I have a work "#{title}"}
@@ -274,6 +279,15 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   Work.tire.index.refresh
   Tag.write_redis_to_database
+end
+
+# Posts a chapter for the current user
+When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+  work = Work.find_by(title: work_title)
+  visit work_url(work)
+  step %{I follow "Add Chapter"}
+  step %{I fill in "content" with "la la la la la la la la la la la"}
+  step %{I post the chapter}
 end
 
 When /^a chapter is set up for "([^"]*)"$/ do |work_title|
@@ -455,9 +469,10 @@ end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  click_button("Yes, Delete Work")
+  # If JavaScript is enabled, window.confirm will be used and this button will not appear
+  click_button("Yes, Delete Work") unless @javascript
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
@@ -484,7 +499,9 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
+
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
+  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
   step %{I post the work without preview}

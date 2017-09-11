@@ -1,5 +1,5 @@
 class Admin::SettingsController < ApplicationController
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
     @admin_setting = AdminSetting.first || AdminSetting.create(last_updated_by: Admin.first)

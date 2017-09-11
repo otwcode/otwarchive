@@ -1,6 +1,6 @@
 class UserInviteRequestsController < ApplicationController
-  before_filter :admin_only, except: [:new, :create]
-  before_filter :check_user_status, only: [:new, :create]
+  before_action :admin_only, except: [:new, :create]
+  before_action :check_user_status, only: [:new, :create]
 
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
@@ -62,7 +62,7 @@ class UserInviteRequestsController < ApplicationController
         end
       end
       flash[:notice] = 'All Requests were declined.'
-      redirect_to user_invite_requests_url and return
+      redirect_to user_invite_requests_path and return
     end
     params[:requests].each_pair do |id, quantity|
       unless quantity.blank?
@@ -72,7 +72,7 @@ class UserInviteRequestsController < ApplicationController
       end
     end
     flash[:notice] = ts("Requests were successfully updated.")
-    redirect_to user_invite_requests_url
+    redirect_to user_invite_requests_path
   end
 
   private
