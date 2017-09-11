@@ -8,6 +8,7 @@ class WorkSearchForm < SearchForm
     :query,
     :title,
     :creators,
+    :collected,
     :revised_at,
     :language_id,
     :complete,
@@ -51,6 +52,7 @@ class WorkSearchForm < SearchForm
   end
 
   def process_options(opts = {})
+    # TODO: Should be able to remove this
     opts[:creator] = opts[:creators] if opts[:creators]
     opts[:creators] = opts[:creator] if opts[:creator]
 
@@ -62,7 +64,10 @@ class WorkSearchForm < SearchForm
 
     opts[:query].gsub!('creator:', 'creators:') if opts[:query]
 
-    WorkSearch.new(opts).options
+    processed_opts = WorkSearch.new(opts).options
+    processed_opts.merge!(collected: opts[:collected]) if opts[:collected]
+
+    processed_opts
   end
 
   def persisted?

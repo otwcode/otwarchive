@@ -404,12 +404,13 @@ describe WorksController do
                                               collection_names: collection.name,
                                               posted: true,
                                               fandom_string: collected_fandom.name)
-      [@unrestricted_work,
-       @unrestricted_work_2_in_collection,
-       @unrestricted_work_in_collection,
-       @restricted_work_in_collection].each do |work|
-        work.index.refresh
-      end
+      # [@unrestricted_work,
+       # @unrestricted_work_2_in_collection,
+       # @unrestricted_work_in_collection,
+       # @restricted_work_in_collection].each do |work|
+        # work.index.refresh
+      # end
+      update_and_refresh_indexes 'work'
     end
 
     context "as a guest" do

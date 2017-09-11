@@ -1,7 +1,7 @@
 class PeopleController < ApplicationController
 
   before_action :load_collection
-  
+
   def do_search
     options = { query: params[:query], page: params[:page] || 1 }
     if @collection
@@ -31,7 +31,7 @@ class PeopleController < ApplicationController
         @people = Pseud.order("RAND()").limit(10)
       end
       @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-      @work_counts = Pseud.work_counts_for_pseuds(@people)      
+      @work_counts = Pseud.work_counts_for_pseuds(@people)
     end
   end
 

@@ -155,7 +155,7 @@ class WorksController < ApplicationController
 
   def collected
     options = params[:work_search_form].present? ? work_search_form_params : {}
-    options[:page] = params[:page]
+    options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
     @user = User.find_by(login: params[:user_id])

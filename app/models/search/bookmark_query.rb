@@ -43,19 +43,13 @@ class BookmarkQuery < Query
             when Pseud
               :pseud_ids
             when User
-              # :user_ids
-              :pseud_ids
+              :user_ids
             when Collection
               :collection_ids
             end
     return unless field.present?
     options[field] ||= []
-
-    if owner.is_a?(User)
-      options[:pseud_ids] << owner.pseuds.pluck(:id)
-    else
-      options[field] << owner.id
-    end
+    options[field] << owner.id
   end
 
   ####################

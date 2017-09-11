@@ -70,14 +70,14 @@ describe BookmarkQuery do
     pseud = Pseud.new
     pseud.id = 42
     q = BookmarkQuery.new(parent: pseud)
-    expect(q.filters).to include({terms: { pseud_id: [42]} })
+    expect(q.filters).to include({term: { pseud_id: 42} })
   end
 
   it "should allow you to filter for bookmarks by user" do
     user = User.new
     user.id = 2
     q = BookmarkQuery.new(parent: user)
-    expect(q.filters).to include({terms: { user_id: [2]} })
+    expect(q.filters).to include({term: { user_id: 2 }})
   end
 
   it "should allow you to filter for bookmarks by bookmarkable tags" do

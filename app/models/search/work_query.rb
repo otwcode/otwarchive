@@ -192,9 +192,9 @@ class WorkQuery < Query
         end
       end
     end
-    # if self.options[:collection_ids].blank? #&& self.collected
-    #   search_text << " collection_ids:*"
-    # end
+    if self.options[:collection_ids].blank? && options[:collected]
+      search_text << " collection_ids:*"
+    end
     escape_slashes(search_text.strip)
   end
 

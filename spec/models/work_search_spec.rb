@@ -1,3 +1,4 @@
+=begin
 require 'spec_helper'
 
 describe WorkSearch do
@@ -262,3 +263,4 @@ describe WorkSearch do
     end
   end
 end
+=end
