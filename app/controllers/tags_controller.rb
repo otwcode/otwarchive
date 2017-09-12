@@ -67,7 +67,8 @@ class TagsController < ApplicationController
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options[:page] = params[:page] || 1
-      @tags = TagSearch.search(options)
+      search = TagSearchForm.new(options)
+      @tags = search.search_results
     end
   end
 
