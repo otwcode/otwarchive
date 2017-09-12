@@ -15,6 +15,7 @@ Otwarchive::Application.routes.draw do
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
