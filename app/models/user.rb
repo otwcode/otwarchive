@@ -351,10 +351,10 @@
 
   # Checks authorship of any sort of object
   def is_author_of?(item)
-    if item.respond_to?(:user_id)
-      self.id == item.user_id
-    elsif item.respond_to?(:pseud_id)
+    if item.respond_to?(:pseud_id)
       self.pseuds.pluck(:id).include?(item.pseud_id)
+    elsif item.respond_to?(:user_id)
+      self.id == item.user_id
     elsif item.respond_to?(:pseuds)
       !(self.pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
     elsif item.respond_to?(:author)
