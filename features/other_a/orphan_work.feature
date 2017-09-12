@@ -30,6 +30,7 @@ Feature: Orphan work
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When all search indexes are updated
+      And all search indexes are reindexed
       And I follow "Bookmarks (0)"
       And I follow "Works (0)"
     Then I should not see "Shenanigans"

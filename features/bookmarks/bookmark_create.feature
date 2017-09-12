@@ -98,6 +98,8 @@ Scenario: Create a bookmark
     When I go to another_bookmark_user's bookmarks page
     Then I should not see "Secret Masterpiece"
     When I am logged in as "first_bookmark_user"
+      And the bookmark indexes are updated
+      And the bookmark indexes are reindexed
       And I go to another_bookmark_user's bookmarks page
     Then I should see "Bookmarks (4)"
       And I should see "Secret Masterpiece"

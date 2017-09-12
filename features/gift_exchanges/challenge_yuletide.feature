@@ -488,6 +488,8 @@ Feature: Collection
 
   # someone tries to view it
   When I log out
+    And all search indexes are updated
+    And all search indexes are reindexed
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
   Then I should not see "Mystery Work"

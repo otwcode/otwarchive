@@ -127,11 +127,13 @@ Feature:
       And I should not see "oldusername"
       # Has old name until indexes are updated
     When the work indexes are updated
+      And the work indexes are reindexed
       And I search for works containing "oldusername"
     Then I should see "Epic story"
       And I should see "newusername"
     # Still doesn't yet work due to bug AO3-3468
     When all search indexes are updated
+      And all search indexes are reindexed
     When I search for works containing "oldusername"
     # Change the two lines below this comment to the reverse when bug is fixed
     Then I should not see "No results found"

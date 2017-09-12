@@ -35,6 +35,7 @@ Feature: Basic collection navigation
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When all search indexes are updated
+    And all search indexes are reindexed
     And I follow "Works (1)"
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
