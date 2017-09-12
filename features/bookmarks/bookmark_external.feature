@@ -99,3 +99,45 @@ Feature: Create bookmarks of external works
     Then I should not see "Bookmark External Work"
     When I go to the bookmarks in collection "Testing BEW Collection"
     Then I should not see "Bookmark External Work"
+
+  @javascript
+  Scenario: When using the bookmarklet on a URL that has already been bookmarked, the work information will be automatically filled in
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I use the bookmarklet on a previously bookmarked URL
+      And I wait 1 second
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the work info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When using the autocomplete to select a URL that has already been bookmarked, the work information will be automatically filled in
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I enter a previously bookmarked URL in the autocomplete
+      And I wait 1 second
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the work info for my new bookmark should match the original
+
+  @javascript
+  Scenario: When getting an error (e.g. because you the title is blank) after using the autocomplete to select a previously-bookmarked URL, any changes you made to the work information are not overridden on the edit page
+    Given "first_user" has bookmarked an external work
+      And I am logged in as "second_user"
+    When I go to the new external work page
+      And I enter a previously bookmarked URL in the autocomplete
+      And I wait 1 second
+      And I fill in "Title" with ""
+      And I fill in "Creator" with "Different Author"
+      And I press "Create"
+    Then I should see "Sorry! We couldn't save this bookmark because:"
+      And I should see "Title can't be blank"
+      And the field labeled "Title" should contain ""
+      And the field labeled "Creator" should contain "Different Author"
+    When I fill in "Title" with "Different Title"
+      And I wait 1 second
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And the title and creator info for my new bookmark should vary from the original
+      And the summary and tag info for my new bookmark should match the original

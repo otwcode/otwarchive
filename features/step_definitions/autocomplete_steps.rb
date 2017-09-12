@@ -46,7 +46,7 @@ end
 
 When /^I enter "([^\"]+)" in the "([^\"]+)" autocomplete field$/ do |text, fieldname|
   field = find_field(fieldname)
-  # Clear the field.
+  # Clear the field
   field.set("")
   # Simulate keystrokes to make the autocomplete dropdown appear (instead of fill_in).
   field.send_keys(text)
@@ -98,6 +98,12 @@ When /^I specify two fandoms and enter text in the character autocomplete field$
   step %{I choose "Supernatural" from the "Fandoms" autocomplete}
   step %{I choose "Battlestar Galactica" from the "Fandoms" autocomplete}
   step %{I enter text in the character autocomplete field}
+end
+
+When /^I enter a previously bookmarked URL in the autocomplete$/ do
+  url = ExternalWork.first.url
+  step %{I enter "#{url}" in the "URL" autocomplete field}
+  step %{I choose "#{url}" from the "URL" autocomplete}
 end
 
 ## Here's where we create the steps defining which tags should appear/not appear
