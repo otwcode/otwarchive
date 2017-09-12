@@ -11,7 +11,7 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/art/Flooded-45971613"
     When I press "Import"
     Then I should see "Preview"
-      And I should see the image "src" text "https://orig03.deviantart.net/4707/f/2007/004/a/7/flooded_by_bingeling.jpg"
+      And I should see the image "src" text "https://orig00.deviantart.net/4707/f/2007/004/a/7/flooded_by_bingeling.jpg"
       And I should see "Digital Art" within "dd.freeform"
       And I should see "People" within "dd.freeform"
       And I should see "Vector" within "dd.freeform"
