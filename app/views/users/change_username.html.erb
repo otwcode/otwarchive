@@ -3,8 +3,8 @@
 <%= error_messages_for :user %>
 <p class="caution">
   <%= ts("Please use this feature with caution. For information on how changing your user name will affect your account, please check out the %{account_faq}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, and collections after a week, please %{contact_support}.",
-  account_faq: (link_to ts('Account FAQ'), archive_faqs_path + "/your-account#namechange"),
-  contact_support: (link_to ts('contact Support'), new_feedback_report_path)
+  account_faq: (link_to ts("Account FAQ"), archive_faqs_path + "/your-account#namechange"),
+  contact_support: (link_to ts("contact Support"), new_feedback_report_path)
   ).html_safe %>
 </p>
 <p class="note">
