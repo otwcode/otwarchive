@@ -1,5 +1,5 @@
 <fieldset class="external">
-	<legend><%= ts('External Work') %></legend>
+  <legend><%= ts('External Work') %></legend>
   <dl>
     <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
     <dd class="required" title="URL">
@@ -11,14 +11,30 @@
       <%= hidden_field "fetched", "", :id => "fetched" %>
       <%= content_for :footer_js do %>
         <%= javascript_tag do %>
-          $j("#bookmark-form").on("blur", "#bookmark_external_url_autocomplete", function() {
+          <% if params[:url_from_external].present? %>
+            // The blur event isn't triggered if we start with a URL from the
+            // External Bookmarklet, so instead we grab the info on the initial
+            // page load. This only fires when we're using the bookmarklet, not
+            // when we're throw back to the form due to an error -- we don't
+            // want to override information the user has put in.
+            $j(document).ready(function() {
+              loadExternalWorkInfoForBookmark();
+            });
+          <% else %>
+            // Fill in the external work information once we have chosen a URL
+            // from the autocomplete field.
+            $j("#bookmark-form").on("blur", "#bookmark_external_url_autocomplete", function() {
+              loadExternalWorkInfoForBookmark();
+            });
+          <% end %>
+          function loadExternalWorkInfoForBookmark() {
             $j.ajax({
               type: "get",
               data: "external_work_url=" + $j("#bookmark_external_url").val(),
               dataType: "script",
               url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
             });
-          });
+          }
         <% end %>
       <% end %>
       <p class="showme hidden footnote">
