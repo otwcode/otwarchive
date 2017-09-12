@@ -655,7 +655,6 @@ function updateCachedTokens() {
         $j(this).attr('value', token);
       });
       $j('meta[name=csrf-token]').attr('value', token);
-      console.log("I got a token: " + token);
     });
   }
 }
