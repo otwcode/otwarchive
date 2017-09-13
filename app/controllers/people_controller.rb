@@ -7,7 +7,8 @@ class PeopleController < ApplicationController
     if @collection
       options[:collection_id] = @collection.id
     end
-    @people = PseudSearchForm.search(options)
+    search = PseudSearchForm.new(options)
+    @people = search.search_results
     # TODO: move to search index
     @rec_counts = Pseud.rec_counts_for_pseuds(@people)
     @work_counts = Pseud.work_counts_for_pseuds(@people)

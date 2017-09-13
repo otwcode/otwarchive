@@ -1,7 +1,7 @@
 class PseudQuery < Query
 
   def klass
-    'Tag'
+    'Pseud'
   end
 
   def index_name
@@ -17,7 +17,7 @@ class PseudQuery < Query
   end
 
   def queries
-    [].compact
+    [general_query].compact
   end
 
   ###########

@@ -64,7 +64,7 @@ class Query
   end
 
   # Define specifics in subclasses
-  
+
   def filters
     @filters
   end
