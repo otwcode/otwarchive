@@ -500,6 +500,18 @@ namespace :After do
     end
   end
 
+  desc "Destroy wrangling assignments for non-canonical fandoms"
+  task(:destroy_noncanonical_wrangling_assignments => :environment) do
+    fandom_ids = Fandom.where(canonical: false).joins(:wrangling_assignments).pluck(:id)
+    assignments = WranglingAssignment.where(fandom_id: [fandom_ids])
+    assignments.each do |assignment|
+      fandom = Fandom.find(assignment.fandom_id).name
+      wrangler = User.find(assignment.user_id).login
+      puts "Deleting assignment: #{fandom} (#{wrangler})"
+      assignment.destroy
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
