@@ -29,10 +29,10 @@ Feature: Orphan work
     When I choose "Take my pseud off as well"
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
+      And I should see "Bookmarks (0)"
     When all search indexes are updated
       And all search indexes are reindexed
-      And I follow "Bookmarks (0)"
-      And I follow "Works (0)"
+    When I follow "Works (0)"
     Then I should not see "Shenanigans"
     When I view the work "Shenanigans"
     Then I should see "orphan_account"

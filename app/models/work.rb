@@ -248,6 +248,10 @@ class Work < ActiveRecord::Base
     Work.expire_work_tag_groups_id(self.id)
   end
 
+  def self.index_name
+    "ao3_#{Rails.env}_works"
+  end
+
   def self.work_blurb_tag_cache_key(id)
     "/v1/work_blurb_tag_cache_key/#{id}"
   end

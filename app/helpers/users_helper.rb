@@ -69,12 +69,12 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud = nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
-    total = BookmarkSearch.count_for_pseuds(user.pseuds)
+    total = BookmarkSearchForm.count_for_pseuds(user.pseuds)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def print_pseud_bookmarks_link(pseud)
-    total = BookmarkSearch.count_for_pseuds([pseud])
+    total = BookmarkSearchForm.count_for_pseuds([pseud])
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 

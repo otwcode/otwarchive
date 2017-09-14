@@ -126,6 +126,10 @@ class Bookmark < ActiveRecord::Base
     return false
   end
 
+  def self.index_name
+    "ao3_#{Rails.env}_bookmarks"
+  end
+
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
     bookmarkable.bookmarks.visible.size

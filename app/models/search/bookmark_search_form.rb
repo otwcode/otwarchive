@@ -42,6 +42,21 @@ class BookmarkSearchForm
 
   attr_accessor :options
 
+  def self.count_for_pseuds(pseuds)
+    terms = [
+      { term: { hidden_by_admin: 'F' } },
+      { term: { pseud_id: pseuds.map(&:id) } }
+    ]
+    unless pseuds.map(&:user).uniq == [User.current_user]
+      terms << { term: { private: 'F' } }
+    end
+    query = { query: { bool: { must: terms } } }
+    response = ElasticsearchSimpleClient.perform_count(Bookmark.index_name, 'bookmark', query)
+    if response.code == 200
+      JSON.parse(response.body)['count']
+    end
+  end
+
   ATTRIBUTES.each do |filterable|
     define_method(filterable) { options[filterable] }
   end
