@@ -45,8 +45,8 @@ class BookmarkSearchForm
   def self.count_for_pseuds(pseuds)
     terms = [
       { term: { hidden_by_admin: 'F' } },
-      { term: { pseud_id: pseuds.map(&:id) } }
     ]
+    terms << pseuds.pluck(:id).compact.map { |id| { term: { pseud_id: id } } }
     unless pseuds.map(&:user).uniq == [User.current_user]
       terms << { term: { private: 'F' } }
     end
@@ -54,6 +54,8 @@ class BookmarkSearchForm
     response = ElasticsearchSimpleClient.perform_count(Bookmark.index_name, 'bookmark', query)
     if response.code == 200
       JSON.parse(response.body)['count']
+    else
+      raise response.inspect
     end
   end
 

@@ -82,12 +82,12 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud = nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    total = WorkSearch.user_count(user)
+    total = WorkSearchForm.user_count(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def print_pseud_works_link(pseud)
-    total = WorkSearch.pseud_count(pseud)
+    total = WorkSearchForm.pseud_count(pseud)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 

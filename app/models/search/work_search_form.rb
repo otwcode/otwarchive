@@ -42,6 +42,44 @@ class WorkSearchForm < SearchForm
 
   attr_accessor :options
 
+  # Make a direct request to the elasticsearch count api
+  def self.count_for_pseuds(pseuds)
+    terms = [
+      { term: { posted: 'T' } },
+      { term: { hidden_by_admin: 'F' } },
+      { term: { in_unrevealed_collection: 'F' } },
+      { term: { in_anon_collection: 'F' } },
+      { terms: { pseud_ids: pseuds.pluck(:id).compact } }
+    ]
+    unless User.current_user.present?
+      terms << { term: { restricted: 'F' } }
+    end
+    query = { query: { bool: { must: terms } } }
+    response = ElasticsearchSimpleClient.perform_count(Work.index_name, 'work', query)
+    if response.code == 200
+      JSON.parse(response.body)['count']
+    else
+      raise response.inspect
+    end
+  end
+
+  def self.user_count(user)
+    cached_count(user) || count_for_pseuds(user.pseuds)
+  end
+
+  def self.pseud_count(pseud)
+    cached_count(pseud) || count_for_pseuds([pseud])
+  end
+
+  def self.cached_count(owner)
+    status = User.current_user ? 'logged_in' : 'logged_out'
+    key = "#{owner.works_index_cache_key}_#{status}_page"
+    works = Rails.cache.read(key)
+    if works.present?
+      works.total_entries
+    end
+  end
+
   ATTRIBUTES.each do |filterable|
     define_method(filterable) { options[filterable] }
   end
