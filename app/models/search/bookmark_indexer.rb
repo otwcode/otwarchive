@@ -81,6 +81,7 @@ class BookmarkIndexer < Indexer
   def document(object)
     tags = object.tags
     filters = tags.map{ |t| t.filter }.compact
+    bookmarkable = object.bookmarkable
 
     object.as_json(
       root: false,
@@ -89,7 +90,9 @@ class BookmarkIndexer < Indexer
     ).merge(
       tag: (tags + filters).map(&:name).uniq,
       tag_ids: tags.map(&:id),
-      filter_ids: filters.map(&:id)
+      filter_ids: filters.map(&:id),
+      bookmarkable_posted: !bookmarkable || (bookmarkable && bookmarkable.posted),
+      bookmarkable_hidden_by_admin: !!bookmarkable && bookmarkable.hidden_by_admin
     )
   end
 end

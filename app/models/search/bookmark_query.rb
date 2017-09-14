@@ -164,20 +164,12 @@ class BookmarkQuery < Query
     term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type]
   end
 
-  # don't include these if the current user is looking at their own bookmarks,
-  # so they can see bookmarks that belong to deleted bookmarkable objects
   def posted_filter
-    parent_term_filter(:posted, 'T') unless current_user_is_parent?
+    term_filter(:bookmarkable_posted, 'T')
   end
 
   def hidden_parent_filter
-    parent_term_filter(:hidden_by_admin, 'F') unless current_user_is_parent?
-  end
-
-  def current_user_is_parent?
-    User.current_user && User.current_user.respond_to?(:pseuds) &&
-      (User.current_user.pseuds.include?(options[:parent]) ||
-       options[:parent] == User.current_user)
+    term_filter(:bookmarkable_hidden_by_admin, 'F')
   end
 
   def restricted_filter
