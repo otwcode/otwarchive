@@ -67,6 +67,7 @@ Feature: Subscriptions
     And I check "F/F"
     And I press "Post Without Preview"
     And all search indexes are updated
+    And all search indexes are reindexed
   Then I should see "Anonymous"
     And I should see "Collections: Hidden Treasury"
   When I am logged in as "author"

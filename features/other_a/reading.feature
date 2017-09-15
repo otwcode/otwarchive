@@ -76,6 +76,7 @@ Feature: Reading count
 
     Given I have loaded the fixtures
       And the work indexes are updated
+      And the work indexes are reindexed
     When I am logged in as "fandomer"
       And I am on testuser's works page
       And I follow "First work"

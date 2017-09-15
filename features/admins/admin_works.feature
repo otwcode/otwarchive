@@ -27,6 +27,7 @@ Feature: Admin Actions for Works and Bookmarks
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
       And the work indexes are updated
+      And the work indexes are reindexed
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"

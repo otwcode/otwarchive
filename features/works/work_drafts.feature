@@ -58,6 +58,7 @@ Feature: Work Drafts
   Given I am logged in as "drafter" with password "something"
     And the draft "draft to post" 
   Given the work indexes are updated
+    And the work indexes are reindexed
     When I fill in "site_search" with "draft"
       And I press "Search"
     Then I should see "No results found"

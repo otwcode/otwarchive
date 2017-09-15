@@ -55,6 +55,7 @@ Feature: Search Tags
       Given I have no tags
         And a fandom exists with name: "first.fandom", canonical: false
         And the tag indexes are updated
+        And the tag indexes are reindexed
       When I am on the search tags page
         And I fill in "tag_search" with "first.fandom"
         And I press "Search tags"

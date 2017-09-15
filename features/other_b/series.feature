@@ -83,12 +83,14 @@ Feature: Create and Edit Series
       And I should see "Ponies" within "fieldset#series-options"
     When I fill in "work_series_attributes_title" with "Black Beauty"
       And all search indexes are updated
+      And all search indexes are reindexed
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
     When "AO3-3455" is fixed
       # And I should see "Part 1 of the Black Beauty series" within "dd.series"
     When I press "Update"
       And all search indexes are updated
+      And all search indexes are reindexed
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "div#series"

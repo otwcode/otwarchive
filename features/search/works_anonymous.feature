@@ -18,6 +18,7 @@ Feature: Search anonymous works
   creator Anonymous
     Given I have the Battle set loaded
       And the work indexes are updated
+      And the work indexes are reindexed
     When I search for works containing "Anonymous"
     Then I should see "You searched for: Anonymous"
       And I should see "1 Found"

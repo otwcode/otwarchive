@@ -136,6 +136,7 @@ Feature: User dashboard
     And I post the work "Even more Excellent" with fandom "Star Trek"
     And I post the work "Exciting" with fandom "Star Trek: Discovery"
     And the work indexes are updated
+    And the work indexes are reindexed
   When I go to meatloaf's user page
     And I follow "Star Trek"
   Then I should see "2 Works by meatloaf in Star Trek"

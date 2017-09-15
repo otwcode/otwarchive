@@ -104,6 +104,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{I am logged in as "myname4"}
   step %{the statistics_tasks rake task is run}
   step %{the work indexes are updated}
+  step %{the work indexes are reindexed}
 end
 
 Given /^I have no works or comments$/ do
@@ -598,6 +599,7 @@ end
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   step %{the statistics_tasks rake task is run}
   step %{all search indexes are updated}
+  step %{all search indexes are reindexed}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch
