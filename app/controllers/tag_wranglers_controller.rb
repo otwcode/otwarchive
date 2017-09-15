@@ -1,6 +1,6 @@
 class TagWranglersController < ApplicationController
-  before_filter :check_user_status
-	before_filter :check_permission_to_wrangle
+  before_action :check_user_status
+	before_action :check_permission_to_wrangle
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
@@ -31,6 +31,7 @@ class TagWranglersController < ApplicationController
     @assignments = Fandom.in_use.joins(joins)
                                 .select('tags.*, users.login AS wrangler')
                                 .where(conditions)
+                                .order(:name)
                                 .paginate(page: params[:page], per_page: 50)
   end
 
@@ -56,7 +57,7 @@ class TagWranglersController < ApplicationController
       unless fandoms.blank?
         for fandom in fandoms
           unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
-            assignment = current_user.wrangling_assignments.build(:fandom_id => fandom.id)
+            assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
             assignment.save!
           end
         end
@@ -69,7 +70,7 @@ class TagWranglersController < ApplicationController
           unless login.blank?
             user = User.find_by(login: login)
             unless user.nil? || user.fandoms.include?(fandom)
-              assignment = user.wrangling_assignments.build(:fandom_id => fandom.id)
+              assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
               assignment.save!
             end
           end
@@ -77,13 +78,13 @@ class TagWranglersController < ApplicationController
       end
       flash[:notice] = "Wranglers were successfully assigned!"
     end
-    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
+    redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
 
   def destroy
     wrangler = User.find_by(login: params[:id])
     assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy
-    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
+    redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
 end

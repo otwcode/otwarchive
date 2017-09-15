@@ -117,7 +117,7 @@ module HtmlCleaner
     return "" if text.nil?
 
     # get the text into UTF-8 and get rid of invalid characters
-    text = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
+    text = text.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
 
     text.gsub! "<3", "&lt;3"
 
@@ -147,14 +147,15 @@ module HtmlCleaner
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
-    value.strip!
+    unfrozen_value = value&.dup
+    unfrozen_value.strip!
     if field.to_s == 'title'
       # prevent invisible titles
-      value.gsub!("<", "&lt;")
-      value.gsub!(">", "&gt;")
+      unfrozen_value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!(">", "&gt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
-      value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!("<", "&lt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
@@ -167,20 +168,20 @@ module HtmlCleaner
       end
       # the screencast field shouldn't be wrapped in <p> tags
       unless field.to_s == "screencast"
-        value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value),
-                               Sanitize::Config::ARCHIVE.merge(:transformers => transformers)))
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
-      value = doc.fragment(value).to_xhtml
+      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
     else
       # clean out all tags
-      value = Sanitize.clean(fix_bad_characters(value))
+      unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
     end
 
     # Plain text fields can't contain &amp; entities:
-    value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
-    value
+    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    unfrozen_value
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
@@ -192,7 +193,9 @@ module HtmlCleaner
     hash.keys.each do |key|
       if hash[key].is_a? String
         hash[key] = sanitize_value(key, hash[key])
-      elsif hash[key].is_a? Hash
+      elsif hash[key].is_a?(ActionController::Parameters)
+        hash[key] = hash[key].to_hash
+      elsif hash[key].is_a?(Hash)
         hash[key] = walk_hash(hash[key])
       elsif hash[key].is_a? Array
         hash[key] = walk_array(hash[key])

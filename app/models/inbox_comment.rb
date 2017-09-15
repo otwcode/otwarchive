@@ -1,9 +1,9 @@
-class InboxComment < ActiveRecord::Base
+class InboxComment < ApplicationRecord
   validates_presence_of :user_id
   validates_presence_of :feedback_comment_id
 
   belongs_to :user
-  belongs_to :feedback_comment, :class_name => 'Comment'
+  belongs_to :feedback_comment, class_name: 'Comment'
 
   # Filters inbox comments by read and/or replied to and sorts by date
   scope :find_by_filters, lambda { |filters|

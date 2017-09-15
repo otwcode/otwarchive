@@ -23,11 +23,11 @@
           <dt>
             <noscript><%= tag_type_label(tag_type) %></noscript>
             <a class="tag_category_<%= tag_type %>_open hidden" href="#">
-              <%= image_tag 'arrow-right.gif', :alt => "" %>
+              <%= image_tag 'arrow-right.gif', :alt => "", skip_pipeline: true %>
               <%= tag_type_label(tag_type) %>
             </a>
             <a class="tag_category_<%= tag_type %>_close hidden" href="#">
-              <%= image_tag 'arrow-down.gif', :alt => "" %>
+              <%= image_tag 'arrow-down.gif', :alt => "", skip_pipeline: true %>
               <%= tag_type_label(tag_type) %>
             </a>
           </dt>

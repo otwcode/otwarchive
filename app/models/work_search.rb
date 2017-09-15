@@ -200,7 +200,7 @@ class WorkSearch < Search
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        tags = Tag.where(:name => names, :canonical => true)
+        tags = Tag.where(name: names, canonical: true)
         unless tags.empty?
           options[:filter_ids] ||= []
           options[:filter_ids] += tags.map{ |tag| tag.id }
@@ -220,7 +220,7 @@ class WorkSearch < Search
       options[:sort_column] = 'revised_at'
     end
 
-    options[:sort_direction] ||= sort_direction(options[:sort_column]).downcase
+    options[:sort_direction] ||= default_sort_direction(options[:sort_column]).downcase
     options[:sort_direction] = "desc" unless options[:sort_direction] == "asc"
   end
 
@@ -302,7 +302,7 @@ class WorkSearch < Search
       end
     end
     unless all_tag_ids.empty?
-      tags << Tag.where(:id => all_tag_ids).pluck(:name).join(", ")
+      tags << Tag.where(id: all_tag_ids).pluck(:name).join(", ")
     end
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"
@@ -363,7 +363,7 @@ class WorkSearch < Search
     Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
   end
 
-  def sort_direction(sort_column)
+  def default_sort_direction(sort_column)
     if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
       'asc'
     else

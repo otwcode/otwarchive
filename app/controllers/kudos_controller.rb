@@ -2,7 +2,7 @@ class KudosController < ApplicationController
 
   cache_sweeper :kudos_sweeper
 
-  skip_before_filter :store_location
+  skip_before_action :store_location
 
   def index
     @work = Work.find(params[:work_id])
@@ -28,7 +28,7 @@ class KudosController < ApplicationController
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+          @kudos = @commentable.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
 
           render :create, status: :created
         end

@@ -1,4 +1,4 @@
-class Pseud < ActiveRecord::Base
+class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   include Tire::Model::Search
@@ -159,31 +159,29 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false, restricted: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false, restricted: false }
+      ).group('pseuds.id')
   }
 
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS work_count",
-      joins: :works,
-      conditions: {works: {posted: true, hidden_by_admin: false}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :posted_work_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS work_count')
+      .joins(:works)
+      .where(
+        pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
+      ).group('pseuds.id')
   }
 
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      select: "pseuds.id, count(pseuds.id) AS rec_count",
-      joins: :bookmarks,
-      conditions: {bookmarks: {private: false, hidden_by_admin: false, rec: true}, pseuds: {id: pseud_ids}},
-      group: 'pseuds.id'
-    }
+  scope :public_rec_count_for, -> (pseud_ids) {
+    select('pseuds.id, count(pseuds.id) AS rec_count')
+    .joins(:bookmarks)
+    .where(
+      pseuds: { id: pseud_ids }, bookmarks: { private: false, hidden_by_admin: false, rec: true }
+    )
+    .group('pseuds.id')
   }
 
   def self.rec_counts_for_pseuds(pseuds)
@@ -206,6 +204,7 @@ class Pseud < ActiveRecord::Base
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
       end
+
       count_hash = {}
       pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
       count_hash
@@ -218,14 +217,12 @@ class Pseud < ActiveRecord::Base
 
 
   # look up by byline
-  scope :by_byline, lambda {|byline|
-    {
-      conditions: ['users.login = ? AND pseuds.name = ?',
+  scope :by_byline, -> (byline) {
+    joins(:user)
+      .where('users.login = ? AND pseuds.name = ?',
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
         (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      ],
-      include: :user
-    }
+      )
   }
 
   # Produces a byline that indicates the user's name if pseud is not unique
@@ -258,7 +255,7 @@ class Pseud < ActiveRecord::Base
         conditions = ['pseuds.name = ?', pseud_name]
       end
     end
-    Pseud.includes(:user).where(conditions).references(:user)
+    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines
@@ -300,9 +297,43 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
+  # This method is for use in before_* callbacks
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
+
+  # See byline_before_last_save for the reasoning behind why both this and
+  # autocomplete_value_was exist in this model
+  #
+  # This method is for use in after_* callbacks
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
+  end
+
+  def byline_before_last_save
+    past_name = name_before_last_save.blank? ? name : name_before_last_save
+
+    # In this case, self belongs to a user that has already been saved
+    # during it's (self's) callback cycle, which means we need to
+    # look *back* at the user's [attributes]_before_last_save, since
+    # [attribute]_was for the pseud's user will behave as if this were an
+    # after_* callback on the user, instead of a before_* callback on self.
+    #
+    # see psued_sweeper.rb:13 for more context
+    #
+    past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
+  # This method is for removing stale autocomplete records in a before_*
+  # callback, such as the one used in PseudSweeper
+  #
+  # This is a particular case for the Pseud model
+  def remove_stale_from_autocomplete_before_save
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 
   ## END AUTOCOMPLETE
 
@@ -396,7 +427,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def expire_caches
-    if name_changed?
+    if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
   end

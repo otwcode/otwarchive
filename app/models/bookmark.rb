@@ -1,27 +1,28 @@
-class Bookmark < ActiveRecord::Base
+class Bookmark < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
   include Tire::Model::Search
+  include Responder
   # include Tire::Model::Callbacks
 
-  belongs_to :bookmarkable, :polymorphic => true
+  belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :notes,
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
-  scope :is_public, -> { where(:private => false, :hidden_by_admin => false) }
-  scope :not_public, -> { where(:private => true) }
-  scope :not_private, -> { where(:private => false) }
+  scope :is_public, -> { where(private: false, hidden_by_admin: false) }
+  scope :not_public, -> { where(private: true) }
+  scope :not_private, -> { where(private: false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
-  scope :recs, -> { where(:rec => true) }
+  scope :recs, -> { where(rec: true) }
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
@@ -93,9 +94,11 @@ class Bookmark < ActiveRecord::Base
 
   before_destroy :invalidate_bookmark_count
   after_save :invalidate_bookmark_count
+  after_create :update_work_stats
+  after_destroy :update_work_stats
 
   def invalidate_bookmark_count
-    work = Work.where(:id => self.bookmarkable_id)
+    work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
@@ -125,7 +128,7 @@ class Bookmark < ActiveRecord::Base
 
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
-    bookmarkable.bookmarks.visible.count
+    bookmarkable.bookmarks.visible.size
   end
 
   # Virtual attribute for external works
@@ -156,7 +159,7 @@ class Bookmark < ActiveRecord::Base
         if tag
           self.tags << tag
         else
-          self.tags << UnsortedTag.create(:name => string)
+          self.tags << UnsortedTag.create(name: string)
         end
       end
     end
@@ -172,7 +175,7 @@ class Bookmark < ActiveRecord::Base
     unless User.current_user == user
       bookmarks = bookmarks.is_public
     end
-    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   #################################
@@ -181,11 +184,11 @@ class Bookmark < ActiveRecord::Base
 
   mapping do
     indexes :notes
-    indexes :private, :type => 'boolean'
+    indexes :private, type: 'boolean'
     indexes :bookmarkable_type
     indexes :bookmarkable_id
-    indexes :created_at,          :type  => 'date'
-    indexes :bookmarkable_date,   :type  => 'date'
+    indexes :created_at,          type: 'date'
+    indexes :bookmarkable_date,   type: 'date'
   end
 
   self.include_root_in_json = false

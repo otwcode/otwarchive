@@ -1,4 +1,4 @@
-class CollectionItem < ActiveRecord::Base
+class CollectionItem < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
@@ -14,30 +14,30 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
 
-  belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
-  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
-  belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
+  belongs_to :collection, inverse_of: :collection_items
+  belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
+  belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
+  belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
   has_many :approved_collections, -> {
     where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
-   }, :through => :collection_items, :source => :collection
+   }, through: :collection_items, source: :collection
 
-  validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type],
-    :message => ts("already contains this item.")
+  validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
+    message: ts("already contains this item.")
 
-  validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :user_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :user_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :collection_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :collection_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validate :collection_is_open, :on => :create
+  validate :collection_is_open, on: :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("The collection %{title} is not currently open.", :title => self.collection.title))
+      errors.add(:base, ts("The collection %{title} is not currently open.", title: self.collection.title))
     end
   end
 
@@ -100,7 +100,7 @@ class CollectionItem < ActiveRecord::Base
   def update_work
     return unless item_type == 'Work' && work.present? && !work.new_record?
     # Check if this is new - can't use new_record? with after_save
-    if self.id_changed?
+    if self.saved_change_to_id?
       work.set_anon_unrevealed!
     else
       work.update_anon_unrevealed!
@@ -110,8 +110,8 @@ class CollectionItem < ActiveRecord::Base
   # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
   after_update :update_item_for_status_change
   def update_item_for_status_change
-    if user_approval_status_changed? || collection_approval_status_changed?
-      item.save
+    if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
+      item.save!
     end
   end
 
@@ -119,7 +119,10 @@ class CollectionItem < ActiveRecord::Base
   # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
     self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
-    if self.collection.collection_preference.email_notify && !self.collection.email.blank?
+    email_notify = self.collection.collection_preference &&
+                    self.collection.collection_preference.email_notify
+
+    if email_notify && !self.collection.email.blank?
       CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
     end
   end
@@ -184,8 +187,9 @@ class CollectionItem < ActiveRecord::Base
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    if unrevealed_changed?
-      # making sure that creation_observer.rb has not already notified the user
+    if saved_change_to_unrevealed?
+      # making sure notify_recipients in the work model has not already notified 
+      # the user
       if !work.new_recipients.blank?
         notify_of_reveal
       end
@@ -293,7 +297,7 @@ class CollectionItem < ActiveRecord::Base
 
   def notify_of_reveal
     unless self.unrevealed? || !self.posted?
-      recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver

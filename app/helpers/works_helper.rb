@@ -73,6 +73,13 @@ module WorksHelper
     end
   end
 
+  # Passes value of fields for series back to form when an error occurs on posting
+  def work_series_value(field)
+    if params[:work] && params[:work][:series_attributes]
+      params[:work][:series_attributes][field]
+    end
+  end
+
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
@@ -105,7 +112,7 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(:controller => 'chapters', :action => 'show')
+    if current_page?(controller: 'chapters', action: 'show')
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
@@ -117,7 +124,7 @@ module WorksHelper
   end
 
   def get_related_works_url
-    current_page?(:controller => 'chapters', :action => 'show') ?
+    current_page?(controller: 'chapters', action: 'show') ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end

@@ -6,6 +6,7 @@ Otwarchive::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
+  config.eager_load = true
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
@@ -14,7 +15,7 @@ Otwarchive::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
   config.cache_store = :dalli_store, '127.0.0.1:11211',
-                          { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
+                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = false
@@ -45,7 +46,7 @@ Otwarchive::Application.configure do
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 
-  config.serve_static_assets = true
+  config.serve_static_files = true
   config.eager_load = false
   config.assets.enabled = false
 end

@@ -4,58 +4,59 @@ module Taggable
     taggable.class_eval do
       attr_accessor :invalid_tags
       attr_accessor :preview_mode, :placeholder_tags
-      after_update :reset_placeholders
 
-      has_many :filter_taggings, :as => :filterable
-      has_many :filters, :through => :filter_taggings
-      has_many :direct_filter_taggings, -> { where(inherited: 0) }, :class_name => "FilterTagging", :as => :filterable
-      has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
+      has_many :filter_taggings, as: :filterable
+      has_many :filters, through: :filter_taggings
+      has_many :direct_filter_taggings, -> { where(inherited: 0) }, class_name: "FilterTagging", as: :filterable
+      has_many :direct_filters, source: :filter, through: :direct_filter_taggings
 
-      has_many :taggings, :as => :taggable, :dependent => :destroy
-      has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+      has_many :taggings, as: :taggable, dependent: :destroy
+      has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
       has_many :ratings,
         -> { where("tags.type = 'Rating'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :categories,
         -> { where("tags.type = 'Category'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :warnings,
         -> { where("tags.type = 'Warning'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :fandoms,
         -> { where("tags.type = 'Fandom'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :relationships,
         -> { where("tags.type = 'Relationship'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :characters,
         -> { where("tags.type = 'Character'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
       has_many :freeforms,
         -> { where("tags.type = 'Freeform'") },
-        :through => :taggings,
-        :source => :tagger,
-        :source_type => 'Tag',
-        :before_remove => :remove_filter_tagging
+        through: :taggings,
+        source: :tagger,
+        source_type: 'Tag',
+        before_remove: :remove_filter_tagging
+
+      after_update :reset_placeholders
     end
   end
 
@@ -68,13 +69,13 @@ module Taggable
     tag_category_string(:categories)
   end
   def category_strings
-    tag_category_string(:categories, :return_array => true)
+    tag_category_string(:categories, return_array: true)
   end
   def warning_string
     tag_category_string(:warnings)
   end
   def warning_strings
-    tag_category_string(:warnings, :return_array => true)
+    tag_category_string(:warnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)
@@ -132,8 +133,10 @@ module Taggable
   end
 
   def validate_tags
-    errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
-    self.has_required_tags?
+    unless self.has_required_tags?
+      errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
+      throw :abort
+    end
   end
 
   # Add an error message if the user tried to add invalid tags to the work
@@ -145,8 +148,9 @@ module Taggable
           errors.add(:base, error)
         end
       end
+
+      throw :abort
     end
-    self.invalid_tags.blank?
   end
 
   def cast_tags
@@ -226,8 +230,7 @@ module Taggable
     klass_symbol = klass.to_s.downcase.pluralize.to_sym
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
-      incoming_tags.gsub!(/\uff0c|\u3001/, ',')
-      tag_array = incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+      tag_array = incoming_tags.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
     else
       tag_array = incoming_tags
     end

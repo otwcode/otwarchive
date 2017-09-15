@@ -1,24 +1,17 @@
 class UserSessionsController < ApplicationController
 
-  # I hope this isn't catching unwanted exceptions; it's hard to locate
-  # where exactly the exception is thrown in case of no cookies. --rebecca
-  rescue_from ActionController::InvalidAuthenticityToken, :with => :show_auth_error
-
   layout "session"
-  before_filter :admin_logout_required
-  skip_before_filter :store_location
-
-
-  def show_auth_error
-    redirect_to "/auth_error.html"
-  end
+  before_action :admin_logout_required
+  skip_before_action :store_location
 
   def new
   end
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(params[:user_session])
+      # Need to convert params back to a hash for Authlogic bug
+      @user_session = UserSession.new(user_session_params.to_hash)
+
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
@@ -30,7 +23,7 @@ class UserSessionsController < ApplicationController
             if user.updated_at > 1.week.ago
               # we sent out a generated password and they're using it
               # log them in
-              @current_user = UserSession.create(user, params[:remember_me]).record
+              @current_user = UserSession.create(user, user_session_params[:remember_me]).record
               # flash a notice telling user to change password, and redirect them
               # to the correct form
               flash[:notice] = ts('You used a temporary password to log in.
@@ -53,8 +46,8 @@ class UserSessionsController < ApplicationController
           message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
         end
         flash.now[:error] = message
-        @user_session = UserSession.new(params[:user_session])
-        render :action => 'new'
+        @user_session = UserSession.new(user_session_params)
+        render action: 'new'
       end
     end
   end
@@ -65,7 +58,7 @@ class UserSessionsController < ApplicationController
       @user_session.destroy
       flash[:notice] = ts("Successfully logged out.")
     end
-    redirect_back_or_default root_url
+    redirect_back_or_default root_path
   end
 
   def passwd_small
@@ -80,6 +73,16 @@ class UserSessionsController < ApplicationController
       format.html { redirect_to login_path }
       format.js
     end
+  end
+
+  private
+
+  def user_session_params
+    params.require(:user_session).permit(
+      :login,
+      :password,
+      :remember_me
+    )
   end
 
 end

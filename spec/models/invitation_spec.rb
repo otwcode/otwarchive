@@ -35,7 +35,9 @@ describe Invitation, :ready do
       let(:invite_for_existing) {build(:invitation, invitee_email: @user.email)}
       it "cannot be created" do
         expect(invite_for_existing.save).to be_falsey
-        expect(invite_for_existing.recipient_is_not_registered).to be_falsey
+        expect(invite_for_existing.errors.full_messages).to include(
+          'Invitee email is already being used by an account holder.'
+        )
       end
     end
 
@@ -60,7 +62,9 @@ describe Invitation, :ready do
       let(:invite_for_existing) {build(:invitation, invitee_email: user.email)}
       it "cannot be created" do
         expect(invite_for_existing.save).to be_falsey
-        expect(invite_for_existing.recipient_is_not_registered).to be_falsey
+        expect(invite_for_existing.errors.full_messages).to include(
+          'Invitee email is already being used by an account holder.'
+        )
       end
     end
 
