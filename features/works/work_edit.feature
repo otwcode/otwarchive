@@ -11,7 +11,6 @@ Feature: Edit Works
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
       And all search indexes are updated
-      And all search indexes are reindexed
     # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
@@ -39,7 +38,6 @@ Feature: Edit Works
       And I should see "Additional Tags: new tag"
       And I should see "Words:3"
     When all search indexes are updated
-      And all search indexes are reindexed
       And I go to testuser's works page
     Then I should see "First work"
       And I should see "first fandom"

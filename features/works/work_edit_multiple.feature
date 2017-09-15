@@ -22,7 +22,6 @@ Feature: Edit Multiple Works
   When I press "Yes, Delete Works"
   Then I should see "Your works Glorious, Excellent were deleted."
   When the work indexes are updated
-    And the work indexes are reindexed
     And I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"

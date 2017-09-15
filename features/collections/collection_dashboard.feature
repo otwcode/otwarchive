@@ -14,8 +14,6 @@ Feature: Collection
     And I post the work "Work 4" in the collection "Dashboard Light"
     And I post the work "Work 5" in the collection "Dashboard Light"
     And I post the work "Work 6" in the collection "Dashboard Light"
-    And the work indexes are updated
-    And the work indexes are reindexed
   When I go to "Dashboard Light" collection's page
   Then I should see "Works (6)" within "#collection-works"
   When I follow "Works (6)" within "#collection-works"

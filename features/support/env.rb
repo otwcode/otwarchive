@@ -66,6 +66,15 @@ Before do
 
     language = Language.find_or_create_by(short: 'en', name: 'English')
     Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
+
+    response = $elasticsearch.perform_request("GET", "/")
+    if response.status == 200
+      version = response.body["version"]
+    else
+      raise response.inspect
+    end
+
+    @es_version = version["number"]
 end
 
 Before '@disable_caching' do

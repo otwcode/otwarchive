@@ -22,7 +22,6 @@ Scenario: Create a bookmark
       And I check "bookmark_rec"
       And I press "Create"
       And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
     Then I should see "Bookmark was successfully created"
       And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"
@@ -38,10 +37,9 @@ Scenario: Create a bookmark
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
       And I press "Edit"
-      Then I should see "Bookmark was successfully updated"
-    When the bookmark indexes are updated
-      And the bookmark indexes are reindexed
-      And I go to the bookmarks page
+      And the bookmark indexes are updated
+    Then I should see "Bookmark was successfully updated"
+    When I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "I liked this story"
@@ -87,7 +85,6 @@ Scenario: Create a bookmark
       And I follow "Bookmark"
       And I press "Create"
       And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
     Then I should see "Bookmark was successfully created"
     When I log out
       And I go to the bookmarks page
@@ -98,8 +95,6 @@ Scenario: Create a bookmark
     When I go to another_bookmark_user's bookmarks page
     Then I should not see "Secret Masterpiece"
     When I am logged in as "first_bookmark_user"
-      And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
       And I go to another_bookmark_user's bookmarks page
     Then I should see "Bookmarks (4)"
       And I should see "Secret Masterpiece"
@@ -129,7 +124,6 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     And I fill in "bookmark_collection_names" with "five_pillars"
     And I press "Create"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully created"
     And I should see "The collection Five Pillars is currently moderated."
   When I go to bookmarker's bookmarks page
@@ -138,7 +132,6 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     And I am logged in as "moderator" with password "password"
     And I approve the first item in the collection "Five Pillars"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
     And I am logged in as "bookmarker" with password "password"
     And I go to bookmarker's bookmarks page
   Then I should not see "The collection Five Pillars is currently moderated."
@@ -163,7 +156,6 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I fill in "bookmark_collection_names" with "jbs_greatest"
     And I press "Create"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully created"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
     # UPDATE the bookmark and add it to a second MODERATED collection and
@@ -172,14 +164,12 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms"
     And I press "Update"
     And all search indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully updated."
     And I should see "to the moderated collection 'Bedknobs and Broomsticks'."
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
@@ -209,11 +199,10 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Edit Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
     And I press "Edit" within "div#bookmark-form"
+    And the bookmark indexes are updated
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
-  When the bookmark indexes are updated
-    And the bookmark indexes are reindexed
-    And I go to bookmarker's bookmarks page
+  When I go to bookmarker's bookmarks page
     Then I should see "The Murder of Sherlock Holmes"
     And I should see "JBs Greatest" within "ul.meta"
     And I should see "Mrs. Pots" within "ul.meta"
@@ -340,24 +329,20 @@ Scenario: Delete bookmarks of a work and a series
     And I follow "Bookmark"
     And I press "Create"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully created."
     And I should see "Delete"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully deleted."
   When I view the series "The Funky Bunch"
     And I follow "Bookmark Series"
     And I press "Create"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully created."
   When I follow "Delete"
   And I press "Yes, Delete Bookmark"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully deleted."
   When I go to my bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
@@ -365,7 +350,6 @@ Scenario: Delete bookmarks of a work and a series
     And I am logged in as "wahlly"
     And I delete the work "A Mighty Duck2 the sequel"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
@@ -375,7 +359,6 @@ Scenario: Delete bookmarks of a work and a series
     And I check "bookmark_private"
     And I press "Update"
     And the bookmark indexes are updated
-    And the bookmark indexes are reindexed
   Then I should see "Bookmark was successfully updated"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"

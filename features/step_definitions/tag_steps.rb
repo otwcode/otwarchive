@@ -11,7 +11,6 @@ Given /^basic tags$/ do
   Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
   step %{the tag indexes are updated}
-  step %{the tag indexes are reindexed}
 end
 
 Given /^the default ratings exist$/ do

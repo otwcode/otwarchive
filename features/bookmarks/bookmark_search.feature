@@ -8,7 +8,6 @@ Feature: Search Bookmarks
     Given I have bookmarks to search
       And I am on the search bookmarks page
       And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
 
   Scenario: Search bookmarks by tag
     When I fill in "Tag" with "classic"

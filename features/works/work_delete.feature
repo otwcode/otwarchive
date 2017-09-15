@@ -154,7 +154,6 @@ Feature: Delete Works
     Then I should see "Gifts (1)"
     When I delete the work "All Something Breaks Loose"
       And all search indexes are updated
-      And all search indexes are reindexed
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"
@@ -165,7 +164,6 @@ Feature: Delete Works
     Then I should not see "All Something Breaks Loose"
     # This is correct behaviour - bookmark details are preserved even though the work is gone
     Then all search indexes are updated
-      And all search indexes are reindexed
     Then I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
     When I go to someone_else's bookmarks page

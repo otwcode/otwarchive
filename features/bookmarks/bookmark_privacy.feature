@@ -31,6 +31,7 @@ Feature: Private bookmarks
       And I check "bookmark_rec"
       And I check "bookmark_private"
       And I press "Create"
+      And the bookmark indexes are updated
     Then I should see "Bookmark was successfully created"
       And I should not see the image "title" text "Restricted"
       And I should not see "Rec"
@@ -42,9 +43,7 @@ Feature: Private bookmarks
     When I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-    When the bookmark indexes are updated
-      And the bookmark indexes are reindexed
-      And I am on bookmarker's bookmarks page
+    When I am on bookmarker's bookmarks page
     Then I should see "2 Bookmarks by bookmarker"
       And I should see "Public Masterpiece"
       And I should see "Secret Masterpiece"
@@ -97,6 +96,7 @@ Feature: Private bookmarks
     When I am logged in as "otheruser"
       And I view the work "Public Masterpiece"
       And I rec the current work
+      And the bookmark indexes are updated
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -122,9 +122,7 @@ Feature: Private bookmarks
       And I should not see "bookmarker"
 
       # Private bookmarks should not show on tag's page
-    When the bookmark indexes are updated
-      And the bookmark indexes are reindexed
-      And I go to the bookmarks tagged "Stargate SG-1"
+    When I go to the bookmarks tagged "Stargate SG-1"
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
       And I should not see "bookmarker"

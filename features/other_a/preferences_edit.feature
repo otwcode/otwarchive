@@ -152,7 +152,6 @@ Feature: Edit preferences
     And I should see "Stargate SG-2"
     # we are now looking at a canonical fandom tag
   When all search indexes are updated
-    And the work indexes are reindexed
     And I follow "Stargate SG-1"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"

@@ -26,8 +26,6 @@ Feature: Admin Actions for Works and Bookmarks
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-      And the work indexes are updated
-      And the work indexes are reindexed
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
@@ -65,16 +63,14 @@ Feature: Admin Actions for Works and Bookmarks
     When I follow "Bookmark"
       And I fill in "bookmark_notes" with "Rude comment"
       And I press "Create"
+      And the bookmark indexes are updated
     Then I should see "Bookmark was successfully created"
     When I am logged in as an admin
-      And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
+      And the bookmark indexes are updated
     Then I should see "Item has been hidden."
-    When the bookmark indexes are updated
-      And the bookmark indexes are reindexed
-      And I am logged in as "regular_user" with password "password1"
+    When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
     Then I should not see "Rude comment"
 

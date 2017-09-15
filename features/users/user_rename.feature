@@ -120,20 +120,17 @@ Feature:
       And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
       And I press "Change User Name"
+      And the work indexes are updated
     Then I should get confirmation that I changed my username
     When I am on the the works page
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"
       # Has old name until indexes are updated
-    When the work indexes are updated
-      And the work indexes are reindexed
-      And I search for works containing "oldusername"
+    When I search for works containing "oldusername"
     Then I should see "Epic story"
       And I should see "newusername"
     # Still doesn't yet work due to bug AO3-3468
-    When all search indexes are updated
-      And all search indexes are reindexed
     When I search for works containing "oldusername"
     # Change the two lines below this comment to the reverse when bug is fixed
     Then I should not see "No results found"

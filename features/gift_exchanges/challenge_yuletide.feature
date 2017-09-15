@@ -478,6 +478,7 @@ Feature: Collection
     And I should see "Anonymous"
     And 0 emails should be delivered
   When I press "Post"
+    And the work indexes are updated
   Then I should see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"
@@ -488,8 +489,6 @@ Feature: Collection
 
   # someone tries to view it
   When I log out
-    And the work indexes are updated
-    And the work indexes are reindexed
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
   Then I should not see "Mystery Work"

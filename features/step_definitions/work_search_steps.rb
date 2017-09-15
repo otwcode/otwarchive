@@ -37,7 +37,6 @@ Given /^a set of alternate universe works for searching$/ do
   FactoryGirl.create(:posted_work, character_string: "AU Character")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of Steve Rogers works for searching$/ do
@@ -73,7 +72,6 @@ Given /^a set of Steve Rogers works for searching$/ do
                      summary: "Bucky thinks about his pal Steve Rogers.")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of Kirk\/Spock works for searching$/ do
@@ -96,7 +94,6 @@ Given /^a set of Kirk\/Spock works for searching$/ do
                      category_string: "F/M")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of Spock\/Uhura works for searching$/ do
@@ -118,7 +115,6 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   end
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with various categories for searching$/ do
@@ -133,7 +129,6 @@ Given /^a set of works with various categories for searching$/ do
   FactoryGirl.create(:posted_work, category_string: "M/M, F/F")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with comments for searching$/ do
@@ -152,7 +147,6 @@ Given /^a set of works with comments for searching$/ do
 
   step %{the statistics_tasks rake task is run}
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of Star Trek works for searching$/ do
@@ -190,7 +184,6 @@ Given /^a set of Star Trek works for searching$/ do
                      freeform_string: "Star Trek Fusion")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with bookmarks for searching$/ do
@@ -217,7 +210,6 @@ Given /^a set of works with bookmarks for searching$/ do
   end
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with various ratings for searching$/ do
@@ -238,7 +230,6 @@ Given /^a set of works with various ratings for searching$/ do
                      summary: "Nothing explicit here.")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with various warnings for searching$/ do
@@ -263,7 +254,6 @@ Given /^a set of works with various warnings for searching$/ do
                                      #{ArchiveConfig.WARNING_NONE_TAG_NAME}")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 Given /^a set of works with various access levels for searching$/ do
@@ -282,7 +272,6 @@ Given /^a set of works with various access levels for searching$/ do
                      title: "Work Hidden by Admin")
 
   step %{the work indexes are updated}
-  step %{the work indexes are reindexed}
 end
 
 ### WHEN

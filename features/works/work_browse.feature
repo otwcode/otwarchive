@@ -7,6 +7,5 @@ Scenario: browsing works with incorrect page params in query string
     And a fandom exists with name: "Johnny Be Good", canonical: true
     And I post the work "Whatever" with fandom "Johnny Be Good"
     And the work indexes are updated
-    And the work indexes are reindexed
   When I browse the "Johnny Be Good" works with an empty page parameter
   Then I should see "1 Work"

@@ -102,8 +102,6 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs"
-      And all search indexes are updated
-      And all search indexes are reindexed
     When I view the work "Old Snippet"
     Then the author of "Old Snippet" should be visible to me on the work page
     When I am logged out
@@ -124,8 +122,6 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs"
-      And all search indexes are updated
-      And all search indexes are reindexed
     When I am logged in as "second_user"
       And I bookmark the work "Old Snippet"
       And I go to the bookmarks page

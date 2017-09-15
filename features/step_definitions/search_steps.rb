@@ -1,41 +1,45 @@
-Given /^all search indexes are updated$/ do
-  [Work, Bookmark, Pseud, Tag].each do |klass|
-    # TIRE
-    # klass.import
-    # klass.tire.index.refresh
-    #
-    # Elasticsearch
-    if $elasticsearch.indices.exists? index: "ao3_test_#{klass.to_s.downcase}s"
-      $elasticsearch.indices.delete index: "ao3_test_#{klass.to_s.downcase}s"
+def tire_update(klass)
+  klass.import
+  klass.tire.index.refresh
+end
+
+def es_update(klass)
+  index_name = "ao3_test_#{klass.to_s.downcase}s"
+
+  if $elasticsearch.indices.exists? index: index_name
+    $elasticsearch.indices.delete index: index_name
+  end
+
+  indexer_class = "#{klass.capitalize}Indexer".constantize
+
+  indexer_class.create_index
+
+  indexer = indexer_class.new(klass.capitalize.constantize.all.pluck(:id))
+  indexer.index_documents rescue nil
+
+  if klass == 'bookmark'
+    bookmark_indexers = {
+      BookmarkedExternalWorkIndexer => ExternalWork,
+      BookmarkedSeriesIndexer => Series,
+      BookmarkedWorkIndexer => Work
+    }
+
+    bookmark_indexers.each do |indexer, bookmarkable|
+      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
     end
+  end
 
-    "#{klass}Indexer".constantize.create_index
+  $elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
+end
 
-    indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
-    indexer.index_documents rescue nil
+Given /^all search indexes are updated$/ do
+  ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
+    step %{the #{klass} indexes are updated}
   end
 end
 
-Given /^the (\w+) indexes are updated$/ do |model|
-  # TIRE
-  # model.classify.constantize.import
-  # model.classify.constantize.tire.index.refresh
-  #
-  # Elasticsearch
-  if $elasticsearch.indices.exists? index: "ao3_test_#{model}s"
-    $elasticsearch.indices.delete index: "ao3_test_#{model}s"
-  end
-
-  "#{model.classify}Indexer".constantize.create_index
-
-  indexer = "#{model.classify}Indexer".constantize.new(model.classify.constantize.all.pluck(:id))
-  indexer.index_documents if model.classify.constantize.any?
-
-  if model == 'bookmark'
-    BookmarkedExternalWorkIndexer.new(ExternalWork.all.pluck(:id)).index_documents if ExternalWork.any?
-    BookmarkedSeriesIndexer.new(Series.all.pluck(:id)).index_documents if Series.any?
-    BookmarkedWorkIndexer.new(Work.all.pluck(:id)).index_documents if Work.any?
-  end
+Given /^the (\w+) indexes are updated$/ do |klass|
+  @es_version == ENV['OLD_ES_VERSION'] ? tire_update(klass) : es_update(klass)
 end
 
 Given /^the (\w+) indexes are reindexed$/ do |model|

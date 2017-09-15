@@ -11,7 +11,6 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
     step %{I press "Create"}
     # Bookmark.tire.index.refresh
     step %{the bookmark indexes are updated}
-    step %{the bookmark indexes are reindexed}
 end
 
 Given /^I have a bookmark of a deleted work$/ do
@@ -23,7 +22,6 @@ Given /^I have a bookmark of a deleted work$/ do
   work.destroy
   # Bookmark.tire.index.refresh
   step %{the bookmark indexes are updated}
-  step %{the bookmark indexes are reindexed}
 end
 
 Given /^I have bookmarks to search$/ do
@@ -83,7 +81,6 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*
   click_button("Create")
   # Bookmark.tire.index.refresh
   step %{the bookmark indexes are updated}
-  step %{the bookmark indexes are reindexed}
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|

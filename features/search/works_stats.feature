@@ -5,7 +5,6 @@ Feature: Search works by stats
 
   Scenario: Search by range of hits
     Given I have the Battle set loaded
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Hits" with "10000-20000"
       And I press "Search" within "#new_work_search_form"
@@ -17,7 +16,6 @@ Feature: Search works by stats
 
   Scenario: Search by > hits
     Given I have the Battle set loaded
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Hits" with "> 100"
       And I press "Search" within "#new_work_search_form"
@@ -30,7 +28,6 @@ Feature: Search works by stats
 
   Scenario: Search and sort by kudos
     Given I have the Battle set loaded
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Kudos" with ">0"
       And I select "Kudos" from "Sort by"
@@ -87,7 +84,6 @@ Feature: Search works by stats
 
   Scenario: Search by exact number of comments
     Given a set of works with comments for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Comments" with "1"
       And I press "Search" within "#new_work_search_form"
@@ -98,7 +94,6 @@ Feature: Search works by stats
 
   Scenario: Search by a range of comments
     Given a set of works with comments for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Comments" with "1-5"
       And I press "Search" within "#new_work_search_form"
@@ -110,7 +105,6 @@ Feature: Search works by stats
   Scenario: Search by > a number of comments and sort in ascending order by
   comments
     Given a set of works with comments for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Comments" with "> 0"
       And I select "Comments" from "Sort by"
@@ -132,7 +126,6 @@ Feature: Search works by stats
  Scenario: Search by < a number of comments and sort in descending order by
  comments
     Given a set of works with comments for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Comments" with "<20"
       And I select "Comments" from "Sort by"
@@ -154,7 +147,6 @@ Feature: Search works by stats
   Scenario: Search by > a number of comments and sort in ascending order by
     title using the header search
     Given a set of works with comments for searching
-      And the work indexes are reindexed
     When I fill in "site_search" with "comments: > 2 sort: title ascending"
       And I press "Search"
     Then I should see "You searched for: comments count: > 2 sort by: title ascending"
@@ -169,7 +161,6 @@ Feature: Search works by stats
 
   Scenario: Search by exact number of bookmarks
     Given a set of works with bookmarks for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Bookmarks" with "1"
       And I press "Search" within "#new_work_search_form"
@@ -180,7 +171,6 @@ Feature: Search works by stats
 
   Scenario: Search by a range of bookmarks
     Given a set of works with bookmarks for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Bookmarks" with "2 - 5"
       And I press "Search" within "#new_work_search_form"
@@ -192,7 +182,6 @@ Feature: Search works by stats
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   bookmarks
     Given a set of works with bookmarks for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Bookmarks" with ">1"
       And I select "Bookmarks" from "Sort by"
@@ -212,7 +201,6 @@ Feature: Search works by stats
   Scenario: Search by < a number of bookmarks and sort in descending order by
   bookmarks
     Given a set of works with bookmarks for searching
-      And the work indexes are reindexed
     When I am on the search works page
       And I fill in "Bookmarks" with "< 20"
       And I select "Bookmarks" from "Sort by"
@@ -234,7 +222,6 @@ Feature: Search works by stats
   Scenario: Search by > a number of bookmarks and sort in ascending order by
   title using the header search
     Given a set of works with bookmarks for searching
-      And the work indexes are reindexed
     When I fill in "site_search" with "bookmarks: > 2 sort by: title ascending"
       And I press "Search"
     Then I should see "You searched for: bookmarks count: > 2 sort by: title ascending"

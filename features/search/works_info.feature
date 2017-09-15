@@ -37,8 +37,6 @@ Feature: Search works by work info
 
   Scenario: Search with the header search field and then refine by author/artist
     Given I have the Battle set loaded
-      And all search indexes are updated
-      And all search indexes are reindexed
     When I fill in "site_search" with "testuser2"
       And I press "Search"
     Then I should see "You searched for: testuser2"

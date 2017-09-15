@@ -43,7 +43,6 @@ Feature: Create bookmarks of external works
     When I fill in "Fandoms" with "Popslash"
       And I press "Create"
       And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
     Then I should see "This work isn't hosted on the Archive"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "Stuck with You"
@@ -63,7 +62,6 @@ Feature: Create bookmarks of external works
     When I fill in "URL" with "http://example.org/200"
       And I press "Create"
       And the bookmark indexes are updated
-      And the bookmark indexes are reindexed
     Then I should see "This work isn't hosted on the Archive"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "Stuck with You"

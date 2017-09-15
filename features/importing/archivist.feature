@@ -91,32 +91,30 @@ Feature: Archivist bulk imports
       | login | email                     |
       | ao3   | ao3testing@dreamwidth.org |
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
+      And the work indexes are updated
     Then I should see import confirmation
       And I should see "ao3"
       And I should not see "[archived by archivist]"
       And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should contain claim information
-    When the work indexes are updated
-      And the work indexes are reindexed
-      And I go to ao3's works page
+    When I go to ao3's works page
     Then I should see "Story"
 
   Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
       And the system processes jobs
-      And the work indexes are reindexed
+      And the work indexes are updated
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
       And I go to the claim page for "not_creators_account_email@example.com"
     Then I should see "Claim your works with your logged-in account."
     When I press "Add these works to my currently-logged-in account"
+      And the work indexes are updated
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
-    When the work indexes are updated
-      And the work indexes are reindexed
-      And I go to creator's works page
+    When I go to creator's works page
     Then I should see "Story"
 
   Scenario: Importing sends an email to a guessed address if it can't find the author

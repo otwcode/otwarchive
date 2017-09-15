@@ -127,7 +127,6 @@ Feature: Search works by tag
   Scenario: Searching by category returns all works using that category; search
   can be refined using Any Field to return works using only that category
     Given a set of works with various categories for searching
-      And all search indexes are updated
     When I am on the search works page
       And I check "F/F"
       And I press "Search" within "#new_work_search_form"
