@@ -36,7 +36,7 @@ describe BookmarkQuery do
 
   it "should not return bookmarks of hidden objects" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {hidden_by_admin: 'F'}}}})
+    expect(q.filters).to include({term: { bookmarkable_hidden_by_admin: 'F' }})
   end
 
   it "should not return restricted bookmarked works by default" do
