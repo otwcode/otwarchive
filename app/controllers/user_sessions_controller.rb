@@ -9,6 +9,13 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
+      # We currently remember users for 2 weeks even if they do not check
+      # "Remember me" when logging in. To make it last longer for users who
+      # do check "Remember me," we have to set a different value before we
+      # create the session. (3 months is Authlogic's default.)
+      if user_session_params[:remember_me] == '1'
+        UserSession.remember_me_for = 3.months
+      end
       # Need to convert params back to a hash for Authlogic bug
       @user_session = UserSession.new(user_session_params.to_hash)
 
@@ -16,6 +23,9 @@ class UserSessionsController < ApplicationController
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
+        # Set the session value back to 2 weeks so the next session
+        # doesn't also get remembered for 3 months
+        UserSession.remember_me_for = 2.weeks
       else
         if params[:user_session][:login] && user = User.find_by(login: params[:user_session][:login])
           # we have a user
@@ -47,6 +57,11 @@ class UserSessionsController < ApplicationController
         end
         flash.now[:error] = message
         @user_session = UserSession.new(user_session_params)
+        # We have to determine whether to pre-check the "Remember me" option on
+        # the session page using the current value of remember_me_for
+        # because we're currently remembering sessions no matter what -- it's
+        # just a question of how long
+        @remember_me = true if UserSession.remember_me_for == 3.months
         render action: 'new'
       end
     end
