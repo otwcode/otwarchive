@@ -241,9 +241,9 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :kudos, only: [:index]
-    resources :nominations, :controller => "tag_set_nominations", :only => [:index]
-    resources :preferences, :only => [:index, :update]
-    resource :profile, :only => [:show], :controller => "profile"
+    resources :nominations, controller: "tag_set_nominations", only: [:index]
+    resources :preferences, only: [:index, :update]
+    resource :profile, only: [:show], controller: "profile"
     resources :pseuds do
       resources :works
       resources :series
