@@ -4,21 +4,6 @@ class ReadingsController < ApplicationController
   before_action :check_ownership
   before_action :check_history_enabled
 
-  def load_user
-    @user = User.find_by(login: params[:user_id])
-    @check_ownership_of = @user
-  end
-
-  def index_history
-    @readings = @user.readings
-    @page_subtitle = ts("History")
-  end
-
-  def index_to_read
-    @readings = @user.readings.where(toread: true)
-    @page_subtitle = ts("Saved For Later")
-  end
-
   def index_kudos
     # collext a list of pseuds the user may have left kudos under
     pseuds = Pseud.where(user_id: @user.id).pluck(:id)
@@ -70,14 +55,29 @@ class ReadingsController < ApplicationController
     redirect_to user_readings_path(current_user)
   end
 
+  private
+
+  def load_user
+    @user = User.find_by(login: params[:user_id])
+    @check_ownership_of = @user
+  end
+
+  def index_history
+    @readings = @user.readings
+    @page_subtitle = ts("History")
+  end
+
+  def index_to_read
+    @readings = @user.readings.where(toread: true)
+    @page_subtitle = ts("Saved For Later")
+  end
+
   protected
 
   # checks if user has history enabled and redirects to preferences if not, so they can potentially change it
   def check_history_enabled
-    unless current_user.preference.history_enabled?
-      flash[:notice] = ts("You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.")
-      redirect_to user_preferences_path(current_user)
-    end
+    return if current_user.preference.history_enabled?
+    flash[:notice] = ts("You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.")
+    redirect_to user_preferences_path(current_user)
   end
-
 end

@@ -5,24 +5,8 @@ class KudosController < ApplicationController
   skip_before_action :store_location
 
   def index
-    if params[:work_id]
-      @work = Work.find(params[:work_id])
-      @kudos = @work.kudos.includes(pseud: :user).with_pseud
-      @guest_kudos_count = @work.kudos.by_guest.count
-      return
-    end
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
-      @check_ownership_of = @user
-      check_ownership
-      # collext a list of pseuds the user may have left kudos under
-      kudos_list = Rails.cache.fetch(Kudo.kudo_user_cache(@user.id)) { Kudo.where(pseud_id: Pseud.where(user_id: @user.id).value_of(:id)).value_of(:commentable_id) }
-      if params[:search]
-        @kudos = Work.where(:id => kudos_list).where("title LIKE ?","%#{params[:search]}%").page(params[:page])
-      else
-        @kudos = Work.where(id: kudos_list).page(params[:page])
-      end 
-    end
+    return index_work if params[:work_id]
+    return index_user if params[:user_id]
   end
 
   def create
@@ -77,5 +61,24 @@ class KudosController < ApplicationController
 
   def kudo_params
     params.require(:kudo).permit(:commentable_id, :commentable_type)
+  end
+
+  def index_work
+      @work = Work.find(params[:work_id])
+      @kudos = @work.kudos.includes(pseud: :user).with_pseud
+      @guest_kudos_count = @work.kudos.by_guest.count
+  end
+
+  def index_user
+    @user = User.find_by_login(params[:user_id])
+    @check_ownership_of = @user
+    check_ownership
+    # collext a list of pseuds the user may have left kudos under
+    kudos_list = Rails.cache.fetch(Kudo.kudo_user_cache(@user.id)) { Kudo.where(pseud_id: Pseud.where(user_id: @user.id).value_of(:id)).value_of(:commentable_id) }
+    if params[:search]
+        @kudos = Work.where(:id => kudos_list).where("title LIKE ?","%#{params[:search]}%").page(params[:page])
+    else
+       @kudos = Work.where(id: kudos_list).page(params[:page])
+    end
   end
 end
