@@ -3,7 +3,29 @@ Feature: Edit Multiple Works
   In order to change settings on my works more easily
   As an author
   I want to edit multiple works at once
-  
+
+  Scenario: I can delete multiple works at once
+  Given I am logged in as "author"
+    And I post the work "Glorious" with fandom "SGA"
+    And I post the work "Excellent" with fandom "Star Trek"
+    And I post the work "Lovely" with fandom "Steven Universe"
+    And I go to my works page
+  When I follow "Edit Works"
+  Then I should see "Edit Multiple Works"
+  When I select "Glorious" for editing
+    And I select "Excellent" for editing
+    And I press "Delete"
+  Then I should see "Are you sure you want to delete these works PERMANENTLY?"
+    And I should see "Glorious"
+    And I should see "Excellent"
+    And I should not see "Lovely"
+  When I press "Yes, Delete Works"
+  Then I should see "Your works Glorious, Excellent were deleted."
+  When I go to my works page
+  Then I should not see "Glorious"
+    And I should not see "Excellent"
+    And I should see "Lovely"
+
   Scenario: I can edit multiple works at once
   Given I am logged in as "author"
     And I post the work "Glorious" with fandom "SGA"
@@ -101,3 +123,18 @@ Feature: Edit Multiple Works
   Then I should see "doesn't allow non-Archive users to comment"
   When I view the work "Work with Anonymous Commenting Enabled"
   Then I should not see "doesn't allow non-Archive users to comment"
+
+  Scenario: User can remove coauthors from multiple works at once
+    Given the following activated users exists
+      | login     |
+      | author    |
+      | coauthor  |
+      And I am logged in as "author"
+      And I edit multiple works coauthored as "author" with "coauthor"
+    When I check "coauthor" within "#work_pseuds_to_remove_checkboxes"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "Shared Work 1"
+    Then I should not see "coauthor" within ".byline"
+    When I view the work "Shared Work 2"
+    Then I should not see "coauthor" within ".byline"

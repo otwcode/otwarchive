@@ -1,26 +1,36 @@
 class CommentsController < ApplicationController
-  skip_before_filter :store_location, except: [:show, :index, :new]
-  before_filter :load_commentable, only: [:index, :new, :create, :edit, :update,
+  skip_before_action :store_location, except: [:show, :index, :new]
+  before_action :load_commentable, only: [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
-                                              :cancel_comment_reply, :cancel_comment_edit,
-                                              :delete_comment, :cancel_comment_delete, :unreviewed, :review_all]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy]
-  before_filter :check_visibility, only: [:show]
-  before_filter :check_if_restricted
-  before_filter :check_tag_wrangler_access, only: [:index, :show]
-  before_filter :check_ownership, only: [:edit, :update]
-  before_filter :check_permission_to_edit, only: [:edit, :update]
-  before_filter :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_filter :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
-  before_filter :check_unreviewed, only: [:add_comment_reply]
-  before_filter :check_permission_to_review, only: [:unreviewed]
-  before_filter :check_permission_to_access_single_unreviewed, only: [:show]
+                                              :cancel_comment_reply,
+                                              :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
+  before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
+  before_action :check_visibility, only: [:show]
+  before_action :check_if_restricted
+  before_action :check_tag_wrangler_access
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
+  before_action :check_permission_to_edit, only: [:edit, :update ]
+  before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
+  before_action :check_unreviewed, only: [:add_comment_reply]
+  before_action :check_permission_to_review, only: [:unreviewed]
+  before_action :check_permission_to_access_single_unreviewed, only: [:show]
+  before_action :check_permission_to_moderate, only: [:approve, :reject]
 
   cache_sweeper :comment_sweeper
 
-
+  def check_pseud_ownership
+    if params[:comment][:pseud_id]
+      pseud = Pseud.find(comment_params[:pseud_id])
+      unless pseud && current_user && current_user.pseuds.include?(pseud)
+        flash[:error] = ts("You can't comment with that pseud.")
+        redirect_to root_path and return
+      end
+    end
+  end
 
   def load_comment
     @comment = Comment.find(params[:id])
@@ -54,7 +64,7 @@ class CommentsController < ApplicationController
       redirect_to work_path(parent)
     end
   end
-  
+
   def check_unreviewed
     if @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
       flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
@@ -65,7 +75,7 @@ class CommentsController < ApplicationController
       end
     end
   end
-  
+
   def check_permission_to_review
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
@@ -92,8 +102,16 @@ class CommentsController < ApplicationController
     end
   end
 
+  def check_permission_to_moderate
+    parent = find_parent
+    unless logged_in_as_admin? || current_user_owns?(parent)
+      flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
+      redirect_to(logged_in? ? root_path : login_path)
+    end
+  end
+
   def check_tag_wrangler_access
-    if @commentable.is_a?(Tag) || (@comment && @comment.commentable.is_a?(Tag))
+    if @commentable.is_a?(Tag) || (@comment && @comment.parent.is_a?(Tag))
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
@@ -102,7 +120,7 @@ class CommentsController < ApplicationController
   def check_permission_to_delete
     access_denied(redirect: @comment) unless logged_in_as_admin? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
   end
-  
+
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
@@ -178,7 +196,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
-      @name = 
+      @name =
         case @commentable.class.name
           when /Work/
             @commentable.title
@@ -211,7 +229,7 @@ class CommentsController < ApplicationController
       flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
-      @comment = Comment.new(params[:comment])
+      @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env['HTTP_USER_AGENT']
       @comment.commentable = Comment.commentable_object(@commentable)
@@ -232,15 +250,9 @@ class CommentsController < ApplicationController
           end
           respond_to do |format|
             format.html do
-              if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user, filters: params[:filters], page: params[:page])
-              elsif params[:also_bookmark]
-                # we're going to go to the new bookmark form instead
-                flash[:notice] = ts('Comment created!')
-                @bookmarkable = @comment.ultimate_parent
-                @bookmark = Bookmark.new(notes: params[:comment][:content])
-                render 'bookmarks/new', layout: "application" and return
-              elsif request.referer.match(/new/)
+              if request.referer&.match(/inbox/)
+                redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+              elsif request.referer&.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
@@ -252,7 +264,7 @@ class CommentsController < ApplicationController
               elsif @comment.unreviewed?
                 redirect_to_all_comments(@commentable)
               else
-                redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+                redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
               end
             end
           end
@@ -271,12 +283,12 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    params[:comment][:edited_at] = Time.current
-    if @comment.update_attributes(params[:comment])
+    updated_comment_params = comment_params.merge(edited_at: Time.current)
+    if @comment.update_attributes(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
-        format.html do 
-          redirect_to comment_path(@comment) and return if @comment.unreviewed? 
+        format.html do
+          redirect_to comment_path(@comment) and return if @comment.unreviewed?
           redirect_to_comment(@comment)
         end
         format.js # updating the comment in place
@@ -300,18 +312,17 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_to :back
+      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
-      redirect_to_all_comments(parent, { show_comments: true })
+      redirect_to_all_comments(parent, {show_comments: true})
     end
   end
-  
+
   def review
-    @comment = Comment.find(params[:id])
     if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
       @comment.toggle!(:unreviewed)
       # mark associated inbox comments as read
@@ -320,7 +331,7 @@ class CommentsController < ApplicationController
       respond_to do |format|
         format.html do
           if params[:approved_from] == "inbox"
-            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters]) and return
+            redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters]) and return
           elsif params[:approved_from] == "home"
             redirect_to root_path and return
           else
@@ -331,7 +342,7 @@ class CommentsController < ApplicationController
       end
     end
   end
-  
+
   def review_all
     unless @commentable && current_user_owns?(@commentable)
       flash[:error] = ts("What did you want to review comments on?")
@@ -345,15 +356,13 @@ class CommentsController < ApplicationController
   end
 
   def approve
-    @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, { show_comments: true })
+    redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
   end
 
   def reject
-   @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
-   redirect_to_all_comments(@comment.ultimate_parent, { show_comments: true })
+   redirect_to_all_comments(@comment.ultimate_parent, {show_comments: true})
   end
 
   def show_comments
@@ -363,7 +372,7 @@ class CommentsController < ApplicationController
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
         # so we're being extra-nice and preserving any intention to comment along with the show comments option
-        options = { show_comments: true }
+        options = {show_comments: true}
         options[:add_comment] = params[:add_comment] if params[:add_comment]
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
         options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
@@ -388,7 +397,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html do
-        options = { add_comment: true }
+        options = {add_comment: true}
         options[:show_comments] = params[:show_comments] if params[:show_comments]
         options[:page] = params[:page] if params[:page]
         redirect_to_all_comments(@commentable, options)
@@ -443,7 +452,6 @@ class CommentsController < ApplicationController
   end
 
   def cancel_comment_edit
-    @comment = Comment.find(params[:id])
     respond_to do |format|
       format.html { redirect_to_comment(@comment) }
       format.js
@@ -463,7 +471,6 @@ class CommentsController < ApplicationController
   end
 
   def cancel_comment_delete
-    @comment = Comment.find(params[:id])
     respond_to do |format|
       format.html do
         options = {}
@@ -482,25 +489,25 @@ class CommentsController < ApplicationController
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
       if comment.ultimate_parent.is_a?(Tag)
         default_options = {
-          controller: :comments,
-          action: :show,
-          id: comment.commentable.id,
-          tag_id: comment.ultimate_parent.to_param,
-          anchor: "comment_#{comment.id}"
+           controller: :comments,
+           action: :show,
+           id: comment.commentable.id,
+           tag_id: comment.ultimate_parent.to_param,
+           anchor: "comment_#{comment.id}"
         }
       else
         default_options = {
-          controller: comment.commentable.class.to_s.underscore.pluralize,
-          action: :show,
-          id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
-          anchor: "comment_#{comment.id}"
+           controller: comment.commentable.class.to_s.underscore.pluralize,
+           action: :show,
+           id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
+           anchor: "comment_#{comment.id}"
         }
       end
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
       # need to redirect to the specific chapter; redirect_to_all will then retrieve full work view if applicable
-      redirect_to_all_comments(comment.parent, options.merge({ show_comments: true, anchor: "comment_#{comment.id}" }))
+      redirect_to_all_comments(comment.parent, options.merge({show_comments: true, anchor: "comment_#{comment.id}"}))
     end
   end
 
@@ -530,5 +537,17 @@ class CommentsController < ApplicationController
                   anchor: options[:anchor],
                   page: options[:page]
     end
+  end
+
+  private
+
+  def comment_params
+    params.require(:comment).permit(
+      :pseud_id, :content, :name, :email, :edited_at
+    )
+  end
+
+  def filter_params
+    params.permit!
   end
 end

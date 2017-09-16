@@ -3,6 +3,13 @@ Feature: Admin Actions for Works and Bookmarks
   As an admin
   I should be able to perform special actions on works
 
+  Scenario: Can reindex works
+    Given I am logged in as "regular_user"
+      And I post the work "Just a work you know"
+    When I am logged in as an admin
+      And I view the work "Just a work you know"
+      And I follow "Reindex Work"
+
   Scenario: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
@@ -25,7 +32,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Item has been hidden."
       And all emails have been delivered
     When I follow "Make Work Visible"
-    Then I should see "Item is no longer hidden."      
+    Then I should see "Item is no longer hidden."
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
       And 0 emails should be delivered
@@ -39,13 +46,14 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
+      And the email should not contain "translation missing"
     When I am logged out
       And I am on regular_users's works page
     Then I should not see "ToS Violation"
     When I am logged in
       And I am on regular_users's works page
-    Then I should not see "ToS Violation"  
-      
+    Then I should not see "ToS Violation"
+
   Scenario: Can hide bookmarks
     Given basic tags
       And I am logged in as "regular_user" with password "password1"
@@ -62,7 +70,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Item has been hidden."
     When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
-    Then I should not see "Rude comment" 
+    Then I should not see "Rude comment"
 
   Scenario: Can edit tags on works
     Given basic tags
@@ -93,6 +101,13 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Mature"
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
+     When I follow "Activities"
+     Then I should see "View Admin Activity"
+     When I visit the last activities item
+     Then I should see "No Archive Warnings Apply"
+      And I should see "Old tags"
+      And I should see "User-Added Fandom"
+      And I should not see "Admin-Added Fandom"
 
   Scenario: Can edit external works
     Given basic tags
@@ -105,6 +120,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I fill in "Title" with "Admin-Added Title"
       And I fill in "Creator's Summary" with "Admin-added summary"
       And I select "Mature" from "Rating"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Admin-Added Fandom"
       And I fill in "Relationships" with "Admin-Added Relationship"
       And I fill in "Characters" with "Admin-Added Character"
@@ -115,10 +131,11 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Admin-Added Title"
       And I should see "Admin-added summary"
       And I should see "Mature"
+      And I should see "No Archive Warnings"
       And I should see "Admin-Added Fandom"
       And I should see "Admin-Added Character"
       And I should see "Admin-Added Freeform"
-      And I should see "M/M"      
+      And I should see "M/M"
 
   Scenario: Can delete external works
     Given basic tags
@@ -128,7 +145,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the external work "External Changes"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
-  
+
   Scenario: Can mark a comment as spam
     Given I have no works or comments
       And the following activated users exist
@@ -216,4 +233,4 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Preview Tags and Language"
     When I press "Update"
     Then I should see "Deutsch"
-      And I should not see "English"  
+      And I should not see "English"

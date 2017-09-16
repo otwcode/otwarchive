@@ -120,4 +120,48 @@ Feature: Tag Wrangling - special cases
   When I view the tag "James T. Kirk"
     And I follow "filter works"
   Then I should see "1 Work in James T. Kirk"
-  
+
+  Scenario: Adding a noncanonical tag with "a.k.a.", and viewing works for that tag.
+
+    Given basic tags
+      And I am logged in as a random user
+
+    When I post the work "Escape Attempt" with fandom "a.k.a. Jessica Jones"
+      And I follow "a.k.a. Jessica Jones"
+
+    Then I should see "This tag belongs to the Fandom Category"
+      And I should see "a.k.a. Jessica Jones" within "h2.heading"
+      And I should see "Escape Attempt"
+
+  Scenario: Wranglers can edit a tag with "a.k.a." in the name.
+
+    Given a noncanonical fandom "a.k.a. Jessica Jones"
+      And a canonical fandom "Jessica Jones (TV)"
+
+    When I am logged in as a tag wrangler
+      And I edit the tag "a.k.a. Jessica Jones"
+    Then I should see "Edit a.k.a. Jessica Jones Tag"
+
+    When I fill in "Synonym of" with "Jessica Jones (TV)"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+
+  Scenario Outline: Tag with a, d, h, q, or s between special characters.
+
+    Given a canonical fandom "<char>a<char>d<char>h<char>q<char>s<char>"
+
+    When I am logged in as a tag wrangler
+      And I view the tag "<char>a<char>d<char>h<char>q<char>s<char>"
+    Then I should see "This tag belongs to the Fandom Category"
+      And I should see "Edit"
+
+    When I follow "Edit"
+    Then I should see "Edit <char>a<char>d<char>h<char>q<char>s<char> Tag"
+
+    Examples:
+      | char |
+      | /    |
+      | #    |
+      | .    |
+      | &    |
+      | ?    |

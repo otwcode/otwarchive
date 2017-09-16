@@ -1,10 +1,11 @@
-class AdminActivity < ActiveRecord::Base
+class AdminActivity < ApplicationRecord
+  include ActiveModel::ForbiddenAttributesProtection
   belongs_to :admin
   belongs_to :target, polymorphic: true
 
   validates_presence_of :admin_id
 
-  delegate :login, :to => :admin, :prefix => true
+  delegate :login, to: :admin, prefix: true
 
   def self.log_action(admin, target, options={})
     self.create do |activity|

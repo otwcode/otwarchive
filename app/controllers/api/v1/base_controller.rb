@@ -4,14 +4,15 @@ module Api
   # with the new version.
   module V1
     class BaseController < ApplicationController
-      before_filter :restrict_access
+      skip_before_action :verify_authenticity_token
+      before_action :restrict_access
 
       private
 
       # Look for a token in the Authorization header only and check that the token isn't currently banned
       def restrict_access
         authenticate_or_request_with_http_token do |token, _|
-          ApiKey.exists?(access_token: token) && !ApiKey.find_by_access_token(token).banned?
+          ApiKey.exists?(access_token: token) && !ApiKey.find_by(access_token: token).banned?
         end
       end
 
@@ -30,7 +31,7 @@ module Api
         if import_items.nil? || import_items.empty?
           errors << "No items to import were provided."
         elsif import_items.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-          errors << "This request contains too many items to import. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
+          errors << "This request contains too many items to import. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST } " +
             "items can be imported at one time by an archivist."
         end
         status = :ok if errors.empty?

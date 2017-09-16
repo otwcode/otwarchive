@@ -76,8 +76,6 @@ Feature: Import Works from DW
   @import_dw_tables_no_backdate
   Scenario: Creating a new work from an DW story without backdating it
     Given basic tags
-      And a category exists with name: "Gen", canonical: true
-      And a category exists with name: "F/M", canonical: true
       And the following activated user exists
         | login          | password    |
         | cosomeone      | something   |

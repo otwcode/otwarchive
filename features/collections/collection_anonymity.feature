@@ -36,9 +36,8 @@ Feature: Collection
       # not anonymous
       And the email to "third_user" should contain "first_user"
     When subscription notifications are sent
-      And "AO3-4367: author subscribers not notified when works revealed" is fixed
-    #Then "second_user" should be emailed
-    #  And the email to "second_user" should contain "first_user"
+    Then "second_user" should be emailed
+      And the email to "second_user" should contain "first_user"
     When I am logged out
     Then the work "New Snippet" should be visible to me
     When I view the collection "Hidden Treasury"
@@ -71,12 +70,11 @@ Feature: Collection
     # Then "third_user" should be emailed
     #   And the email to "third_user" should contain "first_user"
     When subscription notifications are sent
-      And "AO3-4367: author subscribers not notified when works revealed" is fixed
-    # Then "second_user" should be emailed
-    #   And 1 emails should be delivered
-    #   And the email to "second_user" should contain "first_user"
-    #   And the email to "second_user" should contain "First Snippet"
-    #   And the email to "second_user" should not contain "Second Snippet"
+    Then "second_user" should be emailed
+      And 1 emails should be delivered
+      And the email to "second_user" should contain "first_user"
+      And the email to "second_user" should contain "First Snippet"
+      And the email to "second_user" should not contain "Second Snippet"
     When I am logged out
     Then the work "First Snippet" should be visible to me
       And the work "Second Snippet" should be hidden from me
@@ -244,4 +242,81 @@ Feature: Collection
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
-  
+
+  Scenario: A work is in two anonymous collections, and one is revealed
+    Given I have the anonymous collection "Permanent Mice"
+      And I have the anonymous collection "Temporary Mice"
+      And I am logged in as "a_nonny_mouse"
+      And I post the work "Cheesy Goodness"
+      And I add the work "Cheesy Goodness" to the collection "Permanent Mice"
+      And I add the work "Cheesy Goodness" to the collection "Temporary Mice"
+      And "eager_fan" subscribes to author "a_nonny_mouse"
+
+    When I am logged in as "moderator"
+      And I reveal authors for "Temporary Mice"
+      And subscription notifications are sent
+
+    Then "eager_fan" should not be emailed
+
+  Scenario: A work is in two unrevealed collections, and one is revealed
+    Given I have the hidden collection "Super-Secret"
+      And I have the hidden collection "Secret for Now"
+      And I am logged in as "classified"
+      And I post the work "Top-Secret Goodness"
+      And I add the work "Top-Secret Goodness" to the collection "Super-Secret"
+      And I add the work "Top-Secret Goodness" to the collection "Secret for Now"
+      And "eager_fan" subscribes to author "classified"
+
+    When I am logged in as "moderator"
+      And I reveal works for "Secret for Now"
+      And subscription notifications are sent
+
+    Then "eager_fan" should not be emailed
+
+  Scenario: A work is in one anonymous and one hidden collection, and the anonymous collection is revealed
+    Given I have the hidden collection "Triple-Secret"
+      And I have the anonymous collection "Cheese Enthusiasts"
+      And I am logged in as "classified"
+      And I post the work "Half and Half"
+      And I add the work "Half and Half" to the collection "Triple-Secret"
+      And I add the work "Half and Half" to the collection "Cheese Enthusiasts"
+      And "eager_fan" subscribes to author "classified"
+
+    When I am logged in as "moderator"
+      And I reveal authors for "Cheese Enthusiasts"
+      And subscription notifications are sent
+
+    Then "eager_fan" should not be emailed
+
+  Scenario: A work is in one anonymous and one hidden collection, and the hidden collection is revealed
+    Given I have the hidden collection "Hidden Dreams"
+      And I have the anonymous collection "Anons Anonymous"
+      And I am logged in as "classified"
+      And I post the work "Half and Half"
+      And I add the work "Half and Half" to the collection "Hidden Dreams"
+      And I add the work "Half and Half" to the collection "Anons Anonymous"
+      And "eager_fan" subscribes to author "classified"
+
+    When I am logged in as "moderator"
+      And I reveal works for "Hidden Dreams"
+      And subscription notifications are sent
+
+    Then "eager_fan" should not be emailed
+
+  Scenario: Creating a new work then immediately editing to add it to an
+    anonymous collection should not trigger a subscriber email.
+
+    Given I have the anonymous collection "Anon Forever"
+      And the following activated users exist
+        | login      | password | email              |
+        | mysterious | password | mysterious@foo.com |
+        | subscriber | password | subscriber@foo.com |
+      And "subscriber" subscribes to author "mysterious"
+      And all emails have been delivered
+
+    When I am logged in as "mysterious"
+      And I post the work "Anonymous Gift"
+      And I add the work "Anonymous Gift" to the collection "Anon Forever"
+      And subscription notifications are sent
+
+    Then 0 emails should be delivered

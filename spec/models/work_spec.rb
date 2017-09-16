@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+  # see lib/collectible_spec for collection-related tests
 
-  it "creates a minimally work" do
+  it "creates a minimal work" do
     expect(create(:work)).to be_valid
+  end
+
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
   end
 
   context "create_stat_counter" do
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do
@@ -112,9 +119,9 @@ describe Work do
       end
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
-      xit "cannot be used by another user" do
-        expect(work.save).to be_falsey
-         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
+      it "cannot be used by another user" do
+        work.work_skin_allowed
+        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
       end
     end
   end
@@ -141,19 +148,19 @@ describe Work do
       expect(@work.new_recipients).to eq(@work.recipients)
     end
 
-    xit "should only contain the new recipients when more are added" do
-      @work.recipients += "," + @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
-    end
-
     it "should only contain the new recipient if replacing the previous recipient" do
       @work.recipients = @recipient3.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
     end
 
-    xit "should be empty if one or more of the original recipients are removed" do
+    it "simple assignment should work" do
       @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to be_empty
+      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    end
+
+    it "recipients should be unique" do
+      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
+      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
 
   end
@@ -185,9 +192,31 @@ describe Work do
     end
 
     it "should find works imported with irrelevant query parameters" do
-      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
-      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
+    end
+
+    it "gets the work from cache when searching for an imported work by URL" do
+      url = "http://lj-site.com/thing2"
+      work = create(:work, imported_from_url: url)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to be_nil
+      expect(Work.find_by_url(url)).to eq(work)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
+      work.destroy
+    end
+  end
+
+  describe "#update_complete_status" do
+    it "marks a work complete when it's been completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      expect(work.complete).to be_truthy
+    end
+
+    it "marks a work incomplete when it's no longer completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      work.update_attributes!(expected_number_of_chapters: nil)
+      expect(work.reload.complete).to be_falsey
     end
   end
 end

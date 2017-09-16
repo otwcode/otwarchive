@@ -16,16 +16,8 @@
       <dt><%= ts("Requests Matched:") %></dt>
       <dd><%= @potential_match.num_prompts_matched %></dd>
     
-      <% @potential_match.request_signup.requests.each_with_index do |request, index| %>
-        <% request.potential_prompt_matches.select {|prompt_match| prompt_match.potential_match == @potential_match}.each do |prompt_match| %>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% if (count = prompt_match.send("num_#{type.pluralize}_matched")) == PotentialPromptMatch::ALL || count > 0 %>
-              <dt><%= ts("Request #{index+1} #{type.pluralize} matched:") %></dt> 
-              <dd><%= count == PotentialPromptMatch::ALL ? ts("All") : count %></dd>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
+      <dt><%= ts("Most Tags Matched:") %></dt>
+      <dd><%= @potential_match.max_tags_matched %></dd>
     </dl>
   </div>
 

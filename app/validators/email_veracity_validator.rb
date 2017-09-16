@@ -4,7 +4,7 @@ require 'mail'
 class EmailVeracityValidator < ActiveModel::EachValidator
   def validate_each(record,attribute,value)
     if options[:allow_blank] && value.blank?
-      result = true 
+      result = true
     else
       begin
         mail = Mail::Address.new(value)
@@ -16,11 +16,13 @@ class EmailVeracityValidator < ActiveModel::EachValidator
         # treetop must respond to domain
         # We exclude valid email values like <user@localhost.com>
         # Hence we use m.__send__(tree).domain
-        treetop = mail.__send__(:tree)
-      
+        # treetop = mail.__send__(:tree)
+
         # A valid domain must have dot_atom_text elements size > 1
-        result &&= (treetop.domain.dot_atom_text.elements.size > 1)
-      rescue Exception => e   
+        
+        # treetop was deprecated out of the mail gem
+        result #&&= (treetop.domain.dot_atom_text.elements.size > 1)
+      rescue Exception => e
         result = false
       end
     end

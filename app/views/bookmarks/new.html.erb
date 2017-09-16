@@ -5,5 +5,5 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= render 'bookmarks/bookmark_form', bookmark: @bookmark, bookmarkable: @bookmarkable, button_name: ts("Create"), action: 'create' %>
+<%= render :partial => 'bookmark_form', :locals => { :bookmark => @bookmark, :bookmarkable => @bookmarkable, :button_name => ts("Create"), :action => 'create' }%>
 <!--/content-->

@@ -157,6 +157,11 @@ form dd p.informational {
 
 /*END FORM RULES*/
 
+/* WIDGET: DEPENDENT OPTIONS */
+.toggle_formfield ~ ul.dependent {
+  margin-left: 2.625em;
+}
+
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
 
 p.character_counter {

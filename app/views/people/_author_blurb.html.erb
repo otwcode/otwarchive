@@ -17,15 +17,4 @@
       <p><%=raw sanitize_field(author, :description) %></p>
     </blockquote>
   <% end %>
-  <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
-  <% unless true %>
-    <% unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? %>
-      <h5 class="heading"><%= "Most used tags: " %></h5>
-      <ul>      
-        <% most_popular.each do |tag_w_count| %>
-        <li><%= link_to_tag_with_count(author, tag_w_count) %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  <% end %>
 </li>

@@ -270,11 +270,6 @@ eg collections, users, skins, instead of the 4-icon list
     word-wrap: break-word;
 }
 
-.prompt h6 {
-  float: left;
-  min-width: 65px;
-}
-
 /* mod: ITEM
 blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
 */
@@ -404,6 +399,19 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .skin .blurb .header p {
   margin-left: 65px;
+}
+
+/* mod: PROMPT */
+
+.prompt .blurb h6 {
+  display: inline-block;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif;
+  font-size: 1em;
+  margin: 0.643em 0 0;
+}
+
+.prompt .blurb ul.optional {
+  display: inline;
 }
 
 /*END== */

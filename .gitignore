@@ -69,5 +69,4 @@ spec/results
 features_report.html
 coverage
 
-.simplecov
 .rspec

@@ -26,6 +26,12 @@
       <dd>
         <%= f.label :support_available, t('.support_available', default: "Support available") %>
       </dd>
+      <dt>
+        <%= f.check_box :abuse_support_available %>
+      </dt>
+      <dd>
+        <%= f.label :abuse_support_available, t('.abuse_support_available', default: "Abuse support available") %>
+      </dd>
     </dl>
     <p class="submit actions">
       <% if @language.new_record? %>

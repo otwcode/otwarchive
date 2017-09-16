@@ -8,6 +8,18 @@ Feature: View a work with various options
     And I follow "Comments (2)"
   Then I should see "Bla bla"
 
+  Scenario: Regular logged-in user doesn't have the option to reindex a work
+  Given the work "Whatever"
+    And I am logged in
+   When I view the work "Whatever"
+   Then I should not see "Reindex Work"
+
+  Scenario: Logged-out user doesn't have the option to reindex a work
+  Given the work "Whatever"
+    And I am logged out
+   When I view the work "Whatever"
+   Then I should not see "Reindex Work"
+
   Scenario: viewing a work when logged in and having set full mode in the preferences
   Given I am logged in as a random user
     And I set my preferences to View Full Work mode by default
@@ -30,6 +42,3 @@ Feature: View a work with various options
     And I should see "DeletedChapterWork"
     And I follow "Site Map"
   Then I should not see "Sorry, we couldn't find the chapter you were looking for."
-
-
-

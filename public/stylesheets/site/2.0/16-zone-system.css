@@ -219,7 +219,7 @@ SUBSECTIONS:
   width: 48%;
 }
 
-.admin_sessions-new form {
+.sessions-new .new_admin {
   width: 75%;
   margin: auto;
 }
