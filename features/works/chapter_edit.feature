@@ -35,23 +35,18 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "chapter_wip_length" with "100"
     And I fill in "content" with "original chapter two"
-    And "AO3-3300" is fixed
-    # All the commented out bits in the following examples need to be changed
-    # back once AO3-3300 has bee fixed.
-    #And I press "Preview"
-  #Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  #When I press "Post"
-  When I press "Post Without Preview"
+    And I press "Preview"
+  Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
+  When I press "Post"
     Then I should see "2/100"
     And I should see "Words:8"
   When I follow "Add Chapter"
     And I fill in "chapter_position" with "3"
     And I fill in "chapter_wip_length" with "50"
     And I fill in "content" with "entering chapter three"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 3"
-  #When I press "Post"
+  When I press "Post"
   Then I should see "3/50"
     And I should see "Words:11"
 
@@ -60,10 +55,9 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "17"
     And I fill in "chapter_wip_length" with "17"
     And I fill in "content" with "entering fourth chapter out of order"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 4"
-  #When I press "Post"
+  When I press "Post"
     And I should see "4/17"
     And I should see "Words:17"
 
@@ -80,9 +74,8 @@ Feature: Edit chapters
   When I follow "Add Chapter"
     And I fill in "chapter_position" with "2"
     And I fill in "content" with "entering second chapter out of order"
-    #And I press "Preview"
-  #When I press "Post"
-  And I press "Post Without Preview"
+    And I press "Preview"
+  When I press "Post"
   Then I should see "4/17"
     And I should see "Words:20"
 
@@ -92,12 +85,11 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "4"
     And I fill in "chapter_wip_length" with "4"
     And I fill in "content" with "last chapter"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 4"
-  #When I press "Update"
+  When I press "Update"
   Then I should see "Chapter was successfully updated"
-    #And I should see "Chapter 4"
+    And I should see "Chapter 4"
     And I should see "4/4"
     And I should see "Words:19"
   When I follow "Edit"
@@ -247,10 +239,12 @@ Feature: Edit chapters
       And I should see "This is a draft"
       And I press "Save Without Posting"
     Then I should not see Updated today
+      And I should not see Completed today
       And I should not see "Updated" within ".work.meta .stats"
+      And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
       And I press "Post Without Preview"
-      Then I should see Updated today
+      Then I should see Completed today
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
