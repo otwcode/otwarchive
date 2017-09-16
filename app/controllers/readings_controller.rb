@@ -9,20 +9,32 @@ class ReadingsController < ApplicationController
     @check_ownership_of = @user
   end
 
-  def index
+  def index_history
     @readings = @user.readings
     @page_subtitle = ts("History")
-    @kudos_list = []
-    if params[:show] == 'to-read'
-      @readings = @readings.where(toread: true)
-      @page_subtitle = ts("Saved For Later")
-    end
-    if params[:show] == 'kudos-history'
-      # collext a list of pseuds the user may have left kudos under
-      pseuds = Pseud.where(user_id: @user.id).value_of(:id)
-      @kudos_list = Kudo.where(pseud_id: pseuds).value_of(:commentable_id)
-      @readings = @readings.where(work_id: @kudos_list)
-      @page_subtitle = ts("Kudos history")
+  end
+
+  def index_to_read
+    @readings = @user.readings.where(toread: true)
+    @page_subtitle = ts("Saved For Later")
+  end
+
+  def index_kudos
+    # collext a list of pseuds the user may have left kudos under
+    pseuds = Pseud.where(user_id: @user.id).pluck(:id)
+    @kudos_list = Kudo.where(pseud_id: pseuds).pluck(:commentable_id)
+    @readings = @user.readings.where(work_id: @kudos_list)
+    @page_subtitle = ts("Kudos history")
+  end
+
+  def index
+    case params[:show]
+    when 'to-read'
+      index_to_read
+    when 'kudos-history'
+      index_kudos
+    else
+      index_history
     end
     @readings = @readings.order("last_viewed DESC").page(params[:page])
   end
