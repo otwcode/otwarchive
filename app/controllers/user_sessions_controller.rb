@@ -9,11 +9,23 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
+      # We currently remember users for 2 weeks even if they do not check
+      # "Remember me" when logging in. To make it last longer for users who
+      # do check "Remember me," we have to set a different value before we
+      # create the session.
+      if user_session_params[:remember_me] == "1"
+        UserSession.remember_me_for = ArchiveConfig.REMEMBERED_SESSION_LENGTH_IN_MONTHS.months
+      end
       # Need to convert params back to a hash for Authlogic bug
       @user_session = UserSession.new(user_session_params.to_hash)
 
       if @user_session.save
-        flash[:notice] = ts("Successfully logged in.")
+        flash[:notice] = ts("Successfully logged in.").html_safe
+        # Remembering users who don't check "Remember me" is non-standard
+        # behavior, so we want to make sure they are aware of it
+        unless user_session_params[:remember_me] == "1"
+          flash[:notice] += ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS).html_safe
+        end
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
@@ -49,6 +61,9 @@ class UserSessionsController < ApplicationController
         @user_session = UserSession.new(user_session_params)
         render action: 'new'
       end
+      # Set the session value back to 2 weeks so the next session
+      # doesn't also get remembered for 3 months
+      UserSession.remember_me_for = ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS.weeks
     end
   end
 
