@@ -68,13 +68,6 @@ Feature: Leave kudos
       And I press "Title Search In Kudos"
     Then I should see "Awesome Story"
     Then I should not see "Interesting Story"
-    When I go to myname2's reading page
-      And I follow "Clear History"
-    Then I should see "Your history is now cleared"
-    When I go to myname2's user page
-      And I follow "Kudos History"
-    Then I should see "Awesome Story"
-    Then I should see "Interesting Story"
 
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
