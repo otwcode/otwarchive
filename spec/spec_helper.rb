@@ -101,7 +101,7 @@ def deprecate_unless(condition)
 end
 
 def old_es?
-  es_version == '0.9'
+  es_version.match("0.90")
 end
 
 def es_version
