@@ -9,7 +9,6 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
     step %{I press "Create"}
-    # Bookmark.tire.index.refresh
     step %{the bookmark indexes are updated}
 end
 
@@ -20,7 +19,6 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{I press "Create"}
   work = Work.find_by(title: title)
   work.destroy
-  # Bookmark.tire.index.refresh
   step %{the bookmark indexes are updated}
 end
 
@@ -79,7 +77,6 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   click_button("Create")
-  # Bookmark.tire.index.refresh
   step %{the bookmark indexes are updated}
 end
 

@@ -73,7 +73,6 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     click_button("Post Without Preview")
   end
   step %{the work indexes are updated}
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -247,7 +246,6 @@ When /^I post the chaptered work "([^"]*)"$/ do |title|
   click_button("Preview")
   step %{I press "Post"}
   step %{the work indexes are updated}
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -265,7 +263,6 @@ When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
   step %{the work indexes are updated}
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -274,7 +271,6 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   step %{I add the co-author "#{coauthor}"}
   click_button("Post")
   step %{the work indexes are updated}
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -283,7 +279,6 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{I press "Preview"}
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -310,7 +305,6 @@ When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -398,7 +392,6 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   work.update_attribute(:created_at, number.to_i.days.ago)
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -412,7 +405,6 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   click_button("Post")
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -471,7 +463,6 @@ When /^I browse the "([^"]+)" works$/ do |tagname|
   visit tag_works_path(tag)
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
@@ -479,7 +470,6 @@ When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   visit tag_works_path(tag, page: "")
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
@@ -491,35 +481,29 @@ When /^I delete the work "([^"]*)"$/ do |work|
   click_button("Yes, Delete Work") unless @javascript
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 When /^I preview the work$/ do
   click_button("Preview")
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 When /^I update the work$/ do
   click_button("Update")
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
   click_button "Post Without Preview"
   step %{the work indexes are updated}
 
-  # Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 When /^I post the work$/ do
   click_button "Post"
   step %{the work indexes are updated}
-
-  # Work.tire.index.refresh
 end
 When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
