@@ -258,11 +258,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = ""
     content_for :tinymce do
-      javascript_include_tag "tinymce/tinymce.min.js"
+      javascript_include_tag "tinymce/tinymce.min.js", skip_pipeline: true
     end
     @content_for_tinymce_init = ""
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor.min.js"
+      javascript_include_tag "mce_editor.min.js", skip_pipeline: true
     end
   end
 
@@ -549,5 +549,17 @@ module ApplicationHelper
       # if not, put the placeholder text in a p tag with the placeholder class
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
+  end
+
+  # change the default link renderer for will_paginate
+  def will_paginate(collection_or_options = nil, options = {})
+    if collection_or_options.is_a? Hash
+      options = collection_or_options
+      collection_or_options = nil
+    end
+    unless options[:renderer]
+      options = options.merge renderer: PaginationListLinkRenderer
+    end
+    super(*[collection_or_options, options].compact)
   end
 end # end of ApplicationHelper

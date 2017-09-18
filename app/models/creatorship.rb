@@ -1,4 +1,4 @@
-class Creatorship < ActiveRecord::Base
+class Creatorship < ApplicationRecord
   belongs_to :pseud
   belongs_to :creation, polymorphic: true, touch: true
 

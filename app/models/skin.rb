@@ -4,7 +4,7 @@ include CssCleaner
 include SkinCacheHelper
 include SkinWizard
 
-class Skin < ActiveRecord::Base
+class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
@@ -271,7 +271,7 @@ class Skin < ActiveRecord::Base
 
   def get_css
     if filename
-      File.read(Rails.public_path.join("." + filename))
+      File.read(Rails.public_path.join(filename))
     else
       css
     end

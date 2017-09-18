@@ -25,6 +25,10 @@ FactoryGirl.definition_file_paths = %w(factories)
 RSpec.configure do |config|
   config.mock_with :rspec
 
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers

@@ -15,6 +15,7 @@ Otwarchive::Application.routes.draw do
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
@@ -561,6 +562,7 @@ Otwarchive::Application.routes.draw do
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
+  get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
   get 'devmode' => 'devmode#index'
@@ -578,7 +580,43 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  get ':controller(/:action(/:id(.:format)))'
+  # These are whitelisted routes that are proven to be used throughout the
+  # application, which previously relied on a deprecated catch-all route definition
+  # (`get ':controller(/:action(/:id(.:format)))'`) to work.
+  #
+  # They are generally not RESTful and in some cases are *almost* duplicates of
+  # existing routes defined above, but due to how extensively they are used
+  # throughout the application must exist until forms, controllers, and tests
+  # can be refactored to not rely on their existence.
+  #
+  # Note written on August 1, 2017 during upgrade to Rails 5.1.
+  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
+  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
+
+  get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
+  get '/user_invite_requests/update' => 'user_invite_requests#update'
+
+  patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+
+  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+
+  # TODO: rewrite the autocomplete controller to deal with the fact that
+  # there are fifty different actions going on in there
+  get '/autocomplete/:action' => 'autocomplete#%{action}'
+
+  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
+  get '/assignments/no_user' => 'challenge_assignments#no_user'
+  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+
+  get '/challenges/no_collection' => 'challenges#no_collection'
+  get '/challenges/no_challenge' => 'challenges#no_challenge'
+
+  get '/works/clean_work_search_params' => 'works#clean_work_search_params'
+  get '/works/collected' => 'works#collected'
+  get '/works/drafts' => 'works#drafts'
+
+  post '/works/edit_multiple/:id' => 'works#edit_multiple'
+  post '/works/confirm_delete_multiple/:id' => 'works#confirm_delete_multiple'
+  post '/works/delete_multiple/:id' => 'works#delete_multiple'
+  put '/works/update_multiple' => 'works#update_multiple'
 end

@@ -77,6 +77,8 @@ module NavigationHelpers
       # Work.tire.index.refresh
       step %{the work indexes are updated}
       user_works_path(User.current_user)
+    when /my drafts page/
+      drafts_user_works_path(User.current_user)
     when /my edit multiple works page/
       show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/

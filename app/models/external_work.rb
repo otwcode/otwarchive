@@ -1,5 +1,5 @@
 include UrlHelpers
-class ExternalWork < ActiveRecord::Base
+class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
 

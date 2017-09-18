@@ -3,8 +3,15 @@ require 'spec_helper'
 describe Work do
   # see lib/collectible_spec for collection-related tests
 
-  it "creates a minimally work" do
+  it "creates a minimal work" do
     expect(create(:work)).to be_valid
+  end
+
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
   end
 
   context "create_stat_counter" do
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do
@@ -197,6 +204,19 @@ describe Work do
       expect(Work.find_by_url(url)).to eq(work)
       expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
       work.destroy
+    end
+  end
+
+  describe "#update_complete_status" do
+    it "marks a work complete when it's been completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      expect(work.complete).to be_truthy
+    end
+
+    it "marks a work incomplete when it's no longer completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      work.update_attributes!(expected_number_of_chapters: nil)
+      expect(work.reload.complete).to be_falsey
     end
   end
 end

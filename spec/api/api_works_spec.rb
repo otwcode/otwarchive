@@ -13,7 +13,7 @@ describe "API WorksController - Create works" do
 
     after :all do
       WebMock.reset!
-      @user.destroy
+      @user.destroy if @user
     end
 
     it "should not support the deprecated /import end-point", type: :routing do
@@ -161,7 +161,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
+        @work.destroy if @work
         WebMock.reset!
       end
 
@@ -225,7 +225,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
+        @work.destroy if @work
         WebMock.reset!
       end
 
@@ -286,7 +286,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
+        @work.destroy if @work
         WebMock.reset!
       end
 
@@ -363,7 +363,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
+        @work.destroy if @work
         WebMock.reset!
       end
 
@@ -429,7 +429,7 @@ describe "API WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy
+        @work.destroy if @work
         WebMock.reset!
       end
 
@@ -482,7 +482,7 @@ describe "API WorksController - Find Works" do
   end
 
   after do
-    @work.destroy
+    @work.destroy if @work
   end
 
   describe "valid work URL request" do

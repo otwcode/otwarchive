@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CollectionItemsController do
   include LoginMacros
   include RedirectExpectationHelper
-  
+
   describe "GET #index" do
     let(:user) { create(:user) }
     before(:each) do
@@ -24,7 +24,7 @@ describe CollectionItemsController do
     context "where the user is not a maintainer" do
       it "redirects and shows an error message" do
         fake_login_known_user(user)
-        get :index
+        get :index, params: { collection_id: @collection.id }
         it_redirects_to_with_error(collections_path, "You don't have permission to see that, sorry!")
       end
     end
@@ -89,12 +89,12 @@ describe CollectionItemsController do
       let (:collection) { FactoryGirl.create(:collection) }
 
       it "fails if collection names missing" do
-        get :create
+        get :create, params: { collection_id: collection.id }
         it_redirects_to_with_error(root_path, "What collections did you want to add?")
       end
 
       it "fails if items missing" do
-        get :create, params: { collection_names: collection.name }
+        get :create, params: { collection_names: collection.name, collection_id: collection.id }
         it_redirects_to_with_error(root_path, "What did you want to add to a collection?")
       end
     end
@@ -113,7 +113,7 @@ describe CollectionItemsController do
       it "removes things" do
         @approved_work_item = CollectionItem.find_by_item_id(@approved_work.id)
         fake_login_known_user(owner)
-        delete :destroy, params: { id: @approved_work_item.id }
+        delete :destroy, params: { id: @approved_work_item.id, work_id: @approved_work.id}
         it_redirects_to_with_notice(collection_items_path(@collection), "Item completely removed from collection " + @collection.title + ".")
         expect(CollectionItem.where(item_id: @approved_work.id)).to be_empty
       end

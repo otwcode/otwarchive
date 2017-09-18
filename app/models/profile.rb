@@ -1,4 +1,4 @@
-class Profile < ActiveRecord::Base
+class Profile < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   PROFILE_TITLE_MAX = 255

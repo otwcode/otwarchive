@@ -5,34 +5,18 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "before_action #clean_work_search_form_params" do
-    let(:params) { nil }
+  describe "before_action #clean_work_search_params" do
+    let(:params) { {} }
 
     def call_with_params(params)
       controller.params = { work_search_form: params }
-      controller.clean_work_search_form_params
+      controller.clean_work_search_params
     end
 
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_form_params, params: params
         it_redirects_to new_user_session_path
-      end
-
-      it "returns a nil" do
-        fake_login
-        controller.params = params
-        controller.clean_work_search_form_params
-        expect(controller.params[:work_search_form]).to be_nil
-      end
-    end
-
-    context "when search parameters are empty" do
-      let(:params) { [] }
-
-      it "returns a RecordNotFound exception" do
-        call_with_params params
-        expect(controller.params[:work_search_form]).to be_empty
       end
     end
 
@@ -367,7 +351,7 @@ describe WorksController do
         }
       end
       it "should update coauthors for each chapter when the work is updated" do
-        put :update, params
+        put :update, params: params
         updated_work = Work.find(update_work.id)
         expect(updated_work.pseuds).to include new_coauthor.default_pseud
         updated_work.chapters.each do |c|

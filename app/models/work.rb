@@ -1,4 +1,4 @@
-class Work < ActiveRecord::Base
+class Work < ApplicationRecord
   include Taggable
   include Creatable
   include Collectible
@@ -242,6 +242,7 @@ class Work < ActiveRecord::Base
     tags.each do |tag|
       tag.update_tag_cache
     end
+
     Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
@@ -697,10 +698,11 @@ class Work < ActiveRecord::Base
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted_changed? || (self.chapters.first && self.chapters.first.posted != self.posted)
-      self.chapters.first.published_at = Date.today unless self.backdate
-      self.chapters.first.posted = self.posted
-      self.chapters.first.save
+    chapter_one = self.first_chapter
+    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
+      chapter_one.published_at = Date.today unless self.backdate
+      chapter_one.posted = self.posted
+      chapter_one.save
     end
   end
 
@@ -794,10 +796,12 @@ class Work < ActiveRecord::Base
   end
 
   after_save :update_complete_status
+  # Note: this can mark a work complete but it can also mark a complete work
+  # as incomplete if its status has changed
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
+    if self.will_save_change_to_attribute?(:complete)
       Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
     end
   end
@@ -882,7 +886,7 @@ class Work < ActiveRecord::Base
 
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags
+      if self.placeholder_tags && !self.placeholder_tags.empty?
         result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
         result = self.tags.group_by { |t| t.type.to_s }

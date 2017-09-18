@@ -1,4 +1,4 @@
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
@@ -179,7 +179,7 @@
   after_update :expire_caches
 
   def expire_caches
-    if login_changed?
+    if saved_change_to_login?
       self.works.each{ |work| work.touch }
     end
   end
@@ -343,6 +343,10 @@
   # Retrieve the current default pseud
   def default_pseud
     self.pseuds.where(is_default: true).first
+  end
+
+  def default_pseud_id
+    pseuds.where(is_default: true).pluck(:id).first
   end
 
   # Checks authorship of any sort of object
@@ -540,9 +544,9 @@
   end
 
   def update_pseud_name
-    return unless login_changed? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
-    if login.downcase == login_was.downcase
+    return unless saved_change_to_login? && login_before_last_save.present?
+    old_pseud = self.pseuds.where(name: login_before_last_save).first
+    if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
     else
@@ -562,6 +566,12 @@
   end
 
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
+
+  def remove_stale_from_autocomplete
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 end
