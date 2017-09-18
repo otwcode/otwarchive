@@ -61,7 +61,7 @@ class TagsController < ApplicationController
   def search
     @page_subtitle = ts('Search Tags')
     if params[:query].present?
-      options = params[:query].dup
+      options = params[:query].permit!.dup
       @query = options
       if @query[:name].present?
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
