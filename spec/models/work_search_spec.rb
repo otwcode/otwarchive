@@ -16,7 +16,7 @@ describe WorkSearch do
   after(:each) do
     deprecate_unless(old_es?) do
       Work.destroy_all
-      delete_index 'works'
+      delete_index 'work'
     end
   end
 

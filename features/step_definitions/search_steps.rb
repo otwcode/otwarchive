@@ -33,7 +33,7 @@ def es_update(klass)
 end
 
 Given /^the (\w+) indexes are updated$/ do |klass|
-  @es_version == ENV['OLD_ES_VERSION'] ? tire_update(klass) : es_update(klass)
+  @es_version == '0.9' ? tire_update(klass) : es_update(klass)
 end
 
 

@@ -88,9 +88,9 @@ def clean_the_database
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
 
-  ['works', 'bookmarks', 'pseuds', 'tags'].each do |index|
+  ['work', 'bookmark', 'pseud', 'tag'].each do |index|
     delete_index index
-    update_and_refresh_index index
+    update_and_refresh_indexes index
   end
 end
 
@@ -135,10 +135,10 @@ end
 
 def delete_index(index)
   if old_es?
-    klass = index.singularize.constantize
+    klass = index.constantize
     Tire.index(klass.index_name).delete
   else
-    index_name = "ao3_test_#{index}"
+    index_name = "ao3_test_#{index}s"
     if $elasticsearch.indices.exists? index: index_name
       $elasticsearch.indices.delete index: index_name
     end
