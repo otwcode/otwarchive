@@ -87,46 +87,61 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
-  # Finally elastic search
-  # TIRE
-  # Work.tire.index.delete
-  # Work.create_elasticsearch_index
 
-  # Bookmark.tire.index.delete
-  # Bookmark.create_elasticsearch_index
+  ['works', 'bookmarks', 'pseuds', 'tags'].each do |index|
+    delete_index index
+    update_and_refresh_index index
+  end
+end
 
-  # Tag.tire.index.delete
-  # Tag.create_elasticsearch_index
+def deprecate_unless(condition)
+  return true unless condition
 
-  # Pseud.tire.index.delete
-  # Pseud.create_elasticsearch_index
+  yield
+end
 
-  # Elasticsearch
-  [Work, Bookmark, Pseud, Tag].each do |klass|
-    if $elasticsearch.indices.exists? index: "ao3_test_#{klass.to_s.downcase}s"
-      $elasticsearch.indices.delete index: "ao3_test_#{klass.to_s.downcase}s"
-    end
+def old_es?
+  es_version == '0.9'
+end
 
-    "#{klass}Indexer".constantize.create_index
+def es_version
+  @es_version ||= get_es_version
+end
 
-    indexer = "#{klass}Indexer".constantize.new(klass.all.pluck(:id))
-    indexer.index_documents if klass.any?
+def get_es_version
+  response = $elasticsearch.perform_request("GET", "/")
+  if response.status == 200
+    response.body["version"]["number"]
+  else
+    raise response.inspect
   end
 end
 
 def update_and_refresh_indexes(klass_name)
-  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-  indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
-  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents if klass_name.capitalize.constantize.any?
+  if old_es?
+    klass = klass_name.capitalize.constantize
+    Tire.index(klass.index_name).delete
+    klass.create_elasticsearch_index
+    klass.import
+  else
+    indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
+    indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
+    indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
+    indexer.index_documents if klass_name.capitalize.constantize.any?
 
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+    $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  end
 end
 
 def delete_index(index)
-  index_name = "ao3_test_#{index}"
-  if $elasticsearch.indices.exists? index: index_name
-    $elasticsearch.indices.delete index: index_name
+  if old_es?
+    klass = index.singularize.constantize
+    Tire.index(klass.index_name).delete
+  else
+    index_name = "ao3_test_#{index}"
+    if $elasticsearch.indices.exists? index: index_name
+      $elasticsearch.indices.delete index: index_name
+    end
   end
 end
 
