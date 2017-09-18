@@ -10,12 +10,12 @@ describe WorksController do
 
     def call_with_params(params)
       controller.params = { work_search_form: params }
-      controller.clean_work_search_params
+      controller.params[:work_search_form] = controller.clean_work_search_params
     end
 
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
-        get :clean_work_search_form_params, params: params
+        get :clean_work_search_params, params: params
         it_redirects_to new_user_session_path
       end
     end
@@ -234,7 +234,7 @@ describe WorksController do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "should return search results when given work_search_form parameters" do
+    it "should return search results when given work_search parameters" do
       params = { work_search_form: { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
@@ -264,7 +264,8 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = FactoryGirl.create(:work, posted: true)
-          work2.index.refresh
+          # work2.index.refresh
+          update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -274,7 +275,7 @@ describe WorksController do
         before do
           @fandom2 = FactoryGirl.create(:fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
-          @work2.index.refresh
+          # @work2.index.refresh
 
           update_and_refresh_indexes('work')
         end
@@ -303,7 +304,7 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
-            @work2.index.refresh
+            # @work2.index.refresh
             update_and_refresh_indexes('work')
           end
 
@@ -388,13 +389,14 @@ describe WorksController do
                                               collection_names: collection.name,
                                               posted: true,
                                               fandom_string: collected_fandom.name)
-      # [@unrestricted_work,
-       # @unrestricted_work_2_in_collection,
-       # @unrestricted_work_in_collection,
-       # @restricted_work_in_collection].each do |work|
+      [@unrestricted_work,
+       @unrestricted_work_2_in_collection,
+       @unrestricted_work_in_collection,
+       @restricted_work_in_collection].each do |work|
         # work.index.refresh
-      # end
-      update_and_refresh_indexes 'work'
+      end
+
+       update_and_refresh_indexes('work')
     end
 
     context "as a guest" do
