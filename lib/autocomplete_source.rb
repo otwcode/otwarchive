@@ -1,15 +1,15 @@
 module AutocompleteSource
-  AUTOCOMPLETE_DELIMITER = ": "
-  AUTOCOMPLETE_COMPLETION_KEY = "completion"
-  AUTOCOMPLETE_SCORE_KEY = "score"
-  AUTOCOMPLETE_CACHE_KEY = "cache"
+  AUTOCOMPLETE_DELIMITER = ": ".freeze
+  AUTOCOMPLETE_COMPLETION_KEY = "completion".freeze
+  AUTOCOMPLETE_SCORE_KEY = "score".freeze
+  AUTOCOMPLETE_CACHE_KEY = "cache".freeze
   AUTOCOMPLETE_RANGE_LENGTH = 50 # not random
   AUTOCOMPLETE_BOOST = 1000 # amt by which we boost results that have all the words
 
   # this marks a completed word in the completion set -- we use double commas because
   # commas are not allowed in pseud and tag names, and double-commas have been disallowed
   # from collection titles
-  AUTOCOMPLETE_WORD_TERMINATOR = ",,"
+  AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   # override to define any autocomplete prefix spaces where this object should live
   def autocomplete_prefixes
@@ -17,15 +17,15 @@ module AutocompleteSource
   end
 
   def autocomplete_search_string
-    "#{name}"
+    name.to_s
   end
 
   def autocomplete_search_string_was
-    "#{name_was}"
+    name_was.to_s
   end
 
   def autocomplete_search_string_before_last_save
-    "#{name_before_last_save}"
+    name_before_last_save.TO_S
   end
 
   def autocomplete_value
@@ -49,14 +49,13 @@ module AutocompleteSource
     self.class.autocomplete_pieces(autocomplete_search_string).each do |word_piece|
       # each prefix represents an autocompletion space -- eg, "autocomplete_collection_all"
       autocomplete_prefixes.each do |prefix|
-
         # We put each prefix and the word + completion token into the set of all completions,
         # with score 0 so they just get sorted lexicographically --
         # this will be used to quickly find all possible completions in this space
         REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_completion_key(prefix), 0, word_piece)
 
         # We put each complete search string into a separate set indexed by word with specified score
-        if (self.class.is_complete_word?(word_piece))
+        if self.class.is_complete_word?(word_piece)
           REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_score_key(prefix, word_piece), score, autocomplete_value)
         end
       end
@@ -117,7 +116,7 @@ module AutocompleteSource
       # we assume that if the user is typing in a phrase, any words they have
       # entered are the exact word they want, so we only get the prefixes for
       # the very last word they have entered so far
-      search_pieces = autocomplete_phrase_split(search_param).map {|w| w + AUTOCOMPLETE_WORD_TERMINATOR}
+      search_pieces = autocomplete_phrase_split(search_param).map { |w| w + AUTOCOMPLETE_WORD_TERMINATOR }
 
       # for each complete word, we look up the phrases in that word's set
       # along with their scores and add up the scores
@@ -293,5 +292,4 @@ module AutocompleteSource
   def self.included(base)
     base.extend(ClassMethods)
   end
-
 end
