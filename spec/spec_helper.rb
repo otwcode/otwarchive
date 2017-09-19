@@ -87,6 +87,7 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_AUTOCOMPLETE.flushall
   # Finally elastic search
   Work.tire.index.delete
   Work.create_elasticsearch_index

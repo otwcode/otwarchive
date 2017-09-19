@@ -1,3 +1,4 @@
+
 class TagSet < ApplicationRecord
 
   # a complete match is numerically represented with ALL
@@ -313,22 +314,22 @@ class TagSet < ApplicationRecord
   end
 
   def remove_from_autocomplete
-    REDIS_GENERAL.del("autocomplete_tagset_#{self.id}")
+    REDIS_AUTOCOMPLETE.del("autocomplete_tagset_#{self.id}")
   end
 
   def add_tags_to_autocomplete(tags_to_add)
     tags_to_add.each do |tag|
       value = tag.autocomplete_value
-      REDIS_GENERAL.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
-      REDIS_GENERAL.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
+      REDIS_AUTOCOMPLETE.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
+      REDIS_AUTOCOMPLETE.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
     end
   end
 
   def remove_tags_from_autocomplete(tags_to_remove)
     tags_to_remove.each do |tag|
       value = tag.autocomplete_value
-      REDIS_GENERAL.zrem("autocomplete_tagset_all_#{self.id}", value)
-      REDIS_GENERAL.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
+      REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_all_#{self.id}", value)
+      REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
     end
   end
 
@@ -346,14 +347,14 @@ class TagSet < ApplicationRecord
 
     if options[:in_any]
       # get the union since we want tags in ANY of these sets
-      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, aggregate: :max)
+      REDIS_AUTOCOMPLETE.zunionstore(combo_key, keys_to_lookup, aggregate: :max)
     else
       # take the intersection of ALL of these sets
-      REDIS_GENERAL.zinterstore(combo_key, keys_to_lookup, aggregate: :max)
+      REDIS_AUTOCOMPLETE.zinterstore(combo_key, keys_to_lookup, aggregate: :max)
     end
-    results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)
+    results = REDIS_AUTOCOMPLETE.zrevrange(combo_key, 0, -1)
     # expire fast
-    REDIS_GENERAL.expire combo_key, 1
+    REDIS_AUTOCOMPLETE.expire combo_key, 1
 
     unless search_param.blank?
       search_regex = Tag.get_search_regex(search_param)
