@@ -68,6 +68,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  helper_method :use_old_search?
   def use_old_search?
     es_version.match "0.90"
   end
