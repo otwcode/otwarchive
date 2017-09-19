@@ -80,13 +80,17 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    options = params[:work_search_form].present? ? clean_work_search_params : {}
+    options = params[work_search_param_name].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    @search = WorkSearchForm.new(options)
+    if use_old_search?
+      @search = WorkSearch.new(options)
+    else
+      @search = WorkSearchForm.new(options)
+    end
     @page_subtitle = ts("Search Works")
 
-    if params[:work_search_form].present? && params[:edit_search].blank?
+    if params[work_search_param_name].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
@@ -98,7 +102,7 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[:work_search_form].present? ? clean_work_search_params : {}
+    options = params[work_search_param_name].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -129,11 +133,15 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+        if use_old_search?
+          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        else
+          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+        end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
-        if use_caching? && params[:work_search_form].blank? && params[:fandom_id].blank? &&
+        if use_caching? && params[work_search_param_name].blank? && params[:fandom_id].blank? &&
            (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
@@ -161,7 +169,7 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = params[:work_search_form].present? ? clean_work_search_params : {}
+    options = params[work_search_param_name].present? ? clean_work_search_params : {}
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
@@ -172,7 +180,11 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      if use_old_search?
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      else
+        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      end
       @works = @search.search_results
       @facets = @works.facets
     end
@@ -1092,7 +1104,7 @@ class WorksController < ApplicationController
   end
 
   def work_search_form_params
-    params.require(:work_search_form).permit(
+    params.require(work_search_param_name).permit(
       :query,
       :title,
       :creators,
@@ -1124,5 +1136,9 @@ class WorksController < ApplicationController
 
       collection_ids: []
     )
+  end
+
+  def work_search_param_name
+    use_old_search? ? :work_search : :work_search_form
   end
 end
