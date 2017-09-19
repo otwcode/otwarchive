@@ -77,9 +77,9 @@ class BookmarksController < ApplicationController
           @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
           if use_old_search?
-            @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
+            @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           else
-            @search = BookmarkSearch.new(options.merge(faceted: true, parent: @owner))
+            @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
