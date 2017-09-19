@@ -87,10 +87,10 @@ class TagSet < ApplicationRecord
         tags_to_remove += (old_tags - new_tags)
       else
         #
-        if !self.instance_variable_get("@#{type}_tagnames_to_add").blank?
+        unless self.instance_variable_get("@#{type}_tagnames_to_add").blank?
           tags_to_add += tagnames_to_list(self.instance_variable_get("@#{type}_tagnames_to_add"), type)
         end
-        if !self.instance_variable_get("@#{type}_tags_to_remove").blank?
+        unless self.instance_variable_get("@#{type}_tags_to_remove").blank?
           tagclass = type.classify.constantize # Safe constantize itterating over TAG_TYPES
           tags_to_remove += (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
         end
@@ -98,7 +98,7 @@ class TagSet < ApplicationRecord
     end
 
     # This overrides the type-specific
-    if !@tagnames_to_remove.blank?
+    if @tagnames_to_remove.present?
       tags_to_remove = @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
     end
 
@@ -113,13 +113,24 @@ class TagSet < ApplicationRecord
     tags_to_add.uniq!
 
     # actually remove and add the tags, and update autocomplete
-    self.tags -= tags_to_remove
-    remove_tags_from_autocomplete(tags_to_remove)
-
-    self.tags += tags_to_add
-    add_tags_to_autocomplete(tags_to_add)
+    if tags_to_remove.present?
+      remove_from_set(tags_to_remove)
+      remove_tags_from_autocomplete(tags_to_remove)
+    end
+    if tags_to_add.present?
+      add_to_set(tags_to_add)
+      add_tags_to_autocomplete(tags_to_add)
+    end
   end
 
+  def remove_from_set(tags_to_remove)
+    self.set_taggings.where(tag_id: tags_to_remove.map(&:id)).delete_all
+  end
+
+  def add_to_set(tags_to_add)
+    tags_to_add.each { |tag| self.tags << tag }
+  end
+  
   # Tags must already exist unless they are being added to an owned tag set
   validate :tagnames_must_exist, unless: :from_owned_tag_set
   def tagnames_must_exist
