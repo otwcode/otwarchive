@@ -12,4 +12,23 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  def self.use_old_search?
+    es_version.match "0.90"
+  end
+
+  private
+
+  def self.es_version
+    @es_version ||= get_es_version
+  end
+
+  def self.get_es_version
+    es_response = $elasticsearch.perform_request("GET", "/")
+    if es_response.status == 200
+      es_response.body["version"]["number"]
+    else
+      raise es_response.inspect
+    end
+  end
+
 end

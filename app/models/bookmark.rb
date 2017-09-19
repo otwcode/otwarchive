@@ -127,7 +127,11 @@ class Bookmark < ApplicationRecord
   end
 
   def self.index_name
-    "ao3_#{Rails.env}_bookmarks"
+    if use_old_search?
+      tire.index.name
+    else
+      "ao3_#{Rails.env}_bookmarks"
+    end
   end
 
   # Returns the number of bookmarks on an item visible to the current user

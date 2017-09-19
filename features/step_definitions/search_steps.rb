@@ -1,6 +1,9 @@
 def tire_update(klass_name)
   klass = klass_name.capitalize.constantize
 
+  Tire.index(klass.index_name).delete
+  klass.create_elasticsearch_index
+
   klass.import
   klass.tire.index.refresh
 end

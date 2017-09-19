@@ -250,7 +250,11 @@ class Work < ApplicationRecord
   end
 
   def self.index_name
-    "ao3_#{Rails.env}_works"
+    if use_old_search?
+      tire.index.name
+    else
+      "ao3_#{Rails.env}_works"
+    end
   end
 
   def self.work_blurb_tag_cache_key(id)
