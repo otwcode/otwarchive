@@ -83,10 +83,11 @@
         <%= ts('Warnings') %>
       </dt>
       <dd>
-        <ul>
+      <ul>
+        <% search_form_name = use_old_search? ? "work_search" : "work_search_form" %>
           <% for tag in Warning.canonical.by_name %>
             <li>
-              <%= check_box_tag "work_search_form[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
+              <%= check_box_tag "#{search_form_name}[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
               <%= label_tag "warning_#{tag.id}", warning_display_name(tag.name) %>
             </li>
           <% end %>
@@ -99,7 +100,7 @@
         <ul>
           <% for tag in Category.canonical.by_name.sort %>
             <li>
-              <%= check_box_tag "work_search_form[category_ids][]", tag.id, @search.category_ids.present? && @search.category_ids.include?(tag.id.to_s), :id => "category_#{tag.id}" %>
+              <%= check_box_tag "#{search_form_name}[category_ids][]", tag.id, @search.category_ids.present? && @search.category_ids.include?(tag.id.to_s), :id => "category_#{tag.id}" %>
               <%= label_tag "category_#{tag.id}", tag.name %>
             </li>
           <% end %>
