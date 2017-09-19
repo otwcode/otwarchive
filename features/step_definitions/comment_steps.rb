@@ -129,6 +129,11 @@ When /^I delete the comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I delete the reply comment$/ do
+  step %{I follow "Delete" within ".even"}
+  step %{I follow "Yes, delete!"}
+end
+
 When /^I view the latest comment$/ do
   visit comment_path(Comment.last)
 end
