@@ -1,4 +1,6 @@
-def tire_update(klass)
+def tire_update(klass_name)
+  klass = klass_name.capitalize.constantize
+
   klass.import
   klass.tire.index.refresh
 end
