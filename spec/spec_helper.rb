@@ -135,7 +135,7 @@ end
 
 def delete_index(index)
   if old_es?
-    klass = index.constantize
+    klass = index.capitalize.constantize
     Tire.index(klass.index_name).delete
   else
     index_name = "ao3_test_#{index}s"
