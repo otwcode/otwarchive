@@ -25,7 +25,7 @@ module AutocompleteSource
   end
 
   def autocomplete_search_string_before_last_save
-    name_before_last_save.TO_S
+    name_before_last_save.to_s
   end
 
   def autocomplete_value
