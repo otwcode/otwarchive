@@ -109,28 +109,27 @@ class TagSet < ApplicationRecord
       tags_to_remove = (self.tags - new_tags)
     end
 
-    tags_to_remove.uniq!
-    tags_to_add.uniq!
-
     # actually remove and add the tags, and update autocomplete
-    if tags_to_remove.present?
-      remove_from_set(tags_to_remove)
-      remove_tags_from_autocomplete(tags_to_remove)
-    end
-    if tags_to_add.present?
-      add_to_set(tags_to_add)
-      add_tags_to_autocomplete(tags_to_add)
-    end
+    remove_from_set(tags_to_remove.uniq)
+    add_to_set(tags_to_add.uniq)
   end
 
   def remove_from_set(tags_to_remove)
+    return unless tags_to_remove.present?
     self.set_taggings.where(tag_id: tags_to_remove.map(&:id)).delete_all
+    remove_tags_from_autocomplete(tags_to_remove)
   end
 
   def add_to_set(tags_to_add)
-    tags_to_add.each { |tag| self.tags << tag }
+    return unless tags_to_add.present?
+    existing_ids = self.set_taggings.where(tag_id: tags_to_add.map(&:id)).pluck(:tag_id)
+    tags_to_add.each do |tag|
+      next if existing_ids.include?(tag.id)
+      self.set_taggings.create(tag_id: tag.id)
+    end
+    add_tags_to_autocomplete(tags_to_add)
   end
-  
+
   # Tags must already exist unless they are being added to an owned tag set
   validate :tagnames_must_exist, unless: :from_owned_tag_set
   def tagnames_must_exist
