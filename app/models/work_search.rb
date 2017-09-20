@@ -89,7 +89,7 @@ class WorkSearch < Search
   # cleaning up elsewhere in the app.
   def process_options
     self.options ||= {}
-    self.options[:creator] = self.options[:creators]
+    self.options[:creator] ||= self.options[:creators]
 
     self.set_parent_fields!
     self.set_tag_fields!

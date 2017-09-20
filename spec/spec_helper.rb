@@ -123,6 +123,7 @@ def update_and_refresh_indexes(klass_name)
     Tire.index(klass.index_name).delete
     klass.create_elasticsearch_index
     klass.import
+    klass.tire.index.refresh
   else
     indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
     indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")

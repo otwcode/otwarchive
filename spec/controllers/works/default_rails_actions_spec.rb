@@ -5,12 +5,14 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:params_label) { old_es? ? :work_search : :work_search_form }
+
   describe "before_action #clean_work_search_params" do
     let(:params) { {} }
 
     def call_with_params(params)
-      controller.params = { work_search_form: params }
-      controller.params[:work_search_form] = controller.clean_work_search_params
+      controller.params = { params_label => params }
+      controller.params[params_label] = controller.clean_work_search_params
     end
 
     context "when no work search parameters are given" do
@@ -27,30 +29,30 @@ describe WorksController do
           { params: "> 5 words", expected: "&gt; 5 words", message: "Should escape >" },
         ].each do |settings|
           call_with_params(query: settings[:params])
-          expect(controller.params[:work_search_form][:query])
+          expect(controller.params[params_label][:query])
             .to eq(settings[:expected]), settings[:message]
         end
       end
 
       it "should convert 'word' to 'word_count'" do
         call_with_params(query: "word:6")
-        expect(controller.params[:work_search_form][:word_count]).to eq("6")
+        expect(controller.params[params_label][:word_count]).to eq("6")
       end
 
       it "should convert 'words' to 'word_count'" do
         call_with_params(query: "words:7")
-        expect(controller.params[:work_search_form][:word_count]).to eq("7")
+        expect(controller.params[params_label][:word_count]).to eq("7")
       end
 
       it "should convert 'hits' queries to 'hits'" do
         call_with_params(query: "hits:8")
-        expect(controller.params[:work_search_form][:hits]).to eq("8")
+        expect(controller.params[params_label][:hits]).to eq("8")
       end
 
       it "should convert other queries to (pluralized term)_count" do
         %w(kudo comment bookmark).each do |term|
           call_with_params(query: "#{term}:9")
-          expect(controller.params[:work_search_form]["#{term.pluralize}_count"])
+          expect(controller.params[params_label]["#{term.pluralize}_count"])
             .to eq("9"), "Search term '#{term}' should become #{term.pluralize}_count key"
         end
       end
@@ -68,7 +70,7 @@ describe WorksController do
           "sort by = words"
         ].each do |query|
           call_with_params(query: query)
-          expect(controller.params[:work_search_form][:sort_column])
+          expect(controller.params[params_label][:sort_column])
             .to eq("word_count"), "Sort command '#{query}' should be converted to :sort_column"
         end
       end
@@ -88,7 +90,7 @@ describe WorksController do
           { query: "sort by: bookmarks", expected: "bookmarks_count" },
         ].each do |settings|
           call_with_params(query: settings[:query])
-          actual = controller.params[:work_search_form][:sort_column]
+          actual = controller.params[params_label][:sort_column]
           expect(actual)
             .to eq(settings[:expected]),
                 "Query '#{settings[:query]}' should be converted to :sort_column '#{settings[:expected]}' but is '#{actual}'"
@@ -102,7 +104,7 @@ describe WorksController do
           "sort: hits ascending",
         ].each do |query|
           call_with_params(query: query)
-          expect(controller.params[:work_search_form][:sort_direction]).to eq("asc")
+          expect(controller.params[params_label][:sort_direction]).to eq("asc")
         end
       end
 
@@ -113,14 +115,14 @@ describe WorksController do
           "sort: hits descending",
         ].each do |query|
           call_with_params(query: query)
-          expect(controller.params[:work_search_form][:sort_direction]).to eq("desc")
+          expect(controller.params[params_label][:sort_direction]).to eq("desc")
         end
       end
 
       # The rest of these are probably bugs
       it "returns no sort column if there is NO punctuation after 'sort by' clause" do
         call_with_params(query: "sort by word count")
-        expect(controller.params[:work_search_form][:sort_column]).to be_nil
+        expect(controller.params[params_label][:sort_column]).to be_nil
       end
 
       it "can't search by date updated" do
@@ -128,7 +130,7 @@ describe WorksController do
           { query: "sort by: date updated", expected: "revised_at" },
         ].each do |settings|
           call_with_params(query: settings[:query])
-          expect(controller.params[:work_search_form][:sort_column]).to eq("created_at") # should be revised_at
+          expect(controller.params[params_label][:sort_column]).to eq("created_at") # should be revised_at
         end
       end
 
@@ -137,7 +139,7 @@ describe WorksController do
           "sort by: word count ascending",
         ].each do |query|
           call_with_params(query: query)
-          expect(controller.params[:work_search_form][:sort_direction]).to be_nil
+          expect(controller.params[params_label][:sort_direction]).to be_nil
         end
       end
     end
@@ -149,14 +151,14 @@ describe WorksController do
           { query: "f/f Scully/Reyes", expected: "\"f/f\" Scully/Reyes" },
         ].each do |settings|
           call_with_params(query: settings[:query])
-          expect(controller.params[:work_search_form][:query]).to eq(settings[:expected])
+          expect(controller.params[params_label][:query]).to eq(settings[:expected])
         end
       end
 
       it "surrounds categories in quotes even when it shouldn't (AO3-3576)" do
         query = "sam/frodo sort by: word"
         call_with_params(query: query)
-        expect(controller.params[:work_search_form][:query]).to eq("sa\"m/f\"rodo ")
+        expect(controller.params[params_label][:query]).to eq("sa\"m/f\"rodo ")
       end
     end
   end
@@ -235,7 +237,7 @@ describe WorksController do
     end
 
     it "should return search results when given work_search parameters" do
-      params = { work_search_form: { query: "fandoms: #{@fandom.name}" } }
+      params = { params_label => { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
     end
@@ -275,7 +277,6 @@ describe WorksController do
         before do
           @fandom2 = FactoryGirl.create(:fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
-          # @work2.index.refresh
 
           update_and_refresh_indexes('work')
         end
@@ -419,7 +420,7 @@ describe WorksController do
       end
 
       it "should return filtered works when search parameters are provided" do
-        get :collected, params: { user_id: collected_user.login, work_search_form: { query: "fandom_ids:#{collected_fandom2.id}" }}
+        get :collected, params: { user_id: collected_user.login, params_label => { query: "fandom_ids:#{collected_fandom2.id}" }}
         expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
         expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
       end
