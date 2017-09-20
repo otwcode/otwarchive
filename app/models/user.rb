@@ -180,7 +180,7 @@
 
   def expire_caches
     if saved_change_to_login?
-      self.works.each{ |work| work.touch }
+      self.works.each{ |work| work.save }
     end
   end
 

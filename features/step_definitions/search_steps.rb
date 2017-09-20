@@ -57,3 +57,10 @@ Given /^all search indexes are reindexed$/ do
     step %{the #{model} indexes are reindexed}
   end
 end
+
+When /^I press the Search button$/ do
+  form_id = @es_version.match('0.90') ? 'new_work_search' : 'new_work_search_form'
+  with_scope("##{form_id}") do
+    click_button("Search")
+  end
+end
