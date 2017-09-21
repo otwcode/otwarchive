@@ -1,4 +1,4 @@
-<% klass = use_new_search ? ? WorkSearchForm : WorkSearch %>
+<% klass = use_new_search? ? WorkSearchForm : WorkSearch %>
 
 <%= form_for klass.new, as: :work_search, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
   <fieldset>
