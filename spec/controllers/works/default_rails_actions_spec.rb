@@ -9,7 +9,7 @@ describe WorksController do
     let(:params) { {} }
 
     def call_with_params(params)
-      controller.params = { work_search: => params }
+      controller.params = { work_search: params }
       controller.params[:work_search] = controller.clean_work_search_params
     end
 
