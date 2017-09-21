@@ -51,7 +51,7 @@ class BookmarksController < ApplicationController
       @search = BookmarkSearch.new(options)
     end
     @page_subtitle = ts("Search Bookmarks")
-    if params[bookmark_search_param_name].present? && params[:edit_search].blank?
+    if params[:bookmark_search].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
