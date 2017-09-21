@@ -11,7 +11,7 @@ class PeopleController < ApplicationController
       search = PseudSearchForm.new(options)
       @people = search.search_results
     else
-      @people = PseudSearch.new(options)
+      @people = PseudSearch.search(options)
     end
     # TODO: move to search index
     @rec_counts = Pseud.rec_counts_for_pseuds(@people)
