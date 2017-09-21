@@ -79,7 +79,7 @@ class BookmarksController < ApplicationController
           if use_new_search?
             @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
           else
-            @search = BookmarkSearchnew(options.merge(faceted: true, bookmarks_parent: @owner))
+            @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
