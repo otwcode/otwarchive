@@ -13,7 +13,8 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.use_new_search?
-    !es_version.match "0.90"
+    # !es_version.match "0.90"
+    User.current_user.present? && $rollout.active(:use_new_search, User.current_user)
   end
 
   private
