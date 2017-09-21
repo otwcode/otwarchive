@@ -2,6 +2,10 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   self.per_page = ArchiveConfig.ITEMS_PER_PAGE
 
+  def self.use_new_search?
+    User.current_user.present? && $rollout.active(:use_new_search, User.current_user)
+  end
+
   before_save :update_sanitizer_version
 
   def update_sanitizer_version
@@ -11,25 +15,4 @@ class ApplicationRecord < ActiveRecord::Base
       end
     end
   end
-
-  def self.use_new_search?
-    # !es_version.match "0.90"
-    User.current_user.present? && $rollout.active(:use_new_search, User.current_user)
-  end
-
-  private
-
-  def self.es_version
-    @es_version ||= get_es_version
-  end
-
-  def self.get_es_version
-    es_response = $elasticsearch.perform_request("GET", "/")
-    if es_response.status == 200
-      es_response.body["version"]["number"]
-    else
-      raise es_response.inspect
-    end
-  end
-
 end
