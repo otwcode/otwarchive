@@ -7,8 +7,7 @@ Feature: Search works by stats
     Given I have the Battle set loaded
     When I am on the search works page
       And I fill in "Hits" with "10000-20000"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: hits: 10000-20000"
       And I should see "1 Found"
       And the 1st result should contain "Hits: 10000"
@@ -19,8 +18,7 @@ Feature: Search works by stats
     Given I have the Battle set loaded
     When I am on the search works page
       And I fill in "Hits" with "> 100"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: hits: > 100"
       And I should see "2 Found"
       And I should see "First work"
@@ -33,8 +31,7 @@ Feature: Search works by stats
     When I am on the search works page
       And I fill in "Kudos" with ">0"
       And I select "Kudos" from "Sort by"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: kudos count: >0 sort by: kudos descending"
       And I should see "2 Found"
       And the 1st result should contain "Kudos: 4"
@@ -43,15 +40,13 @@ Feature: Search works by stats
     Then the field labeled "Kudos" should contain ">0"
       And "Kudos" should be selected within "Sort by"
     When I fill in "Kudos" with "5"
-    # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: kudos count: 5 sort by: kudos descending"
       And I should see "No results found"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "5"
     When I fill in "Kudos" with "4"
-    # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: kudos count: 4 sort by: kudos descending"
       And I should see "1 Found"
       And the 1st result should contain "Kudos: 4"
@@ -59,8 +54,7 @@ Feature: Search works by stats
     Then the field labeled "Kudos" should contain "4"
     When I fill in "Kudos" with "<2"
       And I select "Ascending" from "Sort direction"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: kudos count: <2 sort by: kudos ascending"
       And I should see "6 Found"
       And I should see "second work"
@@ -75,8 +69,7 @@ Feature: Search works by stats
       And "Kudos" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
     When I check "Complete"
-    # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
       And I should see "4 Found"
       And I should see "second work"
@@ -93,8 +86,7 @@ Feature: Search works by stats
     Given a set of works with comments for searching
     When I am on the search works page
       And I fill in "Comments" with "1"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: comments count: 1"
       And I should see "3 Found"
     When I follow "Edit Your Search"
@@ -104,8 +96,7 @@ Feature: Search works by stats
     Given a set of works with comments for searching
     When I am on the search works page
       And I fill in "Comments" with "1-5"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: comments count: 1-5"
       And I should see "5 Found"
     When I follow "Edit Your Search"
@@ -118,8 +109,7 @@ Feature: Search works by stats
       And I fill in "Comments" with "> 0"
       And I select "Comments" from "Sort by"
       And I select "Ascending" from "Sort direction"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: comments count: > 0 sort by: comments ascending"
       And I should see "6 Found"
       And the 1st result should contain "Comments: 1"
@@ -140,8 +130,7 @@ Feature: Search works by stats
       And I fill in "Comments" with "<20"
       And I select "Comments" from "Sort by"
       And I select "Descending" from "Sort direction"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: comments count: <20 sort by: comments descending"
       And I should see "7 Found"
       And the 1st result should contain "Comments: 10"
@@ -174,8 +163,7 @@ Feature: Search works by stats
     Given a set of works with bookmarks for searching
     When I am on the search works page
       And I fill in "Bookmarks" with "1"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: 1"
       And I should see "2 Found"
     When I follow "Edit Your Search"
@@ -185,8 +173,7 @@ Feature: Search works by stats
     Given a set of works with bookmarks for searching
     When I am on the search works page
       And I fill in "Bookmarks" with "2 - 5"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: 2 - 5"
       And I should see "3 Found"
     When I follow "Edit Your Search"
@@ -199,8 +186,7 @@ Feature: Search works by stats
       And I fill in "Bookmarks" with ">1"
       And I select "Bookmarks" from "Sort by"
       And I select "Ascending" from "Sort direction"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: >1 sort by: bookmarks ascending"
       And I should see "4 Found"
       And the 1st result should contain "Bookmarks: 2"
@@ -219,8 +205,7 @@ Feature: Search works by stats
       And I fill in "Bookmarks" with "< 20"
       And I select "Bookmarks" from "Sort by"
       And I select "Descending" from "Sort direction"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: bookmarks count: < 20 sort by: bookmarks descending"
       And I should see "7 Found"
       And the 1st result should contain "Bookmarks: 10"
