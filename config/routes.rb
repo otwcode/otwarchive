@@ -473,6 +473,13 @@ Otwarchive::Application.routes.draw do
       post 'works/import', to: 'works#create'
       post 'works/urls', to: 'works#batch_urls'
     end
+
+    namespace :v2 do
+      resources :bookmarks, only: [:create], defaults: { format: :json }
+      resources :works, only: [:create], defaults: { format: :json }
+      post 'bookmarks/search', to: 'bookmarks#search'
+      post 'works/search', to: 'works#search'
+    end
   end
 
   #### MISC ####
