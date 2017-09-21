@@ -7,12 +7,11 @@ class Indexer
   ##################
 
   def self.elasticsearch
-    $elasticsearch
-    # if $rollout.active?(:elasticsearch_ugprade)
-    #   $new_elasticsearch
-    # else
-    #   $elasticsearch
-    # end
+    if User.current_user.present? && $rollout.active?(:use_new_search, User.current_user)
+      $new_elasticsearch
+    else
+      $elasticsearch
+    end
   end
 
   def self.klass
