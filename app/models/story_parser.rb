@@ -220,7 +220,7 @@ class StoryParser
       if source.nil?
         raise Error, "No external author name or email specified, and unable to generate email based on source location"
       else
-        eval("parse_author_from_#{source.downcase}(location)")
+        send("parse_author_from_#{source.downcase}", location)
       end
     else
       parse_author_common(ext_author_email, ext_author_name)
@@ -230,7 +230,7 @@ class StoryParser
   # download an entire story from an archive type where we know how to parse multi-chaptered works
   # this should only be called from download_and_parse_story
   def download_and_parse_chaptered_story(source, location, options = {})
-    chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
+    chapter_contents = send("download_chaptered_from_#{source.downcase}", location)
     parse_chapters_into_story(location, chapter_contents, options)
   end
 
@@ -397,7 +397,7 @@ class StoryParser
     if source.nil?
       download_with_timeout(location)
     else
-      eval("download_from_#{source.downcase}(location)")
+      send("download_from_#{source.downcase}", location)
     end
   end
 
@@ -515,7 +515,7 @@ class StoryParser
 
     # Extract metadata (unless detect_tags is false)
     if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
-      params = eval("parse_story_from_#{source.downcase}(story, detect_tags)")
+      params = send("parse_story_from_#{source.downcase}", story, detect_tags)
       work_params.merge!(params)
     else
       work_params.merge!(parse_story_from_unknown(story, detect_tags))
