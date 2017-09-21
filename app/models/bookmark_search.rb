@@ -52,8 +52,8 @@ class BookmarkSearch < Search
     end
     query = { bool: { must: terms } }
     response = ElasticsearchSimpleClient.perform_count(Bookmark.index_name, 'bookmark', query)
-    if response.code == 200
-      JSON.parse(response.body)['count']
+    if response.status == 200
+      response.body['count']
     end
   end
 

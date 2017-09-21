@@ -56,8 +56,8 @@ class WorkSearchForm < SearchForm
     end
     query = { query: { bool: { must: terms } } }
     response = ElasticsearchSimpleClient.perform_count(Work.index_name, 'work', query)
-    if response.code == 200
-      JSON.parse(response.body)['count']
+    if response.status == 200
+      response.body['count']
     else
       raise response.inspect
     end

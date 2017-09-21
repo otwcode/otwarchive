@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :use_old_search?
   def use_old_search?
-    # es_version.match "0.90"
+    es_version.match "0.90"
   end
 
   helper_method :use_new_search?
