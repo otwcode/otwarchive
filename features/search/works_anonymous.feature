@@ -27,8 +27,7 @@ Feature: Search anonymous works
       And I should see "Fulfilled Story-thing"
     When I go to the search works page
       And I fill in "Author/Artist" with "Anonymous"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Author/Artist: Anonymous"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
@@ -47,8 +46,7 @@ Feature: Search anonymous works
       And I should see "Fulfilled Story-thing"
     When I go to the search works page
       And I fill in "Author/Artist" with "mod1"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Author/Artist: mod1"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"

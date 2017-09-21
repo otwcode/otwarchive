@@ -309,11 +309,10 @@ end
 When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag1, tag2|
   filter_id1 = Tag.find_by_name(tag1).filter_taggings.first.filter_id
   filter_id2 = Tag.find_by_name(tag2).filter_taggings.first.filter_id if tag2
-  form_field = @es_version.match('0.90') ? 'work_search_query' : 'work_search_form_query'
   if tag2
-    fill_in(form_field, with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
   else
-    fill_in(form_field, with: "-filter_ids: #{filter_id1}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1}")
   end
 end
 
@@ -402,8 +401,7 @@ end
 # when editing a search, we can't look at what is in the input -- we have to
 # look at the contents of the ul that contains both the field and the added tags
 Then /^"([^"]*)" should already be entered in the work search ([^"]*) autocomplete field$/ do |tag, field|
-  form_field = @es_version.match("0.90") ? "work_search" : "work_search_form"
-  within(:xpath, "//input[@id=\"#{form_field}_#{field.singularize}_names_autocomplete\"]/parent::li/parent::ul") do
+  within(:xpath, "//input[@id=\"work_search_#{field.singularize}_names_autocomplete\"]/parent::li/parent::ul") do
     page.should have_content(tag)
   end
 end

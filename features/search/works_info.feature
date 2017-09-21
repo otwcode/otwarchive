@@ -7,8 +7,7 @@ Feature: Search works by work info
     Given I have the Battle set loaded
     When I am on the search works page
       And I select "Deutsch" from "Language"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Language: Deutsch"
       And I should see "1 Found"
       And the 1st result should contain "Language: Deutsch"
@@ -19,8 +18,7 @@ Feature: Search works by work info
     Given I have the Battle set loaded
     When I am on the search works page
       And I fill in "Date" with "> 2 years ago"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: revised at: > 2 years ago"
       And I should see "6 Found"
       And I should see "First work"
@@ -33,8 +31,7 @@ Feature: Search works by work info
     Then I should be on the search works page
       And the field labeled "Date" should contain "> 2 years ago"
     When I fill in "Word Count" with ">15000"
-    # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: word count: >15000 revised at: > 2 years ago"
       And I should see "No results found"
 
@@ -52,8 +49,7 @@ Feature: Search works by work info
       And the field labeled "Any Field" should contain "testuser2"
     When I fill in "Any Field" with ""
       And I fill in "Author/Artist" with "testuser2"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Author/Artist: testuser2"
       And I should see "3 Found"
       And I should see "fourth"
@@ -64,8 +60,7 @@ Feature: Search works by work info
     Given I have the Battle set loaded
     When I am on the search works page
       And I check "Single Chapter"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Single Chapter"
       And I should see "4 Found"
       And I should see "First work"
@@ -80,8 +75,7 @@ Feature: Search works by work info
     When I am on the search works page
       And I fill in "Title" with "work"
       And I select "Title" from "Sort by"
-      # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Title: work sort by: title descending"
       And I should see "3 Found"
       And the 1st result should contain "third work"
@@ -91,8 +85,7 @@ Feature: Search works by work info
     Then the field labeled "Title" should contain "work"
       And "Title" should be selected within "Sort by"
     When I select "Ascending" from "Sort direction"
-    # And I press "Search" within "#new_work_search_form"
-      And I press the Search button
+      And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Title: work sort by: title ascending"
       And I should see "3 Found"
       And the 1st result should contain "First work"
