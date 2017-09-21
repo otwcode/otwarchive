@@ -3,7 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
   self.per_page = ArchiveConfig.ITEMS_PER_PAGE
 
   def self.use_new_search?
-    User.current_user.present? && $rollout.active(:use_new_search, User.current_user)
+    User.current_user.present? && $rollout.active?(:use_new_search, User.current_user)
   end
 
   before_save :update_sanitizer_version
