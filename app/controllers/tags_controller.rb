@@ -67,11 +67,11 @@ class TagsController < ApplicationController
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options[:page] = params[:page] || 1
-      if use_old_search?
-        @tags = TagSearch.search(options)
-      else
+      if use_new_search?
         search = TagSearchForm.new(options)
         @tags = search.search_results
+      else
+        @tags = TagSearch.search(options)
       end
     end
   end

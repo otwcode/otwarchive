@@ -1,8 +1,8 @@
-<%= form_for @search, 
-  url: (@collection ? collection_bookmarks_path(@collection) : bookmarks_path), 
-  html: { 
-    method: :get, 
-    class: 'narrow-hidden filters', 
+<%= form_for @search, as: :bookmark_search,
+  url: (@collection ? collection_bookmarks_path(@collection) : bookmarks_path),
+  html: {
+    method: :get,
+    class: 'narrow-hidden filters',
     id: 'bookmark-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
@@ -32,21 +32,21 @@
             </a>
           </dt>
           <dd id="tag_category_<%= tag_type %>" class="tags toggled">
-            <ul>              
+            <ul>
               <% @facets[tag_type].each do |tag| %>
                 <li>
                   <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
-                    <%= radio_button_tag "bookmark_search[#{tag_type}_ids][]", 
-                      tag.id, 
-                      @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                      :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %> 
-                  <% else %>
-                    <%= check_box_tag "bookmark_search[#{tag_type}_ids][]", 
+                    <%= radio_button_tag "bookmark_search[#{tag_type}_ids][]",
                       tag.id,
-                      @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                      @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                      :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                  <% else %>
+                    <%= check_box_tag "bookmark_search[#{tag_type}_ids][]",
+                      tag.id,
+                      @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
                       :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                   <% end %>
-                    <%= label_tag "bookmark_search_#{tag_type}_ids_#{tag.id}", 
+                    <%= label_tag "bookmark_search_#{tag_type}_ids_#{tag.id}",
                       "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                 </li>
               <% end %>

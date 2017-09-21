@@ -127,10 +127,10 @@ class Bookmark < ApplicationRecord
   end
 
   def self.index_name
-    if use_old_search?
-      tire.index.name
-    else
+    if use_new_search?
       "ao3_#{Rails.env}_bookmarks"
+    else
+      tire.index.name
     end
   end
 

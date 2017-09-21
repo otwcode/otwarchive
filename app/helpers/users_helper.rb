@@ -69,19 +69,19 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud = nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
-    if use_old_search?
-      total = BookmarkSearch.count_for_pseuds(user.pseuds)
-    else
+    if use_new_search?
       total = BookmarkSearchForm.count_for_pseuds(user.pseuds)
+    else
+      total = BookmarkSearch.count_for_pseuds(user.pseuds)
     end
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def print_pseud_bookmarks_link(pseud)
-    if use_old_search?
-      total = BookmarkSearch.count_for_pseuds([pseud])
-    else
+    if use_new_search?
       total = BookmarkSearchForm.count_for_pseuds([pseud])
+    else
+      total = BookmarkSearch.count_for_pseuds([pseud])
     end
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
@@ -90,19 +90,19 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud = nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    if use_old_search?
-      total = WorkSearch.user_count(user)
-    else
+    if use_new_search?
       total = WorkSearchForm.user_count(user)
+    else
+      total = WorkSearch.user_count(user)
     end
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def print_pseud_works_link(pseud)
-    if use_old_search?
-      total = WorkSearch.pseud_count(pseud)
-    else
+    if use_new_search?
       total = WorkSearchForm.pseud_count(pseud)
+    else
+      total = WorkSearch.pseud_count(pseud)
     end
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end

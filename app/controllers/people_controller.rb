@@ -7,11 +7,11 @@ class PeopleController < ApplicationController
     if @collection
       options[:collection_id] = @collection.id
     end
-    if use_old_search?
-      @people = PseudSearch.search(options)
-    else
+    if use_new_search?
       search = PseudSearchForm.new(options)
       @people = search.search_results
+    else
+      @people = PseudSearch.new(options)
     end
     # TODO: move to search index
     @rec_counts = Pseud.rec_counts_for_pseuds(@people)

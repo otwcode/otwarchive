@@ -1,4 +1,4 @@
-<%= form_for @search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
+<%= form_for @search, as: :work_search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
   <fieldset>
     <legend><%= ts('Work Info') %></legend>
     <h3 class="landmark heading"><%= ts('Work Info') %></h3>
@@ -84,10 +84,9 @@
       </dt>
       <dd>
       <ul>
-        <% search_form_name = use_old_search? ? "work_search" : "work_search_form" %>
           <% for tag in Warning.canonical.by_name %>
             <li>
-              <%= check_box_tag "#{search_form_name}[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
+              <%= check_box_tag "work_search[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
               <%= label_tag "warning_#{tag.id}", warning_display_name(tag.name) %>
             </li>
           <% end %>
@@ -100,7 +99,7 @@
         <ul>
           <% for tag in Category.canonical.by_name.sort %>
             <li>
-              <%= check_box_tag "#{search_form_name}[category_ids][]", tag.id, @search.category_ids.present? && @search.category_ids.include?(tag.id.to_s), :id => "category_#{tag.id}" %>
+              <%= check_box_tag "work_search[category_ids][]", tag.id, @search.category_ids.present? && @search.category_ids.include?(tag.id.to_s), :id => "category_#{tag.id}" %>
               <%= label_tag "category_#{tag.id}", tag.name %>
             </li>
           <% end %>

@@ -12,8 +12,8 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def self.use_old_search?
-    es_version.match "0.90"
+  def self.use_new_search?
+    !es_version.match "0.90"
   end
 
   private

@@ -28,7 +28,7 @@ class WorksController < ApplicationController
     # In clone, the frozen state of the object is also copied.
     # In dup, it'll always be thawed.
 
-    clean_params = work_search_form_params&.dup
+    clean_params = work_search_params&.dup
     clean_params[:query] = clean_params[:query].dup unless clean_params[:query].nil?
     clean_params[:sort_column] = clean_params[:sort_column].dup unless clean_params[:sort_column].nil?
     clean_params[:sort_direction] = clean_params[:sort_direction].dup unless clean_params[:sort_direction].nil?
@@ -80,17 +80,17 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    options = params[work_search_param_name].present? ? clean_work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    if use_old_search?
-      @search = WorkSearch.new(options)
-    else
+    if use_new_search?
       @search = WorkSearchForm.new(options)
+    else
+      @search = WorkSearch.new(options)
     end
     @page_subtitle = ts("Search Works")
 
-    if params[work_search_param_name].present? && params[:edit_search].blank?
+    if params[:work_search].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
@@ -102,7 +102,7 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[work_search_param_name].present? ? clean_work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -133,15 +133,15 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        if use_old_search?
-          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        else
+        if use_new_search?
           @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+        else
+          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
         end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
-        if use_caching? && params[work_search_param_name].blank? && params[:fandom_id].blank? &&
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
            (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
@@ -169,7 +169,7 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = params[work_search_param_name].present? ? clean_work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
@@ -180,10 +180,10 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      if use_old_search?
-        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-      else
+      if use_new_search?
         @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      else
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
       end
       @works = @search.search_results
       @facets = @works.facets
@@ -1103,8 +1103,8 @@ class WorksController < ApplicationController
     )
   end
 
-  def work_search_form_params
-    params.require(work_search_param_name).permit(
+  def work_search_params
+    params.require(:work_search).permit(
       :query,
       :title,
       :creators,
@@ -1138,7 +1138,4 @@ class WorksController < ApplicationController
     )
   end
 
-  def work_search_param_name
-    use_old_search? ? :work_search : :work_search_form
-  end
 end
