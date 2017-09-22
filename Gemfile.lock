@@ -249,7 +249,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mimemagic (0.3.2)
-    mini_portile2 (2.2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.2)
     mono_logger (1.1.0)
     multi_json (1.12.1)
@@ -273,8 +273,8 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.18.1.330)
     nio4r (2.1.0)
-    nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
@@ -541,7 +541,7 @@ DEPENDENCIES
   mysql2 (= 0.3.20)
   newrelic-redis
   newrelic_rpm
-  nokogiri (>= 1.7.1)
+  nokogiri (>= 1.8.1)
   nokogumbo (= 1.4.9)
   paperclip (>= 5.1.0)
   permit_yo
