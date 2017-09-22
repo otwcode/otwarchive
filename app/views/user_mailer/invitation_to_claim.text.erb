@@ -9,7 +9,7 @@
 
   <%= t '.text.part4' %>
 
-  <%= t '.part5' %>: <%= claim_url(:invitation_token => @token) %>
+  <%= t '.text.part5', claim_url: claim_url(:invitation_token => @token) %>
 
   <%= t '.part6' %>
   <% @external_author.works.each do |work| %>
