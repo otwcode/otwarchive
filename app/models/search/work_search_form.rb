@@ -1,4 +1,4 @@
-class WorkSearchForm < SearchForm
+class WorkSearchForm
 
   extend ActiveModel::Naming
   include ActiveModel::Conversion

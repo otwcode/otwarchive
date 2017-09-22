@@ -8,7 +8,7 @@ class Query
   end
 
   def search
-    $elasticsearch.search(
+    $new_elasticsearch.search(
       index: index_name,
       type: document_type,
       body: generated_query

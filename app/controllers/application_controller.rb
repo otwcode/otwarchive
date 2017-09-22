@@ -54,25 +54,6 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
-  # TEMPORARY ELASTICSEARCH METHODS
-  def es_version
-    @es_version ||= get_es_version
-  end
-
-  def get_es_version
-    es_response = $elasticsearch.perform_request("GET", "/")
-    if es_response.status == 200
-      es_response.body["version"]["number"]
-    else
-      raise es_response.inspect
-    end
-  end
-
-  helper_method :use_old_search?
-  def use_old_search?
-    es_version.match "0.90"
-  end
-
   helper_method :use_new_search?
   def use_new_search?
     current_user.present? && $rollout.active?(:use_new_search, current_user)
