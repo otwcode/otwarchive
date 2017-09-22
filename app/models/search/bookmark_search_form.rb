@@ -51,7 +51,7 @@ class BookmarkSearchForm
       terms << { term: { private: 'F' } }
     end
     query = { query: { bool: { must: terms } } }
-    response = $new_elasticsearch.get("/#{Bookmark.index_name}/bookmark/_count", body: query)
+    response = $new_elasticsearch.perform_request("get", "/#{Bookmark.index_name}/bookmark/_count", body: query)
     if response.status == 200
       response.body['count']
     else
