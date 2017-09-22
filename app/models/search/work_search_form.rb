@@ -55,7 +55,7 @@ class WorkSearchForm < SearchForm
       terms << { term: { restricted: 'F' } }
     end
     query = { query: { bool: { must: terms } } }
-    response = ElasticsearchSimpleClient.perform_count(Work.index_name, 'work', query)
+    response = $new_elasticsearch.get("/#{Bookmark.index_name}/bookmark/_count", body: query)
     if response.status == 200
       response.body['count']
     else

@@ -489,6 +489,7 @@ Feature: Collection
 
   # someone tries to view it
   When I log out
+    And debug
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
   Then I should not see "Mystery Work"

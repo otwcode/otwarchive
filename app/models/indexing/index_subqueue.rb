@@ -38,7 +38,7 @@ class IndexSubqueue
     unless $rollout.active?(:stop_old_indexing)
       build_batch
       @response = perform_batch_update
-      if @response.status == 200
+      if @response.code == 200
         respond_to_success
       else
         respond_to_failure

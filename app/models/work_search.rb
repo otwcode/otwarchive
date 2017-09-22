@@ -75,8 +75,8 @@ class WorkSearch < Search
     end
     query = { bool: { must: terms } }
     response = ElasticsearchSimpleClient.perform_count(Work.index_name, 'work', query)
-    if response.status == 200
-      response.body['count']
+    if response.code == 200
+      JSON.parse(response.body)['count']
     end
   end
 
