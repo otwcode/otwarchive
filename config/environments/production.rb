@@ -4,6 +4,7 @@ Otwarchive::Application.configure do
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
+  config.eager_load = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -21,19 +22,20 @@ Otwarchive::Application.configure do
   # Disable IP spoofing protection
   config.action_dispatch.ip_spoofing_check = false
 
-  # See everything in the log (default is :info)
+  # See everything in the log (default is now :debug)
   # config.log_level = :debug
+  config.log_level = :info
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
   config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
-                          { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
+                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
-  config.serve_static_assets = false
+  config.serve_static_files = false
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -54,9 +56,9 @@ Otwarchive::Application.configure do
 #  # run after initialization so have access to ArchiveConfig
 #  config.after_initialize do
 #    config.middleware.use ExceptionNotifier,
-#      :email_prefix => ArchiveConfig.ERROR_PREFIX,
-#      :sender_address => ArchiveConfig.RETURN_ADDRESS,
-#      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
+#      email_prefix: ArchiveConfig.ERROR_PREFIX,
+#      sender_address: ArchiveConfig.RETURN_ADDRESS,
+#      exception_recipients: ArchiveConfig.ERROR_ADDRESS
 #  end
 
   # https://github.com/winebarrel/activerecord-mysql-reconnect
@@ -65,6 +67,5 @@ Otwarchive::Application.configure do
   config.active_record.execution_retry_wait = 0.3 # sec
   # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
   config.active_record.retry_mode = :rw
-
 
 end

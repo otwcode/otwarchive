@@ -139,3 +139,17 @@ Feature: Orphan work
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
+
+  Scenario: Orphaning a shared work should not affect chapters created solely by the other creator
+
+    Given I am logged in as "keeper"
+      And I post the work "Half-Orphaned"
+      And I add the co-author "orphaneer" to the work "Half-Orphaned"
+      And I post a chapter for the work "Half-Orphaned"
+    # Verify that the authorship has been set up properly
+    Then "orphaneer" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "orphaneer" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+    When I am logged in as "orphaneer"
+      And I orphan the work "Half-Orphaned"
+    Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"

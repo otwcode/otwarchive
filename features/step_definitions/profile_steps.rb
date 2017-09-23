@@ -6,25 +6,25 @@ end
 
 
 When /^I fill in the details of my profile$/ do
-  fill_in("Title", :with => "Test title thingy")
-  fill_in("Location", :with => "Alpha Centauri")
-  fill_in("About Me", :with => "This is some text about me.")  
+  fill_in("Title", with: "Test title thingy")
+  fill_in("Location", with: "Alpha Centauri")
+  fill_in("About Me", with: "This is some text about me.")  
   click_button("Update")
 end
 
 
 When /^I change the details in my profile$/ do
-  fill_in("Title", :with => "Alternative title thingy")
-  fill_in("Location", :with => "Beta Centauri")
-  fill_in("About Me", :with => "This is some different text about me.") 
+  fill_in("Title", with: "Alternative title thingy")
+  fill_in("Location", with: "Beta Centauri")
+  fill_in("About Me", with: "This is some different text about me.") 
   click_button("Update")
 end
 
 
 When /^I remove details from my profile$/ do
-  fill_in("Title", :with => "")
-  fill_in("Location", :with => "")
-  fill_in("About Me", :with => "")
+  fill_in("Title", with: "")
+  fill_in("Location", with: "")
+  fill_in("About Me", with: "")
   click_button("Update")
 end
 
@@ -64,7 +64,7 @@ end
 
 
 When /^I enter a duplicate email$/ do
-  user = FactoryGirl.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
+  user = FactoryGirl.create(:user, login: "testuser2", password: "password", email: "foo@ao3.org")
   user.activate
   click_link("Change Email")
   fill_in("new_email", with: "foo@ao3.org")
@@ -76,9 +76,9 @@ end
 
 When /^I enter a birthdate that shows I am under age$/ do
   date = 13.years.ago + 1.day
-  select(date.year, :from => "profile_attributes[date_of_birth(1i)]")
-  select(date.strftime("%B"), :from => "profile_attributes[date_of_birth(2i)]")
-  select(date.day, :from => "profile_attributes[date_of_birth(3i)]")
+  select(date.year, from: "profile_attributes[date_of_birth(1i)]")
+  select(date.strftime("%B"), from: "profile_attributes[date_of_birth(2i)]")
+  select(date.day, from: "profile_attributes[date_of_birth(3i)]")
   click_button("Update")
 end
 	
@@ -102,9 +102,9 @@ end
 
 
 When /^I fill in my date of birth$/ do
-  select("1980", :from => "profile_attributes[date_of_birth(1i)]")
-  select("November", :from => "profile_attributes[date_of_birth(2i)]")
-  select("30", :from => "profile_attributes[date_of_birth(3i)]")
+  select("1980", from: "profile_attributes[date_of_birth(1i)]")
+  select("November", from: "profile_attributes[date_of_birth(2i)]")
+  select("30", from: "profile_attributes[date_of_birth(3i)]")
   click_button("Update")
 end
 

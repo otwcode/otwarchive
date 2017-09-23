@@ -30,7 +30,7 @@ class StoryParser
   end
 
   # These attributes need to be moved from the work to the chapter
-  # format: {:work_attribute_name => :chapter_attribute_name} (can be the same)
+  # format: {work_attribute_name: :chapter_attribute_name} (can be the same)
   CHAPTER_ATTRIBUTES_ONLY = {}
 
   # These attributes need to be copied from the work to the chapter
@@ -342,7 +342,7 @@ class StoryParser
       work.chapters.each do |chapter|
         if chapter.content.length > ArchiveConfig.CONTENT_MAX
           # TODO: eventually: insert a new chapter
-          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
         end
 
         chapter.posted = true
@@ -419,7 +419,7 @@ class StoryParser
     def parse_author_common(email, name)
       # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
       name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
-      external_author = ExternalAuthor.find_or_create_by_email(email)
+      external_author = ExternalAuthor.find_or_create_by(email: email)
       unless name.blank?
         external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
                                ExternalAuthorName.new(name: name)
@@ -912,7 +912,7 @@ class StoryParser
         raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
 
-      # clean up any erroneously included string terminator (Issue 785)
+      # clean up any erroneously included string terminator (AO3-2251)
       story.gsub!("\000", "")
 
       story
@@ -942,7 +942,7 @@ class StoryParser
 
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-      storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
+      storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 
@@ -1049,7 +1049,7 @@ class StoryParser
     def get_collection_names(collection_string)
       cnames = ""
       collection_string.split(',').map {|cn| cn.squish}.each do |collection_name|
-        collection = Collection.find_by_name(collection_name) || Collection.find_by_title(collection_name)
+        collection = Collection.find_by(name: collection_name) || Collection.find_by(title: collection_name)
         if collection
           cnames += ", " unless cnames.blank?
           cnames += collection.name

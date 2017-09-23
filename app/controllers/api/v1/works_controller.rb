@@ -28,7 +28,7 @@ class Api::V1::WorksController < Api::V1::BaseController
   # - send_claim_emails: false = don't send emails (for testing), true = send emails
   # - array of works to import
   def create
-    archivist = User.find_by_login(params[:archivist])
+    archivist = User.find_by(login: params[:archivist])
     external_works = params[:items] || params[:works]
     works_responses = []
     @works = []
@@ -42,7 +42,8 @@ class Api::V1::WorksController < Api::V1::BaseController
 
       # Process the works, updating the flags
       external_works.each do |external_work|
-        works_responses << import_work(archivist, external_work.merge(params))
+        # params are whitelisted in the `options` method
+        works_responses << import_work(archivist, external_work.merge(params.permit!))
       end
 
       # Send claim notification emails if required

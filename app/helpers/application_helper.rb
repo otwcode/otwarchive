@@ -2,6 +2,19 @@
 module ApplicationHelper
   include HtmlCleaner
 
+  # TODO: Official recommendation from Rails indicates we should switch to
+  # unobtrusive JavaScript instead of using anything like `link_to_function`
+  def link_to_function(name, *args, &block)
+    html_options = args.extract_options!.symbolize_keys
+
+    function = block_given? ? update_page(&block) : args[0] || ''
+
+    onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
+    href = html_options[:href] || 'javascript:void(0)'
+
+    content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
+  end
+
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
@@ -85,7 +98,7 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = ts("Anonymous").html_safe
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != "public"
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
@@ -95,7 +108,7 @@ module ApplicationHelper
   end
 
   def non_anonymous_byline(creation, url_path = nil)
-    only_path = url_path.nil? ? true : url_path 
+    only_path = url_path.nil? ? true : url_path
     Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
@@ -133,7 +146,11 @@ module ApplicationHelper
   end
 
   def pseud_link(pseud, only_path = true)
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: only_path), rel: "author")
+    if only_path
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
+    else
+      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
+    end
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
@@ -241,11 +258,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = ""
     content_for :tinymce do
-      javascript_include_tag "tinymce/tinymce.min.js"
+      javascript_include_tag "tinymce/tinymce.min.js", skip_pipeline: true
     end
     @content_for_tinymce_init = ""
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor.min.js"
+      javascript_include_tag "mce_editor.min.js", skip_pipeline: true
     end
   end
 
@@ -532,5 +549,17 @@ module ApplicationHelper
       # if not, put the placeholder text in a p tag with the placeholder class
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
+  end
+
+  # change the default link renderer for will_paginate
+  def will_paginate(collection_or_options = nil, options = {})
+    if collection_or_options.is_a? Hash
+      options = collection_or_options
+      collection_or_options = nil
+    end
+    unless options[:renderer]
+      options = options.merge renderer: PaginationListLinkRenderer
+    end
+    super(*[collection_or_options, options].compact)
   end
 end # end of ApplicationHelper

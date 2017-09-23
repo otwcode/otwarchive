@@ -1,6 +1,6 @@
 class AbuseReportsController < ApplicationController
-  skip_before_filter :store_location
-  before_filter :load_abuse_languages
+  skip_before_action :store_location
+  before_action :load_abuse_languages
 
   def new
     @abuse_report = AbuseReport.new
@@ -16,7 +16,7 @@ class AbuseReportsController < ApplicationController
 
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
-    language_name = Language.find_by_id(@abuse_report.language).name
+    language_name = Language.find_by(id: @abuse_report.language).name
     @abuse_report.language = language_name
     if @abuse_report.save
       @abuse_report.email_and_send

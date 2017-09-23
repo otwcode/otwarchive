@@ -1,6 +1,6 @@
 class FeedbacksController < ApplicationController
-  skip_before_filter :store_location
-  before_filter :load_support_languages
+  skip_before_action :store_location
+  before_action :load_support_languages
 
   def new
     @feedback = Feedback.new
@@ -14,7 +14,7 @@ class FeedbacksController < ApplicationController
 
   def create
     @feedback = Feedback.new(feedback_params)
-    language_name = Language.find_by_id(@feedback.language).name
+    language_name = Language.find_by(id: @feedback.language).name
     @feedback.language = language_name
     if @feedback.save
       @feedback.email_and_send
