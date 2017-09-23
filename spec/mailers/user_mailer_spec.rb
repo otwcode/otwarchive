@@ -154,7 +154,54 @@ describe UserMailer do
     end
   end
   
-  describe "invite request" do
+  describe "invitation from a user request" do
+    token = 'abc123'
+
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
+    end
+
+    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("has invited you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("has invited you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
+  
+  describe "invitation" do
     token = 'abc123'
 
     before(:each) do
@@ -180,67 +227,25 @@ describe UserMailer do
     describe 'HTML version' do
       it 'has text contents' do
         expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("been invited")
       end
       
       it 'does not have missing translations' do
         expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
       end
     end
 
     describe 'text version' do
       it 'says the right thing' do
         expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("been invited")
       end
       
       it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
-      end
-    end
-  end
-  
-  describe "invitation" do
-    token = 'abc123'
-
-    before(:each) do
-      @invitation = FactoryGirl.create(:invitation, token: token)
-    end
-
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
-
-    # Test the headers
-    it 'should have a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
-
-    it 'should have the correct subject line' do
-      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
-    end
-
-    # Test both body contents
-    it_behaves_like "multipart email"
-
-    describe 'HTML version' do
-      it 'should have text contents' do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-      end
-      
-      it 'should not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
-      it 'should not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
-      end
-    end
-
-    describe 'text version' do
-      it 'should say the right thing' do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-      end
-      
-      it 'should not have missing translations' do
         expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end

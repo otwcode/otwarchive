@@ -22,7 +22,7 @@ describe WranglingGuidelinesController do
     let(:guideline) { create(:wrangling_guideline) }
 
     it "renders" do
-      get :show, id: guideline.id
+      get :show, params: { id: guideline.id }
       expect(response).to render_template("show")
       expect(assigns(:wrangling_guideline)).to eq(guideline)
     end
@@ -53,11 +53,11 @@ describe WranglingGuidelinesController do
   describe "GET #edit" do
     it "blocks non-admins" do
       fake_logout
-      get :edit
+      get :edit, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      get :edit
+      get :edit, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -67,7 +67,7 @@ describe WranglingGuidelinesController do
       before { fake_login_admin(admin) }
 
       it "renders" do
-        get :edit, id: guideline.id
+        get :edit, params: { id: guideline.id }
         expect(response).to render_template("edit")
         expect(assigns(:wrangling_guideline)).to eq(guideline)
       end
@@ -117,7 +117,7 @@ describe WranglingGuidelinesController do
       it "creates and redirects to new wrangling guideline" do
         title = "Wrangling 101"
         content = "JUST DO IT!"
-        post :create, wrangling_guideline: { title: title, content: content }
+        post :create, params: { wrangling_guideline: { title: title, content: content } }
 
         guideline = WranglingGuideline.find_by_title(title)
         expect(assigns(:wrangling_guideline)).to eq(guideline)
@@ -127,7 +127,7 @@ describe WranglingGuidelinesController do
 
       it "renders new if create fails" do
         # Cannot save a content-free guideline
-        post :create, wrangling_guideline: { title: "Wrangling 101" }
+        post :create, params: { wrangling_guideline: { title: "Wrangling 101" } }
         expect(response).to render_template("new")
       end
     end
@@ -136,11 +136,11 @@ describe WranglingGuidelinesController do
   describe "PUT #update" do
     it "blocks non-admins" do
       fake_logout
-      put :update
+      put :update, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      put :update
+      put :update, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -153,7 +153,7 @@ describe WranglingGuidelinesController do
         title = "Wrangling 101"
         expect(guideline.title).not_to eq(title)
 
-        put :update, id: guideline.id, wrangling_guideline: { title: title }
+        put :update, params: { id: guideline.id, wrangling_guideline: { title: title } }
 
         expect(assigns(:wrangling_guideline)).to eq(guideline)
         expect(assigns(:wrangling_guideline).title).to eq(title)
@@ -161,7 +161,7 @@ describe WranglingGuidelinesController do
       end
 
       it "renders edit if update fails" do
-        put :update, id: guideline.id, wrangling_guideline: { title: nil }
+        put :update, params: { id: guideline.id, wrangling_guideline: { title: nil } }
         expect(response).to render_template("edit")
       end
     end
@@ -187,7 +187,7 @@ describe WranglingGuidelinesController do
 
       it "updates positions and redirects to index" do
         expect(WranglingGuideline.order('position ASC')).to eq([guideline_1, guideline_2, guideline_3])
-        post :update_positions, wrangling_guidelines: [3, 2, 1]
+        post :update_positions, params: { wrangling_guidelines: [3, 2, 1] }
 
         expect(assigns(:wrangling_guidelines)).to eq(WranglingGuideline.order('position ASC'))
         expect(assigns(:wrangling_guidelines)).to eq([guideline_3, guideline_2, guideline_1])
@@ -204,11 +204,11 @@ describe WranglingGuidelinesController do
   describe "DELETE #destroy" do
     it "blocks non-admins" do
       fake_logout
-      delete :destroy
+      delete :destroy, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      delete :destroy
+      delete :destroy, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -218,7 +218,7 @@ describe WranglingGuidelinesController do
       before { fake_login_admin(admin) }
 
       it "deletes and redirects to index" do
-        delete :destroy, id: guideline.id
+        delete :destroy, params: { id: guideline.id }
         expect(WranglingGuideline.find_by_id(guideline.id)).to be_nil
         it_redirects_to(wrangling_guidelines_path)
       end

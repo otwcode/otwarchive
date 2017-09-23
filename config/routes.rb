@@ -11,14 +11,15 @@ Otwarchive::Application.routes.draw do
 
   #### ERRORS ####
 
-  match '/403', to: 'errors#403'
-  match '/404', to: 'errors#404'
-  match '/422', to: 'errors#422'
-  match '/500', to: 'errors#500'
+  get '/403', to: 'errors#403'
+  get '/404', to: 'errors#404'
+  get '/422', to: 'errors#422'
+  get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
-  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', as: 'download'
+  get 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', as: 'download'
 
   #### OPEN DOORS ####
   namespace :opendoors do
@@ -45,9 +46,9 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  match 'signup/:invitation_token' => 'users#new', as: 'signup'
-  match 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
-  match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
+  get 'signup/:invitation_token' => 'users#new', as: 'signup'
+  get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
+  post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
   #### TAGS ####
 
@@ -61,10 +62,8 @@ Otwarchive::Application.routes.draw do
     get :show
   end
   resources :tag_wranglings do
-    member do
-      post :wrangle
-    end
     collection do
+      post :wrangle
       get :discuss
     end
   end
@@ -120,7 +119,7 @@ Otwarchive::Application.routes.draw do
 
   resources :tag_wrangling_requests, only: [:index] do
     collection do
-      put :update_multiple
+      patch :update_multiple
     end
   end
 
@@ -155,13 +154,13 @@ Otwarchive::Application.routes.draw do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
+        post :activate
+        post :send_activation
         get :check_user
       end
       collection do
-        get :notify
         get :bulk_search
         post :bulk_search
-        post :send_notification
         post :update_user
       end
     end
@@ -175,7 +174,7 @@ Otwarchive::Application.routes.draw do
     resources :api
   end
 
-  match '/admin/api/new', to: 'admin/api#create', via: :post
+  post '/admin/api/new', to: 'admin/api#create'
 
   #### USERS ####
 
@@ -202,7 +201,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
-        put :update_multiple
+        patch :update_multiple
       end
       member do
         get :default
@@ -212,7 +211,7 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :collection_items, only: [:index, :update, :destroy] do
       collection do
-        put :update_multiple
+        patch :update_multiple
       end
     end
     resources :collections, only: [:index]
@@ -234,7 +233,7 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :invitations do
-      member do
+      collection do
         post :invite_friend
       end
       collection do
@@ -272,7 +271,7 @@ Otwarchive::Application.routes.draw do
         get :collected
         get :show_multiple
         post :edit_multiple
-        put :update_multiple
+        patch :update_multiple
         post :delete_multiple
       end
     end
@@ -292,7 +291,7 @@ Otwarchive::Application.routes.draw do
       get :navigate
       get :edit_tags
       get :preview_tags
-      put :update_tags
+      patch :update_tags
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
@@ -390,11 +389,12 @@ Otwarchive::Application.routes.draw do
       collection do
         get :add
         get :join
+        patch :update
       end
     end
     resources :items, controller: "collection_items" do
       collection do
-        put :update_multiple
+        patch :update_multiple
       end
     end
     resources :signups, controller: "challenge_signups" do
@@ -418,7 +418,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :claims, controller: "challenge_claims" do
       collection do
-        put :set
+        patch :set
         get :purge
       end
     end
@@ -452,8 +452,8 @@ Otwarchive::Application.routes.draw do
       get :passwd
     end
   end
-  match 'login' => 'user_sessions#new'
-  match 'logout' => 'user_sessions#destroy'
+  get 'login' => 'user_sessions#new'
+  get 'logout' => 'user_sessions#destroy'
 
   #### API ####
 
@@ -461,9 +461,9 @@ Otwarchive::Application.routes.draw do
     namespace :v1 do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
-      match 'bookmarks/import', to: 'bookmarks#create', via: :post
-      match 'works/import', to: 'works#create', via: :post
-      match 'works/urls', to: 'works#batch_urls', via: :post
+      post 'bookmarks/import', to: 'bookmarks#create'
+      post 'works/import', to: 'works#create'
+      post 'works/urls', to: 'works#batch_urls'
     end
   end
 
@@ -541,7 +541,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :abuse_reports, only: [:new, :create] 
+  resources :abuse_reports, only: [:new, :create]
   resources :external_authors do
     resources :external_author_names
   end
@@ -551,27 +551,28 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  match 'search' => 'works#search'
-  match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]
-  match 'support' => 'feedbacks#new', as: 'new_feedback_report', via: [:get]
-  match 'tos' => 'home#tos'
-  match 'tos_faq' => 'home#tos_faq'
-  match 'unicorn_test' => 'home#unicorn_test'
-  match 'dmca' => 'home#dmca'
-  match 'diversity' => 'home#diversity'
-  match 'site_map' => 'home#site_map'
-  match 'site_pages' => 'home#site_pages'
-  match 'first_login_help' => 'home#first_login_help'
-  match 'delete_confirmation' => 'users#delete_confirmation'
-  match 'activate/:id' => 'users#activate', as: 'activate'
-  match 'devmode' => 'devmode#index'
-  match 'donate' => 'home#donate'
-  match 'lost_cookie' => 'home#lost_cookie'
-  match 'about' => 'home#about'
-  match 'menu/browse' => 'menu#browse'
-  match 'menu/fandoms' => 'menu#fandoms'
-  match 'menu/search' => 'menu#search'
-  match 'menu/about' => 'menu#about'
+  get 'search' => 'works#search'
+  post 'support' => 'feedbacks#create', as: 'feedbacks'
+  get 'support' => 'feedbacks#new', as: 'new_feedback_report'
+  get 'tos' => 'home#tos'
+  get 'tos_faq' => 'home#tos_faq'
+  get 'unicorn_test' => 'home#unicorn_test'
+  get 'dmca' => 'home#dmca'
+  get 'diversity' => 'home#diversity'
+  get 'site_map' => 'home#site_map'
+  get 'site_pages' => 'home#site_pages'
+  get 'first_login_help' => 'home#first_login_help'
+  get 'token_dispenser' => 'home#token_dispenser'
+  get 'delete_confirmation' => 'users#delete_confirmation'
+  get 'activate/:id' => 'users#activate', as: 'activate'
+  get 'devmode' => 'devmode#index'
+  get 'donate' => 'home#donate'
+  get 'lost_cookie' => 'home#lost_cookie'
+  get 'about' => 'home#about'
+  get 'menu/browse' => 'menu#browse'
+  get 'menu/fandoms' => 'menu#fandoms'
+  get 'menu/search' => 'menu#search'
+  get 'menu/about' => 'menu#about'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -579,7 +580,43 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  # These are whitelisted routes that are proven to be used throughout the
+  # application, which previously relied on a deprecated catch-all route definition
+  # (`get ':controller(/:action(/:id(.:format)))'`) to work.
+  #
+  # They are generally not RESTful and in some cases are *almost* duplicates of
+  # existing routes defined above, but due to how extensively they are used
+  # throughout the application must exist until forms, controllers, and tests
+  # can be refactored to not rely on their existence.
+  #
+  # Note written on August 1, 2017 during upgrade to Rails 5.1.
+  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
+  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
+
+  get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
+  get '/user_invite_requests/update' => 'user_invite_requests#update'
+
+  patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
+
+  get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
+
+  # TODO: rewrite the autocomplete controller to deal with the fact that
+  # there are fifty different actions going on in there
+  get '/autocomplete/:action' => 'autocomplete#%{action}'
+
+  get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
+  get '/assignments/no_user' => 'challenge_assignments#no_user'
+  get '/assignments/no_assignment' => 'challenge_assignments#no_assignment'
+
+  get '/challenges/no_collection' => 'challenges#no_collection'
+  get '/challenges/no_challenge' => 'challenges#no_challenge'
+
+  get '/works/clean_work_search_params' => 'works#clean_work_search_params'
+  get '/works/collected' => 'works#collected'
+  get '/works/drafts' => 'works#drafts'
+
+  post '/works/edit_multiple/:id' => 'works#edit_multiple'
+  post '/works/confirm_delete_multiple/:id' => 'works#confirm_delete_multiple'
+  post '/works/delete_multiple/:id' => 'works#delete_multiple'
+  put '/works/update_multiple' => 'works#update_multiple'
 end

@@ -14,7 +14,7 @@ module ActionDispatch
           if header.empty?
             [content_mime_type]
           else
-            Mime::Type.parse(header) << Mime::HTML
+            Mime::Type.parse(header) << Mime[:html]
           end
         end
       end

@@ -1,15 +1,14 @@
-class ArchiveFaq < ActiveRecord::Base
+class ArchiveFaq < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  
+
   acts_as_list
   translates :title
 
-  has_many :questions, dependent: :destroy, order: :position
+  has_many :questions, -> { order(:position) }, dependent: :destroy
   accepts_nested_attributes_for :questions, allow_destroy: true
 
   validates :slug, presence: true, uniqueness: true
 
-  attr_protected :content_sanitizer_version
   attr_accessor :notify_translations
 
   belongs_to :language
@@ -23,7 +22,7 @@ class ArchiveFaq < ActiveRecord::Base
 
   # When we modify either a FAQs Category name or one of the Questions,
   # we send an email to Translations.
-  after_save :notify_translations_committee
+  before_save :notify_translations_committee
   def notify_translations_committee
     # Check first to see if we are asked to send an email return if not
     unless !self.email_translations?
@@ -53,8 +52,7 @@ class ArchiveFaq < ActiveRecord::Base
   end
 
   def self.reorder(positions)
-    SortableList.new(self.find(:all, order: 'position ASC')).
-      reorder_list(positions)
+    SortableList.new(self.order('position ASC')).reorder_list(positions)
   end
 
 end

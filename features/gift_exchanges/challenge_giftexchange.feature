@@ -52,10 +52,10 @@ Feature: Gift Exchange Challenge
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT+10:00) Port Moresby" from "gift_exchange_time_zone"
+    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "gift_exchange_time_zone"
       And I submit
     Then I should see "Challenge was successfully updated"
-    Then I should see "PGT"
+    Then I should see "PDT"
 
   Scenario: Add a co-mod
     Given the following activated users exist
@@ -78,7 +78,7 @@ Feature: Gift Exchange Challenge
     # Invalid signup should warn the user
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
-    Then I should see "sign-up is invalid"  
+    Then I should see "sign-up is invalid"
 
   Scenario: I cannot sign up with a pseud that I don't own
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -100,7 +100,7 @@ Feature: Gift Exchange Challenge
     When I am logged in as "myname1"
       And I sign up for "Awesome Gift Exchange" with combination A
       And I follow "Edit Sign-up"
-      And I fill in "Optional Tags:" with "My extra tag, Something else weird" 
+      And I fill in "Optional Tags:" with "My extra tag, Something else weird"
       And I submit
     Then I should see "Something else weird"
     When I follow "Edit Sign-up"
@@ -123,7 +123,7 @@ Feature: Gift Exchange Challenge
       And I go to the collections page
       And I follow "Awesome Gift Exchange"
     Then I should not see "Sign-ups" within "#dashboard"
-  
+
   Scenario: Mod can view signups
    Given the gift exchange "Awesome Gift Exchange" is ready for signups
      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
@@ -179,7 +179,7 @@ Feature: Gift Exchange Challenge
       And I wait 3 seconds
     Then 1 email should be delivered to "mod1"
       And the email should contain "invalid sign-up"
-    When I go to "Awesome Gift Exchange" gift exchange matching page  
+    When I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Generate Potential Matches"
       And I should see "invalid sign-ups"
 
@@ -211,9 +211,9 @@ Feature: Gift Exchange Challenge
     When I assign a recipient to herself
       And I press "Save Assignment Changes"
     Then I should not see "Assignments updated"
-      And I should see "do not match"  
+      And I should see "do not match"
     When I manually destroy the assignments for "Awesome Gift Exchange"
-      And I go to "Awesome Gift Exchange" gift exchange matching page  
+      And I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Regenerate Assignments"
       And I should see "Regenerate All Potential Matches"
       And I should see "try regenerating assignments"
@@ -371,7 +371,7 @@ Feature: Gift Exchange Challenge
       And I should see "Undefault myname4"
       And I should not see "Undefault myname1"
 
-  Scenario: User can default and a mod can undefault on their assignment 
+  Scenario: User can default and a mod can undefault on their assignment
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
@@ -480,7 +480,7 @@ Feature: Gift Exchange Challenge
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" signups page
       And I delete the signup by "myname1"
-    Then I should see "Challenge sign-up was deleted." 
+    Then I should see "Challenge sign-up was deleted."
     When I am logged in as "myname2"
       And I delete my signup for the gift exchange "Awesome Gift Exchange"
     Then I should see "Challenge sign-up was deleted."
@@ -546,7 +546,7 @@ Feature: Gift Exchange Challenge
     When I am on the collections page
     Then I should see "Bad Gift Exchange"
 
-  Scenario: A user can still access their Sign-ups page after a gift exchange 
+  Scenario: A user can still access their Sign-ups page after a gift exchange
   they were signed up for has been deleted
     Given I am logged in as "mod1"
       And I have created the gift exchange "Bad Gift Exchange"
@@ -567,7 +567,7 @@ Feature: Gift Exchange Challenge
     Then I should see "My Assignments"
       And I should not see "Bad Gift Exchange"
 
-  Scenario: A user can still access their Assignments page after a gift exchange 
+  Scenario: A user can still access their Assignments page after a gift exchange
   they had a fulfilled assignment in has been deleted
     Given an assignment has been fulfilled in a gift exchange
       And the challenge "Awesome Gift Exchange" is deleted
@@ -585,4 +585,3 @@ Feature: Gift Exchange Challenge
     Then I should see "Are you sure you want to purge all assignments for Bad Gift Exchange?"
     When I press "Yes, Purge Assignments"
     Then I should see "Assignments purged!"
-

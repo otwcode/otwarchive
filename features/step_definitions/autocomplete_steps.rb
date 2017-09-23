@@ -188,11 +188,12 @@ Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
     user = FactoryGirl.create(:user, login: username)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
 Then /^the coauthor autocomplete field should list matching users$/ do
-  check("Add co-authors?")
+  check("co-authors-options-show")
   step %{I enter "coa" in the "pseud_byline_autocomplete" autocomplete field}
   step %{I should see "coauthor" in the autocomplete}
   step %{I should not see "giftee" in the autocomplete}
@@ -222,7 +223,7 @@ Given /^a gift exchange for testing autocomplete$/ do
 end
 
 When /^I edit the gift exchange for testing autocomplete$/ do
-  visit(edit_collection_gift_exchange_path(Collection.find_by_name("autocomplete")))
+  visit(edit_collection_gift_exchange_path(Collection.find_by(name: "autocomplete")))
 end
 
 Then(/^the pseud autocomplete should contain "([^\"]*)"$/) do |pseud|

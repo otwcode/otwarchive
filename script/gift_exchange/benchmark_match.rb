@@ -9,7 +9,7 @@ if ARGV.size.zero? || ARGV.size > 2
     Runs matching for the specified exchange, recording the amount of time
     it takes. Prints out the number of signups and the number of matches at
     the end. If <TEST_MESSAGE> is specified, it will also log the results of
-    the test to the file log/benchmark.log (for easier recording of results). 
+    the test to the file log/benchmark.log (for easier recording of results).
   "
   exit
 end
@@ -17,7 +17,7 @@ end
 exchange_name = ARGV[0]
 test_name = ARGV[1]
 
-collection = Collection.find_by_name(exchange_name)
+collection = Collection.find_by(name: exchange_name)
 count = collection.signups.count
 
 bench = Benchmark.measure do

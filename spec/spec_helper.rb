@@ -25,10 +25,14 @@ FactoryGirl.definition_file_paths = %w(factories)
 RSpec.configure do |config|
   config.mock_with :rspec
 
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Capybara::DSL
 
   config.before :suite do
@@ -39,6 +43,7 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.start
     User.current_user = nil
+    clean_the_database
   end
 
   config.after :each do
@@ -68,7 +73,7 @@ RSpec.configure do |config|
   # To explicitly tag specs without using automatic inference, set the `:type`
   # metadata manually:
   #
-  #     describe ThingsController, :type => :controller do
+  #     describe ThingsController, type: :controller do
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
@@ -82,8 +87,19 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_AUTOCOMPLETE.flushall
   # Finally elastic search
-  Tire::Model::Search.index_prefix Time.now.to_f.to_s
+  Work.tire.index.delete
+  Work.create_elasticsearch_index
+
+  Bookmark.tire.index.delete
+  Bookmark.create_elasticsearch_index
+
+  Tag.tire.index.delete
+  Tag.create_elasticsearch_index
+
+  Pseud.tire.index.delete
+  Pseud.create_elasticsearch_index
 end
 
 def get_message_part (mail, content_type)
@@ -99,6 +115,6 @@ end
 
 def create_archivist
   user = create(:user)
-  user.roles << Role.new(name: "archivist")
+  user.roles << Role.create(name: "archivist")
   user
 end

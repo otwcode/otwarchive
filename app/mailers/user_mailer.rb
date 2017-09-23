@@ -77,7 +77,7 @@ class UserMailer < BulletproofMailer::Base
       locale = I18n.default_locale
     end
     @external_email = creator.email
-    @claimed_works = Work.where(:id => claimed_work_ids)
+    @claimed_works = Work.where(id: claimed_work_ids)
     I18n.with_locale(locale) do
       mail(
         to: creator.email,
@@ -86,20 +86,20 @@ class UserMailer < BulletproofMailer::Base
     end
     ensure
       I18n.locale = I18n.default_locale
-  end  
-  
+  end
+
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
-    # Here we use find_by_id so that if the subscription is not found 
+    # Here we use find_by_id so that if the subscription is not found
     # then the resque job does not error and we just silently fail.
-    @subscription = Subscription.find_by_id(subscription_id)
+    @subscription = Subscription.find_by(id: subscription_id)
     return if @subscription.nil?
     creation_entries = JSON.parse(entries)
     @creations = []
     # look up all the creations that have generated updates for this subscription
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
-      creation = creation_type.constantize.where(:id => creation_id).first
+      creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
@@ -114,14 +114,14 @@ class UserMailer < BulletproofMailer::Base
 
       @creations << creation
     end
-    
+
     # die if we haven't got any creations to notify about
     # see lib/bulletproof_mailer.rb
     abort_delivery if @creations.empty?
 
     # make sure we only notify once per creation
     @creations.uniq!
-    
+
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"
@@ -165,21 +165,6 @@ class UserMailer < BulletproofMailer::Base
       I18n.locale = I18n.default_locale
   end
 
-  # Sends an admin message to a user
-  def archive_notification(admin_login, user_id, subject, message)
-    @user = User.find(user_id)
-    @message = message
-    @admin_login = admin_login
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
   # Sends an admin message to an array of users
   def mass_archive_notification(admin, users, subject, message)
     users.each do |user|
@@ -195,7 +180,7 @@ class UserMailer < BulletproofMailer::Base
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
-  
+
   def invalid_signup_notification(collection_id, invalid_signup_ids)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
@@ -286,8 +271,8 @@ class UserMailer < BulletproofMailer::Base
   def related_work_notification(user_id, related_work_id)
     @user = User.find(user_id)
     @related_work = RelatedWork.find(related_work_id)
-    @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
-    @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
+    @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
+    @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
@@ -338,8 +323,8 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -358,8 +343,8 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -372,30 +357,13 @@ class UserMailer < BulletproofMailer::Base
 
   # Sends email to authors when a creation is hidden by an Admin
   def admin_hidden_work_notification(creation_id, user_id)
-    @user = User.find_by_id(user_id)
-    @work = Work.find_by_id(creation_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
 
     mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
     )
-  end
-
-  def delete_signup_notification(user, challenge_signup)
-    @user = user
-    @signup = challenge_signup
-    signup_copy = generate_attachment_content_from_signup(@signup)
-    filename = @signup.collection.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => signup_copy}
-    attachments["#{filename}.html"] = {:content => signup_copy}
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   ### OTHER NOTIFICATIONS ###
@@ -442,69 +410,6 @@ class UserMailer < BulletproofMailer::Base
       attachment_string += "<br/>Notes: " + chapter.notes + "<br/>\n" unless chapter.notes.blank?
       attachment_string += "<br/>End Notes: " + chapter.endnotes + "<br/>\n" unless chapter.endnotes.blank?
       attachment_string += "<br/>" + chapter.content + "<br />\n"
-    end
-    return attachment_string
-  end
-
-  def generate_attachment_content_from_signup(signup)
-    attachment_string =  "Collection: " + signup.collection + "<br />\n"
-    signup.requests.each_with_index do |prompt, index|
-      attachment_string += "Request " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
-    end
-    signup.offers.each_with_index do |offer, index|
-      attachment_string += "Offer " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
     end
     return attachment_string
   end

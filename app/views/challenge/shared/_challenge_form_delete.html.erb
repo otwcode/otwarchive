@@ -1,7 +1,7 @@
 <ul class="navigation actions" role="menu">
   <% if @collection.challenge %>
-    <li><%= link_to ts("Delete Challenge"), eval("collection_#{challenge_class_name(@collection)}_path(@collection)"), 
-      :confirm => ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
+    <li><%= link_to ts("Delete Challenge"), eval("collection_#{challenge_class_name(@collection)}_path(@collection)"),
+      data: {confirm: ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)')},
       :method => :delete %></li>
   <% end %>
 </ul>
