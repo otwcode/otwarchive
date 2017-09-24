@@ -95,7 +95,7 @@ class IndexSubqueue
 
   def respond_to_failure
     log.info(@response.inspect)
-    REDIS.rename(name, "#{name}:DEAD")
+    delete # in the new version, ideally do something better
   end
 
   def perform_batch_update

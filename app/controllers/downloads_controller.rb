@@ -61,7 +61,7 @@ protected
     # convert to PDF
     # title needs to be escaped
     title = Shellwords.escape(@work.title)
-    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title #{title} "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
+    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --disable-javascript --title #{title} "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 

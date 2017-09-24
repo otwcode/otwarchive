@@ -6,7 +6,6 @@ en:
       emails_found: 
         one: "one email found"
         other: "%{count} emails found"
-
   errors:
     format: "%{attribute} %{message}"
     messages: &errors_messages
@@ -267,6 +266,48 @@ en:
         look_up_link: "your Assignments page"
         footer: "You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}."
         footer_link: "the challenge profile page"
+
+    invitation_to_claim:
+      subject: "[%{app_name}] Invitation to claim works"
+      greeting: "Hello from the %{app_name}!"
+      
+      part6: "The works uploaded include:"
+      part8: "To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive."
+      part12: "If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply."
+      text:
+        part1: "You're receiving this e-mail because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!"
+        part2: "You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_link}."
+        part3: "If this is a mistake and these are not your works, please don't delete them! Please just contact Open Doors (%{open_doors_link}) and we will sort it out."
+        part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support."
+        part5: "Claim or remove your works here: %{claim_url}"
+        part7: "If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please contact Support at %{support_link}.)"
+        part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
+        part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity."
+        part11: "For other inquiries, please contact AO3 Support at %{support_link}."
+        part13: |-
+          Best,
+          The Open Doors team
+          Organization for Transformative Works
+      html:
+        part1: "You're receiving this e-mail because an archive has recently been imported by %{open_doors_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!"
+        open_doors: "Open Doors"
+        part2: "You can read announcements about recent archive moves at %{news_link}, and find additional information on Open Doors' %{open_doors_faq_link} or %{open_doors_tutorial_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{support_link}."
+        ao3_news: "AO3 News"
+        faq_page: "FAQ page"
+        tutorial_page: "tutorial page"
+        contact_support: "contact AO3 support"
+        part3: "If this is a mistake and these are not your works, please don't delete them! Please just %{open_doors_link} and we will sort it out."
+        contact_open_doors: "contact Open Doors"
+        part4: "Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{support_link}."
+        part5: "Claim or remove your works here."
+        part7: "If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please %{support_link}.)"
+        part9: "If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)"
+        part10: "If you had other works on the imported archive under an e-mail address you can no longer access, please %{open_doors_link} with any information that can help verify your identity."
+        part11: "For other inquiries, please %{support_link}."
+        part13: "Best,"
+        part14: "The Open Doors team"
+        part15: "Organization for Transformative Works"
+
   validators:
     email:
       blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."

@@ -67,10 +67,8 @@ class ExternalWork < ApplicationRecord
   def visible?(user=User.current_user)
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
-  # FIXME - duplicate of above but called in different ways in different places
-  def visible(user=User.current_user)
-    self.hidden_by_admin? ? user.kind_of?(Admin) : true
-  end
+
+  alias_method :visible, :visible?
 
   #######################################################################
   # TAGGING
