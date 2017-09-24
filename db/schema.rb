@@ -969,8 +969,8 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.integer  "user_id"
     t.integer  "work_id"
     t.datetime "created_at"
-    t.datetime "last_viewed"
-    t.integer  "view_count",         :default => 0
+    t.datetime "last_visited"
+    t.integer  "visit_count",         :default => 0
     t.boolean  "toread",             :default => false, :null => false
     t.boolean  "toskip",             :default => false, :null => false
   end

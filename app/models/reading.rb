@@ -18,7 +18,7 @@ class Reading < ActiveRecord::Base
     reading = Reading.find_or_initialize_by_work_id_and_user_id(work.id, user.id)
     reading.major_version_read = work.major_version
     reading.minor_version_read = work.minor_version
-    reading.last_viewed = Time.now
+    reading.last_visited = Time.now
     reading.toread = toread
     reading.save
   end
@@ -41,8 +41,8 @@ class Reading < ActiveRecord::Base
     reading = Reading.find_or_initialize_by_work_id_and_user_id(work_id, user_id)
     reading.major_version_read = major_version
     reading.minor_version_read = minor_version
-    reading.view_count = reading.view_count + 1 unless later
-    reading.last_viewed = time
+    reading.visit_count = reading.visit_count + 1 unless later
+    reading.last_visited = time
     reading.save
     REDIS_GENERAL.srem("Reading:new", reading_json)
     return reading
