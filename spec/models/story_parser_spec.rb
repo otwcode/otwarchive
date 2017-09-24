@@ -9,7 +9,7 @@ describe StoryParser do
       public :get_source_if_known, :check_for_previous_import, :parse_common
     end
   end
-  
+
   after(:all) do
     class StoryParser
       protected :get_source_if_known, :check_for_previous_import, :parse_common
@@ -149,8 +149,8 @@ describe StoryParser do
       urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
-      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
-      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      actual_date = work.revised_at.to_date
+      expected_date = Date.new(2001, 1, 22)
       expect(actual_date).to eq(expected_date)
     end
   end
@@ -211,6 +211,10 @@ describe StoryParser do
       to_return(status: 200,
                 body: body.force_encoding("Windows-1252"),
                 headers: {})
+
+    WebMock.stub_request(:any, /non-sgml-character-number-3/).
+      to_return(status: 200,
+                body: "<body>\0When I get out of here</body>")
   end
 
   describe "Import" do
@@ -230,6 +234,30 @@ describe StoryParser do
           @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
         }.to_not raise_exception
       end
+    end
+
+    it "ignores string terminators (AO3-2251)" do
+      story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
+      expect(story.chapters[0].content).to include("When I get out of here")
+    end
+
+    # temp test
+    # TODO: Write so it reproduces the error without making an external
+    # connection
+    it "saves the work it creates" do
+      options = {
+        post_without_preview: "1",
+        importing_for_others: "1",
+        detect_tags: true
+      }
+
+      archivist = create_archivist
+      User.current_user = archivist
+
+      WebMock.allow_net_connect!
+      work = @sp.download_and_parse_story("http://rebecca2525.livejournal.com/3562.html", options)
+
+      expect { work.save! }.to_not raise_exception
     end
   end
 end

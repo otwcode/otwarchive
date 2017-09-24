@@ -1,29 +1,8 @@
-<!--BACK END: this is accessed via the user dashboard so needs the user dashboard view and so therefore a navigation pathway back-->
+<!--Descriptive page name, messages and instructions-->
 <div class="skins home">
   
-  <div class="primary header module">
-    <h2 class="heading">
-      <%= @skin.title %> <%= ts("skin by %{author}", :author => skin_author_link(@skin)).html_safe %>
-    </h2>
-    <blockquote class="userstuff">
-      <%= @skin.description.blank? ? ts('(No Description Provided)') : raw(sanitize_field(@skin, :description)) %>
-    </blockquote>
-    <dl class="stats">
-      <dt><%= ts('Users:') %></dt><dd><%= @skin.preferences.count %></dd>
-      <dt><%= ts('Role:') %></dt><dd><%= @skin.role %></dd>
-      <dt><%= ts('Media:') %></dt><dd><%= @skin.get_media %></dd>
-      <dt><%= ts('Condition:') %></dt>
-      <dd>
-        <% unless @skin.ie_condition.present? || @skin.unusable? %>normal<% end %>
-        <% if @skin.ie_condition.present? %><abbr title="Internet Explorer"><%= @skin.ie_condition %></abbr><% end %>
-        <% if @skin.unusable? %>parent only<% end %>
-      </dd>
-    </dl>
-    <!--subnav-->
-    <%= render :partial => 'skin_top_navigation' %>
-    <!--/subnav-->
-    <p class="icon"><%= skin_preview_display(@skin) %></p>
-  </div>
+  <%= render 'header' %>
+<!--/descriptions-->
 
   <% if @skin.wizard_settings? %>
     <div class="wizard module">
@@ -110,6 +89,6 @@
     </div>
   <% end %>
 
-  <%= render :partial => 'skin_navigation', :locals => {:skin => @skin} %>
+  <%= render "skin_actions", skin: @skin %>
 
 </div>

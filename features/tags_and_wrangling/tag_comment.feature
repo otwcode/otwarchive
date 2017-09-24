@@ -10,12 +10,14 @@ I'd like to comment on a tag'
         | login     |
         | dizmo     |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
+      And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I view the tag "Stargate Atlantis"
     Then I should see "0 comments"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis" via web
     Then I should see "Shouldn't this be a metatag with Stargate?"
       And the comment's posted date should be nowish
+      And I jump in our Delorean and return to the present
 
   Scenario: Edit a comment on a tag
 
@@ -23,6 +25,7 @@ I'd like to comment on a tag'
         | login     |
         | dizmo     |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
+      And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
     When I follow "Edit"
@@ -31,10 +34,10 @@ I'd like to comment on a tag'
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
       And I press "Update"
     Then I should see "Comment was successfully updated."
-    When "the weird issue with tag comments not updating" is fixed
-      #And I should see "Yep, we should have a Stargate franchise metatag."
-      #And I should not see "Shouldn't this be a metatag with Stargate?"
-      #And I should see Last Edited nowish
+      And I should see "Yep, we should have a Stargate franchise metatag."
+      And I should not see "Shouldn't this be a metatag with Stargate?"
+      And I should see Last Edited nowish
+    When I jump in our Delorean and return to the present
 
   Scenario: Multiple comments on a tag increment correctly
 
@@ -187,7 +190,7 @@ I'd like to comment on a tag'
         | login       | password      | email             |
         | dizmo       | wrangulator   | dizmo@example.org |
         | Enigel      | wrangulator   | enigel@example.org|
-      And a fandom exists with name: "Doctor Who", canonical: true
+      And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
       And a synonym "Dr Who" of the tag "Doctor Who"
     When I am logged in as "dizmo" with password "wrangulator"
@@ -228,7 +231,7 @@ I'd like to comment on a tag'
     Then I should see "Comment created"
     # all it checks is that the pagination links aren't broken
     When I follow "Next" within ".pagination"
-    Then I should see "And now things should not break!" 
+    Then I should see "And now things should not break!"
 
   Scenario: Comments pagination for a tag with slashes and periods in the name
 
@@ -239,3 +242,26 @@ I'd like to comment on a tag'
     # all it checks is that the pagination links aren't broken
     When I follow "Next" within ".pagination"
     Then I should see "And now things should not break!"
+
+  Scenario: Comments on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Top-secret plans." on the tag "World Domination"
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."
+
+  Scenario: Comments replying to a comment on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Anyone have a plan?" on the tag "World Domination"
+      And I reply to a comment with "Top-secret plans."
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."

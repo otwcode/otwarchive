@@ -11,6 +11,9 @@
 SESSION_KEY: '_otwarchive_session'
 SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5'
 
+DEFAULT_SESSION_LENGTH_IN_WEEKS: 2
+REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
@@ -47,7 +50,7 @@ APP_NAME: 'Example Archive'
 APP_HOST: 'archiveofourown.org'
 APP_SHORT_NAME: 'AO3'
 LOGO: 'logo.png'
-ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration, symbolizing the joy of fannish creation in the Archive'
+ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
@@ -133,6 +136,8 @@ IMPORT_MAX_WORKS: 25
 IMPORT_MAX_CHAPTERS: 200
 IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
+# max number of abuse reports to accept for a given user profile URL
+ABUSE_REPORTS_PER_USER_MAX: 5
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
 
@@ -196,7 +201,7 @@ BANNED_CATEGORY_NAME: 'Banned'
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
 
 # SEARCH TIPS
-SEARCH_TIPS: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)', 
+SEARCH_TIPS: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)',
     'hetalia f/f sort:kudos', '"sherlock (tv)" m/m NOT "sherlock holmes/john watson"', 'austen words:10000-50000 sort:title',
     'katekyou "alternate universe" sort:>words', '"uchiha sasuke/uzumaki naruto" angst kudos>10'
 ]
@@ -265,32 +270,32 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
 #
 
-# We use this list for properties which can take shorthand values and also have subproperties or variants 
+# We use this list for properties which can take shorthand values and also have subproperties or variants
 # (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background", 
-"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause", 
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background",
+"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause",
 "scrollbar", "text", "transform", "transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source", 
-  "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
-  "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
-  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
-  "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
-  "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
-  "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
-  "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust", 
-  "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after", 
-  "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode", 
-  "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby", 
-  "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count", 
-  "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right", 
-  "nav-up", "opacity", "orphans", "page", 
-  "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
-  "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
-  "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
-  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select", 
-  "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
+SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source",
+  "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth",
+  "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction",
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile",
+  "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before",
+  "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust",
+  "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float",
+  "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust",
+  "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after",
+  "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode",
+  "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby",
+  "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count",
+  "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right",
+  "nav-up", "opacity", "orphans", "page",
+  "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim",
+  "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang",
+  "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side",
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select",
+  "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress",
   "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
 
 # we allow through any string that is just a-z plus dashes (no spaces), so the only keywords you need to specify would
@@ -369,7 +374,7 @@ DUMP_SEEDS: [
             "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
             "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
             "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
-            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble", 
+            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble",
             "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
             "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
             "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
@@ -377,12 +382,12 @@ DUMP_SEEDS: [
 ]
 
 # seeds who want their email address preserved for testing
-DUMP_EMAIL: [ 
+DUMP_EMAIL: [
           "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
           "admin-kielix", "admin-shalott", "admin-sidra",
-          "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
+          "Amancham", "astolat", "aworldinside", "bingeling", "cesy",
           "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" , 
+          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" ,
           "zz9pzza"
 ]
 
@@ -394,4 +399,3 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
-

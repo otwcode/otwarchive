@@ -30,7 +30,7 @@ module WorkStats
     end
 
     def get_database_stat(statistic, work_id)
-      StatCounter.where(:work_id => work_id).value_of(statistic).first || 0
+      StatCounter.where(work_id: work_id).pluck(statistic).first || 0
     end
 
   end # ClassMethods
@@ -70,7 +70,7 @@ module WorkStats
     counter.update_attributes(
       kudos_count: self.kudos.count,
       comments_count: self.total_comments.not_deleted.count,
-      bookmarks_count: self.bookmarks.where(:private => false).count
+      bookmarks_count: self.bookmarks.where(private: false).count
     )
   end
 

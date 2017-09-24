@@ -6,8 +6,11 @@ CREATE TABLE `abuse_reports` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `ip_address` varchar(255) DEFAULT NULL,
-  `category` varchar(255) DEFAULT NULL,
   `comment_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
+  `summary` varchar(255) DEFAULT NULL,
+  `summary_sanitizer_version` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -98,6 +101,7 @@ CREATE TABLE `admin_settings` (
   `disable_filtering` tinyint(1) NOT NULL DEFAULT '0',
   `request_invite_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `creation_requires_invite` tinyint(1) NOT NULL DEFAULT '0',
+  `downloads_enabled` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_admin_settings_on_last_updated_by` (`last_updated_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -108,9 +112,8 @@ CREATE TABLE `admins` (
   `updated_at` datetime DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `login` varchar(255) DEFAULT NULL,
-  `crypted_password` varchar(255) DEFAULT NULL,
-  `salt` varchar(255) DEFAULT NULL,
-  `persistence_token` varchar(255) NOT NULL,
+  `encrypted_password` varchar(255) DEFAULT NULL,
+  `password_salt` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -678,6 +681,7 @@ CREATE TABLE `languages` (
   `short` varchar(4) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `support_available` tinyint(1) NOT NULL DEFAULT '0',
+  `abuse_support_available` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_languages_on_short` (`short`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -806,30 +810,11 @@ CREATE TABLE `potential_matches` (
   `assigned` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `max_tags_matched` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_potential_matches_on_collection_id` (`collection_id`),
   KEY `index_potential_matches_on_offer_signup_id` (`offer_signup_id`),
   KEY `index_potential_matches_on_request_signup_id` (`request_signup_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `potential_prompt_matches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `potential_match_id` int(11) DEFAULT NULL,
-  `offer_id` int(11) DEFAULT NULL,
-  `request_id` int(11) DEFAULT NULL,
-  `num_fandoms_matched` int(11) DEFAULT NULL,
-  `num_characters_matched` int(11) DEFAULT NULL,
-  `num_relationships_matched` int(11) DEFAULT NULL,
-  `num_freeforms_matched` int(11) DEFAULT NULL,
-  `num_categories_matched` int(11) DEFAULT NULL,
-  `num_ratings_matched` int(11) DEFAULT NULL,
-  `num_warnings_matched` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_potential_prompt_matches_on_potential_match_id` (`potential_match_id`),
-  KEY `index_potential_prompt_matches_on_offer_id` (`offer_id`),
-  KEY `index_potential_prompt_matches_on_request_id` (`request_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `preferences` (
@@ -1019,6 +1004,7 @@ CREATE TABLE `question_translations` (
   `content` text,
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `screencast_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
+  `is_translated` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_question_translations_on_question_id` (`question_id`),
   KEY `index_question_translations_on_locale` (`locale`)
@@ -1999,6 +1985,18 @@ INSERT INTO schema_migrations (version) VALUES ('20151018165632');
 
 INSERT INTO schema_migrations (version) VALUES ('20151129234505');
 
+INSERT INTO schema_migrations (version) VALUES ('20151130183602');
+
 INSERT INTO schema_migrations (version) VALUES ('20160331005706');
 
 INSERT INTO schema_migrations (version) VALUES ('201604030319571');
+
+INSERT INTO schema_migrations (version) VALUES ('20160416163754');
+
+INSERT INTO schema_migrations (version) VALUES ('20160706031054');
+
+INSERT INTO schema_migrations (version) VALUES ('20160724234958');
+
+INSERT INTO schema_migrations (version) VALUES ('20160916172116');
+
+INSERT INTO schema_migrations (version) VALUES ('20160918223157');

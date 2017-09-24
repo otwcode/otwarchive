@@ -76,3 +76,10 @@ Feature: Subscriptions
   Then I should see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"
+
+  Scenario: A user can see a feed for non canonical tags
+   
+  Given I am logged in as "author"
+    And I post the work "Glorious" with fandom "SGA"
+  When I view the "SGA" works feed
+  Then I should see "Glorious"

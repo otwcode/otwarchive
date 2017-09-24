@@ -1,4 +1,4 @@
-class AdminSetting < ActiveRecord::Base
+class AdminSetting < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
@@ -50,6 +50,9 @@ class AdminSetting < ActiveRecord::Base
   end
   def self.guest_downloading_off?
     self.first ? self.first.guest_downloading_off? : false
+  end
+  def self.downloads_enabled?
+    self.first ? self.first.downloads_enabled? : true
   end
   def self.default_skin
     self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.default) : Skin.default

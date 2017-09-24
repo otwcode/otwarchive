@@ -61,8 +61,8 @@
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), url_for(params.merge :flat_view => nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
+    <li><%= span_if_current ts("Fandoms View"), url_for(params.permit!.merge :flat_view => nil), params[:flat_view].blank? %></li>
+    <li><%= span_if_current ts("Flat View"), url_for(params.permit!.merge :flat_view => true) %></li>
   </ul>
 </div>
 

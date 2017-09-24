@@ -6,6 +6,11 @@
   <% end %>
   <% unless comment.unreviewed? %>
     <li><%= link_to ts("Thread"), comment %></li>
+    <% if comment.depth > 0 %>
+      <li>
+        <%= link_to ts("Parent Thread"), comment_path(id: comment.thread) %>
+      </li>
+    <% end %>
   <% end %>
   <% if is_author_of?(comment) && comment.count_all_comments == 0 %>
     <li id="edit_comment_link_<%= comment.id %>">

@@ -2,10 +2,10 @@
 
 <!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= @title %></h2>
-<%= render 'skin_top_navigation' %>
+<%= render 'skin_navigation' %>
 
 <p class="notes">
-  <%= ts('A site skin lets you change the way the Archive looks in your browser, so you can customize your reading experience. You can use work skins to customize the way your own works are shown to others.') %>
+  <%= ts('A site skin lets you change the way the Archive is presented when you are logged in to your account. You can use work skins to customize the way your own works are shown to others.') %>
   <%= link_to_help 'skins-basics' %>
 </p>
 <!--/descriptions-->
@@ -19,40 +19,15 @@
 <% if @skins.empty? %>
   <p>
     <%= work_skin ? ts('No work skins here yet!') : ts('No site skins here yet!') %>
-    <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => work_skin ? 'WorkSkin' : 'Skin') %><% end %>
+    <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(skin_type: work_skin ? 'WorkSkin' : 'Skin') %><% end %>
   </p>
 <% else %>
   <ul class="skin picture index group">
-  <% for skin in @skins %>
-    <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
-      <div class="header module">
-        <h4 class="heading" title="title">
-          <%= link_to skin.title, skin %>
-          <%= ts("by %{byline}", :byline => skin.byline) %>
-        </h4>
-        <% if @user %>
-          <% if skin.official? %> 
-            <p class="status approved">(<%= ts('Approved') %>)</p>
-          <% elsif skin.rejected? %>
-            <p class="status declined">(<%= ts('Declined:')%> <%= link_to_help 'skins-approval' %> <%= skin.admin_note %>)</p>
-          <% elsif skin.public? %> 
-            <p class="status unread">(<%= ts('Not yet reviewed') %>) <%= link_to_help 'skins-approval' %></p>
-          <% end %>
-        <% end %>
-        <div class="icon"><%= skin_preview_display(skin) %></div>
-        <p class="datetime"><%= set_format_for_date(skin.created_at) %></p>
-      </div>
-      
-      <!--summary/descriptions-->
-      <h6 class="landmark heading"><%= ts('Description') %></h6>
-      <blockquote class="userstuff summary">
-        <%=raw skin.description.blank? ? ts('(No Description Provided)') : strip_images(sanitize_field(skin, :description)) %>
-      </blockquote>
-    
-      <%= render :partial => 'skin_navigation', :locals => {:skin => skin} %>
-
-    </li>
-  <% end %>
+    <% for skin in @skins %>
+      <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
+        <%= render 'skin_module', skin: skin %>
+      </li>
+    <% end %>
   </ul>
 <% end %>
 <!--/content-->
