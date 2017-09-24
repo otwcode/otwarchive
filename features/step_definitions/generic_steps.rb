@@ -1,5 +1,5 @@
 When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
-  unselect(item, :from => selector)
+  unselect(item, from: selector)
 end
 
 Then /^debug$/ do
@@ -22,7 +22,7 @@ Then /^show me the main content$/ do
   puts "\n" + find("#main").native.inner_html
 end
 
-Then /^show me the errors$/ do 
+Then /^show me the errors$/ do
   puts "\n" + find("div.error").native.inner_html
 end
 
@@ -61,15 +61,15 @@ Then /^I should see Posted now$/ do
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with `([^\`]*)`$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
-  fill_in(field, :with => value)
+  fill_in(field, with: value)
 end
 
 Then /^I should see a create confirmation message$/ do
@@ -102,16 +102,22 @@ Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
-  page.has_select?(field, :selected => value).should == true
+  page.has_select?(field, selected: value).should == true
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
-Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
   with_scope(selector) do
     page.should have_xpath("//input[@value='#{text}']")
+  end
+end
+
+Then /^I should not see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |_article, text, selector|
+  with_scope(selector) do
+    page.should_not have_xpath("//input[@value='#{text}']")
   end
 end
 
@@ -121,7 +127,7 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, :disabled => true)
+    field_disabled = find_field(label, disabled: true)
     if field_disabled.respond_to? :should
       field_disabled.should be_truthy
     else
@@ -149,6 +155,12 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
     end
 end
 
+Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
+  with_scope(selector) do
+    page.should_not have_xpath("//input[@#{id}='#{id}']")
+  end
+end
+
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
@@ -171,27 +183,24 @@ When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ 
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
+  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], with: value)
 end
 
 
-# These submit steps will only find submit tags inside a <p class="submit">
-# That wrapping paragraph tag will be generated automatically if you use
-# the submit_button or submit_fieldset helpers in application_helper.rb
-# The text on the button will not matter and can be changed without breaking tests. 
-#
-# NOTE: 
 # If you have multiple forms on a page you will need to specify which one you want to submit with, eg,
 # "I submit with the 2nd button", but in those cases you probably want to make sure that
 # the different forms have different button text anyway, and submit them using
 # When I press "Button Text"
 When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index|
-  page.all("p.submit input[type='submit']")[(index.to_i-1)].click
+  page.all("input[type='submit']")[(index.to_i - 1)].click
 end
 
-# This will submit the first submit button in a page by default
+# This will submit the first submit button inside a <p class="submit"> by default
+# That wrapping paragraph tag will be generated automatically if you use
+# the submit_button or submit_fieldset helpers in application_helper.rb
+# The text on the button will not matter and can be changed without breaking tests.
 When /^I submit$/ do
-  step %{I submit with the 1st button}
+  page.all("p.submit input[type='submit']")[0].click
 end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them
@@ -210,6 +219,12 @@ end
 Then /^I should see the page title "(.*)"$/ do |text|
   within('head title') do
     page.should have_content(text)
+  end
+end
+
+Then /^I should see the raw html page title "(.*)"$/ do |text|
+  within('head title') do
+    page.body.should =~ /#{Regexp.escape(text)}/m
   end
 end
 

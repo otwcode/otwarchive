@@ -123,3 +123,18 @@ Feature: Edit Multiple Works
   Then I should see "doesn't allow non-Archive users to comment"
   When I view the work "Work with Anonymous Commenting Enabled"
   Then I should not see "doesn't allow non-Archive users to comment"
+
+  Scenario: User can remove coauthors from multiple works at once
+    Given the following activated users exists
+      | login     |
+      | author    |
+      | coauthor  |
+      And I am logged in as "author"
+      And I edit multiple works coauthored as "author" with "coauthor"
+    When I check "coauthor" within "#work_pseuds_to_remove_checkboxes"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "Shared Work 1"
+    Then I should not see "coauthor" within ".byline"
+    When I view the work "Shared Work 2"
+    Then I should not see "coauthor" within ".byline"

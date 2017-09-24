@@ -45,7 +45,13 @@ describe WorksOwner do
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
 
-      xit "should change after a work is deleted" do
+      it "should change after a work is deleted" do
+        if @owner.class.name == "Collection"
+          Delorean.time_travel_to "10 minutes ago"
+          @work.add_to_collection(@owner)
+          @original_cache_key = @owner.works_index_cache_key
+          Delorean.back_to_the_present
+        end
         @work.destroy
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
@@ -133,6 +139,7 @@ describe WorksOwner do
       describe "with a child" do
         before do
           Delorean.time_travel_to "10 minutes ago"
+          @owner = FactoryGirl.create(:collection)
           # Stub out User.current_user to get past the collection needing to be owned by same person as parent
           allow(User).to receive(:current_user).and_return(@owner.owners.first.user)
           @child = FactoryGirl.create(:collection, parent_name: @owner.name)
@@ -217,6 +224,4 @@ describe WorksOwner do
     end
 
   end
-
-
 end

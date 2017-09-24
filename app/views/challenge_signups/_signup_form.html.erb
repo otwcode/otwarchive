@@ -21,7 +21,6 @@
   </noscript>
 <% end %>
 
-
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
   <p class="notes"><%= ts("Challenge maintainers may have access to the email address associated with your AO3 account for the purpose of communicating with you about the challenge.") %></p>
   <p class="required notice"><%= ts("* Required information") %></p>

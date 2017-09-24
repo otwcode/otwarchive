@@ -14,7 +14,13 @@ user home, collections and challenges home, tag home, admin comms home
 }
 
 .home .header .userstuff, .home .header dl.stats, .home .header .type {
+  clear: right;
   margin-left: 120px;
+}
+
+.home .header ul.actions {
+  margin-bottom: 0.643em;
+  padding-top: 0;
 }
 
 .admin .header h3 {

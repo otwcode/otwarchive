@@ -9,10 +9,6 @@ This shows the archive when logged in as admin, and overrides with admin styles,
   background: #066;
 }
 
-#footer .beta {
-  display: none;
-}
-
 #header .admin {
   background: #066;
   border-top: 1px solid #fff;
@@ -45,6 +41,11 @@ div.admin + h3.landmark {
 
 .admin .abuse.comment .userstuff {
   margin: 0.643em;
+}
+
+.comment .ip {
+  margin: 1.929em 0.643em 0.643em;
+  text-align: right;
 }
 
 /* TABLES AND LISTS */

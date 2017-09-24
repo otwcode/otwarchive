@@ -123,7 +123,7 @@ Feature: Import Works from LJ
     Given basic tags
       And I am logged in as "cosomeone"
     When I go to the import page
-      And I fill in "urls" with "http://zooey_glass04.livejournal.com/99054.html"
+      And I fill in "urls" with "http://ao3_testing.livejournal.com/557.html"
     When I press "Import"
       Then I should see "Preview"
 
