@@ -296,12 +296,12 @@ Feature: Tag wrangling
     Then I follow "Reindex Tag"
       And I should see "Tag sent to be reindexed"
 
-  Scenario: A tag wrangler cannot assign a non-canonical fandom to themsleves
+  Scenario: A tag wrangler cannot assign a non-canonical fandom to themselves
 
     Given a noncanonical fandom "Noncanonical Fandom"
       And I am logged in as a tag wrangler
       And I am on the wranglers page
-    When I fill in "tag_fandom_string" with "Noncanonical Fandom"
+    When I fill in "Enter as many fandoms as you like." with "Noncanonical Fandom"
       And I press "Assign"
     Then I should see "Sorry, only canonical fandoms can be assigned to wranglers."
       And "Noncanonical Fandom" should not be assigned to the wrangler "wrangler"
