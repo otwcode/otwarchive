@@ -57,7 +57,7 @@ class WorkSearchForm
     query = { query: { bool: { must: terms } } }
     response = $new_elasticsearch.perform_request(
       "GET",
-      "#{Bookmark.index_name}/bookmark/_count",
+      "#{Work.index_name}/work/_count",
       {},
       query
     )
