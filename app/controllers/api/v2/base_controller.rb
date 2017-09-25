@@ -23,7 +23,7 @@ module Api
         errors = []
         status = ""
 
-        if archivist && archivist.is_archivist?
+        if archivist&.is_archivist?
           if import_items.nil? || import_items.empty?
             status = :empty_request
             errors << "No items to import were provided."

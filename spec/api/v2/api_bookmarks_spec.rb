@@ -162,7 +162,7 @@ describe "API V2 BookmarksController" do
       # Stub the Bookmark.new method to throw an exception
       allow(Bookmark).to receive(:new).and_raise(StandardError)
       under_test = Api::V2::BookmarksController.new
-      bookmark_response = under_test.instance_eval { import_bookmark(user, bookmark, []) }
+      bookmark_response = under_test.instance_eval { create_bookmark(user, bookmark, []) }
       expect(bookmark_response[:messages][0]).to eq "StandardError"
       expect(bookmark_response[:original_id]).to eq "123"
       expect(bookmark_response[:status]).to eq :unprocessable_entity

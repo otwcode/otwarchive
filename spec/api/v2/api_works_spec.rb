@@ -10,6 +10,10 @@ describe "API V2 WorksController - Create works" do
       mock_external
       @user = create_archivist
     end
+    
+    before :each do
+      Rails.cache.clear
+    end
 
     after :all do
       WebMock.reset!
@@ -495,10 +499,11 @@ describe "API WorksController - Find Works" do
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
+      puts parsed_body[:works].inspect
 
-      expect(parsed_body.first[:status]).to eq "ok"
-      expect(parsed_body.first[:work_url]).to eq work_url(@work)
-      expect(parsed_body.first[:created].to_date).to eq @work.created_at.to_date
+      expect(parsed_body[:works].first[:status]).to eq "found"
+      expect(parsed_body[:works].first[:archive_url]).to eq work_url(@work)
+      expect(parsed_body[:works].first[:created].to_date).to eq @work.created_at.to_date
     end
 
     it "should return the original reference if one was provided" do
@@ -507,9 +512,9 @@ describe "API WorksController - Find Works" do
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body.first[:status]).to eq "ok"
-      expect(parsed_body.first[:original_id]).to eq "123"
-      expect(parsed_body.first[:original_url]).to eq "foo"
+      expect(parsed_body[:works].first[:status]).to eq "found"
+      expect(parsed_body[:works].first[:original_id]).to eq "123"
+      expect(parsed_body[:works].first[:original_url]).to eq "foo"
     end
 
     it "should return an error when no URLs are provided" do
@@ -518,7 +523,7 @@ describe "API WorksController - Find Works" do
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body.first[:error]).to eq "Please provide a list of URLs to find."
+      expect(parsed_body[:messages].first).to eq "Please provide a list of URLs to find."
     end
 
     it "should return an error when too many URLs are provided" do
@@ -528,7 +533,7 @@ describe "API WorksController - Find Works" do
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body.first[:error]).to start_with "Please provide no more than"
+      expect(parsed_body[:messages].first).to start_with "Please provide no more than"
     end
 
     it "should return an error for a work that wasn't imported" do
@@ -537,8 +542,8 @@ describe "API WorksController - Find Works" do
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body.first[:status]).to eq("not_found")
-      expect(parsed_body.first).to include(:error)
+      expect(parsed_body[:works].first[:status]).to eq("not_found")
+      expect(parsed_body[:works].first).to include(:messages)
     end
 
     it "should only do an exact match on the original url" do
@@ -547,10 +552,10 @@ describe "API WorksController - Find Works" do
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body.first[:status]).to eq("not_found")
-      expect(parsed_body.first).to include(:error)
-      expect(parsed_body.second[:status]).to eq("not_found")
-      expect(parsed_body.second).to include(:error)
+      expect(parsed_body[:works].first[:status]).to eq("not_found")
+      expect(parsed_body[:works].first).to include(:messages)
+      expect(parsed_body[:works].second[:status]).to eq("not_found")
+      expect(parsed_body[:works].second).to include(:messages)
     end
   end
 end
@@ -561,7 +566,7 @@ describe "API WorksController - Unit Tests" do
   end
 
   it "work_url_from_external should return an error message when the work URL is blank" do
-    work_url_response = @under_test.instance_eval { work_url_from_external("user", "") }
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("user", "") }
     expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
   end
 

@@ -1,6 +1,7 @@
 class Api::V2::BookmarksController < Api::V2::BaseController
   respond_to :json
 
+  # POST - search for bookmarks for this archivist
   def search
     archivist = User.find_by(login: params[:archivist])
     bookmarks = params[:bookmarks]
@@ -10,12 +11,13 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     results = bookmarks.map do |bookmark|
       found_result = {}
       found_result = check_archivist_bookmark(archivist, bookmark[:url], archivist_bookmarks) unless archivist_bookmarks.empty?
+      
       bookmark_response(
-        found_result[:bookmark_status] || :not_found,
-        found_result[:bookmark_url] || "",
-        bookmark[:id],
-        bookmark[:url],
-        found_result[:bookmark_messages] || ["No bookmark found for archivist '#{archivist.login}' and url '#{bookmark[:url]}'"]
+        status: found_result[:bookmark_status] || :not_found,
+        bookmark_url: found_result[:bookmark_url] || "",
+        bookmark_id: bookmark[:id],
+        original_url: bookmark[:url],
+        messages: found_result[:bookmark_messages] || ["No bookmark found for archivist '#{archivist.login}' and url '#{bookmark[:url]}'"]
       )
     end
 
@@ -23,6 +25,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     render_api_response(status, messages, bookmarks: results)
   end
 
+  # POST - create a bookmark for this archivist
   def create
     archivist = User.find_by(login: params[:archivist])
     bookmarks = params[:bookmarks]
@@ -39,7 +42,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       # Process the bookmarks
       archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud.id)
       bookmarks.each do |bookmark|
-        bookmarks_responses << import_bookmark(archivist, bookmark, archivist_bookmarks)
+        bookmarks_responses << create_bookmark(archivist, bookmark, archivist_bookmarks)
       end
 
       # set final response code and message depending on the flags
@@ -51,20 +54,33 @@ class Api::V2::BookmarksController < Api::V2::BaseController
 
   private
 
-  # Set messages based on success and error flags
-  def response_message(messages)
-    messages << if @some_success && @some_errors
-                  "At least one bookmark was not created. Please check the individual bookmark results for further information."
-                elsif !@some_success && @some_errors
-                  "None of the bookmarks were created. Please check the individual bookmark results for further information."
-                else
-                  "All bookmarks were successfully created."
-                end
-    messages
+  # Find bookmarks for this archivist
+  def check_archivist_bookmark(archivist, original_url, archivist_bookmarks)
+    current_bookmark_url = original_url.gsub(%r{^https:\/\/}, "http://")
+    archivist_bookmarks = archivist_bookmarks
+                            .select { |b| b.bookmarkable_type == "ExternalWork" && b.bookmarkable.url == current_bookmark_url }
+                            .map    { |b| [b, b.bookmarkable] }
+
+    if archivist_bookmarks.present?
+      archivist_bookmark, archivist_bookmarkable = archivist_bookmarks.first
+      find_bookmark_response(
+        bookmarkable: archivist_bookmarkable,
+        bookmark_status: :found,
+        bookmark_messages: "There is already a bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
+        bookmark_url: bookmark_url(archivist_bookmark)
+      )
+    else
+      find_bookmark_response(
+        bookmarkable: "",
+        bookmark_status: :not_found,
+        bookmark_messages: "There is no bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
+        bookmark_url: ""
+      )
+    end
   end
 
-  # Returns a hash
-  def import_bookmark(archivist, params, archivist_bookmarks)
+  # Create a bookmark for this archivist using the Bookmark model
+  def create_bookmark(archivist, params, archivist_bookmarks)
     found_result = {}
     bookmark_request = bookmark_request(archivist, params)
     bookmark_status, bookmark_messages = bookmark_errors(bookmark_request)
@@ -115,7 +131,21 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     )
   end
 
-  # Handling for requests that are incomplete
+  # Error handling
+  
+  # Set messages based on success and error flags
+  def response_message(messages)
+    messages << if @some_success && @some_errors
+                  "At least one bookmark was not created. Please check the individual bookmark results for further information."
+                elsif !@some_success && @some_errors
+                  "None of the bookmarks were created. Please check the individual bookmark results for further information."
+                else
+                  "All bookmarks were successfully created."
+                end
+    messages
+  end
+
+  # Handling for incomplete requests
   def bookmark_errors(bookmark_request)
     status = :bad_request
     errors = []
@@ -144,29 +174,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     [status, errors]
   end
 
-  def check_archivist_bookmark(archivist, original_url, archivist_bookmarks)
-    current_bookmark_url = original_url.gsub(%r{^https:\/\/}, "http://")
-    archivist_bookmarks = archivist_bookmarks
-                            .select { |b| b.bookmarkable_type == "ExternalWork" && b.bookmarkable.url == current_bookmark_url }
-                            .map    { |b| [b, b.bookmarkable] }
-
-    if archivist_bookmarks.present?
-      archivist_bookmark, archivist_bookmarkable = archivist_bookmarks.first
-      {
-        bookmarkable: archivist_bookmarkable,
-        bookmark_status: :found,
-        bookmark_messages: "There is already a bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
-        bookmark_url: bookmark_url(archivist_bookmark)
-      }
-    else
-      {
-        bookmarkable: "",
-        bookmark_status: :not_found,
-        bookmark_messages: "There is no bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
-        bookmark_url: ""
-      }
-    end
-  end
+  # Request and response hashes
 
   # Map Json request to Bookmark request for external work
   def bookmark_request(archivist, params)
@@ -190,7 +198,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       rec: params[:recommendation].blank? ? false : params[:recommendation]
     }
   end
-
+  
   def bookmark_response(status, bookmark_url, bookmark_id, original_url, messages)
     messages = [messages] unless messages.respond_to?('each')
     {
@@ -199,6 +207,16 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       original_id: bookmark_id,
       original_url: original_url,
       messages: messages
+    }
+  end
+  
+  def find_bookmark_response(bookmarkable, bookmark_status, bookmark_message, bookmark_url)
+    bookmark_status = :not_found unless bookmark_status.in?[:found, :not_found]
+    {
+      bookmarkable: bookmarkable,
+      bookmark_status: bookmark_status,
+      bookmark_messages: bookmark_message,
+      bookmark_url: bookmark_url
     }
   end
 end

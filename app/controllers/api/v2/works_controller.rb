@@ -1,10 +1,7 @@
 class Api::V2::WorksController < Api::V2::BaseController
   respond_to :json
 
-  # Return the URLs of a batch of individual works. Limits the number of URLs to
-  # IMPORT_MAX_CHAPTERS so it doesn't get tied up in checking URLs for too long.
-  # Params:
-  # +original_urls+:: an array of original URLs to find on the Archive
+  # POST - search for works based on imported url
   def search
     original_urls = params[:original_urls]
     results = []
@@ -17,19 +14,13 @@ class Api::V2::WorksController < Api::V2::BaseController
       messages << "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find."
     else
       status = :ok
-      results = process_batch_url(original_urls)
+      results = find_existing_works(original_urls)
       messages << "Successfully searched all provided urls"
     end
     render_api_response(status, messages, works: results)
   end
 
-  # Imports multiple works with their meta from external URLs
-  # Params:
-  # +params+:: a JSON object containing the following:
-  # - archivist: username of an existing archivist
-  # - post_without_preview: false = import as drafts, true = import and post
-  # - send_claim_emails: false = don't send emails (for testing), true = send emails
-  # - array of works to import
+  # POST - create a work and invite authors to claim
   def create
     archivist = User.find_by(login: params[:archivist])
     external_works = params[:items] || params[:works]
@@ -74,9 +65,77 @@ class Api::V2::WorksController < Api::V2::BaseController
     messages
   end
 
-  # Use the story parser to import works from the chapter URLs,
-  # and set success or error flag depending on the outcome
-  # Returns a hash
+  # Work-level error handling for requests that are incomplete or too large
+  def work_errors(work)
+    status = :bad_request
+    errors = []
+    urls = work[:chapter_urls]
+    if urls.nil? || urls.empty?
+      status = :empty_request
+      errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
+    elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
+      status = :too_many_requests
+      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS} " \
+                "chapters can be imported per work."
+    end
+    status = :ok if errors.empty?
+    [status, errors]
+  end
+  
+  # Search for works imported from the provided URLs
+  def find_existing_works(original_urls)
+    results = []
+    original_urls.each do |original|
+      original_id = ""
+      if original.class == String
+        original_url = original
+      else
+        original_id = original[:id]
+        original_url = original[:url]
+      end
+      work_result = find_work_by_import_url(original_id, original_url)
+      if work_result[:work].nil?
+        results << { status: :not_found,
+                     original_id: original_id,
+                     original_url: original_url,
+                     messages: [work_result[:error]] }
+      else
+        work = work_result[:work]
+        archive_url = work_url(work)
+        message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\""
+        results << { status: :found,
+                     original_id: original_id,
+                     original_url: original_url,
+                     archive_url: archive_url,
+                     created: work.created_at,
+                     messages: [message] }
+      end
+    end
+    results
+  end
+
+  def find_work_by_import_url(original_id, original_url)
+    work = nil
+    error = ""
+    if original_url.blank?
+      error = "Please provide the original URL for the work."
+    else
+      # We know the url will be identical no need for a call to find_by_url
+      work = Work.where(imported_from_url: original_url).first
+      unless work
+        error = "No work has been imported from \"" + original_url + "\"."
+      end
+    end
+    {
+      original_id: original_id,
+      original_url: original_url,
+      work: work,
+      error: error
+    }
+  end
+  
+  
+  # Use the story parser to scrape works from the chapter URLs
   def import_work(archivist, external_work)
     work_status, work_messages = work_errors(external_work)
     work_url = ""
@@ -85,7 +144,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       urls = external_work[:chapter_urls]
       original_url = urls.first
       storyparser = StoryParser.new
-      options = options(archivist, external_work)
+      options = story_parser_options(archivist, external_work)
       begin
         response = storyparser.import_chapters_into_story(urls, options)
         work = response[:work]
@@ -116,24 +175,7 @@ class Api::V2::WorksController < Api::V2::BaseController
     }
   end
 
-  # Work-level error handling for requests that are incomplete or too large
-  def work_errors(work)
-    status = :bad_request
-    errors = []
-    urls = work[:chapter_urls]
-    if urls.nil? || urls.empty?
-      status = :empty_request
-      errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
-    elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      status = :too_many_requests
-      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS} " \
-                "chapters can be imported per work."
-    end
-    status = :ok if errors.empty?
-    [status, errors]
-  end
-
-  # send invitations to external authors for a given set of works
+  # Send invitations to external authors for a given set of works
   def send_external_invites(works, archivist)
     external_authors = works.map(&:external_authors).flatten.uniq
     unless external_authors.empty?
@@ -143,59 +185,10 @@ class Api::V2::WorksController < Api::V2::BaseController
     end
   end
 
-  # Check if existing URL exists
-  def process_batch_url(original_urls)
-    results = []
-    original_urls.each do |original|
-      original_id = ""
-      if original.class == String
-        original_url = original
-      else
-        original_id = original[:id]
-        original_url = original[:url]
-      end
-      work_result = work_url_from_external(original_id, original_url)
-      if work_result[:work].nil?
-        results << { status: :not_found,
-                     original_id: original_id,
-                     original_url: original_url,
-                     messages: [work_result[:error]] }
-      else
-        work = work_result[:work]
-        archive_url = work_url(work)
-        message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\""
-        results << { status: :found,
-                     original_id: original_id,
-                     original_url: original_url,
-                     archive_url: archive_url,
-                     created: work.created_at,
-                     messages: [message] }
-      end
-    end
-    results
-  end
-
-  def work_url_from_external(original_id, original_url)
-    work = nil
-    error = ""
-    if original_url.blank?
-      error = "Please provide the original URL for the work."
-    else
-      work = Work.where(imported_from_url: original_url).first
-      unless work
-        error = "No work has been imported from \"" + original_url + "\"."
-      end
-    end
-    {
-      original_id: original_id,
-      original_url: original_url,
-      work: work,
-      error: error
-    }
-  end
-
+  # Request and response hashes
+  
   # Create options map for StoryParser
-  def options(archivist, work_params)
+  def story_parser_options(archivist, work_params)
     {
       archivist: archivist,
       import_multiple: "chapters",
