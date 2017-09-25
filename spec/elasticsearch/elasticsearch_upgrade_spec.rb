@@ -3,16 +3,14 @@ require 'spec_helper'
 describe 'Elasticsearch' do
 
   before(:each) do
-    deprecate_unless(!old_es?) do
-      anon_collection.collection_preference.update(anonymous: true)
+    anon_collection.collection_preference.update(anonymous: true)
 
-      anon_work.collections << anon_collection
-      anon_work.save
-      work.collections << collection
-      work.save
+    anon_work.collections << anon_collection
+    anon_work.save
+    work.collections << collection
+    work.save
 
-      update_and_refresh_indexes('work')
-    end
+    update_and_refresh_indexes('work')
   end
 
   let!(:anon_collection) do
@@ -33,32 +31,26 @@ describe 'Elasticsearch' do
 
 
   it "should find works that match" do
-    deprecate_unless(!old_es?) do
-      query = {"query" => "Game"}
-      search = WorkSearchForm.new(query)
+    query = {"query" => "Game"}
+    search = WorkSearchForm.new(query)
 
-      expect(search.search_results).to include work
-    end
+    expect(search.search_results).to include work
   end
 
   it "should not find works that don't match" do
-    deprecate_unless(!old_es?) do
-      query = {"query" => "Game"}
-      search = WorkSearchForm.new(query)
+    query = {"query" => "Game"}
+    search = WorkSearchForm.new(query)
 
-      expect(search.search_results).not_to include anon_work
-    end
+    expect(search.search_results).not_to include anon_work
   end
 
   it "should find works that change authors" do
-    deprecate_unless(!old_es?) do
-      work.pseuds << create(:pseud, name: 'a new pseud name yay')
-      update_and_refresh_indexes('work')
+    work.pseuds << create(:pseud, name: 'a new pseud name yay')
+    update_and_refresh_indexes('work')
 
-      search = WorkSearchForm.new({"query" => "yay"})
+    search = WorkSearchForm.new({"query" => "yay"})
 
-      expect(search.search_results).to include work
-    end
+    expect(search.search_results).to include work
   end
 
 end

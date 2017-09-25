@@ -94,55 +94,32 @@ def clean_the_database
   end
 end
 
-def deprecate_unless(condition)
-  return true unless condition
-
-  yield
-end
-
-def old_es?
-  es_version.match("0.90")
-end
-
-def es_version
-  @es_version ||= get_es_version
-end
-
-def get_es_version
-  response = $elasticsearch.perform_request("GET", "/")
-  if response.status == 200
-    response.body["version"]["number"]
-  else
-    raise response.inspect
-  end
-end
-
 def update_and_refresh_indexes(klass_name)
-  if old_es?
-    klass = klass_name.capitalize.constantize
-    Tire.index(klass.index_name).delete
-    klass.create_elasticsearch_index
-    klass.import
-    klass.tire.index.refresh
-  else
-    indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-    indexer_class.create_index unless $elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
-    indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
-    indexer.index_documents if klass_name.capitalize.constantize.any?
+  # OLD ES
+  klass = klass_name.capitalize.constantize
+  Tire.index(klass.index_name).delete
+  klass.create_elasticsearch_index
+  klass.import
+  klass.tire.index.refresh
 
-    $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
-  end
+  # NEW ES
+  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
+  indexer_class.create_index unless $new_elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
+  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
+  indexer.index_documents if klass_name.capitalize.constantize.any?
+
+  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def delete_index(index)
-  if old_es?
-    klass = index.capitalize.constantize
-    Tire.index(klass.index_name).delete
-  else
-    index_name = "ao3_test_#{index}s"
-    if $elasticsearch.indices.exists? index: index_name
-      $elasticsearch.indices.delete index: index_name
-    end
+  # OLD ES
+  klass = index.capitalize.constantize
+  Tire.index(klass.index_name).delete
+
+  # NEW ES
+  index_name = "ao3_test_#{index}s"
+  if $new_elasticsearch.indices.exists? index: index_name
+    $new_elasticsearch.indices.delete index: index_name
   end
 end
 

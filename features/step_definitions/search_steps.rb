@@ -1,6 +1,6 @@
 Given /^the (\w+) indexes are updated$/ do |klass|
   es_update(klass)
-  # tire_update(klass)
+  tire_update(klass)
 end
 
 

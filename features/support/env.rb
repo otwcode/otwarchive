@@ -69,7 +69,7 @@ Before do
 
   ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
     es_update(klass)
-    # tire_update(klass)
+    tire_update(klass)
   end
 end
 
