@@ -29,9 +29,11 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
+      And the work indexes are updated
     Then I should see "Item has been hidden."
       And all emails have been delivered
     When I follow "Make Work Visible"
+      And the work indexes are updated
     Then I should see "Item is no longer hidden."
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
@@ -43,6 +45,7 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Delete Work"
+      And the work indexes are updated
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"

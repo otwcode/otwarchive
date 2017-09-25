@@ -57,24 +57,53 @@ Before '@javascript' do
 end
 
 Before do
-    settings = AdminSetting.new(invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  settings = AdminSetting.new(invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
           invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
           invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
           account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
           days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
-    settings.save(validate: false)
+  settings.save(validate: false)
 
-    language = Language.find_or_create_by(short: 'en', name: 'English')
-    Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
+  language = Language.find_or_create_by(short: 'en', name: 'English')
+  Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
 
-    response = $elasticsearch.perform_request("GET", "/")
-    if response.status == 200
-      version = response.body["version"]
-    else
-      raise response.inspect
+  response = $elasticsearch.perform_request("GET", "/")
+  if response.status == 200
+    version = response.body["version"]
+  else
+    raise response.inspect
+  end
+
+  @es_version = version["number"]
+
+  ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
+    index_name = "ao3_test_#{klass.to_s.downcase}s"
+
+    if $new_elasticsearch.indices.exists? index: index_name
+      $new_elasticsearch.indices.delete index: index_name
     end
 
-    @es_version = version["number"]
+    indexer_class = "#{klass.capitalize}Indexer".constantize
+
+    indexer_class.create_index
+
+    indexer = indexer_class.new(klass.capitalize.constantize.all.pluck(:id))
+    indexer.index_documents rescue nil
+
+    if klass == 'bookmark'
+      bookmark_indexers = {
+        BookmarkedExternalWorkIndexer => ExternalWork,
+        BookmarkedSeriesIndexer => Series,
+        BookmarkedWorkIndexer => Work
+      }
+
+      bookmark_indexers.each do |indexer, bookmarkable|
+        indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
+      end
+    end
+
+    $new_elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
+  end
 end
 
 Before '@disable_caching' do

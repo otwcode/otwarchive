@@ -11,8 +11,8 @@ end
 def es_update(klass)
   index_name = "ao3_test_#{klass.to_s.downcase}s"
 
-  if $elasticsearch.indices.exists? index: index_name
-    $elasticsearch.indices.delete index: index_name
+  if $new_elasticsearch.indices.exists? index: index_name
+    $new_elasticsearch.indices.delete index: index_name
   end
 
   indexer_class = "#{klass.capitalize}Indexer".constantize
@@ -34,11 +34,12 @@ def es_update(klass)
     end
   end
 
-  $elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
+  $new_elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
 end
 
 Given /^the (\w+) indexes are updated$/ do |klass|
-  @es_version.match('0.90') ? tire_update(klass) : es_update(klass)
+  es_update(klass)
+  # @es_version.match('0.90') ? tire_update(klass) : es_update(klass)
 end
 
 
@@ -49,7 +50,7 @@ Given /^all search indexes are updated$/ do
 end
 
 Given /^the (\w+) indexes are reindexed$/ do |model|
-  $elasticsearch.indices.refresh index: "ao3_test_#{model}s"
+  $new_elasticsearch.indices.refresh index: "ao3_test_#{model}s"
 end
 
 Given /^all search indexes are reindexed$/ do
