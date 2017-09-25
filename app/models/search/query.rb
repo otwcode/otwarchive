@@ -11,7 +11,7 @@ class Query
     $new_elasticsearch.search(
       index: index_name,
       type: document_type,
-      body: generated_query
+      body: generated_query.to_json
     )
   end
 
