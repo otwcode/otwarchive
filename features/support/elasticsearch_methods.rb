@@ -19,9 +19,6 @@ def es_update(klass)
 
   indexer_class.create_index
 
-  indexer = indexer_class.new(klass.capitalize.constantize.all.pluck(:id))
-  indexer.index_documents rescue nil
-
   if klass == 'bookmark'
     bookmark_indexers = {
       BookmarkedExternalWorkIndexer => ExternalWork,
@@ -33,6 +30,9 @@ def es_update(klass)
       indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
     end
   end
+
+  indexer = indexer_class.new(klass.capitalize.constantize.all.pluck(:id))
+  indexer.index_documents rescue nil
 
   $new_elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
 end

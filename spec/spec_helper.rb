@@ -105,6 +105,19 @@ def update_and_refresh_indexes(klass_name)
   # NEW ES
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
   indexer_class.create_index unless $new_elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
+
+  if klass_name == 'bookmark'
+    bookmark_indexers = {
+      BookmarkedExternalWorkIndexer => ExternalWork,
+      BookmarkedSeriesIndexer => Series,
+      BookmarkedWorkIndexer => Work
+    }
+
+    bookmark_indexers.each do |indexer, bookmarkable|
+      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
+    end
+  end
+
   indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
   indexer.index_documents if klass_name.capitalize.constantize.any?
 

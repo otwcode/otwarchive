@@ -5,31 +5,11 @@ class BookmarkableIndexer < Indexer
   end
 
   def self.document_type
-    'bookmarkable'
+    'bookmark'
   end
 
   def self.mapping
-    {
-      'bookmarkable' => {
-        properties: {
-          title: {
-            type: 'text',
-            analyzer: 'simple'
-          },
-          creators: {
-            type: 'text',
-            analyzer: 'simple',
-          },
-          tag: {
-            type: 'text',
-            analyzer: 'simple'
-          },
-          work_types: {
-            type: 'keyword',
-          }
-        }
-      }
-    }
+    BookmarkIndexer.mapping
   end
 
   def routing_info(id)

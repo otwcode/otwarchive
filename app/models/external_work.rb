@@ -128,7 +128,11 @@ class ExternalWork < ApplicationRecord
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
-    ).merge(bookmarkable_type: "ExternalWork")
+    ).merge(
+      id: "external_work-#{id}",
+      bookmarkable_type: "ExternalWork",
+      bookmarkable: "bookmarkable"
+    )
   end
 
   def posted
