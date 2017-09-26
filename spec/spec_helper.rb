@@ -96,11 +96,15 @@ end
 
 def update_and_refresh_indexes(klass_name)
   # OLD ES
-  klass = klass_name.capitalize.constantize
-  Tire.index(klass.index_name).delete
-  klass.create_elasticsearch_index
-  klass.import
-  klass.tire.index.refresh
+  begin
+    klass = klass_name.capitalize.constantize
+    Tire.index(klass.index_name).delete
+    klass.create_elasticsearch_index
+    klass.import
+    klass.tire.index.refresh
+  rescue Faraday::ConnectionFailed
+    nil
+  end
 
   # NEW ES
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
@@ -126,8 +130,12 @@ end
 
 def delete_index(index)
   # OLD ES
-  klass = index.capitalize.constantize
-  Tire.index(klass.index_name).delete
+  begin
+    klass = index.capitalize.constantize
+    Tire.index(klass.index_name).delete
+  rescue Faraday::ConnectionFailed
+    nil
+  end
 
   # NEW ES
   index_name = "ao3_test_#{index}s"
