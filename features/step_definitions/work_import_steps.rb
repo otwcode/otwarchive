@@ -49,17 +49,22 @@ stubbed response", headers: {})
     to_return(status: 404, headers: {})
 end
 
-Given /^I set up importing( with a mock website)?$/ do |mock|
+Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock, is_archivist|
   unless mock.blank?
     mock_external
   end
   step %{basic tags}
-  step %{I am logged in as a random user}
+  if is_archivist.blank?
+    step %{I am logged in as a random user}
+  else
+    step %{I have an archivist "archivist"}
+    step %{I am logged in as "archivist"}
+  end
   step %{I go to the import page}
 end
 
-When /^I start importing "(.*)"( with a mock website)?$/ do |url, mock|
-  step %{I set up importing#{mock}}
+When /^I start importing "(.*)"( with a mock website)?( as an archivist)?$/ do |url, mock, is_archivist|
+  step %{I set up importing#{mock}#{is_archivist}}
   step %{I fill in "urls" with "#{url}"}
 end
 

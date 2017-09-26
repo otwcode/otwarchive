@@ -117,7 +117,7 @@ Feature: Import Works from DW
       And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
       And I should see "more to their friendship than he'd thought." within "div.summary"
       And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should see the image "src" text "http://www.rbreu.de/fan/stanwood_title_400.png"
+      And I should see the image "src" text "https://p.dreamwidth.org/1e4f6fb395d2/59613-5572/www.rbreu.de/fan/stanwood_title_400.png"
       And I should see "Follow me to AO3"
       And I should not see "Rare Literature Fanfiction"
       And I should not see "rarelitfic"
