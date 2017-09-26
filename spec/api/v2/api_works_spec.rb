@@ -20,7 +20,7 @@ describe "API V2 WorksController - Create works" do
       @user.destroy
     end
 
-    it "should return 200 OK when all stories are created" do
+    it "returns 200 OK when all stories are created" do
       valid_params = {
         archivist: @user.login,
         works: [
@@ -35,7 +35,7 @@ describe "API V2 WorksController - Create works" do
       assert_equal 200, response.status
     end
 
-    it "should return 200 OK with an error message when no stories are created" do
+    it "returns 200 OK with an error message when no stories are created" do
       valid_params = {
         archivist: @user.login,
         works: [
@@ -50,7 +50,7 @@ describe "API V2 WorksController - Create works" do
       assert_equal 200, response.status
     end
 
-    it "should return 200 OK with an error message when only some stories are created" do
+    it "returns 200 OK with an error message when only some stories are created" do
       valid_params = {
         archivist: @user.login,
         works: [
@@ -68,7 +68,7 @@ describe "API V2 WorksController - Create works" do
       assert_equal 200, response.status
     end
 
-    it "should return the original id" do
+    it "returns the original id" do
       valid_params = {
         archivist: @user.login,
         works: [
@@ -102,7 +102,7 @@ describe "API V2 WorksController - Create works" do
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
     end
 
-    it "should return 400 Bad Request if no works are specified" do
+    it "returns 400 Bad Request if no works are specified" do
       valid_params = {
         archivist: @user.login
       }
@@ -112,7 +112,7 @@ describe "API V2 WorksController - Create works" do
       assert_equal 400, response.status
     end
 
-    it "should return a helpful message if the external work contains no text" do
+    it "returns a helpful message if the external work contains no text" do
       valid_params = {
         archivist: @user.login,
         works: [
@@ -486,7 +486,7 @@ describe "API WorksController - Find Works" do
   end
 
   describe "valid work URL request" do
-    it "should return 200 OK" do
+    it "returns 200 OK" do
       valid_params = { original_urls: %w(bar foo) }
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
@@ -494,7 +494,7 @@ describe "API WorksController - Find Works" do
       assert_equal 200, response.status
     end
 
-    it "should return the work URL for an imported work" do
+    it "returns the work URL for an imported work" do
       valid_params = { original_urls: %w(foo) }
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
@@ -506,7 +506,7 @@ describe "API WorksController - Find Works" do
       expect(parsed_body[:works].first[:created].to_date).to eq @work.created_at.to_date
     end
 
-    it "should return the original reference if one was provided" do
+    it "returns the original reference if one was provided" do
       valid_params = { original_urls: [{ id: "123", url: "foo" }] }
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
@@ -517,7 +517,7 @@ describe "API WorksController - Find Works" do
       expect(parsed_body[:works].first[:original_url]).to eq "foo"
     end
 
-    it "should return an error when no URLs are provided" do
+    it "returns an error when no URLs are provided" do
       valid_params = { original_urls: [] }
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
@@ -526,7 +526,7 @@ describe "API WorksController - Find Works" do
       expect(parsed_body[:messages].first).to eq "Please provide a list of URLs to find."
     end
 
-    it "should return an error when too many URLs are provided" do
+    it "returns an error when too many URLs are provided" do
       loads_of_items = Array.new(210) { |_| "url" }
       valid_params = { original_urls: loads_of_items }
 
@@ -536,7 +536,7 @@ describe "API WorksController - Find Works" do
       expect(parsed_body[:messages].first).to start_with "Please provide no more than"
     end
 
-    it "should return an error for a work that wasn't imported" do
+    it "returns an error for a work that wasn't imported" do
       valid_params = { original_urls: %w(bar) }
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
@@ -565,7 +565,7 @@ describe "API WorksController - Unit Tests" do
     @under_test = Api::V2::WorksController.new
   end
 
-  it "work_url_from_external should return an error message when the work URL is blank" do
+  it "work_url_from_external returns an error message when the work URL is blank" do
     work_url_response = @under_test.instance_eval { find_work_by_import_url("user", "") }
     expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
   end
@@ -586,13 +586,13 @@ describe "API WorksController - Unit Tests" do
   end
 
   describe "work_errors" do
-    it "should return an error if a work doesn't contain chapter urls" do
+    it "returns an error if a work doesn't contain chapter urls" do
       work = { chapter_urls: [] }
       error_message = @under_test.instance_eval { work_errors(work) }
       expect(error_message[1][0]).to start_with "This work doesn't contain chapter_urls."
     end
 
-    it "should return an error if a work has too many chapters" do
+    it "returns an error if a work has too many chapters" do
       loads_of_items = Array.new(210) { |_| "chapter_url" }
       work = { chapter_urls: loads_of_items }
       error_message = @under_test.instance_eval { work_errors(work) }
