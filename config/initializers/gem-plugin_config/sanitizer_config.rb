@@ -106,7 +106,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"
