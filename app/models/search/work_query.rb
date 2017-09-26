@@ -105,27 +105,27 @@ class WorkQuery < Query
   ####################
 
   def posted_filter
-    term_filter(:posted, 'T')
+    term_filter(:posted, 'true')
   end
 
   def hidden_filter
-    term_filter(:hidden_by_admin, 'F')
+    term_filter(:hidden_by_admin, 'false')
   end
 
   def restricted_filter
-    term_filter(:restricted, 'F') unless include_restricted?
+    term_filter(:restricted, 'false') unless include_restricted?
   end
 
   def unrevealed_filter
-    term_filter(:in_unrevealed_collection, 'F') unless include_unrevealed?
+    term_filter(:in_unrevealed_collection, 'false') unless include_unrevealed?
   end
 
   def anon_filter
-    term_filter(:in_anon_collection, 'F') unless include_anon?
+    term_filter(:in_anon_collection, 'false') unless include_anon?
   end
 
   def complete_filter
-    term_filter(:complete, 'T') if %w(true 1).include?(options[:complete].to_s)
+    term_filter(:complete, 'true') if %w(true 1).include?(options[:complete].to_s)
   end
 
   def single_chapter_filter
@@ -254,9 +254,9 @@ class WorkQuery < Query
   def include_crossovers
     return unless options[:crossover].present?
     if %w(1 true T).include? options[:crossover].to_s
-      'T'
+      'true'
     else
-      'F'
+      'false'
     end
   end
 

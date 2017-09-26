@@ -145,19 +145,19 @@ class BookmarkQuery < Query
   ####################
 
   def privacy_filter
-    term_filter(:private, 'F') unless include_private?
+    term_filter(:private, 'false') unless include_private?
   end
 
   def hidden_filter
-    term_filter(:hidden_by_admin, 'F')
+    term_filter(:hidden_by_admin, 'false')
   end
 
   def rec_filter
-    term_filter(:rec, 'T') if %w(1 true).include?(options[:rec].to_s)
+    term_filter(:rec, 'true') if %w(1 true).include?(options[:rec].to_s)
   end
 
   def notes_filter
-    term_filter(:with_notes, 'T') if %w(1 true).include?(options[:with_notes].to_s)
+    term_filter(:with_notes, 'true') if %w(1 true).include?(options[:with_notes].to_s)
   end
 
   def type_filter
@@ -165,19 +165,19 @@ class BookmarkQuery < Query
   end
 
   def posted_filter
-    term_filter(:bookmarkable_posted, 'T')
+    term_filter(:bookmarkable_posted, 'true')
   end
 
   def hidden_parent_filter
-    term_filter(:bookmarkable_hidden_by_admin, 'F')
+    term_filter(:bookmarkable_hidden_by_admin, 'false')
   end
 
   def restricted_filter
-    parent_term_filter(:restricted, 'F') unless include_restricted?
+    parent_term_filter(:restricted, 'false') unless include_restricted?
   end
 
   def complete_filter
-    parent_term_filter(:complete, 'T') if options[:complete].present?
+    parent_term_filter(:complete, 'true') if options[:complete].present?
   end
 
   def language_filter

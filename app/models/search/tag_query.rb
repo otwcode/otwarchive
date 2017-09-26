@@ -29,7 +29,7 @@ class TagQuery < Query
   end
 
   def canonical_filter
-    { term: { canonical: 'T' } } if options[:canonical]
+    { term: { canonical: 'true' } } if options[:canonical]
   end
 
   ################
