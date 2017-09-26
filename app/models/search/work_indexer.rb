@@ -1,48 +1,42 @@
 class WorkIndexer < Indexer
 
   def self.klass
-    'Work'
+    "Work"
   end
 
   def self.mapping
     {
-      'work' => {
+      "work" => {
         properties: {
           title: {
-            type: 'string',
-            analyzer: 'simple',
+            type: "text",
+            analyzer: "simple"
           },
           creators: {
-            type: 'string',
-            index: 'not_analyzed',
-            # copy_to: 'creator'
+            type: "keyword"
           },
           tag: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           authors_to_sort_on: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           title_to_sort_on: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           imported_from_url: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           work_types: {
-            type: 'string',
-            index: 'not_analyzed',
+            type: "keyword"
           },
-          posted: { type: 'boolean' },
-          restricted: { type: 'boolean' },
-          hidden_by_admin: { type: 'boolean' },
-          complete: { type: 'boolean' },
-          in_anon_collection: { type: 'boolean' },
-          in_unrevealed_collection: { type: 'boolean' }
+          posted: { type: "boolean" },
+          restricted: { type: "boolean" },
+          hidden_by_admin: { type: "boolean" },
+          complete: { type: "boolean" },
+          in_anon_collection: { type: "boolean" },
+          in_unrevealed_collection: { type: "boolean" }
         }
       }
     }

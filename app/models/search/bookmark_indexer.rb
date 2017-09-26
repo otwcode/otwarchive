@@ -1,11 +1,11 @@
 class BookmarkIndexer < Indexer
 
   def self.klass
-    'Bookmark'
+    "Bookmark"
   end
 
   # Create the bookmarkable index/mapping first
-  # Skip delete on the subclasses so it doesn't delete the ones we've just
+  # Skip delete on the subclasses so it doesn"t delete the ones we"ve just
   # reindexed
   def self.index_all(options={})
     options[:skip_delete] = true
@@ -20,46 +20,44 @@ class BookmarkIndexer < Indexer
 
   def self.mapping
     {
-      'bookmarkable' => {
+      "bookmarkable" => {
         properties: {
           title: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           creators: {
-            type: 'string',
-            analyzer: 'simple',
+            type: "text",
+            analyzer: "simple"
           },
           tag: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           work_types: {
-            type: 'string',
-            index: 'not_analyzed',
+            type: "keyword"
           }
         }
       },
       "bookmark" => {
         "_parent" => {
-          type: 'bookmarkable'
+          type: "bookmarkable"
         },
         properties: {
           bookmarkable_type: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           bookmarker: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           notes: {
-            type: 'string',
-            analyzer: 'snowball'
+            type: "text",
+            analyzer: "snowball"
           },
           tag: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           }
         }
       }
@@ -78,10 +76,10 @@ class BookmarkIndexer < Indexer
       parent_id = "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
     end
     {
-      '_index' => index_name,
-      '_type' => document_type,
-      '_id' => id,
-      'parent' => parent_id
+      "_index" => index_name,
+      "_type" => document_type,
+      "_id" => id,
+      "parent" => parent_id
     }
   end
 

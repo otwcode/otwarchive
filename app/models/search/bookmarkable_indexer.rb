@@ -13,20 +13,19 @@ class BookmarkableIndexer < Indexer
       'bookmarkable' => {
         properties: {
           title: {
-            type: 'string',
+            type: 'text',
             analyzer: 'simple'
           },
           creators: {
-            type: 'string',
+            type: 'text',
             analyzer: 'simple',
           },
           tag: {
-            type: 'string',
+            type: 'text',
             analyzer: 'simple'
           },
           work_types: {
-            type: 'string',
-            index: 'not_analyzed',
+            type: 'keyword',
           }
         }
       }
