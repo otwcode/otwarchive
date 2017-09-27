@@ -95,16 +95,18 @@ def clean_the_database
   end
 end
 
+def elasticsearch_enabled?(elasticsearch_instance)
+  elasticsearch_instance.cat.health rescue nil
+end
+
 def update_and_refresh_indexes(klass_name)
   # OLD ES
-  begin
+  if elasticsearch_enabled?($elasticsearch)
     klass = klass_name.capitalize.constantize
     Tire.index(klass.index_name).delete
     klass.create_elasticsearch_index
     klass.import
     klass.tire.index.refresh
-  rescue Faraday::ConnectionFailed, Errno::ECONNREFUSED
-    nil
   end
 
   # NEW ES
@@ -133,11 +135,9 @@ end
 
 def delete_index(index)
   # OLD ES
-  begin
+  if elasticsearch_enabled?($elasticsearch)
     klass = index.capitalize.constantize
     Tire.index(klass.index_name).delete
-  rescue Faraday::ConnectionFailed, Errno::ECONNREFUSED
-    nil
   end
 
   # NEW ES
