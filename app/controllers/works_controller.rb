@@ -91,7 +91,7 @@ class WorksController < ApplicationController
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
 
-      @works = @search.search_results
+      @works = @search.search_results.includes(*fields_for_work_index)
       render 'search_results'
     end
   end
@@ -123,7 +123,7 @@ class WorksController < ApplicationController
 
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
+        @works = Work.includes(*fields_for_work_index).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
@@ -136,24 +136,24 @@ class WorksController < ApplicationController
           subtag = @tag.present? && @tag != @owner ? @tag : nil
           user = current_user.present? ? 'logged_in' : 'logged_out'
           @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
-            results = @search.search_results
+            results = @search.search_results.includes(*fields_for_work_index)
             # calling this here to avoid frozen object errors
             results.items
             results.facets
             results
           end
         else
-          @works = @search.search_results
+          @works = @search.search_results.includes(*fields_for_work_index)
         end
 
         @facets = @works.facets
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+        Work.latest.includes(*fields_for_work_index).to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
+      @works = Work.latest.includes(*fields_for_work_index).to_a
     end
   end
 
@@ -170,7 +170,7 @@ class WorksController < ApplicationController
       @works = Work.collected_without_filters(@user, options)
     else
       @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-      @works = @search.search_results
+      @works = @search.search_results.includes(*fields_for_work_index)
       @facets = @works.facets
     end
 
@@ -1063,6 +1063,14 @@ class WorksController < ApplicationController
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
     }
+  end
+
+  def fields_for_work_index
+    [
+      :tags, :external_creatorships, :series, :language,
+      collections: [:collection_items],
+      pseuds: [:user]
+    ]
   end
 
   def work_params
