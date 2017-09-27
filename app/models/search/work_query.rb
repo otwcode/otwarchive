@@ -240,7 +240,7 @@ class WorkQuery < Query
   end
 
   def include_restricted?
-    User.current_user.present?
+    User.current_user.present? || options[:show_restricted]
   end
 
   def include_unrevealed?

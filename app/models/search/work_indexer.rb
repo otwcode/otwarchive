@@ -13,17 +13,17 @@ class WorkIndexer < Indexer
             analyzer: "simple"
           },
           creators: {
-            type: "keyword"
+            type: "text"
           },
           tag: {
             type: "text",
             analyzer: "simple"
           },
           authors_to_sort_on: {
-            type: "keyword"
+            type: "text"
           },
           title_to_sort_on: {
-            type: "keyword"
+            type: "text"
           },
           imported_from_url: {
             type: "keyword"

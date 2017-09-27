@@ -48,10 +48,12 @@ RSpec.configure do |config|
 
   config.after :each do
     DatabaseCleaner.clean
+    delete_test_indices
   end
 
   config.after :suite do
     DatabaseCleaner.clean_with :truncation
+    delete_test_indices
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -89,7 +91,6 @@ def clean_the_database
   REDIS_ROLLOUT.flushall
 
   ['work', 'bookmark', 'pseud', 'tag'].each do |index|
-    delete_index index
     update_and_refresh_indexes index
   end
 end
@@ -102,13 +103,15 @@ def update_and_refresh_indexes(klass_name)
     klass.create_elasticsearch_index
     klass.import
     klass.tire.index.refresh
-  rescue Faraday::ConnectionFailed
+  rescue Faraday::ConnectionFailed, Errno::ECONNREFUSED
     nil
   end
 
   # NEW ES
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
-  indexer_class.create_index unless $new_elasticsearch.indices.exists?(index: "ao3_test_#{klass_name}s")
+
+  indexer_class.delete_index
+  indexer_class.create_index
 
   if klass_name == 'bookmark'
     bookmark_indexers = {
@@ -133,7 +136,7 @@ def delete_index(index)
   begin
     klass = index.capitalize.constantize
     Tire.index(klass.index_name).delete
-  rescue Faraday::ConnectionFailed
+  rescue Faraday::ConnectionFailed, Errno::ECONNREFUSED
     nil
   end
 
@@ -141,6 +144,13 @@ def delete_index(index)
   index_name = "ao3_test_#{index}s"
   if $new_elasticsearch.indices.exists? index: index_name
     $new_elasticsearch.indices.delete index: index_name
+  end
+end
+
+def delete_test_indices
+  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices.each do |index|
+    $new_elasticsearch.indices.delete(index: index)
   end
 end
 

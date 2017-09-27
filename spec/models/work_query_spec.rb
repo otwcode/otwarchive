@@ -17,48 +17,48 @@ describe WorkQuery do
 
   it "should never return drafts" do
     q = WorkQuery.new
-    expect(q.filters).to include({term: { posted: 'T'} })
+    expect(q.filters).to include({term: { posted: 'true'} })
   end
 
   it "should never return hidden works" do
     q = WorkQuery.new
-    expect(q.filters).to include({term: { hidden_by_admin: 'F'} })
+    expect(q.filters).to include({term: { hidden_by_admin: 'false'} })
   end
 
   it "should not return unrevealed works by default" do
     q = WorkQuery.new
-    expect(q.filters).to include({term: { in_unrevealed_collection: 'F'} })
+    expect(q.filters).to include({term: { in_unrevealed_collection: 'false'} })
   end
 
   it "should return unrevealed works when filtering by a collection" do
     q = WorkQuery.new(works_parent: Collection.new)
-    expect(q.filters).not_to include({term: { in_unrevealed_collection: 'F'} })
+    expect(q.filters).not_to include({term: { in_unrevealed_collection: 'false'} })
   end
 
   it "should not return restricted works by default" do
     q = WorkQuery.new
-    expect(q.filters).to include({term: { restricted: 'F'} })
+    expect(q.filters).to include({term: { restricted: 'false'} })
   end
 
   it "should only return restricted works when a user is logged in" do
     User.current_user = User.new
     q = WorkQuery.new
-    expect(q.filters).not_to include({term: { restricted: 'F'} })
+    expect(q.filters).not_to include({term: { restricted: 'false'} })
   end
 
   it "should not return anonymous works when filtering by a pseud" do
     q = WorkQuery.new(works_parent: Pseud.new)
-    expect(q.filters).to include({term: { in_anon_collection: 'F'} })
+    expect(q.filters).to include({term: { in_anon_collection: 'false'} })
   end
 
   it "should not return anonymous works when filtering by a user" do
     q = WorkQuery.new(works_parent: User.new)
-    expect(q.filters).to include({term: { in_anon_collection: 'F'} })
+    expect(q.filters).to include({term: { in_anon_collection: 'false'} })
   end
 
   it "should allow you to filter for complete works" do
     q = WorkQuery.new(complete: true)
-    expect(q.filters).to include({term: { complete: 'T'} })
+    expect(q.filters).to include({term: { complete: 'true'} })
   end
 
   it "should allow you to filter for works by tag" do

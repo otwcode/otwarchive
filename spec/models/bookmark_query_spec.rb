@@ -10,7 +10,7 @@ describe BookmarkQuery do
 
   it "should not return private bookmarks by default" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({term: { private: 'F'} })
+    expect(q.filters).to include({term: { private: 'false'} })
   end
 
   it "should not return private bookmarks by default when a user is logged in" do
@@ -18,7 +18,7 @@ describe BookmarkQuery do
     user.id = 5
     User.current_user = user
     q = BookmarkQuery.new
-    expect(q.filters).to include({term: { private: 'F'} })
+    expect(q.filters).to include({term: { private: 'false'} })
   end
 
   it "should return private bookmarks when a user is logged in and looking at their own page" do
@@ -26,44 +26,44 @@ describe BookmarkQuery do
     user.id = 5
     User.current_user = user
     q = BookmarkQuery.new(parent: user)
-    expect(q.filters).not_to include({term: { private: 'F'} })
+    expect(q.filters).not_to include({term: { private: 'false'} })
   end
 
   it "should never return hidden bookmarks" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({term: { hidden_by_admin: 'F'} })
+    expect(q.filters).to include({term: { hidden_by_admin: 'false'} })
   end
 
   it "should not return bookmarks of hidden objects" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({term: { bookmarkable_hidden_by_admin: 'F' }})
+    expect(q.filters).to include({term: { bookmarkable_hidden_by_admin: 'false' }})
   end
 
   it "should not return restricted bookmarked works by default" do
     User.current_user = nil
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'F'}}}})
+    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'false'}}}})
   end
 
   it "should only return restricted bookmarked works when a user is logged in" do
     User.current_user = User.new
     q = BookmarkQuery.new
-    expect(q.filters).not_to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'F'}}}})
+    expect(q.filters).not_to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'false'}}}})
   end
 
   it "should allow you to filter for recs" do
     q = BookmarkQuery.new(rec: true)
-    expect(q.filters).to include({term: { rec: 'T'} })
+    expect(q.filters).to include({term: { rec: 'true'} })
   end
 
   it "should allow you to filter for bookmarks with notes" do
     q = BookmarkQuery.new(with_notes: true)
-    expect(q.filters).to include({term: { with_notes: 'T'} })
+    expect(q.filters).to include({term: { with_notes: 'true'} })
   end
 
   it "should allow you to filter for complete works" do
     q = BookmarkQuery.new(complete: true)
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {complete: 'T'}}}})
+    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {complete: 'true'}}}})
   end
 
   it "should allow you to filter for bookmarks by pseud" do
