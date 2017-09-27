@@ -1067,8 +1067,7 @@ class WorksController < ApplicationController
 
   def fields_for_work_index
     [
-      :tags, :external_creatorships, :series, :language,
-      collections: [:collection_items],
+      :tags, :external_creatorships, :series, :language, :approved_collections,
       pseuds: [:user]
     ]
   end
