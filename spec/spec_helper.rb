@@ -99,6 +99,18 @@ def elasticsearch_enabled?(elasticsearch_instance)
   elasticsearch_instance.cat.health rescue nil
 end
 
+def deprecate_unless(condition)
+  return true unless condition
+
+  yield
+end
+
+def deprecate_old_elasticsearch_test
+  deprecate_unless(elasticsearch_enabled?($elasticsearch)) do
+    yield
+  end
+end
+
 def update_and_refresh_indexes(klass_name)
   # OLD ES
   if elasticsearch_enabled?($elasticsearch)

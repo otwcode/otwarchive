@@ -16,9 +16,18 @@ module Searchable
 
   def enqueue_to_index
     if Rails.env.test?
-      update_index and return
+      reindex_document and return
     end
     IndexQueue.enqueue(self, :main)
   end
 
+  def reindex_document
+    update_index rescue nil
+    $new_elasticsearch.index(
+      index: self.class.index_name,
+      type: self.class.document_type,
+      id: self.id,
+      body: self.document_json
+    )
+  end
 end

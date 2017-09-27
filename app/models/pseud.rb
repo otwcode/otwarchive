@@ -125,6 +125,14 @@ class Pseud < ApplicationRecord
     includes(:user)
   }
 
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_pseuds"
+    else
+      tire.index.name
+    end
+  end
+
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
   end
@@ -460,6 +468,10 @@ class Pseud < ApplicationRecord
   self.include_root_in_json = false
   def to_indexed_json
     to_json(methods: [:user_login, :collection_ids])
+  end
+
+  def document_json
+    PseudIndexer.new({}).document(self)
   end
 
   def self.search(options={})

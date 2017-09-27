@@ -24,6 +24,18 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
+  end
+
+  def document_json
+    TagIndexer.new({}).document(self)
+  end
+
   def self.write_redis_to_database
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
       Tag.transaction do
@@ -179,7 +191,7 @@ class Tag < ApplicationRecord
   before_update :remove_index_for_type_change, if: :type_changed?
   def remove_index_for_type_change
     @destroyed = true
-    tire.update_index
+    reindex_document
   end
 
   before_validation :check_synonym

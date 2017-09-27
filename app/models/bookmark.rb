@@ -213,6 +213,10 @@ class Bookmark < ApplicationRecord
     indexes :bookmarkable_date,   type: 'date'
   end
 
+  def document_json
+    BookmarkIndexer.new({}).document(self)
+  end
+
   self.include_root_in_json = false
   def to_indexed_json
     to_json(methods:

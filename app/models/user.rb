@@ -527,7 +527,7 @@
   def reindex_user_bookmarks
     # Reindex a user's bookmarks.
     bookmarks.each do |bookmark|
-      bookmark.update_index
+      bookmark.reindex_document
     end
     update_works_index_timestamp!
   end

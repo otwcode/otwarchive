@@ -1,7 +1,7 @@
 class Warning < Tag
 
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
-  index_name Tag.index_name
+  # index_name Tag.index_name
 
   def self.warning_tags
     Set[ArchiveConfig.WARNING_DEFAULT_TAG_NAME,

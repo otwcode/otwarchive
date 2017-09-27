@@ -1,7 +1,7 @@
 class Rating < Tag
 
   NAME = ArchiveConfig.RATING_CATEGORY_NAME
-  index_name Tag.index_name
+  # index_name Tag.index_name
 
   # Gives us the default ratings as Not Rated + low to high
   def self.defaults_by_severity

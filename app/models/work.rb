@@ -1423,6 +1423,10 @@ class Work < ApplicationRecord
       ])
   end
 
+  def document_json
+    WorkIndexer.new({}).document(self)
+  end
+
   def bookmarkable_json
     as_json(
       root: false,
