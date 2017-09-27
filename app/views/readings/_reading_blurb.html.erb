@@ -12,7 +12,7 @@
 
       <% if reading.work.nil? %>
 
-        <%= ts('(Deleted work, last visited %{date})', :date => set_format_for_date(reading.last_viewed)) %>
+        <%= ts('(Deleted work, last visited %{date})', date: set_format_for_date(reading.last_viewed)) %>
 
       <% else %>
 
