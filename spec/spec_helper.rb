@@ -96,7 +96,7 @@ def clean_the_database
 end
 
 def elasticsearch_enabled?(elasticsearch_instance)
-  elasticsearch_instance.cat.health rescue nil
+  elasticsearch_instance.cluster.health rescue nil
 end
 
 def deprecate_unless(condition)
