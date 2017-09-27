@@ -218,7 +218,7 @@ class StoryParser
     if location.present? && ext_author_name.blank? && ext_author_email.blank?
       source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
       if source.nil?
-        raise Error, "No external author name or email specified, and unable to generate email based on source location"
+        raise Error, "No external author name or email specified"
       else
         send("parse_author_from_#{source.downcase}", location)
       end
