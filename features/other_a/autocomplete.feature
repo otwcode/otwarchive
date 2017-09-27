@@ -128,3 +128,15 @@ Feature: Display autocomplete for tags
 
     When I enter "ø" in the "Fandoms" autocomplete field
     Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
+
+  @javascript
+  Scenario: Characters with a non-ASCII uppercase letter will appear in fandom-specific autocompletes.
+
+    Given basic tags
+      And I am logged in
+      And a canonical character "Éowyn" in fandom "Lord of the Rings"
+      And I go to the new work page
+
+    When I choose "Lord of the Rings" from the "Fandoms" autocomplete
+      And I enter "É" in the "Characters" autocomplete field
+    Then I should see "Éowyn" in the autocomplete
