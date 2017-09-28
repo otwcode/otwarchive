@@ -3,7 +3,7 @@
 
   <% unless reading.work.nil? %>
 
-    <%= render 'works/work_module', :work => reading.work %>
+    <%= render 'works/work_module', work: reading.work %>
 
   <% end %>
 
@@ -29,7 +29,7 @@
         <% if reading.view_count == 1 %>
           <%= ts('Visited once') %>
         <% else %>
-          <%= ts('Visited %{count} times', :count => reading.view_count) %>
+          <%= ts('Visited %{count} times', count: reading.view_count) %>
         <% end %>
 
         <% if reading.toread? %>
