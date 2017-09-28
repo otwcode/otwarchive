@@ -6,12 +6,6 @@ class DownloadsController < ApplicationController
   before_action :guest_downloading_off, only: :show
   before_action :check_visibility, only: :show
 
-  # once a format has been created, we want nginx to be able to serve
-  # it directly, without going through rails again (until the work changes).
-  # This means no processing per user. consider this the "published" version
-  # It can't contain unposted chapters, nor unrevealed authors, even
-  # if the author is the one requesting the download
-
   # named route: download_path
   # Note: only :id and :format need to be correct,
   # the other two are derived and are there for nginx's benefit
@@ -27,11 +21,10 @@ class DownloadsController < ApplicationController
 
     unless @admin_settings.downloads_enabled?
       flash[:error] = ts("Sorry, downloads are currently disabled.")
-      redirect_back_or_default works_path 
+      redirect_back_or_default works_path
       return
     end
 
-    Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(posted: true)
     create_work_html
@@ -44,6 +37,7 @@ class DownloadsController < ApplicationController
       # epub for ibooks
       format.epub {download_epub}
     end
+    @work.remove_outdated_downloads
   end
 
 protected
@@ -162,7 +156,7 @@ protected
   def render_mobi_html(template, basename)
     @mobi = true
     html = render_to_string(template: "downloads/#{template}.html", layout: 'barebones.html')
-    html = html.to_ascii 
+    html = html.to_ascii
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 
