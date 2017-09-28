@@ -69,7 +69,22 @@ Before do
 
   ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
     es_update(klass)
-    tire_update(klass)
+    unless !elasticsearch_enabled?($elasticsearch)
+      tire_update(klass)
+    end
+  end
+
+  unless elasticsearch_enabled?($elasticsearch)
+    $rollout.activate :start_new_indexing
+    $rollout.activate :stop_old_indexing
+    $rollout.activate :use_new_search
+  end
+end
+
+After do
+  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices.each do |index|
+    $new_elasticsearch.indices.delete(index: index)
   end
 end
 

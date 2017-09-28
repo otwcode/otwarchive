@@ -1,3 +1,7 @@
+def elasticsearch_enabled?(elasticsearch_instance)
+  elasticsearch_instance.cluster.health rescue nil
+end
+
 def tire_update(klass_name)
   klass = klass_name.capitalize.constantize
 
