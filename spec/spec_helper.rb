@@ -44,6 +44,12 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
+
+    unless elasticsearch_enabled?($elasticsearch)
+      $rollout.activate :start_new_indexing
+      $rollout.activate :stop_old_indexing
+      $rollout.activate :use_new_search
+    end
   end
 
   config.after :each do

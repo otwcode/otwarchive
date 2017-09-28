@@ -24,9 +24,11 @@ module Searchable
   def reindex_document
     update_index rescue nil
     if self.class.use_new_search?
+      index_name = self.is_a?(Tag) ? 'tag' : self.class.to_s.downcase
+      doc_type = self.is_a?(Tag) ? 'tag' : self.class.document_type
       $new_elasticsearch.index(
-        index: "ao3_#{Rails.env}_#{self.class.to_s.downcase}s",
-        type: self.class.document_type,
+        index: "ao3_#{Rails.env}_#{index_name}s",
+        type: doc_type,
         id: self.id,
         body: self.document_json
       )
