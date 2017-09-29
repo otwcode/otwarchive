@@ -44,11 +44,11 @@ class BookmarkSearchForm
 
   def self.count_for_pseuds(pseuds)
     terms = [
-      { term: { hidden_by_admin: 'F' } },
+      { term: { hidden_by_admin: 'false' } },
     ]
     terms << pseuds.pluck(:id).compact.map { |id| { term: { pseud_id: id } } }
     unless pseuds.map(&:user).uniq == [User.current_user]
-      terms << { term: { private: 'F' } }
+      terms << { term: { private: 'false' } }
     end
     query = { query: { bool: { must: terms } } }
     response = $new_elasticsearch.perform_request(
