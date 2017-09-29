@@ -43,10 +43,10 @@ class DownloadsController < ApplicationController
 protected
 
   def download_html
-    create_work_html
+    data = create_work_html_string
 
     # send as HTML
-    send_file("#{@work.download_basename}.html", type: "text/html")
+    send_data data, filename: "#{@work.download_title}.html", type: "text/html"
   end
 
   def download_pdf
@@ -118,17 +118,15 @@ protected
     File.exists?("#{@work.download_basename}.#{format}")
   end
 
+  def create_work_html_string
+    @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
+    render_to_string(template: "downloads/show.html", layout: 'barebones.html')
+  end
+
   def create_work_html
     return if File.exists?("#{@work.download_basename}.html")
-
-    # set up instance variables needed by template
-    @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
-
-    # render template
-    html = render_to_string(template: "downloads/show.html", layout: 'barebones.html')
-
     # write to file
-    File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
+    File.open("#{@work.download_basename}.html", 'w') {|f| f.write(create_work_html_string)}
   end
 
   def create_mobi_html
