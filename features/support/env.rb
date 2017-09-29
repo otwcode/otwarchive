@@ -66,19 +66,6 @@ Before do
 
   language = Language.find_or_create_by(short: 'en', name: 'English')
   Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
-
-  ['work', 'bookmark', 'pseud', 'tag'].each do |klass|
-    es_update(klass)
-    unless !elasticsearch_enabled?($elasticsearch)
-      tire_update(klass)
-    end
-  end
-
-  unless elasticsearch_enabled?($elasticsearch)
-    $rollout.activate :start_new_indexing
-    $rollout.activate :stop_old_indexing
-    $rollout.activate :use_new_search
-  end
 end
 
 After do
