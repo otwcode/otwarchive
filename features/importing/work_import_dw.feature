@@ -55,7 +55,6 @@ Feature: Import Works from DW
       And I should see "Character A/Character B" within "dd.relationship"
       And I should see "Published:2017-07-03"
       And I should see "Single Chapter Fic from DW" within "h2.title"
-      And I should not see "NFS" within "h2.title"
       And I should see "THIS IS USED FOR AUTOMATED TESTS" within "div.notes"
       And I should see "This is the body of my single-chapter work."
       And I should not see the image "alt" text "Add to memories"
