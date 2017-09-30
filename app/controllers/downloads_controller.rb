@@ -16,7 +16,8 @@ class DownloadsController < ApplicationController
 
     if @work.unrevealed?
       flash[:error] = ts("Sorry, you can't download an unrevealed work")
-      redirect_back_or_default works_path and return
+      redirect_back_or_default works_path
+      return
     end
 
     unless @admin_settings.downloads_enabled?
@@ -30,12 +31,15 @@ class DownloadsController < ApplicationController
     create_work_html
 
     respond_to do |format|
-      format.html {download_html}
-      format.pdf {download_pdf}
+      format.html do
+        download_html
+        return
+      end
+      format.pdf { download_pdf }
       # mobipocket for kindle
-      format.mobi {download_mobi}
+      format.mobi { download_mobi }
       # epub for ibooks
-      format.epub {download_epub}
+      format.epub { download_epub }
     end
     @work.remove_outdated_downloads
   end
@@ -44,7 +48,6 @@ protected
 
   def download_html
     data = create_work_html_string
-
     # send as HTML
     send_data data, filename: "#{@work.download_title}.html", type: "text/html"
   end
@@ -115,7 +118,7 @@ protected
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
   def check_for_file(format)
-    File.exists?("#{@work.download_basename}.#{format}")
+    File.exist?("#{@work.download_basename}.#{format}")
   end
 
   def create_work_html_string
@@ -124,9 +127,9 @@ protected
   end
 
   def create_work_html
-    return if File.exists?("#{@work.download_basename}.html")
+    return if File.exist?("#{@work.download_basename}.html")
     # write to file
-    File.open("#{@work.download_basename}.html", 'w') {|f| f.write(create_work_html_string)}
+    File.open("#{@work.download_basename}.html", 'w') { |f| f.write(create_work_html_string) }
   end
 
   def create_mobi_html
@@ -140,14 +143,14 @@ protected
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
       @page_title = chapter.chapter_title
-      render_mobi_html("_download_chapter", "chapter#{index+1}")
+      render_mobi_html("_download_chapter", "chapter#{index + 1}")
     end
 
     # the afterword contains the works end notes, any related works, and a link back to comment
     @page_title = ts("Afterword")
     render_mobi_html("_download_afterword", "afterword")
 
-    chapter_file_names = 1.upto(@chapters.size).map {|i| "mobi/chapter#{i}.html"}
+    chapter_file_names = 1.upto(@chapters.size).map { |i| "mobi/chapter#{i}.html" }
     ["mobi/preface.html", chapter_file_names.join(' '), "mobi/afterword.html"].join(' ')
   end
 
@@ -155,13 +158,13 @@ protected
     @mobi = true
     html = render_to_string(template: "downloads/#{template}.html", layout: 'barebones.html')
     html = html.to_ascii
-    File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
+    File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') { |f| f.write(html) }
   end
 
   def create_epub_files
-    return if File.exists?("#{@work.download_basename}.epub")
-  # Manually building an epub file here
-  # See http://www.jedisaber.com/eBooks/tutorial.asp for details
+    return if File.exist?("#{@work.download_basename}.epub")
+    # Manually building an epub file here
+    # See http://www.jedisaber.com/eBooks/tutorial.asp for details
     epubdir = "#{@work.download_dir}/epub"
     FileUtils.mkdir_p epubdir
 
@@ -204,7 +207,7 @@ protected
   def render_xhtml(html, filename)
     doc = Nokogiri::XML.parse(html)
     xhtml = doc.children.to_xhtml
-    File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') {|f| f.write(xhtml)}
+    File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') { |f| f.write(xhtml) }
   end
 
   def guest_downloading_off
