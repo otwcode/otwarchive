@@ -214,8 +214,3 @@ shared_examples_for "multipart email" do
   end
 end
 
-def create_archivist
-  user = create(:user)
-  user.roles << Role.create(name: "archivist")
-  user
-end

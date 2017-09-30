@@ -6,14 +6,14 @@ include ApiHelper
 describe "API WorksController - Create works" do
 
   describe "API import with a valid archivist" do
+    let(:archivist) { create(:archivist) }
+    
     before :all do
       mock_external
-      @user = create_archivist
     end
 
     after :all do
       WebMock.reset!
-      @user.destroy if @user
     end
 
     it "should not support the deprecated /import end-point", type: :routing do
@@ -22,7 +22,7 @@ describe "API WorksController - Create works" do
 
     it "should return 200 OK when all stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -37,7 +37,7 @@ describe "API WorksController - Create works" do
 
     it "should return 200 OK with an error message when no stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -52,7 +52,7 @@ describe "API WorksController - Create works" do
 
     it "should return 200 OK with an error message when only some stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -70,7 +70,7 @@ describe "API WorksController - Create works" do
 
     it "should return the original id" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { id: "123",
             external_author_name: "bar",
@@ -89,7 +89,7 @@ describe "API WorksController - Create works" do
       # This test hits the call to #send_external_invites in #create for coverage
       # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         send_claim_emails: 1,
         works: [
           { id: "123",
@@ -104,7 +104,7 @@ describe "API WorksController - Create works" do
 
     it "should return 400 Bad Request if no works are specified" do
       valid_params = {
-        archivist: @user.login
+        archivist: archivist.login
       }
 
       post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
@@ -114,7 +114,7 @@ describe "API WorksController - Create works" do
 
     it "should return a helpful message if the external work contains no text" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -133,9 +133,11 @@ describe "API WorksController - Create works" do
         Rails.cache.clear
 
         mock_external
+        
+        archivist = create(:archivist)
 
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -207,8 +209,10 @@ describe "API WorksController - Create works" do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -270,8 +274,11 @@ describe "API WorksController - Create works" do
     describe "Imports should use fallback values or nil if no metadata is supplied" do
       before(:all) do
         mock_external
+
+        archivist = create(:archivist)
+        
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -335,8 +342,10 @@ describe "API WorksController - Create works" do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -412,8 +421,10 @@ describe "API WorksController - Create works" do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+        
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -478,7 +489,7 @@ end
 
 describe "API WorksController - Find Works" do
   before do
-    @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
+    @work = create(:work, posted: true, imported_from_url: "foo")
   end
 
   after do
