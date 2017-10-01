@@ -838,7 +838,7 @@ class Work < ApplicationRecord
 
   # spread downloads out by first two letters of authorname
   def download_dir
-    "#{Rails.public_path}/#{self.download_folder}"
+    "/tmp/#{self.id}"
   end
 
   # split out so we can use this in works_helper
