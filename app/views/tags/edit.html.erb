@@ -63,7 +63,7 @@
         <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
       <% end %>
 
-      <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
+      <% if Tag::USER_DEFINED.include?(@tag[:type]) && !(@tag.canonical? && !logged_in_as_admin?) %>
         <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
         <dd>
           <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
