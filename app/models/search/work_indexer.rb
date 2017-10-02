@@ -23,7 +23,7 @@ class WorkIndexer < Indexer
             type: "text"
           },
           title_to_sort_on: {
-            type: "text"
+            type: "keyword"
           },
           imported_from_url: {
             type: "keyword"
