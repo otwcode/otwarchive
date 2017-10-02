@@ -83,14 +83,18 @@ namespace :Tag do
   task(destroy_invalid_common_taggings: :environment) do
     count = 0
 
-    CommonTagging.destroy_invalid do
+    CommonTagging.destroy_invalid do |ct, valid|
+      unless valid
+        puts "Deleting invalid CommonTagging: " \
+             "#{ct.filterable.try(:name)} > #{ct.common_tag.try(:name)}"
+        puts ct.errors.full_messages
+      end
+
       if (count += 1) % 1000 == 0
-        print "."
-        STDOUT.flush
+        puts "Processed #{count} CommonTaggings."
       end
     end
 
-    print "\n"
     puts "Processed #{count} CommonTaggings."
   end
 
@@ -98,14 +102,18 @@ namespace :Tag do
   task(destroy_invalid_meta_taggings: :environment) do
     count = 0
 
-    MetaTagging.destroy_invalid do
+    MetaTagging.destroy_invalid do |mt, valid|
+      unless valid
+        puts "Deleting invalid MetaTagging: " \
+             "#{mt.meta_tag.try(:name)} > #{mt.sub_tag.try(:name)}"
+        puts mt.errors.full_messages
+      end
+
       if (count += 1) % 1000 == 0
-        print "."
-        STDOUT.flush
+        puts "Processed #{count} MetaTaggings."
       end
     end
 
-    print "\n"
     puts "Processed #{count} MetaTaggings."
   end
 end

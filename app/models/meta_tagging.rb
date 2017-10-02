@@ -68,19 +68,19 @@ class MetaTagging < ApplicationRecord
   # Go through all MetaTaggings and destroy the invalid ones.
   def self.destroy_invalid
     includes(:sub_tag, meta_tag: :meta_tags).find_each do |mt|
-      # Let callers do something on each iteration.
-      yield mt if block_given?
-
       # Don't use valid? because the uniqueness check triggers one query per row.
       # Just call the check manually, and check for the existence of errors (or
       # missing sub_tag or meta_tag).
       mt.meta_tag_validation
-      next if mt.errors.blank? && mt.sub_tag && mt.meta_tag
+      valid = mt.errors.blank? && mt.sub_tag && mt.meta_tag
+
+      # Let callers do something on each iteration.
+      yield mt, valid if block_given?
 
       # We use this method instead of mt.destroy because we want to trigger the
       # before_remove callbacks on mt.sub_tag, thus ensuring that we clean up
       # the filter_taggings associated with this MetaTagging.
-      mt.sub_tag.meta_tags.delete(mt.meta_tag)
+      mt.sub_tag.meta_tags.delete(mt.meta_tag) unless valid
     end
   end
 end
