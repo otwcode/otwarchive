@@ -90,7 +90,7 @@ namespace :Tag do
         puts ct.errors.full_messages
       end
 
-      if (count += 1) % 1000 == 0
+      if ((count += 1) % 1000).zero?
         puts "Processed #{count} CommonTaggings."
       end
     end
@@ -109,7 +109,7 @@ namespace :Tag do
         puts mt.errors.full_messages
       end
 
-      if (count += 1) % 1000 == 0
+      if ((count += 1) % 1000).zero?
         puts "Processed #{count} MetaTaggings."
       end
     end
