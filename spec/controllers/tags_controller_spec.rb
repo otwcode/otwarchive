@@ -402,11 +402,15 @@ describe TagsController do
           grandparent
         end
 
-        include_examples "success message"
+        it "should show an error" do
+          expect(response.body).to include(
+            "Invalid meta tag '#{meta.name}': Meta tag has already been " \
+            "added (possibly as an indirect meta tag)."
+          )
+        end
 
-        it "should add the grandparent as its direct metatag" do
-          expect(tag.meta_tags).to include(meta)
-          expect(tag.direct_meta_tags).to include(meta)
+        it "should not create two meta-taggings" do
+          expect(MetaTagging.where(sub_tag: tag, meta_tag: meta).count).to eq 1
         end
       end
     end

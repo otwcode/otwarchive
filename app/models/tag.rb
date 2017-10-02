@@ -1101,11 +1101,7 @@ class Tag < ApplicationRecord
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = Tag.find_by_name(name)
-      # We use find_or_initialize_by here so that we can properly handle tags
-      # that are already our meta-tag. In particular, we may want to upgrade an
-      # existing MetaTagging from indirect to direct.
-      meta_tagging = meta_taggings.find_or_initialize_by(meta_tag: parent)
-      meta_tagging.direct = true
+      meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
       save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
     end
   end
@@ -1114,11 +1110,7 @@ class Tag < ApplicationRecord
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       sub = Tag.find_by_name(name)
-      # We use find_or_initialize_by here so that we can properly handle tags
-      # that are already our sub-tag. In particular, we may want to upgrade an
-      # existing MetaTagging from indirect to direct.
-      meta_tagging = sub_taggings.find_or_initialize_by(sub_tag: sub)
-      meta_tagging.direct = true
+      meta_tagging = sub_taggings.build(sub_tag: sub, direct: true)
       save_and_gather_errors(meta_tagging, "Invalid sub tag '#{name}':")
     end
   end

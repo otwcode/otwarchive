@@ -5,7 +5,9 @@ class MetaTagging < ApplicationRecord
   belongs_to :sub_tag, class_name: 'Tag'
 
   validates_presence_of :meta_tag, :sub_tag, message: "does not exist."
-  validates_uniqueness_of :meta_tag_id, scope: :sub_tag_id
+  validates_uniqueness_of :meta_tag_id,
+                          scope: :sub_tag_id,
+                          message: "has already been added (possibly as an indirect meta tag)."
 
   before_create :add_filters, :inherit_meta_tags
   after_create :expire_caching
