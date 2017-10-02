@@ -432,10 +432,10 @@ namespace :After do
   end
 
 
-  desc "Clean up work URLs for abuse reports from the last month"
-  task(:clean_abuse_report_work_urls => :environment) do
+  desc "Clean up URLs for abuse reports from the last month"
+  task(:clean_abuse_report_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
-      report.clean_work_url
+      report.clean_url
       puts report.url
       report.save
     end
@@ -500,6 +500,70 @@ namespace :After do
     end
   end
 
+  desc "Fix comment threaded_left and threaded_right."
+  task(fix_comment_threading: :environment) do
+    progress = 0
+
+    # It's possible that the callback to fix threaded_left and threaded_right
+    # after a comment is destroyed hasn't been working for some time. If so,
+    # this task can be used to recalculate threaded_left and threaded_right for
+    # all of the comments that need it.
+    Comment.where("thread = id").includes(:thread_comments).find_each do |root|
+      print "." and STDOUT.flush if ((progress += 1) % 1000).zero?
+
+      # It only affects threads that have more than one comment.
+      next if root.children_count.zero?
+
+      # Get all threaded_left and threaded_right values.
+      left_and_right_values = root.thread_comments.flat_map do |c|
+        [c.threaded_left, c.threaded_right]
+      end
+
+      # Compute a mapping from threaded_left and threaded_right values
+      # back to a compact version.
+      left_and_right_values.sort!
+      compact_left_and_right = {}
+      left_and_right_values.each_with_index do |value, index|
+        compact_left_and_right[value] = index + 1
+      end
+
+      # Calculate the changes that need to be made.
+      changes = {}
+      root.thread_comments.each do |c|
+        new_left = compact_left_and_right[c.threaded_left]
+        new_right = compact_left_and_right[c.threaded_right]
+        if new_left != c.threaded_left || new_right != c.threaded_right
+          changes[c.id] = { threaded_left: new_left, threaded_right: new_right }
+        end
+      end
+
+      # Don't bother if we have nothing to change.
+      next if changes.empty?
+
+      Comment.transaction do
+        changes.each_pair do |id, values|
+          # Use update_all to bypass validations & callbacks (for speed).
+          Comment.where(id: id).update_all(values)
+        end
+      end
+    end
+
+    print "\n"
+  end
+
+  desc "Prune unnecessary deleted comment placeholders."
+  task(prune_deleted_comment_placeholders: :environment) do
+    # This should be performed after the fix_comment_threading task, if that's
+    # necessary. (It can be used without it, but unless threaded_left and
+    # threaded_right are set correctly, it won't delete any existing
+    # placeholders.)
+    Comment.where(is_deleted: true).find_each do |placeholder|
+      if placeholder.children_count.zero?
+        # We don't need a placeholder if it doesn't have children.
+        placeholder.destroy
+      end
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################

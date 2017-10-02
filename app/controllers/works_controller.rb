@@ -106,12 +106,8 @@ class WorksController < ApplicationController
       end
 
       tag = @fandom || @tag
-      # This strange dance is because there is an interaction between
-      # strong_parameters and dup, without the dance
-      # options[:filter_ids] << tag.id is ignored.
-      filter_ids = options[:filter_ids] || []
-      filter_ids << tag.id
-      options[:filter_ids] = filter_ids
+      options[:filter_ids] ||= []
+      options[:filter_ids] << tag.id
     end
 
     options[:page] = params[:page]
@@ -573,11 +569,11 @@ class WorksController < ApplicationController
     storyparser = StoryParser.new
 
     begin
-      if urls.size == 1
-        @work = storyparser.download_and_parse_story(urls.first, options)
-      else
-        @work = storyparser.download_and_parse_chapters_into_story(urls, options)
-      end
+      @work = if urls.size == 1
+                storyparser.download_and_parse_story(urls.first, options)
+              else
+                storyparser.download_and_parse_chapters_into_story(urls, options)
+              end
     rescue Timeout::Error
       flash.now[:error] = ts('Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.')
       render(:new_import) && return

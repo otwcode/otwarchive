@@ -149,7 +149,7 @@ module ApplicationHelper
     if only_path
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, only_path: false), rel: "author")
+      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
     end
   end
 
@@ -218,17 +218,6 @@ module ApplicationHelper
         end
       end
     }.join.html_safe
-  end
-
-  # For setting the current locale
-  def locales_menu    
-    result = "<form action=\"" + url_for(action: 'set', controller: 'locales') + "\">\n" 
-    result << "<div><select id=\"accessible_menu\" name=\"locale_id\" >\n"
-    result << options_from_collection_for_select(@loaded_locales, :iso, :name, @current_locale.iso)
-    result << "</select></div>"
-    result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"
-    result << "</form>"
-    return result
   end
 
   # Generates sorting links for index pages, with column names and directions
