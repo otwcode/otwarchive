@@ -4,7 +4,7 @@ class MetaTagging < ApplicationRecord
   belongs_to :meta_tag, class_name: 'Tag'
   belongs_to :sub_tag, class_name: 'Tag'
 
-  validates_presence_of :meta_tag, :sub_tag
+  validates_presence_of :meta_tag, :sub_tag, message: "does not exist."
   validates_uniqueness_of :meta_tag_id, scope: :sub_tag_id
 
   before_create :add_filters, :inherit_meta_tags
@@ -23,7 +23,7 @@ class MetaTagging < ApplicationRecord
       if self.meta_tag == self.sub_tag
         self.errors.add(:base, "A tag can't be its own meta tag.")
       end
-      if (self.meta_tag.meta_tags + self.meta_tag.sub_tags).include?(self.sub_tag)
+      if self.meta_tag.meta_tags.include?(self.sub_tag)
         self.errors.add(:base, "A meta tag can't be its own grandpa.")
       end
     end
@@ -63,5 +63,24 @@ class MetaTagging < ApplicationRecord
 
   def expire_caching
     self.meta_tag.update_works_index_timestamp!
+  end
+
+  # Go through all MetaTaggings and destroy the invalid ones.
+  def self.destroy_invalid
+    self.includes(:sub_tag, meta_tag: :meta_tags).find_each do |mt|
+      # Let callers do something on each iteration.
+      yield mt if block_given?
+
+      # Don't use valid? because the uniqueness check triggers one query per row.
+      # Just call the check manually, and check for the existence of errors (or
+      # missing sub_tag or meta_tag).
+      mt.meta_tag_validation
+      next if mt.errors.blank? && mt.sub_tag && mt.meta_tag
+
+      # We use this method instead of mt.destroy because we want to trigger the
+      # before_remove callbacks on mt.sub_tag, thus ensuring that we clean up
+      # the filter_taggings associated with this MetaTagging.
+      mt.sub_tag.meta_tags.delete(mt.meta_tag)
+    end
   end
 end
