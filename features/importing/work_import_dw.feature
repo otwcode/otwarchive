@@ -98,38 +98,38 @@ Feature: Import Works from DW
       And I should not see the image "alt" text "Add to memories!"
       And I should not see the image "alt" text "Next Entry"
 
-  @import_dw_comm
-  Scenario: Creating a new work from an DW story that is posted to a community
-    Given basic tags
-      And the following activated user exists
-        | login          | password    |
-        | cosomeone      | something   |
-      And I am logged in as "cosomeone" with password "something"
-    When I go to the import page
-      And I fill in "urls" with "http://rarelitfic.dreamwidth.org/5572.html"
-    When I press "Import"
-    Then I should see "Preview"
-      And I should see "Poirot - Agatha Christie" within "dd.fandom"
-      And I should see "General Audiences" within "dd.rating"
-      And I should see "Published:2010-10-23"
-      And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
-      And I should not see "[Poirot]" within "h2.title"
-      And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
-      And I should see "more to their friendship than he'd thought." within "div.summary"
-      And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should see the image "src" text "https://p.dreamwidth.org/1e4f6fb395d2/59613-5572/www.rbreu.de/fan/stanwood_title_400.png"
-      And I should see "Follow me to AO3"
-      And I should not see "Rare Literature Fanfiction"
-      And I should not see "rarelitfic"
-      And I should not see "rebecca2525"
-      And I should not see the image "alt" text "Add to memories"
-      And I should not see the image "alt" text "Next Entry"
-      And I should not see "mood"
-      And I should not see "Entry tags"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page
-      Then I should see "Mrs Stanwood's Birthday Party"
+  # @import_dw_comm
+  # Scenario: Creating a new work from an DW story that is posted to a community
+  # Given basic tags
+  # And the following activated user exists
+  # | login          | password    |
+  # | cosomeone      | something   |
+  # And I am logged in as "cosomeone" with password "something"
+  # When I go to the import page
+  # And I fill in "urls" with "http://rarelitfic.dreamwidth.org/5572.html"
+  # When I press "Import"
+  # Then I should see "Preview"
+  # And I should see "Poirot - Agatha Christie" within "dd.fandom"
+  # And I should see "General Audiences" within "dd.rating"
+  # And I should see "Published:2010-10-23"
+  # And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
+  # And I should not see "[Poirot]" within "h2.title"
+  # And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
+  # And I should see "more to their friendship than he'd thought." within "div.summary"
+  # And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
+  # And I should see the image "src" text "https://p.dreamwidth.org/1e4f6fb395d2/59613-5572/www.rbreu.de/fan/stanwood_title_400.png"
+  # And I should see "Follow me to AO3"
+  # And I should not see "Rare Literature Fanfiction"
+  # And I should not see "rarelitfic"
+  # And I should not see "rebecca2525"
+  # And I should not see the image "alt" text "Add to memories"
+  # And I should not see the image "alt" text "Next Entry"
+  # And I should not see "mood"
+  # And I should not see "Entry tags"
+  # When I press "Post"
+  # Then I should see "Work was successfully posted."
+  # When I am on cosomeone's user page
+  # Then I should see "Mrs Stanwood's Birthday Party"
 
   @import_dw_multi_chapter
   Scenario: Creating a new multichapter work from a DW story
