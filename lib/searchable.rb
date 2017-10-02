@@ -26,12 +26,21 @@ module Searchable
     if self.class.use_new_search?
       index_name = self.is_a?(Tag) ? 'tag' : self.class.to_s.downcase
       doc_type = self.is_a?(Tag) ? 'tag' : self.class.document_type
-      $new_elasticsearch.index(
+
+      index = {
         index: "ao3_#{Rails.env}_#{index_name}s",
         type: doc_type,
         id: self.id,
         body: self.document_json
-      )
+      }
+
+      if self.is_a?(Bookmark)
+        index.merge!(
+          routing: "#{self.bookmarkable_type}-#{self.bookmarkable_id}"
+        )
+      end
+
+      $new_elasticsearch.index index
     end
   end
 end

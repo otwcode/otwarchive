@@ -69,7 +69,7 @@ class BookmarkIndexer < Indexer
       "_index" => index_name,
       "_type" => document_type,
       "_id" => id,
-      "parent" => parent_id(object)
+      "routing" => parent_id(object)
     }
   end
 
@@ -86,7 +86,7 @@ class BookmarkIndexer < Indexer
     filters = tags.map{ |t| t.filter }.compact
     bookmarkable = object.bookmarkable if object.respond_to? :bookmarkable
 
-    object.as_json(
+    json_object = object.as_json(
       root: false,
       except: [:notes_sanitizer_version, :delta],
       methods: [:bookmarker, :collection_ids, :with_notes]
@@ -96,12 +96,19 @@ class BookmarkIndexer < Indexer
       tag_ids: tags.map(&:id),
       filter_ids: filters.map(&:id),
       bookmarkable_posted: !bookmarkable || (bookmarkable && bookmarkable.posted),
-      bookmarkable_hidden_by_admin: !!bookmarkable && bookmarkable.hidden_by_admin,
-      position: {
-        name: "bookmark",
-        parent: parent_id(object)
-      }
+      bookmarkable_hidden_by_admin: !!bookmarkable && bookmarkable.hidden_by_admin
     )
+
+    unless parent_id(object).match("deleted")
+      json_object.merge!(
+        bookmarkable: {
+          name: "bookmark",
+          parent: parent_id(object)
+        }
+      )
+    end
+
+    json_object
   end
 
   def deleted_bookmmark_info(id)

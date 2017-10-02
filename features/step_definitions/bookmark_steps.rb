@@ -70,6 +70,8 @@ Given /^I have bookmarks to search$/ do
                      bookmarkable_type: "ExternalWork",
                      pseud_id: pseud2.id,
                      notes: "I enjoyed this")
+
+  step %{all search indexes are updated}
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
@@ -123,6 +125,7 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+  step %{the bookmark indexes are updated}
 end
 
 When(/^I attempt to create a bookmark of "([^"]*)" with a pseud that is not mine$/) do |work|

@@ -7,7 +7,6 @@ Feature: Search Bookmarks
   Background:
     Given I have bookmarks to search
       And I am on the search bookmarks page
-      And the bookmark indexes are updated
 
   Scenario: Search bookmarks by tag
     When I fill in "Tag" with "classic"
