@@ -52,6 +52,13 @@ protected
     send_data data, filename: "#{@work.download_title}.html", type: "text/html"
   end
 
+  def send_file_sync(file, filename, type)
+    # send file synchronously so we don't delete it before we have finsihed sending it.
+    File.open(file, 'r') do |f|
+      send_data f.read, filename: filename, type: type
+    end
+  end
+
   def download_pdf
     create_work_html
 
@@ -67,10 +74,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    # send file synchronously so we don't delete it before we have finsihed sending it.
-    File.open("#{@work.download_basename}.pdf", 'r') do |f|
-      send_data f.read, filename: "#{@work.download_title}.pdf", type: "application/pdf"
-    end
+    send_file_sync("#{@work.download_basename}.pdf", "#{@work.download_title}.pdf", "application/pdf")
   end
 
   def download_mobi
@@ -95,10 +99,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    # send file synchronously so we don't delete it before we have finsihed sending it.
-    File.open("#{@work.download_basename}.mobi", 'r') do |f|
-      send_data f.read, filename: "#{@work.download_title}.mobi", type: "application/x-mobipocket-ebook"
-    end
+    send_file_sync("#{@work.download_basename}.mobi", "#{@work.download_title}.mobi", "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -119,10 +120,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    # send file synchronously so we don't delete it before we have finsihed sending it.
-    File.open("#{@work.download_basename}.epub", 'r') do |f|
-      send_data f.read, filename: "#{@work.download_title}.epub", type: "application/x-mobipocket-ebook"
-    end
+    send_file_sync("#{@work.download_basename}.epub", "#{@work.download_title}.epub", "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
