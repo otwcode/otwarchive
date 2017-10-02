@@ -78,11 +78,11 @@ protected
   end
 
   def download_mobi
-     cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
-     # metadata needs to be escaped for command line
-     title = Shellwords.escape(@work.title)
-     author = Shellwords.escape(@work.display_authors)
-     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
+    cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
+    # metadata needs to be escaped for command line
+    title = Shellwords.escape(@work.title)
+    author = Shellwords.escape(@work.display_authors)
+    cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
 
     # more than one chapter
     # create a table of contents out of separate chapter files
