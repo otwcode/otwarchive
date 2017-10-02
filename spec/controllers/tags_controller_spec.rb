@@ -186,5 +186,229 @@ describe TagsController do
         it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
       end
     end
+
+    shared_examples "success message" do
+      it "should show a success message" do
+        expect(flash[:notice]).to eq("Tag was updated.")
+      end
+    end
+
+    describe "adding a new associated tag" do
+      render_views # make sure we can view the error messages
+
+      let(:tag) { create(:character, canonical: true) }
+      let(:associated) { nil } # to be overridden by the examples
+      let(:field) { "#{associated.type.downcase}_string" }
+
+      before do
+        put :update, params: {
+          id: tag.name, tag: { "#{field}": associated.name }
+        }
+
+        tag.reload
+      end
+
+      shared_examples "invalid association" do
+        it "should not add the associated tag" do
+          expect(tag.parents).not_to include(associated)
+          expect(tag.children).not_to include(associated)
+        end
+      end
+
+      context "when the associated tag doesn't exist" do
+        let(:associated) do
+          destroyed_fandom = create(:fandom)
+          destroyed_fandom.destroy
+          destroyed_fandom
+        end
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Cannot add association to '#{associated.name}': " \
+            "Common tag does not exist."
+          )
+        end
+
+        include_examples "invalid association"
+      end
+
+      context "when the associated tag is entered into the wrong field" do
+        let(:associated) { create(:fandom, canonical: true) }
+        let(:field) { "relationship_string" }
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Cannot add association to '#{associated.name}': " \
+            "#{associated.type} added in Relationship field."
+          )
+        end
+
+        include_examples "invalid association"
+      end
+
+      context "when the associated tag has an invalid type" do
+        # NOTE This will enter the associated tag into the freeform_string
+        # field, which is not displayed on the form. This still might come up
+        # in the extremely rare case where a tag wrangler loads the form, a
+        # different tag wrangler goes in and changes the type of the tag being
+        # edited, and then the first wrangler submits the form.
+        let(:associated) { create(:freeform, canonical: true) }
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Cannot add association to '#{associated.name}': A tag of type " \
+            "#{tag.type} cannot have a child of type #{associated.type}."
+          )
+        end
+
+        include_examples "invalid association"
+      end
+
+      context "when the associated tag has a valid type" do
+        context "when the tag is a canonical child" do
+          let(:associated) { create(:relationship, canonical: true) }
+
+          include_examples "success message"
+
+          it "should add the association" do
+            expect(tag.parents).not_to include(associated)
+            expect(tag.children).to include(associated)
+          end
+        end
+
+        context "when the tag is a non-canonical child" do
+          let(:associated) { create(:relationship, canonical: false) }
+
+          include_examples "success message"
+
+          it "should add the association" do
+            expect(tag.parents).not_to include(associated)
+            expect(tag.children).to include(associated)
+          end
+        end
+
+        context "when the tag is a canonical parent" do
+          let(:associated) { create(:fandom, canonical: true) }
+
+          include_examples "success message"
+
+          it "should add the association" do
+            expect(tag.parents).to include(associated)
+            expect(tag.children).not_to include(associated)
+          end
+        end
+
+        context "when the tag is a non-canonical parent" do
+          let(:associated) { create(:fandom, canonical: false) }
+
+          it "should show an error" do
+            expect(response.body).to include(
+              "Cannot add association to '#{associated.name}': " \
+              "Parent tag is not canonical."
+            )
+          end
+
+          include_examples "invalid association"
+        end
+      end
+    end
+
+    describe "adding a new metatag" do
+      render_views # make sure we can view the error messages
+
+      let(:tag) { create(:freeform, canonical: true) }
+      let(:meta) { nil } # to be overridden by the examples
+
+      before do
+        put :update, params: {
+          id: tag.name, tag: { meta_tag_string: meta.name }
+        }
+
+        tag.reload
+      end
+
+      shared_examples "invalid meta tag" do
+        it "should not add the meta tag" do
+          expect(tag.meta_tags).not_to include(meta)
+        end
+      end
+
+      context "when the tag is not canonical" do
+        let(:meta) { create(:freeform, canonical: false) }
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Invalid meta tag '#{meta.name}': " \
+            "Meta taggings can only exist between canonical tags."
+          )
+        end
+
+        include_examples "invalid meta tag"
+      end
+
+      context "when the tag is the wrong type" do
+        let(:meta) { create(:character, canonical: true) }
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Invalid meta tag '#{meta.name}': " \
+            "Meta taggings can only exist between two tags of the same type."
+          )
+        end
+
+        include_examples "invalid meta tag"
+      end
+
+      context "when the metatag is itself" do
+        let(:meta) { tag }
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Invalid meta tag '#{meta.name}': " \
+            "A tag can't be its own meta tag."
+          )
+        end
+
+        include_examples "invalid meta tag"
+      end
+
+      context "when the metatag is its subtag" do
+        let(:meta) do
+          sub = create(:freeform, canonical: true)
+          MetaTagging.create(meta_tag: tag, sub_tag: sub, direct: true)
+          tag.reload
+          sub.reload
+        end
+
+        it "should show an error" do
+          expect(response.body).to include(
+            "Invalid meta tag '#{meta.name}': " \
+            "A meta tag can't be its own grandpa."
+          )
+        end
+
+        include_examples "invalid meta tag"
+      end
+
+      context "when the metatag is already its grandparent" do
+        let(:meta) do
+          parent = create(:freeform, canonical: true)
+          grandparent = create(:freeform, canonical: true)
+
+          parent.sub_tags << tag
+          parent.meta_tags << grandparent
+
+          # We want to add the grandparent as our new metatag.
+          grandparent
+        end
+
+        include_examples "success message"
+
+        it "should add the grandparent as its direct metatag" do
+          expect(tag.meta_tags).to include(meta)
+          expect(tag.direct_meta_tags).to include(meta)
+        end
+      end
+    end
   end
 end
