@@ -1107,6 +1107,8 @@ class Tag < ApplicationRecord
           unless new_merger.save
             self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
           end
+        elsif self.canonical? && !User.current_user.is_a?(Admin)
+          self.errors.add(:base, "Only an admin can make a canonical tag into a synonym of another tag.")
         end
         if new_merger && self.errors.empty?
           self.canonical = false
