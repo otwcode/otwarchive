@@ -1259,8 +1259,8 @@ class Tag < ApplicationRecord
 
     # Expire caching when a merger is added or removed
     if tag.saved_change_to_merger_id?
-      if tag.merger_id_was.present?
-        old = Tag.find(tag.merger_id_was)
+      if tag.merger_id_before_last_save.present?
+        old = Tag.find(tag.merger_id_before_last_save)
         old.update_works_index_timestamp!
       end
       if tag.merger_id.present?
