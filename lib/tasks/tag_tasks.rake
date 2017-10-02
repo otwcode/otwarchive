@@ -78,4 +78,34 @@ namespace :Tag do
       FilterTagging.update_filter_counts_since(admin_settings.suspend_filter_counts_at)
     end
   end
+
+  desc "Clean up invalid CommonTaggings"
+  task(destroy_invalid_common_taggings: :environment) do
+    count = 0
+
+    CommonTagging.destroy_invalid do
+      if (count += 1) % 1000 == 0
+        print "."
+        STDOUT.flush
+      end
+    end
+
+    print "\n"
+    puts "Processed #{count} CommonTaggings."
+  end
+
+  desc "Clean up invalid MetaTaggings"
+  task(destroy_invalid_meta_taggings: :environment) do
+    count = 0
+
+    MetaTagging.destroy_invalid do
+      if (count += 1) % 1000 == 0
+        print "."
+        STDOUT.flush
+      end
+    end
+
+    print "\n"
+    puts "Processed #{count} MetaTaggings."
+  end
 end
