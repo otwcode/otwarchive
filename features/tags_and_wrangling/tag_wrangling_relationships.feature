@@ -66,15 +66,11 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
 
   # creating non-canonical relationships from work posting
   When I am logged in as "Enigel" with password "wrangulate!"
-   And I go to the new work page
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
+    And I go to the new work page
+    And I fill in the basic work information for "Silliness"
     And I fill in "Fandoms" with "Torchwood"
-    And I fill in "Work Title" with "Silliness"
     And I fill in "Relationships" with "Janto, Jack/Ianto"
-    And I fill in "content" with "And then everyone was kidnapped by an alien bus."
-    And I press "Preview"
-    And I press "Post"
+    And I press "Post Without Preview"
   Then I should see "Work was successfully posted."
 
   # editing non-canonical relationship in order to syn it to existing canonical merger AND add characters
@@ -103,7 +99,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     But I should not see "Jack Harkness" within ".tags"
     And I should not see "Ianto Jones" within ".tags"
 
-  # metatags and subtags, transference thereof to a new canonical
+  # metatags and subtags, transference thereof to a new canonical by an admin
   When I follow "Edit Jack Harkness/Ianto Jones"
     And I fill in "MetaTags" with "Jack Harkness/Male Character"
     And I press "Save changes"
@@ -130,7 +126,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Jack Harkness/Ianto Jones"
   Then I should see "Jack Harkness/Robot Ianto Jones"
     And I should see "Jack Harkness/Male Character"
-  When I fill in "Synonym of" with "Captain Jack Harkness/Ianto Jones"
+  When I am logged in as an admin
+    And I edit the tag "Jack Harkness/Ianto Jones"
+    And I fill in "Synonym of" with "Captain Jack Harkness/Ianto Jones"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "Jack Harkness/Robot Ianto Jones"
@@ -145,7 +143,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Jack Harkness/Ianto Jones" within "div#child_Merger_associations_to_remove_checkboxes"
 
   # trying to syn a non-canonical to another non-canonical
-  When I follow "New Tag"
+  When I am logged in as "Enigel" with password "wrangulate!"
+    And I edit the tag "Jack Harkness/Ianto Jones"
+    And I follow "New Tag"
     And I fill in "Name" with "James Norrington/Jack Sparrow"
     And I choose "Relationship"
     And I press "Create Tag"
@@ -269,7 +269,8 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
     And the "Canonical" checkbox should be checked
     And the "Canonical" checkbox should be disabled
 
-  When I edit the tag "Testing McTestypants/Testing McTestySkirt"
+  When I am logged in as an admin
+    And I edit the tag "Testing McTestypants/Testing McTestySkirt"
     And I fill in "Synonym of" with "Dame Tester/Sir Tester"
     And I press "Save changes"
   Then I should see "Tag was updated"
