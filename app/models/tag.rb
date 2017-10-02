@@ -975,7 +975,7 @@ class Tag < ApplicationRecord
   def associations_to_remove=(taglist)
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
       tag_to_remove = Tag.find(tag_id)
-      remove_association(tag_to_remove.id) if tag_to_remove
+      async(:remove_association, tag_to_remove.id) if tag_to_remove
     end
   end
 
