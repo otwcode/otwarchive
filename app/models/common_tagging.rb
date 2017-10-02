@@ -43,7 +43,7 @@ class CommonTagging < ApplicationRecord
     return if filterable.nil? || common_tag.nil?
     return if filterable.child_types.include?(common_tag.type)
 
-    errors.add(:base, "A tag of type #{filterable.type} cannot have a child " +
+    errors.add(:base, "A tag of type #{filterable.type} cannot have a child " \
                       "of type #{common_tag.type}.")
   end
 
@@ -57,7 +57,7 @@ class CommonTagging < ApplicationRecord
 
   # Go through all CommonTaggings and destroy the invalid ones.
   def self.destroy_invalid
-    self.includes(:common_tag, :filterable).find_each do |ct|
+    includes(:common_tag, :filterable).find_each do |ct|
       # Let callers do something on each iteration.
       yield ct if block_given?
 

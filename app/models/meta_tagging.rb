@@ -67,7 +67,7 @@ class MetaTagging < ApplicationRecord
 
   # Go through all MetaTaggings and destroy the invalid ones.
   def self.destroy_invalid
-    self.includes(:sub_tag, meta_tag: :meta_tags).find_each do |mt|
+    includes(:sub_tag, meta_tag: :meta_tags).find_each do |mt|
       # Let callers do something on each iteration.
       yield mt if block_given?
 

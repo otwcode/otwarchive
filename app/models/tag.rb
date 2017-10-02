@@ -249,10 +249,10 @@ class Tag < ApplicationRecord
     retyped.common_taggings.destroy_invalid
     retyped.child_taggings.destroy_invalid
 
-    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
-    if retyped.is_a?(Fandom)
-      retyped.add_media_for_uncategorized
-    end
+    # If the tag has just become a Fandom, it needs the Uncategorized media
+    # added to it manually (the after_save hook on Fandom won't take effect,
+    # since it's not a Fandom yet)
+    retyped.add_media_for_uncategorized if retyped.is_a?(Fandom)
   end
 
   scope :id_only, -> { select("tags.id") }
@@ -1047,9 +1047,9 @@ class Tag < ApplicationRecord
   # existing CommonTagging object.
   def build_association(tag)
     if parent_types.include?(tag&.type)
-      self.common_taggings.find_or_initialize_by(filterable: tag)
+      common_taggings.find_or_initialize_by(filterable: tag)
     else
-      self.child_taggings.find_or_initialize_by(common_tag: tag)
+      child_taggings.find_or_initialize_by(common_tag: tag)
     end
   end
 
@@ -1104,7 +1104,7 @@ class Tag < ApplicationRecord
       # We use find_or_initialize_by here so that we can properly handle tags
       # that are already our meta-tag. In particular, we may want to upgrade an
       # existing MetaTagging from indirect to direct.
-      meta_tagging = self.meta_taggings.find_or_initialize_by(meta_tag: parent)
+      meta_tagging = meta_taggings.find_or_initialize_by(meta_tag: parent)
       meta_tagging.direct = true
       save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
     end
@@ -1117,7 +1117,7 @@ class Tag < ApplicationRecord
       # We use find_or_initialize_by here so that we can properly handle tags
       # that are already our sub-tag. In particular, we may want to upgrade an
       # existing MetaTagging from indirect to direct.
-      meta_tagging = self.sub_taggings.find_or_initialize_by(sub_tag: sub)
+      meta_tagging = sub_taggings.find_or_initialize_by(sub_tag: sub)
       meta_tagging.direct = true
       save_and_gather_errors(meta_tagging, "Invalid sub tag '#{name}':")
     end
