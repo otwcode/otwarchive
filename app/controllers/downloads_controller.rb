@@ -52,10 +52,10 @@ protected
     send_data data, filename: "#{@work.download_title}.html", type: "text/html"
   end
 
-  def send_file_sync(file, filename, type)
+  def send_file_sync(file_type, mime_type)
     # send file synchronously so we don't delete it before we have finsihed sending it.
-    File.open(file, 'r') do |f|
-      send_data f.read, filename: filename, type: type
+    File.open("#{@work.download_basename}.#{file_type}", 'r') do |f|
+      send_data f.read, filename: "#{@work.download_title}.#{file_type}", type: mime_type
     end
   end
 
@@ -74,7 +74,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file_sync("#{@work.download_basename}.pdf", "#{@work.download_title}.pdf", "application/pdf")
+    send_file_sync("pdf", "application/pdf")
   end
 
   def download_mobi
@@ -99,7 +99,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file_sync("#{@work.download_basename}.mobi", "#{@work.download_title}.mobi", "application/x-mobipocket-ebook")
+    send_file_sync("mobi", "aapplication/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -120,7 +120,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file_sync("#{@work.download_basename}.epub", "#{@work.download_title}.epub", "application/epub+zip")
+    send_file_sync("epub", "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
