@@ -251,29 +251,9 @@ When /^there are (\d+) Archive FAQs$/ do |n|
   end
 end
 
-When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
-  n ||= 1
-  visit new_admin_post_path
-  fill_in("admin_post_title", with: "Amazing News #{n}")
-  fill_in("content", with: "This is the content for the #{n} Admin Post")
-  click_button("Post")
-end
-
-When /^there are (\d+) Admin Posts$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} Admin Post}
-  end
-end
-
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
-  end
-end
-
-When /^(\d+) Admin Posts? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryGirl.create(:admin_post, id: i)
   end
 end
 
@@ -310,7 +290,7 @@ end
 
 ### THEN
 
-When (/^I make a translation of an admin post$/) do
+When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -319,6 +299,7 @@ When (/^I make a translation of an admin post$/) do
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
+  fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
   click_button("Post")
 end
 
