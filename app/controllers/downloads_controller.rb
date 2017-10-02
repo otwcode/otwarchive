@@ -67,7 +67,10 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.pdf", type: "application/pdf")
+    # send file synchronously so we don't delete it before we have finsihed sending it.
+    File.open("#{@work.download_basename}.pdf", 'r') do |f|
+      send_data f.read, filename: "#{@work.download_title}.pdf", type: "application/pdf"
+    end
   end
 
   def download_mobi
@@ -92,7 +95,10 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", type: "application/x-mobipocket-ebook")
+    # send file synchronously so we don't delete it before we have finsihed sending it.
+    File.open("#{@work.download_basename}.mobi", 'r') do |f|
+      send_data f.read, filename: "#{@work.download_title}.mobi", type: "application/x-mobipocket-ebook"
+    end
   end
 
   def download_epub
@@ -113,7 +119,10 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", type: "application/epub+zip")
+    # send file synchronously so we don't delete it before we have finsihed sending it.
+    File.open("#{@work.download_basename}.epub", 'r') do |f|
+      send_data f.read, filename: "#{@work.download_title}.epub", type: "application/x-mobipocket-ebook"
+    end
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
