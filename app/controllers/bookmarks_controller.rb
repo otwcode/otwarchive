@@ -64,6 +64,7 @@ class BookmarksController < ApplicationController
       options = params[:bookmark_search].present? ? bookmark_search_params : {}
       options[:show_private] = (@user.present? && @user == current_user)
       options[:show_restricted] = current_user.present?
+      options[:rec] = params[:recs_only] == "true"
 
       options.merge!(page: params[:page])
       @page_subtitle = index_page_title
