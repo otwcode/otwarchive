@@ -84,9 +84,6 @@ class ArchiveFaqsController < ApplicationController
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
-        if @archive_faq.email_translations? && @archive_faq.new_record?
-          AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
-        end
       else
         render action: "new"
       end
@@ -169,7 +166,7 @@ class ArchiveFaqsController < ApplicationController
 
   def archive_faq_params
     params.require(:archive_faq).permit(
-      :title, :notify_translations,
+      :title,
       questions_attributes: [
         :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
       ]

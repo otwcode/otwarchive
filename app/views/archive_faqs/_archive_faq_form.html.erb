@@ -31,12 +31,6 @@
         <%= form.text_field :title %>
         <%= live_validation_for_field(field_id(form, "title").to_sym, :failureMessage => ts("Please enter a category name.")) %>
       </dd>
-      <dt>
-        <%= form.check_box :notify_translations %>
-      </dt>
-      <dd>
-        <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ category?") %>
-      </dd>
     </dl>
   </fieldset>
 
