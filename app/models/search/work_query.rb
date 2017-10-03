@@ -299,5 +299,4 @@ class WorkQuery < Query
     Tag.where(name: names, canonical: true).value_of(:id)
   end
 
-
 end

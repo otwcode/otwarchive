@@ -11,7 +11,6 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
-    updateCachedTokens();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -385,24 +384,25 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  var panes = $j(".expandable");
-  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
-    var expander = $j(this);
-    if (expander.attr('href') == '#') {
-      e.preventDefault();
-    }
-    // We need to treat the pseud menu differently so it will be properly responsive
-    // The other accordions need to be converted to a similar system
-    // Otherwise we run into bugs if one @media uses inline display and another uses block
-    if (expander.attr('title') == 'Pseud Switcher') {
-      if (expander.hasClass('expanded')) {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
-      } else {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
-      }
-    } else {
-      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-    }
+  $j(".expandable").each(function() {
+    var pane = $j(this);
+    // hide the pane element if it's not hidden by default
+    if ( !pane.hasClass("hidden") ) {
+      pane.addClass("hidden");
+    };
+
+    // make the expander visible
+    // add the default collapsed state
+    // make it do the expanding and collapsing
+    pane.prev().removeClass("hidden").addClass("collapsed").click(function(e) {
+      var expander = $j(this);
+      if (expander.attr('href') == '#') {
+        e.preventDefault();
+      };
+
+      // change the classes upon clicking the expander
+      expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
+    });
   });
 }
 
@@ -454,18 +454,18 @@ $j(document).ready(function() {
         var msg = 'Sorry, we were unable to save your kudos';
         var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors) {
-          if (data.errors.pseud_id || data.errors.ip_address) {
-            msg = "You have already left kudos here. :)";
-          } else if (data.errors.cannot_be_author) {
-            msg = "You can't leave kudos on your own work.";
-          } else if (data.errors.guest_on_restricted) {
-            msg = "You can't leave guest kudos on a restricted work.";
-          } else if (data.errors.auth_error) {
-            msg = data.errors.auth_error;
-          }
+        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
+          msg = "You have already left kudos here. :)";
         }
-        $j('#kudos_message').addClass('comment_error').html(msg);
+
+        if (data.errors && data.errors.cannot_be_author) {
+          msg = "You can't leave kudos on your own work.";
+        }
+        if (data.errors && data.errors.guest_on_restricted) {
+          msg = "You can't leave guest kudos on a restricted work.";
+        }
+
+        $j('#kudos_message').addClass('comment_error').text(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -643,18 +643,4 @@ function thermometer() {
       });
     }
   });
-}
-
-function updateCachedTokens() {
-  // we only do full page caching when users are logged out
-  if ($j('#small_login').length > 0) {
-    $j.getJSON("/token_dispenser.json", function( data ) {
-      var token = data.token;
-      //set token on fields
-      $j('input[name=authenticity_token]').each(function(){
-        $j(this).attr('value', token);
-      });
-      $j('meta[name=csrf-token]').attr('value', token);
-    });
-  }
 }

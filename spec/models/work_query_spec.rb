@@ -98,13 +98,12 @@ describe WorkQuery do
     expect(q.filters).to include({term: { filter_ids: 6 }})
   end
 
-  # TODO: Wait to add exclusion filters after current behavior is functional
-  # it "should allow you to exclude works by tag ids" do
-  #   tag = FactoryGirl.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
-  #   q = WorkQuery.new(excluded_tag_names: "foobar")
-  #   search_body = q.generated_query
-  #   expect(search_body[:query][:filtered][:filter][:bool][:must_not]).to include({terms: { filter_ids: [6]} })
-  # end
+  it "should allow you to exclude works by tag ids" do
+    tag = FactoryGirl.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
+    q = WorkQuery.new(excluded_tag_names: "foobar")
+    search_body = q.generated_query
+    expect(search_body[:query][:filtered][:filter][:bool][:must_not]).to include({terms: { filter_ids: [6]} })
+  end
 
   it "should allow you to filter for works by language" do
     q = WorkQuery.new(language_id: 1)
