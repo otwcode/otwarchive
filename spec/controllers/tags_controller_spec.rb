@@ -137,7 +137,7 @@ describe TagsController do
   end
 
   describe "edit" do
-    context "when editing a tag" do
+    context "when editing a banned tag" do
       before do
         @tag = FactoryGirl.create(:banned)
       end
@@ -184,6 +184,33 @@ describe TagsController do
         tag.reload
         expect(tag.canonical?).to be_falsy
         it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
+      end
+    end
+
+    context "when making a canonical tag into a synonym" do
+      let(:tag) { create(:freeform, canonical: true) }
+      let(:synonym) { create(:freeform, canonical: true) }
+
+      context "when logged in as a wrangler" do
+        it "errors and renders the edit page" do
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          expect(response).to render_template(:edit)
+          expect(assigns[:tag].errors.full_messages).to include("Only an admin can make a canonical tag into a synonym of another tag.")
+
+          tag.reload
+          expect(tag.merger_id).to eq(nil)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "succeeds and redirects to the edit page" do
+          fake_login_admin(create(:admin))
+          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
+          it_redirects_to_with_notice edit_tag_path(tag), "Tag was updated."
+
+          tag.reload
+          expect(tag.merger_id).to eq(synonym.id)
+        end
       end
     end
   end

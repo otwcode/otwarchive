@@ -463,14 +463,37 @@ describe Tag do
       @sub_tag = FactoryGirl.create(:fandom)
     end
 
-    it "should let you make a tag the synonym of a canonical one" do
+    context "when logged in as admin" do
+      it "lets you make a canonical tag the synonym of a canonical one" do
+        User.current_user = create(:admin)
+        @syn_tag.syn_string = @canonical_tag.name
+        @syn_tag.save
+
+        expect(@syn_tag.merger).to eq(@canonical_tag)
+        @canonical_tag = Tag.find(@canonical_tag.id)
+        expect(@canonical_tag.mergers).to eq([@syn_tag])
+      end
+    end
+
+    it "lets you make a noncanonical tag the synonym of a canonical one" do
+      @noncanonical_syn_tag = create(:fandom, canonical: false)
+      @noncanonical_syn_tag.syn_string = @canonical_tag.name
+      @noncanonical_syn_tag.save
+
+      expect(@noncanonical_syn_tag.merger).to eq(@canonical_tag)
+      @canonical_tag = Tag.find(@canonical_tag.id)
+      expect(@canonical_tag.mergers).to eq([@noncanonical_syn_tag])
+    end
+
+    it "doesn't let you make a canonical tag the synonym of a canonical one" do
       @syn_tag.syn_string = @canonical_tag.name
       @syn_tag.save
 
-      expect(@syn_tag.merger).to eq(@canonical_tag)
+      expect(@syn_tag.merger).to eq(nil)
       @canonical_tag = Tag.find(@canonical_tag.id)
-      expect(@canonical_tag.mergers).to eq([@syn_tag])
+      expect(@canonical_tag.mergers).to eq([])
     end
+
 
     it "should let you make a canonical tag the subtag of another canonical one" do
       @sub_tag.meta_tag_string = @canonical_tag.name
@@ -481,6 +504,7 @@ describe Tag do
 
     describe "with a synonym and a subtag" do
       before do
+        User.current_user = create(:admin)
         @syn_tag.syn_string = @canonical_tag.name
         @syn_tag.save
         @sub_tag.meta_tag_string = @canonical_tag.name
@@ -514,7 +538,7 @@ describe Tag do
           @sub_bm = FactoryGirl.create(:bookmark, tag_string: @sub_tag.name)
         end
 
-        it "should find all bookmarks that would need to be reindexed" do
+        it "finds all bookmarks that would need to be reindexed" do
           expect(@syn_tag.all_bookmark_ids).to eq([@syn_bm.id])
           expect(@sub_tag.all_bookmark_ids).to eq([@sub_bm.id])
           expect(@canonical_tag.all_bookmark_ids).to match_array([@direct_bm.id, @syn_bm.id, @sub_bm.id])
