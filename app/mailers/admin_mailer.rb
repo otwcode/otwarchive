@@ -16,16 +16,6 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
-  def edited_faq(archive_faq_id, admin)
-    @admin = admin
-    @archive_faq = ArchiveFaq.find(archive_faq_id)
-    @email = "translation@transformativeworks.org"
-    mail(
-      to: @email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
-         )
-  end
-
   def feedback(feedback_id)
     feedback = Feedback.find(feedback_id)
     @summary = feedback.summary
