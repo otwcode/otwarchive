@@ -163,7 +163,9 @@ class WorkQuery < Query
   end
 
   def tag_exclusion_filter
-    terms_filter(:filter_ids, exclusion_ids) if exclusion_ids.present?
+    if exclusion_ids.present?
+      exclusion_ids.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
+    end
   end
 
   ####################
@@ -296,7 +298,11 @@ class WorkQuery < Query
   def exclusion_ids
     return unless options[:excluded_tag_names]
     names = options[:excluded_tag_names].split(",")
-    Tag.where(name: names, canonical: true).value_of(:id)
+
+    excluded_tags = (Tag.where(name: names, canonical: true) +
+                      Tag.where(name: names, canonical: false).map(&:merger)).flatten
+
+    excluded_tags.pluck(:id) + excluded_tags.map(&:children).flatten.pluck(:id)
   end
 
 end

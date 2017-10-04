@@ -53,7 +53,7 @@ class Query
     return unless filters.present?
     bool = { bool: { must: filters } }
     if exclusion_filters.present?
-      bool[:bool].merge!(must_not: exclusion_filters)
+      bool[:bool][:must_not] = exclusion_filters
     end
     bool
   end

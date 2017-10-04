@@ -1133,6 +1133,7 @@ class WorksController < ApplicationController
       character_ids: [],
       relationship_ids: [],
       freeform_ids: [],
+      excluded_tag_names: [],
 
       collection_ids: []
     )
