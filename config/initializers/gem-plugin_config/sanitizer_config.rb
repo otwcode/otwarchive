@@ -121,9 +121,11 @@ class Sanitize
 
       allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
       supports_https = [
+        "8tracks",
         "archiveorg",
         "archiveofourown",
         "dailymotion",
+        "podfic",
         "soundcloud",
         "spotify",
         "viddertube",
