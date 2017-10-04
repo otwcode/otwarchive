@@ -234,6 +234,25 @@ describe HtmlCleaner do
         expect(result).to be_empty
       end
 
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
+         archiveofourown.org archive.org dailymotion.com
+         embed.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+
+        it "should convert to https for #{source}" do
+          html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(:content, html)
+          expect(result).to match('https:')
+        end
+      end
+
+      %w(metacafe.com vidders.net criticalcommons.org 8tracks.com static.ning.com ning.com podfic.com).each do |source|
+        it "should not convert to https for #{source}" do
+          html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(:content, html)
+          expect(result).not_to match('https:')
+        end
+      end
+
       ["'';!--\"<XSS>=&{()}",
        '<XSS STYLE="behavior: url(xss.htc);">'
       ].each do |value|

@@ -564,6 +564,16 @@ namespace :After do
       end
     end
   end
+
+  desc "Enforce HTTPS where available for embedded media"
+  task(enforce_https: :environment) do
+    Chapter.find_each do |chapter|
+      if chapter.content.match /<(embed|iframe)/
+        chapter.content_sanitizer_version = -1
+        chapter.sanitize_field(chapter, :content)
+      end
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
