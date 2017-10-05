@@ -102,7 +102,7 @@ describe WorkQuery do
     tag = FactoryGirl.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
     q = WorkQuery.new(excluded_tag_names: "foobar")
     search_body = q.generated_query
-    expect(search_body[:query][:filtered][:filter][:bool][:must_not]).to include({terms: { filter_ids: [6]} })
+    expect(search_body[:query][:bool][:filter][:bool][:must_not]).to include({term: { filter_ids: 6} })
   end
 
   it "should allow you to filter for works by language" do

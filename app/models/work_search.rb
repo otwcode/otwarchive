@@ -5,6 +5,7 @@ class WorkSearch < Search
     :title,
     :creator,
     :creators,
+    :excluded_tag_names,
     :revised_at,
     :language_id,
     :complete,

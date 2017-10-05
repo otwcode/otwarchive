@@ -1125,6 +1125,7 @@ class WorksController < ApplicationController
       :sort_column,
       :sort_direction,
       :other_tag_names,
+      :excluded_tag_names,
 
       warning_ids: [],
       category_ids: [],
@@ -1133,7 +1134,6 @@ class WorksController < ApplicationController
       character_ids: [],
       relationship_ids: [],
       freeform_ids: [],
-      excluded_tag_names: [],
 
       collection_ids: []
     )

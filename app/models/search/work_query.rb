@@ -26,7 +26,7 @@ class WorkQuery < Query
   end
 
   def exclusion_filters
-    [tag_exclusion_filter].compact
+    tag_exclusion_filter.compact if tag_exclusion_filter
   end
 
   # Combine the available queries
