@@ -35,6 +35,11 @@ stubbed response", headers: {})
               body: "stubbed response",
               headers: {})
 
+  WebMock.stub_request(:any, /second-import-site-without-tags/).
+    to_return(status: 200,
+              body: "second stubbed response",
+              headers: {})
+
   WebMock.stub_request(:any, /no-content/).
     to_return(status: 200,
               body: "",
@@ -44,17 +49,22 @@ stubbed response", headers: {})
     to_return(status: 404, headers: {})
 end
 
-Given /^I set up importing( with a mock website)?$/ do |mock|
+Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock, is_archivist|
   unless mock.blank?
     mock_external
   end
   step %{basic tags}
-  step %{I am logged in as a random user}
+  if is_archivist.blank?
+    step %{I am logged in as a random user}
+  else
+    step %{I have an archivist "archivist"}
+    step %{I am logged in as "archivist"}
+  end
   step %{I go to the import page}
 end
 
-When /^I start importing "(.*)"( with a mock website)?$/ do |url, mock|
-  step %{I set up importing#{mock}}
+When /^I start importing "(.*)"( with a mock website)?( as an archivist)?$/ do |url, mock, is_archivist|
+  step %{I set up importing#{mock}#{is_archivist}}
   step %{I fill in "urls" with "#{url}"}
 end
 
@@ -69,8 +79,14 @@ When /^I import the urls$/ do |urls|
   step %{I press "Import"}
 end
 
-When /^I import the urls with mock websites$/ do |urls|
+When /^I import the urls with mock websites( as chapters)?( without preview)?$/ do |chapters, no_preview, urls|
   step %{I set up importing with a mock website}
   step %{I fill in "urls" with "#{urls}"}
+  if chapters
+    step %{I choose "import_multiple_chapters"}
+  end
+  if no_preview
+    step %{I check "post_without_preview"}
+  end
   step %{I press "Import"}
 end

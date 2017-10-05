@@ -1,7 +1,5 @@
-class TranslationNote < ActiveRecord::Base
+class TranslationNote < ApplicationRecord
   belongs_to :user
   belongs_to :locale
 
-
-  attr_protected :note_sanitizer_version
 end

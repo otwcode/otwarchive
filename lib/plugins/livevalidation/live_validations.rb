@@ -1,64 +1,70 @@
 module ActiveModel
   module Validations
     LIVE_VALIDATIONS_OPTIONS = {
-      :failureMessage => :message,
-      :pattern => :with,
-      :onlyInteger => :only_integer
+      failureMessage: :message,
+      pattern: :with,
+      onlyInteger: :only_integer
     }
     # more complicated mappings in map_configuration method
 
     VALIDATION_METHODS = {
-      :presence => { :method => "Validate.Presence", 
-  		  :messages => { 
-  			  :failureMessage => "live_validation.presence.failure" 
-  			} 
+      presence: { method: "Validate.Presence",
+  		  messages: {
+  			  failureMessage: "live_validation.presence.failure"
+  			}
   		},
-      :numericality =>  { :method => "Validate.Numericality",
-		    :messages => { 
-    			:notANumberMessage => "live_validation.numericality.not_a_number", 
-    			:notAnIntegerMessage => "live_validation.numericality.not_an_integer",
-    			:wrongNumberMessage => "live_validation.numericality.wrong_number",
-    			:tooLowMessage => "live_validation.numericality.too_low",
-    			:tooHighMessage => "live_validation.numericality.too_high"
-    		} 
+      numericality:  { method: "Validate.Numericality",
+		    messages: {
+    			notANumberMessage: "live_validation.numericality.not_a_number",
+    			notAnIntegerMessage: "live_validation.numericality.not_an_integer",
+    			wrongNumberMessage: "live_validation.numericality.wrong_number",
+    			tooLowMessage: "live_validation.numericality.too_low",
+    			tooHighMessage: "live_validation.numericality.too_high"
+    		}
 		  },
-      :format => { :method => "Validate.Format",
-    		:messages => { 
-    			:failureMessage => "live_validation.format.failure"
-    		} 
-    	},
-      :length => { :method => "Validate.Length",
-    		:messages => { 
-    			:wrongLengthMessage => "live_validation.length.wrong_length", 
-    			:tooShortMessage => "live_validation.length.too_short",
-    			:tooLongMessage => "live_validation.length.too_long" 
+      format: { method: "Validate.Format",
+    		messages: {
+    			failureMessage: "live_validation.format.failure"
     		}
     	},
-      :acceptance => { :method => "Validate.Acceptance",
-    		:messages => { 
-    			:failureMessage => "live_validation.acceptance.failure"
+      length: { method: "Validate.Length",
+    		messages: {
+    			wrongLengthMessage: "live_validation.length.wrong_length",
+    			tooShortMessage: "live_validation.length.too_short",
+    			tooLongMessage: "live_validation.length.too_long"
     		}
     	},
-      :confirmation => { :method => "Validate.Confirmation",
-    		:messages => { 
-    			:failureMessage => "live_validation.confirmation.failure"
-    		} 
+      acceptance: { method: "Validate.Acceptance",
+    		messages: {
+    			failureMessage: "live_validation.acceptance.failure"
+    		}
+    	},
+      confirmation: { method: "Validate.Confirmation",
+    		messages: {
+    			failureMessage: "live_validation.confirmation.failure"
+    		}
     	}
     }
 
 
     module HelperMethods
 
+      def live_validations
+        @live_validations ||= {}
+      end
+
       VALIDATION_METHODS.keys.each do |type|
         define_method "validates_#{type}_of_with_live_validations".to_sym do |*attr_names|
           send "validates_#{type}_of_without_live_validations".to_sym, *attr_names
           define_validations(type, attr_names)
         end
-        alias_method_chain "validates_#{type}_of".to_sym, :live_validations
-      end
 
-      def live_validations
-        @live_validations ||= {}
+        # alias_method_chain "validates_#{type}_of".to_sym, :live_validations
+        # see form_helpers for explanation
+        #
+        alias_method "validates_#{type}_of_without_live_validations".to_sym, :live_validations
+        alias_method :live_validations, "validates_#{type}_of_with_live_validations".to_sym
+
       end
 
       private
