@@ -16,7 +16,7 @@ Feature: Display autocomplete for tags
     Given I am logged in
       And a set of tags for testing autocomplete
       And I go to the new work page
-     Then the fandom-specific tag autocomplete fields should list only fandom-specific canonical tags
+    Then the fandom-specific tag autocomplete fields should list only fandom-specific canonical tags
 
   @javascript
   Scenario: Bookmark archive work form autocomplete should work
@@ -140,3 +140,33 @@ Feature: Display autocomplete for tags
     When I choose "Lord of the Rings" from the "Fandoms" autocomplete
       And I enter "É" in the "Characters" autocomplete field
     Then I should see "Éowyn" in the autocomplete
+
+  @javascript
+  Scenario: Search terms are highlighted in autocomplete results
+    Given I am logged in
+      And basic tags
+      And a canonical relationship "Cassian Andor & Jyn Erso"
+      And I go to the new work page
+
+    When I enter "Jyn" in the "Relationships" autocomplete field
+    Then I should see HTML "Cassian Andor &amp; <b>Jyn</b> Erso" in the autocomplete
+
+    When I enter "Cass" in the "Relationships" autocomplete field
+    Then I should see HTML "<b>Cass</b>ian Andor &amp; Jyn Erso" in the autocomplete
+
+    When I enter "erso and" in the "Relationships" autocomplete field
+    Then I should see HTML "Cassian <b>And</b>or &amp; Jyn <b>Erso</b>" in the autocomplete
+
+    When I enter "Cassian Andor & Jyn Erso" in the "Relationships" autocomplete field
+    Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
+
+    # AO3-4976 There should not be stray semicolons if the query has...
+    # ...trailing spaces
+    When I enter "Jyn " in the "Relationships" autocomplete field
+    Then I should see HTML "Cassian Andor &amp; <b>Jyn</b> Erso" in the autocomplete
+    # ...leading spaces
+    When I enter " Jyn" in the "Relationships" autocomplete field
+    Then I should see HTML "Cassian Andor &amp; <b>Jyn</b> Erso" in the autocomplete
+    # ...consecutive spaces
+    When I enter "Jyn  Erso" in the "Relationships" autocomplete field
+    Then I should see HTML "Cassian Andor &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
