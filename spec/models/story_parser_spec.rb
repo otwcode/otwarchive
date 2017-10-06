@@ -6,13 +6,13 @@ describe StoryParser do
   # Temporarily make the methods we want to test public
   before(:all) do
     class StoryParser
-      public :get_source_if_known, :check_for_previous_import, :parse_common
+      public :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
     end
   end
 
   after(:all) do
     class StoryParser
-      protected :get_source_if_known, :check_for_previous_import, :parse_common
+      protected :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
     end
   end
 
@@ -174,6 +174,32 @@ describe StoryParser do
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
+    end
+  end
+
+  describe "#parse_author" do
+    it "returns an external author name when a name and email are provided" do
+      results = @sp.parse_author("", "Author Name", "author@example.com")
+      expect(results.name).to eq("Author Name")
+      expect(results.external_author.email).to eq("author@example.com")
+    end
+
+    it "raises an exception when the external author name is not provided" do
+      expect {
+        @sp.parse_author("", nil, "author@example.com")
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified") }
+    end
+
+    it "raises an exception when the external author email is not provided" do
+      expect {
+        @sp.parse_author("", "Author Name", nil)
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author email specified") }
+    end
+
+    it "raises an exception when neither the external author name nor email is provided" do
+      expect {
+        @sp.parse_author("", nil, nil)
+      }.to raise_exception(StoryParser::Error) { |e| expect(e.message).to eq("No author name specified\nNo author email specified") }
     end
   end
 
