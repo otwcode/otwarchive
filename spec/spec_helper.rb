@@ -2,9 +2,13 @@ ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
 require 'simplecov'
-require 'coveralls'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
-Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
+if ENV["CI"] == "true"
+  # Only on Travis...
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
@@ -87,6 +91,7 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_AUTOCOMPLETE.flushall
   # Finally elastic search
   Work.tire.index.delete
   Work.create_elasticsearch_index

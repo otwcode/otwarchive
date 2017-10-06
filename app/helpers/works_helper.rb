@@ -184,6 +184,10 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
+  def all_coauthor_skins
+    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+  end
+
   # For works that are more than 1 chapter, returns "current #/expected #" of chapters
   # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
   # returns the un-linked version.
@@ -198,5 +202,4 @@ module WorksHelper
       work.chapter_total_display
     end
   end
-
 end

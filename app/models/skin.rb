@@ -154,10 +154,14 @@ class Skin < ApplicationRecord
 
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
-      where(public: true, official: true)
+      approved_skins
     else
-      where("(public = 1 AND official = 1) OR author_id = ?", user.id)
+      approved_or_owned_by_any([user])
     end
+  end
+
+  def self.approved_or_owned_by_any(users)
+    where("(public = 1 AND official = 1) OR author_id in (?)", users.map(&:id))
   end
 
   def self.usable
@@ -271,7 +275,7 @@ class Skin < ApplicationRecord
 
   def get_css
     if filename
-      File.read(Rails.public_path.join("." + filename))
+      File.read(Rails.public_path.join(filename))
     else
       css
     end
