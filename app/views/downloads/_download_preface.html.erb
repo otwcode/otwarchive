@@ -61,7 +61,7 @@ hide_freeform?(@work)) %>
         <% parent_work_list = @work.parent_work_relationships.reject{ |wr| wr.parent.nil? } %>
         <%= parent_work_list.map{ |rw| "#{link_to(rw.parent.title,
                url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
-                       only_path: false)) } #{ts('by')} #{byline(rw.parent)}" }.join(", ").html_safe %>
+                       only_path: false)) } #{ts('by')} #{byline(rw.parent, only_path: false)}" }.join(", ").html_safe %>
       </dd>
     </dl>
   <% end %>

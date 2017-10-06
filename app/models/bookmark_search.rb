@@ -48,7 +48,7 @@ class BookmarkSearch < Search
       { terms: { pseud_id: pseuds.map(&:id) } }
     ]
     unless pseuds.map(&:user).uniq == [User.current_user]
-      terms << { term: { :private => 'F' } }
+      terms << { term: { private: 'F' } }
     end
     query = { bool: { must: terms } }
     response = ElasticsearchSimpleClient.perform_count(Bookmark.index_name, 'bookmark', query)
@@ -180,7 +180,7 @@ class BookmarkSearch < Search
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        tags = Tag.where(:name => names, :canonical => true)
+        tags = Tag.where(name: names, canonical: true)
         unless tags.empty?
           options[:filter_ids] ||= []
           options[:filter_ids] += tags.map{ |tag| tag.id }
@@ -262,7 +262,7 @@ class BookmarkSearch < Search
       end
     end
     unless all_tag_ids.empty?
-      tags << Tag.where(:id => all_tag_ids).pluck(:name).join(", ")
+      tags << Tag.where(id: all_tag_ids).pluck(:name).join(", ")
     end
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"

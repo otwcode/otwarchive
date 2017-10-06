@@ -117,7 +117,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   n_chapters ||= 2
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
-    fill_in("content", :with => "Yet another chapter.")
+    fill_in("content", with: "Yet another chapter.")
     click_button("Post Without Preview")
   end
   step %{I am logged out}
@@ -142,13 +142,31 @@ Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I post the locked work "#{work}"}
 end
 
-Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
-  step %{I have a work "Blabla"}
+Given /^I have a multi-chapter draft$/ do
+  step %{I am logged in as a random user}
+  step %{I post the chaptered draft "Multi-chapter Draft"}
+end
+
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
   step %{I am logged out}
   n_comments ||= 3
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Keep up the good work" on the work "Blabla"}
+    step %{I post the comment "Keep up the good work" on the work "#{title}"}
+    step %{I am logged out}
+  end
+end
+
+Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
+  title ||= "Blabla"
+  step %{I have a work "#{title}"}
+  step %{I am logged out}
+  n_bookmarks ||= 3
+  n_bookmarks.to_i.times do |i|
+    step %{I am logged in as a random user}
+    step %{I bookmark the work "#{title}"}
     step %{I am logged out}
   end
 end
@@ -177,6 +195,12 @@ Given /^the work "([^"]*)"$/ do |work|
   end
 end
 
+Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
+  step %{I am logged in as "#{author}"}
+  step %{I post the work "#{work}"}
+  step %{a chapter with the co-author "#{coauthor}" is added to "#{work}"}
+end
+
 Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |work, collection|
   step %{I have the hidden collection "#{collection}"}
   step %{I am logged in as a random user}
@@ -200,7 +224,7 @@ When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |wo
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by(title: work)
-  visit work_url(work, :anchor => "comments", :show_comments => true)
+  visit work_url(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do
@@ -224,7 +248,7 @@ end
 When /^I post the chaptered work "([^"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
-  fill_in("content", :with => "Another Chapter.")
+  fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
   Work.tire.index.refresh
@@ -263,6 +287,15 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+# Posts a chapter for the current user
+When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+  work = Work.find_by(title: work_title)
+  visit work_url(work)
+  step %{I follow "Add Chapter"}
+  step %{I fill in "content" with "la la la la la la la la la la la"}
+  step %{I post the chapter}
+end
+
 When /^a chapter is set up for "([^"]*)"$/ do |work_title|
   work = Work.find_by(title: work_title)
   user = work.users.first
@@ -288,13 +321,13 @@ Then /^I should not see the default work content$/ do
 end
 
 When /^I fill in basic work tags$/ do
-  select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Additional Tags", :with => DEFAULT_FREEFORM)
+  select(DEFAULT_RATING, from: "Rating")
+  fill_in("Fandoms", with: DEFAULT_FANDOM)
+  fill_in("Additional Tags", with: DEFAULT_FREEFORM)
 end
 
 When /^I fill in basic external work tags$/ do
-  select(DEFAULT_RATING, :from => "Rating")
+  select(DEFAULT_RATING, from: "Rating")
   fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
   fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
@@ -341,6 +374,15 @@ When /^I edit multiple works with different anonymous commenting settings$/ do
   step %{I go to my edit multiple works page}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
   step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coauthor|
+  step %{I coauthored the work "Shared Work 1" as "#{author}" with "#{coauthor}"}
+  step %{I coauthored the work "Shared Work 2" as "#{author}" with "#{coauthor}"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Shared Work 1" for editing}
+  step %{I select "Shared Work 2" for editing}
   step %{I press "Edit"}
 end
 
@@ -408,13 +450,13 @@ When /^I set the publication date to today$/ do
 
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")
-    select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
-    select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
-    select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+    select("#{today.day}", from: "work[chapter_attributes][published_at(3i)]")
+    select("#{month}", from: "work[chapter_attributes][published_at(2i)]")
+    select("#{today.year}", from: "work[chapter_attributes][published_at(1i)]")
   else
-    select("#{today.day}", :from => "chapter[published_at(3i)]")
-    select("#{month}", :from => "chapter[published_at(2i)]")
-    select("#{today.year}", :from => "chapter[published_at(1i)]")
+    select("#{today.day}", from: "chapter[published_at(3i)]")
+    select("#{month}", from: "chapter[published_at(2i)]")
+    select("#{today.year}", from: "chapter[published_at(1i)]")
   end
 end
 
@@ -426,16 +468,17 @@ When /^I browse the "([^"]+)" works$/ do |tagname|
 end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, :page => "")
+  visit tag_works_path(tag, page: "")
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
 
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: work)
-  visit edit_work_url(work)
+  visit edit_work_path(work)
   step %{I follow "Delete Work"}
-  click_button("Yes, Delete Work")
+  # If JavaScript is enabled, window.confirm will be used and this button will not appear
+  click_button("Yes, Delete Work") unless @javascript
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
@@ -462,7 +505,9 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
+
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
+  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
   step %{I post the work without preview}
@@ -519,6 +564,15 @@ When /^I mark the work "([^"]*)" for later$/ do |work|
   step %{I follow "Mark for Later"}
   Reading.update_or_create_in_database
 end
+
+When /^the statistics for the work "([^"]*)" are updated$/ do |title|
+  step %{the statistics_tasks rake task is run}
+  step %{all search indexes are updated}
+  work = Work.find_by(title: title)
+  # Touch the work to actually expire the cache
+  work.touch
+end
+
 ### THEN
 Then /^I should see Updated today$/ do
   today = Time.zone.today.to_s
@@ -550,4 +604,12 @@ end
 
 Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
+end
+
+Then /^the Remove Me As Chapter Co-Creator option should be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
+end
+
+Then /^the Remove Me As Chapter Co-Creator option should not be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
+  step %{I should not see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end

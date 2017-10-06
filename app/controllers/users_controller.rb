@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :check_user_status, only: [:edit, :update]
-  before_filter :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_filter :check_account_creation_status, only: [:new, :create]
-  skip_before_filter :store_location, only: [:end_first_login]
+  before_action :check_user_status, only: [:edit, :update]
+  before_action :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
+  before_action :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
+  before_action :check_account_creation_status, only: [:new, :create]
+  skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
   # The unique index on login (database level) prevents the duplicate user from being created,
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 
     visible = visible_items(current_user)
 
-    @fandoms = @fandoms.all # force eager loading
+    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
     @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -254,8 +254,8 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @hide_dashboard = true
-    @works = @user.works.find(:all, conditions: { posted: true })
-    @sole_owned_collections = @user.collections.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? }
+    @works = @user.works.where(posted: true)
+    @sole_owned_collections = @user.collections.to_a.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? }
 
     if @works.empty? && @sole_owned_collections.empty?
       @user.wipeout_unposted_works if @user.unposted_works
@@ -369,7 +369,7 @@ class UsersController < ApplicationController
     @fandoms = Fandom.select('tags.*, count(tags.id) as work_count')
                      .joins(:direct_filter_taggings)
                      .joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'")
-                     .group('tags.id').order('work_count DESC')
+                     .group('tags.id')
                      .merge(Work.send(visible_method).revealed.non_anon)
                      .merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
   INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
@@ -414,7 +414,7 @@ class UsersController < ApplicationController
         pseuds_with_author_removed = w.pseuds - @user.pseuds
         w.pseuds = pseuds_with_author_removed
 
-        w.save
+        w.save && w.touch # force cache_key to bust
 
         w.chapters.each do |c|
           c.pseuds = c.pseuds - @user.pseuds
@@ -444,7 +444,7 @@ class UsersController < ApplicationController
       @sole_owned_collections.each(&:destroy)
     end
 
-    @works = @user.works.find(:all, conditions: { posted: true })
+    @works = @user.works.where(posted: true)
 
     if @works.blank?
       @user.wipeout_unposted_works if @user.unposted_works

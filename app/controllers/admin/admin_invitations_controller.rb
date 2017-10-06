@@ -1,6 +1,6 @@
 class Admin::AdminInvitationsController < ApplicationController
 
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
   end
@@ -12,19 +12,19 @@ class Admin::AdminInvitationsController < ApplicationController
       render action: 'index'
     elsif @invitation.save
       flash[:notice] = t('sent', default: "An invitation was sent to %{email_address}", email_address: @invitation.invitee_email)
-      redirect_to admin_invitations_url
+      redirect_to admin_invitations_path
     else
       render action: 'index'
     end
   end
 
   def invite_from_queue
-    InviteRequest.find(:all, order: :position, limit: invitation_params[:invite_from_queue].to_i).each do |request|
+    InviteRequest.order(:position).limit(invitation_params[:invite_from_queue].to_i).each do |request|
       request.invite_and_remove(current_admin)
     end
     InviteRequest.reset_order
     flash[:notice] = t('invited_from_queue', default: "%{count} people from the invite queue were invited.", count: invitation_params[:invite_from_queue].to_i)
-    redirect_to admin_invitations_url
+    redirect_to admin_invitations_path
   end
 
   def grant_invites_to_users
@@ -34,7 +34,7 @@ class Admin::AdminInvitationsController < ApplicationController
       Invitation.grant_empty(invitation_params[:number_of_invites].to_i)
     end
     flash[:notice] = t('invites_created', default: 'Invitations successfully created.')
-    redirect_to admin_invitations_url
+    redirect_to admin_invitations_path
   end
 
   def find
@@ -46,7 +46,7 @@ class Admin::AdminInvitationsController < ApplicationController
     if !invitation_params[:token].blank?
       @invitation = Invitation.find_by(token: invitation_params[:token])
     elsif !invitation_params[:invitee_email].blank?
-      @invitations = Invitation.find(:all, conditions: ['invitee_email LIKE ?', '%' + invitation_params[:invitee_email] + '%'])
+      @invitations = Invitation.where('invitee_email LIKE ?', "%#{invitation_params[:invitee_email]}%")
       @invitation = @invitations.first if @invitations.length == 1
     end
     unless @user || @invitation || @invitations

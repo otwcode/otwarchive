@@ -1,13 +1,13 @@
-class ChallengeClaim < ActiveRecord::Base
+class ChallengeClaim < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
-  belongs_to :claiming_user, :class_name => "User", :inverse_of => :request_claims
+  belongs_to :claiming_user, class_name: "User", inverse_of: :request_claims
   belongs_to :collection
-  belongs_to :request_signup, :class_name => "ChallengeSignup"
-  belongs_to :request_prompt, :class_name => "Prompt"
-  belongs_to :creation, :polymorphic => true
+  belongs_to :request_signup, class_name: "ChallengeSignup"
+  belongs_to :request_prompt, class_name: "Prompt"
+  belongs_to :creation, polymorphic: true
 
   # have to override the == operator or else two claims by same user on same user's prompts are equal
   def ==(other)
@@ -133,7 +133,7 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claiming_pseud
-    User.find_by(id: claiming_user_id).default_pseud
+    claiming_user.try(:default_pseud)
   end
 
   def requesting_pseud
@@ -141,7 +141,7 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claim_byline
-    User.find_by(id: claiming_user_id).default_pseud.byline
+    claiming_pseud.try(:byline) || "deleted user"
   end
 
   def request_byline

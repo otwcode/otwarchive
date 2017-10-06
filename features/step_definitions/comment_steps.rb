@@ -11,7 +11,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
   user.preference.kudos_emails_off = true
-  user.preference.admin_emails_off = true
   user.preference.save
 end
 
@@ -104,7 +103,7 @@ end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
   work = Work.find_by(title: work)
-  visit new_work_comment_path(work, :only_path => false)
+  visit new_work_comment_path(work, only_path: false)
 end
 
 When /^I comment on an admin post$/ do
@@ -112,6 +111,26 @@ When /^I comment on an admin post$/ do
     step %{I follow "Comment"}
     step %{I fill in "comment[content]" with "Excellent, my dear!"}
     step %{I press "Comment"}
+end
+
+When /^I post a spam comment$/ do
+  fill_in("comment[name]", with: "spammer")
+  fill_in("comment[email]", with: "spammer@example.org")
+  fill_in("comment[content]", with: "Buy my product! http://spam.org")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^I post a guest comment$/ do
+  fill_in("comment[name]", with: "guest")
+  fill_in("comment[email]", with: "guest@example.org")
+  fill_in("comment[content]", with: "This was really lovely!")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^all comments by "([^"]*)" are marked as spam$/ do |name|
+  Comment.where(name: name).update_all(approved: false)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
@@ -127,6 +146,11 @@ end
 
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
+  step %{I follow "Yes, delete!"}
+end
+
+When /^I delete the reply comment$/ do
+  step %{I follow "Delete" within ".even"}
   step %{I follow "Yes, delete!"}
 end
 

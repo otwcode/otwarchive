@@ -39,7 +39,7 @@ module ActionView
           end
 
           content = options.delete("value") { value_before_type_cast(object) }
-          content = strip_html_breaks(content)
+          content = strip_html_breaks(content, options['name'])
 
           content_tag("textarea", content, options)
         end

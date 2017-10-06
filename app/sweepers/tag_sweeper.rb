@@ -66,7 +66,7 @@ class TagSweeper < ActionController::Caching::Sweeper
       values[:parented] = tag.parents.any? {|p| p.is_a?(Fandom)}
       values[:exists] = true
     end
-    TagNomination.where(:tagname => tag.name).update_all(values)
+    TagNomination.where(tagname: tag.name).update_all(values)
   end
 
 

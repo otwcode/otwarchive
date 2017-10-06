@@ -1,8 +1,8 @@
 class StatsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   # only the current user
   def load_user
@@ -12,7 +12,7 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(posted: true)
+    user_works = Work.joins(pseuds: :user).where("users.id = ?", @user.id).where(posted: true)
     work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom,
@@ -25,7 +25,7 @@ class StatsController < ApplicationController
 
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is
     # checked against the whitelist of valid options
-    sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
+    sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
     @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
 
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
@@ -65,7 +65,7 @@ class StatsController < ApplicationController
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
-    @totals[:user_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
+    @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: 'User').count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new
@@ -90,15 +90,15 @@ class StatsController < ApplicationController
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
-    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {:isVertical => true}).uri({
-     :chtt => chart_title,
-     :chs => "800x350",
-     :chbh => "a",
-     :chxt => "x",
-     :chm => "N,000000,0,-1,11"
+    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {isVertical: true}).uri({
+     chtt: chart_title,
+     chs: "800x350",
+     chbh: "a",
+     chxt: "x",
+     chm: "N,000000,0,-1,11"
     })
 
-    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, :title => chart_title)
+    @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, title: chart_title)
 
   end
 

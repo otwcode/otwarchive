@@ -137,6 +137,14 @@ describe UserMailer do
       it 'only has style_to links in the HTML body' do
         expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
       end
+
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
     end
 
     describe 'text version' do
@@ -150,6 +158,10 @@ describe UserMailer do
 
       it 'lists the second imported work with a leading hyphen' do
         expect(get_message_part(email, /plain/)).to include(title2)
+      end
+
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
       end
     end
   end
@@ -205,6 +217,7 @@ describe UserMailer do
     token = 'abc123'
 
     before(:each) do
+      @user = FactoryGirl.create(:user)
       @invitation = FactoryGirl.create(:invitation, token: token)
     end
 

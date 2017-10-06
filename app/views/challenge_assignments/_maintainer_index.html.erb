@@ -32,13 +32,13 @@
   <li>
     <%= link_to ts("Default All Incomplete"),
                 default_all_collection_assignments_path(@collection),
-                confirm: ts("Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting."),
+                data: { confirm: ts("Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting.") },
                 role: "button" %>
   </li>
   <li>
     <%= link_to ts("Purge Assignments"),
                 confirm_purge_collection_assignments_path(@collection),
-                confirm: ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!"),
+                data: { confirm: ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") },
                 role: "button" %>
   </li>
 </ul>

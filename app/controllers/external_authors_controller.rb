@@ -1,9 +1,9 @@
 class ExternalAuthorsController < ApplicationController
-  before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
-  before_filter :check_user_status, :only => [:new, :create, :edit]
-  before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
-  before_filter :users_only, :only => [:complete_claim]
+  before_action :load_user
+  before_action :check_ownership, only: [:create, :edit, :destroy, :new]
+  before_action :check_user_status, only: [:new, :create, :edit]
+  before_action :get_external_author_from_invitation, only: [:claim, :complete_claim]
+  before_action :users_only, only: [:complete_claim]
 
   def load_user
     @user = User.find_by(login: params[:user_id])
@@ -49,7 +49,7 @@ class ExternalAuthorsController < ApplicationController
     # go ahead and give the user the works
     @external_author.claim!(current_user)
     @invitation.mark_as_redeemed(current_user) if @invitation
-    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under %{email} to your account.", :email => @external_author.email)
+    flash[:notice] = t('external_author_claimed', default: "We have added the stories imported under %{email} to your account.", email: @external_author.email)
     redirect_to user_external_authors_path(current_user)
   end
 
@@ -76,7 +76,7 @@ class ExternalAuthorsController < ApplicationController
     end
     @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params[:external_author])
+    if @external_author.update_attributes(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
       if @user
         redirect_to user_external_authors_path(@user)
@@ -85,7 +85,7 @@ class ExternalAuthorsController < ApplicationController
       end
     else
       flash[:error] += "There were problems saving your preferences."
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

@@ -17,6 +17,15 @@ Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
     user.activate
+    user.pseuds.first.add_to_autocomplete
+  end
+end
+
+Given /the following activated users with private work skins/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
   end
 end
 
@@ -25,6 +34,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
@@ -44,18 +54,26 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
 end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
-  step("I am logged out")
   user = find_or_create_new_user(login, password)
+  require 'authlogic/test_case'
+  step("I am logged out")
   if hidden.present?
     user.preference.hide_warnings = true
     user.preference.hide_freeform = true
     user.preference.save
   end
-  visit login_path
+  step %{I am on the homepage}
+  find_link('login-dropdown').click
+  activate_authlogic
+
   fill_in "User name", with: login
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
+
+  activate_authlogic
+  UserSession.create!(user)
+
   assert UserSession.find unless @javascript
 end
 
@@ -84,7 +102,9 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
+  require 'authlogic/test_case'
   visit logout_path
+  activate_authlogic
   assert UserSession.find.nil? unless @javascript
   visit destroy_admin_session_path
 end
@@ -100,9 +120,11 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
+  require 'authlogic/test_case'
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
+  activate_authlogic
 end
 
 Given /^I am a visitor$/ do
@@ -114,10 +136,11 @@ Given /^I view the people page$/ do
   visit people_path
 end
 
-Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
+Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
+  step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
   author2 = User.find_by(login: coauthor).default_pseud
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
 end
 
 # WHEN
@@ -208,6 +231,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
+  require 'authlogic/test_case'
+  activate_authlogic
   assert UserSession.find.nil? unless @javascript
 end
 

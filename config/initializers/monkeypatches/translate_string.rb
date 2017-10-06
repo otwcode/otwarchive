@@ -20,7 +20,7 @@ module I18n
         end
         # Rails.logger.error "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
         # add the default string as an option, and hand off to translate.
-        options.merge!(:default => default_string)
+        options.merge!(default: default_string)
         translate(key.to_sym, options)
       else
         translate(args)
@@ -112,7 +112,7 @@ module ActionView
           end
           #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
           # add the default string as an option, and hand off to translate.
-          options.merge!(:default => default_string)
+          options.merge!(default: default_string)
           translate(key.to_sym, options)
         else
           translate(args)

@@ -1,5 +1,5 @@
 When /^I view the "([^\"]*)" works index$/ do |tag|
-  visit works_path(:tag_id => tag.to_param)
+  visit works_path(tag_id: tag.to_param)
 end
 
 When /^I view the "([^"]*)" works feed$/ do |tag|

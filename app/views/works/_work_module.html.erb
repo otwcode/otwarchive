@@ -31,8 +31,8 @@
       <% if work.gifts.not_rejected.exists? %>
         <%= ts("for") %> <%= recipients_link(work) %>
       <% end %>
-      <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-      <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted", skip_pipeline: true) %><% end %>
+      <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator", skip_pipeline: true) %><% end %>
     </h4>
 
     <h5 class="fandoms heading">

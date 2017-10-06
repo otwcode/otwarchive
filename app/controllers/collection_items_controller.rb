@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_user, only: [:update_multiple]
-  before_filter :load_item_and_collection, only: [:destroy]
-  before_filter :load_collectible_item, only: [:new, :create]
-  before_filter :allowed_to_destroy, only: [:destroy]
+  before_action :load_collection
+  before_action :load_user, only: [:update_multiple]
+  before_action :load_item_and_collection, only: [:destroy]
+  before_action :load_collectible_item, only: [:new, :create]
+  before_action :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 
@@ -101,6 +101,8 @@ class CollectionItemsController < ApplicationController
         end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
+      elsif (collection.anonymous? || collection.unrevealed?) && !current_user.is_author_of?(@item)
+        errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       # add the work to a collection, and try to save it
@@ -131,7 +133,7 @@ class CollectionItemsController < ApplicationController
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
-                            :collections => new_collections.collect(&:title).join(", "))
+                            collections: new_collections.collect(&:title).join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
@@ -156,7 +158,7 @@ class CollectionItemsController < ApplicationController
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
     else
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -164,7 +166,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by(login: params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
+    flash[:notice] = ts("Item completely removed from collection %{title}.", title: @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

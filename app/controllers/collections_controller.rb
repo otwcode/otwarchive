@@ -1,10 +1,10 @@
 class CollectionsController < ApplicationController
 
-  before_filter :users_only, only: [:new, :edit, :create, :update]
-  before_filter :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :validate_challenge_type
+  before_action :users_only, only: [:new, :edit, :create, :update]
+  before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
+  before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_action :validate_challenge_type
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
@@ -30,7 +30,7 @@ class CollectionsController < ApplicationController
       @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-      @page_subtitle = ts("created by ") + @user.login
+      @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
         flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
@@ -70,11 +70,11 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
       visible_bookmarks = @collection.approved_bookmarks.visible.order('RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, collections: [:collection_items])
       # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
       visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
@@ -100,7 +100,7 @@ class CollectionsController < ApplicationController
 
     # add the owner
     owner_attributes = []
-    (params[:owner_pseuds] || [current_user.default_pseud]).each do |pseud_id|
+    (params[:owner_pseuds] || [current_user.default_pseud_id]).each do |pseud_id|
       pseud = Pseud.find(pseud_id)
       owner_attributes << {pseud: pseud, participant_role: CollectionParticipant::OWNER} if pseud
     end
@@ -162,7 +162,7 @@ class CollectionsController < ApplicationController
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to(collections_url)
+    redirect_to(collections_path)
   end
 
   private

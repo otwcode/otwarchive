@@ -1,7 +1,6 @@
 include UrlHelpers
-class ExternalWork < ActiveRecord::Base
+class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  include Taggable
   include Bookmarkable
 
   has_many :related_works, as: :parent
@@ -68,10 +67,8 @@ class ExternalWork < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
-  # FIXME - duplicate of above but called in different ways in different places
-  def visible(user=User.current_user)
-    self.hidden_by_admin? ? user.kind_of?(Admin) : true
-  end
+
+  alias_method :visible, :visible?
 
   #######################################################################
   # TAGGING
@@ -149,5 +146,6 @@ class ExternalWork < ActiveRecord::Base
   def revised_at
     created_at
   end
+  include Taggable
 
 end

@@ -1,8 +1,8 @@
 class TagWranglingsController < ApplicationController
   # cache_sweeper :tag_sweeper
 
-  before_filter :check_user_status
-  before_filter :check_permission_to_wrangle
+  before_action :check_user_status
+  before_action :check_permission_to_wrangle
 
   def index
     @counts = {}
@@ -22,11 +22,11 @@ class TagWranglingsController < ApplicationController
       if params[:show] == "fandoms"
         @media_names = Media.by_name.pluck(:name)
         @page_subtitle = ts("fandoms")
-        @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = Fandom.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else # by fandom
         raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
         klass = params[:show].classify.constantize
-        @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = klass.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end
@@ -116,7 +116,7 @@ class TagWranglingsController < ApplicationController
   end
 
   def discuss
-    @comments = Comment.where(:commentable_type => 'Tag').order('updated_at DESC').paginate(:page => params[:page])
+    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
 
 end

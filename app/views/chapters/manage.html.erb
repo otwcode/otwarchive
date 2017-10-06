@@ -1,33 +1,57 @@
-<!--REVIEW: this is very different, including classes, to most of the front end. Can it be regularised? Can it be generalised?-->
-<div id="manage-chapters">
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts('Manage Chapters') %></h2>
+<!--/descriptions-->
 
-  <h4 class="heading"><%= ts("Delete/reorder chapters") %></h4>
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<div id="manage-chapters">
 
   <p id="drag" class="showme"><%= ts("Drag chapters to change their order.") %><p>
   <noscript><p><%= ts("Enter new chapter numbers.") %><p></noscript>
-  <%= form_tag url_for(:action => 'update_positions') do %>
+
+  <%= form_tag url_for(action: 'update_positions') do %>
+
   <ul id="sortable_chapter_list" class="sortable">
     <% for chapter in @chapters %>
-      <li id="chapter_<%= chapter.id %>" class='chapter-position-list'>
-        <%= text_field_tag 'chapters[]', nil, :size => 3, :maxlength => 3, :class => 'number chapter-position-field', :id => 'chapters_' + chapter.position.to_s %>
-        <span id='position-for-<%= chapter.id %>'><%= chapter.position %></span>.
+      <li id="chapter_<%= chapter.id %>" class="chapter-position-list">
+
+        <%= text_field_tag 'chapters[]', nil,
+                                        size: 3,
+                                        maxlength: 3,
+                                        class: "number chapter-position-field",
+                                        id: "chapters_" + chapter.position.to_s %>
+        <span id="position-for-<%= chapter.id %>"><%= chapter.position %></span>.
         <%= chapter.chapter_title.html_safe %>
-        <ul class='chapter-control actions' role="menu">
+
+        <ul class="chapter-control actions">
           <li><%= link_to ts("Edit"), [:edit, @work, chapter] %></li>
-           <% if @work.chapters.count > 1 %>
-             <li><%= link_to ts("Delete"), [@work, chapter], data: {confirm: ts("Are you sure?")}, :method => :delete %></li>
-             <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 %>
-               <li><%= link_to ts("Remove Me As Author"), {:action => "edit", :id => chapter.id, :remove => "me"}, data: {confirm: ts("You will no longer be able to edit this chapter. Are you sure?")} %></li>
-             <% end %>
+          <% if @work.chapters.count > 1 %>
+            <li>
+              <%= link_to ts("Delete"), [@work, chapter],
+                                        data: { confirm: ts("Are you sure?") },
+                                        method: :delete %>
+            </li>
+            <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 && current_user.is_author_of?(chapter) %>
+              <li>
+                <%= link_to ts("Remove Me As Chapter Co-Creator"),
+                            {action: "edit", id: chapter.id, remove: "me"},
+                            data: { confirm: ts("Are you sure you want to remove yourself as a co-creator of this chapter?") } %>
+              </li>
+            <% end %> 
           <% end %>
         </ul>
+
       </li>
     <% end %>
   </ul>
+
   <p class="submit actions">
     <%= submit_tag ts("Update Positions") %>
     <%= link_to ts("Back"), url_for(@work) %>
   </p>
+
   <% end %>
 </div>
 
@@ -49,3 +73,4 @@
       })
   <% end %>
 <% end %>
+<!--/content-->
