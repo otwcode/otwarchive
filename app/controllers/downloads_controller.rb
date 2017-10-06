@@ -28,7 +28,6 @@ class DownloadsController < ApplicationController
 
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(posted: true)
-    create_work_html
 
     respond_to do |format|
       format.html do
