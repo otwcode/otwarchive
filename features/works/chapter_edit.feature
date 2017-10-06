@@ -341,6 +341,54 @@ Feature: Edit chapters
       And the "sabrina" checkbox should be disabled
 
 
+  Scenario: Removing yourself as a co-creator from the chapter edit page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter 2"
+      And I should see "Chapter by originalposter"
+
+
+  Scenario: Removing yourself as a co-creator from the chapter manage page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter by originalposter"
+
+
+  Scenario: The option to remove yourself as a co-creator should only be
+  included for chapters you are a co-creator of
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    Then the Remove Me As Chapter Co-Creator option should not be on the 1st chapter
+      And the Remove Me As Chapter Co-Creator option should be on the 2nd chapter
+    When I view the work "OP's Work"
+      And I follow "Edit Chapter"
+    Then I should not see "Remove Me As Chapter Co-Creator"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    Then I should see "Remove Me As Chapter Co-Creator"
+
+
   Scenario: You should be able to edit a chapter you are not already co-creator
   of, and you will be added to the chapter as a co-creator and your changes will
   be saved
@@ -424,6 +472,7 @@ Feature: Edit chapters
 
   Scenario: Users can't set a chapter publication date that is in the future,
   e.g. set the date to April 30 when it is April 26
+
     Given I am logged in
       And it is currently Wed Apr 26 22:00:00 UTC 2017
       And I post the work "Futuristic"
