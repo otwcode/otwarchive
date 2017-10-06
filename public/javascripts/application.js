@@ -454,18 +454,18 @@ $j(document).ready(function() {
         var msg = 'Sorry, we were unable to save your kudos';
         var data = $j.parseJSON(jqXHR.responseText);
 
-        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-          msg = "You have already left kudos here. :)";
+        if (data.errors) {
+          if (data.errors.pseud_id || data.errors.ip_address) {
+            msg = "You have already left kudos here. :)";
+          } else if (data.errors.cannot_be_author) {
+            msg = "You can't leave kudos on your own work.";
+          } else if (data.errors.guest_on_restricted) {
+            msg = "You can't leave guest kudos on a restricted work.";
+          } else if (data.errors.auth_error) {
+            msg = data.errors.auth_error;
+          }
         }
-
-        if (data.errors && data.errors.cannot_be_author) {
-          msg = "You can't leave kudos on your own work.";
-        }
-        if (data.errors && data.errors.guest_on_restricted) {
-          msg = "You can't leave guest kudos on a restricted work.";
-        }
-
-        $j('#kudos_message').addClass('comment_error').text(msg);
+        $j('#kudos_message').addClass('comment_error').html(msg);
       },
       success: function(data) {
         $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');

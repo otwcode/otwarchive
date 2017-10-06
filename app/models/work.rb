@@ -838,7 +838,7 @@ class Work < ApplicationRecord
 
   # spread downloads out by first two letters of authorname
   def download_dir
-    "#{Rails.public_path}/#{self.download_folder}"
+    "/tmp/#{self.id}"
   end
 
   # split out so we can use this in works_helper
@@ -999,6 +999,12 @@ class Work < ApplicationRecord
   # hide their existence from other users
   def count_all_comments
     find_all_comments.count
+  end
+
+  # Count the number of comment threads visible to the user (i.e. excluding
+  # threads that have been marked as spam). Used on the work stats page.
+  def comment_thread_count
+    comments.where(approved: true).count
   end
 
   # returns the top-level comments for all chapters in the work

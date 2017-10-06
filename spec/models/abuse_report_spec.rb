@@ -84,6 +84,22 @@ describe AbuseReport do
     end
   end
 
+  shared_examples "enough already" do |url|
+    let(:report) { build(:abuse_report, url: url) }
+    it "can't be submitted" do
+      expect(report.save).to be_falsey
+      expect(report.errors[:base].first).to include("URL has already been reported.")
+    end
+  end
+
+  shared_examples "alright" do |url|
+    let(:report) { build(:abuse_report, url: url) }
+    it "can be submitted" do
+      expect(report.save).to be_truthy
+      expect(report.errors[:base]).to be_empty
+    end
+  end
+
   context "for a work reported the maximum number of times" do
     work_url = "http://archiveofourown.org/works/789"
 
@@ -91,28 +107,14 @@ describe AbuseReport do
       ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
         create(:abuse_report, url: work_url)
       end
-    end
-
-    shared_examples "enough already" do |url|
-      let(:report) { build(:abuse_report, url: url) }
-      it "can't be submitted" do
-        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
-        expect(report.save).to be_falsey
-        expect(report.errors[:base].first).to include("URL has already been reported.")
-      end
-    end
-
-    shared_examples "alright" do |url|
-      let(:report) { build(:abuse_report, url: url) }
-      it "can be submitted" do
-        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
-        expect(report.save).to be_truthy
-        expect(report.errors[:base]).to be_empty
-      end
+      expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
     end
 
     # obviously
     it_behaves_like "enough already", work_url
+
+    # the same work, different protocol
+    it_behaves_like "enough already", "https://archiveofourown.org/works/789"
 
     # the same work, with parameters/anchors
     it_behaves_like "enough already", "http://archiveofourown.org/works/789?smut=yes"
@@ -123,6 +125,10 @@ describe AbuseReport do
 
     # the same work, in a collection
     it_behaves_like "enough already", "http://archiveofourown.org/collections/rarepair/works/789"
+
+    # the same work, under users
+    it_behaves_like "enough already", "http://archiveofourown.org/users/author/works/789"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/coauthor/works/789"
 
     # the same work, subpages
     it_behaves_like "enough already", "http://archiveofourown.org/works/789/bookmarks"
@@ -145,6 +151,68 @@ describe AbuseReport do
     it_behaves_like "alright", "http://archiveofourown.org/works/78"
     it_behaves_like "alright", "http://archiveofourown.org/works/7890"
     it_behaves_like "alright", "http://archiveofourown.org/external_works/789"
+
+    # unrelated
+    it_behaves_like "alright", "http://archiveofourown.org/users/someone"
+
+    context "a month later" do
+      before { Timecop.freeze(1.month.from_now) }
+      after { Timecop.return }
+
+      it_behaves_like "alright", work_url
+    end
+  end
+
+  context "for a user profile reported the maximum number of times" do
+    user_url = "http://archiveofourown.org/users/someone"
+
+    before do
+      ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
+        create(:abuse_report, url: user_url)
+      end
+      expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX)
+    end
+
+    # obviously
+    it_behaves_like "enough already", user_url
+
+    # the same user, different protocol
+    it_behaves_like "enough already", "https://archiveofourown.org/users/someone"
+
+    # the same user, with parameters/anchors
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone?sfw=yes"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone?sfw=yes#timeline"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone#timeline"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/?sfw=yes"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/#timeline"
+
+    # the same user, as admin (why admin?)
+    it_behaves_like "enough already", "http://archiveofourown.org/admin/users/someone"
+
+    # the same user, subpages
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/bookmarks"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/claims"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/pseuds/"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/pseuds/ghostwriter"
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/pseuds/g h o s t w r i t e r"
+
+    # the same user, Unicode in parameters
+    it_behaves_like "enough already", "http://archiveofourown.org/users/someone/inbox?utf8=✓&filters[read]=false"
+
+    # not the same user
+    it_behaves_like "alright", "http://archiveofourown.org/users/some"
+    it_behaves_like "alright", "http://archiveofourown.org/users/someoneelse"
+    it_behaves_like "alright", "http://archiveofourown.org/users/somebody"
+
+    # unrelated
+    it_behaves_like "alright", "http://archiveofourown.org/works/789"
+
+    context "a month later" do
+      before { Timecop.freeze(1.month.from_now) }
+      after { Timecop.return }
+
+      it_behaves_like "alright", user_url
+    end
   end
 
   context "for a URL that is not a work" do

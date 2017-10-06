@@ -101,6 +101,8 @@ class CollectionItemsController < ApplicationController
         end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
+      elsif (collection.anonymous? || collection.unrevealed?) && !current_user.is_author_of?(@item)
+        errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       # add the work to a collection, and try to save it
