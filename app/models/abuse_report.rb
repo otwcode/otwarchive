@@ -34,7 +34,7 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  app_url_regex = Regexp.new('^https?:\/\/(www\.)?' +
+  app_url_regex = Regexp.new('^https?:\/\/(www\.|insecure\.)?' +
                              ArchiveConfig.APP_HOST, true)
   validates_format_of :url, with: app_url_regex,
                             message: ts('does not appear to be on this site.'),
