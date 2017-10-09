@@ -1,5 +1,8 @@
 #!/bin/bash
 sudo service elasticsearch stop
+# ES UPGRADE TRANSITION #
+# Only DL latest stable version of ES in this file
+
 #1) Simulate having both new and old elasticsearch but test the old elasticsearch.
 #2) Simulate having only the new elasticsearch.
 case $ES in

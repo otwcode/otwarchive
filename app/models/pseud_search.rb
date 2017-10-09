@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Remove class
 class PseudSearch < Search
 
   def self.search(options={})

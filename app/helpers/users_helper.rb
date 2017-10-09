@@ -69,6 +69,8 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud = nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to BookmarkSearch
     if use_new_search?
       total = BookmarkSearchForm.count_for_pseuds(user.pseuds)
     else
@@ -78,6 +80,8 @@ module UsersHelper
   end
 
   def print_pseud_bookmarks_link(pseud)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to BookmarkSearch
     if use_new_search?
       total = BookmarkSearchForm.count_for_pseuds([pseud])
     else
@@ -90,6 +94,8 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud = nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
     if use_new_search?
       total = WorkSearchForm.user_count(user)
     else
@@ -99,6 +105,8 @@ module UsersHelper
   end
 
   def print_pseud_works_link(pseud)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
     if use_new_search?
       total = WorkSearchForm.pseud_count(pseud)
     else

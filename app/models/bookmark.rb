@@ -3,6 +3,8 @@ class Bookmark < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include Responder
   # include Tire::Model::Callbacks
@@ -126,6 +128,8 @@ class Bookmark < ApplicationRecord
     return false
   end
 
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
       "ao3_#{Rails.env}_bookmarks"
@@ -186,6 +190,7 @@ class Bookmark < ApplicationRecord
     bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
+  # TODO: Is this necessary anymore?
   before_destroy :save_parent_info
 
   # Because of the way the elasticsearch parent/child index is set up, we need
@@ -204,6 +209,8 @@ class Bookmark < ApplicationRecord
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :notes
     indexes :private, type: 'boolean'

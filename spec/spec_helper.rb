@@ -45,6 +45,8 @@ RSpec.configure do |config|
     User.current_user = nil
     clean_the_database
 
+    # ES UPGRADE TRANSITION #
+    # Remove $rollout activation & unless block
     $rollout.activate :start_new_indexing
 
     unless elasticsearch_enabled?($elasticsearch)
@@ -102,24 +104,33 @@ def clean_the_database
   end
 end
 
+# ES UPGRADE TRANSITION #
+# Remove method
 def elasticsearch_enabled?(elasticsearch_instance)
   elasticsearch_instance.cluster.health rescue nil
 end
 
+# ES UPGRADE TRANSITION #
+# Remove method
 def deprecate_unless(condition)
   return true unless condition
 
   yield
 end
 
+# ES UPGRADE TRANSITION #
+# Remove method
 def deprecate_old_elasticsearch_test
   deprecate_unless(elasticsearch_enabled?($elasticsearch)) do
     yield
   end
 end
 
+# ES UPGRADE TRANSITION #
+# Replace all instances of $new_elasticsearch with $elasticsearch
 def update_and_refresh_indexes(klass_name)
-  # OLD ES
+  # ES UPGRADE TRANSITION #
+  # Remove block
   if elasticsearch_enabled?($elasticsearch)
     klass = klass_name.capitalize.constantize
     Tire.index(klass.index_name).delete
@@ -153,7 +164,8 @@ def update_and_refresh_indexes(klass_name)
 end
 
 def delete_index(index)
-  # OLD ES
+  # ES UPGRADE TRANSITION #
+  # Remove block
   if elasticsearch_enabled?($elasticsearch)
     klass = index.capitalize.constantize
     Tire.index(klass.index_name).delete

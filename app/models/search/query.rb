@@ -8,6 +8,8 @@ class Query
   end
 
   def search
+    # ES UPGRADE TRANSITION #
+    # Change $new_elasticsearch to $elasticsearch
     $new_elasticsearch.search(
       index: index_name,
       type: document_type,

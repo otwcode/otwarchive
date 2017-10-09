@@ -1,8 +1,9 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -24,6 +25,8 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
       "ao3_#{Rails.env}_works"
@@ -1183,6 +1186,8 @@ class Tag < ApplicationRecord
   #################################
 
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :id,           index: :not_analyzed
     indexes :name#,         analyzer: 'snowball', boost: 100

@@ -61,12 +61,15 @@ class TagsController < ApplicationController
   def search
     @page_subtitle = ts('Search Tags')
     if params[:query].present?
+      # TODO: tag_search_params
       options = params[:query].permit!.dup
       @query = options
       if @query[:name].present?
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options[:page] = params[:page] || 1
+      # ES UPGRADE TRANSITION #
+      # Remove conditional and call to TagSearch
       if use_new_search?
         search = TagSearchForm.new(options)
         @tags = search.search_results

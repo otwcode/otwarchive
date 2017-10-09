@@ -52,6 +52,8 @@ class BookmarkSearchForm
       terms << { term: { private: 'false' } }
     end
     query = { query: { bool: { must: terms } } }
+    # ES UPGRADE TRANSITION #
+    # Change $new_elasticsearch to $elasticsearch
     response = $new_elasticsearch.perform_request(
       "GET",
       "#{Bookmark.index_name}/bookmark/_count",

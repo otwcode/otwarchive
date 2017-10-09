@@ -1,7 +1,14 @@
+# ES UPGRADE TRANSITION #
+# Change all instances of $new_elasticsearch to $elasticsearch
+
+# ES UPGRADE TRANSITION #
+# Remove method
 def elasticsearch_enabled?(elasticsearch_instance)
   elasticsearch_instance.cluster.health rescue nil
 end
 
+# ES UPGRADE TRANSITION #
+# Remove method
 def tire_update(klass_name)
   klass = klass_name.capitalize.constantize
 

@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Remove class
 class BookmarkSearch < Search
   include ActiveModel::ForbiddenAttributesProtection
 
@@ -77,6 +79,8 @@ class BookmarkSearch < Search
     self.options.delete_if { |key, value| value.blank? }
   end
 
+  # Useful for inspecting the differences between the old ES query and the new
+  # ES query, when debugging problems between ES versions
   def search_query
     self.options ||= {}
     search_opts = self.options

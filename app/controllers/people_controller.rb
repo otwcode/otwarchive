@@ -7,6 +7,8 @@ class PeopleController < ApplicationController
     if @collection
       options[:collection_id] = @collection.id
     end
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to PseudSearch
     if use_new_search?
       search = PseudSearchForm.new(options)
       @people = search.search_results

@@ -98,6 +98,10 @@ Feature: Import Works from DW
       And I should not see the image "alt" text "Add to memories!"
       And I should not see the image "alt" text "Next Entry"
 
+  # Commented out due to broken url http://rarelitfic.dreamwidth.org/5572.html
+  # TODO: Uncomment with updated URL or once issue has been addressed on
+  # dreamwidth
+  #
   # @import_dw_comm
   # Scenario: Creating a new work from an DW story that is posted to a community
   # Given basic tags

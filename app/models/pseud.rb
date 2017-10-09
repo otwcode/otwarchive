@@ -1,7 +1,8 @@
 class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -125,6 +126,8 @@ class Pseud < ApplicationRecord
     includes(:user)
   }
 
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
       "ao3_#{Rails.env}_pseuds"
@@ -457,6 +460,8 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :name, boost: 20
   end

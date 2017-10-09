@@ -1,9 +1,11 @@
+# ES UPGRADE TRANSITION #
+# Remove file
+
 require 'optparse'
 require 'redis'
 require 'rollout'
 require_relative '../config/environment'
 
-# $rollout = Rollout.new(REDIS_ROLLOUT)
 value = nil
 parser = OptionParser.new do |options|
   options.on '-d', '--display rollout_name', 'Display the value of a rollout variable.' do |arg|

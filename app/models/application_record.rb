@@ -2,6 +2,8 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   self.per_page = ArchiveConfig.ITEMS_PER_PAGE
 
+  # ES UPGRADE TRANSITION #
+  # Remove method
   def self.use_new_search?
     $rollout.active?(:use_new_search) ||
       User.current_user.present? && $rollout.active?(:use_new_search, User.current_user)

@@ -19,6 +19,7 @@ class BookmarkIndexer < Indexer
   end
 
   # index_all without background jobs
+  # Mostly useful for quick local debugging
   def self.index_all_foreground
     delete_index
     create_index

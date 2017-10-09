@@ -83,6 +83,8 @@ class WorksController < ApplicationController
     options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
     if use_new_search?
       @search = WorkSearchForm.new(options)
     else
@@ -133,6 +135,8 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
+        # ES UPGRADE TRANSITION #
+        # Remove conditional and call to WorkSearch
         if use_new_search?
           @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
         else
@@ -180,6 +184,8 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
+      # ES UPGRADE TRANSITION #
+      # Remove conditional and call to WorkSearch
       if use_new_search?
         @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
       else

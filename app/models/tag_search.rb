@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Remove class
 class TagSearch < Search
 
   def self.search(options={})

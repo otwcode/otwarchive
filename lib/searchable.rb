@@ -22,7 +22,12 @@ module Searchable
   end
 
   def reindex_document
+    # ES UPGRADE TRANSITION #
+    # Remove `update_index rescue nil`
     update_index rescue nil
+
+    # ES UPGRADE TRANSITION #
+    # Remove outer conditional
     if self.class.use_new_search?
       index_name = self.is_a?(Tag) ? 'tag' : self.class.to_s.downcase
       doc_type = self.is_a?(Tag) ? 'tag' : self.class.document_type
@@ -40,6 +45,8 @@ module Searchable
         )
       end
 
+      # ES UPGRADE TRANSITION #
+      # Replace $new_elasticsearch with $elasticsearch
       $new_elasticsearch.index index
     end
   end

@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Remove file
 require 'spec_helper'
 
 deprecate_old_elasticsearch_test do

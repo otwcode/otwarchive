@@ -1,5 +1,7 @@
 Given /^the (\w+) indexes are updated$/ do |klass|
   es_update(klass)
+  # ES UPGRADE TRANSITION #
+  # Remove unless block
   unless !elasticsearch_enabled?($elasticsearch)
     tire_update(klass)
   end
@@ -13,6 +15,8 @@ Given /^all search indexes are updated$/ do
 end
 
 Given /^the (\w+) indexes are reindexed$/ do |model|
+  # ES UPGRADE TRANSITION #
+  # Change $new_elasticsearch to $elasticsearch
   $new_elasticsearch.indices.refresh index: "ao3_test_#{model}s"
 end
 

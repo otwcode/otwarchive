@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Change all instances of $new_elasticsearch to $elasticsearch
 class Indexer
 
   BATCH_SIZE = 1000

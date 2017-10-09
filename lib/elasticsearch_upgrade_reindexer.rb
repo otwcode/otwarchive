@@ -1,3 +1,8 @@
+# This class will reindex all existing old indexes to the new version of
+# elasticsearch
+#
+# ES UPGRADE TRANSITION #
+# Remove class
 class ElasticsearchUpgradeReindexer
 
   OLD_VERSION_URL = 'http://127.0.0.1:9201'

@@ -264,7 +264,6 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = FactoryGirl.create(:work, posted: true)
-          # work2.index.refresh
           update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
@@ -303,7 +302,6 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
-            # @work2.index.refresh
             update_and_refresh_indexes('work')
           end
 
@@ -388,12 +386,6 @@ describe WorksController do
                                               collection_names: collection.name,
                                               posted: true,
                                               fandom_string: collected_fandom.name)
-      [@unrestricted_work,
-       @unrestricted_work_2_in_collection,
-       @unrestricted_work_in_collection,
-       @restricted_work_in_collection].each do |work|
-        # work.index.refresh
-      end
 
        update_and_refresh_indexes('work')
     end

@@ -55,6 +55,8 @@ class WorkSearchForm
       terms << { term: { restricted: 'false' } }
     end
     query = { query: { bool: { must: terms } } }
+    # ES UPGRADE TRANSITION #
+    # Change $new_elasticsearch to $elasticsearch
     response = $new_elasticsearch.perform_request(
       "GET",
       "#{Work.index_name}/work/_count",
@@ -107,6 +109,7 @@ class WorkSearchForm
 
     opts[:query].gsub!('creator:', 'creators:') if opts[:query]
 
+    # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
     processed_opts.merge!(collected: opts[:collected]) if opts[:collected]
 

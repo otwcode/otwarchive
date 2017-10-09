@@ -8,9 +8,10 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -249,6 +250,8 @@ class Work < ApplicationRecord
     Work.expire_work_tag_groups_id(self.id)
   end
 
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
       "ao3_#{Rails.env}_works"
@@ -1392,6 +1395,8 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block #
   mapping do
     indexes :authors_to_sort_on,  index: :not_analyzed
     indexes :title_to_sort_on,    index: :not_analyzed

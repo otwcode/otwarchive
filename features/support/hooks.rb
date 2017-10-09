@@ -10,6 +10,8 @@ Before do
 
   step %{all search indexes are updated}
 
+  # ES UPGRADE TRANSITION #
+  # Remove rollout activation & unless block
   $rollout.activate :start_new_indexing
 
   unless elasticsearch_enabled?($elasticsearch)
