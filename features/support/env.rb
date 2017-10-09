@@ -6,11 +6,15 @@
 
 # This file has been edited by hand :(
 require 'simplecov'
-require 'coveralls'
 require 'cucumber/timecop'
 require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
-Coveralls.wear_merged!('rails') unless ENV['TEST_LOCAL']
+if ENV["CI"] == "true"
+  # Only on Travis...
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require 'cucumber/rails'
 require 'email_spec'
 require 'email_spec/cucumber'

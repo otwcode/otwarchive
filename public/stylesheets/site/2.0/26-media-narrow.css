@@ -90,6 +90,10 @@ body .narrow-shown {
   background-position: center;
 }
 
+#main.session {
+  background-image: none;
+}
+
 #main.errors p, #main.errors .heading {
   margin-right: 0;
 }
@@ -179,6 +183,11 @@ body .narrow-shown {
 .splash .intro h2 {
   font-size: 1.5em;
     word-break: normal;
+}
+
+.session #signin {
+  margin-left: 0;
+  width: 100%;
 }
 
 /* 18 zone: search browse */

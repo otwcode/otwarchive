@@ -20,6 +20,29 @@ Feature: Archivist bulk imports
     When I go to the import page
     Then I should see "Import for others ONLY with permission"
 
+  Scenario: Importing for others without an email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Name*" with "Name"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author email specified"
+
+  Scenario: Importing for others without a name should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Email Address*" with "foo@example.com"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author name specified"
+
+  Scenario: Importing for others without a name or email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No external author name or email specified"
+
   Scenario: Importing for an author without an account should have the correct byline and email
     When I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
