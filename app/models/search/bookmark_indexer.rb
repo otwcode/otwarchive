@@ -99,7 +99,7 @@ class BookmarkIndexer < Indexer
 
     if object.respond_to?(:bookmarkable)
       bookmarkable = object.bookmarkable
-      bookmarkable_filters = bookmarkable.tags.map(&:filter).compact
+      bookmarkable_filters = bookmarkable ? bookmarkable.tags.map(&:filter).compact : []
     end
 
     json_object = object.as_json(
