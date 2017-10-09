@@ -18,6 +18,7 @@ class BookmarkSearchForm
     :bookmarkable_pseud_ids,
     :bookmarkable_type,
     :tag,
+    :excluded_tag_names,
     :other_tag_names,
     :tag_ids,
     :filter_ids,

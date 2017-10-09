@@ -31,6 +31,10 @@ class BookmarkQuery < Query
     ).flatten.compact
   end
 
+  def exclusion_filters
+    tag_exclusion_filter.compact if tag_exclusion_filter
+  end
+
   def queries
     @queries = [general_query] unless general_query.blank?
   end
@@ -227,6 +231,12 @@ class BookmarkQuery < Query
     terms_filter(:collection_ids, options[:collection_ids]) if options[:collection_ids].present?
   end
 
+  def tag_exclusion_filter
+    if exclusion_ids.present?
+      exclusion_ids.flatten.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
+    end
+  end
+
   ####################
   # HELPERS
   ####################
@@ -308,6 +318,18 @@ class BookmarkQuery < Query
         }
       }
     }
+  end
+
+  def exclusion_ids
+    return unless options[:excluded_tag_names]
+    names = options[:excluded_tag_names].split(",")
+
+    excluded_tags = (Tag.where(name: names, canonical: true) +
+                     Tag.where(name: names, canonical: false).map(&:merger)).flatten.compact
+
+    excluded_tags.pluck(:id).compact +
+      excluded_tags.map(&:sub_tags).flatten.pluck(:id).compact +
+      excluded_tags.map(&:children).flatten.pluck(:id).compact
   end
 
 end

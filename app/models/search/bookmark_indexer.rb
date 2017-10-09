@@ -18,6 +18,16 @@ class BookmarkIndexer < Indexer
     super
   end
 
+  # index_all without background jobs
+  def self.index_all_foreground
+    delete_index
+    create_index
+    BookmarkedExternalIndexer.new(ExternalWork.all.pluck(:id)).index_documents rescue nil
+    BookmarkedSeriesIndexer.new(Series.all.pluck(:id)).index_documents rescue nil
+    BookmarkedWorkIndexer.new(BookmarkedWorkIndexer.indexables.pluck(:id)).index_documents rescue nil
+    self.new(Bookmark.all.pluck(:id)).index_documents rescue nil
+  end
+
   def self.mapping
     {
       "bookmark" => {
@@ -39,10 +49,10 @@ class BookmarkIndexer < Indexer
           "work_types" => {
             "type" => "keyword"
           },
-          # "bookmarkable_tag" => {
-          #   "type" => "text",
-          #   "analyzer" => "simple"
-          # },
+          "bookmarkable_tag" => {
+            "type" => "text",
+            "analyzer" => "simple"
+          },
           "bookmarkable_type" => {
             "type" => "keyword"
           },
@@ -83,8 +93,14 @@ class BookmarkIndexer < Indexer
 
   def document(object)
     tags = object.tags
-    filters = tags.map{ |t| t.filter }.compact
-    bookmarkable = object.bookmarkable if object.respond_to? :bookmarkable
+    tag_filters = tags.map(&:filter).compact
+
+    bookmarkable = nil
+
+    if object.respond_to?(:bookmarkable)
+      bookmarkable = object.bookmarkable
+      bookmarkable_filters = bookmarkable.tags.map(&:filter).compact
+    end
 
     json_object = object.as_json(
       root: false,
@@ -92,9 +108,9 @@ class BookmarkIndexer < Indexer
       methods: [:bookmarker, :collection_ids, :with_notes]
     ).merge(
       user_id: object.pseud.user_id,
-      tag: (tags + filters).map(&:name).uniq,
+      tag: (tags + tag_filters).map(&:name).uniq,
       tag_ids: tags.map(&:id),
-      filter_ids: filters.map(&:id),
+      filter_ids: tag_filters.map(&:id) + bookmarkable_filters.map(&:id),
       bookmarkable_posted: !bookmarkable || (bookmarkable && bookmarkable.posted),
       bookmarkable_hidden_by_admin: !!bookmarkable && bookmarkable.hidden_by_admin
     )

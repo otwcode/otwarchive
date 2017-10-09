@@ -1,8 +1,8 @@
-<%= form_for @search, as: :bookmark_search, 
-  url: (@collection ? collection_bookmarks_path(@collection) : bookmarks_path), 
-  html: { 
-    method: :get, 
-    class: "narrow-hidden filters", 
+<%= form_for @search, as: :bookmark_search,
+  url: (@collection ? collection_bookmarks_path(@collection) : bookmarks_path),
+  html: {
+    method: :get,
+    class: "narrow-hidden filters",
     id: "bookmark-filters"
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
@@ -19,53 +19,55 @@
       </dd>
 
       <% %w(include exclude).each do |filter_action| %>
-        <dt class="<%= filter_action %>">
-          <h4 class="heading">
-            <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
-          </h4>
-          <%= link_to_help "filters-#{filter_action}-tags-help" %>
-        </dt>
-        <dd class="<%= filter_action %>">
-          <dl>
-            <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
-              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
-                <% # For accessibility, include filter action (e.g. Include) as landmark text %>
-                <% # The space needs to be in the landmark to keep the text aligned %>
-                <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
-                    filter_action: filter_action.titleize,
-                    tag_type: tag_type_label(tag_type)
-                    ).html_safe %>
+        <% if (!use_new_search? && filter_action == "include") || use_new_search? %>
+          <dt class="<%= filter_action %>">
+            <h4 class="heading">
+              <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
+            </h4>
+            <%= link_to_help "filters-#{filter_action}-tags-help" %>
+          </dt>
+          <dd class="<%= filter_action %>">
+            <dl>
+              <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
+                <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
+                  <% # For accessibility, include filter action (e.g. Include) as landmark text %>
+                  <% # The space needs to be in the landmark to keep the text aligned %>
+                  <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
+                      filter_action: filter_action.titleize,
+                      tag_type: tag_type_label(tag_type)
+                      ).html_safe %>
+                </dt>
+                <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
+                  <ul>
+                    <% @facets[tag_type].each do |tag| %>
+                      <li>
+                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
+                          <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                              tag.id,
+                              @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% else %>
+                          <%= check_box_tag "bookmark_search[#{filter_action}_#{tag_type}_ids][]",
+                              tag.id,
+                              @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% end %>
+                        <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",
+                            "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </dd>
+              <% end %>
+              <dt class="autocomplete">
+                <%= f.label 'other_tag_names', ts("Other tags to %{filter_action}", filter_action: filter_action) %>
               </dt>
-              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
-                <ul>
-                  <% @facets[tag_type].each do |tag| %>
-                    <li>
-                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
-                        <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]", 
-                            tag.id, 
-                            @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %> 
-                      <% else %>
-                        <%= check_box_tag "bookmark_search[#{filter_action}_#{tag_type}_ids][]", 
-                            tag.id,
-                            @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                      <% end %>
-                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}", 
-                          "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
-                    </li>
-                  <% end %>
-                </ul>
+              <dd class="autocomplete">
+                <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
               </dd>
-            <% end %>
-            <dt class="autocomplete">
-              <%= f.label 'other_tag_names', ts("Other tags to %{filter_action}", filter_action: filter_action) %>
-            </dt>
-            <dd class="autocomplete">
-              <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
-            </dd>
-          </dl>
-        </dd>
+            </dl>
+          </dd>
+        <% end %>
       <% end %>
 
       <dt class="more">
