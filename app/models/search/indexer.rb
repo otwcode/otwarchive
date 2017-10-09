@@ -19,14 +19,16 @@ class Indexer
   def self.create_index
     $new_elasticsearch.indices.create(
       index: index_name,
-      # type: document_type,
       body: {
         settings: {
           index: {
-            number_of_shards: 5
+            number_of_shards: 5,
+            # In preparation for ES 6.x, only a single document type is allowed
+            # per index
+            mapping: { single_type: true }
           }
         },
-        mappings: mapping
+        mappings: mapping,
       }
     )
   end
