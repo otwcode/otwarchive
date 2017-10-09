@@ -66,14 +66,14 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       find_bookmark_response(
         bookmarkable: archivist_bookmarkable,
         bookmark_status: :found,
-        bookmark_messages: "There is already a bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
+        bookmark_message: "There is already a bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
         bookmark_url: bookmark_url(archivist_bookmark)
       )
     else
       find_bookmark_response(
         bookmarkable: "",
         bookmark_status: :not_found,
-        bookmark_messages: "There is no bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
+        bookmark_message: "There is no bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
         bookmark_url: ""
       )
     end
@@ -199,7 +199,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     }
   end
   
-  def bookmark_response(status, bookmark_url, bookmark_id, original_url, messages)
+  def bookmark_response(status:, bookmark_url:, bookmark_id:, original_url:, messages:)
     messages = [messages] unless messages.respond_to?('each')
     {
       status: status,
@@ -210,8 +210,8 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     }
   end
   
-  def find_bookmark_response(bookmarkable, bookmark_status, bookmark_message, bookmark_url)
-    bookmark_status = :not_found unless bookmark_status.in?[:found, :not_found]
+  def find_bookmark_response(bookmarkable:, bookmark_status:, bookmark_message:, bookmark_url:)
+    bookmark_status = :not_found unless [:found, :not_found].include?(bookmark_status)
     {
       bookmarkable: bookmarkable,
       bookmark_status: bookmark_status,
