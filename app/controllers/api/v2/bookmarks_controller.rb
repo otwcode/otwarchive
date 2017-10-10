@@ -123,11 +123,11 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     end
 
     bookmark_response(
-      found_result[:bookmark_status] || bookmark_status,
-      found_result[:bookmark_url] || bookmark_url,
-      params[:id],
-      original_url,
-      found_result[:bookmark_messages] || bookmark_messages.flatten
+      status: found_result[:bookmark_status] || bookmark_status,
+      bookmark_url: found_result[:bookmark_url] || bookmark_url,
+      bookmark_id: params[:id],
+      original_url: original_url,
+      messages: found_result[:bookmark_messages] || bookmark_messages.flatten
     )
   end
 
