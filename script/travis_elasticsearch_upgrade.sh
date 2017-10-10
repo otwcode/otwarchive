@@ -8,15 +8,9 @@ sudo service elasticsearch stop
 case $ES in
   1)
     echo "Simulate having both new and old elasticsearch but test the old elasticsearch."
-    bundle exec ruby ./script/set_rollout.rb -v 100 -s start_new_indexing
-    bundle exec ruby ./script/set_rollout.rb -v   0 -s stop_old_indexing
-    bundle exec ruby ./script/set_rollout.rb -v   0 -s use_new_search
     ;;
   2)
     echo "Simulate having only the new elasticsearch."
-    bundle exec ruby ./script/set_rollout.rb -v 100 -s start_new_indexing
-    bundle exec ruby ./script/set_rollout.rb -v 100 -s stop_old_indexing
-    bundle exec ruby ./script/set_rollout.rb -v 100 -s use_new_search
     ;;
 esac
 cd /tmp
