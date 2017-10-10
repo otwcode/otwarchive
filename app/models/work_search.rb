@@ -36,6 +36,7 @@ class WorkSearch < Search
     :sort_column,
     :sort_direction,
     :show_restricted,
+    :show_private,
     :page
 
   attr_accessor :works_parent, :faceted, :collected
