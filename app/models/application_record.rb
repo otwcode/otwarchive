@@ -7,7 +7,6 @@ class ApplicationRecord < ActiveRecord::Base
   def self.use_new_search?
     $rollout.active?(:use_new_search) ||
       User.current_user.present? && $rollout.active?(:use_new_search, User.current_user) ||
-      true
   end
 
   before_save :update_sanitizer_version

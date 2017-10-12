@@ -60,7 +60,6 @@ class ApplicationController < ActionController::Base
   def use_new_search?
     $rollout.active?(:use_new_search) ||
       current_user.present? && $rollout.active?(:use_new_search, current_user) ||
-      true
   end
 
   # Title helpers
