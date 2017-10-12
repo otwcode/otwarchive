@@ -107,7 +107,7 @@ class BookmarksController < ApplicationController
             @filtering_facets = BookmarkSearchForm.new(base_options.merge({parent: @owner})).search_results.facets
           else
             @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-            @filtering_facets = @search.facets
+            @filtering_facets = @search.search_results.facets
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
