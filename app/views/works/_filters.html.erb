@@ -7,12 +7,11 @@
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts("Filter results:") do %>
-
     <dl>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
       <dt class="sort">
-        <%= ts("Sort by") %>
+        <%= f.label :sort_column, ts("Sort by") %>
       </dt>
       <dd class="sort">
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
@@ -39,17 +38,17 @@
                 </dt>
                 <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
                   <ul>
-                    <% @facets[tag_type].each do |tag| %>
+                    <% @filtering_facets[tag_type].each do |tag| %>
                       <li>
-                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
+                        <% if (tag_type == "rating") && @filtering_facets[tag_type].length > 1 %>
                           <%= radio_button_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
                             tag.id,
-                            @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                             id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
                         <% else %>
                           <%= check_box_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
                             tag.id,
-                            @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                             id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
                         <% end %>
                         <%= label_tag "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}",
@@ -59,8 +58,7 @@
                   </ul>
                 </dd>
               <% end %>
-              <% filter_action == "include" ? field_name = "other_tag_names" :
-                 field_name = "excluded_tag_names" %>
+              <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
               <dt class="autocomplete">
                 <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
               </dt>

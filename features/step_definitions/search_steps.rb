@@ -1,3 +1,5 @@
+require "cucumber/rspec/doubles"
+
 Given /^the (\w+) indexes are updated$/ do |klass|
   es_update(klass)
   # ES UPGRADE TRANSITION #
@@ -24,4 +26,9 @@ Given /^all search indexes are reindexed$/ do
   ['work', 'bookmark', 'pseud', 'tag'].each do |model|
     step %{the #{model} indexes are reindexed}
   end
+end
+
+When /^(\w+) can use the new search/ do |login|
+  user = User.find_by(login: login)
+  $rollout.activate_user(:use_new_search, user)
 end

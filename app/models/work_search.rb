@@ -8,6 +8,7 @@ class WorkSearch < Search
     :creator,
     :creators,
     :excluded_tag_names,
+    :excluded_tag_ids,
     :revised_at,
     :language_id,
     :complete,

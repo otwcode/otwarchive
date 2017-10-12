@@ -10,7 +10,6 @@
     <dl>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
-
       <dt class="sort">
         <%= f.label :sort_column, ts("Sort by") %>
       </dt>
@@ -39,17 +38,17 @@
                 </dt>
                 <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
                   <ul>
-                    <% @facets[tag_type].each do |tag| %>
+                    <% @filtering_facets[tag_type].each do |tag| %>
                       <li>
-                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
+                        <% if (tag_type == "rating") && @filtering_facets[tag_type].length > 1 %>
                           <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
                               tag.id,
-                              @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                               id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                        <% else %>
-                          <%= check_box_tag "bookmark_search[#{filter_action}_#{tag_type}_ids][]",
+                          <% else %>
+                          <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
                               tag.id,
-                              @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s),
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                               id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                         <% end %>
                         <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",

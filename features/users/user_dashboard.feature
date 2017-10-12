@@ -139,4 +139,3 @@ Feature: User dashboard
   Then I should see "2 Works by meatloaf in Star Trek"
   When I press "Sort and Filter"
   Then I should see "2 Works by meatloaf in Star Trek"
-

@@ -104,6 +104,11 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
+    base_options = {
+      page: params[:page] || 1,
+      show_restricted: current_user.present? || logged_in_as_admin?
+    }
+
     options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
@@ -116,8 +121,23 @@ class WorksController < ApplicationController
       options[:filter_ids] << tag.id
     end
 
-    options[:page] = params[:page] || 1
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    if params[:include_work_search].present?
+      params[:include_work_search].keys.each do |key|
+        options[key] ||= []
+        options[key] << params[:include_work_search][key]
+        options[key].flatten!
+      end
+    end
+
+    if params[:exclude_work_search].present?
+      params[:exclude_work_search].keys.each do |key|
+        options[:excluded_tag_ids] ||= []
+        options[:excluded_tag_ids] << params[:exclude_work_search][key]
+        options[:excluded_tag_ids].flatten!
+      end
+    end
+
+    options.merge!(base_options)
     @page_subtitle = index_page_title
 
     if logged_in? && @tag
@@ -135,8 +155,10 @@ class WorksController < ApplicationController
         # Remove conditional and call to WorkSearch
         if use_new_search?
           @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+          @filtering_facets = WorkSearchForm.new(base_options.merge(works_parent: @owner))
         else
           @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+          @filtering_facets = @search.facets
         end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
@@ -158,6 +180,10 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
+
+        # For listing all of the tags that it's possible to filter on within an
+        # owner's works page
+        @filtering_facets = WorkSearchForm.new(base_options.merge({works_parent: @owner})).search_results.facets
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do

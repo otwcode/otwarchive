@@ -22,6 +22,7 @@ class WorkSearchForm
     :collection_ids,
     :tag,
     :excluded_tag_names,
+    :excluded_tag_ids,
     :other_tag_names,
     :filter_ids,
     :fandom_names,

@@ -321,11 +321,19 @@ class BookmarkQuery < Query
   end
 
   def exclusion_ids
-    return unless options[:excluded_tag_names]
-    names = options[:excluded_tag_names].split(",")
+    return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
+    names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]
+    excluded_tags = []
 
-    excluded_tags = (Tag.where(name: names, canonical: true) +
-                     Tag.where(name: names, canonical: false).map(&:merger)).flatten.compact
+    if names
+      excluded_tags = (Tag.where(name: names, canonical: true) +
+                        Tag.where(name: names, canonical: false).map(&:merger)).flatten.compact
+    end
+
+    if options[:excluded_tag_ids]
+      excluded_tags += (Tag.where(id: options[:excluded_tag_ids], canonical: true) +
+                          Tag.where(id: options[:excluded_tag_ids], canonical: false).map(&:merger)).flatten
+    end
 
     excluded_tags.pluck(:id).compact +
       excluded_tags.map(&:sub_tags).flatten.pluck(:id).compact +
