@@ -18,17 +18,6 @@ class BookmarkIndexer < Indexer
     super
   end
 
-  # index_all without background jobs
-  # Mostly useful for quick local debugging
-  def self.index_all_foreground
-    delete_index
-    create_index
-    BookmarkedExternalIndexer.new(ExternalWork.all.pluck(:id)).index_documents rescue nil
-    BookmarkedSeriesIndexer.new(Series.all.pluck(:id)).index_documents rescue nil
-    BookmarkedWorkIndexer.new(BookmarkedWorkIndexer.indexables.pluck(:id)).index_documents rescue nil
-    self.new(Bookmark.all.pluck(:id)).index_documents rescue nil
-  end
-
   def self.mapping
     {
       "bookmark" => {
