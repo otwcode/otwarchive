@@ -71,7 +71,7 @@ describe WorksController do
     it "should use the new work search form object when use_new_search? is true" do
       controller.stub(:use_new_search?) { true }
       WorkSearchForm.any_instance.stub(:search_results) { OpenStruct.new(facets: []) }
-      expect(WorkSearchForm).to receive(:new).and_return(WorkSearchForm.new({}))
+      expect(WorkSearchForm).to receive(:new).at_least(:once).and_return(WorkSearchForm.new({}))
       expect(WorkSearch).not_to receive(:new)
       get :index, params: { user_id: user.login }
     end
@@ -79,7 +79,7 @@ describe WorksController do
     it "should use the old work search object when use_new_search? is false" do
       controller.stub(:use_new_search?) { false }
       WorkSearch.any_instance.stub(:search_results) { OpenStruct.new(facets: []) }
-      expect(WorkSearch).to receive(:new).and_return(WorkSearch.new({}))
+      expect(WorkSearch).to receive(:new).at_least(:once).and_return(WorkSearch.new({}))
       expect(WorkSearchForm).not_to receive(:new)
       get :index, params: { user_id: user.login }
     end

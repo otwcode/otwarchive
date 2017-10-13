@@ -180,10 +180,6 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
-
-        # For listing all of the tags that it's possible to filter on within an
-        # owner's works page
-        @filtering_facets = WorkSearchForm.new(base_options.merge({works_parent: @owner})).search_results.facets
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
