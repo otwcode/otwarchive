@@ -45,7 +45,8 @@ class Api::V2::WorksController < Api::V2::BaseController
         send_external_invites(@works, archivist)
       end
 
-      # set final response code and message depending on the flags
+      # set final status code and message depending on the flags
+      status = :bad_request if works_responses.any? { |r| [:ok, :created, :found].exclude?(r[:status]) }
       messages = response_message(messages)
     end
     render_api_response(status, messages, works: works_responses)

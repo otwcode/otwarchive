@@ -114,6 +114,7 @@ class StoryParser
   # according to the rules for that site.
   def download_and_parse_work(location, options = {})
     status = :created
+    message = ""
     work = Work.find_by_url(location)
     if work.nil?
       @options = options
@@ -133,12 +134,6 @@ class StoryParser
       message: message,
       work: work
     }
-  end
-
-  # download and add a new chapter to the end of a work
-  def download_and_parse_chapter_of_work(work, location, options = {})
-    chapter_content = download_text(location)
-    return parse_chapter_of_work(work, chapter_content, location, options)
   end
 
   # Given an array of urls for chapters of a single story,

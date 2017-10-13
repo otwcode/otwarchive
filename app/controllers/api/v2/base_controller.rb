@@ -43,6 +43,7 @@ module Api
 
       # Return a standard HTTP + Json envelope for all API responses
       def render_api_response(status, messages, response = {})
+        # It's a bad request unless it's ok or an authorisation error
         http_status = %i[forbidden ok].include?(status) ? status : :bad_request
         render status: http_status, json: { status: status, messages: messages }.merge(response)
       end

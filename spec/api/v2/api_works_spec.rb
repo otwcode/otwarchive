@@ -3,7 +3,7 @@ require "api/api_helper"
 
 include ApiHelper
 
-describe "API V2 WorksController - Create works" do
+describe "API v2 WorksController - Create works" do
   let(:archivist) { create(:archivist) }
 
   describe "API import with a valid archivist" do
@@ -34,7 +34,7 @@ describe "API V2 WorksController - Create works" do
       assert_equal 200, response.status
     end
 
-    it "returns 200 OK with an error message when no stories are created" do
+    it "returns 400 error with an error message when no stories are created" do
       valid_params = {
         archivist: archivist.login,
         works: [
@@ -46,10 +46,10 @@ describe "API V2 WorksController - Create works" do
 
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
 
-      assert_equal 200, response.status
+      assert_equal 400, response.status
     end
 
-    it "returns 200 OK with an error message when only some stories are created" do
+    it "returns 400 OK with an error message when only some stories are created" do
       valid_params = {
         archivist: archivist.login,
         works: [
@@ -64,7 +64,7 @@ describe "API V2 WorksController - Create works" do
 
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
 
-      assert_equal 200, response.status
+      assert_equal 400, response.status
     end
 
     it "returns the original id" do
@@ -485,7 +485,7 @@ describe "API V2 WorksController - Create works" do
   end
 end
 
-describe "API WorksController - Find Works" do
+describe "API v2 WorksController - Find Works" do
   before do
     @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
   end
@@ -569,14 +569,20 @@ describe "API WorksController - Find Works" do
   end
 end
 
-describe "API WorksController - Unit Tests" do
+describe "v2 API WorksController - Unit Tests" do
   before do
     @under_test = Api::V2::WorksController.new
   end
 
   it "work_url_from_external returns an error message when the work URL is blank" do
-    work_url_response = @under_test.instance_eval { find_work_by_import_url("user", "") }
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("id", "") }
     expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
+  end
+
+  it "work_url_from_external returns the work url when a work is found" do
+    work1 = create(:work, imported_from_url: "http://foo")
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("id", "http://foo") }
+    expect(work_url_response[:work]).to eq work1
   end
 
   it "send_external_invites should call find_or_invite on each external author" do
