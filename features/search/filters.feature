@@ -75,6 +75,7 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using inclusion filters
     Given I am logged in as "recengine"
+      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
@@ -107,6 +108,7 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using exclusion filters
     Given I am logged in as "recengine"
+      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
