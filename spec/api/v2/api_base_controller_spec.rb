@@ -40,10 +40,6 @@ describe Api::V2::BaseController, type: :controller do
     let!(:archivist) { create(:archivist) }
 
     it "should return error messages with no items to import" do
-      # puts v2_archivist.inspect
-      # puts v2_archivist.roles.inspect
-      # puts v2_archivist.has_role?(:archivist)
-      # puts v2_archivist.is_archivist?
       user = archivist
       _, messages = controller.instance_eval { batch_errors(user, nil) }
       assert_equal "No items to import were provided.", messages[0]

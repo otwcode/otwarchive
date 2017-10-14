@@ -22,13 +22,10 @@ describe "API V2 BookmarksController" do
 
   before do
     mock_external
-    # @user = create_archivist
-    # user = create_archivist
   end
 
   after do
     WebMock.reset!
-    # @user.destroy
   end
 
   context "Valid API bookmark import" do
