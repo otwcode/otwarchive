@@ -124,7 +124,7 @@ describe "API v2 WorksController - Create works" do
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_body[:works].first[:messages].first).to start_with("We couldn't")
+      expect(parsed_body[:works].first[:messages].first).to start_with("Unable to import this work.")
     end
 
     describe "Provided API metadata should be used if present" do
@@ -161,7 +161,7 @@ describe "API v2 WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy if @work
+        @work&.destroy
         WebMock.reset!
       end
 
@@ -227,7 +227,7 @@ describe "API v2 WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy if @work
+        @work&.destroy
         WebMock.reset!
       end
 
@@ -291,7 +291,7 @@ describe "API v2 WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy if @work
+        @work&.destroy
         WebMock.reset!
       end
 
@@ -370,7 +370,7 @@ describe "API v2 WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy if @work
+        @work&.destroy
         WebMock.reset!
       end
 
@@ -438,7 +438,7 @@ describe "API v2 WorksController - Create works" do
       end
 
       after(:all) do
-        @work.destroy if @work
+        @work&.destroy
         WebMock.reset!
       end
 
@@ -491,7 +491,7 @@ describe "API v2 WorksController - Find Works" do
   end
 
   after do
-    @work.destroy if @work
+    @work&.destroy
   end
 
   describe "valid work URL request" do
@@ -596,8 +596,9 @@ describe "v2 API WorksController - Unit Tests" do
     create(:external_creatorship, external_author_name: name2, creation: work)
 
     @under_test.instance_eval { send_external_invites([work], user) }
-    expect(Invitation.all.map(&:invitee_email)).to include(author1.email)
-    expect(Invitation.all.map(&:invitee_email)).to include(author2.email)
+    emails = Invitation.all.map(&:invitee_email)
+    expect(emails).to include(author1.email)
+    expect(emails).to include(author2.email)
   end
 
   describe "work_errors" do
