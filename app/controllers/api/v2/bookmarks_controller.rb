@@ -46,6 +46,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       end
 
       # set final response code and message depending on the flags
+      status = :bad_request if bookmarks_responses.any? { |r| [:ok, :created, :found].exclude?(r[:status]) }
       messages = response_message(messages)
     end
 
@@ -71,7 +72,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       )
     else
       find_bookmark_response(
-        bookmarkable: "",
+        bookmarkable: nil,
         bookmark_status: :not_found,
         bookmark_message: "There is no bookmark for #{archivist.login} and the URL #{current_bookmark_url}",
         bookmark_url: ""
@@ -84,8 +85,8 @@ class Api::V2::BookmarksController < Api::V2::BaseController
     found_result = {}
     bookmark_request = bookmark_request(archivist, params)
     bookmark_status, bookmark_messages = bookmark_errors(bookmark_request)
-    bookmark_url = ""
-    original_url = ""
+    bookmark_url = nil
+    original_url = nil
     bookmarkable = nil
     @some_errors = true
     if bookmark_status == :ok
@@ -117,17 +118,16 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       rescue StandardError => exception
         bookmark_status = :unprocessable_entity
         bookmark_messages << exception.message
-        Rails.logger.error(exception.backtrace)
       end
       original_url = bookmarkable.url if bookmarkable
     end
 
     bookmark_response(
-      status: found_result[:bookmark_status] || bookmark_status,
-      bookmark_url: found_result[:bookmark_url] || bookmark_url,
+      status: bookmark_status || found_result[:bookmark_status],
+      bookmark_url: bookmark_url || found_result[:bookmark_url],
       bookmark_id: params[:id],
       original_url: original_url,
-      messages: found_result[:bookmark_messages] || bookmark_messages.flatten
+      messages: bookmark_messages.flatten || found_result[:bookmark_messages]
     )
   end
 
@@ -185,14 +185,14 @@ class Api::V2::BookmarksController < Api::V2::BaseController
         author: params[:author],
         title: params[:title],
         summary: params[:summary],
-        fandom_string: params[:fandom_string],
-        rating_string: params[:rating_string],
-        category_string: params[:category_string].to_s.split(","), # category is actually an array on bookmarks
-        relationship_string: params[:relationship_string],
-        character_string: params[:character_string]
+        fandom_string: params[:fandom_string] || "",
+        rating_string: params[:rating_string] || "",
+        category_string: params[:category_string] ? params[:category_string].to_s.split(",") : [], # category is actually an array on bookmarks
+        relationship_string: params[:relationship_string] || "",
+        character_string: params[:character_string] || ""
       },
       notes: params[:notes],
-      tag_string: params[:tag_string],
+      tag_string: params[:tag_string] || "",
       collection_names: params[:collection_names],
       private: params[:private].blank? ? false : params[:private],
       rec: params[:recommendation].blank? ? false : params[:recommendation]

@@ -163,6 +163,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
+        work_messages << "Unable to import this work."
         work_messages << exception.message
       end
     end
