@@ -102,7 +102,7 @@ describe "API V2 BookmarksController" do
              bookmarks: [ bookmark.except(:url) ]
            }.to_json,
            headers: valid_headers
-      assert_equal 200, response.status
+      assert_equal 400, response.status
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "This bookmark does not contain a URL to an external site. Please specify a valid, non-AO3 URL."
@@ -115,7 +115,7 @@ describe "API V2 BookmarksController" do
              bookmarks: [ bookmark.merge(url: work_url(work)) ]
            }.to_json,
            headers: valid_headers
-      assert_equal 200, response.status
+      assert_equal 400, response.status
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "Url could not be reached. If the URL is correct and the site is currently down, please try again later."
@@ -127,7 +127,7 @@ describe "API V2 BookmarksController" do
              bookmarks: [ bookmark.merge(fandom_string: "") ]
            }.to_json,
            headers: valid_headers
-      assert_equal 200, response.status
+      assert_equal 400, response.status
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "This bookmark does not contain a fandom. Please specify a fandom."
@@ -139,7 +139,7 @@ describe "API V2 BookmarksController" do
              bookmarks: [ bookmark.merge(title: "") ]
            }.to_json,
            headers: valid_headers
-      assert_equal 200, response.status
+      assert_equal 400, response.status
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first, "Title can't be blank"
     end
@@ -150,7 +150,7 @@ describe "API V2 BookmarksController" do
              bookmarks: [ bookmark.merge(author: "") ]
            }.to_json,
            headers: valid_headers
-      assert_equal 200, response.status
+      assert_equal 400, response.status
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal bookmark_response[:messages].first,
                    "This bookmark does not contain an external author name. Please specify an author."
