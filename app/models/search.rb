@@ -24,7 +24,7 @@ class Search < ApplicationRecord
     option.gsub!("&gt;", ">")
     option.gsub!("&lt;", "<")
     option.downcase!
-    match = option.match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)
+    match = option.match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?\s*$/)
     range = {}
     if match
       range = time_range(match[1], match[2], match[3])
