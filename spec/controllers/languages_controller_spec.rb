@@ -15,7 +15,7 @@ describe LanguagesController do
 
   describe 'GET show' do
     it 'renders the show template' do
-      get :show, params: { id: 'en'}
+      get :show, params: { id: 'en' }
       expect(response).to render_template('show')
     end
   end
