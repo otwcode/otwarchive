@@ -644,3 +644,17 @@ function thermometer() {
     }
   });
 }
+
+function updateCacheTokens() {
+  // we only do full page caching when users are logged out
+  if ($j('#small_login').length > 0) {
+    $j.getJSON("/token_dispenser.json", function( data ) {
+      var token = data.token;
+      // set token on fields
+      $j('input[name=authenticity_token]').each(function(){
+        $j(this).attr('value', token);
+      });
+      $j('meta[name=csrf-token]').attr('value', token);
+    });
+  }
+}

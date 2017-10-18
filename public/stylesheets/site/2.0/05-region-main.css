@@ -41,6 +41,10 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   background: url("/images/ao3_logos/logo-ruby.png") top right no-repeat;
 }
 
+#main.session {
+  background: url("/images/logo.png") top left no-repeat;
+}
+
 #main.errors h2 {
   display: block;
   margin-top: 0;

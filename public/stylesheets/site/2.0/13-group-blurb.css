@@ -226,6 +226,7 @@ li.blurb:after, .blurb .blurb:after {
 }
 
 .claim .datetime {
+  margin-left: 65px;
   position: static;
 }
 
