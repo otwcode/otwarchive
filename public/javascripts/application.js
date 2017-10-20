@@ -11,7 +11,6 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
-    updateCachedTokens();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -650,7 +649,7 @@ function thermometer() {
   });
 }
 
-function updateCachedTokens() {
+function updateCacheTokens() {
   // we only do full page caching when users are logged out
   if ($j('#small_login').length > 0) {
     $j.getJSON("/token_dispenser.json", function( data ) {
