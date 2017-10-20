@@ -38,7 +38,7 @@ nohup bash -c "./bin/elasticsearch 2>&1" &
 NEW_ES_VERSION="5.6.3"
 NEW_ES_PORT="9334"
 cd ~
-wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${NEW_ES_VERSION}.zip
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${NEW_ES_VERSION}.zip
 unzip -o  elasticsearch-${NEW_ES_VERSION}.zip
 cd elasticsearch-${NEW_ES_VERSION}
 echo "http.port: ${NEW_ES_PORT}" >> config/elasticsearch.yml
