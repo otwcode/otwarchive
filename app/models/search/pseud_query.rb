@@ -13,11 +13,11 @@ class PseudQuery < Query
   end
 
   def filters
-    [collection_filter].compact
+    [collection_filter, fandom_filter].compact
   end
 
   def queries
-    [general_query].compact
+    [general_query, name_query].compact
   end
 
   ###########
@@ -28,6 +28,14 @@ class PseudQuery < Query
     { term: { collection_ids: options[:collection_id] } } if options[:collection_id]
   end
 
+  def fandom_filter
+    if options[:fandom_ids]
+      options[:fandom_ids].map do |fandom_id|
+        { term: { "fandoms.id" => fandom_id } }
+      end
+    end
+  end
+
   ###########
   # QUERIES
   ###########
@@ -36,4 +44,7 @@ class PseudQuery < Query
     { query_string: { query: options[:query] } } if options[:query]
   end
 
+  def name_query
+    { match: { byline: escape_reserved_characters(options[:name]) } } if options[:name]
+  end
 end
