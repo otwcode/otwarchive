@@ -118,6 +118,9 @@ module NavigationHelpers
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+    when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
+      step %{the bookmark indexes are updated}
+      user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
     when /^(.*?)(?:'s)? bookmarks page$/i
       step %{the bookmark indexes are updated}
       user_bookmarks_path(user_id: $1)
