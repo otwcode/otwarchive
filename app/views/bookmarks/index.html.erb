@@ -11,7 +11,7 @@
       <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
       <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
-      <% # let the user reading this bookmark save a copy for themselves %>	
+      <% # let the user reading this bookmark save a copy for themselves %>
       <% if logged_in? && !is_author_of?(@bookmark) %>
         <li>
           <% if (current_user_bookmark ||= bookmark_if_exists(@bookmarkable)) %>
