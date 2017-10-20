@@ -508,7 +508,6 @@ describe "API v2 WorksController - Find Works" do
 
       post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
-      puts parsed_body[:works].inspect
 
       expect(parsed_body[:works].first[:status]).to eq "found"
       expect(parsed_body[:works].first[:archive_url]).to eq work_url(@work)

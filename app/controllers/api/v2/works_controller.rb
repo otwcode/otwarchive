@@ -25,40 +25,35 @@ class Api::V2::WorksController < Api::V2::BaseController
     archivist = User.find_by(login: params[:archivist])
     external_works = params[:items] || params[:works]
     works_responses = []
-    @works = []
 
     # check for top-level errors (not an archivist, no works...)
     status, messages = batch_errors(archivist, external_works)
 
     if status == :ok
-      # Flag error and successes
-      @some_errors = @some_success = false
-
       # Process the works, updating the flags
-      external_works.each do |external_work|
-        works_responses << import_work(archivist, external_work.merge(params.permit!))
-      end
-
-      # Send claim notification emails if required
-      if params[:send_claim_emails] && !@works.empty?
-        status = :emails_sent
-        send_external_invites(@works, archivist)
+      works_responses = external_works.map { |external_work| import_work(archivist, external_work.merge(params.permit!)) }
+      success_works, error_works = works_responses.partition { |r| [:ok, :created, :found].include?(r[:status]) }
+      
+      # Send claim notification emails for successful works
+      if params[:send_claim_emails] && success_works.present?
+        notified_authors = send_external_invites(success_works, archivist)
+        messages << "Claim emails sent to #{notified_authors.to_sentence}."
       end
 
       # set final status code and message depending on the flags
-      status = :bad_request if works_responses.any? { |r| [:ok, :created, :found].exclude?(r[:status]) }
-      messages = response_message(messages)
+      status = :bad_request if error_works.present?
+      messages = response_message(messages, success_works.present?, error_works.present?)
     end
-    render_api_response(status, messages, works: works_responses)
+    render_api_response(status, messages, works: works_responses.map { |r| r.except!(:work) })
   end
 
   private
 
   # Set messages based on success and error flags
-  def response_message(messages)
-    messages << if @some_success && @some_errors
+  def response_message(messages, any_success, any_errors)
+    messages << if any_success && any_errors
                   "At least one work was not imported. Please check individual work responses for further information."
-                elsif !@some_success && @some_errors
+                elsif !any_success && any_errors
                   "None of the works were imported. Please check individual work responses for further information."
                 else
                   "All works were successfully imported."
@@ -151,17 +146,10 @@ class Api::V2::WorksController < Api::V2::BaseController
         work = response[:work]
         work_status = response[:status]
 
-        if work_status == :created
-          work.save
-          @some_success = true
-        elsif work_status == :already_imported
-          @some_errors = true
-        end
-        @works << work
+        work.save if work_status == :created
         work_url = work_url(work)
         work_messages << response[:message]
       rescue => exception
-        @some_errors = true
         work_status = :unprocessable_entity
         work_messages << "Unable to import this work."
         work_messages << exception.message
@@ -173,18 +161,22 @@ class Api::V2::WorksController < Api::V2::BaseController
       archive_url: work_url,
       original_id: external_work[:id],
       original_url: original_url,
-      messages: work_messages
+      messages: work_messages,
+      work: work
     }
   end
 
   # Send invitations to external authors for a given set of works
-  def send_external_invites(works, archivist)
-    external_authors = works.map(&:external_authors).flatten.uniq
-    unless external_authors.empty?
-      external_authors.each do |external_author|
-        external_author.find_or_invite(archivist)
-      end
+  def send_external_invites(success_works, archivist)
+    notified_authors = []
+    external_authors = success_works.map(&:external_authors).flatten.uniq
+    external_authors&.each do |external_author|
+      external_author.find_or_invite(archivist)
+      # One of the external author pseuds is its email address so filter that one out 
+      author_names = external_author.names.select { |a| a.name != external_author.email }.map(&:name).flatten. join(", ")
+      notified_authors << author_names
     end
+    notified_authors
   end
 
   # Request and response hashes
