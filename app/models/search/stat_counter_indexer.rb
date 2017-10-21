@@ -23,7 +23,7 @@ class StatCounterIndexer
     @batch = []
     objects.each do |object|
       next unless object.present?
-      @batch << { update: routing_info(id) }
+      @batch << { update: routing_info(object) }
       @batch << document(object)
     end
     @batch
