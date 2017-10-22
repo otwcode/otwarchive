@@ -39,7 +39,8 @@ class BookmarkSearchForm
     :bookmarkable_collection_ids,
     :sort_column,
     :show_restricted,
-    :page
+    :page,
+    :faceted
   ]
 
   attr_accessor :options

@@ -155,10 +155,8 @@ class WorksController < ApplicationController
         # Remove conditional and call to WorkSearch
         if use_new_search?
           @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-          @filtering_facets = WorkSearchForm.new(base_options.merge(works_parent: @owner)).search_results.facets
         else
           @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-          @filtering_facets = @search.search_results.facets
         end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for

@@ -102,12 +102,8 @@ class BookmarksController < ApplicationController
           # Remove conditional and call to BookmarkSearch
           if use_new_search?
             @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
-            # For listing all of the tags that it's possible to filter on within
-            # an owner's bookmarks page
-            @filtering_facets = BookmarkSearchForm.new(base_options.merge({parent: @owner})).search_results.facets
           else
             @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-            @filtering_facets = @search.search_results.facets
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets

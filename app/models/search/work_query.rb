@@ -234,11 +234,11 @@ class WorkQuery < Query
   ####################
 
   def facet_tags?
-    true
+    options[:faceted]
   end
 
   def facet_collections?
-    false
+    options[:collected]
   end
 
   def include_restricted?

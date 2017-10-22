@@ -233,7 +233,7 @@ class BookmarkQuery < Query
   ####################
 
   def facet_tags?
-    true
+    options[:faceted]
   end
 
   def facet_collections?

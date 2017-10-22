@@ -24,7 +24,7 @@ class BookmarkableQuery < Query
   # Parent filters should now be regular filters on the work/series
   def add_bookmark_filters(bookmark_query)
     @filters ||= []
-    bookmark_filters = bookmark_query.generated_query[:query][:bool][:must]
+    bookmark_filters = bookmark_query.filters
 
     return unless bookmark_filters
 

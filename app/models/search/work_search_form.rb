@@ -9,6 +9,7 @@ class WorkSearchForm
     :title,
     :creators,
     :collected,
+    :faceted,
     :revised_at,
     :language_id,
     :complete,
@@ -112,8 +113,7 @@ class WorkSearchForm
 
     # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
-    processed_opts.merge!(collected: opts[:collected]) if opts[:collected]
-
+    processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
     processed_opts
   end
 
