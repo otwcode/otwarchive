@@ -18,13 +18,13 @@
       </dd>
 
       <% %w(include exclude).each do |filter_action| %>
-        <dt class="<%= filter_action %>">
+        <dt class="<%= filter_action %> heading">
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
           <%= link_to_help "filters-#{filter_action}-tags-help" %>
         </dt>
-        <dd class="<%= filter_action %>">
+        <dd class="<%= filter_action %> tags group">
           <dl>
             <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
               <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
@@ -58,20 +58,20 @@
               </dd>
             <% end %>
             <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
-            <dt class="autocomplete">
+            <dt class="autocomplete search">
               <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
-            <dd class="autocomplete">
+            <dd class="autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
         </dd>
       <% end %>
 
-      <dt class="more">
+      <dt class="more heading">
         <h4 class="heading"><%= ts("More Options") %></h4>
       </dt>
-      <dd class="more">
+      <dd class="more group">
         <dl>
           <dt class="search">
             <%= f.label :query, ts("Search within results") %>

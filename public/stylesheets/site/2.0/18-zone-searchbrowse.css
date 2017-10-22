@@ -74,19 +74,6 @@ form.filters {
   padding: 0;
 }
 
-.filters dt, .filters select {
-  min-width: 0;
-}
-
-.filters fieldset > dl > dt {
-  margin-top: 1.929em;
-}
-
-.filters dt.sort, .filters dd, .filters .more dd.search {
-  margin: 0;
-  padding: 0;
-}
-
 .filters dt, .filters dd, .filters input[type="submit"], .filters .expander {
   width: 100%;
 }
@@ -95,13 +82,17 @@ form.filters {
   padding-left: 0;
 }
 
-.filters button {
-  background: none transparent;
-  border: none;
-  outline: none;
-  padding: 0.25em 0;
-  text-align: left;
-    border-radius: 0;
+.filters dl dl {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+    box-shadow: none;
+}
+
+.filters .submit, .filters .group {
+  margin: 0;
+  padding: 0;
 }
 
 .filters .submit input {
@@ -114,35 +105,21 @@ form.filters {
   white-space: normal;
 }
 
-.filters dl dl {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  background: none;
-    box-shadow: none;
-}
-
-.filters dt.search, .filters dt.autocomplete {
-  border-bottom: none;
-}
-
-.filters dt.autocomplete {
-  padding: 0.25em 0;
-}
-
-.filters .more dt {
-  margin-top: 0.643em;
-}
-
-.filters dd.sort, .filters .more dd {
-  margin-top: 0.375em;
+.filters dt.heading {
+  margin-top: 1.929em;
 }
 
 .filters .expander {
   background: url("/images/arrow-right.gif") left center no-repeat;
+  border: none;
   color: #2a2a2a;
+  height: 100%;
   min-height: 1.786em; /* default button height plus 0.25 vertical padding */
-  padding-left: 14px;
+  outline: none;
+  padding: 0.25em 0 0.25em 14px;
+  text-align: left;
+  white-space: normal;
+    border-radius: 0;
     box-sizing: border-box;
 }
 
@@ -154,12 +131,29 @@ form.filters {
   background-image: url("/images/arrow-down.gif");
 }
 
+.filters .expandable, .filters .group dd.autocomplete {
+  margin: 0;
+}
+
+.filters .group dt.search {
+  border-bottom: none;
+  padding: 0.25em 0;
+}
+
+.filters .more dd.search {
+  margin-top: 0;
+}
+
 .filters .warning {
   font-weight: 500;
 }
 
 .filters .collapsed:after, .filters .expanded:after { 
   content: none;
+}
+
+.filters .sort + .heading {
+  margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
 /* INTERACTION: OLD FILTERS */
