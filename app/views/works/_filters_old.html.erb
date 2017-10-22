@@ -2,12 +2,12 @@
   url: (@collection ? collection_works_path(@collection) : works_path), 
   html: { 
     method: :get, 
-    class: 'narrow-hidden filters', 
+    class: 'narrow-hidden old-filters', 
     id: 'work-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts('Filter results:') do %>
-    <dl class="filters" role="menu">
+    <dl class="old-filters" role="menu">
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
       <dt>
