@@ -34,9 +34,7 @@ class PseudSearchForm
   def set_fandoms
     return unless @options[:fandom].present?
     names = @options[:fandom].split(',').map(&:squish)
-    fandom_ids = Tag.where(name: names).pluck(:id)
-    @options[:fandom_ids] ||= []
-    @options[:fandom_ids] = (@options[:fandom_ids] + fandom_ids).uniq
+    @options[:fandom_ids] = Tag.where(name: names).pluck(:id)
   end
 
 end

@@ -18,7 +18,8 @@ class PeopleController < ApplicationController
     if people_search_params.blank?
       @search = PseudSearchForm.new({})
     else
-      @search = PseudSearchForm.new(people_search_params)
+      options = people_search_params.merge(page: params[:page])
+      @search = PseudSearchForm.new(options)
       @people = @search.search_results
       @search_data = @people.hits.inject({}) do |data, hit|
         data.merge(hit['_id'].to_i => hit['_source'])
