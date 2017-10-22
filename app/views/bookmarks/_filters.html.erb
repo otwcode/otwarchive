@@ -40,6 +40,7 @@
                   <ul>
                     <% @facets[tag_type].each do |tag| %>
                       <li>
+                        <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
                         <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
                           <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
                               tag.id,

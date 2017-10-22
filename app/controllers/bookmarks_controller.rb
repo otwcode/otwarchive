@@ -107,6 +107,13 @@ class BookmarksController < ApplicationController
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
+          if @search.options[:excluded_tag_ids].present?
+            tags = Tag.where(id: @search.options[:excluded_tag_ids])
+            tags.each do |tag|
+              @facets[tag.class.to_s.downcase] ||= []
+              @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+            end
+          end
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
