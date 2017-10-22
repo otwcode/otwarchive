@@ -17,7 +17,9 @@ class BookmarkQuery < Query
   # Hopefully someday they'll fix this and we can get the data from a single query
   def search_results
     response = search
-    response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
+    if response['aggregations']
+      response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
+    end
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
