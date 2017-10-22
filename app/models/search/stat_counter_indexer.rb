@@ -22,7 +22,6 @@ class StatCounterIndexer
   def batch
     @batch = []
     objects.each do |object|
-      next unless object.present?
       @batch << { update: routing_info(object) }
       @batch << document(object)
     end
@@ -35,23 +34,23 @@ class StatCounterIndexer
 
   # Use the routing information from the WorkIndexer, since we don't have an
   # index of our own. And use the work_id rather than our own id.
-  def routing_info(stats)
+  def routing_info(stat_counter)
     {
       '_index' => WorkIndexer.index_name,
       '_type' => WorkIndexer.document_type,
-      '_id' => stats.work_id
+      '_id' => stat_counter.work_id
     }
   end
 
   # Since we're doing an update instead of an index, nest the values.
-  def document(stats)
+  def document(stat_counter)
     {
-      "doc": {
-        hits: stats.hit_count,
-        comments_count: stats.comments_count,
-        kudos_count: stats.kudos_count,
-        bookmarks_count: stats.bookmarks_count
+      doc: {
+        hits: stat_counter.hit_count,
+        comments_count: stat_counter.comments_count,
+        kudos_count: stat_counter.kudos_count,
+        bookmarks_count: stat_counter.bookmarks_count
       }
-    }.to_json
+    }
   end
 end

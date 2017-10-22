@@ -168,6 +168,10 @@ def update_and_refresh_indexes(klass_name)
   $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
+def refresh_index_without_updating(klass_name)
+  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+end
+
 def delete_index(index)
   # ES UPGRADE TRANSITION #
   # Remove block
