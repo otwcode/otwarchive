@@ -20,7 +20,7 @@ class WorkIndexer < Indexer
             analyzer: "simple"
           },
           authors_to_sort_on: {
-            type: "text"
+            type: "keyword"
           },
           title_to_sort_on: {
             type: "keyword"
