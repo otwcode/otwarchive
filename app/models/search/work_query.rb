@@ -1,4 +1,5 @@
 class WorkQuery < Query
+  include TaggableQuery
 
   def klass
     'Work'
@@ -200,8 +201,6 @@ class WorkQuery < Query
     escape_slashes(search_text.strip)
   end
 
-
-
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : 'revised_at'
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
@@ -265,54 +264,4 @@ class WorkQuery < Query
   def pseud_ids
     options[:pseud_ids]
   end
-
-  def filter_ids
-    return @filter_ids if @filter_ids.present?
-    @filter_ids = options[:filter_ids] || []
-    %w(fandom rating warning category character relationship freeform).each do |tag_type|
-      if options["#{tag_type}_ids".to_sym].present?
-        ids = options["#{tag_type}_ids".to_sym]
-        @filter_ids += ids.is_a?(Array) ? ids : [ids]
-      end
-    end
-    @filter_ids += named_tags
-    @filter_ids.uniq
-  end
-
-  # Get the ids for tags passed in by name
-  def named_tags
-    tag_ids = []
-    %w(fandom character relationship freeform other_tag).each do |tag_type|
-      tag_names_key = "#{tag_type}_names".to_sym
-      if options[tag_names_key].present?
-        names = options[tag_names_key].split(",")
-        tags = Tag.where(name: names, canonical: true)
-        unless tags.empty?
-          tag_ids += tags.map{ |tag| tag.id }
-        end
-      end
-    end
-    tag_ids
-  end
-
-  def exclusion_ids
-    return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
-    names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]
-    excluded_tags = []
-
-    if names
-      excluded_tags += Tag.where(name: names, canonical: true) +
-                          Tag.where(name: names, canonical: false).map(&:merger).flatten
-    end
-
-    if options[:excluded_tag_ids]
-      excluded_tags += Tag.where(id: options[:excluded_tag_ids], canonical: true) +
-                         Tag.where(id: options[:excluded_tag_ids], canonical: false).map(&:merger).flatten
-    end
-
-    excluded_tags.pluck(:id).compact +
-      excluded_tags.map(&:sub_tags).flatten.pluck(:id).compact +
-      excluded_tags.map(&:children).flatten.pluck(:id).compact
-  end
-
 end

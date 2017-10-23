@@ -1,4 +1,6 @@
 class BookmarkQuery < Query
+  include TaggableQuery
+
   def klass
     'Bookmark'
   end
@@ -226,7 +228,12 @@ class BookmarkQuery < Query
 
   def tag_exclusion_filter
     if exclusion_ids.present?
-      exclusion_ids.flatten.map { |exclusion_id| parent_term_filter(:filter_ids, exclusion_id) }
+      exclusion_ids.flatten.map { |exclusion_id|
+        [
+          parent_term_filter(:filter_ids, exclusion_id),
+          term_filter(:tag_ids, exclusion_id)
+        ]
+      }.flatten
     end
   end
 
@@ -263,34 +270,6 @@ class BookmarkQuery < Query
     user_ids
   end
 
-  def filter_ids
-    return @filter_ids if @filter_ids.present?
-    @filter_ids = options[:filter_ids] || []
-    %w(fandom rating warning category character relationship freeform).each do |tag_type|
-      if options["#{tag_type}_ids".to_sym].present?
-        @filter_ids += options["#{tag_type}_ids".to_sym]
-      end
-    end
-    @filter_ids += named_tags
-    @filter_ids.uniq
-  end
-
-  # Get the ids for tags passed in by name
-  def named_tags
-    tag_ids = []
-    %w(fandom character relationship freeform other_tag).each do |tag_type|
-      tag_names_key = "#{tag_type}_names".to_sym
-      if options[tag_names_key].present?
-        names = options[tag_names_key].split(",")
-        tags = Tag.where(name: names, canonical: true)
-        unless tags.empty?
-          tag_ids += tags.map{ |tag| tag.id }
-        end
-      end
-    end
-    tag_ids
-  end
-
   def parent_term_filter(field, value, options={})
     {
       has_parent: {
@@ -312,27 +291,4 @@ class BookmarkQuery < Query
       }
     }
   end
-
-  # TODO: this is an awful lot of queries
-  # Also remove children from this unless the tag is a character
-  def exclusion_ids
-    return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
-    names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]
-    excluded_tags = []
-
-    if names
-      excluded_tags = (Tag.where(name: names, canonical: true) +
-                        Tag.where(name: names, canonical: false).map(&:merger)).flatten.compact
-    end
-
-    if options[:excluded_tag_ids]
-      excluded_tags += (Tag.where(id: options[:excluded_tag_ids], canonical: true) +
-                          Tag.where(id: options[:excluded_tag_ids], canonical: false).map(&:merger)).flatten
-    end
-
-    excluded_tags.pluck(:id).compact +
-      excluded_tags.map(&:sub_tags).flatten.pluck(:id).compact +
-      excluded_tags.map(&:children).flatten.pluck(:id).compact
-  end
-
 end
