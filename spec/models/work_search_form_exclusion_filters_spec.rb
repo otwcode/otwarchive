@@ -163,20 +163,32 @@ describe WorkSearchForm do
     end
 
     describe "common tagging" do
-      let!(:filterable_tag) do
+      let!(:fandom_tag) do
         FactoryGirl.create(:tag, type: "Fandom", name: "Dr. Horrible's Sing-Along Blog", canonical: true)
       end
 
-      let!(:common_tag) do
+      let!(:character_tag) do
         FactoryGirl.create(:tag, type: "Character", name: "Penny", canonical: true)
       end
 
-      let!(:common_tagging) do
-        FactoryGirl.create(:common_tagging, filterable: filterable_tag, common_tag: common_tag)
+      let!(:relationship_tag) do
+        FactoryGirl.create(:tag, type: "Relationship", name: "Billy/Penny", canonical: true)
       end
 
-      it "should exclude works with common tags when given that common tag's parent" do
-        excluded_work.update(character_string: "Penny")
+      let!(:common_tagging_fandom) do
+        FactoryGirl.create(:common_tagging, filterable: fandom_tag, common_tag: character_tag)
+      end
+
+      let!(:common_tagging_character) do
+        FactoryGirl.create(:common_tagging, filterable: character_tag, common_tag: relationship_tag)
+      end
+
+      let!(:third_work) do
+        FactoryGirl.create(:work, posted: true)
+      end
+
+      it "should not exclude character works when given a fandom parent" do
+        third_work.update(character_string: "Penny", relationship_string: "Billy/Penny")
         update_and_refresh_indexes("work")
 
         options = {
@@ -186,12 +198,13 @@ describe WorkSearchForm do
         search = WorkSearchForm.new(options)
 
         expect(search.search_results).to include(included_work)
-        expect(search.search_results).not_to include(excluded_work)
+        expect(search.search_results).to include(third_work)
       end
 
-      it "should not exclude works with tags when given that tag's child" do
+      it "should exclude relationship but not fandom works hen given a character tag" do
         included_work.update(fandom_string: "Dr. Horrible's Sing-Along Blog")
         excluded_work.update(character_string: "Penny")
+        third_work.update(relationship_string: "Billy/Penny")
         update_and_refresh_indexes("work")
 
         options = {
@@ -202,6 +215,7 @@ describe WorkSearchForm do
 
         expect(search.search_results).to include(included_work)
         expect(search.search_results).not_to include(excluded_work)
+        expect(search.search_results).not_to include(third_work)
       end
     end
 
