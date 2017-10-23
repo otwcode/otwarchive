@@ -18,62 +18,61 @@
       </dd>
 
       <% %w(include exclude).each do |filter_action| %>
-        <% if (!use_new_search? && filter_action == "include") || use_new_search? %>
-          <dt class="<%= filter_action %>">
-            <h4 class="heading">
-              <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
-            </h4>
-            <%= link_to_help "filters-#{filter_action}-tags-help" %>
-          </dt>
-          <dd class="<%= filter_action %>">
-            <dl>
-              <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
-                <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
-                  <% # For accessibility, include filter action (e.g. Include) as landmark text %>
-                  <% # The space needs to be in the landmark to keep the text aligned %>
-                  <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
-                      filter_action: filter_action.titleize,
-                      tag_type: tag_type_label(tag_type)
-                      ).html_safe %>
-                </dt>
-                <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
-                  <ul>
-                    <% @facets[tag_type].each do |tag| %>
-                      <li>
-                        <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
-                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
-                          <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                              tag.id,
-                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                          <% else %>
-                          <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                              tag.id,
-                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                        <% end %>
-                        <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",
-                            "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </dd>
-              <% end %>
-              <dt class="autocomplete">
-                <%= f.label 'other_tag_names', ts("Other tags to %{filter_action}", filter_action: filter_action) %>
+        <dt class="<%= filter_action %> heading">
+          <h4 class="heading">
+            <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
+          </h4>
+          <%= link_to_help "filters-#{filter_action}-tags-help" %>
+        </dt>
+        <dd class="<%= filter_action %> tags group">
+          <dl>
+            <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
+                <% # For accessibility, include filter action (e.g. Include) as landmark text %>
+                <% # The space needs to be in the landmark to keep the text aligned %>
+                <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
+                    filter_action: filter_action.titleize,
+                    tag_type: tag_type_label(tag_type)
+                    ).html_safe %>
               </dt>
-              <dd class="autocomplete">
-                <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
+              <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
+                <ul>
+                  <% @facets[tag_type].each do |tag| %>
+                    <li>
+                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
+                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
+                        <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                            tag.id,
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                      <% else %>
+                        <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                            tag.id,
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                      <% end %>
+                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",
+                          "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
+                    </li>
+                  <% end %>
+                </ul>
               </dd>
-            </dl>
-          </dd>
-        <% end %>
+            <% end %>
+            <dt class="autocomplete search">
+              <%= f.label "other_tag_names", ts("Other tags to %{filter_action}",
+                  filter_action: filter_action) %>
+            </dt>
+            <dd class="autocomplete search">
+              <%= f.text_field "other_tag_names", autocomplete_options("tag") %>
+            </dd>
+          </dl>
+        </dd>
       <% end %>
 
-      <dt class="more">
+      <dt class="more heading">
         <h4 class="heading"><%= ts("More Options") %></h4>
       </dt>
-      <dd class="more">
+      <dd class="more group">
         <dl>
           <dt class="search">
             <%= f.label :query, ts("Search within results") %>

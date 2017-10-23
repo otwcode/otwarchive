@@ -1460,7 +1460,7 @@ class Work < ApplicationRecord
   end
 
   def user_ids
-    Pseud.where(id: pseud_ids).pluck(:id)
+    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids
@@ -1518,8 +1518,8 @@ class Work < ApplicationRecord
   def work_types
     types = []
     video_ids = [44011] # Video
-    audio_ids = [70308] # Podfic
-    art_ids = [7844, 125758] # Fanart, Arts
+    audio_ids = [70308, 1098169] # Podfic, Audio Content
+    art_ids = [7844, 125758, 3863] # Fanart, Arts
     types << "Video" if (filter_ids & video_ids).present?
     types << "Audio" if (filter_ids & audio_ids).present?
     types << "Art" if (filter_ids & art_ids).present?
@@ -1534,7 +1534,7 @@ class Work < ApplicationRecord
   # To be replaced by actual category
   # Can't use the 'Meta' tag since that has too many different uses
   def nonfiction
-    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
 end

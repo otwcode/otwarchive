@@ -35,6 +35,11 @@ class IndexSubqueue
   end
 
   def run
+    # Do this before the old indexing  to make sure that we know which IDs to
+    # pass to the indexer. (Delete this comment after the upgrade is complete.)
+    if $rollout.active?(:start_new_indexing)
+      AsyncIndexer.index(klass, ids, label)
+    end
     unless $rollout.active?(:stop_old_indexing)
       build_batch
       @response = perform_batch_update
@@ -43,9 +48,6 @@ class IndexSubqueue
       else
         respond_to_failure
       end
-    end
-    if $rollout.active?(:start_new_indexing)
-      AsyncIndexer.index(klass, ids, label)
     end
   end
 
