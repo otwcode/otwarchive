@@ -50,13 +50,18 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Bookmarks") %></h3>
 <ol class="bookmark index group">
-	<%= render 'bookmarks/bookmarks' %>
+  <%= render "bookmarks/bookmarks" %>
 </ol>
 <!-- /content-->
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render 'filters' %>
+  <% # ES UPGRADE TRANSITION # %>
+  <% if use_new_search? %>
+    <%= render "filters" %>
+  <% else %>
+    <%= render "filters_old" %>
+  <% end %>
 <% end %>
 <!---/subnav-->
 
