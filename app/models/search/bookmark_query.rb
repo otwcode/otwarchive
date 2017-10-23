@@ -34,7 +34,7 @@ class BookmarkQuery < Query
   end
 
   def exclusion_filters
-    tag_exclusion_filter.compact if tag_exclusion_filter
+    @exclusion_filters ||= tag_exclusion_filter
   end
 
   def queries
@@ -171,11 +171,11 @@ class BookmarkQuery < Query
   end
 
   def posted_filter
-    term_filter(:bookmarkable_posted, 'true')
+    parent_term_filter(:posted, 'true')
   end
 
   def hidden_parent_filter
-    term_filter(:bookmarkable_hidden_by_admin, 'false')
+    parent_term_filter(:hidden_by_admin, 'false')
   end
 
   def restricted_filter
@@ -226,7 +226,7 @@ class BookmarkQuery < Query
 
   def tag_exclusion_filter
     if exclusion_ids.present?
-      exclusion_ids.flatten.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
+      exclusion_ids.flatten.map { |exclusion_id| parent_term_filter(:filter_ids, exclusion_id) }
     end
   end
 
@@ -313,6 +313,8 @@ class BookmarkQuery < Query
     }
   end
 
+  # TODO: this is an awful lot of queries
+  # Also remove children from this unless the tag is a character
   def exclusion_ids
     return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
     names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]

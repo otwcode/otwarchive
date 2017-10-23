@@ -23,16 +23,16 @@ class BookmarkableQuery < Query
   # Simple term filters should now be child filters so they apply to the bookmarks
   # Parent filters should now be regular filters on the work/series
   def add_bookmark_filters(bookmark_query)
-    @filters ||= []
-    bookmark_filters = bookmark_query.filters
-
-    return unless bookmark_filters
-
-    bookmark_filters.each do |filter|
-      if filter.has_key?(:term) || filter.has_key?(:terms)
-        @filters << { has_child: { type: "bookmark", filter: filter } }
-      elsif filter.has_key?(:has_parent)
-        @filters << filter[:has_parent][:filter]
+    if bookmark_query.filters.present?
+      @filters ||= []
+      bookmark_query.filters.each do |filter|
+        @filters << flipped_filter(filter)
+      end
+    end
+    if bookmark_query.exclusion_filters.present?
+      @exclusion_filters ||= []
+      bookmark_query.exclusion_filters.each do |filter|
+        @exclusion_filters << flipped_filter(filter)
       end
     end
   end
@@ -51,6 +51,16 @@ class BookmarkableQuery < Query
       aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
     end
     { aggs: aggs }
+  end
+
+  private
+
+  def flipped_filter(filter)
+    if filter.has_key?(:term) || filter.has_key?(:terms)
+      { has_child: { type: "bookmark", filter: filter } }
+    elsif filter.has_key?(:has_parent)
+      filter[:has_parent][:filter]
+    end
   end
 
 end

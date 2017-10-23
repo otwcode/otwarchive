@@ -80,6 +80,7 @@ class Query
   end
 
   def exclusion_filters
+    @exclusion_filters
   end
 
   def queries

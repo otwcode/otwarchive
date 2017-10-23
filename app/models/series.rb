@@ -229,7 +229,7 @@ class Series < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Series',
-      bookmarkable: "bookmarkable"
+      bookmarkable_join: "bookmarkable"
     )
   end
 
