@@ -5,7 +5,7 @@ class BookmarkIndexer < Indexer
   end
 
   # Create the bookmarkable index/mapping first
-  # Skip delete on the subclasses so it doesn"t delete the ones we"ve just
+  # Skip delete on the subclasses so it doesn't delete the ones we've just
   # reindexed
   def self.index_all(options={})
     options[:skip_delete] = true
@@ -44,7 +44,7 @@ class BookmarkIndexer < Indexer
           },
           "bookmarker" => {
             type: "text",
-            analyzer: "snowball"
+            analyzer: "simple"
           },
           "tag" => {
             "type" => "text",

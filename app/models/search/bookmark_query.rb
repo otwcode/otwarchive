@@ -39,8 +39,12 @@ class BookmarkQuery < Query
     @exclusion_filters ||= tag_exclusion_filter
   end
 
-  def queries
-    @queries = [general_query] unless general_query.blank?
+  # Instead of doing a standard query, which would only match bookmark fields
+  # we'll make this a should query that will try to match either the bookmark or its parent
+  def should_query
+    if query_term.present?
+      @should_queries = parent_child_query
+    end
   end
 
   def add_owner
@@ -64,12 +68,33 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  # Search for a tag by name
-  def general_query
-    input = (options[:q] || options[:query])
-    query = generate_search_text( input || '' )
+  def parent_child_query
+    [
+      general_query,
+      parent_query
+    ]
+  end
 
-    { query_string: { query: query } } unless query.blank?
+  def general_query
+    { query_string: { query: query_term } }
+  end
+
+  def parent_query
+    {
+      has_parent: {
+        type: "bookmarkable",
+        query: {
+          query_string: {
+            query: query_term
+          }
+        }
+      }
+    }
+  end
+
+  def query_term
+    input = (options[:q] || options[:query])
+    generate_search_text( input || '' )
   end
 
   def generate_search_text(query = '')

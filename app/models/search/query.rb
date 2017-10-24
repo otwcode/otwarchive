@@ -47,6 +47,10 @@ class Query
     filtered_query = {}
     filtered_query[:filter] = filter_bool if filter_bool.present?
     filtered_query[:must] = query_bool if query_bool.present?
+    if should_query.present?
+      filtered_query[:should] = should_query
+      filtered_query[:minimum_should_match] = 1
+    end
     filtered_query
   end
 
@@ -63,6 +67,11 @@ class Query
   # Boolean query
   def query_bool
     queries if !queries.blank?
+  end
+
+  # Should queries (used primarily for bookmarks)
+  def should_query
+    @should_queries
   end
 
   # Define specifics in subclasses

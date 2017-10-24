@@ -14,7 +14,7 @@ class BookmarkableQuery < Query
   # Use an existing bookmark query to get aggregations on the parent objects
   # Elasticsearch doesn't let you do parent aggregations directly
   def self.filters_for_bookmarks(bookmark_query)
-    query = BookmarkableQuery.new
+    query = BookmarkableQuery.new(per_page: 0)
     query.add_bookmark_filters(bookmark_query)
     query.aggregation_results
   end
@@ -23,18 +23,9 @@ class BookmarkableQuery < Query
   # Simple term filters should now be child filters so they apply to the bookmarks
   # Parent filters should now be regular filters on the work/series
   def add_bookmark_filters(bookmark_query)
-    if bookmark_query.filters.present?
-      @filters ||= []
-      bookmark_query.filters.each do |filter|
-        @filters << flipped_filter(filter)
-      end
-    end
-    if bookmark_query.exclusion_filters.present?
-      @exclusion_filters ||= []
-      bookmark_query.exclusion_filters.each do |filter|
-        @exclusion_filters << flipped_filter(filter)
-      end
-    end
+    add_flipped_filters(bookmark_query)
+    add_flipped_exclusion_filters(bookmark_query)
+    add_flipped_query(bookmark_query)
   end
 
   # Do a regular search and return only the aggregations
@@ -55,11 +46,44 @@ class BookmarkableQuery < Query
 
   private
 
+  def add_flipped_filters(bookmark_query)
+    if bookmark_query.filters.present?
+      @filters ||= []
+      bookmark_query.filters.each do |filter|
+        @filters << flipped_filter(filter)
+      end
+    end
+  end
+
+  def add_flipped_exclusion_filters(bookmark_query)
+    if bookmark_query.exclusion_filters.present?
+      @exclusion_filters ||= []
+      bookmark_query.exclusion_filters.each do |filter|
+        @exclusion_filters << flipped_filter(filter)
+      end
+    end
+  end
+
+  def add_flipped_query(bookmark_query)
+    shoulds = bookmark_query.should_query
+    if shoulds.present?
+      @should_queries = shoulds.map { |q| flipped_query(q) }
+    end
+  end
+
   def flipped_filter(filter)
-    if filter.has_key?(:term) || filter.has_key?(:terms)
+    if filter.key?(:term) || filter.key?(:terms)
       { has_child: { type: "bookmark", filter: filter } }
-    elsif filter.has_key?(:has_parent)
+    elsif filter.key?(:has_parent)
       filter[:has_parent][:filter]
+    end
+  end
+
+  def flipped_query(q)
+    if q.key?(:query_string)
+      q
+    elsif q.key?(:has_parent)
+      { has_child: q[:has_parent]&.merge(type: "bookmark") }
     end
   end
 
