@@ -99,7 +99,7 @@ class BookmarkQuery < Query
 
   def generate_search_text(query = '')
     search_text = query
-    [:bookmarker].each do |field|
+    [:bookmarker, :notes, :tag].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
           if word[0] == "-"
@@ -119,7 +119,7 @@ class BookmarkQuery < Query
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     sort_hash = { column => { order: direction } }
 
-    if column == 'created_at'
+    if %w(created_at bookmarkable_date).include?(column)
       sort_hash[column][:unmapped_type] = 'date'
     end
 
@@ -236,12 +236,6 @@ class BookmarkQuery < Query
   end
 
   def tags_filter
-    if options[:tag].present?
-      tag = Tag.find_by name: options[:tag]
-      options[:tag_ids] ||= []
-      options[:tag_ids] << tag.id if tag
-    end
-
     if options[:tag_ids].present?
       options[:tag_ids].map { |tag_id| term_filter(:tag_ids, tag_id) }
     end

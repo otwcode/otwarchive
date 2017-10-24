@@ -351,7 +351,7 @@ class BookmarksController < ApplicationController
     params.require(:bookmark_search).permit(
       :query,
       :bookmarker,
-      :notes,
+      :bookmark_notes,
       :tag,
       :rec,
       :with_notes,

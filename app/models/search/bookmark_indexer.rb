@@ -82,7 +82,7 @@ class BookmarkIndexer < Indexer
     json_object = object.as_json(
       root: false,
       except: [:notes_sanitizer_version, :delta],
-      methods: [:bookmarker, :collection_ids, :with_notes]
+      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
       user_id: object.pseud.user_id,
       tag: tags.map(&:name),
