@@ -31,11 +31,10 @@ module TaggableQuery
     end
     ids = excluded_tags.pluck(:id)
     if excluded_tags.present?
-      sub_ids = MetaTagging.where(meta_tag_id: ids).pluck(:sub_tag_id)
       child_ids = CommonTagging.joins("JOIN tags ON tags.id = common_taggings.filterable_id").
                            where("filterable_id IN (?) AND tags.type = 'Character'", ids).
                            pluck(:common_tag_id)
-      ids = (ids + sub_ids + child_ids).uniq
+      ids = (ids + child_ids).uniq
     end
     @exclusion_ids = ids
   end
