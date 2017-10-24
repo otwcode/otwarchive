@@ -254,7 +254,7 @@ class Series < ApplicationRecord
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (work_tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets
