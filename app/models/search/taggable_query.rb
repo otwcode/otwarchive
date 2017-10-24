@@ -36,5 +36,4 @@ module TaggableQuery
     end
     Tag.where(name: names).pluck(:id)
   end
-
 end

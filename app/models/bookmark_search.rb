@@ -6,6 +6,7 @@ class BookmarkSearch < Search
   serialized_options :query,
     :rec,
     :notes,
+    :bookmark_notes,
     :with_notes,
     :date,
     :show_private,
@@ -69,6 +70,7 @@ class BookmarkSearch < Search
   def process_options
     self.options ||= {}
 
+    options[:notes] ||= options[:bookmark_notes]
     self.set_parent_fields!
     self.set_tag_fields!
     self.set_sorting!
