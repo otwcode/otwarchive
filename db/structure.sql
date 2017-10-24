@@ -1640,7 +1640,8 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_email` (`email`),
   KEY `index_users_on_confirmation_token` (`confirmation_token`),
-  KEY `index_users_on_reset_password_token` (`reset_password_token`)
+  KEY `index_users_on_reset_password_token` (`reset_password_token`),
+  KEY `index_users_on_unlock_token` (`unlock_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `work_links`;
