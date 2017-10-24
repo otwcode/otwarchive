@@ -109,9 +109,15 @@ class BookmarksController < ApplicationController
           @facets = @bookmarks.facets
           if @search.options[:excluded_tag_ids].present?
             tags = Tag.where(id: @search.options[:excluded_tag_ids])
+            excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
             tags.each do |tag|
-              @facets[tag.class.to_s.downcase] ||= []
-              @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+              if excluded_bookmark_tag_ids.include?(tag.id.to_s)
+                key = 'tag'
+              else
+                key = tag.class.to_s.downcase
+              end
+              @facets[key] ||= []
+              @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
             end
           end
         end
