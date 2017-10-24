@@ -71,31 +71,17 @@ Feature: Search Bookmarks
       And the "With Notes" checkbox should be checked
 
   Scenario: If testuser has the pseud tester_pseud, searching for bookmarks by
-  the bookmarker testuser does not return any of tester_pseud's bookmarks
+  the bookmarker testuser returns all of tester_pseud's bookmarks
     When I fill in "Bookmarker" with "testuser"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Bookmarker: testuser"
-      And I should see "3 Found"
+      And I should see "6 Found"
       And I should see "First work"
       And I should see "second work"
       And I should see "third work"
-      And I should not see "tester_pseud"
-      And I should not see "fifth"
-      And I should not see "Skies Grown Darker"
-    When I follow "Edit Your Search"
-    Then the field labeled "Bookmarker" should contain "testuser"
-
-  Scenario: If testuser has the pseud tester_pseud, searching for bookmarks by
-  the bookmarker tester_pseud does not return any of testusers's bookmarks
-    When I fill in "Bookmarker" with "tester_pseud"
-      And I press "Search bookmarks"
-    Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: Bookmarker: tester_pseud"
-      And I should see "2 Found"
+      And I should see "tester_pseud"
       And I should see "fifth"
       And I should see "Skies Grown Darker"
-      And I should not see "First work"
-      And I should not see "second work"
-      And I should not see "third work"
-
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarker" should contain "testuser"

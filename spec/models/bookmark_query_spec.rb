@@ -5,7 +5,7 @@ describe BookmarkQuery do
   it "should allow you to perform a simple search" do
     q = BookmarkQuery.new(query: "unicorns")
     search_body = q.generated_query
-    expect(search_body[:query][:bool][:must]).to eq([{:query_string => { :query => "unicorns" }}])
+    expect(search_body[:query][:bool][:should]).to include({:query_string => { :query => "unicorns" }})
   end
 
   it "should not return private bookmarks by default" do
