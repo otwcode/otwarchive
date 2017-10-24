@@ -17,26 +17,12 @@ module TaggableQuery
   def exclusion_ids
     return @exclusion_ids if @exclusion_ids.present?
     return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
-    names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]
-    excluded_tags = []
 
-    if names
-      excluded_tags = Tag.where(name: names)
-    end
-    if options[:excluded_tag_ids]
-      excluded_tags += Tag.where(id: options[:excluded_tag_ids])
-    end
-    if excluded_tags.find{ |tag| tag.merger_id.present? }
-      excluded_tags += Tag.where(id: excluded_tags.map(&:merger_id).compact.uniq)
-    end
-    ids = excluded_tags.pluck(:id)
-    if excluded_tags.present?
-      child_ids = CommonTagging.joins("JOIN tags ON tags.id = common_taggings.filterable_id").
-                           where("filterable_id IN (?) AND tags.type = 'Character'", ids).
-                           pluck(:common_tag_id)
-      ids = (ids + child_ids).uniq
-    end
-    @exclusion_ids = ids
+    ids = options[:excluded_tag_ids] || []
+    names = options[:excluded_tag_names]&.split(",")
+    ids += Tag.where(name: names).pluck(:id) if names
+    ids += Tag.where(id: ids).pluck(:merger_id)
+    @exclusion_ids = ids.uniq.compact
   end
 
   # Get the ids for tags passed in by name
@@ -48,7 +34,7 @@ module TaggableQuery
         names += options[tag_names_key].split(",")
       end
     end
-    Tag.where(name: names, canonical: true).pluck(:id)
+    Tag.where(name: names).pluck(:id)
   end
 
 end
