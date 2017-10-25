@@ -65,6 +65,7 @@ Feature: User dashboard
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"
+    And I should see "Works (6)" within "#dashboard"
   When I follow "Works (6)" within "#user-works"
   Then I should see "6 Works by meatloaf"
     And I should see "Oldest Work"
@@ -102,6 +103,7 @@ Feature: User dashboard
     And I go to meatloaf's user page
   Then I should see "Work Six" within "#user-bookmarks"
     And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Bookmarks (6)" within "#dashboard"
   When I follow "Bookmarks (6)" within "#user-bookmarks"
   Then I should see "6 Bookmarks by meatloaf"
     And I should see "Work One"
@@ -118,6 +120,7 @@ Feature: User dashboard
     And I follow "gravy" within ".pseud .expandable li"
   Then I should see "Recent works"
     And I should see "Pseud's Work 1"
+    And I should see "Works (1)" within "#dashboard"
     And I should not see "Works (" within "#user-works"
     And I should not see "Oldest Work" within "#user-works"
   Then I should see "Recent series"
@@ -125,6 +128,7 @@ Feature: User dashboard
     And I should not see "Oldest Series"
   Then I should see "Recent bookmarks"
     And I should see "Work 5" within "#user-bookmarks"
+    And I should see "Bookmarks (1)" within "#dashboard"
 
   Scenario: You can follow a fandom link from a user's dashboard and then use the filters to sort within that fandom.
   Given a media exists with name: "TV Shows", canonical: true

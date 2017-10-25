@@ -22,6 +22,14 @@ class Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
+  # Perform a count query based on the given options
+  def count
+    $new_elasticsearch.count(
+      index: index_name,
+      body: { query: generated_query[:query] }
+    )['count']
+  end
+
   # Sort by relevance by default, override in subclasses as necessary
   def sort
     { "_score" => { order: "desc" }}
