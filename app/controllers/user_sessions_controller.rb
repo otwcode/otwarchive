@@ -1,9 +1,10 @@
-class UserSessionsController < ApplicationController
+class UserSessionsController < Devise::SessionsController
 
   layout "session"
   before_action :admin_logout_required
   skip_before_action :store_location
 
+=begin
   def new
   end
 
@@ -78,14 +79,14 @@ class UserSessionsController < ApplicationController
 
   def passwd_small
     respond_to do |format|
-      format.html { redirect_to login_path }
+      format.html { redirect_to new_user_session_path }
       format.js
     end
   end
 
   def passwd
     respond_to do |format|
-      format.html { redirect_to login_path }
+      format.html { redirect_to new_user_session_path }
       format.js
     end
   end
@@ -99,5 +100,5 @@ class UserSessionsController < ApplicationController
       :remember_me
     )
   end
-
+=end
 end

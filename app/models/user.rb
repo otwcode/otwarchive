@@ -1,12 +1,17 @@
-  class User < ApplicationRecord
+class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
+
+  devise :database_authenticatable, :confirmable, :recoverable,
+          :registerable, :rememberable, :trackable, :validatable,
+          :lockable
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
   # Authlogic gem
+=begin
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
     if (ArchiveConfig.BCRYPT || "true") == "true"
@@ -29,7 +34,7 @@
   def has_no_credentials?
     self.crypted_password.blank?
   end
-
+=end
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
@@ -261,7 +266,7 @@
     return if role.blank? && query.blank?
     users = User.select("DISTINCT users.*").order(:login)
     if options[:inactive]
-      users = users.where("activated_at IS NULL")
+      users = users.where("confirmed_at IS NULL")
     end
     if role.present?
       users = users.joins(:roles).where("roles.id = ?", role.id)
@@ -281,8 +286,7 @@
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
-    !activated_at.nil?
-  end
+    !confirmed_at.nil?  end
 
   def generate_password(length = 8)
     chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789"
@@ -294,14 +298,14 @@
   # use update_all to force the update even if the user is invalid
   def reset_user_password
     temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1")
+    User.where("id = #{self.id}").update_all("confirmation_token = '#{temp_password}', recently_reset = 1")
     # send synchronously to prevent getting caught in backed-up mail queue
     UserMailer.reset_password(self.id, temp_password).deliver!
   end
 
   def activate
     return false if self.active?
-    self.update_attribute(:activated_at, Time.now.utc)
+    self.update_attribute(:confirmed_at, Time.now.utc)
   end
 
   def create_default_associateds
