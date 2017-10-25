@@ -72,7 +72,7 @@ module UsersHelper
     # ES UPGRADE TRANSITION #
     # Remove conditional and call to BookmarkSearch
     if use_new_search?
-      total = BookmarkSearchForm.count_for_pseuds(user.pseuds)
+      total = BookmarkSearchForm.count_for_user(user)
     else
       total = BookmarkSearch.count_for_pseuds(user.pseuds)
     end

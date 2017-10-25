@@ -45,28 +45,12 @@ class BookmarkSearchForm
 
   attr_accessor :options
 
+  def self.count_for_user(user)
+    BookmarkQuery.new(user_ids: [user.id]).count
+  end
+
   def self.count_for_pseuds(pseuds)
-    terms = [
-      { term: { hidden_by_admin: 'false' } },
-    ]
-    terms << pseuds.pluck(:id).compact.map { |id| { term: { pseud_id: id } } }
-    unless pseuds.map(&:user).uniq == [User.current_user]
-      terms << { term: { private: 'false' } }
-    end
-    query = { query: { bool: { must: terms } } }
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    response = $new_elasticsearch.perform_request(
-      "GET",
-      "#{Bookmark.index_name}/bookmark/_count",
-      {},
-      query
-    )
-    if response.status == 200
-      response.body['count']
-    else
-      raise response.inspect
-    end
+    BookmarkQuery.new(pseud_ids: pseuds.map(&:id)).count
   end
 
   ATTRIBUTES.each do |filterable|
