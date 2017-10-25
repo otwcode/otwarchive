@@ -11,13 +11,12 @@ class AsyncIndexer
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
     batch = indexer.new(ids).index_documents
-
-    if batch["errors"]
-      failure_ids = batch["items"].map { |i| i["_id"] }
-      new(indexer, "failures").enqueue_ids(failure_ids)
-    end
-
+    process_batch_failures(batch, indexer)
     REDIS.del(name)
+  end
+
+  def self.process_batch_failures(batch, indexer)
+    IndexSweeper.new(batch, indexer, 1)
   end
 
   # For the new search code, the indexing is handled
