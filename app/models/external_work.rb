@@ -127,7 +127,6 @@ class ExternalWork < ApplicationRecord
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(
-      id: "external_work-#{id}",
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: "bookmarkable"
     )

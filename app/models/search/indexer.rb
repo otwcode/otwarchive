@@ -110,7 +110,7 @@ class Indexer
 
   def objects
     Rails.logger.info "Blueshirt: Logging use of constantize class objects #{klass}"
-    @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
+    @objects ||= klass.constantize.where(id: ids.map(&:to_i)).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end
   end

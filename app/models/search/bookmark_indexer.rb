@@ -64,7 +64,7 @@ class BookmarkIndexer < Indexer
     {
       "_index" => index_name,
       "_type" => document_type,
-      "_id" => id,
+      "_id" => id.to_s,
       "routing" => parent_id(object)
     }
   end

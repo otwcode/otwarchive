@@ -10,7 +10,13 @@ class AsyncIndexer
     Rails.logger.info "Blueshirt: Logging use of constantize class self.perform #{name.split(":").first}"
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
-    indexer.new(ids).index_documents
+    batch = indexer.new(ids).index_documents
+
+    if batch["errors"]
+      failure_ids = batch["items"].select { |i| i["_id"] }
+      new(indexer, "failures").enqueue_ids(failure_ids)
+    end
+
     REDIS.del(name)
   end
 
