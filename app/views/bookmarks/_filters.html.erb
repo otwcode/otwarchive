@@ -37,9 +37,10 @@
               </dt>
               <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type %> tags">
                 <ul>
-                  <% @filtering_facets[tag_type].each do |tag| %>
+                  <% @facets[tag_type].each do |tag| %>
                     <li>
-                      <% if (tag_type == "rating") && @filtering_facets[tag_type].length > 1 %>
+                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
+                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
                         <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
                             tag.id,
                             filter_boolean_value(filter_action, tag_type, tag.id.to_s),
@@ -57,12 +58,12 @@
                 </ul>
               </dd>
             <% end %>
+            <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
             <dt class="autocomplete search">
-              <%= f.label "other_tag_names", ts("Other tags to %{filter_action}",
-                  filter_action: filter_action) %>
+              <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
             <dd class="autocomplete search">
-              <%= f.text_field "other_tag_names", autocomplete_options("tag") %>
+              <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
         </dd>

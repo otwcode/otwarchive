@@ -7,7 +7,7 @@ class BookmarkSearchForm
   ATTRIBUTES = [
     :query,
     :rec,
-    :notes,
+    :bookmark_notes,
     :with_notes,
     :date,
     :show_private,
@@ -39,7 +39,8 @@ class BookmarkSearchForm
     :bookmarkable_collection_ids,
     :sort_column,
     :show_restricted,
-    :page
+    :page,
+    :faceted
   ]
 
   attr_accessor :options
@@ -74,6 +75,8 @@ class BookmarkSearchForm
 
   def initialize(options={})
     @options = options
+    # If we call the form field 'notes', the parser adds html to it
+    @options[:notes] = @options[:bookmark_notes]
     @searcher = BookmarkQuery.new(options.delete_if { |k, v| v.blank? })
   end
 

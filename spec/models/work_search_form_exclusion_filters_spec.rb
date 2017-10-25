@@ -161,49 +161,5 @@ describe WorkSearchForm do
         expect(search.search_results).not_to include(excluded_work)
       end
     end
-
-    describe "common tagging" do
-      let!(:filterable_tag) do
-        FactoryGirl.create(:tag, type: "Fandom", name: "Dr. Horrible's Sing-Along Blog", canonical: true)
-      end
-
-      let!(:common_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Penny", canonical: true)
-      end
-
-      let!(:common_tagging) do
-        FactoryGirl.create(:common_tagging, filterable: filterable_tag, common_tag: common_tag)
-      end
-
-      it "should exclude works with common tags when given that common tag's parent" do
-        excluded_work.update(character_string: "Penny")
-        update_and_refresh_indexes("work")
-
-        options = {
-          excluded_tag_names: "Dr. Horrible's Sing-Along Blog"
-        }
-
-        search = WorkSearchForm.new(options)
-
-        expect(search.search_results).to include(included_work)
-        expect(search.search_results).not_to include(excluded_work)
-      end
-
-      it "should not exclude works with tags when given that tag's child" do
-        included_work.update(fandom_string: "Dr. Horrible's Sing-Along Blog")
-        excluded_work.update(character_string: "Penny")
-        update_and_refresh_indexes("work")
-
-        options = {
-          excluded_tag_names: "Penny"
-        }
-
-        search = WorkSearchForm.new(options)
-
-        expect(search.search_results).to include(included_work)
-        expect(search.search_results).not_to include(excluded_work)
-      end
-    end
-
   end
 end

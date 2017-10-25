@@ -102,15 +102,24 @@ class BookmarksController < ApplicationController
           # Remove conditional and call to BookmarkSearch
           if use_new_search?
             @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
-            # For listing all of the tags that it's possible to filter on within
-            # an owner's bookmarks page
-            @filtering_facets = BookmarkSearchForm.new(base_options.merge({parent: @owner})).search_results.facets
           else
             @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-            @filtering_facets = @search.search_results.facets
           end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
+          if @search.options[:excluded_tag_ids].present?
+            tags = Tag.where(id: @search.options[:excluded_tag_ids])
+            excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
+            tags.each do |tag|
+              if excluded_bookmark_tag_ids.include?(tag.id.to_s)
+                key = 'tag'
+              else
+                key = tag.class.to_s.downcase
+              end
+              @facets[key] ||= []
+              @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
+            end
+          end
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
@@ -342,7 +351,7 @@ class BookmarksController < ApplicationController
     params.require(:bookmark_search).permit(
       :query,
       :bookmarker,
-      :notes,
+      :bookmark_notes,
       :tag,
       :rec,
       :with_notes,

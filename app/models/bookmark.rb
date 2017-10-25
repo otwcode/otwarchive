@@ -255,7 +255,7 @@ class Bookmark < ApplicationRecord
   end
 
   def bookmarker
-    pseud.try(:name)
+    pseud.try(:byline)
   end
 
   def with_notes
