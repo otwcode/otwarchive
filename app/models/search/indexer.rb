@@ -110,14 +110,7 @@ class Indexer
 
   def objects
     Rails.logger.info "Blueshirt: Logging use of constantize class objects #{klass}"
-    # Calling `.map(&:to_i)` on `ids` because some ES bookmark documents are ID'd
-    # with a class type - i.e. `"6-work"` should just be `6`, though we still want
-    # the routing ID to be `"6-work"` when calling `routing_info(id)` from the
-    # `batch` method
-    #
-    # This is necessary when re-indexing failures from AsyncIndexer, as it hands
-    # the list of ES document IDs to the indexer instead of object IDs
-    @objects ||= klass.constantize.where(id: ids.map(&:to_i)).inject({}) do |h, obj|
+    @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end
   end
