@@ -223,7 +223,7 @@ describe "API v2 WorksController - Create works" do
         parsed_body = JSON.parse(response.body, symbolize_names: true)
         @work = Work.find_by_url(parsed_body[:works].first[:original_url])
         created_user = ExternalAuthor.find_by(email: api_fields[:external_author_email])
-        created_user.destroy unless created_user.nil?
+        created_user&.destroy
       end
 
       after(:all) do
@@ -481,89 +481,6 @@ describe "API v2 WorksController - Create works" do
       it "Author pseud" do
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
       end
-    end
-  end
-end
-
-describe "API v2 WorksController - Find Works" do
-  before do
-    @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
-  end
-
-  after do
-    @work&.destroy
-  end
-
-  describe "valid work URL request" do
-    it "returns 200 OK" do
-      valid_params = { original_urls: %w(bar foo) }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-
-      assert_equal 200, response.status
-    end
-
-    it "returns the work URL for an imported work" do
-      valid_params = { original_urls: %w(foo) }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:works].first[:status]).to eq "found"
-      expect(parsed_body[:works].first[:archive_url]).to eq work_url(@work)
-      expect(parsed_body[:works].first[:created].to_date).to eq @work.created_at.to_date
-    end
-
-    it "returns the original reference if one was provided" do
-      valid_params = { original_urls: [{ id: "123", url: "foo" }] }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:works].first[:status]).to eq "found"
-      expect(parsed_body[:works].first[:original_id]).to eq "123"
-      expect(parsed_body[:works].first[:original_url]).to eq "foo"
-    end
-
-    it "returns an error when no URLs are provided" do
-      valid_params = { original_urls: [] }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:messages].first).to eq "Please provide a list of URLs to find."
-    end
-
-    it "returns an error when too many URLs are provided" do
-      loads_of_items = Array.new(210) { |_| "url" }
-      valid_params = { original_urls: loads_of_items }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:messages].first).to start_with "Please provide no more than"
-    end
-
-    it "returns an error for a work that wasn't imported" do
-      valid_params = { original_urls: %w(bar) }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:works].first[:status]).to eq("not_found")
-      expect(parsed_body[:works].first).to include(:messages)
-    end
-
-    it "should only do an exact match on the original url" do
-      valid_params = { original_urls: %w(fo food) }
-
-      post "/api/v2/works/search", params: valid_params.to_json, headers: valid_headers
-      parsed_body = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_body[:works].first[:status]).to eq("not_found")
-      expect(parsed_body[:works].first).to include(:messages)
-      expect(parsed_body[:works].second[:status]).to eq("not_found")
-      expect(parsed_body[:works].second).to include(:messages)
     end
   end
 end

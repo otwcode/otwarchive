@@ -3,7 +3,9 @@ class Api::V2::WorksController < Api::V2::BaseController
 
   # POST - search for works based on imported url
   def search
-    original_urls = params[:original_urls]
+    works = params[:works]
+    original_urls = works.map { |w| w[:original_urls] }.flatten
+    
     results = []
     messages = []
     if original_urls.nil? || original_urls.blank? || original_urls.empty?
