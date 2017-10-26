@@ -12,11 +12,44 @@ class AsyncIndexer
     ids = REDIS.smembers(name)
     batch = indexer.new(ids).index_documents
     process_batch_failures(batch, indexer)
+
     REDIS.del(name)
   end
 
   def self.process_batch_failures(batch, indexer)
-    IndexSweeper.new(batch, indexer, 1)
+    unless REDIS.get("#{indexer}:first_failures")
+      REDIS.set("#{indexer}:first_failures", [].to_json)
+    end
+
+    unless REDIS.get("#{indexer}:permanent_failures")
+      REDIS.set("#{indexer}:permanent_failures", [].to_json)
+    end
+
+    if batch["errors"]
+      rerun_ids = []
+
+      batch["items"].each do |item|
+        obj = item[item.keys.first] # update/delete/index
+        next unless obj["error"]
+
+        first_failures = JSON.parse(REDIS.get("#{indexer}:first_failures"))
+        permanent_failures = JSON.parse(REDIS.get("#{indexer}:permanent_failures"))
+
+        unless permanent_failures.include?(obj["_id"])
+          if first_failures.include?({obj["_id"] => obj["error"]})
+            permanent_failures << {obj["_id"] => obj["error"]}
+            first_failures.delete({obj["_id"] => obj["error"]})
+            REDIS.set("#{indexer}:permanent_failures", permanent_failures.to_json)
+          else
+            first_failures << {obj["_id"] => obj["error"]}
+            REDIS.set("#{indexer}:first_failures", first_failures.to_json)
+            rerun_ids << obj["_id"]
+          end
+        end
+      end
+
+      new(indexer, "failures").enqueue_ids(rerun_ids) unless rerun_ids.empty?
+    end
   end
 
   # For the new search code, the indexing is handled

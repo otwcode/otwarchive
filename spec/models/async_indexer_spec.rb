@@ -19,7 +19,18 @@ describe AsyncIndexer do
     work.id = 34
 
     indexer = WorkIndexer.new([34])
-    batch = { "errors" => true, "items" => [{ "update" => {"_id" => 34 }}] }
+    batch = {
+      "errors" => true,
+      "items" => [{
+        "update" => {
+          "_id" => 34,
+          "error" => {
+            "problem" => "description"
+          }
+        }
+      }]
+    }
+
     async_indexer = AsyncIndexer.new(WorkIndexer, "failures")
 
     expect(AsyncIndexer::REDIS).to receive(:smembers).and_return([34])
