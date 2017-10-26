@@ -11,57 +11,8 @@ class AsyncIndexer
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
     batch = indexer.new(ids).index_documents
-    process_batch_failures(batch, indexer)
-
+    IndexSweeper.new(batch, indexer).process_batch_failures
     REDIS.del(name)
-  end
-
-  def self.process_batch_failures(batch, indexer)
-    unless REDIS.get("#{indexer}:first_failures")
-      REDIS.set("#{indexer}:first_failures", [].to_json)
-    end
-
-    unless REDIS.get("#{indexer}:second_failures")
-      REDIS.get("#{indexer}:second_failures", [].to_json)
-    end
-
-    unless REDIS.get("#{indexer}:permanent_failures")
-      REDIS.set("#{indexer}:permanent_failures", [].to_json)
-    end
-
-    if batch["errors"]
-      rerun_ids = []
-
-      batch["items"].each do |item|
-        obj = item[item.keys.first] # update/delete/index
-        next unless obj["error"]
-
-        stamp = { obj["_id"] => obj["error"] }
-
-        first_failures = JSON.parse(REDIS.get("#{indexer}:first_failures"))
-        second_failures = JSON.parse(REDIS.get("#{indexer}:second_failures"))
-        permanent_failures = JSON.parse(REDIS.get("#{indexer}:permanent_failures"))
-
-        unless permanent_failures.include?(obj["_id"])
-          if first_failures.include?(stamp)
-            second_failures << stamp
-            first_failures.delete(stamp)
-            REDIS.set("#{indexer}:second_failures", second_failures.to_json)
-            rerun_ids << obj["_id"]
-          elsif second_failures.include?(stamp)
-            permanent_failures << stamp
-            second_failures.delete(stamp)
-            REDIS.set("#{indexer}:permanent_failures", permanent_failures.to_json)
-          else
-            first_failures << stamp
-            REDIS.set("#{indexer}:first_failures", first_failures.to_json)
-            rerun_ids << obj["_id"]
-          end
-        end
-      end
-
-      new(indexer, "failures").enqueue_ids(rerun_ids) unless rerun_ids.empty?
-    end
   end
 
   # For the new search code, the indexing is handled
