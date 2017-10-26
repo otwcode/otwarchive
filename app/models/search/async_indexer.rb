@@ -32,16 +32,18 @@ class AsyncIndexer
         obj = item[item.keys.first] # update/delete/index
         next unless obj["error"]
 
+        stamp = { obj["_id"] => obj["error"] }
+
         first_failures = JSON.parse(REDIS.get("#{indexer}:first_failures"))
         permanent_failures = JSON.parse(REDIS.get("#{indexer}:permanent_failures"))
 
         unless permanent_failures.include?(obj["_id"])
-          if first_failures.include?({obj["_id"] => obj["error"]})
-            permanent_failures << {obj["_id"] => obj["error"]}
-            first_failures.delete({obj["_id"] => obj["error"]})
+          if first_failures.include?(stamp)
+            permanent_failures << stamp
+            first_failures.delete(stamp)
             REDIS.set("#{indexer}:permanent_failures", permanent_failures.to_json)
           else
-            first_failures << {obj["_id"] => obj["error"]}
+            first_failures << stamp
             REDIS.set("#{indexer}:first_failures", first_failures.to_json)
             rerun_ids << obj["_id"]
           end
