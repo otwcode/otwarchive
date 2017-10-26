@@ -84,7 +84,7 @@ class BookmarkIndexer < Indexer
       except: [:notes_sanitizer_version, :delta],
       methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
-      user_id: object.pseud.user_id,
+      user_id: object.pseud&.user_id,
       tag: tags.map(&:name),
       tag_ids: tags.map(&:id)
     )

@@ -17,10 +17,15 @@ class AsyncIndexer
   # For the new search code, the indexing is handled
   # by the indexer classes, so make sure we have the right names
   def self.index(klass, ids, priority)
-    unless klass.to_s =~ /Indexer/
-      klass = "#{klass}Indexer"
+    if klass.to_s =~ /Indexer/
+      indexers = [klass]
+    else
+      klass = klass.constantize if klass.respond_to?(:constantize)
+      indexers = klass.new.indexers
     end
-    self.new(klass, priority).enqueue_ids(ids)
+    indexers.each do |indexer|
+      self.new(indexer, priority).enqueue_ids(ids)
+    end
   end
 
   ####################
