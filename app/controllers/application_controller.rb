@@ -132,7 +132,11 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
-  protected
+  # def current_user
+    # @current_user ||= current_user_session && current_user_session.record
+  # end
+
+protected
 
   def record_not_found (exception)
     @message=exception.message
@@ -140,6 +144,11 @@ class ApplicationController < ActionController::Base
       f.html{ render template: "errors/404", status: 404 }
     end
   end
+
+  # def current_user_session
+  #   return @current_user_session if defined?(@current_user_session)
+  #   @current_user_session = UserSession.find
+  # end
 
   helper_method :logged_in?
   def logged_in?

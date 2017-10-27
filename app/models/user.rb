@@ -3,36 +3,38 @@ class User < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
-  devise :database_authenticatable,
-          :confirmable,
-          :recoverable,
-          :registerable,
-          :rememberable,
-          :trackable,
-          :validatable,
-          :lockable,
-          password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
-
-  alias :devise_valid_password? :valid_password?
-  def valid_password?(password)
-    begin
-      result = super(password)
-      return true if result
-      if Authlogic::CryptoProviders::BCrypt.matches?(self.encrypted_password, [password, self.password_salt].compact)
-        # self.password = password
-        return true
-      end
-      return false
-    rescue BCrypt::Errors::InvalidHash
-      return false unless Digest::SHA1.hexdigest(password) == encrypted_password
-      # self.password = password
-      true
-    end
-  end
+  devise :database_authenticatable, :confirmable, :recoverable,
+          :registerable, :rememberable, :trackable, :validatable,
+          :lockable
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
+  # Authlogic gem
+=begin
+  acts_as_authentic do |config|
+    config.transition_from_restful_authentication = true
+    if (ArchiveConfig.BCRYPT || "true") == "true"
+      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
+    else
+      config.crypto_provider = Authlogic::CryptoProviders::Sha512
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
+    end
+    # Use our own validations for login
+    config.validate_login_field = false
+    config.validates_length_of_password_field_options = { on: :update,
+                                                          minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                          if: :has_no_credentials? }
+    config.validates_length_of_password_confirmation_field_options = { on: :update,
+                                                                       minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                                       if: :has_no_credentials? }
+  end
+
+  def has_no_credentials?
+    self.crypted_password.blank?
+  end
+=end
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
