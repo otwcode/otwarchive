@@ -9,6 +9,12 @@ Otwarchive::Application.routes.draw do
                sign_out: 'logout'
              }
 
+  devise_for :users,
+              path_names: {
+                sign_in: 'login',
+                sign_out: 'logout'
+              }
+
   #### ERRORS ####
 
   get '/403', to: 'errors#403'
