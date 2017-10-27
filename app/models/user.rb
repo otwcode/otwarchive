@@ -278,7 +278,7 @@ class User < ApplicationRecord
   # use update_all to force the update even if the user is invalid
   def reset_user_password
     temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("confirmation_token = '#{temp_password}', recently_reset = 1")
+    User.where("id = #{self.id}").update_all("reset_password_token = '#{temp_password}', recently_reset = 1")
     # send synchronously to prevent getting caught in backed-up mail queue
     UserMailer.reset_password(self.id, temp_password).deliver!
   end

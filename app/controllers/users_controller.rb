@@ -149,7 +149,7 @@ class UsersController < ApplicationController
       @user.password = user_params[:password] if user_params[:password]
       @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
 
-      @user.activation_code = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
+      @user.confirmation_token = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
 
       @user.transaction do
         if @user.save
@@ -166,7 +166,7 @@ class UsersController < ApplicationController
     UserMailer.signup_notification(@user.id).deliver!
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        activation_url: activate_path(@user.activation_code)).html_safe if Rails.env.development?
+                        activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
 
     render 'confirmation'
   end
@@ -179,7 +179,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @user = User.find_by(activation_code: params[:id])
+    @user = User.find_by(confirmation_token: params[:id])
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe

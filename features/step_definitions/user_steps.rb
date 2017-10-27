@@ -160,7 +160,7 @@ end
 
 When /^I fill in "([^"]*)"'s temporary password$/ do |login|
   user = User.find_by(login: login)
-  fill_in "Password", with: user.activation_code
+  fill_in "Password", with: user.reset_password_token
 end
 
 When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|

@@ -109,7 +109,8 @@ class ApplicationController < ActionController::Base
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
 
-  before_action :logout_if_not_user_credentials
+  # TODO: Determine if this is necessary with Devise
+  # before_action :logout_if_not_user_credentials
 
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"

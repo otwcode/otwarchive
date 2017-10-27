@@ -13,7 +13,7 @@ Feature: User Authentication
       And I fill in "Password" with "test"
       And I press "Log In"
     Then I should see "The password or user name you entered doesn't match our records"
-    And I should see "Forgot your password or user name?"
+      And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
     When I fill in "reset_password_for" with "sam"
@@ -25,47 +25,47 @@ Feature: User Authentication
 
     # old password should still work
     When I am on the homepage
-    And I fill in "User name" with "sam"
-    And I fill in "Password" with "secret"
-    And I press "Log In"
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "secret"
+      And I press "Log In"
     Then I should see "Hi, sam"
 
     # password from email should also work
     When I am logged out
-    And I fill in "User name" with "sam"
-    And I fill in "sam"'s temporary password
-    And I press "Log In"
+      And I fill in "User name" with "sam"
+      And I fill in "sam"'s temporary password
+      And I press "Log In"
     Then I should see "Hi, sam"
-    And I should see "Change My Password"
+      And I should see "Change My Password"
 
     # and I should be able to change the password
     When I fill in "New password" with "newpass"
-    And I fill in "Confirm new password" with "newpass"
-    And I press "Change Password"
+      And I fill in "Confirm new password" with "newpass"
+      And I press "Change Password"
     Then I should see "Your password has been changed"
 
     # old password should no longer work
     When I am logged out
     When I am on the homepage
-    And I fill in "User name" with "sam"
-    And I fill in "Password" with "secret"
-    And I press "Log In"
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "secret"
+      And I press "Log In"
     Then I should not see "Hi, sam"
 
     # generated password should no longer work
     When I am logged out
     When I am on the homepage
-    And I fill in "User name" with "sam"
-    And I fill in "sam"'s temporary password
-    And I press "Log In"
+      And I fill in "User name" with "sam"
+      And I fill in "sam"'s temporary password
+      And I press "Log In"
     Then I should not see "Hi, sam"
 
     # new password should work
     When I am logged out
     When I am on the homepage
-    And I fill in "User name" with "sam"
-    And I fill in "Password" with "newpass"
-    And I press "Log In"
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "newpass"
+      And I press "Log In"
     Then I should see "Hi, sam"
 
   Scenario: invalid user
@@ -79,23 +79,23 @@ Feature: User Authentication
 
     # password from email should work
     When I fill in "User name" with "testuser"
-    And I fill in "testuser"'s temporary password
-    And I press "Log In"
+      And I fill in "testuser"'s temporary password
+      And I press "Log In"
     Then I should see "Hi, testuser"
-    And I should see "Change My Password"
+      And I should see "Change My Password"
 
     # and I should be able to change the password
     When I fill in "New password" with "newpas"
-    And I fill in "Confirm new password" with "newpas"
-    And I press "Change Password"
+      And I fill in "Confirm new password" with "newpas"
+      And I press "Change Password"
     Then I should see "Your password has been changed"
 
     # new password should work
     When I am logged out
     When I am on the homepage
-    And I fill in "User name" with "testuser"
-    And I fill in "Password" with "newpas"
-    And I press "Log In"
+      And I fill in "User name" with "testuser"
+      And I fill in "Password" with "newpas"
+      And I press "Log In"
     Then I should see "Hi, testuser"
 
   Scenario: Wrong username

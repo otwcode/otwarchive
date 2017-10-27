@@ -31,7 +31,7 @@ class UserSessionsController < ApplicationController
       else
         if params[:user_session][:login] && user = User.find_by(login: params[:user_session][:login])
           # we have a user
-          if user.recently_reset? && params[:user_session][:password] == user.activation_code
+          if user.recently_reset? && params[:user_session][:password] == user.reset_password_token
             if user.updated_at > 1.week.ago
               # we sent out a generated password and they're using it
               # log them in
