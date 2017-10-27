@@ -58,7 +58,7 @@ class IndexSweeper
       set_store "second", second_store
       set_store "first", first_store
       @rerun_ids << document["_id"]
-    elsif second_store .include?(document_stamp)
+    elsif second_store.include?(document_stamp)
       permanent_store << document_stamp
       second_store.delete(document_stamp)
       set_store "permanent", permanent_store
