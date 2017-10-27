@@ -10,6 +10,8 @@ Otwarchive::Application.routes.draw do
              }
 
   devise_for :users,
+              module: 'users',
+              controllers: { sessions: 'users/sessions' },
               path_names: {
                 sign_in: 'login',
                 sign_out: 'logout'
@@ -452,6 +454,7 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
+=begin
   resources :user_sessions, only: [:new, :create, :destroy] do
     collection do
       get :passwd_small
@@ -460,7 +463,7 @@ Otwarchive::Application.routes.draw do
   end
   get 'login' => 'user_sessions#new'
   get 'logout' => 'user_sessions#destroy'
-
+=end
   #### API ####
 
   namespace :api do

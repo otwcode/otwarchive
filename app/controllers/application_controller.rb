@@ -21,6 +21,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  helper_method :resource_name, :resource, :devise_mapping, :resource_class
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def resource_class
+    User
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
+
   def display_auth_error
     respond_to do |format|
       format.html do
@@ -114,10 +131,6 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
-  def current_user
-    @current_user ||= current_user_session && current_user_session.record
-  end
-
 protected
 
   def record_not_found (exception)
@@ -125,11 +138,6 @@ protected
     respond_to do |f|
       f.html{ render template: "errors/404", status: 404 }
     end
-  end
-
-  def current_user_session
-    return @current_user_session if defined?(@current_user_session)
-    @current_user_session = UserSession.find
   end
 
   def logged_in?
@@ -359,7 +367,7 @@ public
   before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = login_url
+    @logged_out_redirect = new_user_session_path
   end
 
   def is_registered_user?
@@ -417,7 +425,7 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(restricted: true)
+      redirect_to new_user_session_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
