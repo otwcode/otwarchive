@@ -46,7 +46,7 @@
           <% end %>
       	</ul>
       </li>
-      <li><%= link_to ts('Log Out', key: 'header'), destroy_user_session_path %></li>
+      <li><%= link_to ts('Log Out', key: 'header'), logout_path %></li>
     </ul>
 
     <% elsif logged_in_as_admin? %>

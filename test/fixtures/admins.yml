@@ -7,3 +7,4 @@ admin_00001:
   id: 1
   login: testadmin
   email: user1@example.com
+  persistence_token: foo

@@ -8,13 +8,6 @@ Otwarchive::Application.routes.draw do
                sign_in: 'login',
                sign_out: 'logout'
              }
-  devise_for :users,
-             path: 'user',
-             controllers: { sessions: 'users/sessions' },
-             path_names: {
-               sign_in: 'login',
-               sign_out: 'logout'
-             }
 
   #### ERRORS ####
 
@@ -452,16 +445,16 @@ Otwarchive::Application.routes.draw do
   resources :locales, except: :destroy
 
   #### SESSIONS ####
-=begin
-    resources :user_sessions, only: [:new, :create, :destroy] do
-      collection do
-        get :passwd_small
-        get :passwd
-      end
+
+  resources :user_sessions, only: [:new, :create, :destroy] do
+    collection do
+      get :passwd_small
+      get :passwd
     end
-    get 'login' => 'user_sessions#new'
-    get 'logout' => 'user_sessions#destroy'
-=end
+  end
+  get 'login' => 'user_sessions#new'
+  get 'logout' => 'user_sessions#destroy'
+
   #### API ####
 
   namespace :api do

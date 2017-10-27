@@ -52,7 +52,7 @@ class CommentsController < ApplicationController
   def check_if_restricted
     parent = find_parent
     if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
-      redirect_to new_user_session_path(restricted_commenting: true) and return
+      redirect_to login_path(restricted_commenting: true) and return
     end
   end
 
@@ -71,7 +71,7 @@ class CommentsController < ApplicationController
       if logged_in?
         redirect_to root_path and return
       else
-        redirect_to new_user_session_path and return
+        redirect_to login_path and return
       end
     end
   end
@@ -83,7 +83,7 @@ class CommentsController < ApplicationController
       if logged_in?
         redirect_to root_path and return
       else
-        redirect_to new_user_session_path and return
+        redirect_to login_path and return
       end
     end
   end
@@ -96,7 +96,7 @@ class CommentsController < ApplicationController
         if logged_in?
           redirect_to root_path and return
         else
-          redirect_to new_user_session_path and return
+          redirect_to login_path and return
         end
       end
     end
@@ -106,7 +106,7 @@ class CommentsController < ApplicationController
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
       flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
-      redirect_to(logged_in? ? root_path : new_user_session_path)
+      redirect_to(logged_in? ? root_path : login_path)
     end
   end
 

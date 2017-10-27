@@ -130,11 +130,11 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   tw.tag_wrangler = '1'
 
-  visit destroy_user_session_path
+  visit logout_path
   activate_authlogic
   assert !UserSession.find
 
-  visit new_user_session_path
+  visit login_path
   activate_authlogic
   user_record = find_or_create_new_user(user, password)
 

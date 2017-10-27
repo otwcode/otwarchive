@@ -103,7 +103,7 @@ end
 
 Given /^I am logged out$/ do
   require 'authlogic/test_case'
-  visit destroy_user_session_path
+  visit logout_path
   activate_authlogic
   assert UserSession.find.nil? unless @javascript
   visit destroy_admin_session_path

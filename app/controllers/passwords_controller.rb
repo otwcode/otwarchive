@@ -21,7 +21,7 @@ class PasswordsController < ApplicationController
         @user_session.destroy
       end
       flash[:notice] = t('check_email', default: 'Check your email for your generated password.')
-      redirect_to new_user_session_path
+      redirect_to login_path
     end
   end
 

@@ -218,7 +218,7 @@ protected
 
   def guest_downloading_off
     if !logged_in? && @admin_settings.guest_downloading_off?
-      redirect_to new_user_session_path(high_load: true)
+      redirect_to login_path(high_load: true)
     end
   end
 
