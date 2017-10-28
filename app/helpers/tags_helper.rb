@@ -49,11 +49,6 @@ module TagsHelper
     }
   end
 
-  # Displays a list of links for navigating the tag wrangling section of the site
-  def tag_wrangler_footer
-    render partial: 'tag_wranglings/footer'
-  end
-
   def wrangler_list(wranglers, tag)
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
