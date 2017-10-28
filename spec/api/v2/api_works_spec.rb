@@ -491,14 +491,14 @@ describe "v2 API WorksController - Unit Tests" do
   end
 
   it "work_url_from_external returns an error message when the work URL is blank" do
-    work_url_response = @under_test.instance_eval { find_work_by_import_url("id", "") }
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("") }
     expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
   end
 
   it "work_url_from_external returns the work url when a work is found" do
     work1 = create(:work, imported_from_url: "http://foo")
-    work_url_response = @under_test.instance_eval { find_work_by_import_url("id", "http://foo") }
-    expect(work_url_response[:work]).to eq work1
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("http://foo") }
+    expect(work_url_response[:works].first).to eq work1
   end
 
   it "send_external_invites should call find_or_invite on each external author" do

@@ -488,15 +488,9 @@ describe "API WorksController - Create works" do
 end
 
 describe "API WorksController - Find Works" do
-  before do
-    @work = create(:work, posted: true, imported_from_url: "foo")
-  end
-
-  after do
-    @work.destroy if @work
-  end
-
   describe "valid work URL request" do
+    work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
+
     it "should return 200 OK" do
       valid_params = { original_urls: %w(bar foo) }
 
@@ -512,8 +506,8 @@ describe "API WorksController - Find Works" do
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
       expect(parsed_body.first[:status]).to eq "ok"
-      expect(parsed_body.first[:work_url]).to eq work_url(@work)
-      expect(parsed_body.first[:created].to_date).to eq @work.created_at.to_date
+      expect(parsed_body.first[:work_url]).to eq work_url(work)
+      expect(parsed_body.first[:created].to_date).to eq work.created_at.to_date
     end
 
     it "should return the original reference if one was provided" do

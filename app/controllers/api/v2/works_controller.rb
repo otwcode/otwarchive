@@ -83,6 +83,7 @@ class Api::V2::WorksController < Api::V2::BaseController
   # Search for works imported from the provided URLs
   def find_existing_works(original_urls)
     results = []
+    messages = ""
     original_urls.each do |original|
       original_id = ""
       if original.class == String
@@ -91,43 +92,49 @@ class Api::V2::WorksController < Api::V2::BaseController
         original_id = original[:id]
         original_url = original[:url]
       end
-      work_result = find_work_by_import_url(original_id, original_url)
-      if work_result[:work].nil?
+      
+      # Search for works - there may be duplicates
+      search_results = find_work_by_import_url(original_url)
+      if search_results[:works].empty?
         results << { status: :not_found,
                      original_id: original_id,
                      original_url: original_url,
-                     messages: [work_result[:error]] }
+                     messages: [search_results[:error]] }
       else
-        work = work_result[:work]
-        archive_url = work_url(work)
-        message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\""
+        work_results = search_results[:works].map do |work| 
+            archive_url = work_url(work)
+            message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\""
+            messages << message
+            { archive_url: archive_url,
+              created: work.created_at,
+              message: message }
+          end
         results << { status: :found,
                      original_id: original_id,
                      original_url: original_url,
-                     archive_url: archive_url,
-                     created: work.created_at,
-                     messages: [message] }
+                     search_results: work_results,
+                     messages: messages
+                   }
       end
     end
     results
   end
 
-  def find_work_by_import_url(original_id, original_url)
-    work = nil
+  def find_work_by_import_url(original_url)
+    works = nil
     error = ""
     if original_url.blank?
       error = "Please provide the original URL for the work."
     else
       # We know the url will be identical no need for a call to find_by_url
-      work = Work.where(imported_from_url: original_url).first
-      unless work
+      works = Work.where(imported_from_url: original_url)
+      unless works
         error = "No work has been imported from \"" + original_url + "\"."
       end
     end
     {
-      original_id: original_id,
       original_url: original_url,
-      work: work,
+      works: works,
       error: error
     }
   end

@@ -7,6 +7,9 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :restrict_access
 
+      # Prevent unhandled errors from returning the normal HTML page
+      rescue_from StandardError, with: :render_standard_error_response
+
       private
 
       # Look for a token in the Authorization header only and check that the token isn't currently banned
@@ -46,6 +49,12 @@ module Api
         # It's a bad request unless it's ok or an authorisation error
         http_status = %i[forbidden ok].include?(status) ? status : :bad_request
         render status: http_status, json: { status: status, messages: messages }.merge(response)
+      end
+
+      # Return a standard HTTP + Json envelope for errors that drop through other handling
+      def render_standard_error_response(exception)
+        message = "An error occurred in the Archive code: #{exception.message}"
+        render status: :internal_server_error, json: { status: :internal_server_error, messages: message }
       end
     end
   end
