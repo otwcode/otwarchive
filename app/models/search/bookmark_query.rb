@@ -100,21 +100,9 @@ class BookmarkQuery < Query
   def generate_search_text(query = '')
     search_text = query
     [:bookmarker, :notes].each do |field|
-      next if options[field].blank?
-      options[field].split(" ").each do |word|
-        if word[0] == "-"
-          search_text << " NOT "
-          word.slice!(0)
-        end
-        word = escape_reserved_characters(word)
-        search_text << " #{field.to_s}:#{word}"
-      end
+      search_text << split_query_text_words(field, options[field])
     end
-    if options[:tag].present?
-      options[:tag].split(",").map(&:squish).each do |name|
-        search_text << " tag:\"#{name}\""
-      end
-    end
+    search_text << split_query_text_phrases(:tag, options[:tag])
     escape_slashes(search_text.strip)
   end
 

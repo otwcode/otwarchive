@@ -184,22 +184,9 @@ class WorkQuery < Query
   def generate_search_text(query = '')
     search_text = query
     [:title, :creators].each do |field|
-      if self.options[field].present?
-        self.options[field].split(" ").each do |word|
-          if word[0] == "-"
-            search_text << " NOT "
-            word.slice!(0)
-          end
-          word = escape_reserved_characters(word)
-          search_text << " #{field.to_s}:#{word}"
-        end
-      end
+      search_text << split_query_text_words(field, options[field])
     end
-    if options[:tag].present?
-      options[:tag].split(",").map(&:squish).each do |name|
-        search_text << " tag:\"#{name}\""
-      end
-    end
+    search_text << split_query_text_phrases(:tag, options[:tag])
     if self.options[:collection_ids].blank? && options[:collected]
       search_text << " collection_ids:*"
     end
