@@ -175,15 +175,15 @@ class WorkQuery < Query
 
   # Search for a tag by name
   def general_query
-    input = (options[:q] || options[:query])
-    query = generate_search_text( input || '' )
+    input = (options[:q] || options[:query] || "").dup
+    query = generate_search_text(input)
 
     return { query_string: { query: query, default_operator: "AND" } } unless query.blank?
   end
 
   def generate_search_text(query = '')
     search_text = query
-    [:title, :creators, :tag].each do |field|
+    [:title, :creators].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
           if word[0] == "-"
@@ -193,6 +193,11 @@ class WorkQuery < Query
           word = escape_reserved_characters(word)
           search_text << " #{field.to_s}:#{word}"
         end
+      end
+    end
+    if options[:tag].present?
+      options[:tag].split(",").map(&:squish).each do |name|
+        search_text << " tag:\"#{name}\""
       end
     end
     if self.options[:collection_ids].blank? && options[:collected]

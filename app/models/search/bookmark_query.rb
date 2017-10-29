@@ -93,22 +93,26 @@ class BookmarkQuery < Query
   end
 
   def query_term
-    input = (options[:q] || options[:query])
-    generate_search_text( input || '' )
+    input = (options[:q] || options[:query] || "").dup
+    generate_search_text(input)
   end
 
   def generate_search_text(query = '')
     search_text = query
-    [:bookmarker, :notes, :tag].each do |field|
-      if self.options[field].present?
-        self.options[field].split(" ").each do |word|
-          if word[0] == "-"
-            search_text << " NOT "
-            word.slice!(0)
-          end
-          word = escape_reserved_characters(word)
-          search_text << " #{field.to_s}:#{word}"
+    [:bookmarker, :notes].each do |field|
+      next if options[field].blank?
+      options[field].split(" ").each do |word|
+        if word[0] == "-"
+          search_text << " NOT "
+          word.slice!(0)
         end
+        word = escape_reserved_characters(word)
+        search_text << " #{field.to_s}:#{word}"
+      end
+    end
+    if options[:tag].present?
+      options[:tag].split(",").map(&:squish).each do |name|
+        search_text << " tag:\"#{name}\""
       end
     end
     escape_slashes(search_text.strip)
