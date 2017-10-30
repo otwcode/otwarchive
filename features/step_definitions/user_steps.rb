@@ -55,7 +55,6 @@ end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   user = find_or_create_new_user(login, password)
-  require 'authlogic/test_case'
   step("I am logged out")
   if hidden.present?
     user.preference.hide_warnings = true
@@ -64,17 +63,11 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
   end
   step %{I am on the homepage}
   find_link('login-dropdown').click
-  activate_authlogic
 
   fill_in "User name", with: login
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-
-  activate_authlogic
-  UserSession.create!(user)
-
-  assert UserSession.find unless @javascript
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
@@ -102,10 +95,7 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
-  require 'authlogic/test_case'
   visit destroy_user_session_path
-  activate_authlogic
-  assert UserSession.find.nil? unless @javascript
   visit destroy_admin_session_path
 end
 
@@ -120,11 +110,9 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
-  require 'authlogic/test_case'
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
-  activate_authlogic
 end
 
 Given /^I am a visitor$/ do
@@ -231,8 +219,6 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  require 'authlogic/test_case'
-  activate_authlogic
   assert UserSession.find.nil? unless @javascript
 end
 
