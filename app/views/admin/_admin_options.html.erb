@@ -36,7 +36,7 @@
       </li>
       <% if @work.spam? %>
         <li>
-          <%= link_to ts("Mark Not Spam"), 
+          <%= link_to ts("Mark Not Spam"),
                       { controller: "admin/user_creations",
                         action: "set_spam",
                         id: @work.id,
@@ -45,8 +45,8 @@
         </li>
       <% else %>
         <li>
-          <%= link_to ts("Mark As Spam"), 
-                      { controller: "admin/user_creations", 
+          <%= link_to ts("Mark As Spam"),
+                      { controller: "admin/user_creations",
                         action: "set_spam",
                         id: @work.id,
                         creation_type: @work.class,
