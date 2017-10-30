@@ -33,7 +33,7 @@ class Users::SessionsController < Devise::SessionsController
           if user.failed_attempts > 50
             message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
           else
-            message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password.</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
+            message = ts("The password or user name you entered doesn't match our records. Please try again or <a href=\"#{new_password_path}\">reset your password</a>. If you still can't log in, please visit <a href=\"#{admin_posts_path + '/1277'}\">Problems When Logging In</a> for help.".html_safe)
           end
         else
           message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
