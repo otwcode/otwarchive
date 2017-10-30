@@ -25,7 +25,7 @@ class InviteRequest < ApplicationRecord
 
   # Doing this with a method so the error message makes more sense
   def simplified_email_uniqueness
-    if InviteRequest.where(simplified_email: simplified_email).exists?
+    if InviteRequest.where(simplified_email: simplified_email).where.not(id: id).exists?
       errors.add(:email, "is already part of our queue.")
     end
   end
