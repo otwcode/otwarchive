@@ -19,7 +19,7 @@ class EmailVeracityValidator < ActiveModel::EachValidator
         # treetop = mail.__send__(:tree)
 
         # A valid domain must have dot_atom_text elements size > 1
-        
+
         # treetop was deprecated out of the mail gem
         result #&&= (treetop.domain.dot_atom_text.elements.size > 1)
       rescue Exception => e

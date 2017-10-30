@@ -212,7 +212,7 @@ class User < ApplicationRecord
   # done by authlogic
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
 
-  validates :email, email_veracity: true
+  validates :email, email_veracity: true, email_format: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
