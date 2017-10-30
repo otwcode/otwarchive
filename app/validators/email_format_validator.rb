@@ -15,10 +15,18 @@ class EmailFormatValidator < ActiveModel::EachValidator
       /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
     end
 
-    if value.match(email_regex)
-      true
+    if (options[:allow_blank] && value.blank?) || (value.present? && value.match(email_regex))
+      result = true
     else
-      record.errors[attribute] << (options[:message] || I18n.t('validators.email.format'))
+      result = false
+    end
+
+    unless result
+      if options[:allow_blank]
+        record.errors[attribute] << (options[:message] || I18.t('validators.email.format.allow_blank'))
+      else
+        record.errors[attribute] << (options[:message] || I18n.t('validators.email.format.no_blank'))
+      end
     end
   end
 end
