@@ -11,7 +11,7 @@ class EmailVeracityValidator < ActiveModel::EachValidator
       begin
         mail = Mail::Address.new(value)
         # We must check that value contains a domain and that value is an email address
-        result = mail.domain && mail.domain.match('\.') && mail.address == value
+        result = mail.domain&.match('\.') && mail.address == value
       rescue Exception => e
         result = false
       end

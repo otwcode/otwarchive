@@ -20,7 +20,7 @@ class InviteRequest < ApplicationRecord
   def set_simplified_email
     return if email.blank?
     simplified = AdminBlacklistedEmail.canonical_email(email).split('@')
-    self.simplified_email = simplified.first.gsub(".", "") + "@#{simplified.last}"
+    self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
   end
 
   # Doing this with a method so the error message makes more sense
