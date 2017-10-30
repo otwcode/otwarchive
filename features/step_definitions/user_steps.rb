@@ -74,6 +74,11 @@ Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
+Given /^I am logged in and confirmed as "([^"]*)"$/ do |login|
+  step(%{I am logged in as "#{login}"})
+  step(%{confirmation emails have been delivered})
+end
+
 Given /^I am logged in$/ do
   step(%{I am logged in as "#{DEFAULT_USER}"})
 end
@@ -81,6 +86,7 @@ end
 Given /^I am logged in as a random user$/ do
   name = "testuser#{User.count + 1}"
   step(%{I am logged in as "#{name}" with password "#{DEFAULT_PASSWORD}"})
+  step(%{confirmation emails have been delivered})
 end
 
 Given /^I am logged in as a banned user$/ do

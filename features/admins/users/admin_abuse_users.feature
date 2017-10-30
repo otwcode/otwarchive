@@ -105,7 +105,7 @@ Feature: Admin Abuse actions
 
   Scenario: A spammer can be permabanned and all their creations destroyed
     Given I have a work "Not Spam"
-      And I am logged in as "Spamster"
+      And I am logged in and confirmed as "Spamster"
       And I post the work "Loads of Spam"
       And I post the work "Even More Spam"
       And I post the work "Spam 3: Tokyo Drift"
@@ -128,7 +128,7 @@ Feature: Admin Abuse actions
       And I should see "Spam 3: Tokyo Drift"
       And I should see "I like spam"
     When I press "Yes, Delete All Spammer Creations"
-    Then I should see "All creations by user Spamster have been deleted."
+    Then I should see "All creations by user spamster have been deleted."
       And the work "Loads of Spam" should be deleted
       And the work "Even More Spam" should be deleted
       And the work "Spam 3: Tokyo Drift" should be deleted
@@ -159,4 +159,4 @@ Feature: Admin Abuse actions
       And I press "Update"
     Then I should see "Are you sure you want to delete"
     When I press "Yes, Delete All Spammer Creations"
-    Then I should see "All creations by user Spamster have been deleted."
+    Then I should see "All creations by user spamster have been deleted."
