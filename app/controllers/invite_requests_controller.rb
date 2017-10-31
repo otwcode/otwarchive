@@ -54,6 +54,10 @@ class InviteRequestsController < ApplicationController
     redirect_to manage_invite_requests_path(page: params[:page])
   end
 
+  def status
+    @page_subtitle = ts("Invitation Request Status")
+  end
+
   private
 
   def invite_request_params
