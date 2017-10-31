@@ -59,7 +59,7 @@ class Admin::UserCreationsController < ApplicationController
     end
     redirect_to(@creation)
   end
-  
+
   def destroy
     AdminActivity.log_action(current_admin, @creation, action: "destroy", summary: @creation.inspect)
     @creation.destroy
