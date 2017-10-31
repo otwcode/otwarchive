@@ -1372,16 +1372,11 @@ class Work < ApplicationRecord
   # SPAM CHECKING
   ########################################################################
 
-  def spam_checked?
-    spam_checked_at.present?
-  end
-
-  def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
+  def akismet_attributes
     content = chapters_in_order.map { |c| c.content }.join
     user = users.first
-    self.spam = Akismetor.spam?(
-      comment_type: 'Fan Fiction',
+    {
+      comment_type: 'fanwork-post',
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
@@ -1390,9 +1385,30 @@ class Work < ApplicationRecord
       comment_author: user.login,
       comment_author_email: user.email,
       comment_content: content
-    )
+    }
+  end
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
+  end
+
+  def mark_as_spam!
+    update_attribute(:spam, true)
+    # don't submit spam reports unless in production mode
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def mark_as_ham!
+    update_attribute(:spam, false)
+    # don't submit ham reports unless in production mode
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
   #############################################################################
