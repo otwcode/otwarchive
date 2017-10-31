@@ -5,7 +5,7 @@ class Admin::UserCreationsController < ApplicationController
   before_action :can_be_marked_as_spam, only: [:set_spam]
 
   def get_creation
-    raise "Redshirt: Attempted to constantize invalid class initialize hide #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
+    raise "Redshirt: Attempted to constantize invalid class initialize #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
     @creation_class = params[:creation_type].constantize
     @creation = @creation_class.find(params[:id])
   end
