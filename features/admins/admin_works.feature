@@ -4,14 +4,14 @@ Feature: Admin Actions for Works and Bookmarks
   I should be able to perform special actions on works
 
   Scenario: Can reindex works
-    Given I am logged in and confirmed as "regular_user"
+    Given I am logged in as "regular_user"
       And I post the work "Just a work you know"
     When I am logged in as an admin
       And I view the work "Just a work you know"
       And I follow "Reindex Work"
 
   Scenario: Can hide works
-    Given I am logged in and confirmed as "regular_user"
+    Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -24,7 +24,7 @@ Feature: Admin Actions for Works and Bookmarks
       And the email should contain "We are investigating the matter and will contact you"
 
   Scenario: Can unhide works
-    Given I am logged in and confirmed as "regular_user"
+    Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -40,7 +40,7 @@ Feature: Admin Actions for Works and Bookmarks
       And 0 emails should be delivered
 
   Scenario: Can delete works
-    Given I am logged in and confirmed as "regular_user"
+    Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -61,7 +61,7 @@ Feature: Admin Actions for Works and Bookmarks
     Given basic tags
       And I am logged in as "regular_user" with password "password1"
       And I post the work "A Nice Work"
-    When I am logged in and confirmed as "bad_user"
+    When I am logged in as "bad_user"
       And I view the work "A Nice Work"
     When I follow "Bookmark"
       And I fill in "bookmark_notes" with "Rude comment"
@@ -79,7 +79,7 @@ Feature: Admin Actions for Works and Bookmarks
 
   Scenario: Can edit tags on works
     Given basic tags
-      And I am logged in and confirmed as "regular_user"
+      And I am logged in as "regular_user"
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as an admin
       And I view the work "Changes"
@@ -116,7 +116,7 @@ Feature: Admin Actions for Works and Bookmarks
 
   Scenario: Can edit external works
     Given basic tags
-      And I am logged in and confirmed as "regular_user"
+      And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
       And I view the external work "External Changes"
@@ -144,7 +144,7 @@ Feature: Admin Actions for Works and Bookmarks
 
   Scenario: Can delete external works
     Given basic tags
-      And I am logged in and confirmed as "regular_user"
+      And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
       And I view the external work "External Changes"
@@ -216,7 +216,7 @@ Feature: Admin Actions for Works and Bookmarks
   Scenario: Admin can edit language on works when posting without previewing
     Given basic tags
       And basic languages
-      And I am logged in and confirmed as "regular_user"
+      And I am logged in as "regular_user"
       And I post the work "Wrong Language"
     When I am logged in as an admin
       And I view the work "Wrong Language"
@@ -230,7 +230,7 @@ Feature: Admin Actions for Works and Bookmarks
   Scenario: Admin can edit language on works when previewing first
     Given basic tags
       And basic languages
-      And I am logged in and confirmed as "regular_user"
+      And I am logged in as "regular_user"
       And I post the work "Wrong Language"
     When I am logged in as an admin
       And I view the work "Wrong Language"

@@ -40,6 +40,7 @@ end
 
 Given /^the user "([^"]*)" exists and is activated$/ do |login|
   find_or_create_new_user(login, DEFAULT_PASSWORD)
+  step %{confirmation emails have been delivered}
 end
 
 Given /^the user "([^"]*)" exists and is not activated$/ do |login|
@@ -68,15 +69,11 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
+  step %{confirmation emails have been delivered}
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
-end
-
-Given /^I am logged in and confirmed as "([^"]*)"$/ do |login|
-  step(%{I am logged in as "#{login}"})
-  step(%{confirmation emails have been delivered})
 end
 
 Given /^I am logged in$/ do
