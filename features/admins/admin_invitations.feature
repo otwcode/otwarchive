@@ -219,7 +219,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should not see "Get Invited!"
       And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
-      And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
