@@ -83,8 +83,14 @@ class WorksController < ApplicationController
     options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    @search = WorkSearch.new(options)
-    @page_subtitle = ts('Search Works')
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
+    if use_new_search?
+      @search = WorkSearchForm.new(options)
+    else
+      @search = WorkSearch.new(options)
+    end
+    @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
       if @search.query.present?
@@ -98,6 +104,11 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
+    base_options = {
+      page: params[:page] || 1,
+      show_restricted: current_user.present? || logged_in_as_admin?
+    }
+
     options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
@@ -110,8 +121,23 @@ class WorksController < ApplicationController
       options[:filter_ids] << tag.id
     end
 
-    options[:page] = params[:page]
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    if params[:include_work_search].present?
+      params[:include_work_search].keys.each do |key|
+        options[key] ||= []
+        options[key] << params[:include_work_search][key]
+        options[key].flatten!
+      end
+    end
+
+    if params[:exclude_work_search].present?
+      params[:exclude_work_search].keys.each do |key|
+        options[:excluded_tag_ids] ||= []
+        options[:excluded_tag_ids] << params[:exclude_work_search][key]
+        options[:excluded_tag_ids].flatten!
+      end
+    end
+
+    options.merge!(base_options)
     @page_subtitle = index_page_title
 
     if logged_in? && @tag
@@ -125,8 +151,15 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-
+        # ES UPGRADE TRANSITION #
+        # Remove conditional and call to WorkSearch
+        if use_new_search?
+          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+          @filtering_facets = WorkSearchForm.new(base_options.merge(works_parent: @owner)).search_results.facets
+        else
+          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+          @filtering_facets = @search.search_results.facets
+        end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
@@ -159,7 +192,7 @@ class WorksController < ApplicationController
 
   def collected
     options = params[:work_search].present? ? clean_work_search_params : {}
-    options[:page] = params[:page]
+    options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
     @user = User.find_by(login: params[:user_id])
@@ -169,7 +202,13 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      # ES UPGRADE TRANSITION #
+      # Remove conditional and call to WorkSearch
+      if use_new_search?
+        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      else
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      end
       @works = @search.search_results
       @facets = @works.facets
     end
@@ -1092,7 +1131,7 @@ class WorksController < ApplicationController
     params.require(:work_search).permit(
       :query,
       :title,
-      :creator,
+      :creators,
       :revised_at,
       :complete,
       :single_chapter,
@@ -1110,6 +1149,7 @@ class WorksController < ApplicationController
       :sort_column,
       :sort_direction,
       :other_tag_names,
+      :excluded_tag_names,
 
       warning_ids: [],
       category_ids: [],
@@ -1122,4 +1162,5 @@ class WorksController < ApplicationController
       collection_ids: []
     )
   end
+
 end

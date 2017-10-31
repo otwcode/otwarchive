@@ -478,6 +478,7 @@ Feature: Collection
     And I should see "Anonymous"
     And 0 emails should be delivered
   When I press "Post"
+    And the work indexes are updated
   Then I should see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"

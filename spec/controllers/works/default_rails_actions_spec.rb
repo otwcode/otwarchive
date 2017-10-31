@@ -235,7 +235,7 @@ describe WorksController do
     end
 
     it "should return search results when given work_search parameters" do
-      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
+      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
     end
@@ -264,7 +264,7 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = FactoryGirl.create(:work, posted: true)
-          work2.index.refresh
+          update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -274,7 +274,8 @@ describe WorksController do
         before do
           @fandom2 = FactoryGirl.create(:fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
-          @work2.index.refresh
+
+          update_and_refresh_indexes('work')
         end
 
         it "should only get works under that tag" do
@@ -301,7 +302,7 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
-            @work2.index.refresh
+            update_and_refresh_indexes('work')
           end
 
           it "should not show restricted works to guests" do
@@ -385,12 +386,8 @@ describe WorksController do
                                               collection_names: collection.name,
                                               posted: true,
                                               fandom_string: collected_fandom.name)
-      [@unrestricted_work,
-       @unrestricted_work_2_in_collection,
-       @unrestricted_work_in_collection,
-       @restricted_work_in_collection].each do |work|
-        work.index.refresh
-      end
+
+       update_and_refresh_indexes('work')
     end
 
     context "as a guest" do
@@ -413,7 +410,7 @@ describe WorksController do
       end
 
       it "should return filtered works when search parameters are provided" do
-        get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
+        get :collected, params: { user_id: collected_user.login, :work_search => { query: "fandom_ids:#{collected_fandom2.id}" }}
         expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
         expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
       end

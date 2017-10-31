@@ -12,7 +12,7 @@ end
 shared_examples_for "on unrestricted works", :pending do
     before do
       @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
-      @work2.index.refresh
+      @work2.reindex_document
       @comment2 = create(:comment)
       @work2.first_chapter.comments << @comment2
     end
@@ -59,7 +59,7 @@ describe "Comments" do
   context "on restricted works" do
     before do
       @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: true)
-      @work1.index.refresh
+      @work1.reindex_document
       @comment = create(:comment, commentable_id: @work1.id)
       @comment2 = create(:comment, commentable_id: @work1.chapters.last.id, commentable_type: "Chapter")
     end
@@ -114,7 +114,7 @@ describe "Comments" do
   context "on works which have anonymous commenting disabled" do
     before do
       @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
-      @work.index.refresh
+      @work.reindex_document
       @comment = create(:comment)
       @work.first_chapter.comments << @comment
     end

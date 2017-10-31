@@ -219,16 +219,22 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :created_at],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
         :word_count, :work_types]
     ).merge(
+      id: "series-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Series'
+      bookmarkable_type: 'Series',
+      bookmarkable: "bookmarkable"
     )
+  end
+
+  def word_count
+    self.works.posted.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?

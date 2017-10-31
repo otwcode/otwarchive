@@ -1,4 +1,4 @@
-<%= form_for @search, :url => search_bookmarks_path, :html => {:class => 'search', :method => :get} do |f| %>
+<%= form_for @search, as: :bookmark_search, :url => search_bookmarks_path, :html => {:class => 'search', :method => :get} do |f| %>
 <fieldset>
   <legend>Search bookmarks</legend>
   <dl>
