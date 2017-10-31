@@ -3,9 +3,9 @@ class InviteRequest < ApplicationRecord
   acts_as_list
   validates :email, presence: true, email_veracity: true
   validates_uniqueness_of :email, message: "is already part of our queue."
-  validate :simplified_email_uniqueness
   before_validation :compare_with_users, on: :create
-  before_validation :set_simplified_email, on: :save
+  before_validation :set_simplified_email, on: :create
+  validate :simplified_email_uniqueness, on: :create
 
   # Realign positions if they're incorrect
   def self.reset_order
@@ -25,7 +25,7 @@ class InviteRequest < ApplicationRecord
 
   # Doing this with a method so the error message makes more sense
   def simplified_email_uniqueness
-    if InviteRequest.where(simplified_email: simplified_email).where.not(id: id).exists?
+    if InviteRequest.where(simplified_email: simplified_email).exists?
       errors.add(:email, "is already part of our queue.")
     end
   end
