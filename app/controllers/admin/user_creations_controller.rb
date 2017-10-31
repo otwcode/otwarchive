@@ -1,6 +1,5 @@
 class Admin::UserCreationsController < ApplicationController
   
-<<<<<<< HEAD
   before_action :admin_only
   before_action :get_creation
   before_action :can_be_marked_as_spam, only: [:set_spam]
@@ -24,7 +23,7 @@ class Admin::UserCreationsController < ApplicationController
     @creation.save(validate: false)
     action = @creation.hidden_by_admin? ? "hide" : "unhide"
     AdminActivity.log_action(current_admin, @creation, action: action)
-    flash[:notice] = creation.hidden_by_admin? ?
+    flash[:notice] = @creation.hidden_by_admin? ?
                         ts("Item has been hidden.") :
                         ts("Item is no longer hidden.")
     if @creation_class == Comment
