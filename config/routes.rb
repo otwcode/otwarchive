@@ -147,7 +147,8 @@ Otwarchive::Application.routes.draw do
     end
     resources :user_creations, only: [:destroy] do
       member do
-        get :hide
+        put :hide
+        put :set_spam
       end
     end
     resources :users, controller: 'admin_users' do
