@@ -7,7 +7,7 @@ class BookmarkSearchForm
   ATTRIBUTES = [
     :query,
     :rec,
-    :notes,
+    :bookmark_notes,
     :with_notes,
     :date,
     :show_private,
@@ -39,33 +39,18 @@ class BookmarkSearchForm
     :bookmarkable_collection_ids,
     :sort_column,
     :show_restricted,
-    :page
+    :page,
+    :faceted
   ]
 
   attr_accessor :options
 
+  def self.count_for_user(user)
+    BookmarkQuery.new(user_ids: [user.id]).count
+  end
+
   def self.count_for_pseuds(pseuds)
-    terms = [
-      { term: { hidden_by_admin: 'false' } },
-    ]
-    terms << pseuds.pluck(:id).compact.map { |id| { term: { pseud_id: id } } }
-    unless pseuds.map(&:user).uniq == [User.current_user]
-      terms << { term: { private: 'false' } }
-    end
-    query = { query: { bool: { must: terms } } }
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    response = $new_elasticsearch.perform_request(
-      "GET",
-      "#{Bookmark.index_name}/bookmark/_count",
-      {},
-      query
-    )
-    if response.status == 200
-      response.body['count']
-    else
-      raise response.inspect
-    end
+    BookmarkQuery.new(pseud_ids: pseuds.map(&:id)).count
   end
 
   ATTRIBUTES.each do |filterable|
@@ -74,6 +59,8 @@ class BookmarkSearchForm
 
   def initialize(options={})
     @options = options
+    # If we call the form field 'notes', the parser adds html to it
+    @options[:notes] = @options[:bookmark_notes]
     @searcher = BookmarkQuery.new(options.delete_if { |k, v| v.blank? })
   end
 

@@ -155,10 +155,8 @@ class WorksController < ApplicationController
         # Remove conditional and call to WorkSearch
         if use_new_search?
           @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-          @filtering_facets = WorkSearchForm.new(base_options.merge(works_parent: @owner)).search_results.facets
         else
           @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-          @filtering_facets = @search.search_results.facets
         end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
@@ -180,6 +178,13 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
+        if @search.options[:excluded_tag_ids].present?
+          tags = Tag.where(id: @search.options[:excluded_tag_ids])
+          tags.each do |tag|
+            @facets[tag.class.to_s.downcase] ||= []
+            @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+          end
+        end
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do

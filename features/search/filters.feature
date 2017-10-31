@@ -35,14 +35,14 @@ Feature: Filters
     When I press "Fandoms" within "dd.include"
     Then I should see "The Hobbit (2)" within "#include_fandom_tags"
       And I should see "Legend of Korra (1)" within "#include_fandom_tags"
-      And I should see "Harry Potter (1)" within "#include_fandom_tags"
+      And I should not see "Harry Potter (1)" within "#include_fandom_tags"
     When I check "Legend of Korra (1)" within "#include_fandom_tags"
       And press "Sort and Filter"
     Then I should see "Bilbo Does the Thing"
       And I should not see "A Hobbit's Meandering"
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
     When I press "Fandoms" within "dd.include"
-      And I uncheck "The Hobbit (2)" within "#include_fandom_tags"
+      And I uncheck "The Hobbit (1)" within "#include_fandom_tags"
       And I uncheck "Legend of Korra (1)" within "#include_fandom_tags"
       And I press "Sort and Filter"
     Then I should see "Roonal Woozlib and the Ferrets of Nimh"
@@ -65,7 +65,7 @@ Feature: Filters
     When I press "Fandoms" within "dd.exclude"
     Then I should see "The Hobbit (2)" within "#exclude_fandom_tags"
       And I should see "Legend of Korra (1)" within "#exclude_fandom_tags"
-      And I should see "Harry Potter (1)" within "#exclude_fandom_tags"
+      And I should see "Harry Potter (0)" within "#exclude_fandom_tags"
     When I check "Legend of Korra (1)" within "#exclude_fandom_tags"
       And I press "Sort and Filter"
     Then I should see "A Hobbit's Meandering"
@@ -98,7 +98,7 @@ Feature: Filters
     When I press "Fandoms" within "dd.include"
     Then I should see "The Hobbit (2)" within "#include_fandom_tags"
       And I should see "Legend of Korra (1)" within "#include_fandom_tags"
-      And I should see "Harry Potter (1)" within "#include_fandom_tags"
+      And I should not see "Harry Potter (1)" within "#include_fandom_tags"
     When I check "Legend of Korra (1)" within "#include_fandom_tags"
       And press "Sort and Filter"
     Then I should see "Bilbo Does the Thing"
@@ -126,7 +126,7 @@ Feature: Filters
     When I press "Fandoms" within "dd.exclude"
     Then the "The Hobbit (2)" checkbox within "#exclude_fandom_tags" should not be checked
       And the "Legend of Korra (1)" checkbox within "#exclude_fandom_tags" should not be checked
-      And the "Harry Potter (1)" checkbox within "#exclude_fandom_tags" should be checked
+      And the "Harry Potter (0)" checkbox within "#exclude_fandom_tags" should be checked
     When I check "Legend of Korra (1)" within "#exclude_fandom_tags"
       And I press "Sort and Filter"
     Then I should see "A Hobbit's Meandering"

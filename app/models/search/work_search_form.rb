@@ -9,6 +9,7 @@ class WorkSearchForm
     :title,
     :creators,
     :collected,
+    :faceted,
     :revised_at,
     :language_id,
     :complete,
@@ -44,35 +45,16 @@ class WorkSearchForm
   attr_accessor :options
 
   # Make a direct request to the elasticsearch count api
+  def self.count_for_user(user)
+    WorkQuery.new(user_ids: [user.id]).count
+  end
+
   def self.count_for_pseuds(pseuds)
-    terms = [
-      { term: { posted: 'true' } },
-      { term: { hidden_by_admin: 'false' } },
-      { term: { in_unrevealed_collection: 'false' } },
-      { term: { in_anon_collection: 'false' } },
-      { terms: { pseud_ids: pseuds.pluck(:id).compact } }
-    ]
-    unless User.current_user.present?
-      terms << { term: { restricted: 'false' } }
-    end
-    query = { query: { bool: { must: terms } } }
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    response = $new_elasticsearch.perform_request(
-      "GET",
-      "#{Work.index_name}/work/_count",
-      {},
-      query
-    )
-    if response.status == 200
-      response.body['count']
-    else
-      raise response.inspect
-    end
+    WorkQuery.new(pseud_ids: pseuds.map(&:id)).count
   end
 
   def self.user_count(user)
-    cached_count(user) || count_for_pseuds(user.pseuds)
+    cached_count(user) || count_for_user(user)
   end
 
   def self.pseud_count(pseud)
@@ -112,8 +94,7 @@ class WorkSearchForm
 
     # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
-    processed_opts.merge!(collected: opts[:collected]) if opts[:collected]
-
+    processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
     processed_opts
   end
 

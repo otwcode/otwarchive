@@ -1,4 +1,6 @@
 class BookmarkQuery < Query
+  include TaggableQuery
+
   def klass
     'Bookmark'
   end
@@ -17,7 +19,9 @@ class BookmarkQuery < Query
   # Hopefully someday they'll fix this and we can get the data from a single query
   def search_results
     response = search
-    response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
+    if response['aggregations']
+      response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
+    end
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
@@ -32,11 +36,15 @@ class BookmarkQuery < Query
   end
 
   def exclusion_filters
-    tag_exclusion_filter.compact if tag_exclusion_filter
+    @exclusion_filters ||= tag_exclusion_filter
   end
 
-  def queries
-    @queries = [general_query] unless general_query.blank?
+  # Instead of doing a standard query, which would only match bookmark fields
+  # we'll make this a should query that will try to match either the bookmark or its parent
+  def should_query
+    if query_term.present?
+      @should_queries = parent_child_query
+    end
   end
 
   def add_owner
@@ -60,17 +68,38 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  # Search for a tag by name
-  def general_query
-    input = (options[:q] || options[:query])
-    query = generate_search_text( input || '' )
+  def parent_child_query
+    [
+      general_query,
+      parent_query
+    ]
+  end
 
-    { query_string: { query: query } } unless query.blank?
+  def general_query
+    { query_string: { query: query_term } }
+  end
+
+  def parent_query
+    {
+      has_parent: {
+        type: "bookmarkable",
+        query: {
+          query_string: {
+            query: query_term
+          }
+        }
+      }
+    }
+  end
+
+  def query_term
+    input = (options[:q] || options[:query])
+    generate_search_text( input || '' )
   end
 
   def generate_search_text(query = '')
     search_text = query
-    [:bookmarker].each do |field|
+    [:bookmarker, :notes, :tag].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
           if word[0] == "-"
@@ -90,7 +119,7 @@ class BookmarkQuery < Query
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     sort_hash = { column => { order: direction } }
 
-    if column == 'created_at'
+    if %w(created_at bookmarkable_date).include?(column)
       sort_hash[column][:unmapped_type] = 'date'
     end
 
@@ -169,11 +198,11 @@ class BookmarkQuery < Query
   end
 
   def posted_filter
-    term_filter(:bookmarkable_posted, 'true')
+    parent_term_filter(:posted, 'true')
   end
 
   def hidden_parent_filter
-    term_filter(:bookmarkable_hidden_by_admin, 'false')
+    parent_term_filter(:hidden_by_admin, 'false')
   end
 
   def restricted_filter
@@ -207,12 +236,6 @@ class BookmarkQuery < Query
   end
 
   def tags_filter
-    if options[:tag].present?
-      tag = Tag.find_by name: options[:tag]
-      options[:tag_ids] ||= []
-      options[:tag_ids] << tag.id if tag
-    end
-
     if options[:tag_ids].present?
       options[:tag_ids].map { |tag_id| term_filter(:tag_ids, tag_id) }
     end
@@ -224,7 +247,12 @@ class BookmarkQuery < Query
 
   def tag_exclusion_filter
     if exclusion_ids.present?
-      exclusion_ids.flatten.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
+      exclusion_ids.flatten.map { |exclusion_id|
+        [
+          parent_term_filter(:filter_ids, exclusion_id),
+          term_filter(:tag_ids, exclusion_id)
+        ]
+      }.flatten
     end
   end
 
@@ -233,7 +261,7 @@ class BookmarkQuery < Query
   ####################
 
   def facet_tags?
-    true
+    options[:faceted]
   end
 
   def facet_collections?
@@ -261,34 +289,6 @@ class BookmarkQuery < Query
     user_ids
   end
 
-  def filter_ids
-    return @filter_ids if @filter_ids.present?
-    @filter_ids = options[:filter_ids] || []
-    %w(fandom rating warning category character relationship freeform).each do |tag_type|
-      if options["#{tag_type}_ids".to_sym].present?
-        @filter_ids += options["#{tag_type}_ids".to_sym]
-      end
-    end
-    @filter_ids += named_tags
-    @filter_ids.uniq
-  end
-
-  # Get the ids for tags passed in by name
-  def named_tags
-    tag_ids = []
-    %w(fandom character relationship freeform other_tag).each do |tag_type|
-      tag_names_key = "#{tag_type}_names".to_sym
-      if options[tag_names_key].present?
-        names = options[tag_names_key].split(",")
-        tags = Tag.where(name: names, canonical: true)
-        unless tags.empty?
-          tag_ids += tags.map{ |tag| tag.id }
-        end
-      end
-    end
-    tag_ids
-  end
-
   def parent_term_filter(field, value, options={})
     {
       has_parent: {
@@ -310,25 +310,4 @@ class BookmarkQuery < Query
       }
     }
   end
-
-  def exclusion_ids
-    return if options[:excluded_tag_names].blank? && options[:excluded_tag_ids].blank?
-    names = options[:excluded_tag_names].split(",") if options[:excluded_tag_names]
-    excluded_tags = []
-
-    if names
-      excluded_tags = (Tag.where(name: names, canonical: true) +
-                        Tag.where(name: names, canonical: false).map(&:merger)).flatten.compact
-    end
-
-    if options[:excluded_tag_ids]
-      excluded_tags += (Tag.where(id: options[:excluded_tag_ids], canonical: true) +
-                          Tag.where(id: options[:excluded_tag_ids], canonical: false).map(&:merger)).flatten
-    end
-
-    excluded_tags.pluck(:id).compact +
-      excluded_tags.map(&:sub_tags).flatten.pluck(:id).compact +
-      excluded_tags.map(&:children).flatten.pluck(:id).compact
-  end
-
 end

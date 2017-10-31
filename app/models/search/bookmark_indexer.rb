@@ -5,7 +5,7 @@ class BookmarkIndexer < Indexer
   end
 
   # Create the bookmarkable index/mapping first
-  # Skip delete on the subclasses so it doesn"t delete the ones we"ve just
+  # Skip delete on the subclasses so it doesn't delete the ones we've just
   # reindexed
   def self.index_all(options={})
     options[:skip_delete] = true
@@ -22,7 +22,7 @@ class BookmarkIndexer < Indexer
     {
       "bookmark" => {
         "properties" => {
-          "bookmarkable" => {
+          "bookmarkable_join" => {
             "type" => "join",
             "relations" => {
               "bookmarkable" => "bookmark"
@@ -39,16 +39,12 @@ class BookmarkIndexer < Indexer
           "work_types" => {
             "type" => "keyword"
           },
-          "bookmarkable_tag" => {
-            "type" => "text",
-            "analyzer" => "simple"
-          },
           "bookmarkable_type" => {
             "type" => "keyword"
           },
           "bookmarker" => {
             type: "text",
-            analyzer: "snowball"
+            analyzer: "simple"
           },
           "tag" => {
             "type" => "text",
@@ -83,31 +79,19 @@ class BookmarkIndexer < Indexer
 
   def document(object)
     tags = object.tags
-    tag_filters = tags.map(&:filter).compact
-
-    bookmarkable = nil
-
-    if object.respond_to?(:bookmarkable)
-      bookmarkable = object.bookmarkable
-      bookmarkable_filters = bookmarkable ? bookmarkable.tags.map(&:filter).compact : []
-    end
-
     json_object = object.as_json(
       root: false,
       except: [:notes_sanitizer_version, :delta],
-      methods: [:bookmarker, :collection_ids, :with_notes]
+      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
       user_id: object.pseud.user_id,
-      tag: (tags + tag_filters).map(&:name).uniq,
-      tag_ids: tags.map(&:id),
-      filter_ids: tag_filters.map(&:id) + bookmarkable_filters.map(&:id),
-      bookmarkable_posted: !bookmarkable || (bookmarkable && bookmarkable.posted),
-      bookmarkable_hidden_by_admin: !!bookmarkable && bookmarkable.hidden_by_admin
+      tag: tags.map(&:name),
+      tag_ids: tags.map(&:id)
     )
 
     unless parent_id(object).match("deleted")
       json_object.merge!(
-        bookmarkable: {
+        bookmarkable_join: {
           name: "bookmark",
           parent: parent_id(object)
         }
@@ -117,7 +101,7 @@ class BookmarkIndexer < Indexer
     json_object
   end
 
-  def deleted_bookmmark_info(id)
+  def deleted_bookmark_info(id)
     REDIS_GENERAL.get("deleted_bookmark_parent_#{id}")
   end
 end

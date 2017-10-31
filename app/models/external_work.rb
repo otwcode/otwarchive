@@ -129,7 +129,7 @@ class ExternalWork < ApplicationRecord
     ).merge(
       id: "external_work-#{id}",
       bookmarkable_type: "ExternalWork",
-      bookmarkable: "bookmarkable"
+      bookmarkable_join: "bookmarkable"
     )
   end
 

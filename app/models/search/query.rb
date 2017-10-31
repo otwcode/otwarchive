@@ -22,6 +22,14 @@ class Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
+  # Perform a count query based on the given options
+  def count
+    $new_elasticsearch.count(
+      index: index_name,
+      body: { query: generated_query[:query] }
+    )['count']
+  end
+
   # Sort by relevance by default, override in subclasses as necessary
   def sort
     { "_score" => { order: "desc" }}
@@ -47,6 +55,10 @@ class Query
     filtered_query = {}
     filtered_query[:filter] = filter_bool if filter_bool.present?
     filtered_query[:must] = query_bool if query_bool.present?
+    if should_query.present?
+      filtered_query[:should] = should_query
+      filtered_query[:minimum_should_match] = 1
+    end
     filtered_query
   end
 
@@ -65,6 +77,11 @@ class Query
     queries if !queries.blank?
   end
 
+  # Should queries (used primarily for bookmarks)
+  def should_query
+    @should_queries
+  end
+
   # Define specifics in subclasses
 
   def filters
@@ -80,6 +97,7 @@ class Query
   end
 
   def exclusion_filters
+    @exclusion_filters
   end
 
   def queries
