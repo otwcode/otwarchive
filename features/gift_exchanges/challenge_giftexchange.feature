@@ -233,7 +233,7 @@ Feature: Gift Exchange Challenge
     Then I should see "No Potential Givers"
       And I should see "No Potential Recipients"
     When I follow "No Potential Givers"
-      Then I should see "Regenerate Matches For Mismatch"
+      Then I should see "Regenerate Matches For mismatch"
     When I follow "Edit"
       And I check the 1st checkbox with the value "Stargate Atlantis"
       And I uncheck the 1st checkbox with the value "Bad Choice"
@@ -242,8 +242,8 @@ Feature: Gift Exchange Challenge
       And I submit
       And I follow "Matching"
       And I follow "No Potential Recipients"
-      And I follow "Regenerate Matches For Mismatch"
-    Then I should see "Matches are being regenerated for Mismatch"
+      And I follow "Regenerate Matches For mismatch"
+    Then I should see "Matches are being regenerated for mismatch"
     When the system processes jobs
       And I wait 3 seconds
       And I reload the page
