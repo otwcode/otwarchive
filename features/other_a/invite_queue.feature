@@ -87,7 +87,6 @@ Feature: Invite queue management
     Then I should see the page title "Invitation Request Status"
       And I should see "There are currently 0 people on the waiting list."
       And I should not see "We are currently sending out"
-      And I should see "Look me up"
 
   Scenario: The queue sends out invites and user can create and activate an account
 
