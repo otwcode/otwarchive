@@ -129,7 +129,7 @@ Feature: User Authentication
     Then I should see "Log In"
       And I should not see "Log Out"
       And I should not see "Preferences"
-      
+
   Scenario: User locked out
     Given the following activated users exist
     | login     | password |
@@ -140,7 +140,7 @@ Feature: User Authentication
     # and I shouldn't be able to login with correct password
     When I login username "sam" and password "secret" for 1 times
     Then I should see "Your account has been locked"
-    
+
   # TODO make this an actual test - it's been 4 years...
   Scenario Outline: Show or hide preferences link
     Given I have no users
