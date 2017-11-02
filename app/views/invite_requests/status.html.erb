@@ -6,7 +6,7 @@
 <p>
   <%= ts("There are currently %{count} people on the waiting list.", count: InviteRequest.count) %>
   <% if @admin_settings.invite_from_queue_enabled? %>
-    <%= ts("We are sending out %{invites} invitations per day.", invites: @admin_setting.invite_from_queue_number) %>
+    <%= ts("We are sending out %{invites} invitations per day.", invites: @admin_settings.invite_from_queue_number) %>
   <% end %>
 </p>
 <!--/descriptions-->
