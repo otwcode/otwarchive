@@ -18,6 +18,7 @@ Given /the following activated users? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
+    step %{confirmation emails have been delivered}
   end
 end
 
@@ -26,6 +27,7 @@ Given /the following activated users with private work skins/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    step %{confirmation emails have been delivered}
   end
 end
 
@@ -167,12 +169,12 @@ When /^I create the pseud "([^"]*)"$/ do |newpseud|
 end
 
 When /^I fill in the sign up form with valid data$/ do
-  step(%{I fill in "user_login" with "#{NEW_USER}"})
-  step(%{I fill in "user_email" with "test@archiveofourown.org"})
-  step(%{I fill in "user_password" with "password1"})
-  step(%{I fill in "user_password_confirmation" with "password1"})
-  step(%{I check "user_age_over_13"})
-  step(%{I check "user_terms_of_service"})
+  step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
+  step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
+  step(%{I fill in "user_registration_password" with "password1"})
+  step(%{I fill in "user_registration_password_confirmation" with "password1"})
+  step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_terms_of_service"})
 end
 
 When /^I try to delete my account as (.*)$/ do |login|

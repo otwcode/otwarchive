@@ -72,20 +72,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by(token: params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
-  end
-
   # GET /users/1/edit
   def edit
   end

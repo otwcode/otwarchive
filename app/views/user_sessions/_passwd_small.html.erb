@@ -9,14 +9,14 @@
   <p class="submit actions">
     <label for="user_session_remember_me" class="action"><%= check_box_tag "user_session[remember_me]", 1, false, :id => 'user_session_remember_me' %><%= ts('Remember Me') %></label>
     <%= f.submit ts("Log In") %>
-  </p>    
+  </p>
 <% end %>
 
 <ul class="footnote actions">
   <li><%= link_to ts("Forgot password?"), new_password_path %></li>
   <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
     <li>
-      <%= link_to ts("Create an Account"), new_user_path %>
+      <%= link_to ts("Create an Account"), signup_path %>
     </li>
   <% elsif @admin_settings.invite_from_queue_enabled? %>
     <li>

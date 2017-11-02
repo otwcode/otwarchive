@@ -9,9 +9,16 @@ Otwarchive::Application.routes.draw do
                sign_out: 'logout'
              }
 
+  devise_scope :user do
+    get 'signup' => 'users/registrations#new', as: 'signup'
+  end
+
   devise_for :users,
               module: 'users',
-              controllers: { sessions: 'users/sessions' },
+              controllers: {
+                sessions: 'users/sessions',
+                registrations: 'users/registrations'
+              },
               path_names: {
                 sign_in: 'login',
                 sign_out: 'logout'
@@ -54,7 +61,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
