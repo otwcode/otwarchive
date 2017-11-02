@@ -65,6 +65,19 @@ describe InviteRequestsController do
       invite_request = InviteRequest.find_by_email(email)
       it_redirects_to_with_notice(invite_requests_path, "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider.")
     end
+
+    context "invite queue is disabled" do
+      before do
+        AdminSetting.first.update_attribute(:invite_from_queue_enabled, false)
+      end
+
+      it "redirects to index with error" do
+        post :create, params: { invite_request: { email: generate(:email) } }
+        it_redirects_to(invite_requests_path)
+        expect(flash[:error]).to include("New invitation requests are currently closed.")
+        expect(assigns(:admin_settings).invite_from_queue_enabled?).to be_falsey
+      end
+    end
   end
 
   describe "DELETE #destroy" do
