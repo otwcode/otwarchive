@@ -467,13 +467,62 @@ describe HtmlCleaner do
         result = sanitize_value(:content, "& &amp;")
         expect(result).to match(/&amp; &amp;/)
       end
+      
+      context "add rel=nofollow to all links to defeat spammers' SEO plans" do
+        it "adds rel=nofollow to links with no rel attribute" do
+          result = sanitize_value(:content, "<a href='foo'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+        
+        it "adds rel=nofollow to links with a rel attribute" do
+          result = sanitize_value(:content, "<a href='foo' rel='help'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+      end
 
     end
 
-    # TODO: other fields
+    describe ":summary" do
+      context "add rel=nofollow to all links to defeat spammers' SEO plans" do
+        it "adds rel=nofollow to links with no rel attribute" do
+          result = sanitize_value(:summary, "<a href='foo'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
 
-  end
+        it "adds rel=nofollow to links with a rel attribute" do
+          result = sanitize_value(:summary, "<a href='foo' rel='help'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+      end
+    end
+    
+    describe ":notes" do
+      context "add rel=nofollow to all links to defeat spammers' SEO plans" do
+        it "adds rel=nofollow to links with no rel attribute" do
+          result = sanitize_value(:notes, "<a href='foo'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
 
+        it "adds rel=nofollow to links with a rel attribute" do
+          result = sanitize_value(:notes, "<a href='foo' rel='help'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+      end
+    end
+
+    describe ":endnotes" do
+      context "add rel=nofollow to all links to defeat spammers' SEO plans" do
+        it "adds rel=nofollow to links with no rel attribute" do
+          result = sanitize_value(:endnotes, "<a href='foo'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+
+        it "adds rel=nofollow to links with a rel attribute" do
+          result = sanitize_value(:endnotes, "<a href='foo' rel='help'>Foo</a>")
+          expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+        end
+      end
+    end
 
   describe "fix_bad_characters" do
 
@@ -889,4 +938,6 @@ describe HtmlCleaner do
     end
 
   end
+  end
 end
+
