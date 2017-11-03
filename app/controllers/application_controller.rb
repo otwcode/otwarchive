@@ -217,7 +217,14 @@ public
   end
 
   def after_sign_in_path_for(resource)
-    admin_users_path
+    if resource.is_a?(Admin)
+      admin_users_path
+    else
+      back = session[:return_to]
+      session.delete(:return_to)
+
+      back || root_path
+    end
   end
 
   def authenticate_admin!
