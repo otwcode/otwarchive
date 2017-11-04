@@ -19,10 +19,10 @@ describe InviteRequestsController do
       it "redirects to index with error" do
         message = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
         get :show, params: { id: 0 }
-        it_redirects_to_with_error(invite_requests_path, message)
+        it_redirects_to_with_error(status_invite_requests_path, message)
         expect(assigns(:invite_request)).to be_nil
         get :show, params: { id: 0, email: "mistressofallevil@example.org" }
-        it_redirects_to_with_error(invite_requests_path, message)
+        it_redirects_to_with_error(status_invite_requests_path, message)
         expect(assigns(:invite_request)).to be_nil
       end
 

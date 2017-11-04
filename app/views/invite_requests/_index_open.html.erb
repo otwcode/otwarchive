@@ -1,0 +1,33 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading">
+  <%= ts("Invitation Requests") %>
+</h2>
+
+<p>
+  <%= ts("To get a free Archive of Our Own account, you'll need an invitation.") %>
+</p>
+<!--/descriptions-->
+
+<!--main content-->
+<h3 class="heading"><%= ts("Request an invitation") %></h3>
+
+<%= form_for(@invite_request, html: { class: "simple" }) do |f| %>
+  <%= error_messages_for @invite_request %>
+  <fieldset>
+    <p>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+      <%= f.submit ts("Add me to the list") %>
+    </p>
+  </fieldset>
+<% end %>
+
+<p> 
+    <%= ts("If you have already requested an invitation, you can %{status}. There are currently %{count} people on the waiting list. We are sending 
+    out %{invites} invitations per day.",
+      status: link_to("check your position on the waiting list",
+                      status_invite_requests_path),
+      count: InviteRequest.count,
+      invites: @admin_settings.invite_from_queue_number).html_safe %>
+</p>
+<!--/content-->

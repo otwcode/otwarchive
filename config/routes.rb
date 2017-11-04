@@ -43,6 +43,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      get :status
     end
   end
 
