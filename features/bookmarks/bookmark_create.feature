@@ -83,8 +83,12 @@ Scenario: Create a series bookmark
   Then I should not see "You don't have anything posted under this name yet"
     And I should see "Star Wars"
 
-Scenario: Create a series bookmark
-  Given I am logged in as "first_bookmark_user"
+Scenario: Create a bookmark for a user with a pseud
+  Given the following activated users exist
+    | login           |
+    | first_bookmark_user   |
+    | another_bookmark_user |
+    And I am logged in as "first_bookmark_user"
   When I am on first_bookmark_user's user page
   Then I should see "have anything posted under this name yet"
   When I am logged in as "another_bookmark_user"
@@ -103,8 +107,8 @@ Scenario: Create a series bookmark
     And I press "Create"
   Then I should see "Bookmark was successfully created"
     And I should see "My Bookmarks"
-  When I am logged in as "first_bookmark_user"
-    And I go to the bookmarks page
+  When I am logged in as "another_bookmark_user"
+    And I go to first_bookmark_user's bookmarks page
   Then I should see "Revenge of the Sith"
     And I should see "This is a tag"
     And I should see "and another tag"
