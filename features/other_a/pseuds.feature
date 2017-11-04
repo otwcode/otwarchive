@@ -38,6 +38,17 @@ Scenario: pseud creation and playing with the default pseud
   Then the "pseud_is_default" checkbox should be checked
     And the "pseud_is_default" checkbox should be disabled
 
+  # Recheck default in Me to test update path
+  When I follow "Back To Pseuds"
+    And I follow "Me"
+    And I follow "Edit Pseud"
+    And I check "Make this name default"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I follow "Edit Pseud"
+  Then the "Make this name default" checkbox should not be checked
+
+
 Scenario: Manage pseuds - add, edit
 
   Given I am logged in as "editpseuds"
@@ -60,7 +71,13 @@ Scenario: Manage pseuds - add, edit
     And I should see "My new name (editpseuds)"
     And I should see "I wanted to add another name"
     And I should see "Default Pseud"
-  When I follow "editpseuds"
+  When I follow "New Pseud"
+  Then I should see "New pseud"
+  When I fill in "Name" with "My new name"
+    And I press "Create"
+  Then I should see "You already have a pseud with that name"
+  When I follow "Back To Pseuds"
+    And I follow "editpseuds"
     And I follow "Profile"
     And I follow "Manage My Pseuds"
   Then I should see "Edit My new name"

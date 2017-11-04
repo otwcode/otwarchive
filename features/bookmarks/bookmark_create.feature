@@ -32,7 +32,9 @@ Scenario: Create a bookmark
     When I am logged in as "first_bookmark_user"
       And I go to first_bookmark_user's user page 
     Then I should not see "You don't have anything posted under this name yet"
-      And I should see "Revenge of the Sith"
+      And I should see "Revenge of the Sith"  
+    
+    # Set bookmark to private
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
       And I press "Edit"
@@ -48,7 +50,67 @@ Scenario: Create a bookmark
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-      
+
+Scenario: Create a series bookmark
+  Given I am logged in as "first_bookmark_user"
+  When I am on first_bookmark_user's user page
+  Then I should see "have anything posted under this name yet"
+  When I am logged in as "another_bookmark_user"
+    And I post the work "Revenge of the Sith"
+    And I add the work "Revenge of the sith" to the series "Star Wars"
+    And I go to the bookmarks page
+  Then I should not see "Star Wars"
+  When I am logged in as "first_bookmark_user"
+    And I go to the series page
+    And I follow "Star Wars"
+  Then I should see "Bookmark Series"
+  When I follow "Bookmark Series"
+    And I fill in "bookmark_notes" with "I liked this trilogy"
+    And I fill in "bookmark_tag_string" with "This is a series tag, and another series tag,"
+    And I check "bookmark_rec"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "My Bookmarks"
+  When I am logged in as "another_bookmark_user"
+    And I go to the bookmarks page
+    And "AO3-5221" is fixed
+  #Then I should see "Star Wars"
+  #  And I should see "This is a series tag"
+  #  And I should see "and another series tag"
+  #  And I should see "I liked this trilogy"
+  When I am logged in as "first_bookmark_user"
+    And I go to first_bookmark_user's user page
+  Then I should not see "You don't have anything posted under this name yet"
+    And I should see "Star Wars"
+
+Scenario: Create a series bookmark
+  Given I am logged in as "first_bookmark_user"
+  When I am on first_bookmark_user's user page
+  Then I should see "have anything posted under this name yet"
+  When I am logged in as "another_bookmark_user"
+    And "another_bookmark_user" creates the default pseud "another_pseud"
+    And I post the work "Revenge of the Sith"
+  When I go to the bookmarks page
+  Then I should not see "Revenge of the Sith"
+  When I am logged in as "first_bookmark_user"
+    And I go to the works page
+    And I follow "Revenge of the Sith"
+  Then I should see "Bookmark"
+  When I follow "Bookmark"
+    And I fill in "bookmark_notes" with "I liked this story"
+    And I fill in "bookmark_tag_string" with "This is a tag, and another tag,"
+    And I check "bookmark_rec"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "My Bookmarks"
+  When I am logged in as "first_bookmark_user"
+    And I go to the bookmarks page
+  Then I should see "Revenge of the Sith"
+    And I should see "This is a tag"
+    And I should see "and another tag"
+    And I should see "I liked this story"
+    And I should see "another_pseud"
+
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           |
@@ -400,3 +462,22 @@ Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
   Then I should not see "bookmarker1" within ".recent"
     And I should not see "Love it" within ".recent"
     And I should see "Show Most Recent Bookmarks" within "li.bookmark"
+
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page for external works
+  Given basic tags
+    And I am logged in as "bookmarker1"
+    And I bookmark the external work "Popular Work"
+    And I log out
+    And I am logged in as "bookmarker2"
+    And I bookmark the external work "Popular Work"
+  When I am on the bookmarks page
+    And "AO3-5221" is fixed
+      # There are two of these links, but bookmarker2's bookmark is more recent,
+      # and it follows the first link matching the specified text
+  #  And I follow "Show Most Recent Bookmarks"
+    # Again, we're relying on the fact that it uses the first element that
+    # matches the specified selector, since each bookmark on the page will have a
+    # div with the class .recent
+  #Then I should see "bookmarker1" within ".recent"
+  #  And I should see "Hide Most Recent Bookmarks" within ".recent"
