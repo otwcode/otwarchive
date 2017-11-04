@@ -267,7 +267,11 @@
       users = users.joins(:roles).where("roles.id = ?", role.id)
     end
     if query.present?
-      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+      if (options[:exact])
+        users = users.joins(:pseuds).where("pseuds.name = ? OR email = ?", "#{query}", "#{query}")
+      else
+        users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+      end
     end
     users.paginate(page: options[:page] || 1)
   end
