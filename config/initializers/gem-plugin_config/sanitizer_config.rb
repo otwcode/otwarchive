@@ -27,6 +27,10 @@ class Sanitize
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
         'ul' => ['type'],
       },
+      
+      add_attributes: {
+        'a' => {'rel' => 'nofollow'}
+      },
 
       protocols: {
         'a' => {'href' => ['ftp', 'http', 'https', 'mailto', :relative]},
