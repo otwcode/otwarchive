@@ -83,7 +83,7 @@ Scenario: Create a series bookmark
   Then I should not see "You don't have anything posted under this name yet"
     And I should see "Star Wars"
 
-Scenario: Create a bookmark for a user with a pseud
+Scenario: Create a bookmark for a work by a user with a pseud
   Given the following activated users exist
     | login           |
     | first_bookmark_user   |
@@ -109,6 +109,34 @@ Scenario: Create a bookmark for a user with a pseud
     And I should see "My Bookmarks"
   When I am logged in as "another_bookmark_user"
     And I go to first_bookmark_user's bookmarks page
+  Then I should see "Revenge of the Sith"
+    And I should see "This is a tag"
+    And I should see "and another tag"
+    And I should see "I liked this story"
+    And I should see "another_pseud"
+
+Scenario: Create a bookmark by a user with a pseud
+  Given the following activated users exist
+    | login           |
+    | first_bookmark_user   |
+    | another_bookmark_user |
+    And I am logged in as "first_bookmark_user"
+  When I am on first_bookmark_user's user page
+    And I post the work "Revenge of the Sith"
+  When I am logged in as "another_bookmark_user"
+    And "another_bookmark_user" creates the default pseud "another_pseud"
+    And I go to the works page
+    And I follow "Revenge of the Sith"
+  Then I should see "Bookmark"
+  When I follow "Bookmark"
+    And I fill in "bookmark_notes" with "I liked this story"
+    And I fill in "bookmark_tag_string" with "This is a tag, and another tag,"
+    And I check "bookmark_rec"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "My Bookmarks"
+  When I am logged in as "first_bookmark_user"
+    And I go to another_bookmark_user's "another_pseud" pseud bookmarks page
   Then I should see "Revenge of the Sith"
     And I should see "This is a tag"
     And I should see "and another tag"
