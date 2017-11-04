@@ -112,7 +112,7 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
       user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? "(.*)" pseud bookmarks page$/i
-        user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
+      user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^(.*?)(?:'s)? works page$/i
