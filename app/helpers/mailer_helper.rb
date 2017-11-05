@@ -28,7 +28,7 @@ module MailerHelper
     if work.anonymous?
       "Anonymous"
     else
-      work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe
+      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
     end
   end
   

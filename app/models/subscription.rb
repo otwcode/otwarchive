@@ -45,8 +45,7 @@ class Subscription < ApplicationRecord
     text += subscribable_type == "Series" ? " in the #{self.name} series" : ""
   end
 
-  def self.is_anonymous_creation?(creation)
+  def self.anonymous_creation?(creation)
     (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
   end
-
 end

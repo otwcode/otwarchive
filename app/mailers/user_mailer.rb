@@ -108,7 +108,7 @@ class UserMailer < BulletproofMailer::Base
       # If the subscription notification is for a user subscription, we don't
       # want to send updates about works that have recently become anonymous.
       if @subscription.subscribable_type == 'User'
-        next if Subscription.is_anonymous_creation?(creation)
+        next if Subscription.anonymous_creation?(creation)
       end
 
       @creations << creation
