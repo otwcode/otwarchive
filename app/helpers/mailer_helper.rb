@@ -23,6 +23,14 @@ module MailerHelper
     style_link("<img src=\"" + root_url + "favicon.ico\" style=\"border:none;display:inline-block;font-weight:bold;height:16px;padding-right:3px;vertical-align:-3px;width:16px;\">" +
       pseud.byline, user_pseud_url(pseud.user, pseud))
   end
+
+  def creator_links(work)
+    if work.anonymous?
+      "Anonymous"
+    else
+      work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe
+    end
+  end
   
   def text_pseud(pseud)
     pseud.byline + " (#{user_pseud_url(pseud.user, pseud)})"

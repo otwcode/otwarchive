@@ -42,6 +42,10 @@ module Creatable
     save_creatorships(this_creation)
   end
 
+  def creators
+    pseuds.map(&:byline)
+  end
+
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
@@ -65,7 +69,7 @@ module Creatable
   # notify people subscribed to this creation or its authors
   def notify_subscribers
     work = self.respond_to?(:work) ? self.work : self
-    if work && !work.unrevealed? && !work.anonymous?
+    if work && !work.unrevealed?
       Subscription.for_work(work).each do |subscription|
         RedisMailQueue.queue_subscription(subscription, self)
       end

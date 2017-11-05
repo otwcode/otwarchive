@@ -5,8 +5,9 @@
 
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
+    <% creators = creator_links(this_work) %>
 
-    <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> posted a
+    <%= creators %> posted a
     <% if creation.is_a?(Work) %>
       <%= this_work.backdate ? "backdated" : "new" %> work:
     <% else %>
@@ -23,7 +24,7 @@
       <% unless @seen[this_work.id] %>
         <br>
 
-        by <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
+        by <%= creators %>
       <% end %>
     </p>
 

@@ -172,6 +172,63 @@
   When I press "Subscribe"
   Then the page title should include "Chapter 2"
 
+  Scenario: Subscription to a work in an anonymous collection
+
+  When I am logged in as "first_user"
+    And I set up the collection "test_collection" with name "test1"
+    And I check "collection_collection_preference_attributes_anonymous"
+    And I submit
+    And I post the work "Multi Chapter Work"
+    And a chapter is added to "Multi Chapter Work"
+    And I add the work "Multi Chapter Work" to the collection "test_collection"
+  When I am logged in as "second_user"
+    And I view the work "Multi Chapter Work"
+    And I view the 1st chapter
+    And I press "Subscribe"
+  When I am logged in as "first_user"
+    And a chapter is added to "Multi Chapter Work"
+    Then 0 emails should be delivered
+  When subscription notifications are sent
+    Then 1 email should be delivered to "second_user@foo.com"
+    And the email should contain "Multi Chapter Work"
+    And the email should contain "Anonymous"
+    And the email should not contain "first_user"
+
+    Scenario: Subscription to a user should not inform you about his anonymous works
+
+    Given I am logged in as "second_user"
+      And I go to first_user's user page
+      And I press "Subscribe"
+    When I am logged in as "first_user"
+      And I set up the collection "test_collection" with name "test1"
+      And I check "collection_collection_preference_attributes_anonymous"
+      And I submit
+      And I post the work "Multi Chapter Work" to the collection "test_collection"
+    Then 0 emails should be delivered
+    When subscription notifications are sent
+    Then 0 emails should be delivered
+
+    Scenario: Subscription to a series in an anonymous collection
+
+    When I am logged in as "first_user"
+      And I set up the collection "test_collection" with name "test1"
+      And I check "collection_collection_preference_attributes_anonymous"
+      And I submit
+      And I post the work "Multi Chapter Work" as part of a series "Multi Work Series"
+      And I add the work "Multi Chapter Work" to the collection "test_collection"
+    When I am logged in as "second_user"
+      And I view the series "Multi Work Series"
+      And I press "Subscribe"
+    When I am logged in as "first_user"
+      And a chapter is added to "Multi Chapter Work"
+    Then 0 emails should be delivered
+    When subscription notifications are sent
+    Then 1 email should be delivered to "second_user@foo.com"
+      And the email should contain "Multi Work Series"
+      And the email should contain "Multi Chapter Work"
+      And the email should contain "Anonymous"
+      And the email should not contain "first_user"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
   Given I have loaded the fixtures
