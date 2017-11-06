@@ -62,6 +62,41 @@ Scenario: Edit profile - Changing email address and viewing
 	When I change my preferences to display my email address
 	  Then I should see "My email address: valid2@archiveofourown.org"
 
+Scenario: Edit profile - Changing email address after requesting temporary password
+
+  When I am logged out
+    And I am on the home page
+    And I follow "Forgot password?"
+    And I fill in "reset_password_for" with "editname"
+    And I press "Reset Password"
+  Then 1 email should be delivered to "bar@ao3.org"
+  When all emails have been delivered
+    And I am logged in as "editname"
+    And I want to edit my profile
+    And I change my email
+  Then I should see "Your email has been successfully updated"
+    And 1 email should be delivered to "bar@ao3.org"
+    And the email should contain "the email associated with your account has been changed to"
+    And the email should contain "valid2@archiveofourown.org"
+    And the email should not contain "translation missing"
+  When I change my preferences to display my email address
+  Then I should see "My email address: valid2@archiveofourown.org"
+
+Scenario: Edit profile - Changing email address after requesting temporary password by entering temporary password
+
+  When I am logged out
+    And I am on the home page
+    And I follow "Forgot password?"
+    And I fill in "reset_password_for" with "editname"
+    And I press "Reset Password"
+  Then 1 email should be delivered to "bar@ao3.org"
+  When all emails have been delivered
+    And I am logged in as "editname"
+    And I want to edit my profile
+    And I enter a temporary password for user editname
+ Then I should see "Your password was incorrect"
+	And 0 emails should be delivered
+
 Scenario: Edit profile -  Changing email address -- can't be the same as another user's
 
   When I enter a duplicate email
