@@ -10,7 +10,7 @@ Otwarchive::Application.routes.draw do
              }
 
   devise_scope :user do
-    get 'signup' => 'users/registrations#new', as: 'signup'
+    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
   end
 
   devise_for :users,
