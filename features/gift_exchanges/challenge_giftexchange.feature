@@ -55,7 +55,9 @@ Feature: Gift Exchange Challenge
     When I select "(GMT-08:00) Pacific Time (US & Canada)" from "gift_exchange_time_zone"
       And I submit
     Then I should see "Challenge was successfully updated"
-    Then I should see "PDT"
+    # Pacific Time Zone changes from PDT to PST with Daylight savings
+    # This should pass no matter what season we're in
+    Then I should see "PDT" or "PST"
 
   Scenario: Add a co-mod
     Given the following activated users exist

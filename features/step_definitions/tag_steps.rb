@@ -131,21 +131,14 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   tw.tag_wrangler = '1'
 
   visit destroy_user_session_path
-  activate_authlogic
-  assert !UserSession.find
 
   visit new_user_session_path
-  activate_authlogic
   user_record = find_or_create_new_user(user, password)
 
   fill_in "User name", with: user
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-
-  activate_authlogic
-  UserSession.create!(user_record)
-  assert UserSession.find
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url

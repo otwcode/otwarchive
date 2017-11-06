@@ -183,6 +183,11 @@ Then /^(?:|I )should see '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
+Then(/^I should see "([^"]*)" or "([^"]*)"$/) do |text1, text2|
+  result = page.has_content?(text1) || page.has_content?(text2)
+  expect(result).to be(true)
+end
+
 Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
   regexp = Regexp.new(regexp)
   with_scope(selector) do

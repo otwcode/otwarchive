@@ -125,7 +125,7 @@ I'd like to comment on a tag'
     Then I should see "Comment created"
       And 1 email should be delivered to "enigel@example.org"
       And the email should contain "really clever stuff"
-      And the email should contain "Cesy"
+      And the email should contain "cesy"
       And the email should contain "left the following comment on"
       And the email should contain "the tag"
 
