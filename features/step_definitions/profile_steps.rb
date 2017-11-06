@@ -46,7 +46,7 @@ When /^I enter a temporary password for user (.*)$/ do |login|
   click_button("Change Email")
 end
 
-When /^I change my email$/ do |password|
+When /^I change my email$/ do
   click_link("Change Email")
   fill_in("new_email", with: "valid2@archiveofourown.org")
   fill_in("email_confirmation", with: "valid2@archiveofourown.org")
