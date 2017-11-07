@@ -35,3 +35,13 @@ Feature: Authenticate Admin Users
       And I fill in "admin_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
+
+  Scenario: Login case (in)sensitivity
+    Given the following admin exists
+      | login       | password |
+      | TheMadAdmin | secret   |
+    When I go to the admin login page
+      And I fill in "admin_login" with "themadadmin"
+      And I fill in "admin_password" with "secret"
+      And I press "Log in as admin"
+    Then I should see "Successfully logged in"

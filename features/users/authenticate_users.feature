@@ -130,6 +130,17 @@ Feature: User Authentication
       And I should not see "Log Out"
       And I should not see "Preferences"
 
+  Scenario: Login case (in)sensitivity
+    Given the following activated user exists
+      | login      | password |
+      | TheMadUser | password1 |
+    When I am on the home page
+      And I fill in "User name" with "themaduser"
+      And I fill in "Password" with "password1"
+      And I press "Log In"
+    Then I should see "Successfully logged in."
+      And I should see "Hi, TheMadUser!"
+
   # TODO make this an actual test - it's been 4 years...
   Scenario Outline: Show or hide preferences link
     Given I have no users
