@@ -224,7 +224,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert UserSession.find.nil? unless @javascript
+  expect(User.current_user).to be(nil)
 end
 
 def get_work_name(age, classname, name)
