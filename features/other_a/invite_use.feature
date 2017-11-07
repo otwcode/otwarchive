@@ -27,5 +27,5 @@ I want to use an invitation to create an account
     And I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     When I am logged in as "Scott" with password "password"
     And I go to SOME_USER2's invitations page
-  Then I should be on scott's user page
+  Then I should be on Scott's user page
     And I should see "Sorry, you don't have permission to access the page you were trying to reach."
