@@ -2,6 +2,7 @@ class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
+  include BackwardsCompatiblePasswordDecryptor
 
   devise :database_authenticatable,
           :confirmable,
@@ -10,6 +11,8 @@ class User < ApplicationRecord
           :trackable,
           :validatable,
           :lockable
+
+  alias :devise_valid_password? :valid_password?
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
