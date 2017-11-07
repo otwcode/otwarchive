@@ -209,7 +209,6 @@ class User < ApplicationRecord
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
 
   validates :email, email_veracity: true, email_format: true
@@ -233,6 +232,16 @@ class User < ApplicationRecord
     login
   end
 
+  # Override of Devise method to make login case insensitive without losing
+  # user-preferred case for display
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["lower(login) = :value", { value: login.downcase }]).first
+    else
+      where(conditions).first
+    end
+  end
 
   def self.for_claims(claims_ids)
     joins(:request_claims).
