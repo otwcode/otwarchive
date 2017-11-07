@@ -72,20 +72,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by(token: params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
-  end
-
   # GET /users/1/edit
   def edit
   end
@@ -128,36 +114,6 @@ class UsersController < ApplicationController
     else
       @user.reload
       render :change_username
-    end
-  end
-
-  # POST /users
-  # POST /users.xml
-  def create
-    @hide_dashboard = true
-
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      @user = User.new
-      @user.login = user_params[:login]
-      @user.email = user_params[:email]
-      @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = user_params[:age_over_13]
-      @user.terms_of_service = user_params[:terms_of_service]
-
-      @user.password = user_params[:password] if user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
-
-      @user.confirmation_token = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
-
-      @user.transaction do
-        if @user.save
-          notify_and_show_confirmation_screen
-        else
-          render action: 'new'
-        end
-      end
     end
   end
 
