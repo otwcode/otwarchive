@@ -12,8 +12,6 @@ class User < ApplicationRecord
           :validatable,
           :lockable
 
-  alias :devise_valid_password? :valid_password?
-
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
@@ -235,13 +233,14 @@ class User < ApplicationRecord
     login
   end
 
-  # Override of Devise method to make login case insensitive without losing
-  # user-preferred case for display
+  # Override of Devise method to allow user to login with login OR username as
+  # well as to make login case insensitive without losing user-preferred case
+  # for login display
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
-      where(conditions).where(["lower(login) = :value", { value: login.downcase }]).first
-    else
+      where(conditions).where(["lower(login) = :value OR lower(email) = :value", { value: login.downcase }]).first
+    elsif conditions.has_key?(:email)
       where(conditions).first
     end
   end

@@ -141,6 +141,17 @@ Feature: User Authentication
     Then I should see "Successfully logged in."
       And I should see "Hi, TheMadUser!"
 
+  Scenario: Login with email or login
+    Given the following activated user exists
+      | login      | email                          | password |
+      | TheMadUser | themaduser@archiveofourown.org | password |
+    When I am on the home page
+      And I fill in "User name" with "themaduser@archiveofourown.org"
+      And I fill in "Password" with "password"
+      And I press "Log In"
+      Then I should see "Successfully logged in."
+        And I should see "Hi, TheMadUser!"
+
   # TODO make this an actual test - it's been 4 years...
   Scenario Outline: Show or hide preferences link
     Given I have no users

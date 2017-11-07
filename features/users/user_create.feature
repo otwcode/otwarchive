@@ -44,6 +44,16 @@ Feature: Sign Up for a new account
     Then I should see "Login has already been taken"
       And I should not see "Account Created!"
 
+  Scenario: The user should not be able to sign up with a login that is already in use, no matter the case
+    Given the following users exist
+      | login | password |
+      | user1 | password |
+    When I fill in the sign up form with valid data
+      And I fill in "user_registration_login" with "USER1"
+      And I press "Create Account"
+    Then I should see "Login has already been taken"
+      And I should not see "Account Created!"
+
   Scenario: The user should be able to create a new account with a valid email and password
     When I fill in the sign up form with valid data
       And all emails have been delivered
