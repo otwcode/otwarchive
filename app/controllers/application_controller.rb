@@ -65,6 +65,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  helper_method :current_user
+  helper_method :current_admin
+  helper_method :logged_in?
+  helper_method :logged_in_as_admin?
+
   # ES UPGRADE TRANSITION #
   # Remove method & `helper_method :use_new_search?`
   helper_method :use_new_search?
