@@ -11,7 +11,7 @@ class InviteRequestsController < ApplicationController
     fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
     unless (request.xml_http_request?) || @invite_request
-      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       redirect_to status_invite_requests_path and return
     end
     respond_to do |format|
@@ -24,7 +24,7 @@ class InviteRequestsController < ApplicationController
   def create
     unless @admin_settings.invite_from_queue_enabled?
       flash[:error] = ts("<strong>New invitation requests are currently closed.</strong> For more information, please check the %{news}.",
-                         news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag_id: 143))).html_safe
+                         news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag: 143))).html_safe
       redirect_to invite_requests_path
       return
     end
