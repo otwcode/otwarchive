@@ -39,7 +39,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     # deliver synchronously to avoid getting caught in backed-up mail queue
     UserMailer.signup_notification(resource.id).deliver!
 
-    flash[:notice] = ts("During testing you can activate via <a href='%activation_url}'>your activation url</a>.",
+    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         activation_url: activate_path(resource.confirmation_token)).html_safe if Rails.env.development?
 
     render 'users/confirmation'
