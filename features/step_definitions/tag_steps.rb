@@ -116,7 +116,6 @@ Given /^I am logged in as a tag wrangler$/ do
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
-  require 'authlogic/test_case'
   tw = User.find_by(login: user)
 
   if tw.blank?
