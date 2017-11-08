@@ -99,9 +99,8 @@ class UsersController < ApplicationController
     render(:change_username) && return unless params[:new_login].present?
 
     @new_login = params[:new_login]
-    session = UserSession.new(login: @user.login, password: params[:password])
 
-    unless session.valid?
+    unless @user.valid_password?(params[:password])
       flash[:error] = ts('Your password was incorrect')
       render(:change_username) && return
     end
@@ -273,9 +272,7 @@ class UsersController < ApplicationController
                              ts('You must enter your old password'))
     end
 
-    session = UserSession.new(login: @user.login, password: params[:password_check])
-
-    if session.valid?
+    if @user.valid_password?(params[:password_check])
       true
     else
       wrong_password!(params[:new_email],
