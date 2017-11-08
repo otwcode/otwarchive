@@ -458,18 +458,6 @@ Otwarchive::Application.routes.draw do
   end
   resources :locales, except: :destroy
 
-  #### SESSIONS ####
-
-=begin
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  get 'login' => 'user_sessions#new'
-  get 'logout' => 'user_sessions#destroy'
-=end
   #### API ####
 
   namespace :api do

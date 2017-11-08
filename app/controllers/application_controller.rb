@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Devise helper methods allow header login form to work
   helper_method :resource_name, :resource, :devise_mapping, :resource_class
   def resource_name
     :user
@@ -114,10 +115,7 @@ class ApplicationController < ActionController::Base
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
-      @user_session = UserSession.find
-      if @user_session
-        @user_session.destroy
-      end
+      sign_out
       redirect_to '/lost_cookie' and return
     end
   end
@@ -141,11 +139,11 @@ protected
   end
 
   def logged_in?
-    current_user.nil? ? false : true
+    user_signed_in?
   end
 
   def logged_in_as_admin?
-    current_admin.nil? ? false : true
+    admin_signed_in?
   end
 
   def guest?

@@ -4,10 +4,10 @@ Feature: Admin Find Users page
     Given I have loaded the "roles" fixture
       And the following activated users exist
         | login  | email      |
-        | usera  | a@ao3.org  |
-        | userb  | b@bo3.org  |
-        | usercb | cb@bo3.org |
-      And the user "userb" exists and has the role "archivist"
+        | userA  | a@ao3.org  |
+        | userB  | b@bo3.org  |
+        | userCB | cb@bo3.org |
+      And the user "userB" exists and has the role "archivist"
       And I am logged in as an admin
 
   Scenario: The default page for the Admin section should be the Find Users page
@@ -16,23 +16,23 @@ Feature: Admin Find Users page
   Scenario: The Find Users page should perform a partial match on name
     When I fill in "query" with "user"
       And I submit
-    Then I should see "usera"
-      And I should see "userb"
-      And I should see "usercb"
+    Then I should see "userA"
+      And I should see "userB"
+      And I should see "userCB"
 
   Scenario: The Find Users page should perform a partial match by email
     When I fill in "query" with "bo3"
       And I submit
-    Then I should see "userb"
-      And I should see "usercb"
-      But I should not see "usera"
+    Then I should see "userB"
+      And I should see "userCB"
+      But I should not see "userA"
 
   Scenario: The Find Users page should perform an exact match by role
     When I select "Archivist" from "role"
       And I submit
-    Then I should see "userb"
-      But I should not see "usera"
-      And I should not see "usercb"
+    Then I should see "userB"
+      But I should not see "userA"
+      And I should not see "userCB"
 
   Scenario: The Find Users should display an appropriate message if no users are found
     When I fill in "query" with "co3"
@@ -48,9 +48,9 @@ Feature: Admin Find Users page
         a@ao3.org
       """
       And I press "Find"
-    Then I should see "userb"
-      And I should see "usera"
-      But I should not see "usercb"
+    Then I should see "userB"
+      And I should see "userA"
+      But I should not see "userCB"
 
   Scenario: The Bulk Email Search page should list emails found and not found
     When I go to the Bulk Email Search page
@@ -68,9 +68,9 @@ Feature: Admin Find Users page
     When I go to the Bulk Email Search page
       And I fill in "Email addresses *" with "b@bo3.org"
       And I press "Find"
-    Then I should see "userb"
-      But I should not see "usera"
-      And I should not see "usercb"
+    Then I should see "userB"
+      But I should not see "userA"
+      And I should not see "userCB"
 
    Scenario: Admins can download a CSV of found emails
      When I go to the Bulk Email Search page
