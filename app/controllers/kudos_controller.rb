@@ -23,7 +23,7 @@ class KudosController < ApplicationController
         format.html do
           flash[:comment_notice] = ts("Thank you for leaving kudos!")
 
-          redirect_to (request.referer || root_path) && return
+          redirect_to request.referer || root_path && return
         end
 
         format.js do
@@ -48,7 +48,7 @@ class KudosController < ApplicationController
             error_message = "You can't leave guest kudos on a restricted work."
           end
           flash[:comment_error] = ts(error_message)
-          redirect_to (request.referer || root_path) && return
+          redirect_to request.referer || root_path && return
         end
 
         format.js do
