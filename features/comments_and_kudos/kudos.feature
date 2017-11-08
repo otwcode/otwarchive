@@ -53,6 +53,15 @@ Feature: Leave kudos
       And I view the work "Awesome Story"
       Then I should not see "Kudos ♥"
 
+  Scenario: kudos page
+    When I go to the "Awesome Story" work kudos page
+    Then I should not see " left kudos on this work"
+    When I am logged in as "myname3"
+      And I view the work "Awesome Story"
+      And I press "Kudos ♥"
+      And I go to the "Awesome Story" work kudos page
+    Then I should see "myname3 left kudos on this work!"
+
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
       And I post the chaptered work "Epic Saga"

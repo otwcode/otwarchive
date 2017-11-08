@@ -25,6 +25,10 @@ FactoryGirl.define do
 
     factory :posted_work do
       posted true
+
+      factory :restricted_work do
+        restricted true
+      end
     end
   end
 
