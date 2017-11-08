@@ -50,7 +50,7 @@ When /^I change my email$/ do
   click_link("Change Email")
   fill_in("new_email", with: "valid2@archiveofourown.org")
   fill_in("email_confirmation", with: "valid2@archiveofourown.org")
-  fill_in("password_check", "password")
+  fill_in("password_check", with: "password")
   click_button("Change Email")
 end
 
