@@ -17,7 +17,7 @@ describe InviteRequestsController do
   describe "GET #show" do
     context "given invalid emails" do
       it "redirects to index with error" do
-        message = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+        message = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
         get :show, params: { id: 0 }
         it_redirects_to_with_error(status_invite_requests_path, message)
         expect(assigns(:invite_request)).to be_nil
