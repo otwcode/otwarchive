@@ -116,8 +116,8 @@ module NavigationHelpers
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
-      when /^the "(.*)" work kudos page/
-        work_kudos_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+    when /^the "(.*)" work kudos page/
+      work_kudos_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^(.*?)(?:'s)? bookmarks page$/i
