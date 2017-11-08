@@ -2,7 +2,6 @@ class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
-  include BackwardsCompatiblePasswordDecryptor
 
   devise :database_authenticatable,
           :confirmable,
@@ -11,6 +10,10 @@ class User < ApplicationRecord
           :trackable,
           :validatable,
           :lockable
+
+  # Must come after Devise modules in order to alias devise_valid_password?
+  # properly
+  include BackwardsCompatiblePasswordDecryptor
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user

@@ -4,6 +4,11 @@ module BackwardsCompatiblePasswordDecryptor
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
   # https://www.ruby-forum.com/topic/217465
   # Not useful but https://github.com/plataformatec/devise/issues/511
+  def self.included(base)
+    base.class_eval do
+      alias :devise_valid_password? :valid_password?
+    end
+  end
 
   def valid_password?(password)
     begin

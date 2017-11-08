@@ -22,6 +22,38 @@ Given /the following activated users? exists?/ do |table|
   end
 end
 
+Given /the following users exist with BCrypt encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    salt = Authlogic::Random.friendly_token
+    encrypted_password = Authlogic::CryptoProviders::BCrypt.encrypt(hash[:password], salt)
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
+  end
+end
+
+Given /the following users exist with SHA-512 encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    salt = Authlogic::Random.friendly_token
+    encrypted_password = Authlogic::CryptoProviders::Sha512.encrypt(hash[:password], salt)
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
+  end
+end
+
 Given /the following activated users with private work skins/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)

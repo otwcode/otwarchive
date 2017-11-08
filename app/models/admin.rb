@@ -1,12 +1,11 @@
 class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  include BackwardsCompatiblePasswordDecryptor
 
   devise :database_authenticatable,
          :validatable,
          password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
 
-  alias :devise_valid_password? :valid_password?
+  include BackwardsCompatiblePasswordDecryptor
 
   has_many :log_items
   has_many :invitations, as: :creator
