@@ -176,6 +176,16 @@ When /^I follow the link for "([^"]*)" first invite$/ do |login|
   step(%{I follow "#{invite.token}"})
 end
 
+When /^the password reset token for "([^*"]*)" is expired$/ do |login|
+  password_generated_date = 2.weeks.ago
+  expect_any_instance_of(User).to receive(:updated_at).at_least(:once).and_return(password_generated_date)
+end
+
+When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
+  user = User.find_by(login: login)
+  user.update(failed_attempts: count.to_i)
+end
+
 When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
   fill_in "Name", with: newpseud

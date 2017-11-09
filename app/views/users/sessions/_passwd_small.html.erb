@@ -6,7 +6,7 @@
     <dd><%= f.password_field :password, :class => 'text', :size => nil %></dd>
   </dl>
   <p class="submit actions">
-    <label for="user_session_remember_me" class="action"><%= check_box_tag "user_session[remember_me]", 1, false, :id => 'user_session_remember_me' %><%= ts('Remember Me') %></label>
+    <label for="user_remember_me" class="action"><%= check_box_tag "user[remember_me]", 1, false, :id => 'user_remember_me' %><%= ts('Remember Me') %></label>
     <%= f.submit ts("Log In") %>
   </p>
 <% end %>

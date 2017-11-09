@@ -13,9 +13,9 @@ class Users::SessionsController < Devise::SessionsController
       end
     else
 
-      if params[:user][:login] && user = User.find_by(login: params[:user][:login])
+      if params[:user][:login] && user = (User.find_by(login: params[:user][:login]) || User.find_by(email: params[:user][:login]))
         self.resource = user
-        #resource we have a user
+        # resource we have a user
         if user.recently_reset? && params[:user][:password] == user.reset_password_token
           if user.updated_at > 1.week.ago
             # we sent out a generated password and they're using it to log them

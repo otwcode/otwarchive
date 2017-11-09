@@ -20,3 +20,7 @@ Before do
     $rollout.activate :use_new_search
   end
 end
+
+After do
+  Timecop.return
+end
