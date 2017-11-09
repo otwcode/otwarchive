@@ -28,8 +28,15 @@ Given /the following users exist with BCrypt encrypted passwords/ do |table|
     user.activate
     user.pseuds.first.add_to_autocomplete
 
-    salt = Authlogic::Random.friendly_token
-    encrypted_password = Authlogic::CryptoProviders::BCrypt.encrypt(hash[:password], salt)
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::BCrypt.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = BCrypt::Password.create(
+                           [hash[:password], salt].flatten.join,
+                           cost: ArchiveConfig.BCRYPT_COST || 14
+                         )
 
     user.update(
       password_salt: salt,
@@ -44,8 +51,13 @@ Given /the following users exist with SHA-512 encrypted passwords/ do |table|
     user.activate
     user.pseuds.first.add_to_autocomplete
 
-    salt = Authlogic::Random.friendly_token
-    encrypted_password = Authlogic::CryptoProviders::Sha512.encrypt(hash[:password], salt)
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::Sha512.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = [hash[:password], salt].flatten.join
+    20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
 
     user.update(
       password_salt: salt,

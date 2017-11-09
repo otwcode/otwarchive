@@ -19,7 +19,11 @@ module BackwardsCompatiblePasswordDecryptor
       # This is the backwards compatibility with what we used to authenticate
       # with bcrypt and authlogic.
       # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
-      if Authlogic::CryptoProviders::BCrypt.matches?(encrypted_password, [password, password_salt].compact)
+
+
+      # if Authlogic::CryptoProviders::BCrypt.matches?(encrypted_password, [password, password_salt].compact)
+      # same as
+      if BCrypt::Password.new(encrypted_password) == [password, password_salt].flatten.join
         # I am commenting the following line so that if we need to roll back the
         # migration because of reasons the authentication would still work.
         # self.password = password
