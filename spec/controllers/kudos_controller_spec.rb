@@ -7,7 +7,7 @@ describe KudosController do
   include RedirectExpectationHelper
 
   describe 'create' do
-    context "when regular work is posted" do
+    context "when a regular work is posted" do
       let(:user) { create(:user) }
       let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
 
@@ -29,7 +29,7 @@ describe KudosController do
       end
     end
 
-    context "when restricted work is posted" do
+    context "when a restricted work is posted" do
       let!(:work) { create(:restricted_work) }
 
       it 'rejects guests' do
