@@ -134,7 +134,7 @@ describe InviteRequestsController do
           allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
           delete :destroy, params: { id: invite_request.id, format: :json }
           parsed_body = JSON.parse(response.body, symbolize_names: true)
-          expect(parsed_body[:item_error_message]).to eq("Request could not be removed. Please try again.")
+          expect(parsed_body[:errors]).to eq("Request could not be removed. Please try again.")
         end
       end
     end
