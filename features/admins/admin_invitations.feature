@@ -350,3 +350,15 @@ Feature: Admin Actions to Manage Invitations
    When I fill in "invitation_invitee_email" with "oldman@ds9.com"
      And I press "Update Invitation"
    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
+
+  Scenario: An admin can delete an invitation
+    Given an invitation for "test@a.com" exists
+      And an invitation for "test@a.com" exists
+      And I am logged in as an admin
+    When I follow "Invite New Users"
+      And I fill in "track_invitation_invitee_email" with "test@a.com"
+      And I press "Go"
+    Then I should see "Delete"
+    When I follow "Delete"
+    Then I should see "Invitation successfully destroyed"
+      And I should be on the invite new users page

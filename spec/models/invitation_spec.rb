@@ -18,7 +18,7 @@ describe Invitation, :ready do
     context "Create Invite without email" do
 
       let(:user) {build(:user)}
-      let(:invite) {build(:invitation, invitee_email: user.email)}
+      let(:invite) {build(:invitation, invitee_email: nil)}
       it "is created with an invitation token" do
         expect(invite.save).to be_truthy
         expect(invite.token).not_to be_nil
@@ -54,7 +54,6 @@ describe Invitation, :ready do
   end
 
   describe "Update" do
-
 
     context "Update Invitation for existing user" do
 

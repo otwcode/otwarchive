@@ -53,6 +53,8 @@ module NavigationHelpers
       new_user_session_path
     when /^account creation page$/i
       new_user_path
+    when /^the invite new users page$/i
+      admin_invitations_path
     when /^invite requests page$/i
       invite_requests_path
     when /^the manage invite queue page$/i

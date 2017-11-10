@@ -87,6 +87,43 @@ Feature: Invite requests
       And I should see how long I have to activate my account
       And I should see "If you don't hear from us within 24 hours"
 
+  Scenario: A user can't send an invite with an empty email
+    Given invitations are required
+      And I am logged in as "user1"
+      And I request some invites
+      And an admin grants the request
+      And I try to invite a friend from my user page
+    When all emails have been delivered
+      And I press "Send Invitation"
+    Then 0 email should be delivered
+      And I should see "Please enter an email address."
+
+  Scenario: A user can't send an invite with an invalid email
+    Given invitations are required
+      And I am logged in as "user1"
+      And I request some invites
+      And an admin grants the request
+      And I try to invite a friend from my user page
+    When all emails have been delivered
+      And I fill in "Email address" with "aaa"
+      And I press "Send Invitation"
+    Then 0 email should be delivered
+
+  Scenario: A user can't update an invalid invite with an empty email
+    Given invitations are required
+      And I am logged in as "user1"
+      And I request some invites
+      And an admin grants the request
+      And I try to invite a friend from my user page
+    When all emails have been delivered
+      And I fill in "Email address" with "aaa"
+      And I press "Send Invitation"
+    Then 0 email should be delivered
+    When I fill in "invitation_invitee_email" with ""
+      And I press "Update Invitation"
+    Then 0 email should be delivered
+      And I should see "Please enter an email address."
+
   Scenario: Banned users cannot access their invitations page
 
     Given I am logged in as a banned user
@@ -94,7 +131,7 @@ Feature: Invite requests
     Then I should be on my user page
     And I should see "Your account has been banned."
 
-  Scenario:  A user can manage their invitations
+  Scenario: A user can manage their invitations
 
     Given I am logged in as "user1"
       And "user1" has "5" invitations

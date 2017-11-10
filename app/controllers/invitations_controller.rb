@@ -57,7 +57,7 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.find(params[:id])
     @invitation.attributes = invitation_params
 
-    if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
+    if @invitation.invitee_email_changed? && !@invitation.invitee_email.blank? && @invitation.update_attributes(invitation_params)
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
         redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)
@@ -65,7 +65,7 @@ class InvitationsController < ApplicationController
         redirect_to([@user, @invitation])
       end
     else
-      flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
+      flash.now[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
       render action: "show"
     end
   end
