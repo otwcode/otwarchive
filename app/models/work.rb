@@ -69,7 +69,8 @@ class Work < ApplicationRecord
     counter = self.build_stat_counter
     counter.save
   end
-
+  # moderation
+  has_one :moderated_work, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -1386,16 +1387,19 @@ class Work < ApplicationRecord
     self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
+    ModeratedWork.register(self) if spam?
   end
 
   def mark_as_spam!
     update_attribute(:spam, true)
+    ModeratedWork.mark_reviewed(self)
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update_attribute(:spam, false)
+    ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end

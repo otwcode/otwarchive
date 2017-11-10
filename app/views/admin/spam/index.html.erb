@@ -1,0 +1,40 @@
+<h1>Works marked as spam</h1>
+
+<%= form_tag "/admin/spam/bulk_update", method: :post do %>
+<fieldset>
+<%= check_all_none("Select All As Approved", "Select None As Approved", "ham") %>
+<%= check_all_none("Select All As Spam", "Select None As Spam", "spam") %>
+<%= submit_button %>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Creator</th>
+      <th>Revised At</th>
+      <th>Mark Reviewed</th>
+      <th>Mark As Not Spam</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @works.each do |work| %>
+      <tr>
+        <td>
+          <%= link_to work.title, work_path(id: work.work_id) %>
+        </td>
+        <td><%= work.admin_user_links %></td>
+        <td><%= work.revised_at %></td>
+        <td>
+          <%= check_box_tag 'spam[]', work.id, nil, id: "spam_#{work.id}" %>
+          <%= label_tag "spam_#{work.id}", "Spam" %>
+        </td>
+        <td>
+          <%= check_box_tag 'ham[]', work.id, nil, id: "ham_#{work.id}" %>
+          <%= label_tag "ham_#{work.id}", "Not Spam" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= submit_button %>
+</fieldset>
+<% end %>
