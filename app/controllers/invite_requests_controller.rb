@@ -56,7 +56,7 @@ class InviteRequestsController < ApplicationController
     if @invite_request.destroy
       success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
       respond_to do |format|
-        format.html { redirect_to request.referer || manage_invite_requests_path(page: params[:page]), notice: success_message }
+        format.html { redirect_to manage_invite_requests_path(page: params[:page]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
       end
     else
@@ -64,7 +64,7 @@ class InviteRequestsController < ApplicationController
       respond_to do |format|
         format.html do
           flash.keep
-          redirect_to request.referer || manage_invite_requests_path(page: params[:page]), flash: { error: error_message }
+          redirect_to manage_invite_requests_path(page: params[:page]), flash: { error: error_message }
         end
         format.json { render json: { errors: error_message }, status: :unprocessable_entity }
       end
