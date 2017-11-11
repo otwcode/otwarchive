@@ -1,10 +1,15 @@
 <% # expects local variable f %>
+<% f = nil if local_assigns[:f].nil? %>
 <dt class="language">
-  <%= f.label :language_id, ts('Choose a language') %>
+  <%= work_language_label(f) %>
   <%= link_to_help "languages-help" %>
 </dt>
 <dd class="language">
-  <select id="work_language_id" name="work[language_id]">
+  <% if f.nil? %>
+    <select id="language_id" name="language_id">
+  <% else %>
+    <select id="work_language_id" name="work[language_id]">
+  <% end %>
     <%= options_from_collection_for_select(Language.all.order(:short), :id, :name,
       @work.language_id || Language.default.id) %>
   </select>

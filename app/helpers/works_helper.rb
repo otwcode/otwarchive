@@ -187,4 +187,10 @@ module WorksHelper
   def all_coauthor_skins
     WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
   end
+
+  def work_language_label(work)
+    text = ts('Choose a language')
+    functor = work.nil? ? method(:label_tag) : work.method(:label)
+    functor.call :language_id, text
+  end
 end

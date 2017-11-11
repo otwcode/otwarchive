@@ -25,10 +25,12 @@ Feature: Import Works
     Then I should see "Untitled Imported Work"
 
   Scenario: With override disabled and tag detection enabled, tags should be detected
+    Given I have loaded the "languages" fixture
     When I start importing "http://import-site-with-tags" with a mock website
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
+      And I select "Deutsch" from "Choose a language"
       And I check "M/M"
       And I fill in "Relationships" with "Adam/Kris"
       And I fill in "Characters" with "Adam Lambert, Kris Allen"
@@ -40,6 +42,7 @@ Feature: Import Works
       And I should see "Explicit"
       And I should see "Archive Warning: Underage"
       And I should see "Fandom: Detected Fandom"
+      And I should see "Language: Deutsch"
       And I should see "Category: M/M"
       And I should see "Relationship: Detected 1/Detected 2"
       And I should see "Characters: Detected 1Detected 2"
@@ -49,12 +52,14 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: With override and tag detection enabled, provided tags should be used when tags are entered
+    Given I have loaded the "languages" fixture
     When I start importing "http://import-site-with-tags" with a mock website
       And I check "override_tags"
       And I choose "detect_tags_true"
       And I select "Mature" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
+      And I select "Deutsch" from "Choose a language"
       And I check "F/M"
       And I fill in "Relationships" with "Adam/Kris"
       And I fill in "Characters" with "Adam Lambert, Kris Allen"
@@ -66,6 +71,7 @@ Feature: Import Works
       And I should see "Rating: Mature"
       And I should see "Archive Warning: No Archive Warnings"
       And I should see "Fandom: Idol RPF"
+      And I should see "Language: Deutsch"
       And I should see "Category: F/M"
       And I should see "Relationship: Adam/Kris"
       And I should see "Characters: Adam LambertKris Allen"
@@ -75,10 +81,12 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: With override and tag detection enabled, both provided and detected tags should be used when not all tags are entered
+    Given I have loaded the "languages" fixture
     When I start importing "http://import-site-with-tags" with a mock website
     And I check "override_tags"
     And I choose "detect_tags_true"
     And I select "Mature" from "Rating"
+    And I select "Deutsch" from "Choose a language"
     And I check "No Archive Warnings Apply"
     And I fill in "Characters" with "Adam Lambert, Kris Allen"
     And I fill in "Additional Tags" with "kinkmeme"
@@ -89,6 +97,7 @@ Feature: Import Works
     And I should see "Rating: Mature"
     And I should see "Archive Warning: No Archive Warnings"
     And I should see "Fandom: Detected Fandom"
+    And I should see "Language: Deutsch"
     And I should see "Relationship: Detected 1/Detected 2"
     And I should see "Characters: Adam LambertKris Allen"
     And I should see "Additional Tags: kinkmeme"
@@ -98,6 +107,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
+    Given I have loaded the "languages" fixture
     When I start importing "http://import-site-with-tags" with a mock website
       And I check "override_tags"
       And I choose "detect_tags_false"
@@ -106,6 +116,7 @@ Feature: Import Works
       And I should see "Rating: Not Rated"
       And I should see "Archive Warning: Creator Chose Not To Use Archive Warnings"
       And I should see "Fandom: No Fandom"
+      And I should see "Language: English"
       And I should not see "Relationship:"
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
