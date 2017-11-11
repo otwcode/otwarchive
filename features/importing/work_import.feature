@@ -110,6 +110,12 @@ Feature: Import Works
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
 
+  Scenario: Admin should see IP Address on imported work
+    Given I import "http://import-site-with-tags" with a mock website
+    When I am logged in as an admin
+      And I go to the "Detected Title" work page
+    Then I should see "IP Address"
+
   Scenario: Importing multiple works with backdating
     When I import the urls
         """
