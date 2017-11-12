@@ -54,11 +54,21 @@ class InviteRequestsController < ApplicationController
   def destroy
     @invite_request = InviteRequest.find(params[:id])
     if @invite_request.destroy
-      flash[:notice] = "Request was removed from the queue."
+      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
+      respond_to do |format|
+        format.html { redirect_to manage_invite_requests_path(page: params[:page]), notice: success_message }
+        format.json { render json: { item_success_message: success_message }, status: :ok }
+      end
     else
-      flash[:error] = "Request could not be removed. Please try again."
+      error_message = ts("Request could not be removed. Please try again.")
+      respond_to do |format|
+        format.html do
+          flash.keep
+          redirect_to manage_invite_requests_path(page: params[:page]), flash: { error: error_message }
+        end
+        format.json { render json: { errors: error_message }, status: :unprocessable_entity }
+      end
     end
-    redirect_to manage_invite_requests_path(page: params[:page])
   end
 
   def status

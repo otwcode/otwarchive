@@ -95,28 +95,47 @@ describe InviteRequestsController do
 
       before { fake_login_admin(admin) }
 
-      it "redirects to manage with notice" do
-        delete :destroy, params: { id: invite_request.id }
-        it_redirects_to_with_notice(manage_invite_requests_path, "Request was removed from the queue.")
+      context "when format is HTML" do
+        it "redirects to manage with notice" do
+          delete :destroy, params: { id: invite_request.id }
+          it_redirects_to_with_notice(manage_invite_requests_path, "Request for #{invite_request.email} was removed from the queue.")
+        end
+
+        it "redirects to manage at a specified page" do
+          page = 45_789
+          delete :destroy, params: { id: invite_request.id, page: page }
+          it_redirects_to_with_notice(manage_invite_requests_path(page: page), "Request for #{invite_request.email} was removed from the queue.")
+        end
+
+        it "redirects to manage with error when deletion fails" do
+          allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
+          delete :destroy, params: { id: invite_request.id }
+          it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
+        end
+
+        xit "redirects to manage with error when request cannot be found" do
+          # TODO: AO3-4971
+          invite_request.destroy
+          delete :destroy, params: { id: invite_request.id }
+          # it_redirects_to_with_error(manage_invite_requests_path, "?")
+        end
       end
 
-      it "redirects to manage at a specified page" do
-        page = 45_789
-        delete :destroy, params: { id: invite_request.id, page: page }
-        it_redirects_to_with_notice(manage_invite_requests_path(page: page), "Request was removed from the queue.")
-      end
+      context "when format is JSON" do
+        it "deletes request and responds with success status and message" do
+          delete :destroy, params: { id: invite_request.id, format: :json }
+          parsed_body = JSON.parse(response.body, symbolize_names: true)
+          expect(parsed_body[:item_success_message]).to eq("Request for #{invite_request.email} was removed from the queue.")
+          expect(response).to have_http_status(:success)
+          expect { invite_request.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
 
-      it "redirects to manage with error when deletion fails" do
-        allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
-        delete :destroy, params: { id: invite_request.id }
-        it_redirects_to_with_error(manage_invite_requests_path, "Request could not be removed. Please try again.")
-      end
-
-      xit "redirects to manage with error when request cannot be found" do
-        # TODO: AO3-4971
-        invite_request.destroy
-        delete :destroy, params: { id: invite_request.id }
-        # it_redirects_to_with_error(manage_invite_requests_path, "?")
+        it "fails with an error" do
+          allow_any_instance_of(InviteRequest).to receive(:destroy) { false }
+          delete :destroy, params: { id: invite_request.id, format: :json }
+          parsed_body = JSON.parse(response.body, symbolize_names: true)
+          expect(parsed_body[:errors]).to eq("Request could not be removed. Please try again.")
+        end
       end
     end
   end
