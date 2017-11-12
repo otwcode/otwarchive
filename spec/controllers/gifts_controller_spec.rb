@@ -13,5 +13,11 @@ describe GiftsController do
       post :toggle_rejected, params: { id: gift.id }
       expect(flash[:error]).to include("Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
+
+    it "should reject if the gift's recipient is not logged on" do
+      fake_login
+      post :toggle_rejected, params: { id: gift.id }
+      expect(flash[:error]).to include("Sorry, you don't have permission to access the page you were trying to reach.")
+    end
   end
 end
