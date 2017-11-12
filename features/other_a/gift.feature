@@ -12,9 +12,50 @@ Feature: Create Gifts
       | giftee1    | something   | giftee1@foo.com  |
       | giftee2    | something   | giftee2@foo.com  |
       | associate  | something   | associate@foo.com |
+      And "giftee1" has the pseud "g1"
       And I am logged in as "gifter" with password "something"
       And I set up the draft "GiftStory1"
 
+  Scenario: Gifts page without parameters should return error
+    When I go to the gifts page
+    Then I should be on the home page
+      And I should see "Whose gifts did you want to see?"
+
+  Scenario: Gifts page for recipient should show recipient's gifts
+    When I give the work to "giftee1"
+      And I press "Post Without Preview"
+      And I go to the gifts page for the recipient giftee1
+    Then I should see "GiftStory1 by gifter for giftee1"
+
+  Scenario: Gifts page for recipient when logged out should show recipient's gifts if visible to all
+    When I give the work to "giftee1"
+      And I press "Post Without Preview"
+      And I set up the draft "GiftStory2"
+      And I give the work to "giftee1"
+      And I lock the work
+      And I press "Post Without Preview"
+      And I log out
+      And I go to the gifts page for the recipient giftee1
+    Then I should see "GiftStory1 by gifter for giftee1"
+      And I should not see "GiftStory2 by gifter for giftee1"
+
+  Scenario: Gifts page for pseud recipient should show pseud's gifts
+    Given I give the work to "g1"
+      And I press "Post Without Preview"
+    When I go to the gifts page for the recipient g1
+    Then I should see "GiftStory1 by gifter for g1"
+
+  Scenario: Gifts page for recipient when logged out should show gifts visible to all
+    When I give the work to "g1"
+      And I press "Post Without Preview"
+      And I set up the draft "GiftStory2"
+      And I give the work to "g1"
+      And I lock the work
+      And I press "Post Without Preview"
+      And I log out
+    When I go to the gifts page for the recipient g1
+    Then I should see "GiftStory1 by gifter for g1"
+      And I should not see "GiftStory2 by gifter for g1"
 
   Scenario: Giving a work as a gift when posting directly
 
