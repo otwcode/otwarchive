@@ -52,9 +52,13 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
-    @invite_request = InviteRequest.find(params[:id])
-    if @invite_request.destroy
-      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
+    @invite_request = InviteRequest.find_by(params[:id])
+    if @invite_request.nil? || @invite_request.destroy
+      success_message = if @invite_request.nil?
+                          ts("Request was removed from the queue.")
+                        else
+                          ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
+                        end
       respond_to do |format|
         format.html { redirect_to manage_invite_requests_path(page: params[:page]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
