@@ -81,8 +81,6 @@ describe WorksController do
     it "should display an error if the current user is not the owner of the specified work" do
       random_work = create(:work, posted: false)
       put :post_draft, params: { id: random_work.id }
-      # There is code to return a different message in the action, but it is unreachable using a web request
-      # as the application_controller redirects the user first
       expect(flash[:error]).to start_with "Sorry, you don't have permission to access"
     end
 

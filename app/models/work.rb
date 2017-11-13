@@ -1323,7 +1323,7 @@ class Work < ApplicationRecord
 
   def self.collected_without_filters(user, options)
     works = Work.written_by_id([user.id])
-    works = works.join(:collection_items)
+    works = works.joins(:collection_items)
     unless User.current_user == user
       works = works.where(in_anon_collection: false)
       works = works.posted

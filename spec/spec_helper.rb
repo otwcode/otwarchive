@@ -117,6 +117,18 @@ shared_examples_for "multipart email" do
   end
 end
 
+shared_context "disable_filtering" do
+  before do
+    allow(controller).to receive(:fetch_admin_settings).and_return(true)
+    admin_settings = AdminSetting.new(disable_filtering: true)
+    controller.instance_variable_set("@admin_settings", admin_settings)
+  end
+
+  after do
+    allow(controller).to receive(:fetch_admin_settings).and_call_original
+  end
+end
+
 def create_archivist
   user = create(:user)
   user.roles << Role.create(name: "archivist")

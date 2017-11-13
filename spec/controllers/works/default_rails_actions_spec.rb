@@ -191,6 +191,27 @@ describe WorksController do
       expect(flash[:error]).to eq "You're not allowed to use that pseud."
     end
 
+    it "renders new if edit is pressed" do
+      work_attributes = attributes_for(:work)
+      post :create, params: { work: work_attributes, edit_button: true }
+      expect(response).to render_template("new")
+    end
+
+    context "cancel button is pressed" do
+      before do
+        work_attributes = attributes_for(:work)
+        post :create, params: { work: work_attributes, cancel_button: true }
+      end
+
+      it "sets a notice in flash" do
+        expect(flash[:notice]).to eq('New work posting canceled.')
+      end
+
+      it "redirects to user page" do
+        expect(response).to redirect_to(@user)
+      end
+    end
+
     it "renders the co-author view if a work has invalid pseuds" do
       allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
       work_attributes = attributes_for(:work)
@@ -288,14 +309,11 @@ describe WorksController do
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        it "should show results when filters are disabled" do
-          allow(controller).to receive(:fetch_admin_settings).and_return(true)
-          admin_settings = AdminSetting.new(disable_filtering: true)
-          controller.instance_variable_set("@admin_settings", admin_settings)
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works)).to include(@work)
-
-          allow(controller).to receive(:fetch_admin_settings).and_call_original
+        include_context "disable_filtering" do
+          it "should show results when filters are disabled" do
+            get :index, params: { tag_id: @fandom.name }
+            expect(assigns(:works)).to include(@work)
+          end
         end
 
         context "with restricted works" do
@@ -416,6 +434,14 @@ describe WorksController do
         get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
         expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
         expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
+      end
+
+      include_context "disable_filtering" do
+        it "should show results when filters are disabled" do
+          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
+          expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
+          expect(assigns(:works)).to include(@unrestricted_work_in_collection)
+        end
       end
     end
 
