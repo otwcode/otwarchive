@@ -39,6 +39,8 @@ Feature: Edit Multiple Works
       And I should see "Edit Multiple Works"
       And I should see "All"
       And I should see "None"
+      And I should not see "Pristine"
+      And I should not see "Naruto"
     When I select "Glorious" for editing
       And I select "Excellent" for editing
       And I press "Edit"
@@ -46,7 +48,7 @@ Feature: Edit Multiple Works
       And I should see "Glorious"
       And I should see "Excellent"
     When I set the fandom to "Random"
-     And I press "Update All Works"
+      And I press "Update All Works"
     Then I should see "Your edits were put through"
       And I should see "Random"
       And I should not see "SGA"

@@ -251,6 +251,42 @@ describe WorksController, work_search: true do
     end
   end
 
+  describe "edit" do
+    let(:user) { create(:user) }
+    let(:work) {
+      create(:work, authors: [user.default_pseud], posted: true)
+    }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    it "redirects to orphan work page if only author is being removed" do
+      get :edit, params: { id: work.id, remove: "me" }
+      expect(response).to redirect_to controller: 'orphans', action: 'new', work_id: work.id
+    end
+  end
+
+  context "destroy" do
+    let(:user) { create(:user) }
+    let!(:work) {
+      create(:work, authors: [user.default_pseud], posted: true)
+    }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    it "sets flash message in case of error" do
+      allow_any_instance_of(Work).to receive(:destroy).and_raise("Cannot save")
+
+      delete :destroy, params: { id: work }
+      expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
+
+      allow_any_instance_of(Work).to receive(:destroy).and_call_original
+    end
+  end
+
   describe "create" do
     let(:user) { create(:user) }
 
@@ -284,6 +320,32 @@ describe WorksController, work_search: true do
       work_attributes = attributes_for(:work).except(:posted)
       work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "*impossible*" }
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Invalid creator: Could not find a pseud *impossible*."
+    end
+
+    xit "renders new if edit is pressed" do
+      work_attributes = attributes_for(:work)
+      post :create, params: { work: work_attributes, edit_button: true }
+      expect(response).to render_template("new")
+    end
+
+    context "cancel button is pressed" do
+      before do
+        work_attributes = attributes_for(:work)
+        post :create, params: { work: work_attributes, cancel_button: true }
+      end
+
+      it "redirects to user page with notice" do
+        it_redirects_to_with_notice(@user, "New work posting canceled.")
+      end
+    end
+
+    it "renders the co-author view if a work has invalid pseuds" do
+      allow_any_instance_of(Work).to receive(:invalid_pseuds).and_return(@user.pseuds.first)
+      work_attributes = attributes_for(:work)
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
@@ -446,6 +508,10 @@ describe WorksController, work_search: true do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
+      after do
+        allow(controller).to receive(:use_caching?).and_call_original
+      end
+
       it "returns the result with different works the second time" do
         get :index
         expect(assigns(:works)).to include(@work)
@@ -458,6 +524,10 @@ describe WorksController, work_search: true do
     describe "with caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
+      end
+
+      after do
+        allow(controller).to receive(:use_caching?).and_call_original
       end
 
       context "with NO owner tag" do
@@ -487,6 +557,23 @@ describe WorksController, work_search: true do
         it "shows different results on second page" do
           get :index, params: { tag_id: @fandom.name, page: 2 }
           expect(assigns(:works).items).not_to include(@work)
+        end
+
+        context "when disabling filtering" do
+          before do
+            allow(controller).to receive(:fetch_admin_settings).and_return(true)
+            admin_settings = AdminSetting.new(disable_filtering: true)
+            controller.instance_variable_set("@admin_settings", admin_settings)
+          end
+
+          it "should show results when filters are disabled" do
+            get :index, params: { tag_id: @fandom.name }
+            expect(assigns(:works)).to include(@work)
+          end
+
+          after do
+            allow(controller).to receive(:fetch_admin_settings).and_call_original
+          end
         end
 
         context "with restricted works" do
@@ -621,7 +708,7 @@ describe WorksController, work_search: true do
   describe "update" do
     let(:update_user) { create(:user) }
     let(:update_work) {
-      work = create(:work, authors: [update_user.default_pseud])
+      work = create(:work, authors: [update_user.default_pseud], posted: true)
       create(:chapter, work: work)
       work
     }
@@ -675,6 +762,40 @@ describe WorksController, work_search: true do
       expect(update_work.pseuds.reload).to contain_exactly(new_pseud)
       update_work.chapters.reload.each do |c|
         expect(c.pseuds.reload).to contain_exactly(new_pseud)
+      end
+    end
+
+    it "displays chapter errors if chapter is invalid" do
+      allow_any_instance_of(Chapter).to receive(:save).and_return(false)
+      chapter_error = ["Test Error"]
+      allow_any_instance_of(Chapter).to receive(:errors).and_return(chapter_error)
+      allow_any_instance_of(Chapter).to receive(:valid?).and_return(false)
+
+      attrs = { title: "New Work Title" }
+      put :update, params: { id: update_work.id, work: attrs }
+      expect(assigns(:work).errors[:base]).to eq(chapter_error)
+
+      allow_any_instance_of(Chapter).to receive(:valid?).and_call_original
+      allow_any_instance_of(Chapter).to receive(:errors).and_call_original
+      allow_any_instance_of(Chapter).to receive(:save).and_call_original
+    end
+
+    context "where the coauthor is being updated" do
+      let(:new_coauthor) { create(:user) }
+      let(:params) do
+        {
+          work: { title: "New title" },
+          pseud: { byline: new_coauthor.login },
+          id: update_work.id
+        }
+      end
+      it "should update coauthors for each chapter when the work is updated" do
+        put :update, params: params
+        updated_work = Work.find(update_work.id)
+        expect(updated_work.pseuds).to include new_coauthor.default_pseud
+        updated_work.chapters.each do |c|
+          expect(c.pseuds).to include new_coauthor.default_pseud
+        end
       end
     end
 
