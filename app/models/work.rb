@@ -1084,6 +1084,74 @@ class Work < ApplicationRecord
     where("series.id = ?", series.id)
   end
 
+  scope :for_recipient, lambda {|recipient|
+    select("DISTINCT works.*").
+    joins(:gifts).
+    where('gifts.recipient_name = ?', recipient)
+  }
+
+  # shouldn't really use a named scope for this, but I'm afraid to try
+  # to change the way work filtering works
+  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
+
+  # returns an array, must come last
+  # TODO: if you know how to turn this into a scope, please do!
+  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
+  def self.no_tags(tag_category, options = {})
+    tags = tag_category.tags
+    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uniq
+  end
+
+  # Used when admins have disabled filtering
+  def self.list_without_filters(owner, options)
+    works = case owner.class.to_s
+            when 'Pseud'
+              works = Work.written_by_id([owner.id])
+            when 'User'
+              works = Work.owned_by(owner)
+            when 'Collection'
+              works = Work.in_collection(owner)
+            else
+              if owner.is_a?(Tag)
+                works = owner.filtered_works
+              end
+            end
+
+    # Need to support user + fandom and collection + tag pages
+    if options[:fandom_id] || options[:filter_ids]
+      id = options[:fandom_id] || options[:filter_ids].first
+      tag = Tag.find_by(id: id)
+      if tag.present?
+        works = works.with_filter(tag)
+      end
+    end
+
+    if %w(Pseud User).include?(owner.class.to_s)
+      works = works.where(in_anon_collection: false)
+    end
+    unless owner.is_a?(Collection)
+      works = works.revealed
+    end
+    if User.current_user.nil? || User.current_user == :false
+      works = works.unrestricted
+    end
+
+    works = works.posted
+    works = works.order("revised_at DESC")
+    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+  end
+
+  def self.collected_without_filters(user, options)
+    works = Work.written_by_id([user.id])
+    works = works.joins(:collection_items)
+    unless User.current_user == user
+      works = works.where(in_anon_collection: false)
+      works = works.posted
+    end
+    works = works.order("revised_at DESC")
+    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+  end
+
   ########################################################################
   # SORTING
   ########################################################################

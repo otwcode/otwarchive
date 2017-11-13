@@ -3,9 +3,9 @@
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
-  before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share]
+  before_action :load_owner, only: [:index, :show_multiple]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share, :reindex]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share, :reindex]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
@@ -613,12 +613,6 @@ class WorksController < ApplicationController
 
   def post_draft
     @user = current_user
-    @work = Work.find(params[:id])
-
-    unless @user.is_author_of?(@work)
-      flash[:error] = ts('You can only post your own works.')
-      redirect_to(current_user) && return
-    end
 
     if @work.posted
       flash[:error] = ts('That work is already posted. Do you want to edit it instead?')
@@ -647,8 +641,8 @@ class WorksController < ApplicationController
   def show_multiple
     @user = current_user
 
-    if params[:pseud_id]
-      @works = Work.joins(:pseuds).where(pseud_id: params[:pseud_id])
+    if @pseud
+      @works = Work.joins(:pseuds).where("pseuds.id = ?", @pseud.id)
     else
       @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id)
     end
