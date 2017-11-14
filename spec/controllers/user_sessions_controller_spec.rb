@@ -3,8 +3,7 @@
 require 'spec_helper'
 
 describe UserSessionsController do
-
-  let(:user) { create(:user, activated_at: Time.new(2007,1,1)) }
+  let(:user) { create(:user, activated_at: Time.new(2007, 1, 1)) }
 
   context "create" do
     context "after failed to login more than consecutive login limit" do
