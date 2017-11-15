@@ -22,8 +22,16 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:comment_notice] = ts("Thank you for leaving kudos!")
+          commentable = @kudo.commentable
+          redirect_path = root_path
 
-          redirect_to request.referer || root_path and return
+          if commentable.is_a?(Work)
+            redirect_path = work_path(commentable.id)
+          elsif commentable.is_a?(Chapter)
+            redirect_path = work_chapter_path(work_id: commentable.work.id, id: commentable.id)
+          end
+
+          redirect_to request.referer || redirect_path and return
         end
 
         format.js do
@@ -44,7 +52,7 @@ class KudosController < ApplicationController
           if @kudo && @kudo.creator_of_work?
             error_message = "You can't leave kudos on your own work."
           end
-          if !current_user.present? && commentable.restricted?
+          if !current_user.present? && !commentable.nil? && commentable.restricted?
             error_message = "You can't leave guest kudos on a restricted work."
           end
           flash[:comment_error] = ts(error_message)
