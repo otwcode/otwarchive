@@ -112,4 +112,33 @@ describe User, :ready do
       end
     end
   end
+
+  describe "search_multiple_by_email" do
+    let(:user_bundle) { create_list(:user, 5) }
+
+    it "removes exact duplicates from the list" do
+      emails = user_bundle.map(&:email) << user_bundle.first.email
+      expect(emails.size).to be > user_bundle.size
+      expect(User.search_multiple_by_email(emails).first.size).to eq(emails.size - 1)
+    end
+
+    it "ignores case differences" do
+      emails = user_bundle.map(&:email) << user_bundle.first.email.upcase
+      expect(emails.size).to be > user_bundle.size
+      expect(User.search_multiple_by_email(emails).first.size).to eq(emails.size - 1)
+    end
+
+    it "returns found users, not found emails and the number of duplicates" do
+      more_emails = [ user_bundle.second.email, user_bundle.first.email.upcase, "unknown@ao3.org", "UnKnown@AO3.org", "nobody@example.com"]
+      emails = user_bundle.map(&:email) + more_emails
+
+      found, not_found, duplicates = User.search_multiple_by_email(emails)
+
+      expect(not_found).to eq([ "unknown@ao3.org", "nobody@example.com" ])
+      expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
+      expect(duplicates).to eq(3)
+    end
+  end
+
+
 end

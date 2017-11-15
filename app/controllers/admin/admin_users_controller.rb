@@ -14,12 +14,15 @@ class Admin::AdminUsersController < ApplicationController
   def bulk_search
     @emails = params[:emails].split if params[:emails]
     unless @emails.nil? || @emails.blank?
-      all_users, @not_found = User.search_multiple_by_email(@emails)
-      @users = all_users.paginate(page: params[:page] || 1)
+      found_users, @not_found_emails, @duplicates = User.search_multiple_by_email(@emails)
+      
+      # Cheat to use the shared paginated view even though will_paginate doesn't support POST requests
+      @users = found_users.paginate(page: 1, per_page: found_users.size)
+      
       if params[:download_button]
         header = [%w(Email Username)]
-        found = all_users.map { |u| [u.email, u.login] }
-        not_found = @not_found.map { |email| [email, ""] }
+        found = found_users.map { |u| [u.email, u.login] }
+        not_found = @not_found_emails.map { |email| [email, ""] }
         send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime("%Y-%m-%d-%H%M")}.csv")
         flash.now[:notice] = ts("Downloaded CSV")
       end

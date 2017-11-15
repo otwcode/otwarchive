@@ -292,10 +292,17 @@ class User < ApplicationRecord
   private_class_method :filter_by_name_or_email
 
   def self.search_multiple_by_email(emails = [])
-    users = User.where(email: emails)
-    found_emails = users.map(&:email)
-    not_found = emails - found_emails
-    [users, not_found]
+    # Normalise and dedupe emails
+    all_emails = emails.map(&:downcase)
+    unique_emails = all_emails.uniq
+    # Find users and their email addresses
+    users = User.where(email: unique_emails)
+    found_emails = users.map(&:email).map(&:downcase)
+    # Remove found users from the total list of unique emails and count duplicates
+    not_found = unique_emails - found_emails
+    num_duplicates = emails.size - unique_emails.size
+    
+    [users, not_found, num_duplicates]
   end
 
   ### AUTHENTICATION AND PASSWORDS

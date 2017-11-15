@@ -30,12 +30,13 @@
     </fieldset>
   <% end %>
 
-  <% if @not_found || @users %>
-    <p><%= ts("#{@emails.size} emails searched. #{@emails.size - @not_found.size} found. #{@not_found.size} not found.") %></p>
+  <% if @not_found_emails || @users %>
+    <p><%= ts("#{pluralize(@emails.size, "email")} entered. #{@users.size + @not_found_emails.size } searched. " + 
+              "#{@users.size} found. #{@not_found_emails.size} not found. #{pluralize(@duplicates, "duplicate")}.") %></p>
 
-    <% unless @not_found.empty? %>
+    <% unless @not_found_emails.empty? %>
       <h3 class="heading"><%= ts("Not found") %></h3>
-      <p><%= @not_found.join(",") %></p>
+      <p><%= @not_found_emails.join(", ") %></p>
     <% end %>
 
     <% if @users %>
