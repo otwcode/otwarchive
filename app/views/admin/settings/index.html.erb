@@ -28,6 +28,9 @@
     
       <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
       <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+
+      <dt><%= f.check_box :hide_spam %></dt>
+      <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
     </dl>
   </fieldset>
   

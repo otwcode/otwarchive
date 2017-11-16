@@ -196,6 +196,8 @@ class Work < ApplicationRecord
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
+  before_save :hide_spam
+
   after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
   before_destroy :before_destroy
@@ -1388,6 +1390,14 @@ class Work < ApplicationRecord
     self.spam_checked_at = Time.now
     save
     ModeratedWork.register(self) if spam?
+  end
+
+  def hide_spam
+    return unless spam?
+    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    if admin_settings.hide_spam?
+      self.hidden_by_admin = true
+    end
   end
 
   def mark_as_spam!
