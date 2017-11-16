@@ -10,7 +10,7 @@ class Admin::SpamController < ApplicationController
                   else
                     { reviewed: false, approved: false }
                   end
-    @works = ModeratedWork.where(conditions).order(:created_at)
+    @works = ModeratedWork.where(conditions).order(:created_at).page(params[:page])
   end
 
   def bulk_update

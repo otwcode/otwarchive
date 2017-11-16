@@ -69,6 +69,8 @@
   </table>
   <%= submit_button nil, ts("Update Works") %>
 <% end %>
+
+<%= will_paginate @works %>
 <!--/content-->
 
 <% content_for :footer_js do %>
