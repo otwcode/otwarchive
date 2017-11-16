@@ -158,15 +158,6 @@ When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   click_button "Create"
 end
 
-When /^I login username "([^"]*)" and password "([^"]*)" for ([0-9]*) times$/ do |login, password, n|
-  n.to_i.times do
-    step(%{I am on the home page"})
-    step(%{I fill in "User name" with "#{login}"})
-    step(%{I fill in "Password" with "#{password}"})
-    step(%{I press "Log In"})
-  end
-end
-
 When /^I fill in "([^"]*)"'s temporary password$/ do |login|
   user = User.find_by(login: login)
   fill_in "Password", with: user.activation_code
