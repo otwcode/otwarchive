@@ -174,6 +174,42 @@ describe WorksController do
     end
   end
 
+  describe "edit" do
+    let(:user) { create(:user) }
+    let(:work) {
+      create(:work, authors: [user.default_pseud], posted: true)
+    }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    it "should redirect to orphan work page if only author is being removed" do
+      get :edit, params: { id: work.id, remove: "me" }
+      expect(response).to redirect_to controller: 'orphans', action: 'new', work_id: work.id
+    end
+  end
+
+  context "destroy" do
+    let(:user) { create(:user) }
+    let!(:work) {
+      create(:work, authors: [user.default_pseud], posted: true)
+    }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    it "should set flash message in case of error" do
+      allow_any_instance_of(Work).to receive(:destroy).and_raise("Cannot save")
+
+      delete :destroy, params: { id: work }
+      expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
+
+      allow_any_instance_of(Work).to receive(:destroy).and_call_original
+    end
+  end
+
   describe "create" do
     before do
       @user = create(:user)
@@ -261,6 +297,31 @@ describe WorksController do
       expect(assigns(:works)).to include(@work)
     end
 
+    it "should redirect to tag page for noncanonical tags" do
+      @unsorted_tag = create(:unsorted_tag)
+      @work2 = create(:work, posted: true, fandom_string: @unsorted_tag.name)
+      get :index, params: { id: @work, tag_id: @unsorted_tag.name }
+      expect(response).to redirect_to(tag_path(@unsorted_tag))
+    end
+
+    it "should redirect to tags works page for noncanonical merged tags page" do
+      @noncanonical_fandom = create(:fandom, canonical: false)
+      @noncanonical_fandom.syn_string = @fandom.name
+      @noncanonical_fandom.save
+      get :index, params: { id: @work, tag_id: @noncanonical_fandom.name }
+      expect(response).to redirect_to(tag_works_path(@fandom))
+    end
+
+    it "should redirect to collection tags works page for noncanonical merged tags page" do
+      @noncanonical_fandom = create(:fandom, canonical: false)
+      @noncanonical_fandom.syn_string = @fandom.name
+      @noncanonical_fandom.save
+      @collection = FactoryGirl.create(:collection)
+      @work2 = create(:work, posted: true, collection_names: @collection.name, fandom_string: @noncanonical_fandom.name)
+      get :index, params: { id: @work, tag_id: @noncanonical_fandom.name, collection_id: @collection }
+      expect(response).to redirect_to(collection_tag_works_path(@collection, @fandom))
+    end
+
     describe "without caching" do
       before do
         allow(controller).to receive(:use_caching?).and_return(false)
@@ -335,9 +396,9 @@ describe WorksController do
   end
 
   describe "update" do
-    let(:update_user) { create(:user) }
-    let(:update_chapter) { create(:chapter) }
-    let(:update_work) {
+    let!(:update_user) { create(:user) }
+    let!(:update_chapter) { create(:chapter) }
+    let!(:update_work) {
       work = create(:work, authors: [update_user.default_pseud], posted: true)
       work.chapters << update_chapter
       work
@@ -354,6 +415,21 @@ describe WorksController do
       put :update, params: { id: update_work.id, work: attrs }
       expect(response).to render_template :edit
       allow_any_instance_of(Work).to receive(:save).and_call_original
+    end
+
+    it "should display chapter errors if chapter is invalid" do
+      allow_any_instance_of(Chapter).to receive(:save).and_return(false)
+      chapter_error = ["Test Error"]
+      allow_any_instance_of(Chapter).to receive(:errors).and_return(chapter_error)
+      allow_any_instance_of(Chapter).to receive(:valid?).and_return(false)
+
+      attrs = { title: "New Work Title" }
+      put :update, params: { id: update_work.id, work: attrs }
+      expect(assigns(:work).errors[:base]).to eq(chapter_error)
+
+      allow_any_instance_of(Chapter).to receive(:valid?).and_call_original
+      allow_any_instance_of(Chapter).to receive(:errors).and_call_original
+      allow_any_instance_of(Chapter).to receive(:save).and_call_original
     end
 
     context "where the coauthor is being updated" do

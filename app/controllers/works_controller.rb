@@ -745,7 +745,7 @@ class WorksController < ApplicationController
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(updated_work_params)
-        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
+        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(","))
       end
     end
 
@@ -954,19 +954,6 @@ class WorksController < ApplicationController
     end
   end
 
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.distinct.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect { |tag| tag.name + ', ' }.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ''
-    end
-  end
-
   def index_page_title
     if @owner.present?
       owner_name =
@@ -1005,21 +992,13 @@ class WorksController < ApplicationController
   #       what potential values `saved` has as used elsewhere (which is what is
   #       passed as `condition`) and thus the usual approach of condition=nil
   #       followed by a ||= cannot be reliably used. -@duckinator
-  def preview_mode(page_name, condition = (@work.has_required_tags? && @work.invalid_tags.blank?))
+  def preview_mode(page_name, condition = (@work.invalid_tags.blank?))
     @preview_mode = true
 
     if condition
       yield
     else
-      @work.check_for_invalid_tags unless @work.invalid_tags.blank?
-
-      if @work.fandoms.blank?
-        @work.errors.add(:base, 'Updating: Please add all required tags. Fandom is missing.')
-      elsif !@work.has_required_tags?
-        @work.errors.add(:base, 'Updating: Please add all required tags.')
-      end
-
-      render page_name
+      @work.check_for_invalid_tags
     end
   end
 
