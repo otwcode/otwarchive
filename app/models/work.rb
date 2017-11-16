@@ -197,6 +197,7 @@ class Work < ApplicationRecord
   after_update :adjust_series_restriction
 
   before_save :hide_spam
+  after_save :moderate_spam
 
   after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
@@ -1389,7 +1390,6 @@ class Work < ApplicationRecord
     self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
-    ModeratedWork.register(self) if spam?
   end
 
   def hide_spam
@@ -1398,6 +1398,10 @@ class Work < ApplicationRecord
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
+  end
+
+  def moderate_spam
+    ModeratedWork.register(self) if spam?
   end
 
   def mark_as_spam!

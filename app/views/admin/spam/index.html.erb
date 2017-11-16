@@ -7,7 +7,7 @@
 
 <!--main content-->
 <%= form_tag "/admin/spam/bulk_update", method: :post do %>
-  <%= submit_button %>
+  <%= submit_button nil, ts("Update Works") %>
   <table id="spam_works" summary="<%= ts("Titles, creators, and revision dates for works that have been automatically marked as spam, along with options to verify or correct their spam status.") %>">
     <caption><%= ts("Works Marked as Spam") %></caption>
     <thead>
@@ -67,7 +67,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= submit_button %>
+  <%= submit_button nil, ts("Update Works") %>
 <% end %>
 <!--/content-->
 
