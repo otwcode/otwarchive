@@ -198,6 +198,7 @@ class Work < ApplicationRecord
 
   before_save :hide_spam
   after_save :moderate_spam
+  after_save :notify_of_hiding
 
   after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
@@ -1416,6 +1417,13 @@ class Work < ApplicationRecord
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def notify_of_hiding
+    return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    users.each do |user|
+      UserMailer.admin_hidden_work_notification(id, user.id).deliver
+    end
   end
 
   #############################################################################
