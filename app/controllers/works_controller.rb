@@ -892,6 +892,28 @@ class WorksController < ApplicationController
 
   private
 
+  # NOTE: The reason for the gross condition=(...) thing is because I don't know
+  #       what potential values `saved` has as used elsewhere (which is what is
+  #       passed as `condition`) and thus the usual approach of condition=nil
+  #       followed by a ||= cannot be reliably used. -@duckinator
+  def preview_mode(page_name, condition = (@work.invalid_tags.blank?))
+    @preview_mode = true
+
+    if condition
+      yield
+    else
+      @work.check_for_invalid_tags
+    end
+  end
+
+  def sort_direction(sortdir)
+    if sortdir == '>' || sortdir == 'ascending'
+      'asc'
+    elsif sortdir == '<' || sortdir == 'descending'
+      'desc'
+    end
+  end
+
   def build_options(params)
     pseuds_to_apply =
       (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
