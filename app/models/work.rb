@@ -1412,7 +1412,7 @@ class Work < ApplicationRecord
   end
 
   def mark_as_ham!
-    update_attribute(:spam, false)
+    update_attributes(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
