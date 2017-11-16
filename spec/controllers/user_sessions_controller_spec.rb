@@ -10,7 +10,7 @@ describe UserSessionsController do
       before do
         max_consecutive_attempts = 2
         allow(UserSession).to receive(:consecutive_failed_logins_limit).and_return(max_consecutive_attempts)
-        (max_consecutive_attempts + 1).times do
+        (max_consecutive_attempts).times do
           post :create, params: { user_session: { login: user.login, password: "aaa" } }
         end
       end
