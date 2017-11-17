@@ -350,3 +350,19 @@ Feature: Admin Actions to Manage Invitations
    When I fill in "invitation_invitee_email" with "oldman@ds9.com"
      And I press "Update Invitation"
    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
+
+  Search: An admin can search the invitation queue
+    Given I am logged in as an admin
+      And an invitation request for "streamtv@example.com"
+      And an invitation request for "livetv@example.com"
+      And an invitation request for "clearstream@example.com"
+      And an invitation request for "stre.a.mer@example.com"
+      And an invitation request for "dreamer@example.com"
+    When I am on the manage invite queue page
+      And I fill in "#query" with "stream"
+      And I press "Search Queue"
+    Then I should see "streamtv@example.com"
+      And I should see "clearstream@example.com"
+      And I should see "stre.a.mer@example.com"
+      But I should not see "livetv@example.com"
+      And I should not see "dreamer@example.com"
