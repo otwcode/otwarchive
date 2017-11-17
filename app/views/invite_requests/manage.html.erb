@@ -39,7 +39,7 @@
           <td><%= request.position %></td>
           <td><%= request.email %></td>
           <td>
-            <%= form_tag invite_request_path(request, page: params[:page]), method: "delete", class: "ajax-remove" do |f| %>
+            <%= form_tag invite_request_path(request, page: params[:page], query: params[:query]), method: "delete", class: "ajax-remove" do |f| %>
               <%= submit_tag ts("Delete") %>
             <% end %>
           </td>
