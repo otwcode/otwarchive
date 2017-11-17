@@ -311,7 +311,13 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     # If Edit or Cancel is pressed, bail out and display relevant form
-    if params[:edit_button] || work_cannot_be_saved?
+    if params[:edit_button]
+      render :new and return
+    elsif params[:cancel_button] || work_cannot_be_saved?
+      flash[:notice] = ts('New work posting canceled.')
+      redirect_to current_user and return
+    else
+      # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       set_work_tag_error_messages
       render :new
     else
