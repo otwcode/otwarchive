@@ -54,16 +54,17 @@ hide_freeform?(@work)) %>
     <% end %>
   <% end %>
 
-  <% unless @work.parents.blank? %>
-    <dl>
-      <dt><%= ts('This work was inspired by') %></dt>
-      <dd>
-        <% parent_work_list = @work.parent_work_relationships.reject{ |wr| wr.parent.nil? } %>
-        <%= parent_work_list.map{ |rw| "#{link_to(rw.parent.title,
-               url_for(action: :show, controller: rw.parent_type.underscore.pluralize, id: rw.parent_id,
-                       only_path: false)) } #{ts('by')} #{byline(rw.parent, only_path: false)}" }.join(", ").html_safe %>
-      </dd>
-    </dl>
+  <% related_works = @work.parent_work_relationships.reject{ |wr| !wr.parent } %>
+  <% if related_works.length > 0 %>
+    <ul>
+    <% related_works.each do |work| %>
+      <li>
+        <%= ts(work.translation ? 'A translation of' : 'Inspired by') %>
+        <%= link_to work.parent.title.html_safe, work_url(work.parent) %>
+        <%= ts("by") %> <%= byline(work.parent) %>.
+      </li>
+    <% end %>
+    </ul>
   <% end %>
 
 </div>
