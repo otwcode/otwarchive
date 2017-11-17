@@ -40,6 +40,12 @@ class InviteRequestsController < ApplicationController
 
   def manage
     @invite_requests = InviteRequest.order(:position).page(params[:page])
+    if params[:query].present?
+      @invite_requests = InviteRequest.where("simplified_email LIKE ?",
+                                             "%#{params[:query]}%")
+                                      .order(:position)
+                                      .page(params[:page])
+    end
   end
 
   def reorder
@@ -83,7 +89,7 @@ class InviteRequestsController < ApplicationController
 
   def invite_request_params
     params.require(:invite_request).permit(
-      :email
+      :email, :query
     )
   end
 end
