@@ -367,7 +367,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "stre.a.mer@example.com"
       But I should not see "livetv@example.com"
       And I should not see "dreamer@example.com"
-    When I follow "Delete"
+    When I press "Delete"
     Then the "query" field should contain "stream"
       And I should not see "dreamer@example.com"
       And I should not see "livetv@example.com"
