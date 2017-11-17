@@ -298,7 +298,7 @@ class WorksController < ApplicationController
     @work.ip_address = request.remote_ip
     # If Edit or Cancel is pressed, bail out and display relevant form
     if params[:edit_button]
-      render :new && return
+      render :new and return
     elsif params[:cancel_button]
       flash[:notice] = ts('New work posting canceled.')
       redirect_to current_user and return

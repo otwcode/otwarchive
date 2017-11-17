@@ -298,33 +298,35 @@ describe WorksController do
     end
 
     it "should redirect to tag page for noncanonical tags" do
-      @unsorted_tag = create(:unsorted_tag)
-      @work2 = create(:work, posted: true, fandom_string: @unsorted_tag.name)
-      get :index, params: { id: @work, tag_id: @unsorted_tag.name }
-      expect(response).to redirect_to(tag_path(@unsorted_tag))
+      unsorted_tag = create(:unsorted_tag)
+      get :index, params: { id: @work, tag_id: unsorted_tag.name }
+      expect(response).to redirect_to(tag_path(unsorted_tag))
     end
 
     it "should redirect to tags works page for noncanonical merged tags page" do
-      @noncanonical_fandom = create(:fandom, canonical: false)
-      @noncanonical_fandom.syn_string = @fandom.name
-      @noncanonical_fandom.save
-      get :index, params: { id: @work, tag_id: @noncanonical_fandom.name }
+      noncanonical_fandom = create(:fandom, canonical: false)
+      noncanonical_fandom.syn_string = @fandom.name
+      noncanonical_fandom.save
+      get :index, params: { id: @work, tag_id: noncanonical_fandom.name }
       expect(response).to redirect_to(tag_works_path(@fandom))
     end
 
     it "should redirect to collection tags works page for noncanonical merged tags page" do
-      @noncanonical_fandom = create(:fandom, canonical: false)
-      @noncanonical_fandom.syn_string = @fandom.name
-      @noncanonical_fandom.save
-      @collection = FactoryGirl.create(:collection)
-      @work2 = create(:work, posted: true, collection_names: @collection.name, fandom_string: @noncanonical_fandom.name)
-      get :index, params: { id: @work, tag_id: @noncanonical_fandom.name, collection_id: @collection }
-      expect(response).to redirect_to(collection_tag_works_path(@collection, @fandom))
+      noncanonical_fandom = create(:fandom, canonical: false)
+      noncanonical_fandom.syn_string = @fandom.name
+      noncanonical_fandom.save
+      collection = FactoryGirl.create(:collection)
+      get :index, params: { id: @work, tag_id: noncanonical_fandom.name, collection_id: collection }
+      expect(response).to redirect_to(collection_tag_works_path(collection, @fandom))
     end
 
     describe "without caching" do
       before do
         allow(controller).to receive(:use_caching?).and_return(false)
+      end
+
+      after do
+        allow(controller).to receive(:use_caching?).and_call_original
       end
 
       it "should return the result with different works the second time" do
@@ -339,6 +341,10 @@ describe WorksController do
     describe "with caching" do
       before do
         allow(controller).to receive(:use_caching?).and_return(true)
+      end
+
+      after do
+        allow(controller).to receive(:use_caching?).and_call_original
       end
 
       context "with NO owner tag" do
@@ -370,10 +376,20 @@ describe WorksController do
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        include_context "disable_filtering" do
+        context "when disabling filtering" do
+          before do
+            allow(controller).to receive(:fetch_admin_settings).and_return(true)
+            admin_settings = AdminSetting.new(disable_filtering: true)
+            controller.instance_variable_set("@admin_settings", admin_settings)
+          end
+
           it "should show results when filters are disabled" do
             get :index, params: { tag_id: @fandom.name }
             expect(assigns(:works)).to include(@work)
+          end
+
+          after do
+            allow(controller).to receive(:fetch_admin_settings).and_call_original
           end
         end
 
@@ -512,11 +528,21 @@ describe WorksController do
         expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
       end
 
-      include_context "disable_filtering" do
-        it "should show results when filters are disabled" do
-          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
+      context "when filtering is disabled" do
+        before do
+          allow(controller).to receive(:fetch_admin_settings).and_return(true)
+          admin_settings = AdminSetting.new(disable_filtering: true)
+          controller.instance_variable_set("@admin_settings", admin_settings)
+        end
+
+        it "should show results" do
+          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom.id}" }}
           expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
           expect(assigns(:works)).to include(@unrestricted_work_in_collection)
+        end
+
+        after do
+          allow(controller).to receive(:fetch_admin_settings).and_call_original
         end
       end
     end
