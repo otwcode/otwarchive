@@ -1,0 +1,78 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Works Marked as Spam") %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<%= form_tag "/admin/spam/bulk_update", method: :post do %>
+  <%= submit_button nil, ts("Update Works") %>
+  <table id="spam_works" summary="<%= ts("Titles, creators, and revision dates for works that have been automatically marked as spam, along with options to verify or correct their spam status.") %>">
+    <caption><%= ts("Works Marked as Spam") %></caption>
+    <thead>
+      <tr>
+        <th scope="col"><%= ts("Title") %></th>
+        <th scope="col"><%= ts("Creator") %></th>
+        <th scope="col"><%= ts("Revised At") %></th>
+        <th scope="col">
+          <%= ts("Mark Reviewed") %>
+          <ul class="actions">
+            <li>
+              <button id="spam_all_select" type="button">
+                <%= ts("All") %>
+              </button>
+            </li>
+            <li>
+              <button id="spam_all_deselect" type="button">
+                <%= ts("None") %>
+              </button>
+            </li>
+          </ul>
+        </th>
+        <th scope="col">
+          <%= ts("Mark As Not Spam") %>
+          <ul class="actions">
+            <li>
+              <button id="ham_all_select" type="button">
+                <%= ts("All") %>
+              </button>
+            </li>
+            <li>
+              <button id="ham_all_deselect" type="button">
+                <%= ts("None") %>
+              </button>
+            </li>
+          </ul>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @works.each do |work| %>
+        <tr>
+          <th scope="row">
+            <%= link_to work.title, work_path(id: work.work_id) %>
+          </th>
+          <td><%= work.admin_user_links %></td>
+          <td><%= work.revised_at %></td>
+          <td>
+            <%= check_box_tag 'spam[]', work.id, nil, id: "spam_#{work.id}" %>
+            <%= label_tag "spam_#{work.id}", "Spam" %>
+          </td>
+          <td>
+            <%= check_box_tag 'ham[]', work.id, nil, id: "ham_#{work.id}" %>
+            <%= label_tag "ham_#{work.id}", "Not Spam" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= submit_button nil, ts("Update Works") %>
+<% end %>
+
+<%= will_paginate @works %>
+<!--/content-->
+
+<% content_for :footer_js do %>
+  <%= javascript_include_tag "select_all" %>
+<% end %>

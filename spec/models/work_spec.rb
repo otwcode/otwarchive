@@ -219,4 +219,29 @@ describe Work do
       expect(work.reload.complete).to be_falsey
     end
   end
+
+  describe "#hide_spam" do
+    before do
+      @admin_setting = AdminSetting.first || AdminSetting.create
+      @work = create(:posted_work)
+    end
+    context "when the admin setting is enabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, true)
+      end
+      it "automatically hides spam works" do
+        @work.update_attributes!(spam: true)
+        expect(@work.reload.hidden_by_admin).to be_truthy
+      end
+    end
+    context "when the admin setting is disabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, false)
+      end
+      it "does not automatically hide spam works" do
+        @work.update_attributes!(spam: true)
+        expect(@work.reload.hidden_by_admin).to be_falsey
+      end
+    end
+  end
 end
