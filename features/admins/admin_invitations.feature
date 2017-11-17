@@ -351,8 +351,7 @@ Feature: Admin Actions to Manage Invitations
      And I press "Update Invitation"
    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
 
-  Search: An admin can search the invitation queue, and search parameters are
-  kept even if deleting without JavaScript
+  Search: An admin can search the invitation queue, and search parameters are kept even if deleting without JavaScript
     Given I am logged in as an admin
       And an invitation request for "streamtv@example.com"
       And an invitation request for "livetv@example.com"
