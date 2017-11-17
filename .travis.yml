@@ -11,6 +11,7 @@ env:
   - TEST_GROUP="cucumber -r features features/comments_and_kudos -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/gift_exchanges     -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/importing          -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/invitations        -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/other_a            -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/other_b            -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/prompt_memes_a     -f Ao3Cucumber::Formatter --color"
