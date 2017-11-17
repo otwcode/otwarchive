@@ -360,7 +360,7 @@ Feature: Admin Actions to Manage Invitations
       And an invitation request for "stre.a.mer@example.com"
       And an invitation request for "dreamer@example.com"
     When I am on the manage invite queue page
-      And I fill in "#query" with "stream"
+      And I fill in "query" with "stream"
       And I press "Search Queue"
     Then I should see "streamtv@example.com"
       And I should see "clearstream@example.com"
@@ -368,5 +368,6 @@ Feature: Admin Actions to Manage Invitations
       But I should not see "livetv@example.com"
       And I should not see "dreamer@example.com"
     When I follow "Delete"
-    Then I should not see "dreamer@example.com"
+    Then the "query" field should contain "stream"
+      And I should not see "dreamer@example.com"
       And I should not see "livetv@example.com"
