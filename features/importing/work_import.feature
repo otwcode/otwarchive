@@ -112,9 +112,20 @@ Feature: Import Works
 
   Scenario: Admin should see IP Address on imported work
     Given I import "http://import-site-with-tags" with a mock website
+      And I press "Post"
     When I am logged in as an admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address"
+      And I should not see "No address recorded"
+
+  Scenario: Admin should see IP Address on imported work if posted without preview as an archivist
+    Given I start importing "http://import-site-with-tags" with a mock website
+      And I check "Post without previewing"
+      And I press "Import"
+    When I am logged in as an admin
+      And I go to the "Detected Title" work page
+    Then I should see "IP Address"
+      And I should not see "No address recorded"
 
   Scenario: Importing multiple works with backdating
     When I import the urls
