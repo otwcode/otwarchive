@@ -605,7 +605,7 @@ class WorksController < ApplicationController
   def import_multiple(urls, options)
     # try a multiple import
     storyparser = StoryParser.new
-    @works, failed_urls, errors = storyparser.import_from_urls(urls, options)
+    @works, failed_urls, errors = storyparser.import_from_urls(urls, request.remote_ip, options)
 
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?

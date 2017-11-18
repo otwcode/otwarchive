@@ -72,7 +72,7 @@ class StoryParser
 
 
   # Import many stories
-  def import_from_urls(urls, options = {})
+  def import_from_urls(urls, remote_ip, options = {})
     # Try to get the works
     works = []
     failed_urls = []
@@ -83,7 +83,7 @@ class StoryParser
         work = download_and_parse_story(url, options)
 
         if work
-          work.ip_address = request.remote_ip
+          work.ip_address = remote_ip
         end
 
         if work && work.save
