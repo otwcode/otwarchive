@@ -83,8 +83,8 @@ class TagWranglersController < ApplicationController
 
   def destroy
     wrangler = User.find_by(login: params[:id])
-    assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
-    assignment.destroy
-    redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
+    assignments = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_ids])
+    assignments.each { |f| f.destroy }
+    redirect_to request.referer || tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
 end

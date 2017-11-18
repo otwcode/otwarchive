@@ -238,6 +238,11 @@ When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   check("selected_tags_#{tag.id}")
 end
 
+When /^I check the fandom unassign option for "([^"]*)"$/ do |tagname|
+  tag = Tag.find_by(name: tagname)
+  check("fandom_ids_#{tag.id}")
+end
+
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by!(name: tag)
   visit tag_path(tag)

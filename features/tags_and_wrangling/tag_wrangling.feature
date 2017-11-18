@@ -226,6 +226,13 @@ Feature: Tag wrangling
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Merger Tags"
 
+    # Unassigning fandoms from myself
+    When I am on my wrangling page
+      And I check the fandom unassign option for "Stargate SG-1"
+      And I press "Unassign"
+    Then I should be on my wrangling page
+      And I should not see "Stargate SG-1"
+
   Scenario: Wrangler has option to reindex a work
 
     Given the work "Indexing Issues"
