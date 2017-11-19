@@ -171,6 +171,5 @@ Feature: Download a work
   When I am logged in as the owner of "Invisibility"
     And I view the work "Now You See Me"
     And I follow "HTML"
-    And "AO3-4706" is fixed
-  # Then I should see "Sorry, you can't download an unrevealed work"
-  #   And I should be on the works page
+   Then I should see "Sorry, you can't download an unrevealed work"
+     And I should be on the "Now You See Me" work page
