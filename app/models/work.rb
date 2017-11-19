@@ -253,7 +253,9 @@ class Work < ApplicationRecord
 
     Work.expire_work_tag_groups_id(self.id)
 
-    self.touch
+    unless self.destroyed?
+      self.touch
+    end
   end
 
   def self.work_blurb_tag_cache_key(id)
