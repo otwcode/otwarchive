@@ -167,7 +167,6 @@ Otwarchive::Application.routes.draw do
       end
       collection do
         get :bulk_search
-        post :bulk_search
         post :update_user
       end
     end

@@ -8,7 +8,7 @@
     <p class="notice"><%= ts("Please enter a list of email addresses to search below. This form will search for <strong>exact</strong> matches.").html_safe %></p>
   </div>
 
-  <%= form_tag url_for(controller: "admin/admin_users", action: :bulk_search, method: :post), class: "search", role: "search" do %>
+  <%= form_tag url_for(controller: "admin/admin_users", action: :bulk_search), method: :get, class: "search", role: "search" do %>
     <fieldset>
       <legend><%= ts("Email addresses") %></legend>
       <dl>
