@@ -253,7 +253,7 @@ class Work < ApplicationRecord
 
     Work.expire_work_tag_groups_id(self.id)
 
-    unless self.destroyed?
+    if persisted?
       self.touch
     end
   end

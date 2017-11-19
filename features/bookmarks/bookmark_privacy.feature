@@ -108,8 +108,7 @@ Feature: Private bookmarks
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
       And I should not see "Bookmarks: 2"
-      # CACHING (perform_caching: true)
-      # And I should see "Bookmarks: 1"
+      And I should see "Bookmarks: 1"
     When I view the work "Public Masterpiece"
     Then I should not see "Bookmarks:2"
       And I should see "Bookmarks:1"
@@ -126,5 +125,5 @@ Feature: Private bookmarks
       And I should not see "bookmarker"
       And I should see "otheruser"
       # bookmark counter
-      And I should see "0" within ".count"
+      And I should see "1" within ".count"
       And I should not see "2" within ".count"
