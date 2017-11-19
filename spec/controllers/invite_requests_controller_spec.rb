@@ -100,6 +100,7 @@ describe InviteRequestsController do
         it "redirects to manage with notice" do
           delete :destroy, params: { id: invite_request.id }
           it_redirects_to_with_notice(manage_invite_requests_path, "Request for #{invite_request.email} was removed from the queue.")
+          expect { invite_request.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it "redirects to manage at a specified page" do
@@ -118,6 +119,20 @@ describe InviteRequestsController do
           invite_request.destroy
           delete :destroy, params: { id: invite_request.id }
           it_redirects_to_with_notice(manage_invite_requests_path, "Request was removed from the queue.")
+        end
+
+        context "when there are multiple requests" do
+          let!(:invite_request_1) { create(:invite_request) }
+          let!(:invite_request_2) { create(:invite_request) }
+          let!(:invite_request_3) { create(:invite_request) }
+
+          it "deletes the specified request" do
+            delete :destroy, params: { id: invite_request_2.id }
+            it_redirects_to_with_notice(manage_invite_requests_path, "Request for #{invite_request_2.email} was removed from the queue.")
+            expect { invite_request_2.reload }.to raise_error ActiveRecord::RecordNotFound
+            invite_request_1.reload
+            invite_request_3.reload
+          end
         end
       end
 
