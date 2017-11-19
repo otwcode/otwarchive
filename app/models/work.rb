@@ -252,6 +252,8 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+
+    self.touch
   end
 
   def self.work_blurb_tag_cache_key(id)
