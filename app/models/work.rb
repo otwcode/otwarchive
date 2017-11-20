@@ -1422,7 +1422,11 @@ class Work < ApplicationRecord
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
     users.each do |user|
-      UserMailer.admin_hidden_work_notification(id, user.id).deliver
+      if spam?
+        UserMailer.admin_spam_work_notification(id, user.id).deliver
+      else
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+      end
     end
   end
 

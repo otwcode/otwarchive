@@ -28,15 +28,12 @@
     
       <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
       <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
-
-      <dt><%= f.check_box :hide_spam %></dt>
-      <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
     </dl>
   </fieldset>
   
   <fieldset>
-    <legend><%= ts("Performance") %></legend>
-    <h3 class="landmark heading"><%= ts("Performance") %></h3>
+    <legend><%= ts("Performance and Misc") %></legend>
+    <h3 class="landmark heading"><%= ts("Performance and Misc") %></h3>
     <dl>
         
       <dt><%= f.check_box :disable_filtering %></dt>
@@ -59,6 +56,9 @@
     
       <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
       <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
+
+      <dt><%= f.check_box :hide_spam %></dt>
+      <dd><%= f.label :hide_spam, ts("Automatically hide spam works") %></dd>
     </dl>
   </fieldset>
   
