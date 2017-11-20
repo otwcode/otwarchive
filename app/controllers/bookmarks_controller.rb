@@ -213,7 +213,12 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
-    redirect_to user_bookmarks_path(current_user)
+
+    if request.referer&.match(/confirm_delete|edit/)
+      redirect_to(user_bookmarks_path(current_user))
+    else
+      redirect_to(request.referer || user_bookmarks_path(current_user))
+    end
   end
 
   # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
