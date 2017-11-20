@@ -362,3 +362,24 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And I should be on the invite new users page
+
+  Scenario: An admin can search the invitation queue, and search parameters are
+  kept even if deleting without JavaScript
+    Given I am logged in as an admin
+      And an invitation request for "streamtv@example.com"
+      And an invitation request for "livetv@example.com"
+      And an invitation request for "clearstream@example.com"
+      And an invitation request for "stre.a.mer@example.com"
+      And an invitation request for "dreamer@example.com"
+    When I am on the manage invite queue page
+      And I fill in "query" with "stream"
+      And I press "Search Queue"
+    Then I should see "streamtv@example.com"
+      And I should see "clearstream@example.com"
+      And I should see "stre.a.mer@example.com"
+      But I should not see "livetv@example.com"
+      And I should not see "dreamer@example.com"
+    When I press "Delete"
+    Then the "query" field should contain "stream"
+      And I should not see "dreamer@example.com"
+      And I should not see "livetv@example.com"
