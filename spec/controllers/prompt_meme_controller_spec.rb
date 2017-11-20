@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Challenge::PromptMemeController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   describe "new" do
     context "when the collection already has a challenge" do
@@ -11,28 +12,23 @@ describe Challenge::PromptMemeController do
         post :new, params: { collection_id: @collection.name }
       end
 
-      it "should set flash notice" do
-        expect(flash[:notice]).to eq("There is already a challenge set up for this collection.")
-      end
-
-      it "should redirect to edit meme collection path" do
-        expect(response).to redirect_to(edit_collection_prompt_meme_path(@collection))
+      it "redirects to edit meme collection path with notice" do
+        it_redirects_to_with_notice(edit_collection_prompt_meme_path(@collection), "There is already a challenge set up for this collection.")
       end
     end
   end
 
   describe "update" do
-    context "when it fails to udpate parameters" do
+    context "when it fails to update parameters" do
       before do
-        challenge = PromptMeme.new
-        @collection = FactoryGirl.create(:collection, challenge: challenge)
+        @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
         fake_login_known_user(@collection.owners.first.user)
         allow_any_instance_of(PromptMeme).to receive(:update_attributes).and_return(false)
         allow(controller).to receive(:prompt_meme_params).and_return({})
         post :update, params: { collection_id: @collection.name, propmt_meme: {} }
       end
 
-      it "should render edit page" do
+      it "renders edit page" do
         expect(response).to render_template "edit"
       end
 
