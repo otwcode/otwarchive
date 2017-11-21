@@ -61,7 +61,7 @@ hide_freeform?(@work)) %>
       <li>
         <%= ts(work.translation ? 'A translation of' : 'Inspired by') %>
         <%= link_to work.parent.title.html_safe, work_url(work.parent) %>
-        <%= ts("by") %> <%= byline(work.parent) %>.
+        <%= ts("by") %> <%= byline(work.parent, only_path: false) %>.
       </li>
     <% end %>
     </ul>
