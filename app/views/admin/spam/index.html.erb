@@ -1,11 +1,14 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Works Marked as Spam") %></h2>
+<h2 class="heading"><%= ts("Manage Potential Spam") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current ts("Reviewed Works"), { show: "reviewed" } %>
+    <%= span_if_current ts("Unreviewed Works"), admin_spam_index_path, params[:show].blank? %>
+  </li>
+  <li>
+    <%= span_if_current ts("Confirmed Spam"), { show: "reviewed" } %>
   </li>
   <li>
     <%= span_if_current ts("Approved Works"), { show: "approved" } %>
@@ -23,7 +26,7 @@
         <th scope="col"><%= ts("Creator") %></th>
         <th scope="col"><%= ts("Revised At") %></th>
         <th scope="col">
-          <%= ts("Mark Reviewed") %>
+          <%= ts("Confirm As Spam") %>
           <ul class="actions">
             <li>
               <button id="spam_all_select" type="button">
