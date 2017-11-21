@@ -3,11 +3,18 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<ul class="navigation actions" role="navigation">
+  <li>
+    <%= span_if_current ts("Reviewed Works"), { show: "reviewed" } %>
+  </li>
+  <li>
+    <%= span_if_current ts("Approved Works"), { show: "approved" } %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
 <%= form_tag "/admin/spam/bulk_update", method: :post do %>
-  <%= submit_button nil, ts("Update Works") %>
   <table id="spam_works" summary="<%= ts("Titles, creators, and revision dates for works that have been automatically marked as spam, along with options to verify or correct their spam status.") %>">
     <caption><%= ts("Works Marked as Spam") %></caption>
     <thead>
