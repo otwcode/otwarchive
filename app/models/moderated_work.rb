@@ -38,13 +38,10 @@ class ModeratedWork < ApplicationRecord
 
   def self.bulk_review(ids)
     return true unless ids.present?
-    where(id: ids).update_all("reviewed = 1")
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
-    # If spam isn't hidden by default, hide it now
-    unless admin_settings.hide_spam?
-      Work.joins(:moderated_work).where("moderated_works.id IN (?)", ids).each do |work|
-        work.update_attribute(:hidden_by_admin, true)
-      end
+    where(id: ids).update_all(reviewed: true, approved: false)
+    # Ensure works are hidden and spam if they weren't already
+    Work.joins(:moderated_work).where("moderated_works.id IN (?)", ids).each do |work|
+      work.update_attributes(hidden_by_admin: true, spam: true)
     end
   end
 
