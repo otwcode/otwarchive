@@ -214,7 +214,7 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
 
-    if request.referer&.match(/confirm_delete|edit/)
+    if request.referer&.match(/confirm_delete|edit|#{bookmarks_path(@bookmark.id)}/)
       redirect_to(user_bookmarks_path(current_user))
     else
       redirect_to(request.referer || user_bookmarks_path(current_user))
