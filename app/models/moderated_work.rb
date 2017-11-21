@@ -37,7 +37,7 @@ class ModeratedWork < ApplicationRecord
   end
 
   def self.bulk_review(ids)
-    return unless ids.present?
+    return true unless ids.present?
     where(id: ids).update_all("reviewed = 1")
     admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
     # If spam isn't hidden by default, hide it now
@@ -49,7 +49,7 @@ class ModeratedWork < ApplicationRecord
   end
 
   def self.bulk_approve(ids)
-    return unless ids.present?
+    return true unless ids.present?
     where(id: ids).update_all("approved = 1")
     Work.joins(:moderated_work).where("moderated_works.id IN (?)", ids).each do |work|
       work.mark_as_ham!
