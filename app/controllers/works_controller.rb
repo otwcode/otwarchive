@@ -2,36 +2,44 @@
 
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
-  before_filter :load_collection
-  before_filter :load_owner, only: [:index]
-  before_filter :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
-  before_filter :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
-  before_filter :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
+  before_action :load_collection
+  before_action :load_owner, only: [:index]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
+  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
+  before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :reindex]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
-  before_filter :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_filter :log_admin_activity, only: [:update_tags]
-  before_filter :check_visibility, only: [:show, :navigate]
+  before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
+  before_action :log_admin_activity, only: [:update_tags]
+  before_action :check_visibility, only: [:show, :navigate]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
-  before_filter :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
-  before_filter :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
-  before_filter :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
-
-  before_filter :clean_work_search_params, only: [:search, :index, :collected]
+  before_action :set_author_attributes, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate]
+  before_action :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
+  before_action :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
   cache_sweeper :collection_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    if params[:work_search].present? && params[:work_search][:query].present?
+    # https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
+    # While nearly identical, clone does one more thing than dup.
+    # In clone, the frozen state of the object is also copied.
+    # In dup, it'll always be thawed.
+
+    clean_params = work_search_params&.dup
+    clean_params[:query] = clean_params[:query].dup unless clean_params[:query].nil?
+    clean_params[:sort_column] = clean_params[:sort_column].dup unless clean_params[:sort_column].nil?
+    clean_params[:sort_direction] = clean_params[:sort_direction].dup unless clean_params[:sort_direction].nil?
+
+    if clean_params.present? && clean_params[:query].present?
       # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      params[:work_search][:query].gsub!('&gt;', '>')
-      params[:work_search][:query].gsub!('&lt;', '<')
+      clean_params[:query].gsub!('&gt;', '>')
+      clean_params[:query].gsub!('&lt;', '<')
 
       # extract countable params
       %w(word kudo comment bookmark hit).each do |term|
-        next unless params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+        next unless clean_params[:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
         # pluralize, add _count, convert to symbol
         term = term.pluralize unless term == 'word'
         term += '_count' unless term == 'hits'
@@ -39,39 +47,39 @@ class WorksController < ApplicationController
 
         value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
         # don't overwrite if submitting from advanced search?
-        params[:work_search][term] = value unless params[:work_search][term].present?
+        clean_params[term] = value unless clean_params[term].present?
       end
 
       # get sort-by
-      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+      if clean_params[:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
         sortdir = Regexp.last_match(3) || Regexp.last_match(1)
         sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
 
         _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        params[:work_search][:sort_column] = sort_column unless sort_column.nil?
-
-        params[:work_search][:sort_direction] = sort_direction(sortdir)
+        clean_params[:sort_column] = sort_column unless sort_column.nil?
+        clean_params[:sort_direction] = sort_direction(sortdir)
       end
 
       # put categories into quotes
       qr = Regexp.new('(?:"|\')?')
       %w(m/m f/f f/m m/f).each do |cat|
         cr = Regexp.new("#{qr}#{cat}#{qr}")
-        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
+        clean_params[:query].gsub!(cr, "\"#{cat}\"")
       end
 
       # swap out gt/lt
-      params[:work_search][:query].gsub!('>', '&gt;')
-      params[:work_search][:query].gsub!('<', '&lt;')
+      clean_params[:query].gsub!('>', '&gt;')
+      clean_params[:query].gsub!('<', '&lt;')
 
       # get rid of empty queries
-      params[:work_search][:query] = nil if params[:work_search][:query] =~ /^\s*$/
+      clean_params[:query] = nil if clean_params[:query] =~ /^\s*$/
     end
+    clean_params
   end
 
   def search
     @languages = Language.default_order
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearch.new(options)
@@ -89,20 +97,16 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
-        @fandom = Fandom.find_by_id(params[:fandom_id])
+        @fandom = Fandom.find_by(id: params[:fandom_id])
       end
 
       tag = @fandom || @tag
-      # This strange dance is because there is an interaction between
-      # strong_parameters and dup, without the dance
-      # options[:filter_ids] << tag.id is ignored.
-      filter_ids = options[:filter_ids] || []
-      filter_ids << tag.id
-      options[:filter_ids] = filter_ids
+      options[:filter_ids] ||= []
+      options[:filter_ids] << tag.id
     end
 
     options[:page] = params[:page]
@@ -118,7 +122,7 @@ class WorksController < ApplicationController
 
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).list_without_filters(@owner, options)
+        @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
@@ -145,19 +149,19 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
-        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
     end
   end
 
   def collected
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page]
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
 
     return unless @user.present?
 
@@ -179,7 +183,7 @@ class WorksController < ApplicationController
       return
     end
 
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
 
     unless current_user == @user
       flash[:error] = ts('You can only see your own drafts, sorry!')
@@ -188,7 +192,7 @@ class WorksController < ApplicationController
     end
 
     if params[:pseud_id]
-      @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+      @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       @works = @pseud.unposted_works.paginate(page: params[:page])
     else
       @works = @user.unposted_works.paginate(page: params[:page])
@@ -255,7 +259,7 @@ class WorksController < ApplicationController
   def new
     @hide_dashboard = true
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
     @unposted = current_user.unposted_work
 
     @work.ip_address = request.remote_ip
@@ -346,8 +350,8 @@ class WorksController < ApplicationController
   def set_edit_form_fields
     load_pseuds
     @work.reset_published_at(@chapter)
-    @series = current_user.series.uniq
-    @collection = Collection.find_by_name(params[:work][:collection_names])
+    @series = current_user.series.distinct
+    @collection = Collection.find_by(name: params[:work][:collection_names])
   end
 
   # GET /works/1/edit
@@ -355,7 +359,7 @@ class WorksController < ApplicationController
     @hide_dashboard = true
     @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
-    @series = current_user.series.uniq
+    @series = current_user.series.distinct
 
     return unless params['remove'] == 'me'
 
@@ -523,14 +527,16 @@ class WorksController < ApplicationController
       render(:new_import) && return
     end
 
+    importing_for_others = params[:importing_for_others] != "false" && params[:importing_for_others]
+
     # is external author information entered when import for others is not checked?
-    if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
+    if (params[:external_author_name].present? || params[:external_author_email].present?) && !importing_for_others
       flash.now[:error] = ts('You have entered an external author name or e-mail address but did not select "Import for others." Please select the "Import for others" option or remove the external author information to continue.')
       render(:new_import) && return
     end
 
     # is this an archivist importing?
-    if params[:importing_for_others] && !current_user.archivist
+    if importing_for_others && !current_user.archivist
       flash.now[:error] = ts('You may not import stories by other users unless you are an approved archivist.')
       render(:new_import) && return
     end
@@ -562,11 +568,11 @@ class WorksController < ApplicationController
     storyparser = StoryParser.new
 
     begin
-      if urls.size == 1
-        @work = storyparser.download_and_parse_story(urls.first, options)
-      else
-        @work = storyparser.download_and_parse_chapters_into_story(urls, options)
-      end
+      @work = if urls.size == 1
+                storyparser.download_and_parse_story(urls.first, options)
+              else
+                storyparser.download_and_parse_chapters_into_story(urls, options)
+              end
     rescue Timeout::Error
       flash.now[:error] = ts('Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.')
       render(:new_import) && return
@@ -579,7 +585,7 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
-      @series = current_user.series.uniq
+      @series = current_user.series.distinct
       render(:new) && return
     end
 
@@ -731,19 +737,19 @@ class WorksController < ApplicationController
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
-    work_params = params[:work].reject { |_key, value| value.blank? || value == '0' }
+    updated_work_params = work_params.reject { |_key, value| value.blank? || value == '0' }
 
     # manually allow switching of anon/moderated comments
-    if work_params[:anon_commenting_disabled] == 'allow_anon'
-      work_params[:anon_commenting_disabled] = '0'
+    if updated_work_params[:anon_commenting_disabled] == 'allow_anon'
+      updated_work_params[:anon_commenting_disabled] = '0'
     end
-    if work_params[:moderated_commenting_enabled] == 'not_moderated'
-      work_params[:moderated_commenting_enabled] = '0'
+    if updated_work_params[:moderated_commenting_enabled] == 'not_moderated'
+      updated_work_params[:moderated_commenting_enabled] = '0'
     end
 
     @works.each do |work|
       # now we can just update each work independently, woo!
-      unless work.update_attributes(work_params)
+      unless work.update_attributes(updated_work_params)
         @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
       end
     end
@@ -793,9 +799,9 @@ class WorksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       end
     end
     if params[:tag_id]
@@ -827,7 +833,7 @@ class WorksController < ApplicationController
   end
 
   def load_work
-    @work = Work.find_by_id(params[:id])
+    @work = Work.find_by(id: params[:id])
     unless @work
       raise ActiveRecord::RecordNotFound, "Couldn't find work with id '#{params[:id]}'"
     end
@@ -918,7 +924,7 @@ class WorksController < ApplicationController
     end
 
     # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).value_of(:user_id).uniq
+    user_ids = Pseud.where(id: params[:work][:author_attributes][:ids]).pluck(:user_id).uniq
     unless user_ids.include?(current_user.id)
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       render :new and return
@@ -955,7 +961,7 @@ class WorksController < ApplicationController
 
   # Takes an array of tags and returns a comma-separated list, without the markup
   def tag_list(tags)
-    tags = tags.uniq.compact
+    tags = tags.distinct.compact
     if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
       tag_list = tags.collect { |tag| tag.name + ', ' }.join
@@ -991,7 +997,7 @@ class WorksController < ApplicationController
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.value_of(:name).join(', ')}"
+        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
       end
 
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
@@ -1032,7 +1038,7 @@ class WorksController < ApplicationController
 
   def build_options(params)
     pseuds_to_apply =
-      (Pseud.find_by_name(params[:pseuds_to_apply]) if params[:pseuds_to_apply])
+      (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
 
     {
       pseuds: pseuds_to_apply,
@@ -1064,7 +1070,9 @@ class WorksController < ApplicationController
       :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
-      :moderated_commenting_enabled, :title,
+      :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
+      :unrestricted,
+      pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],

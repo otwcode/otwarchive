@@ -54,9 +54,9 @@ module UsersHelper
     alt_text = pseud.try(:icon_alt_text) || nil
 
     if path
-      link_to image_tag(icon, alt: alt_text, class: 'icon'), path
+      link_to image_tag(icon, alt: alt_text, class: 'icon', skip_pipeline: true), path
     else
-      image_tag(icon, class: 'icon')
+      image_tag(icon, class: 'icon', skip_pipeline: true)
     end
   end
 
@@ -113,9 +113,9 @@ module UsersHelper
 
   def print_gifts_link(user)
     if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_all.distinct.count
     else
-      gift_number = user.gift_works.visible_to_registered_user.count(:id, distinct: true)
+      gift_number = user.gift_works.visible_to_registered_user.distinct.count
     end
     span_if_current ts('Gifts (%{gift_number})', gift_number: gift_number.to_s), user_gifts_path(user)
   end
@@ -133,7 +133,7 @@ module UsersHelper
 
   #  def print_pseud_drafts_link(pseud)
   #    total = pseud.unposted_works.size
-  #    link_to_unless_current t('my_drafts', :default =>"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+  #    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
   #  end
 
   def authors_header(collection, what = 'People')

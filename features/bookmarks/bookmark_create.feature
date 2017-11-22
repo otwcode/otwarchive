@@ -376,3 +376,27 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
+
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+  Given the work "Popular Work"
+    And I am logged in as "bookmarker1"
+    And I bookmark the work "Popular Work" with the note "Love it"
+    And I log out
+    And I am logged in as "bookmarker2"
+    And I bookmark the work "Popular Work"
+    And the statistics for the work "Popular Work" are updated
+  When I am on the bookmarks page
+    # There are two of these links, but bookmarker2's bookmark is more recent,
+    # and it follows the first link matching the specified text
+    And I follow "Show Most Recent Bookmarks"
+  # Again, we're relying on the fact that it uses the first element that
+  # matches the specified selector, since each bookmark on the page will have a
+  # div with the class .recent
+  Then I should see "bookmarker1" within ".recent"
+    And I should see "Love it" within ".recent"
+    And I should see "Hide Most Recent Bookmarks" within ".recent"
+  When I follow "Hide Most Recent Bookmarks"
+  Then I should not see "bookmarker1" within ".recent"
+    And I should not see "Love it" within ".recent"
+    And I should see "Show Most Recent Bookmarks" within "li.bookmark"

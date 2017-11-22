@@ -7,6 +7,7 @@
 #
 export RAILS_ENV=test
 bundle install
+\curl -sSL https://raw.githubusercontent.com/codeship/scripts/master/packages/mysql-5.7.sh | bash -s
 cp config/database.codeship.yml config/database.yml
 cp config/newrelic.example config/newrelic.yml
 cp config/redis-cucumber.conf.example config/redis-cucumber.conf

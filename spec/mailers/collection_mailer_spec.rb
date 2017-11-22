@@ -10,7 +10,7 @@ describe CollectionMailer do
       @work = FactoryGirl.create(:work)
     end
 
-    let(:email) { CollectionMailer.item_added_notification(@work, @collection, "Work").deliver }
+    let(:email) { CollectionMailer.item_added_notification(@work.id, @collection.id, "Work").deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"

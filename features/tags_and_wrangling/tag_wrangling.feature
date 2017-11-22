@@ -191,6 +191,41 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+    # check sidebar links and pages for wrangling within a fandom
+    When I am on my wrangling page
+      And I follow "Stargate SG-1"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+    When I follow "Characters (3)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Character Tags"
+      And I should see "Daniel Jackson"
+      And I should see "Jack O'Neil"
+      And I should see "Jack O'Neill"
+    When I follow "Canonical"
+    Then I should see "Showing Canonical Character Tags"
+      And I should see "Daniel Jackson"
+      And I should see "Jack O'Neill"
+      # This would fail because "Jack O'Neil" is in "Jack O'Neill"
+      # But I should not see "Jack O'Neil"
+    When I follow "Synonymous"
+    Then I should see "Showing Synonymous Character Tags"
+      And I should see "Jack O'Neil"
+      # It will be in a td in the tbody, whereas "Jack O'Neil" is in a th
+      But I should not see "Jack O'Neill" within "tbody th"
+      And I should not see "Daniel Jackson"
+    When I follow "Relationships (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Relationship Tags"
+    When I follow "Freeforms (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Freeform Tags"
+    When I follow "SubTags (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Sub Tag Tags"
+    When I follow "Mergers (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Merger Tags"
+
   Scenario: Wrangler has option to reindex a work
 
     Given the work "Indexing Issues"

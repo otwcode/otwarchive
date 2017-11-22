@@ -5,7 +5,7 @@
     <% unless @mobi %><h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2><% end %>
     <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>
       <%# only display byline if different from the main byline %>
-      <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter) %></p>
+      <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter, only_path: false) %></p>
     <% end %>
 
     <% unless @chapter.summary.blank? %>

@@ -1,11 +1,9 @@
 class TagsController < ApplicationController
-  before_filter :load_collection
-  before_filter :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_filter :load_tag_and_subtags, only: [:show]
-
-  cache_sweeper :tag_sweeper
+  before_action :load_collection
+  before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
+  before_action :load_tag_and_subtags, only: [:show]
 
   def load_tag
     @tag = Tag.find_by_name(params[:id])
@@ -234,9 +232,9 @@ class TagsController < ApplicationController
     @counts['External Works'] = @tag.visible_external_works_count
     @counts['Taggings Count'] = @tag.taggings_count
 
-    @parents = @tag.parents.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-    @children = @tag.children.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
 
@@ -284,9 +282,9 @@ class TagsController < ApplicationController
         redirect_to url_for(controller: :tags, action: :edit, id: @tag)
       end
     else
-      @parents = @tag.parents.find(:all, order: :name).group_by { |tag| tag[:type] }
+      @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
       @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-      @children = @tag.children.find(:all, order: :name).group_by { |tag| tag[:type] }
+      @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
       @children['SubTag'] = @tag.direct_sub_tags.by_name
       @children['Merger'] = @tag.mergers.by_name
 
@@ -315,7 +313,7 @@ class TagsController < ApplicationController
       elsif params[:status] == 'unwrangled'
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else
-        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end

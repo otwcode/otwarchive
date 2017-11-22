@@ -15,7 +15,7 @@ end
 challenge_name = ARGV[0]
 output_json = ARGV[1]
 
-collection = Collection.find_by_name(challenge_name)
+collection = Collection.find_by(name: challenge_name)
 challenge = collection.challenge
 
 result = {}

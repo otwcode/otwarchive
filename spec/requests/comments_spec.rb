@@ -14,7 +14,7 @@ shared_examples_for "on unrestricted works", :pending do
       @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: false)
       @work2.index.refresh
       @comment2 = create(:comment)
-      @work2.comments << @comment2
+      @work2.first_chapter.comments << @comment2
     end
 
     #has been added
@@ -116,7 +116,7 @@ describe "Comments" do
       @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
       @work.index.refresh
       @comment = create(:comment)
-      @work.comments << @comment
+      @work.first_chapter.comments << @comment
     end
 
     it "should not be creatable by guests on a work" do

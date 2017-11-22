@@ -1,12 +1,12 @@
 class SkinsController < ApplicationController
 
-  before_filter :users_only, only: [:new, :create, :destroy]
-  before_filter :load_skin, except: [:index, :new, :create, :unset]
-  before_filter :check_title, only: [:create, :update]
-  before_filter :check_ownership_or_admin, only: [:edit, :update]
-  before_filter :check_ownership, only: [:destroy]
-  before_filter :check_visibility, only: [:show]
-  before_filter :check_editability, only: [:edit, :update, :destroy]
+  before_action :users_only, only: [:new, :create, :destroy]
+  before_action :load_skin, except: [:index, :new, :create, :unset]
+  before_action :check_title, only: [:create, :update]
+  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :check_ownership, only: [:destroy]
+  before_action :check_visibility, only: [:show]
+  before_action :check_editability, only: [:edit, :update, :destroy]
 
   #### ACTIONS
 
@@ -15,10 +15,10 @@ class SkinsController < ApplicationController
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
     end
-    if params[:user_id] && @user = User.find_by_login(params[:user_id])
+    if params[:user_id] && @user = User.find_by(login: params[:user_id])
       redirect_to new_user_session_path and return unless logged_in?
       if (@user != current_user)
-        flash[:error] = "You can only browse your own skins and approved public skins." 
+        flash[:error] = "You can only browse your own skins and approved public skins."
         redirect_to skins_path and return
       end
       if is_work_skin
@@ -138,7 +138,7 @@ class SkinsController < ApplicationController
   end
 
   def destroy
-    @skin = Skin.find_by_id(params[:id])
+    @skin = Skin.find_by(id: params[:id])
     begin
       @skin.destroy
       flash[:notice] = ts("The skin was deleted.")
@@ -166,10 +166,10 @@ class SkinsController < ApplicationController
   end
 
   def load_skin
-    @skin = Skin.find_by_id(params[:id])
+    @skin = Skin.find_by(id: params[:id])
     unless @skin
       flash[:error] = "Skin not found"
-      redirect_to skins_url and return
+      redirect_to skins_path and return
     end
     @check_ownership_of = @skin
     @check_visibility_of = @skin
@@ -192,37 +192,24 @@ class SkinsController < ApplicationController
   # if we've been asked to load the archive parents, we do so and add them to params
   def load_archive_parents
     if params[:add_site_parents]
-      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
+      params[:skin][:skin_parents_attributes] ||= ActionController::Parameters.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
       skin_parent_titles = params[:skin][:skin_parents_attributes].values.map {|v| v[:parent_skin_title]}
-      skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).value_of(:id) 
+      skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
       skin_parents += @skin.get_all_parents.collect(&:id) if @skin
       if !(skin_parents.uniq & archive_parents.collect(&:id)).empty?
         flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!")
         return true
       end
-      last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0      
+      last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0
       last_position ||= 0
       archive_parents.each do |parent_skin|
         last_position += 1
-        new_skin_parent_hash = HashWithIndifferentAccess.new({position: last_position, parent_skin_id: parent_skin.id})
-        params[:skin][:skin_parents_attributes].merge!({last_position => new_skin_parent_hash})
+        new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
+        params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
       end
       return true
     end
     return false
-  end
-end
-
-# https://github.com/rails/strong_parameters/pull/221
-# where the key is converted to a string
-# but the pull was closed due to:
-# "parameter keys [already] arrive as strings when submitted via HTTP requests"
-# but, at least with our cucumber tests, nested attribute keys are, in fact, integers
-module ActionController
-  class Parameters
-    def fields_for_style?(object)
-      object.is_a?(Hash) && object.all? { |k, v| k.to_s =~ /\A-?\d+\z/ && v.is_a?(Hash) }
-    end
   end
 end

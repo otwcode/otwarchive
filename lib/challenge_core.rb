@@ -33,14 +33,6 @@ module ChallengeCore
     end
   end
 
-  # HACK to avoid time zones being encoded
-  def fix_time_zone
-    return true if self.time_zone.nil?
-    return true if ActiveSupport::TimeZone[self.time_zone]
-    try = self.time_zone.gsub('&amp;', '&')
-    self.time_zone = try if ActiveSupport::TimeZone[try]
-  end
-
   # When Challenges are deleted, there are two references left behind that need to be reset to nil
   def clear_challenge_references
     collection.challenge_id = nil
@@ -92,7 +84,7 @@ module ChallengeCore
           self.send(datetime_attr).try(:strftime, ArchiveConfig.DEFAULT_DATETIME_FORMAT)
         end
         define_method("#{datetime_attr}_string=") do |datetimestring|
-          self.send("#{datetime_attr}=", Timeliness.parse(datetimestring, :zone => (self.time_zone || Time.zone)))
+          self.send("#{datetime_attr}=", Timeliness.parse(datetimestring, zone: (self.time_zone || Time.zone)))
         end
       end
     end
