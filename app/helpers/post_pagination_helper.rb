@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PostPaginationHelper
   def page_from_params(params)
     if params[:next_page]
