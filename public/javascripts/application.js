@@ -540,7 +540,7 @@ $j(document).ready(function() {
 });
 
 // For simple forms that update or destroy records and remove them from a listing
-// e.g. delete from history, mark as read
+// e.g. delete from history, mark as read, delete invitation request
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
@@ -549,8 +549,12 @@ $j(document).ready(function() {
 
     var form = $j(this);
     var formAction = form.attr('action');
-    var formParent = form.closest('li.group');
-    var parentContainer = formParent.closest('div');
+    // The record we're removing is probably in a list, but might be in a table
+    if (form.closest('li.group').length !== 0) {
+      formParent = form.closest('li.group');
+    } else { formParent = form.closest('tr'); };
+    // The admin div does not hold a flash container
+    var parentContainer = formParent.closest('div:not(.admin)');
     var flashContainer = parentContainer.find('.flash');
 
     $j.ajax({

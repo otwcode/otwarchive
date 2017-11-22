@@ -219,4 +219,32 @@ describe Work do
       expect(work.reload.complete).to be_falsey
     end
   end
+
+  describe "#hide_spam" do
+    before do
+      @admin_setting = AdminSetting.first || AdminSetting.create
+      @work = create(:posted_work)
+    end
+    context "when the admin setting is enabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, true)
+      end
+      it "automatically hides spam works and sends an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(@work.reload.hidden_by_admin).to be_truthy
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
+      end
+    end
+    context "when the admin setting is disabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, false)
+      end
+      it "does not automatically hide spam works and does not send an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          not_to change { ActionMailer::Base.deliveries.count }
+        expect(@work.reload.hidden_by_admin).to be_falsey
+      end
+    end
+  end
 end
