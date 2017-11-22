@@ -1,5 +1,6 @@
 class Admin::AdminUsersController < ApplicationController
   include ExportsHelper
+  include PostPaginationHelper
 
   before_action :admin_only
 
@@ -13,7 +14,10 @@ class Admin::AdminUsersController < ApplicationController
     @emails = params[:emails].split if params[:emails]
     unless @emails.nil? || @emails.blank?
       all_users, @not_found = User.search_multiple_by_email(@emails)
-      @users = all_users.paginate(page: params[:page] || 1)
+
+      page = page_from_params(params)
+
+      @users = all_users.paginate(page: page)
       if params[:download_button]
         header = [%w(Email Username)]
         found = all_users.map { |u| [u.email, u.login] }

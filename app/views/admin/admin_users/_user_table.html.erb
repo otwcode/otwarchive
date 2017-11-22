@@ -28,6 +28,9 @@
       </tbody>
     </table>
   </div>
-  <%= will_paginate @users %>
+  <%= form_tag url_for(controller: "admin/admin_users", action: :bulk_search), method: :post, class: "search", role: "search" do %>
+    <%= hidden_field_tag("emails", @emails) %>
+    <%= will_paginate @users, renderer: PostLinkRenderer %>
+  <% end %>
 <% end %>
 <!--/content-->
