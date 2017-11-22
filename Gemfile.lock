@@ -238,7 +238,7 @@ GEM
     newrelic_rpm (3.14.1.311)
     nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
-    nokogumbo (1.4.10)
+    nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
@@ -499,6 +499,7 @@ DEPENDENCIES
   newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.7.1)
+  nokogumbo (= 1.4.9)
   paperclip
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)

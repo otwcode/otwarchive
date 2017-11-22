@@ -10,6 +10,7 @@ class Pseud < ActiveRecord::Base
     styles: { standard: "100x100>" },
     path: %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
+    s3_protocol: "https",
     s3_credentials: "#{Rails.root}/config/s3.yml",
     bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     default_url: "/images/skins/iconsets/default/icon_user.png"
@@ -322,8 +323,12 @@ class Pseud < ActiveRecord::Base
   # Options: skip_series -- if you begin by changing ownership of the series, you don't
   # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    creation.pseuds.delete(self)
-    creation.pseuds << pseud rescue nil
+    # Should only transfer creatorship if we're a co-creator.
+    if creation.pseuds.include?(self)
+      creation.pseuds.delete(self)
+      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
+    end
+
     if creation.is_a?(Work)
       creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
       unless options[:skip_series]

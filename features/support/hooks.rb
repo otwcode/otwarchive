@@ -1,7 +1,7 @@
 Before do
+  # Reset Elasticsearch
   Work.tire.index.delete
   Work.create_elasticsearch_index
-  Work.tire.index.refresh
 
   Bookmark.tire.index.delete
   Bookmark.create_elasticsearch_index
@@ -13,5 +13,12 @@ Before do
   Pseud.tire.index.delete
   Pseud.create_elasticsearch_index
 
+  # Clear Memcached
   Rails.cache.clear
+
+  # Clear Redis
+  REDIS_GENERAL.flushall
+  REDIS_KUDOS.flushall
+  REDIS_RESQUE.flushall
+  REDIS_ROLLOUT.flushall
 end

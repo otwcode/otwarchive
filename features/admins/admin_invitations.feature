@@ -53,7 +53,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
     When I go to account creation page
     Then I should be on invite requests page
@@ -79,7 +79,7 @@ Feature: Admin Actions to Manage Invitations
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
       And I check "Account creation requires invitation"
-      And I uncheck "Users can request invitations"
+      And I check "Users can request invitations"
       And I check "Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)"
       And I press "Update"
       And I am logged out as an admin
@@ -160,7 +160,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled

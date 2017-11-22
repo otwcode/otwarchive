@@ -137,7 +137,7 @@ Feature: Edit Works
       And I have coauthored a work as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
-    Then I should see "test pseud 1 (coolperson), test pseud 2 (ex_friend)" within ".byline"
+    Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"

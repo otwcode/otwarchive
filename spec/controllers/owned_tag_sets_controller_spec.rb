@@ -120,7 +120,7 @@ describe OwnedTagSetsController do
 
     context "where tag set is found" do
       let(:visible) { false }
-      let(:tag) { create(:character) }
+      let(:tag) { create(:character, common_taggings: [create(:common_tagging)]) }
       let(:owned_tag_set) do
         create(
           :owned_tag_set,

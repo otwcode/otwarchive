@@ -242,3 +242,26 @@ I'd like to comment on a tag'
     # all it checks is that the pagination links aren't broken
     When I follow "Next" within ".pagination"
     Then I should see "And now things should not break!"
+
+  Scenario: Comments on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Top-secret plans." on the tag "World Domination"
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."
+
+  Scenario: Comments replying to a comment on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Anyone have a plan?" on the tag "World Domination"
+      And I reply to a comment with "Top-secret plans."
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."

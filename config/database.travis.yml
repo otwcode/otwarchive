@@ -3,3 +3,4 @@ test:
    database: otwarchive_test
    username: root
    encoding: utf8
+   collation: utf8_unicode_ci

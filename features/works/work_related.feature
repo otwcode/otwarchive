@@ -360,3 +360,19 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
+
+  Scenario: When using a URL on the site to cite a parent work, the URL can't be
+  for something that isn't a work
+  Given I am logged in
+    And I set up a draft "Inspired"
+  When I list a series as inspiration
+    And I press "Post Without Preview"
+  Then I should see "Only a link to a work can be listed as an inspiration."
+
+  Scenario: When using a URL on the site to cite a parent work, the URL must be 
+  for a work that exists
+  Given I am logged in
+    And I set up a draft "Inspired"
+  When I list a nonexistent work as inspiration
+    And I press "Post Without Preview"
+  Then I should see "The work you listed as an inspiration does not seem to exist."

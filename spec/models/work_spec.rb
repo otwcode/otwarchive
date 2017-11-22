@@ -152,7 +152,7 @@ describe Work do
     end
 
     it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name 
+      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
 
@@ -185,8 +185,17 @@ describe Work do
     end
 
     it "should find works imported with irrelevant query parameters" do
-      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
-      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "gets the work from cache when searching for an imported work by URL" do
+      url = "http://lj-site.com/thing2"
+      work = create(:work, imported_from_url: url)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to be_nil
+      expect(Work.find_by_url(url)).to eq(work)
+      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
       work.destroy
     end
   end
