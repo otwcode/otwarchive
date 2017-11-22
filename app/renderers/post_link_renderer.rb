@@ -3,7 +3,7 @@
 class PostLinkRenderer < WillPaginate::ActionView::LinkRenderer
   def previous_or_next_page(page, text, classname)
     if page
-      submit(text, page, classname,class: classname)
+      submit(text, page, classname, class: classname)
     else
       tag(:span, text, class: classname + ' disabled')
     end
@@ -18,7 +18,7 @@ class PostLinkRenderer < WillPaginate::ActionView::LinkRenderer
   end
 
   def submit(text, target, target_name, attributes = {})
-    string_attributes = attributes.inject(''.dup) do |attrs, pair|
+    string_attributes = attributes.inject(+'') do |attrs, pair|
       unless pair.last.nil?
         attrs << %( #{pair.first}="#{CGI.escapeHTML(pair.last.to_s)}")
       end
