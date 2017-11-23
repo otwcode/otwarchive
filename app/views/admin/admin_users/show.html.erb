@@ -84,7 +84,7 @@
       </p>
       <p>
         <%= text_area_tag "admin_note", nil, class: "observe_textlength" %>
-        <%= generate_countdown_html("admin_note", ArchiveConfig.LOGNOTE_MAX) %>
+        <%= generate_countdown_html("admin_note", ArchiveConfig.LOGNOTE_MAX_DISPLAYED) %>
       </p>
     </fieldset>
 
