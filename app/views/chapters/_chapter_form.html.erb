@@ -8,8 +8,8 @@
         <dt><%= f.label :title, ts("Chapter Title") %> <%= link_to_help "chapter-title" %></dt>
         <dd>
           <%= f.text_field :title, class: "observe_textlength" %>
-          <%= live_validation_for_field("chapter_title", presence: false, maximum_length: ArchiveConfig.TITLE_MAX_DISPLAYED) %>
-          <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX_DISPLAYED) %>
+          <%= live_validation_for_field("chapter_title", presence: false, maximum_length: ArchiveConfig.TITLE_MAX) %>
+          <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
         </dd>
 
         <dt><%= f.label :position, ts("Chapter Number") %></dt>

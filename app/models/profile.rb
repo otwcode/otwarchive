@@ -2,10 +2,8 @@ class Profile < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # Max is 1.02 times displayed
-  PROFILE_TITLE_MAX = 261
-  PROFILE_TITLE_MAX_DISPLAYED = 255
-  LOCATION_MAX = 261
-  LOCATION_MAX_DISPLAYED = 255
+  PROFILE_TITLE_MAX = 255
+  LOCATION_MAX = 255
   ABOUT_ME_MAX = 2040
   ABOUT_ME_MAX_DISPLAYED = 2000
 

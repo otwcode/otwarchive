@@ -79,8 +79,7 @@ DAYS_TO_SAVE_PROCESSED: 56
 
 # validation values -- max/min lengths
 # max is 1.02 times max_displayed
-TITLE_MAX: 261
-TITLE_MAX_DISPLAYED: 255
+TITLE_MAX: 255
 TITLE_MIN: 1
 SUMMARY_MAX: 1275
 SUMMARY_MAX_DISPLAYED: 1250

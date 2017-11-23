@@ -16,15 +16,15 @@
        <dt><%= p.label :title, "Title" %></dt>
        <dd>
           <%= p.text_field :title, :class => "observe_textlength" %>
-          <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX_DISPLAYED) %>      
-          <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX_DISPLAYED) %>
+          <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX) %>      
+          <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
         </dd>
 
         <dt><%= p.label :location, "Location" %></dt>
         <dd>
           <%= p.text_field :location, :class => "observe_textlength" %>
-          <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX_DISPLAYED) %>
-          <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX_DISPLAYED) %>
+          <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX) %>
+          <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) %>
         </dd>
 
         <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>

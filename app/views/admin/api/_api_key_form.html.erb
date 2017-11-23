@@ -14,7 +14,7 @@
         <%= f.text_field :name %>
         <%= live_validation_for_field("api_key_name",
                                       :presence => true,
-                                      :maximum_length => Profile::PROFILE_TITLE_MAX_DISPLAYED) %>
+                                      :maximum_length => Profile::PROFILE_TITLE_MAX) %>
       </dd>
       <dt><%= f.check_box :banned %></dt>
       <dd>

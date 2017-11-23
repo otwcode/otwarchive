@@ -27,7 +27,7 @@
       <dd class="required">
         <%= f.text_field :title, class: "observe_textlength" %>
         <%= generate_countdown_html("bookmark_external_title",
-                                    ArchiveConfig.TITLE_MAX_DISPLAYED) %>
+                                    ArchiveConfig.TITLE_MAX) %>
       </dd>
       <dt>
         <%= f.label :summary, ts("Creator's Summary") %>
