@@ -42,7 +42,7 @@
     </dt>
     <dd>
       <%= ew.text_area :summary, :rows => 5, :class => "observe_textlength"%>
-      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
+      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
     </dd>
   </dl>
 </fieldset>

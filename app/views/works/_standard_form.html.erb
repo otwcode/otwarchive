@@ -27,13 +27,13 @@
       <%= render "pseuds/byline", form: f, type: "work" %>
 
       <dt class="summary">
-        <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX_DISPLAYED.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, class: "observe_textlength" %>
         <%= live_validation_for_field("work_summary", presence: false,
-              maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-        <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) %>
+              maximum_length: ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+        <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
       </dd>
 
       <!-- notes -->

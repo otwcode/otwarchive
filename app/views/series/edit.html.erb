@@ -31,13 +31,13 @@
       <%= render 'pseuds/byline', :form => f, :type => 'series' %>
       
       <dt class="summary">
-        <%= f.label :summary, ts("Series Description", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, ts("Series Description", :max => ArchiveConfig.SUMMARY_MAX_DISPLAYED.to_s) %>
       </dt>
       <dd class="summary">
         <%= allowed_html_instructions %>
         <%= f.text_area :summary, :class => "observe_textlength" %>
-        <%= live_validation_for_field('series_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
-        <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) %>
+        <%= live_validation_for_field('series_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+        <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
       </dd>
       
       <dt>

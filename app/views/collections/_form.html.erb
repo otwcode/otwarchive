@@ -107,8 +107,8 @@
       <dd>
         <%= collection_form.text_area :description, rows: 4, cols: 60, class: "description-field observe_textlength" %>
         <%= live_validation_for_field('collection_description',
-              presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-        <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
+              presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+        <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
       </dd>
     </dl>
   </fieldset>
@@ -217,8 +217,8 @@
             class: "observe_textlength",
             "aria-describedby" => "assignment-notification-field-description" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_assignment_notification',
-            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", ArchiveConfig.SUMMARY_MAX) %>
+            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
     </p>
 
     <h3 class="heading">
@@ -232,8 +232,8 @@
             class: "observe_textlength",
             "aria-describedby" => "gift-notification-field-description" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_gift_notification',
-            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX) %>
+            presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
     </p>
 
   <% end %>

@@ -34,8 +34,8 @@
         <dt class="summary"><%= f.label :summary, ts("Chapter Summary") %></dt>
         <dd class="summary">
           <%= f.text_area :summary, rows: 4, cols: 60, class: "observe_textlength" %>
-          <%= live_validation_for_field("chapter_summary", presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
-          <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
+          <%= live_validation_for_field("chapter_summary", presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+          <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
         </dd>
 
         <%= render "works/notes_form", f: f, type: "chapter" %>
