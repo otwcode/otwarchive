@@ -36,19 +36,19 @@ describe BookmarkQuery do
 
   it "should not return bookmarks of hidden objects" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: { hidden_by_admin: 'false' }}}})
+    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: { hidden_by_admin: 'false' }}}})
   end
 
   it "should not return restricted bookmarked works by default" do
     User.current_user = nil
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'false'}}}})
+    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
   end
 
   it "should only return restricted bookmarked works when a user is logged in" do
     User.current_user = User.new
     q = BookmarkQuery.new
-    expect(q.filters).not_to include({has_parent:{type: 'bookmarkable', filter:{term: {restricted: 'false'}}}})
+    expect(q.filters).not_to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
   end
 
   it "should allow you to filter for recs" do
@@ -63,7 +63,7 @@ describe BookmarkQuery do
 
   it "should allow you to filter for complete works" do
     q = BookmarkQuery.new(complete: true)
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {complete: 'true'}}}})
+    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {complete: 'true'}}}})
   end
 
   it "should allow you to filter for bookmarks by pseud" do
@@ -86,8 +86,8 @@ describe BookmarkQuery do
     q = BookmarkQuery.new(parent: tag)
     expected_filter = {
       has_parent: {
-        type: 'bookmarkable',
-        filter: {
+        parent_type: 'bookmarkable',
+        query: {
           term: {
             filter_ids: 1
           }
@@ -115,7 +115,7 @@ describe BookmarkQuery do
 
   it "should allow you to filter for bookmarks by language" do
     q = BookmarkQuery.new(language_id: 1)
-    expect(q.filters).to include({has_parent:{type: 'bookmarkable', filter:{term: {language_id: 1}}}})
+    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {language_id: 1}}}})
   end
 
 #   it "should allow you to filter by count ranges" do
