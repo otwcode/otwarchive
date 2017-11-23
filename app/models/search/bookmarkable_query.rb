@@ -73,9 +73,9 @@ class BookmarkableQuery < Query
 
   def flipped_filter(filter)
     if filter.key?(:term) || filter.key?(:terms)
-      { has_child: { type: "bookmark", filter: filter } }
+      { has_child: { type: "bookmark", query: filter } }
     elsif filter.key?(:has_parent)
-      filter[:has_parent][:filter]
+      filter[:has_parent][:query]
     end
   end
 

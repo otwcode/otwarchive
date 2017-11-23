@@ -293,7 +293,7 @@ class BookmarkQuery < Query
     {
       has_parent: {
         parent_type: "bookmarkable",
-        filter: {
+        query: {
           term: options.merge(field => value)
         }
       }
@@ -304,7 +304,7 @@ class BookmarkQuery < Query
     {
       has_parent: {
         parent_type: "bookmarkable",
-        filter: {
+        query: {
           terms: options.merge(field => value)
         }
       }
