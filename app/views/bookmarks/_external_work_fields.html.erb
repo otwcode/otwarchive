@@ -34,7 +34,7 @@
       <% else %>
         <%= ew.text_field :title, :class => "observe_textlength" %>
       <% end %>
-      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX_DISPLAYED) %>
     </dd>
     <dt>
       <%= ew.label :summary, ts('Creator\'s Summary') %>
