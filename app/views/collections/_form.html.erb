@@ -183,8 +183,8 @@
     <p>
       <%= profile_form.text_area :intro, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_intro',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: ArchiveConfig.INFO_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX_DISPLAYED) %>
     </p>
 
     <h3 class="heading">
@@ -193,8 +193,8 @@
     <p>
       <%= profile_form.text_area :faq, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_faq',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: ArchiveConfig.INFO_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX_DISPLAYED) %>
     </p>
 
     <h3 class="heading">
@@ -202,8 +202,8 @@
     </h3>
       <p><%= profile_form.text_area :rules, rows: 10, cols: 80, class: "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_rules',
-            presence: false, maximum_length: ArchiveConfig.INFO_MAX) %>
-      <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) %>
+            presence: false, maximum_length: ArchiveConfig.INFO_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX_DISPLAYED) %>
     </p>
 
     <h3 class="heading">

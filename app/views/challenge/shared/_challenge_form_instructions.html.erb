@@ -8,16 +8,16 @@
     <dt><%= f.label :signup_instructions_general, ts("General Sign-up Instructions:") %></dt>
     <dd>
       <%= f.text_area :signup_instructions_general, :id => field_id(f, "signup_instructions_general").to_sym, :rows => 6, :cols => 60, :class => "observe_textlength" %>
-      <%= live_validation_for_field(field_id(f, "signup_instructions_general").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-      <%= generate_countdown_html(field_id(f, "signup_instructions_general").to_sym, ArchiveConfig.INFO_MAX) -%>        
+      <%= live_validation_for_field(field_id(f, "signup_instructions_general").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX_DISPLAYED) -%>
+      <%= generate_countdown_html(field_id(f, "signup_instructions_general").to_sym, ArchiveConfig.INFO_MAX_DISPLAYED) -%>        
     </dd>
 
     <% f.object.class::PROMPT_TYPES.each do |prompt_type| %>
       <dt><%= f.label "signup_instructions_#{prompt_type}".to_sym, ts("#{prompt_type.singularize.capitalize} Instructions: ") %></dt>
       <dd>
         <%= f.text_area "signup_instructions_#{prompt_type}".to_sym, :id => field_id(f, "signup_instructions_#{prompt_type}").to_sym, :rows => 6, :cols => 60, :class => "observe_textlength" %>
-        <%= live_validation_for_field(field_id(f, "signup_instructions_#{prompt_type}").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-        <%= generate_countdown_html(field_id(f, "signup_instructions_#{prompt_type}").to_sym, ArchiveConfig.INFO_MAX) -%>        
+        <%= live_validation_for_field(field_id(f, "signup_instructions_#{prompt_type}").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX_DISPLAYED) -%>
+        <%= generate_countdown_html(field_id(f, "signup_instructions_#{prompt_type}").to_sym, ArchiveConfig.INFO_MAX_DISPLAYED) -%>        
       </dd>
     <% end %>
   </dl>
