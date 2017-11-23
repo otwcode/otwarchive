@@ -128,7 +128,7 @@
       <dt><%= label_tag :notes, ts("Notes at the beginning") %></dt>
       <dd>
         <%= text_area_tag :notes, nil, class: "observe_textlength" %>
-        <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
+        <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX_DISPLAYED) %>
       </dd>
     </dl>
   </fieldset>

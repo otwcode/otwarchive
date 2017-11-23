@@ -75,7 +75,7 @@
             </p>
             <%= f.text_area :notes, rows: 4, id: notes_id, class: "observe_textlength",
                 "aria-describedby" => "notes-field-description" %>
-            <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
+            <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX_DISPLAYED) %>
           </dd>
 
           <dt><%= f.label :tag_string, ts("Your tags") %></dt>

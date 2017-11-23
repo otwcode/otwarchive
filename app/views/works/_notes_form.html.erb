@@ -17,10 +17,10 @@
         <% if !params[:claim_id].blank? %>
         <% posting_claim = ChallengeClaim.find(params[:claim_id]) %>
           <%= f.text_area :notes, :class => "observe_textlength", :value => "<strong>Prompt:</strong> " << posting_claim.request_prompt.description %>
-          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
+          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX_DISPLAYED) %>
         <% else %>
           <%= f.text_area :notes, :class => "observe_textlength" %>
-          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
+          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX_DISPLAYED) %>
         <% end %>
       </fieldset>
     </li>
@@ -34,7 +34,7 @@
       <fieldset id="end-notes-options" class="end">
         <legend><%= f.label :endnotes, ts("End Notes") %></legend>
         <%= f.text_area :endnotes, :class => "observe_textlength" %>
-        <%= generate_countdown_html("#{type}_endnotes", ArchiveConfig.NOTES_MAX) %>
+        <%= generate_countdown_html("#{type}_endnotes", ArchiveConfig.NOTES_MAX_DISPLAYED) %>
       </fieldset>
     </li>
   </ul>

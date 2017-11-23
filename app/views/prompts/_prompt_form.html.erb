@@ -68,8 +68,8 @@
           <% end %>
         </dt>
         <dd><%= form.text_area :description, :rows => 6, :cols => 50, :class => "observe_textlength" %>
-        <%= live_validation_for_field(field_id(form, "description").to_sym, :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
-        <%= generate_countdown_html(field_id(form, "description").to_sym, ArchiveConfig.NOTES_MAX) %>
+        <%= live_validation_for_field(field_id(form, "description").to_sym, :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX_DISPLAYED) -%>
+        <%= generate_countdown_html(field_id(form, "description").to_sym, ArchiveConfig.NOTES_MAX_DISPLAYED) %>
         </dd>
       <% end %>
     
