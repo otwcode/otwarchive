@@ -16,15 +16,15 @@
        <dt><%= p.label :title, "Title" %></dt>
        <dd>
           <%= p.text_field :title, :class => "observe_textlength" %>
-          <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX) %>      
-          <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
+          <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX_DISPLAYED) %>      
+          <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX_DISPLAYED) %>
         </dd>
 
         <dt><%= p.label :location, "Location" %></dt>
         <dd>
           <%= p.text_field :location, :class => "observe_textlength" %>
-          <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX) %>
-          <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) %>
+          <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX_DISPLAYED) %>
+          <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX_DISPLAYED) %>
         </dd>
 
         <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
@@ -34,8 +34,8 @@
         <dd class="description">
           <p><%= allowed_html_instructions %></p>
           <%= p.text_area :about_me, :class => "observe_textlength" %>
-          <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX) %>
-          <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
+          <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX_DISPLAYED) %>
+          <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX_DISPLAYED) %>
         </dd>
   		<dt class="landmark"><%= p.label :update, "Update" %></dt>
   		<dd class="submit actions"><%= f.submit "Update" %></dd>
