@@ -32,7 +32,15 @@
     <dd><%= form.text_field :title %></dd>
 
     <dt><%= form.label :description, ts("Brief Description") %></dt>
-    <dd><%= form.text_field :description %></dd>
+    <dd>
+      <%= form.text_area :description, class: "observe_textlength" %>
+      <%= live_validation_for_field("owned_tag_set_description",
+                                    presence: false,
+                                    maximum_length: 
+                                      ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+      <%= generate_countdown_html("owned_tag_set_description",
+                                  ArchiveConfig.SUMMARY_MAX_DISPLAYED) %>
+    </dd>
 
     <dt><%= form.label :visible, ts("Visible tag list?") %></dt>
     <dd><%= form.check_box :visible %></dd>
