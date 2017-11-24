@@ -1,0 +1,2 @@
+<% "Expects @fandoms" %>
+<%= @fandoms.collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>

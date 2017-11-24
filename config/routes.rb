@@ -68,7 +68,9 @@ Otwarchive::Application.routes.draw do
       get :discuss
     end
   end
-  resources :tag_wranglers
+  resources :tag_wranglers do
+    get :confirm_delete
+  end
   resources :unsorted_tags do
     collection do
       post :mass_update

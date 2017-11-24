@@ -92,6 +92,16 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 
+  Scenario: Wrangler cannot remove another wrangler's fandom from that wrangler's page
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And the following activated tag wrangler exists
+        | login          |
+        | wranglerette   |
+    When I am logged in as "wranglerette"
+      And I am on tangler's wranglers page
+    Then I should not see "Unassign"
+
   Scenario: Wrangler can remove another wrangler from a fandom
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
@@ -101,7 +111,8 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I am logged in as "wranglerette"
       And I am on the wranglers page
       And I follow "x"
-    Then "Testing" should not be assigned to the wrangler "tangler"
+    Then I should be on the wranglers page
+     And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 

@@ -1,0 +1,19 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Unassign Fandoms") %></h2>
+
+<p class="caution">
+  <%= ts("You are about to unassign the following fandoms from %{name}:", name: @wrangler.default_pseud.byline.html_safe) %>
+</p>
+
+<%= render "fandoms/fandoms_abbreviated_list", fandoms: @fandoms %>
+
+<%= form_tag tag_wrangler_path(:id => @wrangler), :method => :delete do %>
+  <% @fandoms.each_with_index do |fandom, index| %><%= hidden_field_tag "fandom_ids[]", fandom.id, :id => "fandom_ids_#{index}" %><% end %>
+  <ul class="actions">
+    <li><%= submit_tag ts("Yes, Unassign Fandoms") %></li>
+    <li><%= link_to ts("Cancel"), tag_wrangler_path(@wrangler) %></li>
+  </ul>
+<% end %>
+
+
+<!--/content-->

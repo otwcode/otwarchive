@@ -1,6 +1,8 @@
 class TagWranglersController < ApplicationController
   before_action :check_user_status
-	before_action :check_permission_to_wrangle
+  before_action :check_permission_to_wrangle, except: [:destroy, :confirm_delete]
+  before_action :load_wrangler, except: [:index]
+  before_action :load_assignments, only: [:destroy, :confirm_delete]
 
   def index
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
@@ -35,8 +37,20 @@ class TagWranglersController < ApplicationController
                                 .paginate(page: params[:page], per_page: 50)
   end
 
-  def show
+  def load_wrangler
     @wrangler = User.find_by(login: params[:id])
+    @check_ownership_of = @wrangler
+  end
+
+  def load_assignments
+    @assignments = WranglingAssignment.where(user_id: @wrangler.id, fandom_id: params[:fandom_ids])
+    @fandoms = @assignments.map(&:fandom)
+  end
+
+  def confirm_delete
+  end
+
+  def show
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
@@ -82,9 +96,20 @@ class TagWranglersController < ApplicationController
   end
 
   def destroy
-    wrangler = User.find_by(login: params[:id])
-    assignments = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_ids])
-    assignments.each(&:destroy)
-    redirect_to request.referer || tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
+    if request.format == "html" && params[:commit] == 'Unassign'
+      render 'confirm_delete' and return
+    end
+
+    @assignments.each(&:destroy)
+
+    respond_to do |format|
+      format.html do
+        redirect_to request.referer || tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
+      end
+      format.js do
+        @fandoms = @wrangler.fandoms.by_name
+        render partial: 'assigned_fandoms_span'
+      end
+    end
   end
 end

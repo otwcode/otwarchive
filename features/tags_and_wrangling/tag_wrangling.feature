@@ -230,6 +230,9 @@ Feature: Tag wrangling
     When I am on my wrangling page
       And I check the fandom unassign option for "Stargate SG-1"
       And I press "Unassign"
+    Then I should see "You are about to unassign"
+      And I should see "Stargate SG-1"
+    When I press "Yes, Unassign Fandoms"
     Then I should be on my wrangling page
       And I should not see "Stargate SG-1"
 
