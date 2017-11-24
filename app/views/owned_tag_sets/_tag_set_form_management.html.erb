@@ -31,7 +31,7 @@
     <dt class="required"><%= form.label :title, ts("Title* (text only)") %></dt>
     <dd><%= form.text_field :title %></dd>
 
-    <dt><%= form.label :description, ts("Brief Description") %></dt>
+    <dt><%= form.label :description, ts("Description") %></dt>
     <dd>
       <%= form.text_area :description, class: "observe_textlength" %>
       <%= live_validation_for_field("owned_tag_set_description",
