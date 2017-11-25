@@ -147,7 +147,7 @@ describe HtmlCleaner do
     context "Sanitize tags allowed only in the content field" do
       %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
          metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-         embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+         open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
 
         it "should allow embeds from #{source}" do
           html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
