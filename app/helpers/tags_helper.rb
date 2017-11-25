@@ -376,4 +376,15 @@ module TagsHelper
     end
   end
 
+  def set_tags_counters
+    @counts = {}
+    [Fandom, Character, Relationship, Freeform].each do |klass|
+      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
+        klass.unwrangled.in_use.count
+      end
+    end
+    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
+      UnsortedTag.count
+    end
+  end
 end
