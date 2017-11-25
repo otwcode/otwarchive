@@ -2,11 +2,12 @@ class SearchResult
 
   include Enumerable
 
-  attr_reader :klass, :tire_response
+  attr_reader :klass, :relation, :tire_response
 
   def initialize(model_name, response)
     raise "Redshirt: Attempted to constantize invalid class initialize #{model_name.classify}" unless %w(Bookmark Pseud Tag Work).include?(model_name.classify)
     @klass = model_name.classify.constantize
+    @relation = @klass
     @tire_response = response
   end
 
@@ -14,10 +15,17 @@ class SearchResult
   def items
     if @items.nil?
       ids = tire_response.results.map { |item| item['id'] }
-      items = klass.where(id: ids).group_by(&:id)
+      items = relation.where(id: ids).group_by(&:id)
       @items = ids.map{ |id| items[id.to_i] }.flatten.compact
     end
     @items
+  end
+
+  # Adds includes to the relation that we'll be using when we look up the items
+  # in this search result set. Returns self for easy chaining.
+  def includes(*args)
+    @relation = @relation.includes(*args)
+    self
   end
 
   def each(&block)
