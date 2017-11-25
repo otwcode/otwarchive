@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-class PostLinkRenderer < WillPaginate::ActionView::LinkRenderer
-  def previous_or_next_page(page, text, classname)
+class PostLinkRenderer < PaginationListLinkRenderer
+  def previous_or_next_page(page, text, classname, remote = nil)
     if page
       submit(text, page, classname, class: classname)
     else
-      tag(:span, text, class: classname + ' disabled')
+      super
     end
   end
 
-  def page_number(page)
-    if page == current_page
-      tag(:em, page, class: 'current')
-    else
+  def page_number(page, remote = nil)
+    unless page == current_page
       submit(page, page, nil)
+    else
+      super
     end
   end
 

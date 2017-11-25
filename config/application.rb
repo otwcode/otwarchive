@@ -16,7 +16,6 @@ module Otwarchive
     # config.autoload_paths += %W(#{config.root}/extras)
     config.eager_load_paths += %W(#{Rails.root}/lib)
     config.autoload_paths += %W(#{Rails.root}/app/sweepers)
-    config.autoload_paths += %W(#{Rails.root}/app/renderers)
     %w(
       challenge_models
       tagset_models
