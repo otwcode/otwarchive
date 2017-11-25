@@ -16,5 +16,5 @@ a=Admin.new(email: email, login: login, password: password, password_confirmatio
 if a.save
   print "Admin created\n"
 else
-  y a.errors.full_messages
+  puts a.errors.full_messages
 end

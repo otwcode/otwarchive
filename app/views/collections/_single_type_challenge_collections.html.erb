@@ -1,0 +1,9 @@
+<%= render :partial => "challenge_collections" %>
+
+<!--filters subnav-->
+<%= render :partial => "filters", locals: { :filter_target => filter_target } %>
+<!---/subnav-->
+
+<% unless @challenge_collections.blank? %>
+  <%= will_paginate @challenge_collections %>
+<% end %>

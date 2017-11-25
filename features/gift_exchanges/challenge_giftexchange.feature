@@ -38,6 +38,21 @@ Feature: Gift Exchange Challenge
     When I view open challenges
     Then I should see "My Gift Exchange"
 
+  Scenario: Gift exchanges are ordered so the soonest to close are on top
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "My Gift Exchange"
+      And I am on "My Gift Exchange" gift exchange edit page
+      And I check "Sign-up open?"
+      And I set challenge close time to 1 month
+      And I submit
+      And I have created the gift exchange "My Second Gift Exchange"
+      And I am on "My Second Gift Exchange" gift exchange edit page
+      And I check "Sign-up open?"
+      And I set challenge close time to 2 month
+      And I submit
+    When I view open challenges
+    Then I should see "My Gift Exchange" before "My Second Gift Exchange"
+
   Scenario: Gift exchange also appears in list of open gift exchange challenges
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
@@ -47,6 +62,27 @@ Feature: Gift Exchange Challenge
     When I view open challenges
       And I follow "Gift Exchange Challenges"
     Then I should see "My Gift Exchange"
+
+  Scenario: Filtering in list of open gift exchange challenges
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "My Gift Exchange"
+      And I am on "My Gift Exchange" gift exchange edit page
+      And I check "Sign-up open?"
+      And I submit
+      And I go to "My Gift Exchange" collection's page
+      And I follow "Collection Settings"
+      And I check "This collection is moderated"
+      And I press "Update"
+      And I have created the gift exchange "My Second Gift Exchange"
+      And I am on "My Second Gift Exchange" gift exchange edit page
+      And I check "Sign-up open?"
+      And I submit
+    When I view open challenges
+      And I follow "Gift Exchange Challenges"
+      And I choose "collection_filters_moderated_true"
+      And I press "Filter"
+    Then I should see "My Gift Exchange"
+      And I should not see "My Second Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
     Given I am logged in as "mod1"

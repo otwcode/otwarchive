@@ -66,6 +66,11 @@ When /^I fill in gift exchange challenge options$/ do
     select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
+When /^I set challenge close time to ([0-9]*) months?$/ do |months|
+  current_date = DateTime.current
+  fill_in("Sign-up closes", with: "#{current_date.months_since(months.to_i)}")
+end
+
 When /^I fill in single-fandom gift exchange challenge options$/ do
   current_date = DateTime.current
   fill_in("Sign-up opens", with: current_date.months_ago(2).to_s)

@@ -62,7 +62,7 @@
 
 <% if @sort_and_filter %>
   <!--filters subnav-->
-  <%= render 'collections/filters' %>
+  <%= render :partial => 'collections/filters', locals: { filter_target: collections_url } %>
   <!---/subnav-->
 <% end %> 
 

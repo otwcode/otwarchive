@@ -210,12 +210,12 @@ class Collection < ApplicationRecord
   end
 
   # Get only collections with running challenges
-  def self.signup_open(challenge_type)
+  scope :signup_open, lambda { |challenge_type|
     table = challenge_type.tableize
     not_closed.where(challenge_type: challenge_type).
       joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
-  end
+      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at ASC")
+  }
 
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
@@ -448,17 +448,15 @@ class Collection < ApplicationRecord
     approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
   end
 
-  def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = {page: page}
-
+  def self.filtered(filters)
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
 
     if !filters[:title].blank?
       # we get the matching collections out of autocomplete and use their ids
       ids = Collection.autocomplete_lookup(search_param: filters[:title],
-                autocomplete_prefix: (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
-             ).map {|result| Collection.id_from_autocomplete(result)}
+                                           autocomplete_prefix: (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
+      ).map {|result| Collection.id_from_autocomplete(result)}
       query = query.where("collections.id in (?)", ids)
     else
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
@@ -473,18 +471,30 @@ class Collection < ApplicationRecord
         query = query.no_challenge
       end
     end
-    query = query.order(sort)
 
+    query
+  end
+
+  def self.filter_fandom(query, filters)
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
       if fandom
-        (fandom.approved_collections & query).paginate(pagination_args)
+        (fandom.approved_collections & query)
       else
         []
       end
     else
-      query.paginate(pagination_args)
+      query
     end
+  end
+
+  def self.sorted_and_filtered(filters, sort_function, page)
+    # build up the query with scopes based on the options the user specifies
+    query = filtered(filters)
+    query = sort_function.call(query)
+    query = filter_fandom(query, filters)
+
+    query.paginate(page: page)
   end
 
   # Delete current icon (thus reverting to archive default icon)

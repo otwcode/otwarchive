@@ -44,7 +44,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @collections = Collection.sorted_and_filtered(params[:collection_filters], Proc.new { |query| query.order(sort) }, params[:page])
     end
   end
 
@@ -52,17 +52,30 @@ class CollectionsController < ApplicationController
   def list_challenges
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
+    @challenge_collections = (Collection.signup_open("GiftExchange").includes(:challenge).limit(15) +
+      Collection.signup_open("PromptMeme").includes(:challenge).limit(15)).
+        sort_by { |collection| collection.challenge.signups_close_at }
   end
 
   def list_ge_challenges
-    @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
+    @challenge_type = "GiftExchange"
+    list_challenges_of_type
   end
 
   def list_pm_challenges
-    @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
+    @challenge_type = "PromptMeme"
+    list_challenges_of_type
+  end
+
+  def list_challenges_of_type
+    @page_subtitle = "Open #{@challenge_type.underscore.humanize.titleize} Challenges"
+    @sort_and_filter = true
+
+    params[:collection_filters] ||= {}
+    params[:collection_filters].delete("challenge_type")
+    params[:collection_filters].delete("closed")
+
+    @challenge_collections = Collection.sorted_and_filtered(params[:collection_filters], Proc.new { |query| query.signup_open(@challenge_type) }, params[:page])
   end
 
   def show

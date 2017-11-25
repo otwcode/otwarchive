@@ -136,6 +136,12 @@ Then /^(?:|I )should see JSON:$/ do |expected_json|
   expected.should == actual
 end
 
+Then /^(?:|I )should see "([^"]*)" before "([^"]*)"(?: within "([^"]*)")?$/ do |text_before, text_after, selector|
+  with_scope(selector) do
+    page.body.should =~ /#{Regexp.escape(text_before)}.*#{Regexp.escape(text_after)}/m
+  end
+end
+
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.should have_content(text)
