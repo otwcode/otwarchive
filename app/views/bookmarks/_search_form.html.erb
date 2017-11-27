@@ -1,4 +1,4 @@
-<%= form_for @search, :url => search_bookmarks_path, :html => {:class => 'search', :method => :get} do |f| %>
+<%= form_for @search, as: :bookmark_search, :url => search_bookmarks_path, :html => {:class => 'search', :method => :get} do |f| %>
 <fieldset>
   <legend>Search bookmarks</legend>
   <dl>
@@ -17,11 +17,11 @@
       <%= f.text_field :bookmarker %>
     </dd>
     <dt>
-      <%= f.label :notes, ts("Notes") %>
+      <%= f.label :bookmark_notes, ts("Notes") %>
       <%= link_to_help "bookmark-search-text-help" %>
     </dt>
     <dd>
-      <%= f.text_field :notes %>
+      <%= f.text_field :bookmark_notes %>
     </dd>
     <dt>
       <%= f.label :tag, ts("Tag") %>

@@ -16,7 +16,7 @@ class IndexSubqueue
 
   ####################
   # INSTANCE METHODS
-  ####################  
+  ####################
 
   attr_reader :name
 
@@ -35,18 +35,25 @@ class IndexSubqueue
   end
 
   def run
-    build_batch
-    @response = perform_batch_update
-    if @response.code == 200
-      respond_to_success
-    else
-      respond_to_failure
+    # Do this before the old indexing  to make sure that we know which IDs to
+    # pass to the indexer. (Delete this comment after the upgrade is complete.)
+    if $rollout.active?(:start_new_indexing)
+      AsyncIndexer.index(klass, ids, label)
+    end
+    unless $rollout.active?(:stop_old_indexing)
+      build_batch
+      @response = perform_batch_update
+      if @response.code == 200
+        respond_to_success
+      else
+        respond_to_failure
+      end
     end
   end
 
   def log
     @@log ||= Logger.new("#{Rails.root}/log/index-errors.log")
-  end 
+  end
 
   def ids
     @ids = REDIS.smembers(name).select{ |id| id.present? }
@@ -77,7 +84,7 @@ class IndexSubqueue
       :reindex_low
     end
   end
-  
+
   def delete
     REDIS.del(name)
   end
@@ -131,15 +138,15 @@ class IndexSubqueue
   def add_stats_to_batch(obj)
     basics = { "_index" => Work.index_name, "_type" => Work.document_type, "_id" => obj.work_id }
     @batch << { update: basics }.to_json
-    @batch << { 
-      doc: { 
+    @batch << {
+      doc: {
         work: {
           hits: obj.hit_count,
-          kudos_count: obj.kudos_count, 
-          bookmarks_count: obj.bookmarks_count, 
+          kudos_count: obj.kudos_count,
+          bookmarks_count: obj.bookmarks_count,
           comments_count: obj.comments_count
         }
-      } 
+      }
     }.to_json
   end
 

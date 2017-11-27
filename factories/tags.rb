@@ -13,6 +13,11 @@ FactoryGirl.define do
     association :filterable, factory: :fandom
   end
 
+  factory :meta_tagging do
+    association :meta_tag, factory: :freeform
+    association :sub_tag, factory: :freeform
+  end
+
   factory :tag_set do
     tags { [create(:fandom)] }
   end

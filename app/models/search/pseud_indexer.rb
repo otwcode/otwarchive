@@ -1,20 +1,20 @@
 class PseudIndexer < Indexer
 
   def self.klass
-    'Pseud'
+    "Pseud"
   end
 
   def self.mapping
     {
-      'pseud' => {
+      "pseud" => {
         properties: {
           name: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           user_login: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           }
         }
       }
