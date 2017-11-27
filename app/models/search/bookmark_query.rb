@@ -82,7 +82,7 @@ class BookmarkQuery < Query
   def parent_query
     {
       has_parent: {
-        type: "bookmarkable",
+        parent_type: "bookmarkable",
         query: {
           query_string: {
             query: query_term
@@ -284,8 +284,8 @@ class BookmarkQuery < Query
   def parent_term_filter(field, value, options={})
     {
       has_parent: {
-        type: "bookmarkable",
-        filter: {
+        parent_type: "bookmarkable",
+        query: {
           term: options.merge(field => value)
         }
       }
@@ -295,8 +295,8 @@ class BookmarkQuery < Query
   def parent_terms_filter(field, value, options={})
     {
       has_parent: {
-        type: "bookmarkable",
-        filter: {
+        parent_type: "bookmarkable",
+        query: {
           terms: options.merge(field => value)
         }
       }
