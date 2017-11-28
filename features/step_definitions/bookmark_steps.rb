@@ -74,6 +74,20 @@ Given /^I have bookmarks to search$/ do
   step %{all search indexes are updated}
 end
 
+Given /^I have bookmarks to search by dates$/ do
+  work1 = nil
+  Timecop.freeze(901.days.ago) do
+    work1 = FactoryGirl.create(:posted_work, title: "Old work")
+    FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "Old bookmark of old work")
+  end
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "New bookmark of old work")
+
+  work2 = FactoryGirl.create(:posted_work, title: "New work")
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, notes: "New bookmark of new work")
+
+  step %{all search indexes are updated}
+end
+
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
