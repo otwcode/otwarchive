@@ -338,16 +338,3 @@ Feature: Create Works
     When I follow "Next Chapter →"
     Then I should see "Chapter 2"
       And I should see "author, coauthor" within ".byline"
-
-  Scenario: Adding a co-creator to a work should notify the co-creator
-
-    Given the user "karma" exists and is activated
-      And the user "amy" exists and is activated
-    When I am logged in as "karma"
-      And I post the work "Forever Friends"
-      And I add the co-author "amy" to the work "Forever Friends"
-    Then 1 email should be delivered to "amy"
-      And the email should contain "You have been listed as a co-creator on the following work"
-      And the email should contain "Forever Friends"
-      And the email should contain "amy, karma"
-      And the email should not contain "translation missing"

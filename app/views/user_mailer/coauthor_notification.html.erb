@@ -4,12 +4,8 @@
   <p><%= t ".part1_#{creation_type}" %></p>
 
   <p>
-    <i><b><%= style_link(@creation.title, (@creation.class == Series ? series_url(@creation) : work_url(@creation))) %></b></i> by <%= @creation.pseuds.map{ |p| style_pseud_link(p) }.to_sentence.html_safe %>
-  </p>
-
-  <p>
     <%= t(".html.creation",
-    creation_link: "<i><b>#{style_link(@creation.title, (@creation.class == Series ? series_url(@creation) : work_url(@creation)))}</b></i>", 
+    creation_link: "<i><b>#{style_link(@creation.title, (@creation.class == Series ? series_url(@creation) : work_url(@creation)))}</b></i>".html_safe, 
     pseud_links: @creation.pseuds.map{ |p| style_pseud_link(p) }.to_sentence.html_safe).html_safe %>
   </p>
 
