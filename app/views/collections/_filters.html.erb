@@ -1,50 +1,68 @@
-<%= form_tag filter_target, method: :get, class: 'narrow-hidden filters', id: 'collection-filters' do %>
+<%= form_tag filter_target, method: :get, class: "narrow-hidden filters",
+    id: "collection-filters" do %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
-  <%= field_set_tag ts('Filter collections:') do %>
- 		<dl class="filters" role="menu">
+  <%= field_set_tag ts("Filter collections:") do %>
+    <dl>
       <% submit_text = ts(@challenge_type ? 'Filter' : 'Sort and Filter') %>
       <dt class="landmark"><%= submit_text %></dt>
       <dd class="submit actions"><%= submit_tag submit_text %></dd>
       <% unless @challenge_type %>
-        <dt>
+        <dt class="sort">
           <%= label_tag :sort_column, ts("Sort by") %>
         </dt>
-        <dd>
-          <%= select_tag :sort_column, options_for_select({
-            ts('Title') => 'collections.title',
-            ts('Date Created') => 'collections.created_at'}, params[:sort_column]) %>
+        <dd class="sort">
+          <%= select_tag :sort_column,
+              options_for_select({
+                ts("Title") => "collections.title",
+                ts("Date Created") => "collections.created_at" },
+                params[:sort_column]) %>
         </dd>
-        <dt>
+        <dt class="sort">
           <%= label_tag :sort_direction, ts("Sort direction") %>
         </dt>
-        <dd>
-          <%= select_tag :sort_direction, options_for_select({
-            ts('Ascending') => 'ASC',
-            ts('Descending') => 'DESC'}, params[:sort_direction]) %>
+        <dd class="sort">
+          <%= select_tag :sort_direction,
+              options_for_select({
+                ts("Ascending") => "ASC",
+                ts("Descending") => "DESC" },
+                params[:sort_direction]) %>
         </dd>
       <% end %>
-      <dt><%= label_tag 'collection_filters_title', ts("Filter by Title or Name") %></dt>
-      <dd>
-        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title], autocomplete_options("collection_fullname", :autocomplete_token_limit => 1) %>
+      <dt class="autocomplete search">
+        <%= label_tag "collection_filters_title",
+            ts("Filter by title or name") %>
+      </dt>
+      <dd class="autocomplete search">
+        <%= text_field_tag "collection_filters[title]",
+            params[:collection_filters][:title],
+            autocomplete_options("collection_fullname",
+              autocomplete_token_limit: 1) %>
       </dd>
-      <dt><%= label_tag 'collection_filters_fandom', ts("Filter by Fandom") %></dt>
-      <dd>
-        <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
+      <dt class="autocomplete search">
+        <%= label_tag "collection_filters_fandom", ts("Filter by fandom") %>
+      </dt>
+      <dd class="autocomplete search">
+        <%= text_field_tag "collection_filters[fandom]",
+            params[:collection_filters][:fandom],
+            autocomplete_options("fandom", autocomplete_token_limit: 1) %>
       </dd>
       <% unless @challenge_type %>
         <dt><%= ts("Closed") %></dt>
         <dd>
           <ul>
             <li>
-              <%= radio_button_tag "collection_filters[closed]", true, params[:collection_filters][:closed] == "true" %>
+              <%= radio_button_tag "collection_filters[closed]", true,
+                  params[:collection_filters][:closed] == "true" %>
               <%= label_tag "collection_filters_closed_true", ts("Yes") %>
             </li>
             <li>
-              <%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" %>
+              <%= radio_button_tag "collection_filters[closed]", false,
+                  params[:collection_filters][:closed] == "false" %>
               <%= label_tag "collection_filters_closed_false", ts("No") %>
             </li>
             <li>
-              <%= radio_button_tag "collection_filters[closed]", '', params[:collection_filters][:closed] == "" %>
+              <%= radio_button_tag "collection_filters[closed]", "",
+                  params[:collection_filters][:closed] == "" %>
               <%= label_tag "collection_filters_closed_", ts("Either") %>
             </li>
           </ul>
@@ -54,43 +72,57 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", true, params[:collection_filters][:moderated] == "true" %>
+            <%= radio_button_tag "collection_filters[moderated]", true,
+                params[:collection_filters][:moderated] == "true" %>
             <%= label_tag "collection_filters_moderated_true", ts("Yes") %>
-          </li>    
+          </li>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" %>
+            <%= radio_button_tag "collection_filters[moderated]", false,
+                params[:collection_filters][:moderated] == "false" %>
             <%= label_tag "collection_filters_moderated_false", ts("No") %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", '', params[:collection_filters][:moderated] == "" %>
+            <%= radio_button_tag "collection_filters[moderated]", "", params[:collection_filters][:moderated] == "" %>
             <%= label_tag "collection_filters_moderated_", ts("Either") %>
           </li>
-        </ul>   
+        </ul>
       </dd>
       <% unless @challenge_type %>
         <dt><%= ts("Collection Type") %></dt>
         <dd>
           <ul>
             <li>
-              <%= radio_button_tag "collection_filters[challenge_type]", "gift_exchange", params[:collection_filters][:challenge_type] == "gift_exchange" %>
-              <%= label_tag "collection_filters_challenge_type_gift_exchange", ts("Gift Exchange Challenge") %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "gift_exchange",
+                  params[:collection_filters][:challenge_type] == "gift_exchange"
+              %>
+              <%= label_tag "collection_filters_challenge_type_gift_exchange",
+                  ts("Gift Exchange Challenge") %>
             </li>
             <li>
-              <%= radio_button_tag "collection_filters[challenge_type]", "prompt_meme", params[:collection_filters][:challenge_type] == "prompt_meme" %>
-              <%= label_tag "collection_filters_challenge_type_prompt_meme", ts("Prompt Meme Challenge") %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "prompt_meme",
+                  params[:collection_filters][:challenge_type] == "prompt_meme" %>
+              <%= label_tag "collection_filters_challenge_type_prompt_meme",
+                  ts("Prompt Meme Challenge") %>
             </li>
             <li>
-              <%= radio_button_tag "collection_filters[challenge_type]", "no_challenge", params[:collection_filters][:challenge_type] == "no_challenge" %>
-              <%= label_tag "collection_filters_challenge_type_no_challenge", ts("No Challenge") %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "no_challenge",
+                  params[:collection_filters][:challenge_type] == "no_challenge"
+              %>
+              <%= label_tag "collection_filters_challenge_type_no_challenge",
+                  ts("No Challenge") %>
             </li>
             <li>
-              <%= radio_button_tag "collection_filters[challenge_type]", '', params[:collection_filters][:challenge_type] == "" %>
+              <%= radio_button_tag "collection_filters[challenge_type]", "",
+                  params[:collection_filters][:challenge_type] == "" %>
               <%= label_tag "collection_filters_challenge_type_", ts("Any") %>
             </li>
           </ul>
         </dd>
       <% end %>
-      <dt class="landmark"><%= ts('Submit') %></dt>
+      <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag submit_text %></dd>
     </dl>
   <% end %>

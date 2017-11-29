@@ -85,6 +85,7 @@ GEM
       activesupport (>= 3.2, < 5.2)
       request_store (~> 1.0)
       scrypt (>= 1.2, < 4.0)
+    awesome_print (1.8.0)
     aws-sdk (2.9.35)
       aws-sdk-resources (= 2.9.35)
     aws-sdk-core (2.9.35)
@@ -495,6 +496,7 @@ DEPENDENCIES
   akismetor
   audited (~> 4.4)
   authlogic (~> 3.6.0)
+  awesome_print
   aws-sdk
   bcrypt
   bullet (~> 5.6.0)
@@ -535,7 +537,7 @@ DEPENDENCIES
   mysql2 (= 0.3.20)
   newrelic-redis
   newrelic_rpm
-  nokogiri (>= 1.7.1)
+  nokogiri (>= 1.8.1)
   nokogumbo (= 1.4.9)
   paperclip (>= 5.1.0)
   permit_yo
@@ -579,4 +581,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

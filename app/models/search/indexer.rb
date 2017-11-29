@@ -1,3 +1,5 @@
+# ES UPGRADE TRANSITION #
+# Change all instances of $new_elasticsearch to $elasticsearch
 class Indexer
 
   BATCH_SIZE = 1000
@@ -11,29 +13,28 @@ class Indexer
   end
 
   def self.delete_index
-    if $elasticsearch.indices.exists(index: index_name)
-      $elasticsearch.indices.delete(index: index_name)
+    if $new_elasticsearch.indices.exists(index: index_name)
+      $new_elasticsearch.indices.delete(index: index_name)
     end
   end
 
   def self.create_index
-    $elasticsearch.indices.create(
+    $new_elasticsearch.indices.create(
       index: index_name,
-      type: document_type,
       body: {
         settings: {
           index: {
             number_of_shards: 5
           }
         },
-        mappings: mapping
+        mappings: mapping,
       }
     )
   end
 
   # Note that the index must exist before you can set the mapping
   def self.create_mapping
-    $elasticsearch.indices.put_mapping(
+    $new_elasticsearch.indices.put_mapping(
       index: index_name,
       type: document_type,
       body: mapping
@@ -70,7 +71,7 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}" 
+    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}"
     klass.constantize
   end
 
@@ -84,7 +85,7 @@ class Indexer
 
   ####################
   # INSTANCE METHODS
-  ####################     
+  ####################
 
   attr_reader :ids
 
@@ -126,7 +127,7 @@ class Indexer
   end
 
   def index_documents
-    $elasticsearch.bulk(body: batch)
+    $new_elasticsearch.bulk(body: batch)
   end
 
   def routing_info(id)
@@ -140,4 +141,5 @@ class Indexer
   def document(object)
     object.as_json(root: false)
   end
+
 end

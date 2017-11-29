@@ -1,5 +1,9 @@
 class TagQuery < Query
 
+  def klass
+    'Tag'
+  end
+
   def index_name
     TagIndexer.index_name
   end
@@ -21,11 +25,11 @@ class TagQuery < Query
   ################
 
   def type_filter
-    { term: { tag_type: options[:tag_type] } } if options[:tag_type]
+    { term: { tag_type: options[:type] } } if options[:type]
   end
 
   def canonical_filter
-    { term: { canonical: 'T' } } if options[:canonical]
+    { term: { canonical: 'true' } } if options[:canonical]
   end
 
   ################
@@ -33,7 +37,10 @@ class TagQuery < Query
   ################
 
   def name_query
-    { match: { name: options[:name] } } if options[:name]
+    return unless options[:name]
+
+    name = escape_reserved_characters(options[:name])
+    { match_phrase: { name: name } } if options[:name]
   end
 
 end

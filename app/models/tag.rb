@@ -1,8 +1,9 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -23,6 +24,20 @@ class Tag < ApplicationRecord
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
+  end
+
+  def document_json
+    TagIndexer.new({}).document(self)
+  end
 
   def self.write_redis_to_database
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
@@ -179,7 +194,7 @@ class Tag < ApplicationRecord
   before_update :remove_index_for_type_change, if: :type_changed?
   def remove_index_for_type_change
     @destroyed = true
-    tire.update_index
+    reindex_document
   end
 
   before_validation :check_synonym
@@ -1171,9 +1186,11 @@ class Tag < ApplicationRecord
   #################################
 
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :id,           index: :not_analyzed
-    indexes :name,         analyzer: 'snowball', boost: 100
+    indexes :name#,         analyzer: 'snowball', boost: 100
     indexes :type
     indexes :canonical,    type: :boolean
   end

@@ -8,9 +8,10 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -252,6 +253,16 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -1436,6 +1447,8 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block #
   mapping do
     indexes :authors_to_sort_on,  index: :not_analyzed
     indexes :title_to_sort_on,    index: :not_analyzed
@@ -1467,23 +1480,33 @@ class Work < ApplicationRecord
       ])
   end
 
+  def document_json
+    WorkIndexer.new({}).document(self)
+  end
+
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
+      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
+      id: "work-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Work'
+      bookmarkable_type: 'Work',
+      bookmarkable_join: "bookmarkable"
     )
   end
 
   def pseud_ids
     creatorships.pluck :pseud_id
+  end
+
+  def user_ids
+    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids
@@ -1541,8 +1564,8 @@ class Work < ApplicationRecord
   def work_types
     types = []
     video_ids = [44011] # Video
-    audio_ids = [70308] # Podfic
-    art_ids = [7844, 125758] # Fanart, Arts
+    audio_ids = [70308, 1098169] # Podfic, Audio Content
+    art_ids = [7844, 125758, 3863] # Fanart, Arts
     types << "Video" if (filter_ids & video_ids).present?
     types << "Audio" if (filter_ids & audio_ids).present?
     types << "Art" if (filter_ids & art_ids).present?
@@ -1557,7 +1580,7 @@ class Work < ApplicationRecord
   # To be replaced by actual category
   # Can't use the 'Meta' tag since that has too many different uses
   def nonfiction
-    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
 end
