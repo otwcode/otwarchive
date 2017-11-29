@@ -32,13 +32,10 @@ class Indexer
       body: {
         settings: {
           index: {
-            number_of_shards: 5,
-            # In preparation for ES 6.x, only a single document type is allowed
-            # per index
-            mapping: { single_type: true }
+            number_of_shards: 5
           }
         },
-        mappings: mapping,
+        mappings: mapping
       }
     )
   end
