@@ -127,7 +127,7 @@ class BookmarkSearch < Search
         end
       end
 
-      [:bookmarkable_word_count, :date, :bookmarkable_date].each do |countable|
+      [:date, :bookmarkable_date].each do |countable|
         if search_opts[countable].present?
           key = (countable == :date) ? :created_at : countable
           filter :range, key => Search.range_to_search(search_opts[countable])
@@ -194,7 +194,7 @@ class BookmarkSearch < Search
         end
       end
 
-      [:bookmarkable_word_count, :date, :bookmarkable_date].each do |countable|
+      [:date, :bookmarkable_date].each do |countable|
         if search_opts[countable].present?
           key = (countable == :date) ? :created_at : countable
           filter :range, key => Search.range_to_search(search_opts[countable])
