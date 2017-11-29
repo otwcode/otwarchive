@@ -141,4 +141,26 @@ class Query
     word
   end
 
+  def split_query_text_phrases(fieldname, text)
+    str = ""
+    return str if text.blank?
+    text.split(",").map(&:squish).each do |phrase|
+      str << " #{fieldname}:\"#{phrase}\""
+    end
+    str
+  end
+
+  def split_query_text_words(fieldname, text)
+    str = ""
+    return str if text.blank?
+    text.split(" ").each do |word|
+      if word[0] == "-"
+        str << " NOT"
+        word.slice!(0)
+      end
+      word = escape_reserved_characters(word)
+      str << " #{fieldname}:#{word}"
+    end
+    str
+  end
 end

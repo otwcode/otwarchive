@@ -105,6 +105,10 @@ Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   page.has_select?(field, selected: value).should == true
 end
 
+Then /^"(.*)?" should( not)? be an option within "(.*)?"$/ do |value, negation, field|
+  expect(page.has_select?(field, with_options: [value])).to be !negation
+end
+
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
@@ -145,14 +149,6 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
       assert !field_disabled
     end
   end
-end
-
-Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
-    if page.respond_to? :should
-      page.should have_content('<option selected="selected" value="' + text + '"')
-    else
-      assert page.has_content?('<option selected="selected" value="' + text + '"')
-    end
 end
 
 Then /^I should not see the field "([^"]*)"(?: within "([^"]*)")?$/ do |id, selector|
