@@ -12,6 +12,8 @@ class Indexer
     "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
   }.freeze
 
+  delegate :klass, :index_name, :document_type, to: :class
+
   ##################
   # CLASS METHODS
   ##################
@@ -106,18 +108,6 @@ class Indexer
 
   def initialize(ids)
     @ids = ids
-  end
-
-  def klass
-    self.class.klass
-  end
-
-  def index_name
-    self.class.index_name
-  end
-
-  def document_type
-    self.class.document_type
   end
 
   def objects
