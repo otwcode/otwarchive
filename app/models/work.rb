@@ -1493,7 +1493,6 @@ class Work < ApplicationRecord
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
-      id: "work-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
