@@ -156,4 +156,13 @@ describe WorkQuery do
     date = filter.dig(:range, :revised_at, :lt)
     expect(date.year).to eq(1000.years.ago.year)
   end
+
+  it "should rescue absurd date ranges" do
+    q = WorkQuery.new(revised_at: "700000000-700000001 days ago")
+    filter = q.range_filters.first
+    start_date = filter.dig(:range, :revised_at, :gte)
+    end_date = filter.dig(:range, :revised_at, :lte)
+    expect(start_date.year).to eq(1000.years.ago.year)
+    expect(end_date.year).to eq(1000.years.ago.year)
+  end
 end
