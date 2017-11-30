@@ -82,8 +82,12 @@ class Search < ApplicationRecord
   end
 
   # helper method to create times from two strings
+  # Elasticsearch gets grumpy with negative years, so the simple fix
+  # is just to go back a thousand years
+  # TODO: rework date query formats if Homer ever starts posting his stuff to AO3
   def self.time_from_string(amount, period)
-    amount.to_i.send(period).ago
+    date = amount.to_i.send(period).ago
+    date.year < 0 ? 1000.years.ago : date
   end
 
   # Generate a range based on one number

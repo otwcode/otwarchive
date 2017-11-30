@@ -150,4 +150,10 @@ describe WorkQuery do
     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
   end
 
+  it "should rescue absurd dates" do
+    q = WorkQuery.new(revised_at: "> 700000000 days")
+    filter = q.range_filters.first
+    date = filter.dig(:range, :revised_at, :lt)
+    expect(date.year).to eq(1000.years.ago.year)
+  end
 end
