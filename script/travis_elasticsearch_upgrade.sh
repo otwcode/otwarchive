@@ -15,12 +15,12 @@ case $ES in
 esac
 cd /tmp
 wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-0.90.13.tar.gz
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.1.tar.gz
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.0.0.tar.gz
 tar xvfz /tmp/elasticsearch-0.90.13.tar.gz
-tar xvfz /tmp/elasticsearch-5.6.1.tar.gz
-sed -i elasticsearch-5.6.1/config/elasticsearch.yml  -e 's/#http.port: 9200/http.port: 9400/'
+tar xvfz /tmp/elasticsearch-6.0.0.tar.gz
+sed -i elasticsearch-6.0.0/config/elasticsearch.yml  -e 's/#http.port: 9200/http.port: 9400/'
 sed -i elasticsearch-0.90.13/config/elasticsearch.yml  -e 's/# http.port: 9200/http.port: 9500/'
-nohup ./elasticsearch-5.6.1/bin/elasticsearch &
+nohup ./elasticsearch-6.0.0/bin/elasticsearch &
 wget -q --waitretry=1 --retry-connrefused -T 20 -O - http://127.0.0.1:9400
 if [ "$ES" != "2" ] ; then
  nohup ./elasticsearch-0.90.13/bin/elasticsearch &

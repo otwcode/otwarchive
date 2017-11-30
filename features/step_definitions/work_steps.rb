@@ -208,6 +208,14 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I am logged out}
 end
 
+Given /^the spam work "([^\"]*)"$/ do |work|
+  step %{I have a work "#{work}"}
+  step %{I am logged out}
+  w = Work.find_by_title(work)
+  w.update_attribute(:spam, true)
+  w.update_attribute(:hidden_by_admin, true)
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|

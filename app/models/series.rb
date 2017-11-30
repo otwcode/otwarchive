@@ -2,6 +2,7 @@ class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Creatable
+  include Searchable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -225,6 +226,7 @@ class Series < ApplicationRecord
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
         :word_count, :work_types]
     ).merge(
+      id: "series-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Series',
