@@ -14,8 +14,8 @@ class AsyncIndexer
     REDIS.del(name)
   end
 
-  # For the new search code, the indexing is handled
-  # by the indexer classes, so make sure we have the right names
+  # Get the appropriate indexers for the class and pass the ids off to them
+  # This method is only called internally and klass is not a user-supplied value
   def self.index(klass, ids, priority)
     if klass.to_s =~ /Indexer/
       indexers = [klass]
