@@ -3,15 +3,15 @@ require 'spec_helper'
 describe AsyncIndexer do
 
   it "should enqueue ids" do
-    work = Work.new
-    work.id = 34
+    tag = Tag.new
+    tag.id = 34
 
-    indexer = AsyncIndexer.new('WorkIndexer', :background)
+    indexer = AsyncIndexer.new(TagIndexer, :background)
 
-    expect(AsyncIndexer).to receive(:new).with('WorkIndexer', :background).and_return(indexer)
+    expect(AsyncIndexer).to receive(:new).with(TagIndexer, :background).and_return(indexer)
     expect(indexer).to receive(:enqueue_ids).with([34]).and_return(true)
 
-    AsyncIndexer.index('Work', [34], :background)
+    AsyncIndexer.index('Tag', [34], :background)
   end
 
   it "should retry batch errors" do
