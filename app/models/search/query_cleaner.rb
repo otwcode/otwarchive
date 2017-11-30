@@ -32,6 +32,8 @@ class QueryCleaner
     params
   end
 
+  private
+
   def unescape_angle_brackets
     params[:query] = params[:query].gsub('&gt;', '>').gsub('&lt;', '<')
   end
@@ -81,11 +83,12 @@ class QueryCleaner
   end
 
   # put categories into quotes
+  # don't match if the letters are part of larger words (ie, "Tom/Mark")
   def add_quotes_to_categories
     qr = Regexp.new('(?:"|\')?')
     %w(m/m f/f f/m m/f).each do |cat|
-      cr = Regexp.new("#{qr}#{cat}#{qr}", Regexp::IGNORECASE)
-      params[:query] = params[:query].gsub(cr, "\"#{cat}\"")
+      cr = Regexp.new("(\\A|\\s)#{qr}#{cat}#{qr}(\\z|\\s)", Regexp::IGNORECASE)
+      params[:query] = params[:query].gsub(cr, " \"#{cat}\" ")
     end
   end
 

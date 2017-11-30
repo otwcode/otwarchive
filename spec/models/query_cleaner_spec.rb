@@ -44,6 +44,11 @@ describe QueryCleaner do
       expect(cleaner.clean[:query]).to eq("Buffy \"f/f\"")
     end
 
+    it "should not ID category tags that are part of larger words" do
+      cleaner = QueryCleaner.new(query: "Jim/Frank")
+      expect(cleaner.clean[:query]).to eq("Jim/Frank")
+    end
+
     it "should extract sorting options from a query" do
       cleaner = QueryCleaner.new(query: "sort by: hits ascending")
       clean_params = cleaner.clean
