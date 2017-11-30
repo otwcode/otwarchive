@@ -83,7 +83,9 @@ class BookmarkableQuery < Query
     if q.key?(:query_string)
       q
     elsif q.key?(:has_parent)
-      { has_child: q[:has_parent]&.merge(type: "bookmark") }
+      child_query = q[:has_parent]&.merge(type: "bookmark")
+      child_query.delete(:parent_type)
+      { has_child: child_query }
     end
   end
 
