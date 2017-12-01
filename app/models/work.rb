@@ -257,8 +257,13 @@ class Work < ApplicationRecord
 
   def update_pseud_index
     return unless $rollout.active?(:start_new_indexing)
-    return unless destroyed? || saved_change_to_id? || saved_change_to_restricted?
+    return unless should_reindex_pseuds?
     AsyncIndexer.index(PseudIndexer, [pseuds.pluck(:id)], :background)
+  end
+
+  def should_reindex_pseuds?
+    pertinent_attributes = %w(id restricted in_anon_collection in_unrevealed_collection hidden_by_admin)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   # ES UPGRADE TRANSITION #
