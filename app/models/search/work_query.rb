@@ -98,6 +98,7 @@ class WorkQuery < Query
         ranges << { range: { countable => Search.range_to_search(options[countable]) } }
       end
     end
+    ranges += [date_range_filter, word_count_filter].compact
     ranges
   end
 
@@ -126,7 +127,7 @@ class WorkQuery < Query
   end
 
   def complete_filter
-    term_filter(:complete, 'true') if %w(true 1).include?(options[:complete].to_s)
+    term_filter(:complete, bool_value(options[:complete])) if options[:complete].present?
   end
 
   def single_chapter_filter
@@ -138,7 +139,7 @@ class WorkQuery < Query
   end
 
   def crossover_filter
-    term_filter(:crossover, include_crossovers) if include_crossovers.present?
+    term_filter(:crossover, bool_value(options[:crossover])) if options[:crossover].present?
   end
 
   def type_filter
@@ -167,6 +168,22 @@ class WorkQuery < Query
     if exclusion_ids.present?
       exclusion_ids.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
     end
+  end
+
+  def date_range_filter
+    return unless options[:date_from].present? || options[:date_to].present?
+    range = {}
+    range[:gte] = options[:date_from].to_date if options[:date_from].present?
+    range[:lte] = options[:date_to].to_date if options[:date_to].present?
+    { range: { revised_at: range } }
+  end
+
+  def word_count_filter
+    return unless options[:words_from].present? || options[:words_to].present?
+    range = {}
+    range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
+    range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    { range: { word_count: range } }
   end
 
   ####################
@@ -242,15 +259,6 @@ class WorkQuery < Query
 
   def include_anon?
     options[:user_ids].blank? && pseud_ids.blank?
-  end
-
-  def include_crossovers
-    return unless options[:crossover].present?
-    if %w(1 true T).include? options[:crossover].to_s
-      'true'
-    else
-      'false'
-    end
   end
 
   def pseud_ids

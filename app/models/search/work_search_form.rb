@@ -13,6 +13,7 @@ class WorkSearchForm
     :revised_at,
     :language_id,
     :complete,
+    :crossover,
     :single_chapter,
     :word_count,
     :hits,
@@ -37,6 +38,10 @@ class WorkSearchForm
     :relationship_ids,
     :freeform_names,
     :freeform_ids,
+    :date_from,
+    :date_to,
+    :words_from,
+    :words_to,
     :sort_column,
     :sort_direction,
     :page

@@ -89,10 +89,57 @@
             <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
           </dd>
 
-          <dt class="status"><%= ts("Status") %></dt>
-          <dd class="status">
-            <%= f.check_box :complete %>
-            <%= f.label :complete, ts("Complete only") %>
+          <dt id="toggle_work_complete" class="tags"><%= ts("Status") %></dt>
+          <dd id="work_complete" class="expandable">
+            <ul>
+              <li>
+                <%= f.radio_button :complete, "" %>
+                <%= f.label :complete, ts("Both complete and incomplete"), value: "" %>
+              </li>
+              <li>
+                <%= f.radio_button :complete, "T" %>
+                <%= f.label :complete, ts("Only complete works"), value: "T" %>
+              </li>
+              <li>
+                <%= f.radio_button :complete, "F" %>
+                <%= f.label :complete, ts("Only incomplete works"), value: "F" %>
+              </li>
+            </ul>
+          </dd>
+          <dt id="toggle_work_crossover" class="tags">Crossovers</dt>
+          <dd id="work_crossover" class="expandable">
+            <ul>
+              <li>
+                <%= f.radio_button :crossover, "" %>
+                <%= f.label :crossover, ts("Include crossovers"), value: "" %>
+              </li>
+              <li>
+                <%= f.radio_button :crossover, "F" %>
+                <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
+              </li>
+              <li>
+                <%= f.radio_button :crossover, "T" %>
+                <%= f.label :crossover, ts("Show only crossovers"), value: "T" %>
+              </li>
+            </ul>
+          </dd>
+          <dt id="toggle_work_words" class="tags">Word Count</dt>
+          <dd id="work_words" class="expandable">
+            <dl>
+              <dt><%= f.label :words_from, ts("From:") %></dt>
+              <dd><%= f.text_field :words_from %>
+              <dt><%= f.label :words_to, ts("To:") %></dt>
+              <dd><%= f.text_field :words_to %>
+            </dl>
+          </dd>
+          <dt id="toggle_work_dates" class="tags">Date</dt>
+          <dd id="work_dates" class="expandable">
+            <dl>
+              <dt><%= f.label :date_from, ts("From:") %></dt>
+              <dd><%= f.text_field :date_from, :class => 'datepicker' %>
+              <dt><%= f.label :date_to, ts("To:") %></dt>
+              <dd><%= f.text_field :date_to, :class => 'datepicker' %>
+            </dl>
           </dd>
         </dl>
       </dd>
@@ -117,4 +164,12 @@
     </a>
   </p>
 
+<% end %>
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j('.datepicker').datepicker({
+      dateFormat: "yy-mm-dd"
+    });
+  <% end %>
 <% end %>
