@@ -153,7 +153,7 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def prompt_description
-    request_prompt.try(:description) || ""
+    request_prompt&.description || ""
   end
 
 end
