@@ -23,59 +23,7 @@ class WorksController < ApplicationController
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    # https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
-    # While nearly identical, clone does one more thing than dup.
-    # In clone, the frozen state of the object is also copied.
-    # In dup, it'll always be thawed.
-
-    clean_params = work_search_params&.dup
-    clean_params[:query] = clean_params[:query].dup unless clean_params[:query].nil?
-    clean_params[:sort_column] = clean_params[:sort_column].dup unless clean_params[:sort_column].nil?
-    clean_params[:sort_direction] = clean_params[:sort_direction].dup unless clean_params[:sort_direction].nil?
-
-    if clean_params.present? && clean_params[:query].present?
-      # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      clean_params[:query].gsub!('&gt;', '>')
-      clean_params[:query].gsub!('&lt;', '<')
-
-      # extract countable params
-      %w(word kudo comment bookmark hit).each do |term|
-        next unless clean_params[:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
-        # pluralize, add _count, convert to symbol
-        term = term.pluralize unless term == 'word'
-        term += '_count' unless term == 'hits'
-        term = term.to_sym
-
-        value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
-        # don't overwrite if submitting from advanced search?
-        clean_params[term] = value unless clean_params[term].present?
-      end
-
-      # get sort-by
-      if clean_params[:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
-        sortdir = Regexp.last_match(3) || Regexp.last_match(1)
-        sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
-
-        _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        clean_params[:sort_column] = sort_column unless sort_column.nil?
-        clean_params[:sort_direction] = sort_direction(sortdir)
-      end
-
-      # put categories into quotes
-      qr = Regexp.new('(?:"|\')?')
-      %w(m/m f/f f/m m/f).each do |cat|
-        cr = Regexp.new("#{qr}#{cat}#{qr}")
-        clean_params[:query].gsub!(cr, "\"#{cat}\"")
-      end
-
-      # swap out gt/lt
-      clean_params[:query].gsub!('>', '&gt;')
-      clean_params[:query].gsub!('<', '&lt;')
-
-      # get rid of empty queries
-      clean_params[:query] = nil if clean_params[:query] =~ /^\s*$/
-    end
-    clean_params
+    QueryCleaner.new(work_search_params || {}).clean
   end
 
   def search
@@ -83,8 +31,14 @@ class WorksController < ApplicationController
     options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    @search = WorkSearch.new(options)
-    @page_subtitle = ts('Search Works')
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
+    if use_new_search?
+      @search = WorkSearchForm.new(options)
+    else
+      @search = WorkSearch.new(options)
+    end
+    @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
       if @search.query.present?
@@ -98,6 +52,11 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
+    base_options = {
+      page: params[:page] || 1,
+      show_restricted: current_user.present? || logged_in_as_admin?
+    }
+
     options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
@@ -110,8 +69,23 @@ class WorksController < ApplicationController
       options[:filter_ids] << tag.id
     end
 
-    options[:page] = params[:page]
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    if params[:include_work_search].present?
+      params[:include_work_search].keys.each do |key|
+        options[key] ||= []
+        options[key] << params[:include_work_search][key]
+        options[key].flatten!
+      end
+    end
+
+    if params[:exclude_work_search].present?
+      params[:exclude_work_search].keys.each do |key|
+        options[:excluded_tag_ids] ||= []
+        options[:excluded_tag_ids] << params[:exclude_work_search][key]
+        options[:excluded_tag_ids].flatten!
+      end
+    end
+
+    options.merge!(base_options)
     @page_subtitle = index_page_title
 
     if logged_in? && @tag
@@ -125,8 +99,13 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-
+        # ES UPGRADE TRANSITION #
+        # Remove conditional and call to WorkSearch
+        if use_new_search?
+          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+        else
+          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
@@ -147,6 +126,13 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
+        if @search.options[:excluded_tag_ids].present?
+          tags = Tag.where(id: @search.options[:excluded_tag_ids])
+          tags.each do |tag|
+            @facets[tag.class.to_s.downcase] ||= []
+            @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+          end
+        end
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
@@ -159,7 +145,7 @@ class WorksController < ApplicationController
 
   def collected
     options = params[:work_search].present? ? clean_work_search_params : {}
-    options[:page] = params[:page]
+    options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
     @user = User.find_by(login: params[:user_id])
@@ -169,7 +155,13 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      # ES UPGRADE TRANSITION #
+      # Remove conditional and call to WorkSearch
+      if use_new_search?
+        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      else
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      end
       @works = @search.search_results
       @facets = @works.facets
     end
@@ -1029,14 +1021,6 @@ class WorksController < ApplicationController
     end
   end
 
-  def sort_direction(sortdir)
-    if sortdir == '>' || sortdir == 'ascending'
-      'asc'
-    elsif sortdir == '<' || sortdir == 'descending'
-      'desc'
-    end
-  end
-
   def build_options(params)
     pseuds_to_apply =
       (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
@@ -1092,7 +1076,7 @@ class WorksController < ApplicationController
     params.require(:work_search).permit(
       :query,
       :title,
-      :creator,
+      :creators,
       :revised_at,
       :complete,
       :single_chapter,
@@ -1110,6 +1094,7 @@ class WorksController < ApplicationController
       :sort_column,
       :sort_direction,
       :other_tag_names,
+      :excluded_tag_names,
 
       warning_ids: [],
       category_ids: [],
@@ -1122,4 +1107,5 @@ class WorksController < ApplicationController
       collection_ids: []
     )
   end
+
 end

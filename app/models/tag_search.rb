@@ -1,5 +1,7 @@
+# ES UPGRADE TRANSITION #
+# Remove class
 class TagSearch < Search
-  
+
   def self.search(options={})
     query_string = self.new.escape_slashes(options[:name] || '')
     response = Tag.tire.search(page: options[:page], per_page: 50, type: nil, load: false) do
@@ -13,5 +15,5 @@ class TagSearch < Search
     end
     SearchResult.new('Tag', response)
   end
-  
+
 end

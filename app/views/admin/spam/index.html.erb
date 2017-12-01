@@ -1,13 +1,23 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Works Marked as Spam") %></h2>
+<h2 class="heading"><%= ts("Manage Potential Spam") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
+<ul class="navigation actions" role="navigation">
+  <li>
+    <%= span_if_current ts("Unreviewed Works"), admin_spam_index_path, params[:show].blank? %>
+  </li>
+  <li>
+    <%= span_if_current ts("Confirmed Spam"), { show: "reviewed" } %>
+  </li>
+  <li>
+    <%= span_if_current ts("Approved Works"), { show: "approved" } %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
 <%= form_tag "/admin/spam/bulk_update", method: :post do %>
-  <%= submit_button nil, ts("Update Works") %>
   <table id="spam_works" summary="<%= ts("Titles, creators, and revision dates for works that have been automatically marked as spam, along with options to verify or correct their spam status.") %>">
     <caption><%= ts("Works Marked as Spam") %></caption>
     <thead>
@@ -16,7 +26,7 @@
         <th scope="col"><%= ts("Creator") %></th>
         <th scope="col"><%= ts("Revised At") %></th>
         <th scope="col">
-          <%= ts("Mark Reviewed") %>
+          <%= ts("Confirm As Spam") %>
           <ul class="actions">
             <li>
               <button id="spam_all_select" type="button">

@@ -1,13 +1,20 @@
 class PeopleController < ApplicationController
 
   before_action :load_collection
-  
+
   def do_search
     options = { query: params[:query], page: params[:page] || 1 }
     if @collection
       options[:collection_id] = @collection.id
     end
-    @people = PseudSearch.search(options)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to PseudSearch
+    if use_new_search?
+      search = PseudSearchForm.new(options)
+      @people = search.search_results
+    else
+      @people = PseudSearch.search(options)
+    end
     # TODO: move to search index
     @rec_counts = Pseud.rec_counts_for_pseuds(@people)
     @work_counts = Pseud.work_counts_for_pseuds(@people)
@@ -31,7 +38,7 @@ class PeopleController < ApplicationController
         @people = Pseud.order("RAND()").limit(10)
       end
       @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-      @work_counts = Pseud.work_counts_for_pseuds(@people)      
+      @work_counts = Pseud.work_counts_for_pseuds(@people)
     end
   end
 

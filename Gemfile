@@ -50,7 +50,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.7.1'
+gem 'nokogiri', '>= 1.8.1'
 gem 'mechanize'
 gem 'sanitize'
 # Until there is a working solution to
@@ -63,7 +63,7 @@ gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
-gem 'elasticsearch'
+gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -161,6 +161,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.8.0'

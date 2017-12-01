@@ -45,7 +45,13 @@ class BookmarksController < ApplicationController
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false
     options[:show_restricted] = current_user.present?
-    @search = BookmarkSearch.new(options)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to BookmarkSearch
+    if use_new_search?
+      @search = BookmarkSearchForm.new(options)
+    else
+      @search = BookmarkSearch.new(options)
+    end
     @page_subtitle = ts("Search Bookmarks")
     if params[:bookmark_search].present? && params[:edit_search].blank?
       if @search.query.present?
@@ -61,25 +67,69 @@ class BookmarksController < ApplicationController
       access_denied unless is_admin? || @bookmarkable.visible
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
-      options = params[:bookmark_search].present? ? bookmark_search_params : {}
-      options[:show_private] = (@user.present? && @user == current_user)
-      options[:show_restricted] = current_user.present?
+      base_options = {
+        show_private: (@user.present? && @user == current_user),
+        show_restricted: current_user.present?,
+        page: params[:page]
+      }
 
-      options.merge!(page: params[:page])
+      options = params[:bookmark_search].present? ? bookmark_search_params : {}
+
+      if params[:include_bookmark_search].present?
+        params[:include_bookmark_search].keys.each do |key|
+          options[key] ||= []
+          options[key] << params[:include_bookmark_search][key]
+          options[key].flatten!
+        end
+      end
+
+      if params[:exclude_bookmark_search].present?
+        params[:exclude_bookmark_search].keys.each do |key|
+          options[:excluded_tag_ids] ||= []
+          options[:excluded_tag_ids] << params[:exclude_bookmark_search][key]
+          options[:excluded_tag_ids].flatten!
+        end
+      end
+
+      options.merge!(base_options)
       @page_subtitle = index_page_title
 
       if @owner.present?
         if @admin_settings.disable_filtering?
           @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
-          @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-          results = @search.search_results
+          # ES UPGRADE TRANSITION #
+          # Remove conditional and call to BookmarkSearch
+          if use_new_search?
+            @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
+          else
+            @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          end
           @bookmarks = @search.search_results
           @facets = @bookmarks.facets
+          if @search.options[:excluded_tag_ids].present?
+            tags = Tag.where(id: @search.options[:excluded_tag_ids])
+            excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
+            tags.each do |tag|
+              if excluded_bookmark_tag_ids.include?(tag.id.to_s)
+                key = 'tag'
+              else
+                key = tag.class.to_s.downcase
+              end
+              @facets[key] ||= []
+              @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
+            end
+          end
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
-          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          # ES UPGRADE TRANSITION #
+          # Remove conditional and call to BookmarkSearch
+          if use_new_search?
+            search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          else
+            search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          end
           results = search.search_results
           @bookmarks = search.search_results.to_a
         end
@@ -301,7 +351,7 @@ class BookmarksController < ApplicationController
     params.require(:bookmark_search).permit(
       :query,
       :bookmarker,
-      :notes,
+      :bookmark_notes,
       :tag,
       :rec,
       :with_notes,
@@ -310,6 +360,7 @@ class BookmarksController < ApplicationController
       :bookmarkable_date,
       :sort_column,
       :other_tag_names,
+      :excluded_tag_names,
       rating_ids: [],
       warning_ids: [],
       category_ids: [],
@@ -317,7 +368,8 @@ class BookmarksController < ApplicationController
       character_ids: [],
       relationship_ids: [],
       freeform_ids: [],
-      tag_ids: []
+      tag_ids: [],
     )
   end
+
 end

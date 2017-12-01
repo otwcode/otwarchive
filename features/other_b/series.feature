@@ -82,7 +82,6 @@ Feature: Create and Edit Series
     Then the "series-options-show" checkbox should be checked
       And I should see "Ponies" within "fieldset#series-options"
     When I fill in "work_series_attributes_title" with "Black Beauty"
-      And all search indexes are updated
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
     When "AO3-3455" is fixed
