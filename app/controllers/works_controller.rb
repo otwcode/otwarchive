@@ -46,6 +46,7 @@ class WorksController < ApplicationController
       end
 
       @works = @search.search_results
+      set_own_works
       render 'search_results'
     end
   end
@@ -141,6 +142,7 @@ class WorksController < ApplicationController
     else
       @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
     end
+    set_own_works
   end
 
   def collected
@@ -165,7 +167,7 @@ class WorksController < ApplicationController
       @works = @search.search_results
       @facets = @works.facets
     end
-
+    set_own_works
     @page_subtitle = ts('%{username} - Collected Works', username: @user.login)
   end
 
@@ -940,6 +942,17 @@ class WorksController < ApplicationController
       @work.save_parents if @work.preview_mode
     end
   rescue
+  end
+
+  def set_own_works
+    return unless @works
+    @own_works = []
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.pluck(:id)
+      @own_works = @works.select do |work|
+        (pseud_ids & work.pseuds.pluck(:id)).present?
+      end
+    end
   end
 
   def cancel_posting_and_redirect
