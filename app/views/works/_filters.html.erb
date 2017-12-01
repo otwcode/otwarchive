@@ -88,7 +88,26 @@
           <dd class="language">
             <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
           </dd>
-
+          <dt id="toggle_work_crossover" class="tags">
+            <%= ts("Crossovers") %>
+            <%= link_to_help "work-search-crossover-help" %>
+          </dt>
+          <dd id="work_crossover" class="expandable">
+            <ul>
+              <li>
+                <%= f.radio_button :crossover, "" %>
+                <%= f.label :crossover, ts("Include crossovers"), value: "" %>
+              </li>
+              <li>
+                <%= f.radio_button :crossover, "F" %>
+                <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
+              </li>
+              <li>
+                <%= f.radio_button :crossover, "T" %>
+                <%= f.label :crossover, ts("Show only crossovers"), value: "T" %>
+              </li>
+            </ul>
+          </dd>
           <dt id="toggle_work_complete" class="tags"><%= ts("Status") %></dt>
           <dd id="work_complete" class="expandable">
             <ul>
@@ -103,23 +122,6 @@
               <li>
                 <%= f.radio_button :complete, "F" %>
                 <%= f.label :complete, ts("Only incomplete works"), value: "F" %>
-              </li>
-            </ul>
-          </dd>
-          <dt id="toggle_work_crossover" class="tags">Crossovers</dt>
-          <dd id="work_crossover" class="expandable">
-            <ul>
-              <li>
-                <%= f.radio_button :crossover, "" %>
-                <%= f.label :crossover, ts("Include crossovers"), value: "" %>
-              </li>
-              <li>
-                <%= f.radio_button :crossover, "F" %>
-                <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
-              </li>
-              <li>
-                <%= f.radio_button :crossover, "T" %>
-                <%= f.label :crossover, ts("Show only crossovers"), value: "T" %>
               </li>
             </ul>
           </dd>
