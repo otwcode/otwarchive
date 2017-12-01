@@ -23,14 +23,14 @@ Feature: Reading count
       And fandomer first read "some work" on "2010-05-25"
     When I go to fandomer's reading page
     Then I should see "some work"
-      And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
+      And I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
     When I am on writer's works page
       And I follow "some work"
     When the reading rake task is run
       And I go to fandomer's reading page
-    Then I should see "Viewed 2 times"
-      And I should see "Last viewed: less than 1 minute ago"
+    Then I should see "Visited 2 times"
+      And I should see "Last visited: less than 1 minute ago"
 
   Scenario: disable reading history
     then re-enable and check counts update again
@@ -42,8 +42,8 @@ Feature: Reading count
       And fandomer first read "some work" on "2010-05-25"
     When I go to fandomer's reading page
     Then I should see "some work"
-      And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
+      And I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
     When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
@@ -61,14 +61,14 @@ Feature: Reading count
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
     When I go to fandomer's reading page
-    Then I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
+    Then I should see "Visited once"
+      And I should see "Last visited: 25 May 2010"
     When I am on writer's works page
       And I follow "some work"
     When the reading rake task is run
       And I go to fandomer's reading page
-    Then I should see "Viewed 2 times"
-      And I should see "Last viewed: less than 1 minute ago"
+    Then I should see "Visited 2 times"
+      And I should see "Last visited: less than 1 minute ago"
 
   Scenario: Clear entire reading history
 
@@ -143,21 +143,21 @@ Feature: Reading count
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "multichapter work"
-    And I should see "Viewed once"
+    And I should see "Visited once"
   When I press "Delete from History"
   Then I should see "Work successfully deleted from your history."
   When I view the work "multichapter work"
     And the reading rake task is run
   When I go to fandomer's reading page
   Then I should see "multichapter work"
-    And I should see "Viewed once"
+    And I should see "Visited once"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
     And the reading rake task is run
   When I go to fandomer's reading page
   Then I should see "multichapter work"
   When "AO3-5073" is fixed
-    # And I should see "Viewed 3 times"
+    # And I should see "Visited 3 times"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
   When I follow "Mark for Later"
@@ -165,7 +165,7 @@ Feature: Reading count
     And I go to fandomer's reading page
   Then I should see "multichapter work"
   When "AO3-5073" is fixed
-    # And I should see "Viewed 5 times"
+    # And I should see "Visited 5 times"
     And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage

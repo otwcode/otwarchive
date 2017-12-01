@@ -59,6 +59,13 @@ class BookmarkSearchForm
 
   def initialize(options={})
     @options = options
+    [:date, :bookmarkable_date].each do |countable|
+      if @options[countable].present?
+        @options[countable].gsub!("&gt;", ">")
+        @options[countable].gsub!("&lt;", "<")
+      end
+    end
+
     # If we call the form field 'notes', the parser adds html to it
     @options[:notes] = @options[:bookmark_notes]
     @searcher = BookmarkQuery.new(options.delete_if { |k, v| v.blank? })

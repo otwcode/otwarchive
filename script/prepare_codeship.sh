@@ -35,7 +35,7 @@ cd elasticsearch-${VERSION}
 echo "http.port: ${PORT}" >> config/elasticsearch.yml
 # Make sure to use the exact parameters you want for elasticsearch and give it enough sleep time to properly start up
 nohup bash -c "./bin/elasticsearch 2>&1" &
-NEW_ES_VERSION="5.6.3"
+NEW_ES_VERSION="6.0.0"
 NEW_ES_PORT="9334"
 cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${NEW_ES_VERSION}.zip
