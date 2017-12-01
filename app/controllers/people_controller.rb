@@ -21,9 +21,6 @@ class PeopleController < ApplicationController
       options = people_search_params.merge(page: params[:page])
       @search = PseudSearchForm.new(options)
       @people = @search.search_results
-      @search_data = @people.hits.inject({}) do |data, hit|
-        data.merge(hit['_id'].to_i => hit['_source'])
-      end
     end
   end
 

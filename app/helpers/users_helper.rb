@@ -155,31 +155,6 @@ module UsersHelper
     items.html_safe
   end
 
-  # produces similar results as above but using elasticsearch results
-  # TODO: extract and simpilfy
-  def authored_items_es(pseud, search_hit, fandom_ids)
-    works_count = search_hit['works_count'].to_i
-    bookmarks_count = search_hit['bookmarks_count'].to_i
-    items = []
-    if works_count > 0
-      items << link_to(pluralize(works_count, "work"), user_pseud_works_path(pseud.user, pseud))
-    end
-    if bookmarks_count > 0
-      items << link_to(pluralize(bookmarks_count, "bookmark"), user_pseud_bookmarks_path(pseud.user, pseud))
-    end
-    if fandom_ids.present?
-      fandom_ids.each do |fandom_id|
-        begin
-          fandom = search_hit["fandoms"].find{ |results| results['id'].to_s == fandom_id.to_s }
-          items << link_to("#{pluralize(fandom['count'].to_i, 'work')} in #{fandom['name']}", user_pseud_works_path(pseud.user, pseud, fandom_id: fandom_id))
-        rescue
-          next
-        end
-      end
-    end
-    items.join(', ').html_safe
-  end
-
   #  def print_pseud_drafts_link(pseud)
   #    total = pseud.unposted_works.size
   #    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)

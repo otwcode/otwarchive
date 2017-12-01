@@ -45,11 +45,13 @@ class PseudIndexer < Indexer
   end
 
   def extras(pseud)
+    work_counts = work_counts(pseud)
     {
       sortable_name: pseud.name.downcase,
       fandoms: fandoms(pseud),
-      bookmarks_count: bookmarks_count(pseud),
-      works_count: works_count(pseud)
+      public_bookmarks_count: public_bookmarks_count(pseud),
+      general_works_count: work_counts.values.sum,
+      public_works_count: work_counts[false]
     }
   end
 
@@ -72,12 +74,12 @@ class PseudIndexer < Indexer
                          }
   end
 
-  def bookmarks_count(pseud)
+  def public_bookmarks_count(pseud)
     pseud.bookmarks.where(private: false, hidden_by_admin: false).count
   end
 
-  def works_count(pseud)
-    pseud.works.where(countable_works_conditions).count
+  def work_counts(pseud)
+    pseud.works.where(countable_works_conditions).group(:restricted).count
   end
 
   def countable_works_conditions

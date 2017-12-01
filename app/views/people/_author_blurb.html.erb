@@ -6,7 +6,7 @@
       <% end %>
     </h4>
     <% if @search.present? %>
-      <% creations = authored_items_es(author, @search_data[author.id], @search.options[:fandom_ids]) %>
+      <% creations = author.authored_items_links(fandom_id: @search.options[:fandom_ids]).html_safe %>
     <% else %>
       <% creations = authored_items(author, @work_counts, @rec_counts) %>
     <% end %>
