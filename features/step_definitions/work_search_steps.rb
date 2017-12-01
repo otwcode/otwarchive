@@ -310,9 +310,9 @@ When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag1,
   filter_id1 = Tag.find_by_name(tag1).filter_taggings.first.filter_id
   filter_id2 = Tag.find_by_name(tag2).filter_taggings.first.filter_id if tag2
   if tag2
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
   else
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id1}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1}")
   end
 end
 

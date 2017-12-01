@@ -3,7 +3,7 @@
 require 'ostruct'
 require 'yaml'
 hash = YAML.load_file("#{Rails.root}/config/config.yml")
-if !Rails.env.test?
+if File.exist?("#{Rails.root}/config/local.yml")
   hash.merge! YAML.load_file("#{Rails.root}/config/local.yml")
 end
 ::ArchiveConfig = OpenStruct.new(hash)

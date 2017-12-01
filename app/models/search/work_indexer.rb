@@ -1,43 +1,42 @@
 class WorkIndexer < Indexer
 
   def self.klass
-    'Work'
+    "Work"
   end
 
   def self.mapping
     {
-      'work' => {
+      "work" => {
         properties: {
           title: {
-            type: 'string',
-            analyzer: 'simple',
+            type: "text",
+            analyzer: "simple"
           },
           creators: {
-            type: 'string',
-            analyzer: 'simple',
-            index_name: 'creator'
+            type: "text"
           },
           tag: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "simple"
           },
           authors_to_sort_on: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           title_to_sort_on: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           imported_from_url: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
           },
           work_types: {
-            type: 'string',
-            index_name: 'work_type',
-            index: 'not_analyzed',
-          }
+            type: "keyword"
+          },
+          posted: { type: "boolean" },
+          restricted: { type: "boolean" },
+          hidden_by_admin: { type: "boolean" },
+          complete: { type: "boolean" },
+          in_anon_collection: { type: "boolean" },
+          in_unrevealed_collection: { type: "boolean" }
         }
       }
     }
@@ -48,7 +47,9 @@ class WorkIndexer < Indexer
       root: false,
       except: [
         :delta, :summary_sanitizer_version, :notes_sanitizer_version,
-        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old],
+        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old,
+        :anon_commenting_disabled, :ip_address, :spam, :spam_checked_at,
+        :moderated_commenting_disabled],
       methods: [
         :rating_ids,
         :warning_ids,
@@ -60,6 +61,7 @@ class WorkIndexer < Indexer
         :filter_ids,
         :tag,
         :pseud_ids,
+        :user_ids,
         :collection_ids,
         :hits,
         :comments_count,

@@ -1,6 +1,6 @@
 OTW-Archive
 =========
-[![Build Status](https://img.shields.io/travis/otwcode/otwarchive/master.svg?label=travis-ci)](https://travis-ci.org/otwcode/otwarchive) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/coveralls/otwcode/otwarchive/master.svg)](https://coveralls.io/github/otwcode/otwarchive?branch=master)
+[![Build Status](https://img.shields.io/travis/otwcode/otwarchive/master.svg?label=travis-ci)](https://travis-ci.org/otwcode/otwarchive) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://codecov.io/gh/otwcode/otwarchive)
 
 The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 

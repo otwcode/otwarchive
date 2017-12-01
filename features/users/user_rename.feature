@@ -110,7 +110,7 @@ Feature:
     When I follow "Pseuds (2)"
       Then I should see "Edit oldusername"
       And I should see "Edit newusername"
-      
+
   Scenario: Changing username updates search results (bug AO3-3468)
     Given I have no users
       And I am logged in as "oldusername" with password "password"
@@ -120,21 +120,14 @@ Feature:
       And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
       And I press "Change User Name"
+      And the work indexes are updated
     Then I should get confirmation that I changed my username
     When I am on the the works page
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"
-    # Has old name until indexes are updated
     When I search for works containing "oldusername"
-    Then I should see "Epic story"
-      And I should see "newusername"
-    # Still doesn't yet work due to bug AO3-3468
-    When all search indexes are updated
-    When I search for works containing "oldusername"
-    # Change the two lines below this comment to the reverse when bug is fixed
-    Then I should not see "No results found"
-      And I should see "Epic story"
-    # Works properly regardless of bug
+    Then I should see "No results found"
+      And I should not see "Epic story"
     When I search for works containing "newusername"
     Then I should see "Epic story"

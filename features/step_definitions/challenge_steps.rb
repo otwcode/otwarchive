@@ -179,6 +179,7 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is anonymous"}
     step %{I press "Update"}
+    step %{the work indexes are updated}
 end
 
 # Notification messages
