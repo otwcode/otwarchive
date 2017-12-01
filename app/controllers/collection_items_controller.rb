@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_user, only: [:update_multiple]
-  before_filter :load_item_and_collection, only: [:destroy]
-  before_filter :load_collectible_item, only: [:new, :create]
-  before_filter :allowed_to_destroy, only: [:destroy]
+  before_action :load_collection
+  before_action :load_user, only: [:update_multiple]
+  before_action :load_item_and_collection, only: [:destroy]
+  before_action :load_collectible_item, only: [:new, :create]
+  before_action :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 
@@ -101,6 +101,8 @@ class CollectionItemsController < ApplicationController
         end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
+      elsif (collection.anonymous? || collection.unrevealed?) && !current_user.is_author_of?(@item)
+        errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       # add the work to a collection, and try to save it

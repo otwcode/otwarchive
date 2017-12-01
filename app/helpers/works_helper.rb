@@ -73,6 +73,13 @@ module WorksHelper
     end
   end
 
+  # Passes value of fields for series back to form when an error occurs on posting
+  def work_series_value(field)
+    if params[:work] && params[:work][:series_attributes]
+      params[:work][:series_attributes][field]
+    end
+  end
+
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
@@ -177,5 +184,7 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
-
+  def all_coauthor_skins
+    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+  end
 end

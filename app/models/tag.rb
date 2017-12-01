@@ -1,8 +1,9 @@
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -23,6 +24,20 @@ class Tag < ActiveRecord::Base
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
+  end
+
+  def document_json
+    TagIndexer.new({}).document(self)
+  end
 
   def self.write_redis_to_database
     REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
@@ -69,7 +84,7 @@ class Tag < ActiveRecord::Base
   def taggings_count
     cache_read = Rails.cache.read(taggings_count_cache_key)
     return cache_read unless cache_read.nil?
-    real_value = taggings.length
+    real_value = taggings.count
     self.taggings_count = real_value
     real_value
   end
@@ -81,7 +96,7 @@ class Tag < ActiveRecord::Base
 
   def update_counts_cache(id)
     tag = Tag.find(id)
-    tag.taggings_count = tag.taggings.length
+    tag.taggings_count = tag.taggings.count
   end
 
   acts_as_commentable
@@ -133,12 +148,12 @@ class Tag < ActiveRecord::Base
   has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :remove_sub_filters
   has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
-
-  has_many :same_work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { uniq }, through: :works, source: :fandoms
-
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
+
+  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
+
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
@@ -179,7 +194,7 @@ class Tag < ActiveRecord::Base
   before_update :remove_index_for_type_change, if: :type_changed?
   def remove_index_for_type_change
     @destroyed = true
-    tire.update_index
+    reindex_document
   end
 
   before_validation :check_synonym
@@ -510,7 +525,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -520,7 +535,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -529,7 +544,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_before_last_save) if parent.is_a?(Fandom)
       end
     end
   end
@@ -556,10 +571,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_AUTOCOMPLETE.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -784,7 +799,22 @@ class Tag < ActiveRecord::Base
         ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
         ft.update_attribute(:inherited, false)
       else
-        work.filters << filter_tag
+        FilterTagging.create(
+          filter: filter_tag,
+          filterable: work
+        )
+        # As of Rails 5 upgrade, this triggers a stack level too deep error
+        # because it triggers the `before_update
+        # :update_filters_for_canonical_change` callback. In 4.2 and before,
+        # after this point `canonical_changed?` has been reset and returns
+        # false. Now it returns true and causes an endless loop.
+        #
+        # Reference: https://github.com/rails/rails/issues/28908
+        #
+        # TODO: Keep an eye on this issue. We should not have to create the
+        # FilterTagging directly.
+        #
+        # work.filters << filter_tag
         tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
       end
       unless filter_tag.meta_tags.empty?
@@ -795,14 +825,14 @@ class Tag < ActiveRecord::Base
           end
         end
       end
+    end
 
-      # make sure that all the works and bookmarks under this tag get reindexed
-      # for filtering/searching
-      async(:reindex_taggables)
+    # make sure that all the works and bookmarks under this tag get reindexed
+    # for filtering/searching
+    async(:reindex_taggables)
 
-      tags_that_need_filter_count_reset.each do |tag_to_reset|
-        tag_to_reset.reset_filter_count
-      end
+    tags_that_need_filter_count_reset.each do |tag_to_reset|
+      tag_to_reset.reset_filter_count
     end
   end
 
@@ -1156,9 +1186,11 @@ class Tag < ActiveRecord::Base
   #################################
 
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :id,           index: :not_analyzed
-    indexes :name,         analyzer: 'snowball', boost: 100
+    indexes :name#,         analyzer: 'snowball', boost: 100
     indexes :type
     indexes :canonical,    type: :boolean
   end
@@ -1187,7 +1219,7 @@ class Tag < ActiveRecord::Base
   after_update :after_update
   def after_update
     tag = self
-    if tag.canonical_changed?
+    if tag.saved_change_to_canonical?
       if tag.canonical
         # newly canonical tag
         tag.add_to_autocomplete
@@ -1202,7 +1234,7 @@ class Tag < ActiveRecord::Base
     end
 
     # Expire caching when a merger is added or removed
-    if tag.merger_id_changed?
+    if tag.saved_change_to_merger_id?
       if tag.merger_id_was.present?
         old = Tag.find(tag.merger_id_was)
         old.update_works_index_timestamp!
@@ -1213,7 +1245,7 @@ class Tag < ActiveRecord::Base
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
-    if tag.type_changed?
+    if tag.saved_change_to_type?
       tag.parents.each do |parent_tag|
         ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
       end

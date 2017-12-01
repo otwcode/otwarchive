@@ -1,12 +1,12 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_filter :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
+  before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_action :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, only: [ :new, :create, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
-  before_filter :check_visibility, only: [ :show]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_ownership, only: [ :new, :create, :edit, :update, :manage, :preview, :destroy, :confirm_delete ]
+  before_action :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
+  before_action :check_visibility, only: [ :show]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
 
   cache_sweeper :feed_sweeper
 
@@ -91,10 +91,10 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1/edit
   def edit
     if params["remove"] == "me"
-      @chapter.pseuds = @chapter.pseuds - current_user.pseuds
+      @chapter.authors_to_remove = current_user.pseuds
       @chapter.save
-      flash[:notice] = ts("You have been removed as an author from the chapter")
-     redirect_to @work
+      flash[:notice] = ts("You have been removed as a creator from the chapter")
+      redirect_to @work
     end
   end
 
@@ -182,7 +182,7 @@ class ChaptersController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@work) and return }
-      format.js { render nothing: true }
+      format.js { head :ok }
     end
   end
 
@@ -219,7 +219,7 @@ class ChaptersController < ApplicationController
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
-      redirect_to(edit_work_url(@work))
+      redirect_to(edit_work_path(@work))
     else
       was_draft = !@chapter.posted?
       if @chapter.destroy

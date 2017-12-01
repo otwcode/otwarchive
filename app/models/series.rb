@@ -1,18 +1,20 @@
-class Series < ActiveRecord::Base
+class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Creatable
+  include Searchable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
-  has_many :work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :work_pseuds, -> { uniq }, through: :works, source: :pseuds
+  has_many :work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
@@ -24,6 +26,9 @@ class Series < ActiveRecord::Base
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
+
+  after_create :notify_after_creation
+  before_update :notify_before_update
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -126,7 +131,7 @@ class Series < ActiveRecord::Base
   def adjust_restricted
     unless self.restricted? == !(self.works.where(restricted: false).count > 0)
       self.restricted = !(self.works.where(restricted: false).count > 0)
-      self.save(validate: false)
+      self.save!(validate: false)
     end
   end
 
@@ -215,16 +220,22 @@ class Series < ActiveRecord::Base
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :created_at],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
         :word_count, :work_types]
     ).merge(
+      id: "series-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Series'
+      bookmarkable_type: 'Series',
+      bookmarkable_join: "bookmarkable"
     )
+  end
+
+  def word_count
+    self.works.posted.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?
@@ -244,7 +255,7 @@ class Series < ActiveRecord::Base
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (work_tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets

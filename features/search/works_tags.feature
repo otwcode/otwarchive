@@ -56,7 +56,7 @@ Feature: Search works by tag
       And the results should contain the fandom tag "ST: TOS"
       And the results should contain the fandom tag "Battlestar Galactica (2003)"
     When I follow "Edit Your Search"
-    Then "Star Trek" should already be entered in the work search fandom autocomplete field
+      Then "Star Trek" should already be entered in the work search fandom autocomplete field
       And "Battlestar Galactica (2003)" should already be entered in the work search fandom autocomplete field
 
   Scenario: Searching by rating returns only works using that rating
@@ -114,7 +114,7 @@ Feature: Search works by tag
       And the 2nd result should contain "No Archive Warnings Apply"
     When I follow "Edit Your Search"
     Then the "No Archive Warnings Apply" checkbox should be checked
-  
+
   Scenario: Using the header search to exclude works with certain warnings using the warnings' filter_ids
     Given a set of works with various warnings for searching
     When I search for works without the "Rape/Non-Con" and "Underage" filter_ids
@@ -278,7 +278,7 @@ Feature: Search works by tag
     Then the field labeled "Additional Tags" should contain "Alternate Universe - High School"
 
   Scenario: Searching by additional tags (freeforms) for a tag that has not been
-  wrangled returns only works using tags containing the search term (not 
+  wrangled returns only works using tags containing the search term (not
   summaries, titles, etc)
     Given a set of alternate universe works for searching
     When I am on the search works page

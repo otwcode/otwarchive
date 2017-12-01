@@ -10,6 +10,7 @@ Given /^basic tags$/ do
   step %{the basic warnings exist}
   Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
+  step %{the tag indexes are updated}
 end
 
 Given /^the default ratings exist$/ do
@@ -201,7 +202,7 @@ end
 
 Given(/^the following typed tags exists$/) do |table|
   table.hashes.each do |hash|
-    type = hash["type"].classify.constantize
+    type = hash["type"].downcase.to_sym
     hash.delete("type")
     FactoryGirl.create(type, hash)
   end

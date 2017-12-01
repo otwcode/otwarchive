@@ -17,6 +17,15 @@ Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
     user.activate
+    user.pseuds.first.add_to_autocomplete
+  end
+end
+
+Given /the following activated users with private work skins/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
   end
 end
 
@@ -25,6 +34,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
+    user.pseuds.first.add_to_autocomplete
   end
 end
 

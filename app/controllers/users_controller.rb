@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :check_user_status, only: [:edit, :update]
-  before_filter :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_filter :check_account_creation_status, only: [:new, :create]
-  skip_before_filter :store_location, only: [:end_first_login]
+  before_action :check_user_status, only: [:edit, :update]
+  before_action :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
+  before_action :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
+  before_action :check_account_creation_status, only: [:new, :create]
+  skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
   # The unique index on login (database level) prevents the duplicate user from being created,
@@ -65,7 +65,6 @@ class UsersController < ApplicationController
     @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
                                                        subscribable_type: 'User').first ||
@@ -414,7 +413,7 @@ class UsersController < ApplicationController
         pseuds_with_author_removed = w.pseuds - @user.pseuds
         w.pseuds = pseuds_with_author_removed
 
-        w.save
+        w.save && w.touch # force cache_key to bust
 
         w.chapters.each do |c|
           c.pseuds = c.pseuds - @user.pseuds

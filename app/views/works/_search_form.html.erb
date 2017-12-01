@@ -1,4 +1,4 @@
-<%= form_for @search, :url => search_works_path, :html => {:method => :get, :class => 'verbose search'} do |f| %>
+<%= form_for @search, as: :work_search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
   <fieldset>
     <legend><%= ts('Work Info') %></legend>
     <h3 class="landmark heading"><%= ts('Work Info') %></h3>
@@ -18,10 +18,10 @@
         <%= f.text_field :title %>
       </dd>
       <dt>
-        <%= f.label :creator, ts('Author/Artist') %>
+        <%= f.label :creators, ts('Author/Artist') %>
       </dt>
       <dd>
-        <%= f.text_field :creator %>
+        <%= f.text_field :creators %>
       </dd>
       <dt>
         <%= f.label :revised_at, ts('Date') %>
@@ -83,7 +83,7 @@
         <%= ts('Warnings') %>
       </dt>
       <dd>
-        <ul>
+      <ul>
           <% for tag in Warning.canonical.by_name %>
             <li>
               <%= check_box_tag "work_search[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>
@@ -171,8 +171,8 @@
         <%= f.label :sort_direction, ts("Sort direction") %>
       </dt>
       <dd>
-        <%= select_tag "work_search[sort_direction]",
-          '<option value="asc">Ascending</option><option value="desc">Descending</option>'.html_safe,
+        <%= f.select :sort_direction,
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction),
           {:include_blank => true } %>
       </dd>
     </dl>

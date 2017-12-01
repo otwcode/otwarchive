@@ -27,6 +27,10 @@ class Sanitize
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
         'ul' => ['type'],
       },
+      
+      add_attributes: {
+        'a' => {'rel' => 'nofollow'}
+      },
 
       protocols: {
         'a' => {'href' => ['ftp', 'http', 'https', 'mailto', :relative]},
@@ -106,7 +110,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"
@@ -120,6 +124,23 @@ class Sanitize
       return if source.nil?           
 
       allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
+      supports_https = [
+        "8tracks",
+        "archiveorg",
+        "archiveofourown",
+        "dailymotion",
+        "podfic",
+        "soundcloud",
+        "spotify",
+        "viddertube",
+        "vimeo",
+        "youtube"
+      ]
+
+      # For sites that support https, ensure we use a secure embed
+      if supports_https.include?(source) && node['src'].present?
+        node['src'] = node['src'].gsub("http:", "https:")
+      end
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
@@ -162,7 +183,6 @@ class Sanitize
         return {node_whitelist: [node, parent]}
       end
     end
-    
   end
 
 end

@@ -1,6 +1,6 @@
-class Work < ActiveRecord::Base
-
+class Work < ApplicationRecord
   include Taggable
+  include Creatable
   include Collectible
   include Bookmarkable
   include Pseudable
@@ -8,9 +8,10 @@ class Work < ActiveRecord::Base
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -20,15 +21,15 @@ class Work < ActiveRecord::Base
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
   has_many :external_author_names, through: :external_creatorships, inverse_of: :works
-  has_many :external_authors, -> { uniq }, through: :external_author_names
+  has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters, -> { where("work_id IS NOT NULL") }
+  has_many :chapters
   validates_associated :chapters
 
   has_many :serial_works, dependent: :destroy
@@ -61,7 +62,6 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-
   # statistics
   has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
@@ -70,7 +70,8 @@ class Work < ActiveRecord::Base
     counter = self.build_stat_counter
     counter.save
   end
-
+  # moderation
+  has_one :moderated_work, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -122,9 +123,10 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank? && self.pseuds.blank?
       errors.add(:base, ts("Work must have at least one author."))
-      return false
+      throw :abort
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
+      throw :abort
     end
   end
 
@@ -141,12 +143,13 @@ class Work < ActiveRecord::Base
 
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
+
   def clean_and_validate_title
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", min: ArchiveConfig.TITLE_MIN))
-        return false
+        throw :abort
       else
         self.title_to_sort_on = self.sorted_title
       end
@@ -154,11 +157,13 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
+    return unless first_chapter
+
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 
@@ -176,20 +181,49 @@ class Work < ActiveRecord::Base
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
+
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :post_first_chapter, :set_word_count
+  after_save :post_first_chapter
+  before_save :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
+
   before_create :set_anon_unrevealed, :set_author_sorting
+  after_create :notify_after_creation
   before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
-  before_update :validate_tags
+  before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :expire_caches
+  before_save :hide_spam
+  after_save :moderate_spam
+  after_save :notify_of_hiding
+
+  after_save :notify_recipients, :expire_caches
   after_destroy :expire_caches
+  before_destroy :before_destroy
+
+  def before_destroy
+    if self.posted?
+      users = self.pseuds.collect(&:user).uniq
+      orphan_account = User.orphan_account
+      unless users.blank?
+        for user in users
+          next if user == orphan_account
+          # Check to see if this work is being deleted by an Admin
+          if User.current_user.is_a?(Admin)
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.admin_deleted_work_notification(user, self).deliver!
+          else
+            # this has to use the synchronous version because the work is going to be destroyed
+            UserMailer.delete_work_notification(user, self).deliver!
+          end
+        end
+      end
+    end
+  end
 
   def expire_caches
     pseuds.each do |pseud|
@@ -214,10 +248,21 @@ class Work < ActiveRecord::Base
     tags.each do |tag|
       tag.update_tag_cache
     end
+
     Work.expire_work_tag_groups_id(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -238,7 +283,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.tag_groups_key_id(id)
-    "/v2/work_tag_groups/#{id}"
+    "/v3/work_tag_groups/#{id}"
   end
 
   def tag_groups_key
@@ -287,7 +332,7 @@ class Work < ActiveRecord::Base
 
   after_destroy :clean_up_filter_taggings
   def clean_up_filter_taggings
-    FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
+    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
   end
 
   after_destroy :clean_up_assignments
@@ -574,7 +619,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
-        self.revised_at || self.created_at
+        self.revised_at || self.created_at || DateTime.now
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
@@ -586,7 +631,7 @@ class Work < ActiveRecord::Base
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? ||
-        chapter.published_at > self.revised_at.to_date ||
+        (chapter.published_at && chapter.published_at > self.revised_at.to_date) ||
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
@@ -660,15 +705,16 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    self.chapters.first.save(validate: false)
+    !self.chapters.first.save(validate: false)
   end
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted_changed?
-      self.chapters.first.published_at = Date.today unless self.backdate
-      self.chapters.first.posted = self.posted
-      self.chapters.first.save
+    chapter_one = self.first_chapter
+    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
+      chapter_one.published_at = Date.today unless self.backdate
+      chapter_one.posted = self.posted
+      chapter_one.save
     end
   end
 
@@ -762,10 +808,12 @@ class Work < ActiveRecord::Base
   end
 
   after_save :update_complete_status
+  # Note: this can mark a work complete but it can also mark a complete work
+  # as incomplete if its status has changed
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
-    if self.complete_changed?
+    if self.will_save_change_to_attribute?(:complete)
       Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
     end
   end
@@ -806,7 +854,7 @@ class Work < ActiveRecord::Base
 
   # spread downloads out by first two letters of authorname
   def download_dir
-    "#{Rails.public_path}/#{self.download_folder}"
+    "/tmp/#{self.id}"
   end
 
   # split out so we can use this in works_helper
@@ -850,7 +898,7 @@ class Work < ActiveRecord::Base
 
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
-      if self.placeholder_tags
+      if self.placeholder_tags && !self.placeholder_tags.empty?
         result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
         result = self.tags.group_by { |t| t.type.to_s }
@@ -969,6 +1017,12 @@ class Work < ActiveRecord::Base
     find_all_comments.count
   end
 
+  # Count the number of comment threads visible to the user (i.e. excluding
+  # threads that have been marked as spam). Used on the work stats page.
+  def comment_thread_count
+    comments.where(approved: true).count
+  end
+
   # returns the top-level comments for all chapters in the work
   def comments
     Comment.where(
@@ -1038,7 +1092,7 @@ class Work < ActiveRecord::Base
           if ew.save
             self.new_parent = {parent: ew, translation: translation}
           else
-            self.errors.add(:base, "Parent work info would not save.")
+            self.errors.add(:base, "Parent work " + ew.errors.full_messages[0])
           end
         end
       end
@@ -1323,16 +1377,11 @@ class Work < ActiveRecord::Base
   # SPAM CHECKING
   ########################################################################
 
-  def spam_checked?
-    spam_checked_at.present?
-  end
-
-  def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
+  def akismet_attributes
     content = chapters_in_order.map { |c| c.content }.join
     user = users.first
-    self.spam = Akismetor.spam?(
-      comment_type: 'Fan Fiction',
+    {
+      comment_type: "fanwork-post",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
@@ -1341,9 +1390,55 @@ class Work < ActiveRecord::Base
       comment_author: user.login,
       comment_author_email: user.email,
       comment_content: content
-    )
+    }
+  end
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
+  end
+
+  def hide_spam
+    return unless spam?
+    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    if admin_settings.hide_spam?
+      self.hidden_by_admin = true
+    end
+  end
+
+  def moderate_spam
+    ModeratedWork.register(self) if spam?
+  end
+
+  def mark_as_spam!
+    update_attribute(:spam, true)
+    ModeratedWork.mark_reviewed(self)
+    # don't submit spam reports unless in production mode
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def mark_as_ham!
+    update_attributes(spam: false, hidden_by_admin: false)
+    ModeratedWork.mark_approved(self)
+    # don't submit ham reports unless in production mode
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def notify_of_hiding
+    return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    users.each do |user|
+      if spam?
+        UserMailer.admin_spam_work_notification(id, user.id).deliver
+      else
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+      end
+    end
   end
 
   #############################################################################
@@ -1352,6 +1447,8 @@ class Work < ActiveRecord::Base
   #
   #############################################################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block #
   mapping do
     indexes :authors_to_sort_on,  index: :not_analyzed
     indexes :title_to_sort_on,    index: :not_analyzed
@@ -1383,23 +1480,33 @@ class Work < ActiveRecord::Base
       ])
   end
 
+  def document_json
+    WorkIndexer.new({}).document(self)
+  end
+
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
+      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
+      id: "work-#{id}",
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Work'
+      bookmarkable_type: 'Work',
+      bookmarkable_join: "bookmarkable"
     )
   end
 
   def pseud_ids
     creatorships.pluck :pseud_id
+  end
+
+  def user_ids
+    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids
@@ -1457,8 +1564,8 @@ class Work < ActiveRecord::Base
   def work_types
     types = []
     video_ids = [44011] # Video
-    audio_ids = [70308] # Podfic
-    art_ids = [7844, 125758] # Fanart, Arts
+    audio_ids = [70308, 1098169] # Podfic, Audio Content
+    art_ids = [7844, 125758, 3863] # Fanart, Arts
     types << "Video" if (filter_ids & video_ids).present?
     types << "Audio" if (filter_ids & audio_ids).present?
     types << "Art" if (filter_ids & art_ids).present?
@@ -1473,8 +1580,7 @@ class Work < ActiveRecord::Base
   # To be replaced by actual category
   # Can't use the 'Meta' tag since that has too many different uses
   def nonfiction
-    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
-
 end

@@ -1,4 +1,4 @@
-class ArchiveFaq < ActiveRecord::Base
+class ArchiveFaq < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   acts_as_list
@@ -22,7 +22,7 @@ class ArchiveFaq < ActiveRecord::Base
 
   # When we modify either a FAQs Category name or one of the Questions,
   # we send an email to Translations.
-  after_save :notify_translations_committee
+  before_save :notify_translations_committee
   def notify_translations_committee
     # Check first to see if we are asked to send an email return if not
     unless !self.email_translations?

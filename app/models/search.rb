@@ -1,11 +1,13 @@
-class Search < ActiveRecord::Base
+# ES UPGRADE TRANSITION #
+# Remove class
+class Search < ApplicationRecord
   belongs_to :user
-  
+
   validates_presence_of :name
   validates_presence_of :options
-  
+
   serialize :options, Hash
-  
+
   def self.serialized_options(*args)
     args.each do |method_name|
       eval "
@@ -19,7 +21,7 @@ class Search < ActiveRecord::Base
       "
     end
   end
-  
+
   def self.range_to_search(option)
     option.gsub!("&gt;", ">")
     option.gsub!("&lt;", "<")
@@ -36,7 +38,7 @@ class Search < ActiveRecord::Base
     end
     range
   end
-  
+
   # create numerical range from operand and string
   # operand can be "<", ">" or ""
   # string must be an integer unless operand is ""
@@ -108,12 +110,12 @@ class Search < ActiveRecord::Base
     end
     { gte: a, lte: a2 }
   end
-  
+
   # Only escape if it isn't already escaped
   def escape_slashes(word)
     word = word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
   end
-  
+
   def escape_reserved_characters(word)
     word = escape_slashes(word)
     word.gsub!('!', '\\!')
@@ -128,5 +130,5 @@ class Search < ActiveRecord::Base
     word.gsub!(':', '\\:')
     word
   end
-  
+
 end

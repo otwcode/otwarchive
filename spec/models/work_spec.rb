@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Work do
-  # see lib/collectible_spec for collectio n-related tests
+  # see lib/collectible_spec for collection-related tests
 
-  it "creates a minimally work" do
+  it "creates a minimal work" do
     expect(create(:work)).to be_valid
+  end
+
+  context "when posted" do
+    it "posts the first chapter" do
+      work = create(:posted_work)
+      work.first_chapter.posted.should == true
+    end
   end
 
   context "create_stat_counter" do
@@ -95,7 +102,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed"  do
+  describe "work_skin_allowed" do
     context "public skin"
 
     context "private skin" do
@@ -197,6 +204,47 @@ describe Work do
       expect(Work.find_by_url(url)).to eq(work)
       expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
       work.destroy
+    end
+  end
+
+  describe "#update_complete_status" do
+    it "marks a work complete when it's been completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      expect(work.complete).to be_truthy
+    end
+
+    it "marks a work incomplete when it's no longer completed" do
+      work = create(:posted_work, expected_number_of_chapters: 1)
+      work.update_attributes!(expected_number_of_chapters: nil)
+      expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#hide_spam" do
+    before do
+      @admin_setting = AdminSetting.first || AdminSetting.create
+      @work = create(:posted_work)
+    end
+    context "when the admin setting is enabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, true)
+      end
+      it "automatically hides spam works and sends an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(@work.reload.hidden_by_admin).to be_truthy
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
+      end
+    end
+    context "when the admin setting is disabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, false)
+      end
+      it "does not automatically hide spam works and does not send an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          not_to change { ActionMailer::Base.deliveries.count }
+        expect(@work.reload.hidden_by_admin).to be_falsey
+      end
     end
   end
 end

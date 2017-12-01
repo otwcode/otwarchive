@@ -14,7 +14,7 @@ module Otwarchive
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    config.autoload_paths += %W(#{Rails.root}/lib)
+    config.eager_load_paths += %W(#{Rails.root}/lib)
     config.autoload_paths += %W(#{Rails.root}/app/sweepers)
     %w(
       challenge_models
@@ -39,10 +39,6 @@ module Otwarchive
     I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id,
       :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
 
-    # Activate observers that should always be running.
-    # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-    config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_preference_observer, :kudo_observer, :response_observer
-
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -59,6 +55,8 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_mailer.default_url_options = { host: "archiveofourown.org" }
+
+    config.action_view.automatically_disable_submit_tag = false
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
@@ -79,6 +77,5 @@ module Otwarchive
 
     # Bring the log under control
     config.lograge.enabled = true
-
   end
 end

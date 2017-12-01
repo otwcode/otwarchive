@@ -1,6 +1,6 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
-class Invitation < ActiveRecord::Base
+class Invitation < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :creator, polymorphic: true
@@ -12,7 +12,6 @@ class Invitation < ActiveRecord::Base
     # we allow invitations to be sent to existing users if the purpose is to claim an external author
     if self.invitee_email && User.find_by(email: self.invitee_email) && !self.external_author
       errors.add :invitee_email, ts('is already being used by an account holder.')
-      return false
     end
   end
 
@@ -64,7 +63,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def send_and_set_date
-    if self.invitee_email_changed? && !self.invitee_email.blank?
+    if self.saved_change_to_invitee_email? && !self.invitee_email.blank?
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
@@ -85,7 +84,7 @@ class Invitation < ActiveRecord::Base
   def adjust_user_invite_status
     if self.creator.respond_to?(:out_of_invites)
       self.creator.out_of_invites = (self.creator.invitations.unredeemed.count < 1)
-      self.creator.save(validate: false)
+      self.creator.save!(validate: false)
     end
   end
 

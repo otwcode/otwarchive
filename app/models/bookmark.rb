@@ -1,9 +1,12 @@
-class Bookmark < ActiveRecord::Base
+class Bookmark < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
+  include Responder
   # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, polymorphic: true
@@ -93,6 +96,8 @@ class Bookmark < ActiveRecord::Base
 
   before_destroy :invalidate_bookmark_count
   after_save :invalidate_bookmark_count
+  after_create :update_work_stats
+  after_destroy :update_work_stats
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
@@ -121,6 +126,16 @@ class Bookmark < ActiveRecord::Base
       end
     end
     return false
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_bookmarks"
+    else
+      tire.index.name
+    end
   end
 
   # Returns the number of bookmarks on an item visible to the current user
@@ -175,10 +190,27 @@ class Bookmark < ActiveRecord::Base
     bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
+  # TODO: Is this necessary anymore?
+  before_destroy :save_parent_info
+
+  # Because of the way the elasticsearch parent/child index is set up, we need
+  # to know what the bookmarkable type and id was in order to delete the
+  # bookmark from the index after it's been deleted from the database
+  def save_parent_info
+    expire_time = (Time.now + 2.weeks).to_i
+    REDIS_GENERAL.setex(
+      "deleted_bookmark_parent_#{self.id}",
+      expire_time,
+      "#{bookmarkable_id}-#{bookmarkable_type.underscore}"
+    )
+  end
+
   #################################
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :notes
     indexes :private, type: 'boolean'
@@ -186,6 +218,10 @@ class Bookmark < ActiveRecord::Base
     indexes :bookmarkable_id
     indexes :created_at,          type: 'date'
     indexes :bookmarkable_date,   type: 'date'
+  end
+
+  def document_json
+    BookmarkIndexer.new({}).document(self)
   end
 
   self.include_root_in_json = false
@@ -219,7 +255,7 @@ class Bookmark < ActiveRecord::Base
   end
 
   def bookmarker
-    pseud.try(:name)
+    pseud.try(:byline)
   end
 
   def with_notes

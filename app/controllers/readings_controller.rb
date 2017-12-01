@@ -1,8 +1,8 @@
 class ReadingsController < ApplicationController
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
-  before_filter :check_history_enabled
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
+  before_action :check_history_enabled
 
   def load_user
     @user = User.find_by(login: params[:user_id])
@@ -24,14 +24,14 @@ class ReadingsController < ApplicationController
     if @reading.destroy
       success_message = ts('Work successfully deleted from your history.')
       respond_to do |format|
-        format.html { redirect_to request.referer || user_readings_url(current_user, page: params[:page]), notice: success_message }
+        format.html { redirect_to request.referer || user_readings_path(current_user, page: params[:page]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
       end
     else
       respond_to do |format|
         format.html do
           flash.keep
-          redirect_to request.referer || user_readings_url(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages }
+          redirect_to request.referer || user_readings_path(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages }
         end
         format.json { render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity }
       end
@@ -47,7 +47,7 @@ class ReadingsController < ApplicationController
        end
      end
     flash[:notice] = ts("Your history is now cleared.")
-    redirect_to user_readings_url(current_user)
+    redirect_to user_readings_path(current_user)
   end
 
   protected

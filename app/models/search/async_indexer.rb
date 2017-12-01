@@ -14,15 +14,37 @@ class AsyncIndexer
     REDIS.del(name)
   end
 
+  # Get the appropriate indexers for the class and pass the ids off to them
+  # This method is only called internally and klass is not a user-supplied value
+  def self.index(klass, ids, priority)
+    if klass.to_s =~ /Indexer/
+      indexers = [klass]
+    else
+      klass = klass.constantize if klass.respond_to?(:constantize)
+      indexers = klass.new.indexers
+    end
+    indexers.each do |indexer|
+      self.new(indexer, priority).enqueue_ids(ids)
+    end
+  end
+
   ####################
   # INSTANCE METHODS
   ####################
 
   attr_reader :indexer, :priority
 
+  # Just standardizing priority/queue names
   def initialize(indexer, priority)
     @indexer = indexer
-    @priority = priority
+    @priority = case priority.to_s
+                when 'main'
+                  'high'
+                when 'background'
+                  'low'
+                else
+                  priority
+                end
   end
 
   def enqueue_ids(ids)

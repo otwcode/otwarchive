@@ -1,11 +1,52 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception, prepend: true
+  rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
-  before_filter :sanitize_params
+  before_action :sanitize_ac_params
+
+  # sanitize_params works best with a hash, and will convert
+  # ActionController::Parameters to a hash in order to work with them anyway.
+  #
+  # Controllers need to deal with ActionController::Parameters, not hashes.
+  # These methods hand the params as a hash to sanitize_params, and then
+  # transforms the results back into ActionController::Parameters.
+  def sanitize_ac_params
+    sanitize_params(params.to_unsafe_h).each do |key, value|
+      params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def display_auth_error
+    respond_to do |format|
+      format.html do
+        redirect_to auth_error_path
+      end
+      format.js do
+        render json: {
+          errors: {
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+          }
+        }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def transform_sanitized_hash_to_ac_params(key, value)
+    if value.is_a?(Hash)
+      ActionController::Parameters.new(value)
+    elsif value.is_a?(Array)
+      value.map.with_index do |val, index|
+        value[index] = transform_sanitized_hash_to_ac_params(key,  val)
+      end
+    else
+      value
+    end
+  end
 
   # Authlogic login helpers
   helper_method :current_user
@@ -13,21 +54,29 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
+  # ES UPGRADE TRANSITION #
+  # Remove method & `helper_method :use_new_search?`
+  helper_method :use_new_search?
+  def use_new_search?
+    $rollout.active?(:use_new_search) ||
+      current_user.present? && $rollout.active?(:use_new_search, current_user)
+  end
+
   # Title helpers
   helper_method :process_title
 
   # clear out the flash-being-set
-  before_filter :clear_flash_cookie
+  before_action :clear_flash_cookie
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
 
-  after_filter :check_for_flash
+  after_action :check_for_flash
   def check_for_flash
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  before_filter :ensure_admin_credentials
+  before_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
@@ -42,14 +91,9 @@ class ApplicationController < ActionController::Base
 
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
-  # before_filter :logout_if_not_user_credentials
-  # this was disabled when we found issues:
-  # https://github.com/nbudin/devise_openid_authenticatable/issues/21
-  # https://github.com/binarylogic/authlogic/issues/532
-  # 
-  # We will look back in to this back once we have devises.
-  # if we believe the caching is worth the extra support tickets.
-  # 
+
+  before_action :logout_if_not_user_credentials
+
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
       logger.error "Forcing logout"
@@ -111,7 +155,7 @@ protected
 
 public
 
-  before_filter :fetch_admin_settings
+  before_action :fetch_admin_settings
   def fetch_admin_settings
     if Rails.env.development?
       @admin_settings = AdminSetting.first
@@ -120,7 +164,7 @@ public
     end
   end
 
-  before_filter :load_admin_banner
+  before_action :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
       @admin_banner = AdminBanner.where(active: true).last
@@ -137,7 +181,7 @@ public
 
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
-  before_filter :store_location
+  before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
@@ -237,7 +281,7 @@ public
   end
 
   # Hide admin banner via cookies
-  before_filter :hide_banner
+  before_action :hide_banner
   def hide_banner
     if params[:hide_banner]
       session[:hide_banner] = true
@@ -246,7 +290,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_filter :set_current_user
+  before_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -301,7 +345,7 @@ public
   end
 
   # Define media for fandoms menu
-  before_filter :set_media
+  before_action :set_media
   def set_media
     uncategorized = Media.uncategorized
     @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
@@ -312,10 +356,10 @@ public
   #### -- AUTHORIZATION -- ####
 
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
-  before_filter :set_redirects
+  before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({controller: 'session', action: 'new'})
+    @logged_out_redirect = login_url
   end
 
   def is_registered_user?
@@ -434,8 +478,12 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  #### -- AUTHORIZATION -- ####
-
-  protect_from_forgery
+  # Don't get unnecessary data for json requests
+  skip_before_action  :fetch_admin_settings,
+                      :load_admin_banner,
+                      :set_redirects,
+                      :set_media,
+                      :store_location,
+                      if: proc { %w(js json).include?(request.format) }
 
 end

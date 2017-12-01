@@ -1,4 +1,4 @@
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
@@ -85,9 +85,9 @@
   has_many :pinch_hit_assignments, through: :pseuds
   has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "claiming_user_id", inverse_of: :claiming_user
   has_many :gifts, -> { where(rejected: false) }, through: :pseuds
-  has_many :gift_works, -> { uniq }, through: :pseuds
+  has_many :gift_works, -> { distinct }, through: :pseuds
   has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
-  has_many :rejected_gift_works, -> { uniq }, through: :pseuds
+  has_many :rejected_gift_works, -> { distinct }, through: :pseuds
   has_many :readings, dependent: :destroy
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
@@ -179,8 +179,8 @@
   after_update :expire_caches
 
   def expire_caches
-    if login_changed?
-      self.works.each{ |work| work.touch }
+    if saved_change_to_login?
+      self.works.each{ |work| work.save }
     end
   end
 
@@ -307,7 +307,7 @@
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new
+    self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
   protected
@@ -343,6 +343,10 @@
   # Retrieve the current default pseud
   def default_pseud
     self.pseuds.where(is_default: true).first
+  end
+
+  def default_pseud_id
+    pseuds.where(is_default: true).pluck(:id).first
   end
 
   # Checks authorship of any sort of object
@@ -523,7 +527,7 @@
   def reindex_user_bookmarks
     # Reindex a user's bookmarks.
     bookmarks.each do |bookmark|
-      bookmark.update_index
+      bookmark.reindex_document
     end
     update_works_index_timestamp!
   end
@@ -540,9 +544,9 @@
   end
 
   def update_pseud_name
-    return unless login_changed? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
-    if login.downcase == login_was.downcase
+    return unless saved_change_to_login? && login_before_last_save.present?
+    old_pseud = self.pseuds.where(name: login_before_last_save).first
+    if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
     else
@@ -552,15 +556,22 @@
 
       if old_pseud.present?
         # change the old pseud to match
-        old_pseud.update_attribute(:name, login)
+        old_pseud.name = login
+        old_pseud.save!(validate: false)
       else
         # shouldn't be able to get here, but just in case
-        Pseud.create(name: login, user_id: self.id)
+        Pseud.create!(name: login, user_id: self.id)
       end
     end
   end
 
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
+
+  def remove_stale_from_autocomplete
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 end

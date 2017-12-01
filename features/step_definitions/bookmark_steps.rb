@@ -9,7 +9,7 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
     step %{I press "Create"}
-    Bookmark.tire.index.refresh
+    step %{the bookmark indexes are updated}
 end
 
 Given /^I have a bookmark of a deleted work$/ do
@@ -19,7 +19,7 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{I press "Create"}
   work = Work.find_by(title: title)
   work.destroy
-  Bookmark.tire.index.refresh
+  step %{the bookmark indexes are updated}
 end
 
 Given /^I have bookmarks to search$/ do
@@ -70,6 +70,22 @@ Given /^I have bookmarks to search$/ do
                      bookmarkable_type: "ExternalWork",
                      pseud_id: pseud2.id,
                      notes: "I enjoyed this")
+
+  step %{all search indexes are updated}
+end
+
+Given /^I have bookmarks to search by dates$/ do
+  work1 = nil
+  Timecop.freeze(901.days.ago) do
+    work1 = FactoryGirl.create(:posted_work, title: "Old work")
+    FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "Old bookmark of old work")
+  end
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "New bookmark of old work")
+
+  work2 = FactoryGirl.create(:posted_work, title: "New work")
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, notes: "New bookmark of new work")
+
+  step %{all search indexes are updated}
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
@@ -77,7 +93,7 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   click_button("Create")
-  Bookmark.tire.index.refresh
+  step %{the bookmark indexes are updated}
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
@@ -123,6 +139,7 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+  step %{the bookmark indexes are updated}
 end
 
 When(/^I attempt to create a bookmark of "([^"]*)" with a pseud that is not mine$/) do |work|

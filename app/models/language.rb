@@ -1,4 +1,4 @@
-class Language < ActiveRecord::Base
+class Language < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   validates_presence_of :short

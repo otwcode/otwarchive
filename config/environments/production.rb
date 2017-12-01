@@ -4,6 +4,7 @@ Otwarchive::Application.configure do
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
+  config.eager_load = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -21,8 +22,9 @@ Otwarchive::Application.configure do
   # Disable IP spoofing protection
   config.action_dispatch.ip_spoofing_check = false
 
-  # See everything in the log (default is :info)
+  # See everything in the log (default is now :debug)
   # config.log_level = :debug
+  config.log_level = :info
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new

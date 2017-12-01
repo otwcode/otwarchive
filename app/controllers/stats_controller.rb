@@ -1,8 +1,8 @@
 class StatsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   # only the current user
   def load_user
@@ -28,10 +28,10 @@ class StatsController < ApplicationController
     sort_options = ""
     @sort = ""
     if current_user.preference.hide_hit_counts
-      sort_options = %w(date kudos.count comments.count bookmarks.count subscriptions.count word_count)
+      sort_options = %w(date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
     else
-      sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
+      sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     end
 

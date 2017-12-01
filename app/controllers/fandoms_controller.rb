@@ -1,5 +1,5 @@
 class FandomsController < ApplicationController
-  before_filter :load_collection
+  before_action :load_collection
 
   def index
     if @collection
