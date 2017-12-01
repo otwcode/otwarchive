@@ -11,6 +11,8 @@ class UserManager
               :errors,
               :successes
 
+  PERMITTED_ACTIONS = %w(warn suspend unsuspend ban unban spamban)
+
   def initialize(admin, params)
     @admin = admin
     @user  = User.find_by(login: params[:user_login])
@@ -93,7 +95,7 @@ class UserManager
   end
 
   def save_next_of_kin
-    return true if user.fannish_next_of_kin.nil? && kin_name.blank?
+    return true if user.fannish_next_of_kin.nil? && kin_name.blank? && kin_email.blank?
     if FannishNextOfKin.update_for_user(user, kin_name, kin_email)
       successes << "Fannish next of kin was updated."
     else
@@ -106,7 +108,7 @@ class UserManager
     return true if admin_action.blank?
     if admin_action == 'spamban'
       ban_user
-    else
+    elsif PERMITTED_ACTIONS.include?(admin_action)
       send("#{admin_action}_user")
     end
   end
