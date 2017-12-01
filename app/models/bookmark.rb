@@ -95,15 +95,23 @@ class Bookmark < ApplicationRecord
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count, :update_pseud_index
+
   after_create :update_work_stats
-  after_destroy :update_work_stats
+  after_destroy :update_work_stats, :update_pseud_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
+  end
+
+  # We index the bookmark count, so if it should change, update the pseud
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private?
+    AsyncIndexer.index(PseudIndexer, [pseud_id], :background)
   end
 
   def visible?(current_user=User.current_user)

@@ -201,8 +201,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches
-  after_destroy :expire_caches
+  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
   def before_destroy
@@ -253,6 +253,12 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless destroyed? || saved_change_to_id? || saved_change_to_restricted?
+    AsyncIndexer.index(PseudIndexer, [pseud_id], :background)
   end
 
   # ES UPGRADE TRANSITION #
