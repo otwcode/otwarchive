@@ -7,6 +7,15 @@ describe "API Authorization" do
   end_points = %w(/api/v1/works /api/v1/bookmarks)
 
   describe "API POST with invalid request" do
+    it "should return 401 Unauthorized if no token is supplied and forgery protection is enabled" do
+      ActionController::Base.allow_forgery_protection = true
+      end_points.each do |url|
+        post url
+        assert_equal 401, response.status
+      end
+      ActionController::Base.allow_forgery_protection = false
+    end
+
     it "should return 401 Unauthorized if no token is supplied" do
       end_points.each do |url|
         post url

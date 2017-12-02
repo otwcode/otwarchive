@@ -1,6 +1,6 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
-class Invitation < ActiveRecord::Base
+class Invitation < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :creator, polymorphic: true
@@ -63,7 +63,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def send_and_set_date
-    if self.invitee_email_changed? && !self.invitee_email.blank?
+    if self.saved_change_to_invitee_email? && !self.invitee_email.blank?
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")

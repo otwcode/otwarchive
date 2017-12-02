@@ -1,6 +1,6 @@
 <li class="user pseud picture blurb group" role="article">
   <div class="header module">
-    <h4 class="heading"><%= link_to(author.name, user_pseud_path(author.user, author)) %> 
+    <h4 class="heading"><%= link_to(author.name, user_pseud_path(author.user, author)) %>
       <% if (author.name != author.user.login) %>
         (<%= link_to(author.user_name, user_path(author.user)) %>)
       <% end %>

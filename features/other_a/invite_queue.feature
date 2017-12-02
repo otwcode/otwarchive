@@ -33,15 +33,15 @@ Feature: Invite queue management
       And I am on the homepage
     Then I should see "Get an Invitation"
     When I follow "Get an Invitation"
-    Then I should see "Request an Invitation"
+    Then I should see "Request an invitation"
 
   Scenario: An admin can delete people from the queue
 
     Given an invitation request for "invitee@example.org"
       And I am logged in as an admin
     When I go to the manage invite queue page
-      And I follow "Delete"
-    Then I should see "Request was removed from the queue."
+      And I press "Delete"
+    Then I should see "Request for invitee@example.org was removed from the queue."
       And I should be on the manage invite queue page
 
   Scenario: Visitors can join the queue and check status when invitations are required and the queue is enabled
@@ -60,8 +60,8 @@ Feature: Invite queue management
 
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "You can search for the email address you signed up with below."
-      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+    Then I should see "Invitation Request Status"
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -73,16 +73,20 @@ Feature: Invite queue management
 
     Given the invitation queue is disabled
     When I go to the invite_requests page
-    Then I should not see "Add yourself to the list"
+    Then I should not see "Request an invitation"
       And I should not see "invite_request_email"
+      And I should see "New invitation requests are currently closed."
+      And I should not see "Add me to the list"
 
   Scenario: Can still check status when queue is off
 
     Given the invitation queue is disabled
       And I am logged out as an admin
     When I go to the invite_requests page
-    Then I should see "Wondering how long you'll have to wait"
-      And I should see "Email"
+      And I follow "check your position on the waiting list"
+    Then I should see the page title "Invitation Request Status"
+      And I should see "There are currently 0 people on the waiting list."
+      And I should not see "We are currently sending out"
 
   Scenario: The queue sends out invites and user can create and activate an account
 
@@ -98,7 +102,7 @@ Feature: Invite queue management
       And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
-    Then I should see "You can search for the email address you signed up with below."
+    Then I should see "Invitation Request Status"
       And I should see "If you can't find it, your invitation may have already been emailed to that address;"
 
     # invite can be used

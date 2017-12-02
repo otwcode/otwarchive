@@ -20,6 +20,29 @@ Feature: Archivist bulk imports
     When I go to the import page
     Then I should see "Import for others ONLY with permission"
 
+  Scenario: Importing for others without an email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Name*" with "Name"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author email specified"
+
+  Scenario: Importing for others without a name should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Email Address*" with "foo@example.com"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author name specified"
+
+  Scenario: Importing for others without a name or email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No external author name or email specified"
+
   Scenario: Importing for an author without an account should have the correct byline and email
     When I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
@@ -91,6 +114,7 @@ Feature: Archivist bulk imports
       | login | email                     |
       | ao3   | ao3testing@dreamwidth.org |
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
+      And the work indexes are updated
     Then I should see import confirmation
       And I should see "ao3"
       And I should not see "[archived by archivist]"
@@ -103,12 +127,14 @@ Feature: Archivist bulk imports
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
       And the system processes jobs
+      And the work indexes are updated
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
       And I go to the claim page for "not_creators_account_email@example.com"
     Then I should see "Claim your works with your logged-in account."
     When I press "Add these works to my currently-logged-in account"
+      And the work indexes are updated
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
     When I go to creator's works page

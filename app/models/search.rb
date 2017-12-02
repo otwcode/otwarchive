@@ -1,11 +1,13 @@
-class Search < ActiveRecord::Base
+# ES UPGRADE TRANSITION #
+# Remove class
+class Search < ApplicationRecord
   belongs_to :user
-  
+
   validates_presence_of :name
   validates_presence_of :options
-  
+
   serialize :options, Hash
-  
+
   def self.serialized_options(*args)
     args.each do |method_name|
       eval "
@@ -19,7 +21,7 @@ class Search < ActiveRecord::Base
       "
     end
   end
-  
+
   def self.range_to_search(option)
     option.gsub!("&gt;", ">")
     option.gsub!("&lt;", "<")
@@ -36,7 +38,7 @@ class Search < ActiveRecord::Base
     end
     range
   end
-  
+
   # create numerical range from operand and string
   # operand can be "<", ">" or ""
   # string must be an integer unless operand is ""
@@ -80,8 +82,12 @@ class Search < ActiveRecord::Base
   end
 
   # helper method to create times from two strings
+  # Elasticsearch gets grumpy with negative years, so the simple fix
+  # is just to go back a thousand years
+  # TODO: rework date query formats if Homer ever starts posting his stuff to AO3
   def self.time_from_string(amount, period)
-    amount.to_i.send(period).ago
+    date = amount.to_i.send(period).ago
+    date.year.negative? ? out_of_range_date : date
   end
 
   # Generate a range based on one number
@@ -106,14 +112,21 @@ class Search < ActiveRecord::Base
     else
       raise "unknown period: " + period
     end
+    a, a2 = [a, a2].map do |date|
+      date.year.negative? ? out_of_range_date : date
+    end
     { gte: a, lte: a2 }
   end
-  
+
+  def self.out_of_range_date
+    1000.years.ago
+  end
+
   # Only escape if it isn't already escaped
   def escape_slashes(word)
     word = word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
   end
-  
+
   def escape_reserved_characters(word)
     word = escape_slashes(word)
     word.gsub!('!', '\\!')
@@ -128,5 +141,5 @@ class Search < ActiveRecord::Base
     word.gsub!(':', '\\:')
     word
   end
-  
+
 end

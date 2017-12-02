@@ -1,8 +1,8 @@
-class Pseud < ActiveRecord::Base
+class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -125,6 +125,16 @@ class Pseud < ActiveRecord::Base
     group("pseuds.id").
     includes(:user)
   }
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_pseuds"
+    else
+      tire.index.name
+    end
+  end
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -297,9 +307,43 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
+  # This method is for use in before_* callbacks
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
+
+  # See byline_before_last_save for the reasoning behind why both this and
+  # autocomplete_value_was exist in this model
+  #
+  # This method is for use in after_* callbacks
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
+  end
+
+  def byline_before_last_save
+    past_name = name_before_last_save.blank? ? name : name_before_last_save
+
+    # In this case, self belongs to a user that has already been saved
+    # during it's (self's) callback cycle, which means we need to
+    # look *back* at the user's [attributes]_before_last_save, since
+    # [attribute]_was for the pseud's user will behave as if this were an
+    # after_* callback on the user, instead of a before_* callback on self.
+    #
+    # see psued_sweeper.rb:13 for more context
+    #
+    past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
+  # This method is for removing stale autocomplete records in a before_*
+  # callback, such as the one used in PseudSweeper
+  #
+  # This is a particular case for the Pseud model
+  def remove_stale_from_autocomplete_before_save
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 
   ## END AUTOCOMPLETE
 
@@ -393,7 +437,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def expire_caches
-    if name_changed?
+    if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
   end
@@ -416,6 +460,8 @@ class Pseud < ActiveRecord::Base
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :name, boost: 20
   end
@@ -427,6 +473,10 @@ class Pseud < ActiveRecord::Base
   self.include_root_in_json = false
   def to_indexed_json
     to_json(methods: [:user_login, :collection_ids])
+  end
+
+  def document_json
+    PseudIndexer.new({}).document(self)
   end
 
   def self.search(options={})

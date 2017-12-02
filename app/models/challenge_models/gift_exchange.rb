@@ -1,4 +1,4 @@
-class GiftExchange < ActiveRecord::Base
+class GiftExchange < ApplicationRecord
   PROMPT_TYPES = %w(requests offers)
   include ActiveModel::ForbiddenAttributesProtection
   include ChallengeCore
@@ -46,9 +46,6 @@ class GiftExchange < ActiveRecord::Base
 
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
-
-  #FIXME hack because time zones are being html encoded. couldn't figure out why.
-  before_save :fix_time_zone
 
   #  When Challenges are deleted, there are two references left behind that need to be reset to nil
   before_destroy :clear_challenge_references

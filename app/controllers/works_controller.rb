@@ -18,65 +18,27 @@ class WorksController < ApplicationController
   before_action :set_instance_variables, only: [:new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import]
   before_action :set_instance_variables_tags, only: [:edit_tags, :update_tags, :preview_tags]
 
-  before_action :clean_work_search_params, only: [:search, :index, :collected]
-
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    if params[:work_search].present? && params[:work_search][:query].present?
-      # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      params[:work_search][:query].gsub!('&gt;', '>')
-      params[:work_search][:query].gsub!('&lt;', '<')
-
-      # extract countable params
-      %w(word kudo comment bookmark hit).each do |term|
-        next unless params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
-        # pluralize, add _count, convert to symbol
-        term = term.pluralize unless term == 'word'
-        term += '_count' unless term == 'hits'
-        term = term.to_sym
-
-        value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
-        # don't overwrite if submitting from advanced search?
-        params[:work_search][term] = value unless params[:work_search][term].present?
-      end
-
-      # get sort-by
-      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
-        sortdir = Regexp.last_match(3) || Regexp.last_match(1)
-        sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
-
-        _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        params[:work_search][:sort_column] = sort_column unless sort_column.nil?
-
-        params[:work_search][:sort_direction] = sort_direction(sortdir)
-      end
-
-      # put categories into quotes
-      qr = Regexp.new('(?:"|\')?')
-      %w(m/m f/f f/m m/f).each do |cat|
-        cr = Regexp.new("#{qr}#{cat}#{qr}")
-        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
-      end
-
-      # swap out gt/lt
-      params[:work_search][:query].gsub!('>', '&gt;')
-      params[:work_search][:query].gsub!('<', '&lt;')
-
-      # get rid of empty queries
-      params[:work_search][:query] = nil if params[:work_search][:query] =~ /^\s*$/
-    end
+    QueryCleaner.new(work_search_params || {}).clean
   end
 
   def search
     @languages = Language.default_order
-    options = params[:work_search].present? ? work_search_params : {}
+    options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    @search = WorkSearch.new(options)
-    @page_subtitle = ts('Search Works')
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
+    if use_new_search?
+      @search = WorkSearchForm.new(options)
+    else
+      @search = WorkSearch.new(options)
+    end
+    @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
       if @search.query.present?
@@ -90,7 +52,12 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    options = params[:work_search].present? ? work_search_params : {}
+    base_options = {
+      page: params[:page] || 1,
+      show_restricted: current_user.present? || logged_in_as_admin?
+    }
+
+    options = params[:work_search].present? ? clean_work_search_params : {}
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
@@ -98,16 +65,27 @@ class WorksController < ApplicationController
       end
 
       tag = @fandom || @tag
-      # This strange dance is because there is an interaction between
-      # strong_parameters and dup, without the dance
-      # options[:filter_ids] << tag.id is ignored.
-      filter_ids = options[:filter_ids] || []
-      filter_ids << tag.id
-      options[:filter_ids] = filter_ids
+      options[:filter_ids] ||= []
+      options[:filter_ids] << tag.id
     end
 
-    options[:page] = params[:page]
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    if params[:include_work_search].present?
+      params[:include_work_search].keys.each do |key|
+        options[key] ||= []
+        options[key] << params[:include_work_search][key]
+        options[key].flatten!
+      end
+    end
+
+    if params[:exclude_work_search].present?
+      params[:exclude_work_search].keys.each do |key|
+        options[:excluded_tag_ids] ||= []
+        options[:excluded_tag_ids] << params[:exclude_work_search][key]
+        options[:excluded_tag_ids].flatten!
+      end
+    end
+
+    options.merge!(base_options)
     @page_subtitle = index_page_title
 
     if logged_in? && @tag
@@ -121,8 +99,13 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-
+        # ES UPGRADE TRANSITION #
+        # Remove conditional and call to WorkSearch
+        if use_new_search?
+          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+        else
+          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        end
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
@@ -143,6 +126,13 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
+        if @search.options[:excluded_tag_ids].present?
+          tags = Tag.where(id: @search.options[:excluded_tag_ids])
+          tags.each do |tag|
+            @facets[tag.class.to_s.downcase] ||= []
+            @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
+          end
+        end
       end
     elsif use_caching?
       @works = Rails.cache.fetch('works/index/latest/v1', expires_in: 10.minutes) do
@@ -154,8 +144,8 @@ class WorksController < ApplicationController
   end
 
   def collected
-    options = params[:work_search].present? ? work_search_params : {}
-    options[:page] = params[:page]
+    options = params[:work_search].present? ? clean_work_search_params : {}
+    options[:page] = params[:page] || 1
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
     @user = User.find_by(login: params[:user_id])
@@ -165,7 +155,13 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      # ES UPGRADE TRANSITION #
+      # Remove conditional and call to WorkSearch
+      if use_new_search?
+        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+      else
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      end
       @works = @search.search_results
       @facets = @works.facets
     end
@@ -565,11 +561,11 @@ class WorksController < ApplicationController
     storyparser = StoryParser.new
 
     begin
-      if urls.size == 1
-        @work = storyparser.download_and_parse_story(urls.first, options)
-      else
-        @work = storyparser.download_and_parse_chapters_into_story(urls, options)
-      end
+      @work = if urls.size == 1
+                storyparser.download_and_parse_story(urls.first, options)
+              else
+                storyparser.download_and_parse_chapters_into_story(urls, options)
+              end
     rescue Timeout::Error
       flash.now[:error] = ts('Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.')
       render(:new_import) && return
@@ -1025,14 +1021,6 @@ class WorksController < ApplicationController
     end
   end
 
-  def sort_direction(sortdir)
-    if sortdir == '>' || sortdir == 'ascending'
-      'asc'
-    elsif sortdir == '<' || sortdir == 'descending'
-      'desc'
-    end
-  end
-
   def build_options(params)
     pseuds_to_apply =
       (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
@@ -1088,7 +1076,7 @@ class WorksController < ApplicationController
     params.require(:work_search).permit(
       :query,
       :title,
-      :creator,
+      :creators,
       :revised_at,
       :complete,
       :single_chapter,
@@ -1106,6 +1094,7 @@ class WorksController < ApplicationController
       :sort_column,
       :sort_direction,
       :other_tag_names,
+      :excluded_tag_names,
 
       warning_ids: [],
       category_ids: [],
@@ -1118,4 +1107,5 @@ class WorksController < ApplicationController
       collection_ids: []
     )
   end
+
 end

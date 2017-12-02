@@ -8,5 +8,8 @@ class ErrorsController < ApplicationController
       end
     end
   end
+
+  def auth_error
+  end
   
 end
