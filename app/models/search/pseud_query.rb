@@ -41,7 +41,13 @@ class PseudQuery < Query
   ###########
 
   def general_query
-    { query_string: { query: options[:query] } } if options[:query]
+    {
+      simple_query_string:{
+        query: escape_reserved_characters(options[:query]),
+        fields: ["name^5", "user_login^2", "description"],
+        default_operator: 'AND'
+      }
+    } if options[:query]
   end
 
   def name_query
