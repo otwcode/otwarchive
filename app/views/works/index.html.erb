@@ -33,7 +33,7 @@
         <% if @tag && logged_in? && !@collection %>
           <li><%= render 'favorite_tags/form', current_user: @current_user, favorite_tag: @favorite_tag %></li>
         <% end %>
-        <% if @tag && !@collection && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+        <% if @tag && !@collection && !params[:work_search] && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
           <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
         <% end %>
       </ul>
@@ -69,4 +69,3 @@
 <% if @works.respond_to?(:total_pages) %>
   <%= will_paginate @works %>
 <% end %>
-
