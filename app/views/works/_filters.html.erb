@@ -27,7 +27,7 @@
         <dd class="<%= filter_action %> tags group">
           <dl>
             <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
-              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type %> tags">
                 <% # For accessibility, include filter action (e.g. Include) as landmark text %>
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
@@ -72,23 +72,10 @@
       <dt class="more heading">
         <h4 class="heading"><%= ts("More Options") %></h4>
       </dt>
+
       <dd class="more group">
         <dl>
-          <dt class="search">
-            <%= f.label :query, ts("Search within results") %>
-            <%= link_to_help "work-search-text-help" %>
-          </dt>
-          <dd class="search">
-            <%= f.text_field :query %>
-          </dd>
-
-          <dt class="language">
-            <%= f.label :language_id, ts("Language") %>
-          </dt>
-          <dd class="language">
-            <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
-          </dd>
-          <dt id="toggle_work_crossover" class="tags">
+          <dt id="toggle_work_crossover" class="filter-toggle crossover">
             <%= ts("Crossovers") %>
             <%= link_to_help "work-search-crossover-help" %>
           </dt>
@@ -108,7 +95,7 @@
               </li>
             </ul>
           </dd>
-          <dt id="toggle_work_complete" class="tags"><%= ts("Status") %></dt>
+          <dt id="toggle_work_complete" class="filter-toggle status"><%= ts("Status") %></dt>
           <dd id="work_complete" class="expandable">
             <ul>
               <li>
@@ -125,23 +112,38 @@
               </li>
             </ul>
           </dd>
-          <dt id="toggle_work_words" class="tags">Word Count</dt>
+          <dt id="toggle_work_words" class="filter-toggle words"><%= ts("Word Count") %></dt>
           <dd id="work_words" class="expandable">
-            <dl>
-              <dt><%= f.label :words_from, ts("From:") %></dt>
+            <dl class="range">
+              <dt><%= f.label :words_from, ts("From") %></dt>
               <dd><%= f.text_field :words_from %>
-              <dt><%= f.label :words_to, ts("To:") %></dt>
+              <dt><%= f.label :words_to, ts("To") %></dt>
               <dd><%= f.text_field :words_to %>
             </dl>
           </dd>
-          <dt id="toggle_work_dates" class="tags">Date</dt>
+          <dt id="toggle_work_dates" class="filter-toggle dates"><%= ts("Date Updated") %></dt>
           <dd id="work_dates" class="expandable">
-            <dl>
-              <dt><%= f.label :date_from, ts("From:") %></dt>
-              <dd><%= f.text_field :date_from, :class => 'datepicker' %>
-              <dt><%= f.label :date_to, ts("To:") %></dt>
-              <dd><%= f.text_field :date_to, :class => 'datepicker' %>
+            <dl class="range">
+              <dt><%= f.label :date_from, ts("From") %></dt>
+              <dd><%= f.text_field :date_from, class: "datepicker" %>
+              <dt><%= f.label :date_to, ts("To") %></dt>
+              <dd><%= f.text_field :date_to, class: "datepicker" %>
             </dl>
+          </dd>
+
+          <dt class="search">
+            <%= f.label :query, ts("Search within results") %>
+            <%= link_to_help "work-search-text-help" %>
+          </dt>
+          <dd class="search">
+            <%= f.text_field :query %>
+          </dd>
+
+          <dt class="language">
+            <%= f.label :language_id, ts("Language") %>
+          </dt>
+          <dd class="language">
+            <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
           </dd>
         </dl>
       </dd>
@@ -170,7 +172,7 @@
 
 <%= content_for :footer_js do %>
   <%= javascript_tag do %>
-    $j('.datepicker').datepicker({
+    $j(".datepicker").datepicker({
       dateFormat: "yy-mm-dd"
     });
   <% end %>
