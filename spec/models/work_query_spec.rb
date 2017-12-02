@@ -58,7 +58,7 @@ describe WorkQuery do
 
   it "should allow you to filter for complete works" do
     q = WorkQuery.new(complete: true)
-    expect(q.filters).to include({term: { complete: 'true'} })
+    expect(q.filters).to include({ term: { complete: true } })
   end
 
   it "should allow you to filter for works by tag" do
