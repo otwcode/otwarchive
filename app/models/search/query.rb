@@ -96,6 +96,10 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  def bool_value(str)
+    %w(true 1 T).include?(str.to_s)
+  end
+
   def exclusion_filters
     @exclusion_filters
   end
