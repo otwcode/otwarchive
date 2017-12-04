@@ -168,7 +168,8 @@ form.filters {
 }
 
 .filters input[type="radio"] + span:before, .filters input[type="checkbox"] + span:before {
-  background: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%);
+  /* background: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); */
+  background: linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   color: #aaa;  
   border: 0.125em solid;
   margin-right: 0.25em;
@@ -193,15 +194,20 @@ form.filters {
     border-radius: 1em;
 }
 
+.filters [type="radio"]:checked + span:before {
+  background: radial-gradient(ellipse at center, #aaa 0%, #ddd 29%, #fff 61%);
+}
+
 .filters [type="checkbox"] + span:before {
   content: " \2713";
   padding: 0 0.25em;
     border-radius: 0.25em;
 }
 
-.filters input:checked + span:before {
+.filters [type="checkbox"]:checked + span:before {
   color: #006d00;
-  background: linear-gradient(to bottom, #ffffff 0%, #e5efe5 50%, #c5dfc7 51%, #eaf4ea 100%);
+  /* background: linear-gradient(to bottom, #ffffff 0%, #e5efe5 50%, #c5dfc7 51%, #eaf4ea 100%); */
+  background: linear-gradient(#fff 2%, #c3d8c3 95%, #a7baa7 100%);
 }
 
 .filters .exclude [type="checkbox"] + span:before {
@@ -210,7 +216,8 @@ form.filters {
 
 .filters .exclude [type="checkbox"]:checked + span:before {
   color: red;
-  background: linear-gradient(to bottom, #ffffff 0%, #f9eaeb 50%, #f1d5d5 51%, #faf0ee 100%);
+  /* background: linear-gradient(to bottom, #ffffff 0%, #f9eaeb 50%, #f1d5d5 51%, #faf0ee 100%); */
+  background: linear-gradient(#fff 2%, #EFCECE 95%, #E0C0C0 100%);
 }
 
 /* INTERACTION: OLD FILTERS */
