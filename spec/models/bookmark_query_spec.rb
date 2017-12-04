@@ -85,13 +85,20 @@ describe BookmarkQuery do
     tag.id = 1
     q = BookmarkQuery.new(parent: tag)
     expected_filter = {
-      has_parent: {
-        parent_type: 'bookmarkable',
-        query: {
-          term: {
-            filter_ids: 1
-          }
-        }
+      bool: {
+        should: [
+          {
+            has_parent: {
+              parent_type: 'bookmarkable',
+              query: {
+                term: {
+                  filter_ids: 1
+                }
+              }
+            }
+          },
+          { term: { tag_ids: 1 } }
+        ]
       }
     }
 

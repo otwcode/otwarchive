@@ -76,13 +76,36 @@ class BookmarkableQuery < Query
   # Because a work or a series can have many bookmarks, we need to combine
   # the child queries into one bool query so that we don't, eg, leak private bookmark data
   def flipped_filter(filter, options = {})
-    if filter.key?(:term) || filter.key?(:terms)
-      key = options[:type] == :exclusion ? :exclude : :include
-      child_filters[key] << filter
-      return nil
-    elsif filter.key?(:has_parent)
-      filter[:has_parent][:query]
+    case filter.keys.first
+    when :term, :terms
+      # return nil since we're adding this to the child filters not the main ones
+      flip_term_filter(filter, options) && nil
+    when :has_parent
+      flip_parent_filter(filter)
+    when :bool
+      flip_bool_filter(filter)
     end
+  end
+
+  def flip_term_filter(filter, options = {})
+    key = options[:type] == :exclusion ? :exclude : :include
+    child_filters[key] << filter
+  end
+
+  def flip_parent_filter(filter)
+    filter[:has_parent][:query]
+  end
+
+  def flip_bool_filter(filter)
+    condition = filter.dig(:bool, :should)&.detect{ |c| c.key?(:term) }
+    {
+      bool: {
+        should: [
+          condition,
+          { has_child: { type: "bookmark", query: condition } }
+        ]
+      }
+    }
   end
 
   def flipped_query(q)

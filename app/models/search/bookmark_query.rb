@@ -235,8 +235,16 @@ class BookmarkQuery < Query
   end
 
   def filter_id_filter
-    if filter_ids.present?
-      filter_ids.map{ |filter_id| parent_term_filter(:filter_ids, filter_id) }
+    return unless filter_ids.present?
+    filter_ids.map do |filter_id|
+      {
+        bool: {
+          should: [
+            parent_term_filter(:filter_ids, filter_id),
+            term_filter(:tag_ids, filter_id)
+          ]
+        }
+      }
     end
   end
 
