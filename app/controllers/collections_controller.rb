@@ -44,7 +44,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(params[:collection_filters], Proc.new { |query| query.order(sort) }, params[:page])
+      @collections = Collection.sorted_and_filtered(params[:collection_filters], proc { |query| query.order(sort) }, params[:page])
     end
   end
 
@@ -54,7 +54,7 @@ class CollectionsController < ApplicationController
     @hide_dashboard = true
     @challenge_collections = (Collection.signup_open("GiftExchange").includes(:challenge).limit(15) +
       Collection.signup_open("PromptMeme").includes(:challenge).limit(15)).
-        sort_by { |collection| collection.challenge.signups_close_at }
+      sort_by { |collection| collection.challenge.signups_close_at }
   end
 
   def list_ge_challenges
@@ -75,7 +75,7 @@ class CollectionsController < ApplicationController
     params[:collection_filters].delete("challenge_type")
     params[:collection_filters].delete("closed")
 
-    @challenge_collections = Collection.sorted_and_filtered(params[:collection_filters], Proc.new { |query| query.signup_open(@challenge_type) }, params[:page])
+    @challenge_collections = Collection.sorted_and_filtered(params[:collection_filters], proc { |query| query.signup_open(@challenge_type) }, params[:page])
   end
 
   def show

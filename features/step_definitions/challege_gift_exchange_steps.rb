@@ -68,7 +68,7 @@ end
 
 When /^I set challenge close time to ([0-9]*) months?$/ do |months|
   current_date = DateTime.current
-  fill_in("Sign-up closes", with: "#{current_date.months_since(months.to_i)}")
+  fill_in("Sign-up closes", with: current_date.months_since(months.to_i).to_s)
 end
 
 When /^I fill in single-fandom gift exchange challenge options$/ do
