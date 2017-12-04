@@ -40,19 +40,21 @@
                   <% @facets[tag_type].each do |tag| %>
                     <li>
                       <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
-                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
-                        <%= radio_button_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
-                          tag.id,
-                          filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                          id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
-                      <% else %>
-                        <%= check_box_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
-                          tag.id,
-                          filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                          id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
+                      <%= label_tag "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" do %>
+                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
+                          <%= radio_button_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
+                            tag.id,
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                            id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% else %>
+                          <%= check_box_tag "#{filter_action}_work_search[#{tag_type}_ids][]",
+                            tag.id,
+                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                            id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% end %>
+                        <% # If this isn't on one line, there is a space before and after the label %>
+                        <span><%= label_for_filter(tag_type, {name: tag.name, count: tag.count}) %></span>
                       <% end %>
-                      <%= label_tag "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}",
-                        "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                     </li>
                   <% end %>
                 </ul>
@@ -82,16 +84,22 @@
           <dd id="work_crossover" class="expandable">
             <ul>
               <li>
-                <%= f.radio_button :crossover, "" %>
-                <%= f.label :crossover, ts("Include crossovers"), value: "" %>
+                <%= f.label :crossover, value: "" do %>
+                  <%= f.radio_button :crossover, "" %>
+                  <span><%= ts("Include crossovers") %></span>
+                <% end %>
               </li>
               <li>
-                <%= f.radio_button :crossover, "F" %>
-                <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
+                <%= f.label :crossover, value: "F" do %>
+                  <%= f.radio_button :crossover, "F" %>
+                  <span><%= ts("Exclude crossovers") %></span>
+                <% end %>
               </li>
               <li>
-                <%= f.radio_button :crossover, "T" %>
-                <%= f.label :crossover, ts("Show only crossovers"), value: "T" %>
+                <%= f.label :crossover, ts("Only crossovers"), value: "T" do %>
+                  <%= f.radio_button :crossover, "T" %>
+                  <span><%= ts("Show only crossovers") %></span>
+                <% end %>
               </li>
             </ul>
           </dd>
@@ -99,16 +107,22 @@
           <dd id="work_complete" class="expandable">
             <ul>
               <li>
-                <%= f.radio_button :complete, "" %>
-                <%= f.label :complete, ts("Both complete and incomplete"), value: "" %>
+                <%= f.label :complete, value: "" do %>
+                  <%= f.radio_button :complete, "" %>
+                  <span><%= ts("Both complete and incomplete") %></span>
+                <% end %>
               </li>
               <li>
-                <%= f.radio_button :complete, "T" %>
-                <%= f.label :complete, ts("Only complete works"), value: "T" %>
+                <%= f.label :complete, value: "T" do %>
+                  <%= f.radio_button :complete, "T" %>
+                  <span><%= ts("Only complete works") %></span>
+                <% end %>
               </li>
               <li>
-                <%= f.radio_button :complete, "F" %>
-                <%= f.label :complete, ts("Only incomplete works"), value: "F" %>
+                <%= f.label :complete, value: "F" do %>
+                  <%= f.radio_button :complete, "F" %>
+                  <span><%= ts("Only incomplete works") %></span>
+                <% end %>
               </li>
             </ul>
           </dd>
