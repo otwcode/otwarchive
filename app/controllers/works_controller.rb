@@ -1095,6 +1095,11 @@ class WorksController < ApplicationController
       :sort_direction,
       :other_tag_names,
       :excluded_tag_names,
+      :crossover,
+      :date_from,
+      :date_to,
+      :words_from,
+      :words_to,
 
       warning_ids: [],
       category_ids: [],

@@ -135,12 +135,12 @@ form.filters {
   margin: 0;
 }
 
-.filters .group dt.search {
+.filters .group dt.search, .filters .range dt {
   border-bottom: none;
   padding: 0.25em 0;
 }
 
-.filters .more dd.search {
+.filters .more dd.search, .filters .range dd {
   margin-top: 0;
 }
 
