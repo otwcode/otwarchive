@@ -21,7 +21,11 @@ module Searchable
     IndexQueue.enqueue(self, :main)
   end
 
-  def reindex_document
+  def indexers
+    Indexer.for_object(self)
+  end
+
+  def reindex_document(options = {})
     # ES UPGRADE TRANSITION #
     # Remove `update_index rescue nil`
     update_index rescue nil
@@ -29,25 +33,16 @@ module Searchable
     # ES UPGRADE TRANSITION #
     # Remove outer conditional
     if self.class.use_new_search?
-      index_name = self.is_a?(Tag) ? 'tag' : self.class.to_s.downcase
-      doc_type = self.is_a?(Tag) ? 'tag' : self.class.document_type
-
-      index = {
-        index: "ao3_#{Rails.env}_#{index_name}s",
-        type: doc_type,
-        id: self.id,
-        body: self.document_json
-      }
-
-      if self.is_a?(Bookmark)
-        index.merge!(
-          routing: "#{self.bookmarkable_type}-#{self.bookmarkable_id}"
-        )
+      responses = []
+      self.indexers.each do |indexer|
+        if options[:async]
+          queue = options[:queue] || :main
+          responses << AsyncIndexer.index(indexer, [id], queue)
+        else
+          responses << indexer.new([id]).index_document(self)
+        end
       end
-
-      # ES UPGRADE TRANSITION #
-      # Replace $new_elasticsearch with $elasticsearch
-      $new_elasticsearch.index index
+      responses
     end
   end
 end

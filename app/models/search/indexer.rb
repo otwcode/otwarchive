@@ -3,6 +3,16 @@
 class Indexer
 
   BATCH_SIZE = 1000
+  INDEXERS_FOR_CLASS = {
+    "Work" => %w(WorkIndexer BookmarkedWorkIndexer),
+    "Bookmark" => %w(BookmarkIndexer),
+    "Tag" => %w(TagIndexer),
+    "Pseud" => %w(PseudIndexer),
+    "Series" => %w(BookmarkedSeriesIndexer),
+    "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
+  }.freeze
+
+  delegate :klass, :index_name, :document_type, to: :class
 
   ##################
   # CLASS METHODS
@@ -27,7 +37,7 @@ class Indexer
             number_of_shards: 5
           }
         },
-        mappings: mapping,
+        mappings: mapping
       }
     )
   end
@@ -83,6 +93,13 @@ class Indexer
     klass.underscore
   end
 
+  # Given a searchable object, what indexers should handle it?
+  # Returns an array of indexers
+  def self.for_object(object)
+    name = object.is_a?(Tag) ? 'Tag' : object.class.to_s
+    (INDEXERS_FOR_CLASS[name] || []).map(&:constantize)
+  end
+
   ####################
   # INSTANCE METHODS
   ####################
@@ -91,18 +108,6 @@ class Indexer
 
   def initialize(ids)
     @ids = ids
-  end
-
-  def klass
-    self.class.klass
-  end
-
-  def index_name
-    self.class.index_name
-  end
-
-  def document_type
-    self.class.document_type
   end
 
   def objects
@@ -130,6 +135,19 @@ class Indexer
     $new_elasticsearch.bulk(body: batch)
   end
 
+  def index_document(object)
+    info = {
+      index: index_name,
+      type: document_type,
+      id: document_id(object.id),
+      body: document(object)
+    }
+    if respond_to?(:parent_id)
+      info.merge!(routing: parent_id(object))
+    end
+    $new_elasticsearch.index(info)
+  end
+
   def routing_info(id)
     {
       '_index' => index_name,
@@ -140,6 +158,11 @@ class Indexer
 
   def document(object)
     object.as_json(root: false)
+  end
+
+  # can be overriden by our bookmarkable indexers
+  def document_id(id)
+    id
   end
 
 end

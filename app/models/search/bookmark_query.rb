@@ -31,7 +31,8 @@ class BookmarkQuery < Query
     @filters ||= (
       visibility_filters +
       bookmark_filters +
-      bookmarkable_filters
+      bookmarkable_filters +
+      range_filters
     ).flatten.compact
   end
 
@@ -163,6 +164,17 @@ class BookmarkQuery < Query
       language_filter,
       filter_id_filter
     ]
+  end
+
+  def range_filters
+    ranges = []
+    [:date, :bookmarkable_date].each do |countable|
+      if options[countable].present?
+        key = countable == :date ? :created_at : countable
+        ranges << { range: { key => Search.range_to_search(options[countable]) } }
+      end
+    end
+    ranges
   end
 
   ####################

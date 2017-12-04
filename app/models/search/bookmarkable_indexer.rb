@@ -16,12 +16,16 @@ class BookmarkableIndexer < Indexer
     {
       '_index' => index_name,
       '_type' => document_type,
-      '_id' => "#{id}-#{klass.underscore}"
+      '_id' => document_id(id)
     }
   end
 
   def document(object)
     object.bookmarkable_json
+  end
+
+  def document_id(id)
+    "#{id}-#{klass.underscore}"
   end
 
 end

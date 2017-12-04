@@ -2,6 +2,7 @@ include UrlHelpers
 class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Searchable
 
   has_many :related_works, as: :parent
 
