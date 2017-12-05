@@ -52,8 +52,8 @@
                               filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                               id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                         <% end %>
-                        <% # If this isn't on one line, there is a space before and after the label %>
-                        <span><%= label_for_filter(tag_type, {name: tag.name, count: tag.count}) %></span>
+                        <% text = label_for_filter(tag_type, { name: tag.name, count: tag.count }) %>
+                        <%= replacement_label(text) %>
                       <% end %>
                     </li>
                   <% end %>
@@ -90,13 +90,13 @@
               <li>
                 <%= f.label :rec do %>
                   <%= f.check_box :rec %>
-                  <span><%= ts("Recs only") %></span>
+                  <%= replacement_label(ts("Recs only")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :with_notes do %>
                   <%= f.check_box :with_notes %>
-                  <span><%= ts("Only bookmarks with notes") %></span>
+                  <%= replacement_label(ts("Only bookmarks with notes")) %>
                 <% end %>
               </li>
             </ul>

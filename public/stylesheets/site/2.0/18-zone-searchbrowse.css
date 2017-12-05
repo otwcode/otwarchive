@@ -156,6 +156,14 @@ form.filters {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
+.filters dl legend {
+  width: auto;
+  height: auto;
+  opacity: 1.0;
+  display: inline;
+  font-size: 1em;
+}
+
 .filters [type="radio"], .filters [type="checkbox"] {
   border: 0; 
   clip: rect(0 0 0 0); 
@@ -167,7 +175,7 @@ form.filters {
   width: 1px;
 }
 
-.filters input[type="radio"] + span:before, .filters input[type="checkbox"] + span:before {
+.filters input[type="radio"] + .indicator:before, .filters input[type="checkbox"] + .indicator:before {
   background: linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   color: #aaa;  
   border: 0.125em solid;
@@ -175,16 +183,16 @@ form.filters {
   text-align: center;
 }
 
-.filters input:checked + span:before {
+.filters input:checked + .indicator:before {
   border-color: #aaa;
   font-weight: 500;
 }
 
-.filters input:checked + span {
+.filters input:checked + .indicator + span {
   font-weight: 700;
 }
 
-.filters [type="radio"] + span:before {
+.filters [type="radio"] + .indicator:before {
   content: "";
   width: 1em;
   height: 1em;
@@ -193,28 +201,28 @@ form.filters {
     border-radius: 1em;
 }
 
-.filters [type="radio"]:checked + span:before {
+.filters [type="radio"]:checked + .indicator:before {
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 11%, rgba(0, 0, 0, 0) 23%),
               linear-gradient(to bottom, #bbb 0%, #ddd 5%, #fff 100%);
   color: #aaa;
 }
 
-.filters [type="checkbox"] + span:before {
+.filters [type="checkbox"] + .indicator:before {
   content: " \2713";
   padding: 0 0.25em;
     border-radius: 0.25em;
 }
 
-.filters [type="checkbox"]:checked + span:before {
+.filters [type="checkbox"]:checked + .indicator:before {
   color: #006d00;
   background: linear-gradient(#fff 2%, #c3d8c3 95%, #a7baa7 100%);
 }
 
-.filters .exclude [type="checkbox"] + span:before {
+.filters .exclude [type="checkbox"] + .indicator:before {
   content: " \2715";
 }
 
-.filters .exclude [type="checkbox"]:checked + span:before {
+.filters .exclude [type="checkbox"]:checked + .indicator:before {
   color: red;
   background: linear-gradient(#fff 2%, #EFCECE 95%, #E0C0C0 100%);
 }

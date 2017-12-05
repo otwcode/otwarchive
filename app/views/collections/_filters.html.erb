@@ -51,21 +51,21 @@
             <%= label_tag "collection_filters_closed_true" do %>
               <%= radio_button_tag "collection_filters[closed]", true,
                   params[:collection_filters][:closed] == "true" %>
-              <span><%= ts("Yes") %></span>
+              <%= replacement_label(ts("Yes")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_closed_false" do %>
               <%= radio_button_tag "collection_filters[closed]", false,
                   params[:collection_filters][:closed] == "false" %>
-              <span><%= ts("No") %></span>
+              <%= replacement_label(ts("No")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_closed_" do %>
               <%= radio_button_tag "collection_filters[closed]", "",
                   params[:collection_filters][:closed] == "" %>
-              <span><%= ts("Either") %></span>
+              <%= replacement_label(ts("Either")) %>
             <% end %>
           </li>
         </ul>
@@ -77,21 +77,21 @@
             <%= label_tag "collection_filters_moderated_true" do %>
               <%= radio_button_tag "collection_filters[moderated]", true,
                   params[:collection_filters][:moderated] == "true" %>
-              <span><%= ts("Yes") %></span>
+              <%= replacement_label(ts("Yes")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_moderated_false" do %>
               <%= radio_button_tag "collection_filters[moderated]", false,
                   params[:collection_filters][:moderated] == "false" %>
-              <span><%= ts("No") %></span>
+              <%= replacement_label(ts("No")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_moderated_" do %>
               <%= radio_button_tag "collection_filters[moderated]", "",
                   params[:collection_filters][:moderated] == "" %>
-              <span><%= ts("Either") %></span>
+              <%= replacement_label(ts("Either")) %>
             <% end %>
           </li>
         </ul>
@@ -105,16 +105,16 @@
                   "gift_exchange",
                   params[:collection_filters][:challenge_type] == "gift_exchange"
               %>
-              <span><%= ts("Gift Exchange Challenge") %></span>
+              <%= replacement_label(ts("Gift Exchange Challenge")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_challenge_type_prompt_meme" do %>
               <%= radio_button_tag "collection_filters[challenge_type]",
                   "prompt_meme",
-                  params[:collection_filters][:challenge_type] == "prompt_meme" 
+                  params[:collection_filters][:challenge_type] == "prompt_meme"
               %>
-              <span><%= ts("Prompt Meme Challenge") %></span>
+              <%= replacement_label(ts("Prompt Meme Challenge")) %>
             <% end %>
           </li>
           <li>
@@ -123,14 +123,14 @@
                   "no_challenge",
                   params[:collection_filters][:challenge_type] == "no_challenge"
               %>
-              <span><%= ts("No Challenge") %></span>
+              <%= replacement_label(ts("No Challenge")) %>
             <% end %>
           </li>
           <li>
             <%= label_tag "collection_filters_challenge_type_" do %>
               <%= radio_button_tag "collection_filters[challenge_type]", "",
                   params[:collection_filters][:challenge_type] == "" %>
-              <span><%= ts("Any") %></span>
+              <%= replacement_label(ts("Any")) %>
             <% end %>
           </li>
         </ul>

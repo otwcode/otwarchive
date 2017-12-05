@@ -52,8 +52,8 @@
                             filter_boolean_value(filter_action, tag_type, tag.id.to_s),
                             id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
                         <% end %>
-                        <% # If this isn't on one line, there is a space before and after the label %>
-                        <span><%= label_for_filter(tag_type, {name: tag.name, count: tag.count}) %></span>
+                        <% text = label_for_filter(tag_type, { name: tag.name, count: tag.count }) %>
+                        <%= replacement_label(text) %>
                       <% end %>
                     </li>
                   <% end %>
@@ -86,19 +86,19 @@
               <li>
                 <%= f.label :crossover, value: "" do %>
                   <%= f.radio_button :crossover, "" %>
-                  <span><%= ts("Include crossovers") %></span>
+                  <%= replacement_label(ts("Include crossovers")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :crossover, value: "F" do %>
                   <%= f.radio_button :crossover, "F" %>
-                  <span><%= ts("Exclude crossovers") %></span>
+                  <%= replacement_label(ts("Exclude crossovers")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :crossover, ts("Only crossovers"), value: "T" do %>
                   <%= f.radio_button :crossover, "T" %>
-                  <span><%= ts("Show only crossovers") %></span>
+                  <%= replacement_label(ts("Show only crossovers")) %>
                 <% end %>
               </li>
             </ul>
@@ -109,19 +109,19 @@
               <li>
                 <%= f.label :complete, value: "" do %>
                   <%= f.radio_button :complete, "" %>
-                  <span><%= ts("Both complete and incomplete") %></span>
+                  <%= replacement_label(ts("Both complete and incomplete")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :complete, value: "T" do %>
                   <%= f.radio_button :complete, "T" %>
-                  <span><%= ts("Only complete works") %></span>
+                  <%= replacement_label(ts("Only complete works")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :complete, value: "F" do %>
                   <%= f.radio_button :complete, "F" %>
-                  <span><%= ts("Only incomplete works") %></span>
+                  <%= replacement_label(ts("Only incomplete works")) %>
                 <% end %>
               </li>
             </ul>
