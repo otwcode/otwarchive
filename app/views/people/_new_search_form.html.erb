@@ -3,20 +3,20 @@
     <legend><%= ts("Search people") %></legend>
     <dl>
       <dt>
-        <%= f.label :query, ts("Search all fields:") %>
+        <%= f.label :query, ts("Search all fields") %>
         <%= link_to_help "people-search-name-help" %>
       </dt>
       <dd>
         <%= f.text_field :query %>
       </dd>
       <dt>
-        <%= f.label :name, ts("Name:") %>
+        <%= f.label :name, ts("Name") %>
       </dt>
       <dd>
         <%= f.text_field :name, autocomplete_options("pseud") %>
       </dd>
       <dt>
-        <%= f.label :fandom, ts("Fandom:") %>
+        <%= f.label :fandom, ts("Fandom") %>
       </dt>
       <dd>
         <%= f.text_field :fandom, autocomplete_options("fandom") %>
