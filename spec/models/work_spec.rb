@@ -102,6 +102,26 @@ describe Work do
     end
   end
 
+  describe "authors to sort on" do
+    let(:work) { build(:work) }
+
+    it "when pseuds start with special characters" do
+      work.authors = [create(:pseud, name: "-jolyne")]
+      work.save
+      expect(work.authors_to_sort_on).to eq "jolyne"
+
+      work.authors = [create(:pseud, name: "_hermes")]
+      work.save
+      expect(work.authors_to_sort_on).to eq "hermes"
+    end
+
+    it "when there are multiple pseuds" do
+      work.authors = [create(:pseud, name: "diavolo"), create(:pseud, name: "doppio")]
+      work.save
+      expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+    end
+  end
+
   describe "work_skin_allowed" do
     context "public skin"
 
