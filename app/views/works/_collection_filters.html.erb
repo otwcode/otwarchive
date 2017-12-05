@@ -30,7 +30,7 @@
                     @search.collection_ids.present? && @search.collection_ids.include?(collection.id.to_s), 
                     id: "work_search_collection_ids_#{collection.id}" %>
                   <% text = "#{collection.name} (#{collection.count})" %>
-                  <%= replacement_label(text) %>
+                  <%= label_indicator_and_text(text) %>
                 <% end %>
               </li>
             <% end %>

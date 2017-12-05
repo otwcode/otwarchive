@@ -53,7 +53,7 @@
                               id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                         <% end %>
                         <% text = label_for_filter(tag_type, { name: tag.name, count: tag.count }) %>
-                        <%= replacement_label(text) %>
+                        <%= label_indicator_and_text(text) %>
                       <% end %>
                     </li>
                   <% end %>
@@ -90,13 +90,13 @@
               <li>
                 <%= f.label :rec do %>
                   <%= f.check_box :rec %>
-                  <%= replacement_label(ts("Recs only")) %>
+                  <%= label_indicator_and_text(ts("Recs only")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :with_notes do %>
                   <%= f.check_box :with_notes %>
-                  <%= replacement_label(ts("Only bookmarks with notes")) %>
+                  <%= label_indicator_and_text(ts("Only bookmarks with notes")) %>
                 <% end %>
               </li>
             </ul>
