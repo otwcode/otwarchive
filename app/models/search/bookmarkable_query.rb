@@ -97,15 +97,15 @@ class BookmarkableQuery < Query
   end
 
   def flip_bool_filter(filter)
-    condition = filter.dig(:bool, :should)&.detect{ |c| c.key?(:term) }
-    {
-      bool: {
-        should: [
-          condition,
-          { has_child: { type: "bookmark", query: condition } }
-        ]
-      }
-    }
+    conditions = filter.dig(:bool, :should)&.map do |f|
+      case f.keys.first
+      when :term, :terms
+        { has_child: { type: "bookmark", query: f } }
+      when :has_parent
+        f.dig(:has_parent, :query)
+      end
+    end
+    { bool: { should: conditions } } if conditions.present?
   end
 
   def flipped_query(q)
