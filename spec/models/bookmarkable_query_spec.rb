@@ -20,7 +20,7 @@ describe BookmarkableQuery do
       child_filter = filters.detect { |f| f.key?(:has_child) }
       expect(child_filter.dig(:has_child, :query, :bool, :must)).to include(term: { private: "false" })
       expect(child_filter.dig(:has_child, :query, :bool, :must)).to include(term: { user_id: 5 })
-      expect(child_filter.dig(:has_child, :query, :bool, :must_not)).to include(term: { tag_ids: 666 })      
+      expect(child_filter.dig(:has_child, :query, :bool, :must_not)).to include(term: { tag_ids: 666 })
     end
   end
 end
