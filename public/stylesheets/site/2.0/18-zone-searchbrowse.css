@@ -178,6 +178,7 @@ form.filters {
 .filters .indicator:before {
   background: #eee;
   color: #aaa;  
+  display: inline-block;
   border: 1px solid;
   margin-right: 0.25em;
   text-align: center;
@@ -216,7 +217,6 @@ form.filters {
   content: "";
   width: 1em;
   height: 1em;
-  display: inline-block;
   vertical-align: -0.125em;
     border-radius: 1em;
 }
