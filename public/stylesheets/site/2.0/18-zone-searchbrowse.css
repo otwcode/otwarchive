@@ -156,14 +156,6 @@ form.filters {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
-.filters dl legend {
-  width: auto;
-  height: auto;
-  opacity: 1.0;
-  display: inline;
-  font-size: 1em;
-}
-
 .filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
   clip: rect(0 0 0 0); 
