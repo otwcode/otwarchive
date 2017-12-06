@@ -164,7 +164,7 @@ form.filters {
   font-size: 1em;
 }
 
-.filters [type="radio"], .filters [type="checkbox"] {
+.filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
   clip: rect(0 0 0 0); 
   height: 1px;
@@ -175,12 +175,16 @@ form.filters {
   width: 1px;
 }
 
-.filters input[type="radio"] + .indicator:before, .filters input[type="checkbox"] + .indicator:before {
+.filters .indicator:before {
   background: linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
   color: #aaa;  
   border: 0.125em solid;
   margin-right: 0.25em;
   text-align: center;
+}
+
+.filters input:focus + .indicator + span {
+  outline: 1px dotted;
 }
 
 .filters input:checked + .indicator:before {
@@ -190,6 +194,17 @@ form.filters {
 
 .filters input:checked + .indicator + span {
   font-weight: 700;
+}
+
+.filters [type="checkbox"] + .indicator:before {
+  content: " \2713";
+  padding: 0 0.25em;
+    border-radius: 0.25em;
+}
+
+.filters [type="checkbox"]:checked + .indicator:before {
+  color: #006d00;
+  background: linear-gradient(#fff 2%, #c3d8c3 95%, #a7baa7 100%);
 }
 
 .filters [type="radio"] + .indicator:before {
@@ -207,23 +222,12 @@ form.filters {
   color: #aaa;
 }
 
-.filters [type="checkbox"] + .indicator:before {
-  content: " \2713";
-  padding: 0 0.25em;
-    border-radius: 0.25em;
-}
-
-.filters [type="checkbox"]:checked + .indicator:before {
-  color: #006d00;
-  background: linear-gradient(#fff 2%, #c3d8c3 95%, #a7baa7 100%);
-}
-
 .filters .exclude [type="checkbox"] + .indicator:before {
   content: " \2715";
 }
 
 .filters .exclude [type="checkbox"]:checked + .indicator:before {
-  color: red;
+  color: #f00;
   background: linear-gradient(#fff 2%, #EFCECE 95%, #E0C0C0 100%);
 }
 
