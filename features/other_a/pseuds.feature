@@ -75,3 +75,14 @@ Scenario: Manage pseuds - add, edit
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
     And I should not see "I wanted to add another name"
+
+Scenario: A pseud's blurb links to its recs
+
+  Given I have bookmarks to search
+    And the bookmark indexes are updated
+  When I go to testuser's pseuds page
+  Then I should see "testuser (testuser) 1 rec"
+  When I follow "1 rec"
+  Then I should see "1 Bookmark by testuser"
+    And I should see "First work"
+    And the "Recs only" checkbox should be checked

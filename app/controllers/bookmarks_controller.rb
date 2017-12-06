@@ -70,6 +70,7 @@ class BookmarksController < ApplicationController
       base_options = {
         show_private: (@user.present? && @user == current_user),
         show_restricted: current_user.present?,
+        rec: params[:recs_only] == "true",
         page: params[:page]
       }
 
