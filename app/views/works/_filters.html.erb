@@ -96,7 +96,7 @@
                 <% end %>
               </li>
               <li>
-                <%= f.label :crossover, ts("Only crossovers"), value: "T" do %>
+                <%= f.label :crossover, value: "T" do %>
                   <%= f.radio_button :crossover, "T" %>
                   <%= label_indicator_and_text(ts("Show only crossovers")) %>
                 <% end %>
@@ -130,18 +130,18 @@
           <dd id="work_words" class="expandable">
             <dl class="range">
               <dt><%= f.label :words_from, ts("From") %></dt>
-              <dd><%= f.text_field :words_from %>
+              <dd><%= f.text_field :words_from %></dd>
               <dt><%= f.label :words_to, ts("To") %></dt>
-              <dd><%= f.text_field :words_to %>
+              <dd><%= f.text_field :words_to %></dd>
             </dl>
           </dd>
           <dt id="toggle_work_dates" class="filter-toggle dates"><%= ts("Date Updated") %></dt>
           <dd id="work_dates" class="expandable">
             <dl class="range">
               <dt><%= f.label :date_from, ts("From") %></dt>
-              <dd><%= f.text_field :date_from, class: "datepicker" %>
+              <dd><%= f.text_field :date_from, class: "datepicker" %></dd>
               <dt><%= f.label :date_to, ts("To") %></dt>
-              <dd><%= f.text_field :date_to, class: "datepicker" %>
+              <dd><%= f.text_field :date_to, class: "datepicker" %></dd>
             </dl>
           </dd>
 
