@@ -40,19 +40,21 @@
                   <% @facets[tag_type].each do |tag| %>
                     <li>
                       <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
-                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
-                        <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                            tag.id,
-                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                      <% else %>
-                        <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                            tag.id,
-                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" do %>
+                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
+                          <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                              tag.id,
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% else %>
+                          <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                              tag.id,
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% end %>
+                        <% text = label_for_filter(tag_type, { name: tag.name, count: tag.count }) %>
+                        <%= label_indicator_and_text(text) %>
                       <% end %>
-                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",
-                          "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                     </li>
                   <% end %>
                 </ul>
@@ -86,12 +88,16 @@
           <dd class="options">
             <ul>
               <li>
-                <%= f.check_box :rec %>
-                <%= f.label :rec, ts("Recs only") %>
+                <%= f.label :rec do %>
+                  <%= f.check_box :rec %>
+                  <%= label_indicator_and_text(ts("Recs only")) %>
+                <% end %>
               </li>
               <li>
-                <%= f.check_box :with_notes %>
-                <%= f.label :with_notes, ts("Only bookmarks with notes") %>
+                <%= f.label :with_notes do %>
+                  <%= f.check_box :with_notes %>
+                  <%= label_indicator_and_text(ts("Only bookmarks with notes")) %>
+                <% end %>
               </li>
             </ul>
           </dd>

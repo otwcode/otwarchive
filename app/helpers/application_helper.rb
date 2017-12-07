@@ -551,4 +551,10 @@ module ApplicationHelper
     end
     super(*[collection_or_options, options].compact)
   end
+
+  # spans for nesting a checkbox or radio button inside its label to make custom
+  # checkbox or radio designs
+  def label_indicator_and_text(text)
+    content_tag(:span, "", class: "indicator", "aria-hidden": "true") + content_tag(:span, text)
+  end
 end # end of ApplicationHelper
