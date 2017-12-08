@@ -1364,12 +1364,14 @@ class Work < ApplicationRecord
   # SORTING
   ########################################################################
 
+  SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
+
   def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_title
