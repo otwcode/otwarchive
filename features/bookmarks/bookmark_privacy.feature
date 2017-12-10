@@ -31,7 +31,7 @@ Feature: Private bookmarks
       And I check "bookmark_rec"
       And I check "bookmark_private"
       And I press "Create"
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
       And I should not see the image "title" text "Restricted"
       And I should not see "Rec"
@@ -96,7 +96,7 @@ Feature: Private bookmarks
     When I am logged in as "otheruser"
       And I view the work "Public Masterpiece"
       And I rec the current work
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"

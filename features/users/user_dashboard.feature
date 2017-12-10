@@ -61,7 +61,7 @@ Feature: User dashboard
     And I should see "Work 5"
     And I should not see "Works (5)" within "#user-works"
   When I post the work "Newest Work"
-    And the work indexes are updated
+    And all indexing jobs have been run
     And I go to meatloaf's user page
   Then I should see "Newest Work"
     And I should not see "Oldest Work"

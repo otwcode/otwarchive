@@ -120,7 +120,7 @@ Feature:
       And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should get confirmation that I changed my username
     When I am on the the works page
     Then I should see "newusername"

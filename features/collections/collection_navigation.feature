@@ -25,7 +25,7 @@ Feature: Basic collection navigation
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
-    And all search indexes are updated
+    And all indexing jobs have been run
     And I follow "My Collection"
   When I follow "Profile"
   Then I should see "About My Collection (my_collection)"

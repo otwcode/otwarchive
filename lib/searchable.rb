@@ -15,9 +15,6 @@ module Searchable
   end
 
   def enqueue_to_index
-    if Rails.env.test?
-      reindex_document and return
-    end
     IndexQueue.enqueue(self, :main)
   end
 

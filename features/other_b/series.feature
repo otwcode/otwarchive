@@ -87,7 +87,7 @@ Feature: Create and Edit Series
     When "AO3-3455" is fixed
       # And I should see "Part 1 of the Black Beauty series" within "dd.series"
     When I press "Update"
-      And all search indexes are updated
+      And all indexing jobs have been run
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "div#series"
