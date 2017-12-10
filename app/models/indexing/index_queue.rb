@@ -63,8 +63,20 @@ class IndexQueue
   end
 
   def create_subqueues
-    ids.in_groups_of(BATCH_SIZE).each_with_index do |id_batch, i|
-      IndexSubqueue.create_and_enqueue("#{name}:#{i}", id_batch)
+    _, klass, label = name.split(":")
+    klass = klass.classify # convert to the uppercase version
+
+    ids.in_groups_of(BATCH_SIZE, false).each_with_index do |id_batch, i|
+      if $rollout.active?(:start_new_indexing)
+        AsyncIndexer.index(klass, id_batch, label)
+      end
+
+      # After the ES6 upgrade, delete this whole unless block.
+      unless $rollout.active?(:stop_old_indexing)
+        if %w(Work Bookmark Pseud StatCounter Tag).include?(klass)
+          IndexSubqueue.create_and_enqueue("#{name}:#{i}", id_batch)
+        end
+      end
     end
   end
 

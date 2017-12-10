@@ -27,7 +27,12 @@ describe IndexQueue do
   it "should create subqueues when run" do
     iq = IndexQueue.new("index:work:main")
     iq.add_id(1)
-    expect(IndexSubqueue).to receive(:create_and_enqueue)
+
+    # Once the upgrade is complete, this check can be deleted.
+    expect(IndexSubqueue).to receive(:create_and_enqueue).exactly(
+      $rollout.active?(:stop_old_indexing) ? 0 : 1
+    ).times
+
     iq.run
 
     expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
