@@ -65,13 +65,13 @@ class BookmarkIndexer < Indexer
       "_index" => index_name,
       "_type" => document_type,
       "_id" => id,
-      "routing" => parent_id(object)
+      "routing" => parent_id(id, object)
     }
   end
 
-  def parent_id(object)
+  def parent_id(id, object)
     if object.nil?
-      deleted_bookmark_info(object.id)
+      deleted_bookmark_info(id)
     else
       "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
     end
@@ -89,7 +89,7 @@ class BookmarkIndexer < Indexer
       tag_ids: tags.map(&:id)
     )
 
-    unless parent_id(object).match("deleted")
+    unless parent_id(object.id, object).match("deleted")
       json_object.merge!(
         bookmarkable_join: {
           name: "bookmark",
