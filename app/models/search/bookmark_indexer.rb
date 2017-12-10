@@ -93,7 +93,7 @@ class BookmarkIndexer < Indexer
       json_object.merge!(
         bookmarkable_join: {
           name: "bookmark",
-          parent: parent_id(object)
+          parent: parent_id(object.id, object)
         }
       )
     end
