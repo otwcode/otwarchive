@@ -201,8 +201,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches
-  after_destroy :expire_caches
+  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
   def before_destroy
@@ -253,6 +253,18 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless should_reindex_pseuds?
+    AsyncIndexer.index(PseudIndexer, [pseuds.pluck(:id)], :background)
+  end
+
+  def should_reindex_pseuds?
+    pertinent_attributes = %w(id posted restricted in_anon_collection
+      in_unrevealed_collection hidden_by_admin authors_to_sort_on)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   # ES UPGRADE TRANSITION #
@@ -1352,12 +1364,14 @@ class Work < ApplicationRecord
   # SORTING
   ########################################################################
 
+  SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
+
   def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_title

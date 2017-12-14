@@ -683,6 +683,18 @@ class Tag < ApplicationRecord
     yield if block_given?
     reindex_all_works(work_ids)
     reindex_all_bookmarks(bookmark_ids)
+    reindex_pseuds if type == "Fandom"
+  end
+
+  # Take the most direct route from tag to pseud and queue up to reindex
+  def reindex_pseuds
+    return unless $rollout.active?(:start_new_indexing)
+    Creatorship.select(:id, :pseud_id).
+                joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
+                where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
+                find_in_batches do |batch|
+      AsyncIndexer.index(PseudIndexer, batch.map(&:pseud_id).uniq, :background)
+    end
   end
 
   # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)

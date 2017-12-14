@@ -151,7 +151,7 @@ class Indexer
       body: document(object)
     }
     if respond_to?(:parent_id)
-      info.merge!(routing: parent_id(object))
+      info.merge!(routing: parent_id(object.id, object))
     end
     $new_elasticsearch.index(info)
   end

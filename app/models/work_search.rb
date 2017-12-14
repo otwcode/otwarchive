@@ -12,6 +12,7 @@ class WorkSearch < Search
     :revised_at,
     :language_id,
     :complete,
+    :crossover,
     :single_chapter,
     :word_count,
     :hits,
@@ -34,6 +35,10 @@ class WorkSearch < Search
     :relationship_ids,
     :freeform_names,
     :freeform_ids,
+    :date_from,
+    :date_to,
+    :words_from,
+    :words_to,
     :sort_column,
     :sort_direction,
     :show_restricted,
@@ -418,20 +423,8 @@ class WorkSearch < Search
   #
   #############################################################################
 
-  SORT_OPTIONS = [
-    ['Author', 'authors_to_sort_on'],
-    ['Title', 'title_to_sort_on'],
-    ['Date Posted', 'created_at'],
-    ['Date Updated', 'revised_at'],
-    ['Word Count', 'word_count'],
-    ['Hits', 'hits'],
-    ['Kudos', 'kudos_count'],
-    ['Comments', 'comments_count'],
-    ['Bookmarks', 'bookmarks_count']
-  ]
-
   def sort_options
-    SORT_OPTIONS
+    QueryCleaner::SORT_OPTIONS
   end
 
   def sort_values
@@ -440,7 +433,7 @@ class WorkSearch < Search
 
   # extract the pretty name
   def name_for_sort_column(sort_column)
-    Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
+    Hash[sort_options.collect {|v| [ v[1], v[0] ]}][sort_column]
   end
 
   def default_sort_direction(sort_column)

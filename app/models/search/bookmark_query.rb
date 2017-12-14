@@ -77,7 +77,7 @@ class BookmarkQuery < Query
   end
 
   def general_query
-    { query_string: { query: query_term } }
+    { query_string: { query: query_term, default_operator: "AND" } }
   end
 
   def parent_query
@@ -86,7 +86,8 @@ class BookmarkQuery < Query
         parent_type: "bookmarkable",
         query: {
           query_string: {
-            query: query_term
+            query: query_term,
+            default_operator: "AND"
           }
         }
       }
