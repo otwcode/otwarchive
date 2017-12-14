@@ -242,3 +242,8 @@ end
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
+
+When /^I should see the correct time zone for "(.*)"$/ do |zone|
+  Time.zone = zone
+  page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
+end
