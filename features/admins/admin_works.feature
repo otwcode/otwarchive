@@ -29,11 +29,11 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should see "Item has been hidden."
       And all emails have been delivered
     When I follow "Make Work Visible"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should see "Item is no longer hidden."
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
@@ -45,7 +45,7 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Delete Work"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
@@ -66,12 +66,12 @@ Feature: Admin Actions for Works and Bookmarks
     When I follow "Bookmark"
       And I fill in "bookmark_notes" with "Rude comment"
       And I press "Create"
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
     When I am logged in as an admin
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     Then I should see "Item has been hidden."
     When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page

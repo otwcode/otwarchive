@@ -57,7 +57,7 @@ Feature: Work Drafts
   Scenario: Drafts cannot be found by search
   Given I am logged in as "drafter" with password "something"
     And the draft "draft to post"
-  Given the work indexes are updated
+  Given all indexing jobs have been run
   When I fill in "site_search" with "draft"
     And I press "Search"
   Then I should see "No results found"
