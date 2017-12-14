@@ -25,7 +25,11 @@ class IndexSweeper
       process_document_failures(item)
     end
 
-    AsyncIndexer.new(@indexer, "failures").enqueue_ids(@rerun_ids) unless @rerun_ids.empty?
+    if @rerun_ids.any?
+      AsyncIndexer.new(@indexer, "failures").enqueue_ids(
+        @indexer.find_elasticsearch_ids(@rerun_ids)
+      )
+    end
   end
 
   def process_document_failures(item)

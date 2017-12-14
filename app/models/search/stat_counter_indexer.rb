@@ -5,6 +5,12 @@
 class StatCounterIndexer
   attr_reader :ids
 
+  # Find StatCounter elasticsearch ids (StatCounters are stored by their
+  # associated work_id) from provided StatCounter ActiveRecord object ids.
+  def self.find_elasticsearch_ids(ids)
+    StatCounter.where(work_id: ids).pluck(:id)
+  end
+
   def initialize(ids)
     @ids = ids
   end

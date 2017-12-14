@@ -111,15 +111,28 @@ describe IndexSweeper do
     expect(permanent_store).to eq([])
   end
 
+  it "should grab the elasticsearch ids expected by the indexer for retries" do
+    work = create(:work)
+    work.stat_counter.update(id: 3)
+
+    sweeper = IndexSweeper.new(batch(work.id), StatCounterIndexer)
+    indexer = AsyncIndexer.new(StatCounterIndexer, "failures")
+
+    expect(AsyncIndexer).to receive(:new).with(StatCounterIndexer, "failures").at_least(:once).and_return(indexer)
+    expect(indexer).to receive(:enqueue_ids).with([work.stat_counter.id]).at_least(:once).and_call_original
+
+    expect(sweeper.process_batch_failures).to be(true)
+  end
+
   private
 
-  def batch
+  def batch(id = 1)
     {
       "errors" => true,
       "items" => [
         {
           "update" => {
-            "_id" => 1,
+            "_id" => id,
             "error" => {
               "an error" => "with a message"
             }
