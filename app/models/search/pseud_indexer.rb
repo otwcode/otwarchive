@@ -51,7 +51,7 @@ class PseudIndexer < Indexer
       fandoms: fandoms(pseud),
       public_bookmarks_count: public_bookmarks_count(pseud),
       general_works_count: work_counts.values.sum,
-      public_works_count: work_counts[false]
+      public_works_count: work_counts[false] || 0
     }
   end
 

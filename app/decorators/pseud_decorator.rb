@@ -37,7 +37,8 @@ class PseudDecorator < SimpleDelegator
   end
 
   def works_count
-    User.current_user.present? ? data[:general_works_count] : data[:public_works_count]
+    count = User.current_user.present? ? data[:general_works_count] : data[:public_works_count]
+    count || 0
   end
 
   def bookmarks_count
