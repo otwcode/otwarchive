@@ -43,6 +43,12 @@ describe PseudDecorator do
         User.current_user = User.new
         expect(@decorator.works_count).to eq(10)
       end
+      it "should return 0 if a count is nil" do
+        data = @search_results.first.dup
+        data["_source"]["public_works_count"] = nil
+        dec = PseudDecorator.decorate_from_search([@pseud], [data]).first
+        expect(dec.works_count).to eq(0)
+      end
     end
 
     describe "#bookmarks_count" do
