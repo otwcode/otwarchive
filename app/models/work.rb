@@ -20,7 +20,9 @@ class Work < ApplicationRecord
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
+  has_many :pseuds,
+           through: :creatorships,
+           after_remove: [:expire_pseud, :reindex_changed_pseud]
   has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
@@ -255,15 +257,20 @@ class Work < ApplicationRecord
     Work.expire_work_tag_groups_id(self.id)
   end
 
+  def reindex_changed_pseud(pseud)
+    pseud = pseud.id if pseud.respond_to?(:id)
+    IndexQueue.enqueue_id(Pseud, pseud, :background)
+  end
+
   def update_pseud_index
     return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
-    AsyncIndexer.index(PseudIndexer, [pseuds.pluck(:id)], :background)
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
 
   def should_reindex_pseuds?
     pertinent_attributes = %w(id posted restricted in_anon_collection
-      in_unrevealed_collection hidden_by_admin authors_to_sort_on)
+      in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 

@@ -701,7 +701,7 @@ class Tag < ApplicationRecord
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
                 find_in_batches do |batch|
-      AsyncIndexer.index(PseudIndexer, batch.map(&:pseud_id).uniq, :background)
+      IndexQueue.enqueue_ids(Pseud, batch.map(&:pseud_id), :background)
     end
   end
 
