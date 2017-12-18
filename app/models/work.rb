@@ -270,7 +270,7 @@ class Work < ApplicationRecord
 
   def should_reindex_pseuds?
     pertinent_attributes = %w(id posted restricted in_anon_collection
-      in_unrevealed_collection hidden_by_admin)
+                              in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 

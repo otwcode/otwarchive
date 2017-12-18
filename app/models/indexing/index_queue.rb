@@ -22,12 +22,12 @@ class IndexQueue
 
   def self.enqueue_id(klass, id, label)
     key = get_key(klass, label)
-    queue = self.new(key).add_id(id)
+    new(key).add_id(id)
   end
 
   def self.enqueue_ids(klass, ids, label)
     key = get_key(klass, label)
-    queue = self.new(key).add_ids(ids)
+    new(key).add_ids(ids)
   end
 
   ####################
