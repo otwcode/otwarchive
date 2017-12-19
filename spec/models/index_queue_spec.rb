@@ -80,7 +80,7 @@ describe IndexQueue do
       stats.update_attributes(hit_count: 10_000)
       expect(StatCounterIndexer).to receive(:new).with(
         array_including(stats.id.to_s)
-      ).and_call_original
+      ).at_least(:once).and_call_original
       IndexQueue.new("index:stat_counter:stats").run
     end
   end

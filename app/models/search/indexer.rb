@@ -22,6 +22,14 @@ class Indexer
     raise "Must be defined in subclass"
   end
 
+  # Originally added to allow IndexSweeper to find the Elasticsearch document
+  # ids when they do not match the associated ActiveRecord objects' ids.
+  #
+  # Override in subclasses if necessary.
+  def self.find_elasticsearch_ids(ids)
+    ids
+  end
+
   def self.delete_index
     if $new_elasticsearch.indices.exists(index: index_name)
       $new_elasticsearch.indices.delete(index: index_name)
@@ -34,10 +42,10 @@ class Indexer
       body: {
         settings: {
           index: {
-            number_of_shards: 5
+            number_of_shards: 5,
           }
         },
-        mappings: mapping
+        mappings: mapping,
       }
     )
   end
