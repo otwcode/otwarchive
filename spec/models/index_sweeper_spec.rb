@@ -25,7 +25,7 @@ describe IndexSweeper do
     expect(AsyncIndexer).to receive(:new).with(WorkIndexer, "failures").and_return(indexer)
     expect(indexer).to receive(:enqueue_ids).with([1])
 
-    sweeper.process_batch_failures
+    sweeper.process_batch
 
     store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:first_failure_store"))
     expect(store).to include({"1" => { "an error" => "with a message" }})
@@ -43,7 +43,7 @@ describe IndexSweeper do
     expect(AsyncIndexer).to receive(:new).with(WorkIndexer, "failures").and_return(indexer)
     expect(indexer).to receive(:enqueue_ids).with([1])
 
-    sweeper.process_batch_failures
+    sweeper.process_batch
 
     first_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:first_failure_store"))
     second_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:second_failure_store"))
@@ -62,7 +62,7 @@ describe IndexSweeper do
 
     expect(AsyncIndexer).not_to receive(:new).with(WorkIndexer, "failures")
 
-    sweeper.process_batch_failures
+    sweeper.process_batch
 
     second_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:second_failure_store"))
     permanent_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:permanent_failure_store"))
@@ -71,44 +71,55 @@ describe IndexSweeper do
     expect(permanent_store).to include({"1" => { "an error" => "with a message" }})
   end
 
-  it "should remove documents from stores if they succeed" do
-    batch = {
-      "errors" => false,
-      "items" => [
-        { "update" => { "_id" => "1" } },
-        { "delete" => { "_id" => "2" } },
-        { "index" => { "_id" => "3" } }
-      ]
+  context "when documents succeed" do
+    let(:batch) {
+      {
+        "errors" => false,
+        "items" => [
+          { "update" => { "_id" => "1" } },
+          { "delete" => { "_id" => "2" } },
+          { "index" => { "_id" => "3" } }
+        ]
+      }
     }
 
-    sweeper = IndexSweeper.new(batch, WorkIndexer)
+    let(:sweeper) { IndexSweeper.new(batch, WorkIndexer) }
 
-    AsyncIndexer::REDIS.set(
-      "WorkIndexer:first_failure_store",
-      [{"1" => { "an error" => "a message" }}].to_json
-    )
+    it "should remove documents from stores if they succeed" do
+      AsyncIndexer::REDIS.set(
+        "WorkIndexer:first_failure_store",
+        [{"1" => { "an error" => "a message" }}].to_json
+      )
 
-    AsyncIndexer::REDIS.set(
-      "WorkIndexer:second_failure_store",
-      [{"2" => { "an error" => "a message" }}].to_json
-    )
+      AsyncIndexer::REDIS.set(
+        "WorkIndexer:second_failure_store",
+        [{"2" => { "an error" => "a message" }}].to_json
+      )
 
-    AsyncIndexer::REDIS.set(
-      "WorkIndexer:permanent_failure_store",
-      [{"3" => { "an error" => "a message" }}].to_json
-    )
+      AsyncIndexer::REDIS.set(
+        "WorkIndexer:permanent_failure_store",
+        [{"3" => { "an error" => "a message" }}].to_json
+      )
 
-    expect(AsyncIndexer).not_to receive(:new)
+      expect(AsyncIndexer).not_to receive(:new)
 
-    sweeper.process_batch_failures
+      sweeper.process_batch
 
-    first_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:first_failure_store"))
-    second_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:second_failure_store"))
-    permanent_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:permanent_failure_store"))
+      first_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:first_failure_store"))
+      second_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:second_failure_store"))
+      permanent_store = JSON.parse(AsyncIndexer::REDIS.get("WorkIndexer:permanent_failure_store"))
 
-    expect(first_store).to eq([])
-    expect(second_store).to eq([])
-    expect(permanent_store).to eq([])
+      expect(first_store).to eq([])
+      expect(second_store).to eq([])
+      expect(permanent_store).to eq([])
+    end
+
+    it "should perform success callbacks with the successful ids" do
+      expect(WorkIndexer).to receive(:handle_success).with(["1", "2", "3"])
+                                                     .and_call_original
+      expect(Work).to receive(:successful_reindex).with(["1", "2", "3"])
+      sweeper.process_batch
+    end
   end
 
   it "should grab the elasticsearch ids expected by the indexer for retries" do
@@ -121,7 +132,7 @@ describe IndexSweeper do
     expect(AsyncIndexer).to receive(:new).with(StatCounterIndexer, "failures").at_least(:once).and_return(indexer)
     expect(indexer).to receive(:enqueue_ids).with([work.stat_counter.id]).at_least(:once).and_call_original
 
-    expect(sweeper.process_batch_failures).to be(true)
+    expect(sweeper.process_batch).to be(true)
   end
 
   private

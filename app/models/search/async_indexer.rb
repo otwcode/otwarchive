@@ -11,7 +11,7 @@ class AsyncIndexer
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
     batch = indexer.new(ids).index_documents
-    IndexSweeper.new(batch, indexer).process_batch_failures
+    IndexSweeper.new(batch, indexer).process_batch
     REDIS.del(name)
   end
 
