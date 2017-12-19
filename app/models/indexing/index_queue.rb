@@ -22,7 +22,12 @@ class IndexQueue
 
   def self.enqueue_id(klass, id, label)
     key = get_key(klass, label)
-    queue = self.new(key).add_id(id)
+    new(key).add_id(id)
+  end
+
+  def self.enqueue_ids(klass, ids, label)
+    key = get_key(klass, label)
+    new(key).add_ids(ids)
   end
 
   ####################
@@ -38,6 +43,10 @@ class IndexQueue
 
   def add_id(id)
     REDIS.sadd(name, id)
+  end
+
+  def add_ids(ids)
+    REDIS.sadd(name, ids) unless ids.blank?
   end
 
   def run

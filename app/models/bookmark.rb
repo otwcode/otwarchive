@@ -111,7 +111,7 @@ class Bookmark < ApplicationRecord
   def update_pseud_index
     return unless $rollout.active?(:start_new_indexing)
     return unless destroyed? || saved_change_to_id? || saved_change_to_private?
-    AsyncIndexer.index(PseudIndexer, [pseud_id], :background)
+    IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
   def visible?(current_user=User.current_user)
