@@ -20,7 +20,9 @@ class Work < ApplicationRecord
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
+  has_many :pseuds,
+           through: :creatorships,
+           after_remove: [:expire_pseud, :reindex_changed_pseud]
   has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
@@ -70,7 +72,8 @@ class Work < ApplicationRecord
     counter = self.build_stat_counter
     counter.save
   end
-
+  # moderation
+  has_one :moderated_work, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -196,8 +199,12 @@ class Work < ApplicationRecord
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :notify_recipients, :expire_caches
-  after_destroy :expire_caches
+  before_save :hide_spam
+  after_save :moderate_spam
+  after_save :notify_of_hiding
+
+  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
   def before_destroy
@@ -248,6 +255,23 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def reindex_changed_pseud(pseud)
+    pseud = pseud.id if pseud.respond_to?(:id)
+    IndexQueue.enqueue_id(Pseud, pseud, :background)
+  end
+
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless should_reindex_pseuds?
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+  end
+
+  def should_reindex_pseuds?
+    pertinent_attributes = %w(id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   # ES UPGRADE TRANSITION #
@@ -1347,12 +1371,14 @@ class Work < ApplicationRecord
   # SORTING
   ########################################################################
 
+  SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
+
   def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_title
@@ -1372,16 +1398,11 @@ class Work < ApplicationRecord
   # SPAM CHECKING
   ########################################################################
 
-  def spam_checked?
-    spam_checked_at.present?
-  end
-
-  def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
+  def akismet_attributes
     content = chapters_in_order.map { |c| c.content }.join
     user = users.first
-    self.spam = Akismetor.spam?(
-      comment_type: 'Fan Fiction',
+    {
+      comment_type: "fanwork-post",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
@@ -1390,9 +1411,55 @@ class Work < ApplicationRecord
       comment_author: user.login,
       comment_author_email: user.email,
       comment_content: content
-    )
+    }
+  end
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
+  end
+
+  def hide_spam
+    return unless spam?
+    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    if admin_settings.hide_spam?
+      self.hidden_by_admin = true
+    end
+  end
+
+  def moderate_spam
+    ModeratedWork.register(self) if spam?
+  end
+
+  def mark_as_spam!
+    update_attribute(:spam, true)
+    ModeratedWork.mark_reviewed(self)
+    # don't submit spam reports unless in production mode
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def mark_as_ham!
+    update_attributes(spam: false, hidden_by_admin: false)
+    ModeratedWork.mark_approved(self)
+    # don't submit ham reports unless in production mode
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def notify_of_hiding
+    return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    users.each do |user|
+      if spam?
+        UserMailer.admin_spam_work_notification(id, user.id).deliver
+      else
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+      end
+    end
   end
 
   #############################################################################

@@ -102,6 +102,47 @@ describe Work do
     end
   end
 
+  describe "#set_author_sorting" do
+    let(:work) { build(:work) }
+
+    context "when the pseuds start with special characters" do
+      it "should remove those characters" do
+        work.authors = [Pseud.new(name: "-jolyne")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "jolyne"
+
+        work.authors = [Pseud.new(name: "_hermes")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "hermes"
+      end
+    end
+
+    context "when the pseuds start with numbers" do
+      it "should not remove numbers" do
+        work.authors = [Pseud.new(name: "007james")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "007james"
+      end
+    end
+
+    context "when the work is anonymous" do
+      it "should set the author sorting to Anonymous" do
+        work.in_anon_collection = true
+        work.authors = [Pseud.new(name: "stealthy")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "Anonymous"
+      end
+    end
+
+    context "when the work has multiple pseuds" do
+      it "should combine them with commas" do
+        work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+      end
+    end
+  end
+
   describe "work_skin_allowed" do
     context "public skin"
 
@@ -217,6 +258,34 @@ describe Work do
       work = create(:posted_work, expected_number_of_chapters: 1)
       work.update_attributes!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#hide_spam" do
+    before do
+      @admin_setting = AdminSetting.first || AdminSetting.create
+      @work = create(:posted_work)
+    end
+    context "when the admin setting is enabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, true)
+      end
+      it "automatically hides spam works and sends an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(@work.reload.hidden_by_admin).to be_truthy
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
+      end
+    end
+    context "when the admin setting is disabled" do
+      before do
+        @admin_setting.update_attribute(:hide_spam, false)
+      end
+      it "does not automatically hide spam works and does not send an email" do
+        expect { @work.update_attributes!(spam: true) }.
+          not_to change { ActionMailer::Base.deliveries.count }
+        expect(@work.reload.hidden_by_admin).to be_falsey
+      end
     end
   end
 end

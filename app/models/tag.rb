@@ -35,6 +35,20 @@ class Tag < ApplicationRecord
     end
   end
 
+  # ES UPGRADE TRANSITION #
+  # Delete this function, since it's unnecessary.
+  def self.document_type
+    "tag"
+  end
+
+  delegate :document_type, to: :class
+
+  # ES UPGRADE TRANSITION #
+  # Delete this function, since it's unnecessary.
+  def to_indexed_json
+    as_json.merge(tag_type: type).to_json
+  end
+
   def document_json
     TagIndexer.new({}).document(self)
   end
@@ -189,12 +203,6 @@ class Tag < ApplicationRecord
     if unwrangleable? && is_a?(UnsortedTag)
       self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
     end
-  end
-
-  before_update :remove_index_for_type_change, if: :type_changed?
-  def remove_index_for_type_change
-    @destroyed = true
-    reindex_document
   end
 
   before_validation :check_synonym
@@ -683,6 +691,18 @@ class Tag < ApplicationRecord
     yield if block_given?
     reindex_all_works(work_ids)
     reindex_all_bookmarks(bookmark_ids)
+    reindex_pseuds if type == "Fandom"
+  end
+
+  # Take the most direct route from tag to pseud and queue up to reindex
+  def reindex_pseuds
+    return unless $rollout.active?(:start_new_indexing)
+    Creatorship.select(:id, :pseud_id).
+                joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
+                where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
+                find_in_batches do |batch|
+      IndexQueue.enqueue_ids(Pseud, batch.map(&:pseud_id), :background)
+    end
   end
 
   # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)
@@ -1200,8 +1220,18 @@ class Tag < ApplicationRecord
       query do
         boolean do
           must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term '_type', options[:type].downcase } if options[:type].present?
           must { term :canonical, 'T' } if options[:canonical].present?
+
+          if options[:type].present?
+            # To support the tags indexed prior to IndexSubqueue, we want to
+            # find the type either in the tag_type field or the _type field:
+            should { term '_type', options[:type].downcase }
+            should { term :tag_type, options[:type].downcase }
+
+            # The tire gem doesn't natively support :minimum_should_match,
+            # but elasticsearch 0.90 does, so we hack it in.
+            @value[:minimum_should_match] = 1
+          end
         end
       end
     end

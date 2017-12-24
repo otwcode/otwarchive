@@ -54,7 +54,7 @@ class UsersController < ApplicationController
   def show
     if @user.blank?
       flash[:error] = ts('Sorry, could not find this user.')
-      redirect_to(people_path) && return
+      redirect_to(search_people_path) && return
     end
 
     @page_subtitle = @user.login
