@@ -96,7 +96,7 @@ class PseudDecorator < SimpleDelegator
       fandom_links = [options[:fandom_id]].flatten.map do |fandom_id|
         fandom_link(fandom_id)
       end
-      general_links  +  " | " + fandom_links.compact.join(", ")
+      general_links + " | " + fandom_links.compact.join(", ")
     else
       general_links
     end
