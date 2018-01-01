@@ -90,16 +90,16 @@ class PseudDecorator < SimpleDelegator
   end
 
   def authored_items_links(options = {})
+    general_links = [works_link, bookmarks_link].compact.join(", ")
     if options[:fandom_id].present?
       # This can potentially be an array
-      links = [options[:fandom_id]].flatten.map do |fandom_id|
+      fandom_links = [options[:fandom_id]].flatten.map do |fandom_id|
         fandom_link(fandom_id)
       end
-      links << bookmarks_link
+      general_links + " | " + fandom_links.compact.join(", ")
     else
-      links = [works_link, bookmarks_link]
+      general_links
     end
-    links.compact.join(", ")
   end
 
   def constructed_byline
