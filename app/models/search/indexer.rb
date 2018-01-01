@@ -108,6 +108,14 @@ class Indexer
     (INDEXERS_FOR_CLASS[name] || []).map(&:constantize)
   end
 
+  # Should be called after a batch update, with the IDs that were successfully
+  # updated. Calls successful_reindex on the indexable class.
+  def self.handle_success(ids)
+    if indexables.respond_to?(:successful_reindex)
+      indexables.successful_reindex(ids)
+    end
+  end
+
   ####################
   # INSTANCE METHODS
   ####################
