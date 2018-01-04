@@ -172,10 +172,14 @@ class WorkQuery < Query
 
   def date_range_filter
     return unless options[:date_from].present? || options[:date_to].present?
-    range = {}
-    range[:gte] = options[:date_from].to_date if options[:date_from].present?
-    range[:lte] = options[:date_to].to_date if options[:date_to].present?
-    { range: { revised_at: range } }
+    begin
+      range = {}
+      range[:gte] = clamp_search_date(options[:date_from].to_date) if options[:date_from].present?
+      range[:lte] = clamp_search_date(options[:date_to].to_date) if options[:date_to].present?
+      { range: { revised_at: range } }
+    rescue ArgumentError
+      nil
+    end
   end
 
   def word_count_filter
@@ -263,5 +267,12 @@ class WorkQuery < Query
 
   def pseud_ids
     options[:pseud_ids]
+  end
+
+  # By default, ES6 expects yyyy-MM-dd and can't parse years with 4+ digits.
+  def clamp_search_date(date)
+    return date.change(year: 0) if date.year.negative?
+    return date.change(year: 9999) if date.year > 9999
+    date
   end
 end
