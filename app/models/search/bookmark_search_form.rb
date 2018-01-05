@@ -71,7 +71,7 @@ class BookmarkSearchForm
 
     # We need to respect some options that are deliberately set to false, and
     # false.blank? is true, so we check for nil? and not blank? here.
-    @searcher = BookmarkQuery.new(options.delete_if { |k, v| v.nil? })
+    @searcher = BookmarkQuery.new(options.delete_if { |_, v| v.nil? })
   end
 
   def persisted?
