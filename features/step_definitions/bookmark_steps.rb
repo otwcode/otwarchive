@@ -86,7 +86,6 @@ Given /^I have bookmarks to search by dates$/ do
   FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, notes: "New bookmark of new work")
 
   step %{all indexing jobs have been run}
->>>>>>> a124b745919786d353036ca6ef71c46fef04221e
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
