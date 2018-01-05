@@ -48,19 +48,25 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag "collection_filters[closed]", true,
-                params[:collection_filters][:closed] == "true" %>
-            <%= label_tag "collection_filters_closed_true", ts("Yes") %>
+            <%= label_tag "collection_filters_closed_true" do %>
+              <%= radio_button_tag "collection_filters[closed]", true,
+                  params[:collection_filters][:closed] == "true" %>
+              <%= label_indicator_and_text(ts("Yes")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[closed]", false,
-                params[:collection_filters][:closed] == "false" %>
-            <%= label_tag "collection_filters_closed_false", ts("No") %>
+            <%= label_tag "collection_filters_closed_false" do %>
+              <%= radio_button_tag "collection_filters[closed]", false,
+                  params[:collection_filters][:closed] == "false" %>
+              <%= label_indicator_and_text(ts("No")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[closed]", "",
-                params[:collection_filters][:closed] == "" %>
-            <%= label_tag "collection_filters_closed_", ts("Either") %>
+            <%= label_tag "collection_filters_closed_" do %>
+              <%= radio_button_tag "collection_filters[closed]", "",
+                  params[:collection_filters][:closed] == "" %>
+              <%= label_indicator_and_text(ts("Either")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -68,18 +74,25 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", true,
-                params[:collection_filters][:moderated] == "true" %>
-            <%= label_tag "collection_filters_moderated_true", ts("Yes") %>
+            <%= label_tag "collection_filters_moderated_true" do %>
+              <%= radio_button_tag "collection_filters[moderated]", true,
+                  params[:collection_filters][:moderated] == "true" %>
+              <%= label_indicator_and_text(ts("Yes")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", false,
-                params[:collection_filters][:moderated] == "false" %>
-            <%= label_tag "collection_filters_moderated_false", ts("No") %>
+            <%= label_tag "collection_filters_moderated_false" do %>
+              <%= radio_button_tag "collection_filters[moderated]", false,
+                  params[:collection_filters][:moderated] == "false" %>
+              <%= label_indicator_and_text(ts("No")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[moderated]", "", params[:collection_filters][:moderated] == "" %>
-            <%= label_tag "collection_filters_moderated_", ts("Either") %>
+            <%= label_tag "collection_filters_moderated_" do %>
+              <%= radio_button_tag "collection_filters[moderated]", "",
+                  params[:collection_filters][:moderated] == "" %>
+              <%= label_indicator_and_text(ts("Either")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -87,32 +100,38 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag "collection_filters[challenge_type]",
-                "gift_exchange",
-                params[:collection_filters][:challenge_type] == "gift_exchange"
-            %>
-            <%= label_tag "collection_filters_challenge_type_gift_exchange",
-                ts("Gift Exchange Challenge") %>
-          </li>    
-          <li>
-            <%= radio_button_tag "collection_filters[challenge_type]",
-                "prompt_meme",
-                params[:collection_filters][:challenge_type] == "prompt_meme" %>
-            <%= label_tag "collection_filters_challenge_type_prompt_meme",
-                ts("Prompt Meme Challenge") %>
+            <%= label_tag "collection_filters_challenge_type_gift_exchange" do %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "gift_exchange",
+                  params[:collection_filters][:challenge_type] == "gift_exchange"
+              %>
+              <%= label_indicator_and_text(ts("Gift Exchange Challenge")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[challenge_type]",
-                "no_challenge",
-                params[:collection_filters][:challenge_type] == "no_challenge"
-            %>
-            <%= label_tag "collection_filters_challenge_type_no_challenge",
-                ts("No Challenge") %>
+            <%= label_tag "collection_filters_challenge_type_prompt_meme" do %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "prompt_meme",
+                  params[:collection_filters][:challenge_type] == "prompt_meme"
+              %>
+              <%= label_indicator_and_text(ts("Prompt Meme Challenge")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag "collection_filters[challenge_type]", "",
-                params[:collection_filters][:challenge_type] == "" %>
-            <%= label_tag "collection_filters_challenge_type_", ts("Any") %>
+            <%= label_tag "collection_filters_challenge_type_no_challenge" do %>
+              <%= radio_button_tag "collection_filters[challenge_type]",
+                  "no_challenge",
+                  params[:collection_filters][:challenge_type] == "no_challenge"
+              %>
+              <%= label_indicator_and_text(ts("No Challenge")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= label_tag "collection_filters_challenge_type_" do %>
+              <%= radio_button_tag "collection_filters[challenge_type]", "",
+                  params[:collection_filters][:challenge_type] == "" %>
+              <%= label_indicator_and_text(ts("Any")) %>
+            <% end %>
           </li>
         </ul>
       </dd>

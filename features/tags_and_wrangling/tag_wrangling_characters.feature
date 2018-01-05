@@ -35,7 +35,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
 
   # check those two created properly
   When I am on the search tags page
-    And the tag indexes are updated
+    And all indexing jobs have been run
     And I fill in "tag_search" with "Doctor"
     And I press "Search tags"
     # This part of the code is a hot mess. Capybara is returning the first instance of .canonical which contains

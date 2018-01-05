@@ -31,7 +31,8 @@ class BookmarkQuery < Query
     @filters ||= (
       visibility_filters +
       bookmark_filters +
-      bookmarkable_filters
+      bookmarkable_filters +
+      range_filters
     ).flatten.compact
   end
 
@@ -76,16 +77,17 @@ class BookmarkQuery < Query
   end
 
   def general_query
-    { query_string: { query: query_term } }
+    { query_string: { query: query_term, default_operator: "AND" } }
   end
 
   def parent_query
     {
       has_parent: {
-        type: "bookmarkable",
+        parent_type: "bookmarkable",
         query: {
           query_string: {
-            query: query_term
+            query: query_term,
+            default_operator: "AND"
           }
         }
       }
@@ -93,24 +95,16 @@ class BookmarkQuery < Query
   end
 
   def query_term
-    input = (options[:q] || options[:query])
-    generate_search_text( input || '' )
+    input = (options[:q] || options[:query] || "").dup
+    generate_search_text(input)
   end
 
   def generate_search_text(query = '')
     search_text = query
-    [:bookmarker, :notes, :tag].each do |field|
-      if self.options[field].present?
-        self.options[field].split(" ").each do |word|
-          if word[0] == "-"
-            search_text << " NOT "
-            word.slice!(0)
-          end
-          word = escape_reserved_characters(word)
-          search_text << " #{field.to_s}:#{word}"
-        end
-      end
+    [:bookmarker, :notes].each do |field|
+      search_text << split_query_text_words(field, options[field])
     end
+    search_text << split_query_text_phrases(:tag, options[:tag])
     escape_slashes(search_text.strip)
   end
 
@@ -171,6 +165,17 @@ class BookmarkQuery < Query
       language_filter,
       filter_id_filter
     ]
+  end
+
+  def range_filters
+    ranges = []
+    [:date, :bookmarkable_date].each do |countable|
+      if options[countable].present?
+        key = countable == :date ? :created_at : countable
+        ranges << { range: { key => Search.range_to_search(options[countable]) } }
+      end
+    end
+    ranges
   end
 
   ####################
@@ -269,13 +274,16 @@ class BookmarkQuery < Query
   end
 
   def include_private?
-    options[:show_private] ||
-      User.current_user && user_ids.include?(User.current_user.id)
+    # Use fetch instead of || here to make sure that we don't accidentally
+    # override a deliberate choice not to show private bookmarks.
+    options.fetch(:show_private,
+                  User.current_user && user_ids.include?(User.current_user.id))
   end
 
   def include_restricted?
-    options[:show_restricted] ||
-      User.current_user.present?
+    # Use fetch instead of || here to make sure that we don't accidentally
+    # override a deliberate choice not to show restricted bookmarks.
+    options.fetch(:show_restricted, User.current_user.present?)
   end
 
   def user_ids
@@ -292,8 +300,8 @@ class BookmarkQuery < Query
   def parent_term_filter(field, value, options={})
     {
       has_parent: {
-        type: "bookmarkable",
-        filter: {
+        parent_type: "bookmarkable",
+        query: {
           term: options.merge(field => value)
         }
       }
@@ -303,8 +311,8 @@ class BookmarkQuery < Query
   def parent_terms_filter(field, value, options={})
     {
       has_parent: {
-        type: "bookmarkable",
-        filter: {
+        parent_type: "bookmarkable",
+        query: {
           terms: options.merge(field => value)
         }
       }

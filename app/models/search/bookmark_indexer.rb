@@ -65,13 +65,13 @@ class BookmarkIndexer < Indexer
       "_index" => index_name,
       "_type" => document_type,
       "_id" => id,
-      "routing" => parent_id(object)
+      "routing" => parent_id(id, object)
     }
   end
 
-  def parent_id(object)
+  def parent_id(id, object)
     if object.nil?
-      deleted_bookmark_info(object.id)
+      deleted_bookmark_info(id)
     else
       "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
     end
@@ -84,16 +84,16 @@ class BookmarkIndexer < Indexer
       except: [:notes_sanitizer_version, :delta],
       methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
-      user_id: object.pseud.user_id,
+      user_id: object.pseud&.user_id,
       tag: tags.map(&:name),
       tag_ids: tags.map(&:id)
     )
 
-    unless parent_id(object).match("deleted")
+    unless parent_id(object.id, object).match("deleted")
       json_object.merge!(
         bookmarkable_join: {
           name: "bookmark",
-          parent: parent_id(object)
+          parent: parent_id(object.id, object)
         }
       )
     end

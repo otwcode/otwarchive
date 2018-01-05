@@ -63,7 +63,7 @@ gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
-gem 'elasticsearch'
+gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
 

@@ -1,44 +1,6 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Request an Invitation") %></h2>
-
-<p><%= ts("To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
-  %{count} people on the waiting list.", count: InviteRequest.count) %>
-  <% if AdminSetting.invite_from_queue_enabled? %>
-    <%= ts("We are sending out %{invites} invitations per day.", invites: AdminSetting.invite_from_queue_number) %>
-  <% end %></p>
-<!--/descriptions-->
-
-<!--main content-->
+<% # Page changes depending on whether queue is enabled %>
 <% if @admin_settings.invite_from_queue_enabled? %>
-  <h3 class="heading"><%= ts("Add yourself to the list") %></h3>
-
-  <%= form_for(@invite_request, html: {class: "simple"}) do |f| %>
-    <%= error_messages_for @invite_request %>
-    <fieldset>
-      <p>
-        <%= f.label :email %>
-        <%= f.text_field :email %>
-        <span class="submit actions">
-          <%= f.submit ts("Add me to the list") %>
-        </span>
-      </p>
-    </fieldset>
-  <% end %>
+  <%= render "index_open" %>
+<% else %>
+  <%= render "index_closed" %>
 <% end %>
-
-<h3 class="heading"><%= ts("Wondering how long you'll have to wait?") %></h3>
-
-<%= form_tag show_invite_request_path, { remote: true, method: :get, class: "simple"} do %>
-<fieldset>
-  <p>
-    <%= label_tag :email %>
-    <%= text_field_tag :email %>
-    <span class="submit actions">
-      <%= submit_tag ts('Look me up') %>
-    </span>
-  </p>
-</fieldset>
-<% end %>
-
-<div id="invite-status"></div>
-<!--/content-->

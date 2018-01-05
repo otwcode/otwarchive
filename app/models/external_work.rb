@@ -2,6 +2,7 @@ include UrlHelpers
 class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Searchable
 
   has_many :related_works, as: :parent
 
@@ -127,7 +128,6 @@ class ExternalWork < ApplicationRecord
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(
-      id: "external_work-#{id}",
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: "bookmarkable"
     )

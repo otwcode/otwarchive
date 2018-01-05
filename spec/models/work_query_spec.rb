@@ -58,7 +58,7 @@ describe WorkQuery do
 
   it "should allow you to filter for complete works" do
     q = WorkQuery.new(complete: true)
-    expect(q.filters).to include({term: { complete: 'true'} })
+    expect(q.filters).to include({ term: { complete: true } })
   end
 
   it "should allow you to filter for works by tag" do
@@ -150,4 +150,22 @@ describe WorkQuery do
     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
   end
 
+<<<<<<< HEAD
+=======
+  it "should rescue absurd dates" do
+    q = WorkQuery.new(revised_at: "> 700000000 days")
+    filter = q.range_filters.first
+    date = filter.dig(:range, :revised_at, :lt)
+    expect(date.year).to eq(1000.years.ago.year)
+  end
+
+  it "should rescue absurd date ranges" do
+    q = WorkQuery.new(revised_at: "700000000-700000001 days ago")
+    filter = q.range_filters.first
+    start_date = filter.dig(:range, :revised_at, :gte)
+    end_date = filter.dig(:range, :revised_at, :lte)
+    expect(start_date.year).to eq(1000.years.ago.year)
+    expect(end_date.year).to eq(1000.years.ago.year)
+  end
+>>>>>>> a124b745919786d353036ca6ef71c46fef04221e
 end

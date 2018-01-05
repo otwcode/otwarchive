@@ -38,9 +38,13 @@ class TagQuery < Query
 
   def name_query
     return unless options[:name]
-
-    name = escape_reserved_characters(options[:name])
-    { match_phrase: { name: name } } if options[:name]
+    {
+      simple_query_string: {
+        query: escape_reserved_characters(options[:name]),
+        fields: ["name"],
+        default_operator: "and"
+      }
+    }
   end
 
 end
