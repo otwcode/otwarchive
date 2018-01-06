@@ -1571,7 +1571,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    filters.by_type('Fandom').first_class.count > 1
+    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
   end
 
   # Does this work have only one relationship tag?
