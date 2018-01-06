@@ -64,9 +64,9 @@ describe AsyncIndexer do
     end
 
     it "should call the BookmarkedWorkIndexer three times with the same ID" do
-      expect(BookmarkedWorkIndexer).to receive(:new).with(["99999"])
-                                                    .exactly(3).times
-                                                    .and_call_original
+      expect(BookmarkedWorkIndexer).to receive(:new).with(["99999"]).
+        exactly(3).times.
+        and_call_original
       AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
     end
 
