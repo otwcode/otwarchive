@@ -42,4 +42,44 @@ describe AsyncIndexer do
     AsyncIndexer.perform("WorkIndexer:34:#{Time.now.to_i}")
   end
 
+  context "when persistent failures occur" do
+    before do
+      # Make elasticsearch always fail.
+      allow($new_elasticsearch).to receive(:bulk) do |options|
+        {
+          "errors" => true,
+          "items" => options[:body].map do |line|
+            action = line.keys.first
+            next unless (id = line[action]["_id"])
+
+            {
+              action.to_s => {
+                "_id" => id,
+                "error" => { "an error" => "with a message" }
+              }
+            }
+          end.compact
+        }
+      end
+    end
+
+    it "should call the BookmarkedWorkIndexer three times with the same ID" do
+      expect(BookmarkedWorkIndexer).to receive(:new).with(["99999"])
+                                                    .exactly(3).times
+                                                    .and_call_original
+      AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
+    end
+
+    it "should add the ID to the BookmarkedWorkIndexer's permanent failures" do
+      AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
+
+      permanent_store = JSON.parse(
+        IndexSweeper::REDIS.get("BookmarkedWorkIndexer:permanent_failure_store")
+      )
+
+      expect(permanent_store).to include(
+        "99999-work" => { "an error" => "with a message" }
+      )
+    end
+  end
 end
