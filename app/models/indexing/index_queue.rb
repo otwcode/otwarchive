@@ -58,7 +58,7 @@ class IndexQueue
 
   def ids
     @ids = REDIS.smembers(name)
-  end  
+  end
 
   private
 
