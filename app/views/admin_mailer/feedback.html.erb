@@ -11,6 +11,12 @@
       Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
     </p>
   <% end %>
+  <% unless @rollout.blank? %>
+    <p>Rollout: <%= raw @rollout %><p>
+  <% end %>
+  <% unless @user_agent.blank? %>
+    <p>User agent: <%= raw @user_agent %></p>
+  <% end %>
 
 
   Feedback:

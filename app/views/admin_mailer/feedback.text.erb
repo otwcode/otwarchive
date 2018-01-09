@@ -8,6 +8,12 @@ Here's some user feedback on the Archive!
   <% unless ArchiveConfig.REVISION.blank? %>
     Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
   <% end %>
+  <% unless @rollout.blank? %>
+    Rollout: <%= raw @rollout %>
+  <% end %>
+  <% unless @user_agent.blank? %>
+    User agent: <%= raw @user_agent %>
+  <% end %>
 
 Feedback: 
 <%= text_divider %>

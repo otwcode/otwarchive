@@ -41,10 +41,10 @@ class AdminMailer < ActionMailer::Base
     @summary = feedback.summary
     @comment = feedback.comment
     @username = feedback.username if feedback.username.present?
-    @email = if feedback.email.present?
-               feedback.email
-             end
+    @email = feedback.email if feedback.email.present?
     @language = feedback.language
+    @rollout = feedback.rollout if feedback.rollout.present?
+    @user_agent = feedback.user_agent if feedback.user_agent.present?
     mail(
       from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
       to: ArchiveConfig.FEEDBACK_ADDRESS,
