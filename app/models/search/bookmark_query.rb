@@ -13,15 +13,8 @@ class BookmarkQuery < Query
     BookmarkIndexer.document_type
   end
 
-  # After the initial search, run an additional query to get work/series tag filters
-  # Elasticsearch doesn't support parent aggregations, and doing the main query on the parents
-  # limits searching and sorting on the bookmarks themselves
-  # Hopefully someday they'll fix this and we can get the data from a single query
   def search_results
     response = search
-    if response['aggregations']
-      response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
-    end
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
@@ -128,6 +121,9 @@ class BookmarkQuery < Query
 
     if facet_tags?
       aggs[:tag] = { terms: { field: "tag_ids" } }
+      %w(rating warning category fandom character relationship freeform).each do |facet_type|
+        aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
+      end
     end
 
     { aggs: aggs }
