@@ -55,7 +55,7 @@ class Feedback < ApplicationRecord
     string = ""
     # ES UPGRADE TRANSITION #
     # Remove ES version logic, but leave this method for future rollout use
-    string << if $rollout.active?(:use_new_search) || User.current_user.present? && $rollout.active?(:use_new_search, User.current_user)
+    string << if use_new_search?
                 "ES 6.0"
               else
                 "ES 0.90"
