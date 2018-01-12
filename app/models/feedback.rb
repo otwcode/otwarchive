@@ -55,7 +55,7 @@ class Feedback < ApplicationRecord
     string = ""
     # ES UPGRADE TRANSITION #
     # Remove ES version logic, but leave this method for future rollout use
-    string << if use_new_search?
+    string << if Feedback.use_new_search?
                 "ES 6.0"
               else
                 "ES 0.90"
