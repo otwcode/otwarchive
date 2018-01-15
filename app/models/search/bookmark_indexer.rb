@@ -82,11 +82,11 @@ class BookmarkIndexer < Indexer
     json_object = object.as_json(
       root: false,
       except: [:notes_sanitizer_version, :delta],
-      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :rating_ids, :warning_ids, :category_ids, :collection_ids]
+      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
       user_id: object.pseud&.user_id,
       tag: tags.map(&:name),
-      tag_ids: tags.map(&:id),
+      tag_ids: tags.map(&:id)
     )
 
     unless parent_id(object.id, object).match("deleted")
