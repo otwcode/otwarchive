@@ -8,7 +8,7 @@ class InvitationsController < ApplicationController
   before_action :check_ownership, only: [:show, :invite_friend, :update]
 
   def load_invitation
-    @invitation = Invitation.find(params[:id])
+    @invitation = Invitation.find(params[:id] || invitation_params[:id])
     @check_ownership_of = @invitation
   end
 
