@@ -65,8 +65,8 @@ class QueryResult
           ids = results.map{ |result| result['key'] }
           tags = Tag.where(id: ids).group_by(&:id)
           results.each do |facet|
-            unless tags[facet['key'].to_i].blank?
-              @facets[term] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
+            unless tags[facet['key'].to_i].blank? || facet["#{term}_count"].blank?
+              @facets[term] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet["#{term}_count"]['doc_count'])
             end
           end
         elsif term == 'collections'

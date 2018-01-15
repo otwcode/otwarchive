@@ -47,7 +47,22 @@ class BookmarkableQuery < Query
   def aggregations
     aggs = {}
     %w(rating warning category fandom character relationship freeform).each do |facet_type|
-      aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
+      aggs[facet_type] = {
+        terms: {
+          field: "#{facet_type}_ids"
+        },
+        # The nested aggregate below returns the number of bookmarks tagged per tag,
+        # whereas the doc_count returned by the {terms: {field:
+        # "#{facet_type}_ids"}} simply returns the number of works tagged per
+        # tag
+        aggs: {
+          "bookmark_#{facet_type}_count".to_sym => {
+            children: {
+              type: "bookmark"
+            }
+          }
+        }
+      }
     end
     { aggs: aggs }
   end
