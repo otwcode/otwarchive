@@ -145,5 +145,5 @@ Feature: Filters
       And all indexing jobs have been run
     When I view the tag "The Hobbit" and go to its bookmarks page
     Then I should see "4 Bookmarks in The Hobbit"
-    When I press "Fandoms" within "dd.include"
+    When I follow "Fandoms"
     Then I should see "The Hobbit (4)"

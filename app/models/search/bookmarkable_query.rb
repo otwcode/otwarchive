@@ -51,10 +51,9 @@ class BookmarkableQuery < Query
         terms: {
           field: "#{facet_type}_ids"
         },
-        # The nested aggregate below returns the number of bookmarks tagged per tag,
+        # The nested aggregate below returns the number of bookmarks per work,
         # whereas the doc_count returned by the {terms: {field:
-        # "#{facet_type}_ids"}} simply returns the number of works tagged per
-        # tag
+        # "#{facet_type}_ids"}} simply returns the number of works per tag
         aggs: {
           "bookmark_#{facet_type}_count".to_sym => {
             children: {
