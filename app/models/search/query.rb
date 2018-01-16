@@ -53,10 +53,14 @@ class Query
   # Don't include empty conditions, since those will affect results
   def filtered_query
     filtered_query = {}
-    filtered_query[:filter] = filter_bool if filter_bool.present?
-    filtered_query[:must] = query_bool if query_bool.present?
-    if should_query.present?
-      filtered_query[:should] = should_query
+    filter = filter_bool
+    query = query_bool
+    should = should_query
+    
+    filtered_query[:filter] = filter if filter.present?
+    filtered_query[:must] = query if query.present?
+    if should.present?
+      filtered_query[:should] = should
       filtered_query[:minimum_should_match] = 1
     end
     filtered_query
@@ -74,7 +78,8 @@ class Query
 
   # Boolean query
   def query_bool
-    queries if !queries.blank?
+    q = queries
+    q unless q.blank?
   end
 
   # Should queries (used primarily for bookmarks)
@@ -127,13 +132,13 @@ class Query
 
   # Only escape if it isn't already escaped
   def escape_slashes(word)
-    word = word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
+    word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
   end
 
   def escape_reserved_characters(word)
     word = escape_slashes(word)
     word.gsub!('!', '\\!')
-    word.gsub!('+', '\\+')
+    word.gsub!('+', '\\\\+')
     word.gsub!('-', '\\-')
     word.gsub!('?', '\\?')
     word.gsub!("~", '\\~')

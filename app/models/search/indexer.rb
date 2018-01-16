@@ -44,7 +44,7 @@ class Indexer
           index: {
             number_of_shards: 5,
           }
-        },
+        }.merge(settings),
         mappings: mapping,
       }
     )
@@ -61,14 +61,24 @@ class Indexer
 
   def self.mapping
     {
-      document_type => {
+      document_type: {
         properties: {
-          #add properties in subclasses
+          # add properties in subclasses
         }
       }
     }
   end
 
+  def self.settings
+    {
+      analyzer: {
+        custom_analyzer: {
+          # add properties in subclasses
+        }
+      }
+    }
+  end
+  
   def self.index_all(options={})
     unless options[:skip_delete]
       delete_index

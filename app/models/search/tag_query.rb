@@ -39,12 +39,11 @@ class TagQuery < Query
   def name_query
     return unless options[:name]
     {
-      simple_query_string: {
+      query_string: {
         query: escape_reserved_characters(options[:name]),
-        fields: ["name"],
+        fields: ["name.exact^2", "name"],
         default_operator: "and"
       }
     }
   end
-
 end
