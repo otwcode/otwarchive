@@ -133,7 +133,7 @@ end
 
 # ES UPGRADE TRANSITION #
 # Replace all instances of $new_elasticsearch with $elasticsearch
-def update_and_refresh_indexes(klass_name)
+def update_and_refresh_indexes(klass_name, shards = 5)
   # ES UPGRADE TRANSITION #
   # Remove block
   if elasticsearch_enabled?($elasticsearch)
@@ -148,7 +148,7 @@ def update_and_refresh_indexes(klass_name)
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
 
   indexer_class.delete_index
-  indexer_class.create_index
+  indexer_class.create_index(shards)
 
   if klass_name == 'bookmark'
     bookmark_indexers = {

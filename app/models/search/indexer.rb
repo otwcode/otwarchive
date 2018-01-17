@@ -36,13 +36,13 @@ class Indexer
     end
   end
 
-  def self.create_index
+  def self.create_index(shards = 5)
     $new_elasticsearch.indices.create(
       index: index_name,
       body: {
         settings: {
           index: {
-            number_of_shards: 5,
+            number_of_shards: shards,
           }
         }.merge(settings),
         mappings: mapping,
