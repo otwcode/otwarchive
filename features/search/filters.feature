@@ -143,7 +143,7 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And all indexing jobs have been run
-    When I view the tag "The Hobbit" and go to its bookmarks page
+    When I go to the bookmarks tagged "The Hobbit"
     Then I should see "4 Bookmarks in The Hobbit"
     When I follow "Fandoms"
     Then I should see "The Hobbit (4)"

@@ -252,11 +252,6 @@ When /^I view the tag "([^\"]*)"$/ do |tag|
   visit tag_path(tag)
 end
 
-When /^I view the tag "([^\"]*)" and go to its bookmarks page$/ do |tag|
-  tag = Tag.find_by!(name: tag)
-  visit tag_bookmarks_path(tag)
-end
-
 When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
  tag = Fandom.new(name: name)
  tag.id = id.to_i
