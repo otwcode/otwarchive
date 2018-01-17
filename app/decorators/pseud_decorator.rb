@@ -16,10 +16,11 @@ class PseudDecorator < SimpleDelegator
     work_counts
     bookmark_counts
     work_key = User.current_user.present? ? :general_works_count : :public_works_count
+    bookmark_key = User.current_user.present? ? :general_bookmarks_count : :public_bookmarks_count
     pseuds.map do |pseud|
       data = {
         user_login: users[user_id].login,
-        public_bookmarks_count: bookmark_counts[id],
+        bookmark_key => bookmark_counts[id],
         work_key => work_counts[id]
       }
       new_with_data(pseud, data)
@@ -42,7 +43,7 @@ class PseudDecorator < SimpleDelegator
   end
 
   def bookmarks_count
-    data[:public_bookmarks_count]
+    User.current_user.present? ? data[:general_bookmarks_count] : data[:public_bookmarks_count]
   end
 
   def byline

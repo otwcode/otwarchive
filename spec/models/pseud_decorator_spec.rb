@@ -15,6 +15,7 @@ describe PseudDecorator do
         "collection_ids"=>[1],
         "sortable_name"=>@pseud.name.downcase,
         "fandoms"=>[{"id"=>13, "name"=>"Stargate SG-1", "count"=>7}],
+        "general_bookmarks_count"=>7,
         "public_bookmarks_count"=>5,
         "general_works_count"=>10,
         "public_works_count"=>7
@@ -52,8 +53,12 @@ describe PseudDecorator do
     end
 
     describe "#bookmarks_count" do
-      it "returns the public bookmarks count" do
+      it "returns the public count if there's no current user" do
         expect(@decorator.bookmarks_count).to eq(5)
+      end
+      it "returns the general count if there is a current user" do
+        User.current_user = User.new
+        expect(@decorator.bookmarks_count).to eq(7)
       end
     end
 
