@@ -199,7 +199,7 @@ class BookmarkQuery < Query
   end
 
   def type_filter
-    term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type]
+    term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type].present?
   end
 
   def posted_filter
