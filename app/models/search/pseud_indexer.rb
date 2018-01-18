@@ -75,7 +75,7 @@ class PseudIndexer < Indexer
   end
 
   def public_bookmarks_count(pseud)
-    pseud.bookmarks.where(private: false, hidden_by_admin: false).count
+    pseud.bookmarks.visible_to_all.count
   end
 
   def work_counts(pseud)
