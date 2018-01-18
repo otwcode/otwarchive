@@ -49,6 +49,7 @@ class PseudIndexer < Indexer
     {
       sortable_name: pseud.name.downcase,
       fandoms: fandoms(pseud),
+      general_bookmarks_count: general_bookmarks_count(pseud),
       public_bookmarks_count: public_bookmarks_count(pseud),
       general_works_count: work_counts.values.sum,
       public_works_count: work_counts[false] || 0
@@ -72,6 +73,10 @@ class PseudIndexer < Indexer
                           name: tags.first.name,
                           count: tags.length }
                          }
+  end
+
+  def general_bookmarks_count(pseud)
+    pseud.bookmarks.visible_to_registered_user.count
   end
 
   def public_bookmarks_count(pseud)
