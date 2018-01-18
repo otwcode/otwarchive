@@ -40,12 +40,8 @@ class BookmarkQuery < Query
     @exclusion_filters ||= tag_exclusion_filter
   end
 
-  # Instead of doing a standard query, which would only match bookmark fields
-  # we'll make this a should query that will try to match either the bookmark or its parent
-  def should_query
-    if query_term.present?
-      @should_queries = parent_child_query
-    end
+  def queries
+    parent_child_query
   end
 
   def add_owner
@@ -86,7 +82,7 @@ class BookmarkQuery < Query
         parent_type: "bookmarkable",
         query: {
           query_string: {
-            query: query_term,
+            query: parent_query_term,
             default_operator: "AND"
           }
         }
@@ -99,12 +95,17 @@ class BookmarkQuery < Query
     generate_search_text(input)
   end
 
+  def parent_query_term
+    search_text = ""
+    search_text << split_query_text_phrases(:tag, options[:tag])
+    escape_slashes(search_text.strip)
+  end
+
   def generate_search_text(query = '')
     search_text = query
     [:bookmarker, :notes].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    search_text << split_query_text_phrases(:tag, options[:tag])
     escape_slashes(search_text.strip)
   end
 
