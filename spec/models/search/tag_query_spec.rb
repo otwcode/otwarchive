@@ -14,7 +14,8 @@ describe TagQuery, type: :model do
       free_abapos: create(:freeform, name: "ab'c d"),
       rel_slash: create(:relationship, name: "ab/cd"),
       rel_space: create(:relationship, name: "ab cd"),
-      rel_quotes: create(:relationship, name: "ab \"cd\" ef")
+      rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
+      rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
     update_and_refresh_indexes('tag', 1)
     tags
@@ -132,9 +133,21 @@ describe TagQuery, type: :model do
     results.should include(tags[:fan_yuri])
   end
 
-  it "matches tags without canonical punctuation ('yuri' on ice matches 'Yuri!!! On Ice')" do
+  it "matches tags without canonical punctuation ('yuri on ice' matches 'Yuri!!! On Ice')" do
     tag_query = TagQuery.new(name: "yuri on ice")
     results = tag_query.search_results
     results.should include(tags[:fan_yuri])
+  end
+
+  it "matches unicode tags with unicode character ('Dave ♦ Sawbuck' matches 'Dave ♦ Sawbuck')" do
+    tag_query = TagQuery.new(name: "dave ♦ sawbuck")
+    results = tag_query.search_results
+    results.should include(tags[:rel_unicode])
+  end
+
+  it "matches unicode tags without unicode character ('dave sawbuck' matches 'Dave ♦ Sawbuck')" do
+    tag_query = TagQuery.new(name: "dave sawbuck")
+    results = tag_query.search_results
+    results.should include(tags[:rel_unicode])
   end
 end
