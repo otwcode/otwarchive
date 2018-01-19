@@ -93,7 +93,7 @@ class BookmarkableQuery < Query
     if filter.key?(:term) || filter.key?(:terms)
       key = options[:type] == :exclusion ? :exclude : :include
       child_filters[key] << filter
-      return nil
+      nil
     elsif filter.key?(:has_parent)
       filter[:has_parent][:query]
     end

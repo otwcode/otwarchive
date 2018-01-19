@@ -41,7 +41,7 @@ class BookmarkQuery < Query
   end
 
   def queries
-    parent_child_query
+    parent_child_query unless query_term.blank? && parent_query_term.blank?
   end
 
   def add_owner
@@ -96,12 +96,12 @@ class BookmarkQuery < Query
   end
 
   def parent_query_term
-    search_text = ""
-    search_text << split_query_text_phrases(:tag, options[:tag])
+    return "" unless options[:tag].present?
+    search_text = split_query_text_phrases(:tag, options[:tag])
     escape_slashes(search_text.strip)
   end
 
-  def generate_search_text(query = '')
+  def generate_search_text(query = "")
     search_text = query
     [:bookmarker, :notes].each do |field|
       search_text << split_query_text_words(field, options[field])
@@ -110,8 +110,8 @@ class BookmarkQuery < Query
   end
 
   def sort
-    column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
-    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
+    column = options[:sort_column].present? ? options[:sort_column] : "created_at"
+    direction = options[:sort_direction].present? ? options[:sort_direction] : "desc"
     sort_hash = { column => { order: direction } }
 
     if %w(created_at bookmarkable_date).include?(column)
@@ -124,7 +124,7 @@ class BookmarkQuery < Query
   def aggregations
     aggs = {}
     if facet_collections?
-      aggs[:collections] = { terms: { field: 'collection_ids' } }
+      aggs[:collections] = { terms: { field: "collection_ids" } }
     end
 
     if facet_tags?
