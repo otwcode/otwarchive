@@ -108,6 +108,7 @@ class PseudDecorator < SimpleDelegator
   end
 
   def fandom_stats(id)
-    data[:fandoms]&.detect { |fandom| fandom['id'].to_s == id.to_s }
+    key = User.current_user.present? ? "id" : "id_for_public"
+    data[:fandoms]&.detect { |fandom| fandom[key].to_s == id.to_s }
   end
 end

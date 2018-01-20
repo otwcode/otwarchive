@@ -14,7 +14,10 @@ describe PseudDecorator do
         "byline"=>@pseud.byline,
         "collection_ids"=>[1],
         "sortable_name"=>@pseud.name.downcase,
-        "fandoms"=>[{"id"=>13, "name"=>"Stargate SG-1", "count"=>7}],
+        "fandoms" => [
+          { "id" => 13, "name" => "Stargate SG-1", "count" => 7 },
+          { "id_for_public" => 13, "name" => "Stargate SG-1", "count" => 2 }
+        ],
         "general_bookmarks_count"=>7,
         "public_bookmarks_count"=>5,
         "general_works_count"=>10,
@@ -111,8 +114,18 @@ describe PseudDecorator do
     end
 
     describe "#fandom_link" do
-      it "is an html link to the pseud works page with the fandom id" do
+      it "is an html link to the pseud works page with the fandom id, showing the public count" do
+        expect(@decorator.fandom_link(13)).to eq("<a href='/users/#{@pseud.user.to_param}/pseuds/#{@pseud.to_param}/works?fandom_id=13'>2 works in Stargate SG-1</a>")
+      end
+      it "is an html link to the pseud works page with the fandom id, showing the general count if there is a current user" do
+        User.current_user = User.new
         expect(@decorator.fandom_link(13)).to eq("<a href='/users/#{@pseud.user.to_param}/pseuds/#{@pseud.to_param}/works?fandom_id=13'>7 works in Stargate SG-1</a>")
+      end
+      it "returns nil if there are no public works" do
+        data = @search_results.first.dup
+        data["_source"]["fandoms"] = [{ "id" => 13, "name" => "Stargate SG-1", "count" => 7 }]
+        dec = PseudDecorator.decorate_from_search([@pseud], [data]).first
+        expect(dec.fandom_link(13)).to be_nil
       end
     end
 
