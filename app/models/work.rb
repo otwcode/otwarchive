@@ -1576,7 +1576,7 @@ class Work < ApplicationRecord
 
   # Does this work have only one relationship tag?
   def otp
-    filters.by_type('Relationship').first_class.count == 1
+    relationships.count == 1
   end
 
   # Quick and dirty categorization of the most obvious stuff
