@@ -172,4 +172,9 @@ class Query
     end
     str
   end
+  
+  # Generate some common Elasticsearch tropes
+  def and_query_string(query)
+    { query_string: { query: query, default_operator: "AND" } }
+  end
 end

@@ -41,7 +41,48 @@ class BookmarkQuery < Query
   end
 
   def queries
-    parent_child_query unless query_term.blank? && parent_query_term.blank?
+    must_clauses = []
+    
+    # query (any field)
+    text_query = (options[:q] || options[:query] || "").dup
+    if text_query.present?
+      must_clauses << {
+        bool: {
+          should: [
+            and_query_string(text_query), # bookmark
+            parent_query(and_query_string(text_query)) # bookmarkable
+          ]
+        }
+      }
+    end
+    
+    if options[:bookmarker].present?
+      must_clauses << and_query_string(split_query_text_words(:bookmarker, options[:bookmarker]).strip)
+    end
+    
+    # bookmark notes
+    if options[:bookmark_notes].present?
+      must_clauses << and_query_string(split_query_text_words(:notes, options[:bookmark_notes]).strip)
+    end
+
+    if options[:tag].present?
+      # If it is comma-separated, assume individual tags and AND them
+      # If not, split into words and search them individually
+      tags = options[:tag].split(/\s+/).map(&:squish).compact
+
+      must_clauses += tags.map do |term|
+        {
+          bool: {
+            should: [
+              and_query_string("tag:\"#{term}\""), # bookmark
+              parent_query(and_query_string("tag:\"#{term}\"")) # bookmarkable
+            ]
+          }
+         }
+      end
+    end
+
+    { bool: { must: must_clauses } }
   end
 
   def add_owner
@@ -68,7 +109,7 @@ class BookmarkQuery < Query
   def parent_child_query
     [
       general_query,
-      parent_query
+      parent_query(general_query)
     ]
   end
 
@@ -76,16 +117,11 @@ class BookmarkQuery < Query
     { query_string: { query: query_term, default_operator: "AND" } }
   end
 
-  def parent_query
+  def parent_query(query)
     {
       has_parent: {
         parent_type: "bookmarkable",
-        query: {
-          query_string: {
-            query: parent_query_term,
-            default_operator: "AND"
-          }
-        }
+        query: query
       }
     }
   end
@@ -96,9 +132,8 @@ class BookmarkQuery < Query
   end
 
   def parent_query_term
-    return "" unless options[:tag].present?
-    search_text = split_query_text_phrases(:tag, options[:tag])
-    escape_slashes(search_text.strip)
+    return "*" unless options[:tag].present?
+
   end
 
   def generate_search_text(query = "")

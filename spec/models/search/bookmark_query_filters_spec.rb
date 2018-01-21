@@ -2,21 +2,6 @@ require 'spec_helper'
 
 describe BookmarkQuery do
 
-  it "performs a simple search" do
-    q = BookmarkQuery.new(query: "unicorns")
-    search_body = q.generated_query
-    expect(search_body[:query][:bool][:must]).to include({ query_string: { query: "unicorns", default_operator: "AND" }})
-  end
-
-  it "searches for bookmarker on the bookmark, and tags on the bookmarkable item" do
-    bookmark_query = { query_string: { query: "bookmarker:testy", default_operator: "AND" } }
-    parent_query = {has_parent: {parent_type: "bookmarkable", query: {query_string: {query: "tag:\"foo\"", default_operator: "AND"}}}}
-    q = BookmarkQuery.new({ bookmarker: "testy", tag: "foo" })
-    search_body = q.generated_query
-    expect(search_body[:query][:bool][:must]).to include(bookmark_query)
-    expect(search_body[:query][:bool][:must]).to include(parent_query)
-  end
-
   it "does NOT return private bookmarks by default" do
     q = BookmarkQuery.new
     expect(q.filters).to include({term: { private: 'false'} })
