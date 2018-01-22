@@ -78,7 +78,7 @@ class BookmarkQuery < Query
               parent_query(and_query_string("tag:\"#{term}\"")) # bookmarkable
             ]
           }
-         }
+        }
       end
     end
 
@@ -106,17 +106,6 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  def parent_child_query
-    [
-      general_query,
-      parent_query(general_query)
-    ]
-  end
-
-  def general_query
-    { query_string: { query: query_term, default_operator: "AND" } }
-  end
-
   def parent_query(query)
     {
       has_parent: {
@@ -124,24 +113,6 @@ class BookmarkQuery < Query
         query: query
       }
     }
-  end
-
-  def query_term
-    input = (options[:q] || options[:query] || "").dup
-    generate_search_text(input)
-  end
-
-  def parent_query_term
-    return "*" unless options[:tag].present?
-
-  end
-
-  def generate_search_text(query = "")
-    search_text = query
-    [:bookmarker, :notes].each do |field|
-      search_text << split_query_text_words(field, options[field])
-    end
-    escape_slashes(search_text.strip)
   end
 
   def sort

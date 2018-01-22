@@ -30,14 +30,14 @@ describe BookmarkQuery do
   
   it "searches for bookmarker ONLY on the bookmark" do
     q = BookmarkQuery.new(bookmarker: "testy")
-    search_body = q.general_query
-    expect(search_body).to eq(bookmarker_query)
+    search_body = q.generated_query
+    expect(search_body[:query][:bool][:must][:bool][:must].first).to eq(bookmarker_query)
   end
   
   it "searches for bookmark notes ONLY on the bookmark" do
-    q = BookmarkQuery.new(notes: "Notes")
-    search_body = q.general_query
-    expect(search_body).to eq(bookmark_notes_query)
+    q = BookmarkQuery.new(bookmark_notes: "Notes")
+    search_body = q.generated_query
+    expect(search_body[:query][:bool][:must][:bool][:must].first).to eq(bookmark_notes_query)
   end
   
   it "searches for tags on both bookmark and bookmarkable" do
