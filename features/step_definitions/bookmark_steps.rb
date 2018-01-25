@@ -96,6 +96,14 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*
   step %{all indexing jobs have been run}
 end
 
+When /^I bookmark the series "([^\"]*)"$/ do |series_title|
+  series = Series.find_by(title: series_title)
+  visit series_path(series)
+  click_link("Bookmark Series")
+  click_button("Create")
+  step %{all indexing jobs have been run}
+end
+
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
   step %{I open the bookmarkable work "#{title}"}
   click_link("Bookmark")
@@ -163,6 +171,13 @@ Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   bookmark = work.bookmarks.first
   bookmark.reload
   bookmark.tags.collect(&:name).include?(tag)
+end
+
+Then /^the ([\d]+)(?:st|nd|rd|th) bookmark result should contain "(^"]*)"$/ do |n, text|
+  select = "ol.bookmark > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    page.should have_content(text)
+  end
 end
 
 Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bookmark tags$/ do |title|
