@@ -172,9 +172,8 @@ Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   bookmark.reload
   bookmark.tags.collect(&:name).include?(tag)
 end
-
-Then /^the ([\d]+)(?:st|nd|rd|th) bookmark result should contain "(^"]*)"$/ do |n, text|
-  select = "ol.bookmark > li:nth-of-type(#{n})"
+Then /^the ([\d]+)(?:st|nd|rd|th) bookmark result should contain "([^"]*)"$/ do |n, text|
+  selector = "ol.bookmark > li:nth-of-type(#{n})"
   with_scope(selector) do
     page.should have_content(text)
   end
