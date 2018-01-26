@@ -5,7 +5,7 @@ class InvitationsController < ApplicationController
   before_action :admin_only, only: [:create, :destroy]
   before_action :check_user_status, only: [:index, :manage, :invite_friend, :update]
   before_action :load_invitation, only: [:show, :invite_friend, :update, :destroy]
-  before_action :check_ownership, only: [:show, :invite_friend, :update]
+  before_action :check_ownership_or_admin, only: [:show, :invite_friend, :update]
 
   def load_invitation
     @invitation = Invitation.find(params[:id] || invitation_params[:id])
