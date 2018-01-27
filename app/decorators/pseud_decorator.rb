@@ -16,10 +16,11 @@ class PseudDecorator < SimpleDelegator
     work_counts
     bookmark_counts
     work_key = User.current_user.present? ? :general_works_count : :public_works_count
+    bookmark_key = User.current_user.present? ? :general_bookmarks_count : :public_bookmarks_count
     pseuds.map do |pseud|
       data = {
         user_login: users[user_id].login,
-        public_bookmarks_count: bookmark_counts[id],
+        bookmark_key => bookmark_counts[id],
         work_key => work_counts[id]
       }
       new_with_data(pseud, data)
@@ -42,7 +43,7 @@ class PseudDecorator < SimpleDelegator
   end
 
   def bookmarks_count
-    data[:public_bookmarks_count]
+    User.current_user.present? ? data[:general_bookmarks_count] : data[:public_bookmarks_count]
   end
 
   def byline
@@ -90,16 +91,16 @@ class PseudDecorator < SimpleDelegator
   end
 
   def authored_items_links(options = {})
+    general_links = [works_link, bookmarks_link].compact.join(", ")
     if options[:fandom_id].present?
       # This can potentially be an array
-      links = [options[:fandom_id]].flatten.map do |fandom_id|
+      fandom_links = [options[:fandom_id]].flatten.map do |fandom_id|
         fandom_link(fandom_id)
       end
-      links << bookmarks_link
+      general_links + " | " + fandom_links.compact.join(", ")
     else
-      links = [works_link, bookmarks_link]
+      general_links
     end
-    links.compact.join(", ")
   end
 
   def constructed_byline
@@ -107,6 +108,7 @@ class PseudDecorator < SimpleDelegator
   end
 
   def fandom_stats(id)
-    data[:fandoms]&.detect { |fandom| fandom['id'].to_s == id.to_s }
+    key = User.current_user.present? ? "id" : "id_for_public"
+    data[:fandoms]&.detect { |fandom| fandom[key].to_s == id.to_s }
   end
 end

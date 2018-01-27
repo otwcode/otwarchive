@@ -29,9 +29,10 @@ class PseudQuery < Query
   end
 
   def fandom_filter
+    key = User.current_user.present? ? "fandoms.id" : "fandoms.id_for_public"
     if options[:fandom_ids]
       options[:fandom_ids].map do |fandom_id|
-        { term: { "fandoms.id" => fandom_id } }
+        { term: { key => fandom_id } }
       end
     end
   end

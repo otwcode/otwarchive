@@ -16,6 +16,9 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new(feedback_params)
     language_name = Language.find_by(id: @feedback.language).name
     @feedback.language = language_name
+    @feedback.rollout = @feedback.rollout_string
+    @feedback.user_agent = request.env["HTTP_USER_AGENT"]
+    @feedback.ip_address = request.remote_ip
     if @feedback.save
       @feedback.email_and_send
       flash[:notice] = t("successfully_sent",
@@ -36,8 +39,7 @@ class FeedbacksController < ApplicationController
 
   def feedback_params
     params.require(:feedback).permit(
-      :comment, :email, :summary, :user_agent,
-      :ip_address, :username, :language
+      :comment, :email, :summary, :username, :language
     )
   end
 

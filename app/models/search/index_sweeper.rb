@@ -13,16 +13,19 @@ class IndexSweeper
   def initialize(batch, indexer)
     @batch = batch
     @indexer = indexer
+    @success_ids = []
     @rerun_ids = []
 
     ensure_failure_stores
   end
 
-  def process_batch_failures
-    return if !@batch["errors"] && all_stores_empty?
-
+  def process_batch
     @batch["items"].each do |item|
-      process_document_failures(item)
+      process_document(item)
+    end
+
+    if @success_ids.present? && @indexer.respond_to?(:handle_success)
+      @indexer.handle_success(@success_ids)
     end
 
     if @rerun_ids.any?
@@ -32,7 +35,7 @@ class IndexSweeper
     end
   end
 
-  def process_document_failures(item)
+  def process_document(item)
     document = item[item.keys.first] # update/index/delete
     document_stamp = { document["_id"].to_s => document["error"] }
 
@@ -50,6 +53,8 @@ class IndexSweeper
       set_store "first", first_store
       set_store "second", second_store
       set_store "permanent", permanent_store
+
+      @success_ids << document["_id"]
 
       return
     end
