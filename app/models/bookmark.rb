@@ -110,7 +110,7 @@ class Bookmark < ApplicationRecord
   # We index the bookmark count, so if it should change, update the pseud
   def update_pseud_index
     return unless $rollout.active?(:start_new_indexing)
-    return unless destroyed? || saved_change_to_id? || saved_change_to_private?
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
     IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
