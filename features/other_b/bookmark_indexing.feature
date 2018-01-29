@@ -14,7 +14,6 @@ Feature: Bookmark Indexing
       And I select "Date Updated" from "Sort by"
       And I press "Sort and Filter"
     Then the 1st bookmark result should contain "Unrelated Story"
-      And the 2nd bookmark result should contain "Telling Stories"
     When I am logged in as "author"
       And I post the work "The Story Returns" with fandom "X-Files" as part of a series "Telling Stories"
       And I go to the bookmarks tagged "X-Files"
@@ -30,5 +29,3 @@ Feature: Bookmark Indexing
       And I press "Sort and Filter"
     Then the 1st bookmark result should contain "Telling Stories"
       And the 2nd bookmark result should contain "Unrelated Story"
-
-
