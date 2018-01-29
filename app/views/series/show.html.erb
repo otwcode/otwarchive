@@ -4,7 +4,7 @@
 	<% if @series.restricted %>
 		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted", skip_pipeline: true) %>
 	<% end %>
-  <% if series.hidden_by_admin %>
+  <% if @series.hidden_by_admin %>
     <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
                   title: ts("Hidden by Administrator"),
                   skip_pipeline: true) %>
