@@ -31,7 +31,7 @@ class Admin::UserCreationsController < ApplicationController
     elsif @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      unless action == "unhide" || @creation_class == Work
+      unless action == "unhide" || @creation_class != Work
         # Email users so they're aware of Abuse action
         # Emails for works are handled in the work class
         orphan_account = User.orphan_account
