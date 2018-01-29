@@ -269,7 +269,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I add the work "Legit Work" to series "Violation"
     When I am logged in as an admin
       And I view the series "Violation"
-      And I press "Hide Series"
+      And I follow "Hide Series"
     Then I should see "Item has been hidden."
       And I should see the image "title" text "Hidden by Administrator"
       And I should see "Make Series Visible"
@@ -297,8 +297,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I add the work "Legit Work" to series "Violation"
       And I am logged in as an admin
       And I view the series "Violation"
-      And I press "Hide Series"
-    When I press "Make Series Visible"
+      And I follow "Hide Series"
+    When I follow "Make Series Visible"
     Then I should see "Item is no longer hidden."
       And I should not see the image "title" text "Hidden by Administrator"
       And I should see "Hide Series"
