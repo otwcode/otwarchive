@@ -1,7 +1,7 @@
 @admin
-Feature: Admin Actions for Works and Bookmarks
+Feature: Admin Actions for Works, Comments, Series, Bookmarks
   As an admin
-  I should be able to perform special actions on works
+  I should be able to perform special actions
 
   Scenario: Can reindex works
     Given I am logged in as "regular_user"
@@ -263,3 +263,60 @@ Feature: Admin Actions for Works and Bookmarks
     And I should see "Mark As Spam"
     And the work "Spammity Spam" should not be marked as spam
     And the work "Spammity Spam" should not be hidden
+
+  Scenario: Admin can hide a series (e.g. if the series description or notes contain a TOS Violation)
+    Given I am logged in as "tosser"
+      And I add the work "Legit Work" to series "Violation"
+    When I am logged in as an admin
+      And I view the series "Violation"
+      And I press "Hide Series"
+    Then I should see "Item has been hidden."
+      And I should see the image "title" text "Hidden by Administrator"
+      And I should see "Make Series Visible"
+    When I am logged out
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+    When I am logged in as "other_user"
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+    When I am logged in as "tosser"
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see the image "title" text "Hidden by Administrator"
+
+  Scenario: Admin can un-hide a series
+    Given I am logged in as "tosser"
+      And I add the work "Legit Work" to series "Violation"
+      And I am logged in as an admin
+      And I view the series "Violation"
+      And I press "Hide Series"
+    When I press "Make Series Visible"
+    Then I should see "Item is no longer hidden."
+      And I should not see the image "title" text "Hidden by Administrator"
+      And I should see "Hide Series"
+    When I am logged out
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"
+    When I am logged in as "other_user"
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"
+    When I am logged in as "tosser"
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"
