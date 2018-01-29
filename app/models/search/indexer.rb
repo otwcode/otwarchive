@@ -36,15 +36,15 @@ class Indexer
     end
   end
 
-  def self.create_index
+  def self.create_index(shards = 5)
     $new_elasticsearch.indices.create(
       index: index_name,
       body: {
         settings: {
           index: {
-            number_of_shards: 5,
+            number_of_shards: shards,
           }
-        },
+        }.merge(settings),
         mappings: mapping,
       }
     )
@@ -61,14 +61,24 @@ class Indexer
 
   def self.mapping
     {
-      document_type => {
+      document_type: {
         properties: {
-          #add properties in subclasses
+          # add properties in subclasses
         }
       }
     }
   end
 
+  def self.settings
+    {
+      analyzer: {
+        custom_analyzer: {
+          # add properties in subclasses
+        }
+      }
+    }
+  end
+  
   def self.index_all(options={})
     unless options[:skip_delete]
       delete_index
