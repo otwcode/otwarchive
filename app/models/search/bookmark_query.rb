@@ -277,7 +277,8 @@ class BookmarkQuery < Query
     # Use fetch instead of || here to make sure that we don't accidentally
     # override a deliberate choice not to show private bookmarks.
     options.fetch(:show_private,
-                  User.current_user && user_ids.include?(User.current_user.id))
+                  User.current_user.is_a?(User) &&
+                  user_ids.include?(User.current_user.id))
   end
 
   def include_restricted?
@@ -292,7 +293,7 @@ class BookmarkQuery < Query
       user_ids += options[:user_ids].map(&:to_i)
     end
     if options[:pseud_ids].present?
-      user_ids += Pseud.where(id: options[:pseud_id]).pluck(:user_id)
+      user_ids += Pseud.where(id: options[:pseud_ids]).pluck(:user_id)
     end
     user_ids
   end
