@@ -14,8 +14,6 @@ class FeedbacksController < ApplicationController
 
   def create
     @feedback = Feedback.new(feedback_params)
-    language_name = Language.find_by(id: @feedback.language).name
-    @feedback.language = language_name
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
     @feedback.ip_address = request.remote_ip
