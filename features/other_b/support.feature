@@ -40,20 +40,8 @@ Feature: Filing a support request
     And all emails have been delivered
     And I press "Send"
   Then I should see "Email does not seem to be a valid address."
+    And "Deutsch" should be selected within "Select language (required)"
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
     And 2 emails should be delivered
-
-  Scenario: Invalid form submission
-
-  When I am on the home page
-    And basic languages
-    And I follow "Support and Feedback"
-  When I select "Deutsch" from "feedback_language"
-    And I fill in "Brief summary" with "Just a brief note"
-    And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
-    And I fill in "Your email (required)" with "a"
-    And I press "Send"
-  Then I should see "Sorry, your message could not be saved"
-    And the field labeled "feedback_language" should contain "Deutsch"
