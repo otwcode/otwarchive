@@ -27,12 +27,11 @@ class SerialWork < ApplicationRecord
   # Ensure series bookmarks are reindexed when a new work is added to a series
   def update_series_index
     if $rollout.active?(:start_new_indexing)
-      BookmarkedSeriesIndexer.new([series_id]).index_documents
+      Series.all.each(&:enqueue_to_index)
     end
 
     unless $rollout.active?(:stop_old_indexing)
-      bookmark_ids = work.bookmarks.pluck(:id) + series.bookmarks.pluck(:id)
-      IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :background)
+      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
     end
   end
 end

@@ -29,3 +29,11 @@ Feature: Bookmark Indexing
       And I press "Sort and Filter"
     Then the 1st bookmark result should contain "Telling Stories"
       And the 2nd bookmark result should contain "Unrelated Story"
+    When author can use the new search
+      And I go to the bookmarks tagged "X-Files"
+    Then I should see "Telling Stories"
+      And I should not see "This tag has not been marked common and can't be filtered on (yet)."
+    When I select "Date Updated" from "Sort by"
+      And I press "Sort and Filter"
+    Then the 1st bookmark result should contain "Telling Stories"
+      And the 2nd bookmark result should contain "Unrelated Story"

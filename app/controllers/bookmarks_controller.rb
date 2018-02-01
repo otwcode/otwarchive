@@ -100,7 +100,6 @@ class BookmarksController < ApplicationController
         else
           # ES UPGRADE TRANSITION #
           # Remove conditional and call to BookmarkSearch
-
           if use_new_search?
             @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
           else
