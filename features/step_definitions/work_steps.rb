@@ -151,6 +151,11 @@ Given /^I have a work "([^"]*)"$/ do |work|
   step %{I post the work "#{work}"}
 end
 
+Given /^I have a work "([^"]*)" by "([^"]*)"$/ do |work, author|
+  step %{I am logged in as "#{author}"}
+  step %{I post the work "#{work}"}
+end
+
 Given /^I have a locked work "([^"]*)"$/ do |work|
   step %{I am logged in as a random user}
   step %{I post the locked work "#{work}"}
@@ -235,6 +240,14 @@ end
 
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
+  step %{I am logged out}
+  w = Work.find_by_title(work)
+  w.update_attribute(:spam, true)
+  w.update_attribute(:hidden_by_admin, true)
+end
+
+Given /^the spam work "([^\"]*)" by "([^\"]*)"$/ do |work, author|
+  step %{I have a work "#{work}" by "#{author}"}
   step %{I am logged out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)

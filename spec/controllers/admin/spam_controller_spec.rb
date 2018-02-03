@@ -35,6 +35,27 @@ describe Admin::SpamController do
         expect(response).to render_template(:index)
       end
     end
+
+    context "when spam exists" do
+      it "redirects to post with notice" do
+        spam_work = create(:work, spam: true)
+        fake_login_admin(admin)
+        get :index
+        expect(response).to render_template(:index)
+        expect(assigns[:works]).to include(spam_work.moderated_work)
+      end
+    end
+
+    context "when spam has been deleted" do
+      it "fails horribly in manual testing but works fine here" do
+        deleted_work = create(:work, spam: true) 
+        deleted_work.destroy
+        fake_login_admin(admin)
+        get :index
+        expect(response).to render_template(:index)
+        expect(assigns[:works]).not_to include(deleted_work.moderated_work)
+      end
+    end
   end
 
   describe "POST #bulk_update" do
@@ -59,7 +80,7 @@ describe Admin::SpamController do
     end
 
     context "when logged in as admin" do
-      it "marks moderated workd as reviewed, marks works as spam, hides the works, and redirects with notice" do
+      it "marks moderated works as reviewed, marks works as spam, hides the works, and redirects with notice" do
         FactoryBot.create_list(:moderated_work, 3)
         fake_login_admin(admin)
         post :bulk_update, params: { spam: ModeratedWork.all.map(&:id) }

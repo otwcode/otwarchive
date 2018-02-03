@@ -20,3 +20,15 @@ Scenario: Review spam
     And I should not see "Totally Legit"
     And the work "Spammity Spam" should be hidden
     And the work "Totally Legit" should not be hidden
+
+Scenario: Deleting spam
+# This fails with 500 in manual testing (AO3-5283) but works here
+  Given the spam work "Spammity Spam" by "faker"
+    And I am logged in as an admin
+  When I follow "Spam"
+  Then I should see "Works Marked as Spam"
+  When I am logged in as "faker"
+    And I delete the work "Spammity Spam"
+    And I am logged in as an admin
+    And I follow "Spam"
+  Then I should see "Works Marked as Spam"
