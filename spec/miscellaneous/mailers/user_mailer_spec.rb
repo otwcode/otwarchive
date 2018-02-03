@@ -311,4 +311,53 @@ describe UserMailer, type: :mailer do
       end
     end
   end
+
+  describe "invite request declined" do
+
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @total = 2
+      @reason = "You smell"
+    end
+
+    let(:email) { UserMailer.invite_request_declined(@user.id, @total, @reason).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("We regret to inform you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("We regret to inform you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
 end
