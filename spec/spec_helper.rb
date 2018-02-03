@@ -176,8 +176,9 @@ def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform reindex_type
   end
-  # Specs are too fast! Wait for ES...
-  sleep 1
+  %w[work bookmark pseud tag].each do |index|
+    refresh_index_without_updating index
+  end
 end
 
 def delete_index(index)
