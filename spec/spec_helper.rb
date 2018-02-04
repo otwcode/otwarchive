@@ -172,6 +172,15 @@ def refresh_index_without_updating(klass_name)
   $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
+def run_all_indexing_jobs
+  %w[main background stats].each do |reindex_type|
+    ScheduledReindexJob.perform reindex_type
+  end
+  %w[work bookmark pseud tag].each do |index|
+    refresh_index_without_updating index
+  end
+end
+
 def delete_index(index)
   # ES UPGRADE TRANSITION #
   # Remove block
