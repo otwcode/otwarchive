@@ -71,6 +71,13 @@ class ExternalWork < ApplicationRecord
 
   alias_method :visible, :visible?
 
+  # Visibility has changed, which means we need to reindex
+  # the external work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   #######################################################################
   # TAGGING
   # External works are taggable objects.
