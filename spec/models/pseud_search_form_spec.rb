@@ -116,5 +116,40 @@ describe PseudSearchForm do
       User.current_user = nil
       expect(result.bookmarks_count).to eq 0
     end
+
+    {
+      "Work" => :posted_work,
+      "Series" => :series_with_a_work,
+      "ExternalWork" => :external_work
+    }.each_pair do |type, factory|
+      it "updates when bookmarked #{type} changes hidden by admin status" do
+        bookmarkable = create(factory)
+        expect(bookmarkable.restricted).to be_falsy
+        expect(bookmarkable.hidden_by_admin).to be_falsy
+
+        bookmark = create(:bookmark, bookmarkable_id: bookmarkable.id, bookmarkable_type: type)
+        run_all_indexing_jobs
+        result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+        expect(result).to eq bookmark.pseud
+
+        # Bookmark of public bookmarkable is counted for logged in and logged out searches
+        User.current_user = User.new
+        expect(result.bookmarks_count).to eq 1
+        User.current_user = nil
+        expect(result.bookmarks_count).to eq 1
+
+        bookmarkable.update_attribute(:hidden_by_admin, true)
+        expect(bookmarkable.hidden_by_admin).to be_truthy
+        run_all_indexing_jobs
+        result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+        expect(result).to eq bookmark.pseud
+
+        # Bookmark of bookmarkable hidden by admin is counted for no one
+        User.current_user = User.new
+        expect(result.bookmarks_count).to eq 0
+        User.current_user = nil
+        expect(result.bookmarks_count).to eq 0
+      end
+    end
   end
 end

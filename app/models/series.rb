@@ -138,7 +138,7 @@ class Series < ApplicationRecord
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?
-    pertinent_attributes = %w[id restricted]
+    pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
