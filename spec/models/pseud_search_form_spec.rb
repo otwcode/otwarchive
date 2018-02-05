@@ -138,8 +138,12 @@ describe PseudSearchForm do
         User.current_user = nil
         expect(result.bookmarks_count).to eq 1
 
+        # When a series and its work are first created, the series loads
+        # an empty collection of bookmarks, which stays unupdated when we pluck
+        # the bookmark IDs to reindex bookmarker pseuds, so no pseuds get reindexed.
+        # We need to reload the series.
+        bookmarkable.reload
         bookmarkable.update_attribute(:hidden_by_admin, true)
-        expect(bookmarkable.hidden_by_admin).to be_truthy
         run_all_indexing_jobs
         result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
         expect(result).to eq bookmark.pseud
