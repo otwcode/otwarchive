@@ -138,8 +138,10 @@ describe PseudSearchForm do
         User.current_user = nil
         expect(result.bookmarks_count).to eq 1
 
-        # This reload is here because the following update_attribute fails otherwise
-        # I don't know why :(
+        # When a series and its work are first created, the series loads
+        # an empty collection of bookmarks, which stays unupdated when we pluck
+        # the bookmark IDs to reindex bookmarker pseuds, so no pseuds get reindexed.
+        # We need to reload the series.
         bookmarkable.reload
         bookmarkable.update_attribute(:hidden_by_admin, true)
         run_all_indexing_jobs
