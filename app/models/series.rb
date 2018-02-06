@@ -135,6 +135,13 @@ class Series < ApplicationRecord
     end
   end
 
+  # Visibility has changed, which means we need to reindex
+  # the series' bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id restricted hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   # Change the positions of the serial works in the series
   def reorder(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)

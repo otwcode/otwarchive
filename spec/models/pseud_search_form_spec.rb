@@ -1,10 +1,9 @@
 require "spec_helper"
 
 describe PseudSearchForm do
-  let(:fandom_kp) { create(:fandom) }
-  let(:fandom_mlaatr) { create(:fandom) }
-
   context "searching pseuds in a fandom" do
+    let(:fandom_kp) { create(:fandom) }
+    let(:fandom_mlaatr) { create(:fandom) }
     let!(:work_1) { create(:posted_work, fandoms: [fandom_kp]) }
     let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], restricted: true) }
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr]) }
@@ -31,6 +30,8 @@ describe PseudSearchForm do
   end
 
   context "searching pseuds in multiple fandoms" do
+    let(:fandom_kp) { create(:fandom) }
+    let(:fandom_mlaatr) { create(:fandom) }
     let(:user) { create(:user) }
 
     let!(:work_1) { create(:posted_work, fandoms: [fandom_kp, fandom_mlaatr]) }
@@ -52,6 +53,107 @@ describe PseudSearchForm do
       # This author posts in both fandoms, but their only work for fandom_mlaatr is restricted.
       # To logged out users, this author does not post in both specified fandoms.
       expect(results).not_to include user.default_pseud
+    end
+  end
+
+  context "pseud index of bookmarkers" do
+    it "updates when bookmarked work changes restricted status" do
+      work = create(:posted_work)
+      expect(work.restricted).to be_falsy
+
+      bookmark = create(:bookmark, bookmarkable_id: work.id)
+      run_all_indexing_jobs
+      result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+      expect(result).to eq bookmark.pseud
+
+      # Bookmark of public work is counted for logged in and logged out searches
+      User.current_user = User.new
+      expect(result.bookmarks_count).to eq 1
+      User.current_user = nil
+      expect(result.bookmarks_count).to eq 1
+
+      # Work becomes restricted
+      work.update_attribute(:restricted, true)
+      expect(work.restricted).to be_truthy
+      run_all_indexing_jobs
+      result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+      expect(result).to eq bookmark.pseud
+
+      # Bookmark of restricted work is only counted for logged in searches
+      User.current_user = User.new
+      expect(result.bookmarks_count).to eq 1
+      User.current_user = nil
+      expect(result.bookmarks_count).to eq 0
+    end
+
+    it "updates when bookmarked series changes restricted status" do
+      series = create(:series)
+      serial_work = create(:serial_work, series: series)
+      expect(series.restricted).to be_falsy
+
+      bookmark = create(:bookmark, bookmarkable_id: series.id, bookmarkable_type: "Series")
+      run_all_indexing_jobs
+      result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+      expect(result).to eq bookmark.pseud
+
+      # Bookmark of public series is counted for logged in and logged out searches
+      User.current_user = User.new
+      expect(result.bookmarks_count).to eq 1
+      User.current_user = nil
+      expect(result.bookmarks_count).to eq 1
+
+      # Series becomes restricted
+      serial_work.work.update_attribute(:restricted, true)
+      series.reload
+      expect(series.restricted).to be_truthy
+      run_all_indexing_jobs
+      result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+      expect(result).to eq bookmark.pseud
+
+      # Bookmark of restricted series is only counted for logged in searches
+      User.current_user = User.new
+      expect(result.bookmarks_count).to eq 1
+      User.current_user = nil
+      expect(result.bookmarks_count).to eq 0
+    end
+
+    {
+      "Work" => :posted_work,
+      "Series" => :series_with_a_work,
+      "ExternalWork" => :external_work
+    }.each_pair do |type, factory|
+      it "updates when bookmarked #{type} changes hidden by admin status" do
+        bookmarkable = create(factory)
+        expect(bookmarkable.restricted).to be_falsy
+        expect(bookmarkable.hidden_by_admin).to be_falsy
+
+        bookmark = create(:bookmark, bookmarkable_id: bookmarkable.id, bookmarkable_type: type)
+        run_all_indexing_jobs
+        result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+        expect(result).to eq bookmark.pseud
+
+        # Bookmark of public bookmarkable is counted for logged in and logged out searches
+        User.current_user = User.new
+        expect(result.bookmarks_count).to eq 1
+        User.current_user = nil
+        expect(result.bookmarks_count).to eq 1
+
+        # When a series and its work are first created, the series loads
+        # an empty collection of bookmarks, which stays unupdated when we pluck
+        # the bookmark IDs to reindex bookmarker pseuds, so no pseuds get reindexed.
+        # We need to reload the series.
+        bookmarkable.reload
+        bookmarkable.update_attribute(:hidden_by_admin, true)
+        run_all_indexing_jobs
+        result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
+        expect(result).to eq bookmark.pseud
+
+        # Bookmark of bookmarkable hidden by admin is counted for no one
+        User.current_user = User.new
+        expect(result.bookmarks_count).to eq 0
+        User.current_user = nil
+        expect(result.bookmarks_count).to eq 0
+      end
     end
   end
 end

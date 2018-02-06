@@ -1,10 +1,12 @@
 <!-- BEGIN admin options -->
 <div class="admin">
 
-  <% if item.class == ExternalWork %>
-    <% item_type_name = ts("External Work") %>
-  <% elsif item.class == Bookmark %>
+  <% if item.class == Bookmark %>
     <% item_type_name = ts("Bookmark") %>
+  <% elsif item.class == ExternalWork %>
+    <% item_type_name = ts("External Work") %>
+  <% elsif item.class == Series %>
+    <% item_type_name = ts("Series") %>
   <% else %>
     <% item_type_name = ts("Work") %>
   <% end %>

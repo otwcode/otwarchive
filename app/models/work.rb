@@ -268,6 +268,9 @@ class Work < ApplicationRecord
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
 
+  # Visibility has changed, which means we need to reindex
+  # the work's pseuds, to update their work counts, as well as
+  # the work's bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
