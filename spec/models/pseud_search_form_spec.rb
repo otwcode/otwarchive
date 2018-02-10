@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe PseudSearchForm do
   context "searching pseuds in a fandom" do
-    let(:fandom_kp) { create(:fandom) }
-    let(:fandom_mlaatr) { create(:fandom) }
+    let(:fandom_kp) { create(:canonical_fandom) }
+    let(:fandom_mlaatr) { create(:canonical_fandom) }
     let!(:work_1) { create(:posted_work, fandoms: [fandom_kp]) }
     let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], restricted: true) }
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr]) }
@@ -30,8 +30,8 @@ describe PseudSearchForm do
   end
 
   context "searching pseuds in multiple fandoms" do
-    let(:fandom_kp) { create(:fandom) }
-    let(:fandom_mlaatr) { create(:fandom) }
+    let(:fandom_kp) { create(:canonical_fandom) }
+    let(:fandom_mlaatr) { create(:canonical_fandom) }
     let(:user) { create(:user) }
 
     let!(:work_1) { create(:posted_work, fandoms: [fandom_kp, fandom_mlaatr]) }

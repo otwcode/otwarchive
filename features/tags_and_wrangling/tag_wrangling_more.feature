@@ -106,22 +106,20 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Sign Up"
 
   Scenario: Updating multiple tags works.
-    Given the following typed tags exists
-        | name                                   | type         |
-        | Cowboy Bebop                           | Fandom       |
-        | Spike Spiegel is a sweetie             | Freeform     |
-        | Jet Black is a sweetie                 | Freeform     |
+    Given a canonical fandom "Cowboy Bebop"
+      And a noncanonical freeform "Spike Spiegel is a sweetie"
+      And a noncanonical freeform "Jet Black is a sweetie"
       And I am logged in as a random user
       And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Jet Black is a sweetie"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I follow "Tag Wrangling"
-       And I follow "2"
-       And I fill in "fandom_string" with "Cowboy Bebop"
-       And I check the mass wrangling option for "Spike Spiegel is a sweetie"
-       And I check the mass wrangling option for "Jet Black is a sweetie"
-       And I press "Wrangle"
-     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"
+    When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+      And I follow "Tag Wrangling"
+      And I follow "2"
+      And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
+      And I check the mass wrangling option for "Spike Spiegel is a sweetie"
+      And I check the mass wrangling option for "Jet Black is a sweetie"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"
 
   Scenario: Updating multiple tags works and set them as canonical
     Given the following typed tags exists

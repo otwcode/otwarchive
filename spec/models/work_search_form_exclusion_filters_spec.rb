@@ -65,15 +65,15 @@ describe WorkSearchForm do
 
     describe "meta tagging" do
       let!(:grand_parent_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Sam")
+        create(:canonical_character, name: "Sam")
       end
 
       let!(:parent_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Sam Winchester")
+        create(:canonical_character, name: "Sam Winchester")
       end
 
       let!(:child_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Endverse Sam Winchester")
+        create(:canonical_character, name: "Endverse Sam Winchester")
       end
 
       let!(:grand_parent_parent_meta_tagging) do
