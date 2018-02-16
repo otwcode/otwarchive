@@ -217,6 +217,53 @@ describe UserMailer do
     end
   end
 
+  describe "invitation from a user request" do
+    token = 'abc123'
+
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
+    end
+
+    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /html/)).to include("has invited you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
+        expect(get_message_part(email, /plain/)).to include("has invited you")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
+
   describe "challenge_assignment_notification" do
     let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
@@ -432,4 +479,97 @@ describe UserMailer do
       end
     end
   end
+
+  describe "invited to collection" do
+    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+    let!(:otheruser) { create(:user) }
+    let!(:work) { create(:work) }
+
+    let(:email) { UserMailer.invited_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Request to include work in a collection"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("would like to include your work")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("would like to include your work")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
+
+  describe "added to collection" do
+    let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+    let!(:otheruser) { create(:user) }
+    let!(:work) { create(:work) }
+
+    let(:email) { UserMailer.added_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
+
+    # Test the headers
+    it 'has a valid from line' do
+      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
+      expect(email.header['From'].to_s).to eq(text)
+    end
+
+    it 'has the correct subject line' do
+      text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+      expect(email.subject).to eq(text)
+    end
+
+    # Test both body contents
+    it_behaves_like "multipart email"
+
+    describe 'HTML version' do
+      it 'has text contents' do
+        expect(get_message_part(email, /html/)).to include("have added your work")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /html/)).not_to include("translation missing")
+      end
+      
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
+    end
+
+    describe 'text version' do
+      it 'says the right thing' do
+        expect(get_message_part(email, /plain/)).to include("have added your work")
+      end
+      
+      it 'does not have missing translations' do
+        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+      end
+    end
+  end
+
 end
