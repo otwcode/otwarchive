@@ -313,7 +313,6 @@ describe UserMailer, type: :mailer do
   end
 
   describe "invite request declined" do
-
     before(:each) do
       @user = FactoryGirl.create(:user)
       @total = 2
