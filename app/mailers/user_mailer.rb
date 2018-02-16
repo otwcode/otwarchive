@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
          to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
+         subject: t("user_mailer.added_to_collection_notification.subject", ao3: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
     )
   end
 
@@ -36,7 +36,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
          to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+         subject: t("user_mailer.invited_to_collection_notification.subject", ao3: ArchiveConfig.APP_SHORT_NAME, collection: @collection.title)
     )
   end
 
@@ -186,7 +186,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.invite_request_declined.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -236,7 +236,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.signup_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -251,7 +251,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @old_email,
-        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.change_email.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -373,7 +373,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.delete_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -394,7 +394,7 @@ class UserMailer < ActionMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
-        subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure

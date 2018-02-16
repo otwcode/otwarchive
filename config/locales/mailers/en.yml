@@ -212,6 +212,7 @@ en:
         part13: "Best,"
         part14: "The Open Doors team"
         part15: "Organization for Transformative Works"
+
     invite_request_declined:
       subject: "[%{app_name}] Additional Invite Code Request Declined"
       greeting: "Dear %{user},"
@@ -248,3 +249,21 @@ en:
         html: "For more information, visit our %{faq_link}."
         text: "For more information, visit our Collections and Challenges FAQ: %{faq_url}"
       faq_link_text: "Collections and Challenges FAQ"
+
+    invited_to_collection_notification:
+      subject: "[%{ao3}][%{collection}] Request to include work in a collection"
+      greeting: "Dear %{name},"
+      part1: "The collection maintainers of %{collection} would like to include your work (%{work}) in their collection!"
+      bye: "Thanks!"
+      text:
+        part2: "To approve or reject this request, please visit your \"Collection Items\" page"
+        part3: "If in future you would prefer to automatically approve requests to add your works to collections, please edit your Preferences (%{link}) and tick the box next to \"Automatically agree to your work being collected by others in the Archive.\"."
+      html:
+        part2: "To approve or reject this request, please visit your %{link}."
+        linktext: "Collection Items page"
+        part3: "If in future you would prefer to automatically approve requests to add your works to collections, please edit your %{prefs} and tick the box next to: %{quote}"
+        preferences: "Preferences"
+        quotelink: "Automatically agree to your work being collected by others in the Archive."
+
+    added_to_collection_notification:
+      subject: "[%{ao3}][%{collection}] Your work was added to a collection"

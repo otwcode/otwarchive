@@ -220,46 +220,35 @@ describe UserMailer do
   describe "invitation from a user request" do
     token = 'abc123'
 
-    before(:each) do
-      @user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, token: token, creator: @user)
-    end
+    let(:user) { create(:user) }
+    let(:invitation) { create(:invitation, token: token, creator: user) }
 
-    let(:email) { UserMailer.invitation(@invitation.id).deliver }
+    subject(:email) { UserMailer.invitation(invitation.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
-      expect(email.subject).to eq(text)
+      expect(email).to have_subject(text)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /html/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has text contents" do
+        expect(email).to have_html_part_content("like to join us, please sign up at the following address")
+        expect(email).to have_html_part_content("has invited you")
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("like to join us, please sign up at the following address")
-        expect(get_message_part(email, /plain/)).to include("has invited you")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    describe "text version" do
+      it "says the right thing" do
+        expect(email).to have_text_part_content("like to join us, please sign up at the following address")
+        expect(email).to have_text_part_content("has invited you")
       end
     end
   end
@@ -481,6 +470,7 @@ describe UserMailer do
   end
 
   describe "invited to collection" do
+    let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:work) { create(:work) }
@@ -488,45 +478,33 @@ describe UserMailer do
     let(:email) { UserMailer.invited_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Request to include work in a collection"
       expect(email.subject).to eq(text)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
+    
+    it_behaves_like "a translated email"
 
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("would like to include your work")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("would like to include your work")
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("would like to include your work")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("would like to include your work")
       end
     end
   end
 
   describe "added to collection" do
+    let!(:gift_exchange) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:work) { create(:work) }
@@ -534,40 +512,31 @@ describe UserMailer do
     let(:email) { UserMailer.added_to_collection_notification(otheruser.id, work.id, collection.id).deliver }
 
     # Test the headers
-    it 'has a valid from line' do
-      text = "Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      expect(email.header['From'].to_s).to eq(text)
-    end
+    it_behaves_like "an email with a valid sender"
 
-    it 'has the correct subject line' do
+    it "has the correct subject line" do
       text = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
       expect(email.subject).to eq(text)
     end
 
     # Test both body contents
-    it_behaves_like "multipart email"
+    it_behaves_like "a multipart email"
 
-    describe 'HTML version' do
-      it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("have added your work")
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has text contents" do
+        expect(email).to have_html_part_content("added your work")
       end
       
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /html/)).not_to include("translation missing")
-      end
-      
-      it 'does not have exposed HTML' do
-        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      it "does not have exposed HTML" do
+        expect(email).not_to have_html_part_content("&lt;")
       end
     end
 
-    describe 'text version' do
-      it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("have added your work")
-      end
-      
-      it 'does not have missing translations' do
-        expect(get_message_part(email, /plain/)).not_to include("translation missing")
+    describe "text version" do
+      it "says the right thing" do
+        expect(email).to have_text_part_content("have added your work")
       end
     end
   end

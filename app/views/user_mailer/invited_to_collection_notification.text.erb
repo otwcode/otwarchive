@@ -1,13 +1,11 @@
 <% content_for :message do %>
-Dear <%= @user.default_pseud.byline %>,
+<%= t(".greeting", name: @user.default_pseud.byline) %>
 
-The collection maintainers of <%= @collection.title %> would like to include your work (<%= @work.title.html_safe %>) in their collection!
+<%= t(".part1", collection: @collection.title, work: @work.title.html_safe ) %>
 
-To approve or reject this request, please visit your "Collection Items" page: <%= user_collection_items_url(@user) %>.
+<%= t(".text.part2") %>: <%= user_collection_items_url(@user) %>.
 
-If in future you would prefer to automatically approve requests to add your
-works to collections, please edit your Preferences (<%= "#{root_url}users/#{@user.default_pseud.name}/preferences" %>)
-and tick the box next to "Automatically agree to your work being collected by others in the Archive.".
+<%= t(".text.part3", link: "#{root_url}users/#{@user.default_pseud.name}/preferences") %>
 
-Thanks!
+<%= t(".bye") %>
 <% end %>
