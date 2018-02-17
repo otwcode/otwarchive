@@ -102,6 +102,57 @@ describe Work do
     end
   end
 
+  describe "#otp" do
+    it "is not otp with no relationship" do
+      work = create(:work)
+      expect(work.relationships).to be_empty
+      expect(work.otp).to be_falsy
+    end
+
+    it "is otp with only one relationship" do
+      rel = create(:relationship, name: "asushin")
+      work = create(:work, relationships: [rel])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is otp with one canonical relationship and one of its synonyms" do
+      rel = create(:canonical_relationship, name: "kawoshin")
+      syn = create(:relationship, name: "shinkawo", merger: rel)
+      work = create(:work, relationships: [rel, syn])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is otp with multiple synonyms of the same canonical relationship" do
+      rel = create(:canonical_relationship, name: "kawoshin")
+      syn1 = create(:relationship, name: "shinkawo", merger: rel)
+      syn2 = create(:relationship, name: "kaworu/shinji", merger: rel)
+      work = create(:work, relationships: [syn1, syn2])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is not otp with unrelated relationships, one of which is canonical" do
+      ships = [create(:relationship, name: "shinrei"), create(:canonical_relationship, name: "asurei")]
+      work = create(:work, relationships: ships)
+      expect(work.otp).to be_falsy
+    end
+
+    it "is not otp with unrelated relationships" do
+      ships = [create(:relationship, name: "asushin"), create(:relationship, name: "asurei")]
+      work = create(:work, relationships: ships)
+      expect(work.otp).to be_falsy
+    end
+
+    it "is not otp with related relationships that are not synonyms" do
+      rel1 = create(:canonical_relationship, name: "shinrei")
+      rel2 = create(:canonical_relationship, name: "asurei")
+      parent = create(:canonical_relationship)
+      parent.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
+
+      work = create(:work, relationships: [rel1, rel2])
+      expect(work.otp).to be_falsy
+    end
+  end
+
   describe "#set_author_sorting" do
     let(:work) { build(:work) }
 
