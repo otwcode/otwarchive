@@ -25,8 +25,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create An Account"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is disabled
     Given I am logged in as an admin
@@ -39,8 +40,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
@@ -53,12 +55,13 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
     When I go to account creation page
     Then I should be on invite requests page
       And I should see "To create an account, you'll need an invitation. One option is to add your name to the automatic queue below."
       And I should see "Forgot password? Get an Invitation" within "div#small_login"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
@@ -71,7 +74,8 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
       And I should see "Create an Account!"
 
   Scenario: Account creation disabled, invitations required, users can request invitations, and the queue is enabled
@@ -85,8 +89,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
@@ -99,8 +104,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
     When I go to account creation page
     Then I should be on the home page
       And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
@@ -118,8 +124,10 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should see "Create an Account!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
+
 
   Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
@@ -132,7 +140,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
   Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is disabled
@@ -146,7 +154,8 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
       And I should see "Create an Account!"
 
   Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is enabled
@@ -160,8 +169,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should see "Get Invited!"
-      And I should see "While the site is in beta, you can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
+      And I should see "You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
@@ -174,7 +184,8 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
       And I should see "Create an Account!"
     When I go to account creation page
     Then I should be on account creation page
@@ -191,8 +202,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is disabled
     Given I am logged in as an admin
@@ -205,8 +217,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
@@ -219,12 +232,13 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
     When I go to account creation page
     Then I should be on the home page
       And I should see "Account creation is suspended at the moment. Please check back with us later."
       And I should see "Forgot password? Get an Invitation" within "div#small_login"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
@@ -237,8 +251,9 @@ Feature: Admin Actions to Manage Invitations
       And I am logged out as an admin
     When I go to the home page
     Then I should not see "Get Invited!"
-      And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
+      And I should not see "You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
+      And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
   Scenario: An admin can send an invitation to a user via email
     Given I am logged in as an admin
@@ -335,3 +350,24 @@ Feature: Admin Actions to Manage Invitations
    When I fill in "invitation_invitee_email" with "oldman@ds9.com"
      And I press "Update Invitation"
    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
+
+  Scenario: An admin can search the invitation queue, and search parameters are
+  kept even if deleting without JavaScript
+    Given I am logged in as an admin
+      And an invitation request for "streamtv@example.com"
+      And an invitation request for "livetv@example.com"
+      And an invitation request for "clearstream@example.com"
+      And an invitation request for "stre.a.mer@example.com"
+      And an invitation request for "dreamer@example.com"
+    When I am on the manage invite queue page
+      And I fill in "query" with "stream"
+      And I press "Search Queue"
+    Then I should see "streamtv@example.com"
+      And I should see "clearstream@example.com"
+      And I should see "stre.a.mer@example.com"
+      But I should not see "livetv@example.com"
+      And I should not see "dreamer@example.com"
+    When I press "Delete"
+    Then the "query" field should contain "stream"
+      And I should not see "dreamer@example.com"
+      And I should not see "livetv@example.com"

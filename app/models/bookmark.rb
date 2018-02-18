@@ -3,6 +3,8 @@ class Bookmark < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include Responder
   # include Tire::Model::Callbacks
@@ -93,15 +95,23 @@ class Bookmark < ApplicationRecord
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count, :update_pseud_index
+
   after_create :update_work_stats
-  after_destroy :update_work_stats
+  after_destroy :update_work_stats, :update_pseud_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
+  end
+
+  # We index the bookmark count, so if it should change, update the pseud
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
+    IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
   def visible?(current_user=User.current_user)
@@ -124,6 +134,16 @@ class Bookmark < ApplicationRecord
       end
     end
     return false
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_bookmarks"
+    else
+      tire.index.name
+    end
   end
 
   # Returns the number of bookmarks on an item visible to the current user
@@ -178,10 +198,27 @@ class Bookmark < ApplicationRecord
     bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
+  # TODO: Is this necessary anymore?
+  before_destroy :save_parent_info
+
+  # Because of the way the elasticsearch parent/child index is set up, we need
+  # to know what the bookmarkable type and id was in order to delete the
+  # bookmark from the index after it's been deleted from the database
+  def save_parent_info
+    expire_time = (Time.now + 2.weeks).to_i
+    REDIS_GENERAL.setex(
+      "deleted_bookmark_parent_#{self.id}",
+      expire_time,
+      "#{bookmarkable_id}-#{bookmarkable_type.underscore}"
+    )
+  end
+
   #################################
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :notes
     indexes :private, type: 'boolean'
@@ -189,6 +226,10 @@ class Bookmark < ApplicationRecord
     indexes :bookmarkable_id
     indexes :created_at,          type: 'date'
     indexes :bookmarkable_date,   type: 'date'
+  end
+
+  def document_json
+    BookmarkIndexer.new({}).document(self)
   end
 
   self.include_root_in_json = false
@@ -222,7 +263,7 @@ class Bookmark < ApplicationRecord
   end
 
   def bookmarker
-    pseud.try(:name)
+    pseud.try(:byline)
   end
 
   def with_notes

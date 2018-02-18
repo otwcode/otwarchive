@@ -53,9 +53,9 @@ Feature: Gift Exchange Challenge
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
     When I select "(GMT-08:00) Pacific Time (US & Canada)" from "gift_exchange_time_zone"
-      And I submit
-    Then I should see "Challenge was successfully updated"
-    Then I should see "PDT"
+    And I submit
+      Then I should see "Challenge was successfully updated"
+      Then I should see the correct time zone for "Pacific Time (US & Canada)"
 
   Scenario: Add a co-mod
     Given the following activated users exist

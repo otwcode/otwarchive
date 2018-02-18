@@ -98,6 +98,7 @@ Feature: Edit chapters
 
   # view chapters in the right order
   When I am logged out
+    And all indexing jobs have been run
     And I go to epicauthor's works page
     And I follow "New Epic Work"
     And I follow "Entire Work"

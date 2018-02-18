@@ -2,6 +2,7 @@ include UrlHelpers
 class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Searchable
 
   has_many :related_works, as: :parent
 
@@ -70,6 +71,13 @@ class ExternalWork < ApplicationRecord
 
   alias_method :visible, :visible?
 
+  # Visibility has changed, which means we need to reindex
+  # the external work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   #######################################################################
   # TAGGING
   # External works are taggable objects.
@@ -126,7 +134,10 @@ class ExternalWork < ApplicationRecord
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
-    ).merge(bookmarkable_type: "ExternalWork")
+    ).merge(
+      bookmarkable_type: "ExternalWork",
+      bookmarkable_join: "bookmarkable"
+    )
   end
 
   def posted

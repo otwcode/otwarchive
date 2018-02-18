@@ -366,6 +366,16 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  def admin_spam_work_notification(creation_id, user_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+    )
+  end
+
   ### OTHER NOTIFICATIONS ###
 
   # archive feedback

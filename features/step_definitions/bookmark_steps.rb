@@ -9,7 +9,7 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
     step %{I press "Create"}
-    Bookmark.tire.index.refresh
+    step %{all indexing jobs have been run}
 end
 
 Given /^I have a bookmark of a deleted work$/ do
@@ -19,7 +19,7 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{I press "Create"}
   work = Work.find_by(title: title)
   work.destroy
-  Bookmark.tire.index.refresh
+  step %{all indexing jobs have been run}
 end
 
 Given /^I have bookmarks to search$/ do
@@ -70,6 +70,22 @@ Given /^I have bookmarks to search$/ do
                      bookmarkable_type: "ExternalWork",
                      pseud_id: pseud2.id,
                      notes: "I enjoyed this")
+
+  step %{all indexing jobs have been run}
+end
+
+Given /^I have bookmarks to search by dates$/ do
+  work1 = nil
+  Timecop.freeze(901.days.ago) do
+    work1 = FactoryGirl.create(:posted_work, title: "Old work")
+    FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "Old bookmark of old work")
+  end
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "New bookmark of old work")
+
+  work2 = FactoryGirl.create(:posted_work, title: "New work")
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, notes: "New bookmark of new work")
+
+  step %{all indexing jobs have been run}
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
@@ -77,7 +93,15 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   click_button("Create")
-  Bookmark.tire.index.refresh
+  step %{all indexing jobs have been run}
+end
+
+When /^I bookmark the series "([^\"]*)"$/ do |series_title|
+  series = Series.find_by(title: series_title)
+  visit series_path(series)
+  click_link("Bookmark Series")
+  click_button("Create")
+  step %{all indexing jobs have been run}
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
@@ -123,6 +147,7 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+  step %{all indexing jobs have been run}
 end
 
 When(/^I attempt to create a bookmark of "([^"]*)" with a pseud that is not mine$/) do |work|
@@ -146,6 +171,12 @@ Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   bookmark = work.bookmarks.first
   bookmark.reload
   bookmark.tags.collect(&:name).include?(tag)
+end
+Then /^the ([\d]+)(?:st|nd|rd|th) bookmark result should contain "([^"]*)"$/ do |n, text|
+  selector = "ol.bookmark > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    page.should have_content(text)
+  end
 end
 
 Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bookmark tags$/ do |title|

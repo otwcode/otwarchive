@@ -28,7 +28,6 @@ class DownloadsController < ApplicationController
 
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(posted: true)
-    create_work_html
 
     respond_to do |format|
       format.html do
@@ -99,7 +98,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file_sync("mobi", "aapplication/x-mobipocket-ebook")
+    send_file_sync("mobi", "application/x-mobipocket-ebook")
   end
 
   def download_epub
