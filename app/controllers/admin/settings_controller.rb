@@ -1,20 +1,20 @@
 class Admin::SettingsController < ApplicationController
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
-    @admin_setting = AdminSetting.first || AdminSetting.create(:last_updated_by => Admin.first)
+    @admin_setting = AdminSetting.first || AdminSetting.create(last_updated_by: Admin.first)
   end
 
   # PUT /admin_settings/1
   # PUT /admin_settings/1.xml
   def update
-    @admin_setting = AdminSetting.first || AdminSetting.create(:last_updated_by => Admin.first)
+    @admin_setting = AdminSetting.first || AdminSetting.create(last_updated_by: Admin.first)
 
     if @admin_setting.update_attributes(admin_setting_params)
       flash[:notice] = ts("Archive settings were successfully updated.")
       redirect_to admin_settings_path
     else
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -26,7 +26,7 @@ class Admin::SettingsController < ApplicationController
       :invite_from_queue_at, :suspend_filter_counts, :suspend_filter_counts_at,
       :enable_test_caching, :cache_expiration, :tag_wrangling_off, :guest_downloading_off,
       :disable_filtering, :request_invite_enabled, :creation_requires_invite,
-      :downloads_enabled
+      :downloads_enabled, :hide_spam
     )
   end
 end

@@ -15,6 +15,15 @@ Given /^a set of tags for testing autocomplete$/ do
   step %{a noncanonical freeform "alternate sundays"}
 end
 
+Then /^I should see HTML "(.*)?" in the autocomplete$/ do |string|
+  # There should be only one visible autocomplete dropdown.
+  within("input + .autocomplete", visible: true) do
+    # Wait for results to appear, then check their HTML content
+    expect(current_scope).to have_selector("li")
+    expect(current_scope["innerHTML"]).to include(string)
+  end
+end
+
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
   # There should be only one visible autocomplete dropdown.
   expect(find("input + .autocomplete", visible: true)).to have_content(string)
@@ -188,11 +197,12 @@ Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
     user = FactoryGirl.create(:user, login: username)
     user.activate
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
 Then /^the coauthor autocomplete field should list matching users$/ do
-  check("Add co-authors?")
+  check("co-authors-options-show")
   step %{I enter "coa" in the "pseud_byline_autocomplete" autocomplete field}
   step %{I should see "coauthor" in the autocomplete}
   step %{I should not see "giftee" in the autocomplete}
@@ -222,7 +232,7 @@ Given /^a gift exchange for testing autocomplete$/ do
 end
 
 When /^I edit the gift exchange for testing autocomplete$/ do
-  visit(edit_collection_gift_exchange_path(Collection.find_by_name("autocomplete")))
+  visit(edit_collection_gift_exchange_path(Collection.find_by(name: "autocomplete")))
 end
 
 Then(/^the pseud autocomplete should contain "([^\"]*)"$/) do |pseud|

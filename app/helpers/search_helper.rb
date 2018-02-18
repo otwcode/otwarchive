@@ -36,10 +36,10 @@ module SearchHelper
     end
     header.html_safe
   end
-  
-  
+
+
   def random_search_tip
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
-  
+
 end

@@ -66,3 +66,23 @@ Feature: Delete a comment
 
     When I follow "2 more comments in this thread"
     Then I should see the deeply nested comments
+
+  Scenario: Deleting a comment followed by its reply should hide the deleted comment placeholder.
+
+    Given the work "Amazing Story"
+      And I am logged in as "commenter"
+      And I post the comment "I love it!" on the work "Amazing Story"
+      And I reply to a comment with "Is there going to be a sequel?"
+    When I delete the comment
+      And I delete the reply comment
+    Then I should not see "(Previous comment deleted.)"
+
+  Scenario: Deleting a reply comment followed by its parent should hide the deleted comment placeholder.
+
+    Given the work "Amazing Story"
+      And I am logged in as "commenter"
+      And I post the comment "I love it!" on the work "Amazing Story"
+      And I reply to a comment with "Is there going to be a sequel?"
+    When I delete the reply comment
+      And I delete the comment
+    Then I should not see "(Previous comment deleted.)"

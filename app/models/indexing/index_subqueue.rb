@@ -16,7 +16,7 @@ class IndexSubqueue
 
   ####################
   # INSTANCE METHODS
-  ####################  
+  ####################
 
   attr_reader :name
 
@@ -46,7 +46,7 @@ class IndexSubqueue
 
   def log
     @@log ||= Logger.new("#{Rails.root}/log/index-errors.log")
-  end 
+  end
 
   def ids
     @ids = REDIS.smembers(name).select{ |id| id.present? }
@@ -77,7 +77,7 @@ class IndexSubqueue
       :reindex_low
     end
   end
-  
+
   def delete
     REDIS.del(name)
   end
@@ -95,7 +95,7 @@ class IndexSubqueue
 
   def respond_to_failure
     log.info(@response.inspect)
-    REDIS.rename(name, "#{name}:DEAD")
+    delete # in the new version, ideally do something better
   end
 
   def perform_batch_update
@@ -131,15 +131,13 @@ class IndexSubqueue
   def add_stats_to_batch(obj)
     basics = { "_index" => Work.index_name, "_type" => Work.document_type, "_id" => obj.work_id }
     @batch << { update: basics }.to_json
-    @batch << { 
-      doc: { 
-        work: {
-          hits: obj.hit_count,
-          kudos_count: obj.kudos_count, 
-          bookmarks_count: obj.bookmarks_count, 
-          comments_count: obj.comments_count
-        }
-      } 
+    @batch << {
+      doc: {
+        hits: obj.hit_count,
+        kudos_count: obj.kudos_count,
+        bookmarks_count: obj.bookmarks_count,
+        comments_count: obj.comments_count
+      }
     }.to_json
   end
 

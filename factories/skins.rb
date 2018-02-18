@@ -9,6 +9,7 @@ FactoryGirl.define do
 
     factory :public_work_skin do
       public true
+      official true
     end
   end
 end
