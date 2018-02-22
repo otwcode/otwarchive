@@ -140,7 +140,13 @@ form.filters {
   padding: 0.25em 0;
 }
 
-.filters .more dd.search, .filters .range dd {
+.filters .group dt.bookmarker {
+  border-top: 1px solid #f3efec;
+  margin-top: 0.643em;
+  padding-top: 0.643em;
+}
+
+.filters .more dd.search, .filters .more dt.search, .filters .range dd {
   margin-top: 0;
 }
 
@@ -158,7 +164,7 @@ form.filters {
 
 .filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
-  clip: rect(0 0 0 0); 
+  clip: rect(0 0 0 0);
   height: 1px;
   margin: -1px; 
   overflow: hidden; 
