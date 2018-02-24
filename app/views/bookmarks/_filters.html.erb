@@ -62,9 +62,16 @@
             <% end %>
             <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
             <dt class="autocomplete search">
-              <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
+              <%= f.label field_name, ts("Other work tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
             <dd class="autocomplete search">
+              <%= f.text_field field_name, autocomplete_options("tag") %>
+            </dd>
+            <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
+            <dt class="bookmarker autocomplete search">
+              <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
+            </dt>
+            <dd class="bookmarker autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
@@ -84,7 +91,16 @@
             <%= f.text_field :query %>
           </dd>
 
-          <dt class="options"><%= ts("Options") %></dt>
+          <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
+          <dt class="bookmarker search">
+            <%= f.label :query, ts("Search bookmarker's tags and notes") %>
+            <%= link_to_help "bookmark-search-text-help" %>
+          </dt>
+          <dd class="bookmarker search">
+            <%= f.text_field :query %>
+          </dd>
+
+          <dt class="options"><%= ts("Bookmark types") %></dt>
           <dd class="options">
             <ul>
               <li>
