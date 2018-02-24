@@ -28,7 +28,6 @@ class BookmarkableQuery < Query
   def add_bookmark_filters
     add_flipped_filters
     add_flipped_exclusion_filters
-    add_flipped_query
     add_child_filters
   end
 
@@ -80,20 +79,13 @@ class BookmarkableQuery < Query
     @exclusion_filters += bookmark_query.exclusion_filters.map { |filter| flipped_filter(filter, type: :exclusion) }.compact
   end
 
-  def add_flipped_query
-    shoulds = bookmark_query&.should_query
-    if shoulds.present?
-      @should_queries = shoulds.map { |q| flipped_query(q) }
-    end
-  end
-
   # Because a work or a series can have many bookmarks, we need to combine
   # the child queries into one bool query so that we don't, eg, leak private bookmark data
   def flipped_filter(filter, options = {})
     if filter.key?(:term) || filter.key?(:terms)
       key = options[:type] == :exclusion ? :exclude : :include
       child_filters[key] << filter
-      return nil
+      nil
     elsif filter.key?(:has_parent)
       filter[:has_parent][:query]
     end

@@ -40,12 +40,49 @@ class BookmarkQuery < Query
     @exclusion_filters ||= tag_exclusion_filter
   end
 
-  # Instead of doing a standard query, which would only match bookmark fields
-  # we'll make this a should query that will try to match either the bookmark or its parent
-  def should_query
-    if query_term.present?
-      @should_queries = parent_child_query
+  def queries
+    must_clauses = []
+    
+    # query (any field)
+    text_query = (options[:q] || options[:query] || "").dup
+    if text_query.present?
+      must_clauses << {
+        bool: {
+          should: [
+            and_query_string(text_query), # bookmark
+            parent_query(and_query_string(text_query)) # bookmarkable
+          ]
+        }
+      }
     end
+    
+    if options[:bookmarker].present?
+      must_clauses << and_query_string(split_query_text_words(:bookmarker, options[:bookmarker]).strip)
+    end
+    
+    # bookmark notes
+    if options[:bookmark_notes].present?
+      must_clauses << and_query_string(split_query_text_words(:notes, options[:bookmark_notes]).strip)
+    end
+
+    if options[:tag].present?
+      # If it is comma-separated, assume individual tags and AND them
+      # If not, split into words and search them individually
+      tags = options[:tag].split(/\s+/).map(&:squish).compact
+
+      must_clauses += tags.map do |term|
+        {
+          bool: {
+            should: [
+              and_query_string("tag:\"#{term}\""), # bookmark
+              parent_query(and_query_string("tag:\"#{term}\"")) # bookmarkable
+            ]
+          }
+        }
+      end
+    end
+
+    { bool: { must: must_clauses } }
   end
 
   def add_owner
@@ -69,48 +106,18 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  def parent_child_query
-    [
-      general_query,
-      parent_query
-    ]
-  end
-
-  def general_query
-    { query_string: { query: query_term, default_operator: "AND" } }
-  end
-
-  def parent_query
+  def parent_query(query)
     {
       has_parent: {
         parent_type: "bookmarkable",
-        query: {
-          query_string: {
-            query: query_term,
-            default_operator: "AND"
-          }
-        }
+        query: query
       }
     }
   end
 
-  def query_term
-    input = (options[:q] || options[:query] || "").dup
-    generate_search_text(input)
-  end
-
-  def generate_search_text(query = '')
-    search_text = query
-    [:bookmarker, :notes].each do |field|
-      search_text << split_query_text_words(field, options[field])
-    end
-    search_text << split_query_text_phrases(:tag, options[:tag])
-    escape_slashes(search_text.strip)
-  end
-
   def sort
-    column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
-    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
+    column = options[:sort_column].present? ? options[:sort_column] : "created_at"
+    direction = options[:sort_direction].present? ? options[:sort_direction] : "desc"
     sort_hash = { column => { order: direction } }
 
     if %w(created_at bookmarkable_date).include?(column)
@@ -123,7 +130,7 @@ class BookmarkQuery < Query
   def aggregations
     aggs = {}
     if facet_collections?
-      aggs[:collections] = { terms: { field: 'collection_ids' } }
+      aggs[:collections] = { terms: { field: "collection_ids" } }
     end
 
     if facet_tags?
