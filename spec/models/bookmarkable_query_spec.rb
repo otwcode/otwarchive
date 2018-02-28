@@ -7,8 +7,10 @@ describe BookmarkableQuery do
       q = BookmarkableQuery.new
       q.bookmark_query = bookmark_query
       q.add_bookmark_filters
-      filters = q.generated_query.dig(:query, :bool, :filter, :bool, :must)
-      expect(filters).to include(term: { restricted: "false" })
+      excluded = q.generated_query.dig(:query, :bool, :filter, :bool, :must_not)
+      expect(excluded).to include(term: { restricted: "true" })
+      expect(excluded).to include(term: { hidden_by_admin: "true" })
+      expect(excluded).to include(term: { posted: "false" })
     end
 
     it "should take bookmark filters and combine them into one child query" do
