@@ -241,9 +241,7 @@
           <%= link_to_help "work-skins" %>
         </dt>
         <dd class="skin">
-          <%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title),
-                :id,
-                :title,
+          <%= f.collection_select :work_skin_id, all_coauthor_skins, :id, :title,
                 { :selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), include_blank: true } %>
           <p class="actions" role="navigation">
             <%= link_to ts("Public Work Skins"), skins_path(:skin_type => "WorkSkin") %>

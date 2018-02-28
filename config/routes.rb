@@ -43,6 +43,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      get :status
     end
   end
 
@@ -145,9 +146,15 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :spam, only: [:index] do
+      collection do
+        post :bulk_update
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
-        get :hide
+        put :hide
+        put :set_spam
       end
     end
     resources :users, controller: 'admin_users' do

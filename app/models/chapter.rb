@@ -79,6 +79,9 @@ class Chapter < ApplicationRecord
 
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
+
+  after_save :expire_cache_on_coauthor_removal
+
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
@@ -200,6 +203,14 @@ class Chapter < ApplicationRecord
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
+  end
+
+  private
+
+  def expire_cache_on_coauthor_removal
+    if self.authors_to_remove.present?
+      self.touch
+    end
   end
 
    # private

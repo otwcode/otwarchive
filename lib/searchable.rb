@@ -15,10 +15,31 @@ module Searchable
   end
 
   def enqueue_to_index
-    if Rails.env.test?
-      update_index and return
-    end
     IndexQueue.enqueue(self, :main)
   end
 
+  def indexers
+    Indexer.for_object(self)
+  end
+
+  def reindex_document(options = {})
+    # ES UPGRADE TRANSITION #
+    # Remove `update_index rescue nil`
+    update_index rescue nil
+
+    # ES UPGRADE TRANSITION #
+    # Remove outer conditional
+    if self.class.use_new_search?
+      responses = []
+      self.indexers.each do |indexer|
+        if options[:async]
+          queue = options[:queue] || :main
+          responses << AsyncIndexer.index(indexer, [id], queue)
+        else
+          responses << indexer.new([id]).index_document(self)
+        end
+      end
+      responses
+    end
+  end
 end

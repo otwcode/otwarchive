@@ -21,7 +21,8 @@ Feature: Edit Multiple Works
     And I should not see "Lovely"
   When I press "Yes, Delete Works"
   Then I should see "Your works Glorious, Excellent were deleted."
-  When I go to my works page
+  When all indexing jobs have been run
+    And I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
@@ -138,3 +139,16 @@ Feature: Edit Multiple Works
     Then I should not see "coauthor" within ".byline"
     When I view the work "Shared Work 2"
     Then I should not see "coauthor" within ".byline"
+
+  Scenario: User applies a private work skin to multiple coauthored works
+    Given the following activated users with private work skins
+      | login       |
+      | lead_author |
+      | coauthor    |
+      And I am logged in as "lead_author"
+      And I edit multiple works coauthored as "lead_author" with "coauthor"
+    Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
+      And I should not see "Coauthor's Work Skin" within "#work_work_skin_id"
+    When I select "Lead Author's Work Skin" from "Select Work Skin"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
