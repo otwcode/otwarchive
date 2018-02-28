@@ -87,12 +87,28 @@ class PseudIndexer < Indexer
     info
   end
 
+  # The relation containing all bookmarks that should be included in the count
+  # for logged-in users (when restricted to a particular pseud).
+  def general_bookmarks
+    @general_bookmarks ||= Bookmark.with_missing_bookmarkable.
+      or(Bookmark.with_bookmarkable_visible_to_registered_user).
+      is_public
+  end
+
+  # The relation containing all bookmarks that should be included in the count
+  # for logged-out users (when restricted to a particular pseud).
+  def public_bookmarks
+    @public_bookmarks ||= Bookmark.with_missing_bookmarkable.
+      or(Bookmark.with_bookmarkable_visible_to_all).
+      is_public
+  end
+
   def general_bookmarks_count(pseud)
-    pseud.bookmarks.visible_to_registered_user.count
+    general_bookmarks.merge(pseud.bookmarks).count
   end
 
   def public_bookmarks_count(pseud)
-    pseud.bookmarks.visible_to_all.count
+    public_bookmarks.merge(pseud.bookmarks).count
   end
 
   def work_counts(pseud)

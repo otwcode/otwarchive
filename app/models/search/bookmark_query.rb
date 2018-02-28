@@ -37,7 +37,10 @@ class BookmarkQuery < Query
   end
 
   def exclusion_filters
-    @exclusion_filters ||= tag_exclusion_filter
+    @exclusion_filters ||= [
+      tag_exclusion_filter,
+      bookmarkable_visibility_filters
+    ].flatten.compact
   end
 
   # Instead of doing a standard query, which would only match bookmark fields
@@ -140,10 +143,19 @@ class BookmarkQuery < Query
   def visibility_filters
     [
       privacy_filter,
-      posted_filter,
-      hidden_filter,
+      hidden_filter
+    ]
+  end
+
+  # Filters dealing with the visibility of the parent.
+  # Note that in order to include bookmarks of deleted works/series/external
+  # works in some search results, we set these up as *exclusion* filters, so
+  # the meanings of the filters are flipped.
+  def bookmarkable_visibility_filters
+    [
+      unposted_parent_filter,
       hidden_parent_filter,
-      restricted_filter
+      restricted_parent_filter
     ]
   end
 
@@ -202,16 +214,22 @@ class BookmarkQuery < Query
     term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type].present?
   end
 
-  def posted_filter
-    parent_term_filter(:posted, 'true')
+  # Note that this is used as an exclusion filter, not an inclusion filter, so
+  # the boolean is flipped from the way you might expect.
+  def unposted_parent_filter
+    parent_term_filter(:posted, 'false')
   end
 
+  # Note that this is used as an exclusion filter, not an inclusion filter, so
+  # the boolean is flipped from the way you might expect.
   def hidden_parent_filter
-    parent_term_filter(:hidden_by_admin, 'false')
+    parent_term_filter(:hidden_by_admin, 'true')
   end
 
-  def restricted_filter
-    parent_term_filter(:restricted, 'false') unless include_restricted?
+  # Note that this is used as an exclusion filter, not an inclusion filter, so
+  # the boolean is flipped from the way you might expect.
+  def restricted_parent_filter
+    parent_term_filter(:restricted, 'true') unless include_restricted?
   end
 
   def complete_filter

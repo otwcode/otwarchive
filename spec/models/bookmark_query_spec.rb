@@ -36,19 +36,24 @@ describe BookmarkQuery do
 
   it "should not return bookmarks of hidden objects" do
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: { hidden_by_admin: 'false' }}}})
+    expect(q.exclusion_filters).to include({ has_parent: { parent_type: 'bookmarkable', query: { term: { hidden_by_admin: 'true' } } } })
+  end
+
+  it "should not return bookmarks of drafts" do
+    q = BookmarkQuery.new
+    expect(q.exclusion_filters).to include({ has_parent: { parent_type: 'bookmarkable', query: { term: { posted: 'false' } } } })
   end
 
   it "should not return restricted bookmarked works by default" do
     User.current_user = nil
     q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
+    expect(q.exclusion_filters).to include({ has_parent: { parent_type: 'bookmarkable', query: { term: { restricted: 'true' } } } })
   end
 
   it "should only return restricted bookmarked works when a user is logged in" do
     User.current_user = User.new
     q = BookmarkQuery.new
-    expect(q.filters).not_to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
+    expect(q.exclusion_filters).not_to include({ has_parent: { parent_type: 'bookmarkable', query: { term: { restricted: 'true' } } } })
   end
 
   it "should allow you to filter for recs" do
