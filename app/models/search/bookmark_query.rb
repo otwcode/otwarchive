@@ -161,6 +161,7 @@ class BookmarkQuery < Query
 
   def bookmark_filters
     [
+      bookmarks_only_filter,
       pseud_filter,
       user_filter,
       rec_filter,
@@ -277,6 +278,13 @@ class BookmarkQuery < Query
         ]
       }.flatten
     end
+  end
+
+  # We don't want to accidentally return Bookmarkable documents when we're
+  # doing a search for Bookmarks. So we should only include documents that are
+  # marked as "bookmark" in their bookmarkable_join field.
+  def bookmarks_only_filter
+    term_filter(:bookmarkable_join, "bookmark")
   end
 
   ####################
