@@ -135,7 +135,7 @@ class BookmarkableQuery < Query
       language_filter,
       filter_id_filter,
       date_filter
-    ].compact
+    ].flatten.compact
   end
 
   # Exclusion filters that apply only to the bookmarkable.
@@ -148,7 +148,7 @@ class BookmarkableQuery < Query
       hidden_filter,
       restricted_filter,
       tag_exclusion_filter
-    ].compact
+    ].flatten.compact
   end
 
   # Create a single has_child query with ALL of the child's queries and filters

@@ -151,6 +151,13 @@ class Query
   def make_bool(query)
     query.reject! { |key, value| value.blank? }
     query[:minimum_should_match] = 1 if query[:should].present?
-    { bool: query }
+
+    if query.values.flatten.size == 1 && (query[:must] || query[:should])
+      # There's only one clause in our boolean, so we might as well skip the
+      # bool and just require it.
+      query.values.flatten.first
+    else
+      { bool: query }
+    end
   end
 end

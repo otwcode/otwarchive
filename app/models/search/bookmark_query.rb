@@ -173,7 +173,7 @@ class BookmarkQuery < Query
       collections_filter,
       type_filter,
       date_filter
-    ].compact
+    ].flatten.compact
   end
 
   # Exclusion filters that apply only to the bookmark. These are must_not/not
@@ -183,7 +183,7 @@ class BookmarkQuery < Query
   def bookmark_exclusion_filters
     @bookmark_exclusion_filters ||= [
       tag_exclusion_filter
-    ].compact
+    ].flatten.compact
   end
 
   # Wrap all of the must/and filters on the bookmarkable into a single
