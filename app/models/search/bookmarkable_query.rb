@@ -27,6 +27,26 @@ class BookmarkableQuery < Query
     @options = bookmark_query.options
   end
 
+  # Do a regular search and return only the aggregations
+  # Note that we make a few modifications to the query before sending it. We
+  # don't want to return the nested bookmark aggregations, since this is called
+  # in the BookmarkQuery class (which has its own aggregations). And we don't
+  # want to return any results.
+  def aggregation_results
+    # Override the values for "from" and "size":
+    modified_query = generated_query.merge(from: 0, size: 0)
+
+    # Delete the bookmark aggregations.
+    modified_query[:aggs].delete(:bookmarks)
+
+    # ES UPGRADE TRANSITION #
+    # Change $new_elasticsearch to $elasticsearch
+    $new_elasticsearch.search(
+      index: index_name,
+      type: document_type,
+      body: modified_query
+    )["aggregations"]
+  end
   # Because want to calculate our score based on the bookmark's search results,
   # we use bookmark_filter as our "query" (because it goes in the "must"
   # section of the query, meaning that its score isn't discarded).
@@ -83,8 +103,26 @@ class BookmarkableQuery < Query
       }
     end
 
+    if bookmark_query.facet_tags? || bookmark_query.facet_collections?
+      aggs[:bookmarks] = {
+        # Aggregate on our child bookmarks.
+        children: { type: "bookmark" },
+        aggs: {
+          filtered_bookmarks: {
+            # Only include bookmarks that satisfy the bookmark_query's filters.
+            filter: make_bool(
+              must: bookmark_query.query,
+              filter: bookmark_query.bookmark_filters,
+              must_not: bookmark_query.bookmark_exclusion_filters
+            )
+          }.merge(bookmark_query.aggregations) # Use bookmark aggregations.
+        }
+      }
+    end
+
     { aggs: aggs }
   end
+
 
   ####################
   # GROUPS OF FILTERS

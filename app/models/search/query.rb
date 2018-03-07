@@ -22,17 +22,6 @@ class Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
-  # Do a regular search and return only the aggregations
-  def aggregation_results
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
-      index: index_name,
-      type: document_type,
-      body: generated_query.merge(from: 0, size: 0) # override from and size
-    )["aggregations"]
-  end
-
   # Perform a count query based on the given options
   def count
     $new_elasticsearch.count(

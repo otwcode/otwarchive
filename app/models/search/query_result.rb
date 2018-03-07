@@ -49,33 +49,42 @@ class QueryResult
     items
   end
 
+  def load_tag_facets(type, info)
+    @facets[type] = []
+    buckets = info["buckets"]
+    ids = buckets.map { |result| result['key'] }
+    tags = Tag.where(id: ids).group_by(&:id)
+    buckets.each do |facet|
+      if tags[facet['key'].to_i].any?
+        @facets[type] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
+      end
+    end
+  end
+
+  def load_collection_facets(info)
+    @facets["collections"] = []
+    buckets = info["buckets"]
+    ids = buckets.map { |result| result['key'] }
+    collections = Collection.where(id: ids).group_by(&:id)
+    buckets.each do |facet|
+      unless collections[facet['key'].to_i].blank?
+        @facets["collections"] << QueryFacet.new(facet['key'], collections[facet['key'].to_i].first.title, facet['doc_count'])
+      end
+    end
+  end
+
   def facets
     return if response['aggregations'].nil?
+
     if @facets.nil?
       @facets = {}
       response['aggregations'].each_pair do |term, results|
-        @facets[term] = []
-        results = results['buckets']
         if Tag::TYPES.include?(term.classify) || term == 'tag'
-          ids = results.map{ |result| result['key'] }
-          tags = Tag.where(id: ids).group_by(&:id)
-          results.each do |facet|
-            if tags[facet['key'].to_i].any?
-              if facet["#{term}_count"].nil?
-                @facets[term] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
-              elsif facet["#{term}_count"].any?
-                @facets[term] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet["#{term}_count"]['doc_count'])
-              end
-            end
-          end
+          load_tag_facets(term, results)
         elsif term == 'collections'
-          ids = results.map{ |result| result['key'] }
-          collections = Collection.where(id: ids).group_by(&:id)
-          results.each do |facet|
-            unless collections[facet['key'].to_i].blank?
-              @facets[term] << QueryFacet.new(facet['key'], collections[facet['key'].to_i].first.title, facet['doc_count'])
-            end
-          end
+          load_collection_facets(results)
+        elsif term == 'bookmarks'
+          load_tag_facets("tag", results["filtered_bookmarks"]["tag"])
         end
       end
     end
