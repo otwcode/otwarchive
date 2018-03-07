@@ -39,7 +39,9 @@ Feature: Basic collection navigation
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"
-  Then I should see "0 Bookmarks"
+  # Depending on whether the new search is enabled, I may see "0 Bookmarks" or
+  # "0 Bookmarked Items" so for simplicity, we look for "0 Bookmark":
+  Then I should see "0 Bookmark"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People" within "div#dashboard"

@@ -65,26 +65,24 @@ Feature: Bookmarks of deleted items
       And I should see "This has been deleted, sorry!"
       And I should not see "Extremely Objectionable Content"
 
+  @new-search
   Scenario: Deleting a restricted work with bookmarks makes the public bookmark count on all bookmarker's pseuds increase.
-    # This scenario doesn't make sense unless you can do the people search
-    # logged out. So it can't be enabled until the new search is the default.
-    When "the ES5/ES6 upgrade" is fixed
-    # Given I am logged in as "Alice"
-    #   And I post the locked work "Mayfly"
-    #   And I am logged in as "Beth"
-    #   And I bookmark the work "Mayfly"
-    # When I am logged out
-    #   And I go to the search people page
-    #   And I fill in "Name" with "Beth"
-    #   And I press "Search People"
-    # Then I should see "Beth" within "ol.pseud.group"
-    #   And I should not see "1 bookmark"
-    # When I am logged in as "Alice"
-    #   And I delete the work "Mayfly"
-    #   And all indexing jobs have been run
-    #   And I am logged out
-    #   And I go to the search people page
-    #   And I fill in "Name" with "Beth"
-    #   And I press "Search People"
-    # Then I should see "Beth" within "ol.pseud.group"
-    #   And I should see "1 bookmark"
+    Given I am logged in as "Alice"
+      And I post the locked work "Mayfly"
+      And I am logged in as "Beth"
+      And I bookmark the work "Mayfly"
+    When I am logged out
+      And I go to the search people page
+      And I fill in "Name" with "Beth"
+      And I press "Search People"
+    Then I should see "Beth" within "ol.pseud.group"
+      And I should not see "1 bookmark"
+    When I am logged in as "Alice"
+      And I delete the work "Mayfly"
+      And all indexing jobs have been run
+      And I am logged out
+      And I go to the search people page
+      And I fill in "Name" with "Beth"
+      And I press "Search People"
+    Then I should see "Beth" within "ol.pseud.group"
+      And I should see "1 bookmark"

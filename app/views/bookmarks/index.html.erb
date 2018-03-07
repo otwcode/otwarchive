@@ -1,7 +1,7 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
   <% if @bookmarkable_items %>
-    <%= search_header @bookmarkable_items, @search, "Bookmarkable Item", @owner %>
+    <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>
   <% else %>
     <%= search_header @bookmarks, @search, "Bookmark", @owner %>
   <% end %>
