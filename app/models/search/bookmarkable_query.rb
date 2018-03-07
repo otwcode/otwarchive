@@ -177,7 +177,7 @@ class BookmarkableQuery < Query
       make_bool(
         must: field_value_score("created_at"), # score = bookmark's created_at
         filter: [
-          bookmark_query.query, # the query acts as a filter now
+          bookmark_query.queries, # the query acts as a filter now
           bookmark_query.bookmark_filters
         ].flatten.compact,
         must_not: bookmark_query.bookmark_exclusion_filters
@@ -186,7 +186,7 @@ class BookmarkableQuery < Query
       # In this case, we can fall back on the default behavior and use the
       # bookmark query to score the bookmarks.
       make_bool(
-        must: bookmark_query.query,
+        must: bookmark_query.queries,
         filter: bookmark_query.bookmark_filters,
         must_not: bookmark_query.bookmark_exclusion_filters
       )

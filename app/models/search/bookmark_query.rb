@@ -35,6 +35,13 @@ class BookmarkQuery < Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
+  # Currently, we only have one query:
+  def queries
+    @queries ||= [
+      query
+    ].flatten.compact
+  end
+
   # Combine the filters on the bookmark with the filters on the bookmarkable.
   def filters
     @filters ||= [
