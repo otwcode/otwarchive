@@ -163,7 +163,7 @@ class BookmarkableQuery < Query
         query: bookmark_bool,
         inner_hits: {
           size: inner_hits_size,
-          sort: { created_at: "desc" }
+          sort: { created_at: { order: "desc", unmapped_type: "date" } }
         }
       }
     }

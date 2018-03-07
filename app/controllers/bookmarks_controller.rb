@@ -105,8 +105,21 @@ class BookmarksController < ApplicationController
           else
             @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           end
-          @bookmarks = @search.search_results
-          @facets = @bookmarks.facets
+
+          if use_new_search? && @user.blank?
+            # We're using the new search, but it's not a particular user's
+            # bookmarks. That means that instead of the normal bookmark
+            # listing, we want to list *bookmarkable* items.
+            @bookmarkable_items = @search.bookmarkable_search_results
+            @facets = @bookmarkable_items.facets
+          else
+            # Either we're using the old search, or we're not looking at a
+            # particular user's bookmarks. Either way, we want to just retrieve
+            # the standard search results and their facets.
+            @bookmarks = @search.search_results
+            @facets = @bookmarks.facets
+          end
+
           if @search.options[:excluded_tag_ids].present?
             tags = Tag.where(id: @search.options[:excluded_tag_ids])
             excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
