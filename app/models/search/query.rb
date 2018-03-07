@@ -22,6 +22,17 @@ class Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
+  # Do a regular search and return only the aggregations
+  def aggregation_results
+    # ES UPGRADE TRANSITION #
+    # Change $new_elasticsearch to $elasticsearch
+    $new_elasticsearch.search(
+      index: index_name,
+      type: document_type,
+      body: generated_query.merge(from: 0, size: 0) # override from and size
+    )["aggregations"]
+  end
+
   # Perform a count query based on the given options
   def count
     $new_elasticsearch.count(
@@ -38,7 +49,7 @@ class Query
   # Search query with filters
   def generated_query
     q = {
-      query: { bool: filtered_query },
+      query: filtered_query,
       size: per_page,
       from: pagination_offset,
       sort: sort
@@ -50,41 +61,12 @@ class Query
   end
 
   # Combine the filters and queries
-  # Don't include empty conditions, since those will affect results
   def filtered_query
-    filtered_query = {}
-    filter = filter_bool
-    query = query_bool
-    should = should_query
-    
-    filtered_query[:filter] = filter if filter.present?
-    filtered_query[:must] = query if query.present?
-    if should.present?
-      filtered_query[:should] = should
-      filtered_query[:minimum_should_match] = 1
-    end
-    filtered_query
-  end
-
-  # Boolean filter
-  def filter_bool
-    return unless filters.present?
-    bool = { bool: { must: filters } }
-    if exclusion_filters.present?
-      bool[:bool][:must_not] = exclusion_filters
-    end
-    bool
-  end
-
-  # Boolean query
-  def query_bool
-    q = queries
-    q unless q.blank?
-  end
-
-  # Should queries (used primarily for bookmarks)
-  def should_query
-    @should_queries
+    make_bool(
+      must: queries, # required, score calculated
+      filter: filters, # required, score ignored
+      must_not: exclusion_filters # disallowed, score ignored
+    )
   end
 
   # Define specifics in subclasses
@@ -99,6 +81,10 @@ class Query
 
   def terms_filter(field, value, options={})
     { terms: options.merge(field => value) }
+  end
+
+  def field_value_score(field)
+    { function_score: { field_value_factor: { field: field } } }
   end
 
   def bool_value(str)
@@ -171,5 +157,11 @@ class Query
       str << " #{fieldname}:#{word}"
     end
     str
+  end
+
+  def make_bool(query)
+    query.reject! { |key, value| value.blank? }
+    query[:minimum_should_match] = 1 if query[:should].present?
+    { bool: query }
   end
 end

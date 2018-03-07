@@ -1,6 +1,8 @@
 class BookmarkQuery < Query
   include TaggableQuery
 
+  attr_accessor :bookmarkable_query
+
   def klass
     'Bookmark'
   end
@@ -13,6 +15,14 @@ class BookmarkQuery < Query
     BookmarkIndexer.document_type
   end
 
+  # Load the options and create the linked BookmarkableQuery class (which is
+  # used to generate all of our parent filters).
+  def initialize(options = {})
+    @options = HashWithIndifferentAccess.new(options)
+    add_owner
+    self.bookmarkable_query = BookmarkableQuery.new(self)
+  end
+
   # After the initial search, run an additional query to get work/series tag filters
   # Elasticsearch doesn't support parent aggregations, and doing the main query on the parents
   # limits searching and sorting on the bookmarks themselves
@@ -20,35 +30,26 @@ class BookmarkQuery < Query
   def search_results
     response = search
     if response['aggregations']
-      response['aggregations'].merge!(BookmarkableQuery.filters_for_bookmarks(self))
+      response['aggregations'].merge!(bookmarkable_query.aggregation_results)
     end
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
-  # Combine the available filters
+  # Combine the filters on the bookmark with the filters on the bookmarkable.
   def filters
-    add_owner
-    @filters ||= (
-      visibility_filters +
-      bookmark_filters +
-      bookmarkable_filters +
-      range_filters
-    ).flatten.compact
-  end
-
-  def exclusion_filters
-    @exclusion_filters ||= [
-      tag_exclusion_filter,
-      bookmarkable_visibility_filters
+    @filters ||= [
+      bookmark_filters,
+      bookmarkable_filter
     ].flatten.compact
   end
 
-  # Instead of doing a standard query, which would only match bookmark fields
-  # we'll make this a should query that will try to match either the bookmark or its parent
-  def should_query
-    if query_term.present?
-      @should_queries = parent_child_query
-    end
+  # Combine the exclusion filters on the bookmark with the exclusion filters on
+  # the bookmarkable.
+  def exclusion_filters
+    @exclusion_filters ||= [
+      bookmark_exclusion_filters,
+      bookmarkable_exclusion_filter
+    ].flatten.compact
   end
 
   def add_owner
@@ -72,11 +73,16 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  def parent_child_query
-    [
-      general_query,
-      parent_query
-    ]
+  # Instead of doing a standard query, which would only match bookmark fields
+  # we'll make this a should query that will try to match either the bookmark
+  # or its parent
+  # TODO This isn't right, since it requires all of the fields to be on one or
+  # the other (and, in particular, can't handle tags on the parent with a
+  # specified bookmarker on the child).
+  def query
+    if query_term.present?
+      @query ||= make_bool(should: [general_query, parent_query])
+    end
   end
 
   def general_query
@@ -87,6 +93,7 @@ class BookmarkQuery < Query
     {
       has_parent: {
         parent_type: "bookmarkable",
+        score: true, # include the score from the bookmarkable
         query: {
           query_string: {
             query: query_term,
@@ -110,6 +117,10 @@ class BookmarkQuery < Query
     search_text << split_query_text_phrases(:tag, options[:tag])
     escape_slashes(search_text.strip)
   end
+
+  ####################
+  # SORTING AND AGGREGATIONS
+  ####################
 
   def sort
     column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
@@ -140,27 +151,12 @@ class BookmarkQuery < Query
   # GROUPS OF FILTERS
   ####################
 
-  def visibility_filters
-    [
-      privacy_filter,
-      hidden_filter
-    ]
-  end
-
-  # Filters dealing with the visibility of the parent.
-  # Note that in order to include bookmarks of deleted works/series/external
-  # works in some search results, we set these up as *exclusion* filters, so
-  # the meanings of the filters are flipped.
-  def bookmarkable_visibility_filters
-    [
-      unposted_parent_filter,
-      hidden_parent_filter,
-      restricted_parent_filter
-    ]
-  end
-
+  # Filters that apply only to the bookmark. These are must/and filters,
+  # meaning that all of them are required to occur in all bookmarks.
   def bookmark_filters
-    [
+    @bookmark_filters ||= [
+      privacy_filter,
+      hidden_filter,
       bookmarks_only_filter,
       pseud_filter,
       user_filter,
@@ -168,27 +164,48 @@ class BookmarkQuery < Query
       notes_filter,
       tags_filter,
       collections_filter,
-      type_filter
-    ]
+      type_filter,
+      date_filter
+    ].compact
   end
 
-  def bookmarkable_filters
-    [
-      complete_filter,
-      language_filter,
-      filter_id_filter
-    ]
+  # Exclusion filters that apply only to the bookmark. These are must_not/not
+  # filters, meaning that none of them are allowed to occur in any search
+  # results. DO NOT INCLUDE FILTERS ON THE BOOKMARKABLE HERE. If you do, this
+  # may cause an infinite loop.
+  def bookmark_exclusion_filters
+    @bookmark_exclusion_filters ||= [
+      tag_exclusion_filter
+    ].compact
   end
 
-  def range_filters
-    ranges = []
-    [:date, :bookmarkable_date].each do |countable|
-      if options[countable].present?
-        key = countable == :date ? :created_at : countable
-        ranges << { range: { key => Search.range_to_search(options[countable]) } }
-      end
-    end
-    ranges
+  # Wrap all of the must/and filters on the bookmarkable into a single
+  # has_parent query. (The more has_parent queries we have, the slower our
+  # search will be.)
+  def bookmarkable_filter
+    @bookmarkable_filter ||= {
+      has_parent: {
+        parent_type: "bookmarkable",
+        query: make_bool(
+          must: bookmarkable_query.bookmarkable_filters
+        )
+      }
+    }
+  end
+
+  # Wrap all of the must_not/not filters on the bookmarkable into a single
+  # has_parent query. Note that we wrap them in a should/or query because if
+  # any of the parent queries return true, we want to return false. (De
+  # Morgan's Law.)
+  def bookmarkable_exclusion_filter
+    @bookmarkable_exclusion_filter ||= {
+      has_parent: {
+        parent_type: "bookmarkable",
+        query: make_bool(
+          should: bookmarkable_query.bookmarkable_exclusion_filters
+        )
+      }
+    }
   end
 
   ####################
@@ -215,48 +232,22 @@ class BookmarkQuery < Query
     term_filter(:bookmarkable_type, options[:bookmarkable_type].gsub(" ", "")) if options[:bookmarkable_type].present?
   end
 
-  # Note that this is used as an exclusion filter, not an inclusion filter, so
-  # the boolean is flipped from the way you might expect.
-  def unposted_parent_filter
-    parent_term_filter(:posted, 'false')
-  end
-
-  # Note that this is used as an exclusion filter, not an inclusion filter, so
-  # the boolean is flipped from the way you might expect.
-  def hidden_parent_filter
-    parent_term_filter(:hidden_by_admin, 'true')
-  end
-
-  # Note that this is used as an exclusion filter, not an inclusion filter, so
-  # the boolean is flipped from the way you might expect.
-  def restricted_parent_filter
-    parent_term_filter(:restricted, 'true') unless include_restricted?
-  end
-
-  def complete_filter
-    parent_term_filter(:complete, 'true') if options[:complete].present?
-  end
-
-  def language_filter
-    parent_term_filter(:language_id, options[:language_id].to_i) if options[:language_id].present?
+  # The date filter on the bookmark (i.e. when the bookmark was created).
+  def date_filter
+    if options[:date].present?
+      { range: { created_at: Search.range_to_search(options[:date]) } }
+    end
   end
 
   def pseud_filter
     if options[:pseud_ids].present?
-      options[:pseud_ids].flatten.uniq.map { |pseud_id| term_filter(:pseud_id, pseud_id) }
+      terms_filter(:pseud_id, options[:pseud_ids].flatten.uniq)
     end
-    # terms_filter(:pseud_id, options[:pseud_ids].flatten.uniq) if options[:pseud_ids].present?
   end
 
   def user_filter
     return unless options[:user_ids].present?
     options[:user_ids].flatten.uniq.map { |user_id| term_filter(:user_id, user_id) }
-  end
-
-  def filter_id_filter
-    if filter_ids.present?
-      filter_ids.map{ |filter_id| parent_term_filter(:filter_ids, filter_id) }
-    end
   end
 
   def tags_filter
@@ -271,12 +262,7 @@ class BookmarkQuery < Query
 
   def tag_exclusion_filter
     if exclusion_ids.present?
-      exclusion_ids.flatten.map { |exclusion_id|
-        [
-          parent_term_filter(:filter_ids, exclusion_id),
-          term_filter(:tag_ids, exclusion_id)
-        ]
-      }.flatten
+      terms_filter(:tag_ids, exclusion_ids)
     end
   end
 
@@ -307,12 +293,6 @@ class BookmarkQuery < Query
                   user_ids.include?(User.current_user.id))
   end
 
-  def include_restricted?
-    # Use fetch instead of || here to make sure that we don't accidentally
-    # override a deliberate choice not to show restricted bookmarks.
-    options.fetch(:show_restricted, User.current_user.present?)
-  end
-
   def user_ids
     user_ids = []
     if options[:user_ids].present?
@@ -322,27 +302,5 @@ class BookmarkQuery < Query
       user_ids += Pseud.where(id: options[:pseud_ids]).pluck(:user_id)
     end
     user_ids
-  end
-
-  def parent_term_filter(field, value, options={})
-    {
-      has_parent: {
-        parent_type: "bookmarkable",
-        query: {
-          term: options.merge(field => value)
-        }
-      }
-    }
-  end
-
-  def parent_terms_filter(field, value, options={})
-    {
-      has_parent: {
-        parent_type: "bookmarkable",
-        query: {
-          terms: options.merge(field => value)
-        }
-      }
-    }
   end
 end

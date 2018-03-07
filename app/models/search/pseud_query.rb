@@ -1,7 +1,12 @@
 class PseudQuery < Query
 
+  # The "klass" function in the query classes is used only to determine what
+  # type of search results to return (that is, which class the QueryResult
+  # class will call "load_from_elasticsearch" on). Because the Pseud search
+  # should always wrap Pseuds up in a PseudDecorator, we return PseudDecorator
+  # instead of Pseud.
   def klass
-    'Pseud'
+    'PseudDecorator'
   end
 
   def index_name

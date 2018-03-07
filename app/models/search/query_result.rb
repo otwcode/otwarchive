@@ -15,14 +15,9 @@ class QueryResult
   	response['hits']['hits']
   end
 
-  # Find results with where rather than find in order to avoid ActiveRecord::RecordNotFound
   def items
     if @items.nil?
-      ids = hits.map { |item| item['_id'] }
-      items = klass.where(:id => ids).group_by(&:id)
-      IndexSweeper.async_cleanup(klass, ids, items.keys)
-      @items = ids.map{ |id| items[id.to_i] }.flatten.compact
-      @items = decorate_items(@items)
+      @items = klass.load_from_elasticsearch(hits)
     end
     @items
   end
