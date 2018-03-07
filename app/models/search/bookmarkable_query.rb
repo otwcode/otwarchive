@@ -171,7 +171,7 @@ class BookmarkableQuery < Query
 
   # The bool used in the has_child query.
   def bookmark_bool
-    if options[:sort_column] == "created_at"
+    if options[:sort_column] == "date"
       # In this case, we need to take the max of the creation dates of our
       # children in order to calculate the correct order. 
       make_bool(
