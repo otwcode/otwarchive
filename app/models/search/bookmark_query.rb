@@ -183,6 +183,8 @@ class BookmarkQuery < Query
   # has_parent query. (The more has_parent queries we have, the slower our
   # search will be.)
   def bookmarkable_filter
+    return if bookmarkable_query.bookmarkable_filters.blank?
+
     @bookmarkable_filter ||= {
       has_parent: {
         parent_type: "bookmarkable",
@@ -198,6 +200,8 @@ class BookmarkQuery < Query
   # any of the parent queries return true, we want to return false. (De
   # Morgan's Law.)
   def bookmarkable_exclusion_filter
+    return if bookmarkable_query.bookmarkable_exclusion_filters.blank?
+
     @bookmarkable_exclusion_filter ||= {
       has_parent: {
         parent_type: "bookmarkable",
