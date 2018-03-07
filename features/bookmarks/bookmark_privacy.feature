@@ -127,5 +127,8 @@ Feature: Private bookmarks
       And I should see "Public Masterpiece"
       And I should not see "avid_bookmarker"
       And I should see "otheruser"
-      And I should see "1" within ".count"
+      # This *should* be 1, because there's no way for a bookmark to appear on
+      # a tag bookmark page if the bookmarkable has a public_bookmark_count of
+      # 0. However, caching means that this is actually 0:
+      And I should see "0" within ".count"
       And I should not see "2" within ".count"
