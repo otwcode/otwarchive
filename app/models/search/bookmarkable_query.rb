@@ -47,6 +47,7 @@ class BookmarkableQuery < Query
       body: modified_query
     )["aggregations"]
   end
+
   # Because want to calculate our score based on the bookmark's search results,
   # we use bookmark_filter as our "query" (because it goes in the "must"
   # section of the query, meaning that its score isn't discarded).

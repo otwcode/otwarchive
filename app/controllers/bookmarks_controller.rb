@@ -113,7 +113,7 @@ class BookmarksController < ApplicationController
             @bookmarkable_items = @search.bookmarkable_search_results
             @facets = @bookmarkable_items.facets
           else
-            # Either we're using the old search, or we're not looking at a
+            # Either we're using the old search, or we are looking at a
             # particular user's bookmarks. Either way, we want to just retrieve
             # the standard search results and their facets.
             @bookmarks = @search.search_results

@@ -19,7 +19,10 @@ class PseudDecorator < SimpleDelegator
     end
   end
 
-  # TODO Either eliminate this function or make it work properly.
+  # TODO: Either eliminate this function or add definitions for work_counts and
+  # bookmark_counts (and possibly fandom information, as well?). The NameError
+  # that this causes isn't a problem at the moment because the function isn't
+  # being called from anywhere, but it needs to be fixed before it can be used.
   def self.decorate(pseuds)
     users = User.where(id: pseuds.map(&:user_id)).group_by(&:id)
     work_counts

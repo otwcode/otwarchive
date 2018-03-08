@@ -49,30 +49,29 @@ describe BookmarkQuery do
     expect(q.filters).to include({term: { hidden_by_admin: 'false'} })
   end
 
-  it "should not return bookmarks of hidden objects" do
-    q = BookmarkQuery.new
-    parent_filter = q.exclusion_filters.first { |f| f.key? :has_parent }
-    expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { hidden_by_admin: 'true' })
-  end
+  context "default bookmarkable filters" do
+    let(:query) { BookmarkQuery.new }
+    let(:parent_filter) do
+      query.exclusion_filters.first { |f| f.key? :has_parent }
+    end
 
-  it "should not return bookmarks of drafts" do
-    q = BookmarkQuery.new
-    parent_filter = q.exclusion_filters.first { |f| f.key? :has_parent }
-    expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { posted: 'false' })
-  end
+    it "should not return bookmarks of hidden objects" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { hidden_by_admin: 'true' })
+    end
 
-  it "should not return restricted bookmarked works by default" do
-    User.current_user = nil
-    q = BookmarkQuery.new
-    parent_filter = q.exclusion_filters.first { |f| f.key? :has_parent }
-    expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { restricted: 'true' })
-  end
+    it "should not return bookmarks of drafts" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { posted: 'false' })
+    end
 
-  it "should only return restricted bookmarked works when a user is logged in" do
-    User.current_user = User.new
-    q = BookmarkQuery.new
-    parent_filter = q.exclusion_filters.first { |f| f.key? :has_parent }
-    expect(parent_filter.dig(:has_parent, :query, :bool, :should)).not_to include(term: { restricted: 'true' })
+    it "should not return restricted bookmarked works when logged out" do
+      User.current_user = nil
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { restricted: 'true' })
+    end
+
+    it "should return restricted bookmarked works when a user is logged in" do
+      User.current_user = User.new
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).not_to include(term: { restricted: 'true' })
+    end
   end
 
   it "should allow you to filter for recs" do

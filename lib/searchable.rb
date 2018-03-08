@@ -18,9 +18,6 @@ module Searchable
     # corresponding to the search results don't exist, don't error, just notify
     # IndexSweeper so that the Elasticsearch indices can be cleaned up.)
     # Override for special behavior.
-    #
-    # TODO Is this the right place for this function, or should it be placed in
-    # one of the Query/Indexer objects?
     def load_from_elasticsearch(hits)
       ids = hits.map { |item| item['_id'] }
 
