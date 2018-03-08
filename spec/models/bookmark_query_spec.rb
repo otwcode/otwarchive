@@ -5,7 +5,22 @@ describe BookmarkQuery do
   it "should allow you to perform a simple search" do
     q = BookmarkQuery.new(query: "unicorns")
     search_body = q.generated_query
-    expect(search_body[:query][:bool][:should]).to include({ query_string: { query: "unicorns", default_operator: "AND" }})
+    query = { query_string: { query: "unicorns", default_operator: "AND" } }
+    expect(search_body[:query][:bool][:must]).to include(
+      bool: {
+        should: [
+          query,
+          {
+            has_parent: {
+              parent_type: "bookmarkable",
+              query: query,
+              score: true
+            }
+          }
+        ],
+        minimum_should_match: 1
+      }
+    )
   end
 
   it "should not return private bookmarks by default" do
@@ -34,26 +49,29 @@ describe BookmarkQuery do
     expect(q.filters).to include({term: { hidden_by_admin: 'false'} })
   end
 
-  it "should not return bookmarks of hidden objects" do
-    q = BookmarkQuery.new
-    expect(q.exclusion_filters).to include(has_parent: { parent_type: 'bookmarkable', query: { term: { hidden_by_admin: 'true' } } })
-  end
+  context "default bookmarkable filters" do
+    let(:query) { BookmarkQuery.new }
+    let(:parent_filter) do
+      query.exclusion_filters.first { |f| f.key? :has_parent }
+    end
 
-  it "should not return bookmarks of drafts" do
-    q = BookmarkQuery.new
-    expect(q.exclusion_filters).to include(has_parent: { parent_type: 'bookmarkable', query: { term: { posted: 'false' } } })
-  end
+    it "should not return bookmarks of hidden objects" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { hidden_by_admin: 'true' })
+    end
 
-  it "should not return restricted bookmarked works by default" do
-    User.current_user = nil
-    q = BookmarkQuery.new
-    expect(q.exclusion_filters).to include(has_parent: { parent_type: 'bookmarkable', query: { term: { restricted: 'true' } } })
-  end
+    it "should not return bookmarks of drafts" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { posted: 'false' })
+    end
 
-  it "should only return restricted bookmarked works when a user is logged in" do
-    User.current_user = User.new
-    q = BookmarkQuery.new
-    expect(q.exclusion_filters).not_to include(has_parent: { parent_type: 'bookmarkable', query: { term: { restricted: 'true' } } })
+    it "should not return restricted bookmarked works when logged out" do
+      User.current_user = nil
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { restricted: 'true' })
+    end
+
+    it "should return restricted bookmarked works when a user is logged in" do
+      User.current_user = User.new
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).not_to include(term: { restricted: 'true' })
+    end
   end
 
   it "should allow you to filter for recs" do
@@ -75,7 +93,7 @@ describe BookmarkQuery do
     pseud = Pseud.new
     pseud.id = 42
     q = BookmarkQuery.new(parent: pseud)
-    expect(q.filters).to include({term: { pseud_id: 42} })
+    expect(q.filters).to include(terms: { pseud_id: [42] })
   end
 
   it "should allow you to filter for bookmarks by user" do

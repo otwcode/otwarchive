@@ -127,6 +127,12 @@ class BookmarkSearchForm
     @searcher.search_results
   end
 
+  # Special function for returning the BookmarkableQuery results (instead of
+  # the BookmarkQuery results).
+  def bookmarkable_search_results
+    @searcher.bookmarkable_query.search_results
+  end
+
   ###############
   # SORTING
   ###############

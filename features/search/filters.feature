@@ -133,7 +133,7 @@ Feature: Filters
       And I should not see "Bilbo Does the Thing"
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
 
-  @javascript
+  @javascript @old-search
   Scenario: The filter counts should match the actual returned count
     Given I am logged in as "meatloaf"
       And I bookmark the work "Bilbo Does the Thing"
@@ -147,3 +147,18 @@ Feature: Filters
     Then I should see "4 Bookmarks in The Hobbit"
     When I follow "Fandoms"
     Then I should see "The Hobbit (4)"
+
+  @javascript @new-search
+  Scenario: Tag bookmark pages should display bookmarked items instead of bookmarks, and the sidebar counts should reflect that.
+    Given I am logged in as "meatloaf"
+      And I bookmark the work "Bilbo Does the Thing"
+      And I bookmark the work "A Hobbit's Meandering"
+      And I am logged out
+      And I am logged in as "anothermeatloaf"
+      And I bookmark the work "Bilbo Does the Thing"
+      And I bookmark the work "A Hobbit's Meandering"
+      And all indexing jobs have been run
+    When I go to the bookmarks tagged "The Hobbit"
+    Then I should see "2 Bookmarked Items in The Hobbit"
+    When I follow "Fandoms"
+    Then I should see "The Hobbit (2)"
