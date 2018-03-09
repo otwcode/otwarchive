@@ -57,11 +57,13 @@ describe PseudSearchForm do
   end
 
   context "pseud index of bookmarkers" do
+    let(:bookmarker) { create(:pseud, name: "bookmarkermit") }
+
     it "updates when bookmarked work changes restricted status" do
       work = create(:posted_work)
       expect(work.restricted).to be_falsy
 
-      bookmark = create(:bookmark, bookmarkable_id: work.id)
+      bookmark = create(:bookmark, bookmarkable_id: work.id, pseud: bookmarker)
       run_all_indexing_jobs
       result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
       expect(result).to eq bookmark.pseud
@@ -91,7 +93,7 @@ describe PseudSearchForm do
       serial_work = create(:serial_work, series: series)
       expect(series.restricted).to be_falsy
 
-      bookmark = create(:bookmark, bookmarkable_id: series.id, bookmarkable_type: "Series")
+      bookmark = create(:bookmark, bookmarkable_id: series.id, bookmarkable_type: "Series", pseud: bookmarker)
       run_all_indexing_jobs
       result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
       expect(result).to eq bookmark.pseud
@@ -118,16 +120,16 @@ describe PseudSearchForm do
     end
 
     {
-      "Work" => :posted_work,
-      "Series" => :series_with_a_work,
-      "ExternalWork" => :external_work
+      Work => :posted_work,
+      Series => :series_with_a_work,
+      ExternalWork => :external_work
     }.each_pair do |type, factory|
       it "updates when bookmarked #{type} changes hidden by admin status" do
         bookmarkable = create(factory)
         expect(bookmarkable.restricted).to be_falsy
         expect(bookmarkable.hidden_by_admin).to be_falsy
 
-        bookmark = create(:bookmark, bookmarkable_id: bookmarkable.id, bookmarkable_type: type)
+        bookmark = create(:bookmark, bookmarkable_id: bookmarkable.id, bookmarkable_type: type, pseud: bookmarker)
         run_all_indexing_jobs
         result = PseudSearchForm.new(name: bookmark.pseud.name).search_results.first
         expect(result).to eq bookmark.pseud
