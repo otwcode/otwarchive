@@ -129,13 +129,21 @@ class BookmarkQuery < Query
   # SORTING AND AGGREGATIONS
   ####################
 
-  def sort
-    column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
-    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-    sort_hash = { column => { order: direction } }
+  def sort_column
+    @sort_column ||=
+      options[:sort_column].present? ? options[:sort_column] : "created_at"
+  end
 
-    if %w(created_at bookmarkable_date).include?(column)
-      sort_hash[column][:unmapped_type] = 'date'
+  def sort_direction
+    @sort_direction ||=
+      options[:sort_direction].present? ? options[:sort_direction] : "desc"
+  end
+
+  def sort
+    sort_hash = { sort_column => { order: sort_direction } }
+
+    if %w(created_at bookmarkable_date).include?(sort_column)
+      sort_hash[sort_column][:unmapped_type] = 'date'
     end
 
     sort_hash
