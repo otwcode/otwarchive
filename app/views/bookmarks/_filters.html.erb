@@ -67,7 +67,7 @@
             <dd class="autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
-            <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
+            <% field_name = filter_action == "include" ? "other_bookmark_tag_names" : "excluded_bookmark_tag_names" %>
             <dt class="bookmarker autocomplete search">
               <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
             </dt>

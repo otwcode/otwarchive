@@ -66,7 +66,7 @@ describe BookmarkSearchForm do
         update_and_refresh_indexes("bookmark")
 
         options = {
-          excluded_tag_names: "Complete"
+          excluded_bookmark_tag_names: "Complete"
         }
 
         search = BookmarkSearchForm.new(options)
@@ -122,7 +122,7 @@ describe BookmarkSearchForm do
         update_and_refresh_indexes("bookmark")
 
         options = {
-          excluded_tag_names: "i finished it"
+          excluded_bookmark_tag_names: "i finished it"
         }
 
         search = BookmarkSearchForm.new(options)
