@@ -74,7 +74,7 @@ describe BookmarkSearchForm do
       context "by Date Bookmarked" do
         it "returns bookmarkables in the correct order" do
           results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "date"
+            parent: tag, sort_column: "created_at"
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["Two", "Three", "One"]
         end
@@ -83,7 +83,7 @@ describe BookmarkSearchForm do
           create(:bookmark, bookmarkable: work1)
           run_all_indexing_jobs
           results = BookmarkSearchForm.new(
-            parent: tag, sort_column: "date"
+            parent: tag, sort_column: "created_at"
           ).bookmarkable_search_results
           expect(results.map(&:title)).to eq ["One", "Two", "Three"]
         end

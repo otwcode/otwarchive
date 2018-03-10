@@ -1,7 +1,11 @@
 class BookmarkableQuery < Query
   attr_accessor :bookmark_query
 
-  delegate :filter_ids, :exclusion_ids, to: :bookmark_query
+  # Rather than compute this information twice, we rely on the BookmarkQuery
+  # class to calculate information about filters and sorting.
+  delegate :filter_ids, :exclusion_ids,
+           :sort_column, :sort_direction,
+           to: :bookmark_query
 
   # The "klass" function here returns the class name used to load search
   # results. The BookmarkableQuery is unique among Query classes because it can
@@ -80,14 +84,10 @@ class BookmarkableQuery < Query
   # only way to sort by a child's fields is to store the value in the _score
   # field and sort by score).
   def sort
-    # Set up defaults for sort column and sort direction.
-    column = options[:sort_column].present? ? options[:sort_column] : 'created_at'
-    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
-
-    if column == "bookmarkable_date"
-      { revised_at: { order: direction, unmapped_type: "date" } }
+    if sort_column == "bookmarkable_date"
+      { revised_at: { order: sort_direction, unmapped_type: "date" } }
     else
-      { "_score" => { order: direction } }
+      { "_score" => { order: sort_direction } }
     end
   end
 
@@ -172,7 +172,7 @@ class BookmarkableQuery < Query
 
   # The bool used in the has_child query.
   def bookmark_bool
-    if options[:sort_column] == "date"
+    if sort_column == "created_at"
       # In this case, we need to take the max of the creation dates of our
       # children in order to calculate the correct order. 
       make_bool(

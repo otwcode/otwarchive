@@ -72,8 +72,18 @@ class Query
     { terms: options.merge(field => value) }
   end
 
-  def field_value_score(field)
-    { function_score: { field_value_factor: { field: field } } }
+  # Set the score equal to the value of a field. The optional value "missing"
+  # determines what score value should be used if the specified field is
+  # missing from a document.
+  def field_value_score(field, missing: 0)
+    {
+      function_score: {
+        field_value_factor: {
+          field: field,
+          missing: missing
+        }
+      }
+    }
   end
 
   def bool_value(str)
