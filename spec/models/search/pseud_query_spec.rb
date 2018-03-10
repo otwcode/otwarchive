@@ -43,8 +43,8 @@ describe PseudQuery, type: :model do
       results[0].should eq(pseuds[:pseud_abc_num])
       results[1].should eq(pseuds[:pseud_abc_num_2])
       results[2].should eq(pseuds[:pseud_abc])
-      results[3].should eq(pseuds[:pseud_abc_d])
-      results[4].should eq(pseuds[:pseud_abc_d_2])
+      results.should include(pseuds[:pseud_abc_d])
+      results.should include(pseuds[:pseud_abc_d_2])
     end
 
     it "matches both pseud and user ('bar' matches 'foo (bar)' and 'bar (foo)'" do
@@ -64,18 +64,18 @@ describe PseudQuery, type: :model do
       results[1].should eq(pseuds[:pseud_abc_num_2])
     end
 
-    it "matches a pseud with and without numbers ('abc123' matches 'abc123' first, then 'Abc 123 Pseud' and 'abc')" do
+    it "matches a pseud with and without numbers ('abc123' matches 'abc123' first, then 'Abc 123 Pseud')" do
       pseud_query = PseudQuery.new(name: "abc123")
       results = pseud_query.search_results
       results[0].should eq(pseuds[:pseud_abc_num])
       results[1].should eq(pseuds[:pseud_abc_num_2])
     end
 
-    it "matches multiple pseuds with and without numbers ('abc123, عيشة' matches 'abc123' and 'aisha', then 'Abc 123 Pseud' and 'abc')" do
+    it "matches multiple pseuds with and without numbers ('abc123, عيشة' matches 'abc123' and 'aisha', then 'Abc 123 Pseud')" do
       pseud_query = PseudQuery.new(name: "abc123,عيشة")
       results = pseud_query.search_results
-      results[0].should eq(pseuds[:pseud_aisha])
-      results[1].should eq(pseuds[:pseud_abc_num])
+      results.should include(pseuds[:pseud_aisha])
+      results.should include(pseuds[:pseud_abc_num])
       results[2].should eq(pseuds[:pseud_abc_num_2])
     end
   end
