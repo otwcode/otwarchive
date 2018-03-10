@@ -120,9 +120,9 @@ describe PseudSearchForm do
     end
 
     {
-      Work => :posted_work,
-      Series => :series_with_a_work,
-      ExternalWork => :external_work
+      Work: :posted_work,
+      Series: :series_with_a_work,
+      ExternalWork: :external_work
     }.each_pair do |type, factory|
       it "updates when bookmarked #{type} changes hidden by admin status" do
         bookmarkable = create(factory)

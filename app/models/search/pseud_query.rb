@@ -50,8 +50,8 @@ class PseudQuery < Query
     {
       simple_query_string:{
         query: escape_reserved_characters(options[:query]),
-        fields: ["name^5", "user_login^2", "description"],
-        default_operator: 'AND'
+        fields: ["byline^5", "name^4", "user_login^2", "description"],
+        default_operator: "AND"
       }
     } if options[:query]
   end

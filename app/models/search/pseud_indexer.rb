@@ -6,7 +6,7 @@ class PseudIndexer < Indexer
 
   def self.mapping
     {
-      "pseud" => {
+      pseud: {
         properties: {
           name: {
             type: "text",
@@ -18,7 +18,7 @@ class PseudIndexer < Indexer
           },
           byline: {
             type: "text",
-            analyzer: "simple"
+            analyzer: "standard"
           },
           user_login: {
             type: "text",
