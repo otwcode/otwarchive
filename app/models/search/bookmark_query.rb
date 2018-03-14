@@ -271,7 +271,9 @@ class BookmarkQuery < Query
   end
 
   def tags_filter
-    terms_filter(:tag_ids, included_bookmark_tag_ids) if included_bookmark_tag_ids.present?
+    if included_bookmark_tag_ids.present?
+      included_bookmark_tag_ids.map { |tag_id| term_filter(:tag_ids, tag_id) }
+    end
   end
 
   def collections_filter
@@ -321,22 +323,20 @@ class BookmarkQuery < Query
   end
 
   def included_bookmark_tag_ids
-    return @included_bookmark_tag_ids if @included_bookmark_tag_ids.present?
-    @included_bookmark_tag_ids = bookmark_tag_ids(:tag_ids, :other_bookmark_tag_names)
+    @included_bookmark_tag_ids ||= bookmark_tag_ids(:tag_ids, :other_bookmark_tag_names)
   end
 
   def excluded_bookmark_tag_ids
-    return @excluded_bookmark_tag_ids if @excluded_bookmark_tag_ids.present?
-    @excluded_bookmark_tag_ids = bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names)
+    @excluded_bookmark_tag_ids ||= bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names, true)
   end
 
-  def bookmark_tag_ids(ids_field, names_field)
+  def bookmark_tag_ids(ids_field, names_field, include_mergers=false)
     return if options[ids_field].blank? && options[names_field].blank?
 
     ids = options[ids_field] || []
     names = options[names_field]&.split(",")
     ids += Tag.where(name: names).pluck(:id) if names
-    ids += Tag.where(id: ids).pluck(:merger_id)
+    ids += Tag.where(id: ids).pluck(:merger_id) if include_mergers
     ids.uniq.compact
   end
 end

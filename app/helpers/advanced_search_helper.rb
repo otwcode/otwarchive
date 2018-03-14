@@ -20,7 +20,11 @@ def advanced_search_string=(term_string)
       @search.send("#{tag_type}_ids").present? &&
         @search.send("#{tag_type}_ids").include?(tag_id)
     else
-      @search.excluded_tag_ids.present? && @search.excluded_tag_ids.include?(tag_id)
+      value = @search.excluded_tag_ids.present? && @search.excluded_tag_ids.include?(tag_id)
+      if @search.respond_to?(:excluded_bookmark_tag_ids)
+        value ||= @search.excluded_bookmark_tag_ids.present? && @search.excluded_bookmark_tag_ids.include?(tag_id)
+      end
+      value
     end
   end
 end
