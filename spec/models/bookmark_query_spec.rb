@@ -125,7 +125,8 @@ describe BookmarkQuery do
     tag = Tag.new
     tag.id = 1
     q = BookmarkQuery.new(tag_ids: [1])
-    expect(q.filters).to include({terms: { tag_ids: [1]}})
+
+    expect(q.filters).to include({term: { tag_ids: 1}})
   end
 
   it "should allow you to filter for bookmarks by collection" do
