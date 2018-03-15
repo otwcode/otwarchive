@@ -85,9 +85,12 @@ class BookmarksController < ApplicationController
 
       if params[:exclude_bookmark_search].present?
         params[:exclude_bookmark_search].keys.each do |key|
-          options[:excluded_tag_ids] ||= []
-          options[:excluded_tag_ids] << params[:exclude_bookmark_search][key]
-          options[:excluded_tag_ids].flatten!
+          # Keep bookmarker tags separate, so we can search for them on bookmarks
+          # and search for the rest on bookmarkables
+          options_key = key == "tag_ids" ? :excluded_bookmark_tag_ids : :excluded_tag_ids
+          options[options_key] ||= []
+          options[options_key] << params[:exclude_bookmark_search][key]
+          options[options_key].flatten!
         end
       end
 
@@ -120,8 +123,13 @@ class BookmarksController < ApplicationController
             @facets = @bookmarks.facets
           end
 
-          if @search.options[:excluded_tag_ids].present?
-            tags = Tag.where(id: @search.options[:excluded_tag_ids])
+          if @search.options[:excluded_tag_ids].present? || @search.options[:excluded_bookmark_tag_ids].present?
+            ids = [
+              @search.options[:excluded_tag_ids],
+              @search.options[:excluded_bookmark_tag_ids]
+            ].flatten.compact
+
+            tags = Tag.where(id: ids)
             excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
             tags.each do |tag|
               if excluded_bookmark_tag_ids.include?(tag.id.to_s)
@@ -374,6 +382,8 @@ class BookmarksController < ApplicationController
       :sort_column,
       :other_tag_names,
       :excluded_tag_names,
+      :other_bookmark_tag_names,
+      :excluded_bookmark_tag_names,
       rating_ids: [],
       warning_ids: [],
       category_ids: [],

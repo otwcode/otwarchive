@@ -39,7 +39,9 @@
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
-                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
+                      <% next if filter_action == "include" &&
+                          (@search.options[:excluded_tag_ids]&.include?(tag.id.to_s) ||
+                              @search.options[:excluded_bookmark_tag_ids]&.include?(tag.id.to_s)) %>
                       <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" do %>
                         <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
                           <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
@@ -67,7 +69,7 @@
             <dd class="autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
-            <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
+            <% field_name = filter_action == "include" ? "other_bookmark_tag_names" : "excluded_bookmark_tag_names" %>
             <dt class="bookmarker autocomplete search">
               <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
             </dt>

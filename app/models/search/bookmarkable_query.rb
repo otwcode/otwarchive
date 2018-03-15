@@ -1,10 +1,11 @@
 class BookmarkableQuery < Query
+  include TaggableQuery
+
   attr_accessor :bookmark_query
 
   # Rather than compute this information twice, we rely on the BookmarkQuery
-  # class to calculate information about filters and sorting.
-  delegate :filter_ids, :exclusion_ids,
-           :sort_column, :sort_direction,
+  # class to calculate information about sorting.
+  delegate :sort_column, :sort_direction,
            to: :bookmark_query
 
   # The "klass" function here returns the class name used to load search
