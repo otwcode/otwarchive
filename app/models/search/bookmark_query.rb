@@ -327,16 +327,15 @@ class BookmarkQuery < Query
   end
 
   def excluded_bookmark_tag_ids
-    @excluded_bookmark_tag_ids ||= bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names, true)
+    @excluded_bookmark_tag_ids ||= bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names)
   end
 
-  def bookmark_tag_ids(ids_field, names_field, include_mergers=false)
+  def bookmark_tag_ids(ids_field, names_field)
     return if options[ids_field].blank? && options[names_field].blank?
 
     ids = options[ids_field] || []
     names = options[names_field]&.split(",")
     ids += Tag.where(name: names).pluck(:id) if names
-    ids += Tag.where(id: ids).pluck(:merger_id) if include_mergers
     ids.uniq.compact
   end
 end

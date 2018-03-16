@@ -117,19 +117,19 @@ describe BookmarkSearchForm do
         expect(search.search_results).not_to include(excluded_bookmark)
       end
 
-      it "should exclude bookmarks tagged with a canonical tag given that tag's synonym" do
-        excluded_bookmark.update(tag_string: "Complete")
-        update_and_refresh_indexes("bookmark")
+      # it "should exclude bookmarks tagged with a canonical tag given that tag's synonym" do
+      #   excluded_bookmark.update(tag_string: "Complete")
+      #   update_and_refresh_indexes("bookmark")
 
-        options = {
-          excluded_bookmark_tag_names: "i finished it"
-        }
+      #   options = {
+      #     excluded_bookmark_tag_names: "i finished it"
+      #   }
 
-        search = BookmarkSearchForm.new(options)
+      #   search = BookmarkSearchForm.new(options)
 
-        expect(search.search_results).to include(included_bookmark)
-        expect(search.search_results).not_to include(excluded_bookmark)
-      end
+      #   expect(search.search_results).to include(included_bookmark)
+      #   expect(search.search_results).not_to include(excluded_bookmark)
+      # end
     end
 
     # describe "meta tagging" do
