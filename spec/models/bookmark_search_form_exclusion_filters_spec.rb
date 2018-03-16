@@ -32,19 +32,15 @@ describe BookmarkSearchForm do
 
     describe "mergers" do
       let!(:canonical_work_tag) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "Exclude Work Tag", canonical: true)
+        FactoryGirl.create(:canonical_freeform, name: "Exclude Work Tag")
       end
 
       let!(:work_tag_synonym) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "Tagged Work Exclusion", canonical: false, merger: canonical_work_tag)
+        FactoryGirl.create(:freeform, name: "Tagged Work Exclusion", merger: canonical_work_tag)
       end
 
       let!(:canonical_bookmark_tag) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "Complete", canonical: true)
-      end
-
-      let!(:bookmark_tag_synonym) do
-        FactoryGirl.create(:tag, type: "Freeform", name: "i finished it", canonical: false, merger: canonical_bookmark_tag)
+        FactoryGirl.create(:canonical_freeform, name: "Complete")
       end
 
       it "should exclude bookmarks for works with a given canonical tag name" do
