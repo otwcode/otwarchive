@@ -44,7 +44,7 @@ class BookmarksController < ApplicationController
     options = params[:bookmark_search].present? ? bookmark_search_params : {}
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false
-    options[:show_restricted] = current_user.present?
+    options[:show_restricted] = logged_in? || logged_in_as_admin?
     # ES UPGRADE TRANSITION #
     # Remove conditional and call to BookmarkSearch
     if use_new_search?
@@ -69,7 +69,7 @@ class BookmarksController < ApplicationController
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
-        show_restricted: current_user.present?,
+        show_restricted: logged_in? || logged_in_as_admin?,
         page: params[:page]
       }
 
