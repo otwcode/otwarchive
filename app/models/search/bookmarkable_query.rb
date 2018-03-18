@@ -53,7 +53,7 @@ class BookmarkableQuery < Query
     )["aggregations"]
   end
 
-  # Because want to calculate our score based on the bookmark's search results,
+  # Because we want to calculate our score based on the bookmark's search results,
   # we use bookmark_filter as our "query" (because it goes in the "must"
   # section of the query, meaning that its score isn't discarded).
   def queries
@@ -64,6 +64,7 @@ class BookmarkableQuery < Query
   # bookmarkable filters here.
   def filters
     @filters ||= [
+      bookmarkable_query_or_filter, # acts as a filter
       bookmarkable_filters
     ].flatten.compact
   end
@@ -74,6 +75,21 @@ class BookmarkableQuery < Query
     @exclusion_filters ||= [
       bookmarkable_exclusion_filters
     ].flatten.compact
+  end
+
+  ####################
+  # QUERIES
+  ####################
+
+  def bookmarkable_query_or_filter
+    return nil if bookmarkable_query_text.blank?
+    { query_string: { query: bookmarkable_query_text, default_operator: "AND" } }
+  end
+
+  def bookmarkable_query_text
+    query_text = (options[:bookmarkable_query] || "").dup
+    query_text << split_query_text_phrases(:tag, options[:bookmarkable_tag])
+    escape_slashes(query_text.strip)
   end
 
   ####################
@@ -113,7 +129,7 @@ class BookmarkableQuery < Query
           filtered_bookmarks: {
             # Only include bookmarks that satisfy the bookmark_query's filters.
             filter: make_bool(
-              must: bookmark_query.query,
+              must: bookmark_query.bookmark_query_or_filter, # acts as a query
               filter: bookmark_query.bookmark_filters,
               must_not: bookmark_query.bookmark_exclusion_filters
             )
@@ -181,7 +197,7 @@ class BookmarkableQuery < Query
       make_bool(
         must: field_value_score("created_at"), # score = bookmark's created_at
         filter: [
-          bookmark_query.queries, # the query acts as a filter now
+          bookmark_query.bookmark_query_or_filter, # acts as a filter
           bookmark_query.bookmark_filters
         ].flatten.compact,
         must_not: bookmark_query.bookmark_exclusion_filters
@@ -190,7 +206,7 @@ class BookmarkableQuery < Query
       # In this case, we can fall back on the default behavior and use the
       # bookmark query to score the bookmarks.
       make_bool(
-        must: bookmark_query.queries,
+        must: bookmark_query.bookmark_query_or_filter, # acts as a query
         filter: bookmark_query.bookmark_filters,
         must_not: bookmark_query.bookmark_exclusion_filters
       )

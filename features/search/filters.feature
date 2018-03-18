@@ -154,6 +154,27 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
 
   @javascript
+  Scenario: Filter a user's bookmarks by "Search within results" and "Search bookmarker's tags and notes"
+    Given I am logged in as "recengine"
+      And recengine can use the new search
+      And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
+      And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
+
+    When I go to my bookmarks page
+      And I fill in "Search within results" with "bilbo"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark found by recengine"
+      And I should see "Bilbo Does the Thing"
+      And I should not see "A Hobbit's Meandering"
+
+    When I go to my bookmarks page
+      And I fill in "Search bookmarker's tags and notes" with "bilbo"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark found by recengine"
+      And I should see "A Hobbit's Meandering"
+      And I should not see "Bilbo Does the Thing"
+
+  @javascript
   Scenario: Filter a user's bookmarks by bookmarker's tags
     Given I am logged in as "recengine"
       And recengine can use the new search

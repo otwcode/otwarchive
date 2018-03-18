@@ -7,6 +7,7 @@ Feature: Search Bookmarks
   Background:
     Given I am on the search bookmarks page
 
+  @old-search
   Scenario: Search bookmarks by tag
     Given I have bookmarks to search
     When I fill in "Tag" with "classic"
@@ -17,6 +18,40 @@ Feature: Search Bookmarks
       And I should see "third work"
     When I follow "Edit Your Search"
     Then the field labeled "Tag" should contain "classic"
+
+  @new-search
+  Scenario: Search bookmarks by tag
+    Given I have bookmarks to search
+
+    # Only on bookmarks
+    When I fill in "Bookmark's Tags" with "rare"
+      And I press "Search bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Tags: rare"
+      And I should see "1 Found"
+      And I should see "second work"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmark's Tags" should contain "rare"
+
+    # Only on bookmarkables
+    When I am on the search bookmarks page
+      And I fill in "Bookmarked Item's Tags" with "rare"
+      And I press "Search bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Tags: rare"
+      And I should see "1 Found"
+      And I should see "First work"
+    When I follow "Edit Your Search"
+    Then the field labeled "Bookmarked Item's Tags" should contain "rare"
+
+    # On bookmarks and bookmarkables, results should match both
+    When I am on the search bookmarks page
+      And I fill in "Bookmark's Tags" with "rare"
+      And I fill in "Bookmarked Item's Tags" with "rare"
+      And I press "Search bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Tags: rare"
+      And I should see "No results found."
 
   Scenario: Search bookmarks by date bookmarked
     Given I have bookmarks to search by dates
@@ -65,6 +100,7 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the "Rec" checkbox should be checked
 
+  @old-search
   Scenario: Search bookmarks by any field
     Given I have bookmarks to search
     When I fill in "Any field" with "Hobbits"
@@ -74,6 +110,43 @@ Feature: Search Bookmarks
       And I should see "No results found."
     When I follow "Edit Your Search"
     Then the field labeled "Any field" should contain "Hobbits"
+
+  @new-search
+  Scenario: Search bookmarks by any field
+    Given I have bookmarks to search by any field
+
+    # Only on bookmarks
+    When I fill in "Any field on Bookmark" with "more please"
+      And I press "Search bookmarks"
+    Then I should see the page title "Bookmarks Matching 'more please'"
+      And I should see "You searched for: more please"
+      And I should see "2 Found"
+      And I should see "Hurt and that's it"
+      And I should see "Fluff"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any field on Bookmark" should contain "more please"
+
+    # Only on bookmarkables
+    When I am on the search bookmarks page
+      And I fill in "Any field on Bookmarked Item" with "hurt"
+      And I press "Search bookmarks"
+    Then I should see the page title "Bookmarks Matching 'hurt'"
+      And I should see "You searched for: hurt"
+      And I should see "2 Found"
+      And I should see "Comfort"
+      And I should see "Hurt and that's it"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any field on Bookmarked Item" should contain "hurt"
+
+    # On bookmarks and bookmarkables, results should match both
+    When I am on the search bookmarks page
+      And I fill in "Any field on Bookmark" with "more please"
+      And I fill in "Any field on Bookmarked Item" with "hurt"
+      And I press "Search bookmarks"
+    Then I should see the page title "Bookmarks Matching 'hurt, more please'"
+      And I should see "You searched for: hurt, more please"
+      And I should see "1 Found"
+      And I should see "Hurt and that's it"
 
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
