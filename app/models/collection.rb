@@ -343,8 +343,8 @@ class Collection < ApplicationRecord
     # Note that "approved_by_collection" forces the bookmarks to be approved
     # both by the collection AND by the user.
     bookmarks = Bookmark.is_public.joins(:collection_items).
-      merge(CollectionItem.approved_by_collection).
-      where(collection_items: { collection_id: children.ids + [id] })
+                merge(CollectionItem.approved_by_collection).
+                where(collection_items: { collection_id: children.ids + [id] })
 
     logged_in = User.current_user.present?
 
