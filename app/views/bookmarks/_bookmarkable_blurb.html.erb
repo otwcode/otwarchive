@@ -6,7 +6,6 @@
   <!--bookmark icons-->
   <% bookmark_count = bookmarkable.public_bookmark_count %>
   <p class="status" title="<%= bookmark_count %> Bookmarks">
-    <% # TODO get_symbol_for_bookmark(bookmark) %>
     <span class="count">
       <%= link_to (bookmark_count < 100 ? bookmark_count.to_s : "*"),
                   polymorphic_path([bookmarkable, Bookmark]) %>
@@ -40,8 +39,8 @@
   <% # bookmark form loaded here if requested %>
   <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
 
-  <div class="recent">
-    <ul class="index group">
+  <div class="recent module group">
+    <ul class="bookmark index group">
       <% bookmarkable.matching_bookmarks.each do |bookmark| %>
         <%= render "bookmarks/bookmark_blurb_short", bookmark: bookmark %>
       <% end %>
