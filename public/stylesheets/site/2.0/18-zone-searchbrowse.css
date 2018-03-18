@@ -193,7 +193,7 @@ form.filters {
   border-color: #aaa;
 }
 
-.filters input:checked + .indicator + span {
+.filters input:checked ~ .label {
   font-weight: 700;
 }
 
