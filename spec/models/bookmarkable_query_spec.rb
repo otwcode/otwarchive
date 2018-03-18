@@ -12,7 +12,7 @@ describe BookmarkableQuery do
     end
 
     it "should take bookmark filters and combine them into one child query" do
-      bookmark_query = BookmarkQuery.new(user_ids: [5], excluded_tag_ids: [666])
+      bookmark_query = BookmarkQuery.new(user_ids: [5], excluded_bookmark_tag_ids: [666])
       q = bookmark_query.bookmarkable_query
       child_filter = q.bookmark_filter
       expect(child_filter.dig(:has_child, :query, :bool, :filter)).to include(term: { private: "false" })

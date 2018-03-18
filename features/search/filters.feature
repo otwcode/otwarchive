@@ -5,9 +5,9 @@ Feature: Filters
   I want to filter on a user's works and bookmarks
 
   Background:
-    Given a fandom exists with name: "The Hobbit", canonical: true
-      And a fandom exists with name: "Harry Potter", canonical: true
-      And a fandom exists with name: "Legend of Korra", canonical: true
+    Given a canonical fandom "The Hobbit"
+      And a canonical fandom "Harry Potter"
+      And a canonical fandom "Legend of Korra"
       And I am logged in as "meatloaf"
       And meatloaf can use the new search
       And I post the work "A Hobbit's Meandering" with fandom "The Hobbit"
@@ -132,6 +132,69 @@ Feature: Filters
     Then I should see "A Hobbit's Meandering"
       And I should not see "Bilbo Does the Thing"
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+
+  @javascript
+  Scenario: Filter a user's bookmarks by bookmarker's tags
+    Given I am logged in as "recengine"
+      And recengine can use the new search
+      And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
+      And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
+      And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
+
+    # Use an include checkbox
+    When I go to my bookmarks page
+      And I press "Bookmarker's Tags" within "dd.include"
+    Then the "to read (2)" checkbox within "#include_tag_tags" should not be checked
+      And the "been here (2)" checkbox within "#include_tag_tags" should not be checked
+    When I check "to read (2)" within "#include_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "2 Bookmarks by recengine"
+      And the "to read (2)" checkbox within "#include_tag_tags" should be checked
+      And I should see "Bilbo Does the Thing"
+      And I should see "A Hobbit's Meandering"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+
+    # Use a second include checkbox for bookmarks with both tags
+    When I check "been here (1)" within "#include_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should see "Bilbo Does the Thing"
+
+    # Use an exclude checkbox
+    When I go to my bookmarks page
+      And I press "Bookmarker's Tags" within "dd.exclude"
+    Then the "to read (2)" checkbox within "#exclude_tag_tags" should not be checked
+      And the "been here (2)" checkbox within "#exclude_tag_tags" should not be checked
+    When I check "to read (2)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And the "to read (0)" checkbox within "#exclude_tag_tags" should be checked
+      And I should not see "Bilbo Does the Thing"
+      And I should not see "A Hobbit's Meandering"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
+
+    # Use a second exclude checkbox for bookmarks with neither tags
+    When I check "been here (1)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "0 Bookmarks by recengine"
+
+    # Use include field
+    When I go to my bookmarks page
+      And I fill in "Other bookmarker's tags to include" with "to read"
+      And I press "Sort and Filter"
+    Then I should see "2 Bookmarks by recengine"
+      And I should see "Bilbo Does the Thing"
+      And I should see "A Hobbit's Meandering"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+
+    # Use exclude field
+    When I go to my bookmarks page
+      And I fill in "Other bookmarker's tags to exclude" with "to read"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should not see "Bilbo Does the Thing"
+      And I should not see "A Hobbit's Meandering"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
 
   @javascript @old-search
   Scenario: The filter counts should match the actual returned count

@@ -8,8 +8,8 @@ end
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
-    step %{I press "Create"}
-    step %{all indexing jobs have been run}
+  step %{I press "Create"}
+  step %{all indexing jobs have been run}
 end
 
 Given /^I have a bookmark of a deleted work$/ do
@@ -88,10 +88,11 @@ Given /^I have bookmarks to search by dates$/ do
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
+  fill_in("bookmark_tag_string", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
 end

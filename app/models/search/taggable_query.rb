@@ -1,4 +1,4 @@
-# Shared methods for work and bookmark queries
+# Shared methods for work and bookmarkable queries
 module TaggableQuery
 
   def filter_ids

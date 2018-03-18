@@ -1,6 +1,4 @@
 class BookmarkQuery < Query
-  include TaggableQuery
-
   attr_accessor :bookmarkable_query
 
   def klass
@@ -63,6 +61,9 @@ class BookmarkQuery < Query
     owner = options[:parent]
     field = case owner
             when Tag
+              # Note that in a bookmark search for a Tag owner, we want to return
+              # the bookmarkables, not bookmarks, with that tag.
+              # This field will be handled in the linked BookmarkableQuery.
               :filter_ids
             when Pseud
               :pseud_ids
@@ -270,8 +271,8 @@ class BookmarkQuery < Query
   end
 
   def tags_filter
-    if options[:tag_ids].present?
-      options[:tag_ids].map { |tag_id| term_filter(:tag_ids, tag_id) }
+    if included_bookmark_tag_ids.present?
+      included_bookmark_tag_ids.map { |tag_id| term_filter(:tag_ids, tag_id) }
     end
   end
 
@@ -280,9 +281,7 @@ class BookmarkQuery < Query
   end
 
   def tag_exclusion_filter
-    if exclusion_ids.present?
-      terms_filter(:tag_ids, exclusion_ids)
-    end
+    terms_filter(:tag_ids, excluded_bookmark_tag_ids) if excluded_bookmark_tag_ids.present?
   end
 
   # We don't want to accidentally return Bookmarkable documents when we're
@@ -321,5 +320,22 @@ class BookmarkQuery < Query
       user_ids += Pseud.where(id: options[:pseud_ids]).pluck(:user_id)
     end
     user_ids
+  end
+
+  def included_bookmark_tag_ids
+    @included_bookmark_tag_ids ||= bookmark_tag_ids(:tag_ids, :other_bookmark_tag_names)
+  end
+
+  def excluded_bookmark_tag_ids
+    @excluded_bookmark_tag_ids ||= bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names)
+  end
+
+  def bookmark_tag_ids(ids_field, names_field)
+    return if options[ids_field].blank? && options[names_field].blank?
+
+    ids = options[ids_field] || []
+    names = options[names_field]&.split(",")
+    ids += Tag.where(name: names).pluck(:id) if names
+    ids.uniq.compact
   end
 end
