@@ -136,6 +136,7 @@ class BookmarkableQuery < Query
       complete_filter,
       language_filter,
       filter_id_filter,
+      named_tag_inclusion_filter,
       date_filter
     ].flatten.compact
   end
@@ -149,7 +150,8 @@ class BookmarkableQuery < Query
       unposted_filter,
       hidden_filter,
       restricted_filter,
-      tag_exclusion_filter
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
     ].flatten.compact
   end
 
@@ -245,6 +247,30 @@ class BookmarkableQuery < Query
   def tag_exclusion_filter
     if exclusion_ids.present?
       terms_filter(:filter_ids, exclusion_ids)
+    end
+  end
+
+  # This filter is used to restrict our results to only include bookmarkables
+  # whose "tag" text matches all of the tag names in included_tag_names. This
+  # is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.filter_ids function.
+  def named_tag_inclusion_filter
+    return if included_tag_names.blank?
+    match_filter(:tag, included_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any bookmarkables
+  # whose "tag" text matches one of the passed-in tag names. This is useful
+  # when the user enters a non-existent tag, which would be discarded by the
+  # TaggableQuery.exclusion_ids function.
+  #
+  # Note that we separate these into different filters to get the logic of tag
+  # exclusion right: if we're excluding "A B" and "C D", we want the query to
+  # be "not(A and B) and not(C and D)", which can't be accomplished in a single
+  # match query.
+  def named_tag_exclusion_filter
+    excluded_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
     end
   end
 

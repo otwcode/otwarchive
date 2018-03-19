@@ -72,6 +72,14 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  # A filter used to match all words in a particular field, most frequently
+  # used for matching non-existent tags. The match query doesn't allow
+  # negation/or/and/wildcards, so it should only be used on fields where the
+  # users are expected to enter, e.g. canonical tags.
+  def match_filter(field, value, options = {})
+    { match: { field => { query: value, operator: "and" }.merge(options) } }
+  end
+
   # Set the score equal to the value of a field. The optional value "missing"
   # determines what score value should be used if the specified field is
   # missing from a document.

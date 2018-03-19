@@ -73,6 +73,26 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
 
   @javascript
+  Scenario: Filter through a user's works with non-existent tags
+    Given the tag "legend korra" does not exist
+
+    When I go to meatloaf's works page
+      And I fill in "Other tags to include" with "legend korra"
+      And I press "Sort and Filter"
+    Then I should see "1 Work by meatloaf"
+      And I should see "Bilbo Does the Thing"
+      And I should not see "A Hobbit's Meandering"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+
+    When I go to meatloaf's works page
+      And I fill in "Other tags to exclude" with "legend korra"
+      And I press "Sort and Filter"
+    Then I should see "2 Works by meatloaf"
+      And I should not see "Bilbo Does the Thing"
+      And I should see "A Hobbit's Meandering"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
+
+  @javascript
   Scenario: You can filter through a user's bookmarks using inclusion filters
     Given I am logged in as "recengine"
       And recengine can use the new search
@@ -195,6 +215,43 @@ Feature: Filters
       And I should not see "Bilbo Does the Thing"
       And I should not see "A Hobbit's Meandering"
       And I should see "Roonal Woozlib and the Ferrets of Nimh"
+
+  @javascript
+  Scenario: Filter a user's bookmarks by non-existent tags
+    Given the tag "legend korra" does not exist
+      And the tag "fun crossover" does not exist
+      And I am logged in as "recengine"
+      And recengine can use the new search
+      And I bookmark the work "A Hobbit's Meandering" with the tags "fun"
+      And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
+
+    When I go to my bookmarks page
+      And I fill in "Other work tags to include" with "legend korra"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should not see "A Hobbit's Meandering"
+      And I should see "Bilbo Does the Thing"
+
+    When I go to my bookmarks page
+      And I fill in "Other work tags to exclude" with "legend korra"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should see "A Hobbit's Meandering"
+      And I should not see "Bilbo Does the Thing"
+
+    When I go to my bookmarks page
+      And I fill in "Other bookmarker's tags to include" with "fun crossover"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should not see "A Hobbit's Meandering"
+      And I should see "Bilbo Does the Thing"
+
+    When I go to my bookmarks page
+      And I fill in "Other bookmarker's tags to exclude" with "fun crossover"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should see "A Hobbit's Meandering"
+      And I should not see "Bilbo Does the Thing"
 
   @javascript @old-search
   Scenario: The filter counts should match the actual returned count
