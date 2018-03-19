@@ -6,10 +6,7 @@
   <!--bookmark icons-->
   <% bookmark_count = bookmarkable.public_bookmark_count %>
   <p class="status" title="<%= bookmark_count %> Bookmarks">
-    <span class="count">
-      <%= link_to (bookmark_count < 100 ? bookmark_count.to_s : "*"),
-                  polymorphic_path([bookmarkable, Bookmark]) %>
-    </span>
+    <%= get_count_for_bookmark_blurb(bookmarkable) %>
   </p>
 
   <!--bookmark item module-->
