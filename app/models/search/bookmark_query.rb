@@ -179,6 +179,7 @@ class BookmarkQuery < Query
       rec_filter,
       notes_filter,
       tags_filter,
+      named_tag_inclusion_filter,
       collections_filter,
       type_filter,
       date_filter
@@ -191,7 +192,8 @@ class BookmarkQuery < Query
   # may cause an infinite loop.
   def bookmark_exclusion_filters
     @bookmark_exclusion_filters ||= [
-      tag_exclusion_filter
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
     ].flatten.compact
   end
 
@@ -291,6 +293,29 @@ class BookmarkQuery < Query
     term_filter(:bookmarkable_join, "bookmark")
   end
 
+  # This filter is used to restrict our results to only include bookmarks whose
+  # "tag" text matches all of the tag names in included_bookmark_tag_names.
+  # This is useful when the user enters a non-existent tag, which would be
+  # discarded by the included_bookmark_tag_ids function.
+  def named_tag_inclusion_filter
+    return if included_bookmark_tag_names.blank?
+    match_filter(:tag, included_bookmark_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any bookmarks
+  # whose "tag" text matches one of the passed-in tag names. This is useful
+  # when the user enters a non-existent tag, which would be discarded by the
+  # excluded_bookmark_tag_ids function.
+  #
+  # Unlike the inclusion filter, we separate the queries to make sure that with
+  # tags "A B" and "C D", we're searching for "not(A and B) and not(C and D)",
+  # instead of "not(A and B and C and D)" or "not(A or B or C or D)".
+  def named_tag_exclusion_filter
+    excluded_bookmark_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
+    end
+  end
+
   ####################
   # HELPERS
   ####################
@@ -322,20 +347,43 @@ class BookmarkQuery < Query
     user_ids
   end
 
+  # The list of all tag IDs that should be required for our bookmarks.
   def included_bookmark_tag_ids
-    @included_bookmark_tag_ids ||= bookmark_tag_ids(:tag_ids, :other_bookmark_tag_names)
+    @included_bookmark_tag_ids ||= [
+      options[:tag_ids],
+      parsed_included_tags[:ids]
+    ].flatten.compact.uniq
   end
 
+  # The list of all tag IDs that should be prohibited for our bookmarks.
   def excluded_bookmark_tag_ids
-    @excluded_bookmark_tag_ids ||= bookmark_tag_ids(:excluded_bookmark_tag_ids, :excluded_bookmark_tag_names)
+    @excluded_bookmark_tag_ids ||= [
+      options[:excluded_bookmark_tag_ids],
+      parsed_excluded_tags[:ids]
+    ].flatten.compact.uniq
   end
 
-  def bookmark_tag_ids(ids_field, names_field)
-    return if options[ids_field].blank? && options[names_field].blank?
+  # The list of included tag names that weren't found in the database (and thus
+  # have to be used as text-matching constraints on the tag field).
+  def included_bookmark_tag_names
+    parsed_included_tags[:missing]
+  end
 
-    ids = options[ids_field] || []
-    names = options[names_field]&.split(",")
-    ids += Tag.where(name: names).pluck(:id) if names
-    ids.uniq.compact
+  # The list of excluded tag names that weren't found in the database (and thus
+  # have to be used as text-matching constraints on the tag field).
+  def excluded_bookmark_tag_names
+    parsed_excluded_tags[:missing]
+  end
+
+  # Parse the tag names that should be included in our results.
+  def parsed_included_tags
+    @parsed_included_tags ||=
+      bookmarkable_query.parse_named_tags(%i[other_bookmark_tag_names])
+  end
+
+  # Parse the tag names that should be excluded from our results.
+  def parsed_excluded_tags
+    @parsed_excluded_tags ||=
+      bookmarkable_query.parse_named_tags(%i[excluded_bookmark_tag_names])
   end
 end

@@ -27,7 +27,10 @@ class WorkQuery < Query
   end
 
   def exclusion_filters
-    tag_exclusion_filter.compact if tag_exclusion_filter
+    @exclusion_filters ||= [
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
+    ].flatten.compact
   end
 
   # Combine the available queries
@@ -87,8 +90,9 @@ class WorkQuery < Query
 
   def tag_filters
     [
-      filter_id_filter
-    ]
+      filter_id_filter,
+      named_tag_inclusion_filter
+    ].flatten.compact
   end
 
   def range_filters
@@ -170,6 +174,29 @@ class WorkQuery < Query
     end
   end
 
+  # This filter is used to restrict our results to only include works
+  # whose "tag" text matches all of the tag names in included_tag_names. This
+  # is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.filter_ids function.
+  def named_tag_inclusion_filter
+    return if included_tag_names.blank?
+    match_filter(:tag, included_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any works whose
+  # "tag" text matches one of the passed-in tag names. This is useful when the
+  # user enters a non-existent tag, which would be discarded by the
+  # TaggableQuery.exclusion_ids function.
+  #
+  # Unlike the inclusion filter, we must separate these into different match
+  # filters to get the results that we want (that is, excluding "A B" and "C D"
+  # is the same as "not(A and B) and not(C and D)").
+  def named_tag_exclusion_filter
+    excluded_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
+    end
+  end
+
   def date_range_filter
     return unless options[:date_from].present? || options[:date_to].present?
     begin
@@ -207,7 +234,6 @@ class WorkQuery < Query
     [:title, :creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    search_text << split_query_text_phrases(:tag, options[:tag])
     if self.options[:collection_ids].blank? && options[:collected]
       search_text << " collection_ids:*"
     end
