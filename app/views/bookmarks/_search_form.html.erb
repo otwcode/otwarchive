@@ -35,14 +35,14 @@
       <%= link_to_help "bookmark-search-tag-help" %>
     </dt>
     <dd>
-      <%= f.text_field :other_tag_names %>
+      <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
     </dd>
     <dt>
       <%= f.label :other_bookmark_tag_names, ts("Bookmarker's tags") %>
       <%= link_to_help "bookmark-search-tag-help" %>
     </dt>
     <dd>
-      <%= f.text_field :other_bookmark_tag_names %>
+      <%= f.text_field :other_bookmark_tag_names, autocomplete_options("tag") %>
     </dd>
     <dt>
       <%= f.label :rec, ts("Rec") %>
