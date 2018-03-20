@@ -33,10 +33,11 @@ class BookmarkQuery < Query
     QueryResult.new(klass, response, options.slice(:page, :per_page))
   end
 
-  # Currently, we only have one query:
+  # Combine the query on the bookmark with the query on the bookmarkable.
   def queries
     @queries ||= [
-      query
+      bookmark_query_or_filter,
+      parent_bookmarkable_query_or_filter
     ].flatten.compact
   end
 
@@ -81,49 +82,27 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  # Instead of doing a standard query, which would only match bookmark fields
-  # we'll make this a should query that will try to match either the bookmark
-  # or its parent
-  # TODO This isn't right, since it requires all of the fields to be on one or
-  # the other (and, in particular, can't handle tags on the parent with a
-  # specified bookmarker on the child).
-  def query
-    if query_term.present?
-      @query ||= make_bool(should: [general_query, parent_query])
-    end
+  def bookmark_query_or_filter
+    return nil if bookmark_query_text.blank?
+    { query_string: { query: bookmark_query_text, default_operator: "AND" } }
   end
 
-  def general_query
-    { query_string: { query: query_term, default_operator: "AND" } }
-  end
-
-  def parent_query
+  def parent_bookmarkable_query_or_filter
+    return nil if bookmarkable_query.bookmarkable_query_or_filter.blank?
     {
       has_parent: {
         parent_type: "bookmarkable",
         score: true, # include the score from the bookmarkable
-        query: {
-          query_string: {
-            query: query_term,
-            default_operator: "AND"
-          }
-        }
+        query: bookmarkable_query.bookmarkable_query_or_filter
       }
     }
   end
 
-  def query_term
-    input = (options[:q] || options[:query] || "").dup
-    generate_search_text(input)
-  end
-
-  def generate_search_text(query = '')
-    search_text = query
-    [:bookmarker, :notes].each do |field|
-      search_text << split_query_text_words(field, options[field])
-    end
-    search_text << split_query_text_phrases(:tag, options[:tag])
-    escape_slashes(search_text.strip)
+  def bookmark_query_text
+    query_text = (options[:bookmark_query] || "").dup
+    query_text << split_query_text_words(:bookmarker, options[:bookmarker])
+    query_text << split_query_text_words(:notes, options[:notes])
+    escape_slashes(query_text.strip)
   end
 
   ####################

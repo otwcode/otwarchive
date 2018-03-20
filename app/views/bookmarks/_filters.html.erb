@@ -86,20 +86,19 @@
       <dd class="more group">
         <dl>
           <dt class="search">
-            <%= f.label :query, ts("Search within results") %>
+            <%= f.label :bookmarkable_query, ts("Search within results") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmarkable_query %>
           </dd>
 
-          <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
           <dt class="bookmarker search">
-            <%= f.label :query, ts("Search bookmarker's tags and notes") %>
+            <%= f.label :bookmark_query, ts("Search bookmarker's tags and notes") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="bookmarker search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmark_query %>
           </dd>
 
           <dt class="options"><%= ts("Bookmark types") %></dt>

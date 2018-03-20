@@ -370,7 +370,11 @@ class BookmarksController < ApplicationController
 
   def bookmark_search_params
     params.require(:bookmark_search).permit(
+      # ES UPGRADE TRANSITION #
+      # Remove fields for only BookmarkSearch: query, tag
       :query,
+      :bookmark_query,
+      :bookmarkable_query,
       :bookmarker,
       :bookmark_notes,
       :tag,

@@ -3,22 +3,15 @@ require 'spec_helper'
 describe BookmarkQuery do
 
   it "should allow you to perform a simple search" do
-    q = BookmarkQuery.new(query: "unicorns")
+    q = BookmarkQuery.new(bookmarkable_query: "space", bookmark_query: "unicorns")
     search_body = q.generated_query
     query = { query_string: { query: "unicorns", default_operator: "AND" } }
+    expect(search_body[:query][:bool][:must]).to include(query)
     expect(search_body[:query][:bool][:must]).to include(
-      bool: {
-        should: [
-          query,
-          {
-            has_parent: {
-              parent_type: "bookmarkable",
-              query: query,
-              score: true
-            }
-          }
-        ],
-        minimum_should_match: 1
+      has_parent: {
+        parent_type: "bookmarkable",
+        query: { query_string: { query: "space", default_operator: "AND" } },
+        score: true
       }
     )
   end
@@ -140,35 +133,4 @@ describe BookmarkQuery do
     q = BookmarkQuery.new(language_id: 1)
     expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {language_id: 1}}}})
   end
-
-#   it "should allow you to filter by count ranges" do
-#     q = WorkQuery.new(word_count: ">1000")
-#     expect(q.filters).to include({range: { word_count: { gt: 1000 } } })
-#   end
-
-#   it "should sort by date by default" do
-#     q = WorkQuery.new
-#     expect(q.generated_query[:sort]).to eq({'revised_at' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by creator name" do
-#     q = WorkQuery.new(sort_column: 'authors_to_sort_on', sort_direction: 'asc')
-#     expect(q.generated_query[:sort]).to eq({'authors_to_sort_on' => { order: 'asc'}})
-#   end
-
-#   it "should allow you to sort by title" do
-#     q = WorkQuery.new(sort_column: 'title_to_sort_on')
-#     expect(q.generated_query[:sort]).to eq({'title_to_sort_on' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by kudos" do
-#     q = WorkQuery.new(sort_column: 'kudos_count')
-#     expect(q.generated_query[:sort]).to eq({'kudos_count' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by comments" do
-#     q = WorkQuery.new(sort_column: 'comments_count')
-#     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
-#   end
-
 end
