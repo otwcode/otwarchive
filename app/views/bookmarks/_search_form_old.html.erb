@@ -38,7 +38,7 @@
       <%= f.check_box :rec  %>
     </dd>
     <dt>
-      <%= f.label :with_notes, ts("With Notes") %>
+      <%= f.label :with_notes, ts("With notes") %>
       <%= link_to_help "bookmark-search-notes-help" %>
     </dt>
     <dd>
@@ -52,14 +52,14 @@
       <%= f.select :bookmarkable_type, options_for_select(["",  "Work", "Series", "External Work"]) %>
     </dd>
     <dt>
-      <%= f.label :date, ts('Date Bookmarked') %>
+      <%= f.label :date, ts('Date bookmarked') %>
       <%= link_to_help "bookmark-search-date-bookmarked-help" %>
     </dt>
     <dd>
       <%= f.text_field :date %>
     </dd>
     <dt>
-      <%= f.label :bookmarkable_date, ts('Date Updated') %>
+      <%= f.label :bookmarkable_date, ts('Date updated') %>
       <%= link_to_help "bookmark-search-date-updated-help" %>
     </dt>
     <dd>
