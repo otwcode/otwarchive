@@ -88,7 +88,6 @@ class BookmarkableQuery < Query
 
   def bookmarkable_query_text
     query_text = (options[:bookmarkable_query] || "").dup
-    query_text << split_query_text_phrases(:tag, options[:bookmarkable_tag])
     escape_slashes(query_text.strip)
   end
 

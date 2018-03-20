@@ -102,7 +102,6 @@ class BookmarkQuery < Query
     query_text = (options[:bookmark_query] || "").dup
     query_text << split_query_text_words(:bookmarker, options[:bookmarker])
     query_text << split_query_text_words(:notes, options[:notes])
-    query_text << split_query_text_phrases(:tag, options[:bookmark_tag])
     escape_slashes(query_text.strip)
   end
 

@@ -18,8 +18,6 @@ class BookmarkSearchForm
     :bookmarkable_pseud_names,
     :bookmarkable_pseud_ids,
     :bookmarkable_type,
-    :bookmark_tag,
-    :bookmarkable_tag,
     :excluded_tag_names,
     :excluded_bookmark_tag_names,
     :excluded_tag_ids,
@@ -106,7 +104,7 @@ class BookmarkSearchForm
       summary << "Notes: #{options[:notes]}"
     end
     tags = []
-    %w[bookmarkable_tag bookmark_tag].each do |key|
+    %w[other_tag_names other_bookmark_tag_names].each do |key|
       if options[key].present?
         tags << options[key]
       end

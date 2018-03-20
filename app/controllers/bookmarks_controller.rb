@@ -378,8 +378,6 @@ class BookmarksController < ApplicationController
       :bookmarker,
       :bookmark_notes,
       :tag,
-      :bookmark_tag,
-      :bookmarkable_tag,
       :rec,
       :with_notes,
       :bookmarkable_type,
