@@ -35,19 +35,19 @@ Feature: Search Bookmarks
 
     # Only on bookmarkables
     When I am on the search bookmarks page
-      And I fill in "Bookmarked item's tags" with "rare"
+      And I fill in "Work tags" with "rare"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
       And I should see "1 Found"
       And I should see "First work"
     When I follow "Edit Your Search"
-    Then the field labeled "Bookmarked item's tags" should contain "rare"
+    Then the field labeled "Work tags" should contain "rare"
 
     # On bookmarks and bookmarkables, results should match both
     When I am on the search bookmarks page
       And I fill in "Bookmarker's tags" with "rare"
-      And I fill in "Bookmarked item's tags" with "rare"
+      And I fill in "Work tags" with "rare"
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
@@ -128,7 +128,7 @@ Feature: Search Bookmarks
 
     # Only on bookmarkables
     When I am on the search bookmarks page
-      And I fill in "Any field on bookmarked item" with "hurt"
+      And I fill in "Any field on work" with "hurt"
       And I press "Search bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt'"
       And I should see "You searched for: hurt"
@@ -136,12 +136,12 @@ Feature: Search Bookmarks
       And I should see "Comfort"
       And I should see "Hurt and that's it"
     When I follow "Edit Your Search"
-    Then the field labeled "Any field on bookmarked item" should contain "hurt"
+    Then the field labeled "Any field on work" should contain "hurt"
 
     # On bookmarks and bookmarkables, results should match both
     When I am on the search bookmarks page
       And I fill in "Any field on bookmark" with "more please"
-      And I fill in "Any field on bookmarked item" with "hurt"
+      And I fill in "Any field on work" with "hurt"
       And I press "Search bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt, more please'"
       And I should see "You searched for: hurt, more please"
