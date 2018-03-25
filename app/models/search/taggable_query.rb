@@ -20,7 +20,6 @@ module TaggableQuery
 
     ids = options[:excluded_tag_ids] || []
     ids += parsed_excluded_tags[:ids]
-    ids += Tag.where(id: ids).pluck(:merger_id)
     @exclusion_ids = ids.uniq.compact
   end
 

@@ -85,8 +85,9 @@ describe BookmarkSearchForm do
         expect(search.search_results).not_to include(excluded_bookmark)
       end
 
-      it "should exclude bookmarks for works tagged with a canonical tag given that tag's synonym" do
-        excluded_work.update(freeform_string: "Exclude Work Tag")
+      it "should only exclude bookmarks for works tagged with a synonym (not the merger) when given that synonym as a tag to exclude" do
+        included_work.update(freeform_string: "Exclude Work Tag")
+        excluded_work.update(freeform_string: "Tagged Work Exclusion")
         update_and_refresh_indexes("bookmark")
 
         options = {
