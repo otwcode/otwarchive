@@ -6,7 +6,7 @@
 
 We have a [list of known issues](https://archiveofourown.org/known_issues).
 If you have a problem that you don't see on that list, please send a bug report
-via the [Support and Feedback Form](http://archiveofourown.org/support).
+via the [Support and Feedback Form](https://archiveofourown.org/support).
 
 ### Pick an issue to work on
 
