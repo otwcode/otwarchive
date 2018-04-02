@@ -163,7 +163,7 @@ form.filters {
 }
 
 /* AO3-5370: Normally you'd use absolute positioning here, but we
-needed relative positioning and a left ofset to fix a bug in Safari 9 */
+needed relative positioning and a left offset to fix a bug in Safari 9 */
 .filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
   clip: rect(0 0 0 0);
