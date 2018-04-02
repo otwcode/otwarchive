@@ -162,14 +162,17 @@ form.filters {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
+/* AO3-5370: Normally you'd use absolute positioning here, but we
+needed relative positioning and a left offset to fix a bug in Safari 9 */
 .filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
   clip: rect(0 0 0 0);
   height: 1px;
+  left: -2em;
   margin: -1px; 
   overflow: hidden; 
   padding: 0; 
-  position: absolute; 
+  position: relative; 
   width: 1px;
 }
 
