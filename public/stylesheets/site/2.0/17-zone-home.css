@@ -92,7 +92,10 @@ form.inbox fieldset {
   padding-right: 0;
 }
 
-.dashboard form.filters + h4.landmark {
+/* INTERACTION: OLD FILTERS */
+/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
+.dashboard form.filters + h4.landmark,
+.dashboard form.old-filters + h4.landmark {
   clear: left;
 }
 
