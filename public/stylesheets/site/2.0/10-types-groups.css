@@ -25,9 +25,8 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
 
 /* INTERACTION: OLD FILTERS */
 /* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
-
 .filters .tags li, .review .tags,
-.form-filters .tags li {
+.old-filters .tags li {
   display: block;
 }
 
