@@ -11,7 +11,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks by tag
     Given I have bookmarks to search
     When I fill in "Tag" with "classic"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: classic"
       And I should see "1 Found"
@@ -25,7 +25,7 @@ Feature: Search Bookmarks
 
     # Only on bookmarks
     When I fill in "Bookmarker's tags" with "rare"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
       And I should see "1 Found"
@@ -36,7 +36,7 @@ Feature: Search Bookmarks
     # Only on bookmarkables
     When I am on the search bookmarks page
       And I fill in "Work tags" with "rare"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
       And I should see "1 Found"
@@ -45,10 +45,10 @@ Feature: Search Bookmarks
     Then the field labeled "Work tags" should contain "rare"
 
     # On bookmarks and bookmarkables, results should match both
-    When I am on the search bookmarks page
+    When I am on the search Bookmarks page
       And I fill in "Bookmarker's tags" with "rare"
       And I fill in "Work tags" with "rare"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
       And I should see "No results found."
@@ -56,7 +56,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks by date bookmarked
     Given I have bookmarks to search by dates
     When I fill in "Date bookmarked" with "> 900 days ago"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date bookmarked: > 900 days ago"
       And I should see "1 Found"
@@ -65,7 +65,7 @@ Feature: Search Bookmarks
     Then the field labeled "Date bookmarked" should contain "> 900 days ago"
 
     When I fill in "Date bookmarked" with "< 900 days ago"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see "You searched for: Date bookmarked: < 900 days ago"
       And I should see "2 Found"
       And I should see "New bookmark of old work"
@@ -74,7 +74,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
     When I fill in "Date updated" with "> 900 days ago"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date updated: > 900 days ago"
       And I should see "2 Found"
@@ -84,7 +84,7 @@ Feature: Search Bookmarks
     Then the field labeled "Date updated" should contain "> 900 days ago"
 
     When I fill in "Date updated" with "< 900 days ago"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see "You searched for: Date updated: < 900 days ago"
       And I should see "1 Found"
       And I should see "New bookmark of new work"
@@ -92,7 +92,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks for recs
     Given I have bookmarks to search
     When I check "Rec"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Rec"
       And I should see "1 Found"
@@ -104,7 +104,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks by any field
     Given I have bookmarks to search
     When I fill in "Any field" with "Hobbits"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'Hobbits'"
       And I should see "You searched for: Hobbits"
       And I should see "No results found."
@@ -117,7 +117,7 @@ Feature: Search Bookmarks
 
     # Only on bookmarks
     When I fill in "Any field on bookmark" with "more please"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'more please'"
       And I should see "You searched for: more please"
       And I should see "2 Found"
@@ -129,7 +129,7 @@ Feature: Search Bookmarks
     # Only on bookmarkables
     When I am on the search bookmarks page
       And I fill in "Any field on work" with "hurt"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt'"
       And I should see "You searched for: hurt"
       And I should see "2 Found"
@@ -142,7 +142,7 @@ Feature: Search Bookmarks
     When I am on the search bookmarks page
       And I fill in "Any field on bookmark" with "more please"
       And I fill in "Any field on work" with "hurt"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt, more please'"
       And I should see "You searched for: hurt, more please"
       And I should see "1 Found"
@@ -151,7 +151,7 @@ Feature: Search Bookmarks
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
     When I select "External Work" from "Type"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Type: External Work"
       And I should see "1 Found"
@@ -164,7 +164,7 @@ Feature: Search Bookmarks
   results by the note content
     Given I have bookmarks to search
     When I check "With notes"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: With Notes"
       And I should see "2 Found"
@@ -173,7 +173,7 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the "With notes" checkbox should be checked
     When I fill in "Notes" with "broken heart"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Notes: broken heart, With Notes"
     When "AO3-3943" is fixed
@@ -187,7 +187,7 @@ Feature: Search Bookmarks
   the bookmarker testuser returns all of tester_pseud's bookmarks
     Given I have bookmarks to search
     When I fill in "Bookmarker" with "testuser"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Bookmarker: testuser"
       And I should see "6 Found"
