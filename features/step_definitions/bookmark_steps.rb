@@ -102,6 +102,24 @@ Given /^I have bookmarks to search by dates$/ do
   step %{all indexing jobs have been run}
 end
 
+Given /^I have bookmarks of various completion statuses to search$/ do
+  complete_work = FactoryGirl.create(:posted_work, title: "Finished Work")
+  incomplete_work = FactoryGirl.create(:posted_work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
+
+  complete_series = FactoryGirl.create(:series_with_a_work, title: "Complete Series", complete: true)
+  incomplete_series = FactoryGirl.create(:series_with_a_work, title: "Incomplete Series", complete: false)
+
+  external_work = FactoryGirl.create(:external_work, title: "External Work")
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: complete_work.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: incomplete_work.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: complete_series.id, bookmarkable_type: "Series")
+  FactoryGirl.create(:bookmark, bookmarkable_id: incomplete_series.id, bookmarkable_type: "Series")
+  FactoryGirl.create(:bookmark, bookmarkable_id: external_work.id, bookmarkable_type: "ExternalWork")
+
+  step %{all indexing jobs have been run}
+end
+
 When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
