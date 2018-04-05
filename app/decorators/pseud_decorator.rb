@@ -2,6 +2,14 @@ class PseudDecorator < SimpleDelegator
 
   attr_reader :data
 
+  # Pseuds need to be decorated with various stats from the "_source" when
+  # viewing search results, so we first load the pseuds with the base search
+  # class, and then decorate them with the data.
+  def self.load_from_elasticsearch(hits)
+    items = Pseud.load_from_elasticsearch(hits)
+    decorate_from_search(items, hits)
+  end
+
   # TODO: pull this out into a reusable module
   def self.decorate_from_search(results, search_hits)
     search_data = search_hits.group_by { |doc| doc["_id"] }
@@ -11,6 +19,10 @@ class PseudDecorator < SimpleDelegator
     end
   end
 
+  # TODO: Either eliminate this function or add definitions for work_counts and
+  # bookmark_counts (and possibly fandom information, as well?). The NameError
+  # that this causes isn't a problem at the moment because the function isn't
+  # being called from anywhere, but it needs to be fixed before it can be used.
   def self.decorate(pseuds)
     users = User.where(id: pseuds.map(&:user_id)).group_by(&:id)
     work_counts

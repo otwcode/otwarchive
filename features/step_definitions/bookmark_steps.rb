@@ -8,8 +8,8 @@ end
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
-    step %{I press "Create"}
-    step %{all indexing jobs have been run}
+  step %{I press "Create"}
+  step %{all indexing jobs have been run}
 end
 
 Given /^I have a bookmark of a deleted work$/ do
@@ -30,18 +30,19 @@ Given /^I have bookmarks to search$/ do
   pseud1 = FactoryGirl.create(:pseud, name: "testy", user_id: user1.id)
   pseud2 = FactoryGirl.create(:pseud, name: "tester_pseud", user_id: user1.id)
 
+  # set up a tag
+  freeform1 = FactoryGirl.create(:freeform, name: "classic")
+  freeform2 = FactoryGirl.create(:freeform, name: "rare")
+
   # set up some works
-  work1 = FactoryGirl.create(:work, title: "First work", posted: true)
-  work2 = FactoryGirl.create(:work, title: "second work", posted: true)
-  work3 = FactoryGirl.create(:work, title: "third work", posted: true)
-  work4 = FactoryGirl.create(:work, title: "fourth", posted: true)
-  work5 = FactoryGirl.create(:work, title: "fifth", posted: true)
+  work1 = FactoryGirl.create(:posted_work, title: "First work", freeform_string: freeform2.name)
+  work2 = FactoryGirl.create(:posted_work, title: "second work")
+  work3 = FactoryGirl.create(:posted_work, title: "third work")
+  work4 = FactoryGirl.create(:posted_work, title: "fourth")
+  work5 = FactoryGirl.create(:posted_work, title: "fifth")
 
   # set up an external work
   external1 = FactoryGirl.create(:external_work, title: "Skies Grown Darker")
-
-  # set up a tag
-  freeform1 = FactoryGirl.create(:freeform, name: "classic")
 
   # set up the bookmarks
   FactoryGirl.create(:bookmark,
@@ -51,7 +52,8 @@ Given /^I have bookmarks to search$/ do
 
   FactoryGirl.create(:bookmark,
                      bookmarkable_id: work2.id,
-                     pseud_id: user1.default_pseud.id)
+                     pseud_id: user1.default_pseud.id,
+                     tag_string: freeform2.name)
 
   FactoryGirl.create(:bookmark,
                      bookmarkable_id: work3.id,
@@ -74,6 +76,18 @@ Given /^I have bookmarks to search$/ do
   step %{all indexing jobs have been run}
 end
 
+Given /^I have bookmarks to search by any field$/ do
+  work1 = FactoryGirl.create(:posted_work, title: "Comfort", freeform_string: "hurt a little comfort but only so much")
+  work2 = FactoryGirl.create(:posted_work, title: "Hurt and that's it")
+  work3 = FactoryGirl.create(:posted_work, title: "Fluff")
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "whatever")
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, tag_string: "more please")
+  FactoryGirl.create(:bookmark, bookmarkable_id: work3.id, notes: "more please")
+
+  step %{all indexing jobs have been run}
+end
+
 Given /^I have bookmarks to search by dates$/ do
   work1 = nil
   Timecop.freeze(901.days.ago) do
@@ -88,10 +102,11 @@ Given /^I have bookmarks to search by dates$/ do
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?(?: with the note "([^"]*)")?$/ do |title, pseud, note|
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
+  fill_in("bookmark_tag_string", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
 end

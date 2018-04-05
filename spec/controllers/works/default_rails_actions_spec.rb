@@ -219,7 +219,7 @@ describe WorksController do
 
   describe "index" do
     before do
-      @fandom = create(:fandom)
+      @fandom = create(:canonical_fandom)
       @work = create(:work, posted: true, fandom_string: @fandom.name)
     end
 
@@ -272,7 +272,7 @@ describe WorksController do
 
       context "with an owner tag" do
         before do
-          @fandom2 = FactoryGirl.create(:fandom)
+          @fandom2 = FactoryGirl.create(:canonical_fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
 
           update_and_refresh_indexes('work')
@@ -360,8 +360,8 @@ describe WorksController do
   end
 
   describe "collected" do
-    let(:collected_fandom) { create(:fandom) }
-    let(:collected_fandom2) { create(:fandom) }
+    let(:collected_fandom) { create(:canonical_fandom) }
+    let(:collected_fandom2) { create(:canonical_fandom) }
     let(:collection) { create(:collection) }
     let(:collected_user) { create(:user) }
 

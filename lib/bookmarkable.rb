@@ -6,6 +6,7 @@ module Bookmarkable
       has_many :user_tags, through: :bookmarks, source: :tags
       after_update :update_bookmarks_index
       after_update :update_bookmarker_pseuds_index
+      after_destroy :update_bookmarker_pseuds_index
     end
   end
 

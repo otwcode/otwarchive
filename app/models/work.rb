@@ -1578,8 +1578,11 @@ class Work < ApplicationRecord
   end
 
   # Does this work have only one relationship tag?
+  # (not counting synonyms)
   def otp
-    relationships.count == 1
+    return true if relationships.count == 1
+    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns.count == 1
   end
 
   # Quick and dirty categorization of the most obvious stuff

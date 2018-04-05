@@ -48,8 +48,10 @@ describe WorkSearchForm do
         expect(search.search_results).not_to include(excluded_work)
       end
 
-      it "should exclude works tagged with a canonical tag given that tag's synonym" do
-        excluded_work.update(freeform_string: "Exclude Me")
+      it "should only exclude works tagged with a synonym (not its merger) when given that synonym as a tag to exclude" do
+        included_work.update(freeform_string: "Exclude Me")
+        excluded_work.update(freeform_string: "Excluded")
+
         update_and_refresh_indexes("work")
 
         options = {
@@ -65,15 +67,15 @@ describe WorkSearchForm do
 
     describe "meta tagging" do
       let!(:grand_parent_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Sam")
+        create(:canonical_character, name: "Sam")
       end
 
       let!(:parent_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Sam Winchester")
+        create(:canonical_character, name: "Sam Winchester")
       end
 
       let!(:child_tag) do
-        FactoryGirl.create(:tag, type: "Character", name: "Endverse Sam Winchester")
+        create(:canonical_character, name: "Endverse Sam Winchester")
       end
 
       let!(:grand_parent_parent_meta_tagging) do

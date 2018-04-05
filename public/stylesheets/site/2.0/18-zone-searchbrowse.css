@@ -140,7 +140,13 @@ form.filters {
   padding: 0.25em 0;
 }
 
-.filters .more dd.search, .filters .range dd {
+.filters .group dt.bookmarker {
+  border-top: 1px solid #f3efec;
+  margin-top: 0.643em;
+  padding-top: 0.643em;
+}
+
+.filters .more dd.search, .filters .more dt.search, .filters .range dd {
   margin-top: 0;
 }
 
@@ -156,14 +162,17 @@ form.filters {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
+/* AO3-5370: Normally you'd use absolute positioning here, but we
+needed relative positioning and a left offset to fix a bug in Safari 9 */
 .filters [type="checkbox"], .filters [type="radio"] {
   border: 0; 
-  clip: rect(0 0 0 0); 
+  clip: rect(0 0 0 0);
   height: 1px;
+  left: -2em;
   margin: -1px; 
   overflow: hidden; 
   padding: 0; 
-  position: absolute; 
+  position: relative; 
   width: 1px;
 }
 

@@ -359,6 +359,8 @@
       !(self.pseuds & item.pseuds).empty?
     elsif item.respond_to?(:author)
       self == item.author
+    elsif item.respond_to?(:creator)
+      self == item.creator
     else
       false
     end
