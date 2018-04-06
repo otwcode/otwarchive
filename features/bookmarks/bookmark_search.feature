@@ -182,6 +182,10 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     When "AO3-3583" is fixed
     # Then "External Work" should be selected within "Type"
+    When I select "Series" from "Type"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: Type: Series"
+      And I should see "2 Found"
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
   results by the note content
