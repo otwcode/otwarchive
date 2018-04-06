@@ -53,11 +53,6 @@ class WorkIndexer < Indexer
         :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
         :in_unrevealed_collection,
       ],
-      except: [
-        :delta, :summary_sanitizer_version, :notes_sanitizer_version,
-        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old,
-        :anon_commenting_disabled, :ip_address, :spam, :spam_checked_at,
-        :moderated_commenting_disabled],
       methods: [
         :rating_ids,
         :warning_ids,
