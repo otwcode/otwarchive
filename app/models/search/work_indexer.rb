@@ -45,6 +45,17 @@ class WorkIndexer < Indexer
   def document(object)
     object.as_json(
       root: false,
+      only: [
+        :id, :expected_number_of_chapters, :created_at, :updated_at, 
+        :major_version, :minor_version, :posted, :language_id, :restricted, 
+        :title, :summary, :notes, :word_count, :hidden_by_admin, :delta, 
+        :revised_at, :authors_to_sort_on, :title_to_sort_on, :backdate, 
+        :endnotes, :imported_from_url, :hit_count_old, :last_visitor_old, 
+        :complete, :summary_sanitizer_version, :notes_sanitizer_version, 
+        :endnotes_sanitizer_version, :work_skin_id, :in_anon_collection, 
+        :in_unrevealed_collection, :anon_commenting_disabled, :ip_address, 
+        :spam, :spam_checked_at, :moderated_commenting_enabled
+      ],
       except: [
         :delta, :summary_sanitizer_version, :notes_sanitizer_version,
         :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old,
