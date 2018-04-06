@@ -61,17 +61,23 @@ Feature: Search Bookmarks
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date bookmarked: > 900 days ago"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "Old bookmark of old work"
+      And I should see "Old bookmark of old series"
+      And I should see "Old bookmark of old external work"
     When I follow "Edit Your Search"
     Then the field labeled "Date bookmarked" should contain "> 900 days ago"
 
     When I fill in "Date bookmarked" with "< 900 days ago"
       And I press "Search bookmarks"
     Then I should see "You searched for: Date bookmarked: < 900 days ago"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "New bookmark of old work"
       And I should see "New bookmark of new work"
+      And I should see "New bookmark of old series"
+      And I should see "New bookmark of new series"
+      And I should see "New bookmark of old external work"
+      And I should see "New bookmark of new external work"
 
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
@@ -79,17 +85,23 @@ Feature: Search Bookmarks
       And I press "Search bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date updated: > 900 days ago"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "Old bookmark of old work"
       And I should see "New bookmark of old work"
+      And I should see "Old bookmark of old series"
+      And I should see "New bookmark of old series"
+      And I should see "Old bookmark of old external work"
+      And I should see "New bookmark of old external work"
     When I follow "Edit Your Search"
     Then the field labeled "Date updated" should contain "> 900 days ago"
 
     When I fill in "Date updated" with "< 900 days ago"
       And I press "Search bookmarks"
     Then I should see "You searched for: Date updated: < 900 days ago"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "New bookmark of new work"
+      And I should see "New bookmark of new series"
+      And I should see "New bookmark of new external work"
 
   Scenario: Search bookmarks for recs
     Given I have bookmarks to search

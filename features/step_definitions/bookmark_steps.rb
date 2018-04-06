@@ -138,14 +138,54 @@ end
 
 Given /^I have bookmarks to search by dates$/ do
   work1 = nil
+  series1 = nil
+  external1 = nil
   Timecop.freeze(901.days.ago) do
     work1 = FactoryGirl.create(:posted_work, title: "Old work")
-    FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "Old bookmark of old work")
+    FactoryGirl.create(:bookmark,
+                       bookmarkable_id: work1.id,
+                       notes: "Old bookmark of old work")
+
+    series1 = FactoryGirl.create(:series_with_a_work, title: "Old series")
+    FactoryGirl.create(:bookmark,
+                       bookmarkable_id: series1.id,
+                       bookmarkable_type: "Series",
+                       notes: "Old bookmark of old series")
+
+    external1 = FactoryGirl.create(:external_work, title: "Old external")
+    FactoryGirl.create(:bookmark,
+                       bookmarkable_id: external1.id,
+                       bookmarkable_type: "ExternalWork",
+                       notes: "Old bookmark of old external work")
   end
-  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "New bookmark of old work")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work1.id,
+                     notes: "New bookmark of old work")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series1.id,
+                     bookmarkable_type: "Series",
+                     notes: "New bookmark of old series")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external1.id,
+                     bookmarkable_type: "ExternalWork",
+                     notes: "New bookmark of old external work")
 
   work2 = FactoryGirl.create(:posted_work, title: "New work")
-  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, notes: "New bookmark of new work")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: work2.id,
+                     notes: "New bookmark of new work")
+
+  series2 = FactoryGirl.create(:series_with_a_work, title: "New series")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series2.id,
+                     bookmarkable_type: "Series",
+                     notes: "New bookmark of new series")
+
+  external2 = FactoryGirl.create(:external_work, title: "New external")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external2.id,
+                     bookmarkable_type: "ExternalWork",
+                     notes: "New bookmark of new external work")
 
   step %{all indexing jobs have been run}
 end
