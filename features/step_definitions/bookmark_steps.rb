@@ -97,13 +97,41 @@ Given /^I have bookmarks to search$/ do
 end
 
 Given /^I have bookmarks to search by any field$/ do
-  work1 = FactoryGirl.create(:posted_work, title: "Comfort", freeform_string: "hurt a little comfort but only so much")
+  work1 = FactoryGirl.create(:posted_work,
+                             title: "Comfort",
+                             freeform_string: "hurt a little comfort but only so much")
   work2 = FactoryGirl.create(:posted_work, title: "Hurt and that's it")
   work3 = FactoryGirl.create(:posted_work, title: "Fluff")
+
+  external1 = FactoryGirl.create(:external_work,
+                                 title: "External Whump",
+                                 author: "im hurt")
+  external2 = FactoryGirl.create(:external_work, title: "External Fix-It")
+
+  series1 = FactoryGirl.create(:series_with_a_work,
+                              title: "H/C Series",
+                              summary: "Hurt & comfort ficlets")
+  series2 = FactoryGirl.create(:series_with_a_work, title: "Ouchless Series")
 
   FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, notes: "whatever")
   FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, tag_string: "more please")
   FactoryGirl.create(:bookmark, bookmarkable_id: work3.id, notes: "more please")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external1.id,
+                     bookmarkable_type: "ExternalWork",
+                     notes: "please rec me more like this")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external2.id,
+                     bookmarkable_type: "ExternalWork",
+                     tag_string: "please no more pain")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series1.id,
+                     bookmarkable_type: "Series",
+                     notes: "needs more comfort please")
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series2.id,
+                     bookmarkable_type: "Series",
+                     pseud_id: FactoryGirl.create(:pseud, name: "more please").id)
 
   step %{all indexing jobs have been run}
 end

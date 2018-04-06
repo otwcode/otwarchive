@@ -123,9 +123,13 @@ Feature: Search Bookmarks
       And I press "Search bookmarks"
     Then I should see the page title "Bookmarks Matching 'more please'"
       And I should see "You searched for: more please"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "Hurt and that's it"
       And I should see "Fluff"
+      And I should see "H/C Series"
+      And I should see "Ouchless Series"
+      And I should see "External Fix-It"
+      And I should see "External Whump"
     When I follow "Edit Your Search"
     Then the field labeled "Any field on bookmark" should contain "more please"
 
@@ -135,9 +139,11 @@ Feature: Search Bookmarks
       And I press "Search bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt'"
       And I should see "You searched for: hurt"
-      And I should see "2 Found"
+      And I should see "4 Found"
       And I should see "Comfort"
       And I should see "Hurt and that's it"
+      And I should see "H/C Series"
+      And I should see "External Whump"
     When I follow "Edit Your Search"
     Then the field labeled "Any field on work" should contain "hurt"
 
@@ -148,8 +154,10 @@ Feature: Search Bookmarks
       And I press "Search bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt, more please'"
       And I should see "You searched for: hurt, more please"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "Hurt and that's it"
+      And I should see "H/C Series"
+      And I should see "External Whump"
 
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
