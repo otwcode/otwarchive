@@ -199,3 +199,27 @@ Feature: Search Bookmarks
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarker" should contain "testuser"
+
+  @new-search
+  Scenario: Search for bookmarks by the bookmarkable item's completion status
+    Given I have bookmarks of various completion statuses to search
+    When I fill in "Any field on work" with "complete: true"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: complete: true"
+      And I should see "2 Found"
+      And I should see "Finished Work"
+      And I should see "Complete Series"
+      And I should not see "Incomplete Work"
+      And I should not see "Incomplete Series"
+      And I should not see "External Work"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any field on work" should contain "complete: true"
+    When I fill in "Any field on work" with "complete: false"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: complete: false"
+      And I should see "2 Found"
+      And I should see "Incomplete Work"
+      And I should see "Incomplete Series"
+      And I should not see "Finished Work"
+      And I should not see "Complete Series"
+      And I should not see "External Work"
