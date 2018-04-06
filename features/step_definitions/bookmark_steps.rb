@@ -44,6 +44,13 @@ Given /^I have bookmarks to search$/ do
   # set up an external work
   external1 = FactoryGirl.create(:external_work, title: "Skies Grown Darker")
 
+  # set up some series
+  series1 = FactoryGirl.create(:series, title: "First Series")
+  series2 = FactoryGirl.create(:series_with_a_work, title: "Second Series")
+
+  # add work1 to series1 to ensure the series has tags
+  FactoryGirl.create(:serial_work, work_id: work1.id, series_id: series1.id)
+
   # set up the bookmarks
   FactoryGirl.create(:bookmark,
                      bookmarkable_id: work1.id,
@@ -72,6 +79,19 @@ Given /^I have bookmarks to search$/ do
                      bookmarkable_type: "ExternalWork",
                      pseud_id: pseud2.id,
                      notes: "I enjoyed this")
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series1.id,
+                     bookmarkable_type: "Series",
+                     pseud_id: user1.default_pseud.id,
+                     tag_string: freeform1.name)
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series2.id,
+                     bookmarkable_type: "Series",
+                     pseud_id: pseud2.id,
+                     rec: true,
+                     notes: "A new classic")
 
   step %{all indexing jobs have been run}
 end
