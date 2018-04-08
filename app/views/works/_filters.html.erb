@@ -109,19 +109,19 @@
               <li>
                 <%= f.label :complete, value: "" do %>
                   <%= f.radio_button :complete, "" %>
-                  <%= label_indicator_and_text(ts("Both complete and incomplete")) %>
+                  <%= label_indicator_and_text(ts("All works")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :complete, value: "T" do %>
                   <%= f.radio_button :complete, "T" %>
-                  <%= label_indicator_and_text(ts("Only complete works")) %>
+                  <%= label_indicator_and_text(ts("Complete works only")) %>
                 <% end %>
               </li>
               <li>
                 <%= f.label :complete, value: "F" do %>
                   <%= f.radio_button :complete, "F" %>
-                  <%= label_indicator_and_text(ts("Only incomplete works")) %>
+                  <%= label_indicator_and_text(ts("Works in progress only")) %>
                 <% end %>
               </li>
             </ul>
