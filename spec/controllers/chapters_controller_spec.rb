@@ -346,14 +346,6 @@ describe ChaptersController do
         it_redirects_to(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
-
-      it "removes user, gives notice, and redirects to work when user removes themselves" do
-        other_user = create(:user)
-        chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
-        get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
-        expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]
-        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
-      end
     end
 
     context "when other user is logged in" do
@@ -364,6 +356,28 @@ describe ChaptersController do
       it "errors and redirects to work" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+
+    context "when co-creator is logged in" do
+      before do
+        @co_creator = create(:user)
+        @co_second_chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, @co_creator.pseuds.first])
+        @co_third_chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, @co_creator.pseuds.first])
+        fake_login_known_user(@co_creator)
+      end
+
+      it "removes user, gives notice, and redirects to work when user removes themselves" do
+        get :edit, params: { work_id: work.id, id: @co_second_chapter.id, remove: "me" }
+        expect(assigns[:chapter].pseuds).to eq [user.pseuds.first]
+        it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
+      end
+
+      it "removes user from work after being removed from all chapters" do
+        get :edit, params: { work_id: work.id, id: @co_second_chapter.id, remove: "me" }
+        expect(assigns[:work].pseuds).to eq [user.pseuds.first, @co_creator.pseuds.first]
+        get :edit, params: { work_id: work.id, id: @co_third_chapter.id, remove: "me" }
+        expect(assigns[:work].pseuds).to eq [user.pseuds.first]
       end
     end
   end
