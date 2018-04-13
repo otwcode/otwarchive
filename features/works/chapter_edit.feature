@@ -345,6 +345,7 @@ Feature: Edit chapters
   Scenario: Removing yourself as a co-creator from the chapter edit page
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "anotherfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
       And I view the 2nd chapter
@@ -355,6 +356,7 @@ Feature: Edit chapters
     When I view the 2nd chapter
     Then I should see "Chapter 2"
       And I should see "Chapter by originalposter"
+
 
   Scenario: Removing yourself as a co-creator from last remaining co-created chapter
   also removes you as co-author from work
@@ -376,9 +378,11 @@ Feature: Edit chapters
     Then I should see "Chapter 1"
       And I should not see "Edit Chapter"
 
+
   Scenario: Removing yourself as a co-creator from the chapter manage page
 
     Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And a chapter with the co-author "anotherfriend" is added to "OP's Work"
       And I am logged in as "opsfriend"
     When I view the work "OP's Work"
       And I follow "Edit"
