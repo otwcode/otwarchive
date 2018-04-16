@@ -180,7 +180,7 @@
 
   def expire_caches
     if saved_change_to_login? || login_changed?
-      self.works.each{ |work| work.touch }
+      self.works.each{ |work| work.save }
     end
   end
 
@@ -359,6 +359,8 @@
       !(self.pseuds & item.pseuds).empty?
     elsif item.respond_to?(:author)
       self == item.author
+    elsif item.respond_to?(:creator)
+      self == item.creator
     else
       false
     end
@@ -527,7 +529,7 @@
   def reindex_user_bookmarks
     # Reindex a user's bookmarks.
     bookmarks.each do |bookmark|
-      bookmark.update_index
+      bookmark.reindex_document
     end
     update_works_index_timestamp!
   end

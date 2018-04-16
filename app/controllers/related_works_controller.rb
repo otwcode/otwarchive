@@ -6,7 +6,7 @@ class RelatedWorksController < ApplicationController
   def index
     if params[:user_id].blank?
       flash[:error] = ts("Whose related works were you looking for?")
-      redirect_back_or_default(people_path)
+      redirect_back_or_default(search_people_path)
     else
       @user = User.find_by(login: params[:user_id])
       if @user.blank?

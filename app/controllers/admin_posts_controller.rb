@@ -14,7 +14,7 @@ class AdminPostsController < ApplicationController
     @admin_posts ||= AdminPost
     if params[:language_id].present? && (@language = Language.find_by(short: params[:language_id]))
       @admin_posts = @admin_posts.where(language_id: @language.id)
-      @tags = AdminPostTag.where(language_id: @language.id).order(:name)
+      @tags = AdminPostTag.joins(:admin_posts).where(admin_posts: { language_id: @language.id })
     else
       @admin_posts = @admin_posts.non_translated
       @tags = AdminPostTag.order(:name)

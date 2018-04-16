@@ -102,6 +102,98 @@ describe Work do
     end
   end
 
+  describe "#otp" do
+    it "is not otp with no relationship" do
+      work = create(:work)
+      expect(work.relationships).to be_empty
+      expect(work.otp).to be_falsy
+    end
+
+    it "is otp with only one relationship" do
+      rel = create(:relationship, name: "asushin")
+      work = create(:work, relationships: [rel])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is otp with one canonical relationship and one of its synonyms" do
+      rel = create(:canonical_relationship, name: "kawoshin")
+      syn = create(:relationship, name: "shinkawo", merger: rel)
+      work = create(:work, relationships: [rel, syn])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is otp with multiple synonyms of the same canonical relationship" do
+      rel = create(:canonical_relationship, name: "kawoshin")
+      syn1 = create(:relationship, name: "shinkawo", merger: rel)
+      syn2 = create(:relationship, name: "kaworu/shinji", merger: rel)
+      work = create(:work, relationships: [syn1, syn2])
+      expect(work.otp).to be_truthy
+    end
+
+    it "is not otp with unrelated relationships, one of which is canonical" do
+      ships = [create(:relationship, name: "shinrei"), create(:canonical_relationship, name: "asurei")]
+      work = create(:work, relationships: ships)
+      expect(work.otp).to be_falsy
+    end
+
+    it "is not otp with unrelated relationships" do
+      ships = [create(:relationship, name: "asushin"), create(:relationship, name: "asurei")]
+      work = create(:work, relationships: ships)
+      expect(work.otp).to be_falsy
+    end
+
+    it "is not otp with related relationships that are not synonyms" do
+      rel1 = create(:canonical_relationship, name: "shinrei")
+      rel2 = create(:canonical_relationship, name: "asurei")
+      parent = create(:canonical_relationship)
+      parent.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
+
+      work = create(:work, relationships: [rel1, rel2])
+      expect(work.otp).to be_falsy
+    end
+  end
+
+  describe "#set_author_sorting" do
+    let(:work) { build(:work) }
+
+    context "when the pseuds start with special characters" do
+      it "should remove those characters" do
+        work.authors = [Pseud.new(name: "-jolyne")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "jolyne"
+
+        work.authors = [Pseud.new(name: "_hermes")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "hermes"
+      end
+    end
+
+    context "when the pseuds start with numbers" do
+      it "should not remove numbers" do
+        work.authors = [Pseud.new(name: "007james")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "007james"
+      end
+    end
+
+    context "when the work is anonymous" do
+      it "should set the author sorting to Anonymous" do
+        work.in_anon_collection = true
+        work.authors = [Pseud.new(name: "stealthy")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "Anonymous"
+      end
+    end
+
+    context "when the work has multiple pseuds" do
+      it "should combine them with commas" do
+        work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
+        work.set_author_sorting
+        expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
+      end
+    end
+  end
+
   describe "work_skin_allowed" do
     context "public skin"
 

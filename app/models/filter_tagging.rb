@@ -10,6 +10,13 @@ class FilterTagging < ApplicationRecord
   validates_presence_of :filter, :filterable
 
   before_destroy :expire_caches
+  after_create :update_pseud_index
+  after_destroy :update_pseud_index
+
+  def update_pseud_index
+    return unless filter.is_a?(Fandom) && filterable.is_a?(Work)
+    IndexQueue.enqueue_ids(Pseud, filterable.pseud_ids, :background)
+  end
 
   def self.find(*args)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"

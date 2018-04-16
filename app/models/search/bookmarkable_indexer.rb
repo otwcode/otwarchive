@@ -5,46 +5,32 @@ class BookmarkableIndexer < Indexer
   end
 
   def self.document_type
-    'bookmarkable'
+    'bookmark'
   end
 
   def self.mapping
-    {
-      'bookmarkable' => {
-        properties: {
-          title: {
-            type: 'string',
-            analyzer: 'simple'
-          },
-          creators: {
-            type: 'string',
-            analyzer: 'simple',
-            index_name: 'creator'
-          },
-          tag: {
-            type: 'string',
-            analyzer: 'simple'
-          },
-          work_types: {
-            type: 'string',
-            index: 'not_analyzed',
-            index_name: 'work_type'
-          }
-        }
-      }
-    }
+    BookmarkIndexer.mapping
+  end
+
+  # When we fail, we don't want to just keep adding the -klass suffix.
+  def self.find_elasticsearch_ids(ids)
+    ids.map(&:to_i)
   end
 
   def routing_info(id)
     {
       '_index' => index_name,
       '_type' => document_type,
-      '_id' => "#{id}-#{klass.underscore}"
+      '_id' => document_id(id)
     }
   end
 
   def document(object)
     object.bookmarkable_json
-  end    
+  end
+
+  def document_id(id)
+    "#{id}-#{klass.underscore}"
+  end
 
 end

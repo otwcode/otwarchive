@@ -3,7 +3,7 @@
 
 <h4 class="heading">
   <%= ts("You searched for:") %>
-  <%= strip_tags @search.summary %>
+  <%= (strip_tags @search.summary).html_safe %>
 </h4>
 <!--/descriptions-->
 

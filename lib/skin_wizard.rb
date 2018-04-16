@@ -79,6 +79,7 @@ module SkinWizard
         pre,
         input,
         textarea,
+        button,
         .heading .actions,
         .heading .action,
         .heading span.actions,
@@ -178,6 +179,7 @@ module SkinWizard
         dd.required,
         .required .autocomplete,
         span.series .divider,
+        .filters .expander,
         .userstuff h2 {
           color: #{color};
         }
@@ -206,6 +208,7 @@ module SkinWizard
         }
 
         form dt,
+        .filters .group dt.bookmarker,
         .faq .categories h3,
         .splash .module h3,
         .userstuff h3 {

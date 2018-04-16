@@ -8,9 +8,10 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -19,7 +20,9 @@ class Work < ApplicationRecord
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
+  has_many :pseuds,
+           through: :creatorships,
+           after_remove: [:expire_pseud, :reindex_changed_pseud]
   has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
@@ -203,8 +206,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches
-  after_destroy :expire_caches
+  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
   def before_destroy
@@ -267,6 +270,36 @@ class Work < ApplicationRecord
 
   def self.rss_work_byline_key(id)
     "/v1/rss_data_work/#{id}/byline"
+  end
+
+  def reindex_changed_pseud(pseud)
+    pseud = pseud.id if pseud.respond_to?(:id)
+    IndexQueue.enqueue_id(Pseud, pseud, :background)
+  end
+
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless should_reindex_pseuds?
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+  end
+
+  # Visibility has changed, which means we need to reindex
+  # the work's pseuds, to update their work counts, as well as
+  # the work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w(id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_works"
+    else
+      tire.index.name
+    end
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -1356,12 +1389,14 @@ class Work < ApplicationRecord
   # SORTING
   ########################################################################
 
+  SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
+
   def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
   end
 
   def sorted_title
@@ -1451,6 +1486,8 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block #
   mapping do
     indexes :authors_to_sort_on,  index: :not_analyzed
     indexes :title_to_sort_on,    index: :not_analyzed
@@ -1482,23 +1519,32 @@ class Work < ApplicationRecord
       ])
   end
 
+  def document_json
+    WorkIndexer.new({}).document(self)
+  end
+
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :language_id, :word_count, :complete],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Work'
+      bookmarkable_type: 'Work',
+      bookmarkable_join: "bookmarkable"
     )
   end
 
   def pseud_ids
     creatorships.pluck :pseud_id
+  end
+
+  def user_ids
+    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids
@@ -1543,12 +1589,15 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    filters.by_type('Fandom').first_class.count > 1
+    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
   end
 
   # Does this work have only one relationship tag?
+  # (not counting synonyms)
   def otp
-    filters.by_type('Relationship').first_class.count == 1
+    return true if relationships.count == 1
+    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns.count == 1
   end
 
   # Quick and dirty categorization of the most obvious stuff
@@ -1556,8 +1605,8 @@ class Work < ApplicationRecord
   def work_types
     types = []
     video_ids = [44011] # Video
-    audio_ids = [70308] # Podfic
-    art_ids = [7844, 125758] # Fanart, Arts
+    audio_ids = [70308, 1098169] # Podfic, Audio Content
+    art_ids = [7844, 125758, 3863] # Fanart, Arts
     types << "Video" if (filter_ids & video_ids).present?
     types << "Audio" if (filter_ids & audio_ids).present?
     types << "Art" if (filter_ids & art_ids).present?
@@ -1572,7 +1621,7 @@ class Work < ApplicationRecord
   # To be replaced by actual category
   # Can't use the 'Meta' tag since that has too many different uses
   def nonfiction
-    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
 end
