@@ -14,8 +14,9 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: classic"
-      And I should see "1 Found"
+      And I should see "2 Found"
       And I should see "third work"
+      And I should see "First Series"
     When I follow "Edit Your Search"
     Then the field labeled "Tag" should contain "classic"
 
@@ -39,8 +40,9 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Tags: rare"
-      And I should see "1 Found"
+      And I should see "2 Found"
       And I should see "First work"
+      And I should see "First Series"
     When I follow "Edit Your Search"
     Then the field labeled "Work tags" should contain "rare"
 
@@ -59,17 +61,23 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date bookmarked: > 900 days ago"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "Old bookmark of old work"
+      And I should see "Old bookmark of old series"
+      And I should see "Old bookmark of old external work"
     When I follow "Edit Your Search"
     Then the field labeled "Date bookmarked" should contain "> 900 days ago"
 
     When I fill in "Date bookmarked" with "< 900 days ago"
       And I press "Search Bookmarks"
     Then I should see "You searched for: Date bookmarked: < 900 days ago"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "New bookmark of old work"
       And I should see "New bookmark of new work"
+      And I should see "New bookmark of old series"
+      And I should see "New bookmark of new series"
+      And I should see "New bookmark of old external work"
+      And I should see "New bookmark of new external work"
 
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
@@ -77,17 +85,23 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Date updated: > 900 days ago"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "Old bookmark of old work"
       And I should see "New bookmark of old work"
+      And I should see "Old bookmark of old series"
+      And I should see "New bookmark of old series"
+      And I should see "Old bookmark of old external work"
+      And I should see "New bookmark of old external work"
     When I follow "Edit Your Search"
     Then the field labeled "Date updated" should contain "> 900 days ago"
 
     When I fill in "Date updated" with "< 900 days ago"
       And I press "Search Bookmarks"
     Then I should see "You searched for: Date updated: < 900 days ago"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "New bookmark of new work"
+      And I should see "New bookmark of new series"
+      And I should see "New bookmark of new external work"
 
   Scenario: Search bookmarks for recs
     Given I have bookmarks to search
@@ -95,8 +109,9 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Rec"
-      And I should see "1 Found"
+      And I should see "2 Found"
       And I should see "First work"
+      And I should see "Second Series"
     When I follow "Edit Your Search"
     Then the "Rec" checkbox should be checked
 
@@ -120,9 +135,13 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'more please'"
       And I should see "You searched for: more please"
-      And I should see "2 Found"
+      And I should see "6 Found"
       And I should see "Hurt and that's it"
       And I should see "Fluff"
+      And I should see "H/C Series"
+      And I should see "Ouchless Series"
+      And I should see "External Fix-It"
+      And I should see "External Whump"
     When I follow "Edit Your Search"
     Then the field labeled "Any field on bookmark" should contain "more please"
 
@@ -132,9 +151,11 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt'"
       And I should see "You searched for: hurt"
-      And I should see "2 Found"
+      And I should see "4 Found"
       And I should see "Comfort"
       And I should see "Hurt and that's it"
+      And I should see "H/C Series"
+      And I should see "External Whump"
     When I follow "Edit Your Search"
     Then the field labeled "Any field on work" should contain "hurt"
 
@@ -145,8 +166,10 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Bookmarks Matching 'hurt, more please'"
       And I should see "You searched for: hurt, more please"
-      And I should see "1 Found"
+      And I should see "3 Found"
       And I should see "Hurt and that's it"
+      And I should see "H/C Series"
+      And I should see "External Whump"
 
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
@@ -159,6 +182,10 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     When "AO3-3583" is fixed
     # Then "External Work" should be selected within "Type"
+    When I select "Series" from "Type"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: Type: Series"
+      And I should see "2 Found"
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
   results by the note content
@@ -167,9 +194,10 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: With Notes"
-      And I should see "2 Found"
+      And I should see "3 Found"
       And I should see "fifth"
       And I should see "Skies Grown Darker"
+      And I should see "Second Series"
     When I follow "Edit Your Search"
     Then the "With notes" checkbox should be checked
     When I fill in "Notes" with "broken heart"
@@ -190,12 +218,38 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Bookmarker: testuser"
-      And I should see "6 Found"
+      And I should see "8 Found"
       And I should see "First work"
       And I should see "second work"
       And I should see "third work"
       And I should see "tester_pseud"
       And I should see "fifth"
       And I should see "Skies Grown Darker"
+      And I should see "First Series"
+      And I should see "Second Series"
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarker" should contain "testuser"
+
+  @new-search
+  Scenario: Search for bookmarks by the bookmarkable item's completion status
+    Given I have bookmarks of various completion statuses to search
+    When I fill in "Any field on work" with "complete: true"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: complete: true"
+      And I should see "2 Found"
+      And I should see "Finished Work"
+      And I should see "Complete Series"
+      And I should not see "Incomplete Work"
+      And I should not see "Incomplete Series"
+      And I should not see "External Work"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any field on work" should contain "complete: true"
+    When I fill in "Any field on work" with "complete: false"
+      And I press "Search bookmarks"
+    Then I should see "You searched for: complete: false"
+      And I should see "2 Found"
+      And I should see "Incomplete Work"
+      And I should see "Incomplete Series"
+      And I should not see "Finished Work"
+      And I should not see "Complete Series"
+      And I should not see "External Work"
