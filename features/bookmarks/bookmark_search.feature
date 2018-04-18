@@ -183,7 +183,7 @@ Feature: Search Bookmarks
     When "AO3-3583" is fixed
     # Then "External Work" should be selected within "Type"
     When I select "Series" from "Type"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see "You searched for: Type: Series"
       And I should see "2 Found"
 
@@ -234,7 +234,7 @@ Feature: Search Bookmarks
   Scenario: Search for bookmarks by the bookmarkable item's completion status
     Given I have bookmarks of various completion statuses to search
     When I fill in "Any field on work" with "complete: true"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see "You searched for: complete: true"
       And I should see "2 Found"
       And I should see "Finished Work"
@@ -245,7 +245,7 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the field labeled "Any field on work" should contain "complete: true"
     When I fill in "Any field on work" with "complete: false"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then I should see "You searched for: complete: false"
       And I should see "2 Found"
       And I should see "Incomplete Work"
