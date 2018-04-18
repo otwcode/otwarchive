@@ -179,8 +179,10 @@
   after_update :expire_caches
 
   def expire_caches
-    if saved_change_to_login?
-      self.works.each{ |work| work.save }
+    return unless saved_change_to_login?
+    self.works.each do |work|
+      work.touch
+      work.expire_caches
     end
   end
 
@@ -547,22 +549,23 @@
 
   def update_pseud_name
     return unless saved_change_to_login? && login_before_last_save.present?
-    old_pseud = self.pseuds.where(name: login_before_last_save).first
+    old_pseud = pseuds.where(name: login_before_last_save).first
     if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
+      old_pseud.update_author_sorting
     else
-      new_pseud = self.pseuds.where(name: login).first
+      new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
       return if new_pseud.present?
-
       if old_pseud.present?
         # change the old pseud to match
         old_pseud.name = login
         old_pseud.save!(validate: false)
+        old_pseud.update_author_sorting
       else
         # shouldn't be able to get here, but just in case
-        Pseud.create!(name: login, user_id: self.id)
+        Pseud.create!(name: login, user_id: id)
       end
     end
   end
