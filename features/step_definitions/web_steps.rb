@@ -59,13 +59,13 @@ end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
-    fill_in(field, :with => value)
+    fill_in(field, with: value)
   end
 end
 
 When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
-    fill_in(field, :with => value)
+    fill_in(field, with: value)
   end
 end
 
@@ -90,7 +90,7 @@ end
 
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
-    select(value, :from => field)
+    select(value, from: field)
   end
 end
 
@@ -142,6 +142,12 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
+Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+  with_scope(selector) do
+    page.body.should =~ /#{Regexp.escape(text)}/m
+  end
+end
+
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, selector|
   my_work = User.current_user.works.first.id
   selector = "#work_#{my_work}"
@@ -155,7 +161,7 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, 
 end
 
 Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)") on the other work?$/ do |text, selector|
-  other_user = User.find_by_login("mywarning1")
+  other_user = User.find_by(login: "mywarning1")
   other_work = other_user.works.first.id
   selector = "#work_#{other_work}"
   with_scope(selector) do
@@ -181,9 +187,9 @@ Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, select
   regexp = Regexp.new(regexp)
   with_scope(selector) do
     if page.respond_to? :should
-      page.should have_xpath('//*', :text => regexp)
+      page.should have_xpath('//*', text: regexp)
     else
-      assert page.has_xpath?('//*', :text => regexp)
+      assert page.has_xpath?('//*', text: regexp)
     end
   end
 end
@@ -212,9 +218,9 @@ Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, se
   regexp = Regexp.new(regexp)
   with_scope(selector) do
     if page.respond_to? :should
-      page.should have_no_xpath('//*', :text => regexp)
+      page.should have_no_xpath('//*', text: regexp)
     else
-      assert page.has_no_xpath?('//*', :text => regexp)
+      assert page.has_no_xpath?('//*', text: regexp)
     end
   end
 end
@@ -257,17 +263,15 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-
-
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
+Then /^the "(.*?)" checkbox(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, selector, disabled|
   with_scope(selector) do
-    has_checked_field?(label)
+    assert has_checked_field?(label, disabled: disabled.present?)
   end
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
+Then /^the "(.*?)" checkbox(?: within "(.*?)")? should not be checked$/ do |label, selector|
   with_scope(selector) do
-    has_unchecked_field?(label)
+    assert has_unchecked_field?(label)
   end
 end
 

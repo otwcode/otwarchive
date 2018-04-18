@@ -28,7 +28,11 @@
 
     <li><%= span_if_current ts("Works (%{count})", key: 'dashboard', :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Bookmarks (%{count})", key: 'dashboard', :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li>
+    <% if @admin_settings.disable_filtering? || !use_new_search? %>
+      <li><%= span_if_current ts("Bookmarks (%{count})", key: 'dashboard', :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li>
+    <% else %>
+      <li><%= span_if_current ts("Bookmarked Items (%{count})", key: 'dashboard', :count => @collection.all_bookmarked_items_count), collection_bookmarks_path(@collection) %></li>
+    <% end %>
 
     <li>
       <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>

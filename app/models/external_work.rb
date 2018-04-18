@@ -1,16 +1,14 @@
 include UrlHelpers
-class ExternalWork < ActiveRecord::Base
+class ExternalWork < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  include Taggable
   include Bookmarkable
-
-  attr_protected :summary_sanitizer_version
+  include Searchable
 
   has_many :related_works, as: :parent
 
   belongs_to :language
 
-  scope :duplicate, group: "url HAVING count(DISTINCT id) > 1"
+  scope :duplicate, -> { group("url HAVING count(DISTINCT id) > 1") }
 
   AUTHOR_LENGTH_MAX = 500
 
@@ -51,9 +49,9 @@ class ExternalWork < ActiveRecord::Base
   ########################################################################
   # Adapted from work.rb
 
-  scope :visible_to_all, where(hidden_by_admin: false)
-  scope :visible_to_registered_user, where(hidden_by_admin: false)
-  scope :visible_to_admin, where("")
+  scope :visible_to_all, -> { where(hidden_by_admin: false) }
+  scope :visible_to_registered_user, -> { where(hidden_by_admin: false) }
+  scope :visible_to_admin, -> { where("") }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -64,15 +62,20 @@ class ExternalWork < ActiveRecord::Base
   scope :visible_to_user, lambda {|user| user.is_a?(Admin) ? visible_to_admin : visible_to_all}
 
   # Use the current user to determine what external works are visible
-  scope :visible, visible_to_user(User.current_user)
+  scope :visible, -> { visible_to_user(User.current_user) }
 
   # Visible unless we're hidden by admin, in which case only an Admin can see.
   def visible?(user=User.current_user)
     self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
-  # FIXME - duplicate of above but called in different ways in different places
-  def visible(user=User.current_user)
-    self.hidden_by_admin? ? user.kind_of?(Admin) : true
+
+  alias_method :visible, :visible?
+
+  # Visibility has changed, which means we need to reindex
+  # the external work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   #######################################################################
@@ -131,7 +134,10 @@ class ExternalWork < ActiveRecord::Base
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
-    ).merge(bookmarkable_type: "ExternalWork")
+    ).merge(
+      bookmarkable_type: "ExternalWork",
+      bookmarkable_join: "bookmarkable"
+    )
   end
 
   def posted
@@ -151,5 +157,6 @@ class ExternalWork < ActiveRecord::Base
   def revised_at
     created_at
   end
+  include Taggable
 
 end

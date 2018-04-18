@@ -1,29 +1,30 @@
-class Bookmark < ActiveRecord::Base
+class Bookmark < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
+  include Responder
   # include Tire::Model::Callbacks
 
-  belongs_to :bookmarkable, :polymorphic => true
+  belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-
-  attr_protected :notes_sanitizer_version
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :notes,
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
-  default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
+  default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
 
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
-  scope :is_public, where(:private => false, :hidden_by_admin => false)
-  scope :not_public, where(:private => true)
-  scope :not_private, where(:private => false)
+  scope :is_public, -> { where(private: false, hidden_by_admin: false) }
+  scope :not_public, -> { where(private: true) }
+  scope :not_private, -> { where(private: false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
-  scope :recs, where(:rec => true)
+  scope :recs, -> { where(rec: true) }
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
@@ -32,38 +33,66 @@ class Bookmark < ActiveRecord::Base
             [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
-  scope :join_work,
+  scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
     merge(Work.visible_to_all)
+  }
 
-  scope :join_series,
+  scope :join_series, -> {
     joins("LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')").
     merge(Series.visible_to_all)
+  }
 
-  scope :join_external_works,
+  scope :join_external_works, -> {
     joins("LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')").
     merge(ExternalWork.visible_to_all)
+  }
 
-  scope :join_bookmarkable,
+  scope :join_bookmarkable, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')
            LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')
            LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')")
+  }
 
-  scope :visible_to_all,
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
-      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+  scope :visible_to_all, -> {
+    is_public.with_bookmarkable_visible_to_all
+  }
 
-  scope :visible_to_registered_user,
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.hidden_by_admin = 0) OR
+  scope :visible_to_registered_user, -> {
+    is_public.with_bookmarkable_visible_to_registered_user
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to registered
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_registered_user, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.hidden_by_admin = 0) OR
       (series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
 
-  scope :visible_to_admin, not_private
+  # Scope for retrieving bookmarks with a bookmarkable visible to logged-out
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_all, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
+      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
 
-  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work
+  # Scope for retrieving bookmarks with a missing bookmarkable (regardless of
+  # the bookmark's hidden_by_admin/private status).
+  scope :with_missing_bookmarkable, -> {
+    join_bookmarkable.where(
+      "works.id IS NULL AND series.id IS NULL AND external_works.id IS NULL"
+    )
+  }
+
+  scope :visible_to_admin, -> { not_private }
+
+  scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -85,16 +114,26 @@ class Bookmark < ActiveRecord::Base
   }
 
   # Use the current user to determine what works are visible
-  scope :visible, visible_to_user(User.current_user)
+  scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count, :update_pseud_index
+
+  after_create :update_work_stats
+  after_destroy :update_work_stats, :update_pseud_index
 
   def invalidate_bookmark_count
-    work = Work.where(:id => self.bookmarkable_id)
+    work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
+  end
+
+  # We index the bookmark count, so if it should change, update the pseud
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
+    IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
   def visible?(current_user=User.current_user)
@@ -119,9 +158,19 @@ class Bookmark < ActiveRecord::Base
     return false
   end
 
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "ao3_#{Rails.env}_bookmarks"
+    else
+      tire.index.name
+    end
+  end
+
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
-    bookmarkable.bookmarks.visible.count
+    bookmarkable.bookmarks.visible.size
   end
 
   # Virtual attribute for external works
@@ -152,7 +201,7 @@ class Bookmark < ActiveRecord::Base
         if tag
           self.tags << tag
         else
-          self.tags << UnsortedTag.create(:name => string)
+          self.tags << UnsortedTag.create(name: string)
         end
       end
     end
@@ -168,20 +217,41 @@ class Bookmark < ActiveRecord::Base
     unless User.current_user == user
       bookmarks = bookmarks.is_public
     end
-    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+  end
+
+  # TODO: Is this necessary anymore?
+  before_destroy :save_parent_info
+
+  # Because of the way the elasticsearch parent/child index is set up, we need
+  # to know what the bookmarkable type and id was in order to delete the
+  # bookmark from the index after it's been deleted from the database
+  def save_parent_info
+    expire_time = (Time.now + 2.weeks).to_i
+    REDIS_GENERAL.setex(
+      "deleted_bookmark_parent_#{self.id}",
+      expire_time,
+      "#{bookmarkable_id}-#{bookmarkable_type.underscore}"
+    )
   end
 
   #################################
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :notes
-    indexes :private, :type => 'boolean'
+    indexes :private, type: 'boolean'
     indexes :bookmarkable_type
     indexes :bookmarkable_id
-    indexes :created_at,          :type  => 'date'
-    indexes :bookmarkable_date,   :type  => 'date'
+    indexes :created_at,          type: 'date'
+    indexes :bookmarkable_date,   type: 'date'
+  end
+
+  def document_json
+    BookmarkIndexer.new({}).document(self)
   end
 
   self.include_root_in_json = false
@@ -215,7 +285,7 @@ class Bookmark < ActiveRecord::Base
   end
 
   def bookmarker
-    pseud.try(:name)
+    pseud.try(:byline)
   end
 
   def with_notes
@@ -226,7 +296,7 @@ class Bookmark < ActiveRecord::Base
     if bookmarkable.respond_to?(:creator)
       bookmarkable.creator
     elsif bookmarkable.respond_to?(:pseuds)
-      bookmarkable.pseuds.value_of(:name)
+      bookmarkable.pseuds.pluck(:name)
     elsif bookmarkable.respond_to?(:author)
       bookmarkable.author
     end
@@ -234,23 +304,23 @@ class Bookmark < ActiveRecord::Base
 
   def bookmarkable_pseud_ids
     if bookmarkable.respond_to?(:creatorships)
-      bookmarkable.creatorships.value_of(:pseud_id)
+      bookmarkable.creatorships.pluck(:pseud_id)
     end
   end
 
   def tag
-    names = self.tags.value_of(:name) + filter_names
+    names = self.tags.pluck(:name) + filter_names
     if bookmarkable.respond_to?(:tags)
-      names += bookmarkable.tags.where(canonical: false).value_of :name
+      names += bookmarkable.tags.where(canonical: false).pluck :name
     end
     if bookmarkable.respond_to?(:work_tags)
-      names += bookmarkable.work_tags.where(canonical: false).value_of :name
+      names += bookmarkable.work_tags.where(canonical: false).pluck :name
     end
     names.uniq
   end
 
   def tag_ids
-    self.tags.value_of(:id)
+    self.tags.pluck(:id)
   end
 
   def filters
@@ -310,12 +380,12 @@ class Bookmark < ActiveRecord::Base
   end
 
   def collection_ids
-    approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
+    approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
   def bookmarkable_collection_ids
     if bookmarkable.respond_to?(:approved_collections)
-      bookmarkable.approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
+      bookmarkable.approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
     end
   end
 

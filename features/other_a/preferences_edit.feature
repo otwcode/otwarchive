@@ -34,7 +34,6 @@ Feature: Edit preferences
     And I should see "Turn off messages to your inbox about comments."
     And I should see "Turn off copies of your own comments."
     And I should see "Turn off emails about kudos."
-    And I should see "Turn off admin emails."
     And I should see "Automatically agree to your work being collected by others in the Archive."
     And I should see "Turn off emails from collections."
     And I should see "Turn off inbox messages from collections."
@@ -151,8 +150,9 @@ Feature: Edit preferences
   When I follow "All Fandoms"
   Then I should see "Stargate SG-1"
     And I should see "Stargate SG-2"
-  # we are now looking at a canonical fandom tag
-  When I follow "Stargate SG-1"
+    # we are now looking at a canonical fandom tag
+  When all indexing jobs have been run
+    And I follow "Stargate SG-1"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
     And I should see "No Archive Warnings Apply" within ".tags"

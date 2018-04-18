@@ -6,7 +6,7 @@ Feature: Create bookmarks
 
 Scenario: Create a bookmark
   Given I am logged in as "first_bookmark_user"
-    When I am on first_bookmark_user's user page 
+    When I am on first_bookmark_user's user page
       Then I should see "have anything posted under this name yet"
     When I am logged in as "another_bookmark_user"
       And I post the work "Revenge of the Sith"
@@ -21,6 +21,7 @@ Scenario: Create a bookmark
       And I fill in "bookmark_tag_string" with "This is a tag, and another tag,"
       And I check "bookmark_rec"
       And I press "Create"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
       And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"
@@ -30,25 +31,26 @@ Scenario: Create a bookmark
       And I should see "and another tag"
       And I should see "I liked this story"
     When I am logged in as "first_bookmark_user"
-      And I go to first_bookmark_user's user page 
+      And I go to first_bookmark_user's user page
     Then I should not see "You don't have anything posted under this name yet"
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
       And I press "Edit"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully updated"
     When I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "I liked this story"
-    
+
     # privacy check for the private bookmark '
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-      
+
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           |
@@ -82,6 +84,7 @@ Scenario: Create a bookmark
     When I view the work "Publicky"
       And I follow "Bookmark"
       And I press "Create"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
     When I log out
       And I go to the bookmarks page
@@ -120,6 +123,7 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "five_pillars"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created"
     And I should see "The collection Five Pillars is currently moderated."
   When I go to bookmarker's bookmarks page
@@ -127,6 +131,7 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
   When I log out
     And I am logged in as "moderator" with password "password"
     And I approve the first item in the collection "Five Pillars"
+    And all indexing jobs have been run
     And I am logged in as "bookmarker" with password "password"
     And I go to bookmarker's bookmarks page
   Then I should not see "The collection Five Pillars is currently moderated."
@@ -150,6 +155,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
     # UPDATE the bookmark and add it to a second MODERATED collection and
@@ -157,12 +163,13 @@ Scenario: bookmarks added to moderated collections appear correctly
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms"
     And I press "Update"
-    And all search indexes are updated
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "to the moderated collection 'Bedknobs and Broomsticks'."
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
+    And all indexing jobs have been run
   Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
@@ -192,7 +199,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Edit Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
     And I press "Edit" within "div#bookmark-form"
-    And all search indexes are updated
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
   When I go to bookmarker's bookmarks page
@@ -321,31 +328,37 @@ Scenario: Delete bookmarks of a work and a series
     And I view the work "A Mighty Duck"
     And I follow "Bookmark"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created."
     And I should see "Delete"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
   When I view the series "The Funky Bunch"
     And I follow "Bookmark Series"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created."
   When I follow "Delete"
-    And I press "Yes, Delete Bookmark"
+  And I press "Yes, Delete Bookmark"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
   When I go to my bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
   When I log out
     And I am logged in as "wahlly"
     And I delete the work "A Mighty Duck2 the sequel"
-    Then I should see "A Mighty Duck2 the sequel was deleted."
+    And all indexing jobs have been run
+  Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
-  When I go to my bookmarks page
+    And I go to my bookmarks page
   Then I should see "This has been deleted, sorry!"
     And I follow "Edit"
     And I check "bookmark_private"
     And I press "Update"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
@@ -376,3 +389,27 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
+
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+  Given the work "Popular Work"
+    And I am logged in as "bookmarker1"
+    And I bookmark the work "Popular Work" with the note "Love it"
+    And I log out
+    And I am logged in as "bookmarker2"
+    And I bookmark the work "Popular Work"
+    And the statistics for the work "Popular Work" are updated
+  When I am on the bookmarks page
+    # There are two of these links, but bookmarker2's bookmark is more recent,
+    # and it follows the first link matching the specified text
+    And I follow "Show Most Recent Bookmarks"
+  # Again, we're relying on the fact that it uses the first element that
+  # matches the specified selector, since each bookmark on the page will have a
+  # div with the class .recent
+  Then I should see "bookmarker1" within ".recent"
+    And I should see "Love it" within ".recent"
+    And I should see "Hide Most Recent Bookmarks" within ".recent"
+  When I follow "Hide Most Recent Bookmarks"
+  Then I should not see "bookmarker1" within ".recent"
+    And I should not see "Love it" within ".recent"
+    And I should see "Show Most Recent Bookmarks" within "li.bookmark"

@@ -67,7 +67,7 @@ class SpamReport
                  where("works.created_at > ? AND works.created_at < ?",
                        recent_date,
                        new_date).
-                 posted.not_spam.count
+                 posted.not_spam.size
     score -= (count * 2)
     score += ips.uniq.length
     [new_works, score]

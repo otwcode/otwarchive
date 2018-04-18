@@ -129,6 +129,3 @@ describe User, :ready do
 
 
 end
-
-
-
