@@ -536,6 +536,11 @@
     update_works_index_timestamp!
   end
 
+  def reindex_user_pseuds
+    # Reindex a user's pseuds
+    IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
+  end
+
   private
 
   # Create and/or return a user account for holding orphaned works
@@ -554,6 +559,7 @@
       old_pseud.name = login
       old_pseud.save!
       old_pseud.update_author_sorting
+      reindex_user_pseuds
     else
       new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
@@ -563,6 +569,7 @@
         old_pseud.name = login
         old_pseud.save!(validate: false)
         old_pseud.update_author_sorting
+        reindex_user_pseuds
       else
         # shouldn't be able to get here, but just in case
         Pseud.create!(name: login, user_id: id)
