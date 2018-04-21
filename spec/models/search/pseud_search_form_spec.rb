@@ -56,6 +56,31 @@ describe PseudSearchForm do
     end
   end
 
+  context "a user with multiple pseuds" do
+    let!(:user) { create(:user, login: "avatar") }
+    let!(:second_pseud) { create(:pseud, name: "kyoshi", user: user) }
+
+    before { run_all_indexing_jobs }
+
+    it "reindexes all pseuds when changing username" do
+      results = PseudSearchForm.new(name: "avatar").search_results
+      expect(results).to include(user.default_pseud)
+      expect(results).to include(second_pseud)
+
+      user.reload
+      user.login = "aang"
+      user.save
+      run_all_indexing_jobs
+
+      results = PseudSearchForm.new(name: "avatar").search_results
+      expect(results).to be_empty
+
+      results = PseudSearchForm.new(name: "aang").search_results
+      expect(results).to include(user.default_pseud)
+      expect(results).to include(second_pseud)
+    end
+  end
+
   context "pseud index of bookmarkers" do
     let(:bookmarker) { create(:pseud, name: "bookmarkermit") }
 
