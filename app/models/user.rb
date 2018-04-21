@@ -558,7 +558,6 @@
     if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
-      old_pseud.update_author_sorting
       reindex_user_pseuds
     else
       new_pseud = pseuds.where(name: login).first
@@ -568,7 +567,6 @@
         # change the old pseud to match
         old_pseud.name = login
         old_pseud.save!(validate: false)
-        old_pseud.update_author_sorting
         reindex_user_pseuds
       else
         # shouldn't be able to get here, but just in case
