@@ -132,18 +132,6 @@ class Work < ApplicationRecord
     end
   end
 
-  # ES UPGRADE TRANSITION #
-  # Drop unused database column authors_to_sort_on
-  def authors_to_sort_on
-    if self.anonymous?
-      "Anonymous"
-    elsif self.authors.present?
-      self.sorted_authors
-    else
-      self.sorted_pseuds
-    end
-  end
-
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 
@@ -1374,12 +1362,15 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
-  end
-
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+  # TODO drop unused database column authors_to_sort_on
+  def authors_to_sort_on
+    if self.anonymous?
+      "Anonymous"
+    elsif self.authors.present?
+      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    else
+      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    end
   end
 
   def sorted_title
