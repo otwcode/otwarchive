@@ -153,17 +153,15 @@ describe Work do
     end
   end
 
-  describe "#set_author_sorting" do
+  describe "#authors_to_sort_on" do
     let(:work) { build(:work) }
 
     context "when the pseuds start with special characters" do
       it "should remove those characters" do
         work.authors = [Pseud.new(name: "-jolyne")]
-        work.set_author_sorting
         expect(work.authors_to_sort_on).to eq "jolyne"
 
         work.authors = [Pseud.new(name: "_hermes")]
-        work.set_author_sorting
         expect(work.authors_to_sort_on).to eq "hermes"
       end
     end
@@ -171,7 +169,6 @@ describe Work do
     context "when the pseuds start with numbers" do
       it "should not remove numbers" do
         work.authors = [Pseud.new(name: "007james")]
-        work.set_author_sorting
         expect(work.authors_to_sort_on).to eq "007james"
       end
     end
@@ -180,7 +177,6 @@ describe Work do
       it "should set the author sorting to Anonymous" do
         work.in_anon_collection = true
         work.authors = [Pseud.new(name: "stealthy")]
-        work.set_author_sorting
         expect(work.authors_to_sort_on).to eq "Anonymous"
       end
     end
@@ -188,7 +184,6 @@ describe Work do
     context "when the work has multiple pseuds" do
       it "should combine them with commas" do
         work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
-        work.set_author_sorting
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
       end
     end

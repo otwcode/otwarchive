@@ -73,6 +73,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_update :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -138,13 +139,6 @@ class Pseud < ApplicationRecord
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
-  end
-
-  def update_author_sorting
-    works.each do |work|
-      work.set_author_sorting
-      work.save!
-    end
   end
 
   # Enigel Dec 12 08: added sort method
@@ -497,4 +491,17 @@ class Pseud < ApplicationRecord
     end
   end
 
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end

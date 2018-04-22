@@ -90,4 +90,62 @@ describe BookmarkSearchForm do
       end
     end
   end
+
+  describe "when searching by bookmarker" do
+    let(:bookmarker) { create(:user, login: "yabalchoath") }
+
+    {
+      Work: :posted_work,
+      Series: :series_with_a_work,
+      ExternalWork: :external_work
+    }.each_pair do |type, factory|
+      it "returns the correct bookmarked #{type.to_s.pluralize} when bookmarker changes username" do
+        bookmarkable = create(factory)
+        bookmark = create(:bookmark,
+                          bookmarkable_id: bookmarkable.id,
+                          bookmarkable_type: type,
+                          pseud: bookmarker.default_pseud)
+        run_all_indexing_jobs
+
+        result = BookmarkSearchForm.new(bookmarker: "yabalchoath").search_results.first
+        expect(result).to eq bookmark
+
+        bookmarker.login = "cioelle"
+        bookmarker.save!
+        run_all_indexing_jobs
+
+        result = BookmarkSearchForm.new(bookmarker: "yabalchoath").search_results.first
+        expect(result).to be_nil
+        result = BookmarkSearchForm.new(bookmarker: "cioelle").search_results.first
+        expect(result).to eq bookmark
+      end
+    end
+  end
+
+  describe "when searching any bookmarkable field for author of bookmarkable" do
+    let(:author) { create(:user, login: "yabalchoath") }
+
+    {
+      Work: :posted_work,
+      Series: :series_with_a_work
+    }.each_pair do |type, factory|
+      it "returns the correct bookmarked #{type.to_s.pluralize} when author changes username" do
+        bookmarkable = create(factory, authors: [author.default_pseud])
+        bookmark = create(:bookmark, bookmarkable_id: bookmarkable.id, bookmarkable_type: type)
+        run_all_indexing_jobs
+
+        result = BookmarkSearchForm.new(bookmarkable_query: "yabalchoath").search_results.first
+        expect(result).to eq bookmark
+
+        author.login = "cioelle"
+        author.save!
+        run_all_indexing_jobs
+
+        result = BookmarkSearchForm.new(bookmarkable_query: "yabalchoath").search_results.first
+        expect(result).to be_nil
+        result = BookmarkSearchForm.new(bookmarkable_query: "cioelle").search_results.first
+        expect(result).to eq bookmark
+      end
+    end
+  end
 end
