@@ -153,58 +153,6 @@ module Taggable
     end
   end
 
-  def cast_tags
-    # we combine relationship and character tags up to the limit
-    characters = self.characters.by_name || []
-    relationships = self.relationships.by_name || []
-    return [] if relationships.empty? && characters.empty?
-    canonical_relationships = Relationship.canonical.by_name.where(id: relationships.collect(&:merger_id).compact.uniq)
-    all_relationships = (relationships + canonical_relationships).flatten.uniq.compact
-
-    #relationship_characters = all_relationships.collect{|p| p.all_characters}.flatten.uniq.compact
-    relationship_characters = Character.by_relationships(all_relationships)
-    relationship_characters = (relationship_characters + relationship_characters.collect(&:mergers).flatten).compact.uniq
-
-    line_limited_tags(relationships + characters - relationship_characters)
-  end
-
-  def relationship_tags
-    taglist = self.tags.select {|t| t.is_a?(Relationship)}
-    line_limited_tags(taglist)
-  end
-
-  def character_tags
-    taglist = self.tags.select {|t| t.is_a?(Character)}
-    line_limited_tags(taglist)
-  end
-
-  def freeform_tags
-    taglist = self.tags.select {|t| t.is_a?(Freeform)}
-    line_limited_tags(taglist)
-  end
-
-  def warning_tags
-    taglist = self.tags.select {|t| t.is_a?(Warning)}
-    line_limited_tags(taglist)
-  end
-
-  def line_limited_tags(taglist)
-    taglist = taglist[0..(ArchiveConfig.TAGS_PER_LINE-1)] if taglist.size > ArchiveConfig.TAGS_PER_LINE
-    taglist
-  end
-
-  def fandom_tags
-    self.tags.select {|t| t.is_a?(Fandom)}
-  end
-
-  # for testing
-  def add_default_tags
-    self.fandom_string = "Test Fandom"
-    self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
-    self.save
-  end
-
   private
 
   # Returns a string (or array) of tag names
