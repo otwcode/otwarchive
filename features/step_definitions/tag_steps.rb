@@ -310,6 +310,12 @@ When /^the tag "([^\"]*)" is decanonized$/ do |tag|
   tag.save
 end
 
+When /^the tag "([^"]*)" is canonized$/ do |tag|
+  tag = Tag.find_by!(name: tag)
+  tag.canonical = true
+  tag.save
+end
+
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
   visit new_wrangling_guideline_path
@@ -328,6 +334,21 @@ When /^I flush the wrangling sidebar caches$/ do
   [Fandom, Character, Relationship, Freeform].each do |klass|
     Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
+end
+
+When /^I syn the tag "([^"]*)" to "([^"]*)"$/ do |tag, syn|
+  tag = Tag.find_by(name: tag)
+  visit edit_tag_path(tag)
+  fill_in("Synonym of", with: syn)
+  click_button("Save changes")
+end
+
+When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, tag|
+  tag = Tag.find_by(name: tag)
+  syn_id = Tag.find_by(name: syn).id
+  visit edit_tag_path(tag)
+  check("child_Merger_associations_to_remove_#{syn_id}")
+  click_button("Save changes")
 end
 
 ### THEN
