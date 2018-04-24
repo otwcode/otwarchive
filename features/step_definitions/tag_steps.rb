@@ -351,6 +351,21 @@ When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, tag|
   click_button("Save changes")
 end
 
+When /^I subtag the tag "([^"]*)" to "([^"]*)"$/ do |subtag, metatag|
+  subtag = Tag.find_by(name: subtag)
+  visit edit_tag_path(subtag)
+  fill_in("Add MetaTags:", with: metatag)
+  click_button("Save changes")
+end
+
+When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
+  tag = Tag.find_by(name: subtag)
+  metatag_id = Tag.find_by(name: metatag).id
+  visit edit_tag_path(subtag)
+  check("parent_MetaTag_associations_to_remove_#{metatag_id}")
+  click_button("Save changes")
+end
+
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
