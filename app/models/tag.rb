@@ -947,15 +947,20 @@ class Tag < ApplicationRecord
     end
   end
 
-  # Add filter taggings to this tag's works for one of its meta tags
+  # Add filter taggings to this tag's items for one of its meta tags
   def inherit_meta_filters(meta_tag_id)
     meta_tag = Tag.find_by(id: meta_tag_id)
     return unless meta_tag.present?
-    self.filtered_works.each do |work|
-      unless work.filters.include?(meta_tag)
-        work.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
-        RedisSearchIndexQueue.reindex(work, priority: :low)
-        IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+    filtered_items = self.filtered_works + self.filtered_external_works
+    filtered_items.each do |item|
+      unless item.filters.include?(meta_tag)
+        item.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
+        if item.is_a?(Work)
+          RedisSearchIndexQueue.reindex(item, priority: :low)
+          IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+        else
+          IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+        end 
       end
     end
   end
@@ -1065,23 +1070,28 @@ class Tag < ApplicationRecord
   def remove_meta_filters(meta_tag_id)
     meta_tag = Tag.find(meta_tag_id)
     # remove meta tag from this tag's sub tags
-    self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
+    self.sub_tags.each { |sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag) }
     # remove inherited meta tags from this tag and all of its sub tags
     inherited_meta_tags = meta_tag.meta_tags
     inherited_meta_tags.each do |tag|
       self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
-      self.sub_tags.each {|sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag)}
+      self.sub_tags.each { |sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag) }
     end
-    # remove filters for meta tag from this tag's works
+    # remove filters for meta tag from this tag's works and external works
     other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
-    self.filtered_works.each do |work|
+    filtered_items = self.filtered_works + self.filtered_external_works
+    filtered_items.each do |item|
       to_remove = [meta_tag] + inherited_meta_tags
       to_remove.each do |tag|
-        if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
-          unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filter_taggings.where(filter_id: tag.id).destroy_all
-            RedisSearchIndexQueue.reindex(work, priority: :low)
-            IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+        if item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
+          unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
+            item.filter_taggings.where(filter_id: tag.id).destroy_all
+            if item.is_a?(Work)
+              RedisSearchIndexQueue.reindex(item, priority: :low)
+              IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+            else
+              IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+            end
           end
         end
       end
