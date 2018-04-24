@@ -359,7 +359,7 @@ When /^I subtag the tag "([^"]*)" to "([^"]*)"$/ do |subtag, metatag|
 end
 
 When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
-  tag = Tag.find_by(name: subtag)
+  subtag = Tag.find_by(name: subtag)
   metatag_id = Tag.find_by(name: metatag).id
   visit edit_tag_path(subtag)
   check("parent_MetaTag_associations_to_remove_#{metatag_id}")
