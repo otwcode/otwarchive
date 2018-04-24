@@ -848,22 +848,23 @@ class Tag < ApplicationRecord
     # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
     # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
-    return unless filter_tag  && !filter_tag.new_record?
+    return unless filter_tag && !filter_tag.new_record?
 
     # we collect tags for resetting count so that it's only done once after we've added all filters to works
     tags_that_need_filter_count_reset = []
-    self.works.each do |work|
-      if work.filters.include?(filter_tag)
-        # If the work filters already included the filter tag (e.g. because the
+    items = self.works + self.external_works
+    items.each do |item|
+      if item.filters.include?(filter_tag)
+        # If the item filters already included the filter tag (e.g. because the
         # new filter tag is a meta tag of an existing tag) we make sure to set
-        # the inheritance to false, since the work is now directly tagged with
+        # the inheritance to false, since the item is now directly tagged with
         # the filter or one of its synonyms
-        ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+        ft = item.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
         ft.update_attribute(:inherited, false)
       else
         FilterTagging.create(
           filter: filter_tag,
-          filterable: work
+          filterable: item
         )
         # As of Rails 5 upgrade, this triggers a stack level too deep error
         # because it triggers the `before_update
@@ -881,7 +882,7 @@ class Tag < ApplicationRecord
       end
       unless filter_tag.meta_tags.empty?
         filter_tag.meta_tags.each do |m|
-          unless work.filters.include?(m)
+          unless item.filters.include?(m)
             work.filter_taggings.create!(inherited: true, filter_id: m.id)
             tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
           end

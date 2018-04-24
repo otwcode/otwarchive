@@ -92,3 +92,13 @@ Feature: Bookmark Indexing
     When I go to the bookmarks tagged "Laura Roslin"
     Then I should see "Outside Story"
       And I should see "Telling Stories"
+
+  @new-search
+  Scenario: A bookmark of an external work should show on a tag's bookmark 
+  listing once the tag is made canonical
+    Given I am logged in as "bookmarker"
+      And I bookmark the external work "Outside Story" with character "Mikki Mendoza"
+    When the tag "Mikki Mendoza" is canonized
+      And I go to the bookmarks tagged "Mikki Mendoza"
+    Then I should see "Outside Story"
+      
