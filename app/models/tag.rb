@@ -933,7 +933,7 @@ class Tag < ApplicationRecord
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
         RedisSearchIndexQueue.reindex(work, priority: :low)
-        IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background)
+        IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
       end
     end
   end
@@ -1059,7 +1059,7 @@ class Tag < ApplicationRecord
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filter_taggings.where(filter_id: tag.id).destroy_all
             RedisSearchIndexQueue.reindex(work, priority: :low)
-            IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background)
+            IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
           end
         end
       end
