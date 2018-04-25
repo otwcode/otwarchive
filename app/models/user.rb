@@ -513,9 +513,11 @@
 
   def reindex_user_works
     # reindex the user's works to make sure they show up on the user's works page
-    works.each do |work|
-      IndexQueue.enqueue(work, :main)
-    end
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+  end
+
+  def reindex_user_series
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
   end
 
   def set_user_work_dates
@@ -558,21 +560,26 @@
     if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
-      reindex_user_pseuds
     else
       new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
-      return if new_pseud.present?
-      if old_pseud.present?
-        # change the old pseud to match
-        old_pseud.name = login
-        old_pseud.save!(validate: false)
-        reindex_user_pseuds
-      else
-        # shouldn't be able to get here, but just in case
-        Pseud.create!(name: login, user_id: id)
+      if new_pseud.blank?
+        if old_pseud.present?
+          # change the old pseud to match
+          old_pseud.name = login
+          old_pseud.save!(validate: false)
+        else
+          # shouldn't be able to get here, but just in case
+          Pseud.create!(name: login, user_id: id)
+        end
       end
     end
+
+    # Works, series, and pseuds are indexed with the user's byline,
+    # which has the old username, so they all need to be reindexed.
+    reindex_user_works
+    reindex_user_series
+    reindex_user_pseuds
   end
 
    def log_change_if_login_was_edited
