@@ -6,7 +6,7 @@
     <dt><%= f.label :password, ts("Password:") %></dt>
     <dd><%= f.password_field :password %></dd>
     <dt><%= f.label :remember_me, ts("Remember me") %></dt>
-    <dd><%= f.check_box :remember_me %></dd>
+    <dd><%= check_box_tag "user_session[remember_me]", 1, false, id: "user_session_remember_me" %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions">
       <%= f.submit ts("Log in"), class: "submit" %>
