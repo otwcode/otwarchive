@@ -101,7 +101,7 @@ module Taggable
   def category_string=(tag_string)
     parse_tags(Category, tag_string)
   end
-  def warning_string=(tag_string)
+  def archivewarning_string=(tag_string)
     parse_tags(ArchiveWarning, tag_string)
   end
   def archivewarning_strings=(array)
@@ -201,7 +201,7 @@ module Taggable
   def add_default_tags
     self.fandom_string = "Test Fandom"
     self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
+    self.archivewarning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     self.save
   end
 

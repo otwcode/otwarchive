@@ -345,7 +345,7 @@ class StoryParser
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
     work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-    work.warning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+    work.archivewarning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
     work.category_string = meta_or_default(work.category_string, options[:category], [])
     work.character_string = meta_or_default(work.character_string, options[:character], [])
     work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
