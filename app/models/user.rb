@@ -73,6 +73,8 @@
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
+  after_commit :reindex_user_creations_after_rename
+
   has_many :collection_participants, through: :pseuds
   has_many :collections, through: :collection_participants
   has_many :invited_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::INVITED) }, through: :collection_participants, source: :collection
@@ -511,15 +513,6 @@
     end
   end
 
-  def reindex_user_works
-    # reindex the user's works to make sure they show up on the user's works page
-    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
-  end
-
-  def reindex_user_series
-    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-  end
-
   def set_user_work_dates
     # Fix user stats page error caused by the existence of works with nil revised_at dates
     works.each do |work|
@@ -530,16 +523,10 @@
     end
   end
 
-  def reindex_user_bookmarks
-    # Reindex a user's bookmarks.
-    bookmarks.each do |bookmark|
-      bookmark.reindex_document
-    end
-    update_works_index_timestamp!
-  end
-
-  def reindex_user_pseuds
-    # Reindex a user's pseuds
+  def reindex_user_creations
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
   end
 
@@ -574,12 +561,13 @@
         end
       end
     end
+  end
 
-    # Works, series, and pseuds are indexed with the user's byline,
+  def reindex_user_creations_after_rename
+    return unless saved_change_to_login? && login_before_last_save.present?
+    # Everything is indexed with the user's byline,
     # which has the old username, so they all need to be reindexed.
-    reindex_user_works
-    reindex_user_series
-    reindex_user_pseuds
+    reindex_user_creations
   end
 
    def log_change_if_login_was_edited
