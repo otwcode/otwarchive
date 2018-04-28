@@ -63,11 +63,11 @@ module TagsHelper
   end
 
   def link_to_tag(tag, options = {})
-    link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_with_text(tag, tag.is_a?(ArchiveWarning) ? warning_display_name(tag.name) : tag.name, options)
   end
 
   def link_to_tag_works(tag, options = {})
-    link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_works_with_text(tag, tag.is_a?(ArchiveWarning) ? warning_display_name(tag.name) : tag.name, options)
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})

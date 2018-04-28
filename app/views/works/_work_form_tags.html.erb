@@ -21,14 +21,14 @@
     </dd>
 
     <dt class="warning required">
-      <label><%= Warning::NAME.pluralize %>*</label>
+      <label><%= ArchiveWarning::NAME.pluralize %>*</label>
       <%= link_to_help "warning-help" %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
         <!--<legend class="landmark">Warning</legend>-->
         <ul>
-          <% for tag in Warning.canonical.by_name %>
+          <% for tag in ArchiveWarning.canonical.by_name %>
             <li>
               <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
               <%= label_tag "work_warning_strings_#{tag.id}", tag.name %>

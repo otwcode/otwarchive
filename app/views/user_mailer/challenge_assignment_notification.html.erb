@@ -32,7 +32,7 @@
       <% if chars %><%= style_bold(Character.human_attribute_name("name_with_colon", count: prompt.any_character ? 1 : tag_groups["Character"].count)) %> <%= chars %><br><% end %>
       <% if ships %><%= style_bold(Relationship.human_attribute_name("name_with_colon", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count)) %> <%= ships %><br><% end %>
       <% if ratings %><%= style_bold(Rating.human_attribute_name("name_with_colon")) %> <%= ratings %><br><% end %>
-      <% if warnings %><%= style_bold(Warning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count)) %> <%= warnings %><br><% end %>
+      <% if warnings %><%= style_bold(ArchiveWarning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count)) %> <%= warnings %><br><% end %>
       <% if categories %><%= style_bold(Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %> <%= categories %><br><% end %>
       <% if atags %><%= style_bold(Freeform.human_attribute_name("name_with_colon", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count)) %> <%= atags %><br><% end %>
       <% if otags %><%= style_bold("#{t(".optional_tags")}") %> <%= otags %><br><% end %>

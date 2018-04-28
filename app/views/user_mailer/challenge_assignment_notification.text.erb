@@ -26,7 +26,7 @@
 <%= Character.human_attribute_name("name_with_colon", count: prompt.any_character ? 1 : tag_groups["Character"].count) %> <%= chars %><% end %><% if ships %>
 <%= Relationship.human_attribute_name("name_with_colon", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) %> <%= ships %><% end %><% if ratings %>
 <%= Rating.human_attribute_name("name_with_colon") %> <%= ratings %><% end %><% if warnings %>
-<%= Warning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count) %> <%= warnings %><% end %><% if categories %>
+<%= ArchiveWarning.human_attribute_name("name_with_colon", count: prompt.any_warning ? 1 : tag_groups["Warning"].count) %> <%= warnings %><% end %><% if categories %>
 <%= Category.human_attribute_name("name_with_colon", count: prompt.any_category ? 1 : tag_groups["Category"].count) %> <%= categories %><% end %><% if atags %>
 <%= Freeform.human_attribute_name("name_with_colon", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) %> <%= atags %><% end %><% if otags %>
 <%= t ".optional_tags" %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>

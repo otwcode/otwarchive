@@ -407,7 +407,7 @@ namespace :After do
 
   desc "Set initial values for sortable tag names for tags that aren't fandoms"
   task(:more_sortable_tag_names => :environment) do
-    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+    [Category, Character, Freeform, Rating, Relationship, ArchiveWarning].each do |klass|
       puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
       klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
         tag.set_sortable_name

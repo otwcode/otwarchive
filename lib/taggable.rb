@@ -102,10 +102,10 @@ module Taggable
     parse_tags(Category, tag_string)
   end
   def warning_string=(tag_string)
-    parse_tags(Warning, tag_string)
+    parse_tags(ArchiveWarning, tag_string)
   end
   def warning_strings=(array)
-    parse_tags(Warning, array)
+    parse_tags(ArchiveWarning, array)
   end
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
@@ -184,7 +184,7 @@ module Taggable
   end
 
   def warning_tags
-    taglist = self.tags.select {|t| t.is_a?(Warning)}
+    taglist = self.tags.select {|t| t.is_a?(ArchiveWarning)}
     line_limited_tags(taglist)
   end
 

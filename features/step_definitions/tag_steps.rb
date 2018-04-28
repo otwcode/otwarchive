@@ -32,7 +32,7 @@ Given /^the basic warnings exist$/ do
   warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
               ArchiveConfig.WARNING_NONE_TAG_NAME]
   warnings.each do |warning|
-    Warning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^all warnings exist$/ do
               ArchiveConfig.WARNING_NONCON_TAG_NAME,
               ArchiveConfig.WARNING_CHAN_TAG_NAME]
   warnings.each do |warning|
-    Warning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
   end
 end
 

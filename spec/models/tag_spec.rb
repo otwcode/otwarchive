@@ -185,7 +185,7 @@ describe Tag do
 
       it 'old tag maker still works' do
         tag_adult = Rating.create_canonical('adult', true)
-        tag_normal = Warning.create_canonical('other')
+        tag_normal = ArchiveWarning.create_canonical('other')
         expect(tag_adult.name).to eq('adult')
         expect(tag_normal.name).to eq('other')
         expect(tag_adult.adult).to be_truthy

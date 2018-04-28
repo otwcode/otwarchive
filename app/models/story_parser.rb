@@ -924,7 +924,7 @@ class StoryParser
     }
     new_warning = ''
     result[:warning_string].split(/\s?,\s?/).each do |warning|
-      if Warning.warning? warning
+      if ArchiveWarning.warning? warning
         new_warning += ', ' unless new_warning.blank?
         new_warning += warning
       else
