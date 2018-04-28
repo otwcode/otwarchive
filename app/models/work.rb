@@ -876,7 +876,7 @@ class Work < ApplicationRecord
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?
-    return false if self.warning_string.blank?
+    return false if self.archivewarning_string.blank?
     return false if self.rating_string.blank?
     return true
   end

@@ -25,7 +25,7 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
-      has_many :warnings,
+      has_many :archivewarnings,
         -> { where("tags.type = 'ArchiveWarning'") },
         through: :taggings,
         source: :tagger,
@@ -71,11 +71,11 @@ module Taggable
   def category_strings
     tag_category_string(:categories, return_array: true)
   end
-  def warning_string
-    tag_category_string(:warnings)
+  def archivewarning_string
+    tag_category_string(:archivewarnings)
   end
-  def warning_strings
-    tag_category_string(:warnings, return_array: true)
+  def archivewarning_strings
+    tag_category_string(:archivewarnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)

@@ -5,7 +5,7 @@ FactoryGirl.define do
     title "My title is long enough"
     fandom_string "Testing"
     rating_string "Not Rated"
-    warning_string "No Archive Warnings Apply"
+    archivewarning_string "No Archive Warnings Apply"
     chapter_info = { content: "This is some chapter content for my work." }
     chapter_attributes chapter_info
 

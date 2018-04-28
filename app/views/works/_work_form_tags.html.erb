@@ -30,8 +30,8 @@
         <ul>
           <% for tag in ArchiveWarning.canonical.by_name %>
             <li>
-              <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
-              <%= label_tag "work_warning_strings_#{tag.id}", tag.name %>
+              <%= check_box_tag "work[archivewarning_strings][]", tag.name, include_blank ? false : check_archivewarning(@work, tag), :id => "work_archivewarning_strings_#{tag.id}" %>
+              <%= label_tag "work_archivewarning_strings_#{tag.id}", tag.name %>
             </li>
           <% end %>
         </ul>

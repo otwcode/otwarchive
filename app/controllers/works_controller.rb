@@ -1037,7 +1037,7 @@ class WorksController < ApplicationController
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],
-      warning: params[:work][:warning_strings],
+      warning: params[:work][:archivewarning_strings],
       character: params[:work][:character_string],
       rating: params[:work][:rating_string],
       relationship: params[:work][:relationship_string],
@@ -1055,21 +1055,21 @@ class WorksController < ApplicationController
 
   def work_params
     params.require(:work).permit(
-      :rating_string, :fandom_string, :relationship_string, :character_string,
-      :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
-      :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
-      :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
-      pseuds_to_remove: [],
-      challenge_assignment_ids: [],
-      challenge_claim_ids: [],
-      category_string: [],
-      warning_strings: [],
-      author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
-      series_attributes: [:id, :title],
-      parent_attributes: [:url, :title, :author, :language_id, :translation],
-      chapter_attributes: [
+        :rating_string, :fandom_string, :relationship_string, :character_string,
+        :archivewarning_string, :category_string, :expected_number_of_chapters, :revised_at,
+        :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
+        :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
+        :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
+        :unrestricted,
+        pseuds_to_remove: [],
+        challenge_assignment_ids: [],
+        challenge_claim_ids: [],
+        category_string: [],
+        archivewarning_strings: [],
+        author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
+        series_attributes: [:id, :title],
+        parent_attributes: [:url, :title, :author, :language_id, :translation],
+        chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content
       ]

@@ -194,7 +194,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       collection_names: work_params[:collection_names],
       title: work_params[:title],
       fandom: work_params[:fandoms],
-      warning: work_params[:warnings],
+      warning: work_params[:archivearnings],
       character: work_params[:characters],
       rating: work_params[:rating],
       relationship: work_params[:relationships],

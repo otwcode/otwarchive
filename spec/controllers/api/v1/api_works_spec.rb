@@ -143,7 +143,7 @@ describe "API v1 WorksController - Create works", type: :request do
               title: api_fields[:title],
               summary: api_fields[:summary],
               fandoms: api_fields[:fandoms],
-              warnings: api_fields[:warnings],
+              warnings: api_fields[:archivewarnings],
               characters: api_fields[:characters],
               rating: api_fields[:rating],
               relationships: api_fields[:relationships],
@@ -180,7 +180,7 @@ describe "API v1 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(api_fields[:fandoms])
       end
       it "API should override content for Warnings" do
-        expect(@work.warnings.first.name).to eq(api_fields[:warnings])
+        expect(@work.archivewarnings.first.name).to eq(api_fields[:warnings])
       end
       it "API should override content for Characters" do
         expect(@work.characters.flat_map(&:name)).to eq(api_fields[:characters].split(", "))
@@ -249,7 +249,7 @@ describe "API v1 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(content_fields[:fandoms])
       end
       it "Warnings should be detected from the content" do
-        expect(@work.warnings.first.name).to eq(content_fields[:warnings])
+        expect(@work.archivewarnings.first.name).to eq(content_fields[:warnings])
       end
       it "Characters should be detected from the content" do
         expect(@work.characters.flat_map(&:name)).to eq(content_fields[:characters].split(", "))
@@ -313,7 +313,7 @@ describe "API v1 WorksController - Create works", type: :request do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
       end
       it "Warnings should be the default Archive warning" do
-        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+        expect(@work.archivewarnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
       end
       it "Characters should be empty" do
         expect(@work.characters).to be_empty
