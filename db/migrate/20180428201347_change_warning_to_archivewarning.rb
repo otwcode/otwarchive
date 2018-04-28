@@ -1,4 +1,4 @@
-class ChangeWarningsToArchivewarnings < ActiveRecord::Migration[5.1]
+class ChangeWarningToArchivewarning < ActiveRecord::Migration[5.1]
   def up
     execute "UPDATE tags SET type = 'ArchiveWarning' WHERE type = 'Warning'"
   end
