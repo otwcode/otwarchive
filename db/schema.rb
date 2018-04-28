@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20160706031054) do
     t.string   "username"
   end
 
-  create_table "admin_activities", :force => true do |t|
+  reate_table "admin_activities", :force => true do |t|
     t.integer  "admin_id"
     t.integer  "target_id"
     t.string   "target_type"
