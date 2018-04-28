@@ -149,7 +149,7 @@ module WorksHelper
     end
     # Create list of tags
     text << "<ul>"
-    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+    %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|
       if tags[type]
         label = case type
         when 'Freeform'

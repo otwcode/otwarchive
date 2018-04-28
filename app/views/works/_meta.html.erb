@@ -9,7 +9,7 @@
       <% tags = tag_group[type] %>
         <% unless tags.blank? %>
           <dt class="<%= type.downcase %> tags">
-            <% if type == "Warning" %>
+            <% if type == "ArchiveWarning" %>
               <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
             <% elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME %>
               <%= type.constantize::NAME %>:
@@ -20,7 +20,7 @@
 
           <dd class="<%= type.downcase %> tags">
             <ul class="commas">
-              <% if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
+              <% if (type == "ArchiveWarning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
              <% else %>
                <%= tag_link_list(tags, link_to_works=true) %>

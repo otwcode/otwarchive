@@ -277,7 +277,7 @@ class Series < ApplicationRecord
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
   def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }

@@ -26,7 +26,7 @@ module Taggable
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
       has_many :warnings,
-        -> { where("tags.type = 'Warning'") },
+        -> { where("tags.type = 'ArchiveWarning'") },
         through: :taggings,
         source: :tagger,
         source_type: 'Tag',
@@ -283,7 +283,7 @@ module Taggable
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
   def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
