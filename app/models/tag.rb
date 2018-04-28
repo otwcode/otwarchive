@@ -786,6 +786,19 @@ class Tag < ApplicationRecord
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
   end
 
+  def filtered_items
+    filtered_works + filtered_external_works
+  end
+
+  def reindex_filtered_item(item)
+    if item.is_a?(Work)
+      RedisSearchIndexQueue.reindex(item, priority: :low)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+    else
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+    end 
+  end
+
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
@@ -952,16 +965,10 @@ class Tag < ApplicationRecord
   def inherit_meta_filters(meta_tag_id)
     meta_tag = Tag.find_by(id: meta_tag_id)
     return unless meta_tag.present?
-    filtered_items = self.filtered_works + self.filtered_external_works
     filtered_items.each do |item|
       unless item.filters.include?(meta_tag)
         item.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
-        if item.is_a?(Work)
-          RedisSearchIndexQueue.reindex(item, priority: :low)
-          IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
-        else
-          IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
-        end 
+        reindex_filtered_item(item)
       end
     end
   end
@@ -1080,19 +1087,13 @@ class Tag < ApplicationRecord
     end
     # remove filters for meta tag from this tag's works and external works
     other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
-    filtered_items = self.filtered_works + self.filtered_external_works
     filtered_items.each do |item|
       to_remove = [meta_tag] + inherited_meta_tags
       to_remove.each do |tag|
         if item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
           unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
             item.filter_taggings.where(filter_id: tag.id).destroy_all
-            if item.is_a?(Work)
-              RedisSearchIndexQueue.reindex(item, priority: :low)
-              IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
-            else
-              IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
-            end
+            reindex_filtered_item(item)
           end
         end
       end
