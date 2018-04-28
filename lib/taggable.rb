@@ -104,7 +104,7 @@ module Taggable
   def warning_string=(tag_string)
     parse_tags(ArchiveWarning, tag_string)
   end
-  def warning_strings=(array)
+  def archivewarning_strings=(array)
     parse_tags(ArchiveWarning, array)
   end
   def fandom_string=(tag_string)
