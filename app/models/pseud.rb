@@ -73,7 +73,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_update :reindex_creations
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
