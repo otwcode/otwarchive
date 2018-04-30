@@ -93,18 +93,9 @@ class Chapter < ApplicationRecord
   after_commit :update_series_index
   def update_series_index
     return unless work&.series.present? && should_reindex_series?
+    IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :main)
     work.series.each do |series|
-      # ES UPGRADE TRANSITION #
-      # Remove logic pertaining to which indexing we're using
-      if $rollout.active?(:start_new_indexing)
-        series.enqueue_to_index
-        # Date updated is stored on the bookmark, not the bookmarkable
-        series.bookmarks.each(&:enqueue_to_index)
-      end
-
-      unless $rollout.active?(:stop_old_indexing)
-        IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
-      end
+      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
     end
   end
 
