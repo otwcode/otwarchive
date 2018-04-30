@@ -93,10 +93,7 @@ class Chapter < ApplicationRecord
   after_commit :update_series_index
   def update_series_index
     return unless work&.series.present? && should_reindex_series?
-    IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :main)
-    work.series.each do |series|
-      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
-    end
+    work.serial_works.each(&:update_series_index)
   end
 
   def should_reindex_series?
