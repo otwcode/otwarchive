@@ -37,3 +37,24 @@ Feature: Bookmark Indexing
       And I press "Sort and Filter"
     Then the 1st bookmark result should contain "Telling Stories"
       And the 2nd bookmark result should contain "Unrelated Story"
+
+  @new-search
+  Scenario: When a work in a series is updated with a new tag, bookmarks of the
+  series should appear on the tag's bookmark listing; when a tag is removed, the
+  bookmarks should disappear from the tag listing
+    Given a canonical freeform "New Tag"
+      And I am logged in
+      And I post the work "Work" as part of a series "Series"
+      And I bookmark the series "Series"
+    When I edit the work "Work"
+      And I fill in "Additional Tags" with "New Tag"
+      And I press "Post Without Preview"
+      And all indexing jobs have been run
+      And I go to the bookmarks tagged "New Tag"
+    Then the 1st bookmark result should contain "Series"
+    When I edit the work "Work"
+      And I fill in "Additional Tags" with ""
+      And I press "Post Without Preview"
+      And all indexing jobs have been run
+      And I go to the bookmarks tagged "New Tag"
+    Then I should not see "Series"
