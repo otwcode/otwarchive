@@ -90,6 +90,29 @@ class Chapter < ApplicationRecord
     end
   end
 
+  after_commit :update_series_index
+  def update_series_index
+    return unless work.series.present? && should_reindex_series?
+    work.series.each do |series|
+      # ES UPGRADE TRANSITION #
+      # Remove logic pertaining to which indexing we're using
+      if $rollout.active?(:start_new_indexing)
+        series.enqueue_to_index
+        # Date updated is stored on the bookmark, not the bookmarkable
+        series.bookmarks.each(&:enqueue_to_index)
+      end
+
+      unless $rollout.active?(:stop_old_indexing)
+        IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
+      end
+    end
+  end
+
+  def should_reindex_series?
+    pertinent_attributes = %w[id posted]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   def invalidate_chapter_count
     if work
       invalidate_work_chapter_count(work)
