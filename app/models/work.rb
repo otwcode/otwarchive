@@ -936,8 +936,8 @@ class Work < ApplicationRecord
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta = false)
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+  def add_filter_tagging(tag, meta=false)
+    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
