@@ -27,8 +27,6 @@ class SerialWork < ApplicationRecord
   # Ensure series bookmarks are reindexed when a new work is added to a series
   def update_series_index
     IndexQueue.enqueue_id(Series, series.id, :main)
-    work.series.each do |series|
-      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
-    end
+    IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
   end
 end
