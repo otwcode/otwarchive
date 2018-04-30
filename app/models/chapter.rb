@@ -92,7 +92,7 @@ class Chapter < ApplicationRecord
 
   after_commit :update_series_index
   def update_series_index
-    return unless work.series.present? && should_reindex_series?
+    return unless work&.series.present? && should_reindex_series?
     work.series.each do |series|
       # ES UPGRADE TRANSITION #
       # Remove logic pertaining to which indexing we're using
