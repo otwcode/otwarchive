@@ -208,6 +208,24 @@ Given /^I have bookmarks of various completion statuses to search$/ do
   step %{all indexing jobs have been run}
 end
 
+Given /^I have bookmarks of old series to search$/ do
+  newer_series = nil
+
+  Timecop.freeze(30.days.ago) do
+    step %{I post the work "WIP in a Series" as part of a series "Older WIP Series"}
+    FactoryGirl.create(:bookmark,
+                       bookmarkable_id: Series.find_by(title: "Older WIP Series").id,
+                       bookmarkable_type: "Series")
+  end
+
+  Timecop.freeze(7.days.ago) do
+    newer_series = FactoryGirl.create(:series_with_a_work, title: "Newer Complete Series")
+    FactoryGirl.create(:bookmark,
+                       bookmarkable_id: newer_series.id,
+                       bookmarkable_type: "Series")
+  end
+end
+
 When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
