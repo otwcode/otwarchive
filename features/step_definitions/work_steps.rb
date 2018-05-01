@@ -296,6 +296,14 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
+  step %{I edit the work "#{title}"}
+  step %{I follow "#{chapter}"}
+  step %{I follow "Delete Chapter"}
+  step %{I press "Yes, Delete Chapter"}
+  step %{all indexing jobs have been run}
+end
+
 # Posts a chapter for the current user
 When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
   work = Work.find_by(title: work_title)
