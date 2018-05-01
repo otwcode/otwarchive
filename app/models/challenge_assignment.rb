@@ -331,6 +331,14 @@ class ChallengeAssignment < ApplicationRecord
 
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
+
+    if collection.challenge.assignments_sent_at.present?
+      # If assignments have been sent, we don't want to delete everything and
+      # regenerate. (If the challenge moderator wants to regenerate assignments
+      # after sending assignments, they can use the Purge Assignments button.)
+      return
+    end
+
     settings = collection.challenge.potential_match_settings
 
     REDIS_GENERAL.set(progress_key(collection), 1)
