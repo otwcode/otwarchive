@@ -25,14 +25,10 @@ class SerialWork < ApplicationRecord
   end
 
   # Ensure series bookmarks are reindexed when a new work is added to a series
+  # ES UPGRADE TRANSITION #
+  # Change the queue to :main when transition is complete
   def update_series_index
     series.enqueue_to_index
-    if $rollout.active?(:start_new_indexing)
-      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :main)
-    end
-
-    unless $rollout.active?(:stop_old_indexing)
-      IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
-    end
+    IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :background)
   end
 end
