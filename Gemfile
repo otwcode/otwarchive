@@ -52,7 +52,7 @@ gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>= 1.8.2'
 gem 'mechanize'
-gem 'sanitize'
+gem 'sanitize', '>= 4.6.3'
 # Until there is a working solution to
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
