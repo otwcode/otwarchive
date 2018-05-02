@@ -92,8 +92,6 @@ Feature: Bookmark Indexing
     When I go to the bookmarks tagged "Laura Roslin"
     Then I should see "Outside Story"
       And I should see "Telling Stories"
-    When I go to the bookmarks tagged "Alternate Universe - High School"
-    Then the 1st bookmark result should contain "Telling Stories"
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
