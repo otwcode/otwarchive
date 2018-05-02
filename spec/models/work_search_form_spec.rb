@@ -233,6 +233,34 @@ describe WorkSearchForm do
     end
   end
 
+  describe "searching for authors who changes username" do
+    let!(:user) { create(:user, login: "81_white_chain") }
+    let!(:second_pseud) { create(:pseud, name: "peacekeeper", user: user) }
+    let!(:work_by_default_pseud) { create(:posted_work, authors: [user.default_pseud]) }
+    let!(:work_by_second_pseud) { create(:posted_work, authors: [second_pseud]) }
+
+    before { run_all_indexing_jobs }
+
+    it "matches only on their current username" do
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+
+      user.reload
+      user.login = "82_white_chain"
+      user.save!
+      run_all_indexing_jobs
+
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      puts results.inspect
+      expect(results).to be_empty
+
+      results = WorkSearchForm.new(creator: "82_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+    end
+  end
+
   describe "sorting results" do
     describe "by authors" do
       before do

@@ -9,7 +9,7 @@ require 'simplecov'
 require 'cucumber/timecop'
 require 'capybara/poltergeist'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
-if ENV["CI"] == "true"
+if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
