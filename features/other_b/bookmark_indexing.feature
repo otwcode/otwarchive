@@ -58,3 +58,22 @@ Feature: Bookmark Indexing
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then I should not see "Series"
+
+  Scenario: Adding a chapter to a work in a series should update the series, as
+  should deleting a chapter from a work in a series
+    Given I am logged in as "creator"
+      And I have bookmarks of old series to search
+    When a chapter is added to "WIP in a Series"
+      And I go to the search bookmarks page
+      And I select "Series" from "Type"
+      And I select "Date Updated" from "Sort by"
+      And I press "Search bookmarks"
+    Then the 1st bookmark result should contain "Older WIP Series"
+      And the 2nd bookmark result should contain "Newer Complete Series"
+    When I delete chapter 2 of "WIP in a Series"
+      And I go to the search bookmarks page
+      And I select "Series" from "Type"
+      And I select "Date Updated" from "Sort by"
+      And I press "Search bookmarks"
+    Then the 1st bookmark result should contain "Newer Complete Series"
+      And the 2nd bookmark result should contain "Older WIP Series"
