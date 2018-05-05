@@ -56,6 +56,28 @@ Feature: Search works by work info
       And I should see "fifth"
       And I should see "I am <strong>er Than Yesterday & Other Lies"
 
+  Scenario: Search by status
+    Given I have loaded the fixtures
+    When I am on the search works page
+      And I choose "Only complete works"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Complete"
+    When I am on the search works page
+      And I choose "Only incomplete works"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Incomplete"
+
+  Scenario: Search by crossovers
+    Given I have loaded the fixtures
+    When I am on the search works page
+      And I choose "Exclude crossovers"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: No Crossovers"
+    When I am on the search works page
+      And I choose "Only crossovers"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Only Crossovers"
+
   Scenario: Search by single chapter
     Given I have the Battle set loaded
     When I am on the search works page
