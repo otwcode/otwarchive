@@ -56,6 +56,7 @@ Feature: Search works by work info
       And I should see "fifth"
       And I should see "I am <strong>er Than Yesterday & Other Lies"
 
+  @new-search
   Scenario: Search by status
     Given I have loaded the fixtures
     When I am on the search works page
@@ -67,6 +68,7 @@ Feature: Search works by work info
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Incomplete"
 
+  @new-search
   Scenario: Search by crossovers
     Given I have loaded the fixtures
     When I am on the search works page

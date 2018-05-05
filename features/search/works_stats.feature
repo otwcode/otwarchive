@@ -85,7 +85,6 @@ Feature: Search works by stats
 
   # This is basically the same scenario as above, but the new search has
   # changed the "Complete" checkbox into a "Only complete works" radio button,
-  # and work status is no longer included in the search summary (AO3-5329).
   # So we need a slightly different scenario.
   @new-search
   Scenario: Search and sort by kudos
@@ -132,9 +131,8 @@ Feature: Search works by stats
       And "Ascending" should be selected within "Sort direction"
     When I choose "Only complete works"
       And I press "Search" within "#new_work_search"
-    When "AO3-5329" is fixed
-    # Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
-    Then I should see "4 Found"
+    Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
+      And I should see "4 Found"
       And I should see "second work"
       And I should see "third work"
       And I should see "fourth"
