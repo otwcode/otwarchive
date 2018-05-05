@@ -126,8 +126,15 @@ class WorkSearchForm
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"
     end
-    if %w(1 true).include?(self.complete.to_s)
+    if %w(1 true T).include?(self.complete.to_s)
       summary << "Complete"
+    elsif %w(F).include?(self.complete.to_s)
+      summary << "Incomplete"
+    end
+    if %w(T).include?(self.crossover.to_s)
+      summary << "Only Crossovers"
+    elsif %w(F).include?(self.crossover.to_s)
+      summary << "No Crossovers"
     end
     if %w(1 true).include?(self.single_chapter.to_s)
       summary << "Single Chapter"
