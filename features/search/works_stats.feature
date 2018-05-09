@@ -84,7 +84,7 @@ Feature: Search works by stats
       And "Ascending" should be selected within "Sort direction"
 
   # This is basically the same scenario as above, but the new search has
-  # changed the "Complete" checkbox into a "Only complete works" radio button,
+  # changed the "Complete" checkbox into a "Only complete works" radio button.
   # So we need a slightly different scenario.
   @new-search
   Scenario: Search and sort by kudos
