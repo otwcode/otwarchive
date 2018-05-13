@@ -1509,7 +1509,7 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 
