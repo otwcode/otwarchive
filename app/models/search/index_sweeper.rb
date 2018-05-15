@@ -62,9 +62,8 @@ class IndexSweeper
 
   # Load information about previous errors for all the items in this batch.
   def load_errors
-    errors = REDIS.hmget("#{@indexer}:failures", batch_ids).
-             map { |value| JSON.parse(value || "[]") }
-    @errors = batch_ids.zip(errors).to_h
+    @errors = REDIS.mapped_hmget("#{@indexer}:failures", *batch_ids)
+    @errors.transform_values! { |value| JSON.parse(value || "[]") }
   end
 
   # Save information about all the errors for all the items in this batch.
@@ -78,7 +77,7 @@ class IndexSweeper
     # Save the items with non-blank errors.
     present = @errors.select { |_, v| v.present? }
     present.transform_values!(&:to_json)
-    REDIS.hmset("#{@indexer}:failures", present.flatten) if present.present?
+    REDIS.mapped_hmset("#{@indexer}:failures", present) if present.present?
   end
 
   def process_document(item)
