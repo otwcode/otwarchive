@@ -47,8 +47,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Wash/Zoe"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating a new canonical relationship by renaming
   When I fill in "Synonym of" with "Hoban 'Wash' Washburne/Zoe Washburne"
@@ -61,8 +60,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Hoban Washburne/Zoe Washburne"
     And I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical relationships from work posting
   When I am logged in as "Enigel" with password "wrangulate!"
@@ -198,7 +196,8 @@ Scenario: AO3-959 Non-canonical merger pairings
     And I press "Update"
   Then I should see "Work was successfully updated"
 
-  When I go to Enigel's works page
+  When all indexing jobs have been run
+    And I go to Enigel's works page
   Then I should see "Testypants/Testyskirt"
      And I should see "Testing McTestypants/Testing McTestySkirt"
   When I view the tag "Testing"
@@ -266,8 +265,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
     And I should see "Up with Testing" within "div#parent_Fandom_associations_to_remove_checkboxes"
     And I should see "Coding" within "div#parent_Fandom_associations_to_remove_checkboxes"
     And I should see "Testypants/Testyskirt"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   When I edit the tag "Testing McTestypants/Testing McTestySkirt"
     And I fill in "Synonym of" with "Dame Tester/Sir Tester"

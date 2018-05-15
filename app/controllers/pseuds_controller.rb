@@ -19,7 +19,7 @@ class PseudsController < ApplicationController
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login
     else
-      redirect_to people_path
+      redirect_to search_people_path
     end
   end
 

@@ -26,6 +26,7 @@ Feature: Search works by stats
     When I follow "Edit Your Search"
     Then the field labeled "Hits" should contain "> 100"
 
+  @old-search
   Scenario: Search and sort by kudos
     Given I have the Battle set loaded
     When I am on the search works page
@@ -82,6 +83,68 @@ Feature: Search works by stats
       And the "Complete" checkbox should be checked
       And "Ascending" should be selected within "Sort direction"
 
+  # This is basically the same scenario as above, but the new search has
+  # changed the "Complete" checkbox into a "Only complete works" radio button,
+  # and work status is no longer included in the search summary (AO3-5329).
+  # So we need a slightly different scenario.
+  @new-search
+  Scenario: Search and sort by kudos
+    Given I have the Battle set loaded
+    When I am on the search works page
+      And I fill in "Kudos" with ">0"
+      And I select "Kudos" from "Sort by"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: kudos count: >0 sort by: kudos descending"
+      And I should see "2 Found"
+      And the 1st result should contain "Kudos: 4"
+      And the 2nd result should contain "Kudos: 1"
+    When I follow "Edit Your Search"
+    Then the field labeled "Kudos" should contain ">0"
+      And "Kudos" should be selected within "Sort by"
+    When I fill in "Kudos" with "5"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: kudos count: 5 sort by: kudos descending"
+      And I should see "No results found"
+    When I follow "Edit Your Search"
+    Then the field labeled "Kudos" should contain "5"
+    When I fill in "Kudos" with "4"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: kudos count: 4 sort by: kudos descending"
+      And I should see "1 Found"
+      And the 1st result should contain "Kudos: 4"
+    When I follow "Edit Your Search"
+    Then the field labeled "Kudos" should contain "4"
+    When I fill in "Kudos" with "<2"
+      And I select "Ascending" from "Sort direction"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: kudos count: <2 sort by: kudos ascending"
+      And I should see "6 Found"
+      And I should see "second work"
+      And I should see "third work"
+      And I should see "fourth"
+      And I should see "fifth"
+      And I should see "I am <strong>er Than Yesterday & Other Lies"
+      And I should see "Fulfilled Story-thing"
+      And the 6th result should contain "Kudos: 1"
+    When I follow "Edit Your Search"
+    Then the field labeled "Kudos" should contain "<2"
+      And "Kudos" should be selected within "Sort by"
+      And "Ascending" should be selected within "Sort direction"
+    When I choose "Only complete works"
+      And I press "Search" within "#new_work_search"
+    When "AO3-5329" is fixed
+    # Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
+    Then I should see "4 Found"
+      And I should see "second work"
+      And I should see "third work"
+      And I should see "fourth"
+      And I should see "Fulfilled Story-thing"
+      And the 4th result should contain "Kudos: 1"
+    When I follow "Edit Your Search"
+    Then the field labeled "Kudos" should contain "<2"
+      And the "Only complete works" checkbox should be checked
+      And "Ascending" should be selected within "Sort direction"
+
   Scenario: Search by exact number of comments
     Given a set of works with comments for searching
     When I am on the search works page
@@ -123,8 +186,8 @@ Feature: Search works by stats
       And "Comments" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
 
-  Scenario: Search by < a number of comments and sort in descending order by
-  comments
+ Scenario: Search by < a number of comments and sort in descending order by
+ comments
     Given a set of works with comments for searching
     When I am on the search works page
       And I fill in "Comments" with "<20"
@@ -145,7 +208,7 @@ Feature: Search works by stats
       And "Descending" should be selected within "Sort direction"
 
   Scenario: Search by > a number of comments and sort in ascending order by
-  title using the header search
+    title using the header search
     Given a set of works with comments for searching
     When I fill in "site_search" with "comments: > 2 sort: title ascending"
       And I press "Search"

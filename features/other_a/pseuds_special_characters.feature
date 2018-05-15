@@ -16,11 +16,6 @@ Scenario: creating pseud with unicode characters
   When I follow "Edit Pseud"
   Then I should see "Àlice and Bôb"
     And I should not see "Alice"
-  When I follow "Back To Pseuds"
-    And I view the people page
-  Then I should see "Àlice and Bôb"
-    And I should see "special character name"
-    And I should not see "Alice"
 
 Scenario: creating pseud with chinese characters
 
