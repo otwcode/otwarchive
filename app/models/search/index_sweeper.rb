@@ -15,14 +15,16 @@ class IndexSweeper
     @indexer = indexer
     @success_ids = []
     @rerun_ids = []
-
-    ensure_failure_stores
   end
 
   def process_batch
+    load_errors
+
     @batch["items"].each do |item|
       process_document(item)
     end
+
+    save_errors
 
     if @success_ids.present? && @indexer.respond_to?(:handle_success)
       @indexer.handle_success(@success_ids)
@@ -35,74 +37,74 @@ class IndexSweeper
     end
   end
 
-  def process_document(item)
-    document = item[item.keys.first] # update/index/delete
-    document_stamp = { document["_id"].to_s => document["error"] }
+  # Returns a list of all permanent failures associated with the given indexer.
+  # Used for testing purposes. (Can be used for diagnostic purposes, as well.)
+  def self.permanent_failures(indexer)
+    failures = []
 
-    first_store = get_store_as_json "first"
-    second_store = get_store_as_json "second"
-    permanent_store = get_store_as_json "permanent"
-
-    if !document["error"]
-      [first_store, second_store, permanent_store].each do |raw_store|
-         raw_store.select  { |doc| doc.keys.first == document["_id"] }.each do |doc|
-           raw_store.delete(doc)
-         end
-       end
-
-      set_store "first", first_store
-      set_store "second", second_store
-      set_store "permanent", permanent_store
-
-      @success_ids << document["_id"]
-
-      return
+    REDIS.hgetall("#{indexer}:failures").each_pair do |id, value|
+      JSON.parse(value).each do |info|
+        if info["count"] >= 3
+          failures << { id.to_s => info["error"] }
+        end
+      end
     end
 
-    return if permanent_store.include?(document_stamp)
-
-    if first_store.include?(document_stamp)
-      second_store << document_stamp
-      first_store.delete(document_stamp)
-      set_store "second", second_store
-      set_store "first", first_store
-      @rerun_ids << document["_id"]
-    elsif second_store.include?(document_stamp)
-      permanent_store << document_stamp
-      second_store.delete(document_stamp)
-      set_store "permanent", permanent_store
-      set_store "second", second_store
-    else
-      first_store << document_stamp
-      set_store "first", first_store
-      @rerun_ids << document["_id"]
-    end
+    failures
   end
 
   private
 
-  def ensure_failure_stores
-    ["first",
-     "second",
-     "permanent"].each do |store_name|
-      unless REDIS.get("#{@indexer}:#{store_name}_failure_store")
-        set_store store_name, []
+  # Calculate which IDs were included in this batch.
+  def batch_ids
+    @batch_ids ||= @batch["items"].map { |item| item.values.first["_id"].to_s }
+  end
+
+  # Load information about previous errors for all the items in this batch.
+  def load_errors
+    errors = REDIS.hmget("#{@indexer}:failures", batch_ids).
+                   map { |value| JSON.parse(value || "[]") }
+    @errors = batch_ids.zip(errors).to_h
+  end
+
+  # Save information about all the errors for all the items in this batch.
+  def save_errors
+    return unless @errors.present?
+
+    # Clear out the blank errors.
+    blank = @errors.select { |_, v| v.blank? }.keys
+    REDIS.hdel("#{@indexer}:failures", blank) if blank.present?
+
+    # Save the items with non-blank errors.
+    present = @errors.select { |_, v| v.present? }
+    present.transform_values!(&:to_json)
+    REDIS.hmset("#{@indexer}:failures", present.flatten) if present.present?
+  end
+
+  def process_document(item)
+    document = item[item.keys.first] # update/index/delete
+    id = document["_id"]
+
+    if document["error"]
+      if add_error(id, document["error"]) < 3
+        @rerun_ids << id
       end
+    else
+      @errors[id.to_s].clear
+      @success_ids << id
     end
   end
 
-  def all_stores_empty?
-    get_store_as_json("first").empty? &&
-      get_store_as_json("second").empty? &&
-      get_store_as_json("permanent").empty?
-  end
+  # Add an error for the given document ID. Return the total number of times
+  # that error has occurred.
+  def add_error(id, error)
+    @errors[id.to_s].each do |info|
+      next unless info["error"] == error
+      return info["count"] += 1
+    end
 
-  def set_store(store_name, raw_store)
-    REDIS.set("#{@indexer}:#{store_name}_failure_store", raw_store.to_json)
+    # The error hasn't been seen before, so we need to add it with a count of 1.
+    @errors[id.to_s] << { "error" => error, "count" => 1 }
+    1 # we return the count
   end
-
-  def get_store_as_json(store_name)
-    JSON.parse(REDIS.get("#{@indexer}:#{store_name}_failure_store"))
-  end
-
 end
