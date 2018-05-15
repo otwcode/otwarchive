@@ -31,7 +31,7 @@ describe IndexSweeper do
     IndexSweeper::REDIS.hset(
       "WorkIndexer:failures",
       53,
-      [{"error" => { "an error" => "with a message" }, "count" => 1}].to_json
+      [{ "error" => { "an error" => "with a message" }, "count" => 1 }].to_json
     )
 
     expect(AsyncIndexer).to receive(:new).with(WorkIndexer, "failures").and_return(indexer)
@@ -50,7 +50,7 @@ describe IndexSweeper do
     IndexSweeper::REDIS.hset(
       "WorkIndexer:failures",
       53,
-      [{"error" => { "an error" => "with a message" }, "count" => 2}].to_json
+      [{ "error" => { "an error" => "with a message" }, "count" => 2 }].to_json
     )
 
     expect(AsyncIndexer).not_to receive(:new).with(WorkIndexer, "failures")
@@ -86,19 +86,19 @@ describe IndexSweeper do
       IndexSweeper::REDIS.hset(
         "WorkIndexer:failures",
         11,
-        [{"error" => { "an error" => "a message" }, "count" => 1}].to_json
+        [{ "error" => { "an error" => "a message" }, "count" => 1 }].to_json
       )
 
       IndexSweeper::REDIS.hset(
         "WorkIndexer:failures:second",
         12,
-        [{"error" => { "an error" => "a message" }, "count" => 2}].to_json
+        [{ "error" => { "an error" => "a message" }, "count" => 2 }].to_json
       )
 
       IndexSweeper::REDIS.hset(
         "WorkIndexer:failures:permanent",
         13,
-        [{"error" => { "an error" => "a message" }, "count" => 3}].to_json
+        [{ "error" => { "an error" => "a message" }, "count" => 3 }].to_json
       )
 
       expect(AsyncIndexer).not_to receive(:new)
@@ -110,9 +110,9 @@ describe IndexSweeper do
     end
 
     it "should perform success callbacks with the successful ids" do
-      expect(WorkIndexer).to receive(:handle_success).with(["11", "12", "13"])
+      expect(WorkIndexer).to receive(:handle_success).with(%w[11 12 13])
                                                      .and_call_original
-      expect(Work).to receive(:successful_reindex).with(["11", "12", "13"])
+      expect(Work).to receive(:successful_reindex).with(%w[11 12 13])
       sweeper.process_batch
     end
   end

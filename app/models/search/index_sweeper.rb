@@ -63,7 +63,7 @@ class IndexSweeper
   # Load information about previous errors for all the items in this batch.
   def load_errors
     errors = REDIS.hmget("#{@indexer}:failures", batch_ids).
-                   map { |value| JSON.parse(value || "[]") }
+             map { |value| JSON.parse(value || "[]") }
     @errors = batch_ids.zip(errors).to_h
   end
 
