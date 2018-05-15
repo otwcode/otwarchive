@@ -29,3 +29,51 @@ and preserve the balance/symmetry of the page */
 .edit_external_author ul ul {
   margin-left: 2.75em;
 }
+
+#tos_banner {
+  background: #fff;
+  margin: 0;
+  min-height: 100vh;
+}
+
+#tos_banner .heading {
+  background: #900;
+  color: #fff;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.125em 0;
+}
+
+#tos_banner .heading span {
+ margin: 0 0.375em;
+}
+
+/* #tos_banner_content {
+  max-width: 75%;
+  margin: 0 auto;
+  padding: 0.643em;
+  background: #fff;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+} */
+
+#tos_banner .text {
+  margin: 0.643em 0.643em;
+}
+
+#tos_banner .ticky {
+  margin: 0.643em 0.643em;
+
+}
+
+#tos_banner .clicky {
+  margin: 0.643em 0.643em 0;
+  padding-bottom: 0.643em;
+}
+
+#tos_banner .clicky .action {
+  white-space: normal;
+  height: 100%;
+}
