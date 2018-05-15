@@ -104,16 +104,22 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[read]', 'all', (!%w(true false).include?(@filters[:read])) %>
-            <%= label_tag 'filters_read_all', ts("Show all") %>
+            <%= label_tag "filters_read_all" do %>
+              <%= radio_button_tag 'filters[read]', 'all', (!%w(true false).include?(@filters[:read])) %>
+              <%= label_indicator_and_text(ts("Show all")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[read]', 'false', @filters[:read] == 'false' %>
-            <%= label_tag 'filters_read_false', ts("Show unread") %>
+            <%= label_tag "filters_read_false" do %>
+              <%= radio_button_tag 'filters[read]', 'false', @filters[:read] == 'false' %>
+              <%= label_indicator_and_text(ts("Show unread")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[read]', 'true', @filters[:read] == 'true' %>
-            <%= label_tag 'filters_read_true', ts("Show read") %>
+            <%= label_tag "filters_read_true" do %>
+              <%= radio_button_tag 'filters[read]', 'true', @filters[:read] == 'true' %>
+              <%= label_indicator_and_text(ts("Show read")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -122,16 +128,22 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'all', (!%w(true false).include?(@filters[:replied_to])) %>
-            <%= label_tag 'filters_replied_to_all', ts("Show all") %>
+            <%= label_tag "filters_replied_to_all" do %>
+              <%= radio_button_tag 'filters[replied_to]', 'all', (!%w(true false).include?(@filters[:replied_to])) %>
+              <%= label_indicator_and_text(ts("Show all")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'false', @filters[:replied_to] == 'false' %>
-            <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
+            <%= label_tag "filters_replied_to_false" do %>
+              <%= radio_button_tag 'filters[replied_to]', 'false', @filters[:replied_to] == 'false' %>
+              <%= label_indicator_and_text(ts("Show without replies")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'true', @filters[:replied_to] == 'true' %>
-            <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
+            <%= label_tag "filters_replied_to_true" do %>
+              <%= radio_button_tag 'filters[replied_to]', 'true', @filters[:replied_to] == 'true' %>
+              <%= label_indicator_and_text(ts("Show replied to")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -140,12 +152,16 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[date]', 'desc', @filters[:date] != 'asc' %>
-            <%= label_tag 'filters_date_desc', ts("Newest first") %>
+            <%= label_tag "filters_date_desc" do %>
+              <%= radio_button_tag 'filters[date]', 'desc', @filters[:date] != 'asc' %>
+              <%= label_indicator_and_text(ts("Newest first")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[date]', 'asc', @filters[:date] == 'asc' %>
-            <%= label_tag 'filters_date_asc', ts("Oldest first") %>
+            <%= label_tag "filters_date_asc" do %>
+              <%= radio_button_tag 'filters[date]', 'asc', @filters[:date] == 'asc' %>
+              <%= label_indicator_and_text(ts("Oldest first")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
