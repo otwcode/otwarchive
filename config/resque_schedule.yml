@@ -33,3 +33,10 @@ run_stats_reindex_queue:
   queue: utilities
   args: stats
   description: "Kick off a reindex of works with stats updates"
+
+run_update_filter_counts:
+  every: 1h
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_queue
+  description: "Update filter counts for queued tags"

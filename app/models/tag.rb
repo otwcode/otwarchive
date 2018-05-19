@@ -776,7 +776,7 @@ class Tag < ApplicationRecord
     reindex_taggables do
       self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
     end
-    self.async(:reset_filter_count)
+    reset_filter_count
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -851,9 +851,7 @@ class Tag < ApplicationRecord
     # for filtering/searching
     async(:reindex_taggables)
 
-    tags_that_need_filter_count_reset.each do |tag_to_reset|
-      tag_to_reset.reset_filter_count
-    end
+    FilterCount.enqueue_filters(tags_that_need_filter_count_reset)
   end
 
   # Remove filter taggings for a given tag
@@ -897,7 +895,7 @@ class Tag < ApplicationRecord
           end
         end
 
-        filters_to_remove.each(&:reset_filter_count)
+        FilterCount.enqueue_filters(filters_to_remove)
       else
         self.filter_taggings.destroy_all
         self.reset_filter_count
@@ -915,26 +913,12 @@ class Tag < ApplicationRecord
         RedisSearchIndexQueue.reindex(work, priority: :low)
       end
     end
+
+    meta_tag.reset_filter_count
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
-    return if admin_settings.suspend_filter_counts?
-    current_filter = filter
-    # we only need to cache values for user-defined tags
-    # because they're the only ones we access
-    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
-    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
-                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
-    if current_filter.filter_count
-      unless current_filter.filter_count.update_attributes(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    else
-      unless current_filter.create_filter_count(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    end
+    FilterCount.enqueue_filter(filter)
   end
 
   #### END FILTERING ####
@@ -1043,6 +1027,7 @@ class Tag < ApplicationRecord
       end
     end
     meta_tag.update_works_index_timestamp!
+    FilterCount.enqueue_filters([meta_tag] + inherited_meta_tags)
   end
 
   def remove_sub_filters(sub_tag)
