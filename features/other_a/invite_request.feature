@@ -79,9 +79,9 @@ Feature: Invite requests
     When I click the first link in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
-        | user_login                  | user2     |
-        | user_password               | password1 |
-        | user_password_confirmation  | password1 |
+        | user_registration_login                  | user2     |
+        | user_registration_password               | password1 |
+        | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
     Then I should see "Within 24 hours, you should receive an email at the address you gave us."
       And I should see how long I have to activate my account

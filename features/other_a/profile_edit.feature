@@ -15,14 +15,14 @@ Background:
 Scenario: Edit profile - add details
 
   When I fill in the details of my profile
-    Then I should see "Your profile has been successfully updated"
-	And 0 emails should be delivered
+  Then I should see "Your profile has been successfully updated"
+	  And 0 emails should be delivered
 
 Scenario: Edit profile - change details
 
   When I change the details in my profile
-    Then I should see "Your profile has been successfully updated"
-	And 0 emails should be delivered
+  Then I should see "Your profile has been successfully updated"
+	  And 0 emails should be delivered
 
 Scenario:	Edit profile - remove details
 
@@ -54,19 +54,20 @@ Scenario: Edit profile - changing email address - entering an incorrect password
 Scenario: Edit profile - Changing email address and viewing
 
   When I change my email
-    Then I should see "Your email has been successfully updated"
-	And 1 email should be delivered to "bar@ao3.org"
-        And the email should contain "the email associated with your account has been changed to"
-        And the email should contain "valid2@archiveofourown.org"
-        And the email should not contain "translation missing"
+  Then I should see "Your email has been successfully updated"
+    And 1 email should be delivered to "bar@ao3.org"
+    And all emails have been delivered
+    And the email should contain "the email associated with your account has been changed to"
+    And the email should contain "valid2@archiveofourown.org"
+    And the email should not contain "translation missing"
 	When I change my preferences to display my email address
-	  Then I should see "My email address: valid2@archiveofourown.org"
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Edit profile -  Changing email address -- can't be the same as another user's
 
   When I enter a duplicate email
-	Then I should see "Email has already been taken"
-	And 0 emails should be delivered
+  Then I should see "Email has already been taken"
+	  And 0 emails should be delivered
 
 Scenario: Edit profile - date of birth - under age
 

@@ -76,7 +76,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin

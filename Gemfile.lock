@@ -80,11 +80,6 @@ GEM
     arel (8.0.0)
     audited (4.5.0)
       activerecord (>= 4.0, < 5.2)
-    authlogic (3.6.0)
-      activerecord (>= 3.2, < 5.2)
-      activesupport (>= 3.2, < 5.2)
-      request_store (~> 1.0)
-      scrypt (>= 1.2, < 4.0)
     awesome_print (1.8.0)
     aws-sdk (2.9.35)
       aws-sdk-resources (= 2.9.35)
@@ -206,9 +201,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastimage (2.1.0)
     ffi (1.9.18)
-    ffi-compiler (1.0.1)
-      ffi (>= 1.0.0)
-      rake
     gherkin (4.1.3)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
@@ -397,8 +389,6 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
-    scrypt (3.0.5)
-      ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (3.4.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
@@ -495,7 +485,6 @@ DEPENDENCIES
   addressable
   akismetor
   audited (~> 4.4)
-  authlogic (~> 3.6.0)
   awesome_print
   aws-sdk
   bcrypt

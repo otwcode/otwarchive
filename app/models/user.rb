@@ -1,34 +1,22 @@
-  class User < ApplicationRecord
+class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
+  devise :database_authenticatable,
+          :confirmable,
+          :registerable,
+          :rememberable,
+          :trackable,
+          :validatable,
+          :lockable
+
+  # Must come after Devise modules in order to alias devise_valid_password?
+  # properly
+  include BackwardsCompatiblePasswordDecryptor
+
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-
-  # Authlogic gem
-  acts_as_authentic do |config|
-    config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT || "true") == "true"
-      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    else
-      config.crypto_provider = Authlogic::CryptoProviders::Sha512
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    end
-    # Use our own validations for login
-    config.validate_login_field = false
-    config.validates_length_of_password_field_options = { on: :update,
-                                                          minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                          if: :has_no_credentials? }
-    config.validates_length_of_password_confirmation_field_options = { on: :update,
-                                                                       minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                                       if: :has_no_credentials? }
-  end
-
-  def has_no_credentials?
-    self.crypted_password.blank?
-  end
 
   # Authorization plugin
   acts_as_authorized_user
@@ -229,10 +217,9 @@
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
 
-  validates :email, email_veracity: true
+  validates :email, email_veracity: true, email_format: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -253,6 +240,17 @@
     login
   end
 
+  # Override of Devise method to allow user to login with login OR username as
+  # well as to make login case insensitive without losing user-preferred case
+  # for login display
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["lower(login) = :value OR lower(email) = :value", { value: login.downcase }]).first
+    elsif conditions.has_key?(:email)
+      where(conditions).first
+    end
+  end
 
   def self.for_claims(claims_ids)
     joins(:request_claims).
@@ -265,7 +263,7 @@
     return if role.blank? && query.blank?
     users = User.select("DISTINCT users.*").order(:login)
     if options[:inactive]
-      users = users.where("activated_at IS NULL")
+      users = users.where("confirmed_at IS NULL")
     end
     if role.present?
       users = users.joins(:roles).where("roles.id = ?", role.id)
@@ -285,7 +283,7 @@
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
-    !activated_at.nil?
+    !confirmed_at.nil?
   end
 
   def generate_password(length = 8)
@@ -298,14 +296,14 @@
   # use update_all to force the update even if the user is invalid
   def reset_user_password
     temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1")
+    User.where("id = #{self.id}").update_all("reset_password_token = '#{temp_password}', recently_reset = 1")
     # send synchronously to prevent getting caught in backed-up mail queue
     UserMailer.reset_password(self.id, temp_password).deliver!
   end
 
   def activate
     return false if self.active?
-    self.update_attribute(:activated_at, Time.now.utc)
+    self.update_attribute(:confirmed_at, Time.now.utc)
   end
 
   def create_default_associateds
