@@ -10,6 +10,7 @@ Given /^basic tags$/ do
   step %{the basic warnings exist}
   Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
+  step %{all indexing jobs have been run}
 end
 
 Given /^the default ratings exist$/ do

@@ -177,6 +177,10 @@ describe TagsController do
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
       end
+    end
+
+    context "when updating a canonical tag" do
+      let(:tag) { create(:canonical_freeform) }
 
       it "wrangles" do
         expect(tag.canonical?).to be_truthy

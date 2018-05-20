@@ -212,10 +212,8 @@ SUBSECTIONS:
 
 /* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
 
-.session #logo, .session #signin {
-  display: block;
-  float: left;
-  margin-bottom: 1.5em;
+.session #signin {
+  margin-left: 48%;
   width: 48%;
 }
 

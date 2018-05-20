@@ -85,6 +85,7 @@ GEM
       activesupport (>= 3.2, < 5.2)
       request_store (~> 1.0)
       scrypt (>= 1.2, < 4.0)
+    awesome_print (1.8.0)
     aws-sdk (2.9.35)
       aws-sdk-resources (= 2.9.35)
     aws-sdk-core (2.9.35)
@@ -179,12 +180,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (5.0.4)
-      elasticsearch-api (= 5.0.4)
-      elasticsearch-transport (= 5.0.4)
-    elasticsearch-api (5.0.4)
+    elasticsearch (6.0.0)
+      elasticsearch-api (= 6.0.0)
+      elasticsearch-transport (= 6.0.0)
+    elasticsearch-api (6.0.0)
       multi_json
-    elasticsearch-transport (5.0.4)
+    elasticsearch-transport (6.0.0)
       faraday
       multi_json
     email_spec (1.6.0)
@@ -201,7 +202,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.6.6)
       i18n (~> 0.5)
-    faraday (0.12.1)
+    faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     fastimage (2.1.0)
     ffi (1.9.18)
@@ -253,7 +254,7 @@ GEM
     multi_test (0.1.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
-    mustermann (1.0.0)
+    mustermann (1.0.2)
     mysql2 (0.3.20)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
@@ -270,13 +271,13 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.18.1.330)
     nio4r (2.1.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
-    paperclip (5.1.0)
+    paperclip (5.2.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       cocaine (~> 0.5.5)
@@ -307,7 +308,7 @@ GEM
     rack (2.0.3)
     rack-dev-mark (0.7.6)
       rack (>= 1.1, < 2.1)
-    rack-protection (2.0.0)
+    rack-protection (2.0.1)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -413,10 +414,10 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.1)
-    sinatra (2.0.0)
+    sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.0)
+      rack-protection (= 2.0.1)
       tilt (~> 2.0)
     slop (3.6.0)
     sprockets (3.7.1)
@@ -431,7 +432,7 @@ GEM
       power_assert
     thor (0.19.4)
     thread_safe (0.3.6)
-    tilt (2.0.7)
+    tilt (2.0.8)
     timecop (0.8.1)
     timeliness (0.3.8)
     tire (0.6.2)
@@ -495,6 +496,7 @@ DEPENDENCIES
   akismetor
   audited (~> 4.4)
   authlogic (~> 3.6.0)
+  awesome_print
   aws-sdk
   bcrypt
   bullet (~> 5.6.0)
@@ -515,7 +517,7 @@ DEPENDENCIES
   delorean
   devise
   devise-async
-  elasticsearch
+  elasticsearch (>= 6.0.0)
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
   factory_girl (~> 4.8.0)
@@ -535,9 +537,9 @@ DEPENDENCIES
   mysql2 (= 0.3.20)
   newrelic-redis
   newrelic_rpm
-  nokogiri (>= 1.7.1)
+  nokogiri (>= 1.8.2)
   nokogumbo (= 1.4.9)
-  paperclip (>= 5.1.0)
+  paperclip (>= 5.2.0)
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle
@@ -579,4 +581,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

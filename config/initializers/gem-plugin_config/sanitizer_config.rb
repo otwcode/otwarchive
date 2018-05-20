@@ -27,6 +27,10 @@ class Sanitize
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
         'ul' => ['type'],
       },
+      
+      add_attributes: {
+        'a' => {'rel' => 'nofollow'}
+      },
 
       protocols: {
         'a' => {'href' => ['ftp', 'http', 'https', 'mailto', :relative]},
@@ -106,7 +110,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"
