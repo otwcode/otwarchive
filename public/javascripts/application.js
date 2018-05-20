@@ -12,7 +12,6 @@ $j(document).ready(function() {
     setupAccordion();
     setupDropdown();
     updateCachedTokens();
-    createTOSAgreement();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -663,22 +662,4 @@ function updateCachedTokens() {
       $j('meta[name=csrf-token]').attr('value', token);
     });
   }
-}
-
-function createTOSAgreement() {
-  var banner = $j('#tos_banner');
-  var outer = $j('#outer');
-  var clicky = $j('#tos_banner .action');
-
-  outer.addClass('hidden');
-  banner.find(':focusable').first().focus();
-  banner.trap();
-
-  clicky.click(function(e) {
-    e.preventDefault();
-    outer.removeClass('hidden');
-    banner.addClass('hidden');
-    outer.find(':focusable').first().focus();
-  });
-
 }

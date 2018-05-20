@@ -1,0 +1,57 @@
+<% unless current_user && current_user.try(:accepted_tos_version) == @current_tos_version %>
+<% unless current_user.nil? && cookies[:accepted_tos] == @current_tos_version.to_s %>
+    <div id="tos_banner">
+      <h2 class="heading"><span>Archive of Our Own</span></h2>
+      <div id="tos_banner_content">
+        <p class="text">
+          Archive of Our Own (AO3) allows users to make profiles, post Content/works, post comments, give Kudos, create Collections and Bookmarks, participate in Challenges and import works. Any information you post, such as in a comment, profile, work, or Content that you post or import onto AO3, including any summaries, notes and tags, will be accessible by the public unless you explicitly make a work available only to those with AO3 Accounts, and it will be available to AO3 personnel. To learn more, check out our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
+        </p>
+
+        <p class="ticky">
+          <input type="checkbox" id="tos_agree_may_25" />
+          <label for="tos_agree_may_25">I have read & understood the new Terms of Service and Privacy Policy</label>
+        </p>
+
+        <% if current_user.nil? %>
+          <p class="submit">
+            <%= link_to ts("I agree/consent to its terms"),
+                  url_for(params.permit!.merge :accept_tos => true,
+                  anchor: params[:anchor]),
+                  class: "action" %>
+          </p>
+        <% else %>
+          <%= form_tag end_tos_popup_user_path(current_user),
+                method: :post,
+                remote: true do %>
+            <p class="submit">
+              <%= submit_tag ts("I agree/consent to its terms") %>
+            </p>
+          <% end %>
+        <% end %>
+
+      </div>
+    </div>
+
+  <%= content_for :footer_js do %>
+    <%= javascript_tag do %>
+    function createTOSAgreement() {
+  var banner = $j('#tos_banner');
+  var outer = $j('#outer');
+  var clicky = $j('#tos_banner .action');
+
+  outer.addClass('hidden');
+  banner.find(':focusable').first().focus();
+  banner.trap();
+
+  /* clicky.click(function(e) {
+    e.preventDefault();
+    outer.removeClass('hidden');
+    banner.addClass('hidden');
+    outer.find(':focusable').first().focus();
+  }); */
+}
+    <% end %>
+  <% end %>
+
+<% end %>
+<% end %>

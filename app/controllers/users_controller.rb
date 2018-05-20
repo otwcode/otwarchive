@@ -294,6 +294,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def end_tos_popup
+    @user.update_attribute(:accepted_tos_version, @current_tos_version)
+    respond_to do |format|
+      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) && return }
+      format.js
+    end
+  end
+
   def browse
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
     @tag_types = %w(Fandom Character Relationship Freeform)

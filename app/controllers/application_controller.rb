@@ -179,6 +179,13 @@ public
     end
   end
 
+  before_action :load_tos_popup
+  def load_tos_popup
+    # Four-digit year and two-digit month
+    @current_tos_version = 201805
+  end
+
+
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
   before_action :store_location
@@ -285,6 +292,13 @@ public
   def hide_banner
     if params[:hide_banner]
       session[:hide_banner] = true
+    end
+  end
+
+  before_action :accept_tos
+  def accept_tos
+    if params[:accept_tos]
+      cookies.permanent[:accepted_tos] = @current_tos_version.to_s
     end
   end
 

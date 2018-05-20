@@ -37,22 +37,7 @@
 
   <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
 
-    <div id="tos_banner">
-      <h2 class="heading"><span>Archive of Our Own</span></h2>
-      <div id="tos_banner_content">
-        <p class="text">
-          Archive of Our Own (AO3) allows users to make profiles, post Content/works, post comments, give Kudos, create Collections and Bookmarks, participate in Challenges and import works. Any information you post, such as in a comment, profile, work, or Content that you post or import onto AO3, including any summaries, notes and tags, will be accessible by the public unless you explicitly make a work available only to those with AO3 Accounts, and it will be available to AO3 personnel. To learn more, check out our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
-        </p>
-
-        <p class="ticky">
-          <input type="checkbox" id="tos_agree_may_25" />
-          <label for="tos_agree_may_25">I have read & understood the new Terms of Service and Privacy Policy</label>
-        </p>
-        <p class="clicky">
-          <a href="#" class="action">I agree/consent to its terms</a>
-        </p>
-      </div>
-    </div>
+    <%= render "layouts/tos_popup" %>
 
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>

@@ -1,0 +1,7 @@
+var banner = $j('#tos_banner');
+var outer = $j('#outer');
+var clicky = $j('#tos_banner .action');
+
+    outer.removeClass('hidden');
+    banner.addClass('hidden');
+    outer.find(':focusable').first().focus();
