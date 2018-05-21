@@ -46,26 +46,26 @@ and preserve the balance/symmetry of the page */
 }
 
 #tos_banner .heading span {
- margin: 0 0.375em;
+	margin: auto;
+  width: 40rem;
+  max-width: 80%;
+  display: block;
 }
 
-/* #tos_banner_content {
-  max-width: 75%;
-  margin: 0 auto;
-  padding: 0.643em;
-  background: #fff;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-} */
+#tos_banner_content {
+	max-width: 80%;
+  width: 40rem;
+  margin: auto;
+  overflow: hidden;
+}
 
 #tos_banner .text {
-  margin: 0.643em 0.643em;
+  margin: 2em 0.643em 0;
+  line-height: 1.4;
 }
 
 #tos_banner .ticky {
-  margin: 0.643em 0.643em;
-
+  margin: 2em 0 1em;
 }
 
 #tos_banner .clicky {
@@ -76,4 +76,15 @@ and preserve the balance/symmetry of the page */
 #tos_banner .clicky .action {
   white-space: normal;
   height: 100%;
+}
+
+#tos_banner p.submit {
+	margin: 0.643em 0 2em 0;
+}
+
+#tos_banner .disabled {
+  background: #fff;
+  border-color: #bbb;
+  color: #bbb;
+    box-shadow: none;
 }
