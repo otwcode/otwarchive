@@ -82,7 +82,7 @@ and preserve the balance/symmetry of the page */
 	margin: 0.643em 0 2em 0;
 }
 
-#tos_banner .disabled, #tos_banner input[disabled] {
+#tos_banner .submit [disabled] {
   background: #fff;
   border-color: #bbb;
   color: #bbb;

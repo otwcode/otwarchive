@@ -295,13 +295,6 @@ public
     end
   end
 
-  before_action :accept_tos
-  def accept_tos
-    if params[:accept_tos]
-      cookies.permanent[:accepted_tos] = @current_tos_version.to_s
-    end
-  end
-
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
   before_action :set_current_user

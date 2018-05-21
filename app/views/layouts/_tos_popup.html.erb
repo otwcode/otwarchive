@@ -1,62 +1,56 @@
-<% unless current_user && current_user.try(:accepted_tos_version) == @current_tos_version || 
-    current_user.nil? && cookies[:accepted_tos] == @current_tos_version.to_s %>
-  <div id="tos_banner">
-    <h2 class="heading"><span>Archive of Our Own</span></h2>
-    <div id="tos_banner_content">
-      <p class="text">
-        Archive of Our Own (AO3) allows users to make profiles, post Content/works, post comments, give Kudos, create Collections and Bookmarks, participate in Challenges and import works. Any information you post, such as in a comment, profile, work, or Content that you post or import onto AO3, including any summaries, notes and tags, will be accessible by the public unless you explicitly make a work available only to those with AO3 Accounts, and it will be available to AO3 personnel. To learn more, check out our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
-      </p>
+<div id="tos_banner">
+  <h2 class="heading"><span>Archive of Our Own</span></h2>
+  <div id="tos_banner_content">
+    <p class="text">
+      Archive of Our Own (AO3) allows users to make profiles, post Content/works, post comments, give Kudos, create Collections and Bookmarks, participate in Challenges and import works. Any information you post, such as in a comment, profile, work, or Content that you post or import onto AO3, including any summaries, notes and tags, will be accessible by the public unless you explicitly make a work available only to those with AO3 Accounts, and it will be available to AO3 personnel. To learn more, check out our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
+    </p>
 
-      <p class="ticky">
-        <input type="checkbox" id="tos_agree" />
-        <label for="tos_agree">I have read & understood the new Terms of Service and Privacy Policy</label>
-      </p>
+    <p class="ticky">
+      <input type="checkbox" id="tos_agree" />
+      <label for="tos_agree"><%= ts("I have read & understood the new Terms of Service and Privacy Policy") %></label>
+    </p>
 
-      <% if current_user.nil? %>
+    <% if current_user.nil? %>
+      <p class="submit">
+        <%= button_tag ts("I agree/consent to its terms"), disabled: true, type: 'button' %>
+      </p>
+    <% else %>
+      <%= form_tag end_tos_popup_user_path(current_user),
+            method: :post,
+            remote: true do %>
         <p class="submit">
-          <%= link_to ts("I agree/consent to its terms"),
-                "#",
-                class: "disabled action" %>
+          <%= submit_tag ts("I agree/consent to its terms"), disabled: true %>
         </p>
-      <% else %>
-        <%= form_tag end_tos_popup_user_path(current_user),
-              method: :post,
-              remote: true do %>
-          <p class="submit">
-            <%= submit_tag ts("I agree/consent to its terms"), disabled: true %>
-          </p>
-        <% end %>
       <% end %>
-
-    </div>
-  </div>
-
-  <%= content_for :footer_js do %>
-    <%= javascript_tag do %>
-      $j(document).ready(function() {
-        var banner = $j('#tos_banner');
-        var outer = $j('#outer');
-        var linky = $j('#tos_banner a.action');
-        var clicky = $j('#tos_banner input[type="submit"]');
-
-        outer.addClass('hidden');
-        outer.attr('aria-hidden', 'true');
-        // probably not necessary given this is no longer a modal
-        // banner.find(':focusable').first().focus();
-        // banner.trap();
-
-        $j('#tos_agree').on( "click", function() {
-          clicky.attr('disabled', !this.checked);
-          if (this.checked) {
-            linky.removeClass('disabled');
-            linky.attr('href', '<%= url_for(params.permit!.merge accept_tos: true, anchor: params[:anchor]).to_s %>');
-          } else {
-            linky.addClass('disabled');
-            linky.attr('href', '#');
-          };
-        }).change();
-      });
     <% end %>
-  <% end %>
 
-<% end %>
+  </div>
+</div>
+
+<% # content_for footer renders this when we don't want it %>
+<script>
+  $j(document).ready(function() {
+    var banner = $j('#tos_banner');
+    var outer = $j('#outer');
+    var clicky = $j('#tos_banner input[type="submit"]');
+    var button = $j('#tos_banner button');
+
+    outer.addClass('hidden');
+    outer.attr('aria-hidden', 'true');
+
+    $j('#tos_agree').on("click", function() {
+      clicky.attr('disabled', !this.checked);
+      button.attr('disabled', !this.checked);
+      if (this.checked) {
+        button.on("click", function() {
+          // Expires in 20 years, like a Rails permanent cookie
+          $j.cookie('accepted_tos', '<%= @current_tos_version %>', { expires: 7300 });
+          outer.removeClass('hidden');
+          outer.removeAttr('aria-hidden');
+          banner.addClass('hidden');
+          banner.attr('aria-hidden', 'true');
+        });
+      };
+    }).change();
+  });
+</script>
