@@ -49,7 +49,10 @@
   <%= yield :tinymce_init %>
 <% end %>
 
-<% unless current_user && current_user.try(:accepted_tos_version) == @current_tos_version %>
+<% unless current_user && current_user.try(:accepted_tos_version) == @current_tos_version ||
+  params[:controller] == "home" && params[:action] == "tos" ||
+  params[:controller] == "abuse_reports" && params[:action] == "new" ||
+  params[:controller] == "feedbacks" && params[:action] == "new" %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
       // Users who haven't accepted this TOS and guests who don't have the cookie need the pop-up
