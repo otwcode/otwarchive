@@ -8,23 +8,22 @@
       </p>
 
       <p class="ticky">
-        <input type="checkbox" id="tos_agree_may_25" />
-        <label for="tos_agree_may_25">I have read & understood the new Terms of Service and Privacy Policy</label>
+        <input type="checkbox" id="tos_agree" />
+        <label for="tos_agree">I have read & understood the new Terms of Service and Privacy Policy</label>
       </p>
 
       <% if current_user.nil? %>
         <p class="submit">
           <%= link_to ts("I agree/consent to its terms"),
-                url_for(params.permit!.merge :accept_tos => true,
-                anchor: params[:anchor]),
-                class: "action" %>
+                "#",
+                class: "disabled action" %>
         </p>
       <% else %>
         <%= form_tag end_tos_popup_user_path(current_user),
               method: :post,
               remote: true do %>
           <p class="submit">
-            <%= submit_tag ts("I agree/consent to its terms") %>
+            <%= submit_tag ts("I agree/consent to its terms"), disabled: true %>
           </p>
         <% end %>
       <% end %>
@@ -37,12 +36,25 @@
       $j(document).ready(function() {
         var banner = $j('#tos_banner');
         var outer = $j('#outer');
-        var clicky = $j('#tos_banner .action');
+        var linky = $j('#tos_banner a.action');
+        var clicky = $j('#tos_banner input[type="submit"]');
 
         outer.addClass('hidden');
+        outer.attr('aria-hidden', 'true');
         // probably not necessary given this is no longer a modal
         // banner.find(':focusable').first().focus();
-        banner.trap();
+        // banner.trap();
+
+        $j('#tos_agree').on( "click", function() {
+          clicky.attr('disabled', !this.checked);
+          if (this.checked) {
+            linky.removeClass('disabled');
+            linky.attr('href', '<%= url_for(params.permit!.merge accept_tos: true, anchor: params[:anchor]).to_s %>');
+          } else {
+            linky.addClass('disabled');
+            linky.attr('href', '#');
+          };
+        }).change();
       });
     <% end %>
   <% end %>
