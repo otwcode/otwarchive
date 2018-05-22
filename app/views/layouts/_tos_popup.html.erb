@@ -1,4 +1,4 @@
-<div id="tos_banner">
+<div id="tos_banner" class="hidden" style="position: absolute; top: 0; width: 100%; z-index: 999">
   <h2 class="heading"><span>Archive of Our Own</span></h2>
   <div id="tos_banner_content">
     <p class="text">
@@ -12,14 +12,14 @@
 
     <% if current_user.nil? %>
       <p class="submit">
-        <%= button_tag ts("I agree/consent to its terms"), disabled: true, type: 'button' %>
+        <%= button_tag ts("I agree/consent to its terms"), disabled: true, type: "button", id: "accept_tos" %>
       </p>
     <% else %>
       <%= form_tag end_tos_popup_user_path(current_user),
             method: :post,
             remote: true do %>
         <p class="submit">
-          <%= submit_tag ts("I agree/consent to its terms"), disabled: true %>
+          <%= submit_tag ts("I agree/consent to its terms"), disabled: true, id: "accept_tos" %>
         </p>
       <% end %>
     <% end %>
@@ -28,29 +28,34 @@
 </div>
 
 <% # content_for footer renders this when we don't want it %>
-<script>
+<%= javascript_tag do %>
   $j(document).ready(function() {
     var banner = $j('#tos_banner');
     var outer = $j('#outer');
-    var clicky = $j('#tos_banner input[type="submit"]');
-    var button = $j('#tos_banner button');
+    var button = $j('#accept_tos');
 
-    outer.addClass('hidden');
-    outer.attr('aria-hidden', 'true');
+    setTimeout(makeTOS, 1500);
 
-    $j('#tos_agree').on("click", function() {
-      clicky.attr('disabled', !this.checked);
-      button.attr('disabled', !this.checked);
-      if (this.checked) {
-        button.on("click", function() {
-          // Expires in 20 years, like a Rails permanent cookie
-          $j.cookie('accepted_tos', '<%= @current_tos_version %>', { expires: 7300 });
-          outer.removeClass('hidden');
-          outer.removeAttr('aria-hidden');
-          banner.addClass('hidden');
-          banner.attr('aria-hidden', 'true');
-        });
-      };
-    }).change();
+    function makeTOS() {
+      $j.when(banner.fadeIn(500)).done(function() {
+        outer.addClass('hidden');
+        outer.attr('aria-hidden', 'true');
+      });
+
+      $j('#tos_agree').on("click", function() {
+        button.attr('disabled', !this.checked);
+        if (this.checked) {
+          button.on("click", function() {
+            // Expires in 20 years, like a Rails permanent cookie
+            $j.cookie('accepted_tos', '<%= @current_tos_version %>', { expires: 7300 });
+            outer.removeClass('hidden');
+            outer.removeAttr('aria-hidden');
+            $j.when(banner.fadeOut(500)).done(function() {
+              banner.remove();
+            });
+          });
+        };
+      }).change();
+    };
   });
-</script>
+<% end %>
