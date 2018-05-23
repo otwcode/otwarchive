@@ -50,7 +50,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.7.1'
+gem 'nokogiri', '>= 1.8.2'
 gem 'mechanize'
 gem 'sanitize'
 # Until there is a working solution to
@@ -63,12 +63,12 @@ gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
-gem 'elasticsearch'
+gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '>= 5.1.0'
+gem 'paperclip', '>= 5.2.0'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -156,11 +156,12 @@ group :test do
   gem 'cucumber-timecop', :require => false
   # Code coverage
   gem 'simplecov', '~> 0.14.0'
-  gem 'coveralls', '~> 0.8.12'
+  gem 'codecov', '~> 0.1.10', require: false
   gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.8.0'

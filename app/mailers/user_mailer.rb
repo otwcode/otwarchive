@@ -63,7 +63,7 @@ class UserMailer < BulletproofMailer::Base
     @token = @invitation.token
     mail(
       to: @invitation.invitee_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      subject: t("user_mailer.invitation_to_claim.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
@@ -363,6 +363,16 @@ class UserMailer < BulletproofMailer::Base
     mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+    )
+  end
+
+  def admin_spam_work_notification(creation_id, user_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
     )
   end
 

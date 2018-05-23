@@ -3,7 +3,11 @@
 require 'word_counter'
 
 describe WordCounter do
- let(:word_counter) { WordCounter.new("") }
+  let(:word_counter) { WordCounter.new("") }
+
+  it "should return zero for an empty string" do
+    expect(word_counter.count).to eq(0)
+  end
 
   it "should count plain words delimited with spaces" do
     word_counter.text = "one two three four"

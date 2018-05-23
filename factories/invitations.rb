@@ -3,7 +3,9 @@ require 'faker'
 FactoryGirl.define do
 
   factory :invite_request do
-    email
+    sequence :email do |n|
+      Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
+    end
   end
 
   factory :invitation do

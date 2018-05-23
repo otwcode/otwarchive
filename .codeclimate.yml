@@ -1,2 +1,9 @@
 exclude_paths:
+- "bin/"
+- "config/"
+- "db/"
+- "factories/"
+- "features/"
 - "script/"
+- "spec/"
+- "test/"

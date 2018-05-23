@@ -1,5 +1,11 @@
 #!/bin/sh
-./script/gem_security.sh 
+./script/gem_security.sh
+if [  $? -ne 0 ] ; then
+  exit 1
+fi
+echo "This should be READ-COMMITTED"
+mysql -e "SHOW VARIABLES LIKE 'tx_isolation';"
+mysql -e "SHOW VARIABLES LIKE 'tx_isolation';" | grep -s "READ-COMMITTED"
 if [  $? -ne 0 ] ; then 
   exit 1
 fi

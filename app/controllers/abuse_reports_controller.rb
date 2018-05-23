@@ -4,20 +4,16 @@ class AbuseReportsController < ApplicationController
 
   def new
     @abuse_report = AbuseReport.new
-    if logged_in_as_admin?
-      @abuse_report.email = current_admin.email
-      @abuse_report.username = current_admin.login
-    elsif is_registered_user?
-      @abuse_report.email = current_user.email
-      @abuse_report.username = current_user.login
+    reporter = current_admin || current_user
+    if reporter.present?
+      @abuse_report.email = reporter.email
+      @abuse_report.username = reporter.login
     end
     @abuse_report.url = params[:url] || request.env['HTTP_REFERER']
   end
 
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
-    language_name = Language.find_by(id: @abuse_report.language).name
-    @abuse_report.language = language_name
     if @abuse_report.save
       @abuse_report.email_and_send
       flash[:notice] = ts('Your abuse report was sent to the Abuse team.')

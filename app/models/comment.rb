@@ -9,6 +9,8 @@ class Comment < ApplicationRecord
   has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
   has_many :users, through: :inbox_comments
 
+  has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
+
   validates_presence_of :name, unless: :pseud_id
   validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
@@ -23,7 +25,11 @@ class Comment < ApplicationRecord
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
-  validates :content, uniqueness: {scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id], message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
+  validates :content, uniqueness: {
+    scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
+    unless: :is_deleted?,
+    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+  }
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }

@@ -1,6 +1,8 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception, prepend: true
+  rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   helper :all # include all helpers, all the time
 
@@ -16,6 +18,21 @@ class ApplicationController < ActionController::Base
   def sanitize_ac_params
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def display_auth_error
+    respond_to do |format|
+      format.html do
+        redirect_to auth_error_path
+      end
+      format.js do
+        render json: {
+          errors: {
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+          }
+        }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -36,6 +53,14 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+
+  # ES UPGRADE TRANSITION #
+  # Remove method & `helper_method :use_new_search?`
+  helper_method :use_new_search?
+  def use_new_search?
+    $rollout.active?(:use_new_search) ||
+      current_user.present? && $rollout.active?(:use_new_search, current_user)
+  end
 
   # Title helpers
   helper_method :process_title
@@ -67,14 +92,7 @@ class ApplicationController < ActionController::Base
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
 
-  # before_action :logout_if_not_user_credentials
-  # this was disabled when we found issues:
-  # https://github.com/nbudin/devise_openid_authenticatable/issues/21
-  # https://github.com/binarylogic/authlogic/issues/532
-  # 
-  # We will look back in to this back once we have devises.
-  # if we believe the caching is worth the extra support tickets.
-  # 
+  before_action :logout_if_not_user_credentials
 
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
@@ -460,8 +478,12 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  #### -- AUTHORIZATION -- ####
-
-  protect_from_forgery with: :exception, prepend: true
+  # Don't get unnecessary data for json requests
+  skip_before_action  :fetch_admin_settings,
+                      :load_admin_banner,
+                      :set_redirects,
+                      :set_media,
+                      :store_location,
+                      if: proc { %w(js json).include?(request.format) }
 
 end
