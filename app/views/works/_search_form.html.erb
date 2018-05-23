@@ -1,4 +1,4 @@
-<%= form_for @search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
+<%= form_for @search, as: :work_search, url: search_works_path, html: {method: :get, class: 'verbose search'} do |f| %>
   <fieldset>
     <legend><%= ts('Work Info') %></legend>
     <h3 class="landmark heading"><%= ts('Work Info') %></h3>
@@ -18,10 +18,10 @@
         <%= f.text_field :title %>
       </dd>
       <dt>
-        <%= f.label :creator, ts('Author/Artist') %>
+        <%= f.label :creators, ts('Author/Artist') %>
       </dt>
       <dd>
-        <%= f.text_field :creator %>
+        <%= f.text_field :creators %>
       </dd>
       <dt>
         <%= f.label :revised_at, ts('Date') %>
@@ -30,12 +30,52 @@
       <dd>
         <%= f.text_field :revised_at %>
       </dd>
-      <dt>
-        <%= f.label :complete, ts('Complete') %>
-      </dt>
-      <dd>
-        <%= f.check_box :complete %>
-      </dd>
+      <% if use_new_search? %>
+        <dt><%= ts("Status") %></dt>
+        <dd>
+          <ul>
+            <li>
+              <%= f.radio_button :complete, "" %>
+              <%= f.label :complete, ts("Both complete and incomplete"), value: "" %>
+            </li>
+            <li>
+              <%= f.radio_button :complete, "T" %>
+              <%= f.label :complete, ts("Only complete works"), value: "T" %>
+            </li>
+            <li>
+              <%= f.radio_button :complete, "F" %>
+              <%= f.label :complete, ts("Only incomplete works"), value: "F" %>
+            </li>
+          </ul>
+        </dd>
+        <dt>
+          <%= ts("Crossovers") %>
+          <%= link_to_help "work-search-crossover-help" %>
+        </dt>
+        <dd>
+          <ul>
+            <li>
+              <%= f.radio_button :crossover, "" %>
+              <%= f.label :crossover, ts("Include crossovers"), value: "" %>
+            </li>
+            <li>
+              <%= f.radio_button :crossover, "F" %>
+              <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
+            </li>
+            <li>
+              <%= f.radio_button :crossover, "T" %>
+              <%= f.label :crossover, ts("Only crossovers"), value: "T" %>
+            </li>
+          </ul>
+        </dd>
+      <% else %>
+        <dt>
+          <%= f.label :complete, ts('Complete') %>
+        </dt>
+        <dd>
+          <%= f.check_box :complete %>
+        </dd>
+      <% end %>
       <dt>
         <%= f.label :single_chapter, ts('Single Chapter') %>
       </dt>
@@ -83,7 +123,7 @@
         <%= ts('Warnings') %>
       </dt>
       <dd>
-        <ul>
+      <ul>
           <% for tag in Warning.canonical.by_name %>
             <li>
               <%= check_box_tag "work_search[warning_ids][]", tag.id, @search.warning_ids.present? && @search.warning_ids.include?(tag.id.to_s), :id => "warning_#{tag.id}" %>

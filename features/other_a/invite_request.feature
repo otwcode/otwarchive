@@ -87,30 +87,6 @@ Feature: Invite requests
       And I should see how long I have to activate my account
       And I should see "If you don't hear from us within 24 hours"
 
-  Scenario: When not logged in, there is a Create an Account button
-  when account creation is enabled and invitations are not required
-
-    Given account creation does not require an invitation
-      And I am a visitor
-    When I go to the homepage
-      And I should see "Create an Account!"
-
-  Scenario: When not logged in, there is a Get Invited! button
-    when account creation requires an invitation
-
-    Given account creation requires an invitation
-      And I am a visitor
-    When I go to the homepage
-    Then I should see "Get Invited!"
-
-  Scenario: When not logged in, there is no Get Invited! or Create an Account! button when account creation is disabled
-
-    Given account creation is disabled
-      And I am a visitor
-    When I go to the homepage
-    Then I should not see "Get Invited!"
-      And I should not see "Create an Account!"
-
   Scenario: Banned users cannot access their invitations page
 
     Given I am logged in as a banned user

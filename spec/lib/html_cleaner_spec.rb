@@ -142,77 +142,28 @@ describe HtmlCleaner do
     end
   end
 
-
   describe "sanitize_value" do
-
-    describe ":content" do
-
-      it "should keep html" do
-        value = "<em>hello</em> <blockquote>world</blockquote>"
-        result = sanitize_value(:content, value)
-        doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath(".//em").children.to_s.strip).to eq("hello")
-        expect(doc.xpath(".//blockquote").children.to_s.strip).to eq("<p>world</p>")
-      end
-
-      it "should keep valid unicode chars as is" do
-        result = sanitize_value(:content, "„‚nörmäl’—téxt‘“")
-        expect(result).to match(/„‚nörmäl’—téxt‘“/)
-      end
-
-      it "should allow classes with letters, numbers and hyphens" do
-        result = sanitize_value(:content, '<p class="f-5">foobar</p>')
-        doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[@class='f-5']").children.to_s.strip).to eq("foobar")
-      end
-
-      it "should allow not allow classes starting with numbers" do
-        result = sanitize_value(:content, '<p class="8ball">foobar</p>')
-        expect(result).not_to match(/8ball/)
-        result = sanitize_value(:content, '<p class="magic 8ball">foobar</p>')
-        expect(result).not_to match(/8ball/)
-      end
-
-      it "should allow not allow classes starting with hyphens" do
-        result = sanitize_value(:content, '<p class="-dash">foobar</p>')
-        expect(result).not_to match(/-dash/)
-        result = sanitize_value(:content, '<p class="rainbow -dash">foobar</p>')
-        expect(result).not_to match(/-dash/)
-      end
-
-      it "should allow not allow classes with special characters" do
-        result = sanitize_value(:content, '<p class="foo@bar">foobar</p>')
-        expect(result).not_to match(/foo@bar/)
-      end
-
-      it "should allow two classes" do
-        result = sanitize_value(:content, '<p class="foo bar">foobar</p>')
-        doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip).to eq("foobar")
-      end
-
-      it "should allow RTL content in p" do
-        html = '<p dir="rtl">This is RTL content</p>'
-        result = sanitize_value(:content, html)
-        expect(result).to eq(html)
-      end
-
-      it "should allow RTL content in div" do
-        html = '<div dir="rtl"><p>This is RTL content</p></div>'
-        result = sanitize_value(:content, html)
-        # Yes, this is ugly. We should maybe try to figure out why our parser
-        # wants to wrap All The Things in <p> tags.
-        expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
-      end
-
+    
+    context "Sanitize tags allowed only in the content field" do
       %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
          metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-         embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+         open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
 
         it "should allow embeds from #{source}" do
           html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
           result = sanitize_value(:content, html)
           expect(result).to include(html)
+        end
+      end
+
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
+         archiveofourown.org archive.org dailymotion.com 8tracks.com podfic.com
+         open.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+
+        it "should convert to https for #{source}" do
+          html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(:content, html)
+          expect(result).to match('https:')
         end
       end
 
@@ -228,23 +179,6 @@ describe HtmlCleaner do
         expect(result).to be_empty
       end
 
-      it "should not allow iframes with unknown source" do
-        html = '<iframe src="http://www.evil.org"></iframe>'
-        result = sanitize_value(:content, html)
-        expect(result).to be_empty
-      end
-
-      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-         archiveofourown.org archive.org dailymotion.com 8tracks.com podfic.com
-         embed.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
-
-        it "should convert to https for #{source}" do
-          html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
-          result = sanitize_value(:content, html)
-          expect(result).to match('https:')
-        end
-      end
-
       %w(metacafe.com vidders.net criticalcommons.org static.ning.com ning.com).each do |source|
         it "should not convert to https for #{source}" do
           html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
@@ -252,228 +186,326 @@ describe HtmlCleaner do
           expect(result).not_to match('https:')
         end
       end
-
-      ["'';!--\"<XSS>=&{()}",
-       '<XSS STYLE="behavior: url(xss.htc);">'
-      ].each do |value|
-        it "should strip xss tags: #{value}" do
-          result = sanitize_value(:content, value)
-          expect(result).not_to match(/xss/i)
-        end
-      end
-
-      ["<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>",
-       '<<SCRIPT>alert("XSS");//<</SCRIPT>',
-       "<SCRIPT SRC=http://ha.ckers.org/xss.js?<B>",
-       "<SCRIPT SRC=//ha.ckers.org/.j>",
-       "<SCRIPT>alert(/XSS/.source)</SCRIPT>",
-       '</TITLE><SCRIPT>alert("XSS");</SCRIPT>',
-       '<SCRIPT SRC="http://ha.ckers.org/xss.jpg"></SCRIPT>'
-      ].each do |value|
-        it "should strip script tags: #{value}" do
-          result = sanitize_value(:content, value)
-          expect(result).not_to match(/script/i)
-          expect(result).not_to match(/ha.ckers.org/)
-        end
-      end
-
-      ["\\\";alert('XSS');//",
-       "xss:expr/*blah*/ession(alert('XSS'))",
-       "xss:expression(alert('XSS'))"
-       ].each do |value|
-        it "should keep text: #{value}" do
-          result = sanitize_value(:content, value)
-          expect(result).to match(/alert\('XSS'\)/)
-        end
-      end
-
-      it "should strip iframe tags" do
-        value = "<iframe src=http://ha.ckers.org/scriptlet.html <"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/iframe/i)
-        expect(result).not_to match(/ha.ckers.org/)
-      end
-
-      ["<IMG SRC=\"javascript:alert('XSS');\">",
-       "<IMG SRC=JaVaScRiPt:alert('XSS')>",
-       "<IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>",
-       "<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;>",
-       "<IMG SRC=&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041>",
-       "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>",
-       "<IMG SRC=\" &#14;  javascript:alert('XSS');\">",
-       "<IMG SRC=\"javascript:alert('XSS')\"",
-       "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">",
-       "<IMG SRC=\"jav	ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
-      ].each do |value|
-
-        it "should strip javascript in img src attribute: #{value[0..40]}" do
-          result = sanitize_value(:content, value)
-          expect(result).not_to match(/xss/i)
-          expect(result).not_to match(/javascript/i)
-        end
-      end
-
-      ['<META HTTP-EQUIV="Link" Content="<http://ha.ckers.org/xss.css>; REL=stylesheet">',
-       "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0;url=javascript:alert('XSS');\">",
-       '<META HTTP-EQUIV="refresh" CONTENT="0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K">',
-       "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=http://;URL=javascript:alert('XSS');\">",
-       "<META HTTP-EQUIV=\"Set-Cookie\" Content=\"USERID=&lt;SCRIPT&gt;alert('XSS')&lt;/SCRIPT&gt;\">"
-      ].each do |value|
-        it "should strip xss in meta tags: #{value[0..40]}" do
-          result = sanitize_value(:content, value)
-          expect(result).not_to match(/javascript/i)
-          expect(result).not_to match(/xss/i)
-        end
-      end
-
-      it "should strip xss inside tags" do
-        value = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">'
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/script/i)
-      end
-
-      it "should strip script/xss tags" do
-        value = '<SCRIPT/XSS SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/script/i)
-        expect(result).not_to match(/xss/i)
-        expect(result).not_to match(/ha.ckers.org/)
-      end
-
-      it "should strip script/src tags" do
-        value = '<SCRIPT/SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/script/i)
-        expect(result).not_to match(/xss/i)
-        expect(result).not_to match(/ha.ckers.org/)
-      end
-
-      it "should strip xss in body background" do
-        value = "<BODY BACKGROUND=\"javascript:alert('XSS')\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/xss/i)
-      end
-
-      ["<BODY ONLOAD=alert('XSS')>",
-       '<BODY onload!#$%&()*~+-_.,:;?@[/|\]^`=alert("XSS")>',
-      ].each do |value|
-        it "should strip xss in body onload: #{value}" do
-          result = sanitize_value(:content, value)
-          expect(result).not_to match(/xss/i)
-          expect(result).not_to match(/onload/i)
-        end
-      end
-
-      it "should strip style tag" do
-        value = "<STYLE>@import'http://ha.ckers.org/xss.css';</STYLE>"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/style/i)
-      end
-
-      it "should handle lone @imports" do
-        value = "@import'http://ha.ckers.org/xss.css';"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/style/i)
-        expect(result).to match(/@import/i)
-      end
-
-      it "should handle lone borked @imports" do
-        value = "@im\port'\ja\vasc\ript:alert(\"XSS\")';"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/style/i)
-        expect(result).to match(/@import/i)
-      end
-
-      it "should strip javascript from img dynsrc" do
-        value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/javascript/i)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip javascript from img lowsrc" do
-        value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/javascript/i)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip javascript from bgsound src" do
-        value = "<BGSOUND SRC=\"javascript:alert('XSS');\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/javascript/i)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip javascript from br size" do
-        value = "<BR SIZE=\"&{alert('XSS')}\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip javascript from link href" do
-        value = "<LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\">"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/javascript/i)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip xss from link href" do
-        value = '<LINK REL="stylesheet" HREF="http://ha.ckers.org/xss.css">'
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/ha.ckers.org/i)
-        expect(result).not_to match(/xss/i)
-      end
-
-      it "should strip namespace tags" do
-        value = '<HTML xmlns:xss><?import namespace="xss" implementation="http://ha.ckers.org/xss.htc"><xss:xss>Blah</xss:xss></HTML>'
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/xss/i)
-        expect(result).not_to match(/ha.ckers.org/i)
-        expect(result).to match(/Blah/)
-      end
-
-      it "should strip javascript in style=background-image" do
-        value = "<span style=background-image:url(\"javascript:alert('XSS')\");>Text</span>"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/xss/i)
-        expect(result).not_to match(/javascript/i)
-      end
-
-      it "should strip script tags" do
-        value = "';alert(String.fromCharCode(88,83,83))//\\';alert(String.fromCharCode(88,83,83))//\";alert(String.fromCharCode(88,83,83))//\\\";alert(String.fromCharCode(88,83,83))//--></SCRIPT>\">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>"
-        result = sanitize_value(:content, value)
-        expect(result).not_to match(/xss/i)
-        expect(result).not_to match(/javascript/i)
-      end
-
-      ["<!--#exec cmd=\"/bin/echo '<SCR'\"-->",
-       "<!--#exec cmd=\"/bin/echo 'IPT SRC=http://ha.ckers.org/xss.js></SCRIPT>'\"-->"
-      ].each do |value|
-        it "should strip #exec: #{value[0..40]}" do
-          result = sanitize_value(:content, value)
+    end
+    
+    context "Strip out tags not allowed in text fields other than content" do
+      [:endnotes, :notes, :summary].each do |field|
+        it "should strip iframes" do
+          value = '<iframe width="560" height="315" src="//youtube.com/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(field, value)
           expect(result).to eq("")
         end
       end
-
-      # TODO: Ones with all types of quote marks:
-      # "<IMG SRC=`javascript:alert("RSnake says, 'XSS'")`>"
-
-
-      it "should escape ampersands" do
-        result = sanitize_value(:content, "& &amp;")
-        expect(result).to match(/&amp; &amp;/)
-      end
-
     end
 
-    # TODO: other fields
-
+    [:content, :endnotes, :notes, :summary].each do |field|
+      context "Sanitize #{field} field" do
+  
+        it "should keep html" do
+          value = "<em>hello</em> <blockquote>world</blockquote>"
+          result = sanitize_value(field, value)
+          doc = Nokogiri::HTML.fragment(result)
+          expect(doc.xpath(".//em").children.to_s.strip).to eq("hello")
+          expect(doc.xpath(".//blockquote").children.to_s.strip).to eq("<p>world</p>")
+        end
+  
+        it "should keep valid unicode chars as is" do
+          result = sanitize_value(field, "„‚nörmäl’—téxt‘“")
+          expect(result).to match(/„‚nörmäl’—téxt‘“/)
+        end
+  
+        it "should allow classes with letters, numbers and hyphens" do
+          result = sanitize_value(field, '<p class="f-5">foobar</p>')
+          doc = Nokogiri::HTML.fragment(result)
+          expect(doc.xpath("./p[@class='f-5']").children.to_s.strip).to eq("foobar")
+        end
+  
+        it "should not allow CSS classes starting with numbers" do
+          if field == :summary
+            skip("AO3-5238 Summary field does not sanitise CSS classes")
+          else
+            result = sanitize_value(field, '<p class="8ball">foobar</p>')
+            expect(result).not_to match(/8ball/)
+            result = sanitize_value(field, '<p class="magic 8ball">foobar</p>')
+            expect(result).not_to match(/8ball/)
+          end
+        end
+  
+        it "should not allow classes starting with hyphens" do
+          if field == :summary
+            skip("AO3-5238 Summary field does not sanitise CSS classes")
+          else
+            result = sanitize_value(field, '<p class="-dash">foobar</p>')
+            expect(result).not_to match(/-dash/)
+            result = sanitize_value(field, '<p class="rainbow -dash">foobar</p>')
+            expect(result).not_to match(/-dash/)
+          end
+        end
+  
+        it "should not allow classes with special characters" do
+          if field == :summary
+            skip("AO3-5238 Summary field does not sanitise CSS classes")
+          else
+            result = sanitize_value(field, '<p class="foo@bar">foobar</p>')
+            expect(result).not_to match(/foo@bar/)
+          end
+        end
+  
+        it "should allow two classes" do
+          result = sanitize_value(field, '<p class="foo bar">foobar</p>')
+          doc = Nokogiri::HTML.fragment(result)
+          expect(doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip).to eq("foobar")
+        end
+  
+        it "should allow RTL content in p" do
+          html = '<p dir="rtl">This is RTL content</p>'
+          result = sanitize_value(field, html)
+          expect(result).to eq(html)
+        end
+  
+        it "should allow RTL content in div" do
+          html = '<div dir="rtl"><p>This is RTL content</p></div>'
+          result = sanitize_value(field, html)
+          # Yes, this is ugly. We should maybe try to figure out why our parser
+          # wants to wrap All The Things in <p> tags.
+          expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
+        end
+  
+        it "should not allow iframes with unknown source" do
+          html = '<iframe src="http://www.evil.org"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).to be_empty
+        end
+  
+        ["'';!--\"<XSS>=&{()}",
+         '<XSS STYLE="behavior: url(xss.htc);">'
+        ].each do |value|
+          it "should strip xss tags: #{value}" do
+            result = sanitize_value(field, value)
+            expect(result).not_to match(/xss/i)
+          end
+        end
+  
+        ["<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>",
+         '<<SCRIPT>alert("XSS");//<</SCRIPT>',
+         "<SCRIPT SRC=http://ha.ckers.org/xss.js?<B>",
+         "<SCRIPT SRC=//ha.ckers.org/.j>",
+         "<SCRIPT>alert(/XSS/.source)</SCRIPT>",
+         '</TITLE><SCRIPT>alert("XSS");</SCRIPT>',
+         '<SCRIPT SRC="http://ha.ckers.org/xss.jpg"></SCRIPT>'
+        ].each do |value|
+          it "should strip script tags: #{value}" do
+            result = sanitize_value(field, value)
+            expect(result).not_to match(/script/i)
+            expect(result).not_to match(/ha.ckers.org/)
+          end
+        end
+  
+        ["\\\";alert('XSS');//",
+         "xss:expr/*blah*/ession(alert('XSS'))",
+         "xss:expression(alert('XSS'))"
+         ].each do |value|
+          it "should keep text: #{value}" do
+            result = sanitize_value(field, value)
+            expect(result).to match(/alert\('XSS'\)/)
+          end
+        end
+  
+        it "should strip iframe tags" do
+          value = "<iframe src=http://ha.ckers.org/scriptlet.html <"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/iframe/i)
+          expect(result).not_to match(/ha.ckers.org/)
+        end
+  
+        ["<IMG SRC=\"javascript:alert('XSS');\">",
+         "<IMG SRC=JaVaScRiPt:alert('XSS')>",
+         "<IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>",
+         "<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;>",
+         "<IMG SRC=&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041>",
+         "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>",
+         "<IMG SRC=\" &#14;  javascript:alert('XSS');\">",
+         "<IMG SRC=\"javascript:alert('XSS')\"",
+         "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">",
+         "<IMG SRC=\"jav	ascript:alert('XSS');\">",
+         "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
+         "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
+         "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
+        ].each do |value|
+  
+          it "should strip javascript in img src attribute: #{value[0..40]}" do
+            result = sanitize_value(field, value)
+            expect(result).not_to match(/xss/i)
+            expect(result).not_to match(/javascript/i)
+          end
+        end
+  
+        ['<META HTTP-EQUIV="Link" Content="<http://ha.ckers.org/xss.css>; REL=stylesheet">',
+         "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0;url=javascript:alert('XSS');\">",
+         '<META HTTP-EQUIV="refresh" CONTENT="0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K">',
+         "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=http://;URL=javascript:alert('XSS');\">",
+         "<META HTTP-EQUIV=\"Set-Cookie\" Content=\"USERID=&lt;SCRIPT&gt;alert('XSS')&lt;/SCRIPT&gt;\">"
+        ].each do |value|
+          it "should strip xss in meta tags: #{value[0..40]}" do
+            result = sanitize_value(field, value)
+            expect(result).not_to match(/javascript/i)
+            expect(result).not_to match(/xss/i)
+          end
+        end
+  
+        it "should strip xss inside tags" do
+          value = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">'
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/script/i)
+        end
+  
+        it "should strip script/xss tags" do
+          value = '<SCRIPT/XSS SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/script/i)
+          expect(result).not_to match(/xss/i)
+          expect(result).not_to match(/ha.ckers.org/)
+        end
+  
+        it "should strip script/src tags" do
+          value = '<SCRIPT/SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/script/i)
+          expect(result).not_to match(/xss/i)
+          expect(result).not_to match(/ha.ckers.org/)
+        end
+  
+        it "should strip xss in body background" do
+          value = "<BODY BACKGROUND=\"javascript:alert('XSS')\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        ["<BODY ONLOAD=alert('XSS')>",
+         '<BODY onload!#$%&()*~+-_.,:;?@[/|\]^`=alert("XSS")>',
+        ].each do |value|
+          it "should strip xss in body onload: #{value}" do
+            result = sanitize_value(field, value)
+            expect(result).not_to match(/xss/i)
+            expect(result).not_to match(/onload/i)
+          end
+        end
+  
+        it "should strip style tag" do
+          value = "<STYLE>@import'http://ha.ckers.org/xss.css';</STYLE>"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/style/i)
+        end
+  
+        it "should handle lone @imports" do
+          value = "@import'http://ha.ckers.org/xss.css';"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/style/i)
+          expect(result).to match(/@import/i)
+        end
+  
+        it "should handle lone borked @imports" do
+          value = "@im\port'\ja\vasc\ript:alert(\"XSS\")';"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/style/i)
+          expect(result).to match(/@import/i)
+        end
+  
+        it "should strip javascript from img dynsrc" do
+          value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/javascript/i)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip javascript from img lowsrc" do
+          value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/javascript/i)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip javascript from bgsound src" do
+          value = "<BGSOUND SRC=\"javascript:alert('XSS');\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/javascript/i)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip javascript from br size" do
+          value = "<BR SIZE=\"&{alert('XSS')}\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip javascript from link href" do
+          value = "<LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\">"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/javascript/i)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip xss from link href" do
+          value = '<LINK REL="stylesheet" HREF="http://ha.ckers.org/xss.css">'
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/ha.ckers.org/i)
+          expect(result).not_to match(/xss/i)
+        end
+  
+        it "should strip namespace tags" do
+          value = '<HTML xmlns:xss><?import namespace="xss" implementation="http://ha.ckers.org/xss.htc"><xss:xss>Blah</xss:xss></HTML>'
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/xss/i)
+          expect(result).not_to match(/ha.ckers.org/i)
+          expect(result).to match(/Blah/)
+        end
+  
+        it "should strip javascript in style=background-image" do
+          value = "<span style=background-image:url(\"javascript:alert('XSS')\");>Text</span>"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/xss/i)
+          expect(result).not_to match(/javascript/i)
+        end
+  
+        it "should strip script tags" do
+          value = "';alert(String.fromCharCode(88,83,83))//\\';alert(String.fromCharCode(88,83,83))//\";alert(String.fromCharCode(88,83,83))//\\\";alert(String.fromCharCode(88,83,83))//--></SCRIPT>\">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>"
+          result = sanitize_value(field, value)
+          expect(result).not_to match(/xss/i)
+          expect(result).not_to match(/javascript/i)
+        end
+  
+        ["<!--#exec cmd=\"/bin/echo '<SCR'\"-->",
+         "<!--#exec cmd=\"/bin/echo 'IPT SRC=http://ha.ckers.org/xss.js></SCRIPT>'\"-->"
+        ].each do |value|
+          it "should strip #exec: #{value[0..40]}" do
+            result = sanitize_value(field, value)
+            expect(result).to eq("")
+          end
+        end
+  
+        # TODO: Ones with all types of quote marks:
+        # "<IMG SRC=`javascript:alert("RSnake says, 'XSS'")`>"
+  
+  
+        it "should escape ampersands" do
+          result = sanitize_value(field, "& &amp;")
+          expect(result).to match(/&amp; &amp;/)
+        end
+        
+        context "add rel=nofollow to all links to defeat spammers' SEO plans" do
+          it "adds rel=nofollow to links with no rel attribute" do
+            result = sanitize_value(field, "<a href='foo'>Foo</a>")
+            expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+          end
+          
+          it "adds rel=nofollow to links with a rel attribute" do
+            result = sanitize_value(field, "<a href='foo' rel='help'>Foo</a>")
+            expect(result).to eq("<p>\n  <a href=\"foo\" rel=\"nofollow\">Foo</a>\n</p>")
+          end
+        end
+      end
+    end
   end
-
 
   describe "fix_bad_characters" do
 
