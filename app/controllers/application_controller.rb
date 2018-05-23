@@ -185,7 +185,6 @@ public
     @current_tos_version = 20180523
   end
 
-
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
   before_action :store_location

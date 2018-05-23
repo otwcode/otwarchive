@@ -297,10 +297,6 @@ class UsersController < ApplicationController
 
   def end_tos_prompt
     @user.update_attribute(:accepted_tos_version, @current_tos_version)
-    respond_to do |format|
-      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) && return }
-      format.js
-    end
   end
 
   def browse
