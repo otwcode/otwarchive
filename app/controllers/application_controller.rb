@@ -181,8 +181,8 @@ public
 
   before_action :load_tos_popup
   def load_tos_popup
-    # Four-digit year and two-digit month
-    @current_tos_version = 201805
+    # Integers only, YYYY-MM-DD format of date Board approved TOS
+    @current_tos_version = 20180523
   end
 
 
