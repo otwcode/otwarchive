@@ -58,7 +58,7 @@
   <%= javascript_tag do %>
     $j(document).ready(function() {
       <% # Users who haven't accepted this TOS and guests who don't have the cookie need
-         # the popup. We have to use a JavaScript to check the cookie or risk issues
+         # the popup. We have to use JavaScript to check the cookie or risk issues
          # when full page caching is enabled %>
       <% if current_user %>
         $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
