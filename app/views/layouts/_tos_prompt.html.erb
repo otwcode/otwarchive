@@ -68,7 +68,7 @@
         if (this.checked) {
           button.on("click", function() {
             // Expires in 20 years, like a Rails permanent cookie
-            $j.cookie("accepted_tos", "<%= @current_tos_version %>", { expires: 7300 });
+            $j.cookie("accepted_tos", "<%= @current_tos_version %>", { expires: 7300, path: '/' });
             outer.removeClass("hidden").removeAttr("aria-hidden");
             $j.when(container.fadeOut(500)).done(function() {
               container.remove();
