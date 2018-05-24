@@ -14,7 +14,7 @@ class FilterCount < ApplicationRecord
 
   # Set accurate filter counts for all canonical tags
   def self.set_all
-    filters_needing_counts.find_in_batches do |batch|
+    filters_needing_counts.select(:id).find_in_batches do |batch|
       enqueue_filters(batch)
     end
   end
@@ -73,10 +73,7 @@ class FilterCount < ApplicationRecord
     return unless REDIS.renamenx(QUEUE_KEY, temp_key)
 
     while REDIS.scard(temp_key).positive?
-      # If REDIS is updated to 3.2+, srandmember + srem can be replaced with a
-      # single call to spop (with a count).
-      batch = REDIS.srandmember(temp_key, BATCH_SIZE)
-      REDIS.srem(temp_key, batch)
+      batch = REDIS.spop(temp_key, BATCH_SIZE)
 
       # Build a separate REDIS set for the next batch to process.
       batch_key = "#{temp_key}:#{batch.first}"
