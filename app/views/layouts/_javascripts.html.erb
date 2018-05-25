@@ -52,6 +52,7 @@
 <% unless Rails.env.test? ||
     current_user && current_user.try(:accepted_tos_version) == @current_tos_version ||
     params[:controller] == "home" && params[:action] == "tos" ||
+    params[:controller] == "home" && params[:action] == "tos_faq" ||
     params[:controller] == "home" && params[:action] == "dmca" ||
     params[:controller] == "abuse_reports" && params[:action] == "new" ||
     params[:controller] == "feedbacks" && params[:action] == "new" %>
