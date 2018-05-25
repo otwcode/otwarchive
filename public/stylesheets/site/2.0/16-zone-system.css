@@ -354,14 +354,12 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 	margin-bottom: 2em;
 }
 
-#tos_prompt .submit .action, #tos_prompt .submit button {
+#tos_prompt .submit input, #tos_prompt .submit button {
   white-space: normal;
   height: 100%;
 }
 
 #tos_prompt [disabled] {
-  background: #fff;
-  border-color: #bbb;
-  color: #bbb;
+  background: #ccc;
     box-shadow: none;
 }
