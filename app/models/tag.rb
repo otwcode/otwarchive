@@ -694,7 +694,7 @@ class Tag < ApplicationRecord
     yield if block_given?
     reindex_all_works(work_ids)
     reindex_all_series(series_ids)
-    reindex_all_external_works(all_filtered_external_work_ids)
+    reindex_all_external_works(external_work_ids)
     reindex_all_bookmarks(bookmark_ids)
     reindex_pseuds if type == "Fandom"
   end
