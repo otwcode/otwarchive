@@ -367,6 +367,13 @@ ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 
 
+# Elasticsearch index prefix
+# If you're using webdev or another shared environment, change this to include
+# your username (e.g. ao3_testy) to ensure all users have separate search
+# indexes
+ELASTICSEARCH_PREFIX: 'ao3'
+
+
 ##### For dumping the seed database and NOT clearing emails on stage
 
 # users who have webdavs or asked to be added
