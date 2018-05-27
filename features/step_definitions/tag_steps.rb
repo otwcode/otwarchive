@@ -336,18 +336,33 @@ When /^I flush the wrangling sidebar caches$/ do
   end
 end
 
-When /^I syn the tag "([^"]*)" to "([^"]*)"$/ do |tag, syn|
-  tag = Tag.find_by(name: tag)
-  visit edit_tag_path(tag)
-  fill_in("Synonym of", with: syn)
+When /^I syn the tag "([^"]*)" to "([^"]*)"$/ do |syn, merger|
+  syn = Tag.find_by(name: syn)
+  visit edit_tag_path(syn)
+  fill_in("Synonym of", with: merger)
   click_button("Save changes")
 end
 
-When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, tag|
-  tag = Tag.find_by(name: tag)
+When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, merger|
+  merger = Tag.find_by(name: merger)
   syn_id = Tag.find_by(name: syn).id
-  visit edit_tag_path(tag)
+  visit edit_tag_path(merger)
   check("child_Merger_associations_to_remove_#{syn_id}")
+  click_button("Save changes")
+end
+
+When /^I subtag the tag "([^"]*)" to "([^"]*)"$/ do |subtag, metatag|
+  subtag = Tag.find_by(name: subtag)
+  visit edit_tag_path(subtag)
+  fill_in("Add MetaTags:", with: metatag)
+  click_button("Save changes")
+end
+
+When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
+  subtag = Tag.find_by(name: subtag)
+  metatag_id = Tag.find_by(name: metatag).id
+  visit edit_tag_path(subtag)
+  check("parent_MetaTag_associations_to_remove_#{metatag_id}")
   click_button("Save changes")
 end
 

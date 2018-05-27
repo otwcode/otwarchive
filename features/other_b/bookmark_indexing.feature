@@ -60,6 +60,28 @@ Feature: Bookmark Indexing
     When I go to the bookmarks tagged "Veronica Mars"
     Then the 1st bookmark result should contain "Telling Stories"
 
+  @new-search
+  Scenario: Subtagging a tag used on a bookmarked series should make the
+  bookmark appear in the metatag's bookmark listings; de-subbing should remove
+  it
+    Given I am logged in as "author"
+      And a canonical freeform "Alternate Universe"
+      And a canonical freeform "Alternate Universe - High School"
+      And I post the work "The Story Telling: Beginnings" with freeform "Alternate Universe - High School" as part of a series "Telling Stories"
+      And I am logged in as "bookmarker"
+      And I bookmark the series "Telling Stories"
+    When I go to the bookmarks tagged "Alternate Universe - High School"
+    Then the 1st bookmark result should contain "Telling Stories"
+    When I am logged in as a tag wrangler
+      And I subtag the tag "Alternate Universe - High School" to "Alternate Universe"
+      And I go to the bookmarks tagged "Alternate Universe"
+    Then the 1st bookmark result should contain "Telling Stories"
+    When I remove the metatag "Alternate Universe" from "Alternate Universe - High School"
+      And I go to the bookmarks tagged "Alternate Universe"
+    Then I should not see "Telling Stories"
+    When I go to the bookmarks tagged "Alternate Universe - High School"
+    Then the 1st bookmark result should contain "Telling Stories"
+
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
     Given I am logged in as "creator"
