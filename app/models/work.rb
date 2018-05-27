@@ -269,7 +269,7 @@ class Work < ApplicationRecord
   # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
-      "ao3_#{Rails.env}_works"
+      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
     else
       tire.index.name
     end
@@ -1509,7 +1509,7 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 

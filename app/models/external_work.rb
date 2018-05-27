@@ -136,7 +136,7 @@ class ExternalWork < ApplicationRecord
       ]
     ).merge(
       bookmarkable_type: "ExternalWork",
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 

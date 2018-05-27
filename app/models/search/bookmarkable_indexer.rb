@@ -1,7 +1,7 @@
 class BookmarkableIndexer < Indexer
 
   def self.index_name
-    "ao3_#{Rails.env}_bookmarks"
+    "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_bookmarks"
   end
 
   def self.document_type

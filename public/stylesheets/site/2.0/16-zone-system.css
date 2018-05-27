@@ -1,6 +1,6 @@
 /*==ZONE: SYSTEM
 SUBSECTIONS:
-  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT
+  1. SPLASH, 2. SESSIONS, 3. DOCS, 4. COMMS, 5. SUPPORT, 6. FAQ, 7. TOS POPUP
 */
 
 .system p {
@@ -306,3 +306,60 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   border: 1px solid #c2d2df;
 }
 
+/* 7. ZONE: SYSTEM: TOS POPUP */
+
+#tos_prompt {
+  background: #fff;
+  margin: 0;
+  min-height: 100vh;
+  /* put it on top of the other content so it fades in nicely */
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 999
+}
+
+#tos_prompt .heading {
+  background: #900;
+  color: #fff;
+  display: block;
+  margin: 0;
+  padding: 0.125em 0;
+}
+
+#tos_prompt .heading span {
+  display: block;
+	margin: auto;
+  width: 40rem;
+  max-width: 80%;
+}
+
+#tos_prompt .agreement {
+  margin: auto;
+  overflow: hidden;
+  width: 40rem;
+	max-width: 80%;
+}
+
+#tos_prompt .summary {
+  margin: 2em 0 0.643em 0;
+  line-height: 1.4;
+}
+
+#tos_prompt .confirmation {
+  margin: 2em 0 1em;
+}
+
+#tos_prompt p.submit {
+	margin-bottom: 2em;
+}
+
+#tos_prompt .submit input, #tos_prompt .submit button {
+  white-space: normal;
+  height: 100%;
+}
+
+#tos_prompt [disabled] {
+  background: #ccc;
+    box-shadow: none;
+}
