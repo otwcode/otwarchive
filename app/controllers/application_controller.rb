@@ -484,6 +484,14 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
+  def flash_max_search_results_notice(result)
+    # ES UPGRADE TRANSITION #
+    # Remove return statement
+    return unless use_new_search?
+    notice = result.max_search_results_notice
+    flash.now[:notice] = notice if notice.present?
+  end
+
   # Don't get unnecessary data for json requests
   skip_before_action  :fetch_admin_settings,
                       :load_admin_banner,
