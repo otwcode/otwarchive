@@ -84,7 +84,7 @@ Feature: Search works by stats
       And "Ascending" should be selected within "Sort direction"
 
   # This is basically the same scenario as above, but the new search has
-  # changed the "Complete" checkbox into a "Only complete works" radio button.
+  # changed the "Complete" checkbox into a "Complete works only" radio button.
   # So we need a slightly different scenario.
   @new-search
   Scenario: Search and sort by kudos
@@ -129,7 +129,7 @@ Feature: Search works by stats
     Then the field labeled "Kudos" should contain "<2"
       And "Kudos" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
-    When I choose "Only complete works"
+    When I choose "Complete works only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
       And I should see "4 Found"
@@ -140,7 +140,7 @@ Feature: Search works by stats
       And the 4th result should contain "Kudos: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
-      And the "Only complete works" checkbox should be checked
+      And the "Complete works only" checkbox should be checked
       And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by exact number of comments

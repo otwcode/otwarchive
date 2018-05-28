@@ -104,7 +104,7 @@ class Indexer
   end
 
   def self.index_name
-    "ao3_#{Rails.env}_#{klass.underscore.pluralize}"
+    "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_#{klass.underscore.pluralize}"
   end
 
   def self.document_type
