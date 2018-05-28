@@ -60,7 +60,7 @@ Feature: Search works by work info
   Scenario: Search by status
     Given I have loaded the fixtures
     When I am on the search works page
-      And I choose "Only complete works"
+      And I choose "Complete works only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete"
       And I should see "4 Found"
@@ -69,7 +69,7 @@ Feature: Search works by work info
       And I should see "third work"
       And I should see "fourth"
     When I am on the search works page
-      And I choose "Only incomplete works"
+      And I choose "Works in progress only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Incomplete"
       And I should see "2 Found"
