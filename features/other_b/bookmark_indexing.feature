@@ -122,13 +122,13 @@ Feature: Bookmark Indexing
       And I go to the search bookmarks page
       And I select "Series" from "Type"
       And I select "Date Updated" from "Sort by"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then the 1st bookmark result should contain "Older WIP Series"
       And the 2nd bookmark result should contain "Newer Complete Series"
     When I delete chapter 2 of "WIP in a Series"
       And I go to the search bookmarks page
       And I select "Series" from "Type"
       And I select "Date Updated" from "Sort by"
-      And I press "Search bookmarks"
+      And I press "Search Bookmarks"
     Then the 1st bookmark result should contain "Newer Complete Series"
       And the 2nd bookmark result should contain "Older WIP Series"
