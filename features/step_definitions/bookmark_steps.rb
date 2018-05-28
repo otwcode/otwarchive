@@ -229,13 +229,13 @@ end
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   # Series get their tags from works, so we have to create the work first
-  work =  if tag_type == "character"
-            FactoryGirl.create(:posted_work, character_string: tag)
-          elsif tag_type == "relationship"
-            FactoryGirl.create(:posted_work, relationship_string: tag)
-          elsif tag_type == "fandom"
-            FactoryGirl.create(:posted_work, fandom_string: tag)
-          end
+  work = if tag_type == "character"
+           FactoryGirl.create(:posted_work, character_string: tag)
+         elsif tag_type == "relationship"
+           FactoryGirl.create(:posted_work, relationship_string: tag)
+         elsif tag_type == "fandom"
+           FactoryGirl.create(:posted_work, fandom_string: tag)
+         end
 
   # We're going to need to use the series ID, so make the series
   series = FactoryGirl.create(:series, title: "Series to Bookmark")
