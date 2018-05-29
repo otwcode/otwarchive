@@ -896,7 +896,7 @@ class Tag < ApplicationRecord
       unless filter_tag.meta_tags.empty?
         filter_tag.meta_tags.each do |m|
           unless item.filters.include?(m)
-            work.filter_taggings.create!(inherited: true, filter_id: m.id)
+            item.filter_taggings.create!(inherited: true, filter_id: m.id)
             tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
           end
         end
