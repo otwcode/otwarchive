@@ -891,13 +891,17 @@ class Tag < ApplicationRecord
         # FilterTagging directly.
         #
         # work.filters << filter_tag
-        tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
+        unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(filter_tag)
+          tags_that_need_filter_count_reset << filter_tag
+        end
       end
       unless filter_tag.meta_tags.empty?
         filter_tag.meta_tags.each do |m|
           unless item.filters.include?(m)
             item.filter_taggings.create!(inherited: true, filter_id: m.id)
-            tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
+            unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(m)
+              tags_that_need_filter_count_reset << m
+            end
           end
         end
       end
