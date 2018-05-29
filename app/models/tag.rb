@@ -29,7 +29,7 @@ class Tag < ApplicationRecord
   # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
-      "ao3_#{Rails.env}_works"
+      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
     else
       tire.index.name
     end
@@ -687,9 +687,11 @@ class Tag < ApplicationRecord
   # a way of finding their ids to reindex them. :)
   def reindex_taggables
     work_ids = all_filtered_work_ids
+    series_ids = all_filtered_series_ids
     bookmark_ids = all_bookmark_ids
     yield if block_given?
     reindex_all_works(work_ids)
+    reindex_all_series(series_ids)
     reindex_all_bookmarks(bookmark_ids)
     reindex_pseuds if type == "Fandom"
   end
@@ -722,6 +724,25 @@ class Tag < ApplicationRecord
     # add in the direct works for any noncanonical tags
     (self.filter_taggings.where(filterable_type: "Work").pluck(:filterable_id) +
       self.works.pluck(:id)).uniq
+  end
+
+  # Reindex all series (series_ids argument works as above)
+  def reindex_all_series(series_ids = [])
+    return unless $rollout.active?(:start_new_indexing)
+    if series_ids.empty?
+      series_ids = all_filtered_series_ids
+    end
+    IndexQueue.enqueue_ids(Series, series_ids, :background)
+  end
+
+  # Series get their filters through works, so we need to find the works with this tag's
+  # filters, and then use the serial_works table to find the ids of any series with the
+  # tag's filters
+  def all_filtered_series_ids
+    SerialWork.select(:id, :series_id).
+               joins("JOIN filter_taggings ON filter_taggings.filterable_id = serial_works.work_id").
+               where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work'", id).
+               pluck(:series_id).uniq
   end
 
   # Reindex all bookmarks (bookmark_ids argument works as above)
@@ -911,6 +932,7 @@ class Tag < ApplicationRecord
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
         RedisSearchIndexQueue.reindex(work, priority: :low)
+        IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
       end
     end
 
@@ -1022,6 +1044,7 @@ class Tag < ApplicationRecord
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filter_taggings.where(filter_id: tag.id).destroy_all
             RedisSearchIndexQueue.reindex(work, priority: :low)
+            IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
           end
         end
       end

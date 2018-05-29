@@ -36,15 +36,15 @@
           <ul>
             <li>
               <%= f.radio_button :complete, "" %>
-              <%= f.label :complete, ts("Both complete and incomplete"), value: "" %>
+              <%= f.label :complete, ts("All works"), value: "" %>
             </li>
             <li>
               <%= f.radio_button :complete, "T" %>
-              <%= f.label :complete, ts("Only complete works"), value: "T" %>
+              <%= f.label :complete, ts("Complete works only"), value: "T" %>
             </li>
             <li>
               <%= f.radio_button :complete, "F" %>
-              <%= f.label :complete, ts("Only incomplete works"), value: "F" %>
+              <%= f.label :complete, ts("Works in progress only"), value: "F" %>
             </li>
           </ul>
         </dd>

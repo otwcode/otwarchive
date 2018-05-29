@@ -179,6 +179,12 @@ public
     end
   end
 
+  before_action :load_tos_popup
+  def load_tos_popup
+    # Integers only, YYYY-MM-DD format of date Board approved TOS
+    @current_tos_version = 20180523
+  end
+
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
   before_action :store_location
