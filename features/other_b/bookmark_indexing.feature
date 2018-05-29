@@ -79,6 +79,9 @@ Feature: Bookmark Indexing
     When I go to the bookmarks tagged "Veronica Mars"
     Then I should see "External Work to Bookmark"
       And I should see "Series to Bookmark"
+    When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
+      And I go to the bookmarks tagged "Veronica Mars (TV)"
+    Then I should see "Series to Bookmark"
 
   @new-search
   Scenario: Subtagging a tag used on bookmarked series and external works should
@@ -99,6 +102,21 @@ Feature: Bookmark Indexing
     When I go to the bookmarks tagged "Laura Roslin"
     Then I should see "External Work to Bookmark"
       And I should see "Series to Bookmark"
+
+  Scenario: New bookmarks of external works should appear in the bookmark listings for its tag's existing metatag, and removing the tag should remove the bookmark from both the tag's and metatag's bookmark listings 
+    Given basic tags
+      And a canonical character "Ann"
+      And a canonical character "Ann Ewing"
+      And "Ann" is a metatag of the character "Ann Ewing"
+    When I am logged in
+      And I bookmark the external work "The Big D" with character "Ann Ewing"
+      And I go to the bookmarks tagged "Ann"
+    Then I should see "The Big D"
+    When the character "Ann Ewing" is removed from the external work "The Big D"
+      And I go to the bookmarks tagged "Ann Ewing"
+    Then I should not see "The Big D"
+    When I go to the bookmarks tagged "Ann"
+    Then I should not see "The Big D"
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
