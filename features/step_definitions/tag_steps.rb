@@ -170,7 +170,7 @@ Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ d
   number_of_works.to_i.times do
     FactoryGirl.create(:work, posted: true, fandom_string: tag_name)
   end
-  FilterCount.update_counts_for_queue
+  step %(the periodic filter count task is run)
 end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
@@ -227,7 +227,8 @@ When /^the periodic tag count task is run$/i do
 end
 
 When /^the periodic filter count task is run$/i do
-  FilterCount.update_counts_for_queue
+  FilterCount.update_counts_for_small_queue
+  FilterCount.update_counts_for_large_queue
 end
 
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|

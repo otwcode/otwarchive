@@ -3,6 +3,13 @@ class FilterCount < ApplicationRecord
   validates_presence_of :filter_id
   validates_uniqueness_of :filter_id
 
+  # "Large" filter counts should be updated less frequently, to reduce strain
+  # on the database.
+  def self.large
+    where("unhidden_works_count > ?",
+          ArchiveConfig.LARGE_FILTER_COUNT_THRESHOLD || 1000)
+  end
+
   # Return a relation containing all tags that need FilterCount objects.
   # We only need to cache counts for canonical tags, because non-canonicals
   # don't have associated filter-taggings. And we only need to cache counts for
@@ -46,7 +53,8 @@ class FilterCount < ApplicationRecord
   ####################
 
   REDIS = REDIS_GENERAL
-  QUEUE_KEY = "filter_count:queue".freeze
+  QUEUE_KEY_SMALL = "filter_count:queue_small".freeze
+  QUEUE_KEY_LARGE = "filter_count:queue_large".freeze
   BATCH_SIZE = 1000
 
   # Queue up a single filter (or filter ID) to have its counts recalculated.
@@ -59,18 +67,36 @@ class FilterCount < ApplicationRecord
   def self.enqueue_filters(filters)
     return if suspended?
     ids = filters.map { |filter| filter.respond_to?(:id) ? filter.id : filter }
-    REDIS.sadd(QUEUE_KEY, ids) if ids.present?
+
+    # Separate the large filters from the small filters, so that they can be
+    # processed at different intervals.
+    large_ids = FilterCount.large.where(filter_id: ids).pluck(:filter_id)
+    small_ids = ids - large_ids
+
+    # Add all filters to the appropriate queues.
+    REDIS.sadd(QUEUE_KEY_LARGE, large_ids) if large_ids.present?
+    REDIS.sadd(QUEUE_KEY_SMALL, small_ids) if small_ids.present?
+  end
+
+  # Update counts for small filters.
+  def self.update_counts_for_small_queue
+    update_counts_for_queue(QUEUE_KEY_SMALL)
+  end
+
+  # Update counts for large filters.
+  def self.update_counts_for_large_queue
+    update_counts_for_queue(QUEUE_KEY_LARGE)
   end
 
   # Divide the queue up into batches of size BATCH_SIZE, and asynchronously
   # process each batch.
-  def self.update_counts_for_queue
-    return if suspended? || REDIS.scard(QUEUE_KEY).zero?
+  def self.update_counts_for_queue(queue_key)
+    return if suspended? || REDIS.scard(queue_key).zero?
 
     # Rename to a temporary key to make sure that we don't run into concurrency
     # issues.
-    temp_key = "#{QUEUE_KEY}:#{Time.now.to_i}"
-    return unless REDIS.renamenx(QUEUE_KEY, temp_key)
+    temp_key = "#{queue_key}:#{Time.now.to_i}"
+    return unless REDIS.renamenx(queue_key, temp_key)
 
     while REDIS.scard(temp_key).positive?
       batch = REDIS.spop(temp_key, BATCH_SIZE)
