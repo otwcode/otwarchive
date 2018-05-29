@@ -79,25 +79,15 @@ Feature: The All Fandoms page.
 
     # Adding a meta tag.
     When I am logged in as a tag wrangler
-      And I edit the tag "Harry Potter"
-      And I fill in "MetaTags" with "Wizarding World"
-      And I press "Save changes"
-    Then I should see "Tag was updated."
-
-    When the periodic filter count task is run
+      And I subtag the tag "Harry Potter" to "Wizarding World"
+      And the periodic filter count task is run
       And I go to the media page
     Then I should see "Harry Potter (1)"
       And I should see "Wizarding World (2)"
 
     # Removing the meta tag.
-    When I edit the tag "Harry Potter"
-      # TODO: Maybe the title of this element on the form should be marked
-      # with, e.g. the tag name to make it easier to select the right element?
-      And I check "tag[associations_to_remove][]" within "[title=MetaTags]"
-      And I press "Save changes"
-    Then I should see "Tag was updated."
-
-    When the periodic filter count task is run
+    When I remove the metatag "Wizarding World" from "Harry Potter"
+      And the periodic filter count task is run
       And I go to the media page
     Then I should see "Harry Potter (1)"
       And I should see "Wizarding World (1)"
