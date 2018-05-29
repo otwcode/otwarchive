@@ -31,8 +31,7 @@ namespace :search do
     Series.where("series.updated_at >  #{time}").find_in_batches(batch_size: BATCH_SIZE) do |group|
       AsyncIndexer.new(BookmarkedSeriesIndexer, :world).enqueue_ids(group.map(&:id))
     end
-    Work.includes(:stat_counter).where('stat_counters.bookmarks_count > 0').references(:stat_counters) \
-        .where("works.revised_at >  #{time}").find_in_batches(batch_size: BATCH_SIZE) do |group|
+    Work.includes(:stat_counter).where('stat_counters.bookmarks_count > 0').references(:stat_counters).where("works.revised_at >  #{time}").find_in_batches(batch_size: BATCH_SIZE) do |group|
       AsyncIndexer.new(TagIndexer, :world).enqueue_ids(group.map(&:id))
     end
   end
