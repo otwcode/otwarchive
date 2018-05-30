@@ -4,10 +4,10 @@ class WorkIndexer < Indexer
     "Work"
   end
 
-  def self.index_all(options={})
+  def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: 9)
+      create_index(shards: 12)
     end
     options[:skip_delete] = true
     super(options)
