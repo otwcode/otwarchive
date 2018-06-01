@@ -42,7 +42,10 @@ class Indexer
       body: {
         settings: {
           index: {
+            # static settings
             number_of_shards: shards,
+            # dynamic settings
+            max_result_window: ArchiveConfig.MAX_SEARCH_RESULTS,
           }
         }.merge(settings),
         mappings: mapping,
