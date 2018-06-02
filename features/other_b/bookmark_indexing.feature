@@ -82,6 +82,7 @@ Feature: Bookmark Indexing
     When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
     Then I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
 
   @new-search
   Scenario: Subtagging a tag used on bookmarked series and external works should
@@ -100,6 +101,8 @@ Feature: Bookmark Indexing
     Then I should not see "BookmarkedExternalWork"
       And I should not see "BookmarkedSeries"
     When I go to the bookmarks tagged "Laura Roslin"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "Bookmarked Series"
 
   @new-search
   Scenario: A bookmark of an external work should show on a tag's bookmark 
