@@ -60,48 +60,74 @@ Feature: Bookmark Indexing
     Then I should not see "Series"
 
   @new-search
-  Scenario: Synning a canonical tag used on a bookmarked series should move the 
-  bookmark to the new canonical's bookmark listings; de-synning should remove it
-    Given I am logged in as "author"
-      And a canonical fandom "Veronica Mars"
+  Scenario: Synning a canonical tag used on bookmarked series and external works
+  should move the bookmarks to the new canonical's bookmark listings; de-synning
+  should remove them
+    Given a canonical fandom "Veronica Mars"
       And a canonical fandom "Veronica Mars (TV)"
-      And I post the work "The Story Telling: Beginnings" with fandom "Veronica Mars" as part of a series "Telling Stories"
-      And I am logged in as "bookmarker"
-      And I bookmark the series "Telling Stories"
-    When I go to the bookmarks tagged "Veronica Mars"
-    Then the 1st bookmark result should contain "Telling Stories"
+      And bookmarks of external works and series tagged with the fandom tag "Veronica Mars"
     When I am logged in as a tag wrangler
       And I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
-    Then the 1st bookmark result should contain "Telling Stories"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
     When I de-syn the tag "Veronica Mars" from "Veronica Mars (TV)"
       And the tag "Veronica Mars" is canonized
       And I go to the bookmarks tagged "Veronica Mars (TV)"
-    Then I should not see "Telling Stories"
+    Then I should not see "BookmarkedExternalWork"
+      And I should not see "BookmarkedSeries"
     When I go to the bookmarks tagged "Veronica Mars"
-    Then the 1st bookmark result should contain "Telling Stories"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
+    When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
+      And I go to the bookmarks tagged "Veronica Mars (TV)"
+    Then I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
 
   @new-search
-  Scenario: Subtagging a tag used on a bookmarked series should make the
-  bookmark appear in the metatag's bookmark listings; de-subbing should remove
-  it
-    Given I am logged in as "author"
-      And a canonical freeform "Alternate Universe"
-      And a canonical freeform "Alternate Universe - High School"
-      And I post the work "The Story Telling: Beginnings" with freeform "Alternate Universe - High School" as part of a series "Telling Stories"
-      And I am logged in as "bookmarker"
-      And I bookmark the series "Telling Stories"
-    When I go to the bookmarks tagged "Alternate Universe - High School"
-    Then the 1st bookmark result should contain "Telling Stories"
+  Scenario: Subtagging a tag used on bookmarked series and external works should
+  make the bookmarks appear in the metatag's bookmark listings; de-subbing
+  should remove them
+    Given a canonical character "Laura"
+      And a canonical character "Laura Roslin"
+      And bookmarks of external works and series tagged with the character tag "Laura Roslin"
     When I am logged in as a tag wrangler
-      And I subtag the tag "Alternate Universe - High School" to "Alternate Universe"
-      And I go to the bookmarks tagged "Alternate Universe"
-    Then the 1st bookmark result should contain "Telling Stories"
-    When I remove the metatag "Alternate Universe" from "Alternate Universe - High School"
-      And I go to the bookmarks tagged "Alternate Universe"
-    Then I should not see "Telling Stories"
-    When I go to the bookmarks tagged "Alternate Universe - High School"
-    Then the 1st bookmark result should contain "Telling Stories"
+      And I subtag the tag "Laura Roslin" to "Laura"
+      And I go to the bookmarks tagged "Laura"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
+    When I remove the metatag "Laura" from "Laura Roslin"
+      And I go to the bookmarks tagged "Laura"
+    Then I should not see "BookmarkedExternalWork"
+      And I should not see "BookmarkedSeries"
+    When I go to the bookmarks tagged "Laura Roslin"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
+
+  @new-search
+  Scenario: A bookmark of an external work should show on a tag's bookmark 
+  listing once the tag is made canonical
+    Given basic tags
+      And I am logged in as "bookmarker"
+      And I bookmark the external work "Outside Story" with character "Mikki Mendoza"
+    When the tag "Mikki Mendoza" is canonized
+      And I go to the bookmarks tagged "Mikki Mendoza"
+    Then I should see "Outside Story"
+
+  Scenario: New bookmarks of external works should appear in the bookmark listings for its tag's existing metatag, and removing the tag should remove the bookmark from both the tag's and metatag's bookmark listings 
+    Given basic tags
+      And a canonical character "Ann"
+      And a canonical character "Ann Ewing"
+      And "Ann" is a metatag of the character "Ann Ewing"
+    When I am logged in
+      And I bookmark the external work "The Big D" with character "Ann Ewing"
+      And I go to the bookmarks tagged "Ann"
+    Then I should see "The Big D"
+    When the character "Ann Ewing" is removed from the external work "The Big D"
+      And I go to the bookmarks tagged "Ann Ewing"
+    Then I should not see "The Big D"
+    When I go to the bookmarks tagged "Ann"
+    Then I should not see "The Big D"
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
@@ -121,3 +147,28 @@ Feature: Bookmark Indexing
       And I press "Search Bookmarks"
     Then the 1st bookmark result should contain "Newer Complete Series"
       And the 2nd bookmark result should contain "Older WIP Series"
+
+  @new-search
+  Scenario: When a wrangler edits a tag's merger using the "Synonym of" field,
+  the tag's bookmarks should be transfered to the new merger's bookmark listings
+    Given a canonical character "Ellie Ewing"
+      And a canonical character "Ellie Farlow"
+      And a synonym "Miss Ellie" of the tag "Ellie Ewing"
+      And bookmarks of all types tagged with the character tag "Miss Ellie"
+    When I go to the bookmarks tagged "Ellie Ewing"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I am logged in as a tag wrangler
+      And I edit the tag "Miss Ellie"
+      And I fill in "Synonym of" with "Ellie Farlow"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the bookmarks tagged "Ellie Ewing"
+    Then I should not see "BookmarkedWork"
+      And I should not see "BookmarkedSeries"
+      And I should not see "BookmarkedExternalWork"
+    When I go to the bookmarks tagged "Ellie Farlow"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
