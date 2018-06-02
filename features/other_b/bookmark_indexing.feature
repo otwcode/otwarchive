@@ -102,7 +102,7 @@ Feature: Bookmark Indexing
       And I should not see "BookmarkedSeries"
     When I go to the bookmarks tagged "Laura Roslin"
     Then I should see "BookmarkedExternalWork"
-      And I should see "Bookmarked Series"
+      And I should see "BookmarkedSeries"
 
   @new-search
   Scenario: A bookmark of an external work should show on a tag's bookmark 
