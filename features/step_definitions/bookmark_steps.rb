@@ -226,6 +226,65 @@ Given /^I have bookmarks of old series to search$/ do
   end
 end
 
+# Freeform is omitted because there is no freeform option on the bookmark external work form
+# A comma-separated list will let you use multiple tags
+Given /^bookmarks of all types tagged with the (character|relationship|fandom) tags? "(.*?)"$/ do |tag_type, tags|
+  work = if tag_type == "character"
+           FactoryGirl.create(:posted_work,
+                              title: "BookmarkedWork",
+                              character_string: tags)
+         elsif tag_type == "relationship"
+           FactoryGirl.create(:posted_work,
+                              title: "BoomarkedWork",
+                              relationship_string: tags)
+         elsif tag_type == "fandom"
+           FactoryGirl.create(:posted_work,
+                              title: "BookmarkedWork",
+                              fandom_string: tags)
+         end
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
+
+  step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tags}"}
+end 
+
+# Freeform is omitted because there is no freeform option on the bookmark external work form
+# A comma-separated list will let you use multiple tags
+Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tags? "(.*?)"$/ do |tag_type, tags|
+  # Series get their tags from works, so we have to create the work first
+  work = if tag_type == "character"
+           FactoryGirl.create(:posted_work, character_string: tags)
+         elsif tag_type == "relationship"
+           FactoryGirl.create(:posted_work, relationship_string: tags)
+         elsif tag_type == "fandom"
+           FactoryGirl.create(:posted_work, fandom_string: tags)
+         end
+
+  # We're going to need to use the series ID, so make the series
+  series = FactoryGirl.create(:series, title: "BookmarkedSeries")
+
+  # Now add the work to the series
+  FactoryGirl.create(:serial_work, work_id: work.id, series_id: series.id)
+
+  external_work = if tag_type == "character"
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", character_string: tags)
+                  elsif tag_type == "relationship"
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", relationship_string: tags)
+                  elsif tag_type == "fandom"
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", fandom_string: tags)
+                  end
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: series.id,
+                     bookmarkable_type: "Series")
+
+  FactoryGirl.create(:bookmark,
+                     bookmarkable_id: external_work.id,
+                     bookmarkable_type: "ExternalWork")
+
+  step %{all indexing jobs have been run}
+end
+
 When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
