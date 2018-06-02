@@ -861,7 +861,8 @@ class Tag < ApplicationRecord
 
     # we collect tags for resetting count so that it's only done once after we've added all filters to works
     tags_that_need_filter_count_reset = []
-    filtered_items.each do |item|
+    items = self.works + self.external_works
+    items.each do |item|
       if item.filters.include?(filter_tag)
         # If the item filters already included the filter tag (e.g. because the
         # new filter tag is a meta tag of an existing tag) we make sure to set
@@ -923,7 +924,8 @@ class Tag < ApplicationRecord
         # This means we remove the old merger itself and all its meta tags unless they
         # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
-        filtered_items.each do |item|
+        items = self.works + self.external_works
+        items.each do |item|
           filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
             next unless item.filters.include?(filter_to_remove)
