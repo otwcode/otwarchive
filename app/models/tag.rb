@@ -812,6 +812,8 @@ class Tag < ApplicationRecord
         self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
         self.async(:move_filter_taggings_to_merger)
+      elsif self.meta_tags.present?
+        self.async(:remove_filter_taggings, self.id)
       else
         self.async(:remove_filter_taggings)
       end
