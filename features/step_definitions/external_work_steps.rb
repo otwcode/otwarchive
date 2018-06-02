@@ -32,3 +32,14 @@ When /^I view the external work "([^\"]*)"$/ do |external_work|
   external_work = ExternalWork.find_by_title(external_work)
   visit external_work_url(external_work)
 end
+
+When /^the (character|fandom|relationship) "(.*?)" is removed from the external work "(.*?)"$/ do |tag_type, tag, title|
+  external_work = ExternalWork.find_by(title: title)
+  tags = external_work.tags.where(type: tag_type).pluck(:name) - [tag]
+  tag_string = tags.join(", ")
+  step %{I am logged in as an admin}
+  visit edit_external_work_path(external_work)
+  fill_in("work_#{tag_type}", with: tag_string)
+  click_button("Update External work")
+  step %{all indexing jobs have been run}
+end
