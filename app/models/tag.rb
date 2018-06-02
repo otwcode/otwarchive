@@ -738,14 +738,10 @@ class Tag < ApplicationRecord
     IndexQueue.enqueue_ids(Series, series_ids, :background)
   end
 
-  # Series get their filters through works, so we need to find the works with this tag's
-  # filters, and then use the serial_works table to find the ids of any series with the
-  # tag's filters
+  # Series get their filters through works, so we go through SerialWork, which has
+  # both work and series ids
   def all_filtered_series_ids
-    SerialWork.select(:id, :series_id).
-               joins("JOIN filter_taggings ON filter_taggings.filterable_id = serial_works.work_id").
-               where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work'", id).
-               pluck(:series_id).uniq
+    SerialWork.where(work_id: self.all_filtered_work_ids).pluck(:series_id).uniq
   end
 
   # In the case of external works, the filter_taggings table already collects all the

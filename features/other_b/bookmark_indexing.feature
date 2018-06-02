@@ -69,19 +69,19 @@ Feature: Bookmark Indexing
     When I am logged in as a tag wrangler
       And I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
-    Then I should see "External Work to Bookmark"
-      And I should see "Series to Bookmark"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
     When I de-syn the tag "Veronica Mars" from "Veronica Mars (TV)"
       And the tag "Veronica Mars" is canonized
       And I go to the bookmarks tagged "Veronica Mars (TV)"
-    Then I should not see "External Work to Bookmark"
-      And I should not see "Series to Bookmark"
+    Then I should not see "BookmarkedExternalWork"
+      And I should not see "BookmarkedSeries"
     When I go to the bookmarks tagged "Veronica Mars"
-    Then I should see "External Work to Bookmark"
-      And I should see "Series to Bookmark"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
     When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
-    Then I should see "Series to Bookmark"
+    Then I should see "BookmarkedSeries"
 
   @new-search
   Scenario: Subtagging a tag used on bookmarked series and external works should
@@ -93,12 +93,12 @@ Feature: Bookmark Indexing
     When I am logged in as a tag wrangler
       And I subtag the tag "Laura Roslin" to "Laura"
       And I go to the bookmarks tagged "Laura"
-    Then I should see "External Work to Bookmark"
-      And I should see "Series to Bookmark"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
     When I remove the metatag "Laura" from "Laura Roslin"
       And I go to the bookmarks tagged "Laura"
-    Then I should not see "External Work to Bookmark"
-      And I should not see "Series to Bookmark"
+    Then I should not see "BookmarkedExternalWork"
+      And I should not see "BookmarkedSeries"
     When I go to the bookmarks tagged "Laura Roslin"
 
   @new-search
@@ -144,3 +144,28 @@ Feature: Bookmark Indexing
       And I press "Search Bookmarks"
     Then the 1st bookmark result should contain "Newer Complete Series"
       And the 2nd bookmark result should contain "Older WIP Series"
+
+  @new-search
+  Scenario: When a wrangler edits a tag's merger using the "Synonym of" field,
+  the tag's bookmarks should be transfered to the new merger's bookmark listings
+    Given a canonical character "Ellie Ewing"
+      And a canonical character "Ellie Farlow"
+      And a synonym "Miss Ellie" of the tag "Ellie Ewing"
+      And bookmarks of all types tagged with the character tag "Miss Ellie"
+    When I go to the bookmarks tagged "Ellie Ewing"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I am logged in as a tag wrangler
+      And I edit the tag "Miss Ellie"
+      And I fill in "Synonym of" with "Ellie Farlow"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the bookmarks tagged "Ellie Ewing"
+    Then I should not see "BookmarkedWork"
+      And I should not see "BookmarkedSeries"
+      And I should not see "BookmarkedExternalWork"
+    When I go to the bookmarks tagged "Ellie Farlow"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
