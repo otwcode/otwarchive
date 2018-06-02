@@ -741,7 +741,7 @@ class Tag < ApplicationRecord
   # Series get their filters through works, so we go through SerialWork, which has
   # both work and series ids
   def all_filtered_series_ids
-    SerialWork.where(work_id: self.all_filtered_work_ids).pluck(:series_id).uniq
+    SerialWork.where(work_id: all_filtered_work_ids).pluck(:series_id).uniq
   end
 
   # In the case of external works, the filter_taggings table already collects all the
@@ -749,8 +749,8 @@ class Tag < ApplicationRecord
   def all_filtered_external_work_ids
     # all synned and subtagged external works should be under filter taggings
     # add in the direct external works for any noncanonical tags
-    (self.filter_taggings.where(filterable_type: "ExternalWork").pluck(:filterable_id) +
-      self.external_works.pluck(:id)).uniq
+    (filter_taggings.where(filterable_type: "ExternalWork").pluck(:filterable_id) +
+      external_works.pluck(:id)).uniq
   end
 
   # Reindex all external works (external_work_ids argument works as above)
@@ -861,8 +861,7 @@ class Tag < ApplicationRecord
 
     # we collect tags for resetting count so that it's only done once after we've added all filters to works
     tags_that_need_filter_count_reset = []
-    items = self.works + self.external_works
-    items.each do |item|
+    filtered_items.each do |item|
       if item.filters.include?(filter_tag)
         # If the item filters already included the filter tag (e.g. because the
         # new filter tag is a meta tag of an existing tag) we make sure to set
@@ -893,11 +892,10 @@ class Tag < ApplicationRecord
       end
       unless filter_tag.meta_tags.empty?
         filter_tag.meta_tags.each do |m|
-          unless item.filters.include?(m)
-            item.filter_taggings.create!(inherited: true, filter_id: m.id)
-            unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(m)
-              tags_that_need_filter_count_reset << m
-            end
+          next if item.filters.include?(m)
+          item.filter_taggings.create!(inherited: true, filter_id: m.id)
+          unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(m)
+            tags_that_need_filter_count_reset << m
           end
         end
       end
@@ -925,31 +923,29 @@ class Tag < ApplicationRecord
         # This means we remove the old merger itself and all its meta tags unless they
         # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
-        items = self.works + self.external_works
-        items.each do |item|
+        filtered_items.each do |item|
           filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
-            if item.filters.include?(filter_to_remove)
-              # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
-              # meta. If any of these or its mergers (synonyms) are tags of the item, the
-              # filter_to_remove remains
-              all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-              sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-              all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-              # don't include self because at this point in time (before the save) self
-              # is still in the list of submergers from when it was a synonym to the old filter
-              remaining_tags = item.tags - [self]
-              # instead we add the new merger of self (if there is one) as the relevant one to check
-              remaining_tags += [self.merger] unless self.merger.nil?
-              if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-                item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
-                filter_to_remove.reset_filter_count
-              else # we should keep filter_to_remove, but check if inheritence needs to be updated
-                direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-                if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-                  ft = item.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-                  ft.update_attribute(:inherited, true)
-                end
+            next unless item.filters.include?(filter_to_remove)
+            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
+            # meta. If any of these or its mergers (synonyms) are tags of the item, the
+            # filter_to_remove remains
+            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+            # don't include self because at this point in time (before the save) self
+            # is still in the list of submergers from when it was a synonym to the old filter
+            remaining_tags = item.tags - [self]
+            # instead we add the new merger of self (if there is one) as the relevant one to check
+            remaining_tags += [self.merger] unless self.merger.nil?
+            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+              item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
+              filter_to_remove.reset_filter_count
+            else # we should keep filter_to_remove, but check if inheritence needs to be updated
+              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+                ft = item.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                ft.update_attribute(:inherited, true)
               end
             end
           end
@@ -1078,23 +1074,22 @@ class Tag < ApplicationRecord
   def remove_meta_filters(meta_tag_id)
     meta_tag = Tag.find(meta_tag_id)
     # remove meta tag from this tag's sub tags
-    self.sub_tags.each { |sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag) }
+    sub_tags.each { |sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag) }
     # remove inherited meta tags from this tag and all of its sub tags
     inherited_meta_tags = meta_tag.meta_tags
     inherited_meta_tags.each do |tag|
       self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
-      self.sub_tags.each { |sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag) }
+      sub_tags.each { |sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag) }
     end
     # remove filters for meta tag from this tag's works and external works
     other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
     filtered_items.each do |item|
       to_remove = [meta_tag] + inherited_meta_tags
       to_remove.each do |tag|
-        if item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
-          unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
-            item.filter_taggings.where(filter_id: tag.id).destroy_all
-            reindex_filtered_item(item)
-          end
+        next unless item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
+        unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
+          item.filter_taggings.where(filter_id: tag.id).destroy_all
+          reindex_filtered_item(item)
         end
       end
     end
