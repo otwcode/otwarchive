@@ -143,6 +143,7 @@ class Tag < ApplicationRecord
 
   has_many :filter_taggings, foreign_key: 'filter_id', dependent: :destroy
   has_many :filtered_works, through: :filter_taggings, source: :filterable, source_type: 'Work'
+  has_many :filtered_external_works, through: :filter_taggings, source: :filterable, source_type: "ExternalWork"
   has_one :filter_count, foreign_key: 'filter_id'
   has_many :direct_filter_taggings,
               -> { where(inherited: 0) },
@@ -688,10 +689,12 @@ class Tag < ApplicationRecord
   def reindex_taggables
     work_ids = all_filtered_work_ids
     series_ids = all_filtered_series_ids
+    external_work_ids = all_filtered_external_work_ids
     bookmark_ids = all_bookmark_ids
     yield if block_given?
     reindex_all_works(work_ids)
     reindex_all_series(series_ids)
+    reindex_all_external_works(external_work_ids)
     reindex_all_bookmarks(bookmark_ids)
     reindex_pseuds if type == "Fandom"
   end
@@ -743,6 +746,24 @@ class Tag < ApplicationRecord
                joins("JOIN filter_taggings ON filter_taggings.filterable_id = serial_works.work_id").
                where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work'", id).
                pluck(:series_id).uniq
+  end
+
+  # In the case of external works, the filter_taggings table already collects all the
+  # things tagged by this tag or its subtags/synonyms
+  def all_filtered_external_work_ids
+    # all synned and subtagged external works should be under filter taggings
+    # add in the direct external works for any noncanonical tags
+    (self.filter_taggings.where(filterable_type: "ExternalWork").pluck(:filterable_id) +
+      self.external_works.pluck(:id)).uniq
+  end
+
+  # Reindex all external works (external_work_ids argument works as above)
+  def reindex_all_external_works(external_work_ids = [])
+    return unless $rollout.active?(:start_new_indexing)
+    if external_work_ids.empty?
+      external_work_ids = all_filtered_external_work_ids
+    end
+    IndexQueue.enqueue_ids(ExternalWork, external_work_ids, :background)
   end
 
   # Reindex all bookmarks (bookmark_ids argument works as above)
@@ -879,8 +900,8 @@ class Tag < ApplicationRecord
 
   # Remove filter taggings for a given tag
   # If an old_filter value is given, remove filter_taggings from it with due regard
-  # for potential duplication (ie, works tagged with more than one synonymous tag)
-  def remove_filter_taggings(old_filter_id=nil)
+  # for potential duplication (ie, items tagged with more than one synonymous tag)
+  def remove_filter_taggings(old_filter_id = nil)
     # we're going to have to reindex all the taggables that WERE attached to this work after
     # we do this
     reindex_taggables do
@@ -888,30 +909,31 @@ class Tag < ApplicationRecord
         old_filter = Tag.find(old_filter_id)
         # An old merger of a tag needs to be removed
         # This means we remove the old merger itself and all its meta tags unless they
-        # should remain because of other existing tags of the work (or because they are
+        # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
-        self.works.each do |work|
+        items = self.works + self.external_works
+        items.each do |item|
           filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
-            if work.filters.include?(filter_to_remove)
+            if item.filters.include?(filter_to_remove)
               # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
-              # meta. If any of these or its mergers (synonyms) are tags of the work, the
+              # meta. If any of these or its mergers (synonyms) are tags of the item, the
               # filter_to_remove remains
               all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
               sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
               all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
               # don't include self because at this point in time (before the save) self
               # is still in the list of submergers from when it was a synonym to the old filter
-              remaining_tags = work.tags - [self]
+              remaining_tags = item.tags - [self]
               # instead we add the new merger of self (if there is one) as the relevant one to check
               remaining_tags += [self.merger] unless self.merger.nil?
               if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-                work.filter_taggings.where(filter_id: filter_to_remove).destroy_all
+                item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
                 filter_to_remove.reset_filter_count
               else # we should keep filter_to_remove, but check if inheritence needs to be updated
                 direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
                 if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-                  ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                  ft = item.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
                   ft.update_attribute(:inherited, true)
                 end
               end
@@ -925,15 +947,20 @@ class Tag < ApplicationRecord
     end
   end
 
-  # Add filter taggings to this tag's works for one of its meta tags
+  # Add filter taggings to this tag's items for one of its meta tags
   def inherit_meta_filters(meta_tag_id)
     meta_tag = Tag.find_by(id: meta_tag_id)
     return unless meta_tag.present?
-    self.filtered_works.each do |work|
-      unless work.filters.include?(meta_tag)
-        work.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
-        RedisSearchIndexQueue.reindex(work, priority: :low)
-        IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+    filtered_items = self.filtered_works + self.filtered_external_works
+    filtered_items.each do |item|
+      unless item.filters.include?(meta_tag)
+        item.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
+        if item.is_a?(Work)
+          RedisSearchIndexQueue.reindex(item, priority: :low)
+          IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+        else
+          IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+        end 
       end
     end
   end
@@ -1043,23 +1070,28 @@ class Tag < ApplicationRecord
   def remove_meta_filters(meta_tag_id)
     meta_tag = Tag.find(meta_tag_id)
     # remove meta tag from this tag's sub tags
-    self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
+    self.sub_tags.each { |sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag) }
     # remove inherited meta tags from this tag and all of its sub tags
     inherited_meta_tags = meta_tag.meta_tags
     inherited_meta_tags.each do |tag|
       self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
-      self.sub_tags.each {|sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag)}
+      self.sub_tags.each { |sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag) }
     end
-    # remove filters for meta tag from this tag's works
+    # remove filters for meta tag from this tag's works and external works
     other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
-    self.filtered_works.each do |work|
+    filtered_items = self.filtered_works + self.filtered_external_works
+    filtered_items.each do |item|
       to_remove = [meta_tag] + inherited_meta_tags
       to_remove.each do |tag|
-        if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
-          unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filter_taggings.where(filter_id: tag.id).destroy_all
-            RedisSearchIndexQueue.reindex(work, priority: :low)
-            IndexQueue.enqueue_ids(Series, work.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+        if item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
+          unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
+            item.filter_taggings.where(filter_id: tag.id).destroy_all
+            if item.is_a?(Work)
+              RedisSearchIndexQueue.reindex(item, priority: :low)
+              IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+            else
+              IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+            end
           end
         end
       end
