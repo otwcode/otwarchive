@@ -3,8 +3,8 @@
 AllCops:
   TargetRubyVersion: 2.3
 
-# stop checking quotation marks
-Style/StringLiterals:
+# stop checking for ambiguous regexp literal
+Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
 # stop checking line length
@@ -15,10 +15,14 @@ Metrics/LineLength:
 Style/FormatStringToken:
   EnforcedStyle: template
 
-# stop checking for trailing whitespace
-Style/TrailingWhitespace:
+# stop checking if uses of "self" are redundant
+Style/RedundantSelf:
   Enabled: false
 
-# stop checking for ambiguous regexp literal
-Lint/AmbiguousRegexpLiteral:
+# stop checking quotation marks
+Style/StringLiterals:
+  Enabled: false
+
+# stop checking for trailing whitespace
+Style/TrailingWhitespace:
   Enabled: false
