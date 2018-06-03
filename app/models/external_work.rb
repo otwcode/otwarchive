@@ -89,12 +89,12 @@ class ExternalWork < ApplicationRecord
   # Add and remove filter taggings as tags are added and removed
   def check_filter_taggings
     # Add filter taggings for tags on the work
-    current_filters = self.tags.collect { |tag| tag.canonical? ? tag : tag.merger }.compact
+    current_filters = self.tags.map { |tag| tag.canonical? ? tag : tag.merger }.compact
     current_filters.each { |filter| self.add_filter_tagging(filter) }
 
     # Add filter taggings for the tags' meta tags
-    current_meta_filters = current_filters.collect { |filter| filter.meta_tags }.flatten.compact
-    current_meta_filters.each { |filter| self.add_filter_tagging(filter, meta = true) }
+    current_meta_filters = current_filters.map(&:meta_tags).flatten.compact
+    current_meta_filters.each { |filter| self.add_filter_tagging(filter, true) }
 
     # Remove any filter taggings that do not come from the tags or their meta tags
     filters_to_remove = self.filters - (current_filters + current_meta_filters)
