@@ -1568,7 +1568,24 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+    # If the filter_taggings table is always correct, we only need one line:
+    # fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    unrelated_fandoms = fandoms.map { |r| r.merger ? r.merger : r }.uniq
+
+    # Replace each fandom with the top tags of the meta trees it belongs to
+    loop do
+      n = unrelated_fandoms.map { |f| f.meta_tags.any? ? f.meta_tags : f }.flatten.uniq
+      break if n == unrelated_fandoms
+      unrelated_fandoms = n
+    end
+
+    # These fandoms have no meta tags, and they cannot be related
+    unrelated_fandoms.count > 1
   end
 
   # Does this work have only one relationship tag?
