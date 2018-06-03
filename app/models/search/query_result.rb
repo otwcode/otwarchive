@@ -55,7 +55,7 @@ class QueryResult
     ids = buckets.map { |result| result['key'] }
     tags = Tag.where(id: ids).group_by(&:id)
     buckets.each do |facet|
-      if tags[facet['key'].to_i].any?
+      unless tags[facet['key'].to_i].blank?
         @facets[type] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
       end
     end
