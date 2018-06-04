@@ -1575,7 +1575,7 @@ class Work < ApplicationRecord
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
-    unrelated_fandoms = fandoms.map { |r| r.merger ? r.merger : r }.uniq
+    unrelated_fandoms = fandoms.map { |f| f.merger ? f.merger : f }.uniq
 
     # Replace each fandom with the top tags of the meta trees it belongs to
     loop do
