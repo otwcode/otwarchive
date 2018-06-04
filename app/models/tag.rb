@@ -812,7 +812,7 @@ class Tag < ApplicationRecord
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
 
-  after_update :update_associations
+  after_commit :update_associations, on: :update
 
   # If we have a new merger, transfer our old associations to the merger.
   # If we're newly non-canonical, clean up the associations that relied on us
@@ -828,8 +828,8 @@ class Tag < ApplicationRecord
     end
   end
 
-  after_update :update_filters_for_canonical_change
-  after_update :update_filters_for_merger_change
+  after_commit :update_filters_for_canonical_change, on: :update
+  after_commit :update_filters_for_merger_change, on: :update
 
   # If a tag was not canonical but is now, it needs new filter_taggings
   # If it was canonical but isn't anymore, we need to change or remove
