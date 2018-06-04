@@ -26,12 +26,24 @@ Feature: Collectible items in moderated collections
     When I press "Update"
     Then I should see "the moderated collection 'Various Penguins'"
 
+  @old-search
   Scenario: Add my bookmark to a moderated collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "until it has been approved by a moderator."
     When I go to "Various Penguins" collection's page
     Then I should see "Bookmarks (0)"
+      And I should not see "Tundra penguins"
+
+  # This is the same as the test above, but with the sidebar text updated to
+  # reflect the new bookmarked item listings.
+  @new-search
+  Scenario: Add my bookmark to a moderated collection
+    Given I have a bookmark for "Tundra penguins"
+    When I add my bookmark to the collection "Various_Penguins"
+    Then I should see "until it has been approved by a moderator."
+    When I go to "Various Penguins" collection's page
+    Then I should see "Bookmarked Items (0)"
       And I should not see "Tundra penguins"
 
   Scenario: Bookmarks of deleted items are included on a moderated collection's

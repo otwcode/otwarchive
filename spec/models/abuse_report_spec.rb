@@ -156,7 +156,7 @@ describe AbuseReport do
     it_behaves_like "alright", "http://archiveofourown.org/users/someone"
 
     context "a month later" do
-      before { Timecop.freeze(1.month.from_now) }
+      before { Timecop.freeze(32.days.from_now) }
       after { Timecop.return }
 
       it_behaves_like "alright", work_url
@@ -208,7 +208,7 @@ describe AbuseReport do
     it_behaves_like "alright", "http://archiveofourown.org/works/789"
 
     context "a month later" do
-      before { Timecop.freeze(1.month.from_now) }
+      before { Timecop.freeze(32.days.from_now) }
       after { Timecop.return }
 
       it_behaves_like "alright", user_url

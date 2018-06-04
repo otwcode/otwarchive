@@ -7,5 +7,6 @@
     <fl val="Language"><%= cdata_section(@report.language.present? ? @report.language : "English") %></fl>
     <fl val="Archive Version"><%= cdata_section(@report.site_revision.present? ? @report.site_revision : "Unknown site revision") %></fl>
     <fl val="User Agent"><%= cdata_section(@report.user_agent.present? ? @report.user_agent : "Unknown user agent") %></fl>
+    <fl val="Rollout"><%= cdata_section(@report.rollout.present? ? @report.rollout : "Unknown") %></fl>
   </row>
 </requests>

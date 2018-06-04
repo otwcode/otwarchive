@@ -79,12 +79,26 @@ class Chapter < ApplicationRecord
 
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
+
+  after_save :expire_cache_on_coauthor_removal
+
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}
     end
+  end
+
+  after_commit :update_series_index
+  def update_series_index
+    return unless work&.series.present? && should_reindex_series?
+    work.serial_works.each(&:update_series_index)
+  end
+
+  def should_reindex_series?
+    pertinent_attributes = %w[id posted]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   def invalidate_chapter_count
@@ -200,6 +214,14 @@ class Chapter < ApplicationRecord
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
+  end
+
+  private
+
+  def expire_cache_on_coauthor_removal
+    if self.authors_to_remove.present?
+      self.touch
+    end
   end
 
    # private

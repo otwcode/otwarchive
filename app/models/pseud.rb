@@ -1,8 +1,8 @@
 class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -73,6 +73,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -125,6 +126,16 @@ class Pseud < ApplicationRecord
     group("pseuds.id").
     includes(:user)
   }
+
+  # ES UPGRADE TRANSITION #
+  # Remove conditional and Tire reference
+  def self.index_name
+    if use_new_search?
+      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_pseuds"
+    else
+      tire.index.name
+    end
+  end
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -450,6 +461,8 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block
   mapping do
     indexes :name, boost: 20
   end
@@ -463,6 +476,10 @@ class Pseud < ApplicationRecord
     to_json(methods: [:user_login, :collection_ids])
   end
 
+  def document_json
+    PseudIndexer.new({}).document(self)
+  end
+
   def self.search(options={})
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       query do
@@ -474,4 +491,17 @@ class Pseud < ApplicationRecord
     end
   end
 
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end

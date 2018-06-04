@@ -3,11 +3,27 @@
   <h2 class="heading"><%= ts("Manage the Invitation Queue") %></h2>
 <!--/descriptions-->
 
-<!--main content-->
-  <%= form_tag reorder_invite_requests_url do %>
-    <p><%= submit_tag ts("Reorder Queue") %></p>
-  <% end %>
+<!--subnav-->
+  <ul class="navigation actions" role="navigation">
+    <li>
+      <%= form_tag reorder_invite_requests_url do %>
+        <p><%= submit_tag ts("Reorder Queue") %></p>
+      <% end %>
+    </li>
+    <li class="search" role="search">
+      <%= form_tag manage_invite_requests_path, method: :get,
+          id: "invite-request-search", class: "simple search" do %>
+        <fieldset>
+          <%= text_field_tag :query, params[:query],
+              title: ts("Find invitation requests from") %>
+          <%= submit_tag ts("Search Queue") %>
+        </fieldset>
+      <% end %>
+    </li>
+  </ul>
+<!--/subnav-->
 
+<!--main content-->
   <table summary="<%= ts("Lists each request/email and its current place in the queue. You can also delete each request.") %>">
     <caption><%= ts("Manage the Invitation Queue") %></caption>
     <thead>
@@ -23,10 +39,9 @@
           <td><%= request.position %></td>
           <td><%= request.email %></td>
           <td>
-            <%= link_to ts("Delete"),
-                        invite_request_path(request, page: params[:page]),
-                        data: { confirm: ts("Are you sure?") },
-                        method: :delete %>
+            <%= form_tag invite_request_path(request, page: params[:page], query: params[:query]), method: "delete", class: "ajax-remove" do |f| %>
+              <%= submit_tag ts("Delete") %>
+            <% end %>
           </td>
         </tr>
       <% end %>
