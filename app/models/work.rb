@@ -132,17 +132,6 @@ class Work < ApplicationRecord
     end
   end
 
-  # Set the authors_to_sort_on value, which should be anon for anon works
-  def set_author_sorting
-    if self.anonymous?
-      self.authors_to_sort_on = "Anonymous"
-    elsif self.authors.present?
-      self.authors_to_sort_on = self.sorted_authors
-    else
-      self.authors_to_sort_on = self.sorted_pseuds
-    end
-  end
-
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 
@@ -191,9 +180,8 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_parents, :save_new_recipients
 
-  before_create :set_anon_unrevealed, :set_author_sorting
+  before_create :set_anon_unrevealed
   after_create :notify_after_creation
-  before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
@@ -281,7 +269,7 @@ class Work < ApplicationRecord
   # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
-      "ao3_#{Rails.env}_works"
+      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
     else
       tire.index.name
     end
@@ -947,9 +935,10 @@ class Work < ApplicationRecord
   after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta=false)
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  # Creates a filter_tagging relationship between the work and the tag or its
+  # canonical synonym. Also updates the series index because series inherit tags
+  # from works
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
@@ -963,10 +952,13 @@ class Work < ApplicationRecord
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  # Removes filter_tagging relationship unless the work is tagged with more than
+  # one synonymous tags. Also updates the series index because series inherit
+  # tags from works
   def remove_filter_tagging(tag)
     filter = tag.filter
     if filter
@@ -990,6 +982,7 @@ class Work < ApplicationRecord
           end
         end
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
@@ -1164,8 +1157,6 @@ class Work < ApplicationRecord
 
   scope :id_only, -> { select("works.id") }
 
-  scope :ordered_by_author_desc, -> { order("authors_to_sort_on DESC") }
-  scope :ordered_by_author_asc, -> { order("authors_to_sort_on ASC") }
   scope :ordered_by_title_desc, -> { order("title_to_sort_on DESC") }
   scope :ordered_by_title_asc, -> { order("title_to_sort_on ASC") }
   scope :ordered_by_word_count_desc, -> { order("word_count DESC") }
@@ -1376,12 +1367,15 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
-  end
-
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+  # TODO drop unused database column authors_to_sort_on
+  def authors_to_sort_on
+    if self.anonymous?
+      "Anonymous"
+    elsif self.authors.present?
+      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    else
+      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    end
   end
 
   def sorted_title
@@ -1512,7 +1506,7 @@ class Work < ApplicationRecord
     as_json(
       root: false,
       only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count],
+        :created_at, :revised_at, :language_id, :word_count, :complete],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
@@ -1520,7 +1514,7 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 
@@ -1574,7 +1568,24 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+    # If the filter_taggings table is always correct, we only need one line:
+    # fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    unrelated_fandoms = fandoms.map { |f| f.merger ? f.merger : f }.uniq
+
+    # Replace each fandom with the top tags of the meta trees it belongs to
+    loop do
+      n = unrelated_fandoms.map { |f| f.meta_tags.any? ? f.meta_tags : f }.flatten.uniq
+      break if n == unrelated_fandoms
+      unrelated_fandoms = n
+    end
+
+    # These fandoms have no meta tags, and they cannot be related
+    unrelated_fandoms.count > 1
   end
 
   # Does this work have only one relationship tag?

@@ -20,3 +20,9 @@ Before do
 
   step %{all search indexes are completely regenerated}
 end
+
+# ES UPGRADE TRANSITION #
+# Remove hook
+Before '@new-search' do
+  $rollout.activate :use_new_search
+end

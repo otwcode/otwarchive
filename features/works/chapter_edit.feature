@@ -338,8 +338,7 @@ Feature: Edit chapters
       And a chapter with the co-author "sabrina" is added to "Camp Friends"
     When I follow "Edit Chapter"
     Then I should see "Chapter co-creators"
-      And the "sabrina" checkbox should be checked
-      And the "sabrina" checkbox should be disabled
+      And the "sabrina" checkbox should be checked and disabled
 
 
   Scenario: Removing yourself as a co-creator from the chapter edit page

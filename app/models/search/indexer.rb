@@ -42,7 +42,10 @@ class Indexer
       body: {
         settings: {
           index: {
+            # static settings
             number_of_shards: shards,
+            # dynamic settings
+            max_result_window: ArchiveConfig.MAX_SEARCH_RESULTS,
           }
         }.merge(settings),
         mappings: mapping,
@@ -104,7 +107,7 @@ class Indexer
   end
 
   def self.index_name
-    "ao3_#{Rails.env}_#{klass.underscore.pluralize}"
+    "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_#{klass.underscore.pluralize}"
   end
 
   def self.document_type

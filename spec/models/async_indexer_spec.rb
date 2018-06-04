@@ -73,9 +73,7 @@ describe AsyncIndexer do
     it "should add the ID to the BookmarkedWorkIndexer's permanent failures" do
       AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
 
-      permanent_store = JSON.parse(
-        IndexSweeper::REDIS.get("BookmarkedWorkIndexer:permanent_failure_store")
-      )
+      permanent_store = IndexSweeper.permanent_failures(BookmarkedWorkIndexer)
 
       expect(permanent_store).to include(
         "99999-work" => { "an error" => "with a message" }

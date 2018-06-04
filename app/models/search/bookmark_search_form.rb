@@ -5,7 +5,8 @@ class BookmarkSearchForm
   include ActiveModel::Validations
 
   ATTRIBUTES = [
-    :query,
+    :bookmark_query,
+    :bookmarkable_query,
     :rec,
     :bookmark_notes,
     :with_notes,
@@ -17,10 +18,12 @@ class BookmarkSearchForm
     :bookmarkable_pseud_names,
     :bookmarkable_pseud_ids,
     :bookmarkable_type,
-    :tag,
     :excluded_tag_names,
+    :excluded_bookmark_tag_names,
     :excluded_tag_ids,
+    :excluded_bookmark_tag_ids,
     :other_tag_names,
+    :other_bookmark_tag_names,
     :tag_ids,
     :filter_ids,
     :filter_names,
@@ -78,10 +81,21 @@ class BookmarkSearchForm
     false
   end
 
+  # This is used by SearchHelper.search_header.
+  def query
+    queries = []
+    %w[bookmarkable_query bookmark_query].each do |key|
+      queries << options[key] if options[key].present?
+    end
+    queries.join(', ')
+  end
+
   def summary
     summary = []
-    if options[:query].present?
-      summary << options[:query]
+    %w[bookmarkable_query bookmark_query].each do |key|
+      if options[key].present?
+        summary << options[key]
+      end
     end
     if options[:bookmarker].present?
       summary << "Bookmarker: #{options[:bookmarker]}"
@@ -90,8 +104,10 @@ class BookmarkSearchForm
       summary << "Notes: #{options[:notes]}"
     end
     tags = []
-    if options[:tag].present?
-      tags << options[:tag]
+    %w[other_tag_names other_bookmark_tag_names].each do |key|
+      if options[key].present?
+        tags << options[key]
+      end
     end
     all_tag_ids = []
     [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
@@ -125,6 +141,12 @@ class BookmarkSearchForm
 
   def search_results
     @searcher.search_results
+  end
+
+  # Special function for returning the BookmarkableQuery results (instead of
+  # the BookmarkQuery results).
+  def bookmarkable_search_results
+    @searcher.bookmarkable_query.search_results
   end
 
   ###############
