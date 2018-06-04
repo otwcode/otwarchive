@@ -13,8 +13,13 @@ FactoryGirl.define do
     association :filterable, factory: :fandom
   end
 
+  factory :meta_tagging do
+    association :meta_tag, factory: :freeform
+    association :sub_tag, factory: :freeform
+  end
+
   factory :tag_set do
-    tags { [create(:fandom)] }
+    tags { [create(:canonical_fandom)] }
   end
 
   factory :owned_tag_set do
@@ -56,7 +61,6 @@ FactoryGirl.define do
   end
 
   factory :tag do
-    canonical true
     name { generate(:tag_name) }
   end
 
@@ -65,27 +69,38 @@ FactoryGirl.define do
   end
 
   factory :fandom do
-    canonical true
     sequence(:name) { |n| "The #{n} Fandom" }
+
+    factory :canonical_fandom do
+      canonical true
+    end
   end
 
   factory :character do
-    canonical true
     sequence(:name) { |n| "Character #{n}" }
+
+    factory :canonical_character do
+      canonical true
+    end
   end
 
   factory :relationship do
-    canonical true
     sequence(:name) { |n| "Jane#{n}/John#{n}" }
+
+    factory :canonical_relationship do
+      canonical true
+    end
   end
 
   factory :freeform do
-    canonical true
     sequence(:name) { |n| "Freeform #{n}" }
+
+    factory :canonical_freeform do
+      canonical true
+    end
   end
 
   factory :banned do |f|
-    f.canonical true
     f.sequence(:name) { |n| "Banned #{n}" }
   end
 end

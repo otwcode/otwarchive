@@ -24,12 +24,24 @@ Feature: Collectible items
     Then I should see "Works (1)"
       And I should see "Blabla"
 
+  @old-search
   Scenario: Add my bookmark to a collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
     Then I should see "Bookmarks (1)" within "#dashboard"
+      And I should see "Tundra penguins"
+
+  # This is the same as the test above, but with the sidebar text updated to
+  # reflect the new bookmarked item listings.
+  @new-search
+  Scenario: Add my bookmark to a collection
+    Given I have a bookmark for "Tundra penguins"
+    When I add my bookmark to the collection "Various_Penguins"
+    Then I should see "Added"
+    When I go to "Various Penguins" collection's page
+    Then I should see "Bookmarked Items (1)" within "#dashboard"
       And I should see "Tundra penguins"
 
   Scenario: Bookmarks of deleted items are included on the collection's Manage

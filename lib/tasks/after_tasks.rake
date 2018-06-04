@@ -564,6 +564,23 @@ namespace :After do
       end
     end
   end
+
+  desc "Enforce HTTPS where available for embedded media"
+  task(enforce_https: :environment) do
+    Chapter.find_each do |chapter|
+      if chapter.id % 1000 == 0
+        puts chapter.id
+      end
+      if chapter.content.match /<(embed|iframe)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################

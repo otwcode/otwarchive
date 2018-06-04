@@ -28,7 +28,6 @@ class DownloadsController < ApplicationController
 
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(posted: true)
-    create_work_html
 
     respond_to do |format|
       format.html do
@@ -52,6 +51,13 @@ protected
     send_data data, filename: "#{@work.download_title}.html", type: "text/html"
   end
 
+  def send_file_sync(file_type, mime_type)
+    # send file synchronously so we don't delete it before we have finsihed sending it.
+    File.open("#{@work.download_basename}.#{file_type}", 'r') do |f|
+      send_data f.read, filename: "#{@work.download_title}.#{file_type}", type: mime_type
+    end
+  end
+
   def download_pdf
     create_work_html
 
@@ -67,15 +73,15 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.pdf", type: "application/pdf")
+    send_file_sync("pdf", "application/pdf")
   end
 
   def download_mobi
-     cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
-     # metadata needs to be escaped for command line
-     title = Shellwords.escape(@work.title)
-     author = Shellwords.escape(@work.display_authors)
-     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
+    cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
+    # metadata needs to be escaped for command line
+    title = Shellwords.escape(@work.title)
+    author = Shellwords.escape(@work.display_authors)
+    cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
 
     # more than one chapter
     # create a table of contents out of separate chapter files
@@ -92,7 +98,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", type: "application/x-mobipocket-ebook")
+    send_file_sync("mobi", "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -113,7 +119,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", type: "application/epub+zip")
+    send_file_sync("epub", "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from

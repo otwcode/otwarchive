@@ -10,7 +10,7 @@ Feature: Edit Works
     When I view the work "First work"
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
-      And all search indexes are updated
+      And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
@@ -37,7 +37,7 @@ Feature: Edit Works
     Then I should see "Work was successfully updated."
       And I should see "Additional Tags: new tag"
       And I should see "Words:3"
-    When all search indexes are updated
+    When all indexing jobs have been run
       And I go to testuser's works page
     Then I should see "First work"
       And I should see "first fandom"
@@ -138,11 +138,11 @@ Feature: Edit Works
     When I view the work "Shared"
     Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
+      And I wait 1 second
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"
-    When I view the work "Shared"
-    Then I should see "ex_friend" within ".byline"
-      And I should not see "coolperson" within ".byline"
+      And "ex_friend" should be the creator on the work "Shared"
+      And "coolperson" should not be a creator on the work "Shared"
 
   Scenario: User applies a coauthor's work skin to their work
     Given the following activated users with private work skins

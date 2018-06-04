@@ -33,15 +33,15 @@ Feature: Search restricted works
   users or admins
     Given a set of works with various access levels for searching
       And I am logged in as a random user
-    When I search for works containing "restricted: T"
-    Then I should see "You searched for: restricted: T"
+    When I search for works containing "restricted: true"
+    Then I should see "You searched for: restricted: true"
       And I should see "1 Found"
       And the results should contain only the restricted work
     When I am logged out
-      And I search for works containing "restricted: T"
-    Then I should see "You searched for: restricted: T"
+      And I search for works containing "restricted: true"
+    Then I should see "You searched for: restricted: true"
       And I should see "No results found."
     When I am logged in as an admin
-      And I search for works containing "restricted: T"
+      And I search for works containing "restricted: true"
     Then I should see "1 Found"
       And the results should contain only the restricted work

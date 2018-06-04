@@ -38,8 +38,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should not see "Synonyms"
   When I follow "Edit Alternate Universe Space Pirates"
     And I should see "Pirates! in Spaaaaace! AU"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical freeforms from work posting
   When I go to the new work page

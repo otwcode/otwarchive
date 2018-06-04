@@ -4,6 +4,11 @@
 	<% if @series.restricted %>
 		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted", skip_pipeline: true) %>
 	<% end %>
+  <% if @series.hidden_by_admin %>
+    <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
+                  title: ts("Hidden by Administrator"),
+                  skip_pipeline: true) %>
+  <% end %>
 </h2>
 <!--/descriptions-->
 
@@ -70,13 +75,13 @@
 
 <% if logged_in_as_admin? %>
 <!-- BEGIN admin options -->
-  <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
+  <%= render "admin/admin_options", item: @series %>
 <% end %>
 
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
   <% for serial in @serial_works %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
+    <%= render "works/work_blurb", work: serial.work %>
   <% end %>
 </ul>
 <!--/content-->

@@ -263,17 +263,15 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-
-
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
+Then /^the "(.*?)" checkbox(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, selector, disabled|
   with_scope(selector) do
-    has_checked_field?(label)
+    assert has_checked_field?(label, disabled: disabled.present?)
   end
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
+Then /^the "(.*?)" checkbox(?: within "(.*?)")? should not be checked$/ do |label, selector|
   with_scope(selector) do
-    has_unchecked_field?(label)
+    assert has_unchecked_field?(label)
   end
 end
 
