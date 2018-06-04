@@ -102,6 +102,67 @@ describe Work do
     end
   end
 
+  describe "#crossover" do
+    it "is not crossover with one fandom" do
+      fandom = create(:canonical_fandom, name: "nge")
+      work = create(:work, fandoms: [fandom])
+      expect(work.crossover).to be_falsy
+    end
+
+    it "is not crossover with one fandom and one of its synonyms" do
+      rel = create(:canonical_fandom, name: "evanescence")
+      syn = create(:fandom, name: "can't wake up (wake me up inside)", merger: rel)
+      work = create(:work, fandoms: [rel, syn])
+      expect(work.crossover).to be_falsy
+    end
+
+    it "is not crossover with multiple synonyms of one fandom" do
+      rel = create(:canonical_fandom, name: "nge")
+      syn1 = create(:fandom, name: "eva", merger: rel)
+      syn2 = create(:fandom, name: "end of eva", merger: rel)
+      work = create(:work, fandoms: [syn1, syn2])
+      expect(work.crossover).to be_falsy
+    end
+
+    it "is not crossover with fandoms sharing a direct meta tag" do
+      rel1 = create(:canonical_fandom, name: "rebuild")
+      rel2 = create(:canonical_fandom, name: "campus apocalypse")
+      meta_tag = create(:canonical_fandom, name: "nge")
+      meta_tag.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
+      rel1.reload
+      rel2.reload
+
+      work = create(:work, fandoms: [rel1, rel2])
+      expect(work.crossover).to be_falsy
+    end
+
+    it "is crossover with fandoms in different meta tag trees" do
+      rel1 = create(:canonical_fandom, name: "rebuild again eventually")
+      rel2 = create(:canonical_fandom, name: "evanescence")
+      meta_tag = create(:canonical_fandom, name: "rebuild")
+      meta_tag.update_attribute(:sub_tag_string, rel1.name)
+      super_meta_tag = create(:canonical_fandom, name: "nge")
+      super_meta_tag.update_attribute(:sub_tag_string, meta_tag.name)
+
+      rel1.reload
+      rel2.reload
+      meta_tag.reload
+      super_meta_tag.reload
+
+      work = create(:work, fandoms: [rel1, rel2])
+      expect(work.crossover).to be_truthy
+
+      work = create(:work, fandoms: [meta_tag, super_meta_tag])
+      expect(work.crossover).to be_falsy
+    end
+
+    it "is crossover with unrelated fandoms" do
+      ships = [create(:canonical_fandom, name: "nge"), create(:canonical_fandom, name: "evanescence")]
+      work = create(:work, fandoms: ships)
+      expect(work.crossover).to be_truthy
+    end
+  end
+
   describe "#otp" do
     it "is not otp with no relationship" do
       work = create(:work)
@@ -142,11 +203,13 @@ describe Work do
       expect(work.otp).to be_falsy
     end
 
-    it "is not otp with related relationships that are not synonyms" do
+    it "is not otp with relationships sharing a meta tag" do
       rel1 = create(:canonical_relationship, name: "shinrei")
       rel2 = create(:canonical_relationship, name: "asurei")
-      parent = create(:canonical_relationship)
-      parent.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
+      meta_tag = create(:canonical_relationship)
+      meta_tag.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
+      rel1.reload
+      rel2.reload
 
       work = create(:work, relationships: [rel1, rel2])
       expect(work.otp).to be_falsy
