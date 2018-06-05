@@ -1262,13 +1262,6 @@ class Tag < ApplicationRecord
       syn = Tag.find_by_name(name)
       if syn && !syn.canonical?
         syn.update_attributes(merger_id: self.id)
-        if syn.is_a?(Fandom)
-          syn.medias.each {|medium| self.add_association(medium)}
-          self.medias.each {|medium| syn.add_association(medium)}
-        else
-          syn.parents.by_type("Fandom").canonical.each {|fandom| self.add_association(fandom)}
-          self.parents.by_type("Fandom").canonical.each {|fandom| syn.add_association(fandom)}
-        end
       end
     end
   end
