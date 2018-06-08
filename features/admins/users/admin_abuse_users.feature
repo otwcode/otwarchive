@@ -9,6 +9,14 @@ Feature: Admin Abuse actions
       And I am logged in as an admin
     When I go to the abuse administration page for "mrparis"
 
+  Scenario: An admin adds a note to a user
+    Given I choose "Record note"
+    And I fill in "Notes" with "This user is suspicious."
+    When I press "Update"
+    Then I should see "Note was recorded."
+    And I should see "Note Added"
+    And I should see "This user is suspicious."
+
   Scenario: A user is given a warning with a note
     Given I choose "Record warning"
       And I fill in "Notes" with "Next time, the brig."

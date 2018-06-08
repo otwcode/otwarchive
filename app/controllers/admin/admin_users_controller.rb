@@ -124,6 +124,12 @@ class Admin::AdminUsersController < ApplicationController
           success_message << ts("Fannish next of kin removed.")
         end
 
+        # create note
+        if params[:admin_action] == "note"
+          @user.create_log_item(action: ArchiveConfig.ACTION_NOTE, note: @admin_note, admin_id: current_admin.id)
+          success_message << ts("Note was recorded.")
+        end
+
         # create warning
         if params[:admin_action] == "warn"
           @user.create_log_item(action: ArchiveConfig.ACTION_WARN, note: @admin_note, admin_id: current_admin.id)
