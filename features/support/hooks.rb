@@ -9,8 +9,6 @@ Before do
   REDIS_ROLLOUT.flushall
   REDIS_AUTOCOMPLETE.flushall
 
-  step %{all search indexes are updated}
-
   # ES UPGRADE TRANSITION #
   # Remove rollout activation & unless block
   $rollout.activate :start_new_indexing
@@ -19,4 +17,12 @@ Before do
     $rollout.activate :stop_old_indexing
     $rollout.activate :use_new_search
   end
+
+  step %{all search indexes are completely regenerated}
+end
+
+# ES UPGRADE TRANSITION #
+# Remove hook
+Before '@new-search' do
+  $rollout.activate :use_new_search
 end

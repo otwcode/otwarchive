@@ -6,7 +6,9 @@ class PseudSearchForm
 
   ATTRIBUTES = [
     :query,
-    :collection_ids
+    :name,
+    :collection_ids,
+    :fandom
   ]
 
   attr_accessor :options
@@ -17,6 +19,7 @@ class PseudSearchForm
 
   def initialize(options={})
     @options = options
+    set_fandoms
     @searcher = PseudQuery.new(@options.delete_if { |_, v| v.blank? })
   end
 
@@ -26,6 +29,12 @@ class PseudSearchForm
 
   def search_results
     @searcher.search_results
+  end
+
+  def set_fandoms
+    return unless @options[:fandom].present?
+    names = @options[:fandom].split(',').map(&:squish)
+    @options[:fandom_ids] = Tag.where(name: names).pluck(:id)
   end
 
 end

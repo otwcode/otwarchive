@@ -26,7 +26,7 @@ Scenario: Posting locked work
     When I go to the works tagged "Supernatural"
     Then I should see "Awesomeness" within "h4"
     And I should see the image "alt" text "(Restricted)" within "h4"
-    When the work indexes are updated
+    When all indexing jobs have been run
       And I fill in "site_search" with "Awesomeness"
       And I press "Search"
     Then I should see "1 Found"
@@ -52,7 +52,7 @@ Scenario: Posting locked work
 Scenario: Editing posted work
     Given I am logged in as "fandomer" with password "password"
       And I post the work "Sad generic work"
-      And the work indexes are updated
+      And all indexing jobs have been run
     When I am logged out
       And I go to fandomer's works page
     Then I should see "Sad generic work"

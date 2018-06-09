@@ -35,19 +35,12 @@ class IndexSubqueue
   end
 
   def run
-    # Do this before the old indexing  to make sure that we know which IDs to
-    # pass to the indexer. (Delete this comment after the upgrade is complete.)
-    if $rollout.active?(:start_new_indexing)
-      AsyncIndexer.index(klass, ids, label)
-    end
-    unless $rollout.active?(:stop_old_indexing)
-      build_batch
-      @response = perform_batch_update
-      if @response.code == 200
-        respond_to_success
-      else
-        respond_to_failure
-      end
+    build_batch
+    @response = perform_batch_update
+    if @response.code == 200
+      respond_to_success
+    else
+      respond_to_failure
     end
   end
 
@@ -140,12 +133,10 @@ class IndexSubqueue
     @batch << { update: basics }.to_json
     @batch << {
       doc: {
-        work: {
-          hits: obj.hit_count,
-          kudos_count: obj.kudos_count,
-          bookmarks_count: obj.bookmarks_count,
-          comments_count: obj.comments_count
-        }
+        hits: obj.hit_count,
+        kudos_count: obj.kudos_count,
+        bookmarks_count: obj.bookmarks_count,
+        comments_count: obj.comments_count
       }
     }.to_json
   end

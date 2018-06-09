@@ -27,7 +27,10 @@ class WorkQuery < Query
   end
 
   def exclusion_filters
-    tag_exclusion_filter.compact if tag_exclusion_filter
+    @exclusion_filters ||= [
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
+    ].flatten.compact
   end
 
   # Combine the available queries
@@ -87,8 +90,9 @@ class WorkQuery < Query
 
   def tag_filters
     [
-      filter_id_filter
-    ]
+      filter_id_filter,
+      named_tag_inclusion_filter
+    ].flatten.compact
   end
 
   def range_filters
@@ -98,6 +102,7 @@ class WorkQuery < Query
         ranges << { range: { countable => Search.range_to_search(options[countable]) } }
       end
     end
+    ranges += [date_range_filter, word_count_filter].compact
     ranges
   end
 
@@ -126,7 +131,7 @@ class WorkQuery < Query
   end
 
   def complete_filter
-    term_filter(:complete, 'true') if %w(true 1).include?(options[:complete].to_s)
+    term_filter(:complete, bool_value(options[:complete])) if options[:complete].present?
   end
 
   def single_chapter_filter
@@ -138,7 +143,7 @@ class WorkQuery < Query
   end
 
   def crossover_filter
-    term_filter(:crossover, include_crossovers) if include_crossovers.present?
+    term_filter(:crossover, bool_value(options[:crossover])) if options[:crossover].present?
   end
 
   def type_filter
@@ -169,6 +174,49 @@ class WorkQuery < Query
     end
   end
 
+  # This filter is used to restrict our results to only include works
+  # whose "tag" text matches all of the tag names in included_tag_names. This
+  # is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.filter_ids function.
+  def named_tag_inclusion_filter
+    return if included_tag_names.blank?
+    match_filter(:tag, included_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any works whose
+  # "tag" text matches one of the passed-in tag names. This is useful when the
+  # user enters a non-existent tag, which would be discarded by the
+  # TaggableQuery.exclusion_ids function.
+  #
+  # Unlike the inclusion filter, we must separate these into different match
+  # filters to get the results that we want (that is, excluding "A B" and "C D"
+  # is the same as "not(A and B) and not(C and D)").
+  def named_tag_exclusion_filter
+    excluded_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
+    end
+  end
+
+  def date_range_filter
+    return unless options[:date_from].present? || options[:date_to].present?
+    begin
+      range = {}
+      range[:gte] = clamp_search_date(options[:date_from].to_date) if options[:date_from].present?
+      range[:lte] = clamp_search_date(options[:date_to].to_date) if options[:date_to].present?
+      { range: { revised_at: range } }
+    rescue ArgumentError
+      nil
+    end
+  end
+
+  def word_count_filter
+    return unless options[:words_from].present? || options[:words_to].present?
+    range = {}
+    range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
+    range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    { range: { word_count: range } }
+  end
+
   ####################
   # QUERIES
   ####################
@@ -186,7 +234,6 @@ class WorkQuery < Query
     [:title, :creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    search_text << split_query_text_phrases(:tag, options[:tag])
     if self.options[:collection_ids].blank? && options[:collected]
       search_text << " collection_ids:*"
     end
@@ -244,16 +291,14 @@ class WorkQuery < Query
     options[:user_ids].blank? && pseud_ids.blank?
   end
 
-  def include_crossovers
-    return unless options[:crossover].present?
-    if %w(1 true T).include? options[:crossover].to_s
-      'true'
-    else
-      'false'
-    end
-  end
-
   def pseud_ids
     options[:pseud_ids]
+  end
+
+  # By default, ES6 expects yyyy-MM-dd and can't parse years with 4+ digits.
+  def clamp_search_date(date)
+    return date.change(year: 0) if date.year.negative?
+    return date.change(year: 9999) if date.year > 9999
+    date
   end
 end

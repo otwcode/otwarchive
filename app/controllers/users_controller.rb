@@ -54,7 +54,7 @@ class UsersController < ApplicationController
   def show
     if @user.blank?
       flash[:error] = ts('Sorry, could not find this user.')
-      redirect_to(people_path) && return
+      redirect_to(search_people_path) && return
     end
 
     @page_subtitle = @user.login
@@ -145,6 +145,7 @@ class UsersController < ApplicationController
       @user.invitation_token = params[:invitation_token]
       @user.age_over_13 = user_params[:age_over_13]
       @user.terms_of_service = user_params[:terms_of_service]
+      @user.accepted_tos_version = @current_tos_version
 
       @user.password = user_params[:password] if user_params[:password]
       @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
@@ -292,6 +293,11 @@ class UsersController < ApplicationController
       format.html { redirect_to(request.env['HTTP_REFERER'] || root_path) && return }
       format.js
     end
+  end
+
+  def end_tos_prompt
+    @user.update_attribute(:accepted_tos_version, @current_tos_version)
+    head :no_content
   end
 
   def browse

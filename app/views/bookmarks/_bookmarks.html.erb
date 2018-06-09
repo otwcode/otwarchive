@@ -18,6 +18,11 @@
   <% # show only partial view for each bookmark since the bookmarked object is already shown above %>
   <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
 
+<% elsif @bookmarkable_items %>
+  <% # Display a list of bookmarkables, with several bookmarks under each %>
+  <% @bookmarkable_items.each do |bookmarkable| %>
+    <%= render 'bookmarks/bookmarkable_blurb', bookmarkable: bookmarkable %>
+  <% end %>
 <% else %>
   <% # Standard bookmarks index with full blurb %> 
   <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %><% end %>

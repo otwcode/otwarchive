@@ -50,7 +50,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.8.1'
+gem 'nokogiri', '>= 1.8.2'
 gem 'mechanize'
 gem 'sanitize'
 # Until there is a working solution to
@@ -68,7 +68,7 @@ gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '>= 5.1.0'
+gem 'paperclip', '>= 5.2.0'
 
 # for looking up image dimensions quickly
 gem 'fastimage'

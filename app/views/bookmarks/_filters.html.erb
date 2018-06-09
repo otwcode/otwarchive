@@ -27,7 +27,7 @@
         <dd class="<%= filter_action %> tags group">
           <dl>
             <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
-              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="<%= tag_type %> tags">
+              <dt id="toggle_<%= filter_action %>_<%= tag_type %>_tags" class="filter-toggle <%= tag_type %> tags">
                 <% # For accessibility, include filter action (e.g. Include) as landmark text %>
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
@@ -39,20 +39,24 @@
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
-                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
-                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
-                        <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                            tag.id,
-                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
-                      <% else %>
-                        <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
-                            tag.id,
-                            filter_boolean_value(filter_action, tag_type, tag.id.to_s),
-                            id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                      <% next if filter_action == "include" &&
+                          (@search.options[:excluded_tag_ids]&.include?(tag.id.to_s) ||
+                              @search.options[:excluded_bookmark_tag_ids]&.include?(tag.id.to_s)) %>
+                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" do %>
+                        <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
+                          <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                              tag.id,
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% else %>
+                          <%= check_box_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
+                              tag.id,
+                              filter_boolean_value(filter_action, tag_type, tag.id.to_s),
+                              id: "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" %>
+                        <% end %>
+                        <% text = label_for_filter(tag_type, { name: tag.name, count: tag.count }) %>
+                        <%= label_indicator_and_text(text) %>
                       <% end %>
-                      <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}",
-                          "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                     </li>
                   <% end %>
                 </ul>
@@ -60,9 +64,16 @@
             <% end %>
             <% field_name = filter_action == "include" ? "other_tag_names" : "excluded_tag_names" %>
             <dt class="autocomplete search">
-              <%= f.label field_name, ts("Other tags to %{filter_action}", filter_action: filter_action) %>
+              <%= f.label field_name, ts("Other work tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
             <dd class="autocomplete search">
+              <%= f.text_field field_name, autocomplete_options("tag") %>
+            </dd>
+            <% field_name = filter_action == "include" ? "other_bookmark_tag_names" : "excluded_bookmark_tag_names" %>
+            <dt class="bookmarker autocomplete search">
+              <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
+            </dt>
+            <dd class="bookmarker autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
           </dl>
@@ -75,23 +86,35 @@
       <dd class="more group">
         <dl>
           <dt class="search">
-            <%= f.label :query, ts("Search within results") %>
+            <%= f.label :bookmarkable_query, ts("Search within results") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmarkable_query %>
           </dd>
 
-          <dt class="options"><%= ts("Options") %></dt>
+          <dt class="bookmarker search">
+            <%= f.label :bookmark_query, ts("Search bookmarker's tags and notes") %>
+            <%= link_to_help "bookmark-search-text-help" %>
+          </dt>
+          <dd class="bookmarker search">
+            <%= f.text_field :bookmark_query %>
+          </dd>
+
+          <dt class="options"><%= ts("Bookmark types") %></dt>
           <dd class="options">
             <ul>
               <li>
-                <%= f.check_box :rec %>
-                <%= f.label :rec, ts("Recs only") %>
+                <%= f.label :rec do %>
+                  <%= f.check_box :rec %>
+                  <%= label_indicator_and_text(ts("Recs only")) %>
+                <% end %>
               </li>
               <li>
-                <%= f.check_box :with_notes %>
-                <%= f.label :with_notes, ts("Only bookmarks with notes") %>
+                <%= f.label :with_notes do %>
+                  <%= f.check_box :with_notes %>
+                  <%= label_indicator_and_text(ts("Only bookmarks with notes")) %>
+                <% end %>
               </li>
             </ul>
           </dd>

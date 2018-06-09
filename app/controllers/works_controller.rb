@@ -23,59 +23,7 @@ class WorksController < ApplicationController
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
-    # https://aaronlasseigne.com/2014/07/20/know-ruby-clone-and-dup/
-    # While nearly identical, clone does one more thing than dup.
-    # In clone, the frozen state of the object is also copied.
-    # In dup, it'll always be thawed.
-
-    clean_params = work_search_params&.dup
-    clean_params[:query] = clean_params[:query].dup unless clean_params[:query].nil?
-    clean_params[:sort_column] = clean_params[:sort_column].dup unless clean_params[:sort_column].nil?
-    clean_params[:sort_direction] = clean_params[:sort_direction].dup unless clean_params[:sort_direction].nil?
-
-    if clean_params.present? && clean_params[:query].present?
-      # swap in gt/lt for ease of matching; swap them back out for safety at the end
-      clean_params[:query].gsub!('&gt;', '>')
-      clean_params[:query].gsub!('&lt;', '<')
-
-      # extract countable params
-      %w(word kudo comment bookmark hit).each do |term|
-        next unless clean_params[:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
-        # pluralize, add _count, convert to symbol
-        term = term.pluralize unless term == 'word'
-        term += '_count' unless term == 'hits'
-        term = term.to_sym
-
-        value = Regexp.last_match(1).gsub(/^(\:|\=)/, '') # get rid of : and =
-        # don't overwrite if submitting from advanced search?
-        clean_params[term] = value unless clean_params[term].present?
-      end
-
-      # get sort-by
-      if clean_params[:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
-        sortdir = Regexp.last_match(3) || Regexp.last_match(1)
-        sortby = Regexp.last_match(2).gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
-
-        _, sort_column = WorkSearch::SORT_OPTIONS.find { |opt, _| opt =~ /#{sortby}/i }
-        clean_params[:sort_column] = sort_column unless sort_column.nil?
-        clean_params[:sort_direction] = sort_direction(sortdir)
-      end
-
-      # put categories into quotes
-      qr = Regexp.new('(?:"|\')?')
-      %w(m/m f/f f/m m/f).each do |cat|
-        cr = Regexp.new("#{qr}#{cat}#{qr}")
-        clean_params[:query].gsub!(cr, "\"#{cat}\"")
-      end
-
-      # swap out gt/lt
-      clean_params[:query].gsub!('>', '&gt;')
-      clean_params[:query].gsub!('<', '&lt;')
-
-      # get rid of empty queries
-      clean_params[:query] = nil if clean_params[:query] =~ /^\s*$/
-    end
-    clean_params
+    QueryCleaner.new(work_search_params || {}).clean
   end
 
   def search
@@ -98,6 +46,7 @@ class WorksController < ApplicationController
       end
 
       @works = @search.search_results
+      flash_max_search_results_notice(@works)
       render 'search_results'
     end
   end
@@ -165,7 +114,7 @@ class WorksController < ApplicationController
            (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
-          user = current_user.present? ? 'logged_in' : 'logged_out'
+          user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
           @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
@@ -176,6 +125,8 @@ class WorksController < ApplicationController
         else
           @works = @search.search_results
         end
+
+        flash_max_search_results_notice(@works)
 
         @facets = @works.facets
         if @search.options[:excluded_tag_ids].present?
@@ -215,6 +166,7 @@ class WorksController < ApplicationController
         @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
       end
       @works = @search.search_results
+      flash_max_search_results_notice(@works)
       @facets = @works.facets
     end
 
@@ -1073,14 +1025,6 @@ class WorksController < ApplicationController
     end
   end
 
-  def sort_direction(sortdir)
-    if sortdir == '>' || sortdir == 'ascending'
-      'asc'
-    elsif sortdir == '<' || sortdir == 'descending'
-      'desc'
-    end
-  end
-
   def build_options(params)
     pseuds_to_apply =
       (Pseud.find_by(name: params[:pseuds_to_apply]) if params[:pseuds_to_apply])
@@ -1155,6 +1099,11 @@ class WorksController < ApplicationController
       :sort_direction,
       :other_tag_names,
       :excluded_tag_names,
+      :crossover,
+      :date_from,
+      :date_to,
+      :words_from,
+      :words_to,
 
       warning_ids: [],
       category_ids: [],

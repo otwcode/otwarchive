@@ -19,7 +19,7 @@ class Query
 
   def search_results
     response = search
-    QueryResult.new(klass, response, options.slice(:page, :per_page))
+    QueryResult.new(klass, response, { page: page, per_page: per_page })
   end
 
   # Perform a count query based on the given options
@@ -38,7 +38,7 @@ class Query
   # Search query with filters
   def generated_query
     q = {
-      query: { bool: filtered_query },
+      query: filtered_query,
       size: per_page,
       from: pagination_offset,
       sort: sort
@@ -50,36 +50,12 @@ class Query
   end
 
   # Combine the filters and queries
-  # Don't include empty conditions, since those will affect results
   def filtered_query
-    filtered_query = {}
-    filtered_query[:filter] = filter_bool if filter_bool.present?
-    filtered_query[:must] = query_bool if query_bool.present?
-    if should_query.present?
-      filtered_query[:should] = should_query
-      filtered_query[:minimum_should_match] = 1
-    end
-    filtered_query
-  end
-
-  # Boolean filter
-  def filter_bool
-    return unless filters.present?
-    bool = { bool: { must: filters } }
-    if exclusion_filters.present?
-      bool[:bool][:must_not] = exclusion_filters
-    end
-    bool
-  end
-
-  # Boolean query
-  def query_bool
-    queries if !queries.blank?
-  end
-
-  # Should queries (used primarily for bookmarks)
-  def should_query
-    @should_queries
+    make_bool(
+      must: queries, # required, score calculated
+      filter: filters, # required, score ignored
+      must_not: exclusion_filters # disallowed, score ignored
+    )
   end
 
   # Define specifics in subclasses
@@ -94,6 +70,32 @@ class Query
 
   def terms_filter(field, value, options={})
     { terms: options.merge(field => value) }
+  end
+
+  # A filter used to match all words in a particular field, most frequently
+  # used for matching non-existent tags. The match query doesn't allow
+  # negation/or/and/wildcards, so it should only be used on fields where the
+  # users are expected to enter, e.g. canonical tags.
+  def match_filter(field, value, options = {})
+    { match: { field => { query: value, operator: "and" }.merge(options) } }
+  end
+
+  # Set the score equal to the value of a field. The optional value "missing"
+  # determines what score value should be used if the specified field is
+  # missing from a document.
+  def field_value_score(field, missing: 0)
+    {
+      function_score: {
+        field_value_factor: {
+          field: field,
+          missing: missing
+        }
+      }
+    }
+  end
+
+  def bool_value(str)
+    %w(true 1 T).include?(str.to_s)
   end
 
   def exclusion_filters
@@ -113,23 +115,31 @@ class Query
   end
 
   def per_page
-    options[:per_page] || 20
+    options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE
+  end
+
+  # Example: if the limit is 3 results, and we're displaying 2 per page,
+  # disallow pages beyond page 2.
+  def page
+    [
+      options[:page] || 1,
+      (ArchiveConfig.MAX_SEARCH_RESULTS / per_page.to_f).ceil
+    ].min
   end
 
   def pagination_offset
-    page = options[:page] || 1
     (page * per_page) - per_page
   end
 
   # Only escape if it isn't already escaped
   def escape_slashes(word)
-    word = word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
+    word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
   end
 
   def escape_reserved_characters(word)
     word = escape_slashes(word)
     word.gsub!('!', '\\!')
-    word.gsub!('+', '\\+')
+    word.gsub!('+', '\\\\+')
     word.gsub!('-', '\\-')
     word.gsub!('?', '\\?')
     word.gsub!("~", '\\~')
@@ -162,5 +172,18 @@ class Query
       str << " #{fieldname}:#{word}"
     end
     str
+  end
+
+  def make_bool(query)
+    query.reject! { |_, value| value.blank? }
+    query[:minimum_should_match] = 1 if query[:should].present?
+
+    if query.values.flatten.size == 1 && (query[:must] || query[:should])
+      # There's only one clause in our boolean, so we might as well skip the
+      # bool and just require it.
+      query.values.flatten.first
+    else
+      { bool: query }
+    end
   end
 end

@@ -72,7 +72,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
     click_button("Post Without Preview")
   end
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
@@ -101,7 +101,7 @@ Given(/^I have the Battle set loaded$/) do
   step %{I reveal the "Battle 12" challenge}
   step %{I am logged in as "myname4"}
   step %{the statistics_tasks rake task is run}
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^I have no works or comments$/ do
@@ -259,7 +259,7 @@ When /^I post the chaptered work "([^"]*)"$/ do |title|
   fill_in("content", with: "Another Chapter.")
   click_button("Preview")
   step %{I press "Post"}
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
@@ -276,7 +276,7 @@ end
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
@@ -284,16 +284,24 @@ When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coau
   step %{a chapter is set up for "#{work_title}"}
   step %{I add the co-author "#{coauthor}"}
   click_button("Post")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
 
 When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   step %{a chapter is set up for "#{work_title}"}
   step %{I press "Preview"}
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
+end
+
+When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
+  step %{I edit the work "#{title}"}
+  step %{I follow "#{chapter}"}
+  step %{I follow "Delete Chapter"}
+  step %{I press "Yes, Delete Chapter"}
+  step %{all indexing jobs have been run}
 end
 
 # Posts a chapter for the current user
@@ -317,7 +325,7 @@ end
 # meant to be used in conjunction with above step
 When /^I post the(?: draft)? chapter$/ do
   click_button("Post")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
@@ -404,7 +412,7 @@ When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
   step "the draft \"#{title}\""
   work = Work.find_by(title: title)
   work.update_attribute(:created_at, number.to_i.days.ago)
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
@@ -417,7 +425,7 @@ When /^I post the locked work "([^"]*)"$/ do |title|
   end
   visit preview_work_url(work)
   click_button("Post")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
@@ -472,17 +480,18 @@ When /^I set the publication date to today$/ do
   end
 end
 
-When /^I browse the "([^"]+)" works$/ do |tagname|
+When /^I browse the "(.*?)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
-When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
+
+When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, page: "")
-  step %{the work indexes are updated}
+  visit tag_works_path(tag, page: page)
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
@@ -493,31 +502,31 @@ When /^I delete the work "([^"]*)"$/ do |work|
   step %{I follow "Delete Work"}
   # If JavaScript is enabled, window.confirm will be used and this button will not appear
   click_button("Yes, Delete Work") unless @javascript
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
 When /^I preview the work$/ do
   click_button("Preview")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
 When /^I update the work$/ do
   click_button("Update")
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
   click_button "Post Without Preview"
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
 When /^I post the work$/ do
   click_button "Post"
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
@@ -585,7 +594,7 @@ end
 
 When /^the statistics for the work "([^"]*)" are updated$/ do |title|
   step %{the statistics_tasks rake task is run}
-  step %{all search indexes are updated}
+  step %{all indexing jobs have been run}
   work = Work.find_by(title: title)
   # Touch the work to actually expire the cache
   work.touch

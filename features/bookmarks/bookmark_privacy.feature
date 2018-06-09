@@ -4,18 +4,19 @@ Feature: Private bookmarks
   As a humble user
   I want to bookmark some works privately
 
+  @disable_caching
   Scenario: private bookmarks on public and restricted works
 
     Given the following activated users exist
-      | login           |
-      | workauthor      |
-      | bookmarker      |
-      | otheruser       |
+      | login                |
+      | workauthor           |
+      | avid_bookmarker      |
+      | otheruser            |
       And a fandom exists with name: "Stargate SG-1", canonical: true
       And I am logged in as "workauthor"
       And I post the locked work "Secret Masterpiece"
       And I post the work "Public Masterpiece"
-    When I am logged in as "bookmarker"
+    When I am logged in as "avid_bookmarker"
       And I view the work "Secret Masterpiece"
       And I follow "Bookmark"
       And I check "bookmark_rec"
@@ -31,7 +32,7 @@ Feature: Private bookmarks
       And I check "bookmark_rec"
       And I check "bookmark_private"
       And I press "Create"
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
       And I should not see the image "title" text "Restricted"
       And I should not see "Rec"
@@ -43,8 +44,8 @@ Feature: Private bookmarks
     When I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-    When I am on bookmarker's bookmarks page
-    Then I should see "2 Bookmarks by bookmarker"
+    When I am on avid_bookmarker's bookmarks page
+    Then I should see "2 Bookmarks by avid_bookmarker"
       And I should see "Public Masterpiece"
       And I should see "Secret Masterpiece"
 
@@ -54,8 +55,8 @@ Feature: Private bookmarks
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-      And I should not see "bookmarker"
-    When I go to bookmarker's bookmarks page
+      And I should not see "avid_bookmarker"
+    When I go to avid_bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
     When I go to the works page
@@ -73,7 +74,7 @@ Feature: Private bookmarks
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-    When I go to bookmarker's bookmarks page
+    When I go to avid_bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
     When I go to the works page
@@ -88,7 +89,7 @@ Feature: Private bookmarks
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
-    When I go to bookmarker's bookmarks page
+    When I go to avid_bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
 
@@ -96,22 +97,21 @@ Feature: Private bookmarks
     When I am logged in as "otheruser"
       And I view the work "Public Masterpiece"
       And I rec the current work
-      And the bookmark indexes are updated
+      And all indexing jobs have been run
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
-      And I should not see "bookmarker"
+      And I should not see "avid_bookmarker"
       And I should see "otheruser"
-    When I go to bookmarker's bookmarks page
+    When I go to avid_bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
     When I go to the works page
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
       And I should not see "Bookmarks: 2"
-      # CACHING (perform_caching: true)
-      # And I should see "Bookmarks: 1"
+      And I should see "Bookmarks: 1"
     When I view the work "Public Masterpiece"
     Then I should not see "Bookmarks:2"
       And I should see "Bookmarks:1"
@@ -119,14 +119,16 @@ Feature: Private bookmarks
     Then I should see "List of Bookmarks"
       And I should see "Public Masterpiece"
       And I should see "otheruser"
-      And I should not see "bookmarker"
+      And I should not see "avid_bookmarker"
 
-      # Private bookmarks should not show on tag's page
+    # Private bookmarks should not show on tag's page
     When I go to the bookmarks tagged "Stargate SG-1"
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
-      And I should not see "bookmarker"
+      And I should not see "avid_bookmarker"
       And I should see "otheruser"
-      # bookmark counter
+      # This *should* be 1, because there's no way for a bookmark to appear on
+      # a tag bookmark page if the bookmarkable has a public_bookmark_count of
+      # 0. However, caching means that this is actually 0:
       And I should see "0" within ".count"
       And I should not see "2" within ".count"

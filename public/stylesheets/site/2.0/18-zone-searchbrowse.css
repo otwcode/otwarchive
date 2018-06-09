@@ -135,12 +135,18 @@ form.filters {
   margin: 0;
 }
 
-.filters .group dt.search {
+.filters .group dt.search, .filters .range dt {
   border-bottom: none;
   padding: 0.25em 0;
 }
 
-.filters .more dd.search {
+.filters .group dt.bookmarker {
+  border-top: 1px solid #f3efec;
+  margin-top: 0.643em;
+  padding-top: 0.643em;
+}
+
+.filters .more dd.search, .filters .more dt.search, .filters .range dd {
   margin-top: 0;
 }
 
@@ -154,6 +160,88 @@ form.filters {
 
 .filters .sort + .heading {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
+}
+
+/* AO3-5370: Normally you'd use absolute positioning here, but we
+needed relative positioning and a left offset to fix a bug in Safari 9 */
+.filters [type="checkbox"], .filters [type="radio"] {
+  border: 0; 
+  clip: rect(0 0 0 0);
+  height: 1px;
+  left: -2em;
+  margin: -1px; 
+  overflow: hidden; 
+  padding: 0; 
+  position: relative; 
+  width: 1px;
+}
+
+.filters .indicator:before {
+  background: #eee;
+  color: #aaa;  
+  display: inline-block;
+  border: 1px solid;
+  margin-right: 0.25em;
+  text-align: center;
+    background-image: -moz-linear-gradient(top, #fff 2%, #ddd 95%, #bbb 100%);
+    background-image: -webkit-linear-gradient(top, #fff 2%, #ddd 95%, #bbb 100%);
+    background-image: linear-gradient(#fff 2%, #ddd 95%, #bbb 100%);
+}
+
+.filters input:focus + .indicator + span {
+  outline: 1px dotted;
+}
+
+.filters input:checked + .indicator:before {
+  border-color: #aaa;
+}
+
+.filters input:checked + .indicator + span {
+  font-weight: 700;
+}
+
+.filters [type="checkbox"] + .indicator:before {
+  content: " \2713";
+  padding: 0 0.25em;
+    border-radius: 0.25em;
+}
+
+.filters [type="checkbox"]:checked + .indicator:before {
+  background: #deffde;
+  color: #008000;
+    background-image: -moz-linear-gradient(top, #fff 2%, #d1f0d1 95%, #b3ccb3 100%);
+    background-image: -webkit-linear-gradient(top, #fff 2%, #d1f0d1 95%, #b3ccb3 100%);
+    background-image: linear-gradient(#fff 2%, #d1f0d1 95%, #b3ccb3 100%);
+}
+
+.filters [type="radio"] + .indicator:before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+    border-radius: 1em;
+}
+
+.filters [type="radio"]:checked + .indicator:before {
+  background: #fff;
+    background-image: -moz-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 11%, rgba(0, 0, 0, 0) 23%),
+                      -moz-linear-gradient(top, #bbb 0%, #ddd 5%, #fff 100%);
+    background-image: -webkit-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 11%, rgba(0, 0, 0, 0) 23%),
+                      -webkit-linear-gradient(top, #bbb 0%, #ddd 5%, #fff 100%);
+    background-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 11%, rgba(0, 0, 0, 0) 23%),
+                      linear-gradient(to bottom, #bbb 0%, #ddd 5%, #fff 100%);
+}
+
+.filters .exclude [type="checkbox"] + .indicator:before {
+  content: " \2715";
+}
+
+.filters .exclude [type="checkbox"]:checked + .indicator:before {
+  background: #fedede;
+  color: #f00;
+    background-image: -moz-linear-gradient(top, #fff 2%, #efd1d1 95%, #d8bebe 100%);
+    background-image: -webkit-linear-gradient(top, #fff 2%, #efd1d1 95%, #d8bebe 100%);
+    background-image: linear-gradient(#fff 2%, #efd1d1 95%, #d8bebe 100%);
 }
 
 /* INTERACTION: OLD FILTERS */

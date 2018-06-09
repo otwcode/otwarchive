@@ -13,6 +13,7 @@ class WorkSearchForm
     :revised_at,
     :language_id,
     :complete,
+    :crossover,
     :single_chapter,
     :word_count,
     :hits,
@@ -37,6 +38,10 @@ class WorkSearchForm
     :relationship_ids,
     :freeform_names,
     :freeform_ids,
+    :date_from,
+    :date_to,
+    :words_from,
+    :words_to,
     :sort_column,
     :sort_direction,
     :page
@@ -113,16 +118,8 @@ class WorkSearchForm
     if @options[:creators].present?
       summary << "Author/Artist: #{@options[:creators]}"
     end
-    tags = []
-    if @options[:tag].present?
-      tags << @options[:tag]
-    end
-    all_tag_ids = []
-    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
-      if @options[tag_ids].present?
-        all_tag_ids += @options[tag_ids]
-      end
-    end
+    tags = @searcher.included_tag_names
+    all_tag_ids = @searcher.filter_ids
     unless all_tag_ids.empty?
       tags << Tag.where(id: all_tag_ids).pluck(:name).join(", ")
     end

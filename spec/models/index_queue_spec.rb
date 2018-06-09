@@ -27,7 +27,12 @@ describe IndexQueue do
   it "should create subqueues when run" do
     iq = IndexQueue.new("index:work:main")
     iq.add_id(1)
-    expect(IndexSubqueue).to receive(:create_and_enqueue)
+
+    # Once the upgrade is complete, this check can be deleted.
+    expect(IndexSubqueue).to receive(:create_and_enqueue).exactly(
+      $rollout.active?(:stop_old_indexing) ? 0 : 1
+    ).times
+
     iq.run
 
     expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
@@ -36,7 +41,6 @@ describe IndexQueue do
   describe "#run" do
     it "should call the work indexer" do
       work = create(:work)
-      IndexQueue.enqueue(work, :main) # because test env doesn't enqueue
       expect(WorkIndexer).to receive(:new).with(
         array_including(work.id.to_s)
       ).and_call_original
@@ -45,7 +49,6 @@ describe IndexQueue do
 
     it "should call the bookmark indexer" do
       bookmark = create(:bookmark)
-      IndexQueue.enqueue(bookmark, :main) # because test env doesn't enqueue
       expect(BookmarkIndexer).to receive(:new).with(
         array_including(bookmark.id.to_s)
       ).and_call_original
@@ -54,7 +57,6 @@ describe IndexQueue do
 
     it "should call the tag indexer" do
       tag = create(:freeform)
-      IndexQueue.enqueue(tag, :main) # because test env doesn't enqueue
       expect(TagIndexer).to receive(:new).with(
         array_including(tag.id.to_s)
       ).and_call_original
@@ -63,7 +65,6 @@ describe IndexQueue do
 
     it "should call the pseud indexer" do
       pseud = create(:user).default_pseud
-      IndexQueue.enqueue(pseud, :main) # because test env doesn't enqueue
       expect(PseudIndexer).to receive(:new).with(
         array_including(pseud.id.to_s)
       ).and_call_original
@@ -75,7 +76,7 @@ describe IndexQueue do
       stats.update_attributes(hit_count: 10_000)
       expect(StatCounterIndexer).to receive(:new).with(
         array_including(stats.id.to_s)
-      ).and_call_original
+      ).at_least(:once).and_call_original
       IndexQueue.new("index:stat_counter:stats").run
     end
   end

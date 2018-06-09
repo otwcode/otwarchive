@@ -10,7 +10,7 @@ Given /^basic tags$/ do
   step %{the basic warnings exist}
   Fandom.where(name: "No Fandom", canonical: true).first_or_create
   step %{the basic categories exist}
-  step %{the tag indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^the default ratings exist$/ do
@@ -310,6 +310,12 @@ When /^the tag "([^\"]*)" is decanonized$/ do |tag|
   tag.save
 end
 
+When /^the tag "([^"]*)" is canonized$/ do |tag|
+  tag = Tag.find_by!(name: tag)
+  tag.canonical = true
+  tag.save
+end
+
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
   visit new_wrangling_guideline_path
@@ -328,6 +334,36 @@ When /^I flush the wrangling sidebar caches$/ do
   [Fandom, Character, Relationship, Freeform].each do |klass|
     Rails.cache.delete("/wrangler/counts/sidebar/#{klass}")
   end
+end
+
+When /^I syn the tag "([^"]*)" to "([^"]*)"$/ do |syn, merger|
+  syn = Tag.find_by(name: syn)
+  visit edit_tag_path(syn)
+  fill_in("Synonym of", with: merger)
+  click_button("Save changes")
+end
+
+When /^I de-syn the tag "([^"]*)" from "([^"]*)"$/ do |syn, merger|
+  merger = Tag.find_by(name: merger)
+  syn_id = Tag.find_by(name: syn).id
+  visit edit_tag_path(merger)
+  check("child_Merger_associations_to_remove_#{syn_id}")
+  click_button("Save changes")
+end
+
+When /^I subtag the tag "([^"]*)" to "([^"]*)"$/ do |subtag, metatag|
+  subtag = Tag.find_by(name: subtag)
+  visit edit_tag_path(subtag)
+  fill_in("Add MetaTags:", with: metatag)
+  click_button("Save changes")
+end
+
+When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
+  subtag = Tag.find_by(name: subtag)
+  metatag_id = Tag.find_by(name: metatag).id
+  visit edit_tag_path(subtag)
+  check("parent_MetaTag_associations_to_remove_#{metatag_id}")
+  click_button("Save changes")
 end
 
 ### THEN

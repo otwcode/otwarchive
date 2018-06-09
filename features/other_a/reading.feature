@@ -17,7 +17,7 @@ Feature: Reading count
       also updates the date
     Given I am logged in as "writer"
       And I post the work "some work"
-      And the work indexes are updated
+      And all indexing jobs have been run
       And I am logged out
     When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
@@ -47,7 +47,7 @@ Feature: Reading count
     When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should not see "My History"
     When I am on writer's works page
       And I follow "some work"

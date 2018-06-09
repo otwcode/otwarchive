@@ -1,50 +1,40 @@
 require 'spec_helper'
 
 describe WorkSearchForm do
-  before(:each) do
-    work.save
-    # This doesn't work properly in the factory.
-    second_work.collection_ids = [collection.id]
-    second_work.save
+  describe "searching" do
+    let!(:collection) do
+      FactoryGirl.create(:collection, id: 1)
+    end
 
-    update_and_refresh_indexes('work')
-  end
+    let!(:work) do
+      FactoryGirl.create(:work,
+                         title: "There and back again",
+                         authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
+                         summary: "An unexpected journey",
+                         fandom_string: "The Hobbit",
+                         character_string: "Bilbo Baggins",
+                         posted: true,
+                         expected_number_of_chapters: 3,
+                         complete: false,
+                         language_id: 1)
+    end
 
-  after(:each) do
-    Work.destroy_all
-    delete_index 'work'
-  end
+    let!(:second_work) do
+      FactoryGirl.create(:work,
+                         title: "Harry Potter and the Sorcerer's Stone",
+                         authors: [Pseud.find_by(name: "JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
+                         summary: "Mr and Mrs Dursley, of number four Privet Drive...",
+                         fandom_string: "Harry Potter",
+                         character_string: "Harry Potter, Ron Weasley, Hermione Granger",
+                         posted: true,
+                         language_id: 2)
+    end
 
-  let!(:collection) do
-    FactoryGirl.create(:collection, id: 1)
-  end
-
-  let!(:work) do
-    FactoryGirl.create(:work,
-                       title: "There and back again",
-                       authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
-                       summary: "An unexpected journey",
-                       fandom_string: "The Hobbit",
-                       character_string: "Bilbo Baggins",
-                       posted: true,
-                       expected_number_of_chapters: 3,
-                       complete: false,
-                       language_id: 1)
-  end
-
-  let!(:second_work) do
-    FactoryGirl.create(:work,
-                       title: "Harry Potter and the Sorcerer's Stone",
-                       authors: [Pseud.find_by(name: "JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
-                       summary: "Mr and Mrs Dursley, of number four Privet Drive...",
-                       fandom_string: "Harry Potter",
-                       character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-                       posted: true,
-                       language_id: 2)
-  end
-
-  describe '#search_results' do
     before(:each) do
+      # This doesn't work properly in the factory.
+      second_work.collection_ids = [collection.id]
+      second_work.save
+
       work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
       second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       update_and_refresh_indexes('work')
@@ -111,7 +101,6 @@ describe WorkSearchForm do
     describe "when searching by author" do
       it "should match partial author names" do
         work_search = WorkSearchForm.new(creator: "Rowling")
-        query = work_search.instance_variable_get :@searcher
         expect(work_search.search_results).to include second_work
       end
 
@@ -240,6 +229,81 @@ describe WorkSearchForm do
         work_search = WorkSearchForm.new(bookmarks_count: "10-20")
         expect(work_search.search_results).to include work
         expect(work_search.search_results).not_to include second_work
+      end
+    end
+  end
+
+  describe "searching for authors who changes username" do
+    let!(:user) { create(:user, login: "81_white_chain") }
+    let!(:second_pseud) { create(:pseud, name: "peacekeeper", user: user) }
+    let!(:work_by_default_pseud) { create(:posted_work, authors: [user.default_pseud]) }
+    let!(:work_by_second_pseud) { create(:posted_work, authors: [second_pseud]) }
+
+    before { run_all_indexing_jobs }
+
+    it "matches only on their current username" do
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+
+      user.reload
+      user.login = "82_white_chain"
+      user.save!
+      run_all_indexing_jobs
+
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      puts results.inspect
+      expect(results).to be_empty
+
+      results = WorkSearchForm.new(creator: "82_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+    end
+  end
+
+  describe "sorting results" do
+    describe "by authors" do
+      before do
+        %w(21st_wombat 007aardvark).each do |pseud_name|
+          create(:posted_work, authors: [create(:pseud, name: pseud_name)])
+        end
+        run_all_indexing_jobs
+      end
+
+      it "returns all works in the correct order of sortable pseud values" do
+        sorted_pseuds_asc = ["007aardvark", "21st_wombat"]
+
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc
+
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on", sort_direction: "asc")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc
+
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc.reverse
+      end
+    end
+
+    describe "by authors who changes username" do
+      let!(:user_1) { create(:user, login: "cioelle") }
+      let!(:user_2) { create(:user, login: "ruth") }
+
+      before do
+        create(:posted_work, authors: [user_1.default_pseud])
+        create(:posted_work, authors: [user_2.default_pseud])
+        run_all_indexing_jobs
+      end
+
+      it "returns all works in the correct order of sortable pseud values" do
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["cioelle", "ruth"]
+
+        user_1.login = "yabalchoath"
+        user_1.save!
+        run_all_indexing_jobs
+
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["ruth", "yabalchoath"]
       end
     end
   end

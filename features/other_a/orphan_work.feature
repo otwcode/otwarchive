@@ -28,7 +28,7 @@ Feature: Orphan work
     Then I should see "Read More About The Orphaning Process"
     When I choose "Take my pseud off as well"
       And I press "Yes, I'm sure"
-      And all search indexes are updated
+      And all indexing jobs have been run
     Then I should see "Orphaning was successful."
       And I should see "Bookmarks (0)"
     When I follow "Works (0)"
@@ -134,7 +134,7 @@ Feature: Orphan work
   When I follow "Orphan Works Instead"
   Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
   When I press "Yes, I'm sure"
-    And the work indexes are updated
+    And all indexing jobs have been run
   Then I should see "Orphaning was successful."
   When I go to my works page
   Then I should not see "Glorious"

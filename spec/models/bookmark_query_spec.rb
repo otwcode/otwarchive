@@ -3,9 +3,17 @@ require 'spec_helper'
 describe BookmarkQuery do
 
   it "should allow you to perform a simple search" do
-    q = BookmarkQuery.new(query: "unicorns")
+    q = BookmarkQuery.new(bookmarkable_query: "space", bookmark_query: "unicorns")
     search_body = q.generated_query
-    expect(search_body[:query][:bool][:should]).to include({:query_string => { :query => "unicorns" }})
+    query = { query_string: { query: "unicorns", default_operator: "AND" } }
+    expect(search_body[:query][:bool][:must]).to include(query)
+    expect(search_body[:query][:bool][:must]).to include(
+      has_parent: {
+        parent_type: "bookmarkable",
+        query: { query_string: { query: "space", default_operator: "AND" } },
+        score: true
+      }
+    )
   end
 
   it "should not return private bookmarks by default" do
@@ -34,21 +42,29 @@ describe BookmarkQuery do
     expect(q.filters).to include({term: { hidden_by_admin: 'false'} })
   end
 
-  it "should not return bookmarks of hidden objects" do
-    q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: { hidden_by_admin: 'false' }}}})
-  end
+  context "default bookmarkable filters" do
+    let(:query) { BookmarkQuery.new }
+    let(:parent_filter) do
+      query.exclusion_filters.first { |f| f.key? :has_parent }
+    end
 
-  it "should not return restricted bookmarked works by default" do
-    User.current_user = nil
-    q = BookmarkQuery.new
-    expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
-  end
+    it "should not return bookmarks of hidden objects" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { hidden_by_admin: 'true' })
+    end
 
-  it "should only return restricted bookmarked works when a user is logged in" do
-    User.current_user = User.new
-    q = BookmarkQuery.new
-    expect(q.filters).not_to include({has_parent:{parent_type: 'bookmarkable', query:{term: {restricted: 'false'}}}})
+    it "should not return bookmarks of drafts" do
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { posted: 'false' })
+    end
+
+    it "should not return restricted bookmarked works when logged out" do
+      User.current_user = nil
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).to include(term: { restricted: 'true' })
+    end
+
+    it "should return restricted bookmarked works when a user is logged in" do
+      User.current_user = User.new
+      expect(parent_filter.dig(:has_parent, :query, :bool, :should)).not_to include(term: { restricted: 'true' })
+    end
   end
 
   it "should allow you to filter for recs" do
@@ -70,7 +86,7 @@ describe BookmarkQuery do
     pseud = Pseud.new
     pseud.id = 42
     q = BookmarkQuery.new(parent: pseud)
-    expect(q.filters).to include({term: { pseud_id: 42} })
+    expect(q.filters).to include(terms: { pseud_id: [42] })
   end
 
   it "should allow you to filter for bookmarks by user" do
@@ -117,35 +133,4 @@ describe BookmarkQuery do
     q = BookmarkQuery.new(language_id: 1)
     expect(q.filters).to include({has_parent:{parent_type: 'bookmarkable', query:{term: {language_id: 1}}}})
   end
-
-#   it "should allow you to filter by count ranges" do
-#     q = WorkQuery.new(word_count: ">1000")
-#     expect(q.filters).to include({range: { word_count: { gt: 1000 } } })
-#   end
-
-#   it "should sort by date by default" do
-#     q = WorkQuery.new
-#     expect(q.generated_query[:sort]).to eq({'revised_at' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by creator name" do
-#     q = WorkQuery.new(sort_column: 'authors_to_sort_on', sort_direction: 'asc')
-#     expect(q.generated_query[:sort]).to eq({'authors_to_sort_on' => { order: 'asc'}})
-#   end
-
-#   it "should allow you to sort by title" do
-#     q = WorkQuery.new(sort_column: 'title_to_sort_on')
-#     expect(q.generated_query[:sort]).to eq({'title_to_sort_on' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by kudos" do
-#     q = WorkQuery.new(sort_column: 'kudos_count')
-#     expect(q.generated_query[:sort]).to eq({'kudos_count' => { order: 'desc'}})
-#   end
-
-#   it "should allow you to sort by comments" do
-#     q = WorkQuery.new(sort_column: 'comments_count')
-#     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
-#   end
-
 end

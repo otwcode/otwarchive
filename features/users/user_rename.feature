@@ -75,8 +75,7 @@ Feature:
       Then I should not see "oldusername"
     When I follow "Edit"
     Then I should see "You cannot change the pseud that matches your user name"
-    Then the "pseud_is_default" checkbox should be checked
-      And the "pseud_is_default" checkbox should be disabled
+    Then the "pseud_is_default" checkbox should be checked and disabled
 
   Scenario: Changing only the capitalization of my user name with one pseud changes that pseud's capitalization
     Given I have no users
@@ -91,8 +90,7 @@ Feature:
       Then I should not see "uppercrust"
     When I follow "Edit"
     Then I should see "You cannot change the pseud that matches your user name"
-    Then the "pseud_is_default" checkbox should be checked
-      And the "pseud_is_default" checkbox should be disabled
+    Then the "pseud_is_default" checkbox should be checked and disabled
 
   Scenario: Changing my user name with two pseuds, one same as new, doesn't change old
     Given I have no users
@@ -120,7 +118,7 @@ Feature:
       And I fill in "New user name" with "newusername"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-      And the work indexes are updated
+      And all indexing jobs have been run
     Then I should get confirmation that I changed my username
     When I am on the the works page
     Then I should see "newusername"

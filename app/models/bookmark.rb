@@ -55,17 +55,39 @@ class Bookmark < ApplicationRecord
   }
 
   scope :visible_to_all, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
-      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+    is_public.with_bookmarkable_visible_to_all
   }
 
   scope :visible_to_registered_user, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.hidden_by_admin = 0) OR
+    is_public.with_bookmarkable_visible_to_registered_user
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to registered
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_registered_user, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.hidden_by_admin = 0) OR
       (series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to logged-out
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_all, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
+      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a missing bookmarkable (regardless of
+  # the bookmark's hidden_by_admin/private status).
+  scope :with_missing_bookmarkable, -> {
+    join_bookmarkable.where(
+      "works.id IS NULL AND series.id IS NULL AND external_works.id IS NULL"
+    )
   }
 
   scope :visible_to_admin, -> { not_private }
@@ -95,15 +117,23 @@ class Bookmark < ApplicationRecord
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count, :update_pseud_index
+
   after_create :update_work_stats
-  after_destroy :update_work_stats
+  after_destroy :update_work_stats, :update_pseud_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
+  end
+
+  # We index the bookmark count, so if it should change, update the pseud
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
+    IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
   def visible?(current_user=User.current_user)
@@ -132,7 +162,7 @@ class Bookmark < ApplicationRecord
   # Remove conditional and Tire reference
   def self.index_name
     if use_new_search?
-      "ao3_#{Rails.env}_bookmarks"
+      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_bookmarks"
     else
       tire.index.name
     end

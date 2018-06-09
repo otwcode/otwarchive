@@ -58,7 +58,7 @@ describe WorkQuery do
 
   it "should allow you to filter for complete works" do
     q = WorkQuery.new(complete: true)
-    expect(q.filters).to include({term: { complete: 'true'} })
+    expect(q.filters).to include({ term: { complete: true } })
   end
 
   it "should allow you to filter for works by tag" do
@@ -102,7 +102,7 @@ describe WorkQuery do
     tag = FactoryGirl.create(:tag, name: "foobar", id: 6, canonical: true, type: 'Freeform')
     q = WorkQuery.new(excluded_tag_names: "foobar")
     search_body = q.generated_query
-    expect(search_body[:query][:bool][:filter][:bool][:must_not]).to include({term: { filter_ids: 6} })
+    expect(search_body[:query][:bool][:must_not]).to include(term: { filter_ids: 6 })
   end
 
   it "should allow you to filter for works by language" do
@@ -150,4 +150,35 @@ describe WorkQuery do
     expect(q.generated_query[:sort]).to eq({'comments_count' => { order: 'desc'}})
   end
 
+  it "rescues absurd relative dates" do
+    q = WorkQuery.new(revised_at: "> 700000000 days")
+    filter = q.range_filters.first
+    date = filter.dig(:range, :revised_at, :lt)
+    expect(date.year).to eq(1000.years.ago.year)
+  end
+
+  it "rescues absurd relative date ranges" do
+    q = WorkQuery.new(revised_at: "700000000-700000001 days ago")
+    filter = q.range_filters.first
+    start_date = filter.dig(:range, :revised_at, :gte)
+    end_date = filter.dig(:range, :revised_at, :lte)
+    expect(start_date.year).to eq(1000.years.ago.year)
+    expect(end_date.year).to eq(1000.years.ago.year)
+  end
+
+  it "discards unparseable absolute date ranges" do
+    q = WorkQuery.new(date_from: "2017-12-32")
+    expect(q.date_range_filter).to be_nil
+    q = WorkQuery.new(date_to: "many moons ago")
+    expect(q.date_range_filter).to be_nil
+  end
+
+  it "clamps absolute date ranges so the year is between 0-9999" do
+    q = WorkQuery.new(date_from: "2017-12-31")
+    expect(q.date_range_filter.dig(:range, :revised_at, :gte)).to eq(Date.new(2017, 12, 31))
+
+    q = WorkQuery.new(date_from: "-2000-12-26", date_to: "20000-11-27")
+    expect(q.date_range_filter.dig(:range, :revised_at, :gte)).to eq(Date.new(0, 12, 26))
+    expect(q.date_range_filter.dig(:range, :revised_at, :lte)).to eq(Date.new(9999, 11, 27))
+  end
 end

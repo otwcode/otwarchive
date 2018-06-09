@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'simplecov'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
-if ENV["CI"] == "true"
+if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
@@ -133,7 +133,7 @@ end
 
 # ES UPGRADE TRANSITION #
 # Replace all instances of $new_elasticsearch with $elasticsearch
-def update_and_refresh_indexes(klass_name)
+def update_and_refresh_indexes(klass_name, shards = 5)
   # ES UPGRADE TRANSITION #
   # Remove block
   if elasticsearch_enabled?($elasticsearch)
@@ -148,7 +148,7 @@ def update_and_refresh_indexes(klass_name)
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
 
   indexer_class.delete_index
-  indexer_class.create_index
+  indexer_class.create_index(shards)
 
   if klass_name == 'bookmark'
     bookmark_indexers = {
@@ -170,6 +170,15 @@ end
 
 def refresh_index_without_updating(klass_name)
   $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+end
+
+def run_all_indexing_jobs
+  %w[main background stats].each do |reindex_type|
+    ScheduledReindexJob.perform reindex_type
+  end
+  %w[work bookmark pseud tag].each do |index|
+    refresh_index_without_updating index
+  end
 end
 
 def delete_index(index)
