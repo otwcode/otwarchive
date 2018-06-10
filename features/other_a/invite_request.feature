@@ -7,8 +7,8 @@ Feature: Invite requests
       And I am logged in as "user1"
     When I try to invite a friend from my user page
       And I follow "Request invitations"
-    When I fill in "user_invite_request_quantity" with "3"
-      And I fill in "user_invite_request_reason" with "I want them for a friend"
+    When I fill in "How many invitations would you like? (max 10)" with "3"
+      And I fill in "Please specify why you'd like them:" with "I want them for a friend"
       And I press "Send Request"
     Then I should see a create confirmation message
 
