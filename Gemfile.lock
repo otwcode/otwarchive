@@ -140,7 +140,7 @@ GEM
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.2)
+    crass (1.0.4)
     css_parser (1.5.0)
       addressable
     cucumber (2.4.0)
@@ -393,10 +393,10 @@ GEM
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
     safe_yaml (1.0.4)
-    sanitize (4.5.0)
+    sanitize (4.6.4)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4.1)
+      nokogumbo (~> 1.4)
     scrypt (3.0.5)
       ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (3.4.0)
@@ -559,7 +559,7 @@ DEPENDENCIES
   rspec (~> 3.4)
   rspec-rails (~> 3.6.0)
   rvm-capistrano
-  sanitize
+  sanitize (>= 4.6.3)
   selenium-webdriver
   shoulda
   simplecov (~> 0.14.0)
@@ -581,4 +581,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.4
+   1.16.1
