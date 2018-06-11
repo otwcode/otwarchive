@@ -69,6 +69,13 @@
         <%= f.text_field :bookmark_notes %>
       </dd>
       <dt>
+        <%= f.label :language_id, ts('Language') %>
+        <!--%= link_to_help "bookmark-search-language-help" %-->
+      </dt>
+      <dd>
+        <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>
+      </dd>
+      <dt>
         <%= ts("Bookmark type") %>
       </dt>
       <dd>

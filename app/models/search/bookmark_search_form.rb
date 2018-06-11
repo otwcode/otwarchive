@@ -7,6 +7,7 @@ class BookmarkSearchForm
   ATTRIBUTES = [
     :bookmark_query,
     :bookmarkable_query,
+    :language_id,
     :rec,
     :bookmark_notes,
     :with_notes,
@@ -37,7 +38,6 @@ class BookmarkSearchForm
     :bookmarkable_title,
     :bookmarkable_date,
     :bookmarkable_complete,
-    :bookmarkable_language_id,
     :collection_ids,
     :bookmarkable_collection_ids,
     :sort_column,
@@ -123,6 +123,12 @@ class BookmarkSearchForm
     end
     if self.bookmarkable_type.present?
       summary << "Type: #{self.bookmarkable_type}"
+    end
+    if self.language_id.present?
+      language = Language.find_by(id: self.language_id)
+      if language.present?
+        summary << "Language: #{language.name}"
+      end
     end
     if %w(1 true).include?(self.rec.to_s)
       summary << "Rec"

@@ -37,7 +37,7 @@ Given /^I have bookmarks to search$/ do
   # set up some works
   work1 = FactoryGirl.create(:posted_work, title: "First work", freeform_string: freeform2.name)
   work2 = FactoryGirl.create(:posted_work, title: "second work")
-  work3 = FactoryGirl.create(:posted_work, title: "third work")
+  work3 = FactoryGirl.create(:posted_work, title: "third work", language_id: 1)
   work4 = FactoryGirl.create(:posted_work, title: "fourth")
   work5 = FactoryGirl.create(:posted_work, title: "fifth")
 

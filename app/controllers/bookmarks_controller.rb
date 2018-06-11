@@ -381,6 +381,7 @@ class BookmarksController < ApplicationController
       :bookmarkable_query,
       :bookmarker,
       :bookmark_notes,
+      :language_id,
       :tag,
       :rec,
       :with_notes,

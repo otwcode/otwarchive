@@ -253,3 +253,12 @@ Feature: Search Bookmarks
       And I should not see "Finished Work"
       And I should not see "Complete Series"
       And I should not see "External Work"
+
+  @new_search
+  Scenario: Search bookmarks by type
+    Given I have bookmarks to search
+    When I select "English" from "Language"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Language: English"
+      And I should see "1 Found"
