@@ -7,7 +7,6 @@ class BookmarkSearchForm
   ATTRIBUTES = [
     :bookmark_query,
     :bookmarkable_query,
-    :language_id,
     :rec,
     :bookmark_notes,
     :with_notes,
@@ -19,6 +18,7 @@ class BookmarkSearchForm
     :bookmarkable_pseud_names,
     :bookmarkable_pseud_ids,
     :bookmarkable_type,
+    :language_id,
     :excluded_tag_names,
     :excluded_bookmark_tag_names,
     :excluded_tag_ids,

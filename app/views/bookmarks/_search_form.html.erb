@@ -27,6 +27,13 @@
                    options_for_select(["", "Work", "Series", "External Work"]) %>
     </dd>
     <dt>
+      <%= f.label :language_id, ts('Language') %>
+      <!--%= link_to_help "bookmark-search-language-help" %-->
+    </dt>
+    <dd>
+      <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>
+    </dd>
+    <dt>
       <%= f.label :bookmarkable_date, ts('Date updated') %>
       <%= link_to_help "bookmark-search-date-updated-help" %>
     </dt>
@@ -67,13 +74,6 @@
       </dt>
       <dd>
         <%= f.text_field :bookmark_notes %>
-      </dd>
-      <dt>
-        <%= f.label :language_id, ts('Language') %>
-        <!--%= link_to_help "bookmark-search-language-help" %-->
-      </dt>
-      <dd>
-        <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>
       </dd>
       <dt>
         <%= ts("Bookmark type") %>
