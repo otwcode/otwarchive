@@ -255,10 +255,10 @@ Feature: Search Bookmarks
       And I should not see "External Work"
 
   @new_search
-  Scenario: Search bookmarks by type
+  Scenario: Search bookmarks by work language
     Given I have bookmarks to search
-    When I select "English" from "Language"
+    When I select "English" from "Work language"
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: Language: English"
+      And I should see "You searched for: Work language: English"
       And I should see "1 Found"
