@@ -313,6 +313,30 @@ describe WorksController do
 
         end
 
+        context "when tag is a synonym" do
+          before do
+            @fandom_synonym = create(:fandom, merger: @fandom)
+          end
+
+          it "redirects to the merger's work index" do
+            params = { tag_id: @fandom_synonym.name }
+            get :index, params: params
+            it_redirects_to tag_works_path(@fandom)
+          end
+
+          context "when collection is specified" do
+            before do
+              @collection = create(:collection)
+            end
+
+            it "redirects to the merger's collection works index" do
+              params = { tag_id: @fandom_synonym.name, collection_id: @collection.name }
+              get :index, params: params
+              it_redirects_to collection_tag_works_path(@collection, @fandom)
+            end
+          end
+        end
+
       end
     end
 
@@ -336,6 +360,41 @@ describe WorksController do
           params = { user_id: "nonexistent_user", pseud_id: "nonexistent_pseud" }
           expect{ get :index, params: params }.to raise_error(
             ActiveRecord::RecordNotFound, "Couldn't find user named 'nonexistent_user'")
+        end
+      end
+    end
+
+    context "with a valid owner user" do
+      before do
+        @user = create(:user)
+        @user_work = create(:posted_work, authors: [@user.default_pseud])
+        @pseud = create(:pseud, user: @user)
+        @pseud_work = create(:posted_work, authors: [@pseud])
+        update_and_refresh_indexes("work")
+      end
+
+      it "includes only works for that user" do
+        params = { user_id: @user.login }
+        get :index, params: params
+        expect(assigns(:works).items).to include(@user_work, @pseud_work)
+        expect(assigns(:works).items).not_to include(@work)
+      end
+
+      context "with a valid pseud" do
+        it "includes only works for that pseud" do
+          params = { user_id: @user.login, pseud_id: @pseud.name }
+          get :index, params: params
+          expect(assigns(:works).items).to include(@pseud_work)
+          expect(assigns(:works).items).not_to include(@user_work, @work)
+        end
+      end
+
+      context "with an invalid pseud" do
+        it "includes all of that user's works" do
+          params = { user_id: @user.login, pseud_id: "nonexistent_pseud" }
+          get :index, params: params
+          expect(assigns(:works).items).to include(@user_work, @pseud_work)
+          expect(assigns(:works).items).not_to include(@work)
         end
       end
     end
