@@ -88,21 +88,36 @@ class ExternalWork < ApplicationRecord
 
   # Add and remove filter taggings as tags are added and removed
   def check_filter_taggings
-    current_filters = self.tags.collect{|tag| tag.canonical? ? tag : tag.merger }.compact
-    current_filters.each {|filter| self.add_filter_tagging(filter)}
-    filters_to_remove = self.filters - current_filters
+    # Add filter taggings for tags on the work
+    current_filters = self.tags.map { |tag| tag.canonical? ? tag : tag.merger }.compact
+    current_filters.each { |filter| self.add_filter_tagging(filter) }
+
+    # Add filter taggings for the tags' meta tags
+    current_meta_filters = current_filters.map(&:meta_tags).flatten.compact
+    current_meta_filters.each { |filter| self.add_filter_tagging(filter, true) }
+
+    # Remove any filter taggings that do not come from the tags or their meta tags
+    filters_to_remove = self.filters - (current_filters + current_meta_filters)
     unless filters_to_remove.empty?
-      filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
+      filters_to_remove.each { |filter| self.remove_filter_tagging(filter) }
     end
     return true
   end
 
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag)
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
-    if filter && !self.filters.include?(filter)
-      self.filters << filter
-      filter.reset_filter_count
+    if filter
+      if !self.filters.include?(filter)
+        if meta
+          self.filter_taggings.create(filter_id: filter.id, inherited: true)
+        else
+          self.filters << filter
+        end
+      elsif !meta
+        ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
+        ft.update_attribute(:inherited, false)
+      end
     end
   end
 
@@ -136,7 +151,7 @@ class ExternalWork < ApplicationRecord
       ]
     ).merge(
       bookmarkable_type: "ExternalWork",
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 

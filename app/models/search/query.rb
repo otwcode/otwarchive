@@ -19,7 +19,7 @@ class Query
 
   def search_results
     response = search
-    QueryResult.new(klass, response, options.slice(:page, :per_page))
+    QueryResult.new(klass, response, { page: page, per_page: per_page })
   end
 
   # Perform a count query based on the given options
@@ -115,11 +115,19 @@ class Query
   end
 
   def per_page
-    options[:per_page] || 20
+    options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE
+  end
+
+  # Example: if the limit is 3 results, and we're displaying 2 per page,
+  # disallow pages beyond page 2.
+  def page
+    [
+      options[:page] || 1,
+      (ArchiveConfig.MAX_SEARCH_RESULTS / per_page.to_f).ceil
+    ].min
   end
 
   def pagination_offset
-    page = options[:page] || 1
     (page * per_page) - per_page
   end
 

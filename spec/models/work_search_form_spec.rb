@@ -233,13 +233,41 @@ describe WorkSearchForm do
     end
   end
 
+  describe "searching for authors who changes username" do
+    let!(:user) { create(:user, login: "81_white_chain") }
+    let!(:second_pseud) { create(:pseud, name: "peacekeeper", user: user) }
+    let!(:work_by_default_pseud) { create(:posted_work, authors: [user.default_pseud]) }
+    let!(:work_by_second_pseud) { create(:posted_work, authors: [second_pseud]) }
+
+    before { run_all_indexing_jobs }
+
+    it "matches only on their current username" do
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+
+      user.reload
+      user.login = "82_white_chain"
+      user.save!
+      run_all_indexing_jobs
+
+      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      puts results.inspect
+      expect(results).to be_empty
+
+      results = WorkSearchForm.new(creator: "82_white_chain").search_results
+      expect(results).to include(work_by_default_pseud)
+      expect(results).to include(work_by_second_pseud)
+    end
+  end
+
   describe "sorting results" do
     describe "by authors" do
       before do
         %w(21st_wombat 007aardvark).each do |pseud_name|
           create(:posted_work, authors: [create(:pseud, name: pseud_name)])
         end
-        update_and_refresh_indexes "work"
+        run_all_indexing_jobs
       end
 
       it "returns all works in the correct order of sortable pseud values" do
@@ -253,6 +281,29 @@ describe WorkSearchForm do
 
         work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
         expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc.reverse
+      end
+    end
+
+    describe "by authors who changes username" do
+      let!(:user_1) { create(:user, login: "cioelle") }
+      let!(:user_2) { create(:user, login: "ruth") }
+
+      before do
+        create(:posted_work, authors: [user_1.default_pseud])
+        create(:posted_work, authors: [user_2.default_pseud])
+        run_all_indexing_jobs
+      end
+
+      it "returns all works in the correct order of sortable pseud values" do
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["cioelle", "ruth"]
+
+        user_1.login = "yabalchoath"
+        user_1.save!
+        run_all_indexing_jobs
+
+        work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["ruth", "yabalchoath"]
       end
     end
   end

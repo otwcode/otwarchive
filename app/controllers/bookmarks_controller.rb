@@ -58,6 +58,7 @@ class BookmarksController < ApplicationController
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
       @bookmarks = @search.search_results
+      flash_max_search_results_notice(@bookmarks)
       render 'search_results'
     end
   end
@@ -114,12 +115,14 @@ class BookmarksController < ApplicationController
             # bookmarks. That means that instead of the normal bookmark
             # listing, we want to list *bookmarkable* items.
             @bookmarkable_items = @search.bookmarkable_search_results
+            flash_max_search_results_notice(@bookmarkable_items)
             @facets = @bookmarkable_items.facets
           else
             # Either we're using the old search, or we are looking at a
             # particular user's bookmarks. Either way, we want to just retrieve
             # the standard search results and their facets.
             @bookmarks = @search.search_results
+            flash_max_search_results_notice(@bookmarks)
             @facets = @bookmarks.facets
           end
 
@@ -143,7 +146,7 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_#{use_new_search?}", expires_in: 10.minutes) do
           # ES UPGRADE TRANSITION #
           # Remove conditional and call to BookmarkSearch
           if use_new_search?
@@ -152,7 +155,8 @@ class BookmarksController < ApplicationController
             search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           end
           results = search.search_results
-          @bookmarks = search.search_results.to_a
+          flash_max_search_results_notice(results)
+          @bookmarks = results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a

@@ -7,11 +7,13 @@ class BookmarkIndexer < Indexer
   # Create the bookmarkable index/mapping first
   # Skip delete on the subclasses so it doesn't delete the ones we've just
   # reindexed
-  def self.index_all(options={})
-    options[:skip_delete] = true
-    BookmarkableIndexer.delete_index
-    BookmarkableIndexer.create_index
-    create_mapping
+  def self.index_all(options = {})
+    unless options[:skip_delete]
+      options[:skip_delete] = true
+      BookmarkableIndexer.delete_index
+      BookmarkableIndexer.create_index(18)
+      create_mapping
+    end
     BookmarkedExternalWorkIndexer.index_all(skip_delete: true)
     BookmarkedSeriesIndexer.index_all(skip_delete: true)
     BookmarkedWorkIndexer.index_all(skip_delete: true)

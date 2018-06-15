@@ -296,6 +296,14 @@ When /^a draft chapter is added to "([^"]*)"$/ do |work_title|
   Tag.write_redis_to_database
 end
 
+When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
+  step %{I edit the work "#{title}"}
+  step %{I follow "#{chapter}"}
+  step %{I follow "Delete Chapter"}
+  step %{I press "Yes, Delete Chapter"}
+  step %{all indexing jobs have been run}
+end
+
 # Posts a chapter for the current user
 When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
   work = Work.find_by(title: work_title)
@@ -472,16 +480,17 @@ When /^I set the publication date to today$/ do
   end
 end
 
-When /^I browse the "([^"]+)" works$/ do |tagname|
+When /^I browse the "(.*?)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
   step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
-When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
+
+When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, page: "")
+  visit tag_works_path(tag, page: page)
   step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
