@@ -353,8 +353,7 @@ describe WorksController do
       it "raises an error" do
         params = { user_id: "nonexistent_user" }
         expect { get :index, params: params }.to raise_error(
-          ActiveRecord::RecordNotFound,
-          "Couldn't find user named 'nonexistent_user'"
+          ActiveRecord::RecordNotFound
         )
       end
 
@@ -362,8 +361,7 @@ describe WorksController do
         it "raises an error" do
           params = { user_id: "nonexistent_user", pseud_id: "nonexistent_pseud" }
           expect { get :index, params: params }.to raise_error(
-            ActiveRecord::RecordNotFound,
-            "Couldn't find user named 'nonexistent_user'"
+            ActiveRecord::RecordNotFound
           )
         end
       end
