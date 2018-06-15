@@ -54,7 +54,6 @@ class GiftsController < ApplicationController
     else
       # user doesn't have permission
       access_denied
-      return
     end
     redirect_to user_gifts_path(current_user) and return
   end

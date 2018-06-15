@@ -4,6 +4,7 @@ require 'faker'
 
 FactoryGirl.define do
   factory :gift do
+    user { create(:user) }
     work { create(:work) }
     recipient "recipient"
   end
