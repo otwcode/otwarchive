@@ -254,7 +254,7 @@ Feature: Search Bookmarks
       And I should not see "Complete Series"
       And I should not see "External Work"
 
-  @new_search
+  @new-search
   Scenario: Search bookmarks by work language
     Given I have bookmarks to search
     When I select "English" from "Work language"
