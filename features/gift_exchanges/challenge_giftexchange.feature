@@ -52,11 +52,10 @@ Feature: Gift Exchange Challenge
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    # Port Moresby does not do Daylight Saving Time - do not change this timezone or the test breaks at the end of DST
-    When I select "(GMT+10:00) Port Moresby" from "gift_exchange_time_zone"
+    When I select "(GMT-08:00) Pacific Time (US & Canada)" from "gift_exchange_time_zone"
     And I submit
       Then I should see "Challenge was successfully updated"
-      Then I should see "PGT"
+      Then I should see the correct time zone for "Pacific Time (US & Canada)"
 
   Scenario: Add a co-mod
     Given the following activated users exist

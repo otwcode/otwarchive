@@ -40,8 +40,8 @@ Feature: Invite queue management
     Given an invitation request for "invitee@example.org"
       And I am logged in as an admin
     When I go to the manage invite queue page
-      And I follow "Delete"
-    Then I should see "Request was removed from the queue."
+      And I press "Delete"
+    Then I should see "Request for invitee@example.org was removed from the queue."
       And I should be on the manage invite queue page
 
   Scenario: Visitors can join the queue and check status when invitations are required and the queue is enabled

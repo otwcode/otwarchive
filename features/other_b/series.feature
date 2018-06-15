@@ -82,13 +82,12 @@ Feature: Create and Edit Series
     Then the "series-options-show" checkbox should be checked
       And I should see "Ponies" within "fieldset#series-options"
     When I fill in "work_series_attributes_title" with "Black Beauty"
-      And all search indexes are updated
       And I press "Preview"
     Then I should see "Part 2 of the Ponies series" within "dd.series"
     When "AO3-3455" is fixed
       # And I should see "Part 1 of the Black Beauty series" within "dd.series"
     When I press "Update"
-      And all search indexes are updated
+      And all indexing jobs have been run
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "div#series"
@@ -189,7 +188,7 @@ Feature: Create and Edit Series
       And I wait 1 second
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the series and its works."
-    When "AO3-5083" is fixed 
+    When "AO3-5083" is fixed
       # And "moon" should be the creator of the series "Ponies"
       # And "sun" should not be a creator on the series "Ponies"
     When I go to my works page
