@@ -336,30 +336,35 @@ describe WorksController do
             end
           end
         end
-
       end
     end
 
     context "with an invalid owner tag" do
       it "raises an error" do
         params = { tag_id: "nonexistent_tag" }
-        expect{ get :index, params: params }.to raise_error(
-          ActiveRecord::RecordNotFound, "Couldn't find tag named 'nonexistent_tag'")
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find tag named 'nonexistent_tag'"
+        )
       end
     end
 
     context "with an invalid owner user" do
       it "raises an error" do
         params = { user_id: "nonexistent_user" }
-        expect{ get :index, params: params }.to raise_error(
-          ActiveRecord::RecordNotFound, "Couldn't find user named 'nonexistent_user'")
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find user named 'nonexistent_user'"
+        )
       end
 
       context "with an invalid pseud" do
         it "raises an error" do
           params = { user_id: "nonexistent_user", pseud_id: "nonexistent_pseud" }
-          expect{ get :index, params: params }.to raise_error(
-            ActiveRecord::RecordNotFound, "Couldn't find user named 'nonexistent_user'")
+          expect { get :index, params: params }.to raise_error(
+            ActiveRecord::RecordNotFound,
+            "Couldn't find user named 'nonexistent_user'"
+          )
         end
       end
     end
