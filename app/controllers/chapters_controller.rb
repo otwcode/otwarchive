@@ -97,7 +97,7 @@ class ChaptersController < ApplicationController
         flash[:notice] = ts("You have been removed as a creator from the chapter")
         redirect_to @work
       else # remove from work if no longer co-creator on any chapter
-        redirect_to controller: "works", action: "edit", id: @work.id, remove: "me"
+        redirect_to edit_work_path(@work, remove: "me")
       end
     end
   end

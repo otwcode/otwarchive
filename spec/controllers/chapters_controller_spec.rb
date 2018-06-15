@@ -377,7 +377,7 @@ describe ChaptersController do
         get :edit, params: { work_id: work.id, id: @co_second_chapter.id, remove: "me" }
         expect(assigns[:work].pseuds).to eq [user.pseuds.first, @co_creator.pseuds.first]
         get :edit, params: { work_id: work.id, id: @co_third_chapter.id, remove: "me" }
-        it_redirects_to(controller: "works", action: "edit", id: work.id, remove: "me")
+        it_redirects_to edit_work_path(work, remove: "me")
       end
     end
   end
