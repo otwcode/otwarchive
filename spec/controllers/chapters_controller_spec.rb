@@ -360,23 +360,24 @@ describe ChaptersController do
     end
 
     context "when co-creator is logged in" do
+      let(:co_creator) { create(:user) }
+      let!(:co_second_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+      let!(:co_third_chapter) { create(:chapter, work: work, posted: true, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+
       before do
-        @co_creator = create(:user)
-        @co_second_chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, @co_creator.pseuds.first])
-        @co_third_chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, @co_creator.pseuds.first])
-        fake_login_known_user(@co_creator)
+        fake_login_known_user(co_creator)
       end
 
       it "removes user, gives notice, and redirects to work when user removes themselves" do
-        get :edit, params: { work_id: work.id, id: @co_second_chapter.id, remove: "me" }
+        get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
         expect(assigns[:chapter].pseuds).to eq [user.pseuds.first]
         it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter")
       end
 
-      it "removes user from work after being removed from all chapters" do
-        get :edit, params: { work_id: work.id, id: @co_second_chapter.id, remove: "me" }
-        expect(assigns[:work].pseuds).to eq [user.pseuds.first, @co_creator.pseuds.first]
-        get :edit, params: { work_id: work.id, id: @co_third_chapter.id, remove: "me" }
+      it "delegates to work removal of user after user removed from last co-created chapter" do
+        get :edit, params: { work_id: work.id, id: co_second_chapter.id, remove: "me" }
+        expect(assigns[:work].pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
+        get :edit, params: { work_id: work.id, id: co_third_chapter.id, remove: "me" }
         it_redirects_to edit_work_path(work, remove: "me")
       end
     end
