@@ -1,4 +1,5 @@
 class TagWranglersController < ApplicationController
+  before_action :set_wrangler, only: [:show, :destroy]
   before_action :check_user_status
 	before_action :check_permission_to_wrangle
 
@@ -35,8 +36,11 @@ class TagWranglersController < ApplicationController
                                 .paginate(page: params[:page], per_page: 50)
   end
 
-  def show
+  def set_wrangler
     @wrangler = User.find_by(login: params[:id])
+  end
+
+  def show
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
@@ -51,6 +55,14 @@ class TagWranglersController < ApplicationController
   end
 
   def create
+    unless params[:assignments].blank? || logged_in_as_admin?
+      logins = params[:assignments].values.flatten.uniq.reject(&:blank?)
+      unless logins.blank? || logins.count == 1 && logins[0] == @current_user.login
+        access_denied
+        return
+      end
+    end
+
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
@@ -82,8 +94,12 @@ class TagWranglersController < ApplicationController
   end
 
   def destroy
-    wrangler = User.find_by(login: params[:id])
-    assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
+    unless logged_in_as_admin? || @wrangler == @current_user
+      access_denied
+      return
+    end
+
+    assignment = WranglingAssignment.where(user_id: @wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy
     flash[:notice] = "Wranglers were successfully unassigned!"
     redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])

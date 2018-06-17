@@ -37,7 +37,11 @@ FactoryGirl.define do
     factory :opendoors_user do
       roles { [create(:role, name: "opendoors")] }
     end
-    
+
+    factory :wrangler_user do
+      roles { [create(:role, name: "tag_wrangler")] }
+    end
+
     factory :archivist do
       roles { [ Role.find_or_create_by(name: "archivist")] }
     end
