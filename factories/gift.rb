@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require 'faker'
+require "faker"
 
 FactoryGirl.define do
   factory :gift do
     user { create(:user) }
     work { create(:work) }
-    recipient "recipient"
   end
 end
