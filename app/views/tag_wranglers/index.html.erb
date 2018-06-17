@@ -34,12 +34,14 @@
             <% unless wranglers.empty? %>
               <ul class="wranglers" role="menu">
                 <% wranglers.each do |wrangler| %>
-                  <li>
+                  <li id="<%= wrangler %>-item-for-<%= assignments.first.id %>">
                     <%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
                     <!--BACK END PLS take off this span and give the link the class delete-->
-                    <span class="action" title="remove">
-                      <%= link_to 'x', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), :method => :delete %>
-                    </span>
+                    <% if logged_in_as_admin? || wrangler == @current_user.login %>
+                      <span class="action" title="remove">
+                        <%= link_to 'x', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), :method => :delete %>
+                      </span>
+                    <% end %>
                   </li>
                 <% end %>
               </ul>
@@ -52,7 +54,8 @@
             ?
             -->
             <p id="wranglers-for-<%= assignments.first.id %>" title="wranglers for <%= assignments.first.id %>">
-              <% select_tag_to_add = select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login))) %>
+              <% select_wranglers = logged_in_as_admin? ? @wranglers : [ @current_user ] %>
+              <% select_tag_to_add = select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + select_wranglers.collect(&:login))) %>
               <%= select_tag_to_add %>
               <span class="action" title="add more">
                 <%= link_to_function("+",

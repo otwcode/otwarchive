@@ -55,15 +55,13 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as "Enigel" with password "wrangulator"
       And I follow "Tag Wrangling"
 
-    # assigning another wrangler to a fandom
+    # Can't assign another wrangler to a fandom
     When I follow "Wranglers"
       And I fill in "fandom_string" with "Ghost"
       And I press "Filter"
     Then I should see "Ghost Soup"
       And I should not see "first fandom"
-    When I select "dizmo" from "assignments_10_"
-      And I press "Assign"
-    Then I should see "Wranglers were successfully assigned"
+      And "dizmo" should not be an option within "assignments_10_"
 
     # the filters on the Wranglers page
     When I select "TV Shows" from "media_id"
@@ -79,11 +77,9 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I select "" from "media_id"
       And I press "Filter"
     Then "dizmo" should be selected within "wrangler_id"
-      And I should see "Ghost Soup"
       And I should see "first fandom"
 
   Scenario: Wrangler can remove self from a fandom
-
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
       And I am logged in as "tangler" with password "wr@ngl3r"
     When I am on the wranglers page
@@ -93,19 +89,32 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 
-  Scenario: Wrangler can remove another wrangler from a fandom
-
+  Scenario: Wrangler can't remove another wrangler from a fandom
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
       And the following activated tag wrangler exists
       | login          |
       | wranglerette   |
     When I am logged in as "wranglerette"
+    Then I should not be able to remove the wrangler "tangler" from fandom "Testing"
+
+  Scenario: Admin can remove another wrangler from a fandom
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+    When I am logged in as an admin
       And I am on the wranglers page
       And I follow "x"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
-    Then I should see "Sign Up"
+      Then I should see "Sign Up"
+
+  Scenario: Admin can assign a fandom to another wrangler
+    Given the following activated tag wrangler exists
+      | login          |
+      | wranglerette   |
+      And the canonical fandom "UnassignedFandom" with 1 work
+    When I am logged in as an admin
+      And I assign the fandom "UnassignedFandom" to the wrangler "wranglerette"
+    Then I should see "Wranglers were successfully assigned"
 
   Scenario: Updating multiple tags works.
     Given a canonical fandom "Cowboy Bebop"
@@ -222,6 +231,45 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
      And I view the tag "Cowboy Bebop"
     Then I should not see "Please log in as an admin"
      And I should see "Cowboy Bebop"
+
+  @javascript
+  Scenario: A user can see hidden tags
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+      And I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
+      And I should see "Work was successfully posted."
+      And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
+    When I view the work "Asteroid Blues"
+      And I follow "Show additional tags"
+    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
+     And I should not see "Show additional tags"
+
+  @javascript
+  Scenario: A user can see hidden tags on a series
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+      And I limit myself to the Archive
+      And I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
+      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
+    When I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
+      And I go to first_user's user page
+      And I follow "Cowboy Bebop Blues"
+    Then I should see "Asteroid Blues"
+      And I should see "Wild Horses"
+      And I should not see "Ed is a sweetie"
+    When I follow "Show additional tags"
+    Then I should see "Ed is a sweetie"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should see "No Archive Warnings Apply" within "li.warnings"
 
   Scenario: Synning a fandom to a canonical fandom moves its unwrangled tags to the canonical's unwrangled bins; de-synning takes them out.
     Given the tag wrangler "krebbs" with password "southfork" is wrangler of "Canonical Fandom"

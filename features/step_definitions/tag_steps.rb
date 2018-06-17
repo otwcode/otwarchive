@@ -156,7 +156,7 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
-Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works$/ do |media, tag_name, number_of_works|
+Given /^(?:a|the) canonical(?: "([^"]*)")? fandom "([^"]*)" with (\d+) works?$/ do |media, tag_name, number_of_works|
   fandom = FactoryGirl.create(:fandom, name: tag_name, canonical: true)
   fandom.add_association(Media.find_by(name: media)) if media.present?
   number_of_works.to_i.times do
@@ -365,6 +365,13 @@ When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
   click_button("Save changes")
 end
 
+When /^I assign the fandom "([^"]*)" to the wrangler "([^"]*)"$/ do |fandomname, wrangler|
+  fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
+  visit tag_wranglers_url
+  select(wrangler, from:"assignments_#{fandom.id}_")
+  click_button "Assign"
+end
+
 When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
 end
@@ -385,6 +392,12 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     with_scope(selector) do
       page.has_no_text?(result)
     end
+end
+
+Then /^I should not be able to remove the wrangler "([^\"]*)" from fandom "([^\"]*)"$/ do |wrangler, fandomname|
+  visit tag_wranglers_url
+  fandom = Fandom.find_by(name: fandomname)
+  step %{I should not see the link "x" within "##{wrangler}-item-for-#{fandom.id}"}
 end
 
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
