@@ -874,6 +874,7 @@ class WorksController < ApplicationController
                            end
 
       @work.attributes = work_params
+      @work.set_word_count(@work.preview_mode)
       @work.save_parents if @work.preview_mode
     end
   end
