@@ -28,7 +28,6 @@
     </dd>
     <dt>
       <%= f.label :language_id, ts('Work language') %>
-      <!--%= link_to_help "bookmark-search-language-help" %-->
     </dt>
     <dd>
       <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>

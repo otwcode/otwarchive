@@ -256,9 +256,13 @@ Feature: Search Bookmarks
 
   @new-search
   Scenario: Search bookmarks by work language
-    Given I have bookmarks to search
-    When I select "English" from "Work language"
+    Given I have bookmarks of works in various languages to search
+    # reload search page to bring new language-id mappings for dropdown
+    When I reload the page
+      And I select "English" from "Work language"
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Work language: English"
       And I should see "1 Found"
+      And I should see "english work"
+      And I should not see "german work"

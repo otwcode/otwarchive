@@ -37,7 +37,7 @@ Given /^I have bookmarks to search$/ do
   # set up some works
   work1 = FactoryGirl.create(:posted_work, title: "First work", freeform_string: freeform2.name)
   work2 = FactoryGirl.create(:posted_work, title: "second work")
-  work3 = FactoryGirl.create(:posted_work, title: "third work", language_id: 1)
+  work3 = FactoryGirl.create(:posted_work, title: "third work")
   work4 = FactoryGirl.create(:posted_work, title: "fourth")
   work5 = FactoryGirl.create(:posted_work, title: "fifth")
 
@@ -279,6 +279,21 @@ Given /^bookmarks of external works and series tagged with the (character|relati
   FactoryGirl.create(:bookmark,
                      bookmarkable_id: external_work.id,
                      bookmarkable_type: "ExternalWork")
+
+  step %{all indexing jobs have been run}
+end
+
+Given /^I have bookmarks of works in various languages to search$/ do
+  step %{I have loaded the "languages" fixture}
+
+  lang_en = Language.find_by(name: "English")
+  lang_de = Language.find_by(name: "Deutsch")
+
+  work1 = FactoryGirl.create(:posted_work, title: "english work", language_id: lang_en.id)
+  work2 = FactoryGirl.create(:posted_work, title: "german work", language_id: lang_de.id)
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id)
 
   step %{all indexing jobs have been run}
 end
