@@ -314,7 +314,7 @@ SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
 # resource will be allowed
-SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
+SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
