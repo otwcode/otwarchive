@@ -193,7 +193,7 @@ needed relative positioning and a left offset to fix a bug in Safari 9 */
 }
 
 .filters input:checked + .indicator:before {
-  border-color: #aaa;
+  border-color: #2a2a2a;
 }
 
 .filters input:checked + .indicator + span {
