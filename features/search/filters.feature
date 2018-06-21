@@ -237,6 +237,35 @@ Feature: Filters
       And I should not see "A Hobbit's Meandering"
       And I should see "Roonal Woozlib and the Ferrets of Nimh"
 
+  @new-search
+  Scenario: Filter bookmarks by a tag that appears both on bookmarked works and in bookmarker's tags
+    Given I am logged in as "recengine"
+      And I bookmark the work "Bilbo Does the Thing"
+      And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "The Hobbit"
+
+    # Exclude a tag as a work tag but not as a bookmarker's tag
+    When I go to my bookmarks page
+    Then the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
+
+    When I check "The Hobbit (1)" within "#exclude_fandom_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should not see "Bilbo Does the Thing"
+      And I should see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_fandom_tags" should be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
+
+    # Exclude a tag as a bookmarker's tag but not as a work tag
+    When I go to my bookmarks page
+      And I check "The Hobbit (1)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark by recengine"
+      And I should see "Bilbo Does the Thing"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_tag_tags" should be checked
+      And the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
+
   @javascript
   Scenario: Filter a user's bookmarks by non-existent tags
     Given the tag "legend korra" does not exist
