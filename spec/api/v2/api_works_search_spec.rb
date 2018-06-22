@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "spec_helper"
 require "api/api_helper"
 
@@ -75,7 +76,7 @@ describe "valid work URL request" do
     expect(parsed_body[:works].first).to include(:messages)
   end
 
-  it "should only do an exact match on the original url" do
+  it "only does an exact match on the original url" do
     valid_params = { works: [{ original_urls: %w(fo food) }] }
     parsed_body = post_search_result(valid_params)
 

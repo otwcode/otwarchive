@@ -224,7 +224,6 @@ class StoryParser
     parse_chapters_into_story(locations.first, chapter_contents, options)
   end
 
-
   ### PARSING METHODS
 
   # Parses the text of a story, optionally from a given location.
@@ -368,8 +367,8 @@ class StoryParser
       if chapter.content.length > ArchiveConfig.CONTENT_MAX
         # TODO: eventually: insert a new chapter
         chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
-      elsif chapter.content.length == 0
-        raise Error, "Chapter #{chapter.position} of '#{work.title}' is empty."
+      elsif chapter.content.empty?
+        raise Error, "Chapter #{chapter.position} of \"#{work.title}\" is blank."
       end
 
       chapter.posted = true # do not save - causes the chapters to exist even if work doesn't get created!

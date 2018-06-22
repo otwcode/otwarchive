@@ -5,7 +5,7 @@ describe "API V2 BookmarksController" do
   include ApiHelper
 
   bookmark = { id: "123",
-               url: "http://foo.com",
+               url: "http://example.com",
                author: "Thing",
                title: "Title Thing",
                summary: "<p>blah blah blah</p>",
@@ -31,7 +31,7 @@ describe "API V2 BookmarksController" do
   context "Valid API bookmark import" do
     let!(:archivist) { create(:archivist) }
 
-    it "should return 200 OK when all bookmarks are created" do
+    it "returns 200 OK when all bookmarks are created" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark ]
@@ -40,7 +40,7 @@ describe "API V2 BookmarksController" do
       assert_equal 200, response.status
     end
 
-    it "should return 200 OK when no bookmarks are created" do
+    it "returns 200 OK when no bookmarks are created" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark ]
@@ -49,8 +49,8 @@ describe "API V2 BookmarksController" do
       assert_equal 200, response.status
     end
 
-    it "should not create duplicate bookmarks for the same archivist and external URL" do
-      pseud_id = archivist.default_pseud.id
+    it "does not create duplicate bookmarks for the same archivist and external URL" do
+      pseud_id = archivist.default_pseud_id
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark, bookmark ]
@@ -60,7 +60,7 @@ describe "API V2 BookmarksController" do
       assert_equal bookmarks.count, 1
     end
 
-    it "should pass back any original references unchanged" do
+    it "passes back any original references unchanged" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark ]
@@ -68,10 +68,10 @@ describe "API V2 BookmarksController" do
            headers: valid_headers
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
       assert_equal "123", bookmark_response[:original_id], "Original reference should be passed back unchanged"
-      assert_equal "http://foo.com", bookmark_response[:original_url], "Original URL should be passed back unchanged"
+      assert_equal "http://example.com", bookmark_response[:original_url], "Original URL should be passed back unchanged"
     end
 
-    it "should respond with the URL of the created bookmark" do
+    it "returns the URL of the created bookmark" do
       pseud_id = archivist.default_pseud.id
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
@@ -89,14 +89,14 @@ describe "API V2 BookmarksController" do
   describe "Invalid API bookmark import" do
     let(:archivist) { create(:archivist) }
     
-    it "should return 400 Bad Request if no bookmarks are specified" do
+    it "returns 400 Bad Request if no bookmarks are specified" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login }.to_json,
            headers: valid_headers
       assert_equal 400, response.status
     end
 
-    it "should return an error message if no URL is specified" do
+    it "returns an error message if no URL is specified" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark.except(:url) ]
@@ -108,7 +108,7 @@ describe "API V2 BookmarksController" do
                    "This bookmark does not contain a URL to an external site. Please specify a valid, non-AO3 URL."
     end
 
-    it "should return an error message if the URL is on AO3" do
+    it "returns an error message if the URL is on AO3" do
       work = create(:work)
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
@@ -121,7 +121,7 @@ describe "API V2 BookmarksController" do
                    "Url could not be reached. If the URL is correct and the site is currently down, please try again later."
     end
 
-    it "should return an error message if there is no fandom" do
+    it "returns an error message if there is no fandom" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark.merge(fandom_string: "") ]
@@ -133,7 +133,7 @@ describe "API V2 BookmarksController" do
                    "This bookmark does not contain a fandom. Please specify a fandom."
     end
 
-    it "should return an error message if there is no title" do
+    it "returns an error message if there is no title" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark.merge(title: "") ]
@@ -144,7 +144,7 @@ describe "API V2 BookmarksController" do
       assert_equal bookmark_response[:messages].first, "Title can't be blank"
     end
 
-    it "should return an error message if there is no author" do
+    it "returns an error message if there is no author" do
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark.merge(author: "") ]
@@ -158,7 +158,7 @@ describe "API V2 BookmarksController" do
   end
 
   describe "Unit tests - import_bookmark" do
-    it "should return an error message when an Exception is raised" do
+    it "returns an error message when an Exception is raised" do
       user = create(:user)
       # Stub the Bookmark.new method to throw an exception
       allow(Bookmark).to receive(:new).and_raise(StandardError)

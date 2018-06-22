@@ -50,7 +50,7 @@ describe "API BookmarksController" do
     end
 
     it "should not create duplicate bookmarks for the same archivist and external URL" do
-      pseud_id = archivist.default_pseud.id
+      pseud_id = archivist.default_pseud_id
       post "/api/v1/bookmarks/import",
            params: { archivist: archivist.login,
              bookmarks: [ bookmark, bookmark ]

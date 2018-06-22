@@ -13,11 +13,11 @@ class Api::V2::WorksController < Api::V2::BaseController
       messages << "Please provide a list of URLs to find."
     elsif original_urls.size >= ArchiveConfig.IMPORT_MAX_CHAPTERS
       status = :too_many_request
-      messages << "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find."
+      messages << "Please provide no more than #{ArchiveConfig.IMPORT_MAX_CHAPTERS} URLs to find."
     else
       status = :ok
       results = find_existing_works(original_urls)
-      messages << "Successfully searched all provided urls"
+      messages << "Successfully searched all provided URLs."
     end
     render_api_response(status, messages, works: results)
   end
@@ -38,7 +38,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       
       # Send claim notification emails for successful works
       if params[:send_claim_emails] && success_works.present?
-        notified_authors = send_external_invites(success_works, archivist)
+        notified_authors = notify_and_return_authors(success_works, archivist)
         messages << "Claim emails sent to #{notified_authors.to_sentence}."
       end
 
@@ -70,7 +70,8 @@ class Api::V2::WorksController < Api::V2::BaseController
     urls = work[:chapter_urls]
     if urls.nil? || urls.empty?
       status = :empty_request
-      errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
+      errors << "This work doesn't contain any chapter URLs. " +
+                "Works can only be imported from publicly-accessible chapter URLs."
     elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
       status = :too_many_requests
       errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS} " \
@@ -103,7 +104,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       else
         work_results = search_results[:works].map do |work| 
             archive_url = work_url(work)
-            message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\""
+            message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\"."
             messages << message
             { archive_url: archive_url,
               created: work.created_at,
@@ -176,7 +177,7 @@ class Api::V2::WorksController < Api::V2::BaseController
   end
 
   # Send invitations to external authors for a given set of works
-  def send_external_invites(success_works, archivist)
+  def notify_and_return_authors(success_works, archivist)
     notified_authors = []
     external_authors = success_works.map(&:external_authors).flatten.uniq
     external_authors&.each do |external_author|

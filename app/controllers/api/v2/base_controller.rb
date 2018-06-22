@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   # Version the API explicitly in the URL to allow different versions with breaking changes to co-exist if necessary.
   # The roll over to the next number should happen when code written against the old version will not work
@@ -32,12 +34,12 @@ module Api
             errors << "No items to import were provided."
           elsif import_items.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
             status = :too_many_request
-            errors << "This request contains too many items to import. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST } " +
+            errors << "This request contains too many items to import. A maximum of #{ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST} " \
                       "items can be imported at one time by an archivist."
           end
         else
           status = :forbidden
-          errors << "The 'archivist' field must specify the name of an Archive user with archivist privileges."
+          errors << "The \"archivist\" field must specify the name of an Archive user with archivist privileges."
         end
 
         status = :ok if errors.empty?

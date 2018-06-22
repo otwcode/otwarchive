@@ -17,7 +17,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
         bookmark_url: found_result[:bookmark_url] || "",
         bookmark_id: bookmark[:id],
         original_url: bookmark[:url],
-        messages: found_result[:bookmark_messages] || ["No bookmark found for archivist '#{archivist.login}' and url '#{bookmark[:url]}'"]
+        messages: found_result[:bookmark_messages] || ["No bookmark found for archivist \"#{archivist.login}\" and URL \"#{bookmark[:url]}\""]
       )
     end
 
@@ -40,7 +40,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       @some_errors = @some_success = false
 
       # Process the bookmarks
-      archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud.id)
+      archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud_id, bookmarkable_type: "ExternalWork")
       bookmarks.each do |bookmark|
         bookmarks_responses << create_bookmark(archivist, bookmark, archivist_bookmarks)
       end
@@ -59,7 +59,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   def check_archivist_bookmark(archivist, original_url, archivist_bookmarks)
     current_bookmark_url = original_url
     archivist_bookmarks = archivist_bookmarks
-                            .select { |b| b.bookmarkable_type == "ExternalWork" && b.bookmarkable.url == current_bookmark_url }
+                            .select { |b| b.bookmarkable.url == current_bookmark_url }
                             .map    { |b| [b, b.bookmarkable] }
 
     if archivist_bookmarks.present?
@@ -179,7 +179,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   # Map Json request to Bookmark request for external work
   def bookmark_request(archivist, params)
     {
-      pseud_id: archivist.default_pseud.id,
+      pseud_id: archivist.default_pseud_id,
       external: {
         url: params[:url],
         author: params[:author],

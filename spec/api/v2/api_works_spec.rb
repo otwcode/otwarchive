@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "spec_helper"
 require "api/api_helper"
 
@@ -84,8 +85,8 @@ describe "API v2 WorksController - Create works" do
       expect(parsed_body[:works].first[:original_id]).to eq("123")
     end
 
-    it "should send claim emails if send_claim_email is true" do
-      # This test hits the call to #send_external_invites in #create for coverage
+    it "sends claim emails if send_claim_email is true" do
+      # This test hits the call to #notify_and_return_authors in #create for coverage
       # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
       valid_params = {
         archivist: archivist.login,
@@ -302,7 +303,7 @@ describe "API v2 WorksController - Create works" do
         expect(@work.summary).to eq("")
       end
       it "Date should be todayish" do
-        expect(@work.created_at.utc.to_date).to eq(DateTime.now.utc.to_date)
+        expect(@work.created_at.utc.to_date).to eq(Time.now.getutc.to_date)
       end
       it "Chapter title should be blank" do
         expect(@work.chapters.first.title).to be_nil
@@ -501,7 +502,7 @@ describe "v2 API WorksController - Unit Tests" do
     expect(work_url_response[:works].first).to eq work1
   end
 
-  it "send_external_invites should call find_or_invite on each external author" do
+  it "notify_and_return_authors calls find_or_invite on each external author" do
     user = create(:user)
     author1 = create(:external_author)
     author2 = create(:external_author)
@@ -511,7 +512,7 @@ describe "v2 API WorksController - Unit Tests" do
     create(:external_creatorship, external_author_name: name1, creation: work)
     create(:external_creatorship, external_author_name: name2, creation: work)
 
-    @under_test.instance_eval { send_external_invites([work], user) }
+    @under_test.instance_eval { notify_and_return_authors([work], user) }
     emails = Invitation.all.map(&:invitee_email)
     expect(emails).to include(author1.email)
     expect(emails).to include(author2.email)
@@ -521,7 +522,7 @@ describe "v2 API WorksController - Unit Tests" do
     it "returns an error if a work doesn't contain chapter urls" do
       work = { chapter_urls: [] }
       error_message = @under_test.instance_eval { work_errors(work) }
-      expect(error_message[1][0]).to start_with "This work doesn't contain chapter_urls."
+      expect(error_message[1][0]).to start_with "This work doesn't contain any chapter URLs."
     end
 
     it "returns an error if a work has too many chapters" do
