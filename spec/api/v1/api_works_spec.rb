@@ -489,7 +489,7 @@ end
 
 describe "API WorksController - Find Works" do
   describe "valid work URL request" do
-    work = create(:work, posted: true, imported_from_url: "foo")
+    work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
 
     it "should return 200 OK" do
       valid_params = { original_urls: %w(bar foo) }

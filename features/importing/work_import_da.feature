@@ -36,7 +36,7 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/gallery/#/drdbx9"
     When I press "Import"
     Then I should not see "Preview"
-      And I should see "Chapter 1 of 'bingeling's DeviantArt gallery' is empty."
+      And I should see "Chapter 1 of 'bingeling's DeviantArt gallery' is blank."
 
   Scenario: Creating a new fic from deviantart import
     Given basic tags
