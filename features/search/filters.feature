@@ -266,6 +266,17 @@ Feature: Filters
       And the "The Hobbit (0)" checkbox within "#exclude_tag_tags" should be checked
       And the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
 
+    # Exclude a tag as a bookmarker's tag AND as a work tag
+    When I go to my bookmarks page
+      And I check "The Hobbit (1)" within "#exclude_fandom_tags"
+      And I check "The Hobbit (1)" within "#exclude_tag_tags"
+      And I press "Sort and Filter"
+    Then I should see "0 Bookmarks by recengine"
+      And I should not see "Bilbo Does the Thing"
+      And I should not see "Roonal Woozlib and the Ferrets of Nimh"
+      And the "The Hobbit (0)" checkbox within "#exclude_fandom_tags" should be checked
+      And the "The Hobbit (0)" checkbox within "#exclude_tag_tags" should be checked
+
   @javascript
   Scenario: Filter a user's bookmarks by non-existent tags
     Given the tag "legend korra" does not exist
