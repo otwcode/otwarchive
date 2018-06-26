@@ -1,10 +1,10 @@
 <% # expects local variables kudos, guest_kudos_count, commentable %>
 <div id="kudos">
-  <% if kudos.length > 0 || guest_kudos_count > 0 %>
-    <% cache "#{commentable.cache_key}/kudos-v1", skip_digest: true do %>
+  <% cache "#{commentable.cache_key}/kudos-v1", skip_digest: true do %>
+    <% if kudos.length> 0 || guest_kudos_count > 0 %>
       <p class="kudos">
         <% if kudos.length <= ArchiveConfig.MAX_KUDOS_TO_SHOW %>
-          <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+          <%= kudos.order("created_at DESC").map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
               to_sentence.
               html_safe %>
         <% else %>
@@ -12,7 +12,7 @@
               to_sentence(last_word_connector: ", ").
               html_safe + ", " %>
           <%= link_to work_kudos_path(commentable), id: "kudos_summary" do %>
-           <% collapsed_count = kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW %>
+            <% collapsed_count = kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW %>
             <% if collapsed_count == 1 %>
               <%= ts(" and 1 more user") %>
             <% else %>
@@ -20,10 +20,10 @@
             <% end %>
           <% end %>
           <span class="kudos_expanded hidden">
-            <%= kudos[ArchiveConfig.MAX_KUDOS_TO_SHOW..-1].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
-                to_sentence(two_words_connector: ts(" and "), last_word_connector: ts(" and ")).
-                html_safe %>
-          </span>
+                <%= kudos[ArchiveConfig.MAX_KUDOS_TO_SHOW..-1].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+                    to_sentence(two_words_connector: ts(" and "), last_word_connector: ts(" and ")).
+                    html_safe %>
+              </span>
         <% end %>
         <% if guest_kudos_count > 0 %>
           <% if kudos.length > 0 %>
@@ -33,8 +33,8 @@
         <% end %>
         <%= ts(" left kudos on this work!") %>
         <span class="kudos_expanded hidden">
-          <%= link_to ts("(collapse)"), "#", id: "kudos_collapser" %>
-        </span>
+              <%= link_to ts("(collapse)"), "#", id: "kudos_collapser" %>
+            </span>
       </p>
     <% end %>
   <% end %>

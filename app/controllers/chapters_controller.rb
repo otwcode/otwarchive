@@ -60,7 +60,7 @@ class ChaptersController < ApplicationController
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
+      @kudos = @work.kudos.with_pseud.includes(pseud: :user)
 
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
