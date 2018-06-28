@@ -1,5 +1,5 @@
 require "spec_helper"
-require "api/api_helper"
+require "controllers/api/api_helper"
 
 describe "API BookmarksController" do
   include ApiHelper

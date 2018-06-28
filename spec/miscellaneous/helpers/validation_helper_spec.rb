@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'json'
 
-describe ValidationHelper do
+describe ValidationHelper, type: :helper do
   # NOTE: I only tested the method I modified. -@duckinator
 
   describe '.live_validation_for_field' do

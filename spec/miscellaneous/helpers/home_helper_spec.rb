@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HomeHelper do
+describe HomeHelper, type: :helper do
 
   describe "html_to_text" do
     context "for illegal code" do

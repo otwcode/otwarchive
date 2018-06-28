@@ -116,7 +116,6 @@ describe User, :ready do
     describe "has_no_credentials?" do
       it "is true if password is blank" do
         @user = build(:user, password: nil)
-        puts @user.password
         expect(@user.has_no_credentials?).to be_truthy
       end
       it "is false if password is not blank" do
