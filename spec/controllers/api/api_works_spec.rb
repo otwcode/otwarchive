@@ -3,7 +3,7 @@ require "controllers/api/api_helper"
 
 include ApiHelper
 
-describe "API WorksController - Create works" do
+describe "API WorksController - Create works", type: :controller do
 
   describe "API import with a valid archivist" do
     before :all do
