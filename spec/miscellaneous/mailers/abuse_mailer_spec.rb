@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe AdminMailer do
+describe AdminMailer, type: :mailer do
   context "abuse_reports with email" do
     let(:report) { create(:abuse_report) }
     let(:mail) { AdminMailer.abuse_report(report.id) }

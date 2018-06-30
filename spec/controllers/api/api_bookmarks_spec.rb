@@ -1,7 +1,7 @@
 require "spec_helper"
 require "controllers/api/api_helper"
 
-describe "API BookmarksController", type: :controller do
+describe "API BookmarksController", type: :request do
   include ApiHelper
 
   bookmark = { id: "123",

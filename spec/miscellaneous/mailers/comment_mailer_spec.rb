@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommentMailer do
+describe CommentMailer, type: :mailer do
   describe "basic comment emails" do
 
     before(:each) do

@@ -2,7 +2,7 @@ require "spec_helper"
 require "webmock"
 require "controllers/api/api_helper"
 
-describe "API Authorization", type: :controller do
+describe "API Authorization", type: :request do
   include ApiHelper
   end_points = %w(/api/v1/works /api/v1/bookmarks)
 
