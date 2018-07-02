@@ -4,16 +4,17 @@ describe Challenge::PromptMemeController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:collection) { create(:collection, challenge: PromptMeme.new) }
+
   describe "new" do
     context "when the collection already has a challenge" do
       before do
-        @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
-        fake_login_known_user(@collection.owners.first.user)
-        post :new, params: { collection_id: @collection.name }
+        fake_login_known_user(collection.owners.first.user)
+        post :new, params: { collection_id: collection.name }
       end
 
       it "redirects to edit meme collection path with notice" do
-        it_redirects_to_with_notice(edit_collection_prompt_meme_path(@collection), "There is already a challenge set up for this collection.")
+        it_redirects_to_with_notice(edit_collection_prompt_meme_path(collection), "There is already a challenge set up for this collection.")
       end
     end
   end
@@ -21,11 +22,10 @@ describe Challenge::PromptMemeController do
   describe "update" do
     context "when it fails to update parameters" do
       before do
-        @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
-        fake_login_known_user(@collection.owners.first.user)
+        fake_login_known_user(collection.owners.first.user)
         allow_any_instance_of(PromptMeme).to receive(:update_attributes).and_return(false)
         allow(controller).to receive(:prompt_meme_params).and_return({})
-        post :update, params: { collection_id: @collection.name, propmt_meme: {} }
+        post :update, params: { collection_id: collection.name, prompt_meme: {} }
       end
 
       it "renders edit page" do
@@ -41,15 +41,14 @@ describe Challenge::PromptMemeController do
 
   describe "destroy" do
     before(:each) do
-      @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
-      @collection.save
-      fake_login_known_user(@collection.owners.first.user)
-      delete :destroy, params: { id: @collection.challenge.id, collection_id: @collection.name }
+      collection.save
+      fake_login_known_user(collection.owners.first.user)
+      delete :destroy, params: { id: collection.challenge.id, collection_id: collection.name }
     end
 
     it "remove challenge variables on Collection" do
-      expect(@collection.reload.challenge_id).to eq(nil)
-      expect(@collection.reload.challenge_type).to eq(nil)
+      expect(collection.reload.challenge_id).to eq(nil)
+      expect(collection.reload.challenge_type).to eq(nil)
     end
 
     it "sets a flash message" do
@@ -57,7 +56,7 @@ describe Challenge::PromptMemeController do
     end
 
     it "redirects to the collection's main page" do
-      expect(response).to redirect_to(@collection)
+      expect(response).to redirect_to(collection)
     end
   end
 end
