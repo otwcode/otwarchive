@@ -1,5 +1,5 @@
 require "spec_helper"
-require "api/api_helper"
+require "controllers/api/api_helper"
 
 include ApiHelper
 
@@ -37,7 +37,7 @@ describe Api::V1::BaseController, type: :controller do
   end
 
   describe "batch_errors with a valid pseud" do
-    let!(:archivist) { create(:archivist) }
+    let(:archivist) { create_archivist }
 
     it "should return error messages with no items to import" do
       user = archivist

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TagSetsHelper do
+describe TagSetsHelper, type: :helper do
   describe 'nomination_notes' do
     before(:each) do
       @limit = HashWithIndifferentAccess.new

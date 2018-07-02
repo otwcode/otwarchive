@@ -2,7 +2,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe ExportsHelper do
+describe ExportsHelper, type: :helper do
 
   context "tab-delimited file generation" do
     header = ["Column 1", "Column 2", "Column 3"]

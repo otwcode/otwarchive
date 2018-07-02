@@ -252,7 +252,6 @@ describe WorkSearchForm do
       run_all_indexing_jobs
 
       results = WorkSearchForm.new(creator: "81_white_chain").search_results
-      puts results.inspect
       expect(results).to be_empty
 
       results = WorkSearchForm.new(creator: "82_white_chain").search_results

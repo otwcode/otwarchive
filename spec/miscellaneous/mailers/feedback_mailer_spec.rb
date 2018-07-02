@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AdminMailer do
+describe AdminMailer, type: :mailer do
 
   context "feedback with email" do
      let(:feedback) {create(:feedback)}

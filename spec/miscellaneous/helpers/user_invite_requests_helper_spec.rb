@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UserInviteRequestsHelper do
+describe UserInviteRequestsHelper, type: :helper do
 
   describe "link_to_previous_invite_requests" do
 
