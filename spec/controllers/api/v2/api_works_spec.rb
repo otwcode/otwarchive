@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require "spec_helper"
-require "api/api_helper"
+require "controllers/api/api_helper"
 
 include ApiHelper
 
-describe "API v2 WorksController - Create works" do
+describe "API v2 WorksController - Create works", type: :request do
   let(:archivist) { create(:archivist) }
 
   describe "API import with a valid archivist" do
@@ -486,7 +486,7 @@ describe "API v2 WorksController - Create works" do
   end
 end
 
-describe "v2 API WorksController - Unit Tests" do
+describe "API v2 WorksController - Unit Tests", type: :request do
   before do
     @under_test = Api::V2::WorksController.new
   end

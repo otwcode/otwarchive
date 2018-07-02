@@ -1,5 +1,5 @@
 require "spec_helper"
-require "api/api_helper"
+require "controllers/api/api_helper"
 
 include ApiHelper
 

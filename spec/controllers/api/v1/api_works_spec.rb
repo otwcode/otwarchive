@@ -3,17 +3,17 @@ require "controllers/api/api_helper"
 
 include ApiHelper
 
-describe "API WorksController - Create works", type: :request do
+describe "API v1 WorksController - Create works", type: :request do
 
   describe "API import with a valid archivist" do
+    let(:archivist) { create(:archivist) }
+
     before :all do
       mock_external
-      @user = create_archivist
     end
 
     after :all do
       WebMock.reset!
-      @user.destroy if @user
     end
 
     it "should not support the deprecated /import end-point", type: :routing do
@@ -22,7 +22,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return 200 OK when all stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -37,7 +37,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return 200 OK with an error message when no stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -52,7 +52,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return 200 OK with an error message when only some stories are created" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -70,7 +70,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return the original id" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { id: "123",
             external_author_name: "bar",
@@ -89,7 +89,7 @@ describe "API WorksController - Create works", type: :request do
       # This test hits the call to #send_external_invites in #create for coverage
       # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         send_claim_emails: 1,
         works: [
           { id: "123",
@@ -104,7 +104,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return 400 Bad Request if no works are specified" do
       valid_params = {
-        archivist: @user.login
+        archivist: archivist.login
       }
 
       post "/api/v1/works", params: valid_params.to_json, headers: valid_headers
@@ -114,7 +114,7 @@ describe "API WorksController - Create works", type: :request do
 
     it "should return a helpful message if the external work contains no text" do
       valid_params = {
-        archivist: @user.login,
+        archivist: archivist.login,
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
@@ -134,8 +134,10 @@ describe "API WorksController - Create works", type: :request do
 
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -207,8 +209,10 @@ describe "API WorksController - Create works", type: :request do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -270,8 +274,11 @@ describe "API WorksController - Create works", type: :request do
     describe "Imports should use fallback values or nil if no metadata is supplied" do
       before(:all) do
         mock_external
+
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -335,8 +342,10 @@ describe "API WorksController - Create works", type: :request do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { id: "123",
               title: api_fields[:title],
@@ -412,8 +421,10 @@ describe "API WorksController - Create works", type: :request do
       before(:all) do
         mock_external
 
+        archivist = create(:archivist)
+
         valid_params = {
-          archivist: @user.login,
+          archivist: archivist.login,
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
@@ -476,16 +487,10 @@ describe "API WorksController - Create works", type: :request do
   end
 end
 
-describe "API WorksController - Find Works", type: :request do
-  before do
-    @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
-  end
-
-  after do
-    @work.destroy if @work
-  end
-
+describe "API v1 WorksController - Find Works", type: :request do
   describe "valid work URL request" do
+    work = FactoryGirl.create(:posted_work, imported_from_url: "foo")
+
     it "should return 200 OK" do
       valid_params = { original_urls: %w(bar foo) }
 
@@ -501,8 +506,8 @@ describe "API WorksController - Find Works", type: :request do
       parsed_body = JSON.parse(response.body, symbolize_names: true)
 
       expect(parsed_body.first[:status]).to eq "ok"
-      expect(parsed_body.first[:work_url]).to eq work_url(@work)
-      expect(parsed_body.first[:created].to_date).to eq @work.created_at.to_date
+      expect(parsed_body.first[:work_url]).to eq work_url(work)
+      expect(parsed_body.first[:created].to_date).to eq work.created_at.to_date
     end
 
     it "should return the original reference if one was provided" do
@@ -559,7 +564,7 @@ describe "API WorksController - Find Works", type: :request do
   end
 end
 
-describe "API WorksController - Unit Tests", type: :request do
+describe "API v1 WorksController - Unit Tests", type: :request do
   before do
     @under_test = Api::V1::WorksController.new
   end

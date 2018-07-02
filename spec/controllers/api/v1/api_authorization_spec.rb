@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "webmock"
 require "controllers/api/api_helper"
 
-describe "API Authorization", type: :request do
+describe "API v1 Authorization", type: :request do
   include ApiHelper
   end_points = %w(/api/v1/works /api/v1/bookmarks)
 
