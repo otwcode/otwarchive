@@ -526,7 +526,7 @@ describe HtmlCleaner do
       expect(fix_bad_characters("normal <3 text")).to eq("normal &lt;3 text")
     end
 
-    it "should convert \r\n to \n" do
+    it "should convert \\r\\n to \\n" do
       expect(fix_bad_characters("normal\r\ntext")).to eq("normal\ntext")
     end
 

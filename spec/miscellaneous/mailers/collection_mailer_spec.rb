@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CollectionMailer do
+describe CollectionMailer, type: :mailer do
   describe "basic collection emails" do
 
     before(:each) do

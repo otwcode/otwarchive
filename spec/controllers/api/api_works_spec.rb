@@ -1,9 +1,9 @@
 require "spec_helper"
-require "api/api_helper"
+require "controllers/api/api_helper"
 
 include ApiHelper
 
-describe "API WorksController - Create works" do
+describe "API WorksController - Create works", type: :request do
 
   describe "API import with a valid archivist" do
     before :all do
@@ -476,7 +476,7 @@ describe "API WorksController - Create works" do
   end
 end
 
-describe "API WorksController - Find Works" do
+describe "API WorksController - Find Works", type: :request do
   before do
     @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
   end
@@ -559,7 +559,7 @@ describe "API WorksController - Find Works" do
   end
 end
 
-describe "API WorksController - Unit Tests" do
+describe "API WorksController - Unit Tests", type: :request do
   before do
     @under_test = Api::V1::WorksController.new
   end

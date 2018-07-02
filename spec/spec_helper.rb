@@ -69,9 +69,6 @@ RSpec.configure do |config|
     delete_test_indices
   end
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
-
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -92,6 +89,10 @@ RSpec.configure do |config|
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
+
+  # Set default formatter to print out the description of each test as it runs
+  config.color = true
+  config.formatter = :documentation
 end
 
 def clean_the_database
