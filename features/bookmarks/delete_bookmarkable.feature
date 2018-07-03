@@ -65,7 +65,6 @@ Feature: Bookmarks of deleted items
       And I should see "This has been deleted, sorry!"
       And I should not see "Extremely Objectionable Content"
 
-  @new-search
   Scenario: Deleting a restricted work with bookmarks makes the public bookmark count on all bookmarker's pseuds increase.
     Given I am logged in as "Alice"
       And I post the locked work "Mayfly"
