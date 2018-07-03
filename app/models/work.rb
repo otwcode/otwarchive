@@ -1568,24 +1568,28 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # If the filter_taggings table is always correct, we only need one line:
-    # fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
-
+    # Short-circuit the check if there's only one fandom tag:
     return false if fandoms.count == 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
-    unrelated_fandoms = fandoms.map { |f| f.merger ? f.merger : f }.uniq
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # Replace each fandom with the top tags of the meta trees it belongs to
-    loop do
-      n = unrelated_fandoms.map { |f| f.meta_tags.any? ? f.meta_tags : f }.flatten.uniq
-      break if n == unrelated_fandoms
-      unrelated_fandoms = n
+    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
+    # don't have meta-tags of their own, or the tag itself if it doesn't have
+    # meta-tags) associated with that fandom.
+    top_meta_groups = all_without_syns.map do |f|
+      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
     end
 
-    # These fandoms have no meta tags, and they cannot be related
-    unrelated_fandoms.count > 1
+    # Find the biggest group of top-level meta tags.
+    biggest_group_size = top_meta_groups.map(&:size).max
+
+    # If the biggest group is the same size as the total number in all groups,
+    # that means that all top-level meta-tags in all groups also occur in the
+    # biggest group, so we don't don't have any fandoms that are unrelated to
+    # it.
+    top_meta_groups.flatten.uniq.size > biggest_group_size
   end
 
   # Does this work have only one relationship tag?
