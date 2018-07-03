@@ -9,7 +9,6 @@ Feature: Filters
       And a canonical fandom "Harry Potter"
       And a canonical fandom "Legend of Korra"
       And I am logged in as "meatloaf"
-      And meatloaf can use the new search
       And I post the work "A Hobbit's Meandering" with fandom "The Hobbit"
       And I post the work "Bilbo Does the Thing" with fandom "The Hobbit, Legend of Korra"
       And I post the work "Roonal Woozlib and the Ferrets of Nimh" with fandom "Harry Potter"
@@ -95,7 +94,6 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using inclusion filters
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
@@ -128,7 +126,6 @@ Feature: Filters
   @javascript
   Scenario: You can filter through a user's bookmarks using exclusion filters
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
@@ -156,7 +153,6 @@ Feature: Filters
   @javascript
   Scenario: Filter a user's bookmarks by "Search within results" and "Search bookmarker's tags and notes"
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
       And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
 
@@ -177,7 +173,6 @@ Feature: Filters
   @javascript
   Scenario: Filter a user's bookmarks by bookmarker's tags
     Given I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
       And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
@@ -281,7 +276,6 @@ Feature: Filters
     Given the tag "legend korra" does not exist
       And the tag "fun crossover" does not exist
       And I am logged in as "recengine"
-      And recengine can use the new search
       And I bookmark the work "A Hobbit's Meandering" with the tags "fun"
       And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
 

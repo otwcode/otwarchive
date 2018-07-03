@@ -42,8 +42,3 @@ Given /^(\d+) items are displayed per page$/ do |per_page|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.ITEMS_PER_PAGE = per_page.to_i
 end
-
-When /^(\w+) can use the new search/ do |login|
-  user = User.find_by(login: login)
-  $rollout.activate_user(:use_new_search, user)
-end
