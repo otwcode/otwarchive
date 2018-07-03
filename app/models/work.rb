@@ -1587,8 +1587,7 @@ class Work < ApplicationRecord
 
     # If the biggest group is the same size as the total number in all groups,
     # that means that all top-level meta-tags in all groups also occur in the
-    # biggest group, so we don't don't have any fandoms that are unrelated to
-    # it.
+    # biggest group, so we don't have any fandoms that are unrelated to it.
     top_meta_groups.flatten.uniq.size > biggest_group_size
   end
 
