@@ -172,48 +172,43 @@
   When I press "Subscribe"
   Then the page title should include "Chapter 2"
 
-  Scenario: Subscription to a work in an anonymous collection
+  Scenario: When a chapter is added to an anonymous work, subscription emails are sent
+  to users who have subscribed to the work
 
-  When I am logged in as "first_user"
-    And I set up the collection "test_collection" with name "test1"
-    And I check "collection_collection_preference_attributes_anonymous"
-    And I submit
-    And I post the work "Multi Chapter Work"
-    And a chapter is added to "Multi Chapter Work"
-    And I add the work "Multi Chapter Work" to the collection "test_collection"
+  Given the anonymous collection "test_collection"
+    And I am logged in as "first_user"
+    And I post the work "Multi Chapter Work" to the collection "test_collection"
   When I am logged in as "second_user"
     And I view the work "Multi Chapter Work"
-    And I view the 1st chapter
     And I press "Subscribe"
   When I am logged in as "first_user"
     And a chapter is added to "Multi Chapter Work"
-    Then 0 emails should be delivered
-  When subscription notifications are sent
-    Then 1 email should be delivered to "second_user@foo.com"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "second_user@foo.com"
     And the email should contain "Multi Chapter Work"
     And the email should contain "Anonymous"
     And the email should not contain "first_user"
 
-    Scenario: Subscription to a user should not inform you about his anonymous works
+  Scenario: When a work is added to an anonymous collection or a chapter is added to work in an anonymous collection,
+  no subscription emails should not be sent to the poster's subscribers
 
-    Given I am logged in as "second_user"
+    Given the anonymous collection "test_collection"
+      And I am logged in as "second_user"
       And I go to first_user's user page
       And I press "Subscribe"
     When I am logged in as "first_user"
-      And I set up the collection "test_collection" with name "test1"
-      And I check "collection_collection_preference_attributes_anonymous"
-      And I submit
       And I post the work "Multi Chapter Work" to the collection "test_collection"
+      And subscription notifications are sent
     Then 0 emails should be delivered
-    When subscription notifications are sent
+    When I post a chapter for the work "Multi Chapter Work"
+      And subscription notifications are sent
     Then 0 emails should be delivered
 
-    Scenario: Subscription to a series in an anonymous collection
+  Scenario: When a work is added to a series or a chapter to a work in a series in an anonymous collection,
+  subscription emails are sent to users who have subscribed to the series
 
-    When I am logged in as "first_user"
-      And I set up the collection "test_collection" with name "test1"
-      And I check "collection_collection_preference_attributes_anonymous"
-      And I submit
+    Given the anonymous collection "test_collection"
+      And I am logged in as "first_user"
       And I post the work "Multi Chapter Work" as part of a series "Multi Work Series"
       And I add the work "Multi Chapter Work" to the collection "test_collection"
     When I am logged in as "second_user"
@@ -221,11 +216,18 @@
       And I press "Subscribe"
     When I am logged in as "first_user"
       And a chapter is added to "Multi Chapter Work"
-    Then 0 emails should be delivered
-    When subscription notifications are sent
+      And subscription notifications are sent
     Then 1 email should be delivered to "second_user@foo.com"
       And the email should contain "Multi Work Series"
       And the email should contain "Multi Chapter Work"
+      And the email should contain "Anonymous"
+      And the email should not contain "first_user"
+    When all emails have been delivered
+      And I post the work "Second Work" to the collection "test_collection" as part of a series "Multi Work Series"
+      And subscription notifications are sent
+    Then 1 email should be delivered to "second_user@foo.com"
+      And the email should contain "Multi Work Series"
+      And the email should contain "Second Work"
       And the email should contain "Anonymous"
       And the email should not contain "first_user"
 
