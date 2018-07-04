@@ -1,4 +1,8 @@
-<%= form_for WorkSearch.new, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
+<% # ES UPGRADE TRANSITION # %>
+<% # Remove line 3 & change 'klass' to WorkSearchForm %>
+<% klass = use_new_search? ? WorkSearchForm : WorkSearch %>
+
+<%= form_for klass.new, as: :work_search, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
   <fieldset>
     <legend><%= ts('Search Works', key: 'header') %></legend>
     <p>

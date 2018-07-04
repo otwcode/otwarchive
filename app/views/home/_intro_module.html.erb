@@ -12,7 +12,7 @@
                the %{news} for more information, or if you have already requested 
                an invitation, you can %{status}.",
                news: link_to("\"Invitations\" tag on AO3 News",
-                     admin_posts_path(tag_id: 143)),
+                     admin_posts_path(tag: 143)),
                status: link_to("check your position on the waiting list",
                        status_invite_requests_path)
             ).html_safe %>

@@ -1,7 +1,7 @@
 class TagIndexer < Indexer
 
   def self.klass
-    'Tag'
+    "Tag"
   end
 
   def self.mapping
@@ -9,12 +9,40 @@ class TagIndexer < Indexer
       tag: {
         properties: {
           name: {
-            type: 'string',
-            analyzer: 'simple'
+            type: "text",
+            analyzer: "tag_name_analyzer",
+            fields: {
+              exact: {
+                type:     "text",
+                analyzer: "exact_tag_analyzer"
+              }
+            }
           },
           tag_type: {
-            type: 'string',
-            index: 'not_analyzed'
+            type: "keyword"
+          }
+        }
+      }
+    }
+  end
+
+  def self.settings
+    {
+      analysis: {
+        analyzer: {
+          tag_name_analyzer: {
+            type: "custom",
+            tokenizer: "standard",
+            filter: [
+              "lowercase"
+            ]
+          },
+          exact_tag_analyzer: {
+            type: "custom",
+            tokenizer: "keyword",
+            filter: [
+              "lowercase"
+            ]
           }
         }
       }
