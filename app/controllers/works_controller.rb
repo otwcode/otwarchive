@@ -956,19 +956,6 @@ class WorksController < ApplicationController
     end
   end
 
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.distinct.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect { |tag| tag.name + ', ' }.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ''
-    end
-  end
-
   def index_page_title
     if @owner.present?
       owner_name =
