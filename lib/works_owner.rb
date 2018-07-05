@@ -15,7 +15,7 @@ module WorksOwner
       end
     end
   end
-  
+
   # Used in works_controller to determine whether to expire the cache for this object's works index page
   # The timestamp should reflect the last update that would cause the list to need refreshing
   # When both a collection and a tag are given, include both in the key and use the tag's timestamp
@@ -28,12 +28,12 @@ module WorksOwner
     end
     key
   end
-  
+
   # Set the timestamp if it doesn't yet exist
   def works_index_timestamp
     REDIS_GENERAL.get(redis_works_index_key) || update_works_index_timestamp!
   end
-  
+
   # Should be called wherever works are updated
   # Making the timestamp a stringy integer mostly for ease of testing
   def update_works_index_timestamp!
@@ -41,12 +41,12 @@ module WorksOwner
     REDIS_GENERAL.set(redis_works_index_key, t)
     return t
   end
-  
+
   private
-  
+
   def redis_works_index_key
     klass = self.is_a?(Tag) ? 'tag' : self.class.to_s.underscore
     "#{klass}_#{self.id}_windex"
   end
-  
+
 end

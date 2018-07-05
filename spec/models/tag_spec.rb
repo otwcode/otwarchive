@@ -458,9 +458,9 @@ describe Tag do
   describe "multiple tags of the same type" do
     before do
       # set up three tags of the same type
-      @canonical_tag = FactoryGirl.create(:fandom)
+      @canonical_tag = FactoryGirl.create(:canonical_fandom)
       @syn_tag = FactoryGirl.create(:fandom)
-      @sub_tag = FactoryGirl.create(:fandom)
+      @sub_tag = FactoryGirl.create(:canonical_fandom)
     end
 
     it "should let you make a tag the synonym of a canonical one" do

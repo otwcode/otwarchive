@@ -1,9 +1,13 @@
 <!--SEARCHBROWSE-->
-<h2 class="heading"><%= ts("People Search: Alpha") %></h2>
+<h2 class="heading"><%= ts("People Search") %></h2>
 
 <%= render 'shared/search_nav' %>
 
-<%= render :partial => 'people/search_form' %>
+<% if use_new_search? %>
+  <%= render :partial => 'people/new_search_form' %>
+<% else %>
+  <%= render :partial => 'people/search_form' %>
+<% end %>
 
 <% if @people %>
   <p><strong><%= @people.total_entries %> Found</strong></p>

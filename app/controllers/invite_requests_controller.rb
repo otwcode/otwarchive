@@ -40,6 +40,12 @@ class InviteRequestsController < ApplicationController
 
   def manage
     @invite_requests = InviteRequest.order(:position).page(params[:page])
+    if params[:query].present?
+      @invite_requests = InviteRequest.where("simplified_email LIKE ?",
+                                             "%#{params[:query]}%")
+                                      .order(:position)
+                                      .page(params[:page])
+    end
   end
 
   def reorder
@@ -52,11 +58,15 @@ class InviteRequestsController < ApplicationController
   end
 
   def destroy
-    @invite_request = InviteRequest.find(params[:id])
-    if @invite_request.destroy
-      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
+    @invite_request = InviteRequest.find_by(id: params[:id])
+    if @invite_request.nil? || @invite_request.destroy
+      success_message = if @invite_request.nil?
+                          ts("Request was removed from the queue.")
+                        else
+                          ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
+                        end
       respond_to do |format|
-        format.html { redirect_to manage_invite_requests_path(page: params[:page]), notice: success_message }
+        format.html { redirect_to manage_invite_requests_path(page: params[:page], query: params[:query]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
       end
     else
@@ -64,7 +74,7 @@ class InviteRequestsController < ApplicationController
       respond_to do |format|
         format.html do
           flash.keep
-          redirect_to manage_invite_requests_path(page: params[:page]), flash: { error: error_message }
+          redirect_to manage_invite_requests_path(page: params[:page], query: params[:query]), flash: { error: error_message }
         end
         format.json { render json: { errors: error_message }, status: :unprocessable_entity }
       end
@@ -79,7 +89,7 @@ class InviteRequestsController < ApplicationController
 
   def invite_request_params
     params.require(:invite_request).permit(
-      :email
+      :email, :query
     )
   end
 end

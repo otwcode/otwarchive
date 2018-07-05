@@ -145,7 +145,7 @@ describe WorksController do
     context "when the query contains categories" do
       it "surrounds categories in quotes" do
         [
-          { query: "M/F sort by: comments", expected: "M/F " },
+          { query: "M/F sort by: comments", expected: "\"m/f\"" },
           { query: "f/f Scully/Reyes", expected: "\"f/f\" Scully/Reyes" },
         ].each do |settings|
           call_with_params(query: settings[:query])
@@ -153,10 +153,10 @@ describe WorksController do
         end
       end
 
-      it "surrounds categories in quotes even when it shouldn't (AO3-3576)" do
+      it "does not surround categories in quotes when it shouldn't" do
         query = "sam/frodo sort by: word"
         call_with_params(query: query)
-        expect(controller.params[:work_search][:query]).to eq("sa\"m/f\"rodo ")
+        expect(controller.params[:work_search][:query]).to eq("sam/frodo")
       end
     end
   end
@@ -276,7 +276,7 @@ describe WorksController do
 
   describe "index" do
     before do
-      @fandom = create(:fandom)
+      @fandom = create(:canonical_fandom)
       @work = create(:work, posted: true, fandom_string: @fandom.name)
     end
 
@@ -292,7 +292,7 @@ describe WorksController do
     end
 
     it "should return search results when given work_search parameters" do
-      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
+      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
     end
@@ -352,7 +352,7 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = FactoryGirl.create(:work, posted: true)
-          work2.index.refresh
+          update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -360,9 +360,10 @@ describe WorksController do
 
       context "with an owner tag" do
         before do
-          @fandom2 = FactoryGirl.create(:fandom)
+          @fandom2 = FactoryGirl.create(:canonical_fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
-          @work2.index.refresh
+
+          update_and_refresh_indexes('work')
         end
 
         it "should only get works under that tag" do
@@ -396,7 +397,7 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
-            @work2.index.refresh
+            update_and_refresh_indexes('work')
           end
 
           it "should not show restricted works to guests" do
@@ -469,8 +470,8 @@ describe WorksController do
   end
 
   describe "collected" do
-    let(:collected_fandom) { create(:fandom) }
-    let(:collected_fandom2) { create(:fandom) }
+    let(:collected_fandom) { create(:canonical_fandom) }
+    let(:collected_fandom2) { create(:canonical_fandom) }
     let(:collection) { create(:collection) }
     let(:collected_user) { create(:user) }
 
@@ -495,12 +496,8 @@ describe WorksController do
                                               collection_names: collection.name,
                                               posted: true,
                                               fandom_string: collected_fandom.name)
-      [@unrestricted_work,
-       @unrestricted_work_2_in_collection,
-       @unrestricted_work_in_collection,
-       @restricted_work_in_collection].each do |work|
-        work.index.refresh
-      end
+
+       update_and_refresh_indexes('work')
     end
 
     context "as a guest" do
@@ -523,7 +520,7 @@ describe WorksController do
       end
 
       it "should return filtered works when search parameters are provided" do
-        get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
+        get :collected, params: { user_id: collected_user.login, :work_search => { query: "fandom_ids:#{collected_fandom2.id}" }}
         expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
         expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
       end
