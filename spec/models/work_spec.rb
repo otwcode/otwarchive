@@ -136,6 +136,21 @@ describe Work do
       expect(work.crossover).to be_falsy
     end
 
+    it "is not a crossover between fandoms sharing an indirect meta tag" do
+      grand = create(:canonical_fandom)
+      parent1 = create(:canonical_fandom)
+      parent2 = create(:canonical_fandom)
+      child1 = create(:canonical_fandom)
+      child2 = create(:canonical_fandom)
+
+      grand.update_attribute(:sub_tag_string, "#{parent1.name},#{parent2.name}")
+      child1.update_attribute(:meta_tag_string, parent1.name)
+      child2.update_attribute(:meta_tag_string, parent2.name)
+
+      work = create(:work, fandom_string: "#{child1.name},#{child2.name}")
+      expect(work.crossover).to be_falsey
+    end
+
     it "is crossover with fandoms in different meta tag trees" do
       rel1 = create(:canonical_fandom, name: "rebuild again eventually")
       rel2 = create(:canonical_fandom, name: "evanescence")
@@ -160,6 +175,54 @@ describe Work do
       ships = [create(:canonical_fandom, name: "nge"), create(:canonical_fandom, name: "evanescence")]
       work = create(:work, fandoms: ships)
       expect(work.crossover).to be_truthy
+    end
+
+    context "when one tagged fandom has two unrelated meta tags" do
+      let(:meta1) { create(:canonical_fandom) }
+      let(:meta2) { create(:canonical_fandom) }
+      let(:fandom) { create(:canonical_fandom) }
+
+      before do
+        fandom.update_attribute(:meta_tag_string, "#{meta1.name},#{meta2.name}")
+      end
+
+      it "is not a crossover with the fandom's synonym" do
+        syn = create(:fandom, merger: fandom)
+        work = create(:work, fandom_string: "#{fandom.name},#{syn.name}")
+        expect(work.crossover).to be_falsey
+      end
+
+      it "is not a crossover with the fandom's meta tag" do
+        work = create(:work, fandom_string: "#{fandom.name},#{meta1.name}")
+        expect(work.crossover).to be_falsey
+      end
+
+      it "is not a crossover with another subtag of the fandom's meta tag" do
+        sub = create(:canonical_fandom)
+        sub.update_attribute(:meta_tag_string, meta1.name)
+        work = create(:work, fandom_string: "#{fandom.name},#{sub.name}")
+        expect(work.crossover).to be_falsey
+      end
+
+      it "is not a crossover with another fandom sharing the same two meta tags" do
+        other = create(:canonical_fandom)
+        other.update_attribute(:meta_tag_string, "#{meta1.name},#{meta2.name}")
+        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
+        expect(work.crossover).to be_falsey
+      end
+
+      it "is a crossover with another fandom sharing one meta tag, but with a second unrelated meta tag" do
+        # The tag fandom and the tag other share one meta tag (meta2), but
+        # fandom has a meta tag meta1 completely unrelated to other, and other
+        # has a meta tag meta3 completely unrelated to fandom. So for the
+        # purposes of this check, they count as unrelated, and thus a work
+        # tagged with both is a crossover.
+        meta3 = create(:canonical_fandom)
+        other = create(:canonical_fandom)
+        other.update_attribute(:meta_tag_string, "#{meta2.name},#{meta3.name}")
+        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
+        expect(work.crossover).to be_truthy
+      end
     end
   end
 
