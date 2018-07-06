@@ -289,8 +289,8 @@ class WorkQuery < Query
     options[:collection_ids].present? || collected?
   end
 
-  # Include anonymous works unless we're on a user or pseud page
-  # OR unless the user is viewing their own collected works
+  # Include anonymous works if we're not on a user/pseud page
+  # OR if the user is viewing their own collected works
   def include_anon?
     (user_ids.blank? && pseud_ids.blank?) ||
       (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
