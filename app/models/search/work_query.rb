@@ -234,7 +234,7 @@ class WorkQuery < Query
     [:title, :creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    if self.options[:collection_ids].blank? && options[:collected]
+    if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
     escape_slashes(search_text.strip)
