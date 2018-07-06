@@ -39,6 +39,16 @@ module SearchHelper
     header.html_safe
   end
 
+  def search_results_found(results)
+    # ES UPGRADE TRANSITION
+    # Remove the if statement and results.total_entries
+    count = if results.respond_to?(:unlimited_total_entries)
+              results.unlimited_total_entries
+            else
+              results.total_entries
+            end
+    ts("%{count} Found", count: count)
+  end
 
   def random_search_tip
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
