@@ -100,6 +100,7 @@ class WorkSearchForm
     # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
     processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
+    processed_opts.merge!(works_parent: opts[:works_parent])
     processed_opts
   end
 
