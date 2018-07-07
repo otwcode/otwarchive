@@ -1351,8 +1351,8 @@ class Work < ApplicationRecord
   end
 
   def self.collected_without_filters(user, options)
-    works = Work.written_by_id(user.pseuds.select(:id))
-    works = works.joins(:collection_items)
+    works = Work.written_by_id([user.id])
+    works = works.join(:collection_items)
     unless User.current_user == user
       works = works.where(in_anon_collection: false)
       works = works.posted

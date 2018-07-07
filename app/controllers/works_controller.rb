@@ -3,7 +3,7 @@
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
-  before_action :load_owner, only: [:index, :show_multiple]
+  before_action :load_owner, only: [:index]
   before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
   before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
@@ -294,7 +294,7 @@ class WorksController < ApplicationController
     @work.ip_address = request.remote_ip
     # If Edit or Cancel is pressed, bail out and display relevant form
     if params[:edit_button]
-      render :new and return
+      render :new && return
     elsif params[:cancel_button]
       flash[:notice] = ts('New work posting canceled.')
       redirect_to current_user and return
@@ -655,6 +655,12 @@ class WorksController < ApplicationController
 
   def post_draft
     @user = current_user
+    @work = Work.find(params[:id])
+
+    unless @user.is_author_of?(@work)
+      flash[:error] = ts('You can only post your own works.')
+      redirect_to(current_user) && return
+    end
 
     if @work.posted
       flash[:error] = ts('That work is already posted. Do you want to edit it instead?')
@@ -683,8 +689,8 @@ class WorksController < ApplicationController
   def show_multiple
     @user = current_user
 
-    if @pseud
-      @works = Work.joins(:pseuds).where("pseuds.id = ?", @pseud.id)
+    if params[:pseud_id]
+      @works = Work.joins(:pseuds).where(pseud_id: params[:pseud_id])
     else
       @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id)
     end
@@ -741,7 +747,7 @@ class WorksController < ApplicationController
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(updated_work_params)
-        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(","))
+        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
       end
     end
 
@@ -950,6 +956,19 @@ class WorksController < ApplicationController
     end
   end
 
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.distinct.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect { |tag| tag.name + ', ' }.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ''
+    end
+  end
+
   def index_page_title
     if @owner.present?
       owner_name =
@@ -988,13 +1007,21 @@ class WorksController < ApplicationController
   #       what potential values `saved` has as used elsewhere (which is what is
   #       passed as `condition`) and thus the usual approach of condition=nil
   #       followed by a ||= cannot be reliably used. -@duckinator
-  def preview_mode(page_name, condition = (@work.invalid_tags.blank?))
+  def preview_mode(page_name, condition = (@work.has_required_tags? && @work.invalid_tags.blank?))
     @preview_mode = true
 
     if condition
       yield
     else
-      @work.check_for_invalid_tags
+      @work.check_for_invalid_tags unless @work.invalid_tags.blank?
+
+      if @work.fandoms.blank?
+        @work.errors.add(:base, 'Updating: Please add all required tags. Fandom is missing.')
+      elsif !@work.has_required_tags?
+        @work.errors.add(:base, 'Updating: Please add all required tags.')
+      end
+
+      render page_name
     end
   end
 
