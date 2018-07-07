@@ -186,7 +186,7 @@ describe WorksController, work_search: true do
       fake_login_known_user(user)
     end
 
-    it "should redirect to orphan work page if only author is being removed" do
+    it "redirects to orphan work page if only author is being removed" do
       get :edit, params: { id: work.id, remove: "me" }
       expect(response).to redirect_to controller: 'orphans', action: 'new', work_id: work.id
     end
@@ -202,7 +202,7 @@ describe WorksController, work_search: true do
       fake_login_known_user(user)
     end
 
-    it "should set flash message in case of error" do
+    it "sets flash message in case of error" do
       allow_any_instance_of(Work).to receive(:destroy).and_raise("Cannot save")
 
       delete :destroy, params: { id: work }
@@ -252,7 +252,7 @@ describe WorksController, work_search: true do
         include "Invalid creator: Could not find a pseud *impossible*."
     end
 
-    it "renders new if edit is pressed" do
+    xit "renders new if edit is pressed" do
       work_attributes = attributes_for(:work)
       post :create, params: { work: work_attributes, edit_button: true }
       expect(response).to render_template("new")
@@ -264,12 +264,8 @@ describe WorksController, work_search: true do
         post :create, params: { work: work_attributes, cancel_button: true }
       end
 
-      it "sets a notice in flash" do
-        expect(flash[:notice]).to eq('New work posting canceled.')
-      end
-
-      it "redirects to user page" do
-        expect(response).to redirect_to(@user)
+      it "redirects to user page with notice" do
+        it_redirects_to_with_notice(@user, "New work posting canceled.")
       end
     end
 
@@ -365,13 +361,13 @@ describe WorksController, work_search: true do
       expect(assigns(:works)).to include(@work)
     end
 
-    it "should redirect to tag page for noncanonical tags" do
+    it "redirects to tag page for noncanonical tags" do
       unsorted_tag = create(:unsorted_tag)
       get :index, params: { id: @work, tag_id: unsorted_tag.name }
       expect(response).to redirect_to(tag_path(unsorted_tag))
     end
 
-    it "should redirect to tags works page for noncanonical merged tags page" do
+    it "redirects to tags works page for noncanonical merged tags page" do
       noncanonical_fandom = create(:fandom, canonical: false)
       noncanonical_fandom.syn_string = @fandom.name
       noncanonical_fandom.save
@@ -379,7 +375,7 @@ describe WorksController, work_search: true do
       expect(response).to redirect_to(tag_works_path(@fandom))
     end
 
-    it "should redirect to collection tags works page for noncanonical merged tags page" do
+    it "redirects to collection tags works page for noncanonical merged tags page" do
       noncanonical_fandom = create(:fandom, canonical: false)
       noncanonical_fandom.syn_string = @fandom.name
       noncanonical_fandom.save
@@ -601,7 +597,7 @@ describe WorksController, work_search: true do
       end
     end
 
-    it "should display chapter errors if chapter is invalid" do
+    it "displays chapter errors if chapter is invalid" do
       allow_any_instance_of(Chapter).to receive(:save).and_return(false)
       chapter_error = ["Test Error"]
       allow_any_instance_of(Chapter).to receive(:errors).and_return(chapter_error)
@@ -702,7 +698,7 @@ describe WorksController, work_search: true do
           controller.instance_variable_set("@admin_settings", admin_settings)
         end
 
-        it "should show results" do
+        xit "should show results" do
           get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom.id}" }}
           expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
           expect(assigns(:works)).to include(@unrestricted_work_in_collection)

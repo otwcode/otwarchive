@@ -265,11 +265,7 @@ Otwarchive::Application.routes.draw do
     resources :preferences, only: [:index, :update]
     resource :profile, only: [:show], controller: "profile"
     resources :pseuds do
-      resources :works do
-        collection do
-          get :show_multiple
-        end
-      end
+      resources :works
       resources :series
       resources :bookmarks
     end
