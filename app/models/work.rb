@@ -266,13 +266,9 @@ class Work < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
