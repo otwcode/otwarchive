@@ -581,6 +581,17 @@ namespace :After do
       end
     end
   end
+
+  desc "Destroy wrangling assignments for non-canonical fandoms"
+  task(destroy_noncanonical_wrangling_assignments: :environment) do
+    assignments = WranglingAssignment.joins(:fandom).where(tags: { canonical: false })
+    assignments.each do |assignment|
+      fandom = Fandom.find(assignment.fandom_id).name
+      wrangler = User.find(assignment.user_id).login
+      puts "Deleting assignment: #{fandom} (#{wrangler})"
+      assignment.destroy
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -590,5 +601,5 @@ end # this is the end that you have to put new tasks above
 # NOTE:
 desc "Run all current migrate tasks"
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
-# 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => ['After:locale_setup']
+# 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs', 'After:locale_setup']
+task :After => ['After:destroy_noncanonical_wrangling_assignments']
