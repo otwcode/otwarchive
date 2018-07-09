@@ -633,6 +633,19 @@ Then /^the work "([^"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
 
+Then(/^I should receive an? (MOBI|EPUB|PDF) file "(.*)?"$/) do |type, title|
+  type.downcase!
+  if type == "mobi"
+    mime_type = "application/x-mobipocket-ebook"
+  elsif type == "epub"
+    mime_type = "application/epub+zip"
+  elsif type == "pdf"
+    mime_type = "application/pdf"
+  end
+  expect(page.response_headers["Content-Type"]).to eq(mime_type)
+  expect(page.response_headers["Content-Disposition"]).to eq("attachment; filename=\"#{title}.#{type}\"")
+end
+
 Then /^the Remove Me As Chapter Co-Creator option should be on the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_number|
   step %{I should see "Remove Me As Chapter Co-Creator" within "ul#sortable_chapter_list > li:nth-of-type(#{chapter_number})"}
 end

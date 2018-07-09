@@ -56,6 +56,7 @@ before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
+  - bash script/travis_ebook_converters.sh
   - sudo bash script/travis_set_read_isolation.sh
 after_failure:
   - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html

@@ -119,9 +119,9 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
