@@ -4,6 +4,15 @@ class WorkIndexer < Indexer
     "Work"
   end
 
+  def self.index_all(options = {})
+    unless options[:skip_delete]
+      delete_index
+      create_index(12)
+    end
+    options[:skip_delete] = true
+    super(options)
+  end
+
   def self.mapping
     {
       "work" => {
@@ -45,12 +54,16 @@ class WorkIndexer < Indexer
   def document(object)
     object.as_json(
       root: false,
-      except: [
-        :delta, :summary_sanitizer_version, :notes_sanitizer_version,
-        :endnotes_sanitizer_version, :hit_count_old, :last_visitor_old,
-        :anon_commenting_disabled, :ip_address, :spam, :spam_checked_at,
-        :moderated_commenting_disabled],
+      only: [
+        :id, :expected_number_of_chapters, :created_at, :updated_at,
+        :major_version, :minor_version, :posted, :language_id, :restricted,
+        :title, :summary, :notes, :word_count, :hidden_by_admin, :revised_at,
+        :title_to_sort_on, :backdate, :endnotes,
+        :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
+        :in_unrevealed_collection,
+      ],
       methods: [
+        :authors_to_sort_on,
         :rating_ids,
         :warning_ids,
         :category_ids,

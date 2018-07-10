@@ -132,17 +132,6 @@ class Work < ApplicationRecord
     end
   end
 
-  # Set the authors_to_sort_on value, which should be anon for anon works
-  def set_author_sorting
-    if self.anonymous?
-      self.authors_to_sort_on = "Anonymous"
-    elsif self.authors.present?
-      self.authors_to_sort_on = self.sorted_authors
-    else
-      self.authors_to_sort_on = self.sorted_pseuds
-    end
-  end
-
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 
@@ -191,9 +180,8 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_parents, :save_new_recipients
 
-  before_create :set_anon_unrevealed, :set_author_sorting
+  before_create :set_anon_unrevealed
   after_create :notify_after_creation
-  before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
@@ -268,6 +256,9 @@ class Work < ApplicationRecord
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
 
+  # Visibility has changed, which means we need to reindex
+  # the work's pseuds, to update their work counts, as well as
+  # the work's bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
@@ -275,13 +266,9 @@ class Work < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -944,9 +931,10 @@ class Work < ApplicationRecord
   after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta=false)
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  # Creates a filter_tagging relationship between the work and the tag or its
+  # canonical synonym. Also updates the series index because series inherit tags
+  # from works
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
@@ -960,10 +948,13 @@ class Work < ApplicationRecord
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  # Removes filter_tagging relationship unless the work is tagged with more than
+  # one synonymous tags. Also updates the series index because series inherit
+  # tags from works
   def remove_filter_tagging(tag)
     filter = tag.filter
     if filter
@@ -987,6 +978,7 @@ class Work < ApplicationRecord
           end
         end
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
@@ -1161,8 +1153,6 @@ class Work < ApplicationRecord
 
   scope :id_only, -> { select("works.id") }
 
-  scope :ordered_by_author_desc, -> { order("authors_to_sort_on DESC") }
-  scope :ordered_by_author_asc, -> { order("authors_to_sort_on ASC") }
   scope :ordered_by_title_desc, -> { order("title_to_sort_on DESC") }
   scope :ordered_by_title_asc, -> { order("title_to_sort_on ASC") }
   scope :ordered_by_word_count_desc, -> { order("word_count DESC") }
@@ -1373,12 +1363,15 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
-  end
-
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+  # TODO drop unused database column authors_to_sort_on
+  def authors_to_sort_on
+    if self.anonymous?
+      "Anonymous"
+    elsif self.authors.present?
+      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    else
+      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    end
   end
 
   def sorted_title
@@ -1509,7 +1502,7 @@ class Work < ApplicationRecord
     as_json(
       root: false,
       only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count],
+        :created_at, :revised_at, :language_id, :word_count, :complete],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
@@ -1517,7 +1510,7 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 
@@ -1571,12 +1564,35 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    filters.by_type('Fandom').first_class.count > 1
+    # Short-circuit the check if there's only one fandom tag:
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
+
+    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
+    # don't have meta-tags of their own, or the tag itself if it doesn't have
+    # meta-tags) associated with that fandom.
+    top_meta_groups = all_without_syns.map do |f|
+      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+    end
+
+    # Find the biggest group of top-level meta tags.
+    biggest_group_size = top_meta_groups.map(&:size).max
+
+    # If the biggest group is the same size as the total number in all groups,
+    # that means that all top-level meta-tags in all groups also occur in the
+    # biggest group, so we don't have any fandoms that are unrelated to it.
+    top_meta_groups.flatten.uniq.size > biggest_group_size
   end
 
   # Does this work have only one relationship tag?
+  # (not counting synonyms)
   def otp
-    filters.by_type('Relationship').first_class.count == 1
+    return true if relationships.count == 1
+    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns.count == 1
   end
 
   # Quick and dirty categorization of the most obvious stuff

@@ -76,18 +76,23 @@
 }
 
 /* 18 zone searchbrowse */
+/* INTERACTION: OLD FILTERS */
+/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
 
-form.filters {
+form.filters,
+form.old-filters {
   width: auto;
   min-width: 23%;
   max-width: 24%;
 }
 
-.filters fieldset {
+.filters fieldset,
+.old-filters fieldset {
   margin-right: 0;
 }
 
-form.filters dl {
+form.filters dl,
+form.old-filters dl {
   margin-left: 0.25em;
   margin-right: 0.25em;
 }

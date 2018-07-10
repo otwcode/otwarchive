@@ -1,21 +1,27 @@
 <% content_for :message do %>
 
   <p><%= style_bold("Here's some user feedback on the Archive!") %></p>
-  <p>Username: <%= @username.present? ? (raw @username) : "Anonymous user" %></p>
-  <% unless @email.blank? %>
-    <p>Email address: <%= raw @email %></p>
+  <p>Username: <%= @feedback.username.present? ? (raw @feedback.username) : "Anonymous user" %></p>
+  <% unless @feedback.email.blank? %>
+    <p>Email address: <%= raw @feedback.email %></p>
   <% end %>
-  <p>Language: <%= @language %></p>
+  <p>Language: <%= @feedback.language %></p>
   <% unless ArchiveConfig.REVISION.blank? %>
     <p>
       Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
     </p>
   <% end %>
+  <% unless @feedback.rollout.blank? %>
+    <p>Rollout: <%= raw @feedback.rollout %><p>
+  <% end %>
+  <% unless @feedback.user_agent.blank? %>
+    <p>User agent: <%= raw @feedback.user_agent %></p>
+  <% end %>
 
 
   Feedback:
-  <p><b><%= (raw @summary) %></b></p>
-  <p><%= (raw @comment) %></p>
+  <b><%= (raw @feedback.summary) %></b>
+  <%= (raw @feedback.comment) %>
 
 <% end %>
 

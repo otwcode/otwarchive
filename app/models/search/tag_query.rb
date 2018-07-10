@@ -20,6 +20,11 @@ class TagQuery < Query
     [name_query].compact
   end
 
+  # Tags have a different default per_page value:
+  def per_page
+    options[:per_page] || ArchiveConfig.TAGS_PER_SEARCH_PAGE || 50
+  end
+
   ################
   # FILTERS
   ################
@@ -39,12 +44,11 @@ class TagQuery < Query
   def name_query
     return unless options[:name]
     {
-      simple_query_string: {
+      query_string: {
         query: escape_reserved_characters(options[:name]),
-        fields: ["name"],
+        fields: ["name.exact^2", "name"],
         default_operator: "and"
       }
     }
   end
-
 end

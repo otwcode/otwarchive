@@ -56,6 +56,14 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
   end
 end
 
+When /^I delete the series "([^"]*)"$/ do |series|
+  step %{I view the series "#{series}"}
+  step %{I follow "Delete Series"}
+  step %{I press "Yes, Delete Series"}
+  step %{I should see "Series was successfully deleted."}
+  step %{all indexing jobs have been run}
+end
+
 Then /^the series "(.*)" should be deleted/ do |series|
   assert Series.where(title: series).first.nil?
 end

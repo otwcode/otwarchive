@@ -27,7 +27,10 @@ class WorkQuery < Query
   end
 
   def exclusion_filters
-    tag_exclusion_filter.compact if tag_exclusion_filter
+    @exclusion_filters ||= [
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
+    ].flatten.compact
   end
 
   # Combine the available queries
@@ -87,8 +90,9 @@ class WorkQuery < Query
 
   def tag_filters
     [
-      filter_id_filter
-    ]
+      filter_id_filter,
+      named_tag_inclusion_filter
+    ].flatten.compact
   end
 
   def range_filters
@@ -147,7 +151,7 @@ class WorkQuery < Query
   end
 
   def user_filter
-    terms_filter(:user_ids, options[:user_ids]) if options[:user_ids].present?
+    terms_filter(:user_ids, user_ids) if user_ids.present?
   end
 
   def pseud_filter
@@ -170,12 +174,39 @@ class WorkQuery < Query
     end
   end
 
+  # This filter is used to restrict our results to only include works
+  # whose "tag" text matches all of the tag names in included_tag_names. This
+  # is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.filter_ids function.
+  def named_tag_inclusion_filter
+    return if included_tag_names.blank?
+    match_filter(:tag, included_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any works whose
+  # "tag" text matches one of the passed-in tag names. This is useful when the
+  # user enters a non-existent tag, which would be discarded by the
+  # TaggableQuery.exclusion_ids function.
+  #
+  # Unlike the inclusion filter, we must separate these into different match
+  # filters to get the results that we want (that is, excluding "A B" and "C D"
+  # is the same as "not(A and B) and not(C and D)").
+  def named_tag_exclusion_filter
+    excluded_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
+    end
+  end
+
   def date_range_filter
     return unless options[:date_from].present? || options[:date_to].present?
-    range = {}
-    range[:gte] = options[:date_from].to_date if options[:date_from].present?
-    range[:lte] = options[:date_to].to_date if options[:date_to].present?
-    { range: { revised_at: range } }
+    begin
+      range = {}
+      range[:gte] = clamp_search_date(options[:date_from].to_date) if options[:date_from].present?
+      range[:lte] = clamp_search_date(options[:date_to].to_date) if options[:date_to].present?
+      { range: { revised_at: range } }
+    rescue ArgumentError
+      nil
+    end
   end
 
   def word_count_filter
@@ -203,8 +234,7 @@ class WorkQuery < Query
     [:title, :creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    search_text << split_query_text_phrases(:tag, options[:tag])
-    if self.options[:collection_ids].blank? && options[:collected]
+    if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
     escape_slashes(search_text.strip)
@@ -224,7 +254,7 @@ class WorkQuery < Query
 
   def aggregations
     aggs = {}
-    if facet_collections?
+    if collected?
       aggs[:collections] = { terms: { field: 'collection_ids' } }
     end
 
@@ -245,7 +275,7 @@ class WorkQuery < Query
     options[:faceted]
   end
 
-  def facet_collections?
+  def collected?
     options[:collected]
   end
 
@@ -253,15 +283,31 @@ class WorkQuery < Query
     User.current_user.present? || options[:show_restricted]
   end
 
+  # Include unrevealed works only if we're on a collection page
+  # OR the collected works page of a user
   def include_unrevealed?
-    options[:collection_ids].present?
+    options[:collection_ids].present? || collected?
   end
 
+  # Include anonymous works if we're not on a user/pseud page
+  # OR if the user is viewing their own collected works
   def include_anon?
-    options[:user_ids].blank? && pseud_ids.blank?
+    (user_ids.blank? && pseud_ids.blank?) ||
+      (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
+  end
+
+  def user_ids
+    options[:user_ids]
   end
 
   def pseud_ids
     options[:pseud_ids]
+  end
+
+  # By default, ES6 expects yyyy-MM-dd and can't parse years with 4+ digits.
+  def clamp_search_date(date)
+    return date.change(year: 0) if date.year.negative?
+    return date.change(year: 9999) if date.year > 9999
+    date
   end
 end

@@ -249,6 +249,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def end_tos_prompt
+    @user.update_attribute(:accepted_tos_version, @current_tos_version)
+    head :no_content
+  end
+
   def browse
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
     @tag_types = %w(Fandom Character Relationship Freeform)

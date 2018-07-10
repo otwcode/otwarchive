@@ -168,7 +168,7 @@ Given /^a set of Star Trek works for searching$/ do
   step %{"Star Trek: The Original Series" is a metatag of the fandom "Star Trek: The Original Series (Movies)"}
 
   # Create a work using each of the related fandoms
-  ["Star Trek", "Star Trek: The Original Series", 
+  ["Star Trek", "Star Trek: The Original Series",
    "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
     FactoryGirl.create(:posted_work, fandom_string: fandom)
   end
@@ -377,7 +377,7 @@ Then /^the results should contain a ([^"]*) mentioning "([^"]*)"$/ do |item, ter
                "ol.work .tags .#{item.pluralize}"
              end
   expect(page).to have_css(selector, text: term)
-end 
+end
 
 Then /^the results should not contain a ([^"]*) mentioning "([^"]*)"$/ do |item, term|
   selector = if item == "fandom"
@@ -388,7 +388,7 @@ Then /^the results should not contain a ([^"]*) mentioning "([^"]*)"$/ do |item,
                "ol.work .tags .#{item.pluralize}"
              end
   expect(page).not_to have_css(selector, text: term)
-end 
+end
 
 Then /^the ([\d]+)(?:st|nd|rd|th) result should contain "([^"]*)"$/ do |n, text|
   selector = "ol.work > li:nth-of-type(#{n})"

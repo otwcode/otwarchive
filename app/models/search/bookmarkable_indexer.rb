@@ -1,7 +1,7 @@
 class BookmarkableIndexer < Indexer
 
   def self.index_name
-    "ao3_#{Rails.env}_bookmarks"
+    "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_bookmarks"
   end
 
   def self.document_type
@@ -10,6 +10,11 @@ class BookmarkableIndexer < Indexer
 
   def self.mapping
     BookmarkIndexer.mapping
+  end
+
+  # When we fail, we don't want to just keep adding the -klass suffix.
+  def self.find_elasticsearch_ids(ids)
+    ids.map(&:to_i)
   end
 
   def routing_info(id)

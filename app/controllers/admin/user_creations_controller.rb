@@ -5,7 +5,7 @@ class Admin::UserCreationsController < ApplicationController
   before_action :can_be_marked_as_spam, only: [:set_spam]
 
   def get_creation
-    raise "Redshirt: Attempted to constantize invalid class initialize #{params[:creation_type]}" unless %w(ExternalWork Bookmark Work).include?(params[:creation_type])
+    raise "Redshirt: Attempted to constantize invalid class initialize #{params[:creation_type]}" unless %w(Bookmark ExternalWork Series Work).include?(params[:creation_type])
     @creation_class = params[:creation_type].constantize
     @creation = @creation_class.find(params[:id])
   end
@@ -31,17 +31,6 @@ class Admin::UserCreationsController < ApplicationController
     elsif @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      unless action == "unhide" || @creation_class == Work
-        # Email users so they're aware of Abuse action
-        # Emails for works are handled in the work class
-        orphan_account = User.orphan_account
-        users = @creation.pseuds.map(&:user).uniq
-        users.each do |user|
-          unless user == orphan_account
-            UserMailer.admin_hidden_work_notification(@creation.id, user.id).deliver
-          end
-        end
-      end
       redirect_to(@creation)
     end
   end  

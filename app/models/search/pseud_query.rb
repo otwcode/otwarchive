@@ -1,7 +1,12 @@
 class PseudQuery < Query
 
+  # The "klass" function in the query classes is used only to determine what
+  # type of search results to return (that is, which class the QueryResult
+  # class will call "load_from_elasticsearch" on). Because the Pseud search
+  # should always wrap Pseuds up in a PseudDecorator, we return PseudDecorator
+  # instead of Pseud.
   def klass
-    'Pseud'
+    'PseudDecorator'
   end
 
   def index_name
@@ -29,9 +34,10 @@ class PseudQuery < Query
   end
 
   def fandom_filter
+    key = User.current_user.present? ? "fandoms.id" : "fandoms.id_for_public"
     if options[:fandom_ids]
       options[:fandom_ids].map do |fandom_id|
-        { term: { "fandoms.id" => fandom_id } }
+        { term: { key => fandom_id } }
       end
     end
   end
@@ -44,8 +50,8 @@ class PseudQuery < Query
     {
       simple_query_string:{
         query: escape_reserved_characters(options[:query]),
-        fields: ["name^5", "user_login^2", "description"],
-        default_operator: 'AND'
+        fields: ["byline^5", "name^4", "user_login^2", "description"],
+        default_operator: "AND"
       }
     } if options[:query]
   end
