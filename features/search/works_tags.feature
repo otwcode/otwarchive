@@ -254,7 +254,7 @@ Feature: Search works by tag
   # non-canonical tags. Once that's resolved, either the @old-search tag should
   # be removed from this test, or the test should be modified to reflect the
   # new search behavior.
-  @old-search
+  @wip
   Scenario: Searching by additional tags (freeforms) for a synonym of a metatag
   returns works using (a) the exact tag or (b) other tags containing the search
   term, regardless of tag type
