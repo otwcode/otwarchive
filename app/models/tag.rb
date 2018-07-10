@@ -676,7 +676,6 @@ class Tag < ApplicationRecord
 
   # Take the most direct route from tag to pseud and queue up to reindex
   def reindex_pseuds
-    return unless $rollout.active?(:start_new_indexing)
     Creatorship.select(:id, :pseud_id).
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
@@ -706,7 +705,6 @@ class Tag < ApplicationRecord
 
   # Reindex all series (series_ids argument works as above)
   def reindex_all_series(series_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if series_ids.empty?
       series_ids = all_filtered_series_ids
     end
@@ -730,7 +728,6 @@ class Tag < ApplicationRecord
 
   # Reindex all external works (external_work_ids argument works as above)
   def reindex_all_external_works(external_work_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if external_work_ids.empty?
       external_work_ids = all_filtered_external_work_ids
     end
@@ -764,9 +761,9 @@ class Tag < ApplicationRecord
   def reindex_filtered_item(item)
     if item.is_a?(Work)
       RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
     else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
     end 
   end
 

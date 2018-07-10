@@ -248,7 +248,6 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
