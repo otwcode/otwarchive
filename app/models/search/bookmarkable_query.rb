@@ -44,9 +44,7 @@ class BookmarkableQuery < Query
     # Delete the bookmark aggregations.
     modified_query[:aggs].delete(:bookmarks)
 
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
+    $elasticsearch.search(
       index: index_name,
       type: document_type,
       body: modified_query

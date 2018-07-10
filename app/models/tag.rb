@@ -1,9 +1,6 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -25,25 +22,7 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def self.document_type
-    "tag"
-  end
-
   delegate :document_type, to: :class
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def to_indexed_json
-    as_json.merge(tag_type: type).to_json
-  end
 
   def document_json
     TagIndexer.new({}).document(self)
@@ -1249,42 +1228,6 @@ class Tag < ApplicationRecord
     ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
     series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
-  end
-
-  #################################
-  ## SEARCH #######################
-  #################################
-
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :id,           index: :not_analyzed
-    indexes :name#,         analyzer: 'snowball', boost: 100
-    indexes :type
-    indexes :canonical,    type: :boolean
-  end
-
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
-      query do
-        boolean do
-          must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :canonical, 'T' } if options[:canonical].present?
-
-          if options[:type].present?
-            # To support the tags indexed prior to IndexSubqueue, we want to
-            # find the type either in the tag_type field or the _type field:
-            should { term '_type', options[:type].downcase }
-            should { term :tag_type, options[:type].downcase }
-
-            # The tire gem doesn't natively support :minimum_should_match,
-            # but elasticsearch 0.90 does, so we hack it in.
-            @value[:minimum_should_match] = 1
-          end
-        end
-      end
-    end
   end
 
   after_create :after_create

@@ -8,9 +8,7 @@ class Query
   end
 
   def search
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
+    $elasticsearch.search(
       index: index_name,
       type: document_type,
       body: generated_query
@@ -24,7 +22,7 @@ class Query
 
   # Perform a count query based on the given options
   def count
-    $new_elasticsearch.count(
+    $elasticsearch.count(
       index: index_name,
       body: { query: generated_query[:query] }
     )['count']

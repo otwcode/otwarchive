@@ -68,15 +68,9 @@ class TagsController < ApplicationController
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options[:page] = params[:page] || 1
-      # ES UPGRADE TRANSITION #
-      # Remove conditional and call to TagSearch
-      if use_new_search?
-        search = TagSearchForm.new(options)
-        @tags = search.search_results
-        flash_max_search_results_notice(@tags)
-      else
-        @tags = TagSearch.search(options)
-      end
+      search = TagSearchForm.new(options)
+      @tags = search.search_results
+      flash_max_search_results_notice(@tags)
     end
   end
 

@@ -116,7 +116,7 @@ class IndexSubqueue
   def add_document_to_batch(obj)
     basics = { "_index" => klass.index_name, "_type" => klass.document_type, "_id" => obj.id }
     @batch << { index: basics }.to_json
-    @batch << obj.to_indexed_json
+    @batch << obj.document_json
   end
 
   def add_deletion_to_batch(id)

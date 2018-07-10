@@ -3,11 +3,7 @@ class Bookmark < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Responder
-  # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
@@ -158,12 +154,6 @@ class Bookmark < ApplicationRecord
     return false
   end
 
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
-  end
-
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
     bookmarkable.bookmarks.visible.size
@@ -235,49 +225,8 @@ class Bookmark < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :notes
-    indexes :private, type: 'boolean'
-    indexes :bookmarkable_type
-    indexes :bookmarkable_id
-    indexes :created_at,          type: 'date'
-    indexes :bookmarkable_date,   type: 'date'
-  end
-
   def document_json
     BookmarkIndexer.new({}).document(self)
-  end
-
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods:
-      [ :bookmarker,
-        :with_notes,
-        :bookmarkable_pseud_names,
-        :bookmarkable_pseud_ids,
-        :tag,
-        :tag_ids,
-        :filter_names,
-        :filter_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :bookmarkable_title,
-        :bookmarkable_posted,
-        :bookmarkable_restricted,
-        :bookmarkable_hidden,
-        :bookmarkable_complete,
-        :bookmarkable_language_id,
-        :collection_ids,
-        :bookmarkable_collection_ids,
-        :bookmarkable_date
-      ])
   end
 
   def bookmarker

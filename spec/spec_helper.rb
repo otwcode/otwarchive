@@ -48,15 +48,6 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
-
-    # ES UPGRADE TRANSITION #
-    # Remove $rollout activation & unless block
-    $rollout.activate :start_new_indexing
-
-    unless elasticsearch_enabled?($elasticsearch)
-      $rollout.activate :stop_old_indexing
-      $rollout.activate :use_new_search
-    end
   end
 
   config.after :each do
@@ -110,42 +101,7 @@ def clean_the_database
   end
 end
 
-# ES UPGRADE TRANSITION #
-# Remove method
-def elasticsearch_enabled?(elasticsearch_instance)
-  elasticsearch_instance.cluster.health rescue nil
-end
-
-# ES UPGRADE TRANSITION #
-# Remove method
-def deprecate_unless(condition)
-  return true unless condition
-
-  yield
-end
-
-# ES UPGRADE TRANSITION #
-# Remove method
-def deprecate_old_elasticsearch_test
-  deprecate_unless(elasticsearch_enabled?($elasticsearch)) do
-    yield
-  end
-end
-
-# ES UPGRADE TRANSITION #
-# Replace all instances of $new_elasticsearch with $elasticsearch
 def update_and_refresh_indexes(klass_name, shards = 5)
-  # ES UPGRADE TRANSITION #
-  # Remove block
-  if elasticsearch_enabled?($elasticsearch)
-    klass = klass_name.capitalize.constantize
-    Tire.index(klass.index_name).delete
-    klass.create_elasticsearch_index
-    klass.import
-    klass.tire.index.refresh
-  end
-
-  # NEW ES
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
 
   indexer_class.delete_index
@@ -166,11 +122,11 @@ def update_and_refresh_indexes(klass_name, shards = 5)
   indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
   indexer.index_documents if klass_name.capitalize.constantize.any?
 
-  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def refresh_index_without_updating(klass_name)
-  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
@@ -183,24 +139,16 @@ def run_all_indexing_jobs
 end
 
 def delete_index(index)
-  # ES UPGRADE TRANSITION #
-  # Remove block
-  if elasticsearch_enabled?($elasticsearch)
-    klass = index.capitalize.constantize
-    Tire.index(klass.index_name).delete
-  end
-
-  # NEW ES
   index_name = "ao3_test_#{index}s"
-  if $new_elasticsearch.indices.exists? index: index_name
-    $new_elasticsearch.indices.delete index: index_name
+  if $elasticsearch.indices.exists? index: index_name
+    $elasticsearch.indices.delete index: index_name
   end
 end
 
 def delete_test_indices
-  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
   indices.each do |index|
-    $new_elasticsearch.indices.delete(index: index)
+    $elasticsearch.indices.delete(index: index)
   end
 end
 
