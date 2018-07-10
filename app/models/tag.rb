@@ -818,7 +818,7 @@ class Tag < ApplicationRecord
       async(:add_merger_associations)
       # TODO Should this transfer favorite tags to the merger instead?
       async(:remove_favorite_tags)
-    elsif self.saved_change_to_canonical? && ! self.canonical?
+    elsif self.saved_change_to_canonical? && !self.canonical?
       async(:remove_canonical_associations)
       async(:remove_favorite_tags)
     end
