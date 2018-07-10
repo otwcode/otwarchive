@@ -160,6 +160,9 @@ MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
 MAX_FAVORITE_TAGS: 20
 
+# The number of tags to show on the search page:
+TAGS_PER_SEARCH_PAGE: 50
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
