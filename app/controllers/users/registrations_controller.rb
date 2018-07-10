@@ -46,7 +46,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def configure_permitted_parameters
-    params[:user] = params[:user_registration]
+    params[:user] = params[:user_registration].merge(
+      accepted_tos_version: @current_tos_version
+    )
     devise_parameter_sanitizer.permit(
       :sign_up,
       keys: [
