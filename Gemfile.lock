@@ -390,8 +390,6 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4)
-    scrypt (3.0.5)
-      ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (3.4.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
