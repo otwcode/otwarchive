@@ -38,7 +38,12 @@ Given /^the max search result count is (\d+)$/ do |max|
   ArchiveConfig.MAX_SEARCH_RESULTS = max.to_i
 end
 
-Given /^(\d+) items are displayed per page$/ do |per_page|
+Given /^(\d+) item(?:s)? (?:is|are) displayed per page$/ do |per_page|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.ITEMS_PER_PAGE = per_page.to_i
+end
+
+Given /^(\d+) tag(?:s)? (?:is|are) displayed per search page$/ do |per_page|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.TAGS_PER_SEARCH_PAGE = per_page.to_i
 end

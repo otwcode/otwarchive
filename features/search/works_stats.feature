@@ -70,9 +70,8 @@ Feature: Search works by stats
       And "Ascending" should be selected within "Sort direction"
     When I choose "Complete works only"
       And I press "Search" within "#new_work_search"
-    When "AO3-5329" is fixed
-    # Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
-    Then I should see "4 Found"
+    Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
+      And I should see "4 Found"
       And I should see "second work"
       And I should see "third work"
       And I should see "fourth"
