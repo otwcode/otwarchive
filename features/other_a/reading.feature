@@ -156,16 +156,15 @@ Feature: Reading count
     And the reading rake task is run
   When I go to fandomer's reading page
   Then I should see "multichapter work"
-  When "AO3-5073" is fixed
-    # And I should see "Visited 3 times"
+    And I should see "Visited 3 times"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
+    And the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "multichapter work"
-  When "AO3-5073" is fixed
-    # And I should see "Visited 5 times"
+    And I should see "Visited 6 times"
     And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage

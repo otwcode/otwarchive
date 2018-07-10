@@ -100,6 +100,7 @@ class WorkSearchForm
     # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
     processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
+    processed_opts.merge!(works_parent: opts[:works_parent])
     processed_opts
   end
 
@@ -126,8 +127,15 @@ class WorkSearchForm
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"
     end
-    if %w(1 true).include?(self.complete.to_s)
+    if complete.to_s == "T"
       summary << "Complete"
+    elsif complete.to_s == "F"
+      summary << "Incomplete"
+    end
+    if crossover.to_s == "T"
+      summary << "Only Crossovers"
+    elsif crossover.to_s == "F"
+      summary << "No Crossovers"
     end
     if %w(1 true).include?(self.single_chapter.to_s)
       summary << "Single Chapter"

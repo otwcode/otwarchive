@@ -49,11 +49,6 @@ module TagsHelper
     }
   end
 
-  # Displays a list of links for navigating the tag wrangling section of the site
-  def tag_wrangler_footer
-    render partial: 'tag_wranglings/footer'
-  end
-
   def wrangler_list(wranglers, tag)
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
@@ -87,11 +82,6 @@ module TagsHelper
     link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
   end
 
-  def tag_with_link_to_edit(tag, options = {})
-    options.reverse_merge!({target: "_blank"})
-    content_tag(:span, tag.name, class:"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
-  end
-
   def link_to_tag_works_with_text(tag, link_text, options = {})
     if options[:full_path]
       link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
@@ -120,15 +110,6 @@ module TagsHelper
   # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
     logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
-  end
-
-  def taggable_list(tag, controller_class)
-    taggable_things = ["bookmarks", "works"]
-    list = []
-    taggable_things.each do |tt|
-      list << link_to(h(ts(tt.titlecase)), {controller: tt, action: :index, tag_id: tag}) unless tt == controller_class
-    end
-    list.map{|li| "<li>" + li + "</li>"}.join.html_safe
   end
 
   # Determines whether or not to display warnings for a creation
