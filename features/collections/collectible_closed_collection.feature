@@ -16,18 +16,6 @@ Feature: Collectible items in closed collections
     Then I should see "Works (0)"
       And I should not see "Blabla"
 
-  @old-search
-  Scenario: Add my bookmark to a closed collection
-    Given I have a bookmark for "Tundra penguins"
-    When I add my bookmark to the collection "Various_Penguins"
-    Then I should see "is closed"
-    When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (0)"
-      And I should not see "Tundra penguins"
-
-  # This is the same as the test above, but with the sidebar text updated to
-  # reflect the new bookmarked item listings.
-  @new-search
   Scenario: Add my bookmark to a closed collection
     Given I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection "Various_Penguins"
