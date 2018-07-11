@@ -232,7 +232,7 @@ class BookmarkableQuery < Query
   # updated).
   def date_filter
     if options[:bookmarkable_date].present?
-      { range: { revised_at: Search.range_to_search(options[:bookmarkable_date]) } }
+      { range: { revised_at: SearchRange.parsed(options[:bookmarkable_date]) } }
     end
   end
 

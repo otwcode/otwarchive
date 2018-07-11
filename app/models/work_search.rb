@@ -158,7 +158,7 @@ class WorkSearch < Search
 
       [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
         if search_opts[countable].present?
-          filter :range, countable => Search.range_to_search(search_opts[countable])
+          filter :range, countable => SearchRange.parsed(search_opts[countable])
         end
       end
 
@@ -231,7 +231,7 @@ class WorkSearch < Search
 
       [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
         if search_opts[countable].present?
-          filter :range, countable => Search.range_to_search(search_opts[countable])
+          filter :range, countable => SearchRange.parsed(search_opts[countable])
         end
       end
 

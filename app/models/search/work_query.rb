@@ -99,7 +99,7 @@ class WorkQuery < Query
     ranges = []
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
       if options[countable].present?
-        ranges << { range: { countable => Search.range_to_search(options[countable]) } }
+        ranges << { range: { countable => SearchRange.parsed(options[countable]) } }
       end
     end
     ranges += [date_range_filter, word_count_filter].compact
