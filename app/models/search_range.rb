@@ -13,7 +13,7 @@ class SearchRange
   end
 
   def initialize(text_range)
-    @text_range = text_range
+    @text_range = text_range || ""
   end
 
   def parse
