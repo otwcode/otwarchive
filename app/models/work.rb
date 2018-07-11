@@ -8,9 +8,6 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
 
   ########################################################################
@@ -251,7 +248,6 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
@@ -263,12 +259,6 @@ class Work < ApplicationRecord
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -1461,39 +1451,6 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block #
-  mapping do
-    indexes :authors_to_sort_on,  index: :not_analyzed
-    indexes :title_to_sort_on,    index: :not_analyzed
-    indexes :title,               boost: 20
-    indexes :creator,             boost: 15
-    indexes :revised_at,          type: 'date'
-  end
-
-  def to_indexed_json
-    to_json(
-      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
-      methods: [
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
-        :pseud_ids,
-        :collection_ids,
-        :hits,
-        :comments_count,
-        :kudos_count,
-        :bookmarks_count,
-        :creator
-      ])
-  end
-
   def document_json
     WorkIndexer.new({}).document(self)
   end
@@ -1536,23 +1493,6 @@ class Work < ApplicationRecord
     self.stat_counter.bookmarks_count
   end
 
-  # Deprecated: old search
-  def creator
-    names = ""
-    if anonymous?
-      names = "Anonymous"
-    else
-      pseuds.each do |pseud|
-        names << "#{pseud.name} #{pseud.user_login} "
-      end
-      external_author_names.pluck(:name).each do |name|
-        names << "#{name} "
-      end
-    end
-    names
-  end
-
-  # New version
   def creators
     if anonymous?
       ["Anonymous"]

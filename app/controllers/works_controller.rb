@@ -31,13 +31,7 @@ class WorksController < ApplicationController
     options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to WorkSearch
-    if use_new_search?
-      @search = WorkSearchForm.new(options)
-    else
-      @search = WorkSearch.new(options)
-    end
+    @search = WorkSearchForm.new(options)
     @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
@@ -100,13 +94,7 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        # ES UPGRADE TRANSITION #
-        # Remove conditional and call to WorkSearch
-        if use_new_search?
-          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-        else
-          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        end
+        @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
@@ -115,7 +103,7 @@ class WorksController < ApplicationController
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
           user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_#{use_new_search?}", expires_in: 20.minutes) do
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -158,13 +146,7 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      # ES UPGRADE TRANSITION #
-      # Remove conditional and call to WorkSearch
-      if use_new_search?
-        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
-      else
-        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-      end
+      @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
       @works = @search.search_results
       flash_max_search_results_notice(@works)
       @facets = @works.facets
