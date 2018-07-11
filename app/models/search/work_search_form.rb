@@ -98,7 +98,7 @@ class WorkSearchForm
     opts[:query].gsub!('creator:', 'creators:') if opts[:query]
 
     # TODO: Change this to not rely on WorkSearch
-    processed_opts = WorkSearch.new(opts).options
+    processed_opts = WorkSearchCleanser.clean(opts)
     processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
     processed_opts.merge!(works_parent: opts[:works_parent])
     processed_opts
