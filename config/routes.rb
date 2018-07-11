@@ -15,6 +15,7 @@ Otwarchive::Application.routes.draw do
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
@@ -42,6 +43,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      get :status
     end
   end
 
@@ -144,9 +146,15 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :spam, only: [:index] do
+      collection do
+        post :bulk_update
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
-        get :hide
+        put :hide
+        put :set_spam
       end
     end
     resources :users, controller: 'admin_users' do
@@ -197,6 +205,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      post :end_tos_prompt
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
@@ -561,6 +570,7 @@ Otwarchive::Application.routes.draw do
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
   get 'first_login_help' => 'home#first_login_help'
+  get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
   get 'devmode' => 'devmode#index'
@@ -598,18 +608,9 @@ Otwarchive::Application.routes.draw do
 
   get '/admin/admin_users/troubleshoot/:id' =>'admin/admin_users#troubleshoot', as: :troubleshoot_admin_user
 
-  get '/autocomplete/fandom' => 'autocomplete#fandom'
-  get '/autocomplete/pseud' => 'autocomplete#pseud'
-  get '/autocomplete/open_collection_names' => 'autocomplete#open_collection_names'
-  get '/autocomplete/character_in_fandom' => 'autocomplete#character_in_fandom'
-  get '/autocomplete/tag' => 'autocomplete#tag'
-  get '/autocomplete/relationship_in_fandom' => 'autocomplete#relationship_in_fandom'
-  get '/autocomplete/freeform' => 'autocomplete#freeform'
-  get '/autocomplete/external_work' => 'autocomplete#external_work'
-  get '/autocomplete/noncanonical_tag' => 'autocomplete#noncanonical_tag'
-  get '/autocomplete/character' => 'autocomplete#character'
-  get '/autocomplete/relationship' => 'autocomplete#relationship'
-  get '/autocomplete/associated_tags' => 'autocomplete#associated_tags'
+  # TODO: rewrite the autocomplete controller to deal with the fact that
+  # there are fifty different actions going on in there
+  get '/autocomplete/:action' => 'autocomplete#%{action}'
 
   get '/assignments/no_challenge' => 'challenge_assignments#no_challenge'
   get '/assignments/no_user' => 'challenge_assignments#no_user'

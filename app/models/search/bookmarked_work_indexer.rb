@@ -5,6 +5,6 @@ class BookmarkedWorkIndexer < BookmarkableIndexer
 
   # Only index works with bookmarks
   def self.indexables
-    Work.joins(:stat_counter).where("bookmarks_count > 0")
+    Work.includes(:stat_counter).where("stat_counters.bookmarks_count > 0").references(:stat_counters)
   end
 end

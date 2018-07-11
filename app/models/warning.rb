@@ -1,7 +1,6 @@
 class Warning < Tag
 
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
-  index_name Tag.index_name
 
   DISPLAY_NAME_MAPPING = {
     ArchiveConfig.WARNING_DEFAULT_TAG_NAME => ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME,

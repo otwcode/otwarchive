@@ -8,9 +8,10 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
+  # ES UPGRADE TRANSITION #
+  # Remove Tire::Model::Search
   include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
-  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -19,7 +20,9 @@ class Work < ApplicationRecord
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships, after_remove: :expire_pseud
+  has_many :pseuds,
+           through: :creatorships,
+           after_remove: [:expire_pseud, :reindex_changed_pseud]
   has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
@@ -69,7 +72,8 @@ class Work < ApplicationRecord
     counter = self.build_stat_counter
     counter.save
   end
-
+  # moderation
+  has_one :moderated_work, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -128,17 +132,6 @@ class Work < ApplicationRecord
     end
   end
 
-  # Set the authors_to_sort_on value, which should be anon for anon works
-  def set_author_sorting
-    if self.anonymous?
-      self.authors_to_sort_on = "Anonymous"
-    elsif self.authors.present?
-      self.authors_to_sort_on = self.sorted_authors
-    else
-      self.authors_to_sort_on = self.sorted_pseuds
-    end
-  end
-
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 
@@ -187,16 +180,19 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_parents, :save_new_recipients
 
-  before_create :set_anon_unrevealed, :set_author_sorting
+  before_create :set_anon_unrevealed
   after_create :notify_after_creation
-  before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
-  after_save :notify_recipients, :expire_caches
-  after_destroy :expire_caches
+  before_save :hide_spam
+  after_save :moderate_spam
+  after_save :notify_of_hiding
+
+  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
   def before_destroy
@@ -247,6 +243,32 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
 
     Work.expire_work_tag_groups_id(self.id)
+  end
+
+  def reindex_changed_pseud(pseud)
+    pseud = pseud.id if pseud.respond_to?(:id)
+    IndexQueue.enqueue_id(Pseud, pseud, :background)
+  end
+
+  def update_pseud_index
+    return unless $rollout.active?(:start_new_indexing)
+    return unless should_reindex_pseuds?
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+  end
+
+  # Visibility has changed, which means we need to reindex
+  # the work's pseuds, to update their work counts, as well as
+  # the work's bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w(id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # ES UPGRADE TRANSITION #
+  # Remove this function.
+  def self.index_name
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -694,10 +716,11 @@ class Work < ApplicationRecord
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.saved_change_to_posted? || (self.chapters.first && self.chapters.first.posted != self.posted)
-      self.chapters.first.published_at = Date.today unless self.backdate
-      self.chapters.first.posted = self.posted
-      self.chapters.first.save
+    chapter_one = self.first_chapter
+    if self.saved_change_to_posted? || (chapter_one && chapter_one.posted != self.posted)
+      chapter_one.published_at = Date.today unless self.backdate
+      chapter_one.posted = self.posted
+      chapter_one.save
     end
   end
 
@@ -791,10 +814,13 @@ class Work < ApplicationRecord
   end
 
   after_save :update_complete_status
+  # Note: this can mark a work complete but it can also mark a complete work
+  # as incomplete if its status has changed
   def update_complete_status
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
-    if self.chapters.posted.count == expected_number_of_chapters
-      Work.where("id = #{self.id}").update_all("complete = true")
+    self.complete = self.chapters.posted.count == expected_number_of_chapters
+    if self.will_save_change_to_attribute?(:complete)
+      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
     end
   end
 
@@ -834,7 +860,7 @@ class Work < ApplicationRecord
 
   # spread downloads out by first two letters of authorname
   def download_dir
-    "#{Rails.public_path}/#{self.download_folder}"
+    "/tmp/#{self.id}"
   end
 
   # split out so we can use this in works_helper
@@ -905,9 +931,10 @@ class Work < ApplicationRecord
   after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta=false)
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  # Creates a filter_tagging relationship between the work and the tag or its
+  # canonical synonym. Also updates the series index because series inherit tags
+  # from works
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
@@ -921,10 +948,13 @@ class Work < ApplicationRecord
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  # Removes filter_tagging relationship unless the work is tagged with more than
+  # one synonymous tags. Also updates the series index because series inherit
+  # tags from works
   def remove_filter_tagging(tag)
     filter = tag.filter
     if filter
@@ -948,6 +978,7 @@ class Work < ApplicationRecord
           end
         end
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
@@ -995,6 +1026,12 @@ class Work < ApplicationRecord
   # hide their existence from other users
   def count_all_comments
     find_all_comments.count
+  end
+
+  # Count the number of comment threads visible to the user (i.e. excluding
+  # threads that have been marked as spam). Used on the work stats page.
+  def comment_thread_count
+    comments.where(approved: true).count
   end
 
   # returns the top-level comments for all chapters in the work
@@ -1116,8 +1153,6 @@ class Work < ApplicationRecord
 
   scope :id_only, -> { select("works.id") }
 
-  scope :ordered_by_author_desc, -> { order("authors_to_sort_on DESC") }
-  scope :ordered_by_author_asc, -> { order("authors_to_sort_on ASC") }
   scope :ordered_by_title_desc, -> { order("title_to_sort_on DESC") }
   scope :ordered_by_title_asc, -> { order("title_to_sort_on ASC") }
   scope :ordered_by_word_count_desc, -> { order("word_count DESC") }
@@ -1326,12 +1361,17 @@ class Work < ApplicationRecord
   # SORTING
   ########################################################################
 
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
-  end
+  SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+  # TODO drop unused database column authors_to_sort_on
+  def authors_to_sort_on
+    if self.anonymous?
+      "Anonymous"
+    elsif self.authors.present?
+      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    else
+      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    end
   end
 
   def sorted_title
@@ -1351,16 +1391,11 @@ class Work < ApplicationRecord
   # SPAM CHECKING
   ########################################################################
 
-  def spam_checked?
-    spam_checked_at.present?
-  end
-
-  def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
+  def akismet_attributes
     content = chapters_in_order.map { |c| c.content }.join
     user = users.first
-    self.spam = Akismetor.spam?(
-      comment_type: 'Fan Fiction',
+    {
+      comment_type: "fanwork-post",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
@@ -1369,9 +1404,55 @@ class Work < ApplicationRecord
       comment_author: user.login,
       comment_author_email: user.email,
       comment_content: content
-    )
+    }
+  end
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    self.spam = Akismetor.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
+  end
+
+  def hide_spam
+    return unless spam?
+    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    if admin_settings.hide_spam?
+      self.hidden_by_admin = true
+    end
+  end
+
+  def moderate_spam
+    ModeratedWork.register(self) if spam?
+  end
+
+  def mark_as_spam!
+    update_attribute(:spam, true)
+    ModeratedWork.mark_reviewed(self)
+    # don't submit spam reports unless in production mode
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def mark_as_ham!
+    update_attributes(spam: false, hidden_by_admin: false)
+    ModeratedWork.mark_approved(self)
+    # don't submit ham reports unless in production mode
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def notify_of_hiding
+    return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    users.each do |user|
+      if spam?
+        UserMailer.admin_spam_work_notification(id, user.id).deliver
+      else
+        UserMailer.admin_hidden_work_notification(id, user.id).deliver
+      end
+    end
   end
 
   #############################################################################
@@ -1380,6 +1461,8 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
+  # ES UPGRADE TRANSITION #
+  # Remove mapping block #
   mapping do
     indexes :authors_to_sort_on,  index: :not_analyzed
     indexes :title_to_sort_on,    index: :not_analyzed
@@ -1411,23 +1494,32 @@ class Work < ApplicationRecord
       ])
   end
 
+  def document_json
+    WorkIndexer.new({}).document(self)
+  end
+
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :language_id, :word_count, :complete],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Work'
+      bookmarkable_type: 'Work',
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 
   def pseud_ids
     creatorships.pluck :pseud_id
+  end
+
+  def user_ids
+    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids
@@ -1472,12 +1564,35 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    filters.by_type('Fandom').first_class.count > 1
+    # Short-circuit the check if there's only one fandom tag:
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
+
+    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
+    # don't have meta-tags of their own, or the tag itself if it doesn't have
+    # meta-tags) associated with that fandom.
+    top_meta_groups = all_without_syns.map do |f|
+      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+    end
+
+    # Find the biggest group of top-level meta tags.
+    biggest_group_size = top_meta_groups.map(&:size).max
+
+    # If the biggest group is the same size as the total number in all groups,
+    # that means that all top-level meta-tags in all groups also occur in the
+    # biggest group, so we don't have any fandoms that are unrelated to it.
+    top_meta_groups.flatten.uniq.size > biggest_group_size
   end
 
   # Does this work have only one relationship tag?
+  # (not counting synonyms)
   def otp
-    filters.by_type('Relationship').first_class.count == 1
+    return true if relationships.count == 1
+    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns.count == 1
   end
 
   # Quick and dirty categorization of the most obvious stuff
@@ -1485,8 +1600,8 @@ class Work < ApplicationRecord
   def work_types
     types = []
     video_ids = [44011] # Video
-    audio_ids = [70308] # Podfic
-    art_ids = [7844, 125758] # Fanart, Arts
+    audio_ids = [70308, 1098169] # Podfic, Audio Content
+    art_ids = [7844, 125758, 3863] # Fanart, Arts
     types << "Video" if (filter_ids & video_ids).present?
     types << "Audio" if (filter_ids & audio_ids).present?
     types << "Art" if (filter_ids & art_ids).present?
@@ -1501,7 +1616,7 @@ class Work < ApplicationRecord
   # To be replaced by actual category
   # Can't use the 'Meta' tag since that has too many different uses
   def nonfiction
-    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
   end
 end
