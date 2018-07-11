@@ -12,8 +12,8 @@ class SearchRange
     new(str).parse
   end
 
-  def initialize(text_range)
-    @text_range = text_range || ""
+  def initialize(str)
+    @text_range = str || ""
   end
 
   def parse
@@ -30,9 +30,9 @@ class SearchRange
   private
 
   def standardize_text
-    text_range = text_range.gsub("&gt;", ">").
-                            gsub("&lt;", "<").
-                            downcase
+    @text_range = @text_range.gsub("&gt;", ">").
+                              gsub("&lt;", "<").
+                              downcase
   end
 
 
