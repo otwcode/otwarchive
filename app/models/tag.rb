@@ -968,7 +968,7 @@ class Tag < ApplicationRecord
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    admin_settings = AdminSetting.current
     return if admin_settings.suspend_filter_counts?
     current_filter = filter
     # we only need to cache values for user-defined tags
