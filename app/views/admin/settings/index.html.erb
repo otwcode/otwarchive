@@ -32,6 +32,22 @@
   </fieldset>
 
   <fieldset>
+    <legend><%= ts("Disable Support Form") %></legend>
+    <h3 class="landmark heading"><%= ts("Disable Support Form") %></h3>
+    <dl>
+      <dt><%= check_box_tag "disable_support_form", 1, false, class: "toggle_formfield", id: "disabled_support_form_text-options-show" %></dt>
+      <dd>
+        <%= label_tag "disable_support_form-show", ts("Turn off support form") %>
+        <div id="disabled_support_form_text-options" class="hidden">
+          <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
+          <%= f.text_area :disabled_support_form_text %>
+        </div>
+      </dd>
+    </dl>
+  </fieldset>
+  
+
+  <fieldset>
     <legend><%= ts("Performance and Misc") %></legend>
     <h3 class="landmark heading"><%= ts("Performance and Misc") %></h3>
     <dl>
@@ -79,3 +95,15 @@
 
 <p><%= ts("Last updated on %{updated_at} by %{admin_name}.", :updated_at => @admin_setting.updated_at, :admin_name => @admin_setting.last_updated ? @admin_setting.last_updated.login : "---") %></p>
 <!--/content-->
+
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j(".toggle_formfield").click(function() {
+        var targetId = $j(this).attr("id").replace("-show", "");
+        toggleFormField(targetId);
+      });
+    })
+  <% end %>
+<% end %>
