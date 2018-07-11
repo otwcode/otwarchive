@@ -59,6 +59,7 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = @search.search_results
       flash_max_search_results_notice(@bookmarks)
+      set_own_bookmarks
       render 'search_results'
     end
   end
@@ -167,6 +168,7 @@ class BookmarksController < ApplicationController
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
       end
     end
+    set_own_bookmarks
   end
 
   # GET    /:locale/bookmark/:id
@@ -304,6 +306,7 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.js {
         @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
+        set_own_bookmarks
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
@@ -361,6 +364,17 @@ class BookmarksController < ApplicationController
       "#{owner_name} - Bookmarks".html_safe
     else
       "Latest Bookmarks"
+    end
+  end
+
+  def set_own_bookmarks
+    return unless @bookmarks
+    @own_bookmarks = []
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.pluck(:id)
+      @own_bookmarks = @bookmarks.select do |b|
+        pseud_ids.include?(b.pseud_id)
+      end
     end
   end
 
