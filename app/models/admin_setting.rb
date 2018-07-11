@@ -28,20 +28,20 @@ class AdminSetting < ApplicationRecord
     guest_downloading_off?: false,
     downloads_enabled?: true,
     stats_updated_at: nil
-  }
+  }.freeze
 
   def self.current
-    Rails.cache.fetch("admin_settings"){ AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings") { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
-    delegate *(DEFAULT_SETTINGS.keys), :to => :current
+    delegate *DEFAULT_SETTINGS.keys, :to => :current
   end
 
   def self.default_skin
     settings = current
     if settings.default_skin_id.present?
-      Rails.cache.fetch("admin_default_skin"){ settings.default_skin }
+      Rails.cache.fetch("admin_default_skin") { settings.default_skin }
     else
       Skin.default
     end
