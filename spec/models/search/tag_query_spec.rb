@@ -150,4 +150,11 @@ describe TagQuery, type: :model do
     results = tag_query.search_results
     results.should include(tags[:rel_unicode])
   end
+
+  it "defaults to TAGS_PER_SEARCH_PAGE to determine the number of results" do
+    allow(ArchiveConfig).to receive(:TAGS_PER_SEARCH_PAGE).and_return(5)
+    tag_query = TagQuery.new(name: "a*")
+    results = tag_query.search_results
+    expect(results.size).to eq 5
+  end
 end
