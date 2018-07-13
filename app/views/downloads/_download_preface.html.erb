@@ -59,9 +59,14 @@ hide_freeform?(@work)) %>
     <ul>
     <% related_works.each do |work| %>
       <li>
-        <%= ts(work.translation ? 'A translation of' : 'Inspired by') %>
-        <%= link_to work.parent.title.html_safe, work_url(work.parent) %>
-        <%= ts("by") %> <%= byline(work.parent, only_path: false) %>.
+        <% relation_text = work.translation ?
+          "A translation of %{work_link} by %{author_link}" :
+          "Inspired by %{work_link} by %{author_link}"
+        %>
+        <% work_link = link_to work.parent.title.html_safe, work_url(work.parent) %>
+        <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
+
+        <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
       </li>
     <% end %>
     </ul>
