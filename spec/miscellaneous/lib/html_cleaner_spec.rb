@@ -922,11 +922,11 @@ describe HtmlCleaner do
 
   end
 
-  describe "double_html_paragraphs" do
-    it "adds new paragraphs with nonbreakable spaces between paragraphs" do
+  describe "add_break_between_paragraphs" do
+    it "adds <br /> between paragraphs" do
       original = "<p>Hi!</p><p>I need more space.</p>"
-      result = "<p>Hi!</p><p>&nbsp;</p><p>I need more space.</p>"
-      expect(double_html_paragraphs(original)).to eq(result)
+      result = "<p>Hi!</p><br /><p>I need more space.</p>"
+      expect(add_break_between_paragraphs(original)).to eq(result)
     end
   end
 end

@@ -398,8 +398,8 @@ module HtmlCleaner
           strip
   end
 
-  def double_html_paragraphs(value)
+  def add_break_between_paragraphs(value)
     return "" if value.blank?
-    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><p>&nbsp;</p><p>")
+    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
   end
 end

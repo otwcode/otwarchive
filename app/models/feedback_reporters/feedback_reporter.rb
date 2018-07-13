@@ -21,7 +21,7 @@ class FeedbackReporter
   end
 
   def description
-    double_html_paragraphs(@description)
+    add_break_between_paragraphs(@description)
   end
 
   def send_report!
