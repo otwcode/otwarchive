@@ -21,16 +21,12 @@ class FeedbackReporter
   end
 
   def description
-    strip_html_breaks_simple(@description)
+    add_break_between_paragraphs(@description)
   end
 
   def send_report!
-    # We're sending the XML data via a URL to our Support ticket service. The
-    # URL needs to be Percent-encoded so that everything shows up correctly on
-    # the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
-    encoded_xml = CGI.escape(xml.to_str)
     HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
-                  body: "&xml=#{encoded_xml}")
+                  body: "&xml=#{xml.to_str}")
   end
 
   def xml
