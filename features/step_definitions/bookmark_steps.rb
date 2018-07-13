@@ -283,8 +283,11 @@ Given /^bookmarks of external works and series tagged with the (character|relati
   step %{all indexing jobs have been run}
 end
 
-Given /^I have bookmarks of works in various languages to search$/ do
+Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{I have loaded the "languages" fixture}
+
+  step %{the user "#{user}" exists and is activated}
+  user_pseud = User.find_by(login: user).default_pseud
 
   lang_en = Language.find_by(name: "English")
   lang_de = Language.find_by(name: "Deutsch")
@@ -292,8 +295,8 @@ Given /^I have bookmarks of works in various languages to search$/ do
   work1 = FactoryGirl.create(:posted_work, title: "english work", language_id: lang_en.id)
   work2 = FactoryGirl.create(:posted_work, title: "german work", language_id: lang_de.id)
 
-  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id)
-  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, pseud_id: user_pseud.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, pseud_id: user_pseud.id)
 
   step %{all indexing jobs have been run}
 end

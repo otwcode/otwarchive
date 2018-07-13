@@ -256,7 +256,7 @@ Feature: Search Bookmarks
 
   @new-search
   Scenario: Search bookmarks by work language
-    Given I have bookmarks of works in various languages to search
+    Given "someuser" has bookmarks of works in various languages
     # reload search page to bring new language-id mappings for dropdown
     When I reload the page
       And I select "English" from "Work language"
