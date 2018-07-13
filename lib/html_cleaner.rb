@@ -398,4 +398,8 @@ module HtmlCleaner
           strip
   end
 
+  def double_html_paragraphs(value)
+    return "" if value.blank?
+    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><p>&nbsp;</p><p>")
+  end
 end
