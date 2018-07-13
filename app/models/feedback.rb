@@ -63,7 +63,7 @@ class Feedback < ApplicationRecord
   end
 
   def send_report
-    # return unless %w(staging production).include?(Rails.env)
+    return unless %w(staging production).include?(Rails.env)
     reporter = SupportReporter.new(
       title: summary,
       description: comment,
