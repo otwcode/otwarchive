@@ -581,6 +581,28 @@ namespace :After do
       end
     end
   end
+
+  desc "Fix crossover status for fandoms with two first-class meta-tags."
+  task(crossover_reindex_two_first_class_meta_tags: :environment) do
+    # Find all fandoms with two first-class meta tags:
+    Fandom.joins(:meta_taggings).
+      joins("LEFT JOIN meta_taggings as first_class_check " \
+            "ON first_class_check.sub_tag_id = meta_taggings.meta_tag_id").
+      where(first_class_check: { id: nil }).
+      group("tags.id").
+      having("COUNT(meta_taggings.id) > 1").
+      find_each do |fandom|
+      print("Reindexing all filtered works for #{fandom.name}") && STDOUT.flush
+      # For each fandom, reindex all of its filtered works:
+      fandom.filter_taggings.
+        where(filterable_type: "Work").
+        find_in_batches do |batch|
+        print(".") && STDOUT.flush
+        AsyncIndexer.index(WorkIndexer, batch.map(&:filterable_id), :background)
+      end
+      print("\n") && STDOUT.flush
+    end
+  end
 end # this is the end that you have to put new tasks above
 
 ##################
