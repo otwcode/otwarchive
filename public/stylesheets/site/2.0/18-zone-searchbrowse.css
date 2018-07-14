@@ -171,6 +171,7 @@ form.filters {
   padding: 0;
   position: absolute;
   width: 1px;
+  left: auto; /* fix for VoiceOver outline position in iOS 10.3.1 */
 }
 
 /* AO3-5370: Style changes to fix a bug unique to Safari 9. Hack courtesy of
