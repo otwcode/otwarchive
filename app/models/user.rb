@@ -363,6 +363,8 @@
       !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
     elsif item.respond_to?(:author)
       self == item.author
+    elsif item.respond_to?(:creator_id)
+      self.id == item.creator_id
     else
       false
     end
