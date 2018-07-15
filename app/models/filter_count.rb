@@ -27,7 +27,7 @@ class FilterCount < ApplicationRecord
   end
 
   def self.suspended?
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    admin_settings = AdminSetting.current
     admin_settings.suspend_filter_counts?
   end
 
