@@ -5,20 +5,25 @@ Feature: Search pseuds
   Scenario: Search by name
     Given I have loaded the fixtures
       And I am logged in as "testuser"
-      And testuser can use the new search
     When I go to the search people page
       And I fill in "Name" with "testuser"
       And I press "Search People"
     Then I should see "testy"
       And I should not see "sad user"
+
+    When I fill in "Search all fields" with "test"
+      And I press "Search People"
+    Then I should see "0 Found"
+
     When I fill in "Search all fields" with "test*"
-      Then I should see "testy"
+      And I press "Search People"
+    Then I should see "4 Found"
+      And I should see "testy"
       And I should not see "sad user"
 
   Scenario: Search by fandom
     Given I have loaded the fixtures
       And I am logged in as "testuser"
-      And testuser can use the new search
     When I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
       And I press "Search People"
@@ -28,7 +33,6 @@ Feature: Search pseuds
   Scenario: Search by fandom updates when a work is posted.
     Given a canonical fandom "Ghost Soup"
       And I am logged in as "testuser"
-      And testuser can use the new search
     When I post a work "Drabble Collection" with fandom "Ghost Soup"
       And all indexing jobs have been run
       And I go to the search people page
@@ -41,7 +45,6 @@ Feature: Search pseuds
       And I am logged in as "testuser"
       And I post the work "Drabble Collection" with fandom "MCU"
       And all indexing jobs have been run
-      And testuser can use the new search
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU, Ghost Soup"
       And I press "Post Without Preview"
@@ -56,7 +59,6 @@ Feature: Search pseuds
       And I am logged in as "testuser"
       And I post the work "Drabble Collection" with fandom "MCU, Ghost Soup"
       And all indexing jobs have been run
-      And testuser can use the new search
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU"
       And I press "Post Without Preview"
@@ -71,7 +73,6 @@ Feature: Search pseuds
       And I am logged in as "testuser"
       And I post the work "Drabble Collection" with fandom "Ghost Soup"
       And all indexing jobs have been run
-      And testuser can use the new search
     When I edit the work "Drabble Collection"
       And I add the co-author "alice"
       And I press "Post Without Preview"
@@ -89,7 +90,6 @@ Feature: Search pseuds
       And I add the co-author "alice"
       And I press "Post Without Preview"
       And all indexing jobs have been run
-      And testuser can use the new search
     When I edit the work "Drabble Collection"
       And I follow "Remove Me As Author"
       And all indexing jobs have been run
@@ -105,7 +105,6 @@ Feature: Search pseuds
       And I am logged in as "testuser"
       And I post the work "Drabble Collection" with fandom "Ghost Soup"
       And all indexing jobs have been run
-      And testuser can use the new search
     When I orphan the work "Drabble Collection"
       And all indexing jobs have been run
       And I go to the search people page

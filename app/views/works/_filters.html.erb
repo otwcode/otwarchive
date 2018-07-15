@@ -22,7 +22,7 @@
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
-          <%= link_to_help "filters-#{filter_action}-tags-help" %>
+          <%= link_to_help "work-filters-#{filter_action}-tags" %>
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>
@@ -77,10 +77,7 @@
 
       <dd class="more group">
         <dl>
-          <dt id="toggle_work_crossover" class="filter-toggle crossover">
-            <%= ts("Crossovers") %>
-            <%= link_to_help "work-search-crossover-help" %>
-          </dt>
+          <dt id="toggle_work_crossover" class="filter-toggle crossover"><%= ts("Crossovers") %></dt>
           <dd id="work_crossover" class="expandable">
             <ul>
               <li>
@@ -103,7 +100,7 @@
               </li>
             </ul>
           </dd>
-          <dt id="toggle_work_complete" class="filter-toggle status"><%= ts("Status") %></dt>
+          <dt id="toggle_work_complete" class="filter-toggle status"><%= ts("Completion Status") %></dt>
           <dd id="work_complete" class="expandable">
             <ul>
               <li>

@@ -8,7 +8,6 @@ Scenario: Browsing works with incorrect page params in query string
   When I browse the "Johnny Be Good" works with page parameter ""
   Then I should see "1 Work"
 
-@new-search
 Scenario: If works in a listing exceed the maximum search result count,
   display a notice on the last page of results
 

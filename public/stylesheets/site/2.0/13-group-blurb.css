@@ -335,9 +335,12 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	top: 28px;
 }
 
+.bookmark div.user, .bookmark div.recent {
+  clear: right;
+}
+
 .bookmark .user {
   border: 1px solid #ccc;
-  clear: right;
   margin-top: 0.643em;
   overflow: hidden;
 }
@@ -383,7 +386,8 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 }
 
 .bookmark .recent .index {
-    width: 100%;
+  float: none;
+  width: 100%;
 }
 
 /* mod: READING */

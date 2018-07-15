@@ -2,12 +2,6 @@ require "cucumber/rspec/doubles"
 
 Given /^the (\w+) indexes are completely regenerated$/ do |klass|
   es_update(klass)
-
-  # ES UPGRADE TRANSITION #
-  # Remove unless block
-  unless $rollout.active?(:stop_old_indexing)
-    tire_update(klass)
-  end
 end
 
 Given /^all search indexes are completely regenerated$/ do
@@ -20,13 +14,6 @@ Given /^the (\w+) indexes are refreshed$/ do |model|
   # ES UPGRADE TRANSITION #
   # Change $new_elasticsearch to $elasticsearch
   $new_elasticsearch.indices.refresh index: "ao3_test_#{model}s"
-
-  # ES UPGRADE TRANSITION #
-  # Remove unless block
-  unless $rollout.active?(:stop_old_indexing)
-    klass = model.capitalize.constantize
-    klass.tire.index.refresh
-  end
 end
 
 Given /^all search indexes are refreshed$/ do
@@ -51,12 +38,12 @@ Given /^the max search result count is (\d+)$/ do |max|
   ArchiveConfig.MAX_SEARCH_RESULTS = max.to_i
 end
 
-Given /^(\d+) items are displayed per page$/ do |per_page|
+Given /^(\d+) item(?:s)? (?:is|are) displayed per page$/ do |per_page|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.ITEMS_PER_PAGE = per_page.to_i
 end
 
-When /^(\w+) can use the new search/ do |login|
-  user = User.find_by(login: login)
-  $rollout.activate_user(:use_new_search, user)
+Given /^(\d+) tag(?:s)? (?:is|are) displayed per search page$/ do |per_page|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.TAGS_PER_SEARCH_PAGE = per_page.to_i
 end
