@@ -1575,7 +1575,19 @@ class Work < ApplicationRecord
     # don't have meta-tags of their own, or the tag itself if it doesn't have
     # meta-tags) associated with that fandom.
     top_meta_groups = all_without_syns.map do |f|
-      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      loop do
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+        break if boundary.empty?
+      end
+
+      all_meta_tags.select { |m| m.meta_taggings.empty? }.uniq
     end
 
     # Find the biggest group of top-level meta tags.

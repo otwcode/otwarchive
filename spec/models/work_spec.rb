@@ -177,6 +177,20 @@ describe Work do
       expect(work.crossover).to be_truthy
     end
 
+    it "is a crossover when missing meta-taggings" do
+      f1 = create(:canonical_fandom)
+      f2 = create(:canonical_fandom)
+      f3 = create(:canonical_fandom)
+      unrelated = create(:canonical_fandom)
+
+      f2.update_attribute(:meta_tag_string, f3.name)
+      f2.update_attribute(:sub_tag_string, f1.name)
+      f1.meta_tags.delete(f3)
+
+      work = create(:work, fandom_string: "#{f1.name}, #{unrelated.name}")
+      expect(work.crossover).to be_truthy
+    end
+
     context "when one tagged fandom has two unrelated meta tags" do
       let(:meta1) { create(:canonical_fandom) }
       let(:meta2) { create(:canonical_fandom) }
