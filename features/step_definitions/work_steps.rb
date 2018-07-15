@@ -480,16 +480,17 @@ When /^I set the publication date to today$/ do
   end
 end
 
-When /^I browse the "([^"]+)" works$/ do |tagname|
+When /^I browse the "(.*?)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
   step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database
 end
-When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
+
+When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, page|
   tag = Tag.find_by_name(tagname)
-  visit tag_works_path(tag, page: "")
+  visit tag_works_path(tag, page: page)
   step %{all indexing jobs have been run}
 
   Tag.write_redis_to_database

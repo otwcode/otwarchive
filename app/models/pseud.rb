@@ -128,13 +128,9 @@ class Pseud < ApplicationRecord
   }
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_pseuds"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.not_orphaned

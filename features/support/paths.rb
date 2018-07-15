@@ -91,6 +91,10 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /the gifts page$/
+      gifts_path
+    when /the gifts page for the recipient (.*)$/
+      gifts_path(recipient: $1)
     when /my gifts page/
       user_gifts_path(User.current_user)
     when /my assignments page/

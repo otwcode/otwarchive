@@ -58,6 +58,7 @@ class BookmarksController < ApplicationController
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
       @bookmarks = @search.search_results
+      flash_max_search_results_notice(@bookmarks)
       render 'search_results'
     end
   end
@@ -114,36 +115,43 @@ class BookmarksController < ApplicationController
             # bookmarks. That means that instead of the normal bookmark
             # listing, we want to list *bookmarkable* items.
             @bookmarkable_items = @search.bookmarkable_search_results
+            flash_max_search_results_notice(@bookmarkable_items)
             @facets = @bookmarkable_items.facets
           else
             # Either we're using the old search, or we are looking at a
             # particular user's bookmarks. Either way, we want to just retrieve
             # the standard search results and their facets.
             @bookmarks = @search.search_results
+            flash_max_search_results_notice(@bookmarks)
             @facets = @bookmarks.facets
           end
 
           if @search.options[:excluded_tag_ids].present? || @search.options[:excluded_bookmark_tag_ids].present?
-            ids = [
-              @search.options[:excluded_tag_ids],
-              @search.options[:excluded_bookmark_tag_ids]
-            ].flatten.compact
+            # Excluded tags do not appear in search results, so we need to generate empty facets
+            # to keep them as checkboxes on the filters.
+            excluded_tag_ids = @search.options[:excluded_tag_ids] || []
+            excluded_bookmark_tag_ids = @search.options[:excluded_bookmark_tag_ids] || []
 
-            tags = Tag.where(id: ids)
-            excluded_bookmark_tag_ids = params.dig(:exclude_bookmark_search, :tag_ids) || []
+            # It's possible to determine the tag types by looking at
+            # the original parameters params[:exclude_bookmark_search],
+            # but we need the tag names too, so a database query is unavoidable.
+            tags = Tag.where(id: excluded_tag_ids + excluded_bookmark_tag_ids)
             tags.each do |tag|
+              if excluded_tag_ids.include?(tag.id.to_s)
+                key = tag.class.to_s.downcase
+                @facets[key] ||= []
+                @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
+              end
               if excluded_bookmark_tag_ids.include?(tag.id.to_s)
                 key = 'tag'
-              else
-                key = tag.class.to_s.downcase
+                @facets[key] ||= []
+                @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
               end
-              @facets[key] ||= []
-              @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
             end
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_#{use_new_search?}", expires_in: 10.minutes) do
           # ES UPGRADE TRANSITION #
           # Remove conditional and call to BookmarkSearch
           if use_new_search?
@@ -152,7 +160,8 @@ class BookmarksController < ApplicationController
             search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           end
           results = search.search_results
-          @bookmarks = search.search_results.to_a
+          flash_max_search_results_notice(results)
+          @bookmarks = results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a

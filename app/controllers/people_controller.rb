@@ -21,6 +21,7 @@ class PeopleController < ApplicationController
       options = people_search_params.merge(page: params[:page])
       @search = PseudSearchForm.new(options)
       @people = @search.search_results
+      flash_max_search_results_notice(@people)
     end
   end
 

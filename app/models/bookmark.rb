@@ -159,13 +159,9 @@ class Bookmark < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_bookmarks"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   # Returns the number of bookmarks on an item visible to the current user

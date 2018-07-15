@@ -20,10 +20,10 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INTERACTION: SEARCH */
 
-form.search input[type="text"] {		
-  border-top-color: #999;		
-  padding: 0.15em 0.25em;		
-    border-radius: 1em;		
+form.search input[type="text"] {
+  border-top-color: #999;
+  padding: 0.15em 0.25em;
+    border-radius: 1em;
 }
 
 .search p, li.search form p {
@@ -154,7 +154,7 @@ form.filters {
   font-weight: 500;
 }
 
-.filters .collapsed:after, .filters .expanded:after { 
+.filters .collapsed:after, .filters .expanded:after {
   content: none;
 }
 
@@ -162,23 +162,30 @@ form.filters {
   margin-top: 1.286em; /* heading top margin minus sort bottom margin */
 }
 
-/* AO3-5370: Normally you'd use absolute positioning here, but we
-needed relative positioning and a left offset to fix a bug in Safari 9 */
 .filters [type="checkbox"], .filters [type="radio"] {
-  border: 0; 
+  border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
-  left: -2em;
-  margin: -1px; 
-  overflow: hidden; 
-  padding: 0; 
-  position: relative; 
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
   width: 1px;
+  left: auto; /* fix for VoiceOver outline position in iOS 10.3.1 */
+}
+
+/* AO3-5370: Style changes to fix a bug unique to Safari 9. Hack courtesy of
+https://browserstrangeness.github.io/css_hacks.html */
+@supports (overflow:-webkit-marquee) and (justify-content:inherit) {
+  .filters [type="checkbox"], .filters [type="radio"] {
+    left: -2em;
+    position: relative;
+  }
 }
 
 .filters .indicator:before {
   background: #eee;
-  color: #aaa;  
+  color: #aaa;
   display: inline-block;
   border: 1px solid;
   margin-right: 0.25em;
@@ -193,7 +200,7 @@ needed relative positioning and a left offset to fix a bug in Safari 9 */
 }
 
 .filters input:checked + .indicator:before {
-  border-color: #aaa;
+  border-color: #2a2a2a;
 }
 
 .filters input:checked + .indicator + span {

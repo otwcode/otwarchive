@@ -266,13 +266,9 @@ class Work < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -935,9 +931,10 @@ class Work < ApplicationRecord
   after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta=false)
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  # Creates a filter_tagging relationship between the work and the tag or its
+  # canonical synonym. Also updates the series index because series inherit tags
+  # from works
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
@@ -951,10 +948,13 @@ class Work < ApplicationRecord
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  # Removes filter_tagging relationship unless the work is tagged with more than
+  # one synonymous tags. Also updates the series index because series inherit
+  # tags from works
   def remove_filter_tagging(tag)
     filter = tag.filter
     if filter
@@ -978,6 +978,7 @@ class Work < ApplicationRecord
           end
         end
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
@@ -1563,7 +1564,27 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+    # Short-circuit the check if there's only one fandom tag:
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
+
+    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
+    # don't have meta-tags of their own, or the tag itself if it doesn't have
+    # meta-tags) associated with that fandom.
+    top_meta_groups = all_without_syns.map do |f|
+      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+    end
+
+    # Find the biggest group of top-level meta tags.
+    biggest_group_size = top_meta_groups.map(&:size).max
+
+    # If the biggest group is the same size as the total number in all groups,
+    # that means that all top-level meta-tags in all groups also occur in the
+    # biggest group, so we don't have any fandoms that are unrelated to it.
+    top_meta_groups.flatten.uniq.size > biggest_group_size
   end
 
   # Does this work have only one relationship tag?

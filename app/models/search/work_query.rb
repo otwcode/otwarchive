@@ -151,7 +151,7 @@ class WorkQuery < Query
   end
 
   def user_filter
-    terms_filter(:user_ids, options[:user_ids]) if options[:user_ids].present?
+    terms_filter(:user_ids, user_ids) if user_ids.present?
   end
 
   def pseud_filter
@@ -234,7 +234,7 @@ class WorkQuery < Query
     [:title, :creators].each do |field|
       search_text << split_query_text_words(field, options[field])
     end
-    if self.options[:collection_ids].blank? && options[:collected]
+    if options[:collection_ids].blank? && collected?
       search_text << " collection_ids:*"
     end
     escape_slashes(search_text.strip)
@@ -254,7 +254,7 @@ class WorkQuery < Query
 
   def aggregations
     aggs = {}
-    if facet_collections?
+    if collected?
       aggs[:collections] = { terms: { field: 'collection_ids' } }
     end
 
@@ -275,7 +275,7 @@ class WorkQuery < Query
     options[:faceted]
   end
 
-  def facet_collections?
+  def collected?
     options[:collected]
   end
 
@@ -283,12 +283,21 @@ class WorkQuery < Query
     User.current_user.present? || options[:show_restricted]
   end
 
+  # Include unrevealed works only if we're on a collection page
+  # OR the collected works page of a user
   def include_unrevealed?
-    options[:collection_ids].present?
+    options[:collection_ids].present? || collected?
   end
 
+  # Include anonymous works if we're not on a user/pseud page
+  # OR if the user is viewing their own collected works
   def include_anon?
-    options[:user_ids].blank? && pseud_ids.blank?
+    (user_ids.blank? && pseud_ids.blank?) ||
+      (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
+  end
+
+  def user_ids
+    options[:user_ids]
   end
 
   def pseud_ids
