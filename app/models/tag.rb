@@ -920,9 +920,9 @@ class Tag < ApplicationRecord
         # This means we remove the old merger itself and all its meta tags unless they
         # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
+        filters_to_remove = [old_filter] + old_filter.meta_tags
         items = self.works + self.external_works
         items.each do |item|
-          filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
             next unless item.filters.include?(filter_to_remove)
             # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
@@ -938,7 +938,6 @@ class Tag < ApplicationRecord
             remaining_tags += [self.merger] unless self.merger.nil?
             if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
               item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
-              filter_to_remove.reset_filter_count
             else # we should keep filter_to_remove, but check if inheritence needs to be updated
               direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
               if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
@@ -948,6 +947,8 @@ class Tag < ApplicationRecord
             end
           end
         end
+
+        filters_to_remove.each(&:reset_filter_count)
       else
         self.filter_taggings.destroy_all
         self.reset_filter_count
@@ -968,7 +969,7 @@ class Tag < ApplicationRecord
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    admin_settings = AdminSetting.current
     return if admin_settings.suspend_filter_counts?
     current_filter = filter
     # we only need to cache values for user-defined tags

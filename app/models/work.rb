@@ -984,7 +984,7 @@ class Work < ApplicationRecord
 
   # Determine if filter counts need to be reset after the work is saved
   def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    admin_settings = AdminSetting.current
     self.should_reset_filters = (self.new_record? || self.visibility_changed?)
     if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
       self.should_reset_filters = false
@@ -1420,7 +1420,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end

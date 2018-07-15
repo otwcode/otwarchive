@@ -11,7 +11,7 @@
   </p>
   <p>
     <% # We do days_to_purge_unactivated * 7 because it's actually weeks %>
-    <%= ts("<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.", days_before_purge: AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED).html_safe %>
+    <%= ts("<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.", days_before_purge: AdminSetting.current.days_to_purge_unactivated? ? (AdminSetting.current.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED).html_safe %>
   </p>
   <p>
     <%= link_to ts('Return to Archive front page'), root_path %>
