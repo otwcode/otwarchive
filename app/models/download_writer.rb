@@ -2,16 +2,12 @@ require 'open3'
 
 class DownloadWriter
 
-  include Rails.application.routes.url_helpers
-  include ApplicationHelper
-  include TagsHelper
-
   attr_reader :download, :work, :html_download
 
   def initialize(download)
     @download = download
     @work = download.work
-    @html_download = Download.new(work, "text/html")
+    @html_download = Download.new(work, format: "html")
   end
 
   def write
@@ -27,22 +23,19 @@ class DownloadWriter
   # Write the HTML version
   def generate_html_download
     return if html_download.exists?
-    # sneaking around MVC division, but the rendering of downloads belongs in a module IMO and not
-    # in the controller
-    # set this to handle host lookups
-    Otwarchive::Application.routes.default_url_options = { host: ArchiveConfig.APP_HOST }
-    @html = download_view.render(
-      template: "/downloads/show",
-      formats: [:html],
-      layout: '/layouts/barebones.html',
-      locals: {
-        :@work => work,
-        :@page_title => download.page_title,
-        :@chapters => download.chapters
+
+    renderer = ApplicationController.renderer.new(
+      http_host: ArchiveConfig.APP_HOST
+    )
+    @html = renderer.render(
+      template: 'downloads/show',
+      layout: 'barebones',
+      assigns: {
+        work: work,
+        page_title: download.page_title,
+        chapters: download.chapters
       }
     )
-    # reset back so tests don't get confused
-    Otwarchive::Application.routes.default_url_options = {}    
         
     # write to file
     File.open(html_download.file_path, 'w:UTF-8') { |f| f.write(@html) }
@@ -95,8 +88,8 @@ class DownloadWriter
     ### 
     ebook_convert_command = [
       'ebook-convert',
-      "#{download.file_name}.html",
-      "#{download.file_name}.#{download.file_type}",
+      html_download.file_path,
+      download.file_path,
       '--input-encoding', 'utf-8',
       '--use-auto-toc',
       '--title', meta[:title],
@@ -105,15 +98,6 @@ class DownloadWriter
       '--tags', meta[:tags],
       '--pubdate', meta[:pubdate]
     ] + series + mobi
-  end
-
-  # Set up a Rails view so we can render standard view files
-  def download_view
-    @view = ActionView::Base.new(ActionController::Base.view_paths, {})
-    @view.class_eval do
-      def current_user; nil; end
-    end
-    @view
   end
 
   # A hash of the work data calibre needs
@@ -126,7 +110,7 @@ class DownloadWriter
       pubdate:  work.revised_at.to_date.to_s,
       summary:  work.summary
     }
-    if work.series.exist?
+    if work.series.exists?
       series = work.series.first
       @metadata.merge(
         series_title: series.title,

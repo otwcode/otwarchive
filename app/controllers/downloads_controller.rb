@@ -6,7 +6,7 @@ class DownloadsController < ApplicationController
 
   def show
     respond_to :html, :pdf, :mobi, :epub
-    @download = Download.generate(@work, request.format)
+    @download = Download.generate(@work, mime_type: request.format)
 
     # Make sure we were able to generate the download
     unless @download.present? && @download.exists?
@@ -17,7 +17,7 @@ class DownloadsController < ApplicationController
 
     # send file synchronously so we don't delete it before we have finished sending it
     File.open(@download.file_path, 'r') do |f|
-      send_data f.read, filename: @download.file_name, type: request.format
+      send_data f.read, filename: "#{@download.file_name}.#{@download.file_type}", type: request.format
     end
   end
 
