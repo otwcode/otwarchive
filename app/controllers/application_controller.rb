@@ -3,6 +3,11 @@ PROFILER_SESSIONS_FILE = 'used_tags.txt'
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+  rescue_from ActionController::UnknownFormat, with: :raise_not_found
+
+  def raise_not_found
+    redirect_to '/404'
+  end
 
   helper :all # include all helpers, all the time
 
