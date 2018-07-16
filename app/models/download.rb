@@ -8,11 +8,12 @@ class Download
     new(work).remove
   end
 
-  attr_reader :work, :file_type
+  attr_reader :work, :file_type, :mime_type
 
   def initialize(work, options = {})
     @work = work
     @file_type = set_file_type(options.slice(:mime_type, :format))
+    @mime_type = MIME::Types.type_for(@file_type).first
   end
 
   def generate
@@ -35,7 +36,7 @@ class Download
     if options[:mime_type]
       ext = MimeMagic.new(options[:mime_type].to_s).subtype
       ext == "x-mobipocket-ebook" ? "mobi" : ext
-    elsif %w(html pdf mobi epub).include?(options[:format].to_s)
+    elsif ArchiveConfig.DOWNLOAD_FORMATS.include?(options[:format].to_s)
       options[:format].to_s
     else
       "html"
@@ -43,7 +44,9 @@ class Download
   end
 
   def file_name
-    clean(work.title) || "Work #{work.id}"
+    name = clean(work.title)
+    name = "Work #{work.id}" if name.length < 3
+    name
   end
 
   def public_path

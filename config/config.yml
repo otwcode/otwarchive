@@ -166,6 +166,8 @@ TAGS_PER_SEARCH_PAGE: 50
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
+DOWNLOAD_FORMATS: ['mobi', 'epub', 'pdf', 'html']
+
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
 WARNING_DEFAULT_TAG_NAME: 'Choose Not To Use Archive Warnings'

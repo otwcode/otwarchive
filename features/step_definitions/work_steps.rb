@@ -208,6 +208,11 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I am logged out}
 end
 
+Given /^I am logged in as the author of "([^"]*)"$/ do |work|
+  work = Work.find_by_title(work)
+  step %{I am logged in as "#{work.users.first.login}"}
+end
+
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
   step %{I am logged out}

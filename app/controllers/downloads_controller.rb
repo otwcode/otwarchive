@@ -1,13 +1,16 @@
 class DownloadsController < ApplicationController
 
   skip_before_action :store_location, only: :show
+  before_action :guest_downloading_off, only: :show
   before_action :load_work, only: :show
   before_action :check_visibility, only: :show
   after_action :remove_downloads, only: :show
 
   def show
     respond_to :html, :pdf, :mobi, :epub
-    @download = Download.generate(@work, mime_type: request.format)
+    unless params[:dont_generate_download]
+      @download = Download.generate(@work, mime_type: request.format)
+    end
 
     # Make sure we were able to generate the download
     unless @download.present? && @download.exists?
@@ -18,7 +21,7 @@ class DownloadsController < ApplicationController
 
     # send file synchronously so we don't delete it before we have finished sending it
     File.open(@download.file_path, 'r') do |f|
-      send_data f.read, filename: "#{@download.file_name}.#{@download.file_type}", type: request.format
+      send_data f.read, filename: "#{@download.file_name}.#{@download.file_type}", type: @download.mime_type
     end
   end
 
@@ -43,9 +46,15 @@ protected
     @check_visibility_of = @work
   end
 
+  def guest_downloading_off
+    if !logged_in? && @admin_settings.guest_downloading_off?
+      redirect_to login_path(high_load: true)
+    end
+  end
+
   # We're currently just writing everything to tmp and feeding them through nginx
   # so we don't want to keep the files around
   def remove_downloads
-    @download.remove
+    @download&.remove unless Rails.env.test?
   end
 end
