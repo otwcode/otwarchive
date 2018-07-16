@@ -120,6 +120,8 @@ class ApplicationController < ActionController::Base
   alias :setflash :set_flash_cookie
 
   def current_user
+    # Don't try to assign a current user when generating downloads
+    return if Authlogic::Session::Base.controller.nil?
     @current_user ||= current_user_session && current_user_session.record
   end
 
