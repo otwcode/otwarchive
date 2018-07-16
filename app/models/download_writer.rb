@@ -1,7 +1,6 @@
 require 'open3'
 
 class DownloadWriter
-
   attr_reader :download, :work, :html_download
 
   def initialize(download)
@@ -15,7 +14,7 @@ class DownloadWriter
     FileUtils.mkdir_p download.dir
     generate_html_download
     generate_ebook_download unless download.file_type == "html"
-    return download.file_name
+    download
   end
 
   private
@@ -52,7 +51,7 @@ class DownloadWriter
     # capture and discard the stdin/out info
     # See http://stackoverflow.com/a/5970819/469544 for details
     exit_status = nil
-    Open3.popen3(*cmd) { |stdin, stdout, stderr, wait_thread| exit_status = wait_thread.value }
+    Open3.popen3(*cmd) { |_stdin, _stdout, _stderr, wait_thread| exit_status = wait_thread.value }
     unless exit_status
       Rails.logger.debug "Download generation failed: " + cmd.to_s
     end
@@ -86,8 +85,7 @@ class DownloadWriter
     # Mobi: ignore margins to keep it from padding on the left
     mobi = download.file_type == "mobi" ? ['--mobi-ignore-margins'] : []
 
-    ### 
-    ebook_convert_command = [
+    [
       'ebook-convert',
       html_download.file_path,
       download.file_path,

@@ -15,7 +15,7 @@ Then /^I (?:should be able to )?download the (\w+) version of "(.*)"$/ do |filet
   visit work_url(work)
   step %{I follow "#{filetype.upcase}"}
   filename = download.file_path # the full path of the download file we expect to exist
-  assert File.exists?(filename), "#{filename} does not exist"
+  assert File.exist?(filename), "#{filename} does not exist"
   page.driver.response.headers['Content-Disposition'].should =~ /filename=\"#{File.basename(filename)}\"/
   page.response_headers['Content-Type'].should == MIME::Types.type_for(filename).first
 end
