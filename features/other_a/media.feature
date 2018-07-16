@@ -33,7 +33,8 @@ Feature: The All Fandoms page.
     Then I should see "The Forgotten (1)"
 
   Scenario: Adding or removing works in a fandom should change the count.
-    Given I have a canonical "Books" fandom tag named "Lord of the Rings"
+    Given a media exists with name: "Books", canonical: true
+      And I have a canonical "Books" fandom tag named "Lord of the Rings"
       And I am logged in as "Tolkien"
       And I post a work "Fellowship of the Ring" with fandom "Lord of the Rings"
       And I post a work "The Two Towers" with fandom "Lord of the Rings"
@@ -67,7 +68,8 @@ Feature: The All Fandoms page.
     Then I should see "Lord of the Rings (1)"
 
   Scenario: Adding or removing a meta tag changes the meta tag's count.
-    Given I have a canonical "Books" fandom tag named "Harry Potter"
+    Given a media exists with name: "Books", canonical: true
+      And I have a canonical "Books" fandom tag named "Harry Potter"
       And I have a canonical "Books" fandom tag named "Wizarding World"
       And I am logged in as "Rowling"
       And I post a work "Philosopher's Stone" with fandom "Harry Potter"
