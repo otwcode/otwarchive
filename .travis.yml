@@ -2,6 +2,9 @@ language: ruby
 dist: trusty
 cache: bundler
 sudo: required
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq calibre openssl build-essential xorg libssl-dev wkhtmltopdf
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rspec spec/controllers"
