@@ -69,7 +69,7 @@ class DownloadWriter
       'wkhtmltopdf',
       '--encoding', 'utf-8', 
       '--title', work.title,
-      "#{download.file_name}.html", "#{download.file_name}.pdf"
+      html_download.file_path, download.file_path
     ]
   end
 
