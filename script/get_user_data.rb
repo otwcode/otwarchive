@@ -17,20 +17,20 @@ u = User.find_by(login: login)
 
 # URLs of all comments
 comment_urls = []
-u.comments&.pluck(:id).map do |id|
+u.comments.pluck(:id)&.map do |id|
   comment_urls << "#{comments_url}/#{id}"
 end
 
 # URLs of all works user has kudosed
 # Kudos can only be on works now, but there is a pull request for admin posts
 kudosed_item_urls = [] 
-u.kudos&.pluck(:commentable_type, :commentable_id).map do |type, id|
+u.kudos.pluck(:commentable_type, :commentable_id)&.map do |type, id|
   kudosed_item_urls << "#{ArchiveConfig.APP_URL}/#{type.underscore.downcase}s/#{id}"
 end
 
 # URLs of all nominations made in tag sets
 tag_set_nomination_urls = []
-TagSetNomination.where(pseud_id: u.pseuds.pluck(:id))&.pluck(:id, :owned_tag_set_id).map do |id, tag_set_id|
+TagSetNomination.where(pseud_id: u.pseuds.pluck(:id)).pluck(:id, :owned_tag_set_id)&.map do |id, tag_set_id|
   tag_set_nomination_urls << "#{tag_sets_url}/#{tag_set_id}/nominations/#{id}"
 end
 
@@ -41,14 +41,14 @@ end
 
 # Names of people listing user as their FNOK
 next_of_kin_for = []
-FannishNextOfKin.where(kin_id: u.id)&.pluck(:user_id).map do |id|
+FannishNextOfKin.where(kin_id: u.id).pluck(:user_id)&.map do |id|
   next_of_kin_for << User.find(id).login
 end
 
 # List of roles in collections
 collection_roles = []
 u.pseuds.each do |pseud|
-  pseud.collection_participants&.pluck(:participant_role, :collection_id).map do |role, collection_id|
+  pseud.collection_participants.pluck(:participant_role, :collection_id)&.map do |role, collection_id|
     collection_roles << "#{role} in #{collections_url}/#{Collection.find(collection_id).name}"
   end
 end
@@ -56,12 +56,12 @@ end
 # List of IP addresses
 # Don't include IPs from the audits table because some IPs may be admins'
 ips = []
-u.comments.pluck(:ip_address)&.map { |ip| ips << ip if !ip.blank? }
-u.works.pluck(:ip_address)&.map { |ip| ips << ip if !ip.blank? }
+u.comments.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
+u.works.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
 
 # List of user agents
 user_agents = []
-u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua if !ua.blank? }
+u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 
 # List of changes made to the user account
 # IP addresses, usernames, and emails are personal data; dates are for clarity
@@ -100,7 +100,7 @@ unless user_agents.empty?
   puts
   puts "User Agents:"
   user_agents.uniq.map do |user_agent|
-   puts "  #{user_agent}"
+    puts "  #{user_agent}"
   end
 end
 if u.fannish_next_of_kin || !next_of_kin_for.empty?
@@ -169,4 +169,3 @@ unless account_changes.empty?
     puts "  #{change}"
   end
 end
-
