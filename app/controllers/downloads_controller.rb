@@ -3,6 +3,7 @@ class DownloadsController < ApplicationController
   skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
   before_action :check_visibility, only: :show
+  after_action :remove_downloads, only: :show
 
   def show
     respond_to :html, :pdf, :mobi, :epub
@@ -40,5 +41,11 @@ protected
 
     # set this for checking visibility
     @check_visibility_of = @work
+  end
+
+  # We're currently just writing everything to tmp and feeding them through nginx
+  # so we don't want to keep the files around
+  def remove_downloads
+    @download.remove
   end
 end
