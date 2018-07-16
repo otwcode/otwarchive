@@ -67,8 +67,9 @@ class DownloadWriter
   def get_pdf_command
     [
       'wkhtmltopdf',
-      '--encoding', 'utf-8', 
-      '--title', work.title,
+      '--encoding', 'utf-8',
+      '--disable-javascript',
+      '--title', download.file_name,
       html_download.file_path, download.file_path
     ]
   end
