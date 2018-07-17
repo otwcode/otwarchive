@@ -80,28 +80,18 @@ class WorkSearchForm
   end
 
   def initialize(opts={})
-    @options = self.options = process_options(opts)
-    @searcher = WorkQuery.new(@options.delete_if { |k, v| v.blank? })
+    @options = opts
+    process_options
+    @searcher = WorkQuery.new(@options)
   end
 
-  def process_options(opts = {})
-    # TODO: Should be able to remove this
-    opts[:creator] = opts[:creators] if opts[:creators]
-    opts[:creators] = opts[:creator] if opts[:creator]
-
-    opts.keys.each do |key|
-      if opts[key] == "0"
-        opts[key] = nil
+  def process_options
+    @options.keys.each do |key|
+      if @options[key] == "0"
+        @options[key] = nil
       end
     end
-
-    opts[:query].gsub!('creator:', 'creators:') if opts[:query]
-
-    # TODO: Change this to not rely on WorkSearch
-    processed_opts = WorkSearchCleanser.clean(opts)
-    processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
-    processed_opts.merge!(works_parent: opts[:works_parent])
-    processed_opts
+    @options.delete_if { |k, v| v.blank? }
   end
 
   def persisted?
@@ -201,7 +191,7 @@ class WorkSearchForm
 
   # extract the pretty name
   def name_for_sort_column(sort_column)
-    Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
+    Hash[SORT_OPTIONS.map { |v| [v[1], v[0]] }][sort_column]
   end
 
   def default_sort_direction

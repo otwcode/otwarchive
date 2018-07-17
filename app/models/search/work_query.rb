@@ -16,6 +16,8 @@ class WorkQuery < Query
   # Combine the available filters
   def filters
     add_owner
+    set_language
+
     @filters ||= (
       visibility_filters +
       work_filters +
@@ -54,6 +56,13 @@ class WorkQuery < Query
     return unless field.present?
     options[field] ||= []
     options[field] << owner.id
+  end
+
+  def set_language
+    if options[:language_id].present? && options[:language_id].to_i == 0
+      language = Language.find_by(short: options[:language_id])
+      options[:language_id] = language.id if language.present?
+    end
   end
 
   ####################
@@ -241,7 +250,7 @@ class WorkQuery < Query
   end
 
   def sort
-    column = options[:sort_column].present? ? options[:sort_column] : 'revised_at'
+    column = options[:sort_column].present? ? options[:sort_column] : default_sort
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     sort_hash = { column => { order: direction } }
 
@@ -250,6 +259,11 @@ class WorkQuery < Query
     end
 
     sort_hash
+  end
+
+  # When searching outside of filters, use relevance instead of date
+  def default_sort
+    facet_tags? ? 'revised_at' : '_score'
   end
 
   def aggregations
