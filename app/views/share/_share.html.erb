@@ -4,7 +4,7 @@
   
   <% # HTML share code %>
   <p>
-    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= CGI.escapeHTML((render "share/embed_link_#{shareable.class.to_s.downcase}", item: shareable).html_safe).html_safe %>
+    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= CGI.escapeHTML(remove_newlines(render "share/embed_link_#{shareable.class.to_s.downcase}", item: shareable).html_safe).html_safe %>
     </textarea>
   </p>
   

@@ -28,5 +28,11 @@ module ShareHelper
       "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
     end
   end
+
+  # Being able to add line breaks in the sharing templates makes the code
+  # easier to read and edit, but we don't want them in the sharing code itself
+  def remove_newlines(html)
+    html.gsub("\n", "")
+  end
   
 end
