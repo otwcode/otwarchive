@@ -29,8 +29,7 @@ Feature: Bookmark Indexing
       And I press "Sort and Filter"
     Then the 1st bookmark result should contain "Telling Stories"
       And the 2nd bookmark result should contain "Unrelated Story"
-    When author can use the new search
-      And I go to the bookmarks tagged "X-Files"
+    When I go to the bookmarks tagged "X-Files"
     Then I should see "Telling Stories"
       And I should not see "This tag has not been marked common and can't be filtered on (yet)."
     When I select "Date Updated" from "Sort by"
@@ -38,7 +37,6 @@ Feature: Bookmark Indexing
     Then the 1st bookmark result should contain "Telling Stories"
       And the 2nd bookmark result should contain "Unrelated Story"
 
-  @new-search
   Scenario: When a work in a series is updated with a new tag, bookmarks of the
   series should appear on the tag's bookmark listing; when a tag is removed, the
   bookmarks should disappear from the tag listing
@@ -59,7 +57,6 @@ Feature: Bookmark Indexing
       And I go to the bookmarks tagged "New Tag"
     Then I should not see "Series"
 
-  @new-search
   Scenario: Synning a canonical tag used on bookmarked series and external works
   should move the bookmarks to the new canonical's bookmark listings; de-synning
   should remove them
@@ -84,7 +81,6 @@ Feature: Bookmark Indexing
     Then I should see "BookmarkedSeries"
       And I should see "BookmarkedExternalWork"
 
-  @new-search
   Scenario: Subtagging a tag used on bookmarked series and external works should
   make the bookmarks appear in the metatag's bookmark listings; de-subbing
   should remove them
@@ -104,7 +100,6 @@ Feature: Bookmark Indexing
     Then I should see "BookmarkedExternalWork"
       And I should see "BookmarkedSeries"
 
-  @new-search
   Scenario: A bookmark of an external work should show on a tag's bookmark 
   listing once the tag is made canonical
     Given basic tags
@@ -148,7 +143,6 @@ Feature: Bookmark Indexing
     Then the 1st bookmark result should contain "Newer Complete Series"
       And the 2nd bookmark result should contain "Older WIP Series"
 
-  @new-search
   Scenario: When a wrangler edits a tag's merger using the "Synonym of" field,
   the tag's bookmarks should be transfered to the new merger's bookmark listings
     Given a canonical character "Ellie Ewing"

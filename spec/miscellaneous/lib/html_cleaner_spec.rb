@@ -921,4 +921,12 @@ describe HtmlCleaner do
     end
 
   end
+
+  describe "add_break_between_paragraphs" do
+    it "adds <br /> between paragraphs" do
+      original = "<p>Hi!</p><p>I need more space.</p>"
+      result = "<p>Hi!</p><br /><p>I need more space.</p>"
+      expect(add_break_between_paragraphs(original)).to eq(result)
+    end
+  end
 end

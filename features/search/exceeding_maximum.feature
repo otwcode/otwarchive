@@ -18,7 +18,6 @@ Feature: Large searches
       And I press "Search Bookmarks"
     Then I should see "5 Found"
 
-  @new-search
   Scenario: People search should show the correct number of results
     Given the following activated users exist
       | login      |
@@ -34,7 +33,6 @@ Feature: Large searches
       And I press "Search People"
     Then I should see "4 Found"
 
-  @new-search
   Scenario: Tag search should show the correct number of results
     Given a canonical freeform "Fluff"
       And a canonical freeform "Angst"

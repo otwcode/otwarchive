@@ -86,7 +86,6 @@ class Work < ApplicationRecord
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -928,7 +927,6 @@ class Work < ApplicationRecord
   end
 
   # FILTERING CALLBACKS
-  after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its
@@ -982,27 +980,28 @@ class Work < ApplicationRecord
     end
   end
 
-  # Determine if filter counts need to be reset after the work is saved
-  def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
-      self.should_reset_filters = false
-    end
-    return true
-  end
-
   # Must be called before save
   def visibility_changed?
     self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
   end
 
-  # Calls reset_filter_count on all the work's filters
+  # We need to do a recount for our filters if:
+  # - the work is brand new
+  # - the work is posted from a draft
+  # - the work is hidden or unhidden by an admin
+  # - the work's restricted status has changed
+  # Note that because the two filter counts both include unrevealed works, we
+  # don't need to check whether in_unrevealed_collection has changed -- it
+  # won't change the counts either way.
+  # (Modelled on Work.should_reindex_pseuds?)
+  def should_reset_filters?
+    pertinent_attributes = %w(id posted restricted hidden_by_admin)
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Recalculates filter counts on all the work's filters
   def adjust_filter_counts
-    if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
-    end
-    return true
+    FilterCount.enqueue_filters(filters.reload) if should_reset_filters?
   end
 
   ################################################################################
@@ -1420,7 +1419,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
@@ -1575,7 +1574,19 @@ class Work < ApplicationRecord
     # don't have meta-tags of their own, or the tag itself if it doesn't have
     # meta-tags) associated with that fandom.
     top_meta_groups = all_without_syns.map do |f|
-      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      loop do
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+        break if boundary.empty?
+      end
+
+      all_meta_tags.select { |m| m.meta_taggings.empty? }.uniq
     end
 
     # Find the biggest group of top-level meta tags.

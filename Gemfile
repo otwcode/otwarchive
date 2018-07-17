@@ -30,7 +30,7 @@ gem 'transaction_retry'
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 # Version of redis-rb gem
-# We are currently running Redis 2.6.4 (12/6/2012)
+# We are currently running Redis 3.2.1 (7/2018)
 gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
