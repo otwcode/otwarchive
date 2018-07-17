@@ -1,5 +1,5 @@
 class MovesUsersToDevise < ActiveRecord::Migration[5.1]
-  def change
+  def up
     change_table :users do |t|
       # Remove old authlogic field
       t.remove :persistence_token
@@ -34,6 +34,41 @@ class MovesUsersToDevise < ActiveRecord::Migration[5.1]
       t.string :unlock_token
       t.index :unlock_token
       t.datetime :locked_at
+    end
+  end
+
+  def down
+    change_table :users do |t|
+      # Remove old authlogic field
+      t.string :persistence_token
+
+      # Database authenticatable
+      t.rename :encrypted_password, :crypted_password
+      t.rename :password_salt, :salt
+
+      # Confirmable
+      t.rename :confirmation_token, :activation_code
+      t.rename :confirmed_at, :activated_at
+      t.remove :confirmation_sent_at
+
+      # Recoverable
+      t.remove :reset_password_token
+      t.remove :reset_password_sent_at
+
+      # Rememberable
+      t.remove :remember_created_at
+
+      # Trackable
+      t.remove :sign_in_count
+      t.remove :current_sign_in_at
+      t.remove :last_sign_in_at
+      t.remove :current_sign_in_ip
+      t.remove :last_sign_in_ip
+
+      # Lockable
+      t.rename :failed_attempts, :failed_login_count
+      t.remove :unlock_token
+      t.remove :locked_at
     end
   end
 end
