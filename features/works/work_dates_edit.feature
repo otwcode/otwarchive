@@ -8,7 +8,7 @@ Feature: Edit Works Dates
     When "AO3-2539" is fixed
 #    Given I have loaded the fixtures
 #      And I am logged in as "testuser" with password "testuser"
-#      And all search indexes are updated
+#      And all indexing jobs have been run
 #    When I am on testuser's works page
 #    Then I should not see "less than 1 minute ago"
 #      And I should see "29 Apr 2012"

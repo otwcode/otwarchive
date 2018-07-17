@@ -1,14 +1,14 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading">Invitation Status for <%= invite_request.email %></h2>
+<h2 class="heading">
+  <%= ts("Invitation Status for %{email}", email: invite_request.email) %>
+</h2>
 <!--/descriptions-->
 
 <!--main content-->
-<p>You are currently number <strong><%= InviteRequest.where("position <= #{invite_request.position}").count %></strong> on our waiting list! 
-
-<% if @admin_settings.invite_from_queue_enabled? %>
-At our current rate, you should receive an invitation on or around: <%= l(invite_request.proposed_fill_date, :format => :long) %>
-<% else %>
-New users are not currently being added from the list, but <%= link_to "stay tuned for updates", admin_posts_path %>.
-<% end %>
+<p>
+  <%= ts("You are currently number <strong>%{position}</strong> on our waiting list!", position: InviteRequest.where("position <= #{invite_request.position}").count).html_safe %>
+  <% if @admin_settings.invite_from_queue_enabled? %>
+    <%= ts("At our current rate, you should receive an invitation on or around: %{date}.", date: l(invite_request.proposed_fill_date, format: :long)) %>
+  <% end %>
 </p>
 <!--/content-->

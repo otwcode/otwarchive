@@ -133,7 +133,7 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def claiming_pseud
-    User.find_by(id: claiming_user_id).default_pseud
+    claiming_user.try(:default_pseud)
   end
 
   def requesting_pseud
@@ -141,7 +141,7 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def claim_byline
-    User.find_by(id: claiming_user_id).default_pseud.byline
+    claiming_pseud.try(:byline) || "deleted user"
   end
 
   def request_byline

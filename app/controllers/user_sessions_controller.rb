@@ -1,30 +1,31 @@
 class UserSessionsController < ApplicationController
 
-  # I hope this isn't catching unwanted exceptions; it's hard to locate
-  # where exactly the exception is thrown in case of no cookies. --rebecca
-  rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
-
   layout "session"
   before_action :admin_logout_required
   skip_before_action :store_location
-
-
-  def show_auth_error
-    redirect_to "/auth_error.html"
-  end
 
   def new
   end
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(
-        login: params[:user_session][:login],
-        password: params[:user_session][:password]
-      )
+      # We currently remember users for 2 weeks even if they do not check
+      # "Remember me" when logging in. To make it last longer for users who
+      # do check "Remember me," we have to set a different value before we
+      # create the session.
+      if user_session_params[:remember_me] == "1"
+        UserSession.remember_me_for = ArchiveConfig.REMEMBERED_SESSION_LENGTH_IN_MONTHS.months
+      end
+      # Need to convert params back to a hash for Authlogic bug
+      @user_session = UserSession.new(user_session_params.to_hash)
 
       if @user_session.save
-        flash[:notice] = ts("Successfully logged in.")
+        flash[:notice] = ts("Successfully logged in.").html_safe
+        # Remembering users who don't check "Remember me" is non-standard
+        # behavior, so we want to make sure they are aware of it
+        unless user_session_params[:remember_me] == "1"
+          flash[:notice] += ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS).html_safe
+        end
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
@@ -34,7 +35,7 @@ class UserSessionsController < ApplicationController
             if user.updated_at > 1.week.ago
               # we sent out a generated password and they're using it
               # log them in
-              @current_user = UserSession.create(user, params[:remember_me]).record
+              @current_user = UserSession.create(user, user_session_params[:remember_me]).record
               # flash a notice telling user to change password, and redirect them
               # to the correct form
               flash[:notice] = ts('You used a temporary password to log in.
@@ -60,6 +61,9 @@ class UserSessionsController < ApplicationController
         @user_session = UserSession.new(user_session_params)
         render action: 'new'
       end
+      # Set the session value back to 2 weeks so the next session
+      # doesn't also get remembered for 3 months
+      UserSession.remember_me_for = ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS.weeks
     end
   end
 

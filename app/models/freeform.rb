@@ -1,7 +1,6 @@
 class Freeform < Tag
 
   NAME = ArchiveConfig.FREEFORM_CATEGORY_NAME
-  index_name Tag.index_name
 
   def self.label_name
     "Additional Tags"

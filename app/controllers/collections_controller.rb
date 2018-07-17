@@ -30,7 +30,7 @@ class CollectionsController < ApplicationController
       @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-      @page_subtitle = ts("created by ") + @user.login
+      @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
         flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
@@ -100,7 +100,7 @@ class CollectionsController < ApplicationController
 
     # add the owner
     owner_attributes = []
-    (params[:owner_pseuds] || [current_user.default_pseud]).each do |pseud_id|
+    (params[:owner_pseuds] || [current_user.default_pseud_id]).each do |pseud_id|
       pseud = Pseud.find(pseud_id)
       owner_attributes << {pseud: pseud, participant_role: CollectionParticipant::OWNER} if pseud
     end

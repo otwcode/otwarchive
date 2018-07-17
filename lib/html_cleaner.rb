@@ -25,7 +25,6 @@ module HtmlCleaner
       self_closing = node.children.empty?
     rescue NameError
       name = node
-      attributes ||= {}
       self_closing = false
     end
 
@@ -123,13 +122,6 @@ module HtmlCleaner
 
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
-
-    # replace curlyquotes
-    # note: turns out not to be necessary?
-    # text.gsub! "\xE2\x80\x98", "'"
-    # text.gsub! "\xE2\x80\x99", "'"
-    # text.gsub! "\xE2\x80\x9C", '"'
-    # text.gsub! "\xE2\x80\x9D", '"'
 
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
@@ -271,7 +263,7 @@ module HtmlCleaner
       return [stack, out_html]
     end
 
-    # Don't decend into node if we don't want to touch the content of
+    # Don't descend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
@@ -406,4 +398,8 @@ module HtmlCleaner
           strip
   end
 
+  def add_break_between_paragraphs(value)
+    return "" if value.blank?
+    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+  end
 end

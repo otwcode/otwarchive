@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe IndexSubqueue do
 
+describe IndexSubqueue do
   let(:subqueue) { IndexSubqueue.new("index:work:main:1234567:0") }
 
   it "should have ids added to it" do
@@ -16,5 +16,4 @@ describe IndexSubqueue do
   it "should get its label from the name" do
     expect(subqueue.label).to eq("main")
   end
-
 end

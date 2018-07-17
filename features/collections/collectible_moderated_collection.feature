@@ -1,5 +1,4 @@
 @bookmarks @collections @works
-
 Feature: Collectible items in moderated collections
   As a user
   I want to add my items to moderated collections
@@ -31,7 +30,7 @@ Feature: Collectible items in moderated collections
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "until it has been approved by a moderator."
     When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (0)"
+    Then I should see "Bookmarked Items (0)"
       And I should not see "Tundra penguins"
 
   Scenario: Bookmarks of deleted items are included on a moderated collection's
@@ -42,4 +41,3 @@ Feature: Collectible items in moderated collections
       And I view the awaiting approval collection items page for "Various Penguins"
     Then I should see "Bookmark of deleted item"
       And I should see "This has been deleted, sorry!"
-
