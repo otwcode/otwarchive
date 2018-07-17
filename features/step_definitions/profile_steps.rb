@@ -42,7 +42,7 @@ When /^I enter a temporary password for user (.*)$/ do |login|
   fill_in("new_email", with: "valid2@archiveofourown.org")
   fill_in("email_confirmation", with: "valid2@archiveofourown.org")
   user = User.find_by(login: login)
-  fill_in("password_check", with: user.activation_code)
+  fill_in("password_check", with: user.confirmation_token)
   click_button("Change Email")
 end
 
