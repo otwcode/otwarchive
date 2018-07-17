@@ -56,7 +56,8 @@ end
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
   fandom.update(canonical: true)
-  media = Media.find_by_name(media)
+  media = Media.find_or_create_by_name(media)
+  media.update(canonical: true)
   fandom.add_association media
 end
 
