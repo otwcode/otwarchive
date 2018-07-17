@@ -91,7 +91,23 @@ class WorkSearchForm
         @options[key] = nil
       end
     end
+    standardize_creator_queries
+    clean_up_angle_brackets
     @options.delete_if { |k, v| v.blank? }
+  end
+
+  # Make the creator/creators change backwards compatible
+  def standardize_creator_queries
+    return unless @options[:query].present?
+    @options[:query] = @options[:query].gsub('creator:', 'creators:')
+  end
+
+  def clean_up_angle_brackets
+    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at, :query].each do |countable|
+      next unless @options[countable].present?
+      str = @options[countable]
+      @options[countable] = str.gsub("&gt;", ">").gsub("&lt;", "<")
+    end
   end
 
   def persisted?
