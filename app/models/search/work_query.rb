@@ -231,11 +231,19 @@ class WorkQuery < Query
   ####################
 
   # Search for a tag by name
+  # Note that fields don't need to be explicitly included in the
+  # field list to be searchable directly (ie, "complete:true" will still work)
   def general_query
     input = (options[:q] || options[:query] || "").dup
     query = generate_search_text(input)
 
-    return { query_string: { query: query, default_operator: "AND" } } unless query.blank?
+    return {
+      query_string: {
+        query: query,
+        fields: ["creators^7", "title^5", "endnotes", "notes", "summary", "tag"],
+        default_operator: "AND"
+      }
+    } unless query.blank?
   end
 
   def generate_search_text(query = '')
