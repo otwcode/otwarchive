@@ -86,15 +86,10 @@ class WorkSearchForm
   end
 
   def process_options
-    @options.keys.each do |key|
-      if @options[key] == "0"
-        @options[key] = nil
-      end
-    end
+    @options.delete_if { |k, v| v == "0" || v.blank? }
     standardize_creator_queries
     set_sorting
     clean_up_angle_brackets
-    @options.delete_if { |k, v| v.blank? }
   end
 
   # Make the creator/creators change backwards compatible
@@ -104,13 +99,8 @@ class WorkSearchForm
   end
 
   def set_sorting
-    if @options[:sort_column].blank?
-      @options[:sort_column] = @options[:faceted] ? 'revised_at' : '_score'
-    end
-    if @options[:sort_direction].blank?
-      alpha = %w(authors_to_sort_on title_to_sort_on).include?(@options[:sort_column])
-      @options[:sort_direction] = alpha ? 'asc' : 'desc'
-    end
+    @options[:sort_column] ||= default_sort_column
+    @options[:sort_direction] ||= default_sort_direction
   end
 
   def clean_up_angle_brackets
@@ -185,6 +175,7 @@ class WorkSearchForm
   ###############
 
   SORT_OPTIONS = [
+    ['Best Match', '_score'],
     ['Author', 'authors_to_sort_on'],
     ['Title', 'title_to_sort_on'],
     ['Date Posted', 'created_at'],
@@ -194,22 +185,18 @@ class WorkSearchForm
     ['Kudos', 'kudos_count'],
     ['Comments', 'comments_count'],
     ['Bookmarks', 'bookmarks_count']
-  ]
+  ].freeze
 
   def sort_columns
-    return 'revised_at' if options[:sort_column].blank?
-
-    options[:sort_column]
+    options[:sort_column] || default_sort_column
   end
 
   def sort_direction
-    return default_sort_direction if options[:sort_direction].blank?
-
-    options[:sort_direction]
+    options[:sort_direction] || default_sort_direction
   end
 
   def sort_options
-    SORT_OPTIONS
+    options[:faceted] ? SORT_OPTIONS[1..-1] : SORT_OPTIONS
   end
 
   def sort_values
@@ -219,6 +206,10 @@ class WorkSearchForm
   # extract the pretty name
   def name_for_sort_column(sort_column)
     Hash[SORT_OPTIONS.map { |v| [v[1], v[0]] }][sort_column]
+  end
+
+  def default_sort_column
+    options[:faceted] ? 'revised_at' : '_score'
   end
 
   def default_sort_direction
