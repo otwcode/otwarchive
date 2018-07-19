@@ -92,6 +92,7 @@ class WorkSearchForm
       end
     end
     standardize_creator_queries
+    set_sorting
     clean_up_angle_brackets
     @options.delete_if { |k, v| v.blank? }
   end
@@ -100,6 +101,16 @@ class WorkSearchForm
   def standardize_creator_queries
     return unless @options[:query].present?
     @options[:query] = @options[:query].gsub('creator:', 'creators:')
+  end
+
+  def set_sorting
+    if @options[:sort_column].blank?
+      @options[:sort_column] = @options[:faceted] ? 'revised_at' : '_score'
+    end
+    if @options[:sort_direction].blank?
+      alpha = %w(authors_to_sort_on title_to_sort_on).include?(@options[:sort_column])
+      @options[:sort_direction] = alpha ? 'asc' : 'desc'
+    end
   end
 
   def clean_up_angle_brackets

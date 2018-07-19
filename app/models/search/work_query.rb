@@ -240,7 +240,7 @@ class WorkQuery < Query
     return {
       query_string: {
         query: query,
-        fields: ["creators^7", "title^5", "endnotes", "notes", "summary", "tag"],
+        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag"],
         default_operator: "AND"
       }
     } unless query.blank?
