@@ -71,7 +71,7 @@ class Tag < ApplicationRecord
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
     expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 50) + count % 20 ].min
   end
 
   def taggings_count_cache_key
