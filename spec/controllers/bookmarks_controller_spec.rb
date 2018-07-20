@@ -10,9 +10,9 @@ describe BookmarksController do
 
   describe "new" do
     context "without javascript" do
-      let(:chapteredwork) { create(:work) }
-      let(:chapter2) { create(:chapter, work: chapteredwork) }
-      let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+      let(:chaptered_work) { create(:work) }
+      let(:chapter2) { create(:chapter, work: chaptered_work) }
+      let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
       it "redirects and should not return the form for anyone not logged in" do
         get :new
@@ -29,7 +29,7 @@ describe BookmarksController do
         fake_login
         get :new, params: { chapter_id: chapter2.id }
         expect(response).to render_template('new')
-        expect(assigns(:bookmarkable)).to eq(chapteredwork)
+        expect(assigns(:bookmarkable)).to eq(chaptered_work)
       end
     end
 
