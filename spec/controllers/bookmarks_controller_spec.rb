@@ -27,16 +27,16 @@ describe BookmarksController do
 
       it "with chapter" do
         fake_login
-        get :new, params: { chapter_id: chapter2.id}
+        get :new, params: { chapter_id: chapter2.id }
         expect(response).to render_template('new')
         expect(assigns(:bookmarkable)).to eq(chapteredwork)
       end
     end
 
     context "with javascript" do
-      let(:chapteredwork) { create(:work) }
-      let(:chapter2) { create(:chapter, work: chapteredwork) }
-      let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
+      let(:chaptered_work) { create(:work) }
+      let(:chapter2) { create(:chapter, work: chaptered_work) }
+      let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
       it "renders the bookmark_form_dynamic form if logged in" do
         fake_login
@@ -212,16 +212,16 @@ describe BookmarksController do
   end
 
   describe "show" do
-    let(:chapteredwork) { create(:work) }
-    let(:chapter2) { create(:chapter, work: chapteredwork) }
-    let(:bookmark) { create(:bookmark, bookmarkable_id: chapteredwork.id) }
-    render_views
+    let(:chaptered_work) { create(:work) }
+    let(:chapter2) { create(:chapter, work: chaptered_work) }
+    let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
+    # render_views check why I needed this
 
     it "should find a work from a bookmark" do
       fake_login_known_user(bookmark.pseud.user)
       get :show, params: { id: bookmark }
       expect(response).to have_http_status(:success)
-      expect(response.body).to include(chapteredwork.title)
+      expect(response.body).to include(chaptered_work.title)
       expect(assigns(:bookmark)).to eq(bookmark)
     end
   end
