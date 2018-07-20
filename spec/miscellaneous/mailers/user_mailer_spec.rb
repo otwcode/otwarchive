@@ -337,7 +337,7 @@ describe UserMailer, type: :mailer do
 
     describe 'HTML version' do
       it 'has text contents' do
-        expect(get_message_part(email, /html/)).to include("We regret to inform you")
+        expect(get_message_part(email, /html/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
       
       it 'does not have missing translations' do
@@ -351,7 +351,7 @@ describe UserMailer, type: :mailer do
 
     describe 'text version' do
       it 'says the right thing' do
-        expect(get_message_part(email, /plain/)).to include("We regret to inform you")
+        expect(get_message_part(email, /plain/)).to include("We regret to inform you that your request for 2 new invitations cannot be fulfilled at this time")
       end
       
       it 'does not have missing translations' do
