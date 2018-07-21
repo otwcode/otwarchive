@@ -18,7 +18,7 @@ u = User.find_by(login: login)
 # URLs of all comments
 comment_urls = []
 u.comments.pluck(:id)&.map do |id|
-  comment_urls << "#{comment_url(id)}"
+  comment_urls << comment_url(id)
 end
 
 # URLs of all works user has kudosed
@@ -31,7 +31,7 @@ end
 # URLs of all nominations made in tag sets
 tag_set_nomination_urls = []
 TagSetNomination.where(pseud_id: u.pseuds.pluck(:id)).pluck(:id, :owned_tag_set_id)&.map do |id, tag_set_id|
-  tag_set_nomination_urls << "#tag_set_nomination_url(tag_set_id: tag_set_id, id: id)"
+  tag_set_nomination_urls << tag_set_nomination_url(tag_set_id: tag_set_id, id: id)
 end
 
 # Name of user's Fannish Next of Kin
@@ -49,7 +49,7 @@ end
 collection_roles = []
 u.pseuds.each do |pseud|
   pseud.collection_participants.pluck(:participant_role, :collection_id)&.map do |role, collection_id|
-    collection_roles << "#{role} in #{collections_url}/#{Collection.find(collection_id).name}"
+    collection_roles << "#{role} in #{collection_url(Collection.find(collection_id).name)}"
   end
 end
 
@@ -93,7 +93,7 @@ todays_date = Date.today.to_formatted_s(:number)
 
 filename_and_path = "/tmp/user_data_for_#{u.login}_#{todays_date}.txt"
 
-open(filename_and_path, "w") { |f|
+open(filename_and_path, "w") do |f|
   f.puts "Data for #{u.login} (#{u.email})"
   unless ips.empty?
     f.puts
@@ -126,9 +126,9 @@ open(filename_and_path, "w") { |f|
   f.puts
   f.puts "Collections: #{user_collections_url(u)}"
   unless collection_roles.empty?
-  f.puts "Collection Roles: "
+    f.puts "Collection Roles: "
     collection_roles.map do |role|
-    f.puts "  #{role}"
+      f.puts "  #{role}"
     end
   end
   f.puts
@@ -175,7 +175,7 @@ open(filename_and_path, "w") { |f|
       f.puts "  #{change}"
     end
   end
-}
+end
 
 puts "User data has been written to #{filename_and_path}"
 puts
