@@ -18,7 +18,7 @@ u = User.find_by(login: login)
 # URLs of all comments
 comment_urls = []
 u.comments.pluck(:id)&.map do |id|
-  comment_urls << "#{comments_url}/#{id}"
+  comment_urls << "#{comment_url(id)}"
 end
 
 # URLs of all works user has kudosed
@@ -31,7 +31,7 @@ end
 # URLs of all nominations made in tag sets
 tag_set_nomination_urls = []
 TagSetNomination.where(pseud_id: u.pseuds.pluck(:id)).pluck(:id, :owned_tag_set_id)&.map do |id, tag_set_id|
-  tag_set_nomination_urls << "#{tag_sets_url}/#{tag_set_id}/nominations/#{id}"
+  tag_set_nomination_urls << "#tag_set_nomination_url(tag_set_id: tag_set_id, id: id)"
 end
 
 # Name of user's Fannish Next of Kin
@@ -88,84 +88,101 @@ audited_changes.map do |change|
   end
 end
 
-puts "Data for #{u.login} (#{u.email})"
-unless ips.empty?
-  puts
-  puts "IP Addresses:"
-  ips.uniq.map do |ip|
-    puts "  #{ip}"
+# Date formatted as 20071110 that we'll use in the filename
+todays_date = Date.today.to_formatted_s(:number)
+
+filename_and_path = "/tmp/user_data_for_#{u.login}_#{todays_date}.txt"
+
+open(filename_and_path, "w") { |f|
+  f.puts "Data for #{u.login} (#{u.email})"
+  unless ips.empty?
+    f.puts
+    f.puts "IP Addresses:"
+    ips.uniq.map do |ip|
+      f.puts "  #{ip}"
+    end
   end
-end
-unless user_agents.empty?
-  puts
-  puts "User Agents:"
-  user_agents.uniq.map do |user_agent|
-    puts "  #{user_agent}"
+  unless user_agents.empty?
+    f.puts
+    f.puts "User Agents:"
+    user_agents.uniq.map do |user_agent|
+      f.puts "  #{user_agent}"
+    end
   end
-end
-if u.fannish_next_of_kin || !next_of_kin_for.empty?
-  puts
-  puts "Fannish Next of Kin: #{next_of_kin}" if u.fannish_next_of_kin
-  puts "Fannish Next of Kin For: #{next_of_kin_for.to_sentence}" unless next_of_kin_for.empty?
-end
-puts
-puts "Pseuds: #{user_pseuds_url(u)}"
-puts "Profile: #{user_profile_url(u)}"
-puts "Preferences: #{user_preferences_url(u)}"
-puts
-puts "Works: #{user_works_url(u)}"
-puts "Drafts: #{drafts_user_works_url(u)}"
-puts "Series: #{user_series_index_url(u)}"
-puts "Bookmarks: #{user_bookmarks_url(u)}"
-puts
-puts "Collections: #{user_collections_url(u)}"
-unless collection_roles.empty?
-  puts "Collection Roles: "
-  collection_roles.map do |role|
-    puts "  #{role}"
+  if u.fannish_next_of_kin || !next_of_kin_for.empty?
+    f.puts
+    f.puts "Fannish Next of Kin: #{next_of_kin}" if u.fannish_next_of_kin
+    f.puts "Fannish Next of Kin For: #{next_of_kin_for.to_sentence}" unless next_of_kin_for.empty?
   end
-end
-puts
-puts "Tag Sets: #{user_tag_sets_url(u)}"
-unless tag_set_nomination_urls.empty?
-  puts "Tag Set Nominations: "
-  tag_set_nomination_urls.map do |url|
-    puts "  #{url}"
+  f.puts
+  f.puts "Pseuds: #{user_pseuds_url(u)}"
+  f.puts "Profile: #{user_profile_url(u)}"
+  f.puts "Preferences: #{user_preferences_url(u)}"
+  f.puts
+  f.puts "Works: #{user_works_url(u)}"
+  f.puts "Drafts: #{drafts_user_works_url(u)}"
+  f.puts "Series: #{user_series_index_url(u)}"
+  f.puts "Bookmarks: #{user_bookmarks_url(u)}"
+  f.puts
+  f.puts "Collections: #{user_collections_url(u)}"
+  unless collection_roles.empty?
+  f.puts "Collection Roles: "
+    collection_roles.map do |role|
+    f.puts "  #{role}"
+    end
   end
-end
-puts
-puts "Challenge Sign-ups: #{user_signups_url(u)}"
-puts "Gift Exchange Assignments: #{user_assignments_url(u)}"
-puts "Prompt Meme Claims: #{user_claims_url(u)}"
-puts
-puts "History and Marked for Later: #{user_readings_url(u)}"
-puts "Subscriptions: #{user_subscriptions_url(u)}"
-puts
-puts "Gifts: #{user_gifts_url(u)}"
-puts "Related Works: #{user_related_works_url(u)}"
-puts
-puts "Skins: #{user_skins_url(u)}"
-puts
-puts "Favorite Tags: #{root_url}"
-puts "Invitations: #{user_invitations_url(u)}"
-unless comment_urls.empty?
-  puts
-  puts "Comments Left: "
-  comment_urls.map do |url|
-    puts "  #{url}"
+  f.puts
+  f.puts "Tag Sets: #{user_tag_sets_url(u)}"
+  unless tag_set_nomination_urls.empty?
+    f.puts "Tag Set Nominations: "
+    tag_set_nomination_urls.map do |url|
+      f.puts "  #{url}"
+    end
   end
-end
-unless kudosed_item_urls.empty?
-  puts
-  puts "Kudos Given To: "
-  kudosed_item_urls.map do |url|
-    puts "  #{url}"
+  f.puts
+  f.puts "Challenge Sign-ups: #{user_signups_url(u)}"
+  f.puts "Gift Exchange Assignments: #{user_assignments_url(u)}"
+  f.puts "Prompt Meme Claims: #{user_claims_url(u)}"
+  f.puts
+  f.puts "History and Marked for Later: #{user_readings_url(u)}"
+  f.puts "Subscriptions: #{user_subscriptions_url(u)}"
+  f.puts
+  f.puts "Gifts: #{user_gifts_url(u)}"
+  f.puts "Related Works: #{user_related_works_url(u)}"
+  f.puts
+  f.puts "Skins: #{user_skins_url(u)}"
+  f.puts
+  f.puts "Favorite Tags: #{root_url}"
+  f.puts "Invitations: #{user_invitations_url(u)}"
+  unless comment_urls.empty?
+    f.puts
+    f.puts "Comments Left: "
+    comment_urls.map do |url|
+      f.puts "  #{url}"
+    end
   end
-end
-unless account_changes.empty?
-  puts
-  puts "Account Changes:"
-  account_changes.map do |change|
-    puts "  #{change}"
+  unless kudosed_item_urls.empty?
+    f.puts
+    f.puts "Kudos Given To: "
+    kudosed_item_urls.map do |url|
+      f.puts "  #{url}"
+    end
   end
-end
+  unless account_changes.empty?
+    f.puts
+    f.puts "Account Changes:"
+    account_changes.map do |change|
+      f.puts "  #{change}"
+    end
+  end
+}
+
+puts "User data has been written to #{filename_and_path}"
+puts
+puts "*************************************************"
+puts "*                                               *"
+puts "* DELETE FILE AS SOON AS YOU HAVE DOWNLOADED IT *"
+puts "*                                               *"
+puts "*************************************************"
+puts
+puts "How to delete: File.delete(\"#{filename_and_path}\")"
