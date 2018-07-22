@@ -313,7 +313,7 @@ class TagsController < ApplicationController
       elsif params[:status] == 'unwrangled'
         @tags = @tag.unwrangled_tags(
           params[:show].singularize.camelize,
-          params.permit(:sort_column, :sort_direction, :page)
+          params.permit!.slice(:sort_column, :sort_direction, :page)
         )
       else
         @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
