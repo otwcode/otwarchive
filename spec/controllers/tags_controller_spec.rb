@@ -15,6 +15,7 @@ describe TagsController do
         @fandom = FactoryGirl.create(:fandom, canonical: true)
         @freeform1 = FactoryGirl.create(:freeform)
         @work = FactoryGirl.create(:work, posted: true, fandom_string: "#{@fandom.name}", freeform_string: "#{@freeform1.name}")
+        run_all_indexing_jobs
       end
 
       it "should show those freeforms" do

@@ -1252,7 +1252,10 @@ class Tag < ApplicationRecord
   end
 
   def unwrangled_tag_count(tag_type)
-    unwrangled_query(tag_type).count
+    key = "unwrangled_#{tag_type}_#{self.id}_#{self.updated_at}"
+    Rails.cache.fetch(key, expires_in: 4.hours) do
+      unwrangled_query(tag_type).count
+    end
   end
 
   def suggested_parent_tags(parent_type, options = {})

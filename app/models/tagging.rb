@@ -10,6 +10,7 @@ class Tagging < ApplicationRecord
   # When we create or destroy a tagging, it may change the taggings count.
   after_create :update_taggings_count
   after_destroy :update_taggings_count
+  after_commit :update_search
 
   def add_filter_taggings
     if self.tagger && self.taggable.is_a?(Work)
@@ -42,5 +43,12 @@ class Tagging < ApplicationRecord
   # handles the transition from 0 uses to 1 use properly.
   def update_taggings_count
     tagger.update_tag_cache unless tagger.blank? || tagger.destroyed?
+  end
+
+  def update_search
+    reindex_boundary = 100
+    if %w(Character Relationship Freeform).include?(tagger.type)
+      tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
+    end
   end
 end
