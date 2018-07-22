@@ -18,9 +18,9 @@ class TagIndexer < Indexer
               }
             }
           },
-          tag_type: {
-            type: "keyword"
-          }
+          tag_type: { type: "keyword" },
+          sortable_name: { type: "keyword" },
+          uses: { type: "integer" }
         }
       }
     }
@@ -53,7 +53,28 @@ class TagIndexer < Indexer
     object.as_json(
       root: false,
       only: [:id, :name, :merger_id, :canonical, :created_at]
-    ).merge(tag_type: object.type)
+    ).merge(
+      tag_type: object.type,
+      uses: object.taggings_count_cache,
+      sortable_name: object.name.downcase
+    ).merge(parent_data(object))
+  end
+
+  # Index parent data for tag wrangling searches
+  def parent_data(tag)
+    data = {}
+    %w(Media Fandom Character).each do |parent_type|
+      if tag.parent_types.include?(parent_type)
+        key = "#{parent_type.downcase}_ids"
+        ids = tag.parents.by_type(parent_type).pluck(:id)
+        # add a dummy value so we can find the unwrangled tags more easily
+        # since you can't search for an empty array
+        data[key] = ids.empty? ? [0] : ids
+        next if parent_type == "Media"
+        data["pre_#{key}"] = tag.suggested_parent_ids(parent_type)
+      end
+    end
+    data
   end
 
 end
