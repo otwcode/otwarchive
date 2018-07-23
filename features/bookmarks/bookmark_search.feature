@@ -7,20 +7,6 @@ Feature: Search Bookmarks
   Background:
     Given I am on the search bookmarks page
 
-  @old-search
-  Scenario: Search bookmarks by tag
-    Given I have bookmarks to search
-    When I fill in "Tag" with "classic"
-      And I press "Search Bookmarks"
-    Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: Tags: classic"
-      And I should see "2 Found"
-      And I should see "third work"
-      And I should see "First Series"
-    When I follow "Edit Your Search"
-    Then the field labeled "Tag" should contain "classic"
-
-  @new-search
   Scenario: Search bookmarks by tag
     Given I have bookmarks to search
 
@@ -115,18 +101,6 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the "Rec" checkbox should be checked
 
-  @old-search
-  Scenario: Search bookmarks by any field
-    Given I have bookmarks to search
-    When I fill in "Any field" with "Hobbits"
-      And I press "Search Bookmarks"
-    Then I should see the page title "Bookmarks Matching 'Hobbits'"
-      And I should see "You searched for: Hobbits"
-      And I should see "No results found."
-    When I follow "Edit Your Search"
-    Then the field labeled "Any field" should contain "Hobbits"
-
-  @new-search
   Scenario: Search bookmarks by any field
     Given I have bookmarks to search by any field
 
@@ -230,7 +204,6 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarker" should contain "testuser"
 
-  @new-search
   Scenario: Search for bookmarks by the bookmarkable item's completion status
     Given I have bookmarks of various completion statuses to search
     When I fill in "Any field on work" with "complete: true"
