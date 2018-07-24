@@ -73,7 +73,7 @@ class TagsController < ApplicationController
       if use_new_search?
         search = TagSearchForm.new(options)
         @tags = search.search_results
-        flash_max_search_results_notice(@tags)
+        flash_search_warnings(@tags)
       else
         @tags = TagSearch.search(options)
       end

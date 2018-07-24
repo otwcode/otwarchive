@@ -47,7 +47,7 @@ class WorksController < ApplicationController
 
       @works = @search.search_results
       set_own_works
-      flash_max_search_results_notice(@works)
+      flash_search_warnings(@works)
       render 'search_results'
     end
   end
@@ -127,7 +127,7 @@ class WorksController < ApplicationController
           @works = @search.search_results
         end
 
-        flash_max_search_results_notice(@works)
+        flash_search_warnings(@works)
 
         @facets = @works.facets
         if @search.options[:excluded_tag_ids].present?
@@ -168,7 +168,7 @@ class WorksController < ApplicationController
         @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
       end
       @works = @search.search_results
-      flash_max_search_results_notice(@works)
+      flash_search_warnings(@works)
       @facets = @works.facets
     end
     set_own_works

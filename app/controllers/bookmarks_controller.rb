@@ -58,7 +58,7 @@ class BookmarksController < ApplicationController
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
       @bookmarks = @search.search_results
-      flash_max_search_results_notice(@bookmarks)
+      flash_search_warnings(@bookmarks)
       set_own_bookmarks
       render 'search_results'
     end
@@ -116,14 +116,14 @@ class BookmarksController < ApplicationController
             # bookmarks. That means that instead of the normal bookmark
             # listing, we want to list *bookmarkable* items.
             @bookmarkable_items = @search.bookmarkable_search_results
-            flash_max_search_results_notice(@bookmarkable_items)
+            flash_search_warnings(@bookmarkable_items)
             @facets = @bookmarkable_items.facets
           else
             # Either we're using the old search, or we are looking at a
             # particular user's bookmarks. Either way, we want to just retrieve
             # the standard search results and their facets.
             @bookmarks = @search.search_results
-            flash_max_search_results_notice(@bookmarks)
+            flash_search_warnings(@bookmarks)
             @facets = @bookmarks.facets
           end
 
@@ -161,7 +161,7 @@ class BookmarksController < ApplicationController
             search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           end
           results = search.search_results
-          flash_max_search_results_notice(results)
+          flash_search_warnings(results)
           @bookmarks = results.to_a
         end
       else

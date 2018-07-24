@@ -480,12 +480,12 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  def flash_max_search_results_notice(result)
-    # ES UPGRADE TRANSITION #
-    # Remove return statement
-    return unless use_new_search?
-    notice = result.max_search_results_notice
-    flash.now[:notice] = notice if notice.present?
+  def flash_search_warnings(result)
+    if result.respond_to?(:error) && result.error
+      flash.now[:error] = result.error
+    elsif result.respond_to?(:notice) && result.notice
+      flash.now[:notice] = result.notice
+    end
   end
 
   # Don't get unnecessary data for json requests

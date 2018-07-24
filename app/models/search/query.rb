@@ -10,11 +10,15 @@ class Query
   def search
     # ES UPGRADE TRANSITION #
     # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
-      index: index_name,
-      type: document_type,
-      body: generated_query
-    )
+    begin
+      $new_elasticsearch.search(
+        index: index_name,
+        type: document_type,
+        body: generated_query
+      )
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      { error: "Your search failed because of a syntax error. Please try again." }
+    end
   end
 
   def search_results
