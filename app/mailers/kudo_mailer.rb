@@ -1,9 +1,4 @@
-class KudoMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+class KudoMailer < ArchiveMailer
 
   # send a batched-up notification
   # user_kudos is a hash of arrays converted to JSON string format

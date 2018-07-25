@@ -1,10 +1,4 @@
-class AdminMailer < ActionMailer::Base
-  include Resque::Mailer # see README in this directory
-
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class AdminMailer < ArchiveMailer
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
     @email = abuse_report.email
