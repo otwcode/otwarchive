@@ -49,7 +49,7 @@ end
 collection_roles = []
 u.pseuds.each do |pseud|
   pseud.collection_participants.pluck(:participant_role, :collection_id)&.map do |role, collection_id|
-    collection_roles << "#{role} in #{collection_url(Collection.find(collection_id).name)}"
+    collection_roles << "#{role} of #{collection_url(Collection.find(collection_id).name)}"
   end
 end
 
@@ -68,22 +68,32 @@ u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 # Actions that are or may be taken by admins are excluded to avoid revealing
 # admins' personal data
 account_changes = []
-audited_changes = u.audits.pluck(:audited_changes, :remote_address, :created_at)
-audited_changes.map do |change|
-  action_hash = change[0]
-  ip = change[1].present? ? "the IP address #{change[1]}" : "an unknown IP address"
-  date = change[2]
-  action_hash.each do |k, v|
-    if k == "accepted_tos_version"
-      account_changes << "Accepted TOS from #{ip} on #{date}"
-    elsif k == "email"
-      account_changes << "Changed email from #{v[0]} to #{v[1]} from #{ip} on #{date}"
-    elsif k == "failed_login_count"
-      account_changes << "Failed login attempt from #{ip} on #{date}"
-    elsif k == "login"
-      account_changes << "Changed username from #{v[0]} to #{v[1]} from #{ip} on #{date}"
-    elsif k == "recently_reset"
-      account_changes << "Request password reset from from #{ip} on #{date}"
+audits = u.audits.pluck(:action, :audited_changes, :created_at, :remote_address)
+audits.map do |audit|
+  action = audit[0]
+  changes = audit[1]
+  date = audit[2]
+  ip = if audit[3].present?
+         "the IP address #{audit[3]}"
+       else 
+         "an unknown IP address"
+       end
+  if action == "create"
+    account_changes << "Created account #{changes["login"]} from #{ip} on #{date}"
+  elsif action == "update"
+    changes.each do |k, v|
+      case k
+      when "accepted_tos_version"
+        account_changes << "Accepted TOS from #{ip} on #{date}"
+      when "email"
+        account_changes << "Changed email from #{v[0]} to #{v[1]} from #{ip} on #{date}"
+      when "failed_login_count"
+        account_changes << "Failed login attempt from #{ip} on #{date}"
+      when "login"
+        account_changes << "Changed username from #{v[0]} to #{v[1]} from #{ip} on #{date}"
+      when "recently_reset"
+        account_changes << "Requested password reset from from #{ip} on #{date}"
+      end
     end
   end
 end
