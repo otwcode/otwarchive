@@ -92,7 +92,7 @@ audits.map do |audit|
       when "login"
         account_changes << "Changed username from #{v[0]} to #{v[1]} from #{ip} on #{date}"
       when "recently_reset"
-        account_changes << "Requested password reset from from #{ip} on #{date}"
+        account_changes << "Requested password reset from #{ip} on #{date}"
       end
     end
   end
