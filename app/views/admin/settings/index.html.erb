@@ -35,13 +35,11 @@
     <legend><%= ts("Disable Support Form") %></legend>
     <h3 class="landmark heading"><%= ts("Disable Support Form") %></h3>
     <dl>
-      <dt><%= check_box_tag "disable_support_form", 1, false, class: "toggle_formfield", id: "disabled_support_form_text-options-show" %></dt>
+      <dt><%= f.check_box :disable_support_form %></dt>
       <dd>
-        <%= label_tag "disable_support_form-show", ts("Turn off support form") %>
-        <div id="disabled_support_form_text-options" class="hidden">
-          <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
-          <%= f.text_area :disabled_support_form_text %>
-        </div>
+        <%= f.label :disable_support_form, ts("Turn off support form") %>
+        <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
+        <%= f.text_area :disabled_support_form_text %>
       </dd>
     </dl>
   </fieldset>
