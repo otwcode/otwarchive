@@ -4,6 +4,7 @@ class FeedbacksController < ApplicationController
 
   def new
     @feedback = Feedback.new
+    @admin_setting = AdminSetting.first || AdminSetting.create(last_updated_by: Admin.first)
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
