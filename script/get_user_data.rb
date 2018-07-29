@@ -49,7 +49,11 @@ end
 collection_roles = []
 u.pseuds.each do |pseud|
   pseud.collection_participants.pluck(:participant_role, :collection_id)&.map do |role, collection_id|
-    collection_roles << "#{role} of #{collection_url(Collection.find(collection_id).name)}"
+    if role == "Invited"
+      collection_roles << "#{role} to #{collection_url(Collection.find(collection_id).name)}"
+    else
+      collection_roles << "#{role} of #{collection_url(Collection.find(collection_id).name)}"
+    end
   end
 end
 
