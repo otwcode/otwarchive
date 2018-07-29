@@ -15,6 +15,12 @@ login = gets.chomp.downcase
 # Find the user
 u = User.find_by(login: login)
 
+# Names of user's favorite tags
+favorite_tags = []
+u.favorite_tags.pluck(:tag_id)&.map do |id|
+  favorite_tags << Tag.find_by(id: id).name
+end
+
 # URLs of all comments
 comment_urls = []
 u.comments.pluck(:id)&.map do |id|
@@ -166,8 +172,11 @@ open(filename_and_path, "w") do |f|
   f.puts
   f.puts "Skins: #{user_skins_url(u)}"
   f.puts
-  f.puts "Favorite Tags: #{root_url}"
   f.puts "Invitations: #{user_invitations_url(u)}"
+  unless favorite_tags.empty?
+    f.puts
+    f.puts "Favorite Tags: #{favorite_tags.to_sentence}"
+  end
   unless comment_urls.empty?
     f.puts
     f.puts "Comments Left: "
