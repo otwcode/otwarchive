@@ -74,6 +74,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
   end
   step %{all indexing jobs have been run}
   Tag.write_redis_to_database
+  step %(the periodic filter count task is run)
 end
 
 # Again, same regexp, it just creates a draft and not a posted

@@ -7,6 +7,7 @@ before_install:
   - sudo apt-get install -qq calibre openssl build-essential xorg libssl-dev wkhtmltopdf
 env:
   - TEST_GROUP="./script/check_syntax"
+  - TEST_GROUP="rake db:otwseed"
   - TEST_GROUP="rspec spec/controllers"
   - TEST_GROUP="rspec spec/miscellaneous"
   - TEST_GROUP="rspec spec/models"

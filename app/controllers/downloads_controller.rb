@@ -1,7 +1,6 @@
 class DownloadsController < ApplicationController
 
   skip_before_action :store_location, only: :show
-  before_action :guest_downloading_off, only: :show
   before_action :load_work, only: :show
   before_action :check_visibility, only: :show
   after_action :remove_downloads, only: :show
@@ -44,12 +43,6 @@ protected
 
     # set this for checking visibility
     @check_visibility_of = @work
-  end
-
-  def guest_downloading_off
-    if !logged_in? && @admin_settings.guest_downloading_off?
-      redirect_to login_path(high_load: true)
-    end
   end
 
   # We're currently just writing everything to tmp and feeding them through nginx
