@@ -82,9 +82,21 @@ class DownloadWriter
     end
 
     ### Format-specific options
-    # Mobi: ignore margins to keep it from padding on the left
-    mobi = download.file_type == "mobi" ? ['--mobi-ignore-margins', '--remove-paragraph-spacing'] : []
-    epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
+    # Mobi: ignore margins to keep it from padding on the left, format
+    # paragraphs with a first-line indent and no verical margins, bold the
+    # labels in the metadata
+    # Note: We might want to use the path for a stylesheet instead of writing
+    # the CSS here, especially if we need more
+    # Epub: don't generate a cover image
+    mobi = if download.file_type == "mobi"
+             [
+               '--mobi-ignore-margins', '--remove-paragraph-spacing',
+               '--extra-css', '.meta dt { font-weight: bold; }'
+             ]
+           else
+             []
+           end
+    epub = download.file_type == "epub" ? ['--no-default-epub-cover'] : []
 
     [
       'ebook-convert',
