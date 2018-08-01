@@ -83,7 +83,7 @@ class DownloadWriter
 
     ### Format-specific options
     # Mobi: ignore margins to keep it from padding on the left
-    mobi = download.file_type == "mobi" ? ['--mobi-ignore-margins'] : []
+    mobi = download.file_type == "mobi" ? ['--mobi-ignore-margins', '--remove-paragraph-spacing'] : []
     epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
 
     [
