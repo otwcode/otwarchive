@@ -84,6 +84,7 @@ class DownloadWriter
     ### Format-specific options
     # Mobi: ignore margins to keep it from padding on the left
     mobi = download.file_type == "mobi" ? ['--mobi-ignore-margins'] : []
+    epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
 
     [
       'ebook-convert',
@@ -96,7 +97,7 @@ class DownloadWriter
       '--comments', meta[:summary],
       '--tags', meta[:tags],
       '--pubdate', meta[:pubdate]
-    ] + series + mobi
+    ] + series + mobi + epub
   end
 
   # A hash of the work data calibre needs
