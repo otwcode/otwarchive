@@ -187,9 +187,11 @@ en:
       part1_work: "You have been listed as a co-creator on the following work:"
       part1_series: "You have been listed as a co-creator on the following series:"
       html:
+        creation: "%{creation_link} by %{pseud_links}"
         part2_work: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
         part2_series: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
       text:
+        creation: "%{title} (%{url}) by %{pseuds}"
         part2_work: "Edit the work to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
         part2_series: "Edit the series to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
     change_email:

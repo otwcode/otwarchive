@@ -4,7 +4,10 @@ cache: bundler
 sudo: required
 env:
   - TEST_GROUP="./script/check_syntax"
-  - TEST_GROUP="rspec spec"
+  - TEST_GROUP="rake db:otwseed"
+  - TEST_GROUP="rspec spec/controllers"
+  - TEST_GROUP="rspec spec/miscellaneous"
+  - TEST_GROUP="rspec spec/models"
   - TEST_GROUP="cucumber -r features features/admins             -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/bookmarks          -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/collections        -f Ao3Cucumber::Formatter --color"
@@ -24,17 +27,19 @@ env:
 rvm:
   - "`cat .ruby_version| sed -e 's/ruby //'`"
 services:
-  - elasticsearch
   - redis-server
   - memcached
 script:
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - travis_retry bundle exec $TEST_GROUP
+  - bundle exec $TEST_GROUP
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
+  - sudo bash script/travis_set_read_isolation.sh
+after_failure:
+  - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html
 notifications:
   email:
     recipients:

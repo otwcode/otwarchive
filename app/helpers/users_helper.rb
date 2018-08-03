@@ -1,7 +1,13 @@
 module UsersHelper
   # Can be used to check ownership of items
   def is_author_of?(item)
-    current_user.is_a?(User) ? current_user.is_author_of?(item) : false
+    if @own_bookmarks && item.is_a?(Bookmark)
+      @own_bookmarks.include?(item)
+    elsif @own_works && item.is_a?(Work)
+      @own_works.include?(item)
+    else
+      current_user.is_a?(User) && current_user.is_author_of?(item)
+    end
   end
 
   # Can be used to check if user is maintainer of any collections
@@ -69,12 +75,24 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud = nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
-    total = BookmarkSearch.count_for_pseuds(user.pseuds)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to BookmarkSearch
+    if use_new_search?
+      total = BookmarkSearchForm.count_for_user(user)
+    else
+      total = BookmarkSearch.count_for_pseuds(user.pseuds)
+    end
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def print_pseud_bookmarks_link(pseud)
-    total = BookmarkSearch.count_for_pseuds([pseud])
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to BookmarkSearch
+    if use_new_search?
+      total = BookmarkSearchForm.count_for_pseuds([pseud])
+    else
+      total = BookmarkSearch.count_for_pseuds([pseud])
+    end
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 
@@ -82,12 +100,24 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud = nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    total = WorkSearch.user_count(user)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
+    if use_new_search?
+      total = WorkSearchForm.user_count(user)
+    else
+      total = WorkSearch.user_count(user)
+    end
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def print_pseud_works_link(pseud)
-    total = WorkSearch.pseud_count(pseud)
+    # ES UPGRADE TRANSITION #
+    # Remove conditional and call to WorkSearch
+    if use_new_search?
+      total = WorkSearchForm.pseud_count(pseud)
+    else
+      total = WorkSearch.pseud_count(pseud)
+    end
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 

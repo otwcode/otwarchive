@@ -8,10 +8,12 @@ module SearchHelper
     elsif collection.total_pages < 2
       header = pluralize(collection.size, item_name)
     else
+      total_entries = collection.total_entries
+      total_entries = collection.unlimited_total_entries if collection.respond_to?(:unlimited_total_entries)
       header = %{ %d - %d of %d }% [
                 collection.offset + 1,
                 collection.offset + collection.length,
-                collection.total_entries
+                total_entries
                 ] + item_name.pluralize
     end
     if search.present? && search.query.present?
@@ -36,10 +38,20 @@ module SearchHelper
     end
     header.html_safe
   end
-  
-  
+
+  def search_results_found(results)
+    # ES UPGRADE TRANSITION
+    # Remove the if statement and results.total_entries
+    count = if results.respond_to?(:unlimited_total_entries)
+              results.unlimited_total_entries
+            else
+              results.total_entries
+            end
+    ts("%{count} Found", count: count)
+  end
+
   def random_search_tip
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
-  
+
 end
