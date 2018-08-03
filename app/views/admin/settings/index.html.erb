@@ -94,15 +94,3 @@
 
 <p><%= ts("Last updated on %{updated_at} by %{admin_name}.", :updated_at => @admin_setting.updated_at, :admin_name => @admin_setting.last_updated ? @admin_setting.last_updated.login : "---") %></p>
 <!--/content-->
-
-
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function(){
-      $j(".toggle_formfield").click(function() {
-        var targetId = $j(this).attr("id").replace("-show", "");
-        toggleFormField(targetId);
-      });
-    })
-  <% end %>
-<% end %>
