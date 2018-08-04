@@ -16,10 +16,7 @@ login = gets.chomp.downcase
 u = User.find_by(login: login)
 
 # Names of user's favorite tags
-favorite_tags = []
-u.favorite_tags.pluck(:tag_id)&.map do |id|
-  favorite_tags << Tag.find_by(id: id).name
-end
+favorite_tags = u.favorite_tags.joins(:tag).pluck(:name)
 
 # URLs of all comments
 comment_urls = []
