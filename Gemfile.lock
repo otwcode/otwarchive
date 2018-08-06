@@ -568,6 +568,7 @@ DEPENDENCIES
   timecop
   timeliness
   tire
+  transaction_isolation (= 1.0.5)
   transaction_retry
   unicode
   unicorn (>= 5.1.0)

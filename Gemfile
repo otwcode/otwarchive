@@ -27,7 +27,7 @@ gem 'mysql2', '0.3.20'
 #https://github.com/qertoip/transaction_retry
 # We don't use the isolation gem directly, but it needs to be
 # at the latest version to avoid errors
-# gem 'transaction_isolation', '1.0.5'
+gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
