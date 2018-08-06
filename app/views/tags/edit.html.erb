@@ -95,13 +95,11 @@
           <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
             <dt><%= ts("Suggested Fandoms") %>:</dt>
             <dd>
-            <% @suggested_fandoms.in_groups(2, false) do |fandom_list| %>
               <ul class="tags commas">
-              <% for tag in fandom_list %>
+              <% @suggested_fandoms.each do |tag| %>
                 <li><%= link_to_edit_tag(tag) %></li>
               <% end %>
               </ul>
-            <% end %>
             </dd>
           <% end %>
           <dt><%= tag_category_name(tag_type) %></dt>
