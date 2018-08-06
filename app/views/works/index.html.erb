@@ -53,7 +53,7 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("Listing Works") %></h3>
 <ol class="work index group">
-  <%= render 'work_blurb', collection: @works, as: work %>
+  <%= render partial: 'work_blurb', collection: @works, as: :work %>
 </ol>
 
 <!--/content-->
