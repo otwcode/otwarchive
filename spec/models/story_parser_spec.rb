@@ -277,7 +277,7 @@ describe StoryParser do
         detect_tags: true
       }
 
-      archivist = create_archivist
+      archivist = create(:archivist)
       User.current_user = archivist
 
       WebMock.allow_net_connect!
