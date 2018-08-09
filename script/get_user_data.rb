@@ -15,6 +15,9 @@ login = gets.chomp.downcase
 # Find the user
 u = User.find_by(login: login)
 
+# Names of user's favorite tags
+favorite_tags = u.favorite_tags.joins(:tag).pluck(:name)
+
 # URLs of all comments
 comment_urls = []
 u.comments.pluck(:id)&.map do |id|
@@ -49,12 +52,12 @@ end
 collection_roles = []
 u.pseuds.each do |pseud|
   pseud.collection_participants.pluck(:participant_role, :collection_id)&.map do |role, collection_id|
-    collection_roles << "#{role} of #{collection_url(Collection.find(collection_id).name)}"
+    collection_roles << "Role of #{role} in #{collection_url(Collection.find(collection_id).name)}"
   end
 end
 
 # List of IP addresses
-# Don't include IPs from the audits table because some IPs may be admins'
+# We handle IPs from the audits table below
 ips = []
 u.comments.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
 u.works.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
@@ -63,36 +66,38 @@ u.works.pluck(:ip_address)&.map { |ip| ips << ip unless ip.blank? }
 user_agents = []
 u.comments.pluck(:user_agent)&.map { |ua| user_agents << ua unless ua.blank? }
 
-# List of changes made to the user account
-# IP addresses, usernames, and emails are personal data; dates are for clarity
+# Lists of IP addresses and previous email addresses and usernames
 # Actions that are or may be taken by admins are excluded to avoid revealing
-# admins' personal data
-account_changes = []
-audits = u.audits.pluck(:action, :audited_changes, :created_at, :remote_address)
+# admins' IP addresses
+previous_usernames = []
+previous_emails = []
+audits = u.audits.pluck(:action, :audited_changes, :remote_address)
 audits.map do |audit|
   action = audit[0]
   changes = audit[1]
-  date = audit[2]
-  ip = if audit[3].present?
-         "the IP address #{audit[3]}"
-       else 
-         "an unknown IP address"
-       end
+  ip = audit[2]
+  # Created account
   if action == "create"
-    account_changes << "Created account #{changes["login"]} from #{ip} on #{date}"
+    ips << ip unless ip.blank?
+  # Other account changes
   elsif action == "update"
     changes.each do |k, v|
       case k
       when "accepted_tos_version"
-        account_changes << "Accepted TOS from #{ip} on #{date}"
+        ips << ip unless ip.blank?
+      # Changed email address
       when "email"
-        account_changes << "Changed email from #{v[0]} to #{v[1]} from #{ip} on #{date}"
+        ips << ip unless ip.blank?
+        previous_emails << v[0] unless v[0].blank?
       when "failed_login_count"
-        account_changes << "Failed login attempt from #{ip} on #{date}"
+        ips << ip unless ip.blank?
+      # Changed username
       when "login"
-        account_changes << "Changed username from #{v[0]} to #{v[1]} from #{ip} on #{date}"
+        ips << ip unless ip.blank?
+        previous_usernames << v[0] unless v[0].blank?
+      # Requested password reset email
       when "recently_reset"
-        account_changes << "Requested password reset from #{ip} on #{date}"
+        ips << ip unless ip.blank?
       end
     end
   end
@@ -105,6 +110,14 @@ filename_and_path = "/tmp/user_data_for_#{u.login}_#{todays_date}.txt"
 
 open(filename_and_path, "w") do |f|
   f.puts "Data for #{u.login} (#{u.email})"
+  unless previous_usernames.empty?
+    f.puts
+    f.puts "Previous Usernames: #{previous_usernames.to_sentence}"
+  end
+  unless previous_emails.empty?
+    f.puts
+    f.puts "Previous Email Addresses: #{previous_emails.to_sentence}"
+  end
   unless ips.empty?
     f.puts
     f.puts "IP Addresses:"
@@ -162,8 +175,11 @@ open(filename_and_path, "w") do |f|
   f.puts
   f.puts "Skins: #{user_skins_url(u)}"
   f.puts
-  f.puts "Favorite Tags: #{root_url}"
   f.puts "Invitations: #{user_invitations_url(u)}"
+  unless favorite_tags.empty?
+    f.puts
+    f.puts "Favorite Tags: #{favorite_tags.to_sentence}"
+  end
   unless comment_urls.empty?
     f.puts
     f.puts "Comments Left: "
@@ -176,13 +192,6 @@ open(filename_and_path, "w") do |f|
     f.puts "Kudos Given To: "
     kudosed_item_urls.map do |url|
       f.puts "  #{url}"
-    end
-  end
-  unless account_changes.empty?
-    f.puts
-    f.puts "Account Changes:"
-    account_changes.map do |change|
-      f.puts "  #{change}"
     end
   end
 end
