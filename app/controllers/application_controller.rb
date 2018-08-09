@@ -157,11 +157,7 @@ public
 
   before_action :fetch_admin_settings
   def fetch_admin_settings
-    if Rails.env.development?
-      @admin_settings = AdminSetting.first
-    else
-      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    end
+    @admin_settings = AdminSetting.current
   end
 
   before_action :load_admin_banner
