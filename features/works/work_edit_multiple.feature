@@ -21,7 +21,8 @@ Feature: Edit Multiple Works
     And I should not see "Lovely"
   When I press "Yes, Delete Works"
   Then I should see "Your works Glorious, Excellent were deleted."
-  When I go to my works page
+  When all indexing jobs have been run
+    And I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"

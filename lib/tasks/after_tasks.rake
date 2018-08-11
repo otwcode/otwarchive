@@ -581,6 +581,19 @@ namespace :After do
       end
     end
   end
+
+  desc "Fix crossover status for works with two fandom tags."
+  task(crossover_reindex_works_with_two_fandoms: :environment) do
+    # Find all works with two fandom tags:
+    Work.joins(:tags).merge(Fandom.all).
+      group("works.id").having("COUNT(tags.id) > 1").
+      select(:id).
+      find_in_batches do |batch|
+      print(".") && STDOUT.flush
+      AsyncIndexer.index(WorkIndexer, batch.map(&:id), :background)
+    end
+    print("\n") && STDOUT.flush
+  end
 end # this is the end that you have to put new tasks above
 
 ##################

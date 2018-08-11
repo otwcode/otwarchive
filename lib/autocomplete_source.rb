@@ -227,7 +227,7 @@ module AutocompleteSource
 
       # Split on one or more spaces, ampersand, slash, double quotation mark,
       # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
-      normalized.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/)
+      normalized.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/).reject(&:blank?)
     end
 
     def autocomplete_pieces(string)

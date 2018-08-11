@@ -145,7 +145,7 @@ describe WorksController do
     context "when the query contains categories" do
       it "surrounds categories in quotes" do
         [
-          { query: "M/F sort by: comments", expected: "M/F " },
+          { query: "M/F sort by: comments", expected: "\"m/f\"" },
           { query: "f/f Scully/Reyes", expected: "\"f/f\" Scully/Reyes" },
         ].each do |settings|
           call_with_params(query: settings[:query])
@@ -153,10 +153,10 @@ describe WorksController do
         end
       end
 
-      it "surrounds categories in quotes even when it shouldn't (AO3-3576)" do
+      it "does not surround categories in quotes when it shouldn't" do
         query = "sam/frodo sort by: word"
         call_with_params(query: query)
-        expect(controller.params[:work_search][:query]).to eq("sa\"m/f\"rodo ")
+        expect(controller.params[:work_search][:query]).to eq("sam/frodo")
       end
     end
   end
@@ -219,7 +219,7 @@ describe WorksController do
 
   describe "index" do
     before do
-      @fandom = create(:fandom)
+      @fandom = create(:canonical_fandom)
       @work = create(:work, posted: true, fandom_string: @fandom.name)
     end
 
@@ -235,7 +235,7 @@ describe WorksController do
     end
 
     it "should return search results when given work_search parameters" do
-      params = { work_search: { query: "fandoms: #{@fandom.name}" } }
+      params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
     end
@@ -264,7 +264,7 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = FactoryGirl.create(:work, posted: true)
-          work2.index.refresh
+          update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -272,9 +272,10 @@ describe WorksController do
 
       context "with an owner tag" do
         before do
-          @fandom2 = FactoryGirl.create(:fandom)
+          @fandom2 = FactoryGirl.create(:canonical_fandom)
           @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
-          @work2.index.refresh
+
+          update_and_refresh_indexes('work')
         end
 
         it "should only get works under that tag" do
@@ -301,7 +302,7 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
-            @work2.index.refresh
+            update_and_refresh_indexes('work')
           end
 
           it "should not show restricted works to guests" do
@@ -359,76 +360,147 @@ describe WorksController do
   end
 
   describe "collected" do
-    let(:collected_fandom) { create(:fandom) }
-    let(:collected_fandom2) { create(:fandom) }
     let(:collection) { create(:collection) }
     let(:collected_user) { create(:user) }
 
-    before do
-      @unrestricted_work = create(:work,
-                                  authors: [collected_user.default_pseud],
-                                  posted: true,
-                                  fandom_string: collected_fandom.name)
-      @unrestricted_work_in_collection = create(:work,
-                                                authors: [collected_user.default_pseud],
-                                                collection_names: collection.name,
-                                                posted: true,
-                                                fandom_string: collected_fandom.name)
-      @unrestricted_work_2_in_collection = create(:work,
-                                                  authors: [collected_user.default_pseud],
-                                                  collection_names: collection.name,
-                                                  posted: true,
-                                                  fandom_string: collected_fandom2.name)
-      @restricted_work_in_collection = create(:work,
-                                              restricted: true,
-                                              authors: [collected_user.default_pseud],
-                                              collection_names: collection.name,
-                                              posted: true,
-                                              fandom_string: collected_fandom.name)
-      [@unrestricted_work,
-       @unrestricted_work_2_in_collection,
-       @unrestricted_work_in_collection,
-       @restricted_work_in_collection].each do |work|
-        work.index.refresh
-      end
-    end
+    context "with anonymous works" do
+      let(:anonymous_collection) { create(:anonymous_collection) }
 
-    context "as a guest" do
-      it "should render the empty collected form" do
-        get :collected
-        expect(response).to render_template("collected")
+      let!(:work) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name)
       end
 
-      it "should NOT return any works if no user is set" do
-        get :collected
-        expect(assigns(:works)).to be_nil
+      let!(:anonymous_work) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: anonymous_collection.name)
       end
 
-      it "should return ONLY unrestricted works in collections" do
+      before { update_and_refresh_indexes "work" }
+
+      it "does not return anonymous works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(@unrestricted_work_in_collection)
-        expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
-        expect(assigns(:works)).not_to include(@unrestricted_work)
-        expect(assigns(:works)).not_to include(@restricted_work_in_collection)
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(anonymous_work)
       end
 
-      it "should return filtered works when search parameters are provided" do
-        get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom2.id}" }}
-        expect(assigns(:works)).to include(@unrestricted_work_2_in_collection)
-        expect(assigns(:works)).not_to include(@unrestricted_work_in_collection)
-      end
-    end
-
-    context "with a logged-in user" do
-      before do
+      it "does not return anonymous works in collections for logged-in users" do
         fake_login
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(anonymous_work)
       end
 
-      it "should return ONLY works in collections" do
+      it "returns anonymous works in collections for the author" do
+        fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(@unrestricted_work_in_collection)
-        expect(assigns(:works)).to include(@restricted_work_in_collection)
-        expect(assigns(:works)).not_to include(@unrestricted_work)
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).to include(anonymous_work)
+      end
+    end
+
+    context "with restricted works" do
+      let(:collected_fandom) { create(:canonical_fandom) }
+      let(:collected_fandom_2) { create(:canonical_fandom) }
+
+      let!(:unrestricted_work) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               fandom_string: collected_fandom.name)
+      end
+
+      let!(:unrestricted_work_in_collection) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               fandom_string: collected_fandom.name)
+      end
+
+      let!(:unrestricted_work_2_in_collection) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               fandom_string: collected_fandom_2.name)
+      end
+
+      let!(:restricted_work_in_collection) do
+        create(:posted_work,
+               restricted: true,
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               fandom_string: collected_fandom.name)
+      end
+
+      before { update_and_refresh_indexes "work" }
+
+      context "as a guest" do
+        it "renders the empty collected form" do
+          get :collected
+          expect(response).to render_template("collected")
+        end
+
+        it "does NOT return any works if no user is set" do
+          get :collected
+          expect(assigns(:works)).to be_nil
+        end
+
+        it "returns ONLY unrestricted works in collections" do
+          get :collected, params: { user_id: collected_user.login }
+          expect(assigns(:works)).to include(unrestricted_work_in_collection)
+          expect(assigns(:works)).to include(unrestricted_work_2_in_collection)
+          expect(assigns(:works)).not_to include(unrestricted_work)
+          expect(assigns(:works)).not_to include(restricted_work_in_collection)
+        end
+
+        it "returns filtered works when search parameters are provided" do
+          get :collected, params: { user_id: collected_user.login, work_search: { query: "fandom_ids:#{collected_fandom_2.id}" }}
+          expect(assigns(:works)).to include(unrestricted_work_2_in_collection)
+          expect(assigns(:works)).not_to include(unrestricted_work_in_collection)
+        end
+      end
+
+      context "with a logged-in user" do
+        before { fake_login }
+
+        it "returns ONLY works in collections" do
+          get :collected, params: { user_id: collected_user.login }
+          expect(assigns(:works)).to include(unrestricted_work_in_collection)
+          expect(assigns(:works)).to include(restricted_work_in_collection)
+          expect(assigns(:works)).not_to include(unrestricted_work)
+        end
+      end
+    end
+
+    context "with unrevealed works" do
+      let(:unrevealed_collection) { create(:unrevealed_collection) }
+
+      let!(:work) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name)
+      end
+
+      let!(:unrevealed_work) do
+        create(:posted_work,
+               authors: [collected_user.default_pseud],
+               collection_names: unrevealed_collection.name)
+      end
+
+      before { update_and_refresh_indexes "work" }
+
+      it "returns unrevealed works in collections for guests" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).to include(unrevealed_work)
+      end
+
+      it "returns unrevealed works in collections for logged-in users" do
+        fake_login
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).to include(unrevealed_work)
       end
     end
   end
