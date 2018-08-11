@@ -31,11 +31,11 @@ class FeedbacksController < ApplicationController
     end
   end
 
-  def load_support_languages
-    @support_languages = Language.where(support_available: true).order(:name)
-  end
-
   private
+
+  def load_support_languages
+    @support_languages = Language.where(support_available: true).default_order
+  end
 
   def feedback_params
     params.require(:feedback).permit(
