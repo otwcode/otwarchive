@@ -798,7 +798,7 @@ class WorksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by(login: params[:user_id])
+      @user = User.find_by!(login: params[:user_id])
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       end
