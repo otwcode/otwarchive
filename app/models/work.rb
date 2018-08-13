@@ -86,7 +86,6 @@ class Work < ApplicationRecord
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -266,13 +265,9 @@ class Work < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -932,7 +927,6 @@ class Work < ApplicationRecord
   end
 
   # FILTERING CALLBACKS
-  after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its
@@ -986,27 +980,28 @@ class Work < ApplicationRecord
     end
   end
 
-  # Determine if filter counts need to be reset after the work is saved
-  def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
-      self.should_reset_filters = false
-    end
-    return true
-  end
-
   # Must be called before save
   def visibility_changed?
     self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
   end
 
-  # Calls reset_filter_count on all the work's filters
+  # We need to do a recount for our filters if:
+  # - the work is brand new
+  # - the work is posted from a draft
+  # - the work is hidden or unhidden by an admin
+  # - the work's restricted status has changed
+  # Note that because the two filter counts both include unrevealed works, we
+  # don't need to check whether in_unrevealed_collection has changed -- it
+  # won't change the counts either way.
+  # (Modelled on Work.should_reindex_pseuds?)
+  def should_reset_filters?
+    pertinent_attributes = %w(id posted restricted hidden_by_admin)
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Recalculates filter counts on all the work's filters
   def adjust_filter_counts
-    if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
-    end
-    return true
+    FilterCount.enqueue_filters(filters.reload) if should_reset_filters?
   end
 
   ################################################################################
@@ -1424,7 +1419,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
@@ -1568,24 +1563,38 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # If the filter_taggings table is always correct, we only need one line:
-    # fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
-
+    # Short-circuit the check if there's only one fandom tag:
     return false if fandoms.count == 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
-    unrelated_fandoms = fandoms.map { |f| f.merger ? f.merger : f }.uniq
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # Replace each fandom with the top tags of the meta trees it belongs to
-    loop do
-      n = unrelated_fandoms.map { |f| f.meta_tags.any? ? f.meta_tags : f }.flatten.uniq
-      break if n == unrelated_fandoms
-      unrelated_fandoms = n
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      until boundary.empty?
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+      end
+
+      all_meta_tags.uniq
     end
 
-    # These fandoms have no meta tags, and they cannot be related
-    unrelated_fandoms.count > 1
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?

@@ -1,7 +1,13 @@
 module UsersHelper
   # Can be used to check ownership of items
   def is_author_of?(item)
-    current_user.is_a?(User) ? current_user.is_author_of?(item) : false
+    if @own_bookmarks && item.is_a?(Bookmark)
+      @own_bookmarks.include?(item)
+    elsif @own_works && item.is_a?(Work)
+      @own_works.include?(item)
+    else
+      current_user.is_a?(User) && current_user.is_author_of?(item)
+    end
   end
 
   # Can be used to check if user is maintainer of any collections

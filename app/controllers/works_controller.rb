@@ -46,6 +46,7 @@ class WorksController < ApplicationController
       end
 
       @works = @search.search_results
+      set_own_works
       flash_max_search_results_notice(@works)
       render 'search_results'
     end
@@ -115,7 +116,7 @@ class WorksController < ApplicationController
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
           user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_#{use_new_search?}", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -144,6 +145,7 @@ class WorksController < ApplicationController
     else
       @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
     end
+    set_own_works
   end
 
   def collected
@@ -169,7 +171,7 @@ class WorksController < ApplicationController
       flash_max_search_results_notice(@works)
       @facets = @works.facets
     end
-
+    set_own_works
     @page_subtitle = ts('%{username} - Collected Works', username: @user.login)
   end
 
@@ -944,6 +946,17 @@ class WorksController < ApplicationController
       @work.save_parents if @work.preview_mode
     end
   rescue
+  end
+
+  def set_own_works
+    return unless @works
+    @own_works = []
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.pluck(:id)
+      @own_works = @works.select do |work|
+        (pseud_ids & work.pseuds.pluck(:id)).present?
+      end
+    end
   end
 
   def cancel_posting_and_redirect
