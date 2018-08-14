@@ -322,6 +322,7 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
     attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
     attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
@@ -342,6 +343,7 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
     attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
     attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
