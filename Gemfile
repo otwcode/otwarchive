@@ -64,7 +64,6 @@ gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
-gem 'mail', '~> 2.7'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'elasticsearch', '>=6.0.0'
@@ -124,7 +123,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 gem 'addressable'
 gem 'audited', '~> 4.4'
 
-# For controlling application behaviour dynamically
+# For controlling application behavour dynamically
 gem 'rollout'
 
 #  Place the New Relic gem as low in the list as possible, allowing the
