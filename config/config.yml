@@ -163,6 +163,9 @@ MAX_FAVORITE_TAGS: 20
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
 
+# When updating tag counts, how many to do in one transaction
+TAG_UPDATE_BATCH_SIZE: 100
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
