@@ -82,20 +82,7 @@ class DownloadWriter
     end
 
     ### Format-specific options
-    # Mobi: ignore margins to keep it from padding on the left, format
-    # paragraphs with a first-line indent and no verical margins, bold the
-    # labels in the metadata
-    # Note: We might want to use the path for a stylesheet instead of writing
-    # the CSS here, especially if we need more
-    # Epub: don't generate a cover image
-    mobi = if download.file_type == "mobi"
-             [
-               '--mobi-ignore-margins', '--remove-paragraph-spacing',
-               '--extra-css', '.meta dt { font-weight: bold; }'
-             ]
-           else
-             []
-           end
+    # epub: don't generate a cover image
     epub = download.file_type == "epub" ? ['--no-default-epub-cover'] : []
 
     [
@@ -109,11 +96,12 @@ class DownloadWriter
       '--comments', meta[:summary],
       '--tags', meta[:tags],
       '--pubdate', meta[:pubdate],
+      '--extra-css', '/stylesheets/ebooks.css',
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
       # second for multi-chapter, and third for the preface and afterword
       '--chapter', "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
-    ] + series + mobi + epub
+    ] + series + epub
   end
 
   # A hash of the work data calibre needs
