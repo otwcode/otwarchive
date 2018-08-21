@@ -92,10 +92,14 @@ class DownloadWriter
       '--input-encoding', 'utf-8',
       '--use-auto-toc',
       '--title', meta[:title],
+      '--title-sort', meta[:sortable_title],
       '--authors', meta[:authors],
+      '--author-sort', meta[:sortable_authors],
       '--comments', meta[:summary],
       '--tags', meta[:tags],
       '--pubdate', meta[:pubdate],
+      '--publisher', ArchiveConfig.APP_NAME,
+      '--language', meta[:language],
       '--extra-css', '/stylesheets/ebooks.css',
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
@@ -108,11 +112,16 @@ class DownloadWriter
   def meta
     return @metadata if @metadata
     @metadata = {
-      title:    work.title,
-      authors:  work.pseuds.pluck(:name).join("&"),
-      tags:     work.tags.pluck(:name).join(","),
-      pubdate:  work.revised_at.to_date.to_s,
-      summary:  work.summary
+      title:             work.title,
+      sortable_title:    work.sorted_title,
+      authors:           work.pseuds.pluck(:name).join("&"),
+      sortable_authors:  work.authors_to_sort_on,
+      # We add "Fanworks" because iBooks uses the first tag as the category and
+      # it would otherwise be the work's rating, which is weird
+      tags:              "Fanworks, " + work.tags.pluck(:name).join(","),
+      pubdate:           work.revised_at.to_date.to_s,
+      summary:           work.summary,
+      language:          work.language.short
     }
     if work.series.exists?
       series = work.series.first
