@@ -7,9 +7,8 @@
 <!--subnav-->
 <h4 class="landmark heading"><%= ts("Reference Links") %></h4>
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("FAQ Index"), archive_faqs_path %></li>
-  <li><%= link_to ts("Tutorials"), admin_posts_path(tag: 5) %></li>
-  <li><%= link_to ts("Release Notes"), admin_posts_path(tag: 1) %></li>
+  <li><%= link_to ts("FAQs & Tutorials"), archive_faqs_path %></li>
+  <li><%= link_to ts("Release Notes"), admin_posts_path(:tag => 1) %></li>
   <li><%= link_to ts("Known Issues"), known_issues_path %></li>
 </ul>
 <!--/subnav-->
@@ -20,10 +19,11 @@
     <%= raw sanitize_field(@admin_setting, :disabled_support_form_text) %>
   </div>
 <% else %>
-  <h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
+  <h3 class="heading"><%= ts("Please use this form for questions about how to use the Archive and to report any technical problems. We are always glad to hear from our users!") %></h3>
   <div class="userstuff">
-    <p><%= ts("We're still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href=\"http://www.transformativeworks.org/contact_us\">the back-up form</a>.").html_safe %></p>
-    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+    <p><%= ts("If your question or problem concerns potential violations of the Terms of Service, control of Orphaned Works, or issues requiring identity verification such as regaining access to a lost account, please <a href=\"abuse_reports/new\">contact our Policy and Abuse team</a> instead.").html_safe %></p>
+    <p><%= ts("For current updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>.").html_safe %></p>
+    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
