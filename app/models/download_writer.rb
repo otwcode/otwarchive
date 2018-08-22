@@ -100,7 +100,7 @@ class DownloadWriter
       '--pubdate', meta[:pubdate],
       '--publisher', ArchiveConfig.APP_NAME,
       '--language', meta[:language],
-      '--extra-css', '/stylesheets/ebooks.css',
+      '--extra-css', Rails.public_path.join('stylesheets/ebooks.css').to_s,
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
       # second for multi-chapter, and third for the preface and afterword
