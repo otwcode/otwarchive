@@ -4,6 +4,7 @@ class FeedbacksController < ApplicationController
 
   def new
     @feedback = Feedback.new
+    @admin_setting = AdminSetting.current
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
@@ -13,6 +14,7 @@ class FeedbacksController < ApplicationController
   end
 
   def create
+    @admin_setting = AdminSetting.current
     @feedback = Feedback.new(feedback_params)
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
