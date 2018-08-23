@@ -1,0 +1,18 @@
+.meta dl.tags {
+  border: none;
+  padding: 0;
+}
+
+.meta dl.tags > dt, .meta dl.tags > dd {
+  display: block;
+  margin: 0;
+}
+
+.meta dt {
+  font-weight: bold;
+}
+
+#chapters, .userstuff {
+  font-family: serif;
+  padding: 0;
+}

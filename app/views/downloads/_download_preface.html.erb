@@ -1,8 +1,13 @@
 <div id="preface">
   <h2 class="toc-heading"><%= ts("Preface") %></h2>
 
-  <p class="message"><%= ts("Posted originally on the") %> <%= link_to ArchiveConfig.APP_NAME, root_url %>
-<%= ts("at") %> <%= link_to work_url(@work), work_url(@work) %>.</p>
+  <p class="message">
+    <b><%= @work.title.html_safe %></b><br/>
+    <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
+          archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
+          work_url: link_to(work_url(@work), work_url(@work))
+        ).html_safe %>
+  </p>
 
   <div class="meta">
     <dl class="tags">
