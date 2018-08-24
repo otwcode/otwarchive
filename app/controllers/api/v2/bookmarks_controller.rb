@@ -56,8 +56,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   private
 
   # Find bookmarks for this archivist
-  def check_archivist_bookmark(archivist, original_url, archivist_bookmarks)
-    current_bookmark_url = original_url
+  def check_archivist_bookmark(archivist, current_bookmark_url, archivist_bookmarks)
     archivist_bookmarks = archivist_bookmarks
                             .select { |b| b&.bookmarkable&.url == current_bookmark_url }
                             .map    { |b| [b, b.bookmarkable] }
