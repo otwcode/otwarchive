@@ -59,7 +59,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   def check_archivist_bookmark(archivist, original_url, archivist_bookmarks)
     current_bookmark_url = original_url
     archivist_bookmarks = archivist_bookmarks
-                            .select { |b| b.bookmarkable.url == current_bookmark_url }
+                            .select { |b| b&.bookmarkable&.url == current_bookmark_url }
                             .map    { |b| [b, b.bookmarkable] }
 
     if archivist_bookmarks.present?
