@@ -444,9 +444,9 @@ GEM
       multi_json (~> 1.3)
       rake
       rest-client (~> 1.6)
-    transaction_isolation (1.0.3)
+    transaction_isolation (1.0.5)
       activerecord (>= 3.0.11)
-    transaction_retry (1.0.2)
+    transaction_retry (1.0.3)
       activerecord (>= 3.0.11)
       transaction_isolation (>= 1.0.2)
     tzinfo (1.2.3)
@@ -568,6 +568,7 @@ DEPENDENCIES
   timecop
   timeliness
   tire
+  transaction_isolation (= 1.0.5)
   transaction_retry
   unicode
   unicorn (>= 5.1.0)

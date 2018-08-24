@@ -37,7 +37,7 @@ describe Api::V1::BaseController, type: :controller do
   end
 
   describe "batch_errors with a valid pseud" do
-    let(:archivist) { create_archivist }
+    let(:archivist) { create(:archivist) }
 
     it "should return error messages with no items to import" do
       user = archivist

@@ -40,6 +40,8 @@ cd elasticsearch-${ES_VERSION}
 echo "http.port: ${ES_PORT}" >> config/elasticsearch.yml
 # Make sure to use the exact parameters you want for elasticsearch and give it enough sleep time to properly start up
 nohup bash -c "./bin/elasticsearch 2>&1" &
+wget -q --waitretry=1 --retry-connrefused -T 20 -O - "http://127.0.0.1:${ES_PORT}/_cluster/health?wait_for_status=yellow"
+echo
 
 cd ~/clone
 echo "BCRYPT_COST: 4"  >> config/local.yml
