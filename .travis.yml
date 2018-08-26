@@ -2,9 +2,6 @@ language: ruby
 dist: trusty
 cache: bundler
 sudo: required
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq calibre openssl build-essential xorg libssl-dev
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rake db:otwseed"
@@ -32,6 +29,8 @@ rvm:
 services:
   - redis-server
   - memcached
+before_install:
+  - bash script/travis_ebook_converters.sh
 script:
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
@@ -40,7 +39,6 @@ before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
-  - bash script/travis_ebook_converters.sh
   - sudo bash script/travis_set_read_isolation.sh
 after_failure:
   - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html
