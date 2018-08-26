@@ -2,6 +2,12 @@
 
 ## Contributing code
 
+### Report a bug
+
+We have a [list of known issues](https://archiveofourown.org/known_issues).
+If you have a problem that you don't see on that list, please send a bug report
+via the [Support and Feedback Form](https://archiveofourown.org/support).
+
 ### Pick an issue to work on
 
 You will find our [list of approved issues on JIRA](https://otwarchive.atlassian.net/projects/AO3/issues).

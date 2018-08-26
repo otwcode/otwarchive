@@ -205,6 +205,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      post :end_tos_prompt
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
@@ -471,6 +472,13 @@ Otwarchive::Application.routes.draw do
       post 'bookmarks/import', to: 'bookmarks#create'
       post 'works/import', to: 'works#create'
       post 'works/urls', to: 'works#batch_urls'
+    end
+
+    namespace :v2 do
+      resources :bookmarks, only: [:create], defaults: { format: :json }
+      resources :works, only: [:create], defaults: { format: :json }
+      post 'bookmarks/search', to: 'bookmarks#search'
+      post 'works/search', to: 'works#search'
     end
   end
 

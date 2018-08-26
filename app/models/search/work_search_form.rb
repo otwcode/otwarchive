@@ -100,6 +100,7 @@ class WorkSearchForm
     # TODO: Change this to not rely on WorkSearch
     processed_opts = WorkSearch.new(opts).options
     processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
+    processed_opts.merge!(works_parent: opts[:works_parent])
     processed_opts
   end
 
@@ -118,24 +119,23 @@ class WorkSearchForm
     if @options[:creators].present?
       summary << "Author/Artist: #{@options[:creators]}"
     end
-    tags = []
-    if @options[:tag].present?
-      tags << @options[:tag]
-    end
-    all_tag_ids = []
-    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
-      if @options[tag_ids].present?
-        all_tag_ids += @options[tag_ids]
-      end
-    end
+    tags = @searcher.included_tag_names
+    all_tag_ids = @searcher.filter_ids
     unless all_tag_ids.empty?
       tags << Tag.where(id: all_tag_ids).pluck(:name).join(", ")
     end
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"
     end
-    if %w(1 true).include?(self.complete.to_s)
+    if complete.to_s == "T"
       summary << "Complete"
+    elsif complete.to_s == "F"
+      summary << "Incomplete"
+    end
+    if crossover.to_s == "T"
+      summary << "Only Crossovers"
+    elsif crossover.to_s == "F"
+      summary << "No Crossovers"
     end
     if %w(1 true).include?(self.single_chapter.to_s)
       summary << "Single Chapter"

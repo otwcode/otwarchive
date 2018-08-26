@@ -55,17 +55,39 @@ class Bookmark < ApplicationRecord
   }
 
   scope :visible_to_all, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
-      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+    is_public.with_bookmarkable_visible_to_all
   }
 
   scope :visible_to_registered_user, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.hidden_by_admin = 0) OR
+    is_public.with_bookmarkable_visible_to_registered_user
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to registered
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_registered_user, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.hidden_by_admin = 0) OR
       (series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to logged-out
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_all, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
+      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a missing bookmarkable (regardless of
+  # the bookmark's hidden_by_admin/private status).
+  scope :with_missing_bookmarkable, -> {
+    join_bookmarkable.where(
+      "works.id IS NULL AND series.id IS NULL AND external_works.id IS NULL"
+    )
   }
 
   scope :visible_to_admin, -> { not_private }
@@ -137,13 +159,9 @@ class Bookmark < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_bookmarks"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   # Returns the number of bookmarks on an item visible to the current user

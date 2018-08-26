@@ -8,5 +8,10 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= render :partial => 'bookmarks/search_form' %>
+<% # ES UPGRADE TRANSITION # %>
+<% if use_new_search? %>
+  <%= render "bookmarks/search_form" %>
+<% else %>
+  <%= render "bookmarks/search_form_old" %>
+<% end %>
 <!--/content-->

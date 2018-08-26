@@ -86,7 +86,6 @@ class Work < ApplicationRecord
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -129,17 +128,6 @@ class Work < ApplicationRecord
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
       throw :abort
-    end
-  end
-
-  # Set the authors_to_sort_on value, which should be anon for anon works
-  def set_author_sorting
-    if self.anonymous?
-      self.authors_to_sort_on = "Anonymous"
-    elsif self.authors.present?
-      self.authors_to_sort_on = self.sorted_authors
-    else
-      self.authors_to_sort_on = self.sorted_pseuds
     end
   end
 
@@ -191,9 +179,8 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_parents, :save_new_recipients
 
-  before_create :set_anon_unrevealed, :set_author_sorting
+  before_create :set_anon_unrevealed
   after_create :notify_after_creation
-  before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
@@ -278,13 +265,9 @@ class Work < ApplicationRecord
   end
 
   # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
+  # Remove this function.
   def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -944,12 +927,12 @@ class Work < ApplicationRecord
   end
 
   # FILTERING CALLBACKS
-  after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
-  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag, meta=false)
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  # Creates a filter_tagging relationship between the work and the tag or its
+  # canonical synonym. Also updates the series index because series inherit tags
+  # from works
+  def add_filter_tagging(tag, meta = false)
     filter = tag.canonical? ? tag : tag.merger
     if filter
       if !self.filters.include?(filter)
@@ -963,10 +946,13 @@ class Work < ApplicationRecord
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
   end
 
-  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  # Removes filter_tagging relationship unless the work is tagged with more than
+  # one synonymous tags. Also updates the series index because series inherit
+  # tags from works
   def remove_filter_tagging(tag)
     filter = tag.filter
     if filter
@@ -990,17 +976,8 @@ class Work < ApplicationRecord
           end
         end
       end
+      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
     end
-  end
-
-  # Determine if filter counts need to be reset after the work is saved
-  def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
-      self.should_reset_filters = false
-    end
-    return true
   end
 
   # Must be called before save
@@ -1008,12 +985,23 @@ class Work < ApplicationRecord
     self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
   end
 
-  # Calls reset_filter_count on all the work's filters
+  # We need to do a recount for our filters if:
+  # - the work is brand new
+  # - the work is posted from a draft
+  # - the work is hidden or unhidden by an admin
+  # - the work's restricted status has changed
+  # Note that because the two filter counts both include unrevealed works, we
+  # don't need to check whether in_unrevealed_collection has changed -- it
+  # won't change the counts either way.
+  # (Modelled on Work.should_reindex_pseuds?)
+  def should_reset_filters?
+    pertinent_attributes = %w(id posted restricted hidden_by_admin)
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Recalculates filter counts on all the work's filters
   def adjust_filter_counts
-    if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
-    end
-    return true
+    FilterCount.enqueue_filters(filters.reload) if should_reset_filters?
   end
 
   ################################################################################
@@ -1164,8 +1152,6 @@ class Work < ApplicationRecord
 
   scope :id_only, -> { select("works.id") }
 
-  scope :ordered_by_author_desc, -> { order("authors_to_sort_on DESC") }
-  scope :ordered_by_author_asc, -> { order("authors_to_sort_on ASC") }
   scope :ordered_by_title_desc, -> { order("title_to_sort_on DESC") }
   scope :ordered_by_title_asc, -> { order("title_to_sort_on ASC") }
   scope :ordered_by_word_count_desc, -> { order("word_count DESC") }
@@ -1376,12 +1362,15 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
-  end
-
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+  # TODO drop unused database column authors_to_sort_on
+  def authors_to_sort_on
+    if self.anonymous?
+      "Anonymous"
+    elsif self.authors.present?
+      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    else
+      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+    end
   end
 
   def sorted_title
@@ -1430,7 +1419,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
@@ -1512,7 +1501,7 @@ class Work < ApplicationRecord
     as_json(
       root: false,
       only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :language_id, :word_count],
+        :created_at, :revised_at, :language_id, :word_count, :complete],
       methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
@@ -1520,7 +1509,7 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Work',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 
@@ -1574,7 +1563,38 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
+    # Short-circuit the check if there's only one fandom tag:
+    return false if fandoms.count == 1
+
+    # Replace fandoms with their mergers if possible,
+    # as synonyms should have no meta tags themselves
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
+
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      until boundary.empty?
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+      end
+
+      all_meta_tags.uniq
+    end
+
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?

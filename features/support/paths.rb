@@ -24,6 +24,8 @@ module NavigationHelpers
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the works page$/i
+      works_path
     when /^the admin login page$/i
       new_admin_session_path
     when /^the redirect page$/i
@@ -91,6 +93,10 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /the gifts page$/
+      gifts_path
+    when /the gifts page for the recipient (.*)$/
+      gifts_path(recipient: $1)
     when /my gifts page/
       user_gifts_path(User.current_user)
     when /my assignments page/
@@ -111,7 +117,7 @@ module NavigationHelpers
       user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
-    when /^(.*?)(?:'s)? works page$/i
+    when /^([^ ]*?)(?:'s)? works page$/i
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/

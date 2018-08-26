@@ -40,6 +40,7 @@ Feature: Filing a support request
     And all emails have been delivered
     And I press "Send"
   Then I should see "Email does not seem to be a valid address."
+    And "Deutsch" should be selected within "Select language (required)"
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"

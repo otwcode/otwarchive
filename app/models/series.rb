@@ -227,7 +227,8 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
@@ -236,7 +237,7 @@ class Series < ApplicationRecord
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       bookmarkable_type: 'Series',
-      bookmarkable_join: "bookmarkable"
+      bookmarkable_join: { name: "bookmarkable" }
     )
   end
 

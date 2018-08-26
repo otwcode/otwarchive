@@ -22,7 +22,7 @@
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
-          <%= link_to_help "filters-#{filter_action}-tags-help" %>
+          <%= link_to_help "bookmark-filters-#{filter_action}-tags" %>
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>
@@ -39,7 +39,9 @@
                 <ul>
                   <% @facets[tag_type].each do |tag| %>
                     <li>
-                      <% next if filter_action == "include" && @search.options[:excluded_tag_ids]&.include?(tag.id.to_s) %>
+                      <% next if filter_action == "include" &&
+                          (@search.options[:excluded_tag_ids]&.include?(tag.id.to_s) ||
+                              @search.options[:excluded_bookmark_tag_ids]&.include?(tag.id.to_s)) %>
                       <%= label_tag "#{filter_action}_bookmark_search_#{tag_type}_ids_#{tag.id}" do %>
                         <% if (tag_type == "rating") && @facets[tag_type].length > 1 && filter_action == "include" %>
                           <%= radio_button_tag "#{filter_action}_bookmark_search[#{tag_type}_ids][]",
@@ -67,7 +69,7 @@
             <dd class="autocomplete search">
               <%= f.text_field field_name, autocomplete_options("tag") %>
             </dd>
-            <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
+            <% field_name = filter_action == "include" ? "other_bookmark_tag_names" : "excluded_bookmark_tag_names" %>
             <dt class="bookmarker autocomplete search">
               <%= f.label field_name, ts("Other bookmarker's tags to %{filter_action}", filter_action: filter_action) %>
             </dt>
@@ -84,20 +86,19 @@
       <dd class="more group">
         <dl>
           <dt class="search">
-            <%= f.label :query, ts("Search within results") %>
+            <%= f.label :bookmarkable_query, ts("Search within results") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmarkable_query %>
           </dd>
 
-          <% # TODO: UPDATE WHEN NEW BOOKMARK CODE COMES IN %>
           <dt class="bookmarker search">
-            <%= f.label :query, ts("Search bookmarker's tags and notes") %>
+            <%= f.label :bookmark_query, ts("Search bookmarker's tags and notes") %>
             <%= link_to_help "bookmark-search-text-help" %>
           </dt>
           <dd class="bookmarker search">
-            <%= f.text_field :query %>
+            <%= f.text_field :bookmark_query %>
           </dd>
 
           <dt class="options"><%= ts("Bookmark types") %></dt>

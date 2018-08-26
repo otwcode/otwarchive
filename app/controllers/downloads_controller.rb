@@ -3,7 +3,6 @@ class DownloadsController < ApplicationController
   include XhtmlSplitter
 
   skip_before_action :store_location, only: :show
-  before_action :guest_downloading_off, only: :show
   before_action :check_visibility, only: :show
 
   # named route: download_path
@@ -215,12 +214,4 @@ protected
     xhtml = doc.children.to_xhtml
     File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') { |f| f.write(xhtml) }
   end
-
-  def guest_downloading_off
-    if !logged_in? && @admin_settings.guest_downloading_off?
-      redirect_to login_path(high_load: true)
-    end
-  end
-
 end
-
