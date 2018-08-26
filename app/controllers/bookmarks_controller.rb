@@ -100,9 +100,8 @@ class BookmarksController < ApplicationController
           @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
 
           if @user.blank?
-            # We're using the new search, but it's not a particular user's
-            # bookmarks. That means that instead of the normal bookmark
-            # listing, we want to list *bookmarkable* items.
+            # When it's not a particular user's bookmarks, we want
+            # to list *bookmarkable* items to avoid duplication
             @bookmarkable_items = @search.bookmarkable_search_results
             flash_max_search_results_notice(@bookmarkable_items)
             @facets = @bookmarkable_items.facets
