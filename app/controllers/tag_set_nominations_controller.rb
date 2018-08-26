@@ -38,11 +38,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def set_limit
-    @limit = HashWithIndifferentAccess.new
-	  @limit[:fandom] = @tag_set.fandom_nomination_limit
-	  @limit[:character] = @tag_set.character_nomination_limit
-	  @limit[:relationship] = @tag_set.relationship_nomination_limit
-	  @limit[:freeform] = @tag_set.freeform_nomination_limit
+    @limit = @tag_set.limits
   end
 
   # used in new/edit to build any nominations that don't already exist before we open the form
@@ -148,7 +144,7 @@ class TagSetNominationsController < ApplicationController
     @nominations_count = HashWithIndifferentAccess.new
     more_noms = false
 
-    if @limit[:fandom] > 0
+    if @tag_set.includes_fandoms?
       # all char and rel tags happen under fandom noms
       @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
       more_noms = true if  @nominations_count[:fandom] > @nom_limit
@@ -211,7 +207,6 @@ class TagSetNominationsController < ApplicationController
       flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
-    setup_for_review
 
     # Collate the input into @approve, @reject, @synonym, @change, checking for:
     # - invalid tag name changes
@@ -224,7 +219,7 @@ class TagSetNominationsController < ApplicationController
 
     # If we have errors don't move ahead
     unless @errors.empty?
-      render action: "index" and return
+      render_index_on_error and return
     end
 
     # OK, now we're going ahead and making piles of db changes! eep! D:
@@ -234,13 +229,15 @@ class TagSetNominationsController < ApplicationController
       @tagnames_to_remove = @reject[tag_type]
 
       # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
-      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).pluck(:tagname).uniq
-      tagnames_to_change.each do |oldname|
-        synonym = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination", tagname: oldname).pluck(:synonym).first
-        unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
-          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
-            oldname: oldname, newname: synonym)
-          render action: "index" and return
+      if @tagnames_to_add.present?
+        tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).pluck(:tagname).uniq
+        tagnames_to_change.each do |oldname|
+          synonym = TagNomination.for_tag_set(@tag_set).where(type: "#{tag_type.classify}Nomination", tagname: oldname).pluck(:synonym).first
+          unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
+            flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
+              oldname: oldname, newname: synonym)
+            render_index_on_error and return
+          end
         end
       end
 
@@ -252,7 +249,7 @@ class TagSetNominationsController < ApplicationController
           # ughhhh
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             oldname: oldname, newname: newname)
-          render action: "index" and return
+          render_index_on_error and return
         end
       end
 
@@ -260,7 +257,7 @@ class TagSetNominationsController < ApplicationController
       unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
-        render action: "index" and return
+        render_index_on_error and return
       end
 
       @notice ||= []
@@ -280,6 +277,11 @@ class TagSetNominationsController < ApplicationController
   end
 
   protected
+
+  def render_index_on_error
+    setup_for_review
+    render action: "index"
+  end
 
   # gathers up the data for all the tag types
   def collect_update_multiple_results

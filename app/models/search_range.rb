@@ -2,7 +2,7 @@ class SearchRange
 
   attr_accessor :text_range
 
-  TIME_REGEX = /^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/
+  TIME_REGEX = /^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?\s*$/
   NUMBER_REGEX = /^([<>]*)\s*([\d,. -]+)\s*$/
   OUT_OF_RANGE_DATE = 1000.years.ago
 

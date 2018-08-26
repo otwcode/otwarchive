@@ -73,6 +73,7 @@ li.blurb:after, .blurb .blurb:after {
 
 .blurb dl.stats {
   float: right;
+  line-height: 2.143;
 }
 
 .blurb .fandoms .landmark {

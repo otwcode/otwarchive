@@ -2,29 +2,7 @@
 Feature: Admin Settings Page
   In order to improve performance
   As an admin
-  I want to be able to control guest downloading and tag wrangling.
-
-  Scenario: Settings page shows options for guest downloading and tag wrangling
-    Given I am logged in as an admin
-    When I go to the admin-settings page
-    Then I should see "Turn off downloading for guests"
-      And I should see "Turn off tag wrangling for non-admins"
-
-  Scenario: Update tag wrangling and guest downloading
-    Given I am logged in as an admin
-    When I go to the admin-settings page
-      And I check "Turn off downloading for guests"
-      And I check "Turn off tag wrangling for non-admins"
-      And I press "Update"
-    Then I should see "Archive settings were successfully updated."
-
-  Scenario: Turn off guest downloading
-    Given guest downloading is off
-      And I have a work "Storytime"
-    When I log out
-      And I view the work "Storytime"
-      And I follow "MOBI"
-    Then I should see "Due to current high load"
+  I want to be able to control downloading and tag wrangling.
 
   Scenario: Turn off downloads
     Given downloads are off
@@ -41,8 +19,20 @@ Feature: Admin Settings Page
       And the following activated tag wrangler exists
         | login           |
         | dizmo           |
-      And a character exists with name: "Ianto Jones", canonical: true    
+      And a canonical character "Ianto Jones"
     When I am logged in as "dizmo"
       And I edit the tag "Ianto Jones"
     Then I should see "Wrangling is disabled at the moment. Please check back later."
       And I should not see "Synonym of"
+    
+  Scenario: Turn off Support form
+    Given the support form is disabled and its text field set to "Please don't contact us"
+    When I am logged in as a random user
+      And I go to the support page
+    Then I should see "Please don't contact us"
+
+  Scenario: Turn on Support form
+    Given the support form is enabled
+    When I am logged in as a random user
+      And I go to the support page
+    Then I should see "We can answer Support inquiries in"

@@ -29,7 +29,8 @@ class Tag < ApplicationRecord
   end
 
   def self.write_redis_to_database
-    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
       Tag.transaction do
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
@@ -50,7 +51,7 @@ class Tag < ApplicationRecord
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
     expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 50) + count % 20 ].min
   end
 
   def taggings_count_cache_key

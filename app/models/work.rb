@@ -1510,32 +1510,31 @@ class Work < ApplicationRecord
     # as synonyms should have no meta tags themselves
     all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
-    # don't have meta-tags of their own, or the tag itself if it doesn't have
-    # meta-tags) associated with that fandom.
-    top_meta_groups = all_without_syns.map do |f|
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
       # TODO: This is more complicated than it has to be. Once the
       # meta_taggings table is fixed so that the inherited meta-tags are
       # correctly calculated, this can be simplified.
       boundary = [f] + f.meta_tags
       all_meta_tags = []
 
-      loop do
+      until boundary.empty?
         all_meta_tags.concat(boundary)
         boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-        break if boundary.empty?
       end
 
-      all_meta_tags.select { |m| m.meta_taggings.empty? }.uniq
+      all_meta_tags.uniq
     end
 
-    # Find the biggest group of top-level meta tags.
-    biggest_group_size = top_meta_groups.map(&:size).max
-
-    # If the biggest group is the same size as the total number in all groups,
-    # that means that all top-level meta-tags in all groups also occur in the
-    # biggest group, so we don't have any fandoms that are unrelated to it.
-    top_meta_groups.flatten.uniq.size > biggest_group_size
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?
