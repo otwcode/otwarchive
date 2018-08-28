@@ -22,10 +22,7 @@ html, body, #main, .works-show, dl.meta, .meta, .meta dd, .meta ul, .preface blo
   text-indent: 22pt;
 }
 
-/* INTERACTION: OLD FILTERS */
-/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
-#header, #footer, #dashboard, img, #skiplinks, .navigation, .meta dt, #feedback, .meta .stats, .blurb dt, .filters, .pagination, .flash, input, .landmark,
-.old-filters {
+#header, #footer, #dashboard, img, #skiplinks, .navigation, .meta dt, #feedback, .meta .stats, .blurb dt, .filters, .pagination, .flash, input, .landmark {
   display: none;
 }
 

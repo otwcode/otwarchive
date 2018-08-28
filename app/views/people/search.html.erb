@@ -3,11 +3,7 @@
 
 <%= render 'shared/search_nav' %>
 
-<% if use_new_search? %>
-  <%= render :partial => 'people/new_search_form' %>
-<% else %>
-  <%= render :partial => 'people/search_form' %>
-<% end %>
+<%= render :partial => 'people/search_form' %>
 
 <% if @people %>
   <p><strong><%= search_results_found(@people) %></strong></p>

@@ -54,11 +54,7 @@ ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
-ELASTICSEARCH_URL: 'http://127.0.0.1:9500'
-ELASTICSEARCH_1_URL: 'http://127.0.0.1:9500'
-# ES UPGRADE TRANSITION #
-# Remove UPGRADED_ELASTICSEARCH_URL
-UPGRADED_ELASTICSEARCH_URL: 'http://127.0.0.1:9400'
+ELASTICSEARCH_URL: 'http://127.0.0.1:9400'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings

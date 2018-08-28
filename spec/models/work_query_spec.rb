@@ -5,14 +5,9 @@ describe WorkQuery do
   it "should return raw json for a simple search" do
     q = WorkQuery.new(query: "unicorns")
     search_body = q.generated_query
-    expected_query_string_arr = [{
-      query_string: {
-        query: "unicorns",
-        default_operator: "AND"
-      }
-    }]
-
-    expect(search_body[:query][:bool][:must]).to eq(expected_query_string_arr)
+    query = search_body.dig(:query, :bool, :must).first
+    expect(query.dig(:query_string, :query)).to eq("unicorns")
+    expect(query.dig(:query_string, :default_operator)).to eq("AND")
   end
 
   it "should never return drafts" do
@@ -125,9 +120,9 @@ describe WorkQuery do
     expect(q.filters).to include({range: { word_count: { gt: 1000 } } })
   end
 
-  it "should sort by date by default" do
+  it "should sort by relevance by default" do
     q = WorkQuery.new
-    expect(q.generated_query[:sort]).to eq({'revised_at' => { order: 'desc', unmapped_type: 'date' }})
+    expect(q.generated_query[:sort]).to eq({'_score' => { order: 'desc' }})
   end
 
   it "should allow you to sort by creator name" do

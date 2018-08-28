@@ -2,19 +2,7 @@ class PeopleController < ApplicationController
 
   before_action :load_collection
 
-  # ES UPGRADE TRANSITION #
-  # Remove and standardize
-  def do_search
-    options = { query: params[:query], page: params[:page] || 1 }
-    if @collection
-      options[:collection_id] = @collection.id
-    end
-    @people = PseudSearch.search(options)
-    @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-    @work_counts = Pseud.work_counts_for_pseuds(@people)
-  end
-
-  def new_search
+  def search
     if people_search_params.blank?
       @search = PseudSearchForm.new({})
     else
@@ -22,14 +10,6 @@ class PeopleController < ApplicationController
       @search = PseudSearchForm.new(options)
       @people = @search.search_results
       flash_max_search_results_notice(@people)
-    end
-  end
-
-  def search
-    if use_new_search?
-      new_search and return
-    elsif params[:query].present?
-      do_search
     end
   end
 
