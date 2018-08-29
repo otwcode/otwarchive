@@ -1,1 +1,1 @@
-$elasticsearch = Elasticsearch::Client.new host: ArchiveConfig.ELASTICSEARCH_URL
+$elasticsearch = Elasticsearch::Client.new host: ArchiveConfig.ES_URL
