@@ -180,7 +180,9 @@ public
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
       session.delete(:return_to)
-    else
+    elsif request.fullpath.length <= 200
+      # Sessions are stored in cookies, which has a 4KB size limit.
+      # Don't store paths that are too long (e.g. filters with lots of exclusions).
       session[:return_to] = request.fullpath
       Rails.logger.debug "Return to: #{session[:return_to]}"
     end
