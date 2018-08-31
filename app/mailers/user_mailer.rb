@@ -322,9 +322,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -342,9 +343,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,

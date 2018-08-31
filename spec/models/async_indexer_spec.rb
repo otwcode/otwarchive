@@ -45,7 +45,7 @@ describe AsyncIndexer do
   context "when persistent failures occur" do
     before do
       # Make elasticsearch always fail.
-      allow($new_elasticsearch).to receive(:bulk) do |options|
+      allow($elasticsearch).to receive(:bulk) do |options|
         {
           "errors" => true,
           "items" => options[:body].map do |line|

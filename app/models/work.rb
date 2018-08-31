@@ -8,9 +8,6 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
 
   ########################################################################
@@ -250,7 +247,6 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
@@ -262,12 +258,6 @@ class Work < ApplicationRecord
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -1460,39 +1450,6 @@ class Work < ApplicationRecord
   #
   #############################################################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block #
-  mapping do
-    indexes :authors_to_sort_on,  index: :not_analyzed
-    indexes :title_to_sort_on,    index: :not_analyzed
-    indexes :title,               boost: 20
-    indexes :creator,             boost: 15
-    indexes :revised_at,          type: 'date'
-  end
-
-  def to_indexed_json
-    to_json(
-      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
-      methods: [
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
-        :pseud_ids,
-        :collection_ids,
-        :hits,
-        :comments_count,
-        :kudos_count,
-        :bookmarks_count,
-        :creator
-      ])
-  end
-
   def document_json
     WorkIndexer.new({}).document(self)
   end
@@ -1535,23 +1492,6 @@ class Work < ApplicationRecord
     self.stat_counter.bookmarks_count
   end
 
-  # Deprecated: old search
-  def creator
-    names = ""
-    if anonymous?
-      names = "Anonymous"
-    else
-      pseuds.each do |pseud|
-        names << "#{pseud.name} #{pseud.user_login} "
-      end
-      external_author_names.pluck(:name).each do |name|
-        names << "#{name} "
-      end
-    end
-    names
-  end
-
-  # New version
   def creators
     if anonymous?
       ["Anonymous"]
@@ -1570,32 +1510,31 @@ class Work < ApplicationRecord
     # as synonyms should have no meta tags themselves
     all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
-    # don't have meta-tags of their own, or the tag itself if it doesn't have
-    # meta-tags) associated with that fandom.
-    top_meta_groups = all_without_syns.map do |f|
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
       # TODO: This is more complicated than it has to be. Once the
       # meta_taggings table is fixed so that the inherited meta-tags are
       # correctly calculated, this can be simplified.
       boundary = [f] + f.meta_tags
       all_meta_tags = []
 
-      loop do
+      until boundary.empty?
         all_meta_tags.concat(boundary)
         boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-        break if boundary.empty?
       end
 
-      all_meta_tags.select { |m| m.meta_taggings.empty? }.uniq
+      all_meta_tags.uniq
     end
 
-    # Find the biggest group of top-level meta tags.
-    biggest_group_size = top_meta_groups.map(&:size).max
-
-    # If the biggest group is the same size as the total number in all groups,
-    # that means that all top-level meta-tags in all groups also occur in the
-    # biggest group, so we don't have any fandoms that are unrelated to it.
-    top_meta_groups.flatten.uniq.size > biggest_group_size
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?

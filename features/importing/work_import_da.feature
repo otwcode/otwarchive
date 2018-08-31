@@ -36,7 +36,8 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/gallery/#/drdbx9"
     When I press "Import"
     Then I should not see "Preview"
-      And I should see "We were only partially able to import this work and couldn't save it. Please review below!"
+      And I should see "Chapter 1 of"
+      And I should see "is blank."
 
   Scenario: Creating a new fic from deviantart import
     Given basic tags
