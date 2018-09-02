@@ -53,14 +53,6 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
-  # ES UPGRADE TRANSITION #
-  # Remove method & `helper_method :use_new_search?`
-  helper_method :use_new_search?
-  def use_new_search?
-    $rollout.active?(:use_new_search) ||
-      current_user.present? && $rollout.active?(:use_new_search, current_user)
-  end
-
   # Title helpers
   helper_method :process_title
 
@@ -476,9 +468,6 @@ public
   end
 
   def flash_max_search_results_notice(result)
-    # ES UPGRADE TRANSITION #
-    # Remove return statement
-    return unless use_new_search?
     notice = result.max_search_results_notice
     flash.now[:notice] = notice if notice.present?
   end

@@ -236,7 +236,7 @@ class BookmarkQuery < Query
   # The date filter on the bookmark (i.e. when the bookmark was created).
   def date_filter
     if options[:date].present?
-      { range: { created_at: Search.range_to_search(options[:date]) } }
+      { range: { created_at: SearchRange.parsed(options[:date]) } }
     end
   end
 

@@ -48,7 +48,7 @@
         <%= f.label :language, ts("Select language (required)") %>
       </dt>
       <dd class="required">
-        <%= f.collection_select(:language, @abuse_languages, :name, :name, { selected: Language.default.name }) %>
+        <%= f.collection_select(:language, @abuse_languages, :name, :name, { selected: @abuse_report.language || Language.default.name }) %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary of Terms of Service Violation (required)") %>

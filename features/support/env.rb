@@ -73,11 +73,9 @@ Before do
 end
 
 After do
-  # ES UPGRADE TRANSITION #
-  # Change all instances of $new_elasticsearch to $elasticsearch
-  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
   indices.each do |index|
-    $new_elasticsearch.indices.delete(index: index)
+    $elasticsearch.indices.delete(index: index)
   end
 end
 

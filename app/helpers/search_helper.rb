@@ -40,14 +40,7 @@ module SearchHelper
   end
 
   def search_results_found(results)
-    # ES UPGRADE TRANSITION
-    # Remove the if statement and results.total_entries
-    count = if results.respond_to?(:unlimited_total_entries)
-              results.unlimited_total_entries
-            else
-              results.total_entries
-            end
-    ts("%{count} Found", count: count)
+    ts("%{count} Found", count: results.unlimited_total_entries)
   end
 
   def random_search_tip
