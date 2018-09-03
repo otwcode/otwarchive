@@ -1,5 +1,5 @@
 <div class="news admin home">
-  <% if logged_in_as_admin? %>
+  <% if current_admin&.admin_post_access? %>
     <%= render "admin_index" %>
   <% else %>
     <div class="primary header module">

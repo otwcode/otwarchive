@@ -1,6 +1,7 @@
 class AdminPostsController < ApplicationController
 
   before_action :admin_only, except: [:index, :show]
+  before_action :authorize_poster, except: [:index, :show]
   before_action :load_languages, except: [:show, :destroy]
 
   # GET /admin_posts
@@ -93,6 +94,14 @@ class AdminPostsController < ApplicationController
     params.require(:admin_post).permit(
       :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list
     )
+  end
+
+  def authorize_poster
+    authorize AdminPost, :can_post?
+  end
+
+  def pundit_user
+    current_admin
   end
 
 end

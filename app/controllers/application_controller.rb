@@ -1,8 +1,12 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+  rescue_from 'Pundit::NotAuthorizedError' do
+    access_denied
+  end
 
   helper :all # include all helpers, all the time
 
@@ -244,6 +248,8 @@ public
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
       redirect_to destination
+    elsif logged_in_as_admin?
+      admin_only_access_denied
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
@@ -253,7 +259,7 @@ public
   end
 
   def admin_only_access_denied
-    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
+    flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
     redirect_to root_path
     false
   end

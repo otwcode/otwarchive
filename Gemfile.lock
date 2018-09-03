@@ -303,6 +303,8 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.5)
+    pundit (2.0.0)
+      activesupport (>= 3.0.0)
     rack (2.0.5)
     rack-dev-mark (0.7.6)
       rack (>= 1.1, < 2.1)
@@ -529,6 +531,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
+  pundit
   rack-dev-mark (>= 0.7.5)
   rails (~> 5.1)
   rails-controller-testing

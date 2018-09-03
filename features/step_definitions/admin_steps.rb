@@ -38,6 +38,13 @@ Given /the following admins? exists?/ do |table|
   end
 end
 
+Given /^I am logged in as admin with role "([^\"]*)"$/ do |role|
+  step("I am logged in as an admin")
+  admin = Admin.find_by(login: "testadmin")
+  admin.roles << role
+  admin.save!
+end
+
 Given /^I am logged in as an admin$/ do
   step("I have an AdminSetting")
   step("I am logged out")
@@ -124,7 +131,7 @@ Given /^I have posted known issues$/ do
 end
 
 Given /^I have posted an admin post$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as admin with role \"communications\"")
   step("I make an admin post")
   step("I am logged out as an admin")
 end
@@ -164,13 +171,13 @@ Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
 end
 
 Given /^I have posted an admin post without paragraphs$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as admin with role \"communications\"")
   step("I make an admin post without paragraphs")
   step("I am logged out as an admin")
 end
 
 Given /^I have posted an admin post with tags$/ do
-  step("I am logged in as an admin")
+  step("I am logged in as admin with role \"communications\"")
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
