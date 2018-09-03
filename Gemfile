@@ -143,7 +143,6 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false
