@@ -7,75 +7,80 @@
 <!--subnav-->
 <h4 class="landmark heading"><%= ts("Reference Links") %></h4>
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("FAQ Index"), archive_faqs_path %></li>
-  <li><%= link_to ts("Tutorials"), admin_posts_path(:tag => 5) %></li>
-  <li><%= link_to ts("Release Notes"), admin_posts_path(:tag => 1) %></li>	
+  <li><%= link_to ts("FAQs & Tutorials"), archive_faqs_path %></li>
+  <li><%= link_to ts("Release Notes"), admin_posts_path(:tag => 1) %></li>
   <li><%= link_to ts("Known Issues"), known_issues_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
-<div class="userstuff">
-  <p><%= ts("We're still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href=\"http://www.transformativeworks.org/contact_us\">the back-up form</a>.").html_safe %></p>
-  <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
-</div>
-<%= form_for(@feedback, html: { class: "post feedback" }) do |f| %>
-  <fieldset>
-    <legend><%= ts("Contact Information") %></legend>
-    <p class="notice" id="email-field-description">
-      <%= ts("Our spam filter does collect IP addresses, but we never see them.") %>
-    </p>
-    <dl>
-      <dt><%= f.label :username, ts("Your name (optional)") %></dt>
-      <dd>
-        <%= f.text_field :username %>
-      </dd>
-      <dt class="required"><%= f.label :email, ts("Your email (required)") %></dt>
-      <dd class="required">
-        <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
-      </dd>
-    </dl>
-  </fieldset>
+<% if @admin_setting.disable_support_form %>
+  <div class="userstuff">
+    <%= raw sanitize_field(@admin_setting, :disabled_support_form_text) %>
+  </div>
+<% else %>
+  <h3 class="heading"><%= ts("Please use this form for questions about how to use the Archive and to report any technical problems. We are always glad to hear from our users!") %></h3>
+  <div class="userstuff">
+    <p><%= ts("If your question or problem concerns potential violations of the Terms of Service, control of Orphaned Works, or issues requiring identity verification such as regaining access to a lost account, please %{contact_abuse_link} instead.", contact_abuse_link: link_to(ts("contact our Policy and Abuse team"), new_abuse_report_path)).html_safe %></p>
+    <p><%= ts("For current updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>.").html_safe %></p>
+    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+  </div>
+  <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
+    <fieldset>
+      <legend><%= ts("Contact Information") %></legend>
+      <p class="notice" id="email-field-description">
+        <%= ts("Our spam filter does collect IP addresses, but we never see them.") %>
+      </p>
+      <dl>
+        <dt><%= f.label :username, ts("Your name (optional)") %></dt>
+        <dd>
+          <%= f.text_field :username %>
+        </dd>
+        <dt class="required"><%= f.label :email, ts("Your email (required)") %></dt>
+        <dd class="required">
+          <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
+        </dd>
+      </dl>
+    </fieldset>
 
-  <fieldset>
-    <legend><%= ts("Describe Your Feedback") %></legend>
-    <dl>
-      <dt class="required">
-        <%= f.label :language, ts("Select language (required)") %>
-      </dt>
-      <dd class="required">
-        <%= f.collection_select(:language, @support_languages, :id, :name, { selected: Language.default.id }) %>
-      </dd>
-      <dt class="required">
-        <%= f.label :summary, ts("Brief summary (required)") %>
-      </dt>
-      <dd class="required">
-        <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
-        <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
-        <%= live_validation_for_field("feedback_summary",
-              failureMessage: ts("Please enter a brief summary of your message")) %>
-      </dd>
-      <dt class="required">
-        <%= f.label :comment, ts("Your comment (required)") %>
-      </dt>
-      <dd class="required">
-        <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
-        <%= live_validation_for_field("feedback_comment",
-              failureMessage: ts("Please enter your feedback")) %>
-        <p class="footnote" id="comment-field-description">
-          <%= ts("Please be as specific as possible, including error messages and/or links") %>
-        </p>
-      </dd>
-    </dl>
-  </fieldset>
+    <fieldset>
+      <legend><%= ts("Describe Your Feedback") %></legend>
+      <dl>
+        <dt class="required">
+          <%= f.label :language, ts("Select language (required)") %>
+        </dt>
+        <dd class="required">
+          <%= f.collection_select(:language, @support_languages, :name, :name, { selected: @feedback.language || Language.default.name }) %>
+        </dd>
+        <dt class="required">
+          <%= f.label :summary, ts("Brief summary (required)") %>
+        </dt>
+        <dd class="required">
+          <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
+          <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
+          <%= live_validation_for_field("feedback_summary",
+                failureMessage: ts("Please enter a brief summary of your message")) %>
+        </dd>
+        <dt class="required">
+          <%= f.label :comment, ts("Your comment (required)") %>
+        </dt>
+        <dd class="required">
+          <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
+          <%= live_validation_for_field("feedback_comment",
+                failureMessage: ts("Please enter your feedback")) %>
+          <p class="footnote" id="comment-field-description">
+            <%= ts("Please be as specific as possible, including error messages and/or links") %>
+          </p>
+        </dd>
+      </dl>
+    </fieldset>
 
-  <fieldset>
-    <legend><%= ts("Send Your Feedback") %></legend>
-    <p class="submit actions">
-      <%= f.submit ts("Send"), data: { disable_with: ts("Please wait...") } %>
-    </p>
-  </fieldset>
-
+    <fieldset>
+      <legend><%= ts("Send Your Feedback") %></legend>
+      <p class="submit actions">
+        <%= f.submit ts("Send"), data: { disable_with: ts("Please wait...") } %>
+      </p>
+    </fieldset>
+  <% end %>
 <% end %>
 <!--/content-->

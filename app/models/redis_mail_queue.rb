@@ -66,7 +66,8 @@ class RedisMailQueue
       begin
         # don't die if we hit one deleted subscription
         UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver
-      rescue
+      rescue ActiveRecord::RecordNotFound
+        # never rescue all errors
       end
     end
   end

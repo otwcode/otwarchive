@@ -21,7 +21,7 @@ describe WorksController do
     end
 
     context "when the query contains countable search parameters" do
-      it "should escape less and greater than in query" do
+      it "escapes less and greater than in query" do
         [
           { params: "< 5 words", expected: "&lt; 5 words", message: "Should escape <" },
           { params: "> 5 words", expected: "&gt; 5 words", message: "Should escape >" },
@@ -32,22 +32,22 @@ describe WorksController do
         end
       end
 
-      it "should convert 'word' to 'word_count'" do
+      it "converts 'word' to 'word_count'" do
         call_with_params(query: "word:6")
         expect(controller.params[:work_search][:word_count]).to eq("6")
       end
 
-      it "should convert 'words' to 'word_count'" do
+      it "converts 'words' to 'word_count'" do
         call_with_params(query: "words:7")
         expect(controller.params[:work_search][:word_count]).to eq("7")
       end
 
-      it "should convert 'hits' queries to 'hits'" do
+      it "converts 'hits' queries to 'hits'" do
         call_with_params(query: "hits:8")
         expect(controller.params[:work_search][:hits]).to eq("8")
       end
 
-      it "should convert other queries to (pluralized term)_count" do
+      it "converts other queries to (pluralized term)_count" do
         %w(kudo comment bookmark).each do |term|
           call_with_params(query: "#{term}:9")
           expect(controller.params[:work_search]["#{term.pluralize}_count"])
@@ -57,7 +57,7 @@ describe WorksController do
     end
 
     context "when sort parameters are provided" do
-      it "should convert variations on 'sorted by: X' into :sort_column key" do
+      it "converts variations on 'sorted by: X' into :sort_column key" do
         [
           "sort by: words",
           "sorted by: words",
@@ -73,7 +73,7 @@ describe WorksController do
         end
       end
 
-      it "should convert variations on sort columns to column name" do
+      it "converts variations on sort columns to column name" do
         [
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
@@ -95,7 +95,7 @@ describe WorksController do
         end
       end
 
-      it "should convert 'ascending' or '>' into :sort_direction key 'asc'" do
+      it "converts 'ascending' or '>' into :sort_direction key 'asc'" do
         [
           "sort > word_count",
           "sort: word_count ascending",
@@ -106,7 +106,7 @@ describe WorksController do
         end
       end
 
-      it "should convert 'descending' or '<' into :sort_direction key 'desc'" do
+      it "converts 'descending' or '<' into :sort_direction key 'desc'" do
         [
           "sort < word_count",
           "sort: word_count descending",
@@ -162,12 +162,12 @@ describe WorksController do
   end
 
   describe "new" do
-    it "should not return the form for anyone not logged in" do
+    it "doesn't return the form for anyone not logged in" do
       get :new
       it_redirects_to new_user_session_path
     end
 
-    it "should render the form if logged in" do
+    it "renders the form if logged in" do
       fake_login
       get :new
       expect(response).to render_template("new")
@@ -209,8 +209,8 @@ describe WorksController do
   end
 
   describe "show" do
-    it "shouldn't error when a work has no fandoms" do
-      work = create(:work, fandoms: [], posted: true)
+    it "doesn't error when a work has no fandoms" do
+      work = create(:posted_work, fandoms: [])
       fake_login
       get :show, params: { id: work.id }
       expect(assigns(:page_title)).to include "No fandom specified"
@@ -220,21 +220,21 @@ describe WorksController do
   describe "index" do
     before do
       @fandom = create(:canonical_fandom)
-      @work = create(:work, posted: true, fandom_string: @fandom.name)
+      @work = create(:posted_work, fandom_string: @fandom.name)
     end
 
-    it "should return the work" do
+    it "returns the work" do
       get :index
       expect(assigns(:works)).to include(@work)
     end
 
-    it "should set the fandom when given a fandom id" do
+    it "sets the fandom when given a fandom id" do
       params = { fandom_id: @fandom.id }
       get :index, params: params
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
-    it "should return search results when given work_search parameters" do
+    it "returns search results when given work_search parameters" do
       params = { :work_search => { query: "fandoms: #{@fandom.name}" } }
       get :index, params: params
       expect(assigns(:works)).to include(@work)
@@ -245,10 +245,10 @@ describe WorksController do
         allow(controller).to receive(:use_caching?).and_return(false)
       end
 
-      it "should return the result with different works the second time" do
+      it "returns the result with different works the second time" do
         get :index
         expect(assigns(:works)).to include(@work)
-        work2 = FactoryGirl.create(:work, posted: true)
+        work2 = create(:posted_work)
         get :index
         expect(assigns(:works)).to include(work2)
       end
@@ -260,36 +260,36 @@ describe WorksController do
       end
 
       context "with NO owner tag" do
-        it "should return the same result the second time when a new work is created within the expiration time" do
+        it "returns the same result the second time when a new work is created within the expiration time" do
           get :index
           expect(assigns(:works)).to include(@work)
-          work2 = FactoryGirl.create(:work, posted: true)
+          work2 = create(:posted_work)
           update_and_refresh_indexes('work')
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
       end
 
-      context "with an owner tag" do
+      context "with a valid owner tag" do
         before do
-          @fandom2 = FactoryGirl.create(:canonical_fandom)
-          @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom2.name)
+          @fandom2 = create(:canonical_fandom)
+          @work2 = create(:posted_work, fandom_string: @fandom2.name)
 
           update_and_refresh_indexes('work')
         end
 
-        it "should only get works under that tag" do
+        it "only gets works under that tag" do
           get :index, params: { tag_id: @fandom.name }
           expect(assigns(:works).items).to include(@work)
           expect(assigns(:works).items).not_to include(@work2)
         end
 
-        it "should show different results on second page" do
+        it "shows different results on second page" do
           get :index, params: { tag_id: @fandom.name, page: 2 }
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        it "should show results when filters are disabled" do
+        it "shows results when filters are disabled" do
           allow(controller).to receive(:fetch_admin_settings).and_return(true)
           admin_settings = AdminSetting.new(disable_filtering: true)
           controller.instance_variable_set("@admin_settings", admin_settings)
@@ -301,11 +301,11 @@ describe WorksController do
 
         context "with restricted works" do
           before do
-            @work2 = FactoryGirl.create(:work, posted: true, fandom_string: @fandom.name, restricted: true)
+            @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
             update_and_refresh_indexes('work')
           end
 
-          it "should not show restricted works to guests" do
+          it "shows restricted works to guests" do
             get :index, params: { tag_id: @fandom.name }
             expect(assigns(:works).items).to include(@work)
             expect(assigns(:works).items).not_to include(@work2)
@@ -313,6 +313,89 @@ describe WorksController do
 
         end
 
+        context "when tag is a synonym" do
+          let(:fandom_synonym) { create(:fandom, merger: @fandom) }
+
+          it "redirects to the merger's work index" do
+            params = { tag_id: fandom_synonym.name }
+            get :index, params: params
+            it_redirects_to tag_works_path(@fandom)
+          end
+
+          context "when collection is specified" do
+            let(:collection) { create(:collection) }
+
+            it "redirects to the merger's collection works index" do
+              params = { tag_id: fandom_synonym.name, collection_id: collection.name }
+              get :index, params: params
+              it_redirects_to collection_tag_works_path(collection, @fandom)
+            end
+          end
+        end
+      end
+    end
+
+    context "with an invalid owner tag" do
+      it "raises an error" do
+        params = { tag_id: "nonexistent_tag" }
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound,
+          "Couldn't find tag named 'nonexistent_tag'"
+        )
+      end
+    end
+
+    context "with an invalid owner user" do
+      it "raises an error" do
+        params = { user_id: "nonexistent_user" }
+        expect { get :index, params: params }.to raise_error(
+          ActiveRecord::RecordNotFound
+        )
+      end
+
+      context "with an invalid pseud" do
+        it "raises an error" do
+          params = { user_id: "nonexistent_user", pseud_id: "nonexistent_pseud" }
+          expect { get :index, params: params }.to raise_error(
+            ActiveRecord::RecordNotFound
+          )
+        end
+      end
+    end
+
+    context "with a valid owner user" do
+      let(:user) { create(:user) }
+      let!(:user_work) { create(:posted_work, authors: [user.default_pseud]) }
+      let(:pseud) { create(:pseud, user: user) }
+      let!(:pseud_work) { create(:posted_work, authors: [pseud]) }
+
+      before do
+        update_and_refresh_indexes("work")
+      end
+
+      it "includes only works for that user" do
+        params = { user_id: user.login }
+        get :index, params: params
+        expect(assigns(:works).items).to include(user_work, pseud_work)
+        expect(assigns(:works).items).not_to include(@work)
+      end
+
+      context "with a valid pseud" do
+        it "includes only works for that pseud" do
+          params = { user_id: user.login, pseud_id: pseud.name }
+          get :index, params: params
+          expect(assigns(:works).items).to include(pseud_work)
+          expect(assigns(:works).items).not_to include(user_work, @work)
+        end
+      end
+
+      context "with an invalid pseud" do
+        it "includes all of that user's works" do
+          params = { user_id: user.login, pseud_id: "nonexistent_pseud" }
+          get :index, params: params
+          expect(assigns(:works).items).to include(user_work, pseud_work)
+          expect(assigns(:works).items).not_to include(@work)
+        end
       end
     end
   end
@@ -321,7 +404,7 @@ describe WorksController do
     let(:update_user) { create(:user) }
     let(:update_chapter) { create(:chapter) }
     let(:update_work) {
-      work = create(:work, authors: [update_user.default_pseud], posted: true)
+      work = create(:posted_work, authors: [update_user.default_pseud])
       work.chapters << update_chapter
       work
     }
@@ -330,7 +413,7 @@ describe WorksController do
       fake_login_known_user(update_user)
     end
 
-    it "should redirect to the edit page if the work could not be saved" do
+    it "redirects to the edit page if the work could not be saved" do
       allow_any_instance_of(Work).to receive(:save).and_return(false)
       update_work.fandom_string = "Testing"
       attrs = { title: "New Work Title" }
@@ -348,7 +431,7 @@ describe WorksController do
           id: update_work.id
         }
       end
-      it "should update coauthors for each chapter when the work is updated" do
+      it "updates coauthors for each chapter when the work is updated" do
         put :update, params: params
         updated_work = Work.find(update_work.id)
         expect(updated_work.pseuds).to include new_coauthor.default_pseud
@@ -396,8 +479,7 @@ describe WorksController do
       it "returns anonymous works in collections for the author" do
         fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work)
-        expect(assigns(:works)).to include(anonymous_work)
+        expect(assigns(:works)).to include(work, anonymous_work)
       end
     end
 
@@ -448,10 +530,8 @@ describe WorksController do
 
         it "returns ONLY unrestricted works in collections" do
           get :collected, params: { user_id: collected_user.login }
-          expect(assigns(:works)).to include(unrestricted_work_in_collection)
-          expect(assigns(:works)).to include(unrestricted_work_2_in_collection)
-          expect(assigns(:works)).not_to include(unrestricted_work)
-          expect(assigns(:works)).not_to include(restricted_work_in_collection)
+          expect(assigns(:works)).to include(unrestricted_work_in_collection, unrestricted_work_2_in_collection)
+          expect(assigns(:works)).not_to include(unrestricted_work, restricted_work_in_collection)
         end
 
         it "returns filtered works when search parameters are provided" do
@@ -466,8 +546,7 @@ describe WorksController do
 
         it "returns ONLY works in collections" do
           get :collected, params: { user_id: collected_user.login }
-          expect(assigns(:works)).to include(unrestricted_work_in_collection)
-          expect(assigns(:works)).to include(restricted_work_in_collection)
+          expect(assigns(:works)).to include(unrestricted_work_in_collection, restricted_work_in_collection)
           expect(assigns(:works)).not_to include(unrestricted_work)
         end
       end
@@ -492,15 +571,13 @@ describe WorksController do
 
       it "returns unrevealed works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work)
-        expect(assigns(:works)).to include(unrevealed_work)
+        expect(assigns(:works)).to include(work, unrevealed_work)
       end
 
       it "returns unrevealed works in collections for logged-in users" do
         fake_login
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work)
-        expect(assigns(:works)).to include(unrevealed_work)
+        expect(assigns(:works)).to include(work, unrevealed_work)
       end
     end
   end

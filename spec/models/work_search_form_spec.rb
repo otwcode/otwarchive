@@ -100,17 +100,17 @@ describe WorkSearchForm do
 
     describe "when searching by author" do
       it "should match partial author names" do
-        work_search = WorkSearchForm.new(creator: "Rowling")
+        work_search = WorkSearchForm.new(creators: "Rowling")
         expect(work_search.search_results).to include second_work
       end
 
       it "should not match fields other than authors" do
-        work_search = WorkSearchForm.new(creator: "Baggins")
+        work_search = WorkSearchForm.new(creators: "Baggins")
         expect(work_search.search_results).not_to include work
       end
 
       it "should turn - into NOT" do
-        work_search = WorkSearchForm.new(creator: "-Tolkien")
+        work_search = WorkSearchForm.new(creators: "-Tolkien")
         expect(work_search.search_results).not_to include work
       end
     end
@@ -242,7 +242,7 @@ describe WorkSearchForm do
     before { run_all_indexing_jobs }
 
     it "matches only on their current username" do
-      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      results = WorkSearchForm.new(creators: "81_white_chain").search_results
       expect(results).to include(work_by_default_pseud)
       expect(results).to include(work_by_second_pseud)
 
@@ -251,10 +251,10 @@ describe WorkSearchForm do
       user.save!
       run_all_indexing_jobs
 
-      results = WorkSearchForm.new(creator: "81_white_chain").search_results
+      results = WorkSearchForm.new(creators: "81_white_chain").search_results
       expect(results).to be_empty
 
-      results = WorkSearchForm.new(creator: "82_white_chain").search_results
+      results = WorkSearchForm.new(creators: "82_white_chain").search_results
       expect(results).to include(work_by_default_pseud)
       expect(results).to include(work_by_second_pseud)
     end

@@ -25,6 +25,9 @@ gem 'rails-controller-testing'
 gem 'mysql2', '0.3.20'
 
 #https://github.com/qertoip/transaction_retry
+# We don't use the isolation gem directly, but it needs to be
+# at the latest version to avoid errors
+gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
@@ -62,7 +65,6 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
-gem 'tire'
 gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
@@ -141,7 +143,6 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false

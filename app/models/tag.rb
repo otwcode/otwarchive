@@ -1,9 +1,6 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -25,32 +22,15 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def self.document_type
-    "tag"
-  end
-
   delegate :document_type, to: :class
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def to_indexed_json
-    as_json.merge(tag_type: type).to_json
-  end
 
   def document_json
     TagIndexer.new({}).document(self)
   end
 
   def self.write_redis_to_database
-    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
       Tag.transaction do
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
@@ -697,7 +677,6 @@ class Tag < ApplicationRecord
 
   # Take the most direct route from tag to pseud and queue up to reindex
   def reindex_pseuds
-    return unless $rollout.active?(:start_new_indexing)
     Creatorship.select(:id, :pseud_id).
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
@@ -727,7 +706,6 @@ class Tag < ApplicationRecord
 
   # Reindex all series (series_ids argument works as above)
   def reindex_all_series(series_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if series_ids.empty?
       series_ids = all_filtered_series_ids
     end
@@ -751,7 +729,6 @@ class Tag < ApplicationRecord
 
   # Reindex all external works (external_work_ids argument works as above)
   def reindex_all_external_works(external_work_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if external_work_ids.empty?
       external_work_ids = all_filtered_external_work_ids
     end
@@ -785,9 +762,9 @@ class Tag < ApplicationRecord
   def reindex_filtered_item(item)
     if item.is_a?(Work)
       RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
     else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
     end 
   end
 
@@ -1235,42 +1212,6 @@ class Tag < ApplicationRecord
     ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
     series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
-  end
-
-  #################################
-  ## SEARCH #######################
-  #################################
-
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :id,           index: :not_analyzed
-    indexes :name#,         analyzer: 'snowball', boost: 100
-    indexes :type
-    indexes :canonical,    type: :boolean
-  end
-
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
-      query do
-        boolean do
-          must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :canonical, 'T' } if options[:canonical].present?
-
-          if options[:type].present?
-            # To support the tags indexed prior to IndexSubqueue, we want to
-            # find the type either in the tag_type field or the _type field:
-            should { term '_type', options[:type].downcase }
-            should { term :tag_type, options[:type].downcase }
-
-            # The tire gem doesn't natively support :minimum_should_match,
-            # but elasticsearch 0.90 does, so we hack it in.
-            @value[:minimum_should_match] = 1
-          end
-        end
-      end
-    end
   end
 
   after_create :after_create
