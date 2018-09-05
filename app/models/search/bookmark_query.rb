@@ -111,12 +111,16 @@ class BookmarkQuery < Query
 
   def sort_column
     @sort_column ||=
-      options[:sort_column].present? ? options[:sort_column] : "created_at"
+      options[:sort_column].present? ? options[:sort_column] : default_sort
   end
 
   def sort_direction
     @sort_direction ||=
       options[:sort_direction].present? ? options[:sort_direction] : "desc"
+  end
+
+  def default_sort
+    facet_tags? ? 'created_at' : '_score'
   end
 
   def sort
