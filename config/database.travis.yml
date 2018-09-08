@@ -1,6 +1,8 @@
 test:
-   adapter: mysql2
-   database: otwarchive_test
-   username: root
-   encoding: utf8
-   collation: utf8_unicode_ci
+  adapter: mysql2
+  database: otwarchive_test
+  username: root
+  encoding: utf8
+  collation: utf8_unicode_ci
+  variables:
+    sql_mode: STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
