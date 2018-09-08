@@ -24,6 +24,13 @@ env:
   - TEST_GROUP="cucumber -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/users              -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/works              -f Ao3Cucumber::Formatter --color"
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
 rvm:
   - "`cat .ruby_version| sed -e 's/ruby //'`"
 services:
@@ -37,7 +44,7 @@ before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
-  - sudo bash script/travis_set_read_isolation.sh
+  - bash script/travis_mysql.sh
 after_failure:
   - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html
 notifications:
