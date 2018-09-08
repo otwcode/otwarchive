@@ -1,6 +1,6 @@
 development:
   adapter: mysql2
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
   pool: 10
   port: 3307
@@ -9,7 +9,7 @@ development:
   database: development<%= ENV['TEST_ENV_NUMBER'] %>
 test:
   adapter: mysql2
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
   pool: 10
   port: 3307
