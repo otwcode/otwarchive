@@ -70,7 +70,7 @@ describe InviteRequestsController do
       it "redirects to index with notice" do
         email = generate(:email)
         post :create, params: { invite_request: { email: email } }
-        invite_request = InviteRequest.find_by!(email)
+        invite_request = InviteRequest.find_by!(email: email)
         it_redirects_to_with_notice(invite_requests_path, "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider.")
       end
 
