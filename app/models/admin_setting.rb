@@ -25,9 +25,9 @@ class AdminSetting < ApplicationRecord
     enable_test_caching?: false,
     cache_expiration: 10,
     tag_wrangling_off?: false,
-    guest_downloading_off?: false,
     downloads_enabled?: true,
-    stats_updated_at: nil
+    stats_updated_at: nil,
+    disable_support_form?: false
   }.freeze
 
   def self.current

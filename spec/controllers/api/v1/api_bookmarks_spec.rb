@@ -1,7 +1,7 @@
 require "spec_helper"
 require "controllers/api/api_helper"
 
-describe "API BookmarksController", type: :request do
+describe "API v1 BookmarksController", type: :request do
   include ApiHelper
 
   bookmark = { id: "123",
@@ -22,20 +22,19 @@ describe "API BookmarksController", type: :request do
 
   before do
     mock_external
-    @user = create_archivist
   end
 
   after do
     WebMock.reset!
-    @user.destroy
   end
 
   context "Valid API bookmark import" do
+    let(:archivist) { create(:archivist) }
 
     it "should return 200 OK when all bookmarks are created" do
       post "/api/v1/bookmarks/import",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
@@ -43,18 +42,18 @@ describe "API BookmarksController", type: :request do
 
     it "should return 200 OK when no bookmarks are created" do
       post "/api/v1/bookmarks/import",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
     end
 
     it "should not create duplicate bookmarks for the same archivist and external URL" do
-      pseud_id = @user.default_pseud.id
+      pseud_id = archivist.default_pseud_id
       post "/api/v1/bookmarks/import",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark, bookmark ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark, bookmark ]
            }.to_json,
            headers: valid_headers
       bookmarks = Bookmark.where(pseud_id: pseud_id)
@@ -63,8 +62,8 @@ describe "API BookmarksController", type: :request do
 
     it "should pass back any original references unchanged" do
       post "/api/v1/bookmarks/import",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
            }.to_json,
            headers: valid_headers
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
@@ -73,10 +72,10 @@ describe "API BookmarksController", type: :request do
     end
 
     it "should respond with the URL of the created bookmark" do
-      pseud_id = @user.default_pseud.id
+      pseud_id = archivist.default_pseud.id
       post "/api/v1/bookmarks/import",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
            }.to_json,
            headers: valid_headers
       first_bookmark = Bookmark.where(pseud_id: pseud_id).first
@@ -88,17 +87,19 @@ describe "API BookmarksController", type: :request do
   end
 
   describe "Invalid API bookmark import" do
+    let(:archivist) { create(:archivist) }
+
     it "should return 400 Bad Request if no bookmarks are specified" do
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login }.to_json,
+           params: { archivist: archivist.login }.to_json,
            headers: valid_headers
       assert_equal 400, response.status
     end
 
     it "should return an error message if no URL is specified" do
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark.except(:url) ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark.except(:url) ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
@@ -110,8 +111,8 @@ describe "API BookmarksController", type: :request do
     it "should return an error message if the URL is on AO3" do
       work = create(:work)
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark.merge(url: work_url(work)) ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark.merge(url: work_url(work)) ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
@@ -122,8 +123,8 @@ describe "API BookmarksController", type: :request do
 
     it "should return an error message if there is no fandom" do
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark.merge(fandom_string: "") ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark.merge(fandom_string: "") ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
@@ -134,8 +135,8 @@ describe "API BookmarksController", type: :request do
 
     it "should return an error message if there is no title" do
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark.merge(title: "") ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark.merge(title: "") ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status
@@ -145,8 +146,8 @@ describe "API BookmarksController", type: :request do
 
     it "should return an error message if there is no author" do
       post "/api/v1/bookmarks",
-           params: { archivist: @user.login,
-             bookmarks: [ bookmark.merge(author: "") ]
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark.merge(author: "") ]
            }.to_json,
            headers: valid_headers
       assert_equal 200, response.status

@@ -11,9 +11,7 @@ Given /^all search indexes are completely regenerated$/ do
 end
 
 Given /^the (\w+) indexes are refreshed$/ do |model|
-  # ES UPGRADE TRANSITION #
-  # Change $new_elasticsearch to $elasticsearch
-  $new_elasticsearch.indices.refresh index: "ao3_test_#{model}s"
+  $elasticsearch.indices.refresh index: "ao3_test_#{model}s"
 end
 
 Given /^all search indexes are refreshed$/ do

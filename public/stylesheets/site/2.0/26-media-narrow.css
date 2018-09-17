@@ -103,11 +103,8 @@ body .narrow-shown {
 }
 
 /* once we remove the meta class from the work form, we can remove the form .meta selectors here */
-/* INTERACTION: OLD FILTERS */
-/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
 
-.filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox,
-form.old-filters {
+.filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox {
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -195,24 +192,18 @@ form.old-filters {
 }
 
 /* 18 zone: search browse */
-/* INTERACTION: OLD FILTERS */
-/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
 
-form.filters dl,
-form.old-filters dl {
+form.filters dl {
   width: auto;
 }
 
 /* Filters with JavaScript */
-/* INTERACTION: OLD FILTERS */
-/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
 
 .javascript {
   background: #ddd;
 }
 
-.javascript form.filters,
-.javascript form.old-filters {
+.javascript form.filters {
   margin: 0;
   max-width: 95%;
   position: absolute;
@@ -222,8 +213,7 @@ form.old-filters dl {
   z-index: 400;
 }
 
-.javascript .filters fieldset,
-.javascript .old-filters fieldset {
+.javascript .filters fieldset {
   border: none;
   margin: 0;
   position: relative;
@@ -231,8 +221,7 @@ form.old-filters dl {
     box-shadow: none;
 }
 
-.javascript .filters p.narrow-shown,
-.javascript .old-filters p.narrow-shown {
+.javascript .filters p.narrow-shown {
   position: relative; 
 }
 
@@ -240,8 +229,7 @@ form.old-filters dl {
   right: 14em;
 }
 
-.filtering .filters #leave_filters,
-.filtering .old-filters #leave_filters {
+.filtering .filters #leave_filters {
   background: transparent none;
   border-bottom: none;
   position: fixed;

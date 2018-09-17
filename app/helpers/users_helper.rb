@@ -75,24 +75,12 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud = nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to BookmarkSearch
-    if use_new_search?
-      total = BookmarkSearchForm.count_for_user(user)
-    else
-      total = BookmarkSearch.count_for_pseuds(user.pseuds)
-    end
+    total = BookmarkSearchForm.count_for_user(user)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def print_pseud_bookmarks_link(pseud)
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to BookmarkSearch
-    if use_new_search?
-      total = BookmarkSearchForm.count_for_pseuds([pseud])
-    else
-      total = BookmarkSearch.count_for_pseuds([pseud])
-    end
+    total = BookmarkSearchForm.count_for_pseuds([pseud])
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 
@@ -100,24 +88,12 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud = nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to WorkSearch
-    if use_new_search?
-      total = WorkSearchForm.user_count(user)
-    else
-      total = WorkSearch.user_count(user)
-    end
+    total = WorkSearchForm.user_count(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def print_pseud_works_link(pseud)
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to WorkSearch
-    if use_new_search?
-      total = WorkSearchForm.pseud_count(pseud)
-    else
-      total = WorkSearch.pseud_count(pseud)
-    end
+    total = WorkSearchForm.pseud_count(pseud)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 

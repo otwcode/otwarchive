@@ -16,6 +16,8 @@ class WorkQuery < Query
   # Combine the available filters
   def filters
     add_owner
+    set_language
+
     @filters ||= (
       visibility_filters +
       work_filters +
@@ -54,6 +56,13 @@ class WorkQuery < Query
     return unless field.present?
     options[field] ||= []
     options[field] << owner.id
+  end
+
+  def set_language
+    if options[:language_id].present? && options[:language_id].to_i == 0
+      language = Language.find_by(short: options[:language_id])
+      options[:language_id] = language.id if language.present?
+    end
   end
 
   ####################
@@ -99,7 +108,7 @@ class WorkQuery < Query
     ranges = []
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
       if options[countable].present?
-        ranges << { range: { countable => Search.range_to_search(options[countable]) } }
+        ranges << { range: { countable => SearchRange.parsed(options[countable]) } }
       end
     end
     ranges += [date_range_filter, word_count_filter].compact
@@ -222,11 +231,19 @@ class WorkQuery < Query
   ####################
 
   # Search for a tag by name
+  # Note that fields don't need to be explicitly included in the
+  # field list to be searchable directly (ie, "complete:true" will still work)
   def general_query
     input = (options[:q] || options[:query] || "").dup
     query = generate_search_text(input)
 
-    return { query_string: { query: query, default_operator: "AND" } } unless query.blank?
+    return {
+      query_string: {
+        query: query,
+        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag"],
+        default_operator: "AND"
+      }
+    } unless query.blank?
   end
 
   def generate_search_text(query = '')
@@ -241,7 +258,7 @@ class WorkQuery < Query
   end
 
   def sort
-    column = options[:sort_column].present? ? options[:sort_column] : 'revised_at'
+    column = options[:sort_column].present? ? options[:sort_column] : default_sort
     direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     sort_hash = { column => { order: direction } }
 
@@ -250,6 +267,11 @@ class WorkQuery < Query
     end
 
     sort_hash
+  end
+
+  # When searching outside of filters, use relevance instead of date
+  def default_sort
+    facet_tags? ? 'revised_at' : '_score'
   end
 
   def aggregations
