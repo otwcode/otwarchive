@@ -126,7 +126,7 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   step %{I follow "Sign Up"}
 end
 
-When /^I view the sign-up summary for "([^"]*)"$/ do |title|
+When /^I view the sign-up summary for "(.*?)"$/ do |title|
   visit collection_path(Collection.find_by(title: title))
   step %(I follow "Sign-up Summary")
 end

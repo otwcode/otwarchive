@@ -72,7 +72,6 @@ class ChallengeSignupSummary
   end
 
   # Write the summary to Memcached, so that it can be retrieved and displayed.
-  # takes about 12 minutes for yuletide2010 on beta, about 25 minutes on stage
   def generate_in_background
     locals = {
       challenge_collection: collection,
