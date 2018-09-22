@@ -6,7 +6,10 @@
 #
 #
 export RAILS_ENV=test
+export MYSQL_VERSION=5.7.22
 export REDIS_VERSION=3.2.1
+export PATH="$HOME/mysql-$MYSQL_VERSION/bin:$PATH"
+
 bundle install
 \curl -sSL https://raw.githubusercontent.com/codeship/scripts/master/packages/mysql-5.7.sh | bash -s
 \curl -sSL https://raw.githubusercontent.com/codeship/scripts/master/packages/redis.sh | bash -s
@@ -23,6 +26,7 @@ cp config/redis-cucumber.conf.example config/redis-cucumber.conf
 cp config/redis.codeship.example config/redis.yml
 
 bundle exec rake db:create:all --trace
+bundle exec rails runner "puts \"Connecting to database version #{ActiveRecord::Base.connection.show_variable('version')}\""
 mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e  "ALTER DATABASE test$TEST_ENV_NUMBER CHARACTER SET utf8 COLLATE utf8_general_ci;"
 bundle exec rake db:schema:load --trace
 bundle exec rake db:migrate --trace
