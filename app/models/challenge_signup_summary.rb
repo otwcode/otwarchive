@@ -128,7 +128,7 @@ class ChallengeSignupSummary
 
   # The key used to store info about the signup summary in memcached.
   def cache_key
-    "challenge_signup_summaries/#{collection.id}"
+    "/v1/challenge_signup_summaries/#{collection.id}"
   end
 end
 
