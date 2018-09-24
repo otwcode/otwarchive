@@ -9,7 +9,7 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = reporter.email
       @abuse_report.username = reporter.login
     end
-    @abuse_report.url = params[:url] || request.env['HTTP_REFERER']
+    @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
   end
 
   def create
@@ -17,10 +17,10 @@ class AbuseReportsController < ApplicationController
     @abuse_report.ip_address = request.remote_ip
     if @abuse_report.save
       @abuse_report.email_and_send
-      flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
-      redirect_to ''
+      flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
+      redirect_to root_path
     else
-      render action: 'new'
+      render action: "new"
     end
   end
 
