@@ -326,12 +326,16 @@ AKISMET_NAME: 'http://transformativeworks.org'
 DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
 DEFENSIO_NAME: 'http://archiveofourown.org'
 
-# bug-reporting site for the archive -- we use 16bugs; if you use something else,
-# you will need to change feedbacks_controller.rb and abuse_reports_controller.rb
-# to properly send to your own support tool.
-BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
-BUGS_USER: 'admin username for your 16bugs site which should only be put into your local.yml on your production server'
-BUGS_PASSWORD: 'admin password for your 16bugs site which should only be put into your local.yml on your production server'
+# Abuse and support ticket trackers; you may need to change
+# feedbacks_controller.rb and abuse_reports_controller.rb
+# to properly send to your own ticket tracker.
+NEW_BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
+ABUSE_AUTH: 'authtoken'
+ABUSE_PORTAL: 'ao3abuse'
+ABUSE_DEPARTMENT: 'AO3%20Abuse'
+SUPPORT_AUTH: 'authtoken'
+SUPPORT_PORTAL: 'ao3support'
+SUPPORT_DEPARTMENT: 'Support'
 
 DEFAULT_LANGUAGE_SHORT: 'en'
 DEFAULT_LANGUAGE_NAME: 'English'
