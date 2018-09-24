@@ -14,6 +14,7 @@ class AbuseReportsController < ApplicationController
 
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
+    @abuse_report.ip_address = request.remote_ip
     if @abuse_report.save
       @abuse_report.email_and_send
       flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
