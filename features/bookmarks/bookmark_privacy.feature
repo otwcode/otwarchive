@@ -136,7 +136,7 @@ Feature: Private bookmarks
     # Private bookmarks should not be visible to admins, but the admin
     # should be able to see how many private bookmarks the user has
     When I am logged in as an admin
-      And I go to bookmarker's bookmarks page
+      And I go to avid_bookmarker's bookmarks page
     Then I should see "Bookmarks (2)"
       But I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
