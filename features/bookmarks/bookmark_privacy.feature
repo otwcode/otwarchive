@@ -7,37 +7,31 @@ Feature: Private bookmarks
   @disable_caching
   Scenario: private bookmarks on public and restricted works
 
-    Given the following activated users exist
-      | login                |
-      | workauthor           |
-      | avid_bookmarker      |
-      | otheruser            |
-      And a fandom exists with name: "Stargate SG-1", canonical: true
+    Given a canonical fandom "Stargate SG-1"
       And I am logged in as "workauthor"
       And I post the locked work "Secret Masterpiece"
       And I post the work "Public Masterpiece"
     When I am logged in as "avid_bookmarker"
-      And I view the work "Secret Masterpiece"
-      And I follow "Bookmark"
-      And I check "bookmark_rec"
-      And I check "bookmark_private"
+      And I start a new bookmark for "Secret Masterpiece"
+      And I check "Rec"
+      And I check "Private bookmark"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
       And I should see the image "title" text "Restricted"
       And I should not see "Rec"
       And I should see "Private Bookmark"
-      And I should see "0"
+      And I should see "0" within ".count"
     When I view the work "Public Masterpiece"
       And I follow "Bookmark"
-      And I check "bookmark_rec"
-      And I check "bookmark_private"
+      And I check "Rec"
+      And I check "Private bookmark"
       And I press "Create"
       And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
       And I should not see the image "title" text "Restricted"
       And I should not see "Rec"
       And I should see "Private Bookmark"
-      And I should see "0"
+      And I should see "0" within ".count"
 
     # Private bookmarks should not show on the main bookmark page, but should show on your own bookmark page
 
@@ -94,6 +88,7 @@ Feature: Private bookmarks
       And I should not see "Public Masterpiece"
 
     # Private bookmarks should not be visible when logged out, even if there are other bookmarks on that work
+
     When I am logged in as "otheruser"
       And I view the work "Public Masterpiece"
       And I rec the current work
@@ -122,6 +117,7 @@ Feature: Private bookmarks
       And I should not see "avid_bookmarker"
 
     # Private bookmarks should not show on tag's page
+
     When I go to the bookmarks tagged "Stargate SG-1"
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
@@ -135,6 +131,7 @@ Feature: Private bookmarks
 
     # Private bookmarks should not be visible to admins, but the admin
     # should be able to see how many private bookmarks the user has
+
     When I am logged in as an admin
       And I go to avid_bookmarker's bookmarks page
     Then I should see "Bookmarks (2)"
