@@ -1,5 +1,6 @@
 <%= form_for @search, as: :bookmark_search, url: search_bookmarks_path,
     html: { class: "search", method: :get } do |f| %>
+<<<<<<< HEAD
   <fieldset>
     <legend><%= ts("Bookmarked Item") %></legend>
     <h3 class="landmark heading"><%= ts("Bookmarked Item") %></h3>
@@ -13,7 +14,7 @@
       </dd>
       <dt>
         <%= f.label :other_tag_names, ts("Work tags") %>
-        <%= link_to_help "bookmark-search-tag-help" %>
+        <%= link_to_help "bookmark-search-work-tag" %>
       </dt>
       <dd>
         <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
@@ -50,7 +51,7 @@
       </dd>
       <dt>
         <%= f.label :other_bookmark_tag_names, ts("Bookmarker's tags") %>
-        <%= link_to_help "bookmark-search-tag-help" %>
+        <%= link_to_help "bookmark-search-bookmarker-tag" %>
       </dt>
       <dd>
         <%= f.text_field :other_bookmark_tag_names, autocomplete_options("tag") %>

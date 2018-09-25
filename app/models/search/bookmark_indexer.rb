@@ -11,7 +11,7 @@ class BookmarkIndexer < Indexer
     unless options[:skip_delete]
       options[:skip_delete] = true
       BookmarkableIndexer.delete_index
-      BookmarkableIndexer.create_index(shards: 18)
+      BookmarkableIndexer.create_index(18)
       create_mapping
     end
     BookmarkedExternalWorkIndexer.index_all(skip_delete: true)

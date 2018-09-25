@@ -39,6 +39,9 @@ module SearchHelper
     header.html_safe
   end
 
+  def search_results_found(results)
+    ts("%{count} Found", count: results.unlimited_total_entries)
+  end
 
   def random_search_tip
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]

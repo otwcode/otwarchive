@@ -14,6 +14,7 @@ Otwarchive::Application.configure do
   # Show full error reports and enable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  config.action_mailer.perform_caching = true
   config.cache_store = :dalli_store, '127.0.0.1:11211',
                           { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 

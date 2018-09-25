@@ -8,10 +8,5 @@
 <!--/subnav-->
 
 <!--main content-->
-<% # ES UPGRADE TRANSITION # %>
-<% if use_new_search? %>
-  <%= render "bookmarks/search_form" %>
-<% else %>
-  <%= render "bookmarks/search_form_old" %>
-<% end %>
+<%= render "bookmarks/search_form" %>
 <!--/content-->
