@@ -17,12 +17,14 @@
       <% if @work.restricted %>
         <%= image_tag("lockblue.png", size: "15x15",
                                      alt: ts("(Restricted)"),
-                                     title: ts("Restricted")) %>
+                                     title: ts("Restricted"),
+                                     skip_pipeline: true) %>
       <% end %>
       <% if @work.hidden_by_admin %>
         <%= image_tag("lockred.png", size: "15x15",
                                      alt: ts("(Hidden by Admin)"),
-                                     title: ts("Hidden by Administrator")) %>
+                                     title: ts("Hidden by Administrator"),
+                                     skip_pipeline: true) %>
       <% end %>
       <%= @work.title.html_safe %>
     </h2>

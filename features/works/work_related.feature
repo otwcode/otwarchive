@@ -136,7 +136,7 @@ Scenario: A user cannot see another user's related works page
   When I am logged in as "inspiration"
   When I go to remixer's user page
   Then I should not see "Related Works"
-  When I go to remixers's related works page
+  When I go to remixer's related works page
   # It's currently possible to access a user's related works page directly
   # Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 

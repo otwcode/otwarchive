@@ -1,4 +1,4 @@
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
@@ -72,6 +72,8 @@
 
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
+
+  after_commit :reindex_user_creations_after_rename
 
   has_many :collection_participants, through: :pseuds
   has_many :collections, through: :collection_participants
@@ -179,8 +181,10 @@
   after_update :expire_caches
 
   def expire_caches
-    if login_changed?
-      self.works.each{ |work| work.touch }
+    return unless saved_change_to_login?
+    self.works.each do |work|
+      work.touch
+      work.expire_caches
     end
   end
 
@@ -345,16 +349,22 @@
     self.pseuds.where(is_default: true).first
   end
 
+  def default_pseud_id
+    pseuds.where(is_default: true).pluck(:id).first
+  end
+
   # Checks authorship of any sort of object
   def is_author_of?(item)
-    if item.respond_to?(:user)
-      self == item.user
-    elsif item.respond_to?(:pseud)
-      self.pseuds.include?(item.pseud)
+    if item.respond_to?(:pseud_id)
+      pseuds.pluck(:id).include?(item.pseud_id)
+    elsif item.respond_to?(:user_id)
+      id == item.user_id
     elsif item.respond_to?(:pseuds)
-      !(self.pseuds & item.pseuds).empty?
+      !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
     elsif item.respond_to?(:author)
       self == item.author
+    elsif item.respond_to?(:creator_id)
+      self.id == item.creator_id
     else
       false
     end
@@ -503,13 +513,6 @@
     end
   end
 
-  def reindex_user_works
-    # reindex the user's works to make sure they show up on the user's works page
-    works.each do |work|
-      IndexQueue.enqueue(work, :main)
-    end
-  end
-
   def set_user_work_dates
     # Fix user stats page error caused by the existence of works with nil revised_at dates
     works.each do |work|
@@ -520,12 +523,11 @@
     end
   end
 
-  def reindex_user_bookmarks
-    # Reindex a user's bookmarks.
-    bookmarks.each do |bookmark|
-      bookmark.update_index
-    end
-    update_works_index_timestamp!
+  def reindex_user_creations
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
   end
 
   private
@@ -540,28 +542,41 @@
   end
 
   def update_pseud_name
-    return unless login_changed? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
-    if login.downcase == login_was.downcase
+    return unless saved_change_to_login? && login_before_last_save.present?
+    old_pseud = pseuds.where(name: login_before_last_save).first
+    if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
     else
-      new_pseud = self.pseuds.where(name: login).first
+      new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
-      return if new_pseud.present?
-
-      if old_pseud.present?
-        # change the old pseud to match
-        old_pseud.name = login
-        old_pseud.save!(validate: false)
-      else
-        # shouldn't be able to get here, but just in case
-        Pseud.create!(name: login, user_id: self.id)
+      if new_pseud.blank?
+        if old_pseud.present?
+          # change the old pseud to match
+          old_pseud.name = login
+          old_pseud.save!(validate: false)
+        else
+          # shouldn't be able to get here, but just in case
+          Pseud.create!(name: login, user_id: id)
+        end
       end
     end
   end
 
+  def reindex_user_creations_after_rename
+    return unless saved_change_to_login? && login_before_last_save.present?
+    # Everything is indexed with the user's byline,
+    # which has the old username, so they all need to be reindexed.
+    reindex_user_creations
+  end
+
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
+
+  def remove_stale_from_autocomplete
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 end

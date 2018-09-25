@@ -3,7 +3,7 @@
 
   <% unless reading.work.nil? %>
 
-    <%= render 'works/work_module', :work => reading.work %>
+    <%= render 'works/work_module', work: reading.work %>
 
   <% end %>
 
@@ -12,11 +12,11 @@
 
       <% if reading.work.nil? %>
 
-        <%= ts('(Deleted work, last viewed %{date})', :date => set_format_for_date(reading.last_viewed)) %>
+        <%= ts('(Deleted work, last visited %{date})', date: set_format_for_date(reading.last_viewed)) %>
 
       <% else %>
 
-        <span><%= ts('Last viewed:') %></span> <%= set_format_for_date(reading.last_viewed) %>
+        <span><%= ts('Last visited:') %></span> <%= set_format_for_date(reading.last_viewed) %>
 
         <% if reading.major_version_read != reading.work.major_version %>
           <%= ts('(Update available.)') %>
@@ -27,9 +27,9 @@
         <% end %>
 
         <% if reading.view_count == 1 %>
-          <%= ts('Viewed once') %>
+          <%= ts('Visited once') %>
         <% else %>
-          <%= ts('Viewed %{count} times', :count => reading.view_count) %>
+          <%= ts('Visited %{count} times', count: reading.view_count) %>
         <% end %>
 
         <% if reading.toread? %>

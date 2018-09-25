@@ -1,6 +1,8 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception, prepend: true
+  rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   helper :all # include all helpers, all the time
 
@@ -16,6 +18,21 @@ class ApplicationController < ActionController::Base
   def sanitize_ac_params
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def display_auth_error
+    respond_to do |format|
+      format.html do
+        redirect_to auth_error_path
+      end
+      format.js do
+        render json: {
+          errors: {
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+          }
+        }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -67,14 +84,7 @@ class ApplicationController < ActionController::Base
   # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
 
-  # before_action :logout_if_not_user_credentials
-  # this was disabled when we found issues:
-  # https://github.com/nbudin/devise_openid_authenticatable/issues/21
-  # https://github.com/binarylogic/authlogic/issues/532
-  # 
-  # We will look back in to this back once we have devises.
-  # if we believe the caching is worth the extra support tickets.
-  # 
+  before_action :logout_if_not_user_credentials
 
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
@@ -139,11 +149,7 @@ public
 
   before_action :fetch_admin_settings
   def fetch_admin_settings
-    if Rails.env.development?
-      @admin_settings = AdminSetting.first
-    else
-      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    end
+    @admin_settings = AdminSetting.current
   end
 
   before_action :load_admin_banner
@@ -161,12 +167,23 @@ public
     end
   end
 
+  before_action :load_tos_popup
+  def load_tos_popup
+    # Integers only, YYYY-MM-DD format of date Board approved TOS
+    @current_tos_version = 20180523
+  end
+
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
+      session.delete(:return_to)
+    elsif request.fullpath.length > 200
+      # Sessions are stored in cookies, which has a 4KB size limit.
+      # Don't store paths that are too long (e.g. filters with lots of exclusions).
+      # Also remove the previous stored path.
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
@@ -341,7 +358,7 @@ public
   before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({controller: 'session', action: 'new'})
+    @logged_out_redirect = login_url
   end
 
   def is_registered_user?
@@ -460,8 +477,17 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  #### -- AUTHORIZATION -- ####
+  def flash_max_search_results_notice(result)
+    notice = result.max_search_results_notice
+    flash.now[:notice] = notice if notice.present?
+  end
 
-  protect_from_forgery
+  # Don't get unnecessary data for json requests
+  skip_before_action  :fetch_admin_settings,
+                      :load_admin_banner,
+                      :set_redirects,
+                      :set_media,
+                      :store_location,
+                      if: proc { %w(js json).include?(request.format) }
 
 end

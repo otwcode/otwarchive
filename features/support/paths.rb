@@ -11,19 +11,21 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
     when /^the search bookmarks page$/i
-      Bookmark.tire.index.refresh
+      step %{all indexing jobs have been run}
       search_bookmarks_path
     when /^the search tags page$/i
-      Tag.tire.index.refresh
+      step %{all indexing jobs have been run}
       search_tags_path
     when /^the search works page$/i
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       search_works_path
     when /^the search people page$/i
-      Pseud.tire.index.refresh
+      step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
       bookmarks_path
+    when /^the works page$/i
+      works_path
     when /^the admin login page$/i
       new_admin_session_path
     when /^the redirect page$/i
@@ -66,11 +68,13 @@ module NavigationHelpers
     when /my preferences page/
       user_preferences_path(User.current_user)
     when /my bookmarks page/
-      Bookmark.tire.index.refresh
+      step %{all indexing jobs have been run}
       user_bookmarks_path(User.current_user)
     when /my works page/
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       user_works_path(User.current_user)
+    when /my drafts page/
+      drafts_user_works_path(User.current_user)
     when /my edit multiple works page/
       show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
@@ -89,6 +93,10 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /the gifts page$/
+      gifts_path
+    when /the gifts page for the recipient (.*)$/
+      gifts_path(recipient: $1)
     when /my gifts page/
       user_gifts_path(User.current_user)
     when /my assignments page/
@@ -109,18 +117,23 @@ module NavigationHelpers
       user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? user url$/i
       user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
-    when /^(.*?)(?:'s)? works page$/i
-      Work.tire.index.refresh
+    when /^([^ ]*?)(?:'s)? works page$/i
+      step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
     when /^the work page with title (.*)/
       work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+    when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
+      step %{all indexing jobs have been run}
+      user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
     when /^(.*?)(?:'s)? bookmarks page$/i
-      Bookmark.tire.index.refresh
+      step %{all indexing jobs have been run}
       user_bookmarks_path(user_id: $1)
     when /^(.*?)(?:'s)? pseuds page$/i
       user_pseuds_path(user_id: $1)
+    when /^(.*?)(?:'s)? manage invitations page$/i
+      manage_user_invitations_path(user_id: $1)
     when /^(.*?)(?:'s)? invitations page$/i
       user_invitations_path(user_id: $1)
     when /^(.*?)(?:'s)? reading page$/i
@@ -170,22 +183,22 @@ module NavigationHelpers
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*)"$/i
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       tag_works_path(Tag.find_by_name($1))
     when /^the bookmarks tagged "(.*)"$/i
-      Bookmark.tire.index.refresh
+      step %{all indexing jobs have been run}
       tag_bookmarks_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the bookmarks in collection "(.*)"$/i
-      Bookmark.tire.index.refresh
+      step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*)" in collection "(.*)"$/i
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
-      Work.tire.index.refresh
+      step %{all indexing jobs have been run}
       collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))

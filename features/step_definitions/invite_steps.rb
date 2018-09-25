@@ -137,7 +137,7 @@ When /^an admin grants the request$/ do
 end
 
 When /^I check how long "(.*?)" will have to wait in the invite request queue$/ do |email|
-  visit(invite_requests_path)
+  visit(status_invite_requests_path)
   fill_in("email", with: "#{email}")
   click_button("Look me up")
 end

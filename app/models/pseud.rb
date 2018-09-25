@@ -1,8 +1,5 @@
-class Pseud < ActiveRecord::Base
+class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
-  include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -73,6 +70,7 @@ class Pseud < ActiveRecord::Base
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -297,9 +295,43 @@ class Pseud < ActiveRecord::Base
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
+  # This method is for use in before_* callbacks
   def autocomplete_value_was
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
+
+  # See byline_before_last_save for the reasoning behind why both this and
+  # autocomplete_value_was exist in this model
+  #
+  # This method is for use in after_* callbacks
+  def autocomplete_value_before_last_save
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_before_last_save}"
+  end
+
+  def byline_before_last_save
+    past_name = name_before_last_save.blank? ? name : name_before_last_save
+
+    # In this case, self belongs to a user that has already been saved
+    # during it's (self's) callback cycle, which means we need to
+    # look *back* at the user's [attributes]_before_last_save, since
+    # [attribute]_was for the pseud's user will behave as if this were an
+    # after_* callback on the user, instead of a before_* callback on self.
+    #
+    # see psued_sweeper.rb:13 for more context
+    #
+    past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
+  # This method is for removing stale autocomplete records in a before_*
+  # callback, such as the one used in PseudSweeper
+  #
+  # This is a particular case for the Pseud model
+  def remove_stale_from_autocomplete_before_save
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 
   ## END AUTOCOMPLETE
 
@@ -393,7 +425,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def expire_caches
-    if name_changed?
+    if saved_change_to_name?
       self.works.each{ |work| work.touch }
     end
   end
@@ -416,28 +448,25 @@ class Pseud < ActiveRecord::Base
   ## SEARCH #######################
   #################################
 
-  mapping do
-    indexes :name, boost: 20
-  end
-
   def collection_ids
     collections.pluck(:id)
   end
 
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:user_login, :collection_ids])
+  def document_json
+    PseudIndexer.new({}).document(self)
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
-        end
-      end
-    end
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end

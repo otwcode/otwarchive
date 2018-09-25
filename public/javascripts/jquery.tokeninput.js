@@ -534,6 +534,8 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Check the token limit
         if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
+            // put focus on the last token's remove option, then hide the input
+            input_box.parent().prev("li").find("a").focus();
             input_box.hide();
         } else {
             input_box.focus();
@@ -699,6 +701,10 @@ $.TokenList = function (input, url_or_data, settings) {
     function highlight_term(value, term) {
         var newvalue = value;
         $.each(term.split(' '), function(index, termbit) {
+            if (!termbit) {
+                // AO3-4976 skip empty strings
+                return;
+            }
             termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1");            
             newvalue = newvalue.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + termbit + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
         });

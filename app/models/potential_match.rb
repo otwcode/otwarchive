@@ -1,4 +1,4 @@
-class PotentialMatch < ActiveRecord::Base
+class PotentialMatch < ApplicationRecord
 
   # We use "-1" to represent all the requested items matching
   ALL = -1
@@ -78,6 +78,14 @@ public
   # The actual method that generates the potential matches for an entire collection
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
+
+    if collection.challenge.assignments_sent_at.present?
+      # If assignments have been sent, we don't want to delete everything and
+      # regenerate. (If the challenge moderator wants to recalculate potential
+      # matches after sending assignments, they can use the Purge Assignments
+      # button.)
+      return
+    end
 
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)

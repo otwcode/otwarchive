@@ -1,8 +1,10 @@
-class Creatorship < ActiveRecord::Base
+class Creatorship < ApplicationRecord
   belongs_to :pseud
   belongs_to :creation, polymorphic: true, touch: true
 
   before_destroy :expire_caches
+  after_create :update_pseud_index
+  after_destroy :update_pseud_index
 
   validate :unique_index
 
@@ -37,4 +39,9 @@ class Creatorship < ActiveRecord::Base
     end
   end
 
+  def update_pseud_index
+    return unless creation_type == 'Work'
+    return unless creation.respond_to?(:reindex_changed_pseud)
+    creation.reindex_changed_pseud(pseud_id)
+  end
 end
