@@ -3,7 +3,6 @@ class DownloadsController < ApplicationController
   include XhtmlSplitter
 
   skip_before_action :store_location, only: :show
-  before_action :guest_downloading_off, only: :show
   before_action :check_visibility, only: :show
 
   # named route: download_path
@@ -28,7 +27,6 @@ class DownloadsController < ApplicationController
 
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(posted: true)
-    create_work_html
 
     respond_to do |format|
       format.html do
@@ -99,7 +97,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file_sync("mobi", "aapplication/x-mobipocket-ebook")
+    send_file_sync("mobi", "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -216,12 +214,4 @@ protected
     xhtml = doc.children.to_xhtml
     File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') { |f| f.write(xhtml) }
   end
-
-  def guest_downloading_off
-    if !logged_in? && @admin_settings.guest_downloading_off?
-      redirect_to login_path(high_load: true)
-    end
-  end
-
 end
-
