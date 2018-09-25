@@ -54,7 +54,7 @@ Feature: Gift Exchange Challenge
       And I select "(GMT-08:00) Pacific Time (US & Canada)" from "Time zone"
       And I submit
     Then I should see "Challenge was successfully updated"
-      And I should see "PDT"
+      And I should see the correct time zone for "Pacific Time (US & Canada)"
 
   Scenario: Add a co-mod
     Given the following activated users exist
