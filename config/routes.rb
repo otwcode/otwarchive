@@ -15,6 +15,7 @@ Otwarchive::Application.routes.draw do
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
+  get '/auth_error', to: 'errors#auth_error'
 
   #### DOWNLOADS ####
 
@@ -42,6 +43,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       post :reorder
+      get :status
     end
   end
 
@@ -144,9 +146,15 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :spam, only: [:index] do
+      collection do
+        post :bulk_update
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
-        get :hide
+        put :hide
+        put :set_spam
       end
     end
     resources :users, controller: 'admin_users' do
@@ -197,6 +205,7 @@ Otwarchive::Application.routes.draw do
       post :changed_username
       post :end_first_login
       post :end_banner
+      post :end_tos_prompt
     end
     resources :assignments, controller: "challenge_assignments", only: [:index] do
       collection do
@@ -463,6 +472,13 @@ Otwarchive::Application.routes.draw do
       post 'bookmarks/import', to: 'bookmarks#create'
       post 'works/import', to: 'works#create'
       post 'works/urls', to: 'works#batch_urls'
+    end
+
+    namespace :v2 do
+      resources :bookmarks, only: [:create], defaults: { format: :json }
+      resources :works, only: [:create], defaults: { format: :json }
+      post 'bookmarks/search', to: 'bookmarks#search'
+      post 'works/search', to: 'works#search'
     end
   end
 

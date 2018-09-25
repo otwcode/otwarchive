@@ -184,5 +184,11 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
+  def all_coauthor_skins
+    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+  end
 
+  def sorted_languages
+    Language.default_order
+  end
 end

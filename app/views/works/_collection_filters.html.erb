@@ -9,7 +9,7 @@
   <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
     <dl class="filters" role="menu">
       <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
+      <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
       <dt>
         <%= f.label :sort_column, ts("Sort by") %>
       </dt>
@@ -24,19 +24,21 @@
           <ul>              
             <% @facets['collections'].each do |collection| %>
               <li>
-                <%= check_box_tag "work_search[collection_ids][]", 
-                  collection.id,
-                  @search.collection_ids.present? && @search.collection_ids.include?(collection.id.to_s), 
-                  :id => "work_search_collection_ids_#{collection.id}" %>
-                <%= label_tag "work_search_collection_ids_#{collection.id}", 
-                  "#{collection.name} (#{collection.count})" %>
+                <%= label_tag "work_search_collection_ids_#{collection.id}" do %> 
+                  <%= check_box_tag "work_search[collection_ids][]", 
+                    collection.id,
+                    @search.collection_ids.present? && @search.collection_ids.include?(collection.id.to_s), 
+                    id: "work_search_collection_ids_#{collection.id}" %>
+                  <% text = "#{collection.name} (#{collection.count})" %>
+                  <%= label_indicator_and_text(text) %>
+                <% end %>
               </li>
             <% end %>
           </ul>
         </dd>
       <% end %>
       <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
+      <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
     <div>
       <%= hidden_field_tag("user_id", @user.login) if @user %>

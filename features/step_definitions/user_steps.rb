@@ -21,6 +21,14 @@ Given /the following activated users? exists?/ do |table|
   end
 end
 
+Given /the following activated users with private work skins/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+  end
+end
+
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
@@ -122,10 +130,6 @@ end
 Given /^I am a visitor$/ do
   step(%{I am logged out as an admin})
   step(%{I am logged out})
-end
-
-Given /^I view the people page$/ do
-  visit people_path
 end
 
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
