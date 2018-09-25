@@ -1,5 +1,5 @@
 class AbuseReporter < FeedbackReporter
-  PROJECT_PATH = "authtoken=#{ArchiveConfig.ABUSE_AUTH}&portal=ao3abuse&department=AO3%20Abuse"
+  PROJECT_PATH = "authtoken=#{ArchiveConfig.ABUSE_AUTH}&portal=#{ArchiveConfig.ABUSE_PORTAL}&department=#{ArchiveConfig.ABUSE_DEPARTMENT}"
   attr_accessor :ip_address
 
   def template

@@ -132,6 +132,8 @@ module NavigationHelpers
       user_bookmarks_path(user_id: $1)
     when /^(.*?)(?:'s)? pseuds page$/i
       user_pseuds_path(user_id: $1)
+    when /^(.*?)(?:'s)? manage invitations page$/i
+      manage_user_invitations_path(user_id: $1)
     when /^(.*?)(?:'s)? invitations page$/i
       user_invitations_path(user_id: $1)
     when /^(.*?)(?:'s)? reading page$/i
