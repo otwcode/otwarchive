@@ -49,14 +49,17 @@ class BookmarkSearchForm
   attr_accessor :options
 
   def self.count_for_user(user)
-    BookmarkQuery.new(user_ids: [user.id],
-                      show_private: User.current_user.is_a?(Admin) || user == User.current_user
+    BookmarkQuery.new(
+      user_ids: [user.id],
+      show_private: User.current_user.is_a?(Admin) || user == User.current_user
     ).count
   end
 
   def self.count_for_pseuds(pseuds)
-    BookmarkQuery.new(pseud_ids: pseuds.map(&:id),
-                      show_private: User.current_user.is_a?(Admin) || pseuds.map(&:user).uniq == [User.current_user]
+    BookmarkQuery.new(
+      pseud_ids: pseuds.map(&:id),
+      show_private: User.current_user.is_a?(Admin) ||
+                    pseuds.map(&:user).uniq == [User.current_user]
     ).count
   end
 
