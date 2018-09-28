@@ -3,6 +3,7 @@ require "spec_helper"
 describe PromptsController do
   include LoginMacros
   include RedirectExpectationHelper
+
   let(:collection) { create(:collection) }
   let(:open_signup) do
     signups = create(:challenge_signup)
