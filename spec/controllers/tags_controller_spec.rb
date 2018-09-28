@@ -141,7 +141,7 @@ describe TagsController do
       end
 
       it "redirects with an error when not an admin" do
-         get :edit, params: { id: @tag.name }
+        get :edit, params: { id: @tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
       end

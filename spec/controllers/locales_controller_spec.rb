@@ -84,7 +84,7 @@ describe LocalesController do
     context "when logged in as a non-admin" do
       before { fake_login_known_user(user) }
 
-      it "redirects to the user page" do
+      it "redirects to the user page with an error" do
         post :create
         it_redirects_to_with_error(user_path(user),
                                    "Sorry, you don't have permission to access the page you were trying to reach.")
