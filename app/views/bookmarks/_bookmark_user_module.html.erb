@@ -1,7 +1,7 @@
 <% # expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
   <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v2" : "bookmark-blurb-#{bookmark.cache_key}-v2") %>
-  <% cache(blurb_cache_key) do %>
+  <% cache(blurb_cache_key, skip_digest: true) do %>
     <!--bookmarker, time-->
     <h5 class="byline heading">
       <%= ts('Bookmarked by') %> <%= link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud)) %>

@@ -1,14 +1,14 @@
 class BookmarksController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_owner, :only => [ :index ]
-  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
-  before_filter :users_only, :only => [:new, :create, :edit, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :load_collection
+  before_action :load_owner, only: [ :index ]
+  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :users_only, only: [:new, :create, :edit, :update]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
+  before_action :check_visibility, only: [ :show ]
+  before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
 
-  before_filter :check_pseud_ownership, :only => [:create, :update]
+  before_action :check_pseud_ownership, only: [:create, :update]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -44,14 +44,16 @@ class BookmarksController < ApplicationController
     options = params[:bookmark_search].present? ? bookmark_search_params : {}
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_private] = false
-    options[:show_restricted] = current_user.present?
-    @search = BookmarkSearch.new(options)
+    options[:show_restricted] = logged_in? || logged_in_as_admin?
+    @search = BookmarkSearchForm.new(options)
     @page_subtitle = ts("Search Bookmarks")
     if params[:bookmark_search].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
       @bookmarks = @search.search_results
+      flash_max_search_results_notice(@bookmarks)
+      set_own_bookmarks
       render 'search_results'
     end
   end
@@ -59,34 +61,94 @@ class BookmarksController < ApplicationController
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
-      options = params[:bookmark_search].present? ? bookmark_search_params : {}
-      options[:show_private] = (@user.present? && @user == current_user)
-      options[:show_restricted] = current_user.present?
+      base_options = {
+        show_private: (@user.present? && @user == current_user),
+        show_restricted: logged_in? || logged_in_as_admin?,
+        page: params[:page]
+      }
 
-      options.merge!(page: params[:page])
+      options = params[:bookmark_search].present? ? bookmark_search_params : {}
+
+      if params[:include_bookmark_search].present?
+        params[:include_bookmark_search].keys.each do |key|
+          options[key] ||= []
+          options[key] << params[:include_bookmark_search][key]
+          options[key].flatten!
+        end
+      end
+
+      if params[:exclude_bookmark_search].present?
+        params[:exclude_bookmark_search].keys.each do |key|
+          # Keep bookmarker tags separate, so we can search for them on bookmarks
+          # and search for the rest on bookmarkables
+          options_key = key == "tag_ids" ? :excluded_bookmark_tag_ids : :excluded_tag_ids
+          options[options_key] ||= []
+          options[options_key] << params[:exclude_bookmark_search][key]
+          options[options_key].flatten!
+        end
+      end
+
+      options.merge!(base_options)
       @page_subtitle = index_page_title
 
       if @owner.present?
         if @admin_settings.disable_filtering?
           @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
-          @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-          results = @search.search_results
-          @bookmarks = @search.search_results
-          @facets = @bookmarks.facets
+          @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
+
+          if @user.blank?
+            # When it's not a particular user's bookmarks, we want
+            # to list *bookmarkable* items to avoid duplication
+            @bookmarkable_items = @search.bookmarkable_search_results
+            flash_max_search_results_notice(@bookmarkable_items)
+            @facets = @bookmarkable_items.facets
+          else
+            # We're looking at a particular user's bookmarks, so
+            # just retrieve the standard search results and their facets.
+            @bookmarks = @search.search_results
+            flash_max_search_results_notice(@bookmarks)
+            @facets = @bookmarks.facets
+          end
+
+          if @search.options[:excluded_tag_ids].present? || @search.options[:excluded_bookmark_tag_ids].present?
+            # Excluded tags do not appear in search results, so we need to generate empty facets
+            # to keep them as checkboxes on the filters.
+            excluded_tag_ids = @search.options[:excluded_tag_ids] || []
+            excluded_bookmark_tag_ids = @search.options[:excluded_bookmark_tag_ids] || []
+
+            # It's possible to determine the tag types by looking at
+            # the original parameters params[:exclude_bookmark_search],
+            # but we need the tag names too, so a database query is unavoidable.
+            tags = Tag.where(id: excluded_tag_ids + excluded_bookmark_tag_ids)
+            tags.each do |tag|
+              if excluded_tag_ids.include?(tag.id.to_s)
+                key = tag.class.to_s.downcase
+                @facets[key] ||= []
+                @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
+              end
+              if excluded_bookmark_tag_ids.include?(tag.id.to_s)
+                key = 'tag'
+                @facets[key] ||= []
+                @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
+              end
+            end
+          end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
-          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: 10.minutes) do
+          search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
-          @bookmarks = search.search_results.to_a
+          flash_max_search_results_notice(results)
+          @bookmarks = results.to_a
         end
       else
         @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
       end
     end
+    set_own_bookmarks
   end
 
   # GET    /:locale/bookmark/:id
@@ -105,7 +167,7 @@ class BookmarksController < ApplicationController
       format.js {
         @button_name = ts("Create")
         @action = :create
-        render :action => "bookmark_form_dynamic"
+        render action: "bookmark_form_dynamic"
       }
     end
   end
@@ -118,7 +180,7 @@ class BookmarksController < ApplicationController
       format.js {
         @button_name = ts("Update")
         @action = :update
-        render :action => "bookmark_form_dynamic"
+        render action: "bookmark_form_dynamic"
       }
     end
   end
@@ -139,7 +201,7 @@ class BookmarksController < ApplicationController
       end
     end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render :action => "new" and return
+    render action: "new" and return
   end
 
   # PUT /bookmarks/1
@@ -149,7 +211,7 @@ class BookmarksController < ApplicationController
     unapproved_collections = []
     errors = []
     bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
-      collection = Collection.find_by_name(collection_name)
+      collection = Collection.find_by(name: collection_name)
       if collection.nil?
         errors << ts("#{collection_name} does not exist.")
       else
@@ -177,7 +239,7 @@ class BookmarksController < ApplicationController
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] += ts("Added to collection(s): %{collections}.",
-                          :collections => new_collections.collect(&:title).join(", "))
+                          collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
       flash[:notice] ||= ""
@@ -223,11 +285,12 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
+        set_own_bookmarks
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
-        redirect_to url_for({:action => :index, id_symbol => @bookmarkable})
+        redirect_to url_for({action: :index, id_symbol => @bookmarkable})
       end
     end
   end
@@ -239,12 +302,12 @@ class BookmarksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
+      @user = User.find_by(login: params[:user_id])
       unless @user
         raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
       end
       if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
         unless @pseud
           raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
         end
@@ -284,6 +347,17 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def set_own_bookmarks
+    return unless @bookmarks
+    @own_bookmarks = []
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.pluck(:id)
+      @own_bookmarks = @bookmarks.select do |b|
+        pseud_ids.include?(b.pseud_id)
+      end
+    end
+  end
+
   private
 
   def bookmark_params
@@ -299,10 +373,10 @@ class BookmarksController < ApplicationController
 
   def bookmark_search_params
     params.require(:bookmark_search).permit(
-      :query,
+      :bookmark_query,
+      :bookmarkable_query,
       :bookmarker,
-      :notes,
-      :tag,
+      :bookmark_notes,
       :rec,
       :with_notes,
       :bookmarkable_type,
@@ -310,6 +384,9 @@ class BookmarksController < ApplicationController
       :bookmarkable_date,
       :sort_column,
       :other_tag_names,
+      :excluded_tag_names,
+      :other_bookmark_tag_names,
+      :excluded_bookmark_tag_names,
       rating_ids: [],
       warning_ids: [],
       category_ids: [],
@@ -317,7 +394,8 @@ class BookmarksController < ApplicationController
       character_ids: [],
       relationship_ids: [],
       freeform_ids: [],
-      tag_ids: []
+      tag_ids: [],
     )
   end
+
 end

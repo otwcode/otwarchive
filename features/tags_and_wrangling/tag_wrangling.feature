@@ -191,6 +191,41 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
+    # check sidebar links and pages for wrangling within a fandom
+    When I am on my wrangling page
+      And I follow "Stargate SG-1"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+    When I follow "Characters (3)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Character Tags"
+      And I should see "Daniel Jackson"
+      And I should see "Jack O'Neil"
+      And I should see "Jack O'Neill"
+    When I follow "Canonical"
+    Then I should see "Showing Canonical Character Tags"
+      And I should see "Daniel Jackson"
+      And I should see "Jack O'Neill"
+      # This would fail because "Jack O'Neil" is in "Jack O'Neill"
+      # But I should not see "Jack O'Neil"
+    When I follow "Synonymous"
+    Then I should see "Showing Synonymous Character Tags"
+      And I should see "Jack O'Neil"
+      # It will be in a td in the tbody, whereas "Jack O'Neil" is in a th
+      But I should not see "Jack O'Neill" within "tbody th"
+      And I should not see "Daniel Jackson"
+    When I follow "Relationships (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Relationship Tags"
+    When I follow "Freeforms (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Freeform Tags"
+    When I follow "SubTags (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Sub Tag Tags"
+    When I follow "Mergers (0)"
+    Then I should see "Wrangle Tags for Stargate SG-1"
+      And I should see "Showing All Merger Tags"
+
   Scenario: Wrangler has option to reindex a work
 
     Given the work "Indexing Issues"
@@ -198,26 +233,28 @@ Feature: Tag wrangling
      When I view the work "Indexing Issues"
      Then I should see "Reindex Work"
 
-  Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
-    
+  @javascript
+  Scenario: AO3-1698 Sign up for a fandom from the edit fandom page,
+    then from editing a child tag of a fandom
+
     Given a canonical fandom "'Allo 'Allo"
       And a canonical fandom "From Eroica with Love"
       And a canonical fandom "Cabin Pressure"
       And a noncanonical relationship "Dorian/Martin"
-    
+
     # I want to sign up from the edit page of an unassigned fandom
     When I am logged in as a tag wrangler
       And I edit the tag "'Allo 'Allo"
     Then I should see "Sign Up"
     When I follow "Sign Up"
     Then I should see "Assign fandoms to yourself"
-      And the autocomplete value should be set to "'Allo 'Allo"
+      And I should see "'Allo 'Allo" in the "tag_fandom_string" input
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "'Allo 'Allo"
     Then I should not see "Sign Up"
       And I should see the tag wrangler listed as an editor of the tag
-    
+
     # I want to sign up from the edit page of a relationship that belongs to two unassigned fandoms
     When I edit the tag "Dorian/Martin"
     Then I should not see "Sign Up"
@@ -225,10 +262,9 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Sign Up"
-    When "autocomplete tests with JavaScript" is fixed
-#      Then I should see "Cabin Pressure" in the autocomplete
-#      And I should see "From Eroica with Love" in the autocomplete
-    When I press "Assign"
+      And I choose "Cabin Pressure" from the "Enter as many fandoms as you like." autocomplete
+      And I choose "From Eroica with Love" from the "Enter as many fandoms as you like." autocomplete
+      And I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "From Eroica with Love"
     Then I should not see "Sign Up"
@@ -239,27 +275,22 @@ Feature: Tag wrangling
 
   Scenario: A user can not see the reindex button on a tag page
 
-    Given the following typed tags exists
-        | name              | type         | canonical |
-        | Cowboy Bebop      | Fandom       | true      |
+    Given a canonical fandom "Cowboy Bebop"
       And I am logged in as a random user
     When I view the tag "Cowboy Bebop"
     Then I should not see "Reindex Tag"
 
   Scenario: A tag wrangler can not see the reindex button on a tag page
 
-    Given the following typed tags exists
-        | name              | type         | canonical |
-        | Cowboy Bebop      | Fandom       | true      |
+    Given a canonical fandom "Cowboy Bebop"
       And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
     When I view the tag "Cowboy Bebop"
     Then I should not see "Reindex Tag"
 
-  Scenario: An admin can see the reindex button on a tag page and will recieve the correct message when pressed.
+  Scenario: An admin can see the reindex button on a tag page
+    and will receive the correct message when pressed.
 
-    Given the following typed tags exists
-        | name              | type         | canonical |
-        | Cowboy Bebop      | Fandom       | true      |
+    Given a canonical fandom "Cowboy Bebop"
       And I am logged in as an admin
     When I view the tag "Cowboy Bebop"
     Then I follow "Reindex Tag"

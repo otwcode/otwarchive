@@ -1,5 +1,7 @@
 #!/bin/bash
-sudo service elasticsearch stop
-wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.13.deb
-sudo dpkg --force-confold -i elasticsearch-0.90.13.deb
-sudo service elasticsearch start
+cd /tmp
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.4.tar.gz
+tar xvfz /tmp/elasticsearch-6.2.4.tar.gz
+sed -i elasticsearch-6.2.4/config/elasticsearch.yml  -e 's/#http.port: 9200/http.port: 9400/'
+nohup ./elasticsearch-6.2.4/bin/elasticsearch &
+wget -q --waitretry=1 --retry-connrefused -T 20 -O - "http://127.0.0.1:9400/_cluster/health?wait_for_status=yellow"

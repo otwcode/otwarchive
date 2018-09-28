@@ -21,7 +21,7 @@ describe ChallengesController do
     end
     context 'when a collection is available' do
       it 'should show an error message, redirect and return false' do
-        get :no_challenge, collection_id: @collection.name
+        get :no_challenge, params: { collection_id: @collection.name }
         it_redirects_to_with_error(collection_path(@collection), "What challenge did you want to work on?")
       end
     end

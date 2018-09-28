@@ -6,19 +6,19 @@ end
 
 Given /^the collection "([^\"]*)" is deleted$/ do |collection_title|
   step %{I am logged in as the owner of "#{collection_title}"}
-  visit edit_collection_path(Collection.find_by_title(collection_title))
+  visit edit_collection_path(Collection.find_by(title: collection_title))
   click_link "Delete Collection"
   click_button "Yes, Delete Collection"
   page.should have_content("Collection was successfully deleted.")
 end
 
 When /^I am logged in as the owner of "([^\"]*)"$/ do |collection|
-  c = Collection.find_by_title(collection)
+  c = Collection.find_by(title: collection)
   step %{I am logged in as "#{c.owners.first.user.login}"}
 end
 
 When /^I view the collection "([^\"]*)"$/ do |collection|
-  visit collection_path(Collection.find_by_title(collection))
+  visit collection_path(Collection.find_by(title: collection))
 end
 
 When /^I add my work to the collection$/ do
@@ -28,8 +28,8 @@ When /^I add my work to the collection$/ do
 end
 
 When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, collection_title|
-  w = Work.find_by_title(work_title)
-  c = Collection.find_by_title(collection_title)
+  w = Work.find_by(title: work_title)
+  c = Collection.find_by(title: collection_title)
   visit work_path(w)
   click_link "Add To Collection"
   fill_in("collection_names", with: c.name)
@@ -37,13 +37,13 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
 end
 
 When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
-  c = Collection.find_by_title(collection)
+  c = Collection.find_by(title: collection)
   if item_status == "approved"
     visit collection_items_path(c, approved: true)
   elsif item_status == "rejected"
     visit collection_items_path(c, rejected: true)
   elsif item_status == "invited"
-    visit collection_items_path(c, invited: true)  
+    visit collection_items_path(c, invited: true)
   else
     visit collection_items_path(c)
   end
@@ -69,7 +69,7 @@ end
 
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
   step %{I uncheck "This collection is closed"}
   step %{I submit}
@@ -78,7 +78,7 @@ end
 
 Given /^I close the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
   step %{I check "This collection is closed"}
   step %{I submit}
@@ -86,10 +86,10 @@ Given /^I close the collection with the title "([^\"]*)"$/ do |title|
 end
 
 Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
-  # create the user 
+  # create the user
   step %{I am logged in as "#{name}"}
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
     step %{I press "Submit"}
@@ -132,7 +132,7 @@ end
 
 When /^I reveal works for "([^\"]*)"$/ do |title|
   step %{I am logged in as the owner of "#{title}"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
   uncheck "This collection is unrevealed"
   click_button "Update"
@@ -141,7 +141,7 @@ end
 
 When /^I reveal authors for "([^\"]*)"$/ do |title|
   step %{I am logged in as the owner of "#{title}"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
   uncheck "This collection is anonymous"
   click_button "Update"
@@ -158,7 +158,7 @@ When /^I check all the collection settings checkboxes$/ do
 end
 
 When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
-  the_collection = Collection.find_by_title(collection)
+  the_collection = Collection.find_by(title: collection)
   collection_item_id = the_collection.collection_items.first.id
   visit user_collection_items_path(User.current_user)
   step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
@@ -171,7 +171,7 @@ Then /^"([^"]*)" collection exists$/ do |title|
 end
 
 Then /^the name of the collection "([^"]*)" should be "([^"]*)"$/ do |title, name|
-  assert Collection.find_by_title(title).name == name
+  assert Collection.find_by(title: title).name == name
 end
 
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
@@ -180,17 +180,17 @@ end
 
 Then /^the collection "(.*)" should be deleted/ do |collection|
   assert Collection.where(title: collection).first.nil?
-end 
+end
 
 Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content("Mystery Work")
   page.should_not have_content(title)
   page.should have_content("This work is part of an ongoing challenge and will be revealed soon!")
   page.should_not have_content(Sanitize.clean(work.chapters.first.content))
   if work.collections.first
-    visit collection_path(work.collections.first) 
+    visit collection_path(work.collections.first)
     page.should_not have_content(title)
     page.should have_content("Mystery Work")
   end
@@ -199,35 +199,35 @@ Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
 end
 
 Then /^the work "([^\"]*)" should be visible to me$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content(title)
   page.should have_content(Sanitize.clean(work.chapters.first.content))
-end  
+end
 
 Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   visit work_path(work)
   authors = work.pseuds.uniq.sort.collect(&:byline).join(", ")
   page.should have_content("Anonymous [#{authors}]")
 end
 
 Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
-  if work.collections.first 
-    visit collection_path(work.collections.first) 
+  if work.collections.first
+    visit collection_path(work.collections.first)
     page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   end
 end
 
 Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
-  work = Work.find_by_title(title)
+  work = Work.find_by(title: title)
   visit work_path(work)
   page.should_not have_content(work.users.first.pseuds.first.byline)
   page.should have_content("by Anonymous")
-  visit collection_path(work.collections.first) 
+  visit collection_path(work.collections.first)
   page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   page.should have_content("#{title} by Anonymous")
   visit user_path(work.users.first)

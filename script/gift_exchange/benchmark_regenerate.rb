@@ -16,7 +16,7 @@ end
 exchange_name = ARGV[0]
 test_name = ARGV[1]
 
-collection = Collection.find_by_name(exchange_name)
+collection = Collection.find_by(name: exchange_name)
 count = collection.signups.count
 signup = collection.signups.first
 

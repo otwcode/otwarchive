@@ -36,10 +36,35 @@
 <% end %>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "jquery.cookie", "filters.min" %>
+<%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "jquery.cookie",  skip_pipeline: true %>
+
+<%= javascript_include_tag "filters.min", skip_pipeline: true %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
+<% end %>
+
+<% unless Rails.env.test? ||
+    current_user && current_user.try(:accepted_tos_version) == @current_tos_version ||
+    params[:controller] == "home" && params[:action] == "tos" ||
+    params[:controller] == "home" && params[:action] == "tos_faq" ||
+    params[:controller] == "home" && params[:action] == "dmca" ||
+    params[:controller] == "abuse_reports" && params[:action] == "new" ||
+    params[:controller] == "feedbacks" && params[:action] == "new" %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      <% # Users who haven't accepted this TOS and guests who don't have the cookie need
+         # the popup. We have to use JavaScript to check the cookie or risk issues
+         # when full page caching is enabled %>
+      <% if current_user %>
+        $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
+      <% else %>
+        if ($j.cookie("accepted_tos") != <%= @current_tos_version.to_s %>) {
+          $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
+        }
+      <% end %>
+    });
+  <% end %>
 <% end %>
 
 <%= yield :footer_js %>

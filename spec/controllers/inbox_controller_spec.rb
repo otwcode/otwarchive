@@ -7,14 +7,14 @@ describe InboxController do
 
   describe "GET #show" do
     it "redirects to user page when not logged in and displays an error" do
-      get :show, user_id: user.login
+      get :show, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user),
                                  "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "redirects to user page when logged in as another user and displays an error" do
       fake_login_known_user(create(:user))
-      get :show, user_id: user.login
+      get :show, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user),
                                  "Sorry, you don't have permission to access the page you were trying to reach.")
     end
@@ -23,7 +23,7 @@ describe InboxController do
       before { fake_login_known_user(user) }
 
       it "renders the user inbox" do
-        get :show, user_id: user.login
+        get :show, params: { user_id: user.login }
         expect(response).to render_template("show")
         expect(assigns(:inbox_total)).to eq(0)
         expect(assigns(:unread)).to eq(0)
@@ -37,15 +37,15 @@ describe InboxController do
         end
 
         it "renders non-zero unread count" do
-          get :show, user_id: user.login
+          get :show, params: { user_id: user.login }
           expect(assigns(:inbox_comments)).to eq(inbox_comments.reverse)
           expect(assigns(:inbox_total)).to eq(3)
           expect(assigns(:unread)).to eq(3)
         end
 
         it "renders oldest first" do
-          get :show, user_id: user.login, filters: { date: "asc" }
-          expect(assigns(:select_date)).to eq("asc")
+          get :show, params: { user_id: user.login, filters: { date: "asc" } }
+          expect(assigns(:filters)[:date]).to eq("asc")
           expect(assigns(:inbox_comments)).to eq(inbox_comments)
           expect(assigns(:inbox_total)).to eq(3)
           expect(assigns(:unread)).to eq(3)
@@ -57,8 +57,8 @@ describe InboxController do
         let!(:unread_comment) { create(:inbox_comment, user: user) }
 
         it "renders only unread" do
-          get :show, user_id: user.login, filters: { read: "false" }
-          expect(assigns(:select_read)).to eq("false")
+          get :show, params: { user_id: user.login, filters: { read: "false" } }
+          expect(assigns(:filters)[:read]).to eq("false")
           expect(assigns(:inbox_comments)).to eq([unread_comment])
           expect(assigns(:inbox_total)).to eq(2)
           expect(assigns(:unread)).to eq(1)
@@ -70,8 +70,8 @@ describe InboxController do
         let!(:unreplied_comment) { create(:inbox_comment, user: user) }
 
         it "renders only unreplied" do
-          get :show, user_id: user.login, filters: { replied_to: "false" }
-          expect(assigns(:select_replied_to)).to eq("false")
+          get :show, params: { user_id: user.login, filters: { replied_to: "false" } }
+          expect(assigns(:filters)[:replied_to]).to eq("false")
           expect(assigns(:inbox_comments)).to eq([unreplied_comment])
           expect(assigns(:inbox_total)).to eq(2)
           expect(assigns(:unread)).to eq(2)
@@ -83,7 +83,7 @@ describe InboxController do
 
         it "excludes deleted comments" do
           inbox_comment.feedback_comment.destroy
-          get :show, user_id: user.login
+          get :show, params: { user_id: user.login }
           expect(assigns(:inbox_total)).to eq(0)
           expect(assigns(:unread)).to eq(0)
         end
@@ -98,7 +98,7 @@ describe InboxController do
     before { fake_login_known_user(inbox_comment.user) }
 
     it "renders the HTML form" do
-      get :reply, user_id: inbox_comment.user.login, comment_id: feedback_comment.id
+      get :reply, params: { user_id: inbox_comment.user.login, comment_id: feedback_comment.id }
       path_params = {
         add_comment_reply_id: feedback_comment.id,
         anchor: "comment_" + feedback_comment.id.to_s
@@ -109,7 +109,13 @@ describe InboxController do
     end
 
     it "renders the JS form" do
-      get :reply, user_id: inbox_comment.user.login, comment_id: feedback_comment.id, format: "js"
+      parameters = {
+        user_id: inbox_comment.user.login,
+        comment_id: feedback_comment.id,
+        format: :js
+      }
+
+      get :reply, params: parameters, xhr: true
       expect(response).to render_template("reply")
       expect(assigns(:commentable)).to eq(feedback_comment)
       expect(assigns(:comment)).to be_a_new(Comment)
@@ -121,7 +127,7 @@ describe InboxController do
 
     context "with no comments selected" do
       it "redirects to inbox with caution and a notice" do
-        put :update, user_id: user.login, read: "yeah"
+        put :update, params: { user_id: user.login, read: "yeah" }
         it_redirects_to_with_caution_and_notice(user_inbox_path(user),
                                                 "Please select something first",
                                                 "Inbox successfully updated.")
@@ -129,7 +135,7 @@ describe InboxController do
 
       it "redirects to the previously viewed page if HTTP_REFERER is set, with a caution and a notice" do
         @request.env['HTTP_REFERER'] = root_path
-        put :update, user_id: user.login, read: "yeah"
+        put :update, params: { user_id: user.login, read: "yeah" }
         it_redirects_to_with_caution_and_notice(root_path,
                                                 "Please select something first",
                                                 "Inbox successfully updated.")
@@ -141,9 +147,14 @@ describe InboxController do
       let!(:inbox_comment_2) { create(:inbox_comment, user: user) }
 
       it "marks all as read and redirects to inbox with a notice" do
-        put :update, user_id: user.login, inbox_comments: [inbox_comment_1.id, inbox_comment_2.id], read: "yeah"
-        it_redirects_to_with_notice(user_inbox_path(user),
-                                    "Inbox successfully updated.")
+        parameters = {
+          user_id: user.login,
+          inbox_comments: [inbox_comment_1.id, inbox_comment_2.id],
+          read: "yeah"
+        }
+
+        put :update, params: parameters
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment_1.reload
         expect(inbox_comment_1.read).to be_truthy
@@ -152,9 +163,8 @@ describe InboxController do
       end
 
       it "marks one as read and redirects to inbox with a notice" do
-        put :update, user_id: user.login, inbox_comments: [inbox_comment_1.id], read: "yeah"
-        it_redirects_to_with_notice(user_inbox_path(user),
-                                    "Inbox successfully updated.")
+        put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], read: "yeah" }
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment_1.reload
         expect(inbox_comment_1.read).to be_truthy
@@ -163,11 +173,10 @@ describe InboxController do
       end
 
       it "deletes one and redirects to inbox with a notice" do
-        put :update, user_id: user.login, inbox_comments: [inbox_comment_1.id], delete: "yeah"
-        it_redirects_to_with_notice(user_inbox_path(user),
-                                    "Inbox successfully updated.")
+        put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], delete: "yeah" }
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
-        expect(InboxComment.find_by_id(inbox_comment_1.id)).to be_nil
+        expect(InboxComment.find_by(id: inbox_comment_1.id)).to be_nil
         inbox_comment_2.reload
         expect(inbox_comment_2.read).to be_falsy
       end
@@ -176,17 +185,23 @@ describe InboxController do
     context "with a read comment and redirects to inbox with a notice" do
       let!(:inbox_comment) { create(:inbox_comment, user: user, read: true) }
 
-      it "marks as unread" do
-        put :update, user_id: user.login, inbox_comments: [inbox_comment.id], unread: "yeah"
-        it_redirects_to_with_notice(user_inbox_path(user),
-                                    "Inbox successfully updated.")
+      it "marks as unread and redirects to inbox with a notice" do
+        put :update, params: { user_id: user.login, inbox_comments: [inbox_comment.id], unread: "yeah" }
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment.reload
         expect(inbox_comment.read).to be_falsy
       end
 
       it "marks as unread and returns a JSON response" do
-        put :update, user_id: user.login, inbox_comments: [inbox_comment.id], unread: "yeah", format: "json"
+        parameters = {
+          user_id: user.login,
+          inbox_comments: [inbox_comment.id],
+          unread: "yeah",
+          format: "json"
+        }
+
+        put :update, params: parameters
 
         inbox_comment.reload
         expect(inbox_comment.read).to be_falsy
