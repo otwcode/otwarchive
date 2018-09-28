@@ -158,6 +158,7 @@ describe TagsController do
         tag.taggings_count = 10
         tag.save
 
+        put :update, params: { id: tag, tag: { fix_taggings_count: true } }
         it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
 
         tag.reload
