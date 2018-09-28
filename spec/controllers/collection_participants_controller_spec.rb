@@ -394,7 +394,7 @@ describe CollectionParticipantsController do
 
         it "approves those users, redirects to the collection participants page and displays a notification" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "Members added:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
@@ -407,7 +407,7 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
