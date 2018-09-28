@@ -79,7 +79,7 @@ describe RelatedWorksController do
       context "with invalid parameters" do
         it "sets a flash message and redirects to the related work" do
           allow_any_instance_of(RelatedWork).to receive(:save).and_return(false)
-          put :update, id: @related_work
+          put :update, params: { id: @related_work }
           it_redirects_to_with_error(related_work_path(@related_work), "Sorry, something went wrong.")
         end
       end
