@@ -227,35 +227,37 @@ Given /^I have bookmarks of old series to search$/ do
 end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
-Given /^bookmarks of all types tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
+# A comma-separated list will let you use multiple tags
+Given /^bookmarks of all types tagged with the (character|relationship|fandom) tags? "(.*?)"$/ do |tag_type, tags|
   work = if tag_type == "character"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              character_string: tag)
+                              character_string: tags)
          elsif tag_type == "relationship"
            FactoryGirl.create(:posted_work,
                               title: "BoomarkedWork",
-                              relationship_string: tag)
+                              relationship_string: tags)
          elsif tag_type == "fandom"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              fandom_string: tag)
+                              fandom_string: tags)
          end
 
   FactoryGirl.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
-  step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
+  step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tags}"}
 end 
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
-Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
+# A comma-separated list will let you use multiple tags
+Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tags? "(.*?)"$/ do |tag_type, tags|
   # Series get their tags from works, so we have to create the work first
   work = if tag_type == "character"
-           FactoryGirl.create(:posted_work, character_string: tag)
+           FactoryGirl.create(:posted_work, character_string: tags)
          elsif tag_type == "relationship"
-           FactoryGirl.create(:posted_work, relationship_string: tag)
+           FactoryGirl.create(:posted_work, relationship_string: tags)
          elsif tag_type == "fandom"
-           FactoryGirl.create(:posted_work, fandom_string: tag)
+           FactoryGirl.create(:posted_work, fandom_string: tags)
          end
 
   # We're going to need to use the series ID, so make the series
@@ -265,11 +267,11 @@ Given /^bookmarks of external works and series tagged with the (character|relati
   FactoryGirl.create(:serial_work, work_id: work.id, series_id: series.id)
 
   external_work = if tag_type == "character"
-                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", character_string: tag)
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", character_string: tags)
                   elsif tag_type == "relationship"
-                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", relationship_string: tag)
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", relationship_string: tags)
                   elsif tag_type == "fandom"
-                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", fandom_string: tag)
+                    FactoryGirl.create(:external_work, title: "BookmarkedExternalWork", fandom_string: tags)
                   end
 
   FactoryGirl.create(:bookmark,

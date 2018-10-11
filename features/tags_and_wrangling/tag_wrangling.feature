@@ -295,3 +295,98 @@ Feature: Tag wrangling
     When I view the tag "Cowboy Bebop"
     Then I follow "Reindex Tag"
       And I should see "Tag sent to be reindexed"
+
+  @new-search
+  Scenario: Decanonizing a tag should remove its works and bookmarks from its
+  metatag's listings; canonizing it again should not re-add the items to the
+  listings
+    Given I am logged in as a tag wrangler
+      And a canonical character "Amy"
+      And a canonical character "Amy Sykes"
+      And "Amy" is a metatag of the character "Amy Sykes"
+      And bookmarks of all types tagged with the character tag "Amy Sykes"
+    When I go to the works tagged "Amy"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I edit the tag "Amy Sykes"
+      And I uncheck "Canonical"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the works tagged "Amy"
+    Then I should not see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should not see "BookmarkedWork"
+      And I should not see "BookmarkedSeries"
+      And I should not see "BookmarkedExternalWork"
+    When I edit the tag "Amy Sykes"
+      And I check "Canonical"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the works tagged "Amy Sykes"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy Sykes"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I go to the works tagged "Amy"
+      Then I should not see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should not see "BookmarkedWork"
+      And I should not see "BookmarkedSeries"
+      And I should not see "BookmarkedExternalWork"
+
+  @new-search
+  Scenario: Decanonizing a tag should not remove its works and bookmarks from
+  its metatag's listings if the items are also tagged with a different subtag of
+  that metatag
+    Given I am logged in as a tag wrangler
+      And a canonical character "Amy"
+      And a canonical character "Amy Sykes"
+      And a canonical character "Amy Gardner"
+      And "Amy" is a metatag of the character "Amy Sykes"
+      And "Amy" is a metatag of the character "Amy Gardner"
+      And bookmarks of all types tagged with the character tags "Amy Sykes, Amy Gardner"
+    When I go to the works tagged "Amy"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I edit the tag "Amy Sykes"
+      And I uncheck "Canonical"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the works tagged "Amy"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+
+  @new-search
+  Scenario: Decanonizing a tag should not remove its works and bookmarks from
+  its metatag's listings if the items are also tagged with the metatag
+    Given I am logged in as a tag wrangler
+      And a canonical character "Amy"
+      And a canonical character "Amy Sykes"
+      And "Amy" is a metatag of the character "Amy Sykes"
+      And bookmarks of all types tagged with the character tags "Amy Sykes, Amy"
+    When I go to the works tagged "Amy"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should see "BookmarkedExternalWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"
+    When I edit the tag "Amy Sykes"
+      And I uncheck "Canonical"
+      And I press "Save changes"
+      And all indexing jobs have been run
+      And I go to the works tagged "Amy"
+    Then I should see "BookmarkedWork"
+    When I go to the bookmarks tagged "Amy"
+    Then I should see "BookmarkedWork"
+      And I should see "BookmarkedSeries"
+      And I should see "BookmarkedExternalWork"

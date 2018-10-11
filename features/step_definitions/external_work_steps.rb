@@ -20,15 +20,16 @@ Given /^I set up an external work$/ do
   fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
 end
 
-Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?$/ do |title, fandom, character|
+Given /^I bookmark the external work "(.*?)"(?: with fandom "(.*?)")?(?: with character "(.*?)")?(?: with second character "(.*?)")?$/ do |title, fandom, character, second_character|
   step %{I set up an external work}
   fill_in("bookmark_external_title", with: title)
   fill_in("bookmark_external_fandom_string", with: fandom) if fandom.present?
-  fill_in("bookmark_external_character_string", with: character) if character.present?
+  fill_in("bookmark_external_character_string", with: character) if character.present? && !second_character.present?
+  fill_in("bookmark_external_character_string", with: "#{character}, #{second_character}") if character.present? && second_character.present?  
   click_button("Create")
 end
 
-When /^I view the external work "([^\"]*)"$/ do |external_work|
+When /^I view the external work "(.*?)"$/ do |external_work|
   external_work = ExternalWork.find_by_title(external_work)
   visit external_work_url(external_work)
 end
