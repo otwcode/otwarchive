@@ -1,7 +1,7 @@
 development:
   adapter: mysql2
   host: 127.0.0.1
-  encoding: utf8
+  encoding: utf8mb4
   pool: 10
   port: 3307
   username: <%= ENV['MYSQL_USER'] %>
@@ -12,7 +12,7 @@ development:
 test:
   adapter: mysql2
   host: 127.0.0.1
-  encoding: utf8
+  encoding: utf8mb4
   pool: 10
   port: 3307
   username: <%= ENV['MYSQL_USER'] %>

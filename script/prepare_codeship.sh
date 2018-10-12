@@ -27,7 +27,7 @@ cp config/redis.codeship.example config/redis.yml
 
 bundle exec rake db:create:all --trace
 bundle exec rails runner "puts \"Connecting to database version #{ActiveRecord::Base.connection.show_variable('version')}\""
-mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e  "ALTER DATABASE test$TEST_ENV_NUMBER CHARACTER SET utf8 COLLATE utf8_general_ci;"
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "ALTER DATABASE test$TEST_ENV_NUMBER CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 bundle exec rake db:schema:load --trace
 bundle exec rake db:migrate --trace
 # sed  -e 's/ELASTICSEARCH_URL.*//' -i config/config.yml
