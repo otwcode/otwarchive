@@ -75,4 +75,14 @@ describe WordCounter do
     expect(word_counter.count).to eq(5)
   end
 
+  it "should count words not delimited with space correctly" do
+    word_counter.text = "一个简单の栗子"
+    expect(word_counter.count).to eq(7)
+  end
+
+  it "should count words in mixed languages correctly" do
+    word_counter.text = "\“嘿Bob,\” Alice说，‘啊？！？’"
+    expect(word_counter.count).to eq(5)
+  end
+
 end
