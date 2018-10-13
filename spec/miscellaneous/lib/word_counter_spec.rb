@@ -84,5 +84,4 @@ describe WordCounter do
     word_counter.text = "\“嘿Bob,\” Alice说，‘啊？！？’"
     expect(word_counter.count).to eq(5)
   end
-
 end
