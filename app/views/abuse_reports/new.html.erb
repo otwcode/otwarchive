@@ -28,7 +28,7 @@
             (link_to ts("DMCA Policy"), dmca_path)).html_safe %></li>
   </ul>
   <p><%= ts("<strong>We can answer Abuse reports in %{list}.</strong> Please allow for an additional delay for responses
-            in any language other than English.", list: @abuse_languages.map(&:name).to_sentence).html_safe %></p>
+            in any language other than English.", list: @abuse_languages.pluck(:name).to_sentence).html_safe %></p>
 </div>
 <%= form_for @abuse_report, class: "post" do |f| %>
   <fieldset>

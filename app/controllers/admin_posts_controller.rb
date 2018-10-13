@@ -84,7 +84,7 @@ class AdminPostsController < ApplicationController
   protected
 
   def load_languages
-    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
+    @news_languages = Language.where(id: Locale.pluck(:language_id)).default_order
   end
 
   private

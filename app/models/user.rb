@@ -278,7 +278,7 @@
 
   def self.search_multiple_by_email(emails = [])
     users = User.where(email: emails)
-    found_emails = users.map(&:email)
+    found_emails = users.pluck(:email)
     not_found = emails - found_emails
     [users, not_found]
   end

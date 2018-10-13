@@ -310,7 +310,7 @@ class Work < ApplicationRecord
                     )
 
     pseuds.each { |p| p.update_works_index_timestamp! }
-    User.expire_ids(pseuds.map(&:user_id).uniq)
+    User.expire_ids(pseuds.pluck(:user_id).uniq)
     Tag.expire_ids(tag_ids)
     Collection.expire_ids(collection_ids)
   end
@@ -484,11 +484,11 @@ class Work < ApplicationRecord
   end
 
   def challenge_assignment_ids
-    challenge_assignments.map(&:id)
+    challenge_assignments.pluck(:id)
   end
 
   def challenge_claim_ids
-    challenge_claims.map(&:id)
+    challenge_claims.pluck(:id)
   end
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors

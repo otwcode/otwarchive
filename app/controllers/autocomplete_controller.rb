@@ -96,7 +96,7 @@ class AutocompleteController < ApplicationController
     tag_class = params[:type].classify.constantize
     render_output(tag_class.by_popularity
                       .where(["canonical = 0 AND name LIKE ?",
-                              '%' + search_param + '%']).limit(10).map(&:name))
+                              '%' + search_param + '%']).limit(10).pluck(:name))
   end
 
 

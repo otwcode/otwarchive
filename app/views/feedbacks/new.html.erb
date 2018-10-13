@@ -23,7 +23,7 @@
   <div class="userstuff">
     <p><%= ts("If your question or problem concerns potential violations of the Terms of Service, control of Orphaned Works, or issues requiring identity verification such as regaining access to a lost account, please %{contact_abuse_link} instead.", contact_abuse_link: link_to(ts("contact our Policy and Abuse team"), new_abuse_report_path)).html_safe %></p>
     <p><%= ts("For current updates on Archive performance, please check out our Twitter feed: <a href=\"http://twitter.com/ao3_status\">@AO3_status</a>.").html_safe %></p>
-    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
+    <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> Please allow for up to one week delay for responses in any language other than English.", list: @support_languages.pluck(:name).to_sentence).html_safe %></p>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
