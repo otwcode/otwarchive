@@ -1,7 +1,6 @@
 # encoding=utf-8
 
 require 'nokogiri'
-require 'spec_helper'
 
 class WordCounter
 
