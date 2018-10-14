@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe UsersController do
+  include RedirectExpectationHelper
 
   def valid_user_attributes
     {
@@ -9,13 +10,12 @@ describe UsersController do
     }
   end
 
-  before do
-    allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
-  end
-
   describe "create" do
-
     context "with valid parameters" do
+      before do
+        allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
+      end
+
       it "should be successful" do
         post :create, params: { user: valid_user_attributes }
 
@@ -25,6 +25,88 @@ describe UsersController do
       end
     end
 
-  end
+    context "when invitations are required to sign up" do
+      let(:invitation) { create(:invitation) }
 
+      before do
+        AdminSetting.update_all(
+          account_creation_enabled: true,
+          creation_requires_invite: true,
+          invite_from_queue_enabled: true
+        )
+      end
+
+      context "signing up with no invitation" do
+        it "redirects with an error" do
+          post :create, params: { user: valid_user_attributes }
+
+          it_redirects_to_with_error(
+            invite_requests_path,
+            "To create an account, you'll need an invitation. One option is " \
+            "to add your name to the automatic queue below."
+          )
+        end
+      end
+
+      context "signing up with an invalid invitation" do
+        it "redirects with an error" do
+          post :create, params: { user: valid_user_attributes,
+                                  invitation_token: "asdf" }
+
+          it_redirects_to_with_error(
+            new_feedback_report_path,
+            "There was an error with your invitation token, please contact " \
+            "support"
+          )
+        end
+      end
+
+      context "signing up with a valid invitation" do
+        it "succeeeds in creating the account" do
+          post :create, params: { user: valid_user_attributes,
+                                  invitation_token: invitation.token }
+
+          expect(response).to be_success
+          expect(assigns(:user)).to be_a(User)
+          expect(assigns(:user)).to eq(User.last)
+          expect(assigns(:user).login).to eq("myname")
+        end
+      end
+
+      context "signing up with a used invitation" do
+        let(:previous_user) { create(:user) }
+
+        before do
+          invitation.mark_as_redeemed(previous_user)
+          previous_user.update_attributes(invitation_id: invitation.id)
+        end
+
+        it "redirects with an error" do
+          post :create, params: { user: valid_user_attributes,
+                                  invitation_token: invitation.token }
+
+          it_redirects_to_with_error(
+            root_path,
+            "This invitation has already been used to create an account, " \
+            "sorry!"
+          )
+        end
+
+        context "when the previous user deletes their account" do
+          it "redirects with an error" do
+            previous_user.destroy
+
+            post :create, params: { user: valid_user_attributes,
+                                    invitation_token: invitation.token }
+
+            it_redirects_to_with_error(
+              root_path,
+              "This invitation has already been used to create an account, " \
+              "sorry!"
+            )
+          end
+        end
+      end
+    end
+  end
 end
