@@ -114,6 +114,7 @@ Feature: Archivist bulk imports
       | login | email                     |
       | ao3   | ao3testing@dreamwidth.org |
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
+      And all indexing jobs have been run
     Then I should see import confirmation
       And I should see "ao3"
       And I should not see "[archived by archivist]"
@@ -126,12 +127,14 @@ Feature: Archivist bulk imports
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
       And the system processes jobs
+      And all indexing jobs have been run
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
       And I go to the claim page for "not_creators_account_email@example.com"
     Then I should see "Claim your works with your logged-in account."
     When I press "Add these works to my currently-logged-in account"
+      And all indexing jobs have been run
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
     When I go to creator's works page

@@ -214,8 +214,8 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   line-height: 1.286;
   color: #000;
   display: block;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 1px 3px 5px rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .autocomplete ul li {
@@ -225,8 +225,11 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
 
 .autocomplete input, .autocomplete .dropdown ul li {
   display: block;
-  margin: 0.25em 0 0;
   min-width: 10em;
+}
+
+.autocomplete .dropdown ul li {
+  margin: 0.25em 0 0;
 }
 
 form li ul.autocomplete li.input {

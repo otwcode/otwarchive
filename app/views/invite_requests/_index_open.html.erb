@@ -4,7 +4,17 @@
 </h2>
 
 <p>
-  <%= ts("To get a free Archive of Our Own account, you'll need an invitation.") %>
+  <%= ts("To get a free Archive of Our Own account, you need an Invitation.
+         By submitting your email address to our invitation queue, you confirm
+         that you are at least 13 years old, and if you're in a country whose
+         residents/citizens have to be of an age older than 13 to consent,
+         you are old enough to consent to the processing of your personal data
+         without our obtaining written permission from a parent or legal guardian.
+         We will use the email address you submit only to send you an Invitation
+         and to process/manage your account activation. Please don't request an Invitation
+         unless you've read the %{tos} and agree to abide by those Terms.",
+         tos: link_to(ts("Terms of Service"), tos_path)
+      ).html_safe %>
 </p>
 <!--/descriptions-->
 

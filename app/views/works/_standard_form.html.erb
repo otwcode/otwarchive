@@ -121,7 +121,7 @@
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.collection_select(:language_id, Language.order(:short), :id, :name, prompt: " ") %>
+                <%= p.collection_select(:language_id, sorted_languages, :id, :name, prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
