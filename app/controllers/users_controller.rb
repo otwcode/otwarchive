@@ -54,7 +54,7 @@ class UsersController < ApplicationController
   def show
     if @user.blank?
       flash[:error] = ts('Sorry, could not find this user.')
-      redirect_to(people_path) && return
+      redirect_to(search_people_path) && return
     end
 
     @page_subtitle = @user.login
@@ -65,7 +65,6 @@ class UsersController < ApplicationController
     @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
                                                        subscribable_type: 'User').first ||
@@ -146,6 +145,7 @@ class UsersController < ApplicationController
       @user.invitation_token = params[:invitation_token]
       @user.age_over_13 = user_params[:age_over_13]
       @user.terms_of_service = user_params[:terms_of_service]
+      @user.accepted_tos_version = @current_tos_version
 
       @user.password = user_params[:password] if user_params[:password]
       @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
@@ -295,6 +295,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def end_tos_prompt
+    @user.update_attribute(:accepted_tos_version, @current_tos_version)
+    head :no_content
+  end
+
   def browse
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
     @tag_types = %w(Fandom Character Relationship Freeform)
@@ -343,7 +348,7 @@ class UsersController < ApplicationController
       if !invitation
         flash[:error] = ts('There was an error with your invitation token, please contact support')
         redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at && invitation.invitee
+      elsif invitation.redeemed_at
         flash[:error] = ts('This invitation has already been used to create an account, sorry!')
         redirect_to root_path
       end

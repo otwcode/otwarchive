@@ -21,6 +21,13 @@
       </dd>
 
       <dt>
+        <%= f.label :sortable_name, t('.sortable_name', default: "Name for alphabetical sorting") %>
+      </dt>
+      <dd>
+        <%= f.text_field :sortable_name %>
+      </dd>
+
+      <dt>
         <%= f.check_box :support_available %>
       </dt>
       <dd>

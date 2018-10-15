@@ -76,7 +76,6 @@ GEM
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
     akismetor (1.0.0)
-    ansi (1.5.0)
     arel (8.0.0)
     audited (4.5.0)
       activerecord (>= 4.0, < 5.2)
@@ -85,6 +84,7 @@ GEM
       activesupport (>= 3.2, < 5.2)
       request_store (~> 1.0)
       scrypt (>= 1.2, < 4.0)
+    awesome_print (1.8.0)
     aws-sdk (2.9.35)
       aws-sdk-resources (= 2.9.35)
     aws-sdk-core (2.9.35)
@@ -123,8 +123,6 @@ GEM
     capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
-    childprocess (0.7.0)
-      ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
     climate_control (0.2.0)
     cliver (0.3.2)
@@ -139,7 +137,7 @@ GEM
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.2)
+    crass (1.0.4)
     css_parser (1.5.0)
       addressable
     cucumber (2.4.0)
@@ -179,12 +177,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (5.0.4)
-      elasticsearch-api (= 5.0.4)
-      elasticsearch-transport (= 5.0.4)
-    elasticsearch-api (5.0.4)
+    elasticsearch (6.0.0)
+      elasticsearch-api (= 6.0.0)
+      elasticsearch-transport (= 6.0.0)
+    elasticsearch-api (6.0.0)
       multi_json
-    elasticsearch-transport (5.0.4)
+    elasticsearch-transport (6.0.0)
       faraday
       multi_json
     email_spec (1.6.0)
@@ -201,7 +199,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.6.6)
       i18n (~> 0.5)
-    faraday (0.12.1)
+    faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     fastimage (2.1.0)
     ffi (1.9.18)
@@ -212,14 +210,14 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     hashdiff (0.3.4)
-    hashr (0.0.22)
     highline (1.7.8)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     httparty (0.15.5)
       multi_xml (>= 0.5.2)
-    i18n (0.8.4)
+    i18n (0.9.5)
+      concurrent-ruby (~> 1.0)
     jmespath (1.3.1)
     json (2.1.0)
     kgio (2.10.0)
@@ -230,7 +228,8 @@ GEM
       activesupport (>= 4, < 5.2)
       railties (>= 4, < 5.2)
       request_store (~> 1.0)
-    loofah (2.0.3)
+    loofah (2.2.2)
+      crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.5)
       mime-types (>= 1.16, < 4)
@@ -247,13 +246,13 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.3.0)
-    minitest (5.10.2)
+    minitest (5.11.3)
     mono_logger (1.1.0)
     multi_json (1.12.1)
     multi_test (0.1.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
-    mustermann (1.0.0)
+    mustermann (1.0.2)
     mysql2 (0.3.20)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
@@ -270,13 +269,13 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.18.1.330)
     nio4r (2.1.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.3)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.9)
       nokogiri
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
-    paperclip (5.1.0)
+    paperclip (5.2.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       cocaine (~> 0.5.5)
@@ -304,10 +303,10 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.5)
-    rack (2.0.3)
+    rack (2.0.5)
     rack-dev-mark (0.7.6)
       rack (>= 1.1, < 2.1)
-    rack-protection (2.0.0)
+    rack-protection (2.0.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -330,8 +329,8 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.0.3)
-      loofah (~> 2.0)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
     railties (5.1.3)
       actionpack (= 5.1.3)
       activesupport (= 5.1.3)
@@ -386,22 +385,17 @@ GEM
       rspec-mocks (~> 3.6.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
-    rubyzip (1.2.1)
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
     safe_yaml (1.0.4)
-    sanitize (4.5.0)
+    sanitize (4.6.5)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4.1)
+      nokogumbo (~> 1.4)
     scrypt (3.0.5)
       ffi-compiler (>= 1.0, < 2.0)
-    selenium-webdriver (3.4.0)
-      childprocess (~> 0.5)
-      rubyzip (~> 1.0)
-      websocket (~> 1.0)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
       shoulda-matchers (>= 1.4.1, < 3.0)
@@ -413,13 +407,13 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.1)
-    sinatra (2.0.0)
+    sinatra (2.0.3)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.0)
+      rack-protection (= 2.0.3)
       tilt (~> 2.0)
     slop (3.6.0)
-    sprockets (3.7.1)
+    sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.2.0)
@@ -431,23 +425,15 @@ GEM
       power_assert
     thor (0.19.4)
     thread_safe (0.3.6)
-    tilt (2.0.7)
+    tilt (2.0.8)
     timecop (0.8.1)
     timeliness (0.3.8)
-    tire (0.6.2)
-      activemodel (>= 3.0)
-      activesupport
-      ansi
-      hashr (~> 0.0.19)
-      multi_json (~> 1.3)
-      rake
-      rest-client (~> 1.6)
-    transaction_isolation (1.0.3)
+    transaction_isolation (1.0.5)
       activerecord (>= 3.0.11)
     transaction_retry (1.0.2)
       activerecord (>= 3.0.11)
       transaction_isolation (>= 1.0.2)
-    tzinfo (1.2.3)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
@@ -469,7 +455,6 @@ GEM
       crack (>= 0.3.2)
       hashdiff
     webrobots (0.1.2)
-    websocket (1.2.4)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -495,6 +480,7 @@ DEPENDENCIES
   akismetor
   audited (~> 4.4)
   authlogic (~> 3.6.0)
+  awesome_print
   aws-sdk
   bcrypt
   bullet (~> 5.6.0)
@@ -515,7 +501,7 @@ DEPENDENCIES
   delorean
   devise
   devise-async
-  elasticsearch
+  elasticsearch (>= 6.0.0)
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
   factory_girl (~> 4.8.0)
@@ -535,9 +521,9 @@ DEPENDENCIES
   mysql2 (= 0.3.20)
   newrelic-redis
   newrelic_rpm
-  nokogiri (>= 1.7.1)
+  nokogiri (>= 1.8.3)
   nokogumbo (= 1.4.9)
-  paperclip (>= 5.1.0)
+  paperclip (>= 5.2.0)
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle
@@ -557,14 +543,13 @@ DEPENDENCIES
   rspec (~> 3.4)
   rspec-rails (~> 3.6.0)
   rvm-capistrano
-  sanitize
-  selenium-webdriver
+  sanitize (>= 4.6.5)
   shoulda
   simplecov (~> 0.14.0)
   test-unit (~> 3.2)
   timecop
   timeliness
-  tire
+  transaction_isolation (= 1.0.5)
   transaction_retry
   unicode
   unicorn (>= 5.1.0)
@@ -579,4 +564,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.3
+   1.16.2

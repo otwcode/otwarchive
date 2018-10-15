@@ -208,9 +208,9 @@ class Admin::AdminUsersController < ApplicationController
   def troubleshoot
     @user = User.find_by(login: params[:id])
     @user.fix_user_subscriptions
-    @user.reindex_user_works
     @user.set_user_work_dates
-    @user.reindex_user_bookmarks
+    @user.reindex_user_creations
+    @user.update_works_index_timestamp!
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
     redirect_to(request.env["HTTP_REFERER"] || root_path) && return

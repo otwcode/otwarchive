@@ -120,3 +120,18 @@ Feature: Display autocomplete for tags
     # ...consecutive spaces
     When I enter "Jyn  Erso" in the "Relationships" autocomplete field
     Then I should see HTML "Cassian Andor &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
+
+  @javascript
+  Scenario: Tags with symbols shouldn't match all other tags with symbols.
+
+    Given basic tags
+      And I am logged in
+      And a canonical freeform "AU - Canon"
+      And a canonical freeform "AU - Cats"
+      And a canonical freeform "Science Fiction & Fantasy"
+      And I go to the new work page
+
+    When I enter "AU - Ca" in the "Additional Tags" autocomplete field
+    Then I should see "AU - Canon" in the autocomplete
+      And I should see "AU - Cats" in the autocomplete
+      But I should not see "Science Fiction & Fantasy" in the autocomplete

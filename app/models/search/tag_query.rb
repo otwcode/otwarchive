@@ -1,5 +1,9 @@
 class TagQuery < Query
 
+  def klass
+    'Tag'
+  end
+
   def index_name
     TagIndexer.index_name
   end
@@ -16,16 +20,21 @@ class TagQuery < Query
     [name_query].compact
   end
 
+  # Tags have a different default per_page value:
+  def per_page
+    options[:per_page] || ArchiveConfig.TAGS_PER_SEARCH_PAGE || 50
+  end
+
   ################
   # FILTERS
   ################
 
   def type_filter
-    { term: { tag_type: options[:tag_type] } } if options[:tag_type]
+    { term: { tag_type: options[:type] } } if options[:type]
   end
 
   def canonical_filter
-    { term: { canonical: 'T' } } if options[:canonical]
+    { term: { canonical: 'true' } } if options[:canonical]
   end
 
   ################
@@ -33,7 +42,13 @@ class TagQuery < Query
   ################
 
   def name_query
-    { match: { name: options[:name] } } if options[:name]
+    return unless options[:name]
+    {
+      query_string: {
+        query: escape_reserved_characters(options[:name]),
+        fields: ["name.exact^2", "name"],
+        default_operator: "and"
+      }
+    }
   end
-
 end

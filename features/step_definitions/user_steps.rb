@@ -132,10 +132,6 @@ Given /^I am a visitor$/ do
   step(%{I am logged out})
 end
 
-Given /^I view the people page$/ do
-  visit people_path
-end
-
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
