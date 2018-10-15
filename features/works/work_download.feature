@@ -31,7 +31,7 @@ Feature: Download a work
       """
       "Has double quotes"
       """
-  When I press "Post Without Preview"
+  When I press "Post"
     And I follow "MOBI"
   # Then...
   When I go to the work page with title "Has double quotes"
@@ -52,7 +52,7 @@ Feature: Download a work
       """
       Первый_маг
       """
-  When I press "Post Without Preview"
+  When I press "Post"
   # TODO: Think about whether we can invent a better name than this
   Then I should see the text with tags "_.mobi"
   When I follow "MOBI"
@@ -75,7 +75,7 @@ Feature: Download a work
       """
       Has curly’d quotes
       """
-  When I press "Post Without Preview"
+  When I press "Post"
     And I follow "MOBI"
   # Then...
   When I go to the work page with title Has curly’d quotes
@@ -89,7 +89,7 @@ Feature: Download a work
   # Then...
 
   @wip
-  Scenario: Download works with curly and straight quotes and accented 
+  Scenario: Download works with curly and straight quotes and accented
   characters in the title doesn't bomb
 
   Given I set up the draft "Title I'll Replace In A Sec"
@@ -97,7 +97,7 @@ Feature: Download a work
       """
       "Hàs curly’d quotes"
       """
-  When I press "Post Without Preview"
+  When I press "Post"
     And I follow "MOBI"
   # Then...
   When I go to the work page with title "Hàs curly’d quotes"
@@ -112,7 +112,7 @@ Feature: Download a work
 
   @wip
   Scenario: Download chaptered works doesn't bomb
- 
+
   Given the chaptered work "Epic Novel"
   When I view the work "Epic Novel"
     And I follow "HTML"
@@ -136,7 +136,7 @@ Feature: Download a work
       """
       ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
       """
-  When I press "Post Without Preview"
+  When I press "Post"
     And I follow "MOBI"
   # Then...
   When I go to the work page with title ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
@@ -151,7 +151,7 @@ Feature: Download a work
       """
       à ø something
       """
-  When I press "Post Without Preview"
+  When I press "Post"
     And I follow "MOBI"
   # Then...
   When I go to the work page with title à ø something

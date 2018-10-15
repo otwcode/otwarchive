@@ -8,7 +8,7 @@ Feature: Create and Edit Series
     Given I am logged in as "author"
       And I set up the draft "Sweetie Belle"
     When I fill in "work_series_attributes_title" with "Ponies"
-    When I press "Post Without Preview"
+    When I press "Post"
     Then I should see "Part 1 of the Ponies series" within "div#series"
       And I should see "Part 1 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
@@ -19,7 +19,7 @@ Feature: Create and Edit Series
       And I post the work "Sweetie Belle" as part of a series "Ponies"
       And I set up the draft "Starsong"
     When I select "Ponies" from "work_series_attributes_id"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
@@ -34,7 +34,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "work_series_attributes_id"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
@@ -99,7 +99,7 @@ Feature: Create and Edit Series
       And I add the pseud "Pointless Pseud"
       And I set up the draft "Sweetie Belle" using the pseud "Pointless Pseud"
     When I fill in "work_series_attributes_title" with "Ponies"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Pointless Pseud"
       And I should see "Part 1 of the Ponies series" within "div#series"
       And I should see "Part 1 of the Ponies series" within "dd.series"
@@ -111,7 +111,7 @@ Feature: Create and Edit Series
       And I add the pseud "Pointless Pseud"
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
     When I set up the draft "Starsong" as part of a series "Ponies" using the pseud "Pointless Pseud"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Pointless Pseud"
       And I should see "Part 2 of the Ponies series"
     When I view the series "Ponies"
@@ -127,7 +127,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "work_series_attributes_id"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Part 2 of the Ponies series" within "div#series"
       And I should see "Part 2 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
@@ -159,7 +159,7 @@ Feature: Create and Edit Series
     And "AO3-3847" is fixed
     #  And I should see "Part 1 of the Many a Robot series" within "dd.series"
 
-  Scenario: Post Without Preview
+  Scenario: Post
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "public" to series "be_public"
     When I follow "be_public"
@@ -189,7 +189,7 @@ Feature: Create and Edit Series
       And I wait 1 second
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the series and its works."
-    When "AO3-5083" is fixed 
+    When "AO3-5083" is fixed
       # And "moon" should be the creator of the series "Ponies"
       # And "sun" should not be a creator on the series "Ponies"
     When I go to my works page

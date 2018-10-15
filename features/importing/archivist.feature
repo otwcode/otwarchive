@@ -242,7 +242,7 @@ Feature: Archivist bulk imports
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
     And I fill in "work_collection_names" with "Club"
-    And I press "Post Without Preview"
+    And I press "Post"
     Then I should see "Story"
     And I should see "randomtestname"
     And I should see "Club"

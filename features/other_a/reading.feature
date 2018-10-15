@@ -11,7 +11,7 @@ Feature: Reading count
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
     Then I should see "History" within "div#dashboard"
-    
+
   Scenario: Read a work several times, counts show on reading history
       increment the count whenever you reread a story
       also updates the date
@@ -42,7 +42,7 @@ Feature: Reading count
     When I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"    
+      And I should see "Last viewed: 25 May 2010"
     When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
@@ -238,7 +238,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post Without Preview"
+    And I press "Post"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage

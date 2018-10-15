@@ -70,7 +70,7 @@ When /^I post (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with charac
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
-    click_button("Post Without Preview")
+    click_button("Post")
   end
   Work.tire.index.refresh
   Tag.write_redis_to_database
@@ -118,7 +118,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   (n_chapters.to_i - 1).times do |i|
     step %{I follow "Add Chapter"}
     fill_in("content", with: "Yet another chapter.")
-    click_button("Post Without Preview")
+    click_button("Post")
   end
   step %{I am logged out}
   n_comments ||= 0
@@ -501,7 +501,7 @@ When /^I update the work$/ do
   Tag.write_redis_to_database
 end
 When /^I post the work without preview$/ do
-  click_button "Post Without Preview"
+  click_button "Post"
   Work.tire.index.refresh
   Tag.write_redis_to_database
 end
@@ -541,7 +541,7 @@ When /^I give the work "([^"]*)" to the user "([^"]*)"$/ do |work_title, recipie
   step %{the user "#{recipient}" exists and is activated}
   visit edit_work_path(Work.find_by(title: work_title))
   fill_in("work_recipients", with: "#{recipient}")
-  click_button("Post Without Preview")
+  click_button("Post")
 end
 
 When /^I add the beginning notes "([^"]*)"$/ do |notes|

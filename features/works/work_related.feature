@@ -107,7 +107,7 @@ Scenario: Translation, related work, and parent work links appear in the right p
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
     And a chapter is added to "Worldbuilding"
     And a draft chapter is added to "Worldbuilding"
   When I view the work "Worldbuilding"
@@ -392,13 +392,13 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a series as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "Only a link to a work can be listed as an inspiration."
 
-  Scenario: When using a URL on the site to cite a parent work, the URL must be 
+  Scenario: When using a URL on the site to cite a parent work, the URL must be
   for a work that exists
   Given I am logged in
     And I set up a draft "Inspired"
   When I list a nonexistent work as inspiration
-    And I press "Post Without Preview"
+    And I press "Post"
   Then I should see "The work you listed as an inspiration does not seem to exist."
