@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'rake'
 
 describe UsersController do
   include RedirectExpectationHelper
@@ -63,7 +62,7 @@ describe UsersController do
       end
 
       context "signing up with a valid invitation" do
-        it "succeeds in creating the account" do
+        it "succeeeds in creating the account" do
           post :create, params: { user: valid_user_attributes,
                                   invitation_token: invitation.token }
 
@@ -105,31 +104,6 @@ describe UsersController do
               "This invitation has already been used to create an account, " \
               "sorry!"
             )
-          end
-        end
-
-        context "when the previous user's account was purged" do
-          before do
-            # Code for activating rake, adapted from
-            # spec/miscellaneous/lib/tasks/resque.rake_spec.rb
-            @rake = Rake.application
-            @rake.init
-            @rake.load_rakefile
-
-            # Make sure the previous user's account fits the requirements to be
-            # purged by the task:
-            previous_user.update(activated_at: nil, created_at: 1.month.ago)
-            @rake["admin:purge_unvalidated_users"].invoke
-          end
-
-          it "succeeds in creating the account" do
-            post :create, params: { user: valid_user_attributes,
-                                    invitation_token: invitation.token }
-
-            expect(response).to be_success
-            expect(assigns(:user)).to be_a(User)
-            expect(assigns(:user)).to eq(User.last)
-            expect(assigns(:user).login).to eq("myname")
           end
         end
       end
