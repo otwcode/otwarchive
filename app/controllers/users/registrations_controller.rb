@@ -96,5 +96,4 @@ class Users::RegistrationsController < Devise::RegistrationsController
       redirect_to invite_requests_path
     end
   end
-
 end

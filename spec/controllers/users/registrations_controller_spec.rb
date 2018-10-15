@@ -10,6 +10,10 @@ describe Users::RegistrationsController do
     }
   end
 
+  before do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+  end
+
   describe "create" do
     context "when invitations are required to sign up" do
       let(:invitation) { create(:invitation) }
@@ -24,7 +28,7 @@ describe Users::RegistrationsController do
 
       context "signing up with no invitation" do
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes }
+          post :create, params: { user_registration: valid_user_attributes }
 
           it_redirects_to_with_error(
             invite_requests_path,
@@ -36,7 +40,7 @@ describe Users::RegistrationsController do
 
       context "signing up with an invalid invitation" do
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: "asdf" }
 
           it_redirects_to_with_error(
@@ -49,7 +53,7 @@ describe Users::RegistrationsController do
 
       context "signing up with a valid invitation" do
         it "succeeeds in creating the account" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: invitation.token }
 
           expect(response).to be_success
@@ -68,7 +72,7 @@ describe Users::RegistrationsController do
         end
 
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: invitation.token }
 
           it_redirects_to_with_error(
@@ -82,7 +86,7 @@ describe Users::RegistrationsController do
           it "redirects with an error" do
             previous_user.destroy
 
-            post :create, params: { user: valid_user_attributes,
+            post :create, params: { user_registration: valid_user_attributes,
                                     invitation_token: invitation.token }
 
             it_redirects_to_with_error(
