@@ -77,7 +77,7 @@ Feature: User Authentication
       And all emails have been delivered
     When I am on the login page
       And I follow "Reset password"
-      And I fill in "reset_password_for" with "sam@example.com"
+      And I fill in "Email address or user name" with "sam@example.com"
       And I press "Reset Password"
     Then 1 email should be delivered
     When I am logged out
@@ -96,7 +96,7 @@ Feature: User Authentication
       And all emails have been delivered
     When I am on the login page
       And I follow "Reset password"
-      And I fill in "reset_password_for" with "sam"
+      And I fill in "Email address or user name" with "sam"
       And I press "Reset Password"
     Then 1 email should be delivered
     When I am logged out
@@ -131,7 +131,7 @@ Feature: User Authentication
         And I should not see "Hi, sam!"
 
       # User should be able to log in with the correct password 5 minutes later
-      When 5 minutes have passed
+      When it is currently 5 minutes from now
         And I am on the home page
         And I fill in "User name" with "sam"
         And I fill in "Password" with "password"
@@ -215,9 +215,9 @@ Feature: User Authentication
   Scenario: Login with email or login
     Given the following activated user exists
       | login      | email                          | password |
-      | TheMadUser | themaduser@archiveofourown.org | password |
+      | TheMadUser | themaduser@example.com | password |
     When I am on the home page
-      And I fill in "User name" with "themaduser@archiveofourown.org"
+      And I fill in "User name" with "themaduser@example.com"
       And I fill in "Password" with "password"
       And I press "Log In"
       Then I should see "Successfully logged in."

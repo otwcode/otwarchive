@@ -21,7 +21,7 @@ Given(/^confirmation emails have been delivered$/) do
   end
 
   ActionMailer::Base.deliveries.select do |delivery|
-    delivery.subject ==  "Confirmation instructions"
+    delivery.subject == "Confirmation instructions"
   end.should be_empty
 end
 
