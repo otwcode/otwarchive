@@ -1,5 +1,4 @@
 module BackwardsCompatiblePasswordDecryptor
-
   # http://stackoverflow.com/questions/6113375/converting-existing-password-hash-to-devise
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
   # https://www.ruby-forum.com/topic/217465
@@ -19,7 +18,6 @@ module BackwardsCompatiblePasswordDecryptor
       # This is the backwards compatibility with what we used to authenticate
       # with bcrypt and authlogic.
       # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/password.rb#L361
-
 
       # if Authlogic::CryptoProviders::BCrypt.matches?(encrypted_password, [password, password_salt].compact)
       # same as
@@ -44,5 +42,4 @@ module BackwardsCompatiblePasswordDecryptor
       true
     end
   end
-
 end

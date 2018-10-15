@@ -4,12 +4,12 @@ class User < ApplicationRecord
   include WorksOwner
 
   devise :database_authenticatable,
-          :confirmable,
-          :registerable,
-          :rememberable,
-          :trackable,
-          :validatable,
-          :lockable
+         :confirmable,
+         :registerable,
+         :rememberable,
+         :trackable,
+         :validatable,
+         :lockable
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly

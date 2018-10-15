@@ -35,8 +35,7 @@ Given /the following users exist with BCrypt encrypted passwords/ do |table|
     # same as
     encrypted_password = BCrypt::Password.create(
                            [hash[:password], salt].flatten.join,
-                           cost: ArchiveConfig.BCRYPT_COST || 14
-                         )
+                           cost: ArchiveConfig.BCRYPT_COST || 14)
 
     user.update(
       password_salt: salt,

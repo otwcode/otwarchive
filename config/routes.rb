@@ -14,8 +14,8 @@ Otwarchive::Application.routes.draw do
   end
 
   devise_for :users,
-              module: 'users',
-              controllers: {
+             module: 'users',
+             controllers: {
                 sessions: 'users/sessions',
                 registrations: 'users/registrations'
               },
