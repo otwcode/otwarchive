@@ -150,8 +150,9 @@ Feature: Edit preferences
   When I follow "All Fandoms"
   Then I should see "Stargate SG-1"
     And I should see "Stargate SG-2"
-  # we are now looking at a canonical fandom tag
-  When I follow "Stargate SG-1"
+    # we are now looking at a canonical fandom tag
+  When all indexing jobs have been run
+    And I follow "Stargate SG-1"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
     And I should see "No Archive Warnings Apply" within ".tags"

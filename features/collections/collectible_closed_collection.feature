@@ -1,5 +1,4 @@
 @bookmarks @collections @works
-
 Feature: Collectible items in closed collections
   As a moderator
   I want users to be unable to add items to my closed collection
@@ -21,6 +20,5 @@ Feature: Collectible items in closed collections
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "is closed"
     When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (0)"
+    Then I should see "Bookmarked Items (0)"
       And I should not see "Tundra penguins"
-

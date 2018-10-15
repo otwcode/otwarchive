@@ -25,12 +25,15 @@ gem 'rails-controller-testing'
 gem 'mysql2', '0.3.20'
 
 #https://github.com/qertoip/transaction_retry
+# We don't use the isolation gem directly, but it needs to be
+# at the latest version to avoid errors
+gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 
 # Version of redis-rb gem
-# We are currently running Redis 2.6.4 (12/6/2012)
+# We are currently running Redis 3.2.1 (7/2018)
 gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
@@ -50,9 +53,9 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.7.1'
+gem 'nokogiri', '>= 1.8.3'
 gem 'mechanize'
-gem 'sanitize'
+gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
@@ -62,13 +65,12 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
-gem 'tire'
-gem 'elasticsearch'
+gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine'
-gem 'paperclip', '>= 5.1.0'
+gem 'paperclip', '>= 5.2.0'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -141,7 +143,6 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false
@@ -161,6 +162,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.8.0'
