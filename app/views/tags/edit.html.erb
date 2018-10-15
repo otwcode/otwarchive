@@ -10,7 +10,7 @@
 <!--main content-->
 
 <% if logged_in_as_admin? %>
-  <p><%= ts("Last updated by") %> <%= @tag.last_wrangler.try(:login) || '---' %> <%= ts("on") %> <%= @tag.updated_at %></p>
+  <p><%= ts("Last updated by %{wrangler} on %{date}", wrangler: @tag.last_wrangler.try(:login) || '---', date: @tag.updated_at) %></p>
 <% end %>
 
 <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
