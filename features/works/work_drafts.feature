@@ -117,7 +117,7 @@ Feature: Work Drafts
         And the draft "Walking Into Mordor"
       When I edit the draft "Walking Into Mordor"
         And I press "Preview"
-      Then I should see "Please post your work or Save As Draft if you want to keep them."
+      Then I should see "Please post your work or save as draft if you want to keep them."
 
     Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
       Given I am logged in as "composer"

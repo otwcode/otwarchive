@@ -381,7 +381,7 @@ class WorksController < ApplicationController
           # If this is a preview, display the preview
           preview_mode(:edit) do
             unless @work.posted?
-              flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
+              flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
             end
 
             in_moderated_collection
