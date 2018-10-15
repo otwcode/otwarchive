@@ -2,7 +2,6 @@ class Media < Tag
   include ActiveModel::ForbiddenAttributesProtection
 
   NAME = ArchiveConfig.MEDIA_CATEGORY_NAME
-  index_name Tag.index_name
 
   has_many :common_taggings, as: :filterable
   has_many :fandoms, -> { where(type: 'Fandom') }, through: :common_taggings, source: :common_tag

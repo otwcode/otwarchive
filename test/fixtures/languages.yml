@@ -9,7 +9,7 @@ French:
   short: fr
 Spanish:
   id: 3
-  name: Español 
+  name: Español
   short: es
 German:
   id: 4
@@ -28,8 +28,8 @@ Czech:
   name: Čeština
   short: cs
 Russian:
-  id: 8    
-  name: Pyccĸий  
+  id: 8
+  name: Pyccĸий
   short: ru
 Suomi:
   id: 9
@@ -47,7 +47,7 @@ Português:
   id: 12
   name: Português
   short: pt
->中文:
+">中文":
   id: 13
-  name: >中文
-  short: zh 
+  name: ">中文"
+  short: zh

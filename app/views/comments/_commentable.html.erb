@@ -9,11 +9,11 @@
     <% end %>
 
     <% if @work && @previous_chapter %>
-      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter] %></li>
+      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <% if @work && @next_chapter %>
-      <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <% if @previous_admin_post %>
