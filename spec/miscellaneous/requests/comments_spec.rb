@@ -98,7 +98,7 @@ describe "Comments", type: :request do
   context "logged in users" do
     before do
       @user = create(:user)
-      visit login_path
+      visit new_user_session_path
       within("div#small_login") do
         fill_in "User name:",with: "#{@user.login}" ,  exact: true
         fill_in "Password", with: "password"

@@ -2,6 +2,10 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
   unselect(item, from: selector)
 end
 
+When /^(\d) minutes have passed$/ do |number|
+  Timecop.freeze(number.to_i.minutes.from_now)
+end
+
 Then /^debug$/ do
   binding.pry
 end

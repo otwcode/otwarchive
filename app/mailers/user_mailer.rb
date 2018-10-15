@@ -3,7 +3,6 @@ class UserMailer < BulletproofMailer::Base
 
   layout 'mailer'
 
-  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -223,9 +222,9 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Sends a temporary password to the user
-  def reset_password(user_id, activation_code)
+  def reset_password(user_id, confirmation_token)
     @user = User.find(user_id)
-    @password = activation_code
+    @password = confirmation_token
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,

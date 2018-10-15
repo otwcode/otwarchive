@@ -193,7 +193,7 @@ img#openid {
   border-bottom: 1px solid;
 }
 
-.session form p, .session input#user_session_login, .session input#user_session_password, .session input#openid_url {
+.session form p, .session input#user_login, .session input#user_password, .session input#openid_url {
   float: none;
   display: block !important;
   margin: 0 0 0.875em 0;
