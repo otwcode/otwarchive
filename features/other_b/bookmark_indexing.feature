@@ -46,13 +46,13 @@ Feature: Bookmark Indexing
       And I bookmark the series "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with "New Tag"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then the 1st bookmark result should contain "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with ""
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then I should not see "Series"
@@ -100,7 +100,7 @@ Feature: Bookmark Indexing
     Then I should see "BookmarkedExternalWork"
       And I should see "BookmarkedSeries"
 
-  Scenario: A bookmark of an external work should show on a tag's bookmark 
+  Scenario: A bookmark of an external work should show on a tag's bookmark
   listing once the tag is made canonical
     Given basic tags
       And I am logged in as "bookmarker"
@@ -109,7 +109,7 @@ Feature: Bookmark Indexing
       And I go to the bookmarks tagged "Mikki Mendoza"
     Then I should see "Outside Story"
 
-  Scenario: New bookmarks of external works should appear in the bookmark listings for its tag's existing metatag, and removing the tag should remove the bookmark from both the tag's and metatag's bookmark listings 
+  Scenario: New bookmarks of external works should appear in the bookmark listings for its tag's existing metatag, and removing the tag should remove the bookmark from both the tag's and metatag's bookmark listings
     Given basic tags
       And a canonical character "Ann"
       And a canonical character "Ann Ewing"

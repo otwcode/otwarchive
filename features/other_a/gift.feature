@@ -23,16 +23,16 @@ Feature: Create Gifts
 
   Scenario: Gifts page for recipient should show recipient's gifts
     When I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I go to the gifts page for the recipient giftee1
     Then I should see "GiftStory1 by gifter for giftee1"
 
   Scenario: Gifts page for recipient when logged out should show recipient's gifts if visible to all
     When I give the work to "giftee1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "giftee1"
       And I lock the work
-      And I press "Post Without Preview"
+      And I press "Post"
       And I log out
       And I go to the gifts page for the recipient giftee1
     Then I should see "GiftStory1 by gifter for giftee1"
@@ -40,16 +40,16 @@ Feature: Create Gifts
 
   Scenario: Gifts page for pseud recipient should show pseud's gifts
     Given I give the work to "g1"
-      And I press "Post Without Preview"
+      And I press "Post"
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
 
   Scenario: Gifts page for recipient when logged out should show gifts visible to all
     When I give the work to "g1"
-      And I press "Post Without Preview"
+      And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "g1"
       And I lock the work
-      And I press "Post Without Preview"
+      And I press "Post"
       And I log out
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"

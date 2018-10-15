@@ -47,7 +47,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU, Ghost Soup"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -61,7 +61,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -75,7 +75,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I add the co-author "alice"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -88,7 +88,7 @@ Feature: Search pseuds
       And I am logged in as "testuser"
       And I set up a draft "Drabble Collection" with fandom "Ghost Soup"
       And I add the co-author "alice"
-      And I press "Post Without Preview"
+      And I press "Post"
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I follow "Remove Me As Author"
