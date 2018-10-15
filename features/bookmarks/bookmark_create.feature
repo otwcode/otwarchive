@@ -6,7 +6,7 @@ Feature: Create bookmarks
 
 Scenario: Create a bookmark
   Given I am logged in as "first_bookmark_user"
-    When I am on first_bookmark_user's user page 
+    When I am on first_bookmark_user's user page
       Then I should see "have anything posted under this name yet"
     When I am logged in as "another_bookmark_user"
       And I post the work "Revenge of the Sith"
@@ -30,25 +30,25 @@ Scenario: Create a bookmark
       And I should see "and another tag"
       And I should see "I liked this story"
     When I am logged in as "first_bookmark_user"
-      And I go to first_bookmark_user's user page 
+      And I go to first_bookmark_user's user page
     Then I should not see "You don't have anything posted under this name yet"
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
-      And I press "Edit"
+      And I press "Update"
     Then I should see "Bookmark was successfully updated"
     When I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "I liked this story"
-    
+
     # privacy check for the private bookmark '
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-      
+
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           |
@@ -191,7 +191,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I view the work "The Murder of Sherlock Holmes"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
-    And I press "Edit" within "div#bookmark-form"
+    And I press "Update" within "div#bookmark-form"
     And all search indexes are updated
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
@@ -302,7 +302,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I view the work "Sing a Song of Murder"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
-    And I press "Edit"
+    And I press "Update"
   Then I should see "Bookmark was successfully updated."
 
 Scenario: Delete bookmarks of a work and a series
