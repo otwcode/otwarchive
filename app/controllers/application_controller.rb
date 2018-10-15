@@ -201,7 +201,7 @@ public
       back = session[:return_to]
       session.delete(:return_to)
 
-      back || root_path
+      back || user_path(current_user)
     end
   end
 
