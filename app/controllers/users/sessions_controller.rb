@@ -8,8 +8,10 @@ class Users::SessionsController < Devise::SessionsController
     if warden.authenticate(auth_options)
       super do |resource|
         if resource.remember_me
-          flash[:notice] += ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS).html_safe
+          message = ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS)
         end
+        flash[:notice] += message
+        flash[:notice] = flash[:notice].html_safe
       end
     else
 
