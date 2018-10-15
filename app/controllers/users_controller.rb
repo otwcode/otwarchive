@@ -72,20 +72,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by(token: params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
-  end
-
   # GET /users/1/edit
   def edit
   end
@@ -113,9 +99,8 @@ class UsersController < ApplicationController
     render(:change_username) && return unless params[:new_login].present?
 
     @new_login = params[:new_login]
-    session = UserSession.new(login: @user.login, password: params[:password])
 
-    unless session.valid?
+    unless @user.valid_password?(params[:password])
       flash[:error] = ts('Your password was incorrect')
       render(:change_username) && return
     end
@@ -131,43 +116,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # POST /users
-  # POST /users.xml
-  def create
-    @hide_dashboard = true
-
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      @user = User.new
-      @user.login = user_params[:login]
-      @user.email = user_params[:email]
-      @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = user_params[:age_over_13]
-      @user.terms_of_service = user_params[:terms_of_service]
-      @user.accepted_tos_version = @current_tos_version
-
-      @user.password = user_params[:password] if user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
-
-      @user.activation_code = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
-
-      @user.transaction do
-        if @user.save
-          notify_and_show_confirmation_screen
-        else
-          render action: 'new'
-        end
-      end
-    end
-  end
-
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
     UserMailer.signup_notification(@user.id).deliver!
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        activation_url: activate_path(@user.activation_code)).html_safe if Rails.env.development?
+                        activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
 
     render 'confirmation'
   end
@@ -180,7 +134,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @user = User.find_by(activation_code: params[:id])
+    @user = User.find_by(confirmation_token: params[:id])
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
@@ -217,7 +171,7 @@ class UsersController < ApplicationController
       flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
     end
 
-    redirect_to(login_path)
+    redirect_to(new_user_session_path)
   end
 
   def update
@@ -323,9 +277,7 @@ class UsersController < ApplicationController
                              ts('You must enter your old password'))
     end
 
-    session = UserSession.new(login: @user.login, password: params[:password_check])
-
-    if session.valid?
+    if @user.valid_password?(params[:password_check])
       true
     else
       wrong_password!(params[:new_email],
@@ -339,30 +291,6 @@ class UsersController < ApplicationController
     @wrong_password = true
 
     false
-  end
-
-  def check_account_creation_invite(token)
-    unless token.blank?
-      invitation = Invitation.find_by(token: token)
-
-      if !invitation
-        flash[:error] = ts('There was an error with your invitation token, please contact support')
-        redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at
-        flash[:error] = ts('This invitation has already been used to create an account, sorry!')
-        redirect_to root_path
-      end
-
-      return
-    end
-
-    if !@admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
-      redirect_to root_path
-    else
-      flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-      redirect_to invite_requests_path
-    end
   end
 
   def visible_items(current_user)

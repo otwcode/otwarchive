@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UsersController do
+describe Users::RegistrationsController do
   include RedirectExpectationHelper
 
   def valid_user_attributes
@@ -11,20 +11,6 @@ describe UsersController do
   end
 
   describe "create" do
-    context "with valid parameters" do
-      before do
-        allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
-      end
-
-      it "should be successful" do
-        post :create, params: { user: valid_user_attributes }
-
-        expect(response).to be_success
-        expect(assigns(:user)).to be_a(User)
-        expect(assigns(:user)).to eq(User.last)
-      end
-    end
-
     context "when invitations are required to sign up" do
       let(:invitation) { create(:invitation) }
 

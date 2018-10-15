@@ -15,7 +15,7 @@ describe CommentsController do
     context "when comment is unreviewed" do
       it "redirects logged out user to login path with an error" do
         get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
-        it_redirects_to_with_error(login_path, "Sorry, you cannot reply to an unapproved comment.")
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you cannot reply to an unapproved comment.")
       end
 
       it "redirects logged in user to root path with an error" do
@@ -47,7 +47,7 @@ describe CommentsController do
 
     it "redirects logged out users to login path with an error" do
       get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
-      it_redirects_to_with_error(login_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
     end
 
     it "redirects to root path with an error when logged in user does not own the commentable" do
@@ -300,7 +300,7 @@ describe CommentsController do
         put :approve, params: { id: comment.id }
         expect(comment.reload.approved).to be_falsey
         it_redirects_to_with_error(
-          login_path,
+          new_user_session_path,
           "Sorry, you don't have permission to moderate that comment."
         )
       end
@@ -367,7 +367,7 @@ describe CommentsController do
         put :reject, params: { id: comment.id }
         expect(comment.reload.approved).to be_truthy
         it_redirects_to_with_error(
-          login_path,
+          new_user_session_path,
           "Sorry, you don't have permission to moderate that comment."
         )
       end

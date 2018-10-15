@@ -9,6 +9,21 @@ Otwarchive::Application.routes.draw do
                sign_out: 'logout'
              }
 
+  devise_scope :user do
+    get 'signup(/:invitation_token)' => 'users/registrations#new', as: 'signup'
+  end
+
+  devise_for :users,
+              module: 'users',
+              controllers: {
+                sessions: 'users/sessions',
+                registrations: 'users/registrations'
+              },
+              path_names: {
+                sign_in: 'login',
+                sign_out: 'logout'
+              }
+
   #### ERRORS ####
 
   get '/403', to: 'errors#403'
@@ -47,7 +62,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  get 'signup/:invitation_token' => 'users#new', as: 'signup'
   get 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   post 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -451,17 +465,6 @@ Otwarchive::Application.routes.draw do
     resources :admin_posts
   end
   resources :locales, except: :destroy
-
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  get 'login' => 'user_sessions#new'
-  get 'logout' => 'user_sessions#destroy'
 
   #### API ####
 
