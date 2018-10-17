@@ -35,7 +35,7 @@ bundle exec rake db:migrate --trace
 #sed -e 's/PRODUCTION_CACHE.*$//' -i config/config.yml
 #wget http://media.transformativeworks.org/ao3/codeship/prepare_part2.sh -O - | bash -x
 
-ES_VERSION="6.2.4"
+ES_VERSION="6.4.2"
 ES_PORT="9400"
 cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.zip
