@@ -20,6 +20,13 @@ namespace :admin do
     puts users.map(&:login).join(", ")
     users.map(&:destroy)
     puts "Unvalidated accounts created more than two weeks ago have been purged"
+
+    # Purged users are allowed to reuse their invitations:
+    invite_ids = users.map(&:invitation_id)
+    Invitation.includes(:creator).where(id: invite_ids).each do |invite|
+      invite.update(redeemed_at: nil, invitee: nil)
+    end
+    puts "Invitations for the purged accounts have been reset"
   end
 
 end
