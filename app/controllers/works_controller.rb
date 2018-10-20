@@ -841,6 +841,10 @@ class WorksController < ApplicationController
 
     @chapter = @work.first_chapter
 
+    if params[:claim_id]
+      @posting_claim = ChallengeClaim.find_by(id: params[:claim_id])
+    end
+
     # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
     if params[:work] && work_params[:chapter_attributes]
       @chapter.attributes = work_params[:chapter_attributes]
