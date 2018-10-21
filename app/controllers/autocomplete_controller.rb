@@ -148,7 +148,7 @@ class AutocompleteController < ApplicationController
     collection_id = params[:collection_id]
     render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
                     .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?",
-                            '%' + search_param + '%', collection_id]).map(&:byline))
+                            '%' + search_param + '%', collection_id]).pluck(:byline))
   end
 
   # the pseuds of the potential matches who could fulfill the requests in the given signup

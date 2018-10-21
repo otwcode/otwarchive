@@ -229,8 +229,8 @@ class TagSet < ApplicationRecord
   # Computes the match rank of the two tag sets, in the given type. (Or in all
   # types, if type is nil.)
   def match_rank(another, type = nil)
-    request = type ? tag_ids_by_type[type] : tags.map(&:id)
-    offer = type ? another.tag_ids_by_type[type] : another.tags.map(&:id)
+    request = type ? tag_ids_by_type[type] : tags.pluck(:id)
+    offer = type ? another.tag_ids_by_type[type] : another.tags.pluck(:id)
     TagSet.match_array_rank(request, offer)
   end
 

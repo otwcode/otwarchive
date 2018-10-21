@@ -190,7 +190,7 @@ class WorksController < ApplicationController
       page_creator = if @work.anonymous?
                        ts("Anonymous")
                      else
-                       @work.pseuds.map(&:byline).sort.join(", ")
+                       @work.pseuds.pluck(:byline).sort.join(", ")
                      end
       fandoms = @tag_groups["Fandom"]
       page_title_inner = if fandoms.size > 3
