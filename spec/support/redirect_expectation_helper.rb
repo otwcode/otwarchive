@@ -42,9 +42,6 @@ module RedirectExpectationHelper
 
   def it_redirects_to(path)
     it_redirects_to_simple(path)
-    expect(flash[:notice]).blank?
-    expect(flash[:error]).blank?
-    expect(flash[:caution]).blank?
     expect(flash).to be_empty
   end
 end
