@@ -73,7 +73,7 @@ namespace :Tag do
 
   desc "Reset filter counts from date"
   task(unsuspend_filter_counts: :environment) do
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings && admin_settings.suspend_filter_counts_at
       FilterTagging.update_filter_counts_since(admin_settings.suspend_filter_counts_at)
     end

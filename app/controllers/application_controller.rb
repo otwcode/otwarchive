@@ -54,14 +54,6 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
 
-  # ES UPGRADE TRANSITION #
-  # Remove method & `helper_method :use_new_search?`
-  helper_method :use_new_search?
-  def use_new_search?
-    $rollout.active?(:use_new_search) ||
-      current_user.present? && $rollout.active?(:use_new_search, current_user)
-  end
-
   # Title helpers
   helper_method :process_title
 
@@ -157,11 +149,7 @@ public
 
   before_action :fetch_admin_settings
   def fetch_admin_settings
-    if Rails.env.development?
-      @admin_settings = AdminSetting.first
-    else
-      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    end
+    @admin_settings = AdminSetting.current
   end
 
   before_action :load_admin_banner
@@ -191,6 +179,11 @@ public
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
+      session.delete(:return_to)
+    elsif request.fullpath.length > 200
+      # Sessions are stored in cookies, which has a 4KB size limit.
+      # Don't store paths that are too long (e.g. filters with lots of exclusions).
+      # Also remove the previous stored path.
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
@@ -485,9 +478,6 @@ public
   end
 
   def flash_max_search_results_notice(result)
-    # ES UPGRADE TRANSITION #
-    # Remove return statement
-    return unless use_new_search?
     notice = result.max_search_results_notice
     flash.now[:notice] = notice if notice.present?
   end

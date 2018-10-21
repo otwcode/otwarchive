@@ -149,7 +149,7 @@ class CollectionItem < ApplicationRecord
         when "Work"
           users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
         when "Bookmark"
-          users = [item.user] || [User.current_user]
+          users = [item.pseud.user] || [User.current_user]
         end
 
         users.each do |user|

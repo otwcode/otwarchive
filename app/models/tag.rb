@@ -1,9 +1,6 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -25,36 +22,15 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
-  def self.index_name
-    if use_new_search?
-      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def self.document_type
-    "tag"
-  end
-
   delegate :document_type, to: :class
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def to_indexed_json
-    as_json.merge(tag_type: type).to_json
-  end
 
   def document_json
     TagIndexer.new({}).document(self)
   end
 
   def self.write_redis_to_database
-    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
       Tag.transaction do
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
@@ -75,7 +51,7 @@ class Tag < ApplicationRecord
     # would be TAGGINGS_COUNT_MIN_TIME ( defaults to 3 minutes ) and the maximum amount of time would be
     # TAGGINGS_COUNT_MAX_TIME ( defaulting to an hour ).
     expiry_time = count / (ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR || 1500)
-    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 60)].min
+    [[expiry_time, (ArchiveConfig.TAGGINGS_COUNT_MIN_TIME || 3)].max, (ArchiveConfig.TAGGINGS_COUNT_MAX_TIME || 50) + count % 20 ].min
   end
 
   def taggings_count_cache_key
@@ -705,7 +681,6 @@ class Tag < ApplicationRecord
 
   # Take the most direct route from tag to pseud and queue up to reindex
   def reindex_pseuds
-    return unless $rollout.active?(:start_new_indexing)
     Creatorship.select(:id, :pseud_id).
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
@@ -735,7 +710,6 @@ class Tag < ApplicationRecord
 
   # Reindex all series (series_ids argument works as above)
   def reindex_all_series(series_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if series_ids.empty?
       series_ids = all_filtered_series_ids
     end
@@ -759,7 +733,6 @@ class Tag < ApplicationRecord
 
   # Reindex all external works (external_work_ids argument works as above)
   def reindex_all_external_works(external_work_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if external_work_ids.empty?
       external_work_ids = all_filtered_external_work_ids
     end
@@ -793,9 +766,9 @@ class Tag < ApplicationRecord
   def reindex_filtered_item(item)
     if item.is_a?(Work)
       RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
     else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
     end 
   end
 
@@ -831,7 +804,7 @@ class Tag < ApplicationRecord
     reindex_taggables do
       self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
     end
-    self.async(:reset_filter_count)
+    reset_filter_count
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -910,9 +883,7 @@ class Tag < ApplicationRecord
     # for filtering/searching
     async(:reindex_taggables)
 
-    tags_that_need_filter_count_reset.each do |tag_to_reset|
-      tag_to_reset.reset_filter_count
-    end
+    FilterCount.enqueue_filters(tags_that_need_filter_count_reset)
   end
 
   # Remove filter taggings for a given tag
@@ -928,9 +899,9 @@ class Tag < ApplicationRecord
         # This means we remove the old merger itself and all its meta tags unless they
         # should remain because of other existing tags of the item (or because they are
         # also meta tags of the new merger)
+        filters_to_remove = [old_filter] + old_filter.meta_tags
         items = self.works + self.external_works
         items.each do |item|
-          filters_to_remove = [old_filter] + old_filter.meta_tags
           filters_to_remove.each do |filter_to_remove|
             next unless item.filters.include?(filter_to_remove)
             # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
@@ -946,7 +917,6 @@ class Tag < ApplicationRecord
             remaining_tags += [self.merger] unless self.merger.nil?
             if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
               item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
-              filter_to_remove.reset_filter_count
             else # we should keep filter_to_remove, but check if inheritence needs to be updated
               direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
               if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
@@ -956,6 +926,8 @@ class Tag < ApplicationRecord
             end
           end
         end
+
+        FilterCount.enqueue_filters(filters_to_remove)
       else
         self.filter_taggings.destroy_all
         self.reset_filter_count
@@ -973,26 +945,12 @@ class Tag < ApplicationRecord
         reindex_filtered_item(item)
       end
     end
+
+    meta_tag.reset_filter_count
   end
 
   def reset_filter_count
-    admin_settings = Rails.cache.fetch("admin_settings") { AdminSetting.first }
-    return if admin_settings.suspend_filter_counts?
-    current_filter = filter
-    # we only need to cache values for user-defined tags
-    # because they're the only ones we access
-    return unless current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
-    attributes = { public_works_count: current_filter.filtered_works.posted.unhidden.unrestricted.count,
-                   unhidden_works_count: current_filter.filtered_works.posted.unhidden.count }
-    if current_filter.filter_count
-      unless current_filter.filter_count.update_attributes(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    else
-      unless current_filter.create_filter_count(attributes)
-        raise "Filter count error for #{current_filter.name}"
-      end
-    end
+    FilterCount.enqueue_filter(filter)
   end
 
   #### END FILTERING ####
@@ -1099,6 +1057,7 @@ class Tag < ApplicationRecord
       end
     end
     meta_tag.update_works_index_timestamp!
+    FilterCount.enqueue_filters([meta_tag] + inherited_meta_tags)
   end
 
   def remove_sub_filters(sub_tag)
@@ -1287,42 +1246,6 @@ class Tag < ApplicationRecord
     ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
     series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
-  end
-
-  #################################
-  ## SEARCH #######################
-  #################################
-
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :id,           index: :not_analyzed
-    indexes :name#,         analyzer: 'snowball', boost: 100
-    indexes :type
-    indexes :canonical,    type: :boolean
-  end
-
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
-      query do
-        boolean do
-          must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :canonical, 'T' } if options[:canonical].present?
-
-          if options[:type].present?
-            # To support the tags indexed prior to IndexSubqueue, we want to
-            # find the type either in the tag_type field or the _type field:
-            should { term '_type', options[:type].downcase }
-            should { term :tag_type, options[:type].downcase }
-
-            # The tire gem doesn't natively support :minimum_should_match,
-            # but elasticsearch 0.90 does, so we hack it in.
-            @value[:minimum_should_match] = 1
-          end
-        end
-      end
-    end
   end
 
   after_create :after_create

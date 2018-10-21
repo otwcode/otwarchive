@@ -72,6 +72,98 @@ class StoryParser
 
 
   # Import many stories
+  def import_many(urls, options = {})
+    # Try to get the works
+    works = []
+    failed_urls = []
+    errors = []
+    @options = options
+    urls.each do |url|
+      begin
+        response = download_and_parse_work(url, options)
+        work = response[:work]
+        if response[:status] == :created
+          if work && work.save
+            work.chapters.each(&:save)
+            works << work
+          else
+            failed_urls << url
+            errors << work.errors.values.join(", ")
+            work.delete if work
+          end
+        elsif response[:status] == :already_imported
+          raise StoryParser::Error, response[:message]
+        end
+      rescue Timeout::Error
+        failed_urls << url
+        errors << "Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site."
+        work.delete if work
+      rescue Error => exception
+        failed_urls << url
+        errors << "We couldn't successfully import that work, sorry: #{exception.message}"
+        work.delete if work
+      end
+    end
+    [works, failed_urls, errors]
+  end
+
+  # Downloads a story and passes it on to the parser.
+  # If the URL of the story is from a site for which we have special rules
+  # (eg, downloading from a livejournal clone, you want to use ?format=light
+  # to get a nice and consistent post format), it will pre-process the url
+  # according to the rules for that site.
+  def download_and_parse_work(location, options = {})
+    status = :created
+    message = ""
+    work = Work.find_by_url(location)
+    if work.nil?
+      @options = options
+      source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
+      if source.nil?
+        story = download_text(location)
+        work = parse_story(story, location, options)
+      else
+        work = download_and_parse_chaptered_story(source, location, options)
+      end
+    else
+      status = :already_imported
+      message = "A work has already been imported from #{location}."
+    end
+    {
+      status: status,
+      message: message,
+      work: work
+    }
+  end
+
+  # Given an array of urls for chapters of a single story,
+  # download them all and combine into a single work
+  def import_chapters_into_story(locations, options = {})
+    status = :created
+    work = Work.find_by_url(locations.first)
+    if work.nil?
+      chapter_contents = []
+      @options = options
+      locations.each do |location|
+        chapter_contents << download_text(location)
+      end
+      work = parse_chapters_into_story(locations.first, chapter_contents, options)
+      message = "Successfully created work \"" + work.title + "\"."
+    else
+      status = :already_imported
+      message = "A work has already been imported from #{locations.first}."
+    end
+    {
+      status: status,
+      message: message,
+      work: work
+    }
+  end
+
+
+  ### OLD PARSING METHODS
+
+  # Import many stories
   def import_from_urls(urls, options = {})
     # Try to get the works
     works = []
@@ -102,44 +194,6 @@ class StoryParser
     [works, failed_urls, errors]
   end
 
-  ### DOWNLOAD-AND-PARSE WRAPPERS
-
-  # General pathway for story importing:
-  #
-  # Starting points:
-  # - import_from_urls --> repeatedly calls download_and_parse_story
-  # - download_and_parse_story
-  # - download_and_parse_chapters_into_story
-  # - (download_and_parse_chapter_of_work -- requires existing work)
-  #
-  # Each of these will download the content and then hand it off to a parser.
-  #
-  # Parsers:
-  # - parse_story: for a work of one single chapter downloaded as a single text string
-  # - parse_chapters_into_story: for a work of multiple chapters downloaded as an array of text strings (the separate chapter contents)
-  # - parse_chapter_of_work: essentially duplicates parse_story, but turns the content into a chapter of an existing work
-  #
-  # All of these parsers then go into
-  # - parse_common: processes a single text string, cleaning up HTML and looking for meta information
-  # - sanitize_params: after processing, clean up the params and strip out bad HTML
-  #
-  # If the story is from a known source, parse_common hands off to a custom parser built just for that source,
-  # including parse_story_from_lj. If not known, it falls
-  # back on parse_story_from_unknown.
-  #
-  # The various parsers use different methods to collect up metadata, and generically we also use:
-  # - scan_text_for_meta: looks for text patterns like [metaname]: [value] eg, "Fandom: Highlander"
-  #
-  # Shared options:
-  #
-  # :do_not_set_current_author - true means do not save the current user as an author
-  # :importing for others - true means try and add external author for the work
-  # :pseuds - a list of pseuds to set as authors
-  # :set_tags, :fandom, :rating, :warning, :character, :relationship - sets these tags
-  # :override_tags - set tag values even if some were parsed out of the work
-  # :post_without_preview - if true, mark the story as posted without previewing
-  #
-
   # Downloads a story and passes it on to the parser.
   # If the URL of the story is from a site for which we have special rules
   # (eg, downloading from a livejournal clone, you want to use ?format=light
@@ -156,12 +210,6 @@ class StoryParser
       work = download_and_parse_chaptered_story(source, location, options)
     end
     work
-  end
-
-  # download and add a new chapter to the end of a work
-  def download_and_parse_chapter_of_work(work, location, options = {})
-    chapter_content = download_text(location)
-    parse_chapter_of_work(work, chapter_content, location, options)
   end
 
   # Given an array of urls for chapters of a single story,
@@ -319,11 +367,11 @@ class StoryParser
       if chapter.content.length > ArchiveConfig.CONTENT_MAX
         # TODO: eventually: insert a new chapter
         chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
+      elsif chapter.content.empty?
+        raise Error, "Chapter #{chapter.position} of \"#{work.title}\" is blank."
       end
 
-      chapter.posted = true
-      # ack! causing the chapters to exist even if work doesn't get created!
-      # chapter.save
+      chapter.posted = true # do not save - causes the chapters to exist even if work doesn't get created!
     end
     work
   end

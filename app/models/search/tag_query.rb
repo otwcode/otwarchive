@@ -20,6 +20,11 @@ class TagQuery < Query
     [name_query].compact
   end
 
+  # Tags have a different default per_page value:
+  def per_page
+    options[:per_page] || ArchiveConfig.TAGS_PER_SEARCH_PAGE || 50
+  end
+
   ################
   # FILTERS
   ################
