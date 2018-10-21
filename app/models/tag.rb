@@ -1177,7 +1177,7 @@ class Tag < ApplicationRecord
     meta_taggings.destroy_invalid
     sub_taggings.destroy_invalid
   end
-
+# defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string= 
   %w(Fandom Media Character Relationship Freeform).each do |tag_type|
     attr_reader "#{tag_type.downcase}_string"
 
