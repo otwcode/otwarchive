@@ -12,6 +12,24 @@ class AbuseReport < ApplicationRecord
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  validate :check_for_spam
+  def check_for_spam
+    errors.add(:base, ts("Sorry, this report looks like spam to our system!")) unless check_for_spam?
+  end
+
+  def akismet_attributes
+    name = username ? username : ""
+    {
+      comment_type: "contact-form",
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_author: name,
+      comment_author_email: email,
+      comment_content: comment
+    }
+  end
+
   scope :by_date, -> { order('created_at DESC') }
 
   # Clean work or profile URLs so we can prevent the same URLs from
@@ -47,7 +65,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    # return unless %w(staging production).include?(Rails.env)
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -88,5 +106,10 @@ class AbuseReport < ApplicationRecord
         errors[:base] << message
       end
     end
+  end
+
+  def check_for_spam?
+    # don't check for spam while running tests
+    self.spam = Rails.env.test? || !Akismetor.spam?(akismet_attributes)
   end
 end
