@@ -3,6 +3,11 @@ require 'spec_helper'
 describe AbuseReport do
   context "when report is not spam" do
 
+    # Assume all of these reports pass the spam check
+    before(:each) do
+      allow(Akismetor).to receive(:spam?).and_return(false)
+    end
+
     context "valid reports" do
       it "is valid" do
         expect(build(:abuse_report)).to be_valid
