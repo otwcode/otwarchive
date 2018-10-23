@@ -14,7 +14,8 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, ts("Sorry, this report looks like spam to our system!")) unless check_for_spam?
+    return if Rails.env.test?
+    errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
   end
 
   def akismet_attributes
@@ -65,7 +66,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    # return unless %w(staging production).include?(Rails.env)
+    return unless %w(staging production).include?(Rails.env)
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -106,10 +107,5 @@ class AbuseReport < ApplicationRecord
         errors[:base] << message
       end
     end
-  end
-
-  def check_for_spam?
-    # don't check for spam while running tests
-    self.spam = Rails.env.test? || !Akismetor.spam?(akismet_attributes)
   end
 end
