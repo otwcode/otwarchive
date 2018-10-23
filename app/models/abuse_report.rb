@@ -14,7 +14,6 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    return if Rails.env.test?
     errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
   end
 

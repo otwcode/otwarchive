@@ -227,4 +227,16 @@ describe AbuseReport do
       expect(common_report.errors[:base]).to be_empty
     end
   end
+
+  let (:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
+  it "is not valid if Akismet flags it as spam" do
+    allow(Akismetor).to receive(:spam?).and_return(true)
+    expect(spam_report.save).to be_falsey
+    expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
+  end
+
+  it "is valid if Akismet does not flag it as spam" do
+    allow(Akismetor).to receive(:spam?).and_return(false)
+    expect(build(:abuse_report).save).to be_truthy
+  end
 end
