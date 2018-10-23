@@ -185,7 +185,7 @@ Given(/^the following language exists$/) do |table|
 end
 
 Given /^the abuse report will not be considered spam$/ do
-  llow(Akismetor).to receive(:spam?).and_return(false)
+  allow(Akismetor).to receive(:spam?).and_return(false)
 end
 
 ### WHEN
