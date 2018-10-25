@@ -28,10 +28,27 @@ FactoryGirl.define do
   end  
 
   factory :gift_exchange do
+    requests_num_allowed ArchiveConfig.PROMPTS_MAX
+    requests_num_required 1
+    offers_num_allowed ArchiveConfig.PROMPTS_MAX
+    offers_num_required 1
+
     after(:build) do |ge|
       ge.offer_restriction_id = create(:prompt_restriction).id
       ge.request_restriction_id = create(:prompt_restriction).id
       ge.prompt_restriction_id = create(:prompt_restriction).id
+    end
+
+    trait :open do
+      signups_open_at Time.now - 1.day
+      signups_close_at Time.now + 1.day
+      signup_open true
+    end
+
+    trait :closed do
+      signups_open_at Time.now - 2.days
+      signups_close_at Time.now - 1.day
+      signup_open false
     end
   end
 
