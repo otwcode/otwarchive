@@ -8,7 +8,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :challenge_signup do
+  factory :challenge_signup, aliases: [:gift_exchange_signup] do
     assigned_as_request false
     assigned_as_offer false
     after(:build) do |signup|
@@ -19,13 +19,23 @@ FactoryGirl.define do
     end
   end
 
+  factory :prompt_meme_signup, class: ChallengeSignup do
+    assigned_as_request false
+    assigned_as_offer false
+    after(:build) do |signup|
+      signup.pseud_id = create(:pseud).id unless signup.pseud_id
+      signup.collection_id = create(:collection, challenge: create(:prompt_meme)).id unless signup.collection_id
+      signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
+    end
+  end
+
   factory :potential_match do
     after(:build) do |potential_match|
       potential_match.collection_id = create(:collection, challenge: create(:gift_exchange)).id unless potential_match.collection_id
       potential_match.offer_signup_id = create(:challenge_signup, collection_id: potential_match.collection_id)
       potential_match.request_signup_id = create(:challenge_signup, collection_id: potential_match.collection_id)
     end
-  end  
+  end
 
   factory :gift_exchange do
     after(:build) do |ge|
