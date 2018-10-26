@@ -72,28 +72,51 @@ describe ChallengeSignupsController, type: :controller do
 
   describe "update" do
     context "when sign-ups are open" do
+      let(:params) do
+        { 
+          challenge_signup: { pseud_id: open_signup_owner.pseuds.first.id },
+          id: open_signup,
+          collection_id: open_collection.name
+        }
+      end
+
       it "renders edit if update_attributes fails" do
         fake_login_known_user(open_signup_owner)
         allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_return(false)
-        put :update, params: { challenge_signup: { pseud_id: open_signup_owner.pseuds.first.id }, id: open_signup, collection_id: open_collection.name }
+        put :update, params: params
         allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_call_original
         expect(response).to render_template :edit
       end
 
       it "redirects and errors if the current user can't edit the sign-up" do
         fake_login_known_user(user)
-        put :update, params: { challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id }, id: closed_signup, collection_id: closed_collection.name }
-        it_redirects_to_with_error(closed_collection,
+        put :update, params: params
+        it_redirects_to_with_error(open_collection,
                                    "You can't edit someone else's sign-up!")
       end
     end
 
     context "when signups are closed" do
+      let(:params) do
+        { 
+          challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id },
+          id: closed_signup,
+          collection_id: closed_collection.name
+        }
+      end
+
       it "redirects and errors without updating the sign-up" do
         fake_login_known_user(closed_signup_owner)
-        put :update, params: { challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id }, id: closed_signup, collection_id: closed_collection.name }
+        put :update, params: params
         it_redirects_to_with_error(closed_collection,
                                    "Sign-up is currently closed: please contact a moderator for help.")
+      end
+
+      it "redirects and errors if the current user can't edit the sign-up" do
+        fake_login_known_user(user)
+        put :update, params: params
+        it_redirects_to_with_error(closed_collection,
+                                   "You can't edit someone else's sign-up!")
       end
     end
   end
