@@ -28,11 +28,6 @@ FactoryGirl.define do
   end  
 
   factory :gift_exchange do
-    requests_num_allowed ArchiveConfig.PROMPTS_MAX
-    requests_num_required 1
-    offers_num_allowed ArchiveConfig.PROMPTS_MAX
-    offers_num_required 1
-
     after(:build) do |ge|
       ge.offer_restriction_id = create(:prompt_restriction).id
       ge.request_restriction_id = create(:prompt_restriction).id
