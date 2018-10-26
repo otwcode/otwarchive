@@ -4,52 +4,40 @@ describe ChallengeSignupsController, type: :controller do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
-  let(:signup) do
-    challenge = create(:gift_exchange, :closed)
-    collection = create(:collection, challenge: challenge)
-    signup = build(:challenge_signup, collection_id: collection)
-    signup.collection = collection
-    signup.save
-    signup
-  end
-  let(:collection) { signup.collection }
-  let(:challenge) { signup.collection.challenge }
-  let(:collection_owner) { User.find(collection.all_owners.first.user_id) }
-  let(:signup_owner) { Pseud.find(signup.pseud_id).user }
+ 
+  let(:closed_challenge) { create(:gift_exchange, :closed) }
+  let(:closed_collection) { create(:collection, challenge: closed_challenge) }
+  let(:closed_signup) { create(:gift_exchange_signup, collection_id: closed_collection.id) }
+  let(:closed_collection_owner) { User.find(closed_collection.all_owners.first.user_id) }
+  let(:closed_signup_owner) { Pseud.find(closed_signup.pseud_id).user }
 
-  let(:open_signup) do
-    challenge = create(:gift_exchange, :open)
-    collection = create(:collection, challenge: challenge)
-    signup = build(:challenge_signup, collection_id: collection)
-    signup.collection = collection
-    signup.save
-    signup
-  end
-  let(:open_collection) { open_signup.collection }
-  let(:open_challenge) { open_signup.collection.challenge }
+  let(:open_challenge) { create(:gift_exchange, :open) }
+  let(:open_collection) { create(:collection, challenge: open_challenge) }
+  let(:open_signup) { create(:gift_exchange_signup, collection_id: open_collection.id) }
+  let(:open_collection_owner) { User.find(open_collection.all_owners.first.user_id) }
   let(:open_signup_owner) { Pseud.find(open_signup.pseud_id).user }
 
   describe "new" do
     it "redirects and errors if sign-up is not open" do
       fake_login_known_user(user)
-      get :new, params: { collection_id: collection.name, pseud: user.pseuds.first }
-      it_redirects_to_with_error(collection_path(collection),
+      get :new, params: { collection_id: closed_collection.name, pseud: user.pseuds.first }
+      it_redirects_to_with_error(collection_path(closed_collection),
                                  "Sign-up is currently closed: please contact a moderator for help.")
     end
   end
 
   describe "show" do
     xit "redirects and errors if there is no challenge associated with the collection" do
-      fake_login_known_user(collection_owner)
-      get :show, params: { id: 999_999, collection_id: collection.name }
-      it_redirects_to_with_error(collection_path(collection),
+      fake_login_known_user(closed_collection_owner)
+      get :show, params: { id: 999_999, collection_id: closed_collection.name }
+      it_redirects_to_with_error(collection_path(closed_collection),
                                  "What sign-up did you want to work on?")
     end
 
     it "redirects and errors if the user does not own the sign-up" do
       fake_login_known_user(user)
-      get :show, params: { id: signup, collection_id: collection.name }
-      it_redirects_to_with_error(collection_path(collection),
+      get :show, params: { id: closed_signup, collection_id: closed_collection.name }
+      it_redirects_to_with_error(collection_path(closed_collection),
                                  "Sorry, you're not allowed to do that.")
     end
   end
@@ -57,7 +45,7 @@ describe ChallengeSignupsController, type: :controller do
   describe "index" do
     it "redirects and errors if the current user is not allowed to see the specified user's sign-ups" do
       fake_login_known_user(user)
-      get :index, params: { id: challenge, collection_id: collection.name, user_id: collection_owner }
+      get :index, params: { id: closed_challenge, collection_id: closed_collection.name, user_id: closed_collection_owner }
       it_redirects_to_with_error(root_path,
                                  "You aren't allowed to see that user's sign-ups.")
     end
@@ -74,9 +62,9 @@ describe ChallengeSignupsController, type: :controller do
     end
     context "when sign-ups are closed" do
       it "redirects and errors" do
-        fake_login_known_user(signup_owner)
-        delete :destroy, params: { id: signup, collection_id: collection.name }
-        it_redirects_to_with_error(collection_path(collection),
+        fake_login_known_user(closed_signup_owner)
+        delete :destroy, params: { id: closed_signup, collection_id: closed_collection.name }
+        it_redirects_to_with_error(collection_path(closed_collection),
                                    "You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.")
       end
     end
@@ -94,17 +82,17 @@ describe ChallengeSignupsController, type: :controller do
 
       it "redirects and errors if the current user can't edit the sign-up" do
         fake_login_known_user(user)
-        put :update, params: { challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name }
-        it_redirects_to_with_error(collection,
+        put :update, params: { challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id }, id: closed_signup, collection_id: closed_collection.name }
+        it_redirects_to_with_error(closed_collection,
                                    "You can't edit someone else's sign-up!")
       end
     end
 
     context "when signups are closed" do
       it "redirects and errors without updating the sign-up" do
-        fake_login_known_user(signup_owner)
-        put :update, params: { challenge_signup: { pseud_id: signup_owner.pseuds.first.id }, id: signup, collection_id: collection.name }
-        it_redirects_to_with_error(collection,
+        fake_login_known_user(closed_signup_owner)
+        put :update, params: { challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id }, id: closed_signup, collection_id: closed_collection.name }
+        it_redirects_to_with_error(closed_collection,
                                    "Sign-up is currently closed: please contact a moderator for help.")
       end
     end
