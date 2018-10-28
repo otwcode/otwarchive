@@ -18,25 +18,47 @@ describe ChallengeSignupsController, type: :controller do
   let(:open_signup_owner) { Pseud.find(open_signup.pseud_id).user }
 
   describe "new" do
-    it "redirects and errors if sign-up is not open" do
-      fake_login_known_user(user)
-      get :new, params: { collection_id: closed_collection.name, pseud: user.pseuds.first }
-      it_redirects_to_with_error(collection_path(closed_collection),
-                                 "Sign-up is currently closed: please contact a moderator for help.")
+    context "when sign-ups are closed" do
+      it "redirects and errors" do
+        fake_login
+        get :new, params: { collection_id: closed_collection.name }
+        it_redirects_to_with_error(collection_path(closed_collection),
+                                  "Sign-up is currently closed: please contact a moderator for help.")
+      end
+    end
+
+    context "when sign-ups are open" do
+      it "redirects to edit page with notice if user is already signed up" do
+        fake_login_known_user(open_signup_owner)
+        get :new, params: { collection_id: open_collection.name, pseud: user.pseuds.first }
+        it_redirects_to_with_notice(edit_collection_signup_path(open_collection, open_signup),
+                                  "You are already signed up for this challenge. You can edit your sign-up below.")
+      end   
+    end
+
+    context "when collection has no challenge" do
+      let(:plain_collection) { create(:collection) }
+
+      it "redirects and errors" do
+        fake_login
+        get :new, params: { collection_id: plain_collection }
+        it_redirects_to_with_error(collection_path(plain_collection),
+                                 "What challenge did you want to sign up for?")
+      end
     end
   end
 
   describe "show" do
     # TODO: AO3-5552
     xit "redirects and errors if there is no sign-up with that id" do
-      fake_login_known_user(closed_collection_owner)
-      get :show, params: { id: 999_999, collection_id: closed_collection.name }
+      fake_login
+      get :show, params: { id: 0, collection_id: closed_collection.name }
       it_redirects_to_with_error(collection_path(closed_collection),
                                  "What sign-up did you want to work on?")
     end
 
-    it "redirects and errors if the user does not own the sign-up" do
-      fake_login_known_user(user)
+    it "redirects and errors if the user does not own the sign-up or the collection" do
+      fake_login
       get :show, params: { id: closed_signup, collection_id: closed_collection.name }
       it_redirects_to_with_error(collection_path(closed_collection),
                                  "Sorry, you're not allowed to do that.")
@@ -45,10 +67,17 @@ describe ChallengeSignupsController, type: :controller do
 
   describe "index" do
     it "redirects and errors if the current user is not allowed to see the specified user's sign-ups" do
-      fake_login_known_user(user)
-      get :index, params: { id: closed_challenge, collection_id: closed_collection.name, user_id: closed_collection_owner }
+      fake_login
+      get :index, params: { user_id: closed_signup_owner }
       it_redirects_to_with_error(root_path,
                                  "You aren't allowed to see that user's sign-ups.")
+    end
+
+    it "redirects and errors if the current user is not allowed to see the CSV" do
+      fake_login
+      get :index, params: { collection_id: closed_collection.name, format: :csv }
+      it_redirects_to_with_error(closed_collection,
+                                 "You aren't allowed to see the CSV summary.")      
     end
   end
 
@@ -97,7 +126,7 @@ describe ChallengeSignupsController, type: :controller do
       end
     end
 
-    context "when signups are closed" do
+    context "when sign-ups are closed" do
       let(:params) do
         { 
           challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id },
