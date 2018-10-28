@@ -27,7 +27,8 @@ describe ChallengeSignupsController, type: :controller do
   end
 
   describe "show" do
-    xit "redirects and errors if there is no challenge associated with the collection" do
+    # TODO: AO3-5552
+    xit "redirects and errors if there is no sign-up with that id" do
       fake_login_known_user(closed_collection_owner)
       get :show, params: { id: 999_999, collection_id: closed_collection.name }
       it_redirects_to_with_error(collection_path(closed_collection),
