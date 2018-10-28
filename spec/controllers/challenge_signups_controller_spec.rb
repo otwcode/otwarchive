@@ -23,7 +23,7 @@ describe ChallengeSignupsController, type: :controller do
         fake_login
         get :new, params: { collection_id: closed_collection.name }
         it_redirects_to_with_error(collection_path(closed_collection),
-                                  "Sign-up is currently closed: please contact a moderator for help.")
+                                   "Sign-up is currently closed: please contact a moderator for help.")
       end
     end
 
@@ -32,7 +32,7 @@ describe ChallengeSignupsController, type: :controller do
         fake_login_known_user(open_signup_owner)
         get :new, params: { collection_id: open_collection.name, pseud: user.pseuds.first }
         it_redirects_to_with_notice(edit_collection_signup_path(open_collection, open_signup),
-                                  "You are already signed up for this challenge. You can edit your sign-up below.")
+                                    "You are already signed up for this challenge. You can edit your sign-up below.")
       end   
     end
 
@@ -43,7 +43,7 @@ describe ChallengeSignupsController, type: :controller do
         fake_login
         get :new, params: { collection_id: plain_collection }
         it_redirects_to_with_error(collection_path(plain_collection),
-                                 "What challenge did you want to sign up for?")
+                                   "What challenge did you want to sign up for?")
       end
     end
   end
