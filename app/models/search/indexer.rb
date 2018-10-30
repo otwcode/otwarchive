@@ -1,5 +1,3 @@
-# ES UPGRADE TRANSITION #
-# Change all instances of $new_elasticsearch to $elasticsearch
 class Indexer
 
   BATCH_SIZE = 1000
@@ -31,13 +29,13 @@ class Indexer
   end
 
   def self.delete_index
-    if $new_elasticsearch.indices.exists(index: index_name)
-      $new_elasticsearch.indices.delete(index: index_name)
+    if $elasticsearch.indices.exists(index: index_name)
+      $elasticsearch.indices.delete(index: index_name)
     end
   end
 
   def self.create_index(shards = 5)
-    $new_elasticsearch.indices.create(
+    $elasticsearch.indices.create(
       index: index_name,
       body: {
         settings: {
@@ -55,7 +53,7 @@ class Indexer
 
   # Note that the index must exist before you can set the mapping
   def self.create_mapping
-    $new_elasticsearch.indices.put_mapping(
+    $elasticsearch.indices.put_mapping(
       index: index_name,
       type: document_type,
       body: mapping
@@ -161,7 +159,7 @@ class Indexer
   end
 
   def index_documents
-    $new_elasticsearch.bulk(body: batch)
+    $elasticsearch.bulk(body: batch)
   end
 
   def index_document(object)
@@ -174,7 +172,7 @@ class Indexer
     if respond_to?(:parent_id)
       info.merge!(routing: parent_id(object.id, object))
     end
-    $new_elasticsearch.index(info)
+    $elasticsearch.index(info)
   end
 
   def routing_info(id)

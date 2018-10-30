@@ -38,7 +38,7 @@
     <dl>
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>
-        <%= form.collection_select :language_id, Language.order(:short), :id, :name, {:include_blank => true} %>
+        <%= form.collection_select :language_id, sorted_languages, :id, :name, {:include_blank => true} %>
       </dd>
 
       <dt><%= form.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>

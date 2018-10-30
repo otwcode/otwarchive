@@ -80,28 +80,35 @@ class WorkSearchForm
   end
 
   def initialize(opts={})
-    @options = self.options = process_options(opts)
-    @searcher = WorkQuery.new(@options.delete_if { |k, v| v.blank? })
+    @options = opts
+    process_options
+    @searcher = WorkQuery.new(@options)
   end
 
-  def process_options(opts = {})
-    # TODO: Should be able to remove this
-    opts[:creator] = opts[:creators] if opts[:creators]
-    opts[:creators] = opts[:creator] if opts[:creator]
+  def process_options
+    @options.delete_if { |k, v| v == "0" || v.blank? }
+    standardize_creator_queries
+    set_sorting
+    clean_up_angle_brackets
+  end
 
-    opts.keys.each do |key|
-      if opts[key] == "0"
-        opts[key] = nil
-      end
+  # Make the creator/creators change backwards compatible
+  def standardize_creator_queries
+    return unless @options[:query].present?
+    @options[:query] = @options[:query].gsub('creator:', 'creators:')
+  end
+
+  def set_sorting
+    @options[:sort_column] ||= default_sort_column
+    @options[:sort_direction] ||= default_sort_direction
+  end
+
+  def clean_up_angle_brackets
+    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at, :query].each do |countable|
+      next unless @options[countable].present?
+      str = @options[countable]
+      @options[countable] = str.gsub("&gt;", ">").gsub("&lt;", "<")
     end
-
-    opts[:query].gsub!('creator:', 'creators:') if opts[:query]
-
-    # TODO: Change this to not rely on WorkSearch
-    processed_opts = WorkSearch.new(opts).options
-    processed_opts.merge!(collected: opts[:collected], faceted: opts[:faceted])
-    processed_opts.merge!(works_parent: opts[:works_parent])
-    processed_opts
   end
 
   def persisted?
@@ -168,6 +175,7 @@ class WorkSearchForm
   ###############
 
   SORT_OPTIONS = [
+    ['Best Match', '_score'],
     ['Author', 'authors_to_sort_on'],
     ['Title', 'title_to_sort_on'],
     ['Date Posted', 'created_at'],
@@ -177,22 +185,18 @@ class WorkSearchForm
     ['Kudos', 'kudos_count'],
     ['Comments', 'comments_count'],
     ['Bookmarks', 'bookmarks_count']
-  ]
+  ].freeze
 
   def sort_columns
-    return 'revised_at' if options[:sort_column].blank?
-
-    options[:sort_column]
+    options[:sort_column] || default_sort_column
   end
 
   def sort_direction
-    return default_sort_direction if options[:sort_direction].blank?
-
-    options[:sort_direction]
+    options[:sort_direction] || default_sort_direction
   end
 
   def sort_options
-    SORT_OPTIONS
+    options[:faceted] ? SORT_OPTIONS[1..-1] : SORT_OPTIONS
   end
 
   def sort_values
@@ -201,7 +205,11 @@ class WorkSearchForm
 
   # extract the pretty name
   def name_for_sort_column(sort_column)
-    Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
+    Hash[SORT_OPTIONS.map { |v| [v[1], v[0]] }][sort_column]
+  end
+
+  def default_sort_column
+    options[:faceted] ? 'revised_at' : '_score'
   end
 
   def default_sort_direction

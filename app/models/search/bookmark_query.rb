@@ -111,12 +111,16 @@ class BookmarkQuery < Query
 
   def sort_column
     @sort_column ||=
-      options[:sort_column].present? ? options[:sort_column] : "created_at"
+      options[:sort_column].present? ? options[:sort_column] : default_sort
   end
 
   def sort_direction
     @sort_direction ||=
       options[:sort_direction].present? ? options[:sort_direction] : "desc"
+  end
+
+  def default_sort
+    facet_tags? ? 'created_at' : '_score'
   end
 
   def sort
@@ -236,7 +240,7 @@ class BookmarkQuery < Query
   # The date filter on the bookmark (i.e. when the bookmark was created).
   def date_filter
     if options[:date].present?
-      { range: { created_at: Search.range_to_search(options[:date]) } }
+      { range: { created_at: SearchRange.parsed(options[:date]) } }
     end
   end
 

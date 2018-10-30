@@ -318,3 +318,19 @@ Feature: Collection
       And subscription notifications are sent
 
     Then 0 emails should be delivered
+
+  Scenario: When a creator views their own anonymous work, they should see a message explaining that their comment will be anonymous, and their comment should be anonymous.
+
+    Given I have the anonymous collection "Anon Forever"
+      And I am logged in as "shy_author"
+      And I post the work "Hidden Masterpiece" to the collection "Anon Forever"
+
+    When I view the work "Hidden Masterpiece"
+    Then I should see "While this work is anonymous, comments you post will also be listed anonymously."
+
+    When I post a comment "Reply from the author."
+      And I am logged out
+      And I view the work "Hidden Masterpiece" with comments
+    Then I should see "Reply from the author."
+      And I should see "Anonymous Creator"
+      And I should not see "shy_author"

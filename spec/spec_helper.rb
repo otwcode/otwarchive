@@ -48,12 +48,6 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     User.current_user = nil
     clean_the_database
-
-    # ES UPGRADE TRANSITION #
-    # Remove $rollout activations
-    $rollout.activate :start_new_indexing
-    $rollout.activate :stop_old_indexing
-    $rollout.activate :use_new_search
   end
 
   config.after :each do
@@ -107,8 +101,6 @@ def clean_the_database
   end
 end
 
-# ES UPGRADE TRANSITION #
-# Replace all instances of $new_elasticsearch with $elasticsearch
 def update_and_refresh_indexes(klass_name, shards = 5)
   indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
 
@@ -130,11 +122,11 @@ def update_and_refresh_indexes(klass_name, shards = 5)
   indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
   indexer.index_documents if klass_name.capitalize.constantize.any?
 
-  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def refresh_index_without_updating(klass_name)
-  $new_elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
@@ -148,15 +140,15 @@ end
 
 def delete_index(index)
   index_name = "ao3_test_#{index}s"
-  if $new_elasticsearch.indices.exists? index: index_name
-    $new_elasticsearch.indices.delete index: index_name
+  if $elasticsearch.indices.exists? index: index_name
+    $elasticsearch.indices.delete index: index_name
   end
 end
 
 def delete_test_indices
-  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
   indices.each do |index|
-    $new_elasticsearch.indices.delete(index: index)
+    $elasticsearch.indices.delete(index: index)
   end
 end
 
@@ -169,10 +161,4 @@ shared_examples_for "multipart email" do
     expect(email.body.parts.length).to eq(2)
     expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
-end
-
-def create_archivist
-  user = create(:user)
-  user.roles << Role.create(name: "archivist")
-  user
 end
