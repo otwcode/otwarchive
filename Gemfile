@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+ruby File.read(File.expand_path('../.ruby-version', __FILE__)).strip.gsub("ruby","")
 
 gem 'test-unit', '~> 3.2'
 
