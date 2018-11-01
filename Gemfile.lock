@@ -228,7 +228,7 @@ GEM
       activesupport (>= 4, < 5.2)
       railties (>= 4, < 5.2)
       request_store (~> 1.0)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.5)
@@ -269,7 +269,7 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.18.1.330)
     nio4r (2.1.0)
-    nokogiri (1.8.3)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.9)
       nokogiri
@@ -521,7 +521,7 @@ DEPENDENCIES
   mysql2 (= 0.3.20)
   newrelic-redis
   newrelic_rpm
-  nokogiri (>= 1.8.3)
+  nokogiri (>= 1.8.5)
   nokogumbo (= 1.4.9)
   paperclip (>= 5.2.0)
   permit_yo
