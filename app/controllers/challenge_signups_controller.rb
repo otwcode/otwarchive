@@ -13,6 +13,7 @@ class ChallengeSignupsController < ApplicationController
   before_action :maintainer_or_signup_owner_only, only: [:show]
   before_action :check_signup_open, only: [:new, :create, :edit, :update]
   before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -75,6 +76,13 @@ class ChallengeSignupsController < ApplicationController
         flash[:error] = ts("You can't sign up with that pseud.")
         redirect_to root_path and return
       end
+    end
+  end
+
+  def check_signup_in_collection
+    unless @challenge_signup.collection_id == @collection.id
+      flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
+      redirect_to @collection
     end
   end
 
