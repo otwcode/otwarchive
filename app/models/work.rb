@@ -675,6 +675,10 @@ class Work < ApplicationRecord
   def series_attributes=(attributes)
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
+      if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
+        errors.add(:base, ts("You can't add a work to that series."))
+        return
+      end
       self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
