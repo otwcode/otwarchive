@@ -36,7 +36,7 @@ describe AbuseReport do
 
     context "invalid emails" do
       BAD_EMAILS.each do |email|
-        let(:bad_email) {build(:abuse_report, email: email)}
+        let(:bad_email) { build(:abuse_report, email: email) }
         it "cannot be created if the email does not pass veracity check" do
           expect(bad_email.save).to be_falsey
           expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
@@ -45,46 +45,25 @@ describe AbuseReport do
     end
 
     context "invalid url" do
-      let(:invalid_url){build(:abuse_report, url: "nothing before #{ArchiveConfig.APP_URL}")}
+      let(:invalid_url) { build(:abuse_report, url: "nothing before #{ArchiveConfig.APP_URL}") }
       it "text before url" do
         expect(invalid_url.save).to be_falsey
         expect(invalid_url.errors[:url]).not_to be_empty
       end
 
-      let(:not_from_site) {build(:abuse_report, url: "http://www.google.com/not/our/site")}
+      let(:not_from_site) { build(:abuse_report, url: "http://www.google.com/not/our/site") }
       it "url not from our site" do
         expect(not_from_site.save).to be_falsey
         expect(not_from_site.errors[:url]).not_to be_empty
       end
 
-      let(:no_url) {build(:abuse_report, url: "")}
+      let(:no_url) { build(:abuse_report, url: "") }
       it "no url" do
         expect(no_url.save).to be_falsey
         expect(no_url.errors[:url]).not_to be_empty
       end
     end
 
-  context "alternate url" do
-    let(:no_protocol) { build(:abuse_report, url: "archiveofourown.org") }
-    it "no protocol" do
-      expect(no_protocol.save).to be_truthy
-      expect(no_protocol.errors[:url]).to be_empty
-    end
-
-    let(:dot_com) { build(:abuse_report, url: "http://archiveofourown.com") }
-    it "dot com" do
-      expect(dot_com.save).to be_truthy
-      expect(dot_com.errors[:url]).to be_empty
-    end
-
-    let(:acronym) { build(:abuse_report, url: "http://ao3.org") }
-    it "acronym" do
-      expect(acronym.save).to be_truthy
-      expect(acronym.errors[:url]).to be_empty
-    end
-  end
-
-  context "emailed copy" do
     let(:no_email_provided) { build(:abuse_report, email: nil) }
     it "is invalid if an email is not provided" do
       expect(no_email_provided.save).to be_falsey
@@ -256,7 +235,7 @@ describe AbuseReport do
   end
 
   context "when report is spam" do
-    let (:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
+    let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
     it "is not valid if Akismet flags it as spam" do
       allow(Akismetor).to receive(:spam?).and_return(true)
       expect(spam_report.save).to be_falsey
