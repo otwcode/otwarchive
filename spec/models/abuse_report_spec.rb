@@ -234,6 +234,26 @@ describe AbuseReport do
     end
   end
 
+  context "alternate url" do
+    let(:no_protocol) { build(:abuse_report, url: "archiveofourown.org") }
+    it "no protocol" do
+      expect(no_protocol.save).to be_truthy
+      expect(no_protocol.errors[:url]).to be_empty
+    end
+
+    let(:dot_com) { build(:abuse_report, url: "http://archiveofourown.com") }
+    it "dot com" do
+      expect(dot_com.save).to be_truthy
+      expect(dot_com.errors[:url]).to be_empty
+    end
+
+    let(:acronym) { build(:abuse_report, url: "http://ao3.org") }
+    it "acronym" do
+      expect(acronym.save).to be_truthy
+      expect(acronym.errors[:url]).to be_empty
+    end
+  end
+
   context "when report is spam" do
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
     it "is not valid if Akismet flags it as spam" do
