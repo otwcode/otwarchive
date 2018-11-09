@@ -51,8 +51,8 @@ describe LanguagesController do
       expect(new_lang.sortable_name).to eq('su')
     end
 
-    it 'redirects to languages_path' do
-      it_redirects_to(languages_path)
+    it 'redirects to languages_path with notice' do
+      it_redirects_to_with_notice(languages_path, 'Language was successfully added.')
     end
   end
 
