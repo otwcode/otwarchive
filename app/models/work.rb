@@ -85,6 +85,9 @@ class Work < ApplicationRecord
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
 
+  alias_attribute :work_endnotes, :endnotes
+  alias_attribute :work_notes, :notes
+
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)

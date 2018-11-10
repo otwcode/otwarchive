@@ -41,6 +41,10 @@ class Chapter < ApplicationRecord
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
+  alias_attribute :chapter_content, :content
+  alias_attribute :chapter_endnotes, :endnotes
+  alias_attribute :chapter_notes, :notes
+
   before_save :validate_authors, :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
