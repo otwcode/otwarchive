@@ -123,11 +123,11 @@
   <%= render :partial => 'work_form_tags', locals: { include_blank: true, import: true } %>
 
   <fieldset>
-    <legend><%= label_tag :notes, ts("Notes") %></legend>
+    <legend><%= label_tag :work_notes, ts("Notes") %></legend>
     <dl>
-      <dt><%= label_tag :notes, ts("Notes at the beginning") %></dt>
+      <dt><%= label_tag :work_notes, ts("Notes at the beginning") %></dt>
       <dd>
-        <%= text_area_tag :notes, nil, class: "observe_textlength" %>
+        <%= text_area_tag :work_notes, nil, class: "observe_textlength" %>
         <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
       </dd>
     </dl>

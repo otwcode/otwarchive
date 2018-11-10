@@ -699,7 +699,7 @@ class StoryParser
     # cleanup the notes
     notes.gsub!(%r{<br\s*\/?>}i, "\n") # replace the breaks with newlines
     notes = clean_storytext(notes)
-    work_params[:notes] = notes
+    work_params[:work_notes] = notes
 
     work_params.merge!(scan_text_for_meta(notes, detect_tags))
     work_params[:title] = title

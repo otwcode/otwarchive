@@ -81,3 +81,13 @@ Feature: Parsing HTML
   Then I should see "Comment created!"
   When I follow "Edit"
   Then the "Comment" field should not contain "strip me"
+
+  Scenario: Classes are allowed in notes when overriding extracted import values
+    Given I start importing "http://import-site-without-tags" with a mock website
+    When I check "Set the following tags and/or notes on all works, overriding whatever the importer finds in the content."
+      And I choose "Use values extracted from the content for blank fields if possible"
+      And I fill in "Notes at the beginning" with "<div class='error flash'>Yeeeeah</div>"
+      And I press "Import"
+      And I press "Post"
+      And I follow "Edit"
+    Then the "Notes" field should contain "error flash"

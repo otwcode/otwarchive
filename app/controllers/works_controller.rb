@@ -1042,7 +1042,7 @@ class WorksController < ApplicationController
       relationship: params[:work][:relationship_string],
       category: params[:work][:category_string],
       freeform: params[:work][:freeform_string],
-      notes: params[:notes],
+      notes: params[:work_notes],
       encoding: params[:encoding],
       external_author_name: params[:external_author_name],
       external_author_email: params[:external_author_email],
