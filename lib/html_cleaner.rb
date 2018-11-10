@@ -158,10 +158,14 @@ module HtmlCleaner
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end
-      # the screencast field shouldn't be wrapped in <p> tags
-      unless field.to_s == "screencast"
+      # Now that we know what transformers we need, let's santize the unfrozen value
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                               Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
+                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+      else
+        # the screencast field shouldn't be wrapped in <p> tags
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
