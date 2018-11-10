@@ -370,7 +370,7 @@ describe ChaptersController do
 
   describe "create" do
     before do
-      @chapter_attributes = { content: "This doesn't matter" }
+      @chapter_attributes = { chapter_content: "This doesn't matter" }
     end
 
     context "when user is logged out" do
@@ -431,7 +431,7 @@ describe ChaptersController do
         end
 
         it "renders new if chapter is not valid" do
-          post :create, params: { work_id: work.id, chapter: { content: "" } }
+          post :create, params: { work_id: work.id, chapter: { chapter_content: "" } }
           expect(response).to render_template(:new)
         end
       end
@@ -446,7 +446,7 @@ describe ChaptersController do
         end
 
         it "renders new if chapter is not valid" do
-          post :create, params: { work_id: work.id, chapter: { content: "" } }
+          post :create, params: { work_id: work.id, chapter: { chapter_content: "" } }
           expect(response).to render_template(:new)
         end
       end
@@ -487,11 +487,11 @@ describe ChaptersController do
 
         context "when the chapter or work is not valid" do
           it "does not add a chapter" do
-            expect { post :create, params: { work_id: work.id, chapter: { content: "" }, post_without_preview_button: true } }.to_not change(Chapter, :count)
+            expect { post :create, params: { work_id: work.id, chapter: { chapter_content: "" }, post_without_preview_button: true } }.to_not change(Chapter, :count)
           end
 
           it "renders new" do
-            post :create, params: { work_id: work.id, chapter: { content: "" }, post_without_preview_button: true }
+            post :create, params: { work_id: work.id, chapter: { chapter_content: "" }, post_without_preview_button: true }
             expect(response).to render_template(:new)
           end
         end
@@ -529,11 +529,11 @@ describe ChaptersController do
 
         context "when the chapter or work is not valid" do
           it "does not add a chapter" do
-            expect { post :create, params: { work_id: work.id, chapter: { content: "" }, preview_button: true } }.to_not change(Chapter, :count)
+            expect { post :create, params: { work_id: work.id, chapter: { chapter_content: "" }, preview_button: true } }.to_not change(Chapter, :count)
           end
 
           it "renders new" do
-            post :create, params: { work_id: work.id, chapter: { content: "" }, preview_button: true }
+            post :create, params: { work_id: work.id, chapter: { chapter_content: "" }, preview_button: true }
             expect(response).to render_template(:new)
           end
         end
@@ -560,7 +560,7 @@ describe ChaptersController do
 
   describe "update" do
     before do
-      @chapter_attributes = { content: "This doesn't matter" }
+      @chapter_attributes = { chapter_content: "This doesn't matter" }
     end
 
     context "when user is logged out" do
@@ -616,7 +616,7 @@ describe ChaptersController do
         end
 
         it "renders new if chapter is not valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { chapter_content: "" } }
           expect(response).to render_template(:new)
         end
       end
@@ -631,7 +631,7 @@ describe ChaptersController do
         end
 
         it "renders new if chapter is not valid" do
-          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { chapter_content: "" } }
           expect(response).to render_template(:new)
         end
       end
@@ -699,12 +699,12 @@ describe ChaptersController do
 
         context "when the chapter or work is not valid" do
           it "does not update the chapter" do
-            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" }, post_button: true }
+            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { chapter_content: "" }, post_button: true }
             expect(assigns[:chapter]).to eq work.chapters.first
           end
 
           it "renders edit" do
-            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" }, post_button: true }
+            put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { chapter_content: "" }, post_button: true }
             expect(response).to render_template(:edit)
           end
         end

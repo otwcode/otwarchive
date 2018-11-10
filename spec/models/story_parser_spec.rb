@@ -172,7 +172,7 @@ describe StoryParser do
         story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
         story_out = '<p>here is <a href="' + output + '" rel="nofollow">a link</a>.</p>'
         results = @sp.parse_common(story_in, location)
-        expect(results[:chapter_attributes][:content]).to include(story_out)
+        expect(results[:chapter_attributes][:chapter_content]).to include(story_out)
       end
     end
   end

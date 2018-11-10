@@ -6,7 +6,7 @@ FactoryGirl.define do
     fandom_string "Testing"
     rating_string "Not Rated"
     warning_string "No Archive Warnings Apply"
-    chapter_info = { content: "This is some chapter content for my work." }
+    chapter_info = { chapter_content: "This is some chapter content for my work." }
     chapter_attributes chapter_info
 
     after(:build) do |work|
