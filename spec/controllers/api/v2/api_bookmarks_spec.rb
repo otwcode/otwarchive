@@ -14,7 +14,7 @@ describe "API v2 BookmarksController", type: :request do
                category_string: ["M/M"],
                relationship_string: "Starsky/Hutch",
                character_string: "Starsky,hutch",
-               notes: "<p>Notes</p>",
+               bookmarker_notes: "<p>Notes</p>",
                tag_string: "youpi",
                collection_names: "",
                private: "0",

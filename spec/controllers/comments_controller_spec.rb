@@ -143,7 +143,7 @@ describe CommentsController do
 
   describe "POST #create" do
     let(:anon_comment_attributes) do
-      attributes_for(:comment).slice(:name, :email, :content)
+      attributes_for(:comment).slice(:name, :email, :comment_content)
     end
 
     context "when replying from the inbox" do
@@ -158,7 +158,7 @@ describe CommentsController do
       it "creates the reply and redirects to user inbox path" do
         comment_attributes = {
           pseud_id: user.default_pseud_id,
-          content: "Hello fellow human!"
+          comment_content: "Hello fellow human!"
         }
         post :create, params: { comment_id: comment.id, comment: comment_attributes, filters: { date: 'asc' } }
         expect(response).to redirect_to(user_inbox_path(user, filters: { date: 'asc' }))
@@ -178,7 +178,7 @@ describe CommentsController do
           expect(comment.commentable).to eq fandom
           expect(comment.name).to eq anon_comment_attributes[:name]
           expect(comment.email).to eq anon_comment_attributes[:email]
-          expect(comment.content).to include anon_comment_attributes[:content]
+          expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
           path = comments_path(tag_id: fandom.to_param,
                                anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
@@ -197,7 +197,7 @@ describe CommentsController do
           expect(comment.commentable).to eq fandom
           expect(comment.name).to eq anon_comment_attributes[:name]
           expect(comment.email).to eq anon_comment_attributes[:email]
-          expect(comment.content).to include anon_comment_attributes[:content]
+          expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
           path = comments_path(tag_id: fandom.to_param,
                                anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
