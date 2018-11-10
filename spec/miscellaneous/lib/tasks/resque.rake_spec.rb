@@ -31,6 +31,10 @@ describe "resque rake tasks" do
     @worker = Resque::Worker.new(:tests)
   end
 
+  after do
+    @rake.clear
+  end
+
   describe "rake resque:run_failures" do
     before do
       @task_name = "resque:run_failures"

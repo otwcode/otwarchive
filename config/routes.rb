@@ -371,7 +371,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :prompts
   resources :collections do
     collection do
       get :list_challenges

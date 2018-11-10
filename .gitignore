@@ -39,7 +39,6 @@ REVISION
 /log/*
 
 # /public/
-/public/system
 /public/downloads
 /public/stylesheets/cached_for_screen.css
 /public/stylesheets/skins

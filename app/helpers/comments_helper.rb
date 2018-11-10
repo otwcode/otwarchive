@@ -318,7 +318,7 @@ module CommentsHelper
   def current_user_is_anonymous_creator(commentable)
     if logged_in?
       parent = find_parent(commentable)
-      parent.respond_to?(:work) && parent.anonymous? && current_user.is_author_of?(parent)
+      parent.is_a?(Work) && parent.anonymous? && current_user.is_author_of?(parent)
     end
   end
 

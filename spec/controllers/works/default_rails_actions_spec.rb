@@ -16,7 +16,8 @@ describe WorksController do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to new_user_session_path
+        it_redirects_to_with_error(new_user_session_path,
+                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
 
@@ -164,7 +165,8 @@ describe WorksController do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to new_user_session_path
+      it_redirects_to_with_error(new_user_session_path,
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "renders the form if logged in" do
@@ -178,6 +180,18 @@ describe WorksController do
     before do
       @user = create(:user)
       fake_login_known_user(@user)
+    end
+
+    it "doesn't allow a user to create a work in a series that they don't own" do
+      @series = create(:series)
+      work_attributes = attributes_for(:work)
+      work_attributes[:series_attributes] = { id: @series.id }
+      expect {
+        post :create, params: { work: work_attributes }
+      }.not_to change { @series.works.all.count }
+      expect(response).to render_template :new
+      expect(assigns[:work].errors.full_messages).to \
+        include("You can't add a work to that series.")
     end
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
@@ -411,6 +425,17 @@ describe WorksController do
 
     before do
       fake_login_known_user(update_user)
+    end
+
+    it "doesn't allow the user to add a series that they don't own" do
+      @series = create(:series)
+      attrs = { series_attributes: { id: @series.id } }
+      expect {
+        put :update, params: { id: update_work.id, work: attrs }
+      }.not_to change { @series.works.all.count }
+      expect(response).to render_template :edit
+      expect(assigns[:work].errors.full_messages).to \
+        include("You can't add a work to that series.")
     end
 
     it "redirects to the edit page if the work could not be saved" do

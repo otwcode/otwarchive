@@ -1,5 +1,11 @@
 require 'spec_helper'
 describe AdminMailer, type: :mailer do
+
+  # Assume all of these reports pass the spam check
+  before(:each) do
+    allow(Akismetor).to receive(:spam?).and_return(false)
+  end
+
   context "abuse_reports with email" do
     let(:report) { create(:abuse_report) }
     let(:mail) { AdminMailer.abuse_report(report.id) }

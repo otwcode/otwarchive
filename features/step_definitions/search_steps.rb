@@ -1,5 +1,3 @@
-require "cucumber/rspec/doubles"
-
 Given /^the (\w+) indexes are completely regenerated$/ do |klass|
   es_update(klass)
 end
