@@ -1056,10 +1056,10 @@ class WorksController < ApplicationController
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :warning_string, :category_string, :expected_number_of_chapters, :revised_at,
-      :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
-      :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
-      :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      :unrestricted,
+      :freeform_string, :summary, :work_notes, :work_endnotes, :collection_names,
+      :recipients, :wip_length, :backdate, :language_id, :work_skin_id, :restricted,
+      :anon_commenting_disabled, :moderated_commenting_enabled, :title, :pseuds_to_add,
+      :collections_to_add, :unrestricted,
       pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
@@ -1070,7 +1070,7 @@ class WorksController < ApplicationController
       parent_attributes: [:url, :title, :author, :language_id, :translation],
       chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
-        :published_at, :content
+        :published_at, :chapter_content
       ]
     )
   end

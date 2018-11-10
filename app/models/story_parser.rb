@@ -541,7 +541,7 @@ class StoryParser
   # form results) and returns the final sanitized hash.
   #
   def parse_common(story, location = nil, encoding = nil, detect_tags = true)
-    work_params = { title: "Untitled Imported Work", chapter_attributes: { content: "" } }
+    work_params = { title: "Untitled Imported Work", chapter_attributes: { chapter_content: "" } }
 
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
@@ -588,7 +588,7 @@ class StoryParser
     meta.merge!(scan_text_for_meta(story, detect_tags))
     meta[:title] ||= @doc.css('title').inner_html
     work_params[:chapter_attributes][:title] = meta.delete(:chapter_title)
-    work_params[:chapter_attributes][:content] = clean_storytext(storytext)
+    work_params[:chapter_attributes][:chapter_content] = clean_storytext(storytext)
     work_params.merge!(meta)
   end
 
@@ -609,7 +609,7 @@ class StoryParser
     # storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
     storytext = clean_storytext(storytext)
 
-    work_params[:chapter_attributes][:content] = storytext
+    work_params[:chapter_attributes][:chapter_content] = storytext
     work_params[:title] = @doc.css("title").inner_html
     work_params[:title].gsub! /^[^:]+: /, ""
     work_params.merge!(scan_text_for_meta(storytext, detect_tags))
@@ -639,7 +639,7 @@ class StoryParser
     # cleanup the text
     storytext = clean_storytext(storytext)
 
-    work_params[:chapter_attributes][:content] = storytext
+    work_params[:chapter_attributes][:chapter_content] = storytext
     work_params[:title] = @doc.css("title").inner_html
     work_params[:title].gsub! /^[^:]+: /, ""
     work_params.merge!(scan_text_for_meta(storytext, detect_tags))
@@ -690,7 +690,7 @@ class StoryParser
     # cleanup the text
     storytext.gsub!(%r{<br\s*\/?>}i, "\n") # replace the breaks with newlines
     storytext = clean_storytext(storytext)
-    work_params[:chapter_attributes][:content] = storytext
+    work_params[:chapter_attributes][:chapter_content] = storytext
 
     # Find the notes
     content_divs = body.css("div.text-ctrl div.text")
@@ -839,7 +839,7 @@ class StoryParser
   # We clean the text as if it had been submitted as the content of a chapter
   def clean_storytext(storytext)
     storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
-    sanitize_value("content", storytext)
+    sanitize_value("chapter_content", storytext)
   end
 
   # works conservatively -- doesn't split on

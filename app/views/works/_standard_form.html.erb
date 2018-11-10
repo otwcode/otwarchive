@@ -304,7 +304,7 @@
       <% use_tinymce %>
         <div class="rtf-html-field">
           <h4 class="landmark heading"><%= ts("Work Text") %>*</h4>
-          <%= c.text_area :content, value: @chapter.content,
+          <%= c.text_area :chapter_content, value: @chapter.content,
                 class: "mce-editor observe_textlength large", id: "content" %>
           <%= live_validation_for_field("content",
             maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,

@@ -7,9 +7,9 @@
 
 <%= form.hidden_field :title, :value => "#{@chapter.title}" %>
 <%= form.hidden_field :summary, :value => "#{@chapter.summary}" %>
-<%= form.hidden_field :notes, :value => "#{@chapter.notes}" %>
-<%= form.hidden_field :endnotes, :value => "#{@chapter.endnotes}" %>
-<%= form.hidden_field :content, :value => "#{@chapter.content}" %>
+<%= form.hidden_field :chapter_notes, :value => "#{@chapter.notes}" %>
+<%= form.hidden_field :chapter_endnotes, :value => "#{@chapter.endnotes}" %>
+<%= form.hidden_field :chapter_content, :value => "#{@chapter.content}" %>
 
 <%= form.hidden_field :wip_length, :value => "#{@chapter.wip_length}" %>
 <%= form.hidden_field :position, :value => "#{@chapter.position}" %>

@@ -55,7 +55,7 @@
     <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
   </p>
   <div class="rtf-html-field">
-    <%= f.text_area :content, id: "content", class: "mce-editor observe_textlength large" %>
+    <%= f.text_area :chapter_content, id: "content", class: "mce-editor observe_textlength large" %>
     <%= live_validation_for_field("content",
           maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
           minimum_length: ArchiveConfig.CONTENT_MIN,
