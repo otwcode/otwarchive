@@ -30,7 +30,6 @@ Feature: Comments on Hidden Works
       And I should not see "Sorry, you can't add or edit comments on a hidden work."
       But I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
-
     When I am logged out
       And I go to the work comments page for "To Be Hidden"
     Then I should not see "Do you see?"
