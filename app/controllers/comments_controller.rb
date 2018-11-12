@@ -54,7 +54,7 @@ class CommentsController < ApplicationController
   # No one can create or update comments on something hidden by an admin.
   def check_modify_hidden_parent
     parent = find_parent
-    if parent.is_a?(Work) && parent.hidden_by_admin
+    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
       flash[:error] = ts("Sorry, you can't add or edit comments on a hidden work.")
       redirect_to work_path(parent)
     end
