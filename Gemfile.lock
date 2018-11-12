@@ -303,7 +303,7 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.5)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-dev-mark (0.7.6)
       rack (>= 1.1, < 2.1)
     rack-protection (2.0.3)
