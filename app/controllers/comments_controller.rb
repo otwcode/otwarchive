@@ -543,7 +543,7 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(
-      :pseud_id, :content, :name, :email, :edited_at
+      :pseud_id, :comment_content, :name, :email, :edited_at
     )
   end
 
