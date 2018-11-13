@@ -40,9 +40,9 @@
       <dt><%= ts('Description:') %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
     <% end %>
-    <% unless @series.notes.blank? %>
+    <% unless @series.series_notes.blank? %>
       <dt><%= ts('Notes:') %></dt>
-      <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
+      <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :series_notes) %></blockquote></dd>
     <% end %>
 
     <dt class="stats"><%= ts('Stats:') %></dt>
