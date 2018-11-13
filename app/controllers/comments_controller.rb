@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
   before_action :check_modify_hidden_parent,
                 only: [:new, :create, :edit, :update, :add_comment,
                        :add_comment_reply, :cancel_comment_reply,
-                       :cancel_comment_edit]
+                       :cancel_comment_edit, :cancel_comment]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
