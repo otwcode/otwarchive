@@ -227,7 +227,7 @@ module Taggable
   def parse_tags(klass, incoming_tags)
     tags = []
     self.invalid_tags ||= []
-    klass_symbol = klass.to_s.downcase.pluralize.to_sym
+    klass_symbol = klass.to_s.underscore.pluralize.to_sym
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
       tag_array = incoming_tags.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
