@@ -1037,7 +1037,7 @@ class WorksController < ApplicationController
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],
-      warning: params[:work][:archivewarning_strings],
+      warning: params[:work][:archive_warning_strings],
       character: params[:work][:character_string],
       rating: params[:work][:rating_string],
       relationship: params[:work][:relationship_string],
@@ -1056,7 +1056,7 @@ class WorksController < ApplicationController
   def work_params
     params.require(:work).permit(
         :rating_string, :fandom_string, :relationship_string, :character_string,
-        :archivewarning_string, :category_string, :expected_number_of_chapters, :revised_at,
+        :archive_warning_string, :category_string, :expected_number_of_chapters, :revised_at,
         :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
         :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
         :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
@@ -1065,7 +1065,7 @@ class WorksController < ApplicationController
         challenge_assignment_ids: [],
         challenge_claim_ids: [],
         category_string: [],
-        archivewarning_strings: [],
+        archive_warning_strings: [],
         author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
         series_attributes: [:id, :title],
         parent_attributes: [:url, :title, :author, :language_id, :translation],

@@ -25,7 +25,7 @@ module Taggable
         source: :tagger,
         source_type: 'Tag',
         before_remove: :remove_filter_tagging
-      has_many :archivewarnings,
+      has_many :archive_warnings,
         -> { where("tags.type = 'ArchiveWarning'") },
         through: :taggings,
         source: :tagger,
@@ -71,11 +71,11 @@ module Taggable
   def category_strings
     tag_category_string(:categories, return_array: true)
   end
-  def archivewarning_string
-    tag_category_string(:archivewarnings)
+  def archive_warning_string
+    tag_category_string(:archive_warnings)
   end
-  def archivewarning_strings
-    tag_category_string(:archivewarnings, return_array: true)
+  def archive_warning_strings
+    tag_category_string(:archive_warnings, return_array: true)
   end
   def fandom_string
     tag_category_string(:fandoms)
@@ -101,10 +101,10 @@ module Taggable
   def category_string=(tag_string)
     parse_tags(Category, tag_string)
   end
-  def archivewarning_string=(tag_string)
+  def archive_warning_string=(tag_string)
     parse_tags(ArchiveWarning, tag_string)
   end
-  def archivewarning_strings=(array)
+  def archive_warning_strings=(array)
     parse_tags(ArchiveWarning, array)
   end
   def fandom_string=(tag_string)
@@ -201,7 +201,7 @@ module Taggable
   def add_default_tags
     self.fandom_string = "Test Fandom"
     self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.archivewarning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
+    self.archive_warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     self.save
   end
 
