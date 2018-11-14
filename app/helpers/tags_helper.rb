@@ -218,13 +218,13 @@ module TagsHelper
   def blurb_tag_block(item, tag_groups=nil)
     item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
-    categories = ['Warning', 'Relationship', 'Character', 'Freeform']
+    categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
     tag_block = ""
 
     categories.each do |category|
       if tags = tag_groups[category]
         unless tags.empty?
-          class_name = category.downcase.pluralize
+          class_name = category == "ArchiveWarning" ? "warnings" : category.downcase.pluralize
           if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
             open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
             close_tags = "</strong></li>"
@@ -265,7 +265,7 @@ module TagsHelper
     ratings = tag_groups['Rating']
     symbol_block << get_symbol_link(get_ratings_class(ratings), get_title_string(ratings, "rating"))
 
-    warnings = tag_groups['Warning']
+    warnings = tag_groups['ArchiveWarning']
     symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
 
     categories = tag_groups['Category']
