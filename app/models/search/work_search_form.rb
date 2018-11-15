@@ -196,7 +196,7 @@ class WorkSearchForm
   end
 
   def sort_options
-    options[:faceted] ? SORT_OPTIONS[1..-1] : SORT_OPTIONS
+    options[:faceted] || options[:collected] ? SORT_OPTIONS[1..-1] : SORT_OPTIONS
   end
 
   def sort_values
@@ -209,7 +209,7 @@ class WorkSearchForm
   end
 
   def default_sort_column
-    options[:faceted] ? 'revised_at' : '_score'
+    options[:faceted] || options[:collected] ? 'revised_at' : '_score'
   end
 
   def default_sort_direction

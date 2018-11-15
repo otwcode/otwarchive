@@ -271,7 +271,7 @@ class WorkQuery < Query
 
   # When searching outside of filters, use relevance instead of date
   def default_sort
-    facet_tags? ? 'revised_at' : '_score'
+    facet_tags? || collected? ? 'revised_at' : '_score'
   end
 
   def aggregations
