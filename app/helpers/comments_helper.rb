@@ -106,12 +106,26 @@ module CommentsHelper
         remote: true)
   end
 
+  #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
-  #### HELPERS FOR REPLYING TO COMMENTS #####
+  def can_reply_to_comment?(comment)
+    !(comment.unreviewed? || no_anon_reply(comment) || comment_parent_hidden?(comment))
+  end
+
+  def can_edit_comment?(comment)
+    is_author_of?(comment) && comment.count_all_comments == 0 && !comment_parent_hidden?(comment)
+  end
+
+  def comment_parent_hidden?(comment)
+    parent = comment.ultimate_parent
+    parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+  end
 
   def no_anon_reply(comment)
     comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
   end
+
+  #### HELPERS FOR REPLYING TO COMMENTS #####
 
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s

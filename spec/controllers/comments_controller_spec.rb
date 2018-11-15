@@ -38,6 +38,51 @@ describe CommentsController do
         expect(response).to redirect_to(work_path(comment.ultimate_parent, add_comment_reply_id: comment.id, show_comments: true, anchor: "comment_#{comment.id}"))
       end
     end
+
+    context "when the commentable is a comment on a work hidden by an admin" do
+      let(:work) { comment.ultimate_parent }
+
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the comment writer" do
+        it "redirects to the home page with an error" do
+          fake_login_known_user(comment.pseud.user)
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+    end
   end
 
   describe "GET #unreviewed" do
@@ -139,6 +184,87 @@ describe CommentsController do
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq("Previous Comment")
     end
+
+    context "when the commentable is a work hidden by an admin" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+    end
+
+    context "when the commentable is a comment on a work hidden by an admin" do
+      let(:comment) { create(:comment) }
+      let(:work) { comment.ultimate_parent }
+
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :new, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :new, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the comment writer" do
+        it "redirects to the home page with an error" do
+          fake_login_known_user(comment.pseud.user)
+          get :new, params: { comment_id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          get :new, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          get :new, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+    end
   end
 
   describe "POST #create" do
@@ -225,6 +351,87 @@ describe CommentsController do
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
                                      "reach. Please log in.")
+        end
+      end
+    end
+
+    context "when the commentable is a work hidden by an admin" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+    end
+
+    context "when the commentable is a comment on a work hidden by an admin" do
+      let(:comment) { create(:comment) }
+      let(:work) { comment.ultimate_parent }
+
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the comment writer" do
+        it "redirects to the home page with an error" do
+          fake_login_known_user(comment.pseud.user)
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
         end
       end
     end
@@ -437,6 +644,41 @@ describe CommentsController do
         end
       end
     end
+
+    context "when the commentable is a work hidden by an admin" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :show_comments, params: { work_id: work.id, format: :js }, xhr: true
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :show_comments, params: { work_id: work.id, format: :js }, xhr: true
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "renders the show_comments template" do
+          fake_login_known_user(work.users.first)
+          get :show_comments, params: { work_id: work.id, format: :js }, xhr: true
+          expect(response).to render_template(:show_comments)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "renders the show_comments template" do
+          fake_login_admin(create(:admin))
+          get :show_comments, params: { work_id: work.id, format: :js }, xhr: true
+          expect(response).to render_template(:show_comments)
+        end
+      end
+    end
   end
 
   describe "GET #hide_comments" do
@@ -453,6 +695,41 @@ describe CommentsController do
         get :add_comment, params: { comment_id: unreviewed_comment.id }
         expect(flash[:error]).to be_nil
         expect(response).to redirect_to(comment_path(unreviewed_comment, add_comment: true, anchor: 'comments'))
+      end
+    end
+
+    context "when the commentable is a work hidden by an admin" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :add_comment, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :add_comment, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "redirects to the work with an error" do
+          fake_login_known_user(work.users.first)
+          get :add_comment, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "redirects to the work with an error" do
+          fake_login_admin(create(:admin))
+          get :add_comment, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, you can't add or edit comments on a hidden work.")
+        end
       end
     end
   end
@@ -567,6 +844,55 @@ describe CommentsController do
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end
     end
+
+    context "when the comment is on a work hidden by an admin" do
+      let(:work) { comment.ultimate_parent }
+
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          delete :destroy, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          delete :destroy, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the comment writer" do
+        it "redirects to the home page with an error" do
+          fake_login_known_user(comment.pseud.user)
+          delete :destroy, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "successfully deletes the comment" do
+          fake_login_known_user(work.users.first)
+          delete :destroy, params: { id: comment.id }
+          expect(flash[:comment_notice]).to eq "Comment deleted."
+          it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
+          expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "successfully deletes the comment" do
+          fake_login_admin(create(:admin))
+          delete :destroy, params: { id: comment.id }
+          expect(flash[:comment_notice]).to eq "Comment deleted."
+          it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
+          expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
 
   describe "PUT #review" do
@@ -615,6 +941,53 @@ describe CommentsController do
       get :show, params: { id: unreviewed_comment.id }
       it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
     end
+
+    context "when the comment is on a work hidden by an admin" do
+      let(:work) { comment.ultimate_parent }
+
+      before { work.update_column(:hidden_by_admin, true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :show, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :show, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the comment writer" do
+        it "redirects to the home page with an error" do
+          fake_login_known_user(comment.pseud.user)
+          get :show, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "successfully displays the comment" do
+          fake_login_known_user(work.users.first)
+          get :show, params: { id: comment.id }
+          expect(response).to render_template(:show)
+          expect(assigns[:comment]).to eq(comment)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "successfully displays the comment" do
+          fake_login_admin(create(:admin))
+          get :show, params: { id: comment.id }
+          expect(response).to render_template(:show)
+          expect(assigns[:comment]).to eq(comment)
+        end
+      end
+    end
   end
 
   describe "GET #index" do
@@ -627,6 +1000,41 @@ describe CommentsController do
       fake_login_admin(create(:admin))
       get :index
       expect(response).to render_template("index")
+    end
+
+    context "when the commentable is a work hidden by an admin" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      context "when logged out" do
+        it "redirects to the home page with an error" do
+          get :index, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        end
+      end
+
+      context "when logged in as a random user" do
+        it "redirects to the home page with an error" do
+          fake_login
+          get :index, params: { work_id: work.id }
+          it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as the work's owner" do
+        it "renders the index template" do
+          fake_login_known_user(work.users.first)
+          get :index, params: { work_id: work.id }
+          expect(response).to render_template(:index)
+        end
+      end
+
+      context "when logged in as an admin" do
+        it "renders the index template" do
+          fake_login_admin(create(:admin))
+          get :index, params: { work_id: work.id }
+          expect(response).to render_template(:index)
+        end
+      end
     end
   end
 end

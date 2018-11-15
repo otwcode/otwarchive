@@ -202,6 +202,8 @@ module NavigationHelpers
       collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
+    when /^the work comments? page for "(.*?)"$/i
+      work_comments_path(Work.find_by(title: $1), show_comments: true)
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
