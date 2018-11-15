@@ -10,7 +10,7 @@ class Bookmark < ApplicationRecord
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  validates_length_of :notes,
+  validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
@@ -233,7 +233,7 @@ class Bookmark < ApplicationRecord
   end
 
   def with_notes
-    notes.present?
+    bookmarker_notes.present?
   end
 
   def bookmarkable_pseud_names
