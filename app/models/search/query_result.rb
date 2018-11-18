@@ -82,7 +82,7 @@ class QueryResult
     if @facets.nil?
       @facets = {}
       response['aggregations'].each_pair do |term, results|
-        if Tag::TYPES.include?(term.classify) || term == 'tag'
+        if Tag::TYPES.include?(term.classify) || term == 'tag' || term == 'warning'
           load_tag_facets(term, results)
         elsif term == 'collections'
           load_collection_facets(results)
