@@ -224,7 +224,7 @@ module TagsHelper
     categories.each do |category|
       if tags = tag_groups[category]
         unless tags.empty?
-          class_name = category == "ArchiveWarning" ? "warning" : category.downcase.pluralize
+          class_name = category == "ArchiveWarning" ? "warnings" : category.downcase.pluralize
           if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
             open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
             close_tags = "</strong></li>"

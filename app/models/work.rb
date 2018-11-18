@@ -865,7 +865,7 @@ class Work < ApplicationRecord
       end
       result["Fandom"] ||= []
       result["Rating"] ||= []
-      result["ArchiveWarning"] ||= []
+      result["Warning"] ||= []
       result["Relationship"] ||= []
       result["Character"] ||= []
       result["Freeform"] ||= []

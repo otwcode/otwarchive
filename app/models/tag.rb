@@ -10,7 +10,7 @@ class Tag < ApplicationRecord
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
   # (banned tags are not shown)
-  TYPES = ['Rating', 'ArchiveWarning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
+  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
