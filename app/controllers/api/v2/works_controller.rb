@@ -84,7 +84,7 @@ class Api::V2::WorksController < Api::V2::BaseController
   # Search for works imported from the provided URLs
   def find_existing_works(original_urls)
     results = []
-    messages = ""
+    messages = []
     original_urls.each do |original|
       original_id = ""
       if original.class == String
@@ -100,7 +100,7 @@ class Api::V2::WorksController < Api::V2::BaseController
         results << { status: :not_found,
                      original_id: original_id,
                      original_url: original_url,
-                     messages: [search_results[:error]] }
+                     messages: [search_results[:message]] }
       else
         work_results = search_results[:works].map do |work| 
             archive_url = work_url(work)
@@ -123,20 +123,21 @@ class Api::V2::WorksController < Api::V2::BaseController
 
   def find_work_by_import_url(original_url)
     works = nil
-    error = ""
     if original_url.blank?
-      error = "Please provide the original URL for the work."
+      message = "Please provide the original URL for the work."
     else
       # We know the url will be identical no need for a call to find_by_url
       works = Work.where(imported_from_url: original_url)
-      unless works
-        error = "No work has been imported from \"" + original_url + "\"."
+      if works.empty?
+        message = "No work has been imported from \"" + original_url + "\"."
+      else
+        message = "Found #{works.size} work(s) imported from \"" + original_url + "\"."
       end
     end
     {
       original_url: original_url,
       works: works,
-      error: error
+      message: message
     }
   end
   
