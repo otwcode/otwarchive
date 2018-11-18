@@ -8,7 +8,8 @@
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
         <% unless tags.blank? %>
-          <dt class="<%= type.downcase %> tags">
+          <% class_name = type == "ArchiveWarning" ? "warning" : type.downcase %>
+          <dt class="<%= class_name %> tags">
             <% if type == "ArchiveWarning" %>
               <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
             <% elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME %>
@@ -18,7 +19,7 @@
             <% end %>
           </dt>
 
-          <dd class="<%= type.downcase %> tags">
+          <dd class="<%= class_name %> tags">
             <ul class="commas">
               <% if (type == "ArchiveWarning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
