@@ -5,23 +5,27 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   def search
     archivist = User.find_by(login: params[:archivist])
     bookmarks = params[:bookmarks]
-    status = :bad_request
+    # check for top-level errors (not an archivist, no bookmarks...)
+    status, messages = batch_errors(archivist, bookmarks)
+    results = []
 
-    archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud.id)
-    results = bookmarks.map do |bookmark|
-      found_result = {}
-      found_result = check_archivist_bookmark(archivist, bookmark[:url], archivist_bookmarks) unless archivist_bookmarks.empty?
-      
-      bookmark_response(
-        status: found_result[:bookmark_status] || :not_found,
-        bookmark_url: found_result[:bookmark_url] || "",
-        bookmark_id: bookmark[:id],
-        original_url: bookmark[:url],
-        messages: found_result[:bookmark_messages] || ["No bookmark found for archivist \"#{archivist.login}\" and URL \"#{bookmark[:url]}\""]
-      )
+    if status == :ok
+      archivist_bookmarks = Bookmark.where(pseud_id: archivist.default_pseud.id)
+      results = bookmarks.map do |bookmark|
+        found_result = {}
+        found_result = check_archivist_bookmark(archivist, bookmark[:url], archivist_bookmarks) unless archivist_bookmarks.empty?
+
+        bookmark_response(
+          status: found_result[:bookmark_status] || :not_found,
+          bookmark_url: found_result[:bookmark_url] || "",
+          bookmark_id: bookmark[:id],
+          original_url: bookmark[:url],
+          messages: found_result[:bookmark_messages] || ["No bookmark found for archivist \"#{archivist.login}\" and URL \"#{bookmark[:url]}\""]
+        )
+      end
+      messages = ["Successfully searched bookmarks for archivist '#{archivist.login}'"]
     end
 
-    messages = ["Successfully searched bookmarks for archivist '#{archivist.login}'"]
     render_api_response(status, messages, bookmarks: results)
   end
 
@@ -58,7 +62,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   # Find bookmarks for this archivist
   def check_archivist_bookmark(archivist, current_bookmark_url, archivist_bookmarks)
     archivist_bookmarks = archivist_bookmarks
-                            .select { |b| b&.bookmarkable&.url == current_bookmark_url }
+                            .select { |b| b&.bookmarkable.is_a?(ExternalWork) ? b&.bookmarkable&.url == current_bookmark_url : false }
                             .map    { |b| [b, b.bookmarkable] }
 
     if archivist_bookmarks.present?
