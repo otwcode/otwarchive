@@ -10,8 +10,8 @@ class CommentsController < ApplicationController
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
-  before_action :check_hidden_parent
-  before_action :check_modify_hidden_parent,
+  before_action :check_parent
+  before_action :check_modify_parent,
                 only: [:new, :create, :edit, :update, :add_comment,
                        :add_comment_reply, :cancel_comment_reply,
                        :cancel_comment_edit, :cancel_comment]
@@ -43,19 +43,28 @@ class CommentsController < ApplicationController
     @check_visibility_of = @comment
   end
 
-  # Only admins and the owner can see comments on something hidden by an admin.
-  def check_hidden_parent
+  def check_parent
     parent = find_parent
+    # Only admins and the owner can see comments on something hidden by an admin.
     if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
+    end
+    # Only admins and the owner can see comments on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
       logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
     end
   end
 
-  # No one can create or update comments on something hidden by an admin.
-  def check_modify_hidden_parent
+  def check_modify_parent
     parent = find_parent
+    # No one can create or update comments on something hidden by an admin.
     if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
       flash[:error] = ts("Sorry, you can't add or edit comments on a hidden work.")
+      redirect_to work_path(parent)
+    end
+    # No one can create or update comments on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+      flash[:error] = ts("Sorry, you can't add or edit comments on an unrevealed work.")
       redirect_to work_path(parent)
     end
   end
