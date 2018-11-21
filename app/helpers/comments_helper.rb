@@ -118,7 +118,8 @@ module CommentsHelper
 
   def comment_parent_hidden?(comment)
     parent = comment.ultimate_parent
-    parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+    (parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin) ||
+      (parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection)
   end
 
   def no_anon_reply(comment)

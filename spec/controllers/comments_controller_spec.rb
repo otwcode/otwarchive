@@ -893,7 +893,7 @@ describe CommentsController do
     end
   end
 
-  xcontext "on an unrevealed work" do
+  context "on an unrevealed work" do
     it_behaves_like "no one can add or edit comments" do
       let(:edit_error_message) { "Sorry, you can't add or edit comments on an unrevealed work." }
       let(:work) { comment.ultimate_parent }
