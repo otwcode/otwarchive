@@ -85,6 +85,24 @@ describe "API v2 WorksController - Create works", type: :request do
       expect(parsed_body[:works].first[:original_id]).to eq("123")
     end
 
+    it "returns human-readable messages as an array" do
+      valid_params = {
+        archivist: archivist.login,
+        works: [
+          { id: "123",
+            external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_body[:works].first[:status]).to eq "created"
+      expect(parsed_body[:works].first[:messages]).to include("Successfully created work \"Detected Title\".")
+    end
+
     it "sends claim emails if send_claim_email is true" do
       # This test hits the call to #notify_and_return_authors in #create for coverage
       # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
@@ -493,7 +511,7 @@ describe "API v2 WorksController - Unit Tests", type: :request do
 
   it "work_url_from_external returns an error message when the work URL is blank" do
     work_url_response = @under_test.instance_eval { find_work_by_import_url("") }
-    expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
+    expect(work_url_response[:message]).to eq "Please provide the original URL for the work."
   end
 
   it "work_url_from_external returns the work url when a work is found" do
