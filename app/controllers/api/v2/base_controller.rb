@@ -56,7 +56,7 @@ module Api
       # Return a standard HTTP + Json envelope for errors that drop through other handling
       def render_standard_error_response(exception)
         message = "An error occurred in the Archive code: #{exception.message}"
-        render status: :internal_server_error, json: { status: :internal_server_error, messages: message }
+        render status: :internal_server_error, json: { status: :internal_server_error, messages: [message] }
       end
     end
   end

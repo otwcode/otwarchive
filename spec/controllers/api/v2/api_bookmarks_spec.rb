@@ -157,6 +157,27 @@ describe "API v2 BookmarksController", type: :request do
     end
   end
 
+  describe "Search for bookmarks" do
+    it "does not crash if the archivist has works bookmarked" do
+      archivist = create(:archivist)
+      pseud_id = archivist.default_pseud.id
+      work = create(:work)
+      create(:bookmark, pseud_id: pseud_id, bookmarkable_id: work.id)
+      post "/api/v2/bookmarks/search",
+           params: { archivist: archivist.login,
+                     bookmarks: [ bookmark ]
+           }.to_json,
+           headers: valid_headers
+
+      bookmark_response = JSON.parse(response.body)
+      messages = bookmark_response["messages"]
+      expect(messages[0]).to_not start_with "An error occurred in the Archive code: undefined method `url' for "
+      expect(messages).to include "Successfully searched bookmarks for archivist '#{archivist.login}'"
+      expect(bookmark_response["original_url"]).to eq bookmark["id"]
+      expect(bookmark_response["bookmarks"][0]["messages"]).to include "There is no bookmark for #{archivist.login} and the URL #{bookmark[:url]}"
+    end
+  end
+
   describe "Unit tests - import_bookmark" do
     it "returns an error message when an Exception is raised" do
       user = create(:user)
