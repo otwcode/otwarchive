@@ -81,6 +81,10 @@
     <p class="notice">
       <%= ts("Sorry, you can't add or edit comments on a hidden work.") %>
     </p>
+  <% elsif commentable_parent.is_a?(Work) && commentable_parent.in_unrevealed_collection %>
+    <p class="notice">
+      <%= ts("Sorry, you can't add or edit comments on an unrevealed work.") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
