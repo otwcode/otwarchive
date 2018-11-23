@@ -52,7 +52,10 @@ class TagIndexer < Indexer
   def document(object)
     object.as_json(
       root: false,
-      only: [:id, :name, :sortable_name, :merger_id, :canonical, :created_at]
+      only: [
+        :id, :name, :sortable_name, :merger_id, :canonical, :created_at, 
+        :unwrangleable
+      ]
     ).merge(
       tag_type: object.type,
       uses: object.taggings_count_cache
