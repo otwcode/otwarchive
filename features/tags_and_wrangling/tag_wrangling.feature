@@ -191,8 +191,13 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
 
-    # post a work to create a new unwrangled tag in the fandom
-    When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter"
+    # post a work to create new unwrangled and unwrangleable tags in the fandom
+    When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" and second character "Anubis Arc"
+      And I follow "Anubis Arc"
+      And I check "Unwrangleable"
+      And I fill in "Fandoms" with "Stargate SG-1"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
 
     # check sidebar links and pages for wrangling within a fandom
     When I am on my wrangling page
@@ -217,7 +222,15 @@ Feature: Tag wrangling
       But I should not see "Jack O'Neill" within "tbody th"
       And I should not see "Daniel Jackson"
     When I follow "Unwrangled"
-    Then I should see "Samantha Carter"
+    Then I should see "Showing Unwrangled Character Tags"
+      And I should see "Samantha Carter"
+      And I should not see "Jack O'Neill"
+      And I should not see "Daniel Jackson"
+      And I should not see "Anubis Arc"
+    When I follow "Unwrangleable"
+    Then I should see "Showing Unwrangleable Character Tags"
+      And I should see "Anubis Arc"
+      And I should not see "Samantha Carter"
       And I should not see "Jack O'Neill"
       And I should not see "Daniel Jackson"
     When I follow "Relationships (0)"
