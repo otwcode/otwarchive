@@ -30,7 +30,6 @@ namespace :work do
           chapter.content_will_change!
           chapter.save
         end
-        work.word_count_will_change!
         work.save
       end
       print(".") && STDOUT.flush
