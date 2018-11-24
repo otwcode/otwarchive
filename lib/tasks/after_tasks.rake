@@ -595,7 +595,7 @@ namespace :After do
     print("\n") && STDOUT.flush
   end
 
-  # Usage: rake work:reset_word_counts[en]
+  # Usage: rake After:reset_word_counts[en]
   desc "Reset word counts for works in the specified language"
   task(:reset_word_counts, [:lang] => :environment) do |_t, args|
     language = Language.find_by(short: args.lang)
