@@ -69,7 +69,7 @@ class TagQuery < Query
   end
 
   def unwrangleable_filter
-    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) if options[:unwrangleable].present?
+    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
   end
 
   def media_filter
