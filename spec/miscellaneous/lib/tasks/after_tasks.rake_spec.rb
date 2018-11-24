@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "rake work:reset_word_counts" do
+describe "rake After:reset_word_counts" do
   let(:en) { Language.find_by(short: "en") }
   let(:en_work) { create(:posted_work, language: en, chapter_attributes: { content: "Nice ride, Gloria!" }) }
 
