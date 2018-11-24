@@ -193,7 +193,7 @@ Feature: Tag wrangling
 
     # post a work to create new unwrangled and unwrangleable tags in the fandom
     When I post the work "Test Work" with fandom "Stargate SG-1" with character "Samantha Carter" with second character "Anubis Arc"
-      And I follow "Anubis Arc"
+      And I edit the tag "Anubis Arc"
       And I check "Unwrangleable"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
