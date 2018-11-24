@@ -203,7 +203,7 @@ Feature: Tag wrangling
     When I am on my wrangling page
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
-    When I follow "Characters (3)"
+    When I follow "Characters (4)"
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Character Tags"
       And I should see "Daniel Jackson"
