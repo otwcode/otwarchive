@@ -260,7 +260,7 @@ When /^the invite_from_queue_at is yesterday$/ do
 end
 
 When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
+  step %{I run the rake task "invitations:check_queue"}
 end
 
 When /^I edit known issues$/ do
