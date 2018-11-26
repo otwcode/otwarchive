@@ -406,7 +406,7 @@ When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coau
 end
 
 When /^the purge_old_drafts rake task is run$/ do
-  Work.purge_old_drafts
+  step %{I run the rake task "work:purge_old_drafts"}
 end
 
 When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
@@ -530,8 +530,8 @@ When /^I post the work$/ do
   step %{all indexing jobs have been run}
 end
 When /^the statistics_tasks rake task is run$/ do
-  StatCounter.hits_to_database
-  StatCounter.stats_to_database
+  step %{I run the rake task "statistics:update_stat_counters"}
+  step %{I run the rake task "statistics:update_stats"}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|

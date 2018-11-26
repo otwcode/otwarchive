@@ -335,13 +335,6 @@ class Work < ApplicationRecord
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
-  def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).pluck(:id)
-    Chapter.where(work_id: draft_ids).order("position DESC").map(&:destroy)
-    Work.where(id: draft_ids).map(&:destroy)
-    draft_ids.size
-  end
-
   ########################################################################
   # RESQUE
   ########################################################################
