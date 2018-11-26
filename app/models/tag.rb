@@ -142,9 +142,6 @@ class Tag < ApplicationRecord
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
 
-  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
-
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
@@ -1212,6 +1209,53 @@ class Tag < ApplicationRecord
     ext_work_bookmarks = Bookmark.where(bookmarkable_id: self.external_work_ids, bookmarkable_type: 'ExternalWork').merge(cond)
     series_bookmarks = [] # can't tag a series directly? # Bookmark.where(bookmarkable_id: self.series_ids, bookmarkable_type: 'Series').merge(cond)
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
+  end
+
+  #################################
+  ## SEARCH #######################
+  #################################
+
+  def unwrangled_query(tag_type, options = {})
+    TagQuery.new(options.merge(
+      type: tag_type,
+      unwrangleable: false,
+      fandom_ids: [0],
+      pre_fandom_ids: [self.id]
+    ))
+  end
+
+  def unwrangled_tags(tag_type, options = {})
+    unwrangled_query(tag_type, options).search_results
+  end
+
+  def unwrangled_tag_count(tag_type)
+    key = "unwrangled_#{tag_type}_#{self.id}_#{self.updated_at}"
+    Rails.cache.fetch(key, expires_in: 4.hours) do
+      unwrangled_query(tag_type).count
+    end
+  end
+
+  def suggested_parent_tags(parent_type, options = {})
+    limit = options[:limit] || 50
+    work_ids = works.limit(limit).pluck(:id)
+    Tag.joins(:taggings).where(
+      "tags.type" => parent_type,
+      taggings: {
+        taggable_type: 'Work',
+        taggable_id: work_ids
+      }
+    )
+  end
+
+  # For works that haven't been wrangled yet, get the fandom/character tags
+  # that are used on their works as a place to start
+  def suggested_parent_ids(parent_type)
+    return [] if !parent_types.include?(parent_type) ||
+      unwrangleable? ||
+      parents.by_type(parent_type).exists?
+
+    suggested_parent_tags(parent_type).pluck(:id, :merger_id).
+                                       flatten.compact.uniq
   end
 
   after_create :after_create
