@@ -68,10 +68,7 @@ class TagIndexer < Indexer
     %w(Media Fandom Character).each do |parent_type|
       if tag.parent_types.include?(parent_type)
         key = "#{parent_type.downcase}_ids"
-        ids = tag.parents.by_type(parent_type).pluck(:id)
-        # add a dummy value so we can find the unwrangled tags more easily
-        # since you can't search for an empty array
-        data[key] = ids.empty? ? [0] : ids
+        data[key] = tag.parents.by_type(parent_type).pluck(:id)
         next if parent_type == "Media"
         data["pre_#{key}"] = tag.suggested_parent_ids(parent_type)
       end

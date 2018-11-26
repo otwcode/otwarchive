@@ -1219,7 +1219,7 @@ class Tag < ApplicationRecord
     TagQuery.new(options.merge(
       type: tag_type,
       unwrangleable: false,
-      fandom_ids: [0],
+      no_fandom: true,
       pre_fandom_ids: [self.id]
     ))
   end

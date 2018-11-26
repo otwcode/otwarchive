@@ -25,6 +25,12 @@ class TagQuery < Query
     ].compact
   end
 
+  def exclusion_filters
+    [
+      no_fandom_filter
+    ].compact
+  end
+
   def queries
     [name_query].compact
   end
@@ -90,6 +96,13 @@ class TagQuery < Query
 
   def suggested_character_filter
     terms_filter(:pre_character_ids, options[:pre_character_ids]) if options[:pre_character_ids]
+  end
+
+  # Filter to only include tags that have no assigned fandom_ids. Checks that
+  # the fandom exists, because this particular filter is included in the
+  # exclusion_filters section.
+  def no_fandom_filter
+    { exists: { field: "fandom_ids" } } if options[:no_fandom]
   end
 
   ################
