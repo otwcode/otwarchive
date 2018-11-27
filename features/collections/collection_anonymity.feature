@@ -8,7 +8,7 @@ Feature: Collection
     Given I have the hidden collection "Hidden Treasury"
     When I am logged in as "first_user"
       And I set up the draft "Old Snippet" in collection "Hidden Treasury"
-      And I press "Preview"    
+      And I press "Preview"
     Then I should see "Collections: Hidden Treasury"
       And I should see "Draft was successfully created."
     When I press "Post"
@@ -21,7 +21,7 @@ Feature: Collection
     Then the work "Old Snippet" should be hidden from me
     When I am logged out
     Then the work "Old Snippet" should be hidden from me
-  
+
   Scenario: The moderator can reveal all the works in a hidden collection
     Given I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
@@ -48,7 +48,7 @@ Feature: Collection
     When I view the collection "Hidden Treasury"
     Then I should see "New Snippet"
       And I should not see "Mystery Work"
-      
+
   Scenario: The moderator can reveal a single work in a hidden collection
     Given I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
@@ -80,7 +80,7 @@ Feature: Collection
       And the work "Second Snippet" should be hidden from me
     When I view the collection "Hidden Treasury"
     Then I should see "First Snippet"
-    
+
   Scenario: Bookmarks for hidden works should not reveal the work to others
     Given I have the hidden collection "Hidden Treasury"
       And I am logged in as "first_user"
@@ -97,7 +97,7 @@ Feature: Collection
       And I go to the bookmarks page
     Then I should not see "Mystery Work"
       And I should see "Hiding Work"
-    
+
   Scenario: The authors in an anonymous collection should only be visible to themselves and admins
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
@@ -117,7 +117,7 @@ Feature: Collection
     When I view the approved collection items page for "Anonymous Hugs"
     Then I should see "Old Snippet"
       And I should see "first_user"
-  
+
   Scenario: Bookmarks should not reveal the authors of anonymous works
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
@@ -132,7 +132,7 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
-      And all emails have been delivered      
+      And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
     Then "third_user" should be emailed
@@ -200,7 +200,7 @@ Feature: Collection
     Then the work "Hiding Work" should be visible on the "New series" series page
       And the series "New series" should be visible on the "Hiding Work" work page
       And the neighbors of "Hiding Work" in the "New series" series should link to it
-    
+
   Scenario: Works should not be visible in series if anonymous
     Given I have the anonymous collection "Anon Treasury"
       And I am logged in as "first_user"

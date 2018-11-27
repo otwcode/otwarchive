@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UsersController do
+describe Users::RegistrationsController do
   include RedirectExpectationHelper
 
   def valid_user_attributes
@@ -10,21 +10,11 @@ describe UsersController do
     }
   end
 
+  before do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+  end
+
   describe "create" do
-    context "with valid parameters" do
-      before do
-        allow_any_instance_of(UsersController).to receive(:check_account_creation_status).and_return(true)
-      end
-
-      it "should be successful" do
-        post :create, params: { user: valid_user_attributes }
-
-        expect(response).to be_success
-        expect(assigns(:user)).to be_a(User)
-        expect(assigns(:user)).to eq(User.last)
-      end
-    end
-
     context "when invitations are required to sign up" do
       let(:invitation) { create(:invitation) }
 
@@ -38,7 +28,7 @@ describe UsersController do
 
       context "signing up with no invitation" do
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes }
+          post :create, params: { user_registration: valid_user_attributes }
 
           it_redirects_to_with_error(
             invite_requests_path,
@@ -50,7 +40,7 @@ describe UsersController do
 
       context "signing up with an invalid invitation" do
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: "asdf" }
 
           it_redirects_to_with_error(
@@ -63,7 +53,7 @@ describe UsersController do
 
       context "signing up with a valid invitation" do
         it "succeeeds in creating the account" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: invitation.token }
 
           expect(response).to be_success
@@ -82,7 +72,7 @@ describe UsersController do
         end
 
         it "redirects with an error" do
-          post :create, params: { user: valid_user_attributes,
+          post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: invitation.token }
 
           it_redirects_to_with_error(
@@ -96,7 +86,7 @@ describe UsersController do
           it "redirects with an error" do
             previous_user.destroy
 
-            post :create, params: { user: valid_user_attributes,
+            post :create, params: { user_registration: valid_user_attributes,
                                     invitation_token: invitation.token }
 
             it_redirects_to_with_error(

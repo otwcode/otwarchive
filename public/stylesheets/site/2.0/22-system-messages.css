@@ -28,7 +28,7 @@ div.error {
     border-radius: 0.25em;
 }
 
-.notice, .comment_notice, ul.notes, .caution, .error, .comment_error {
+.notice, .comment_notice, ul.notes, .caution, .error, .comment_error, .alert {
   background: #d1e1ef;
   border: 1px solid #c2d2df;
   margin: 0.643em auto;
@@ -44,7 +44,7 @@ div.error {
   border-color: #d89e36;
 }
 
-.error, .comment_error {
+.error, .comment_error, .alert {
   background: #efd1d1;
   border-color: #900;
     box-shadow: 1px 1px 2px;
@@ -58,13 +58,13 @@ form .notice, form ul.notes {
     box-shadow: 0px 0 3px #fff;
 }
 
-ul.notes, .error ul {
+ul.notes, .error ul, .alert ul {
   position: static;
   margin: auto 0.643em;
   padding: 0.25em 2.5em;
 }
 
-ul.notes li, .error ul li {
+ul.notes li, .error ul li, .alert ul li {
   list-style-type: disc;
   padding-left: 1.5em;
 }

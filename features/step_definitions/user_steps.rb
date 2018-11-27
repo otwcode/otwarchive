@@ -18,6 +18,50 @@ Given /the following activated users? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.pseuds.first.add_to_autocomplete
+    step %{confirmation emails have been delivered}
+  end
+end
+
+Given /the following users exist with BCrypt encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::BCrypt.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = BCrypt::Password.create(
+                           [hash[:password], salt].flatten.join,
+                           cost: ArchiveConfig.BCRYPT_COST || 14)
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
+  end
+end
+
+Given /the following users exist with SHA-512 encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::Sha512.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = [hash[:password], salt].flatten.join
+    20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
   end
 end
 
@@ -26,6 +70,7 @@ Given /the following activated users with private work skins/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    step %{confirmation emails have been delivered}
   end
 end
 
@@ -40,6 +85,7 @@ end
 
 Given /^the user "([^"]*)" exists and is activated$/ do |login|
   find_or_create_new_user(login, DEFAULT_PASSWORD)
+  step %{confirmation emails have been delivered}
 end
 
 Given /^the user "([^"]*)" exists and is not activated$/ do |login|
@@ -55,7 +101,6 @@ end
 
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
   user = find_or_create_new_user(login, password)
-  require 'authlogic/test_case'
   step("I am logged out")
   if hidden.present?
     user.preference.hide_warnings = true
@@ -64,17 +109,12 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences
   end
   step %{I am on the homepage}
   find_link('login-dropdown').click
-  activate_authlogic
 
   fill_in "User name", with: login
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-
-  activate_authlogic
-  UserSession.create!(user)
-
-  assert UserSession.find unless @javascript
+  step %{confirmation emails have been delivered}
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
@@ -88,6 +128,7 @@ end
 Given /^I am logged in as a random user$/ do
   name = "testuser#{User.count + 1}"
   step(%{I am logged in as "#{name}" with password "#{DEFAULT_PASSWORD}"})
+  step(%{confirmation emails have been delivered})
 end
 
 Given /^I am logged in as a banned user$/ do
@@ -102,10 +143,7 @@ Given /^user "([^"]*)" is banned$/ do |login|
 end
 
 Given /^I am logged out$/ do
-  require 'authlogic/test_case'
-  visit logout_path
-  activate_authlogic
-  assert UserSession.find.nil? unless @javascript
+  visit destroy_user_session_path
   visit destroy_admin_session_path
 end
 
@@ -120,11 +158,9 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
 end
 
 Given /^"([^"]*)" deletes their account/ do |username|
-  require 'authlogic/test_case'
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
-  activate_authlogic
 end
 
 Given /^I am a visitor$/ do
@@ -147,6 +183,16 @@ When /^I follow the link for "([^"]*)" first invite$/ do |login|
   step(%{I follow "#{invite.token}"})
 end
 
+When /^the password reset token for "([^*"]*)" is expired$/ do |login|
+  password_generated_date = 2.weeks.ago
+  expect_any_instance_of(User).to receive(:updated_at).at_least(:once).and_return(password_generated_date)
+end
+
+When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
+  user = User.find_by(login: login)
+  user.update(failed_attempts: count.to_i)
+end
+
 When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
   fill_in "Name", with: newpseud
@@ -156,7 +202,7 @@ end
 
 When /^I fill in "([^"]*)"'s temporary password$/ do |login|
   user = User.find_by(login: login)
-  fill_in "Password", with: user.activation_code
+  fill_in "Password", with: user.reset_password_token
 end
 
 When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
@@ -172,12 +218,12 @@ When /^I create the pseud "([^"]*)"$/ do |newpseud|
 end
 
 When /^I fill in the sign up form with valid data$/ do
-  step(%{I fill in "user_login" with "#{NEW_USER}"})
-  step(%{I fill in "user_email" with "test@archiveofourown.org"})
-  step(%{I fill in "user_password" with "password1"})
-  step(%{I fill in "user_password_confirmation" with "password1"})
-  step(%{I check "user_age_over_13"})
-  step(%{I check "user_terms_of_service"})
+  step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
+  step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
+  step(%{I fill in "user_registration_password" with "password1"})
+  step(%{I fill in "user_registration_password_confirmation" with "password1"})
+  step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_terms_of_service"})
 end
 
 When /^I try to delete my account as (.*)$/ do |login|
@@ -227,9 +273,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  require 'authlogic/test_case'
-  activate_authlogic
-  assert UserSession.find.nil? unless @javascript
+  expect(User.current_user).to be(nil)
 end
 
 def get_work_name(age, classname, name)

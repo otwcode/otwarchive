@@ -26,7 +26,7 @@
             <% end %>
           </td>
           <% if logged_in_as_admin? && invitation.redeemed_at.blank? %>
-            <td><%= link_to("Delete", invitation, data: {confirm: "Are you sure you want to delete this invitation?"}, :method => :delete) %></td> 
+            <td><%= link_to("Delete", invitation, data: {confirm: "Are you sure you want to delete this invitation?"}, :method => :delete) %></td>
           <% end %>
         </tr>
       <% end %>
