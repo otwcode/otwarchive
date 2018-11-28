@@ -212,9 +212,9 @@ Feature: User Authentication
     Then I should see "Successfully logged in."
       And I should see "Hi, TheMadUser!"
 
-  Scenario: Login with email or login
+  Scenario: Login with email
     Given the following activated user exists
-      | login      | email                          | password |
+      | login      | email                  | password |
       | TheMadUser | themaduser@example.com | password |
     When I am on the home page
       And I fill in "User name" with "themaduser@example.com"
@@ -223,14 +223,13 @@ Feature: User Authentication
       Then I should see "Successfully logged in."
         And I should see "Hi, TheMadUser!"
 
-  Scenario: Using remember me
+  Scenario: Not using remember me gives a warning about length of session
     Given the following activated user exists
       | login   | password |
       | MadUser | password |
     When I am on the home page
       And I fill in "User name" with "maduser"
       And I fill in "Password" with "password"
-      And I check "Remember Me"
       And I press "Log In"
     Then I should see "Successfully logged in."
       And I should see "You'll stay logged in for 2 weeks even if you close your browser"
