@@ -27,7 +27,7 @@ class TagQuery < Query
 
   def exclusion_filters
     [
-      no_fandom_filter
+      wrangled_filter
     ].compact
   end
 
@@ -101,8 +101,8 @@ class TagQuery < Query
   # Filter to only include tags that have no assigned fandom_ids. Checks that
   # the fandom exists, because this particular filter is included in the
   # exclusion_filters section.
-  def no_fandom_filter
-    { exists: { field: "fandom_ids" } } if options[:no_fandom]
+  def wrangled_filter
+    { exists: { field: "fandom_ids" } } unless options[:wrangled]
   end
 
   ################
