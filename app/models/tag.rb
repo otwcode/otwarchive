@@ -1238,7 +1238,7 @@ class Tag < ApplicationRecord
   def suggested_parent_tags(parent_type, options = {})
     limit = options[:limit] || 50
     work_ids = works.limit(limit).pluck(:id)
-    Tag.joins(:taggings).where(
+    Tag.distinct.joins(:taggings).where(
       "tags.type" => parent_type,
       taggings: {
         taggable_type: 'Work',
