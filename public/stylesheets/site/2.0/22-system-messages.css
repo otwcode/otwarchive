@@ -9,7 +9,7 @@ System messages use the following colours:
   font-weight: 900;
 }
 
-.required, .error {
+.required, .error, .alert {
   color: #900;
 }
 
