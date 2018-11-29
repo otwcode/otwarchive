@@ -2,9 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_action :check_user_status, only: [:edit, :update]
-  before_action :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
-  before_action :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_action :check_account_creation_status, only: [:new, :create]
+  before_action :load_user, except: [:activate, :delete_confirmation, :index]
+  before_action :check_ownership, except: [:activate, :browse, :delete_confirmation, :index, :show]
   skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -27,22 +26,6 @@ class UsersController < ApplicationController
   def load_user
     @user = User.find_by(login: params[:id])
     @check_ownership_of = @user
-  end
-
-  def check_account_creation_status
-    if is_registered_user?
-      flash[:error] = ts('You are already logged in!')
-      redirect_to(root_path) && return
-    end
-
-    token = params[:invitation_token]
-
-    if !@admin_settings.account_creation_enabled?
-      flash[:error] = ts('Account creation is suspended at the moment. Please check back with us later.')
-      redirect_to(root_path) && return
-    else
-      check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
-    end
   end
 
   def index
@@ -291,30 +274,6 @@ class UsersController < ApplicationController
     @wrong_password = true
 
     false
-  end
-
-  def check_account_creation_invite(token)
-    unless token.blank?
-      invitation = Invitation.find_by(token: token)
-
-      if !invitation
-        flash[:error] = ts('There was an error with your invitation token, please contact support')
-        redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at
-        flash[:error] = ts('This invitation has already been used to create an account, sorry!')
-        redirect_to root_path
-      end
-
-      return
-    end
-
-    if !@admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
-      redirect_to root_path
-    else
-      flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-      redirect_to invite_requests_path
-    end
   end
 
   def visible_items(current_user)
