@@ -30,7 +30,6 @@ class MovesUsersToDevise < ActiveRecord::Migration[5.1]
 
       # Lockable
       t.rename :failed_login_count, :failed_attempts
-      t.change :failed_attempts, :integer, default: 0
       t.string :unlock_token
       t.index :unlock_token
       t.datetime :locked_at
