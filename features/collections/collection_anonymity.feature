@@ -435,3 +435,21 @@ Feature: Collection
       And I submit
       And I view the work "Secret Work"
     Then I should not see "This work is part of an ongoing challenge and will be revealed soon!"
+
+  Scenario: Moving a work with two collections from an anonymous collection to a non-anonymous collection should reveal the creator.
+    Given an anonymous collection "Anonymizing"
+      And a collection "Fluffy"
+      And a collection "Holidays"
+
+    When I am logged in as "creator"
+      And I set up the draft "Secret Work"
+      And I fill in "Collections" with "Anonymizing,Fluffy"
+      And I press "Post Without Preview"
+      And I go to my works page
+    Then I should not see "Secret Work"
+
+    When I edit the work "Secret Work"
+      And I fill in "Collections" with "Holidays,Fluffy"
+      And I press "Post Without Preview"
+      And I go to my works page
+    Then I should see "Secret Work"
