@@ -86,7 +86,7 @@ class ApplicationController < ActionController::Base
   before_action :logout_if_not_user_credentials
 
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "users/sessions"
       logger.error "Forcing logout"
       sign_out
       redirect_to '/lost_cookie' and return
