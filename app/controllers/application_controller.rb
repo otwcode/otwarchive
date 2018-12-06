@@ -100,6 +100,7 @@ class ApplicationController < ActionController::Base
       logger.error "Forcing logout"
       sign_out
       redirect_to '/lost_cookie' and return
+    end
   end
 
   # mark the flash as being set (called when flash is set)
