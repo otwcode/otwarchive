@@ -80,6 +80,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # If there is no user_credentials cookie and the user appears to be logged in,
+  # redirect to the lost cookie page. Needs to be before the code to fix
+  # the user_credentials cookie or it won't fire.
+  before_action :logout_if_not_user_credentials
+  def logout_if_not_user_credentials
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "users/sessions"
+      logger.error "Forcing logout"
+      sign_out
+      redirect_to '/lost_cookie' and return
+    end
+  end
+
   # The user_credentials cookie is used by nginx to figure out whether or not
   # to cache the page, so we want to make sure that it's set when the user is
   # logged in, and cleared when the user is logged out.
@@ -89,17 +101,6 @@ class ApplicationController < ActionController::Base
       cookies[:user_credentials] = 1 unless cookies[:user_credentials]
     else
       cookies.delete :user_credentials unless cookies[:user_credentials].nil?
-    end
-  end
-
-  # So if there is not a user_credentials cookie and the user appears to be logged in then
-  # redirect to the logout page
-  before_action :logout_if_not_user_credentials
-  def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials].nil? && controller_name != "users/sessions"
-      logger.error "Forcing logout"
-      sign_out
-      redirect_to '/lost_cookie' and return
     end
   end
 
