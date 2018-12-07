@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  before_action :ensure_admin_credentials
+  after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
   # The user_credentials cookie is used by nginx to figure out whether or not
   # to cache the page, so we want to make sure that it's set when the user is
   # logged in, and cleared when the user is logged out.
-  before_action :ensure_user_credentials
+  after_action :ensure_user_credentials
   def ensure_user_credentials
     if logged_in?
       cookies[:user_credentials] = 1 unless cookies[:user_credentials]
