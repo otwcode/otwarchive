@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
       # set then set that cookie
-      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+      cookies.permanent[:admin_credentials] = 1 unless cookies[:admin_credentials]
     else
       # if we are NOT logged in as an admin and we have the admin_credentials
       # set then delete that cookie
@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
   after_action :ensure_user_credentials
   def ensure_user_credentials
     if logged_in?
-      cookies[:user_credentials] = 1 unless cookies[:user_credentials]
+      cookies.permanent[:user_credentials] = 1 unless cookies[:user_credentials]
     else
       cookies.delete :user_credentials unless cookies[:user_credentials].nil?
     end
