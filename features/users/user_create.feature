@@ -34,6 +34,26 @@ Feature: Sign Up for a new account
       | user_registration_age_over_13      | Sorry, you have to be over 13!                                      |
       | user_registration_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up. |
 
+  Scenario: The user should be able to sign up after fixing form errors.
+    When I fill in the sign up form with valid data
+      And I fill in "Valid email" with "lyingrobot@example.com"
+      And I uncheck "Yes, I have read the Terms of Service and agree to them."
+      And I press "Create Account"
+    Then I should see "Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should not see "Sorry, you have to be over 13!"
+      # Email should be what the user filled in, not the invitee email on the invitation
+      And I should see "lyingrobot@example.com" in the "Valid email" input
+
+    When I check "Yes, I have read the Terms of Service and agree to them."
+      And I fill in "Password" with "password"
+      And I fill in "Confirm password" with "password"
+      And all emails have been delivered
+      And I press "Create Account"
+    Then I should see "Account Created!"
+      And 1 email should be delivered to "lyingrobot@example.com"
+      And I should get a new user activation email
+      And a new user account should exist
+
   Scenario: The user should not be able to sign up with a login that is already in use
     Given the following users exist
       | login | password |
