@@ -4,7 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def new
     super do |resource|
-      set_invitation(resource)
+      set_invitation(resource, true)
 
       @hide_dashboard = true
     end
@@ -20,10 +20,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
       resource.transaction do
         # skip sending the Devise confirmation notification
         resource.skip_confirmation_notification!
+        set_invitation(resource)
         if resource.save
           notify_and_show_confirmation_screen
         else
-          set_invitation(resource)
           render action: 'new'
         end
       end
@@ -32,12 +32,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   private
 
-  def set_invitation(resource)
-    if params[:invitation_token]
-      @invitation = Invitation.find_by(token: params[:invitation_token])
-      resource.invitation_token = @invitation.token
-      resource.email = @invitation.invitee_email if resource.email.blank?
-    end
+  def set_invitation(resource, use_invitee_email = false)
+    return unless params[:invitation_token]
+    @invitation = Invitation.find_by(token: params[:invitation_token])
+    resource.invitation_token = @invitation.token
+    resource.email = @invitation.invitee_email if use_invitee_email
   end
 
   def notify_and_show_confirmation_screen
