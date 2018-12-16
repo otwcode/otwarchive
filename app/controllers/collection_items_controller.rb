@@ -153,7 +153,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    if @collection && @collection.user_is_maintainer?(current_user)
+    if @collection&.user_is_maintainer?(current_user)
       allowed_items = @collection.collection_items
       update_params = collection_update_multiple_params
     elsif @user && @user == current_user
@@ -200,14 +200,14 @@ class CollectionItemsController < ApplicationController
   end
 
   def user_update_multiple_params
-    params.slice(:collection_items).permit(collection_items: [
-      :user_approval_status, :remove
-    ]).require(:collection_items)
+    allowed = %i[user_approval_status remove]
+    params.slice(:collection_items).permit(collection_items: allowed).
+      require(:collection_items)
   end
 
   def collection_update_multiple_params
-    params.slice(:collection_items).permit(collection_items: [
-      :collection_approval_status, :remove, :unrevealed, :anonymous
-    ]).require(:collection_items)
+    allowed = %i[collection_approval_status remove unrevealed anonymous]
+    params.slice(:collection_items).permit(collection_items: allowed).
+      require(:collection_items)
   end
 end
