@@ -175,15 +175,16 @@ class CollectionItemsController < ApplicationController
     # Collect any failures so that we can display errors:
     @collection_items = []
 
-    update_params.each_pair do |id, attributes|
-      item = allowed_items.find_by(id: id)
+    # Make sure that the keys are integers so that we can look up the
+    # parameters by ID.
+    update_params.transform_keys!(&:to_i)
 
-      # Fail silently if the item wasn't found among the allowed_items;
-      # otherwise, try to update with the attributes (and add to
-      # @collection_items if that fails):
-      unless item.nil? || item.update(attributes)
-        @collection_items << item
-      end
+    # By using where() here and updating each item individually, instead of
+    # using allowed_items.update(update_params.keys, update_params.values) --
+    # which uses find() under the hood -- we ensure that we'll fail silently if
+    # the user tries to update an item they're not allowed to.
+    allowed_items.where(id: update_params.keys).each do |item|
+      @collection_items << item unless item.update(update_params[item.id])
     end
 
     if @collection_items.empty?
