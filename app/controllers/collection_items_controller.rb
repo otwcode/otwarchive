@@ -155,10 +155,12 @@ class CollectionItemsController < ApplicationController
   def update_multiple
     if @collection&.user_is_maintainer?(current_user)
       update_multiple_with_params(@collection.collection_items,
-                                  collection_update_multiple_params)
+                                  collection_update_multiple_params,
+                                  collection_items_path(@collection))
     elsif @user && @user == current_user
       update_multiple_with_params(CollectionItem.for_user(@user),
-                                  user_update_multiple_params)
+                                  user_update_multiple_params,
+                                  user_collection_items_path(@user))
     else
       flash[:error] = ts("You don't have permission to do that, sorry!")
       redirect_to(@collection || @user)
@@ -167,20 +169,26 @@ class CollectionItemsController < ApplicationController
 
   # The main work performed by update_multiple. Uses the passed-in parameters
   # to update, and only updates items that can be found in allowed_items (which
-  # should be a relation on CollectionItems).
-  def update_multiple_with_params(allowed_items, update_params)
+  # should be a relation on CollectionItems). When all items are successfully
+  # updated, redirects to success_path.
+  def update_multiple_with_params(allowed_items, update_params, success_path)
     # Collect any failures so that we can display errors:
     @collection_items = []
 
     update_params.each_pair do |id, attributes|
-      # Fail silently if the user isn't allowed to edit this ID:
-      next unless (item = allowed_items.find_by(id: id))
-      @collection_items << item unless item.update(attributes)
+      item = allowed_items.find_by(id: id)
+
+      # Fail silently if the item wasn't found among the allowed_items;
+      # otherwise, try to update with the attributes (and add to
+      # @collection_items if that fails):
+      unless item.nil? || item.update(attributes)
+        @collection_items << item
+      end
     end
 
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
-      redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
+      redirect_to success_path
     else
       render action: "index"
     end
