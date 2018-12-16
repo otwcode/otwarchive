@@ -4,7 +4,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def new
     super do |resource|
-      set_invitation(resource, true)
+      if params[:invitation_token]
+        @invitation = Invitation.find_by(token: params[:invitation_token])
+        resource.invitation_token = @invitation.token
+        resource.email = @invitation.invitee_email
+      end
 
       @hide_dashboard = true
     end
@@ -20,7 +24,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       resource.transaction do
         # skip sending the Devise confirmation notification
         resource.skip_confirmation_notification!
-        set_invitation(resource)
+        resource.invitation_token = params[:invitation_token]
         if resource.save
           notify_and_show_confirmation_screen
         else
@@ -31,13 +35,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   private
-
-  def set_invitation(resource, use_invitee_email = false)
-    return unless params[:invitation_token]
-    @invitation = Invitation.find_by(token: params[:invitation_token])
-    resource.invitation_token = @invitation.token
-    resource.email = @invitation.invitee_email if use_invitee_email
-  end
 
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
