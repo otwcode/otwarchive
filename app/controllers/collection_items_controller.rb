@@ -65,7 +65,7 @@ class CollectionItemsController < ApplicationController
 
   def load_user
     unless @collection
-      @user = User.current_user
+      @user = User.find_by(login: params[:user_id])
     end
   end
 
@@ -153,7 +153,26 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    @collection_items = CollectionItem.update(collection_items_params[:collection_items].keys, collection_items_params[:collection_items].values).reject { |item| item.errors.empty? }
+    if @collection && @collection.user_is_maintainer?(current_user)
+      allowed_items = @collection.collection_items
+      update_params = collection_update_multiple_params
+    elsif @user && @user == current_user
+      allowed_items = CollectionItem.for_user(@user)
+      update_params = user_update_multiple_params
+    else
+      flash[:error] = ts("You don't have permission to do that, sorry!")
+      redirect_to(@collection || @user) && return
+    end
+
+    # Collect any failures so that we can display errors:
+    @collection_items = []
+
+    update_params.each_pair do |id, attributes|
+      # Fail silently if the user isn't allowed to edit this ID:
+      next unless (item = allowed_items.find_by(id: id))
+      @collection_items << item unless item.update(attributes)
+    end
+
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
@@ -180,13 +199,15 @@ class CollectionItemsController < ApplicationController
     params.require(:collection_item).permit(:id)
   end
 
-  def collection_items_params
-    params.permit(
-      :utf8, :_method, :authenticity_token, :commit, :collection_id, :user_id,
-      collection_items: [
-        :id, :collection_id, :collection_approval_status, :unrevealed,
-        :user_approval_status, :anonymous, :remove
-      ]
-    )
+  def user_update_multiple_params
+    params.slice(:collection_items).permit(collection_items: [
+      :user_approval_status, :remove
+    ]).require(:collection_items)
+  end
+
+  def collection_update_multiple_params
+    params.slice(:collection_items).permit(collection_items: [
+      :collection_approval_status, :remove, :unrevealed, :anonymous
+    ]).require(:collection_items)
   end
 end
