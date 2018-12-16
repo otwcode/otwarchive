@@ -154,16 +154,21 @@ class CollectionItemsController < ApplicationController
 
   def update_multiple
     if @collection&.user_is_maintainer?(current_user)
-      allowed_items = @collection.collection_items
-      update_params = collection_update_multiple_params
+      update_multiple_with_params(@collection.collection_items,
+                                  collection_update_multiple_params)
     elsif @user && @user == current_user
-      allowed_items = CollectionItem.for_user(@user)
-      update_params = user_update_multiple_params
+      update_multiple_with_params(CollectionItem.for_user(@user),
+                                  user_update_multiple_params)
     else
       flash[:error] = ts("You don't have permission to do that, sorry!")
-      redirect_to(@collection || @user) && return
+      redirect_to(@collection || @user)
     end
+  end
 
+  # The main work performed by update_multiple. Uses the passed-in parameters
+  # to update, and only updates items that can be found in allowed_items (which
+  # should be a relation on CollectionItems).
+  def update_multiple_with_params(allowed_items, update_params)
     # Collect any failures so that we can display errors:
     @collection_items = []
 
