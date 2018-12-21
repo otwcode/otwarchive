@@ -16,58 +16,77 @@ Feature: User Authentication
       And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "reset_password_for" with "sam"
+    When I fill in "Email address or user name" with "sam"
       And I press "Reset Password"
-    Then 1 email should be delivered
-      And the email should contain "the following generated password has been created for you"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered
       And the email should contain "sam"
+      And the email should contain "someone has requested a password reset for your account"
       And the email should not contain "translation missing"
 
-    # old password should still work
+    # existing password should still work
     When I am on the homepage
       And I fill in "User name" with "sam"
       And I fill in "Password" with "secret"
       And I press "Log In"
     Then I should see "Hi, sam"
 
-    # password from email should also work
+    # link from the email should not work when logged in
+    When I follow "Change my password." in the email
+    Then I should see "You are already signed in."
+      And I should not see "Change My Password"
+
+    # link from the email should work
     When I am logged out
-      And I fill in "User name" with "sam"
-      And I fill in "sam"'s temporary password
-      And I press "Log In"
-    Then I should see "Hi, sam"
-      And I should see "You used a temporary password to log in."
-      And I should see "Change My Password"
+      And I follow "Change my password." in the email
+    Then I should see "Change My Password"
+
+    # entering mismatched passwords should produce an error message
+    When I fill in "New password" with "secret"
+      And I fill in "Confirm new password" with "newpass"
+      And I press "Change Password"
+    Then I should see "We couldn't save this user because:"
+      And I should see "Password confirmation doesn't match confirmation"
 
     # and I should be able to change the password
     When I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed"
+    Then I should see "Your password has been changed successfully. You are now signed in."
+      And I should see "Hi, sam"
+
+    # password reset link should no longer work
+    When I am logged out
+      And I follow "Change my password." in the email
+      And I fill in "New password" with "override"
+      And I fill in "Confirm new password" with "override"
+      And I press "Change Password"
+    Then I should see "We couldn't save this user because:"
+      And I should see "Reset password token is invalid"
 
     # old password should no longer work
     When I am logged out
-    When I am on the homepage
+      And I am on the homepage
       And I fill in "User name" with "sam"
       And I fill in "Password" with "secret"
       And I press "Log In"
     Then I should not see "Hi, sam"
 
-    # generated password should no longer work
-    When I am logged out
-    When I am on the homepage
-      And I fill in "User name" with "sam"
-      And I fill in "sam"'s temporary password
-      And I press "Log In"
-    Then I should not see "Hi, sam"
-
     # new password should work
     When I am logged out
-    When I am on the homepage
+      And I am on the homepage
       And I fill in "User name" with "sam"
       And I fill in "Password" with "newpass"
       And I press "Log In"
     Then I should see "Hi, sam"
+
+    # password entered the second time should not work
+    When I am logged out
+      And I am on the homepage
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "override"
+      And I press "Log In"
+    Then I should not see "Hi, sam"
 
   Scenario: Forgot password, logging in with email address
     Given I have no users
@@ -79,16 +98,17 @@ Feature: User Authentication
       And I follow "Reset password"
       And I fill in "Email address or user name" with "sam@example.com"
       And I press "Reset Password"
-    Then 1 email should be delivered
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered
     When I am logged out
-      And I fill in "User name" with "sam@example.com"
-      And I fill in "sam"'s temporary password
-      And I press "Log In"
-    Then I should see "Hi, sam"
-      And I should see "You used a temporary password to log in."
-      And I should see "Change My Password"
+      And I follow "Change my password." in the email
+      And I fill in "New password" with "newpass"
+      And I fill in "Confirm new password" with "newpass"
+      And I press "Change Password"
+    Then I should see "Your password has been changed"
+      And I should see "Hi, sam"
 
-  Scenario: With expired password token
+  Scenario: Forgot password, with expired password token
     Given I have no users
       And the following activated user exists
         | login | password |
@@ -98,15 +118,19 @@ Feature: User Authentication
       And I follow "Reset password"
       And I fill in "Email address or user name" with "sam"
       And I press "Reset Password"
-    Then 1 email should be delivered
-    When I am logged out
-      And the password reset token for "sam" is expired
-    When I fill in "User name" with "sam"
-      And I fill in "sam"'s temporary password
-      And I press "Log In"
-    Then I should see "The password you entered has expired."
-      And I should not see "Hi, sam!"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered
+    When it is currently 2 weeks from now
+      And I am logged out
+      And I follow "Change my password." in the email
+      And I fill in "New password" with "newpass"
+      And I fill in "Confirm new password" with "newpass"
+      And I press "Change Password"
+    Then I should see "We couldn't save this user because:"
+      And I should see "Reset password token has expired, please request a new one"
       And I should see "Log In"
+      And I should not see "Your password has been changed"
+      And I should not see "Hi, sam!"
 
   Scenario: User is locked out
     Given I have no users
@@ -139,36 +163,6 @@ Feature: User Authentication
       Then I should see "Successfully logged in."
         And I should see "Hi, sam!"
 
-  Scenario: invalid user
-    Given I have loaded the fixtures
-    When I am on the home page
-    And I follow "Forgot password?"
-    When I fill in "reset_password_for" with "testuser"
-      And I press "Reset Password"
-    Then I should see "Check your email"
-      And 1 email should be delivered
-
-    # password from email should work
-    When I fill in "User name" with "testuser"
-      And I fill in "testuser"'s temporary password
-      And I press "Log In"
-    Then I should see "Hi, testuser"
-      And I should see "Change My Password"
-
-    # and I should be able to change the password
-    When I fill in "New password" with "newpas"
-      And I fill in "Confirm new password" with "newpas"
-      And I press "Change Password"
-    Then I should see "Your password has been changed"
-
-    # new password should work
-    When I am logged out
-    When I am on the homepage
-      And I fill in "User name" with "testuser"
-      And I fill in "Password" with "newpas"
-      And I press "Log In"
-    Then I should see "Hi, testuser"
-
   Scenario: Wrong username
     Given I have no users
       And the following activated user exists
@@ -179,9 +173,9 @@ Feature: User Authentication
       And I fill in "User name" with "sammy"
       And I fill in "Password" with "test"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
 
-  Scenario: Wrong username
+  Scenario: Wrong password
     Given I have no users
       And the following activated user exists
       | login    | password |

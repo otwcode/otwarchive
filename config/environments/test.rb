@@ -50,4 +50,7 @@ Otwarchive::Application.configure do
   config.serve_static_files = true
   config.eager_load = false
   config.assets.enabled = false
+
+  # Make sure that we don't have a host mismatch:
+  config.action_mailer.default_url_options = { host: "" }
 end
