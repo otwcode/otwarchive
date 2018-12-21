@@ -170,11 +170,11 @@ describe CollectionItemsController do
         before { fake_login_known_user(work_owner) }
 
         context "setting user_approval_status" do
-          let(:attributes) { { user_approval_status: -1 } }
+          let(:attributes) { { user_approval_status: CollectionItem::REJECTED } }
 
           it "updates the collection item and redirects" do
             patch :update_multiple, params: params
-            expect(item.reload.user_approval_status).to eq(-1)
+            expect(item.reload.user_approval_status).to eq(CollectionItem::REJECTED)
             it_redirects_to_with_notice(user_collection_items_path(work_owner),
                                         "Collection status updated!")
           end
@@ -193,7 +193,7 @@ describe CollectionItemsController do
         end
 
         {
-          collection_approval_status: -1,
+          collection_approval_status: CollectionItem::REJECTED,
           unrevealed: true,
           anonymous: true
         }.each_pair do |field, value|
@@ -243,7 +243,7 @@ describe CollectionItemsController do
         before { fake_login_known_user(collection.owners.first.user) }
 
         {
-          collection_approval_status: -1,
+          collection_approval_status: CollectionItem::REJECTED,
           unrevealed: true,
           anonymous: true
         }.each_pair do |field, value|
@@ -272,13 +272,13 @@ describe CollectionItemsController do
         end
 
         context "setting user_approval_status" do
-          let(:attributes) { { user_approval_status: -1 } }
+          let(:attributes) { { user_approval_status: CollectionItem::REJECTED } }
 
           it "throws an error and doesn't update" do
             expect do
               patch :update_multiple, params: params
             end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(item.reload.user_approval_status).not_to eq(-1)
+            expect(item.reload.user_approval_status).not_to eq(CollectionItem::REJECTED)
           end
         end
       end
@@ -292,14 +292,14 @@ describe CollectionItemsController do
         {
           user_id: user.login,
           collection_items: {
-            item.id => { user_approval_status: -1 }
+            item.id => { user_approval_status: CollectionItem::REJECTED }
           }
         }
       end
 
       it "silently fails to update the collection item" do
         patch :update_multiple, params: params
-        expect(item.reload.user_approval_status).not_to eq(-1)
+        expect(item.reload.user_approval_status).not_to eq(CollectionItem::REJECTED)
         it_redirects_to_with_notice(user_collection_items_path(user),
                                     "Collection status updated!")
       end
@@ -313,14 +313,14 @@ describe CollectionItemsController do
         {
           collection_id: other_collection.name,
           collection_items: {
-            item.id => { collection_approval_status: -1 }
+            item.id => { collection_approval_status: CollectionItem::REJECTED }
           }
         }
       end
 
       it "silently fails to update the collection item" do
         patch :update_multiple, params: params
-        expect(item.reload.collection_approval_status).not_to eq(-1)
+        expect(item.reload.collection_approval_status).not_to eq(CollectionItem::REJECTED)
         it_redirects_to_with_notice(collection_items_path(other_collection),
                                     "Collection status updated!")
       end
