@@ -31,7 +31,7 @@
 </div>
 
 <p>
-  <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_password_path %>
+  <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_user_password_path %>
   <% if @admin_settings.account_creation_enabled? %>
     <br \><%= ts("Don't have an account?") %> <%= link_to ts('Create an account now.'), signup_path %>
   <% end %>

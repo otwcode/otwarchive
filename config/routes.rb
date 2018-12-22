@@ -17,7 +17,8 @@ Otwarchive::Application.routes.draw do
              module: 'users',
              controllers: {
                 sessions: 'users/sessions',
-                registrations: 'users/registrations'
+                registrations: 'users/registrations',
+                passwords: 'users/passwords'
               },
               path_names: {
                 sign_in: 'login',
@@ -204,8 +205,6 @@ Otwarchive::Application.routes.draw do
       get :search
     end
   end
-
-  resources :passwords, only: [:new, :create]
 
   # When adding new nested resources, please keep them in alphabetical order
   resources :users, except: [:new, :create] do

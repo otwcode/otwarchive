@@ -221,20 +221,6 @@ class UserMailer < BulletproofMailer::Base
       I18n.locale = I18n.default_locale
   end
 
-  # Sends a temporary password to the user
-  def reset_password(user_id, confirmation_token)
-    @user = User.find(user_id)
-    @password = confirmation_token
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
   # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)

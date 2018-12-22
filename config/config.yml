@@ -14,6 +14,11 @@ SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672f
 DEFAULT_SESSION_LENGTH_IN_WEEKS: 2
 REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
 
+# This length is hardcoded into the reset_password_instructions email message,
+# defined in config/locales/devise.en.yml. If you change this value, you should
+# also change the message (and vice versa).
+DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
