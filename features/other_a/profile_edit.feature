@@ -15,14 +15,14 @@ Background:
 Scenario: Add details
 
   When I fill in the details of my profile
-    Then I should see "Your profile has been successfully updated"
-	And 0 emails should be delivered
+  Then I should see "Your profile has been successfully updated"
+	  And 0 emails should be delivered
 
 Scenario: Change details
 
   When I change the details in my profile
-    Then I should see "Your profile has been successfully updated"
-	And 0 emails should be delivered
+  Then I should see "Your profile has been successfully updated"
+	  And 0 emails should be delivered
 
 Scenario: Remove details
 
@@ -54,19 +54,20 @@ Scenario: Changing email address - entering an incorrect password
 Scenario: Changing email address and viewing
 
   When I change my email
-    Then I should see "Your email has been successfully updated"
-	And 1 email should be delivered to "bar@ao3.org"
-        And the email should contain "the email associated with your account has been changed to"
-        And the email should contain "valid2@archiveofourown.org"
-        And the email should not contain "translation missing"
+  Then I should see "Your email has been successfully updated"
+    And 1 email should be delivered to "bar@ao3.org"
+    And all emails have been delivered
+    And the email should contain "the email associated with your account has been changed to"
+    And the email should contain "valid2@archiveofourown.org"
+    And the email should not contain "translation missing"
 	When I change my preferences to display my email address
-	  Then I should see "My email address: valid2@archiveofourown.org"
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting temporary password
 
   When I am logged out
     And I follow "Forgot password?"
-    And I fill in "reset_password_for" with "editname"
+    And I fill in "Email address or user name:" with "editname"
     And I press "Reset Password"
   Then 1 email should be delivered to "bar@ao3.org"
   When all emails have been delivered
@@ -86,7 +87,7 @@ Scenario: Changing email address after requesting temporary password by entering
   When I am logged out
     And I am on the home page
     And I follow "Forgot password?"
-    And I fill in "reset_password_for" with "editname"
+    And I fill in "Email address or user name:" with "editname"
     And I press "Reset Password"
   Then 1 email should be delivered to "bar@ao3.org"
   When all emails have been delivered
@@ -99,8 +100,8 @@ Scenario: Changing email address after requesting temporary password by entering
 Scenario: Changing email address -- can't be the same as another user's
 
   When I enter a duplicate email
-	Then I should see "Email has already been taken"
-	And 0 emails should be delivered
+  Then I should see "Email has already been taken"
+	  And 0 emails should be delivered
 
 Scenario: Date of birth - under age
 

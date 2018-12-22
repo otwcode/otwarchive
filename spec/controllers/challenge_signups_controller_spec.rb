@@ -4,7 +4,7 @@ describe ChallengeSignupsController, type: :controller do
   include LoginMacros
   include RedirectExpectationHelper
   let(:user) { create(:user) }
- 
+
   let(:closed_challenge) { create(:gift_exchange, :closed) }
   let(:closed_collection) { create(:collection, challenge: closed_challenge) }
   let(:closed_signup) { create(:gift_exchange_signup, collection_id: closed_collection.id) }
@@ -33,7 +33,7 @@ describe ChallengeSignupsController, type: :controller do
         get :new, params: { collection_id: open_collection.name, pseud: user.pseuds.first }
         it_redirects_to_with_notice(edit_collection_signup_path(open_collection, open_signup),
                                     "You are already signed up for this challenge. You can edit your sign-up below.")
-      end   
+      end
     end
 
     context "when collection has no challenge" do
@@ -63,6 +63,16 @@ describe ChallengeSignupsController, type: :controller do
       it_redirects_to_with_error(collection_path(closed_collection),
                                  "Sorry, you're not allowed to do that.")
     end
+
+    context "when the sign-up is from another collection" do
+      it "redirects and errors" do
+        fake_login_known_user(closed_collection_owner)
+        get :show, params: { collection_id: closed_collection.name,
+                             id: open_signup.id }
+        it_redirects_to_with_error(closed_collection,
+                                   "Sorry, that sign-up isn't associated with that collection.")
+      end
+    end
   end
 
   describe "index" do
@@ -77,7 +87,7 @@ describe ChallengeSignupsController, type: :controller do
       fake_login
       get :index, params: { collection_id: closed_collection.name, format: :csv }
       it_redirects_to_with_error(closed_collection,
-                                 "You aren't allowed to see the CSV summary.")      
+                                 "You aren't allowed to see the CSV summary.")
     end
   end
 
@@ -103,7 +113,7 @@ describe ChallengeSignupsController, type: :controller do
   describe "update" do
     context "when sign-ups are open" do
       let(:params) do
-        { 
+        {
           challenge_signup: { pseud_id: open_signup_owner.pseuds.first.id },
           id: open_signup,
           collection_id: open_collection.name
@@ -128,7 +138,7 @@ describe ChallengeSignupsController, type: :controller do
 
     context "when sign-ups are closed" do
       let(:params) do
-        { 
+        {
           challenge_signup: { pseud_id: closed_signup_owner.pseuds.first.id },
           id: closed_signup,
           collection_id: closed_collection.name
@@ -149,6 +159,35 @@ describe ChallengeSignupsController, type: :controller do
                                    "You can't edit someone else's sign-up!")
       end
     end
+
+    context "when the sign-up is from another collection" do
+      let(:params) do
+        {
+          challenge_signup: { pseud_id: open_signup.pseud_id },
+          id: open_signup,
+          collection_id: closed_collection.name
+        }
+      end
+
+      it "redirects and errors" do
+        fake_login_known_user(closed_collection_owner)
+        put :update, params: params
+        it_redirects_to_with_error(closed_collection,
+                                   "Sorry, that sign-up isn't associated with that collection.")
+      end
+    end
+  end
+
+  describe "edit" do
+    context "when the sign-up is from another collection" do
+      it "redirects and errors" do
+        fake_login_known_user(closed_collection_owner)
+        get :edit, params: { collection_id: closed_collection.name,
+                             id: open_signup.id }
+        it_redirects_to_with_error(closed_collection,
+                                   "Sorry, that sign-up isn't associated with that collection.")
+      end
+    end
   end
 
   describe "gift_exchange_to_csv" do
@@ -159,7 +198,7 @@ describe ChallengeSignupsController, type: :controller do
       signup_offer = signup.offers.first
       signup_offer.tag_set = create(:tag_set)
       signup_offer.save
-      
+
       signup_request = signup.requests.first
       signup_request.tag_set = create(:tag_set)
       signup_request.save

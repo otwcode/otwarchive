@@ -32,7 +32,7 @@ addons:
       - mysql-server
       - mysql-client
 rvm:
-  - "`cat .ruby_version| sed -e 's/ruby //'`"
+  - "`cat .ruby-version| sed -e 's/ruby //'`"
 services:
   - redis-server
   - memcached

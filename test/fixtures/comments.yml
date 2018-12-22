@@ -13,7 +13,7 @@ comment_00006:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: level fooour (4)
+  comment_content: level fooour (4)
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 30
   threaded_left: 5
@@ -35,7 +35,7 @@ comment_00017:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: wheeeeeeee!! (8 behaves as expected. hm.)
+  comment_content: wheeeeeeee!! (8 behaves as expected. hm.)
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 12
   threaded_left: 9
@@ -57,7 +57,7 @@ comment_00039:
   approved: true
   is_deleted: false
   parent_id: 74
-  content: Bleh
+  comment_content: Bleh
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)
   threaded_right: 5
   threaded_left: 2
@@ -79,7 +79,7 @@ comment_00040:
   approved: true
   is_deleted: false
   parent_id: 74
-  content: Argh
+  comment_content: Argh
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)
   threaded_right: 4
   threaded_left: 3
@@ -101,7 +101,7 @@ comment_00018:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: blah!
+  comment_content: blah!
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 27
   threaded_left: 26
@@ -123,7 +123,7 @@ comment_00007:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: level 5 arrives!
+  comment_content: level 5 arrives!
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 21
   threaded_left: 6
@@ -145,7 +145,7 @@ comment_00008:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: 6 is here! (and it got a separate thread).
+  comment_content: 6 is here! (and it got a separate thread).
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 16
   threaded_left: 7
@@ -167,7 +167,7 @@ comment_00019:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: |-
+  comment_content: |-
     whee
     
     now take a fcking bath
@@ -192,7 +192,7 @@ comment_00041:
   approved: true
   is_deleted: false
   parent_id: 78
-  content: |-
+  comment_content: |-
     <i>RPattz is better as Cedric than as Edward.</i>
     
     He totally is!
@@ -217,7 +217,7 @@ comment_00042:
   approved: true
   is_deleted: false
   parent_id: 170
-  content: If I comment to myself does it show up in the inbox?
+  comment_content: If I comment to myself does it show up in the inbox?
   user_agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6
   threaded_right: 
   threaded_left: 
@@ -239,7 +239,7 @@ comment_00020:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: avocado! :D
+  comment_content: avocado! :D
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 36
   threaded_left: 35
@@ -261,7 +261,7 @@ comment_00009:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: |-
+  comment_content: |-
     alas, replying to 6 didn't reload the original thread, but went instead straight to 6.
     
     (this is 7, by the way, the missing Cylon. :( )
@@ -286,7 +286,7 @@ comment_00032:
   approved: true
   is_deleted: true
   parent_id: 56
-  content: deleted comment
+  comment_content: deleted comment
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)
   threaded_right: 10
   threaded_left: 1
@@ -308,7 +308,7 @@ comment_00010:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: yet another tlc
+  comment_content: yet another tlc
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 
   threaded_left: 
@@ -330,7 +330,7 @@ comment_00021:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: Rodney?
+  comment_content: Rodney?
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 
   threaded_left: 
@@ -352,7 +352,7 @@ comment_00043:
   approved: true
   is_deleted: false
   parent_id: 56
-  content: does this work
+  comment_content: does this work
   user_agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6
   threaded_right: 6
   threaded_left: 5
@@ -374,7 +374,7 @@ comment_00044:
   approved: true
   is_deleted: false
   parent_id: 169
-  content: Haha, I realise now that "border bottom" was a CSS term, but in connection with Harry/Draco I first wondered if it was some unknown to me fannish trope... *facepalm* Too much fandom!
+  comment_content: Haha, I realise now that "border bottom" was a CSS term, but in connection with Harry/Draco I first wondered if it was some unknown to me fannish trope... *facepalm* Too much fandom!
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 (.NET CLR 3.5.30729)
   threaded_right: 
   threaded_left: 
@@ -396,7 +396,7 @@ comment_00022:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: John!
+  comment_content: John!
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 
   threaded_left: 
@@ -418,7 +418,7 @@ comment_00011:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: |-
+  comment_content: |-
     trivial case rly
     
     ETA: norly?
@@ -443,7 +443,7 @@ comment_00033:
   approved: true
   is_deleted: true
   parent_id: 56
-  content: deleted comment
+  comment_content: deleted comment
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.19 (KHTML, like Gecko) Chrome/1.0.154.65 Safari/525.19
   threaded_right: 9
   threaded_left: 2
@@ -465,7 +465,7 @@ comment_00034:
   approved: true
   is_deleted: true
   parent_id: 56
-  content: deleted comment
+  comment_content: deleted comment
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.19 (KHTML, like Gecko) Chrome/1.0.154.65 Safari/525.19
   threaded_right: 8
   threaded_left: 3
@@ -487,7 +487,7 @@ comment_00012:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: "non-trivial: I'm going to be a level 6 comment :*"
+  comment_content: "non-trivial: I'm going to be a level 6 comment :*"
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 18
   threaded_left: 17
@@ -509,7 +509,7 @@ comment_00001:
   approved: true
   is_deleted: false
   parent_id: 11
-  content: "Cheerful. I liked Boccaccio's version better. "
+  comment_content: "Cheerful. I liked Boccaccio's version better. "
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.4) Gecko/2008102920 Firefox/3.0.4 (.NET CLR 3.5.30729)
   threaded_right: 
   threaded_left: 
@@ -531,7 +531,7 @@ comment_00023:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: gah (I am a Six, but a marginal one)
+  comment_content: gah (I am a Six, but a marginal one)
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 24
   threaded_left: 23
@@ -553,7 +553,7 @@ comment_00024:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: 9?
+  comment_content: 9?
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 11
   threaded_left: 10
@@ -575,7 +575,7 @@ comment_00002:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: 0 level comment.
+  comment_content: 0 level comment.
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 40
   threaded_left: 1
@@ -597,7 +597,7 @@ comment_00013:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: bah, humbug (6) (Sonia Six? :D)
+  comment_content: bah, humbug (6) (Sonia Six? :D)
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 20
   threaded_left: 19
@@ -619,7 +619,7 @@ comment_00035:
   approved: true
   is_deleted: false
   parent_id: 56
-  content: What?
+  comment_content: What?
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)
   threaded_right: 7
   threaded_left: 4
@@ -641,7 +641,7 @@ comment_00036:
   approved: true
   is_deleted: false
   parent_id: 61
-  content: |-
+  comment_content: |-
     <ul><li>This</li>
     <li>Is</li>
     <li>An Ordered List</li>
@@ -676,7 +676,7 @@ comment_00014:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: |-
+  comment_content: |-
     oooooh breakthrough! (7b)
     
     I want to break freeee!
@@ -701,7 +701,7 @@ comment_00003:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: 1 level
+  comment_content: 1 level
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 39
   threaded_left: 2
@@ -723,7 +723,7 @@ comment_00025:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: are you still working?
+  comment_content: are you still working?
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
   threaded_right: 
   threaded_left: 
@@ -745,7 +745,7 @@ comment_00026:
   approved: true
   is_deleted: false
   parent_id: 58
-  content: I can't seem to be able to access the next story in the series, what's with that? :(
+  comment_content: I can't seem to be able to access the next story in the series, what's with that? :(
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
   threaded_right: 
   threaded_left: 
@@ -767,7 +767,7 @@ comment_00004:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: level 2
+  comment_content: level 2
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 38
   threaded_left: 3
@@ -789,7 +789,7 @@ comment_00015:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: guacamole?
+  comment_content: guacamole?
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 37
   threaded_left: 34
@@ -811,7 +811,7 @@ comment_00037:
   approved: true
   is_deleted: false
   parent_id: 61
-  content: |-
+  comment_content: |-
     This
     Is
     Just 
@@ -842,7 +842,7 @@ comment_00038:
   approved: true
   is_deleted: false
   parent_id: 74
-  content: meh
+  comment_content: meh
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)
   threaded_right: 6
   threaded_left: 1
@@ -864,7 +864,7 @@ comment_00016:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: ngngng! (heh)
+  comment_content: ngngng! (heh)
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 25
   threaded_left: 22
@@ -886,7 +886,7 @@ comment_00005:
   approved: true
   is_deleted: false
   parent_id: 19
-  content: level 3 lalala
+  comment_content: level 3 lalala
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   threaded_right: 31
   threaded_left: 4
@@ -908,7 +908,7 @@ comment_00027:
   approved: true
   is_deleted: true
   parent_id: 56
-  content: deleted comment
+  comment_content: deleted comment
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)
   threaded_right: 2
   threaded_left: 1

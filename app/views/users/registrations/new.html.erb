@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Create Account") %></h2>
-<% if @user.errors.any? %>
+<% if resource.errors.any? %>
   <div class="error">
      <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
      <ul>
-        <% @user.errors.full_messages.each do |msg| %>
+        <% resource.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
      </ul>
@@ -14,14 +14,14 @@
 
 <!--main content-->
 <!-- TODO add ajax -->
-<%= form_for @user, :html => {:id => "user_registration_form"} do |f| %>
-  <%= hidden_field_tag :invitation_token, @user.invitation_token %>
- 
+<%= form_for resource, as: :user_registration, url: registration_path(resource_name), :html => {:id => "user_registration_form"} do |f| %>
+  <%= hidden_field_tag :invitation_token, resource.invitation_token %>
+
   <fieldset>
     <legend><%= ts("User Details") %></legend>
     <%= render :partial => "passwd", :locals => {:f => f} %>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts("Legal Agreements") %></legend>
     <%= render :partial => "legal", :locals => {:f => f} %>

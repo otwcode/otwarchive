@@ -132,11 +132,6 @@ I'd like to comment on a tag'
     # check that the links in the email go where they should; this is wonky and I don't know why
     # I'm having the tests only check the html based email for now
     When I follow "Go to the thread starting from this comment" in the email
-    # the session is lost for some reason and I have to log in! I'll log in as dizmo though
-      And I fill in "User name:" with "dizmo"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
-    # I get redirected to the tag comments page
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
       And I log out
