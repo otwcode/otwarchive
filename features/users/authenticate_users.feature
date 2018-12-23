@@ -105,7 +105,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed"
+    Then I should see "Your password has been changed successfully."
       And I should see "Hi, sam"
 
   Scenario: Forgot password, with expired password token

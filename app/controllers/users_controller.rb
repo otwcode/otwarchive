@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     @user.password_confirmation = params[:password_confirmation]
 
     if @user.save
-      flash[:notice] = ts('Your password has been changed')
+      flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
       @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
 
       redirect_to(user_profile_path(@user)) && return
