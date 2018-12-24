@@ -37,14 +37,6 @@ When /^I enter an incorrect password$/ do
   click_button("Change Email")
 end
 
-When /^I enter a temporary password for user (.*)$/ do |login|
-  click_link("Change Email")
-  fill_in("new_email", with: "valid2@archiveofourown.org")
-  fill_in("email_confirmation", with: "valid2@archiveofourown.org")
-  user = User.find_by(login: login)
-  fill_in("password_check", with: user.confirmation_token)
-  click_button("Change Email")
-end
 
 When /^I change my email$/ do
   click_link("Change Email")

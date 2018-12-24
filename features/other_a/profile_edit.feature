@@ -62,7 +62,7 @@ Scenario: Changing email address and viewing
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
 
-Scenario: Changing email address after requesting temporary password
+Scenario: Changing email address after requesting password reset
 
   When I am logged out
     And I follow "Forgot password?"
@@ -80,21 +80,6 @@ Scenario: Changing email address after requesting temporary password
     And the email should not contain "translation missing"
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
-
-Scenario: Changing email address after requesting temporary password by entering temporary password
-
-  When I am logged out
-    And I am on the home page
-    And I follow "Forgot password?"
-    And I fill in "Email address or user name:" with "editname"
-    And I press "Reset Password"
-  Then 1 email should be delivered to "bar@ao3.org"
-  When all emails have been delivered
-    And I am logged in as "editname"
-    And I want to edit my profile
-    And I enter a temporary password for user editname
-  Then I should see "Your password was incorrect"
-    And 0 emails should be delivered
 
 Scenario: Changing email address -- can't be the same as another user's
 
