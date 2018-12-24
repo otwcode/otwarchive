@@ -31,7 +31,7 @@ class InviteRequest < ApplicationRecord
   end
 
   def proposed_fill_date
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    admin_settings = AdminSetting.current
     number_of_rounds = (self.position.to_f/admin_settings.invite_from_queue_number.to_f).ceil - 1
     proposed_date = admin_settings.invite_from_queue_at.to_date + (admin_settings.invite_from_queue_frequency * number_of_rounds).days
     Date.today > proposed_date ? Date.today : proposed_date
@@ -47,7 +47,7 @@ class InviteRequest < ApplicationRecord
 
   #Invite a specified number of users
   def self.invite
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    admin_settings = AdminSetting.current
     self.order(:position).limit(admin_settings.invite_from_queue_number).each do |request|
       request.invite_and_remove
     end

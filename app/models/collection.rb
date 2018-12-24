@@ -335,6 +335,29 @@ class Collection < ApplicationRecord
     count
   end
 
+  # Return the count of all bookmarkable items (works, series, external works)
+  # that are in this collection (or any of its children) and visible to
+  # the current user. Excludes bookmarks of deleted works/series.
+  def all_bookmarked_items_count
+    # The set of all bookmarks in this collection and its children.
+    # Note that "approved_by_collection" forces the bookmarks to be approved
+    # both by the collection AND by the user.
+    bookmarks = Bookmark.is_public.joins(:collection_items).
+                merge(CollectionItem.approved_by_collection).
+                where(collection_items: { collection_id: children.ids + [id] })
+
+    logged_in = User.current_user.present?
+
+    [
+      logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
+      logged_in ? Series.visible_to_registered_user : Series.visible_to_all,
+      ExternalWork.visible_to_all
+    ].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.
+        count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
   def all_fandoms
     # We want filterable fandoms, but not inherited metatags:
     Fandom.for_collections([self] + children).

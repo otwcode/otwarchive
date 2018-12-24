@@ -47,8 +47,8 @@ Feature: Admin Actions to manage users
 
   Scenario: A admin can send an activation email for a user account
     Given the following users exist
-      | login  | password  | email                | activation_code |
-      | torres | something | torres@starfleet.org | fake_code       |
+      | login  | password  | email                | confirmation_token |
+      | torres | something | torres@starfleet.org | fake_code          |
       And I am logged in as an admin
       And all emails have been delivered
     When I go to the abuse administration page for "torres"

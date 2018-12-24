@@ -36,7 +36,7 @@ Given /^a set of alternate universe works for searching$/ do
   # syn (AU)
   FactoryGirl.create(:posted_work, character_string: "AU Character")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of Steve Rogers works for searching$/ do
@@ -71,7 +71,7 @@ Given /^a set of Steve Rogers works for searching$/ do
   FactoryGirl.create(:posted_work,
                      summary: "Bucky thinks about his pal Steve Rogers.")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of Kirk\/Spock works for searching$/ do
@@ -93,7 +93,7 @@ Given /^a set of Kirk\/Spock works for searching$/ do
                      relationship_string: "Spirk",
                      category_string: "F/M")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of Spock\/Uhura works for searching$/ do
@@ -114,7 +114,7 @@ Given /^a set of Spock\/Uhura works for searching$/ do
                        relationship_string: relationship)
   end
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with various categories for searching$/ do
@@ -128,7 +128,7 @@ Given /^a set of works with various categories for searching$/ do
   # Create one work using multiple categories
   FactoryGirl.create(:posted_work, category_string: "M/M, F/F")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with comments for searching$/ do
@@ -146,7 +146,7 @@ Given /^a set of works with comments for searching$/ do
   step %{the work "Work 7" with 10 comments setup}
 
   step %{the statistics_tasks rake task is run}
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of Star Trek works for searching$/ do
@@ -168,7 +168,7 @@ Given /^a set of Star Trek works for searching$/ do
   step %{"Star Trek: The Original Series" is a metatag of the fandom "Star Trek: The Original Series (Movies)"}
 
   # Create a work using each of the related fandoms
-  ["Star Trek", "Star Trek: The Original Series", 
+  ["Star Trek", "Star Trek: The Original Series",
    "Star Trek: The Original Series (Movies)", "ST: TOS"].each do |fandom|
     FactoryGirl.create(:posted_work, fandom_string: fandom)
   end
@@ -183,7 +183,7 @@ Given /^a set of Star Trek works for searching$/ do
                      fandom_string: "Battlestar Galactica (2003)",
                      freeform_string: "Star Trek Fusion")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with bookmarks for searching$/ do
@@ -209,7 +209,7 @@ Given /^a set of works with bookmarks for searching$/ do
     ActionController::Base.new.expire_fragment("#{work.cache_key}/stats")
   end
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with various ratings for searching$/ do
@@ -229,7 +229,7 @@ Given /^a set of works with various ratings for searching$/ do
                      rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
                      summary: "Nothing explicit here.")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with various warnings for searching$/ do
@@ -253,7 +253,7 @@ Given /^a set of works with various warnings for searching$/ do
                      warning_string: "#{ArchiveConfig.WARNING_DEFAULT_TAG_NAME},
                                      #{ArchiveConfig.WARNING_NONE_TAG_NAME}")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 Given /^a set of works with various access levels for searching$/ do
@@ -271,7 +271,7 @@ Given /^a set of works with various access levels for searching$/ do
                      hidden_by_admin: true,
                      title: "Work Hidden by Admin")
 
-  step %{the work indexes are updated}
+  step %{all indexing jobs have been run}
 end
 
 ### WHEN
@@ -310,9 +310,9 @@ When /^I exclude the tags? "([^"]*)"(?: and "([^"]*)")? by filter_id$/ do |tag1,
   filter_id1 = Tag.find_by_name(tag1).filter_taggings.first.filter_id
   filter_id2 = Tag.find_by_name(tag2).filter_taggings.first.filter_id if tag2
   if tag2
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1} -filter_ids: #{filter_id2}")
   else
-    fill_in("work_search_query", with: "-filter_ids: #{filter_id1}")
+    fill_in('work_search_query', with: "-filter_ids: #{filter_id1}")
   end
 end
 
@@ -377,7 +377,7 @@ Then /^the results should contain a ([^"]*) mentioning "([^"]*)"$/ do |item, ter
                "ol.work .tags .#{item.pluralize}"
              end
   expect(page).to have_css(selector, text: term)
-end 
+end
 
 Then /^the results should not contain a ([^"]*) mentioning "([^"]*)"$/ do |item, term|
   selector = if item == "fandom"
@@ -388,7 +388,7 @@ Then /^the results should not contain a ([^"]*) mentioning "([^"]*)"$/ do |item,
                "ol.work .tags .#{item.pluralize}"
              end
   expect(page).not_to have_css(selector, text: term)
-end 
+end
 
 Then /^the ([\d]+)(?:st|nd|rd|th) result should contain "([^"]*)"$/ do |n, text|
   selector = "ol.work > li:nth-of-type(#{n})"

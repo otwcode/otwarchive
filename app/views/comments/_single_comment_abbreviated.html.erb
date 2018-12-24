@@ -26,7 +26,7 @@
       <span class="visitor icon"><!-- visitor icon holder --></span>
     <% end %>
   </div>
-  <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
+  <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
   <% unless single_comment.edited_at.blank? %>
     <p class="edited datetime">
       <%= ts('Last Edited') %> <%= time_in_zone(single_comment.edited_at) %>

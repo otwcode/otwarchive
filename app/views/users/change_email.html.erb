@@ -19,10 +19,13 @@
     <dt><%= label_tag :email_confirmation, ts("Confirm New Email") %></dt>
     <dd><%= email_field_tag :email_confirmation %></dd>
 
-    <% unless @user.recently_reset? %>
-      <dt><%= label_tag :password_check, ts("Password") %></dt>
-      <dd><%= password_field_tag :password_check%></dd>
-    <% end %>
+    <dt><%= label_tag :password_check, ts("Password") %></dt>
+    <dd>
+      <%= password_field_tag :password_check, nil, "aria-describedby" => "password-field-description" %>
+      <p class="footnote" id="password-field-description">
+        <%= ts("This must be your current password, not a reset password that was emailed to you.") %>
+      </p>
+    </dd>
 
     <dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
     <dd class="submit actions">

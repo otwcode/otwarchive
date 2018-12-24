@@ -1,38 +1,32 @@
 class PeopleController < ApplicationController
 
   before_action :load_collection
-  
-  def do_search
-    options = { query: params[:query], page: params[:page] || 1 }
-    if @collection
-      options[:collection_id] = @collection.id
-    end
-    @people = PseudSearch.search(options)
-    # TODO: move to search index
-    @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-    @work_counts = Pseud.work_counts_for_pseuds(@people)
-  end
 
   def search
-    if params[:query].present?
-      do_search
+    if people_search_params.blank?
+      @search = PseudSearchForm.new({})
+    else
+      options = people_search_params.merge(page: params[:page])
+      @search = PseudSearchForm.new(options)
+      @people = @search.search_results
+      flash_max_search_results_notice(@people)
     end
   end
 
   def index
-    @people = []
-    if params[:query].present?
-      do_search
-    else
-      @random = true
-      if @collection
-        @people = @collection.participants.order("RAND()").limit(10)
-      else
-        @people = Pseud.order("RAND()").limit(10)
-      end
+    if @collection.present?
+      @people = @collection.participants.order(:name).page(params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-      @work_counts = Pseud.work_counts_for_pseuds(@people)      
+      @work_counts = Pseud.work_counts_for_pseuds(@people)
+    else
+      redirect_to search_people_path
     end
   end
 
+  protected
+
+  def people_search_params
+    return {} unless params[:people_search].present?
+    params[:people_search].permit!
+  end
 end

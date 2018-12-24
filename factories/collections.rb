@@ -1,7 +1,6 @@
-require 'faker'
+require "faker"
 
 FactoryGirl.define do
-
   sequence(:collection_name) do |n|
     "basic_collection_#{n}"
   end
@@ -24,14 +23,22 @@ FactoryGirl.define do
   end
 
   factory :collection do |f|
-    name {generate(:collection_name)}
-    title {generate(:collection_title)}
+    name { generate(:collection_name) }
+    title { generate(:collection_title) }
 
     after(:build) do |collection|
-      collection.collection_participants.build(pseud_id: FactoryGirl.create(:pseud).id, participant_role: "Owner")
+      collection.collection_participants.build(pseud_id: create(:pseud).id, participant_role: "Owner")
+    end
+
+    factory :anonymous_collection do
+      association :collection_preference, anonymous: true
+    end
+
+    factory :unrevealed_collection do
+      association :collection_preference, unrevealed: true
     end
   end
-  
+
   factory :collection_item do
     item_type "Work"
   end
