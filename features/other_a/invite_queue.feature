@@ -40,8 +40,8 @@ Feature: Invite queue management
     Given an invitation request for "invitee@example.org"
       And I am logged in as an admin
     When I go to the manage invite queue page
-      And I follow "Delete"
-    Then I should see "Request was removed from the queue."
+      And I press "Delete"
+    Then I should see "Request for invitee@example.org was removed from the queue."
       And I should be on the manage invite queue page
 
   Scenario: Visitors can join the queue and check status when invitations are required and the queue is enabled
@@ -61,7 +61,7 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -123,10 +123,10 @@ Feature: Invite queue management
     When I click the first link in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
-        | user_login                 | newuser                  |
-        | user_email                 | test@archiveofourown.org |
-        | user_password              | password1                |
-        | user_password_confirmation | password1                |
+        | user_registration_login                 | newuser                  |
+        | user_registration_email                 | test@archiveofourown.org |
+        | user_registration_password              | password1                |
+        | user_registration_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
     Then I should see "Account Created!"

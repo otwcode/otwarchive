@@ -16,6 +16,11 @@ class StatCounter < ApplicationRecord
     IndexQueue.enqueue(self, :stats)
   end
 
+  # Specify the indexer that should be used for this class
+  def indexers
+    [StatCounterIndexer]
+  end
+
   ###############################################
   ##### MOVING DATA INTO THE DATABASE
   ###############################################

@@ -185,45 +185,6 @@ class ChallengeSignup < ApplicationRecord
     end
   end
 
-  ### Code for generating signup summaries
-
-  def self.generate_summary_tags(collection)
-    tag_type = collection.challenge.topmost_tag_type
-    summary_tags = ChallengeSignupSummary.new(collection).summary
-
-    return [tag_type, summary_tags]
-  end
-
-  # Write the summary to a file that will then be displayed
-  # takes about 12 minutes for yuletide2010 on beta, about 25 minutes on stage
-  def self.generate_summary(collection)
-    Resque.enqueue(ChallengeSignup, collection.id)
-  end
-  @queue = :collection
-  def self.perform(collection_id)
-    self.generate_summary_in_background(Collection.find(collection_id))
-  end
-  def self.generate_summary_in_background(collection)
-    tag_type, summary_tags = ChallengeSignup.generate_summary_tags(collection)
-    view = ActionView::Base.new(ActionController::Base.view_paths, {})
-    view.class_eval do
-      include ApplicationHelper
-    end
-    content = view.render(partial: "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_signups_summary",
-                          locals: {challenge_collection: collection, tag_type: tag_type, summary_tags: summary_tags, generated_live: false})
-    summary_dir = ChallengeSignup.summary_dir
-    FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
-    File.open(ChallengeSignup.summary_file(collection), "w:UTF-8") {|f| f.write(content)}
-  end
-
-  def self.summary_dir
-    Rails.public_path.join("static/challenge_signup_summaries").to_s
-  end
-
-  def self.summary_file(collection)
-    "#{ChallengeSignup.summary_dir}/#{collection.name}_summary_content.html"
-  end
-
   # sort alphabetically
   include Comparable
   def <=>(other)

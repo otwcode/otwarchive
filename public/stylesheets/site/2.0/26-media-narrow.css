@@ -103,6 +103,7 @@ body .narrow-shown {
 }
 
 /* once we remove the meta class from the work form, we can remove the form .meta selectors here */
+
 .filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox {
   width: 100%;
   max-width: 100%;

@@ -5,6 +5,8 @@ module Bookmarkable
       has_many :bookmarks, as: :bookmarkable
       has_many :user_tags, through: :bookmarks, source: :tags
       after_update :update_bookmarks_index
+      after_update :update_bookmarker_pseuds_index
+      after_destroy :update_bookmarker_pseuds_index
     end
   end
 
@@ -18,4 +20,9 @@ module Bookmarkable
     RedisSearchIndexQueue.queue_bookmarks(self.bookmarks.pluck :id)
   end
 
+  def update_bookmarker_pseuds_index
+    return unless respond_to?(:should_reindex_pseuds?)
+    return unless should_reindex_pseuds?
+    IndexQueue.enqueue_ids(Pseud, bookmarks.pluck(:pseud_id), :background)
+  end
 end

@@ -21,9 +21,11 @@
   </noscript>
 <% end %>
 
-
-<%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection, @challenge_signup))) do |signup_form| %>
-  <p class="required notice"><%= ts('* Required information') %></p>
+<%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
+  <% if @collection.challenge_type == "GiftExchange" %>
+      <p class="notes notice"><%= ts("Challenge maintainers will have access to the email address associated with your AO3 account for the purpose of communicating with you about the challenge.") %></p>
+  <% end %>
+  <p class="required notice"><%= ts("* Required information") %></p>
   <% unless @challenge_signup.errors.empty? %>
     <div class="error">
       <h4 class="heading"><%= ts("There were some problems with this submission. Please correct the mistakes below.") %></h4>

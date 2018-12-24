@@ -16,12 +16,12 @@ FactoryGirl.define do
   end
 
   factory :user do
-    login {generate(:login)}
+    login { generate(:login) }
     password "password"
     age_over_13 '1'
     terms_of_service '1'
     password_confirmation { |u| u.password }
-    email {generate(:email)}
+    email { generate(:email) }
 
 
     factory :duplicate_user do
@@ -36,6 +36,10 @@ FactoryGirl.define do
 
     factory :opendoors_user do
       roles { [create(:role, name: "opendoors")] }
+    end
+    
+    factory :archivist do
+      roles { [ Role.find_or_create_by(name: "archivist")] }
     end
   end
 end

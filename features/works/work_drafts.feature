@@ -7,7 +7,7 @@ Feature: Work Drafts
   When the draft "scotts draft"
     And I press "Cancel"
   Then I should see "The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive."
-  
+
   Scenario: Creating a work draft, editing it, and saving the changes without posting or previewing and then double check that it is saved and I didn't get the success message erroneously
   Given basic tags
     And I am logged in as "persnickety" with password "editingisfun"
@@ -17,7 +17,7 @@ Feature: Work Drafts
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "MASH (TV)"
     And I fill in "Work Title" with "Draft Dodging"
-    And I fill in "content" with "Klinger lay under his porch."  
+    And I fill in "content" with "Klinger lay under his porch."
     And I press "Preview"
   Then I should see "Draft was successfully created. It will be automatically deleted on"
   When I press "Edit"
@@ -53,18 +53,18 @@ Feature: Work Drafts
     When the purge_old_drafts rake task is run
       And I reload the page
     Then I should see "Drafts (1)"
-    
+
   Scenario: Drafts cannot be found by search
   Given I am logged in as "drafter" with password "something"
-    And the draft "draft to post" 
-  Given the work indexes are updated
-    When I fill in "site_search" with "draft"
-      And I press "Search"
-    Then I should see "No results found"
+    And the draft "draft to post"
+  Given all indexing jobs have been run
+  When I fill in "site_search" with "draft"
+    And I press "Search"
+  Then I should see "No results found"
 
   Scenario: Posting drafts from drafts page
     Given I am logged in as "drafter" with password "something"
-      And the draft "draft to post" 
+      And the draft "draft to post"
     When I am on drafter's works page
     Then I should see "Drafts (1)"
     When I follow "Drafts (1)"
@@ -75,10 +75,10 @@ Feature: Work Drafts
     Then I should see "draft to post"
       And I should see "drafter"
       And I should not see "Preview"
-      
+
     Scenario: Deleting drafts from drafts page
       Given I am logged in as "drafter" with password "something"
-        And the draft "draft to delete" 
+        And the draft "draft to delete"
       When I am on drafter's works page
       Then I should see "Drafts (1)"
       When I follow "Drafts (1)"
@@ -90,7 +90,7 @@ Feature: Work Drafts
         And I should not see "Orphan Work Instead"
       When I press "Yes, Delete Draft"
       Then I should see "Your work draft to delete was deleted"
-        
+
     Scenario: Saving changes to an existing draft without posting and then double check that it is saved and I didn't get the success message erroneously
       Given I am logged in as "drafty" with password "breezeinhere"
         And the draft "Windbag"

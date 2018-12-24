@@ -1,49 +1,22 @@
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
-
-<div class="pseud">
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @random %><%= ts("A Random Selection of ") %><% end %>
-  <% if @collection %>
-    <%= ts("Participants in %{collection}", :collection => @collection.title) %>
-  <% else %>
-    <%= ts("People in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
-  <% end %>
+  <%= ts("Participants in %{collection}", :collection => @collection.title) %>
 </h2>
 <!--/descriptions-->
-
-<!--Subnavigation, sorting and actions-->
-<ul class="navigation actions" role="navigation">
-  <li class="search" role="search">
-    <%= form_tag (@collection ? collection_people_path(@collection) : people_path), :class => "simple search", :method => :get do |form| %>
-      <fieldset>
-	      <%= text_field_tag :query, params[:query], :title => "search" %>
-        <%= submit_tag "Search" %>
-      </fieldset>
-    <% end %>
-  </li>
-  <% unless @collection %>
-    <li><%= link_to "Advanced People Search (Alpha)", search_people_path %></li>
-  <% end %>
-</ul>
 
 <% if @people.empty? %>
   <p><%= ts("No matching people found.") %></p>
 <% else %>
-  <% if @query %>
-    <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
-  <% end %>
-  
-  <%= @random ? "" : will_paginate(@people) %>
+  <%= will_paginate(@people) %>
   <!--main content-->
   <h3 class="landmark heading">Listing People</h3>
-	<ul class="pseud index group">
+  <ul class="pseud index group">
     <% for person in @people %>
       <% unless person.nil? %>
         <%= render 'people/author_blurb', :author => person %>
       <% end %>
     <% end %>
   </ul>
-  <%= @random ? "" : will_paginate(@people) %>
+  <%= will_paginate(@people) %>
 <% end %>
-</div>
