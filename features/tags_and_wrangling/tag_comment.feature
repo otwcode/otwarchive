@@ -93,12 +93,12 @@ I'd like to comment on a tag'
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
 
     Given the following activated tag wranglers exist
-        | login       | password      | email             |
-        | dizmo       | wrangulator   | dizmo@example.org |
-        | Enigel      | wrangulator   | enigel@example.org|
-        | Cesy        | wrangulator   | cesy@example.org|
-      And a fandom exists with name: "Eroica", canonical: true
-      And a fandom exists with name: "Doctor Who", canonical: true
+        | login       | password      | email              |
+        | dizmo       | wrangulator   | dizmo@example.org  |
+        | Enigel      | wrangulator   | enigel@example.org |
+        | Cesy        | wrangulator   | cesy@example.org   |
+      And a canonical fandom "Eroica"
+      And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Eroica"
       And the tag wrangler "Cesy" with password "wrangulator" is wrangler of "Doctor Who"
       And the tag wrangler "dizmo" with password "wrangulator" is wrangler of "Doctor Who"
@@ -136,17 +136,17 @@ I'd like to comment on a tag'
       And I should see "really clever stuff"
       And I log out
     When I follow "Read all comments on Eroica" in the email
-      And I fill in "User name:" with "Cesy"
+      And I fill in "User name or email:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-     Then I should see "Reading Comments on Eroica"
-     And I should see "really clever stuff"
-     And I log out
+    Then I should see "Reading Comments on Eroica"
+      And I should see "really clever stuff"
+      And I log out
     When I follow "Reply to this comment" in the email
-      And I fill in "User name:" with "Enigel"
+      And I fill in "User name or email:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-     Then I should see "Reading Comments on Eroica"
+    Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
       And all emails have been delivered
       And I am logged in as "Enigel" with password "wrangulator"
