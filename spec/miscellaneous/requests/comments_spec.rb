@@ -100,8 +100,8 @@ describe "Comments", type: :request do
       @user = create(:user)
       visit new_user_session_path
       within("div#small_login") do
-        fill_in "User name:",with: "#{@user.login}" ,  exact: true
-        fill_in "Password", with: "password"
+        fill_in "User name or email:", with: "#{@user.login}", exact: true
+        fill_in "Password:", with: "password"
         check "Remember Me"
         click_button "Log In"
       end
