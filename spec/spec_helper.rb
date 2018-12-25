@@ -38,8 +38,10 @@ RSpec.configure do |config|
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Capybara::DSL
+  config.include TaskExampleGroup, type: :task
 
   config.before :suite do
+    Rails.application.load_tasks
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
   end
@@ -80,6 +82,9 @@ RSpec.configure do |config|
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
+  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/lib/tasks/}) do |metadata|
+    metadata[:type] = :task
+  end
 
   # Set default formatter to print out the description of each test as it runs
   config.color = true

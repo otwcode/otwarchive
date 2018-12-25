@@ -4,7 +4,7 @@
   </dt>
   <dd>
     <%= f.text_field :login, "aria-describedby" => "login-field-description" %>
-    <%= live_validation_for_field('user_login', 
+    <%= live_validation_for_field('user_registration_login',
         maximum_length: ArchiveConfig.LOGIN_LENGTH_MAX,
         minimum_length: ArchiveConfig.LOGIN_LENGTH_MIN,
         failureMessage: ts("You need a user name! (At least %{minimum} letters long, please.)",
@@ -20,7 +20,7 @@
   </dt>
   <dd>
     <%= f.password_field :password, "aria-describedby" => "password-field-description" %>
-    <%= live_validation_for_field('user_password',
+    <%= live_validation_for_field('user_registration_password',
           minimum_length: ArchiveConfig.PASSWORD_LENGTH_MIN,
           maximum_length: ArchiveConfig.PASSWORD_LENGTH_MAX,
           failureMessage: ts("Please enter a password! (At least %{minimum} letters long, please.)",
@@ -34,7 +34,7 @@
   <dt><%= f.label :password_confirmation, ts("Confirm password") %></dt>
   <dd>
     <%= f.password_field :password_confirmation %>
-    <%= live_validation_for_field('user_password_confirmation',
+    <%= live_validation_for_field('user_registration_password_confirmation',
           minimum_length: ArchiveConfig.PASSWORD_LENGTH_MIN,
           maximum_length: ArchiveConfig.PASSWORD_LENGTH_MAX,
           failureMessage: ts("Please enter the same password in both fields.")) %>
