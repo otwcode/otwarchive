@@ -49,8 +49,8 @@ Feature: User Authentication
       And I should see "Password confirmation doesn't match confirmation"
 
     # and I should be able to change the password
-    When I fill in "New password" with "newpass"
-      And I fill in "Confirm new password" with "newpass"
+    When I fill in "New password" with "new<pass"
+      And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
     Then I should see "Your password has been changed successfully. You are now signed in."
       And I should see "Hi, sam"
@@ -76,7 +76,7 @@ Feature: User Authentication
     When I am logged out
       And I am on the homepage
       And I fill in "User name or email:" with "sam"
-      And I fill in "Password:" with "newpass"
+      And I fill in "Password:" with "new<pass"
       And I press "Log In"
     Then I should see "Hi, sam"
 

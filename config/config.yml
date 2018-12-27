@@ -247,6 +247,9 @@ NONZERO_INTEGER_PARAMETERS:
   page: 1
   per_page: 25
 
+# These fields are encrypted and should not have characters escaped or be treated as HTML
+FIELDS_WITHOUT_SANITIZATION: ["password", "password_confirmation"]
+
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
 
