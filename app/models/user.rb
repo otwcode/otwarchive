@@ -250,8 +250,10 @@ class User < ApplicationRecord
     relation = self.where(conditions)
 
     if login.present?
-      relation = relation.where(["lower(login) = :value OR lower(email) = :value",
-                                 value: login.downcase])
+      # MySql is case insensitve with utf8mb4 so we don't have to force to a 
+      # lowecase value
+      relation = relation.where(["login = :value OR email = :value",
+                                 value: login])
     end
 
     relation.first
