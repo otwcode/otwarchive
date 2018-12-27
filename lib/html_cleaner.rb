@@ -135,10 +135,7 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
-    # Don't sanitize password and password confirmation, which are encrypted.
-    # If we sanitize these fields, passwords with angle brackets get escaped
-    # and don't work for logging in.
-    return "#{value}" if field.to_s == 'password' || field.to_s == 'password_confirmation'
+    return "#{value}" if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
