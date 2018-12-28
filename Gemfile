@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+ruby '2.3.4'
 
 gem 'test-unit', '~> 3.2'
 
@@ -53,7 +53,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.8.3'
+gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
@@ -78,7 +78,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin

@@ -54,7 +54,7 @@ module NavigationHelpers
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
-      new_user_path
+      signup_path
     when /^invite requests page$/i
       invite_requests_path
     when /^the manage invite queue page$/i
@@ -116,14 +116,14 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
       user_pseud_path(user_id: $1, id: $2)
     when /^(.*?)(?:'s)? user url$/i
-      user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      user_url(id: $1)
     when /^([^ ]*?)(?:'s)? works page$/i
       step %{all indexing jobs have been run}
       user_works_path(user_id: $1)
     when /^the "(.*)" work page/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^the work page with title (.*)/
-      work_path(Work.find_by(title: $1)).sub("http://www.example.com", "//")
+      work_path(Work.find_by(title: $1))
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
@@ -177,7 +177,7 @@ module NavigationHelpers
     when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
       collection_participants_path(Collection.find_by(title: $1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
-      collection_url(Collection.find_by(title: $1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      collection_url(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
@@ -190,7 +190,7 @@ module NavigationHelpers
       tag_bookmarks_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
       step %{all indexing jobs have been run}
-      tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      tag_works_url(Tag.find_by_name($1))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
@@ -199,9 +199,11 @@ module NavigationHelpers
       collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
       step %{all indexing jobs have been run}
-      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
+    when /^the work comments? page for "(.*?)"$/i
+      work_comments_path(Work.find_by(title: $1), show_comments: true)
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i

@@ -335,13 +335,6 @@ class Work < ApplicationRecord
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
-  def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).pluck(:id)
-    Chapter.where(work_id: draft_ids).order("position DESC").map(&:destroy)
-    Work.where(id: draft_ids).map(&:destroy)
-    draft_ids.size
-  end
-
   ########################################################################
   # RESQUE
   ########################################################################
@@ -675,6 +668,10 @@ class Work < ApplicationRecord
   def series_attributes=(attributes)
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
+      if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
+        errors.add(:base, ts("You can't add a work to that series."))
+        return
+      end
       self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?

@@ -19,7 +19,6 @@ describe TagsController do
 
       it "should show those freeforms" do
         get :wrangle, params: { id: @fandom.name, show: 'freeforms', status: 'unwrangled' }
-
         expect(assigns(:tags)).to include(@freeform1)
       end
     end
@@ -122,8 +121,7 @@ describe TagsController do
 
       it "Only an admin can reindex a tag" do
         get :reindex, params: { id: @tag.name }
-        expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq "Please log in as admin"
+        it_redirects_to_with_error(root_path, "Please log in as admin")
       end
     end
   end
@@ -132,20 +130,20 @@ describe TagsController do
     it "You can only get a feed on Fandom, Character and Relationships" do
       @tag = FactoryGirl.create(:banned, canonical: false)
       get :feed, params: { id: @tag.id, format: :atom }
-      expect(response).to redirect_to(tag_works_path(tag_id: @tag.name))
+      it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
   end
 
   describe "edit" do
-    context "when editing a tag" do
+    context "when editing a banned tag" do
       before do
         @tag = FactoryGirl.create(:banned)
       end
 
-      it "Only an admin can edit a banned tag" do
+      it "redirects with an error when not an admin" do
         get :edit, params: { id: @tag.name }
-        expect(flash[:error]).to eq "Please log in as admin"
-        expect(response).to redirect_to(tag_wranglings_path)
+        it_redirects_to_with_error(tag_wranglings_path,
+                                   "Please log in as admin")
       end
     end
   end
@@ -161,7 +159,7 @@ describe TagsController do
         tag.save
 
         put :update, params: { id: tag, tag: { fix_taggings_count: true } }
-        it_redirects_to_with_notice edit_tag_path(tag), "Tag was updated."
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
 
         tag.reload
         expect(tag.taggings_count).to eq(0)
@@ -169,11 +167,11 @@ describe TagsController do
 
       it "changes just the tag type" do
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
-        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
 
         put :update, params: { id: unsorted_tag, tag: { type: "UnsortedTag" }, commit: "Save changes" }
-        it_redirects_to_with_notice edit_tag_path(unsorted_tag), "Tag was updated."
+        it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
       end
@@ -187,7 +185,8 @@ describe TagsController do
         put :update, params: { id: tag, tag: { canonical: false }, commit: "Wrangle" }
         tag.reload
         expect(tag.canonical?).to be_falsy
-        it_redirects_to wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC")
+        it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
+                                    "Tag was updated.")
       end
     end
 

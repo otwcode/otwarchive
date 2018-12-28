@@ -34,7 +34,7 @@
       <p><%= ts("You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!") %></p>
       <p class="actions"><%= link_to ts("Get Invited!"), invite_requests_path %></p>
     <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-      <p class="actions"><%= link_to ts("Create an Account!"), new_user_path %></p>
+      <p class="actions"><%= link_to ts("Create an Account!"), signup_path %></p>
     <% end %>
   </div>
 </div>
