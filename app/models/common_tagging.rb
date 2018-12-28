@@ -58,12 +58,7 @@ class CommonTagging < ApplicationRecord
   # Go through all CommonTaggings and destroy the invalid ones.
   def self.destroy_invalid
     includes(:common_tag, :filterable).find_each do |ct|
-      # Don't use valid? because the uniqueness check triggers one query per row.
-      # Just call the new checks, and check for the existence of errors (or
-      # missing common_tag or filterable).
-      ct.check_canonical_filterable
-      ct.check_compatible_types
-      valid = ct.errors.blank? && ct.common_tag && ct.filterable
+      valid = ct.valid?
 
       # Let callers do something on each iteration.
       yield ct, valid if block_given?

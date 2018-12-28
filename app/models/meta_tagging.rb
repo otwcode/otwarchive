@@ -70,11 +70,7 @@ class MetaTagging < ApplicationRecord
   # Go through all MetaTaggings and destroy the invalid ones.
   def self.destroy_invalid
     includes(:sub_tag, meta_tag: :meta_tags).find_each do |mt|
-      # Don't use valid? because the uniqueness check triggers one query per row.
-      # Just call the check manually, and check for the existence of errors (or
-      # missing sub_tag or meta_tag).
-      mt.meta_tag_validation
-      valid = mt.errors.blank? && mt.sub_tag && mt.meta_tag
+      valid = mt.valid?
 
       # Let callers do something on each iteration.
       yield mt, valid if block_given?
