@@ -197,8 +197,6 @@ describe TagsController do
     end
 
     describe "adding a new associated tag" do
-      render_views # make sure we can view the error messages
-
       let(:tag) { create(:character, canonical: true) }
       let(:associated) { nil } # to be overridden by the examples
       let(:field) { "#{associated.type.downcase}_string" }
@@ -225,8 +223,8 @@ describe TagsController do
           destroyed_fandom
         end
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Cannot add association to '#{associated.name}': " \
             "Common tag does not exist."
           )
@@ -239,8 +237,8 @@ describe TagsController do
         let(:associated) { create(:fandom, canonical: true) }
         let(:field) { "relationship_string" }
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Cannot add association to '#{associated.name}': " \
             "#{associated.type} added in Relationship field."
           )
@@ -257,8 +255,8 @@ describe TagsController do
         # edited, and then the first wrangler submits the form.
         let(:associated) { create(:freeform, canonical: true) }
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Cannot add association to '#{associated.name}': A tag of type " \
             "#{tag.type} cannot have a child of type #{associated.type}."
           )
@@ -304,8 +302,8 @@ describe TagsController do
         context "when the tag is a non-canonical parent" do
           let(:associated) { create(:fandom, canonical: false) }
 
-          it "shows an error" do
-            expect(response.body).to include(
+          it "has a useful error" do
+            expect(assigns[:tag].errors.full_messages).to include(
               "Cannot add association to '#{associated.name}': " \
               "Parent tag is not canonical."
             )
@@ -317,8 +315,6 @@ describe TagsController do
     end
 
     describe "adding a new metatag" do
-      render_views # make sure we can view the error messages
-
       let(:tag) { create(:freeform, canonical: true) }
       let(:meta) { nil } # to be overridden by the examples
 
@@ -339,8 +335,8 @@ describe TagsController do
       context "when the tag is not canonical" do
         let(:meta) { create(:freeform, canonical: false) }
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': " \
             "Meta taggings can only exist between canonical tags."
           )
@@ -352,8 +348,8 @@ describe TagsController do
       context "when the tag is the wrong type" do
         let(:meta) { create(:character, canonical: true) }
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': " \
             "Meta taggings can only exist between two tags of the same type."
           )
@@ -365,8 +361,8 @@ describe TagsController do
       context "when the metatag is itself" do
         let(:meta) { tag }
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': " \
             "A tag can't be its own meta tag."
           )
@@ -383,8 +379,8 @@ describe TagsController do
           sub.reload
         end
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': " \
             "A meta tag can't be its own grandpa."
           )
@@ -405,8 +401,8 @@ describe TagsController do
           grandparent
         end
 
-        it "shows an error" do
-          expect(response.body).to include(
+        it "has a useful error" do
+          expect(assigns[:tag].errors.full_messages).to include(
             "Invalid meta tag '#{meta.name}': Meta tag has already been " \
             "added (possibly as an indirect meta tag)."
           )
