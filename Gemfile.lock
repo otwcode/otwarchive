@@ -90,9 +90,9 @@ GEM
     aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
     builder (3.2.3)
-    bullet (5.6.1)
+    bullet (5.9.0)
       activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.10.0)
+      uniform_notifier (~> 1.11)
     bundler-audit (0.5.0)
       bundler (~> 1.2)
       thor (~> 0.18)
@@ -433,7 +433,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     unidecoder (1.1.2)
-    uniform_notifier (1.10.0)
+    uniform_notifier (1.12.1)
     url (0.3.2)
     vcr (3.0.3)
     vegas (0.1.11)
@@ -472,7 +472,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk
   bcrypt
-  bullet (~> 5.6.0)
+  bullet (>= 5.7.3)
   bundler
   bundler-audit
   capistrano-gitflow_version (>= 0.0.3)

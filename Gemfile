@@ -174,7 +174,7 @@ group :development do
 end
 
 group :test, :development, :staging do
-  gem 'bullet', '~> 5.6.0'
+  gem 'bullet', '>= 5.7.3'
 end
 
 # Deploy with Capistrano
