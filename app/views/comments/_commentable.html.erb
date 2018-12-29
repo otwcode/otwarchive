@@ -98,10 +98,10 @@
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
       <% @comments = commentable.comments.reviewed.page(params[:page]) %>
-      <%= will_paginate @comments %>
+      <%= will_paginate @comments, params: { anchor: :comments } %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->
-      <%= will_paginate @comments %>
+      <%= will_paginate @comments, params: { anchor: :comments } %>
     <% end %>
   </div>
 
