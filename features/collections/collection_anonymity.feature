@@ -396,15 +396,15 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Hidden Collection"
 
-    When I view the work "Secret Work"
-    Then I should see "This work is part of an ongoing challenge and will be revealed soon!"
+    When I am logged out
+    Then the work "Secret Work" should be hidden from me
 
     When I am logged in as the owner of "Hidden Collection"
       And I go to "Hidden Collection" collection edit page
       And I follow "Delete Collection"
       And I press "Yes, Delete Collection"
-      And I view the work "Secret Work"
-    Then I should not see "This work is part of an ongoing challenge and will be revealed soon!"
+      And I am logged out
+    Then the work "Secret Work" should be visible to me
 
   Scenario: When the moderator removes a work from an anonymous collection, the creator is revealed.
     Given I have an anonymous collection "Anonymous Collection"
@@ -426,15 +426,15 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Hidden Collection"
 
-    When I view the work "Secret Work"
-    Then I should see "This work is part of an ongoing challenge and will be revealed soon!"
+    When I am logged out
+    Then the work "Secret Work" should be hidden from me
 
     When I am logged in as the owner of "Hidden Collection"
       And I view the approved collection items page for "Hidden Collection"
       And I check "Remove"
       And I submit
-      And I view the work "Secret Work"
-    Then I should not see "This work is part of an ongoing challenge and will be revealed soon!"
+      And I am logged out
+    Then the work "Secret Work" should be visible to me
 
   Scenario: Moving a work with two collections from an anonymous collection to a non-anonymous collection should reveal the creator.
     Given an anonymous collection "Anonymizing"
