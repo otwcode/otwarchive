@@ -70,7 +70,7 @@ class TagsController < ApplicationController
       options[:page] = params[:page] || 1
       search = TagSearchForm.new(options)
       @tags = search.search_results
-      flash_max_search_results_notice(@tags)
+      flash_search_warnings(@tags)
     end
   end
 

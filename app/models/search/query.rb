@@ -8,11 +8,15 @@ class Query
   end
 
   def search
-    $elasticsearch.search(
-      index: index_name,
-      type: document_type,
-      body: generated_query
-    )
+    begin
+      $elasticsearch.search(
+        index: index_name,
+        type: document_type,
+        body: generated_query
+      )
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      { error: "Your search failed because of a syntax error. Please try again." }
+    end
   end
 
   def search_results
