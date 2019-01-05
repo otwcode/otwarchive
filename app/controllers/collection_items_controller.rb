@@ -220,7 +220,7 @@ class CollectionItemsController < ApplicationController
   end
 
   def collection_update_multiple_params
-    allowed = %i[collection_approval_status remove unrevealed anonymous]
+    allowed = %i[collection_approval_status unrevealed anonymous remove]
     params.slice(:collection_items).permit(collection_items: allowed).
       require(:collection_items)
   end
