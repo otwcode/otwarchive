@@ -41,7 +41,7 @@ class WorksController < ApplicationController
 
       @works = @search.search_results
       set_own_works
-      flash_max_search_results_notice(@works)
+      flash_search_warnings(@works)
       render 'search_results'
     end
   end
@@ -115,7 +115,7 @@ class WorksController < ApplicationController
           @works = @search.search_results
         end
 
-        flash_max_search_results_notice(@works)
+        flash_search_warnings(@works)
 
         @facets = @works.facets
         if @search.options[:excluded_tag_ids].present?
@@ -150,7 +150,7 @@ class WorksController < ApplicationController
     else
       @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
       @works = @search.search_results
-      flash_max_search_results_notice(@works)
+      flash_search_warnings(@works)
       @facets = @works.facets
     end
     set_own_works
@@ -862,6 +862,7 @@ class WorksController < ApplicationController
                            end
 
       @work.attributes = work_params
+      @work.set_word_count(@work.preview_mode)
       @work.save_parents if @work.preview_mode
     end
   end

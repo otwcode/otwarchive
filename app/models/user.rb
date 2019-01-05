@@ -9,7 +9,8 @@ class User < ApplicationRecord
          :rememberable,
          :trackable,
          :validatable,
-         :lockable
+         :lockable,
+         :recoverable
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly
@@ -243,13 +244,19 @@ class User < ApplicationRecord
   # Override of Devise method to allow user to login with login OR username as
   # well as to make login case insensitive without losing user-preferred case
   # for login display
-  def self.find_first_by_auth_conditions(warden_conditions)
-    conditions = warden_conditions.dup
-    if login = conditions.delete(:login)
-      where(conditions).where(["lower(login) = :value OR lower(email) = :value", { value: login.downcase }]).first
-    elsif conditions.has_key?(:email)
-      where(conditions).first
+  def self.find_first_by_auth_conditions(tainted_conditions, options = {})
+    conditions = devise_parameter_filter.filter(tainted_conditions).merge(options)
+    login = conditions.delete(:login)
+    relation = self.where(conditions)
+
+    if login.present?
+      # MySQL is case-insensitive with utf8mb4_unicode_ci so we don't have to use
+      # lowercase values
+      relation = relation.where(["login = :value OR email = :value",
+                                 value: login])
     end
+
+    relation.first
   end
 
   def self.for_claims(claims_ids)
@@ -284,21 +291,6 @@ class User < ApplicationRecord
   ### AUTHENTICATION AND PASSWORDS
   def active?
     !confirmed_at.nil?
-  end
-
-  def generate_password(length = 8)
-    chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789"
-    password = ""
-    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
-    password
-  end
-
-  # use update_all to force the update even if the user is invalid
-  def reset_user_password
-    temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("reset_password_token = '#{temp_password}', recently_reset = 1")
-    # send synchronously to prevent getting caught in backed-up mail queue
-    UserMailer.reset_password(self.id, temp_password).deliver!
   end
 
   def activate

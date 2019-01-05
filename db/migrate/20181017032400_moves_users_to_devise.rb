@@ -15,7 +15,7 @@ class MovesUsersToDevise < ActiveRecord::Migration[5.1]
 
       # Recoverable
       t.string :reset_password_token
-      t.index :reset_password_token
+      t.index :reset_password_token, unique: true
       t.datetime :reset_password_sent_at
 
       # Rememberable
@@ -31,7 +31,7 @@ class MovesUsersToDevise < ActiveRecord::Migration[5.1]
       # Lockable
       t.rename :failed_login_count, :failed_attempts
       t.string :unlock_token
-      t.index :unlock_token
+      t.index :unlock_token, unique: true
       t.datetime :locked_at
     end
   end

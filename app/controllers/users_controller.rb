@@ -60,16 +60,15 @@ class UsersController < ApplicationController
   end
 
   def changed_password
-    unless params[:password] && (@user.recently_reset? || reauthenticate)
+    unless params[:password] && reauthenticate
       render(:change_password) && return
     end
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.recently_reset = false
 
     if @user.save
-      flash[:notice] = ts('Your password has been changed')
+      flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
       @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
 
       redirect_to(user_profile_path(@user)) && return

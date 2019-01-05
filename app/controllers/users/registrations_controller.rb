@@ -24,6 +24,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       resource.transaction do
         # skip sending the Devise confirmation notification
         resource.skip_confirmation_notification!
+        resource.invitation_token = params[:invitation_token]
         if resource.save
           notify_and_show_confirmation_screen
         else

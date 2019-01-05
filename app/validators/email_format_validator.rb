@@ -1,10 +1,8 @@
 # From Authlogic, to mimic old behavior
 #
-# https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/regex.rb
-# (line 13)
+# https://github.com/binarylogic/authlogic/blob/v3.6.0/lib/authlogic/regex.rb#L13
 #
-# https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/acts_as_authentic/email.rb
-# (line 90)
+# https://github.com/binarylogic/authlogic/blob/v3.6.0/lib/authlogic/acts_as_authentic/email.rb#L90
 #
 class EmailFormatValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
@@ -23,7 +21,7 @@ class EmailFormatValidator < ActiveModel::EachValidator
 
     unless result
       if options[:allow_blank]
-        record.errors[attribute] << (options[:message] || I18.t('validators.email.format.allow_blank'))
+        record.errors[attribute] << (options[:message] || I18n.t('validators.email.format.allow_blank'))
       else
         record.errors[attribute] << (options[:message] || I18n.t('validators.email.format.no_blank'))
       end

@@ -828,8 +828,8 @@ class Work < ApplicationRecord
 
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
-  def set_word_count
-    if self.new_record?
+  def set_word_count(preview = false)
+    if self.new_record? || preview
       self.word_count = 0
       chapters.each do |chapter|
         self.word_count += chapter.set_word_count

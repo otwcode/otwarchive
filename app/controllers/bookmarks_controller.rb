@@ -52,7 +52,7 @@ class BookmarksController < ApplicationController
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
       @bookmarks = @search.search_results
-      flash_max_search_results_notice(@bookmarks)
+      flash_search_warnings(@bookmarks)
       set_own_bookmarks
       render 'search_results'
     end
@@ -103,13 +103,13 @@ class BookmarksController < ApplicationController
             # When it's not a particular user's bookmarks, we want
             # to list *bookmarkable* items to avoid duplication
             @bookmarkable_items = @search.bookmarkable_search_results
-            flash_max_search_results_notice(@bookmarkable_items)
+            flash_search_warnings(@bookmarkable_items)
             @facets = @bookmarkable_items.facets
           else
             # We're looking at a particular user's bookmarks, so
             # just retrieve the standard search results and their facets.
             @bookmarks = @search.search_results
-            flash_max_search_results_notice(@bookmarks)
+            flash_search_warnings(@bookmarks)
             @facets = @bookmarks.facets
           end
 
@@ -141,7 +141,7 @@ class BookmarksController < ApplicationController
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: 10.minutes) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
-          flash_max_search_results_notice(results)
+          flash_search_warnings(results)
           @bookmarks = results.to_a
         end
       else
