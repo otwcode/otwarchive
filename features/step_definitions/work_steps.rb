@@ -227,13 +227,13 @@ end
 
 When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title(work)
-  visit work_url(work).gsub("http://www.example.com","")
+  visit work_path(work)
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by(title: work)
-  visit work_url(work, anchor: "comments", show_comments: true)
+  visit work_path(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do

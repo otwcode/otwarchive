@@ -67,12 +67,12 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  before_action :ensure_admin_credentials
+  after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
       # if we are logged in as an admin and we don't have the admin_credentials
       # set then set that cookie
-      cookies[:admin_credentials] = 1 unless cookies[:admin_credentials]
+      cookies.permanent[:admin_credentials] = 1 unless cookies[:admin_credentials]
     else
       # if we are NOT logged in as an admin and we have the admin_credentials
       # set then delete that cookie
@@ -80,20 +80,29 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # So if there is not a user_credentials cookie and the user appears to be logged in then
-  # redirect to the logout page
-
-  # TODO: Determine if this is necessary with Devise
-  # before_action :logout_if_not_user_credentials
-
+  # If there is no user_credentials cookie and the user appears to be logged in,
+  # redirect to the lost cookie page. Needs to be before the code to fix
+  # the user_credentials cookie or it won't fire.
+  before_action :logout_if_not_user_credentials
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials].nil? && controller_name != "user_sessions"
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "sessions"
       logger.error "Forcing logout"
       sign_out
       redirect_to '/lost_cookie' and return
     end
   end
 
+  # The user_credentials cookie is used by nginx to figure out whether or not
+  # to cache the page, so we want to make sure that it's set when the user is
+  # logged in, and cleared when the user is logged out.
+  after_action :ensure_user_credentials
+  def ensure_user_credentials
+    if logged_in?
+      cookies.permanent[:user_credentials] = 1 unless cookies[:user_credentials]
+    else
+      cookies.delete :user_credentials unless cookies[:user_credentials].nil?
+    end
+  end
 
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
@@ -472,9 +481,12 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  def flash_max_search_results_notice(result)
-    notice = result.max_search_results_notice
-    flash.now[:notice] = notice if notice.present?
+  def flash_search_warnings(result)
+    if result.respond_to?(:error) && result.error
+      flash.now[:error] = result.error
+    elsif result.respond_to?(:notice) && result.notice
+      flash.now[:notice] = result.notice
+    end
   end
 
   # Don't get unnecessary data for json requests

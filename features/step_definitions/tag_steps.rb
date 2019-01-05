@@ -134,8 +134,8 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   visit new_user_session_path
   user_record = find_or_create_new_user(user, password)
 
-  fill_in "User name", with: user
-  fill_in "Password", with: password
+  fill_in "User name or email:", with: user
+  fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
 

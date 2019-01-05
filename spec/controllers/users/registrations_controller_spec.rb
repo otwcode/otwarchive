@@ -56,10 +56,17 @@ describe Users::RegistrationsController do
           post :create, params: { user_registration: valid_user_attributes,
                                   invitation_token: invitation.token }
 
+          new_user = User.last
+
           expect(response).to be_success
           expect(assigns(:user)).to be_a(User)
-          expect(assigns(:user)).to eq(User.last)
+          expect(assigns(:user)).to eq(new_user)
           expect(assigns(:user).login).to eq("myname")
+
+          invitation.reload
+          expect(invitation.redeemed_at).not_to be_nil
+          expect(invitation.invitee).to eq(new_user)
+          expect(new_user.invitation).to eq(invitation)
         end
       end
 
