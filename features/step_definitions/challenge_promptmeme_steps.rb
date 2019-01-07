@@ -76,6 +76,27 @@ Given /^"([^\"]*)" has claimed a prompt from Battle 12$/ do |username|
   step %{I claim a prompt from "Battle 12"}
 end
 
+Given /^"(.*?)" has submitted a prompt for "(.*?)"$/ do |username, challenge_title|
+  step %{I am logged in as "#{username}"}
+  step %{I start signing up for "#{challenge_title}"}
+  step %{I submit}
+end
+
+Given /^"(.*?)" has claimed a prompt from "(.*?)"$/ do |username, challenge_title|
+  step %{I am logged in as "#{username}"}
+  step %{I claim a prompt from "#{challenge_title}"}
+end
+
+Given /^the prompt meme "(.*?)" with default settings$/ do |challenge_title|
+  step %{I am logged in as "mod1"}
+  step %{I set up the collection "#{challenge_title}"}
+  select("Prompt Meme", from: "challenge_type")
+  click_button("Submit")
+  # This should be done by default, but let's be safe
+  check("prompt_meme_signup_open")
+  click_button("Submit")
+end
+
 When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
   step %{I am logged in as "mod1"}
   visit new_collection_path
@@ -371,8 +392,9 @@ When /^I start to fulfill my claim$/ do
   step %{I start to fulfill my claim with "Fulfilled Story"}
 end
 
-When /^I fulfill my claim$/ do
-  step %{I start to fulfill my claim with "Fulfilled Story"}
+When /^I fulfill my claim(?: with "(.*?)")?$/ do |title|
+  title ||= "Fulfilled Story"
+  step %{I start to fulfill my claim with "#{title}"}
   step %{I press "Preview"}
     step %{I press "Post"}
   step %{I should see "Work was successfully posted"}
