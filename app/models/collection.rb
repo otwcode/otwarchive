@@ -54,6 +54,7 @@ class Collection < ApplicationRecord
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
   has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :user_approved_collection_items, -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) }, class_name: "CollectionItem"
 
   has_many :works, through: :collection_items, source: :item, source_type: 'Work'
   has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
@@ -459,20 +460,34 @@ class Collection < ApplicationRecord
   end
 
   def reveal_collection_items
-    approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+    collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
   end
 
   def reveal_collection_item_authors
-    approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
+    collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
 
+  # A work is not marked unrevealed until the user has approved its inclusion
+  # in a collection, so we don't want to send notifications unless 
+  # user_approval_status is approved.
+  #
+  # TODO: When AO3-2240 is fixed, we should ideally only send notifictations 
+  # for items that had their unrevealed status changed from true to false when 
+  # the collection's unrevealed setting was changed. With the current code,
+  # it's possible to send notifications twice for the same work if the 
+  # moderator reveals the collection, sets it back to unrevealed (which does 
+  # not and should not set exisiting collection items back to unrevaeld), and 
+  # then reveals the collection once again. However, it's necessary to keep 
+  # this behavior due to AO3-2240: if a collection has staggered reveals (e.g. 
+  # 10 works on day 1, 10 works on day 2, etc), notifications will not be sent
+  # for those works until the entire collection is revealed.
   def send_reveal_notifications
-    approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
+    user_approved_collection_items.each { |collection_item| collection_item.notify_of_reveal }
   end
 
   def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = {page: page}
+    pagination_args = { page: page }
 
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
