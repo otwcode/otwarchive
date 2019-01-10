@@ -483,7 +483,7 @@ class Collection < ApplicationRecord
   # 10 works on day 1, 10 works on day 2, etc), notifications will not be sent
   # for those works until the entire collection is revealed.
   def send_reveal_notifications
-    user_approved_collection_items.each { |collection_item| collection_item.notify_of_reveal }
+    user_approved_collection_items.each(&:notify_of_reveal)
   end
 
   def self.sorted_and_filtered(sort, filters, page)
