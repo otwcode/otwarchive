@@ -146,7 +146,7 @@ Feature: Notification emails for newly revealed collections
   Then 0 emails should be delivered
   When I am logged in as the owner of "Unrevealed Moderated Prompt Meme"
     And I view the awaiting approval collection items page for "Unrevealed Moderated Prompt Meme"
-    And I reject the collection item for the work "Approved Work"
+    And I approve the collection item for the work "Approved Work"
     And I reveal works for "Unrevealed Moderated Prompt Meme"
   Then 1 email should be delivered to "prompter"
     And the email should contain "Unrevealed Moderated Prompt Meme"
