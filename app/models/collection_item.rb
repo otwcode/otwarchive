@@ -89,21 +89,27 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  after_commit :update_work
-  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
-  #  this is a has-many-through relationship!!!
-  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work
-  # itself -- see collectible.rb
+  after_save :update_work
+  after_destroy :update_work
 
-  # Set associated works to anonymous or unrevealed as appropriate
-  # Check for chapters to avoid work association creation order shenanigans
+  # Set associated works to anonymous or unrevealed as appropriate.
+  #
+  # Inverses are set up properly on self.item, so we use that field to check
+  # whether we're currently in the process of saving a brand new work, or
+  # whether the work is in the process of being destroyed. (In which case we
+  # rely on the Work's callbacks to set anon/unrevealed status properly.) But
+  # because we want to discard changes made in preview mode, we perform the
+  # actual anon/unrevealed updates on self.work, which doesn't have proper
+  # inverses and therefore is freshly loaded from the database.
   def update_work
-    return unless item_type == 'Work' && work.present? && !work.new_record?
-    # Check if this is new - can't use new_record? with after_save
-    if self.saved_change_to_id?
-      work.set_anon_unrevealed!
-    else
-      work.update_anon_unrevealed!
+    return unless item.is_a?(Work) && item.persisted? && !item.saved_change_to_id?
+
+    if work.present?
+      work.update_anon_unrevealed
+
+      # For a more helpful error message, raise an error saying that the work
+      # is invalid if we fail to save it.
+      raise ActiveRecord::RecordInvalid, work unless work.save
     end
   end
 
@@ -115,15 +121,13 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  after_commit :notify_of_association
-  # TODO: make this work for bookmarks instead of skipping them
+  after_create_commit :notify_of_association
   def notify_of_association
-    self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
     email_notify = self.collection.collection_preference &&
                     self.collection.collection_preference.email_notify
 
     if email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver
     end
   end
 
@@ -197,9 +201,9 @@ class CollectionItem < ApplicationRecord
   end
 
   after_destroy :expire_caches
-
   def expire_caches
     if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
       CacheMaster.record(item_id, 'collection', collection_id)
     end
   end
