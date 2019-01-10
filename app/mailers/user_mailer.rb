@@ -269,11 +269,11 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Emails a recipient to say that a gift has been posted for them
-  def recipient_notification(user_id, work_id, collection_id=nil)
+  def recipient_notification(user_id, work_id, collection_id = nil)
     @user = User.find(user_id)
     @work = Work.find(work_id)
-    # If we've supplied a collection_id, make sure both the collection mods and the work creators are cool with the work's includion in the collection before including collection information in the notification
-    @collection = if collection_id && !CollectionItem.where(item_id: work_id, item_type: "Work", collection_id: collection_id, collection_approval_status: CollectionItem::APPROVED, user_approval_status: CollectionItem::APPROVED).empty?
+    # If we've supplied a collection_id, make sure the collection mods and work creators have approved the work's inclusion in the collection before adding the collection name to the email
+    @collection = if collection_id && @work.collection_items.where(collection_id: collection_id, collection_approval_status: CollectionItem::APPROVED, user_approval_status: CollectionItem::APPROVED).present?
         Collection.find(collection_id)
       else
         nil 
