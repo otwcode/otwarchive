@@ -289,9 +289,14 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(work_id, collection_id=nil)
+  def prompter_notification(work_id, collection_id = nil)
     @work = Work.find(work_id)
-    @collection = Collection.find(collection_id) if collection_id
+    # If we've supplied a collection_id, make sure the collection mods and work creators have approved the work's inclusion in the collection before adding the collection name to the email
+    @collection = if collection_id && @work.collection_items.where(collection_id: collection_id, collection_approval_status: CollectionItem::APPROVED, user_approval_status: CollectionItem::APPROVED).present?
+        Collection.find(collection_id)
+      else
+        nil 
+      end
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
       I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
