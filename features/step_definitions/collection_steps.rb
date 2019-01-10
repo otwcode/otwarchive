@@ -166,9 +166,16 @@ When /^I (accept|reject) the invitation for my work in the collection "(.*?)"$/ 
   select(status, from: select_id)
 end
 
-When /^I set the collection "(.*?)" to unrevealed$/ do |title|
+When /^I set the collection "(.*?)" to (unrevealed|moderated|anonymous)$/ do |title, setting|
   visit edit_collection_path(Collection.find_by(title: title))
-  check("collection_collection_preference_attributes_unrevealed")
+  case setting
+  when "unrevealed"
+    check("collection_collection_preference_attributes_unrevealed")
+  when "moderated"
+    check("collection_collection_preference_attributes_moderated")
+  when "anonymous"
+    check("collection_collection_preference_attributes_anonymous")
+  end
   click_button "Update"
 end
 
@@ -178,12 +185,6 @@ When /^I (approve|reject) the collection item for the work "(.*?)"$/ do |action,
   select_id = "collection_items_#{item_id}_collection_approval_status"
   select(status, from: select_id)
   click_button "Submit"
-end
-
-When /^I set the collection "(.*?)" to moderated$/ do |title|
-  visit edit_collection_path(Collection.find_by(title: title))
-  check("collection_collection_preference_attributes_moderated")
-  click_button "Update"
 end
 
 ### THEN
@@ -238,7 +239,7 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
-  if work.collections.first
+  if work.approved_collections.first
     visit collection_path(work.collections.first)
     page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   end

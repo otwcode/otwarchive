@@ -1,7 +1,7 @@
 @collections @promptmemes @giftexchanges @challenges @works @gifts
 
 Feature: Notification emails for newly revealed collections
-  When a moderator reveals an entire collection, the relevant notification emails should be sent.
+  When a moderator reveals or de-anons an entire collection, the relevant notification emails should be sent.
 
   #########################################
   #
@@ -151,15 +151,63 @@ Feature: Notification emails for newly revealed collections
   Then 1 email should be delivered to "prompter"
     And the email should contain "Unrevealed Moderated Prompt Meme"
 
+  Scenario: A creator posts a work to a moderated anonymous collection. The moderator does not approve or reject the work before de-anoning the collection. A subscription email should be sent.
+  Given the user "creator" exists and is activated
+    And I have the anonymous moderated collection "Anonymous Moderated Collection"
+    And "subscriber" subscribes to author "creator"
+  When I am logged in as "creator"
+    And I post the work "Unapproved Work" to the collection "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+  When I reveal authors for "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "subscriber"
+
+  Scenario: A creator posts a work to a moderated anonymous collection. The moderator rejects the work before de-anoning the collection. A subscription email should be sent.
+  Given the user "creator" exists and is activated
+    And I have the anonymous moderated collection "Anonymous Moderated Collection"
+    And "subscriber" subscribes to author "creator"
+  When I am logged in as "creator"
+    And I post the work "Rejected Work" to the collection "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+  When I am logged in as the owner of "Anonymous Moderated Collection"
+    And I view the awaiting approval collection items page for "Anonymous Moderated Collection"
+    And I reject the collection item for the work "Rejected Work"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+  When I reveal authors for "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "subscriber"
+
+  Scenario: A creator posts a work to a moderated anonymous collection. The moderator approves the work before de-anoning the collection. A subscription email should be sent.
+  Given the user "creator" exists and is activated
+    And I have the anonymous moderated collection "Anonymous Moderated Collection"
+    And "subscriber" subscribes to author "creator"
+  When I am logged in as "creator"
+    And I post the work "Approved Work" to the collection "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+    When I am logged in as the owner of "Anonymous Moderated Collection"
+    And I view the awaiting approval collection items page for "Anonymous Moderated Collection"
+    And I approve the collection item for the work "Approved Work"
+    And subscription notifications are sent
+  Then 0 emails should be delivered to "subscriber"
+  When I reveal authors for "Anonymous Moderated Collection"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "subscriber"
+
   ################
   #
   # INVITED WORKS
   #
   ################
 
-  Scenario: A gift related work is invited to a collection and the creator neither rejects nor approves the invitation. The collection is then made unrevealed, which marks the collection item (but not the work) unrevealed. When the collection is later revealed, no notifications should be sent for the work.
+  Scenario: A gift related work is invited to a collection and the creator neither rejects nor approves the invitation. The collection is then made unrevealed and anonymous, which marks the collection item (but not the work) unrevealed and anonymous. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
   Given the user "recip" exists and is activated
-    And I have the collection "Future Unrevealed Collection"
+    And the user "creator" exists and is activated
+    And "subscriber" subscribes to author "creator"
+    And I have the collection "Future Anon Unrevealed Collection"
     And I am logged in as "inspiration"
     And I post the work "Inspirational Work"
     And I am logged in as "creator"
@@ -168,48 +216,81 @@ Feature: Notification emails for newly revealed collections
     # HACK: AO3-2373 means related work emails don't always go out when posting without preview
     And I press "Preview"
     And I press "Post"
+    And subscription notifications are sent
   Then 1 email should be delivered to "recip"
     And 1 email should be delivered to "inspiration"
+    And 1 email should be delivered to "subscriber"
   When all emails have been delivered
-    And I am logged in as the owner of "Future Unrevealed Collection"
-    And I set the collection "Future Unrevealed Collection" to unrevealed
-    And I am logged out
-  # Setting the collection to unrevealed should not have hidden the work
-  Then the work "Invited Work" should be visible to me
-  When I am logged in as the owner of "Future Unrevealed Collection"
-    And I reveal works for "Future Unrevealed Collection"
-  Then 0 emails should be delivered
-
-  Scenario: A gift related work is invited to a collection and the moderator changes their mind and rejects the work. The collection is then made unrevealed, which marks the collection item (but not the work) unrevealed. When the collection is later revealed, no notifications should be sent for the work.
-  Given the user "recip" exists and is activated
-    And I have the collection "Future Unrevealed Collection"
-    And I am logged in as "inspiration"
-    And I post the work "Inspirational Work"
-    And I am logged in as "creator"
-  When I set up the draft "Invited Work" as a gift for "recip"
-    And I list the work "Inspirational Work" as inspiration
-    # HACK: AO3-2373 means related work emails don't always go out when posting without preview
-    And I press "Preview"
-    And I press "Post"
-  Then 1 email should be delivered to "recip"
-    And 1 email should be delivered to "inspiration"
-  When all emails have been delivered
-    And I am logged in as the owner of "Future Unrevealed Collection"
-    And I add the work "Invited Work" to the collection "Future Unrevealed Collection"
+    And I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I add the work "Invited Work" to the collection "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
   Then 1 email should be delivered to "creator"
     And 0 emails should be delivered to "inspiration"
     And 0 emails should be delivered to "recip"
+    And 0 emails should be delivered to "subscriber"
+  When all emails have been delivered
+    And I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I set the collection "Future Anon Unrevealed Collection" to unrevealed
+    And I set the collection "Future Anon Unrevealed Collection" to anonymous
+    And I am logged out
+  # Setting the collection to unrevealed and anonymous should not have hidden the work or its creator
+  Then the work "Invited Work" should be visible to me
+    And the author of "Invited Work" should be publicly visible
+  When I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I reveal works for "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered
+  When I reveal authors for "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered
+
+  Scenario: A gift related work is invited to a collection and the moderator changes their mind and rejects the work. The collection is then made anonymous and unrevealed, which marks the collection item (but not the work) anonymous unrevealed. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
+  Given the user "recip" exists and is activated
+    And the user "creator" exists and is activated
+    And "subscriber" subscribes to author "creator"
+    And I have the collection "Future Anon Unrevealed Collection"
+    And I am logged in as "inspiration"
+    And I post the work "Inspirational Work"
+    And I am logged in as "creator"
+  When I set up the draft "Invited Work" as a gift for "recip"
+    And I list the work "Inspirational Work" as inspiration
+    # HACK: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "recip"
+    And 1 email should be delivered to "inspiration"
+    And 1 email should be delivered to "subscriber"
+  When all emails have been delivered
+    And I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I add the work "Invited Work" to the collection "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
+  Then 1 email should be delivered to "creator"
+    And 0 emails should be delivered to "inspiration"
+    And 0 emails should be delivered to "recip"
+    And 0 emails should be delivered to "subscriber"
   When all emails have been delivered
     # Reject the item while logged in as the moderator
-    And I view the invited collection items page for "Future Unrevealed Collection"
+    And I view the invited collection items page for "Future Anon Unrevealed Collection"
     And I reject the collection item for the work "Invited Work"
-    # Reject the invitation while logged in as the creator
-    And I am logged in as "creator"
-    And I reject the invitation for my work in the collection "Future Unrevealed Collection"
-    And I am logged in as the owner of "Future Unrevealed Collection"
-    And I set the collection "Future Unrevealed Collection" to unrevealed
+    And subscription notifications are sent
+  Then 0 emails should be delivered
+  # Reject the invitation while logged in as the creator
+  When I am logged in as "creator"
+    And I reject the invitation for my work in the collection "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered
+  When I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I set the collection "Future Anon Unrevealed Collection" to unrevealed
+    And I set the collection "Future Anon Unrevealed Collection" to anonymous
     And I am logged out
-  # Setting the collection to unrevealed should not have hidden the work
+  # Setting the collection to unrevealed and anonymous should not have hidden the work or its creator
   Then the work "Invited Work" should be visible to me
-  When I reveal works for "Future Unrevealed Collection"
+    And the author of "Invited Work" should be publicly visible
+  When I am logged in as the owner of "Future Anon Unrevealed Collection"
+    And I reveal works for "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
+  Then 0 emails should be delivered
+  When I reveal authors for "Future Anon Unrevealed Collection"
+    And subscription notifications are sent
   Then 0 emails should be delivered
