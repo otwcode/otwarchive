@@ -174,8 +174,6 @@ class CollectionItemsController < ApplicationController
   def update_multiple_with_params(allowed_items, update_params, success_path)
     # Collect any failures so that we can display errors:
     @collection_items = []
-    # Collect any successes so we can send notifications
-    @success_items = []
 
     # Make sure that the keys are integers so that we can look up the
     # parameters by ID.
@@ -188,10 +186,7 @@ class CollectionItemsController < ApplicationController
     allowed_items.where(id: update_params.keys).each do |item|
       Rails.logger.debug "DEBUG Updating CollectionItem #{item.id} #{update_params[item.id]}" if Rails.logger.debug?
       @collection_items << item unless item.update(update_params[item.id])
-      @success_items << item if item.update(update_params[item.id])
     end
-    # Rails.logger.debug "DEBUG @success_items: #{@success_items}" if Rails.logger.debug?
-    # Rails.logger.debug "DEBUG update_params: #{update_params}" if Rails.logger.debug?
 
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")

@@ -459,9 +459,9 @@ class Collection < ApplicationRecord
     async(:reveal_collection_item_authors)
   end
 
+  # Notifications are handled by the collection_item model
   def reveal_collection_items
     collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
-    # Now we send notifications when we update the attribute
     # send_reveal_notifications
   end
 

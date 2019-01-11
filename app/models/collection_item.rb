@@ -191,14 +191,7 @@ class CollectionItem < ApplicationRecord
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    Rails.logger.debug "DEBUG notify_of_status_change callback is called on #{self.id}" if Rails.logger.debug?
-    if saved_change_to_unrevealed?
-      # making sure notify_recipients in the work model has not already notified 
-      # the user
-      # if !work.new_recipients.blank?
-        notify_of_reveal
-      # end
-    end
+    notify_of_reveal if saved_change_to_unrevealed?
   end
 
   after_destroy :expire_caches
@@ -290,8 +283,8 @@ class CollectionItem < ApplicationRecord
 
   # Reveal an individual collection item
   # Can't use update_attribute because of potential validation issues
-  # with closed collections
-  # Does not actually get called anywhere because someone hates me.
+  # with closed collections.
+  # Does not appear to be called anywhere.
   def reveal!
     collection.collection_items.where("id = #{self.id}").update_all("unrevealed = 0")
     notify_of_reveal
