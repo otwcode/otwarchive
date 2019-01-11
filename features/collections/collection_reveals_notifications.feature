@@ -203,7 +203,7 @@ Feature: Notification emails for newly revealed collections
   #
   ################
 
-  Scenario: A gift related work is invited to a collection and the creator neither rejects nor approves the invitation. The collection is then made unrevealed and anonymous, which marks the collection item (but not the work) unrevealed and anonymous. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
+  Scenario: A gift related work is invited to a collection and the creator neither rejects nor approves the invitation. The collection is then made unrevealed and anonymous. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
   Given the user "recip" exists and is activated
     And the user "creator" exists and is activated
     And "subscriber" subscribes to author "creator"
@@ -244,7 +244,7 @@ Feature: Notification emails for newly revealed collections
     And subscription notifications are sent
   Then 0 emails should be delivered
 
-  Scenario: A gift related work is invited to a collection and the moderator changes their mind and rejects the work. The collection is then made anonymous and unrevealed, which marks the collection item (but not the work) anonymous unrevealed. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
+  Scenario: A gift related work is invited to a collection and the moderator changes their mind and rejects the work. The collection is then made anonymous and unrevealed. When the collection is later revealed and de-anoned, no notifications should be sent for the work.
   Given the user "recip" exists and is activated
     And the user "creator" exists and is activated
     And "subscriber" subscribes to author "creator"

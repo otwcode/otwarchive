@@ -272,8 +272,7 @@ class UserMailer < BulletproofMailer::Base
   def recipient_notification(user_id, work_id, collection_id = nil)
     @user = User.find(user_id)
     @work = Work.find(work_id)
-    # If we've supplied a collection_id, make sure the collection mods and work creators have approved the work's inclusion in the collection before adding the collection name to the email
-    @collection = Collection.find(collection_id) if collection_id && @work.collection_items.where(collection_id: collection_id, collection_approval_status: CollectionItem::APPROVED, user_approval_status: CollectionItem::APPROVED).present?
+    @collection = collection_for_email(collection_id)
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
@@ -287,8 +286,7 @@ class UserMailer < BulletproofMailer::Base
   # Emails a prompter to say that a response has been posted to their prompt
   def prompter_notification(work_id, collection_id = nil)
     @work = Work.find(work_id)
-    # If we've supplied a collection_id, make sure the collection mods and work creators have approved the work's inclusion in the collection before adding the collection name to the email
-    @collection = Collection.find(collection_id) if collection_id && @work.collection_items.where(collection_id: collection_id, collection_approval_status: CollectionItem::APPROVED, user_approval_status: CollectionItem::APPROVED).present?
+    @collection = collection_for_email(collection_id)
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
       I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
@@ -411,6 +409,15 @@ class UserMailer < BulletproofMailer::Base
       attachment_string += "<br/>" + chapter.content + "<br />\n"
     end
     return attachment_string
+  end
+
+  # If a collection_id has been provided to the mailer, make sure the collection
+  # moderators and work creators have both approved the work's inclusion in the
+  # collection. If they haven't, we don't want to mention the collection in the
+  # email text.
+  def collection_for_email(collection_id)
+    return unless @work.approved_collection_items.where(collection_id: collection_id).any?
+    Collection.find(collection_id)
   end
 
   protected

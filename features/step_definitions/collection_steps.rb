@@ -240,7 +240,7 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   visit work_path(work)
   page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
   if work.approved_collections.first
-    visit collection_path(work.collections.first)
+    visit collection_path(work.approved_collections.first)
     page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   end
 end
