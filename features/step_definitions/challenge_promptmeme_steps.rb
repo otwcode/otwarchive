@@ -339,8 +339,7 @@ When /^I add a new prompt to my signup for a prompt meme$/ do
 end
 
 When /^I edit the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by(title: "Battle 12"))
-  step %{I follow "Prompts ("}
+  visit collection_requests_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Edit Sign-up"}
 end
 
@@ -358,16 +357,14 @@ When /^I view unposted claims for "([^\"]*)"$/ do |title|
 end
 
 When /^I view prompts for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by(title: title))
-  step %{I follow "Prompts ("}
+  visit collection_requests_path(Collection.find_by(title: title))
 end
 
 ### WHEN claiming
 
 When /^I claim a prompt from "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by(title: title))
-    step %{I follow "Prompts ("}
-    step %{I press "Claim"}
+  visit collection_requests_path(Collection.find_by(title: title))
+  click_button("Claim")
 end
 
 When /^I claim two prompts from "([^\"]*)"$/ do |title|
@@ -379,9 +376,8 @@ When /^I claim a prompt by "(.*?)" from "(.*?)"$/ do |user, collection_title|
   collection = Collection.find_by(title: collection_title)
   default_pseud_id = User.find_by(login: user).default_pseud_id
   prompt_id = Prompt.where(collection_id: collection.id, pseud_id: default_pseud_id).first.id
-  visit collection_path(collection)
-  step %{I follow "Prompts ("}
-  step %{I press "prompt_#{prompt_id}"}
+  visit collection_requests_path(collection)
+  click_button("prompt_#{prompt_id}")
 end
 
 ### WHEN fulfilling claims
@@ -435,20 +431,17 @@ When /^mod fulfills claim$/ do
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by(title: title))
-  step %{I follow "Prompts ("}
+  visit collection_requests_path(Collection.find_by(title: title))
   step %{I press "Delete Prompt"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by(title: "Battle 12"))
-  step %{I follow "Prompts ("}
+  visit collection_requests_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Delete Prompt"}
 end
 
 When /^I edit the first prompt$/ do
-  visit collection_path(Collection.find_by(title: "Battle 12"))
-  step %{I follow "Prompts ("}
+  visit collection_requests_path(Collection.find_by(title: "Battle 12"))
   # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
   # Prompt Meme challenges
   #step %{I follow "Edit Prompt"}
