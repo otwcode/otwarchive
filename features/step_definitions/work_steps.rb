@@ -86,6 +86,21 @@ Given /^the draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*
   click_button("Preview")
 end
 
+# Again, same regexp, but it lets you specify the user who posts the work
+When /^"(.*?)" posts (?:a|the) work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |user, title, fandom, character, character2, freeform, freeform2, category, collection, recipient, series, relationship, pseud|
+  step %{I am logged in as "#{user}"}
+  # If the work is already a draft then visit the preview page and post it
+  work = User.find_by(login: user).works.where(title: title).first
+  if work
+    visit preview_work_url(work)
+    click_button("Post")
+  else
+    # Note: this will match the above regexp and work just fine even if all the options are blank!
+    step %{I post the work "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
+  end
+  step %{I am logged out}
+end
+
 When /^I post the works "([^"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I post the work "#{work_title}"}

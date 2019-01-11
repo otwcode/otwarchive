@@ -207,6 +207,14 @@ When /^I (approve|reject) and (unreveal|reveal) the work "(.*?)" in the collecti
   click_button "Submit"
 end
 
+When /^I reveal the creator of the work "(.*?)" in the collection "(.*?)"$/ do |title, collection|
+  work_id = Work.find_by(title: title).id
+  collection_id = Collection.find_by(title: collection).id
+  item_id = CollectionItem.find_by(item_id: work_id, item_type: "Work", collection_id: collection_id).id
+  uncheck("collection_items_#{item_id}_anonymous")
+  click_button "Submit"
+end
+
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|
