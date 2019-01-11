@@ -213,7 +213,7 @@ Feature: Notification emails for newly revealed collections
     And I am logged in as "creator"
   When I set up the draft "Invited Work" as a gift for "recip"
     And I list the work "Inspirational Work" as inspiration
-    # HACK: AO3-2373 means related work emails don't always go out when posting without preview
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
     And I press "Preview"
     And I press "Post"
     And subscription notifications are sent
@@ -254,7 +254,7 @@ Feature: Notification emails for newly revealed collections
     And I am logged in as "creator"
   When I set up the draft "Invited Work" as a gift for "recip"
     And I list the work "Inspirational Work" as inspiration
-    # HACK: AO3-2373 means related work emails don't always go out when posting without preview
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
     And I press "Preview"
     And I press "Post"
     And subscription notifications are sent
