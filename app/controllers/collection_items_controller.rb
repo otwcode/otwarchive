@@ -184,7 +184,6 @@ class CollectionItemsController < ApplicationController
     # which uses find() under the hood -- we ensure that we'll fail silently if
     # the user tries to update an item they're not allowed to.
     allowed_items.where(id: update_params.keys).each do |item|
-      Rails.logger.debug "DEBUG Updating CollectionItem #{item.id} #{update_params[item.id]}" if Rails.logger.debug?
       @collection_items << item unless item.update(update_params[item.id])
     end
 

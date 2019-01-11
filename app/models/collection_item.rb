@@ -295,8 +295,6 @@ class CollectionItem < ApplicationRecord
   end
 
   def notify_of_reveal
-    # This is an after_update callback. Currently, it only gets called when we update the unrevealed setting for the entire collection. We want to call it when we update the unrevealed attribute of a single CI. Why? Because the one in creatable.lib only sends if there are NEW recipients and we want to leave it that way.
-    # Rails.logger.debug "DEBUG CollectionItem after_update unrevealed_before_last_save: #{self.unrevealed_before_last_save} | now: #{self.unrevealed}" if Rails.logger.debug?
     unless self.unrevealed? || !self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
