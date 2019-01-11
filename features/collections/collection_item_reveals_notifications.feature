@@ -95,15 +95,21 @@ Scenario: When there are multiple child works in an unrevealed collection, relat
   When I am logged in as a random user
     And I set up the draft "Child Work 1" to the collection "Unrevealed Collection"
     And I list the work "Inspirational Work 1" as inspiration
-    And I press "Post Without Preview"
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
   Then 0 emails should be delivered to "inspiration1"
   When I set up the draft "Child Work 2" to the collection "Unrevealed Collection"
     And I list the work "Inspirational Work 2" as inspiration
-    And I press "Post Without Preview"
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
   Then 0 emails should be delivered to "inspiration1"
   When I set up the draft "Child Work 3" to the collection "Unrevealed Collection"
     And I list the work "Inspirational Work 3" as inspiration
-    And I press "Post Without Preview"
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
   Then 0 emails should be delivered to "inspiration3"
 
   # Reveal the first work
@@ -341,6 +347,7 @@ Scenario: Three related works are posted to an anonymous moderated collection. T
   When I am logged in as "creator1"
     And I set up the draft "Child Work 1" in the collection "Anon Collection"
     And I list the work "Inspirational Work 1" as inspiration
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
     And I press "Preview"
     And I press "Post"
     And subscription notifications are sent
@@ -349,14 +356,18 @@ Scenario: Three related works are posted to an anonymous moderated collection. T
   When I am logged in as "creator2"
     And I set up the draft "Child Work 2" in the collection "Anon Collection"
     And I list the work "Inspirational Work 2" as inspiration
-    And I press "Post Without Preview"
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
     And subscription notifications are sent
   Then 1 email should be delivered to "inspiration2"
     And 0 emails should be delivered to "subscriber2"
   When I am logged in as "creator3"
     And I set up the draft "Child Work 3" in the collection "Anon Collection"
     And I list the work "Inspirational Work 3" as inspiration
-    And I press "Post Without Preview"
+    # TODO: AO3-2373 means related work emails don't always go out when posting without preview
+    And I press "Preview"
+    And I press "Post"
     And subscription notifications are sent
   Then 1 email should be delivered to "inspiration3"
     And 0 emails should be delivered to "subscriber3"
