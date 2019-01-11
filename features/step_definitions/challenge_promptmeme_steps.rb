@@ -375,6 +375,15 @@ When /^I claim two prompts from "([^\"]*)"$/ do |title|
   step %{I claim a prompt from "#{title}"}
 end
 
+When /^I claim a prompt by "(.*?)" from "(.*?)"$/ do |user, collection_title|
+  collection = Collection.find_by(title: collection_title)
+  default_pseud_id = User.find_by(login: user).default_pseud_id
+  prompt_id = Prompt.where(collection_id: collection.id, pseud_id: default_pseud_id).first.id
+  visit collection_path(collection)
+  step %{I follow "Prompts ("}
+  step %{I press "prompt_#{prompt_id}"}
+end
+
 ### WHEN fulfilling claims
 
 When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|

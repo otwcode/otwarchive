@@ -60,21 +60,20 @@ Feature: Collection
       And I post the work "Second Snippet" to the collection "Hidden Treasury" as a gift for "fourth_user"
       And subscription notifications are sent
     Then 0 emails should be delivered
-    When I am logged in as "moderator"
+    When I am logged in as the owner of "Hidden Treasury"
       And I view the approved collection items page for "Hidden Treasury"
-      # items listed in date order so checking the second will reveal the older work
-      And I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
-      And I submit
-    Then "fourth_user" should not be emailed
-    When "AO3-2240: gift notifications not sent for individual reveals" is fixed
-    # Then "third_user" should be emailed
-    #   And the email to "third_user" should contain "first_user"
-    When subscription notifications are sent
-    Then "second_user" should be emailed
-      And 1 emails should be delivered
+      And I reveal the work "First Snippet" in the collection "Hidden Treasury"
+    Then "third_user" should be notified by email about their gift "First Snippet"
+      And the email to "third_user" should contain "first_user"
+      And 0 emails should be delivered to "fourth_user"
+    When all emails have been delivered
+      And subscription notifications are sent
+    Then 1 email should be delivered to "second_user"
       And the email to "second_user" should contain "first_user"
       And the email to "second_user" should contain "First Snippet"
       And the email to "second_user" should not contain "Second Snippet"
+      And 0 emails should be delivered to "fourth_user"
+      And 0 emails should be delivered to "third_user"
     When I am logged out
     Then the work "First Snippet" should be visible to me
       And the work "Second Snippet" should be hidden from me

@@ -187,6 +187,26 @@ When /^I (approve|reject) the collection item for the work "(.*?)"$/ do |action,
   click_button "Submit"
 end
 
+When /^I reveal the work "(.*?)" in the collection "(.*?)"$/ do |title, collection|
+  work_id = Work.find_by(title: title).id
+  collection_id = Collection.find_by(title: collection).id
+  item_id = CollectionItem.find_by(item_id: work_id, item_type: "Work", collection_id: collection_id).id
+  uncheck("collection_items_#{item_id}_unrevealed")
+  click_button "Submit"
+end
+
+When /^I (approve|reject) and (unreveal|reveal) the work "(.*?)" in the collection "(.*?)"$/ do |approval_action, reveal_action, title, collection|
+  work_id = Work.find_by(title: title).id
+  collection_id = Collection.find_by(title: collection).id
+  item_id = CollectionItem.find_by(item_id: work_id, item_type: "Work", collection_id: collection_id).id
+  select_id = "collection_items_#{item_id}_collection_approval_status"
+  status = approval_action == "approve" ? "Approved" : "Rejected"
+  select(status, from: select_id) 
+  uncheck("collection_items_#{item_id}_unrevealed") if reveal_action == "reveal"
+  check("collection_items_#{item_id}_unrevealed") if reveal_action == "unreveal"
+  click_button "Submit"
+end
+
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|
