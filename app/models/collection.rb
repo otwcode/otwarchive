@@ -461,7 +461,8 @@ class Collection < ApplicationRecord
 
   def reveal_collection_items
     collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
-    send_reveal_notifications
+    # Now we send notifications when we update the attribute
+    # send_reveal_notifications
   end
 
   def reveal_collection_item_authors

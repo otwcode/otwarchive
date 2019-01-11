@@ -46,6 +46,9 @@ module Creatable
   # we also need to check to see if the work is in a collection
   # only notify a recipient once for each work
   def notify_recipients
+    # This is an after_save callback on works. We want to make sure unrevealed was true before the last save.
+    # When updating a collection's items via the Manage Items pages, this gets called once per work. We don't want to use this for notifiations when updating CI because it would mean having to get rid of the new_recipients check... and that would send a gift notification every time the work was edited. 
+    # Rails.logger.debug "DEBUG Creatable #{self.id} in_unrevealed_collection_was: #{self.in_unrevealed_collection_was} | now: #{self.in_unrevealed_collection}" if Rails.logger.debug?
     if self.posted && !self.new_recipients.blank? && !self.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(self.new_recipients, assume_matching_login: true)[:pseuds]
       # check user prefs to see which recipients want to get gift notifications
