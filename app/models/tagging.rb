@@ -46,9 +46,11 @@ class Tagging < ApplicationRecord
   end
 
   def update_search
-    reindex_boundary = 100
-    if %w(Character Relationship Freeform).include?(tagger.type)
-      tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
-    end
+    # When a tag's count is more than this threshold, we start caching it,
+    # so taggings_count becomes less accurate. That's our cue to stop
+    # eagerly reindexing counts as well.
+    return unless %w[Fandom Character Relationship Freeform].include?(tagger.type)
+    reindex_boundary = ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+    tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
   end
 end

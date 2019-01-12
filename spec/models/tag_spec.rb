@@ -247,6 +247,25 @@ describe Tag do
     end
   end
 
+  describe "draft_only" do
+    before do
+      create(:posted_work, fandom_string: "love live,jjba")
+      create(:draft, fandom_string: "zombie land saga,jjba")
+    end
+
+    it "is true if only used in drafts" do
+      expect(Tag.find_by(name: "zombie land saga").draft_only).to be_truthy
+    end
+
+    it "is false if only used in posted works" do
+      expect(Tag.find_by(name: "love live").draft_only).to be_falsey
+    end
+
+    it "is false if used in drafts and posted works" do
+      expect(Tag.find_by(name: "jjba").draft_only).to be_falsey
+    end
+  end
+
   describe "can_change_type?" do
     it "should be false for a wrangled tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)

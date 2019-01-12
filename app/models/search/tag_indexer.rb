@@ -53,8 +53,11 @@ class TagIndexer < Indexer
     object.as_json(
       root: false,
       only: [
-        :id, :name, :sortable_name, :merger_id, :canonical, :created_at, 
+        :id, :name, :sortable_name, :merger_id, :canonical, :created_at,
         :unwrangleable
+      ],
+      methods: [
+        :draft_only
       ]
     ).merge(
       tag_type: object.type,
