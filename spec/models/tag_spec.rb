@@ -255,13 +255,7 @@ describe Tag do
 
     it "is true if only used in drafts" do
       expect(Tag.find_by(name: "zombie land saga").draft_only).to be_truthy
-    end
-
-    it "is false if only used in posted works" do
       expect(Tag.find_by(name: "love live").draft_only).to be_falsey
-    end
-
-    it "is false if used in drafts and posted works" do
       expect(Tag.find_by(name: "jjba").draft_only).to be_falsey
     end
   end
