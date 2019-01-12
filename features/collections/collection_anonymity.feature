@@ -375,3 +375,81 @@ Feature: Collection
     # This is not the desired behavior (AO3-5556), but we want to make sure it doesn't get broken worse
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
+
+  Scenario: When an anonymous collection is deleted, works in the collection stop being anonymous.
+    Given I have an anonymous collection "Anonymous Collection"
+      And I am logged in as "creator"
+      And I post the work "Secret Work" to the collection "Anonymous Collection"
+
+    When I go to my works page
+    Then I should not see "Secret Work"
+
+    When I am logged in as the owner of "Anonymous Collection"
+      And I go to "Anonymous Collection" collection edit page
+      And I follow "Delete Collection"
+      And I press "Yes, Delete Collection"
+      And I go to creator's works page
+    Then I should see "Secret Work"
+
+  Scenario: When an unrevealed collection is deleted, works in the collection stop being unrevealed.
+    Given I have a hidden collection "Hidden Collection"
+      And I am logged in as "creator"
+      And I post the work "Secret Work" to the collection "Hidden Collection"
+
+    When I am logged out
+    Then the work "Secret Work" should be hidden from me
+
+    When I am logged in as the owner of "Hidden Collection"
+      And I go to "Hidden Collection" collection edit page
+      And I follow "Delete Collection"
+      And I press "Yes, Delete Collection"
+      And I am logged out
+    Then the work "Secret Work" should be visible to me
+
+  Scenario: When the moderator removes a work from an anonymous collection, the creator is revealed.
+    Given I have an anonymous collection "Anonymous Collection"
+      And I am logged in as "creator"
+      And I post the work "Secret Work" to the collection "Anonymous Collection"
+
+    When I go to my works page
+    Then I should not see "Secret Work"
+
+    When I am logged in as the owner of "Anonymous Collection"
+      And I view the approved collection items page for "Anonymous Collection"
+      And I check "Remove"
+      And I submit
+      And I go to creator's works page
+    Then I should see "Secret Work"
+
+  Scenario: When the moderator removes a work from an unrevealed collection, the work is revealed.
+    Given I have a hidden collection "Hidden Collection"
+      And I am logged in as "creator"
+      And I post the work "Secret Work" to the collection "Hidden Collection"
+
+    When I am logged out
+    Then the work "Secret Work" should be hidden from me
+
+    When I am logged in as the owner of "Hidden Collection"
+      And I view the approved collection items page for "Hidden Collection"
+      And I check "Remove"
+      And I submit
+      And I am logged out
+    Then the work "Secret Work" should be visible to me
+
+  Scenario: Moving a work with two collections from an anonymous collection to a non-anonymous collection should reveal the creator.
+    Given an anonymous collection "Anonymizing"
+      And a collection "Fluffy"
+      And a collection "Holidays"
+
+    When I am logged in as "creator"
+      And I set up the draft "Secret Work"
+      And I fill in "Collections" with "Anonymizing,Fluffy"
+      And I press "Post Without Preview"
+      And I go to my works page
+    Then I should not see "Secret Work"
+
+    When I edit the work "Secret Work"
+      And I fill in "Collections" with "Holidays,Fluffy"
+      And I press "Post Without Preview"
+      And I go to my works page
+    Then I should see "Secret Work"

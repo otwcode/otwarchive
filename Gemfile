@@ -139,7 +139,7 @@ group :test do
   gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.6.2'
+  gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
   gem 'poltergeist'
@@ -174,7 +174,7 @@ group :development do
 end
 
 group :test, :development, :staging do
-  gem 'bullet', '~> 5.6.0'
+  gem 'bullet', '>= 5.7.3'
 end
 
 # Deploy with Capistrano

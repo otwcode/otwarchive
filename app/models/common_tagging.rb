@@ -15,6 +15,8 @@ class CommonTagging < ApplicationRecord
   after_create :inherit_parents
   after_create :remove_uncategorized_media
 
+  after_commit :update_search
+
   def update_wrangler
     unless User.current_user.nil?
       common_tag.update_attributes!(last_wrangler: User.current_user)
@@ -53,6 +55,10 @@ class CommonTagging < ApplicationRecord
     return unless common_tag.is_a?(Fandom) && filterable.is_a?(Media)
     return if common_tag.medias.count < 2
     common_tag.common_taggings.where(filterable: Media.uncategorized).destroy_all
+  end
+
+  def update_search
+    common_tag.enqueue_to_index
   end
 
   # Go through all CommonTaggings and destroy the invalid ones.

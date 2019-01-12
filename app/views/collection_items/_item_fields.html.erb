@@ -4,7 +4,6 @@
       <!--title-->
       <h4 class="heading" id="collection_item_<%= collection_item.id %>">
         <%= error_messages_for collection_item %>
-        <%= form.hidden_field :collection_id %>
         <%= link_to collection_item_display_title(collection_item), collection_item.item %>
       </h4>
 
