@@ -13,7 +13,22 @@ class TagQuery < Query
   end
 
   def filters
-    [type_filter, canonical_filter].compact
+    [
+      type_filter,
+      canonical_filter,
+      unwrangleable_filter,
+      media_filter,
+      fandom_filter,
+      character_filter,
+      suggested_fandom_filter,
+      suggested_character_filter
+    ].compact
+  end
+
+  def exclusion_filters
+    [
+      wrangled_filter
+    ].compact
   end
 
   def queries
@@ -25,6 +40,28 @@ class TagQuery < Query
     options[:per_page] || ArchiveConfig.TAGS_PER_SEARCH_PAGE || 50
   end
 
+  def sort
+    direction = options[:sort_direction]&.downcase
+    case options[:sort_column]
+    when "taggings_count_cache"
+      column = "uses"
+      direction ||= "desc"
+    when "created_at"
+      column = "created_at"
+      direction ||= "desc"
+    else
+      column = "sortable_name"
+      direction ||= "asc"
+    end
+    sort_hash = { column => { order: direction } }
+
+    if column == "created_at"
+      sort_hash[column][:unmapped_type] = "date"
+    end
+
+    sort_hash
+  end
+
   ################
   # FILTERS
   ################
@@ -34,7 +71,38 @@ class TagQuery < Query
   end
 
   def canonical_filter
-    { term: { canonical: 'true' } } if options[:canonical]
+    term_filter(:canonical, bool_value(options[:canonical])) if options[:canonical].present?
+  end
+
+  def unwrangleable_filter
+    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
+  end
+
+  def media_filter
+    terms_filter(:media_ids, options[:media_ids]) if options[:media_ids]
+  end
+
+  def fandom_filter
+    terms_filter(:fandom_ids, options[:fandom_ids]) if options[:fandom_ids]
+  end
+
+  def character_filter
+    terms_filter(:character_ids, options[:character_ids]) if options[:character_ids]
+  end
+
+  def suggested_fandom_filter
+    terms_filter(:pre_fandom_ids, options[:pre_fandom_ids]) if options[:pre_fandom_ids]
+  end
+
+  def suggested_character_filter
+    terms_filter(:pre_character_ids, options[:pre_character_ids]) if options[:pre_character_ids]
+  end
+
+  # Filter to only include tags that have no assigned fandom_ids. Checks that
+  # the fandom exists, because this particular filter is included in the
+  # exclusion_filters section.
+  def wrangled_filter
+    { exists: { field: "fandom_ids" } } unless options[:wrangled]
   end
 
   ################

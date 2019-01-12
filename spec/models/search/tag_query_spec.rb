@@ -31,7 +31,7 @@ describe TagQuery, type: :model do
   it "performs a query string search ('ab OR cd' matches 'ab cd', 'ab/cd' and 'ab “cd” ef')" do
     tag_query = TagQuery.new(name: "ab OR cd")
     results = tag_query.search_results
-    results.first.should eq(tags[:rel_slash])
+    results.should include(tags[:rel_slash])
     results.should include(tags[:rel_space])
     results.should include(tags[:rel_quotes])
   end
@@ -39,7 +39,6 @@ describe TagQuery, type: :model do
   it "performs an exact match with quotes ('xgh OR “abc d”' matches 'abc d')" do
     tag_query = TagQuery.new(name: 'xgh OR "abc d"')
     results = tag_query.search_results
-    results.first.should eq(tags[:char_abc_d])
     results.should include(tags[:char_abc_d])
   end
   

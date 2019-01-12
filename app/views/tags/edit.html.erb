@@ -95,16 +95,11 @@
           <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
             <dt><%= ts("Suggested Fandoms") %>:</dt>
             <dd>
-            <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
               <ul class="tags commas">
-              <% for tag in fandom_list %>
+              <% @suggested_fandoms.each do |tag| %>
                 <li><%= link_to_edit_tag(tag) %></li>
               <% end %>
               </ul>
-            <% end %>
-            <% if @suggested_fandoms.length > 20 %>
-              <p><%= link_to ts("See all (%{fandoms_len})", :fandoms_len => @suggested_fandoms.length), {:controller => :tags, :action => :wrangle, :id => @tag, :show => :suggested_fandoms} %></p>
-            <% end %>
             </dd>
           <% end %>
           <dt><%= tag_category_name(tag_type) %></dt>

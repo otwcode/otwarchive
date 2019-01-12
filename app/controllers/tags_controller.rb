@@ -237,7 +237,7 @@ class TagsController < ApplicationController
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
-    @suggested_fandoms = @tag.suggested_fandoms - @tag.fandoms if @tag.respond_to?(:fandoms)
+    @suggested_fandoms = @tag.suggested_parent_tags("Fandom") - @tag.fandoms if @tag.respond_to?(:fandoms)
   end
 
   def update
@@ -305,7 +305,10 @@ class TagsController < ApplicationController
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
         @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == 'unwrangled'
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.unwrangled_tags(
+          params[:show].singularize.camelize,
+          params.permit!.slice(:sort_column, :sort_direction, :page)
+        )
       else
         @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end

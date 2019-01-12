@@ -13,6 +13,7 @@ class CommonTagging < ApplicationRecord
 
   after_create :update_wrangler
   after_create :inherit_parents
+  after_commit :update_search
 
   def update_wrangler
     unless User.current_user.nil?
@@ -27,5 +28,9 @@ class CommonTagging < ApplicationRecord
         common_tag.add_association(fandom)
       end
     end
+  end
+
+  def update_search
+    common_tag.enqueue_to_index
   end
 end
