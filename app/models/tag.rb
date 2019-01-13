@@ -66,8 +66,8 @@ class Tag < ApplicationRecord
 
   def taggings_count=(value)
     expiry_time = Tag.taggings_count_expiry(value)
-    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    # Only write to the cache if there are more than a number of uses.
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
     write_taggings_to_redis(value)
   end
 
@@ -81,7 +81,7 @@ class Tag < ApplicationRecord
 
   def update_tag_cache
     cache_read = Rails.cache.read(taggings_count_cache_key)
-    taggings_count if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    taggings_count if cache_read.nil? || (cache_read < ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT)
   end
 
   def update_counts_cache(id)
@@ -623,6 +623,11 @@ class Tag < ApplicationRecord
 
   def unwrangled?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
+  end
+
+  # Returns true if a tag has been used in posted works
+  def has_posted_works?
+    self.works.posted.any?
   end
 
   # sort tags by name

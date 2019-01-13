@@ -187,7 +187,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
@@ -258,6 +258,13 @@ class Work < ApplicationRecord
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # If the work gets posted, we should (potentially) reindex the tags,
+  # so they get the correct draft-only status.
+  def update_tag_index
+    return unless saved_change_to_posted?
+    taggings.each(&:update_search)
   end
 
   def self.work_blurb_tag_cache_key(id)
