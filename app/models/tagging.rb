@@ -46,7 +46,7 @@ class Tagging < ApplicationRecord
   end
 
   def update_search
-    return unless Tag::USER_DEFINED.include?(tagger.type)
+    return unless tagger && Tag::USER_DEFINED.include?(tagger.type)
 
     # Reindex the tag for updated suggested tags, which give you an idea of
     # how unwrangled tags are used, but only if it has less than a number of uses.
