@@ -55,11 +55,9 @@ class TagIndexer < Indexer
       only: [
         :id, :name, :sortable_name, :merger_id, :canonical, :created_at,
         :unwrangleable
-      ],
-      methods: [
-        :has_posted_works
       ]
     ).merge(
+      has_posted_works: object.has_posted_works?,
       tag_type: object.type,
       uses: object.taggings_count_cache
     ).merge(parent_data(object))

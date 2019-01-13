@@ -626,7 +626,7 @@ class Tag < ApplicationRecord
   end
 
   # Returns true if a tag has been used in posted works
-  def has_posted_works
+  def has_posted_works?
     self.works.posted.any?
   end
 
