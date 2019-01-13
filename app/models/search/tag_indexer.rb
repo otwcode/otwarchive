@@ -57,7 +57,7 @@ class TagIndexer < Indexer
         :unwrangleable
       ],
       methods: [
-        :draft_only
+        :has_posted_works
       ]
     ).merge(
       tag_type: object.type,

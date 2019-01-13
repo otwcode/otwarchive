@@ -17,7 +17,7 @@ class TagQuery < Query
       type_filter,
       canonical_filter,
       unwrangleable_filter,
-      draft_only_filter,
+      posted_works_filter,
       media_filter,
       fandom_filter,
       character_filter,
@@ -79,8 +79,8 @@ class TagQuery < Query
     term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
   end
 
-  def draft_only_filter
-    term_filter(:draft_only, bool_value(options[:draft_only])) unless options[:draft_only].nil?
+  def posted_works_filter
+    term_filter(:has_posted_works, bool_value(options[:has_posted_works])) unless options[:has_posted_works].nil?
   end
 
   def media_filter

@@ -48,9 +48,10 @@ class Tagging < ApplicationRecord
   def update_search
     return unless tagger && Tag::USER_DEFINED.include?(tagger.type)
 
-    # Reindex the tag for updated suggested tags, which give you an idea of
-    # how unwrangled tags are used, but only if it has less than a number of uses.
-    # For comprehensive data on really popular tags, we still have work search.
+    # Reindex the tag for updated suggested tags.
+    # Suggested tags help wranglers figure out where to wrangle new tags
+    # and if it's necessary to disambiguate existing canonical/unfilterable tags
+    # in multiple fandoms.
     tagger.enqueue_to_index if tagger.taggings_count < ArchiveConfig.TAGGINGS_COUNT_REINDEX_LIMIT
   end
 end

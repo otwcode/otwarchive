@@ -625,9 +625,9 @@ class Tag < ApplicationRecord
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
-  # Returns true if a tag has only been used in drafts
-  def draft_only
-    self.works.unposted.any? && self.works.posted.empty?
+  # Returns true if a tag has been used in posted works
+  def has_posted_works
+    self.works.posted.any?
   end
 
   # sort tags by name
