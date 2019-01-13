@@ -49,7 +49,7 @@ class Tagging < ApplicationRecord
     # When a tag's count is more than this threshold, we start caching it,
     # so taggings_count becomes less accurate. That's our cue to stop
     # eagerly reindexing counts as well.
-    return unless %w[Fandom Character Relationship Freeform].include?(tagger.type)
+    return unless Tag::USER_DEFINED.include?(tagger.type)
     reindex_boundary = ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
     tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
   end
