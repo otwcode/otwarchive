@@ -46,11 +46,11 @@ class Tagging < ApplicationRecord
   end
 
   def update_search
-    # When a tag's count is more than this threshold, we start caching it,
-    # so taggings_count becomes less accurate. That's our cue to stop
-    # eagerly reindexing counts as well.
     return unless Tag::USER_DEFINED.include?(tagger.type)
-    reindex_boundary = ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
-    tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
+
+    # Reindex the tag for updated suggested tags, which give you an idea of
+    # how unwrangled tags are used, but only if it has less than a number of uses.
+    # For comprehensive data on really popular tags, we still have work search.
+    tagger.enqueue_to_index if tagger.taggings_count < ArchiveConfig.TAGGINGS_COUNT_REINDEX_LIMIT
   end
 end
