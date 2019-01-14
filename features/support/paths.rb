@@ -14,6 +14,7 @@ module NavigationHelpers
       step %{all indexing jobs have been run}
       search_bookmarks_path
     when /^the search tags page$/i
+      step %{all indexing jobs have been run}
       search_tags_path
     when /^the search works page$/i
       step %{all indexing jobs have been run}
