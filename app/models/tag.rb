@@ -1220,6 +1220,14 @@ class Tag < ApplicationRecord
   ## SEARCH #######################
   #################################
 
+  # Override enqueue_to_index method from searchable.rb
+  # These changes are quick so we want to do them synchronously,
+  # especially to make sure the unwrangled bins update with as
+  # little delay as possible.
+  def enqueue_to_index
+    reindex_document
+  end
+
   def unwrangled_query(tag_type, options = {})
     TagQuery.new(options.merge(
       type: tag_type,
