@@ -66,15 +66,7 @@ Feature: Download a work
   Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
     And I am logged in as the author of "Blabla"
   Then I should not be able to download the mobi version of "Blabla"
-    And I should see "can't download an unrevealed"
-
-
-  Scenario: Graceful error message when file can't be generated
-
-  Given I am logged in as "author"
-    And I post the work "Whatever"
-    And I try and fail to download the mobi version of "Whatever"
-  Then I should see "Please try again"
+    And I should see "Sorry, you can't download an unrevealed work."
 
 
   Scenario: Works can be downloaded when anonymous

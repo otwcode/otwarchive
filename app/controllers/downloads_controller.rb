@@ -7,9 +7,7 @@ class DownloadsController < ApplicationController
 
   def show
     respond_to :html, :pdf, :mobi, :epub
-    unless params[:dont_generate_download]
-      @download = Download.generate(@work, mime_type: request.format)
-    end
+    @download = Download.generate(@work, mime_type: request.format)
 
     # Make sure we were able to generate the download
     unless @download.present? && @download.exists?
