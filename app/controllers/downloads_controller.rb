@@ -13,7 +13,7 @@ class DownloadsController < ApplicationController
 
     # Make sure we were able to generate the download
     unless @download.present? && @download.exists?
-      flash[:error] = ts('We were not able to render this work. Please try again in a little while or try another format.')
+      flash[:error] = ts("We were not able to render this work. Please try again in a little while or try another format.")
       redirect_to work_path(@work)
       return
     end

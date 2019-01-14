@@ -25,7 +25,7 @@
 #{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
-        <dt><%= ts('Collections') %>:</dt>
+        <dt><%= ts("Collections") %>:</dt>
         <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(",
 ").html_safe %></dd>
       <% end %>
@@ -44,12 +44,12 @@
     <h1><%= @work.title.html_safe %></h1>
     <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
     <% unless @work.summary.blank? %>
-      <p><%= ts('Summary') %></p>
+      <p><%= ts("Summary") %></p>
       <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
-      <p><%= ts('Notes') %></p>
+      <p><%= ts("Notes") %></p>
       <% unless @work.notes.blank? %>
         <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
       <% end %>
@@ -61,23 +61,23 @@
       <% end %>
     <% end %>
 
-  <% related_works = @work.parent_work_relationships.reject{ |wr| !wr.parent } %>
-  <% if related_works.length > 0 %>
-    <ul>
-    <% related_works.each do |work| %>
-      <li>
-        <% relation_text = work.translation ?
-          "A translation of %{work_link} by %{author_link}" :
-          "Inspired by %{work_link} by %{author_link}"
-        %>
-        <% work_link = link_to work.parent.title.html_safe, url_for(work.parent) %>
-        <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
+    <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
+    <% if related_works.length > 0 %>
+      <ul>
+        <% related_works.each do |work| %>
+          <li>
+            <% relation_text = work.translation ?
+              "A translation of %{work_link} by %{author_link}" :
+              "Inspired by %{work_link} by %{author_link}"
+            %>
+            <% work_link = link_to work.parent.title.html_safe, url_for(work.parent) %>
+            <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
 
-        <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
-      </li>
+            <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
-    </ul>
-  <% end %>
 
   </div>
 </div>
