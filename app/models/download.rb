@@ -76,7 +76,7 @@ class Download
   # Utility methods which clean up work data for use in downloads
 
   def fandoms
-    string = work.fandoms.size > 3 ? ts("Multifandom") : work.fandoms.string
+    string = work.fandoms.size > 3 ? "Multifandom" : work.fandoms.string
     clean(string)
   end
 
@@ -85,7 +85,7 @@ class Download
   end
 
   def author_names
-    work.anonymous? ? [ts("Anonymous")] : work.pseuds.sort.map(&:name)
+    work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:name)
   end
 
   # need the next two to be filesystem safe and not overly long
