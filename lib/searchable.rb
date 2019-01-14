@@ -29,7 +29,7 @@ module Searchable
     end
   end
 
-  def enqueue_to_index   
+  def enqueue_to_index
     IndexQueue.enqueue(self, :main)
   end
 
