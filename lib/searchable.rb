@@ -29,6 +29,7 @@ module Searchable
     end
   end
 
+  # We override this for tags in the Tag model
   def enqueue_to_index
     IndexQueue.enqueue(self, :main)
   end
