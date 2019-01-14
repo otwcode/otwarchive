@@ -30,7 +30,11 @@ module Searchable
   end
 
   def enqueue_to_index
-    IndexQueue.enqueue(self, :main)
+    if self.is_a?(Tag)
+      self.reindex_document
+    else    
+      IndexQueue.enqueue(self, :main)
+    end
   end
 
   def indexers
