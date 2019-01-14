@@ -117,12 +117,6 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
-  def current_user
-    # Don't try to assign a current user when generating downloads
-    return if Authlogic::Session::Base.controller.nil?
-    @current_user ||= current_user_session && current_user_session.record
-  end
-
 protected
 
   def record_not_found (exception)
