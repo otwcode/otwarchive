@@ -209,6 +209,13 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I am logged out}
 end
 
+Given /^there is a work "([^"]*)" in an anonymous collection "([^"]*)"$/ do |work, collection|
+  step %{I have the anonymous collection "#{collection}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}" to the collection "#{collection}"}
+  step %{I am logged out}
+end
+
 Given /^I am logged in as the author of "([^"]*)"$/ do |work|
   work = Work.find_by_title(work)
   step %{I am logged in as "#{work.users.first.login}"}
