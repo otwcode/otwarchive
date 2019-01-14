@@ -93,6 +93,21 @@ Given /^tag wrangling is on$/ do
   step("I am logged out as an admin")
 end
 
+Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  check("Turn off support form")
+  fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
+  click_button("Update")
+end
+
+Given /^the support form is enabled$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Turn off support form")
+  click_button("Update")
+end
+
 Given /^I have posted a FAQ$/ do
   step("I am logged in as an admin")
   step %{I make a 1st FAQ post}
@@ -169,6 +184,10 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^the abuse report will not be considered spam$/ do
+  allow(Akismetor).to receive(:spam?).and_return(false)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -241,7 +260,7 @@ When /^the invite_from_queue_at is yesterday$/ do
 end
 
 When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
+  step %{I run the rake task "invitations:check_queue"}
 end
 
 When /^I edit known issues$/ do

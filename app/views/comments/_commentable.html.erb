@@ -9,11 +9,11 @@
     <% end %>
 
     <% if @work && @previous_chapter %>
-      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter] %></li>
+      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <% if @work && @next_chapter %>
-      <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <% if @previous_admin_post %>
@@ -72,9 +72,18 @@
     <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
   <% end %>
 
-  <% if !logged_in? && (commentable.is_a?(Work) && commentable.anon_commenting_disabled || commentable.is_a?(Chapter) && commentable.work.anon_commenting_disabled) %>
+  <% commentable_parent = find_parent(commentable) %>
+  <% if !logged_in? && commentable_parent.is_a?(Work) && commentable_parent.anon_commenting_disabled %>
     <p class="notice">
       <%= ts("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!") %>
+    </p>
+  <% elsif commentable_parent.is_a?(Work) && commentable_parent.hidden_by_admin? %>
+    <p class="notice">
+      <%= ts("Sorry, you can't add or edit comments on a hidden work.") %>
+    </p>
+  <% elsif commentable_parent.is_a?(Work) && commentable_parent.in_unrevealed_collection %>
+    <p class="notice">
+      <%= ts("Sorry, you can't add or edit comments on an unrevealed work.") %>
     </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">

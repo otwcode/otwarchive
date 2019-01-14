@@ -225,15 +225,24 @@ describe Work do
         expect(work.crossover).to be_falsey
       end
 
-      it "is a crossover with another fandom sharing one meta tag, but with a second unrelated meta tag" do
+      it "is not a crossover with another fandom with two unrelated meta tags, only one of which is shared by both fandoms" do
         # The tag fandom and the tag other share one meta tag (meta2), but
         # fandom has a meta tag meta1 completely unrelated to other, and other
-        # has a meta tag meta3 completely unrelated to fandom. So for the
-        # purposes of this check, they count as unrelated, and thus a work
-        # tagged with both is a crossover.
+        # has a meta tag meta3 completely unrelated to fandom. However, the
+        # shared meta tag means that they are related, and thus a work tagged
+        # with both is not a crossover.
         meta3 = create(:canonical_fandom)
         other = create(:canonical_fandom)
         other.update_attribute(:meta_tag_string, "#{meta2.name},#{meta3.name}")
+        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
+        expect(work.crossover).to be_falsey
+      end
+
+      it "is a crossover with another fandom with two unrelated meta tags, when none of the meta tags are shared" do
+        meta3 = create(:canonical_fandom)
+        meta4 = create(:canonical_fandom)
+        other = create(:canonical_fandom)
+        other.update_attribute(:meta_tag_string, "#{meta3.name},#{meta4.name}")
         work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
         expect(work.crossover).to be_truthy
       end

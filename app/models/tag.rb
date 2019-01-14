@@ -1,9 +1,6 @@
 class Tag < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include StringCleaner
   include WorksOwner
@@ -25,32 +22,15 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def self.document_type
-    "tag"
-  end
-
   delegate :document_type, to: :class
-
-  # ES UPGRADE TRANSITION #
-  # Delete this function, since it's unnecessary.
-  def to_indexed_json
-    as_json.merge(tag_type: type).to_json
-  end
 
   def document_json
     TagIndexer.new({}).document(self)
   end
 
   def self.write_redis_to_database
-    REDIS_GENERAL.smembers("tag_update").each_slice(1000) do |batch|
+    batch_size = ArchiveConfig.TAG_UPDATE_BATCH_SIZE
+    REDIS_GENERAL.smembers("tag_update").each_slice(batch_size) do |batch|
       Tag.transaction do
         batch.each do |id|
           value = REDIS_GENERAL.get("tag_update_#{id}_value")
@@ -86,8 +66,8 @@ class Tag < ApplicationRecord
 
   def taggings_count=(value)
     expiry_time = Tag.taggings_count_expiry(value)
-    # Only write to the cache if there are more than TAGGINGS_COUNT_MIN_CACHE_COUNT ( defaults to 1,000 ) uses.
-    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000)
+    # Only write to the cache if there are more than a number of uses.
+    Rails.cache.write(taggings_count_cache_key, value, race_condition_ttl: 10, expires_in: expiry_time.minutes) if value >= ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
     write_taggings_to_redis(value)
   end
 
@@ -101,7 +81,7 @@ class Tag < ApplicationRecord
 
   def update_tag_cache
     cache_read = Rails.cache.read(taggings_count_cache_key)
-    taggings_count if cache_read.nil? || (cache_read < (ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT || 1000))
+    taggings_count if cache_read.nil? || (cache_read < ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT)
   end
 
   def update_counts_cache(id)
@@ -161,9 +141,6 @@ class Tag < ApplicationRecord
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
   has_many :taggings, as: :tagger
   has_many :works, through: :taggings, source: :taggable, source_type: 'Work'
-
-  has_many :same_work_tags, -> { distinct }, through: :works, source: :tags
-  has_many :suggested_fandoms, -> { distinct }, through: :works, source: :fandoms
 
   has_many :bookmarks, through: :taggings, source: :taggable, source_type: 'Bookmark'
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
@@ -648,6 +625,11 @@ class Tag < ApplicationRecord
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
+  # Returns true if a tag has been used in posted works
+  def has_posted_works?
+    self.works.posted.any?
+  end
+
   # sort tags by name
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
@@ -697,7 +679,6 @@ class Tag < ApplicationRecord
 
   # Take the most direct route from tag to pseud and queue up to reindex
   def reindex_pseuds
-    return unless $rollout.active?(:start_new_indexing)
     Creatorship.select(:id, :pseud_id).
                 joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
                 where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
@@ -727,7 +708,6 @@ class Tag < ApplicationRecord
 
   # Reindex all series (series_ids argument works as above)
   def reindex_all_series(series_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if series_ids.empty?
       series_ids = all_filtered_series_ids
     end
@@ -751,7 +731,6 @@ class Tag < ApplicationRecord
 
   # Reindex all external works (external_work_ids argument works as above)
   def reindex_all_external_works(external_work_ids = [])
-    return unless $rollout.active?(:start_new_indexing)
     if external_work_ids.empty?
       external_work_ids = all_filtered_external_work_ids
     end
@@ -785,9 +764,9 @@ class Tag < ApplicationRecord
   def reindex_filtered_item(item)
     if item.is_a?(Work)
       RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
     else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background) if $rollout.active?(:start_new_indexing)
+      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
     end 
   end
 
@@ -1241,36 +1220,47 @@ class Tag < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :id,           index: :not_analyzed
-    indexes :name#,         analyzer: 'snowball', boost: 100
-    indexes :type
-    indexes :canonical,    type: :boolean
+  def unwrangled_query(tag_type, options = {})
+    TagQuery.new(options.merge(
+      type: tag_type,
+      unwrangleable: false,
+      wrangled: false,
+      pre_fandom_ids: [self.id]
+    ))
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
-      query do
-        boolean do
-          must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :canonical, 'T' } if options[:canonical].present?
+  def unwrangled_tags(tag_type, options = {})
+    unwrangled_query(tag_type, options).search_results
+  end
 
-          if options[:type].present?
-            # To support the tags indexed prior to IndexSubqueue, we want to
-            # find the type either in the tag_type field or the _type field:
-            should { term '_type', options[:type].downcase }
-            should { term :tag_type, options[:type].downcase }
-
-            # The tire gem doesn't natively support :minimum_should_match,
-            # but elasticsearch 0.90 does, so we hack it in.
-            @value[:minimum_should_match] = 1
-          end
-        end
-      end
+  def unwrangled_tag_count(tag_type)
+    key = "unwrangled_#{tag_type}_#{self.id}_#{self.updated_at}"
+    Rails.cache.fetch(key, expires_in: 4.hours) do
+      unwrangled_query(tag_type).count
     end
+  end
+
+  def suggested_parent_tags(parent_type, options = {})
+    limit = options[:limit] || 50
+    work_ids = works.limit(limit).pluck(:id)
+    Tag.distinct.joins(:taggings).where(
+      "tags.type" => parent_type,
+      taggings: {
+        taggable_type: 'Work',
+        taggable_id: work_ids
+      }
+    )
+  end
+
+  # For works that haven't been wrangled yet, get the fandom/character tags
+  # that are used on their works as a place to start
+  def suggested_parent_ids(parent_type)
+    return [] if !parent_types.include?(parent_type) ||
+      unwrangleable? ||
+      parents.by_type(parent_type).exists?
+
+    suggested_parent_tags(parent_type).pluck(:id, :merger_id).
+                                       flatten.compact.uniq
   end
 
   after_create :after_create

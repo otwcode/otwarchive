@@ -33,6 +33,7 @@ Feature: Edit Works
       # line below fails with perform_caching: true because of issue 3461
       # And I should see "Additional Tags: new tag"
       And I should see "first chapter content"
+      And I should see "Words:3"
     When I press "Update"
     Then I should see "Work was successfully updated."
       And I should see "Additional Tags: new tag"
@@ -69,7 +70,8 @@ Feature: Edit Works
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
       And I press "Cancel"
-      Then I should see "second chapter content"
+    Then I should see "second chapter content"
+      And I should see "Words:7"
     # Test changing pseuds on a work
     When I go to testuser's works page
       And I follow "Edit"

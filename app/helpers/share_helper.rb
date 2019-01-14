@@ -48,7 +48,7 @@ module ShareHelper
   def get_embed_link_bookmark_meta(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
       tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "), tag("br"))
-      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :notes)))
+      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :bookmarker_notes)))
     end
   end
 

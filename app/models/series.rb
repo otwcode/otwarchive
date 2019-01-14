@@ -40,7 +40,7 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.SUMMARY_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :notes,
+  validates_length_of :series_notes,
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)

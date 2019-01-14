@@ -38,7 +38,7 @@
       <div id="inner" class="wrapper">
         <!-- BEGIN main -->
         <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region" role="main">
-          <%= flash_div :error, :caution, :notice %>
+          <%= flash_div :error, :caution, :notice, :alert %>
           <div class="flash"></div>
           <div id="signin">
             <%= yield %>

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+ruby '2.3.4'
 
 gem 'test-unit', '~> 3.2'
 
@@ -25,6 +25,9 @@ gem 'rails-controller-testing'
 gem 'mysql2', '0.3.20'
 
 #https://github.com/qertoip/transaction_retry
+# We don't use the isolation gem directly, but it needs to be
+# at the latest version to avoid errors
+gem 'transaction_isolation', '1.0.5'
 gem 'transaction_retry'
 #https://github.com/winebarrel/activerecord-mysql-reconnect
 gem 'activerecord-mysql-reconnect', '~> 0.4.1'
@@ -50,7 +53,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.8.3'
+gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
@@ -62,7 +65,6 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
-gem 'tire'
 gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
@@ -76,7 +78,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
@@ -138,10 +139,9 @@ group :test do
   gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.6.2'
+  gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'capybara-screenshot'
   gem 'cucumber-rails', '~> 1.5', require: false
@@ -174,7 +174,7 @@ group :development do
 end
 
 group :test, :development, :staging do
-  gem 'bullet', '~> 5.6.0'
+  gem 'bullet', '>= 5.7.3'
 end
 
 # Deploy with Capistrano

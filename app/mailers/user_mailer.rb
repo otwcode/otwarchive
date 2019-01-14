@@ -3,7 +3,6 @@ class UserMailer < BulletproofMailer::Base
 
   layout 'mailer'
 
-  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -158,7 +157,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -216,20 +215,6 @@ class UserMailer < BulletproofMailer::Base
       mail(
         to: @user.email,
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
-  # Sends a temporary password to the user
-  def reset_password(user_id, activation_code)
-    @user = User.find(user_id)
-    @password = activation_code
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -322,9 +307,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -342,9 +328,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,

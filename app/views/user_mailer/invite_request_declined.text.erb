@@ -1,9 +1,9 @@
 <% content_for :message do %>
-<%= ts("Dear #{@user.login}, ")%>
-<%= ts("We regret to inform you that your request for #{@total} new ") %><%= @total == 1 ? ts("invitation") : ts("invitations") %><%= ts(" cannot be fulfilled at this time.") %>
-<%= ts("Your request was: ") %>
+<%= t('.greeting', user: @user.login) %>
+<%= t('.main', count: @total) %>
+<%= t('.reason') %>
 <%= to_plain_text(raw @reason) %>
 
-Regards,
-AO3
+<%= t('.signoff') %>
+<%= ArchiveConfig.APP_SHORT_NAME %>
 <% end %>

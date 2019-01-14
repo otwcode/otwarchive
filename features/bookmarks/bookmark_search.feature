@@ -226,3 +226,8 @@ Feature: Search Bookmarks
       And I should not see "Finished Work"
       And I should not see "Complete Series"
       And I should not see "External Work"
+
+  Scenario: Inputting bad queries
+  When I fill in "Any field on work" with "bad~query~~!!!"
+    And I press "Search Bookmarks"
+  Then I should see "Your search failed because of a syntax error"

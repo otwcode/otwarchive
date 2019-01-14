@@ -45,10 +45,10 @@
     <% end %>
 
     <!--notes-->
-    <% unless bookmark.notes.blank? %>
+    <% unless bookmark.bookmarker_notes.blank? %>
       <h6 class="landmark heading"><%= ts('Bookmarker\'s Notes') %></h6>
       <blockquote class="userstuff notes">
-        <%=raw sanitize_field(bookmark, :notes) %>
+        <%=raw sanitize_field(bookmark, :bookmarker_notes) %>
       </blockquote>
     <% end %>
     <% # end of information added by the bookmark owner %>

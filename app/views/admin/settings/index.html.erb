@@ -32,6 +32,21 @@
   </fieldset>
 
   <fieldset>
+    <legend><%= ts("Turn Off Support Form") %></legend>
+    <h3 class="landmark heading"><%= ts("Turn Off Support Form") %></h3>
+    <dl>
+      <dt><%= f.check_box :disable_support_form %></dt>
+      <dd>
+        <%= f.label :disable_support_form, ts("Turn off support form") %>
+        <legend><%= f.label :disabled_support_form_text, ts("Disabled support form text") %></legend>
+        <p><%= allowed_html_instructions %></p>
+        <%= f.text_area :disabled_support_form_text %>
+      </dd>
+    </dl>
+  </fieldset>
+  
+
+  <fieldset>
     <legend><%= ts("Performance and Misc") %></legend>
     <h3 class="landmark heading"><%= ts("Performance and Misc") %></h3>
     <dl>

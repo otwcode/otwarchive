@@ -247,6 +247,19 @@ describe Tag do
     end
   end
 
+  describe "has_posted_works?" do
+    before do
+      create(:posted_work, fandom_string: "love live,jjba")
+      create(:draft, fandom_string: "zombie land saga,jjba")
+    end
+
+    it "is true if used in posted works" do
+      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    end
+  end
+
   describe "can_change_type?" do
     it "should be false for a wrangled tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)
@@ -277,21 +290,8 @@ describe Tag do
       tag = FactoryGirl.create(:unsorted_tag)
       expect(tag.can_change_type?).to be_truthy
 
-      # TODO: use factories when they stop giving validation errors and stack too deep errors
-      creator = User.new(terms_of_service: '1', age_over_13: '1')
-      creator.login = "Creator"
-      creator.email = "creator@muse.net"
-      creator.save
-      bookmarker = User.new(terms_of_service: '1', age_over_13: '1')
-      bookmarker.login = "Bookmarker"
-      bookmarker.email = "bookmarker@avidfan.net"
-      bookmarker.save
-      chapter = Chapter.new(content: "Whatever 10 characters", authors: [creator.pseuds.first])
-      work = Work.new(title: "Work", fandom_string: "Whatever", authors: [creator.pseuds.first], chapters: [chapter])
-      work.posted = true
-      work.save
+      bookmark = FactoryGirl.create(:bookmark, tag_string: tag.name)
 
-      bookmark = Bookmark.create(bookmarkable_type: "Work", bookmarkable_id: work.id, pseud_id: bookmarker.pseuds.first.id, tag_string: tag.name)
       expect(bookmark.tags).to include(tag)
       expect(tag.can_change_type?).to be_truthy
     end

@@ -24,3 +24,15 @@ Feature: Admin Settings Page
       And I edit the tag "Ianto Jones"
     Then I should see "Wrangling is disabled at the moment. Please check back later."
       And I should not see "Synonym of"
+    
+  Scenario: Turn off Support form
+    Given the support form is disabled and its text field set to "Please don't contact us"
+    When I am logged in as a random user
+      And I go to the support page
+    Then I should see "Please don't contact us"
+
+  Scenario: Turn on Support form
+    Given the support form is enabled
+    When I am logged in as a random user
+      And I go to the support page
+    Then I should see "We can answer Support inquiries in"

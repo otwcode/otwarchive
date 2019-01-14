@@ -17,11 +17,11 @@
     <li class="chapter entire"><%= link_to ts("Entire Work"), work_path(@work, :view_full_work => 'true') %></li>
 
     <% if @previous_chapter %>
-      <li class="chapter previous"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
+      <li class="chapter previous"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <% if @next_chapter %>
-      <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
     <li class="chapter" aria-haspopup="true">
@@ -56,7 +56,7 @@
     </li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
-    <li class="mark"> 
+    <li class="mark">
       <% if marked_for_later?(@work) %>
         <%= mark_as_read_link(@work) %>
       <% else %>
@@ -68,7 +68,7 @@
 
   <li class="comments" id="show_comments_link_top">
     <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
-    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %> 
+    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %>
     <% if commentable.count_visible_comments > 0 %>
       <%= show_hide_comments_link(commentable) %>
     <% else %>
@@ -82,7 +82,7 @@
       <%= link_to ts("Unreviewed Comments") + " (" + @work.find_all_comments.unreviewed_only.count.to_s + ")" , unreviewed_work_comments_path(@work) %>
     </li>
   <% end %>
-  
+
   <% # allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
     <li class="style">
@@ -102,7 +102,7 @@
       <%= render 'share/share', :shareable => @work %>
     </li>
   <% end %>
-  
+
   <% if current_user && @subscription %>
     <li class="subscribe">
       <%= render 'subscriptions/form', :subscription => @subscription %>
