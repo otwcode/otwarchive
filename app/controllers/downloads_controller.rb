@@ -39,6 +39,12 @@ protected
       return
     end
 
+    unless @admin_settings.downloads_enabled?
+      flash[:error] = ts("Sorry, downloads are currently disabled.")
+      redirect_back_or_default works_path
+      return
+    end
+
     # set this for checking visibility
     @check_visibility_of = @work
   end
