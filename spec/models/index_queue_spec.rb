@@ -51,7 +51,6 @@ describe IndexQueue do
 
     it "should call the tag indexer" do
       tag = create(:freeform)
-      IndexQueue.enqueue(tag, :main)
       expect(TagIndexer).to receive(:new).with(
         array_including(tag.id.to_s)
       ).and_call_original
