@@ -130,10 +130,8 @@ class DownloadWriter
     }
     if work.series.exists?
       series = work.series.first
-      @metadata.merge!(
-        series_title: series.title,
-        series_position: series.position_of(work).to_s
-      )
+      @metadata[:series_title] = series.title
+      @metadata[:series_position] = series.position_of(work).to_s
     end
     @metadata
   end
