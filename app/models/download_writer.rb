@@ -114,12 +114,12 @@ class DownloadWriter
     @metadata = {
       title:             work.title,
       sortable_title:    work.sorted_title,
-      # Note that using ampersands as instructed by Calibre's ebook-convert CLI
-      # documention means only the first creator name is displayed or available
-      # for sorting in the Mac Books app (formerly iBooks). However, using
-      # commas to make it work in Books would mean Calibre's GUI treats it as
-      # one name, e.g. "testy, testy2" is like "Fangirl, Suzy Q."
-      authors:           download.author_names.join("&"),
+      # Using ampersands as instructed by Calibre's ebook-convert documentation
+      # hides all but the first author name in Books (formerly iBooks). The
+      # other authors cannot be used for searching or sorting. Using commas
+      # just means Calibre's GUI treats it as one name, e.g. "testy, testy2" is
+      # like "Fangirl, Suzy Q", for searching and sorting.
+      authors:           download.authors,
       sortable_authors:  work.authors_to_sort_on,
       # We add "Fanworks" because Books uses the first tag as the category and
       # it would otherwise be the work's rating, which is weird.
