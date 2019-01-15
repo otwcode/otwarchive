@@ -1098,12 +1098,19 @@ class Tag < ApplicationRecord
     end
   end
 
+  # Splits up the passed-in string into a sequence of individual tag names,
+  # then finds (and yields) the tag for each. Used by add_association_string,
+  # meta_tag_string=, and sub_tag_string=.
+  def parse_tag_string(tag_string)
+    tag_string.split(",").map(&:squish).each do |name|
+      yield name, Tag.find_by_name(name)
+    end
+  end
+
   # Try to create new associations with the tags of type tag_type whose names
   # are listed in tag_string.
   def add_association_string(tag_type, tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = Tag.find_by_name(name)
+    parse_tag_string(tag_string) do |name, parent|
       prefix = "Cannot add association to '#{name}':"
       if parent && parent.type != tag_type
         errors.add(:base, "#{prefix} #{parent.type} added in #{tag_type} field.")
@@ -1144,18 +1151,14 @@ class Tag < ApplicationRecord
   end
 
   def meta_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = Tag.find_by_name(name)
+    parse_tag_string(tag_string) do |name, parent|
       meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
       save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
     end
   end
 
   def sub_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      sub = Tag.find_by_name(name)
+    parse_tag_string(tag_string) do |name, sub|
       sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
       save_and_gather_errors(sub_tagging, "Invalid sub tag '#{name}':")
     end
