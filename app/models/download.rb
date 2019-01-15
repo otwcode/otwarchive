@@ -54,7 +54,7 @@ class Download
   # The base name of the file (eg, "War and Peace")
   def file_name
     name = clean(work.title)
-    name = "Work #{work.id}" if name.length < 3
+    name += " Work #{work.id}" if name.length < 3
     name
   end
 
