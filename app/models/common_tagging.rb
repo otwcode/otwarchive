@@ -2,6 +2,9 @@
 # It should probably be renamed "ChildTagging" and have the flip tagging called "ParentTagging"?
 # Also it doesn't need to be polymorphic -- in practice, all the types are Tag
 # -- NN 11/2012
+# Because I never understand without looking at one in the database: common_tag
+# is the child tag and filterable is the parent tag.
+# -- Sarken 01/2019
 class CommonTagging < ApplicationRecord
   # we need "touch" here so that when a common tagging changes, the tag(s) themselves are updated and
   # they get noticed by the tag sweeper (which then updates their autocomplete data)
