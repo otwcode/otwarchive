@@ -247,6 +247,19 @@ describe Tag do
     end
   end
 
+  describe "has_posted_works?" do
+    before do
+      create(:posted_work, fandom_string: "love live,jjba")
+      create(:draft, fandom_string: "zombie land saga,jjba")
+    end
+
+    it "is true if used in posted works" do
+      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    end
+  end
+
   describe "can_change_type?" do
     it "should be false for a wrangled tag" do
       tag = Freeform.create(name: "wrangled", canonical: true)

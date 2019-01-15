@@ -46,9 +46,12 @@ class Tagging < ApplicationRecord
   end
 
   def update_search
-    reindex_boundary = 100
-    if %w(Character Relationship Freeform).include?(tagger.type)
-      tagger.enqueue_to_index if tagger.taggings_count < reindex_boundary
-    end
+    return unless tagger && Tag::USER_DEFINED.include?(tagger.type)
+
+    # Reindex the tag for updated suggested tags.
+    # Suggested tags help wranglers figure out where to wrangle new tags
+    # and if it's necessary to disambiguate existing canonical/unfilterable tags
+    # in multiple fandoms.
+    tagger.enqueue_to_index if tagger.taggings_count < ArchiveConfig.TAGGINGS_COUNT_REINDEX_LIMIT
   end
 end
