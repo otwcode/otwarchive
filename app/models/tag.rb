@@ -621,7 +621,7 @@ class Tag < ApplicationRecord
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
-  def unwrangled?
+  def unfilterable?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
@@ -637,7 +637,7 @@ class Tag < ApplicationRecord
 
   # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
   def can_change_type?
-    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+    self.unfilterable? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
   # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
