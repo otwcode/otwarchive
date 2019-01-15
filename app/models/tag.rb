@@ -1156,8 +1156,8 @@ class Tag < ApplicationRecord
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       sub = Tag.find_by_name(name)
-      meta_tagging = sub_taggings.build(sub_tag: sub, direct: true)
-      save_and_gather_errors(meta_tagging, "Invalid sub tag '#{name}':")
+      sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
+      save_and_gather_errors(sub_tagging, "Invalid sub tag '#{name}':")
     end
   end
 
