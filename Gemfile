@@ -101,7 +101,7 @@ gem 'timeliness'
 # gem 'rpm_contrib', '2.2.0'
 
 # for generating graphs
-gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
