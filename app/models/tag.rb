@@ -1307,6 +1307,11 @@ class Tag < ApplicationRecord
       end
     end
 
+    # Reindex immediately to update the unwrangled bin.
+    if tag.saved_change_to_unwrangleable?
+      tag.reindex_document
+    end
+
     update_tag_nominations(tag)
   end
 

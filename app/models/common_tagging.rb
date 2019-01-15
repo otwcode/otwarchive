@@ -30,7 +30,8 @@ class CommonTagging < ApplicationRecord
     end
   end
 
+  # If a tag's parent changes, reindex immediately to update unwrangled bins.
   def update_search
-    common_tag.enqueue_to_index
+    common_tag.reindex_document
   end
 end
