@@ -151,7 +151,6 @@ class Series < ApplicationRecord
     serial_works.where(work_id: work.id).pluck(:position).first
   end
 
-
   # return list of pseuds on this series
   def allpseuds
     works.collect(&:pseuds).flatten.compact.uniq.sort
