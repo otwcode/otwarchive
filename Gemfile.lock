@@ -15,8 +15,8 @@ GIT
       activemodel (>= 4.0)
 
 GIT
-  remote: https://github.com/stephendolan/google_visualr
-  revision: 1c5f087a0c4412e08b5c15fd2593c0e0c311a3ab
+  remote: https://github.com/winston/google_visualr
+  revision: 17b97114a345baadd011e7b442b9a6c91a2b7ab5
   specs:
     google_visualr (2.5.1)
 
