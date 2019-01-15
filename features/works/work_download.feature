@@ -44,6 +44,8 @@ Feature: Download a work
   Then I should be able to download all versions of "流亡在阿尔比恩"
   When I post the work "-dash in title-"
   Then I should be able to download all versions of "-dash in title-"
+  When I post the work "Emjoi 🤩 Yay 🥳"
+  Then I should be able to download all versions of "Emjoi 🤩 Yay 🥳"
 
 
   Scenario: Download of chaptered works includes chapters
