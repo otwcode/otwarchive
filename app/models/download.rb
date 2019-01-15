@@ -119,5 +119,4 @@ class Download
     string = string.truncate(24, separator: ' ', omission: '')
     string
   end
-
 end
