@@ -131,7 +131,12 @@ class Tag < ApplicationRecord
   has_many :common_taggings, foreign_key: 'common_tag_id', dependent: :destroy
   has_many :child_taggings, class_name: 'CommonTagging', as: :filterable
   has_many :children, through: :child_taggings, source: :common_tag
-  has_many :parents, through: :common_taggings, source: :filterable, source_type: 'Tag', after_remove: :update_wrangler
+  has_many :parents,
+           through: :common_taggings,
+           source: :filterable,
+           source_type: 'Tag',
+           before_remove: :destroy_common_tagging,
+           after_remove: :update_wrangler
 
   has_many :meta_taggings, foreign_key: 'sub_tag_id', dependent: :destroy
   has_many :meta_tags, through: :meta_taggings, source: :meta_tag, before_remove: :update_meta_filters
@@ -246,6 +251,14 @@ class Tag < ApplicationRecord
     elsif self.type == "Fandom" && !self.type_was.nil?
       self.parents = [Media.uncategorized]
     end
+  end
+
+  # Callback for has_many :parents.
+  # Destroy the common tagging so we trigger CommonTagging's callbacks when a
+  # parent is removed. We're specifically interested in the update_search
+  # callback that will reindex the tag and return it to the unwrangled bin.
+  def destroy_common_tagging(parent)
+    self.common_taggings.find_by(filterable_id: parent.id).try(:destroy)
   end
 
   scope :id_only, -> { select("tags.id") }
@@ -621,7 +634,7 @@ class Tag < ApplicationRecord
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
-  def unwrangled?
+  def unfilterable?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
@@ -637,7 +650,7 @@ class Tag < ApplicationRecord
 
   # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
   def can_change_type?
-    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+    self.unfilterable? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
   # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
@@ -1305,6 +1318,11 @@ class Tag < ApplicationRecord
       tag.parents.each do |parent_tag|
         ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
       end
+    end
+
+    # Reindex immediately to update the unwrangled bin.
+    if tag.saved_change_to_unwrangleable?
+      tag.reindex_document
     end
 
     update_tag_nominations(tag)

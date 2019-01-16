@@ -233,7 +233,6 @@ module NavigationHelpers
     when /^the wranglers page$/i
       tag_wranglers_path
     when /^my wrangling page$/i
-      step %{all indexing jobs have been run}
       tag_wrangler_path(User.current_user)
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path

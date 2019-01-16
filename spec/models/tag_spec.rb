@@ -210,40 +210,40 @@ describe Tag do
     end
   end
 
-  describe "unwrangled?" do
-    it "should be false for a canonical" do
+  describe "unfilterable?" do
+    it "is false for a canonical" do
       tag = Freeform.create(name: "canonical", canonical: true)
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for an unwrangleable" do
+    it "is false for an unwrangleable" do
       tag = Tag.create(name: "unwrangleable", unwrangleable: true)
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for a synonym" do
+    it "is false for a synonym" do
       tag = Tag.create(name: "synonym")
       tag_merger = Tag.create(name: "merger")
       tag.merger = tag_merger
       tag.save
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for a merger tag" do
+    it "is false for a merger tag" do
       tag = Tag.create(name: "merger")
       tag_syn = Tag.create(name: "synonym")
       tag_syn.merger = tag
       tag_syn.save
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be true for a tag with a Fandom parent" do
+    it "is true for a tag with a Fandom parent" do
       tag_character = FactoryGirl.create(:character, canonical: false)
       tag_fandom = FactoryGirl.create(:fandom, canonical: true)
       tag_character.parents = [tag_fandom]
       tag_character.save
 
-      expect(tag_character.unwrangled?).to be_truthy
+      expect(tag_character.unfilterable?).to be_truthy
     end
   end
 
