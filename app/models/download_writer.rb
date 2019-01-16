@@ -123,7 +123,7 @@ class DownloadWriter
       sortable_authors:  work.authors_to_sort_on,
       # We add "Fanworks" because Books uses the first tag as the category and
       # it would otherwise be the work's rating, which is weird.
-      tags:              "Fanworks, " + work.tags.pluck(:name).join(","),
+      tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),
       pubdate:           work.revised_at.to_date.to_s,
       summary:           work.summary,
       language:          work.language.short
