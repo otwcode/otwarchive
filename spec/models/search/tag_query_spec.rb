@@ -15,7 +15,7 @@ describe TagQuery, type: :model do
       rel_slash: create(:relationship, name: "ab/cd"),
       rel_space: create(:relationship, name: "ab cd"),
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
-      rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck"),
+      rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
     update_and_refresh_indexes('tag', 1)
     tags

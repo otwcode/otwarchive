@@ -21,7 +21,7 @@ class TagIndexer < Indexer
           tag_type: { type: "keyword" },
           sortable_name: {
             type: "text",
-            analyzer: "exact_tag_analyzer",
+            analyzer: "exact_tag_analyzer"
           },
           uses: { type: "integer" }
         }
