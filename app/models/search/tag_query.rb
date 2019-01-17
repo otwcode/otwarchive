@@ -107,7 +107,7 @@ class TagQuery < Query
   # the fandom exists, because this particular filter is included in the
   # exclusion_filters section.
   def wrangled_filter
-    { exists: { field: "fandom_ids" } } unless options[:wrangled]
+    { exists: { field: "fandom_ids" } } unless options[:wrangled].nil?
   end
 
   ################

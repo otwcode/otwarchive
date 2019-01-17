@@ -15,7 +15,7 @@ describe TagQuery, type: :model do
       rel_slash: create(:relationship, name: "ab/cd"),
       rel_space: create(:relationship, name: "ab cd"),
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
-      rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
+      rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck"),
     }
     update_and_refresh_indexes('tag', 1)
     tags
@@ -155,5 +155,16 @@ describe TagQuery, type: :model do
     tag_query = TagQuery.new(name: "a*")
     results = tag_query.search_results
     expect(results.size).to eq 5
+  end
+
+  before do
+    @wrangled_tag = create(:freeform, name: "wrangled ff")
+    create(:common_tagging, common_tag_id: @wrangled_tag.id)
+    update_and_refresh_indexes('tag', 1)
+  end
+  it "matches wrangled tags" do
+    tag_query = TagQuery.new(name: "wrangled ff")
+    results = tag_query.search_results
+    results.should include(@wrangled_tag)
   end
 end
