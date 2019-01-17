@@ -1276,6 +1276,23 @@ class Tag < ApplicationRecord
                                        flatten.compact.uniq
   end
 
+  # Get all tags that have this one as a suggested parent.
+  def suggested_child_tags_query(options = {})
+   TagQuery.new(options.merge(
+      unwrangleable: false,
+      unwrangled: false,
+      pre_fandom_ids: [self.id]
+    ))
+  end
+
+  def suggested_child_tags(options = {})
+    suggested_child_tags_query(options).search_results
+  end
+
+  def suggested_child_ids
+    suggested_child_tags.pluck(:id)
+  end
+
   after_create :after_create
   def after_create
     tag = self
@@ -1311,6 +1328,7 @@ class Tag < ApplicationRecord
       if tag.merger_id.present?
         tag.merger.update_works_index_timestamp!
       end
+      IndexQueue.enqueue_ids(Tag, tag.suggested_child_ids, :background)
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)

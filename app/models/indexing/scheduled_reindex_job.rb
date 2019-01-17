@@ -5,7 +5,7 @@ class ScheduledReindexJob
               when 'main'
                 %w(Pseud Tag Work Bookmark Series ExternalWork)
               when 'background'
-                %w(Work Bookmark Pseud Series ExternalWork)
+                %w(Work Bookmark Pseud Series ExternalWork Tag)
               when 'stats'
                 %w(StatCounter)
               end

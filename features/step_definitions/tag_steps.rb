@@ -365,6 +365,10 @@ When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
   click_button("Save changes")
 end
 
+When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
+  visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
+end
+
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do

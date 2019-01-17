@@ -221,3 +221,22 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should not see "Please log in as an admin"
      And I should see "Cowboy Bebop"
 
+  Scenario: Synning a fandom to a canonical fandom moves its unwrangled tags to the canonical's unwrangled bin
+    Given the tag wrangler "krebbs" with password "southfork" is wrangler of "Canonical Fandom"
+      And I post the work "Populating My Syn Fandom" with fandom "Syn Fandom" with character "Syn Fandom Character" with freeform "Syn Fandom Freeform" with relationship "Syn Fandom Relationship"
+    When I syn the tag "Syn Fandom" to "Canonical Fandom"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Character"
+    When I view the unwrangled freeform bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Freeform"
+    When I view the unwrangled relationship bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Relationship"
+    When I de-syn the tag "Syn Fandom" from "Canonical Fandom"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Character"
+    When I view the unwrangled freeform bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Freeform"
+    When I view the unwrangled relationship bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Relationship"
