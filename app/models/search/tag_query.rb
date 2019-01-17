@@ -51,7 +51,7 @@ class TagQuery < Query
       column = "created_at"
       direction ||= "desc"
     else
-      column = "name"
+      column = "sortable_name"
       direction ||= "asc"
     end
     sort_hash = { column => { order: direction } }
