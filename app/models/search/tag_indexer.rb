@@ -19,10 +19,7 @@ class TagIndexer < Indexer
             }
           },
           tag_type: { type: "keyword" },
-          sortable_name: {
-            type: "text",
-            analyzer: "exact_tag_analyzer"
-          },
+          sortable_name: { type: "keyword" },
           uses: { type: "integer" }
         }
       }
