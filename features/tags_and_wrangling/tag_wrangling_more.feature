@@ -240,3 +240,10 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should not see "Syn Fandom Freeform"
     When I view the unwrangled relationship bin for "Canonical Fandom"
     Then I should not see "Syn Fandom Relationship"
+
+ Scenario: New relationship tags that are on a work with a canonical character tag should appear in that canonical charcater's unwrangled bin.
+    Given a canonical character "Canonical Character"
+      And I am logged in as a tag wrangler
+      And I post the work "Populating My Tags" with fandom "Canonical Fandom" with character "Canonical Character" with relationship "Canonical Character/OC"
+    When I view the unwrangled relationship bin for "Canonical Character"
+    Then I should see "Canonical Character/OC"

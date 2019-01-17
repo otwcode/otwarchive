@@ -1233,6 +1233,7 @@ class Tag < ApplicationRecord
   ## SEARCH #######################
   #################################
 
+  # TODO: This needs to look at pre_character_ids when called on character tags.
   def unwrangled_query(tag_type, options = {})
     TagQuery.new(options.merge(
       type: tag_type,
@@ -1277,6 +1278,8 @@ class Tag < ApplicationRecord
   end
 
   # Get all tags that have this one as a suggested parent.
+  # TODO: This works if the tag with the merger change is a fandom; it needs to
+  # also work for characters (and relationships?).
   def suggested_child_tags_query(options = {})
    TagQuery.new(options.merge(
       unwrangleable: false,
