@@ -1283,7 +1283,6 @@ class Tag < ApplicationRecord
     self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
       unwrangleable: false,
-      unwrangled: false,
       "pre_#{self_type}_ids": [self.id]
     ))
   end
