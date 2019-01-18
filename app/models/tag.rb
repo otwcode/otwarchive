@@ -1238,7 +1238,8 @@ class Tag < ApplicationRecord
       type: tag_type,
       unwrangleable: false,
       wrangled: false,
-      "pre_#{self.type.downcase}_ids": [self.id]
+      "pre_#{self.type.downcase}_ids": [self.id],
+      per_page: Tag.per_page
     ))
   end
 
