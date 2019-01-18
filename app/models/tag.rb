@@ -1234,11 +1234,12 @@ class Tag < ApplicationRecord
   #################################
 
   def unwrangled_query(tag_type, options = {})
+    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
       type: tag_type,
       unwrangleable: false,
       wrangled: false,
-      "pre_#{self.type.downcase}_ids": [self.id],
+      "pre_#{self_type}_ids": [self.id],
       per_page: Tag.per_page
     ))
   end
@@ -1279,10 +1280,11 @@ class Tag < ApplicationRecord
 
   # Get all tags that have this one as a suggested parent.
   def suggested_child_tags_query(options = {})
+    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
       unwrangleable: false,
       unwrangled: false,
-      "pre_#{self.type.downcase}_ids": [self.id]
+      "pre_#{self_type}_ids": [self.id]
     ))
   end
 
