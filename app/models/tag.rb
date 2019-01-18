@@ -1294,6 +1294,10 @@ class Tag < ApplicationRecord
     end
   end
 
+  def queue_child_tags_for_reindex
+    IndexQueue.enqueue_ids(Tag, self.suggested_child_ids, :background)
+  end
+
   after_create :after_create
   def after_create
     tag = self
@@ -1329,7 +1333,7 @@ class Tag < ApplicationRecord
       if tag.merger_id.present?
         tag.merger.update_works_index_timestamp!
       end
-      IndexQueue.enqueue_ids(Tag, tag.suggested_child_ids, :background)
+      async(:queue_child_tags_for_reindex)
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
