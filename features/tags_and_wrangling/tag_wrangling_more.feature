@@ -241,9 +241,15 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I view the unwrangled relationship bin for "Canonical Fandom"
     Then I should not see "Syn Fandom Relationship"
 
- Scenario: New relationship tags that are on a work with a canonical character tag should appear in that canonical charcater's unwrangled bin.
+  Scenario: Synning a character to a canonical character moves its unwrangled relationships to the canonical's unwrangled bin; de-synning takes them out.
     Given a canonical character "Canonical Character"
       And I am logged in as a tag wrangler
-      And I post the work "Populating My Tags" with fandom "Canonical Fandom" with character "Canonical Character" with relationship "Canonical Character/OC"
-    When I view the unwrangled relationship bin for "Canonical Character"
-    Then I should see "Canonical Character/OC"
+      And I post the work "Populating My Syn Character" with character "Syn Character" with relationship "Syn Character/OC"
+    When I syn the tag "Syn Character" to "Canonical Character"
+      And all indexing jobs have been run
+      And I view the unwrangled relationship bin for "Canonical Character"
+    Then I should see "Syn Character/OC"
+    When I de-syn the tag "Syn Character" from "Canonical Character"
+      And all indexing jobs have been run
+      And I view the unwrangled relationship bin for "Canonical Character"
+    Then I should not see "Syn Character/OC"
