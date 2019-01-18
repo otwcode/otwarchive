@@ -1283,16 +1283,15 @@ class Tag < ApplicationRecord
     self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
       unwrangleable: false,
-      "pre_#{self_type}_ids": [self.id]
+      "pre_#{self_type}_ids": [self.id],
+      per_page: ArchiveConfig.MAX_SEARCH_RESULTS
     ))
   end
 
-  def suggested_child_tags(options = {})
-    suggested_child_tags_query(options).search_results
-  end
-
   def suggested_child_ids
-    suggested_child_tags.pluck(:id)
+    suggested_child_tags_query.search.dig("hits", "hits").map do |item|
+      item.dig("_source", "id")
+    end
   end
 
   after_create :after_create
