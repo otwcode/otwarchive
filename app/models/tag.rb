@@ -1278,7 +1278,7 @@ class Tag < ApplicationRecord
 
   # Get all tags that have this one as a suggested parent.
   def suggested_child_tags_query(options = {})
-   TagQuery.new(options.merge(
+    TagQuery.new(options.merge(
       unwrangleable: false,
       unwrangled: false,
       "pre_#{self.type.downcase}_ids": [self.id]

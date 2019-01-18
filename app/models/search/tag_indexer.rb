@@ -51,8 +51,8 @@ class TagIndexer < Indexer
         },
         normalizer: {
           keyword_lowercase: {
-          type: "custom",
-          filter: ["lowercase"]
+            type: "custom",
+            filter: ["lowercase"]
           }
         }
       }
