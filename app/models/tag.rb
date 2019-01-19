@@ -1278,24 +1278,13 @@ class Tag < ApplicationRecord
                                        flatten.compact.uniq
   end
 
-  # Get all tags that have this one as a suggested parent.
-  def suggested_child_tags_query(options = {})
-    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
-    TagQuery.new(options.merge(
-      unwrangleable: false,
-      "pre_#{self_type}_ids": [self.id],
-      per_page: ArchiveConfig.MAX_SEARCH_RESULTS
-    ))
-  end
-
-  def suggested_child_ids
-    suggested_child_tags_query.search.dig("hits", "hits").map do |item|
-      item.dig("_source", "id")
-    end
-  end
-
   def queue_child_tags_for_reindex
-    IndexQueue.enqueue_ids(Tag, self.suggested_child_ids, :background)
+    all_with_child_type = Tag.where(type: child_types & Tag::USER_DEFINED)
+    works.select(:id).find_in_batches do |batch|
+      relevant_taggings = Tagging.where(taggable: batch)
+      tag_ids = all_with_child_type.joins(:taggings).merge(relevant_taggings).distinct.pluck(:id)
+      IndexQueue.enqueue_ids(Tag, tag_ids, :background)
+    end
   end
 
   after_create :after_create
