@@ -21,6 +21,8 @@ describe TagQuery, type: :model do
     tags
   end
 
+  let(:wrangled_tag) { create(:freeform, name: "wrangled ff") }
+
   it "performs a case-insensitive search ('AbC' matches 'abc')" do
     tag_query = TagQuery.new(name: "AbC")
     results = tag_query.search_results
@@ -155,5 +157,15 @@ describe TagQuery, type: :model do
     tag_query = TagQuery.new(name: "a*")
     results = tag_query.search_results
     expect(results.size).to eq 5
+  end
+
+  before do
+    create(:common_tagging, common_tag_id: wrangled_tag.id)
+    update_and_refresh_indexes('tag', 1)
+  end
+  it "matches wrangled tags" do
+    tag_query = TagQuery.new(name: "wrangled ff")
+    results = tag_query.search_results
+    results.should include(wrangled_tag)
   end
 end

@@ -10,17 +10,55 @@ describe TagsController do
   end
 
   describe "wrangle" do
-    context "a fandom's unwrangled freeforms page" do
-      before do
-        @fandom = FactoryGirl.create(:fandom, canonical: true)
-        @freeform1 = FactoryGirl.create(:freeform)
-        @work = FactoryGirl.create(:work, posted: true, fandom_string: "#{@fandom.name}", freeform_string: "#{@freeform1.name}")
+    context "when showing unwrangled freeforms for a fandom" do
+      let(:fandom) { create(:fandom, canonical: true) }
+      let(:freeform1) { create(:freeform, name: "beta") }
+      let(:freeform2) { create(:freeform, name: "Omega") }
+      let(:freeform3) { create(:freeform, name: "Alpha") }
+      let(:freeform4) { create(:freeform, name: "an abo au") }
+
+      before(:each) do
+        create(:posted_work,
+               fandom_string: fandom.name,
+               freeform_string: "#{freeform1.name}, #{freeform2.name},
+               #{freeform3.name}, #{freeform4.name}")
         run_all_indexing_jobs
       end
 
-      it "should show those freeforms" do
-        get :wrangle, params: { id: @fandom.name, show: 'freeforms', status: 'unwrangled' }
-        expect(assigns(:tags)).to include(@freeform1)
+      it "includes unwrangled freeforms" do
+        get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" }
+        expect(assigns(:tags)).to include(freeform1)
+      end
+
+      it "sorts tags in ascending order by name" do
+        get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" }
+        expect(assigns(:tags).pluck(:name)).to eq([freeform3.name,
+                                                   freeform4.name,
+                                                   freeform1.name,
+                                                   freeform2.name])
+      end
+    end
+  
+    context "when showing unwrangled relationships for a character" do
+      let(:character1) { create(:character, canonical: true) }
+      let(:character2) { create(:character, canonical: true) }
+      let(:relationship1) { create(:relationship) }
+      let(:relationship2) { create(:relationship) }
+
+      before do
+        create(:posted_work,
+               character_string: character1.name,
+               relationship_string: relationship1.name)
+        create(:posted_work,
+               character_string: character2.name,
+               relationship_string: relationship2.name)
+        run_all_indexing_jobs
+      end
+
+      it "includes only relationships from works with that character tag" do
+        get :wrangle, params: { id: character1.name, show: "relationships", status: "unwrangled" }
+        expect(assigns(:tags)).to include(relationship1)
+        expect(assigns(:tags)).not_to include(relationship2)
       end
     end
   end

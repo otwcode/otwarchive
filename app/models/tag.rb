@@ -1234,11 +1234,13 @@ class Tag < ApplicationRecord
   #################################
 
   def unwrangled_query(tag_type, options = {})
+    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
       type: tag_type,
       unwrangleable: false,
       wrangled: false,
-      pre_fandom_ids: [self.id]
+      "pre_#{self_type}_ids": [self.id],
+      per_page: Tag.per_page
     ))
   end
 
@@ -1276,6 +1278,15 @@ class Tag < ApplicationRecord
                                        flatten.compact.uniq
   end
 
+  def queue_child_tags_for_reindex
+    all_with_child_type = Tag.where(type: child_types & Tag::USER_DEFINED)
+    works.select(:id).find_in_batches do |batch|
+      relevant_taggings = Tagging.where(taggable: batch)
+      tag_ids = all_with_child_type.joins(:taggings).merge(relevant_taggings).distinct.pluck(:id)
+      IndexQueue.enqueue_ids(Tag, tag_ids, :background)
+    end
+  end
+
   after_create :after_create
   def after_create
     tag = self
@@ -1311,6 +1322,7 @@ class Tag < ApplicationRecord
       if tag.merger_id.present?
         tag.merger.update_works_index_timestamp!
       end
+      async(:queue_child_tags_for_reindex)
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)

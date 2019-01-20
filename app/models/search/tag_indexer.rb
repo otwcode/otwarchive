@@ -15,6 +15,10 @@ class TagIndexer < Indexer
               exact: {
                 type:     "text",
                 analyzer: "exact_tag_analyzer"
+              },
+              keyword: {
+                type: "keyword",
+                normalizer: "keyword_lowercase"
               }
             }
           },
@@ -43,6 +47,12 @@ class TagIndexer < Indexer
             filter: [
               "lowercase"
             ]
+          }
+        },
+        normalizer: {
+          keyword_lowercase: {
+            type: "custom",
+            filter: ["lowercase"]
           }
         }
       }
