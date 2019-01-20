@@ -37,7 +37,7 @@ describe WorkSearchForm do
 
       work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
       second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
-      update_and_refresh_indexes('work')
+      run_all_indexing_jobs
     end
 
     it "should find works that match" do
@@ -53,7 +53,7 @@ describe WorkSearchForm do
     describe "when searching unposted works" do
       before(:each) do
         work.update_attribute(:posted, false)
-        update_and_refresh_indexes 'work'
+        run_all_indexing_jobs
       end
 
       it "should not return them by default" do
@@ -65,7 +65,7 @@ describe WorkSearchForm do
     describe "when searching restricted works" do
       before(:each) do
         work.update_attribute(:restricted, true)
-        update_and_refresh_indexes 'work'
+        run_all_indexing_jobs
       end
 
       it "should not return them by default" do
@@ -153,7 +153,7 @@ describe WorkSearchForm do
         second_work.chapters.first.update_attributes(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
         second_work.save
 
-        update_and_refresh_indexes 'work'
+        run_all_indexing_jobs
       end
 
       it "should find the right works less than a given number" do
