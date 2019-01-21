@@ -8,7 +8,7 @@ describe StatCounterIndexer do
     before do
       # Update before the stat counter changes, so that we actually have
       # something to change.
-      update_and_refresh_indexes("work")
+      run_all_indexing_jobs
 
       stat_counter.update_attributes(
         kudos_count: 10,

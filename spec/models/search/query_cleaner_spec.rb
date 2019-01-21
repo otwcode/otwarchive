@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/inflector'
-require File.expand_path('../../app/models/search/query_cleaner', File.dirname(__FILE__))
+require_relative '../../../app/models/search/query_cleaner'
 
 describe QueryCleaner do
   describe "#clean" do

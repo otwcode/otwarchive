@@ -45,7 +45,7 @@ describe BookmarkSearchForm do
 
       it "should exclude bookmarks for works with a given canonical tag name" do
         excluded_work.update(freeform_string: "Exclude Work Tag")
-        update_and_refresh_indexes("bookmark")
+        run_all_indexing_jobs
 
         options = {
           excluded_tag_names: "Exclude Work Tag"
@@ -59,7 +59,7 @@ describe BookmarkSearchForm do
 
       it "should exclude bookmarks tagged with a given canonical tag name" do
         excluded_bookmark.update(tag_string: "Complete")
-        update_and_refresh_indexes("bookmark")
+        run_all_indexing_jobs
 
         options = {
           excluded_bookmark_tag_names: "Complete"
@@ -73,7 +73,7 @@ describe BookmarkSearchForm do
 
       it "should exclude bookmarks for works tagged with a synonym to a given canonical tag name" do
         excluded_work.update(freeform_string: "Tagged Work Exclusion")
-        update_and_refresh_indexes("bookmark")
+        run_all_indexing_jobs
 
         options = {
           excluded_tag_names: "Exclude Work Tag"
@@ -88,7 +88,7 @@ describe BookmarkSearchForm do
       it "should only exclude bookmarks for works tagged with a synonym (not the merger) when given that synonym as a tag to exclude" do
         included_work.update(freeform_string: "Exclude Work Tag")
         excluded_work.update(freeform_string: "Tagged Work Exclusion")
-        update_and_refresh_indexes("bookmark")
+        run_all_indexing_jobs
 
         options = {
           excluded_tag_names: "Tagged Work Exclusion"

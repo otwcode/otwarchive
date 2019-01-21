@@ -278,7 +278,7 @@ describe WorksController do
           get :index
           expect(assigns(:works)).to include(@work)
           work2 = create(:posted_work)
-          update_and_refresh_indexes('work')
+          run_all_indexing_jobs
           get :index
           expect(assigns(:works)).not_to include(work2)
         end
@@ -288,8 +288,7 @@ describe WorksController do
         before do
           @fandom2 = create(:canonical_fandom)
           @work2 = create(:posted_work, fandom_string: @fandom2.name)
-
-          update_and_refresh_indexes('work')
+          run_all_indexing_jobs
         end
 
         it "only gets works under that tag" do
@@ -316,7 +315,7 @@ describe WorksController do
         context "with restricted works" do
           before do
             @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
-            update_and_refresh_indexes('work')
+            run_all_indexing_jobs
           end
 
           it "shows restricted works to guests" do
@@ -383,9 +382,7 @@ describe WorksController do
       let(:pseud) { create(:pseud, user: user) }
       let!(:pseud_work) { create(:posted_work, authors: [pseud]) }
 
-      before do
-        update_and_refresh_indexes("work")
-      end
+      before { run_all_indexing_jobs }
 
       it "includes only works for that user" do
         params = { user_id: user.login }
@@ -486,7 +483,7 @@ describe WorksController do
                collection_names: anonymous_collection.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       it "does not return anonymous works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
@@ -540,7 +537,7 @@ describe WorksController do
                fandom_string: collected_fandom.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       context "as a guest" do
         it "renders the empty collected form" do
@@ -592,7 +589,7 @@ describe WorksController do
                collection_names: unrevealed_collection.name)
       end
 
-      before { update_and_refresh_indexes "work" }
+      before { run_all_indexing_jobs }
 
       it "returns unrevealed works in collections for guests" do
         get :collected, params: { user_id: collected_user.login }
