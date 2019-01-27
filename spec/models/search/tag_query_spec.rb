@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe TagQuery, type: :model do
   let!(:tags) do
@@ -17,7 +17,7 @@ describe TagQuery, type: :model do
       rel_quotes: create(:relationship, name: "ab \"cd\" ef"),
       rel_unicode: create(:relationship, name: "Dave ♦ Sawbuck")
     }
-    update_and_refresh_indexes('tag', 1)
+    update_and_refresh_indexes("tag", 1)
     tags
   end
 

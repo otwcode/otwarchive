@@ -93,4 +93,19 @@ describe TagQuery do
       expect(results).to contain_exactly("action", "slice of life", "horror")
     end
   end
+
+  context "searching for wrangled tags" do
+    let(:wrangled_tag) { create(:freeform, name: "wrangled ff") }
+
+    # Make tag wrangled; it should be reindexed without using queues
+    before do
+      create(:common_tagging, common_tag_id: wrangled_tag.id)
+      refresh_index_without_updating "tag"
+    end
+
+    it "matches wrangled tags" do
+      results = TagQuery.new(name: "wrangled ff").search_results
+      expect(results).to include(wrangled_tag)
+    end
+  end
 end
