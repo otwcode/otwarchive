@@ -154,8 +154,7 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
-    When "AO3-3583" is fixed
-    # Then "External Work" should be selected within "Type"
+    Then "External Work" should be selected within "Type"
     When I select "Series" from "Type"
       And I press "Search Bookmarks"
     Then I should see "You searched for: Type: Series"

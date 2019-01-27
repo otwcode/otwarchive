@@ -1,40 +1,41 @@
 <%= form_for @search, as: :bookmark_search, url: search_bookmarks_path,
     html: { class: "search", method: :get } do |f| %>
-<fieldset>
-  <legend><%= ts("Bookmarked Item") %></legend>
-  <h3 class="landmark heading"><%= ts("Bookmarked Item") %></h3>
-  <dl>
-    <dt>
-      <%= f.label :bookmarkable_query, ts("Any field on work") %>
-      <%= link_to_help "bookmark-search-text-help" %>
-    </dt>
-    <dd>
-      <%= f.text_field :bookmarkable_query %>
-    </dd>
-    <dt>
-      <%= f.label :other_tag_names, ts("Work tags") %>
-      <%= link_to_help "bookmark-search-work-tag" %>
-    </dt>
-    <dd>
-      <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
-    </dd>
-    <dt>
-      <%= f.label :bookmarkable_type, ts("Type") %>
-      <%= link_to_help "bookmark-search-type-help" %>
-    </dt>
-    <dd>
-      <%= f.select :bookmarkable_type,
-                   options_for_select(["", "Work", "Series", "External Work"]) %>
-    </dd>
-    <dt>
-      <%= f.label :bookmarkable_date, ts("Date updated") %>
-      <%= link_to_help "bookmark-search-date-updated-help" %>
-    </dt>
-    <dd>
-      <%= f.text_field :bookmarkable_date %>
-    </dd>
-  </dl>
-</fieldset>
+  <fieldset>
+    <legend><%= ts("Bookmarked Item") %></legend>
+    <h3 class="landmark heading"><%= ts("Bookmarked Item") %></h3>
+    <dl>
+      <dt>
+        <%= f.label :bookmarkable_query, ts("Any field on work") %>
+        <%= link_to_help "bookmark-search-text-help" %>
+      </dt>
+      <dd>
+        <%= f.text_field :bookmarkable_query %>
+      </dd>
+      <dt>
+        <%= f.label :other_tag_names, ts("Work tags") %>
+        <%= link_to_help "bookmark-search-work-tag" %>
+      </dt>
+      <dd>
+        <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
+      </dd>
+      <dt>
+        <%= f.label :bookmarkable_type, ts("Type") %>
+        <%= link_to_help "bookmark-search-type-help" %>
+      </dt>
+      <dd>
+        <%= f.select :bookmarkable_type,
+                     options_for_select(["", "Work", "Series", "External Work"],
+                                        @search.bookmarkable_type) %>
+      </dd>
+      <dt>
+        <%= f.label :bookmarkable_date, ts("Date updated") %>
+        <%= link_to_help "bookmark-search-date-updated-help" %>
+      </dt>
+      <dd>
+        <%= f.text_field :bookmarkable_date %>
+      </dd>
+    </dl>
+  </fieldset>
 
   <fieldset>
     <legend><%= ts("Bookmark") %></legend>
@@ -104,8 +105,9 @@
       </dt>
       <dd>
         <%= f.select :sort_column,
-                     options_for_select(@search.sort_options, @search.sort_column),
-                     { :include_blank => ts("Best Match") } %>
+                     options_for_select(@search.sort_options,
+                                        @search.sort_column),
+                     { include_blank: ts("Best Match") } %>
       </dd>
     </dl>
     <p class="submit"><%= f.submit ts("Search Bookmarks") %></p>
