@@ -170,7 +170,7 @@ class SeriesController < ApplicationController
 
   def series_params
     params.require(:series).permit(
-      :title, :summary, :notes, :complete,
+      :title, :summary, :series_notes, :complete,
       author_attributes: [
         ids: [],
         coauthors: []

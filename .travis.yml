@@ -3,49 +3,37 @@ dist: trusty
 cache: bundler
 sudo: required
 env:
-  - ES=1 TEST_GROUP="./script/check_syntax"
-  - ES=1 TEST_GROUP="rspec spec/controllers"
-  - ES=1 TEST_GROUP="rspec spec/miscellaneous"
-  - ES=1 TEST_GROUP="rspec spec/models"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/admins             -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/bookmarks          -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/collections        -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/comments_and_kudos -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/gift_exchanges     -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/importing          -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/other_a            -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/other_b            -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/prompt_memes_a     -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/prompt_memes_b     -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/prompt_memes_c     -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/search             -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/tag_sets           -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/users              -f Ao3Cucumber::Formatter --color"
-  - ES=1 TEST_GROUP="cucumber --tag ~@new-search -r features features/works              -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="rspec spec/controllers"
-  - ES=2 TEST_GROUP="rspec spec/miscellaneous"
-  - ES=2 TEST_GROUP="rspec spec/models"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/admins             -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/bookmarks          -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/collections        -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/comments_and_kudos -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/gift_exchanges     -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/importing          -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/other_a            -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/other_b            -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/prompt_memes_a     -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/prompt_memes_b     -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/prompt_memes_c     -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/search             -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/tag_sets           -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/users              -f Ao3Cucumber::Formatter --color"
-  - ES=2 TEST_GROUP="cucumber --tag ~@old-search -r features features/works              -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="./script/check_syntax"
+  - TEST_GROUP="rake db:otwseed"
+  - TEST_GROUP="rspec spec/controllers"
+  - TEST_GROUP="rspec spec/miscellaneous"
+  - TEST_GROUP="rspec spec/models"
+  - TEST_GROUP="cucumber -r features features/admins             -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/bookmarks          -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/collections        -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/comments_and_kudos -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/gift_exchanges     -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/importing          -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/other_a            -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/other_b            -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/prompt_memes_a     -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/prompt_memes_b     -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/prompt_memes_c     -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/search             -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/tag_sets           -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/users              -f Ao3Cucumber::Formatter --color"
+  - TEST_GROUP="cucumber -r features features/works              -f Ao3Cucumber::Formatter --color"
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
 rvm:
-  - "`cat .ruby_version| sed -e 's/ruby //'`"
+  - "`cat .ruby-version| sed -e 's/ruby //'`"
 services:
-  - elasticsearch
   - redis-server
   - memcached
 script:
@@ -56,7 +44,7 @@ before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
-  - sudo bash script/travis_set_read_isolation.sh
+  - bash script/travis_mysql.sh
 after_failure:
   - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html
 notifications:

@@ -51,10 +51,10 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the email should contain "deleted from the Archive by a site admin"
       And the email should not contain "translation missing"
     When I am logged out
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
     When I am logged in
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
 
   Scenario: Can hide bookmarks

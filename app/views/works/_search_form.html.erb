@@ -30,52 +30,43 @@
       <dd>
         <%= f.text_field :revised_at %>
       </dd>
-      <% if use_new_search? %>
-        <dt><%= ts("Completion status") %></dt>
-        <dd>
-          <ul>
-            <li>
-              <%= f.radio_button :complete, "" %>
-              <%= f.label :complete, ts("All works"), value: "" %>
-            </li>
-            <li>
-              <%= f.radio_button :complete, "T" %>
-              <%= f.label :complete, ts("Complete works only"), value: "T" %>
-            </li>
-            <li>
-              <%= f.radio_button :complete, "F" %>
-              <%= f.label :complete, ts("Works in progress only"), value: "F" %>
-            </li>
-          </ul>
-        </dd>
-        <dt>
-          <%= ts("Crossovers") %>
-          <%= link_to_help "work-search-crossover-help" %>
-        </dt>
-        <dd>
-          <ul>
-            <li>
-              <%= f.radio_button :crossover, "" %>
-              <%= f.label :crossover, ts("Include crossovers"), value: "" %>
-            </li>
-            <li>
-              <%= f.radio_button :crossover, "F" %>
-              <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
-            </li>
-            <li>
-              <%= f.radio_button :crossover, "T" %>
-              <%= f.label :crossover, ts("Only crossovers"), value: "T" %>
-            </li>
-          </ul>
-        </dd>
-      <% else %>
-        <dt>
-          <%= f.label :complete, ts("Complete") %>
-        </dt>
-        <dd>
-          <%= f.check_box :complete %>
-        </dd>
-      <% end %>
+      <dt><%= ts("Completion status") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.radio_button :complete, "" %>
+            <%= f.label :complete, ts("All works"), value: "" %>
+          </li>
+          <li>
+            <%= f.radio_button :complete, "T" %>
+            <%= f.label :complete, ts("Complete works only"), value: "T" %>
+          </li>
+          <li>
+            <%= f.radio_button :complete, "F" %>
+            <%= f.label :complete, ts("Works in progress only"), value: "F" %>
+          </li>
+        </ul>
+      </dd>
+      <dt>
+        <%= ts("Crossovers") %>
+        <%= link_to_help "work-search-crossover-help" %>
+      </dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.radio_button :crossover, "" %>
+            <%= f.label :crossover, ts("Include crossovers"), value: "" %>
+          </li>
+          <li>
+            <%= f.radio_button :crossover, "F" %>
+            <%= f.label :crossover, ts("Exclude crossovers"), value: "F" %>
+          </li>
+          <li>
+            <%= f.radio_button :crossover, "T" %>
+            <%= f.label :crossover, ts("Only crossovers"), value: "T" %>
+          </li>
+        </ul>
+      </dd>
       <dt>
         <%= f.label :single_chapter, ts("Single Chapter") %>
       </dt>
@@ -205,7 +196,7 @@
         <%= f.label :sort_column, ts("Sort by") %>
       </dt>
       <dd>
-        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column), { :include_blank => "Best Match" } %>
+        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
       <dt>
         <%= f.label :sort_direction, ts("Sort direction") %>

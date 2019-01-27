@@ -8,9 +8,6 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
 
   ########################################################################
@@ -86,7 +83,6 @@ class Work < ApplicationRecord
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -191,7 +187,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
@@ -251,7 +247,6 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
@@ -265,10 +260,11 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
+  # If the work gets posted, we should (potentially) reindex the tags,
+  # so they get the correct draft-only status.
+  def update_tag_index
+    return unless saved_change_to_posted?
+    taggings.each(&:update_search)
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -344,13 +340,6 @@ class Work < ApplicationRecord
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
-  end
-
-  def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).pluck(:id)
-    Chapter.where(work_id: draft_ids).order("position DESC").map(&:destroy)
-    Work.where(id: draft_ids).map(&:destroy)
-    draft_ids.size
   end
 
   ########################################################################
@@ -686,6 +675,10 @@ class Work < ApplicationRecord
   def series_attributes=(attributes)
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
+      if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
+        errors.add(:base, ts("You can't add a work to that series."))
+        return
+      end
       self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
@@ -842,8 +835,8 @@ class Work < ApplicationRecord
 
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
-  def set_word_count
-    if self.new_record?
+  def set_word_count(preview = false)
+    if self.new_record? || preview
       self.word_count = 0
       chapters.each do |chapter|
         self.word_count += chapter.set_word_count
@@ -928,7 +921,6 @@ class Work < ApplicationRecord
   end
 
   # FILTERING CALLBACKS
-  after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its
@@ -982,27 +974,28 @@ class Work < ApplicationRecord
     end
   end
 
-  # Determine if filter counts need to be reset after the work is saved
-  def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
-      self.should_reset_filters = false
-    end
-    return true
-  end
-
   # Must be called before save
   def visibility_changed?
     self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
   end
 
-  # Calls reset_filter_count on all the work's filters
+  # We need to do a recount for our filters if:
+  # - the work is brand new
+  # - the work is posted from a draft
+  # - the work is hidden or unhidden by an admin
+  # - the work's restricted status has changed
+  # Note that because the two filter counts both include unrevealed works, we
+  # don't need to check whether in_unrevealed_collection has changed -- it
+  # won't change the counts either way.
+  # (Modelled on Work.should_reindex_pseuds?)
+  def should_reset_filters?
+    pertinent_attributes = %w(id posted restricted hidden_by_admin)
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Recalculates filter counts on all the work's filters
   def adjust_filter_counts
-    if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
-    end
-    return true
+    FilterCount.enqueue_filters(filters.reload) if should_reset_filters?
   end
 
   ################################################################################
@@ -1420,7 +1413,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
@@ -1460,39 +1453,6 @@ class Work < ApplicationRecord
   # SEARCH INDEX
   #
   #############################################################################
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block #
-  mapping do
-    indexes :authors_to_sort_on,  index: :not_analyzed
-    indexes :title_to_sort_on,    index: :not_analyzed
-    indexes :title,               boost: 20
-    indexes :creator,             boost: 15
-    indexes :revised_at,          type: 'date'
-  end
-
-  def to_indexed_json
-    to_json(
-      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
-      methods: [
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
-        :pseud_ids,
-        :collection_ids,
-        :hits,
-        :comments_count,
-        :kudos_count,
-        :bookmarks_count,
-        :creator
-      ])
-  end
 
   def document_json
     WorkIndexer.new({}).document(self)
@@ -1536,23 +1496,6 @@ class Work < ApplicationRecord
     self.stat_counter.bookmarks_count
   end
 
-  # Deprecated: old search
-  def creator
-    names = ""
-    if anonymous?
-      names = "Anonymous"
-    else
-      pseuds.each do |pseud|
-        names << "#{pseud.name} #{pseud.user_login} "
-      end
-      external_author_names.pluck(:name).each do |name|
-        names << "#{name} "
-      end
-    end
-    names
-  end
-
-  # New version
   def creators
     if anonymous?
       ["Anonymous"]
@@ -1571,20 +1514,31 @@ class Work < ApplicationRecord
     # as synonyms should have no meta tags themselves
     all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # For each fandom, find the set of top-level meta tags (i.e. meta-tags that
-    # don't have meta-tags of their own, or the tag itself if it doesn't have
-    # meta-tags) associated with that fandom.
-    top_meta_groups = all_without_syns.map do |f|
-      ([f] + f.meta_tags).select { |m| m.meta_taggings.empty? }.uniq
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      until boundary.empty?
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+      end
+
+      all_meta_tags.uniq
     end
 
-    # Find the biggest group of top-level meta tags.
-    biggest_group_size = top_meta_groups.map(&:size).max
-
-    # If the biggest group is the same size as the total number in all groups,
-    # that means that all top-level meta-tags in all groups also occur in the
-    # biggest group, so we don't have any fandoms that are unrelated to it.
-    top_meta_groups.flatten.uniq.size > biggest_group_size
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?

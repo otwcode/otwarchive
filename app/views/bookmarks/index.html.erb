@@ -62,12 +62,7 @@
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <% # ES UPGRADE TRANSITION # %>
-  <% if use_new_search? %>
-    <%= render "filters" %>
-  <% else %>
-    <%= render "filters_old" %>
-  <% end %>
+  <%= render "filters" %>
 <% end %>
 <!---/subnav-->
 

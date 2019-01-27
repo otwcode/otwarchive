@@ -7,20 +7,6 @@ Feature: Search Bookmarks
   Background:
     Given I am on the search bookmarks page
 
-  @old-search
-  Scenario: Search bookmarks by tag
-    Given I have bookmarks to search
-    When I fill in "Tag" with "classic"
-      And I press "Search Bookmarks"
-    Then I should see the page title "Search Bookmarks"
-      And I should see "You searched for: Tags: classic"
-      And I should see "2 Found"
-      And I should see "third work"
-      And I should see "First Series"
-    When I follow "Edit Your Search"
-    Then the field labeled "Tag" should contain "classic"
-
-  @new-search
   Scenario: Search bookmarks by tag
     Given I have bookmarks to search
 
@@ -115,18 +101,6 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the "Rec" checkbox should be checked
 
-  @old-search
-  Scenario: Search bookmarks by any field
-    Given I have bookmarks to search
-    When I fill in "Any field" with "Hobbits"
-      And I press "Search Bookmarks"
-    Then I should see the page title "Bookmarks Matching 'Hobbits'"
-      And I should see "You searched for: Hobbits"
-      And I should see "No results found."
-    When I follow "Edit Your Search"
-    Then the field labeled "Any field" should contain "Hobbits"
-
-  @new-search
   Scenario: Search bookmarks by any field
     Given I have bookmarks to search by any field
 
@@ -180,8 +154,7 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
-    When "AO3-3583" is fixed
-    # Then "External Work" should be selected within "Type"
+    Then "External Work" should be selected within "Type"
     When I select "Series" from "Type"
       And I press "Search Bookmarks"
     Then I should see "You searched for: Type: Series"
@@ -230,7 +203,6 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the field labeled "Bookmarker" should contain "testuser"
 
-  @new-search
   Scenario: Search for bookmarks by the bookmarkable item's completion status
     Given I have bookmarks of various completion statuses to search
     When I fill in "Any field on work" with "complete: true"
@@ -254,7 +226,6 @@ Feature: Search Bookmarks
       And I should not see "Complete Series"
       And I should not see "External Work"
 
-  @new-search
   Scenario: Search bookmarks by work language
     Given "someuser" has bookmarks of works in various languages
     # reload search page to bring new language-id mappings for dropdown
@@ -266,3 +237,8 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "english work"
       And I should not see "german work"
+
+  Scenario: Inputting bad queries
+  When I fill in "Any field on work" with "bad~query~~!!!"
+    And I press "Search Bookmarks"
+  Then I should see "Your search failed because of a syntax error"

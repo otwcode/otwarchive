@@ -3,18 +3,14 @@ class Bookmark < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Responder
-  # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  validates_length_of :notes,
+  validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
@@ -131,7 +127,6 @@ class Bookmark < ApplicationRecord
 
   # We index the bookmark count, so if it should change, update the pseud
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
     IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
@@ -156,12 +151,6 @@ class Bookmark < ApplicationRecord
       end
     end
     return false
-  end
-
-  # ES UPGRADE TRANSITION #
-  # Remove this function.
-  def self.index_name
-    tire.index.name
   end
 
   # Returns the number of bookmarks on an item visible to the current user
@@ -235,49 +224,8 @@ class Bookmark < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :notes
-    indexes :private, type: 'boolean'
-    indexes :bookmarkable_type
-    indexes :bookmarkable_id
-    indexes :created_at,          type: 'date'
-    indexes :bookmarkable_date,   type: 'date'
-  end
-
   def document_json
     BookmarkIndexer.new({}).document(self)
-  end
-
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods:
-      [ :bookmarker,
-        :with_notes,
-        :bookmarkable_pseud_names,
-        :bookmarkable_pseud_ids,
-        :tag,
-        :tag_ids,
-        :filter_names,
-        :filter_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :bookmarkable_title,
-        :bookmarkable_posted,
-        :bookmarkable_restricted,
-        :bookmarkable_hidden,
-        :bookmarkable_complete,
-        :bookmarkable_language_id,
-        :collection_ids,
-        :bookmarkable_collection_ids,
-        :bookmarkable_date
-      ])
   end
 
   def bookmarker
@@ -285,7 +233,7 @@ class Bookmark < ApplicationRecord
   end
 
   def with_notes
-    notes.present?
+    bookmarker_notes.present?
   end
 
   def bookmarkable_pseud_names

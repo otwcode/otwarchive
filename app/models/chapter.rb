@@ -126,6 +126,15 @@ class Chapter < ApplicationRecord
     self.title.blank? ? self.chapter_header : self.title
   end
 
+  # Header plus title, used in subscriptions
+  def full_chapter_title
+    str = chapter_header
+    if title.present?
+      str += ": #{title}"
+    end
+    str
+  end
+
   def display_title
     self.position.to_s + '. ' + self.chapter_title
   end
