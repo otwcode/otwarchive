@@ -4,7 +4,6 @@ Feature: Filter bookmarks
   As a humble user
   I want to filter some bookmarks
 
-  @new-search
   Scenario: Filter a user's bookmarks by work language
     Given "recengine" has bookmarks of works in various languages
       And I am logged in as "recengine"
