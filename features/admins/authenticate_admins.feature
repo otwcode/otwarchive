@@ -7,7 +7,7 @@ Feature: Authenticate Admin Users
       | login       | password |
       | Zooey       | secret   |
   When I go to the home page
-      And I fill in "User name" with "Zooey"
+      And I fill in "User name or email" with "Zooey"
       And I fill in "Password" with "secret"
       And I press "Log In"
     Then I should see "The password or user name you entered doesn't match our records"
