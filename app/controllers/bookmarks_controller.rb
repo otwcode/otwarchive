@@ -380,6 +380,7 @@ class BookmarksController < ApplicationController
       :rec,
       :with_notes,
       :bookmarkable_type,
+      :language_id,
       :date,
       :bookmarkable_date,
       :sort_column,

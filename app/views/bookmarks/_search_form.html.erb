@@ -28,6 +28,12 @@
                                         @search.bookmarkable_type) %>
       </dd>
       <dt>
+        <%= f.label :language_id, ts("Work language") %>
+      </dt>
+      <dd>
+        <%= f.collection_select :language_id, @languages, :id, :name, include_blank: true %>
+      </dd>
+      <dt>
         <%= f.label :bookmarkable_date, ts("Date updated") %>
         <%= link_to_help "bookmark-search-date-updated-help" %>
       </dt>
