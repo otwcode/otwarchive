@@ -9,7 +9,8 @@ module SkinWizard
         a.tag:hover,
         .listbox .heading a.tag:visited:hover,
         .splash .favorite li:nth-of-type(odd) a:hover,
-        .splash .favorite li:nth-of-type(odd) a:focus { 
+        .splash .favorite li:nth-of-type(odd) a:focus,
+        #tos_prompt .heading { 
           background-image: none;
           background-color: #{color};
         }
@@ -122,7 +123,8 @@ module SkinWizard
         .unreviewed,
         .thread .even,
         .listbox .index,
-        .nomination dt {
+        .nomination dt,
+        #tos_prompt {
           background: #{color};
         }
 

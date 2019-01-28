@@ -90,6 +90,17 @@ class Chapter < ApplicationRecord
     end
   end
 
+  after_commit :update_series_index
+  def update_series_index
+    return unless work&.series.present? && should_reindex_series?
+    work.serial_works.each(&:update_series_index)
+  end
+
+  def should_reindex_series?
+    pertinent_attributes = %w[id posted]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   def invalidate_chapter_count
     if work
       invalidate_work_chapter_count(work)
@@ -113,6 +124,15 @@ class Chapter < ApplicationRecord
 
   def chapter_title
     self.title.blank? ? self.chapter_header : self.title
+  end
+
+  # Header plus title, used in subscriptions
+  def full_chapter_title
+    str = chapter_header
+    if title.present?
+      str += ": #{title}"
+    end
+    str
   end
 
   def display_title

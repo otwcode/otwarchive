@@ -1,15 +1,27 @@
-<%= form_tag url_for(:controller => 'people', :action => 'search'), :class => 'search', :role => 'search', :method => :get do %>
+<%= form_for @search, as: :people_search, url: search_people_path, html: { class: "search", method: :get } do |f| %>
   <fieldset>
-    <legend>Search people</legend>
+    <legend><%= ts("Search people") %></legend>
     <dl>
       <dt>
-        <label for="people_search"><%= ts('Name or description:') %></label>
-        <%= link_to_help "people-search-name-help" %>
+        <%= f.label :query, ts("Search all fields") %>
+        <%= link_to_help "people-search-all-fields" %>
       </dt>
       <dd>
-        <%= text_field_tag :query, params[:query], :id => 'people_search'  %>
+        <%= f.text_field :query %>
+      </dd>
+      <dt>
+        <%= f.label :name, ts("Name") %>
+      </dt>
+      <dd>
+        <%= f.text_field :name, autocomplete_options("pseud") %>
+      </dd>
+      <dt>
+        <%= f.label :fandom, ts("Fandom") %>
+      </dt>
+      <dd>
+        <%= f.text_field :fandom, autocomplete_options("fandom") %>
       </dd>
     </dl>
-    <p class="submit actions"><%= submit_tag ts('Search people'), :name => nil %></p>
+    <p class="submit actions"><%= f.submit ts("Search People") %></p>
   </fieldset>
 <% end %>

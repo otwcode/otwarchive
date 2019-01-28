@@ -4,6 +4,15 @@ class WorkIndexer < Indexer
     "Work"
   end
 
+  def self.index_all(options = {})
+    unless options[:skip_delete]
+      delete_index
+      create_index(12)
+    end
+    options[:skip_delete] = true
+    super(options)
+  end
+
   def self.mapping
     {
       "work" => {

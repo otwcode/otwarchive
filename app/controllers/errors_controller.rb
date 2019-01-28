@@ -10,6 +10,7 @@ class ErrorsController < ApplicationController
   end
 
   def auth_error
+    @page_subtitle = "Auth Error"
   end
   
 end
