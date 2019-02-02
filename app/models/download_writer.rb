@@ -69,6 +69,8 @@ class DownloadWriter
       '--encoding', 'utf-8',
       '--disable-javascript',
       '--title', download.file_name,
+      '--log-level', 'none',
+      '--disable-smart-shrinking',
       html_download.file_path, download.file_path
     ]
   end
