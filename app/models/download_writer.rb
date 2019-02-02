@@ -68,9 +68,9 @@ class DownloadWriter
       'wkhtmltopdf',
       '--encoding', 'utf-8',
       '--disable-javascript',
-      '--title', download.file_name,
-      '--log-level', 'none',
       '--disable-smart-shrinking',
+      '--log-level', 'none',
+      '--title', download.file_name,
       html_download.file_path, download.file_path
     ]
   end
