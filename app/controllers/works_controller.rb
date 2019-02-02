@@ -403,7 +403,7 @@ class WorksController < ApplicationController
     end
 
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
-    @work.attributes = work_params
+    @work.attributes = work_tag_params
 
     if params[:edit_button] || work_is_invalid?
       set_work_tag_error_messages
@@ -978,6 +978,15 @@ class WorksController < ApplicationController
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content
       ]
+    )
+  end
+
+  def work_tag_params
+    params.require(:work).permit(
+      :rating_string, :fandom_string, :relationship_string, :character_string,
+      :warning_string, :category_string, :freeform_string, :language_id,
+      category_string: [],
+      warning_strings: []
     )
   end
 
