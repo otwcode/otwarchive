@@ -163,6 +163,9 @@ class Work < ApplicationRecord
     end
   end
 
+  # Run Taggable#check_for_invalid_tags as a validation.
+  validate :check_for_invalid_tags
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -179,7 +182,6 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
@@ -474,13 +476,18 @@ class Work < ApplicationRecord
     end
   end
 
+  # If this is fulfilling a challenge claim, add the collection.
+  #
+  # Unlike set_challenge_info, we don't automatically add the prompter as a
+  # recipient, because (a) some prompters are anonymous, so there has to be a
+  # prompter notification (separate from the recipient notification) ensuring
+  # that anonymous prompters are notified, and (b) if the prompter is not
+  # anonymous, they'll receive two notifications with roughly the same info
+  # (gift notification + prompter notification).
   def set_challenge_claim_info
-    # if this is fulfilling a challenge claim, add the collection and recipient
-    challenge_claims.each do |assignment|
+    challenge_claims.each do |claim|
       add_to_collection(claim.collection)
-      self.gifts << Gift.new(pseud: claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
     end
-    save
   end
 
   def challenge_assignment_ids
