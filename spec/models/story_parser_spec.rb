@@ -170,7 +170,7 @@ describe StoryParser do
       }.each_pair do |input, output|
         location, href = input
         story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
-        story_out = '<p>here is <a href="' + output + '">a link</a>.</p>'
+        story_out = '<p>here is <a href="' + output + '" rel="nofollow">a link</a>.</p>'
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
@@ -277,7 +277,7 @@ describe StoryParser do
         detect_tags: true
       }
 
-      archivist = create_archivist
+      archivist = create(:archivist)
       User.current_user = archivist
 
       WebMock.allow_net_connect!

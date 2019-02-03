@@ -1,3 +1,5 @@
-<%= render :partial => 'invite_request', :locals => {:invite_request => @invite_request} %>
+<%= render "invite_request", invite_request: @invite_request %>
 
-<p><%= ts("To check on the status of your invitation, go to ")%> <%= link_to ts("the Request an Invitation page"), invite_requests_path %> <%= ts(" and enter your email in the space provided!")%></p>
+<p>
+  <%= ts("To check on the status of your invitation, go to the %{status_page} and enter your email in the space provided!", status_page: link_to("Invitation Request Status page", status_invite_requests_path)).html_safe %>
+</p>

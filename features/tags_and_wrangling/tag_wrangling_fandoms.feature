@@ -40,8 +40,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I should not see "Synonyms"
   When I follow "Edit Stargate Atlantis"
     And I should see "SGA"
-  Then the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+  Then the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical fandoms from work posting
   When I go to the new work page

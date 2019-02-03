@@ -564,6 +564,58 @@ namespace :After do
       end
     end
   end
+
+  desc "Enforce HTTPS where available for embedded media"
+  task(enforce_https: :environment) do
+    Chapter.find_each do |chapter|
+      if chapter.id % 1000 == 0
+        puts chapter.id
+      end
+      if chapter.content.match /<(embed|iframe)/
+        begin
+          chapter.content_sanitizer_version = -1
+          chapter.sanitize_field(chapter, :content)
+        rescue
+          puts "couldn't update chapter #{chapter.id}"
+        end
+      end
+    end
+  end
+
+  desc "Fix crossover status for works with two fandom tags."
+  task(crossover_reindex_works_with_two_fandoms: :environment) do
+    # Find all works with two fandom tags:
+    Work.joins(:tags).merge(Fandom.all).
+      group("works.id").having("COUNT(tags.id) > 1").
+      select(:id).
+      find_in_batches do |batch|
+      print(".") && STDOUT.flush
+      AsyncIndexer.index(WorkIndexer, batch.map(&:id), :background)
+    end
+    print("\n") && STDOUT.flush
+  end
+
+  # Usage: rake After:reset_word_counts[en]
+  desc "Reset word counts for works in the specified language"
+  task(:reset_word_counts, [:lang] => :environment) do |_t, args|
+    language = Language.find_by(short: args.lang)
+    raise "Invalid language: '#{args.lang}'" if language.nil?
+
+    works = Work.where(language: language)
+    print "Resetting word count for #{works.count} '#{language.short}' works: "
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.chapters.each do |chapter|
+          chapter.content_will_change!
+          chapter.save
+        end
+        work.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
 end # this is the end that you have to put new tasks above
 
 ##################

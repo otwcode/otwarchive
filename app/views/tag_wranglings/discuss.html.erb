@@ -20,7 +20,7 @@
   <% for comment in @comments %>
   	<tr>
     	<th scope="row"><%= link_to_tag(comment.parent) %></th>
-    	<td><%= link_to strip_tags(comment.content[0..50]) + '...', comment, :title => strip_tags(comment.content) %></td>
+    	<td><%= link_to strip_tags(comment.comment_content[0..50]) + '...', comment, :title => strip_tags(comment.comment_content) %></td>
     	<td><%= comment.count_all_comments %></td>
     	<td>
     	  <% if comment.pseud %>

@@ -272,7 +272,7 @@ module Taggable
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets
