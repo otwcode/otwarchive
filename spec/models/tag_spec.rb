@@ -457,26 +457,27 @@ describe Tag do
 
   describe "multiple tags of the same type" do
     before do
-      # set up three tags of the same type
-      @canonical_tag = FactoryGirl.create(:canonical_fandom)
-      @syn_tag = FactoryGirl.create(:fandom)
-      @sub_tag = FactoryGirl.create(:canonical_fandom)
+      # set up four tags of the same type
+      @canonical_tag = create(:canonical_fandom)
+      @syn_tag = create(:fandom)
+      @sub_tag = create(:canonical_fandom)
+      @canonical_syn_tag = create(:canonical_fandom)
     end
 
     context "when logged in as admin" do
       it "lets you make a canonical tag the synonym of a canonical one" do
         User.current_user = create(:admin)
-        @syn_tag.syn_string = @canonical_tag.name
-        @syn_tag.save
+        @canonical_syn_tag.syn_string = @canonical_tag.name
+        @canonical_syn_tag.save
 
-        expect(@syn_tag.merger).to eq(@canonical_tag)
+        expect(@canonical_syn_tag.merger).to eq(@canonical_tag)
         @canonical_tag = Tag.find(@canonical_tag.id)
-        expect(@canonical_tag.mergers).to eq([@syn_tag])
+        expect(@canonical_tag.mergers).to eq([@canonical_syn_tag])
       end
     end
 
     it "lets you make a noncanonical tag the synonym of a canonical one" do
-      @noncanonical_syn_tag = create(:fandom, canonical: false)
+      @noncanonical_syn_tag = create(:fandom)
       @noncanonical_syn_tag.syn_string = @canonical_tag.name
       @noncanonical_syn_tag.save
 
@@ -486,14 +487,13 @@ describe Tag do
     end
 
     it "doesn't let you make a canonical tag the synonym of a canonical one" do
-      @syn_tag.syn_string = @canonical_tag.name
-      @syn_tag.save
+      @canonical_syn_tag.syn_string = @canonical_tag.name
+      @canonical_syn_tag.save
 
-      expect(@syn_tag.merger).to eq(nil)
+      expect(@canonical_syn_tag.merger).to eq(nil)
       @canonical_tag = Tag.find(@canonical_tag.id)
       expect(@canonical_tag.mergers).to eq([])
     end
-
 
     it "should let you make a canonical tag the subtag of another canonical one" do
       @sub_tag.meta_tag_string = @canonical_tag.name
