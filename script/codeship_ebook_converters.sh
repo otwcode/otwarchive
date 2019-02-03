@@ -2,11 +2,9 @@
 set -e
 
 # PDF
-if ! [ -x "$(command -v wkhtmltopdf)" ]; then
-  wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-  tar --directory="${HOME}" -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-  ln -s "${HOME}/wkhtmltox/bin/wkhtmltopdf" "${HOME}/bin/wkhtmltopdf"
-fi
+wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb
+sudo dpkg -i ./wkhtmltox_0.12.5-1.trusty_amd64.deb
+sudo apt-get install -f
 wkhtmltopdf --version
 
 # Calibre
