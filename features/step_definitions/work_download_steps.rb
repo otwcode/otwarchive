@@ -1,6 +1,7 @@
 Then /^I should receive a file of type "([^"]*)"$/ do |filetype|
+  mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for("foo.#{filetype}").first
   page.driver.response.headers['Content-Disposition'].should =~ /filename=.+\.#{filetype}/
-  page.response_headers['Content-Type'].should == MIME::Types.type_for("foo.#{filetype}").first
+  page.response_headers['Content-Type'].should == mime_type
 end
 
 Then /^I should be able to download all versions of "(.*)"$/ do |title|
