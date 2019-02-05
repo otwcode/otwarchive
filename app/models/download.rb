@@ -50,7 +50,14 @@ class Download
   # Given a mime type, return a file extension
   def file_type_from_mime(mime)
     ext = MimeMagic.new(mime.to_s).subtype
-    ext == "x-mobipocket-ebook" ? "mobi" : "x-mobi8-ebook" ? "azw3" : ext
+    case ext
+    when "x-mobipocket-ebook"
+      "mobi"
+    when "x-mobi8-ebook"
+      "azw3"
+    else
+      ext
+    end
   end
 
   # The base name of the file (eg, "War and Peace")
