@@ -42,7 +42,7 @@ class DownloadWriter
 
   # transform HTML version into ebook version
   def generate_ebook_download
-    return unless %w(mobi epub pdf).include?(download.file_type)
+    return unless %w(azw3 epub mobi pdf).include?(download.file_type)
     return if download.exists?
 
     cmd = get_command
