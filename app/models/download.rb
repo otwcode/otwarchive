@@ -64,7 +64,7 @@ class Download
   def file_name
     name = clean(work.title)
     name += " Work #{work.id}" if name.length < 3
-    name
+    name.strip
   end
 
   # The public route to this download
@@ -115,13 +115,12 @@ class Download
   # make filesystem-safe
   # ascii encoding
   # squash spaces
-  # strip all alphanumeric
+  # strip all non-alphanumeric
   # truncate to 24 chars at a word boundary
   def clean(string)
     # get rid of any HTML entities to avoid things like "amp" showing up in titles
     string = string.gsub(/\&(\w+)\;/, '')
-    string = ActiveSupport::Inflector.transliterate(string)
-    string = string.encode("us-ascii", "utf-8")
+    string = string.to_ascii
     string = string.gsub(/[^[\w _-]]+/, '')
     string = string.gsub(/ +/, " ")
     string = string.strip
