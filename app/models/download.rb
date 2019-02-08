@@ -14,7 +14,9 @@ class Download
   def initialize(work, options = {})
     @work = work
     @file_type = set_file_type(options.slice(:mime_type, :format))
-    @mime_type = MIME::Types.type_for(@file_type).first
+    # TODO: Our current version of the mime-types gem doesn't include azw3, but
+    # the gem cannot be updated without updating rest-client
+    @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
   end
 
   def generate
@@ -48,14 +50,21 @@ class Download
   # Given a mime type, return a file extension
   def file_type_from_mime(mime)
     ext = MimeMagic.new(mime.to_s).subtype
-    ext == "x-mobipocket-ebook" ? "mobi" : ext
+    case ext
+    when "x-mobipocket-ebook"
+      "mobi"
+    when "x-mobi8-ebook"
+      "azw3"
+    else
+      ext
+    end
   end
 
   # The base name of the file (eg, "War and Peace")
   def file_name
     name = clean(work.title)
     name += " Work #{work.id}" if name.length < 3
-    name
+    name.strip
   end
 
   # The public route to this download
@@ -106,13 +115,12 @@ class Download
   # make filesystem-safe
   # ascii encoding
   # squash spaces
-  # strip all alphanumeric
+  # strip all non-alphanumeric
   # truncate to 24 chars at a word boundary
   def clean(string)
     # get rid of any HTML entities to avoid things like "amp" showing up in titles
     string = string.gsub(/\&(\w+)\;/, '')
-    string = ActiveSupport::Inflector.transliterate(string)
-    string = string.encode("us-ascii", "utf-8")
+    string = string.to_ascii
     string = string.gsub(/[^[\w _-]]+/, '')
     string = string.gsub(/ +/, " ")
     string = string.strip

@@ -6,7 +6,7 @@ class DownloadsController < ApplicationController
   after_action :remove_downloads, only: :show
 
   def show
-    respond_to :html, :pdf, :mobi, :epub
+    respond_to :html, :pdf, :mobi, :epub, :azw3
     @download = Download.generate(@work, mime_type: request.format)
 
     # Make sure we were able to generate the download.
