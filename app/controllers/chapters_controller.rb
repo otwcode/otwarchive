@@ -265,8 +265,8 @@ class ChaptersController < ApplicationController
   def load_pseuds
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
-    @to_select = [@chapter.authors, @chapter.pseuds, @work.pseuds].find(&:present?)
+    @coauthors = @allpseuds.reject { |p| p.user_id == current_user.id }
+    @to_select = [@chapter.authors, @chapter.pseuds, @work.pseuds].detect(&:present?)
     @selected_pseuds = @to_select.map { |pseud| pseud.id.to_i }
   end
 
