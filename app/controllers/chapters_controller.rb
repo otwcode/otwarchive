@@ -106,7 +106,7 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters.xml
   def create
     if params[:cancel_button]
-      redirect_back_or_default('/')
+      redirect_back_or_default(root_path)
       return
     end
 
@@ -141,7 +141,7 @@ class ChaptersController < ApplicationController
   def update
     if params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default('/')
+      redirect_back_or_default(root_path)
       return
     end
 
@@ -265,9 +265,9 @@ class ChaptersController < ApplicationController
   def load_pseuds
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = @to_select.collect {|pseud| pseud.id.to_i }
+    @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
+    @to_select = [@chapter.authors, @chapter.pseuds, @work.pseuds].find(&:present?)
+    @selected_pseuds = @to_select.map { |pseud| pseud.id.to_i }
   end
 
   # fetch work these chapters belong to from db

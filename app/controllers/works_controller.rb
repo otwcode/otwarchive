@@ -384,7 +384,7 @@ class WorksController < ApplicationController
 
       @work.minor_version = @work.minor_version + 1
       if @chapter.save && @work.save
-        flash[:notice] = ts("Work was successfully #{posted_changed ? "posted" : "updated"}.")
+        flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
         if posted_changed
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
