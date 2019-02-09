@@ -1,6 +1,6 @@
 class MediaController < ApplicationController
-  before_filter :load_collection
-  skip_before_filter :store_location, only: [:show]
+  before_action :load_collection
+  skip_before_action :store_location, only: [:show]
 
   def index
     uncategorized = Media.uncategorized

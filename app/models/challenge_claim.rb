@@ -1,4 +1,4 @@
-class ChallengeClaim < ActiveRecord::Base
+class ChallengeClaim < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   # We use "-1" to represent all the requested items matching
   ALL = -1
@@ -133,7 +133,7 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claiming_pseud
-    User.find_by(id: claiming_user_id).default_pseud
+    claiming_user.try(:default_pseud)
   end
 
   def requesting_pseud
@@ -141,7 +141,7 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   def claim_byline
-    User.find_by(id: claiming_user_id).default_pseud.byline
+    claiming_pseud.try(:byline) || "deleted user"
   end
 
   def request_byline
@@ -150,6 +150,10 @@ class ChallengeClaim < ActiveRecord::Base
 
   def user_allowed_to_destroy?(current_user)
     (self.claiming_user == current_user) || self.collection.user_is_maintainer?(current_user)
+  end
+
+  def prompt_description
+    request_prompt&.description || ""
   end
 
 end

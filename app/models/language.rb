@@ -1,4 +1,4 @@
-class Language < ActiveRecord::Base
+class Language < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   validates_presence_of :short
@@ -10,7 +10,7 @@ class Language < ActiveRecord::Base
   has_many :admin_posts
   has_many :archive_faqs
 
-  scope :default_order, -> { order(:short) }
+  scope :default_order, -> { order("COALESCE(NULLIF(sortable_name,''), short)") }
 
   def to_param
     short

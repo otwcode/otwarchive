@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= I18n.locale %>">
   <head>
-    <meta name="generator" content="HTML Tidy, see www.w3.org" />
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <%= phraseapp_in_context_editor_js %>
+    <meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
+    <meta name="language" content="en-US" />
+    <meta name="subject" content="fandom" />
+    <meta name="description" content="An Archive of Our Own, a project of the
+    Organization for Transformative Works" />
+    <meta name="distribution" content="GLOBAL" />
+    <meta name="classification" content="transformative works" />
+    <meta name="author" content="Organization for Transformative Works" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>
@@ -12,29 +19,35 @@
         <% if defined?(@page_subtitle) %>
           <%= @page_subtitle %>
         <% else %>
-          <%= controller.action_name=="index" ? "" : controller.action_name.humanize.titleize %>
-          <%= controller.action_name=="index" ? controller.controller_name.humanize.titleize : controller.controller_name.singularize.humanize.titleize %>
+          <%= controller.action_name=="index" ? "" : process_title(controller.action_name) %>
+          <%= controller.action_name=="index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>
         <% end %>
         |
-        <%= ArchiveConfig.APP_NAME  %>
+        <%= ArchiveConfig.APP_NAME %>
       <% end %>
     </title>
-    <%= render :partial => 'layouts/includes' %>
+
+    <%= render "layouts/includes" %>
+    <%= phraseapp_in_context_editor_js %>
   </head>
-  <body <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
-    <%= render :partial => 'layouts/header' %>
-    <!-- BEGIN main -->
-    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
-      <%= flash_div :error, :caution, :notice %>
-      <p id="logo">
-        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
-      </p>
-      <div id="signin" role="main">
-        <%= yield %>
+
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+    <div id="outer" class="wrapper">
+      <ul id="skiplinks"><li><a href="#main"><%= ts("Main Content") %></a></li></ul>
+      <%= render "layouts/header" %>
+      <div id="inner" class="wrapper">
+        <!-- BEGIN main -->
+        <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region" role="main">
+          <%= flash_div :error, :caution, :notice, :alert %>
+          <div class="flash"></div>
+          <div id="signin">
+            <%= yield %>
+          </div>
+        </div>
+        <!-- END main -->
       </div>
+      <%= render "layouts/footer" %>
     </div>
-    <!-- END main -->
-    <%= render :partial => 'layouts/footer' %>
-    <%= render :partial => 'layouts/javascripts' %>
+    <%= render "layouts/javascripts" %>
   </body>
 </html>

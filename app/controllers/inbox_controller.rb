@@ -1,6 +1,6 @@
 class InboxController < ApplicationController
-  before_filter :load_user
-  before_filter :check_ownership
+  before_action :load_user
+  before_action :check_ownership
 
   def load_user
     @user = User.find_by(login: params[:user_id])
@@ -10,9 +10,8 @@ class InboxController < ApplicationController
   def show
     @inbox_total = @user.inbox_comments.with_feedback_comment.count
     @unread = @user.inbox_comments.with_feedback_comment.count_unread
-    filters = params[:filters] || {}
-    @inbox_comments = @user.inbox_comments.with_feedback_comment.find_by_filters(filters).page(params[:page])
-    @select_read, @select_replied_to, @select_date = filters[:read], filters[:replied_to], filters[:date]
+    @filters = filter_params[:filters] || {}
+    @inbox_comments = @user.inbox_comments.with_feedback_comment.find_by_filters(@filters).page(params[:page])
   end
 
   def reply
@@ -44,5 +43,12 @@ class InboxController < ApplicationController
       format.html { redirect_to request.referer || user_inbox_path(@user, page: params[:page], filters: params[:filters]), notice: success_message }
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
+  end
+
+  private
+
+  # Allow flexible params through, since we're not posting any data
+  def filter_params
+    params.permit!
   end
 end

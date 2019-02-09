@@ -1,14 +1,16 @@
 class PromptsController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_collection, except: [:index]
-  before_filter :load_challenge, except: [:index]
-  before_filter :load_prompt_from_id, only: [:show, :edit, :update, :destroy]
-  before_filter :load_signup, except: [:index, :destroy, :show]
-  # before_filter :promptmeme_only, except: [:index, :new]
-  before_filter :allowed_to_destroy, only: [:destroy]
-  before_filter :signup_owner_only, only: [:edit, :update]
-  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
+  before_action :users_only
+  before_action :load_collection, except: [:index]
+  before_action :load_challenge, except: [:index]
+  before_action :load_prompt_from_id, only: [:show, :edit, :update, :destroy]
+  before_action :load_signup, except: [:index, :destroy, :show]
+  # before_action :promptmeme_only, except: [:index, :new]
+  before_action :allowed_to_destroy, only: [:destroy]
+  before_action :allowed_to_view, only: [:show]
+  before_action :signup_owner_only, only: [:edit, :update]
+  before_action :check_signup_open, only: [:new, :create, :edit, :update]
+  before_action :check_prompt_in_collection, only: [:show, :edit, :update, :destroy]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -82,6 +84,19 @@ class PromptsController < ApplicationController
     flash[:error] = ts("What prompt did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
+  end
+
+  def check_prompt_in_collection
+    unless @prompt.collection_id == @collection.id
+      flash[:error] = ts("Sorry, that prompt isn't associated with that collection.")
+      redirect_to @collection
+    end
+  end
+
+  def allowed_to_view
+    unless @challenge.user_allowed_to_see_prompt?(current_user, @prompt)
+      access_denied(redirect: @collection)
+    end
   end
 
   #### ACTIONS

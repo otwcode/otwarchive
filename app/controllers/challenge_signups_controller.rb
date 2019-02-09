@@ -4,15 +4,16 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_filter :users_only, except: [:summary, :display_summary, :requests_summary]
-  before_filter :load_collection, except: [:index]
-  before_filter :load_challenge, except: [:index]
-  before_filter :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_filter :allowed_to_destroy, only: [:destroy, :confirm_delete]
-  before_filter :signup_owner_only, only: [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, only: [:show]
-  before_filter :check_signup_open, only: [:new, :create, :edit, :update]
-  before_filter :check_pseud_ownership, only: [:create, :update]
+  before_action :users_only, except: [:summary, :display_summary, :requests_summary]
+  before_action :load_collection, except: [:index]
+  before_action :load_challenge, except: [:index]
+  before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action :allowed_to_destroy, only: [:destroy, :confirm_delete]
+  before_action :signup_owner_only, only: [:edit, :update]
+  before_action :maintainer_or_signup_owner_only, only: [:show]
+  before_action :check_signup_open, only: [:new, :create, :edit, :update]
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
 
   def load_challenge
     @challenge = @collection.challenge
@@ -78,6 +79,13 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
+  def check_signup_in_collection
+    unless @challenge_signup.collection_id == @collection.id
+      flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
+      redirect_to @collection
+    end
+  end
+
   #### ACTIONS
 
   def index
@@ -127,25 +135,32 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
+    @summary = ChallengeSignupSummary.new(@collection)
+
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
       flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", count: ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
-      if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
-          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)
-        # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
+      modification_time = @summary.cached_time
 
-        # touch the file so we don't generate a second request
-        summary_dir = ChallengeSignup.summary_dir
-        FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
-        FileUtils.touch(ChallengeSignup.summary_file(@collection))
+      # The time is always written alongside the cache, so if the time is
+      # missing, then the cache must be missing as well -- and we want to
+      # generate it. We also want to generate it if signups are open and it was
+      # last generated more than an hour ago.
+      if modification_time.nil? ||
+         (@collection.challenge.signup_open? && modification_time < 1.hour.ago)
 
-        # generate the page
-        ChallengeSignup.generate_summary(@collection)
+        # Touch the cache so that we don't try to generate the summary a second
+        # time on subsequent page loads.
+        @summary.touch_cache
+
+        # Generate the cache of the summary in the background.
+        @summary.enqueue_for_generation
       end
     else
       # generate it on the fly
-      @tag_type, @summary_tags = ChallengeSignup.generate_summary_tags(@collection)
+      @tag_type = @summary.tag_type
+      @summary_tags = @summary.summary
       @generated_live = true
     end
   end

@@ -1,6 +1,6 @@
 class Admin::BannersController < ApplicationController
 
-  before_filter :admin_only
+  before_action :admin_only
 
   # GET /admin/banners
   def index

@@ -11,7 +11,7 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/art/Flooded-45971613"
     When I press "Import"
     Then I should see "Preview"
-      And I should see the image "src" text "http://orig03.deviantart.net/4707/f/2007/004/a/7/flooded_by_bingeling.jpg"
+      And I should see the image "src" text "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/917f216b-24af-41f8-9802-7ab80f56d2f2/drdbx9-adee7105-ed30-4e62-a66d-4f78dfa36879.jpg"
       And I should see "Digital Art" within "dd.freeform"
       And I should see "People" within "dd.freeform"
       And I should see "Vector" within "dd.freeform"
@@ -36,7 +36,8 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://bingeling.deviantart.com/gallery/#/drdbx9"
     When I press "Import"
     Then I should not see "Preview"
-      And I should see "We were only partially able to import this work and couldn't save it. Please review below!"
+      And I should see "Chapter 1 of"
+      And I should see "is blank."
 
   Scenario: Creating a new fic from deviantart import
     Given basic tags

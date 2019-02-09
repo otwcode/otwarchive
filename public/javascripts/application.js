@@ -11,6 +11,7 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
+    updateCachedTokens();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
@@ -384,24 +385,25 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  var panes = $j(".expandable");
-  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
-    var expander = $j(this);
-    if (expander.attr('href') == '#') {
-      e.preventDefault();
-    }
-    // We need to treat the pseud menu differently so it will be properly responsive
-    // The other accordions need to be converted to a similar system
-    // Otherwise we run into bugs if one @media uses inline display and another uses block
-    if (expander.attr('title') == 'Pseud Switcher') {
-      if (expander.hasClass('expanded')) {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
-      } else {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
-      }
-    } else {
-      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-    }
+  $j(".expandable").each(function() {
+    var pane = $j(this);
+    // hide the pane element if it's not hidden by default
+    if ( !pane.hasClass("hidden") ) {
+      pane.addClass("hidden");
+    };
+
+    // make the expander visible
+    // add the default collapsed state
+    // make it do the expanding and collapsing
+    pane.prev().removeClass("hidden").addClass("collapsed").click(function(e) {
+      var expander = $j(this);
+      if (expander.attr('href') == '#') {
+        e.preventDefault();
+      };
+
+      // change the classes upon clicking the expander
+      expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
+    });
   });
 }
 
@@ -538,7 +540,7 @@ $j(document).ready(function() {
 });
 
 // For simple forms that update or destroy records and remove them from a listing
-// e.g. delete from history, mark as read
+// e.g. delete from history, mark as read, delete invitation request
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
@@ -547,8 +549,12 @@ $j(document).ready(function() {
 
     var form = $j(this);
     var formAction = form.attr('action');
-    var formParent = form.closest('li.group');
-    var parentContainer = formParent.closest('div');
+    // The record we're removing is probably in a list, but might be in a table
+    if (form.closest('li.group').length !== 0) {
+      formParent = form.closest('li.group');
+    } else { formParent = form.closest('tr'); };
+    // The admin div does not hold a flash container
+    var parentContainer = formParent.closest('div:not(.admin)');
     var flashContainer = parentContainer.find('.flash');
 
     $j.ajax({
@@ -642,4 +648,18 @@ function thermometer() {
       });
     }
   });
+}
+
+function updateCachedTokens() {
+  // we only do full page caching when users are logged out
+  if ($j('#small_login').length > 0) {
+    $j.getJSON("/token_dispenser.json", function( data ) {
+      var token = data.token;
+      // set token on fields
+      $j('input[name=authenticity_token]').each(function(){
+        $j(this).attr('value', token);
+      });
+      $j('meta[name=csrf-token]').attr('value', token);
+    });
+  }
 }

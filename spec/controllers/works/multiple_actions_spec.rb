@@ -18,7 +18,7 @@ describe WorksController do
       work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
       work_ids = [work1.id, work2.id]
       fake_login_known_user(multiple_works_user)
-      post :edit_multiple, id: work1.id, work_ids: work_ids, commit: "Orphan"
+      post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
       it_redirects_to new_orphan_path(work_ids: work_ids)
     end
   end
@@ -29,7 +29,7 @@ describe WorksController do
       work2 = create(:work, authors: [multiple_works_user.default_pseud], posted: true)
       fake_login_known_user(multiple_works_user)
       params = { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] }
-      post :confirm_delete_multiple, params
+      post :confirm_delete_multiple, params: params
       expect(assigns(:works)).to include(work1)
       expect(assigns(:works)).to include(work2)
     end
@@ -51,7 +51,7 @@ describe WorksController do
 
     before do
       fake_login_known_user(multiple_works_user)
-      post :delete_multiple, id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id]
+      post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
     end
 
     # already covered - just for completeness
@@ -120,14 +120,14 @@ describe WorksController do
       }
 
       it "should convert the anon_commenting_disabled parameter to false" do
-        put :update_multiple, params
+        put :update_multiple, params: params
         assigns(:works).each do |work|
           expect(work.anon_commenting_disabled).to be false
         end
       end
 
       it "should convert the moderated_commenting_enabled parameter to false" do
-        put :update_multiple, params
+        put :update_multiple, params: params
         assigns(:works).each do |work|
           expect(work.moderated_commenting_enabled).to be false
         end
@@ -148,7 +148,7 @@ describe WorksController do
 
       before do
         multiple_work2.update_attribute(:authors, [multiple_works_user.default_pseud, coauthor_to_remove_pseud])
-        put :update_multiple, params
+        put :update_multiple, params: params
       end
 
       it "removes coauthors when pseuds_to_remove param exists" do

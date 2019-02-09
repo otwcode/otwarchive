@@ -1,9 +1,11 @@
-class InviteRequest < ActiveRecord::Base
+class InviteRequest < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
   validates :email, presence: true, email_veracity: true
   validates_uniqueness_of :email, message: "is already part of our queue."
   before_validation :compare_with_users, on: :create
+  before_validation :set_simplified_email, on: :create
+  validate :simplified_email_uniqueness, on: :create
 
   # Realign positions if they're incorrect
   def self.reset_order
@@ -14,8 +16,22 @@ class InviteRequest < ActiveRecord::Base
     end
   end
 
+  # Borrow the blacklist cleaner but just strip out all the periods for all domains
+  def set_simplified_email
+    return if email.blank?
+    simplified = AdminBlacklistedEmail.canonical_email(email).split('@')
+    self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
+  end
+
+  # Doing this with a method so the error message makes more sense
+  def simplified_email_uniqueness
+    if InviteRequest.where(simplified_email: simplified_email).exists?
+      errors.add(:email, "is already part of our queue.")
+    end
+  end
+
   def proposed_fill_date
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    admin_settings = AdminSetting.current
     number_of_rounds = (self.position.to_f/admin_settings.invite_from_queue_number.to_f).ceil - 1
     proposed_date = admin_settings.invite_from_queue_at.to_date + (admin_settings.invite_from_queue_frequency * number_of_rounds).days
     Date.today > proposed_date ? Date.today : proposed_date
@@ -25,13 +41,13 @@ class InviteRequest < ActiveRecord::Base
   def compare_with_users
     if User.find_by(email: self.email)
       errors.add(:email, "is already being used by an account holder.")
-      return false
+      throw :abort
     end
   end
 
   #Invite a specified number of users
   def self.invite
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    admin_settings = AdminSetting.current
     self.order(:position).limit(admin_settings.invite_from_queue_number).each do |request|
       request.invite_and_remove
     end

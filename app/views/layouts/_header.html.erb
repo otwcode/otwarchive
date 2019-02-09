@@ -23,17 +23,17 @@
 
   <h1 class="heading">
     <%= link_to(content_tag(:span, "#{ArchiveConfig.APP_NAME}") + content_tag(:sup, " beta") +
-    image_tag('/images/ao3_logos/logo_42.png', :alt => "#{ArchiveConfig.ALT_LOGO}", :class => "logo"), root_path) %> 
+    image_tag('/images/ao3_logos/logo_42.png', :alt => "#{ArchiveConfig.ALT_LOGO}", :class => "logo", skip_pipeline: true), root_path) %> 
   </h1>
 
   <% if logged_in? || logged_in_as_admin? %>
-    <%= render 'user_sessions/greeting' %>
+    <%= render 'users/sessions/greeting' %>
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In', key: 'header'), {:controller => :user_sessions, :action => 'new'}, id: "login-dropdown" %>
+        <%= link_to ts('Log In', key: 'header'), new_user_session_path, id: "login-dropdown" %>
       </p>
-      <%= render 'user_sessions/login' %>
+      <%= render 'users/sessions/login' %>
     </div>
   <% end %>
 

@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
-  before_filter :load_collection
-  before_filter :load_user, only: [:update_multiple]
-  before_filter :load_item_and_collection, only: [:destroy]
-  before_filter :load_collectible_item, only: [:new, :create]
-  before_filter :allowed_to_destroy, only: [:destroy]
+  before_action :load_collection
+  before_action :load_user, only: [:update_multiple]
+  before_action :load_item_and_collection, only: [:destroy]
+  before_action :load_collectible_item, only: [:new, :create]
+  before_action :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 
@@ -65,7 +65,7 @@ class CollectionItemsController < ApplicationController
 
   def load_user
     unless @collection
-      @user = User.current_user
+      @user = User.find_by(login: params[:user_id])
     end
   end
 
@@ -101,6 +101,8 @@ class CollectionItemsController < ApplicationController
         end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
+      elsif (collection.anonymous? || collection.unrevealed?) && !current_user.is_author_of?(@item)
+        errors << ts("%{collection_title}, because you don't own this item and the collection is anonymous or unrevealed.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       # add the work to a collection, and try to save it
@@ -151,10 +153,43 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    @collection_items = CollectionItem.update(collection_items_params[:collection_items].keys, collection_items_params[:collection_items].values).reject { |item| item.errors.empty? }
+    if @collection&.user_is_maintainer?(current_user)
+      update_multiple_with_params(@collection.collection_items,
+                                  collection_update_multiple_params,
+                                  collection_items_path(@collection))
+    elsif @user && @user == current_user
+      update_multiple_with_params(CollectionItem.for_user(@user),
+                                  user_update_multiple_params,
+                                  user_collection_items_path(@user))
+    else
+      flash[:error] = ts("You don't have permission to do that, sorry!")
+      redirect_to(@collection || @user)
+    end
+  end
+
+  # The main work performed by update_multiple. Uses the passed-in parameters
+  # to update, and only updates items that can be found in allowed_items (which
+  # should be a relation on CollectionItems). When all items are successfully
+  # updated, redirects to success_path.
+  def update_multiple_with_params(allowed_items, update_params, success_path)
+    # Collect any failures so that we can display errors:
+    @collection_items = []
+
+    # Make sure that the keys are integers so that we can look up the
+    # parameters by ID.
+    update_params.transform_keys!(&:to_i)
+
+    # By using where() here and updating each item individually, instead of
+    # using allowed_items.update(update_params.keys, update_params.values) --
+    # which uses find() under the hood -- we ensure that we'll fail silently if
+    # the user tries to update an item they're not allowed to.
+    allowed_items.where(id: update_params.keys).each do |item|
+      @collection_items << item unless item.update(update_params[item.id])
+    end
+
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
-      redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
+      redirect_to success_path
     else
       render action: "index"
     end
@@ -178,13 +213,15 @@ class CollectionItemsController < ApplicationController
     params.require(:collection_item).permit(:id)
   end
 
-  def collection_items_params
-    params.permit(
-      :utf8, :_method, :authenticity_token, :commit, :collection_id, :user_id,
-      collection_items: [
-        :id, :collection_id, :collection_approval_status, :unrevealed,
-        :user_approval_status, :anonymous, :remove
-      ]
-    )
+  def user_update_multiple_params
+    allowed = %i[user_approval_status remove]
+    params.slice(:collection_items).permit(collection_items: allowed).
+      require(:collection_items)
+  end
+
+  def collection_update_multiple_params
+    allowed = %i[collection_approval_status unrevealed anonymous remove]
+    params.slice(:collection_items).permit(collection_items: allowed).
+      require(:collection_items)
   end
 end

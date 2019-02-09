@@ -35,23 +35,18 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "chapter_wip_length" with "100"
     And I fill in "content" with "original chapter two"
-    And "AO3-3300" is fixed
-    # All the commented out bits in the following examples need to be changed
-    # back once AO3-3300 has bee fixed.
-    #And I press "Preview"
-  #Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  #When I press "Post"
-  When I press "Post Without Preview"
+    And I press "Preview"
+  Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
+  When I press "Post"
     Then I should see "2/100"
     And I should see "Words:8"
   When I follow "Add Chapter"
     And I fill in "chapter_position" with "3"
     And I fill in "chapter_wip_length" with "50"
     And I fill in "content" with "entering chapter three"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 3"
-  #When I press "Post"
+  When I press "Post"
   Then I should see "3/50"
     And I should see "Words:11"
 
@@ -60,10 +55,9 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "17"
     And I fill in "chapter_wip_length" with "17"
     And I fill in "content" with "entering fourth chapter out of order"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 4"
-  #When I press "Post"
+  When I press "Post"
     And I should see "4/17"
     And I should see "Words:17"
 
@@ -80,9 +74,8 @@ Feature: Edit chapters
   When I follow "Add Chapter"
     And I fill in "chapter_position" with "2"
     And I fill in "content" with "entering second chapter out of order"
-    #And I press "Preview"
-  #When I press "Post"
-  And I press "Post Without Preview"
+    And I press "Preview"
+  When I press "Post"
   Then I should see "4/17"
     And I should see "Words:20"
 
@@ -92,12 +85,11 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "4"
     And I fill in "chapter_wip_length" with "4"
     And I fill in "content" with "last chapter"
-    #And I press "Preview"
-    And I press "Post Without Preview"
+    And I press "Preview"
   Then I should see "Chapter 4"
-  #When I press "Update"
+  When I press "Update"
   Then I should see "Chapter was successfully updated"
-    #And I should see "Chapter 4"
+    And I should see "Chapter 4"
     And I should see "4/4"
     And I should see "Words:19"
   When I follow "Edit"
@@ -106,6 +98,7 @@ Feature: Edit chapters
 
   # view chapters in the right order
   When I am logged out
+    And all indexing jobs have been run
     And I go to epicauthor's works page
     And I follow "New Epic Work"
     And I follow "Entire Work"
@@ -247,10 +240,12 @@ Feature: Edit chapters
       And I should see "This is a draft"
       And I press "Save Without Posting"
     Then I should not see Updated today
+      And I should not see Completed today
       And I should not see "Updated" within ".work.meta .stats"
+      And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
       And I press "Post Without Preview"
-      Then I should see Updated today
+      Then I should see Completed today
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
@@ -312,6 +307,9 @@ Feature: Edit chapters
     When I add the co-author "amy"
       And I post the chapter
     Then I should see "amy, karma"
+      And 1 email should be delivered to "amy"
+      And the email should contain "You have been listed as a co-creator on the following work"
+      And the email should not contain "translation missing"
 
 
   Scenario: You should be able to edit a chapter to add a co-creator who is
@@ -340,8 +338,55 @@ Feature: Edit chapters
       And a chapter with the co-author "sabrina" is added to "Camp Friends"
     When I follow "Edit Chapter"
     Then I should see "Chapter co-creators"
-      And the "sabrina" checkbox should be checked
-      And the "sabrina" checkbox should be disabled
+      And the "sabrina" checkbox should be checked and disabled
+
+
+  Scenario: Removing yourself as a co-creator from the chapter edit page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter 2"
+      And I should see "Chapter by originalposter"
+
+
+  Scenario: Removing yourself as a co-creator from the chapter manage page
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    When I follow "Remove Me As Chapter Co-Creator"
+    Then I should see "You have been removed as a creator from the chapter"
+      And I should see "Chapter 1"
+    When I view the 2nd chapter
+    Then I should see "Chapter by originalposter"
+
+
+  Scenario: The option to remove yourself as a co-creator should only be
+  included for chapters you are a co-creator of
+
+    Given the work "OP's Work" by "originalposter" with chapter two co-authored with "opsfriend"
+      And I am logged in as "opsfriend"
+    When I view the work "OP's Work"
+      And I follow "Edit"
+      And I follow "Manage Chapters"
+    Then the Remove Me As Chapter Co-Creator option should not be on the 1st chapter
+      And the Remove Me As Chapter Co-Creator option should be on the 2nd chapter
+    When I view the work "OP's Work"
+      And I follow "Edit Chapter"
+    Then I should not see "Remove Me As Chapter Co-Creator"
+    When I view the work "OP's Work"
+      And I view the 2nd chapter
+      And I follow "Edit Chapter"
+    Then I should see "Remove Me As Chapter Co-Creator"
 
 
   Scenario: You should be able to edit a chapter you are not already co-creator
@@ -427,6 +472,7 @@ Feature: Edit chapters
 
   Scenario: Users can't set a chapter publication date that is in the future,
   e.g. set the date to April 30 when it is April 26
+
     Given I am logged in
       And it is currently Wed Apr 26 22:00:00 UTC 2017
       And I post the work "Futuristic"
@@ -435,3 +481,14 @@ Feature: Edit chapters
       And I press "Post Without Preview"
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
+
+
+  Scenario: The Post Draft option on your drafts page only posts the first
+  chapter of a multi-chapter draft
+    Given I have a multi-chapter draft
+      And I am on my drafts page
+    When I follow "Post Draft"
+    Then I should see "Your work was successfully posted."
+      And I should not see "This chapter is a draft and hasn't been posted yet!"
+    When I follow "Next Chapter"
+    Then I should see "This chapter is a draft and hasn't been posted yet!"

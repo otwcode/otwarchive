@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
 
-  skip_before_filter :store_location, only: [:first_login_help]
+  skip_before_action :store_location, only: [:first_login_help, :token_dispenser]
   
   # unicorn_test
   def unicorn_test
@@ -24,6 +24,13 @@ class HomeController < ApplicationController
   # lost cookie
   def lost_cookie
     render action: 'lost_cookie', layout: 'application'
+  end
+
+  # for updating form tokens on cached pages
+  def token_dispenser
+    respond_to do |format|
+      format.json { render json: { token: form_authenticity_token } }
+    end
   end
   
   # diversity statement

@@ -1,8 +1,8 @@
 class SeriesController < ApplicationController
-  before_filter :check_user_status, only: [:new, :create, :edit, :update]
-  before_filter :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :check_visibility, only: [:show]
+  before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_action :check_visibility, only: [:show]
 
   def load_series
     @series = Series.find_by(id: params[:id])
@@ -146,7 +146,7 @@ class SeriesController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(@series) and return }
-      format.json { render nothing: true }
+      format.json { head :ok }
     end
   end
 
@@ -170,7 +170,7 @@ class SeriesController < ApplicationController
 
   def series_params
     params.require(:series).permit(
-      :title, :summary, :notes, :complete,
+      :title, :summary, :series_notes, :complete,
       author_attributes: [
         ids: [],
         coauthors: []

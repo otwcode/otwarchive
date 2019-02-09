@@ -1,9 +1,10 @@
 # encoding=utf-8
 
-class Chapter < ActiveRecord::Base
+class Chapter < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include Creatable
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
@@ -46,12 +47,15 @@ class Chapter < ActiveRecord::Base
 
 #  before_update :clean_emdashes
 
+  after_create :notify_after_creation
+  before_update :notify_before_update
+
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 
   after_save :fix_positions
   def fix_positions
-    if work
+    if work && !work.new_record?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
@@ -59,9 +63,8 @@ class Chapter < ActiveRecord::Base
         chapters = chapters - [self]
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
-          chapter.position = i+1
-          if chapter.position_changed?
-            Chapter.where("id = #{chapter.id}").update_all("position = #{chapter.position}")
+          if chapter.position != i+1
+            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
             positions_changed = true
           end
         end
@@ -75,13 +78,27 @@ class Chapter < ActiveRecord::Base
   end
 
   after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.posted_changed? }
+    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
+
+  after_save :expire_cache_on_coauthor_removal
+
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}
     end
+  end
+
+  after_commit :update_series_index
+  def update_series_index
+    return unless work&.series.present? && should_reindex_series?
+    work.serial_works.each(&:update_series_index)
+  end
+
+  def should_reindex_series?
+    pertinent_attributes = %w[id posted]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   def invalidate_chapter_count
@@ -107,6 +124,15 @@ class Chapter < ActiveRecord::Base
 
   def chapter_title
     self.title.blank? ? self.chapter_header : self.title
+  end
+
+  # Header plus title, used in subscriptions
+  def full_chapter_title
+    str = chapter_header
+    if title.present?
+      str += ": #{title}"
+    end
+    str
   end
 
   def display_title
@@ -170,7 +196,7 @@ class Chapter < ActiveRecord::Base
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
       errors.add(:base, ts("Chapter must have at least one author."))
-      return false
+      throw :abort
     end
   end
 
@@ -180,7 +206,7 @@ class Chapter < ActiveRecord::Base
       self.published_at = Date.today
     elsif self.published_at > Date.today
       errors.add(:base, ts("Publication date can't be in the future."))
-      return false
+      throw :abort
     end
   end
 
@@ -197,6 +223,14 @@ class Chapter < ActiveRecord::Base
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
+  end
+
+  private
+
+  def expire_cache_on_coauthor_removal
+    if self.authors_to_remove.present?
+      self.touch
+    end
   end
 
    # private

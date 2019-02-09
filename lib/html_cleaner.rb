@@ -25,7 +25,6 @@ module HtmlCleaner
       self_closing = node.children.empty?
     rescue NameError
       name = node
-      attributes ||= {}
       self_closing = false
     end
 
@@ -124,13 +123,6 @@ module HtmlCleaner
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
 
-    # replace curlyquotes
-    # note: turns out not to be necessary?
-    # text.gsub! "\xE2\x80\x98", "'"
-    # text.gsub! "\xE2\x80\x99", "'"
-    # text.gsub! "\xE2\x80\x9C", '"'
-    # text.gsub! "\xE2\x80\x9D", '"'
-
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
 
@@ -143,18 +135,20 @@ module HtmlCleaner
   end
 
   def sanitize_value(field, value)
+    return value if ArchiveConfig.FIELDS_WITHOUT_SANITIZATION.include?(field.to_s)
     if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
       return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
     end
     return "" if value.blank?
-    value.strip!
+    unfrozen_value = value&.dup
+    unfrozen_value.strip!
     if field.to_s == 'title'
       # prevent invisible titles
-      value.gsub!("<", "&lt;")
-      value.gsub!(">", "&gt;")
+      unfrozen_value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!(">", "&gt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
-      value.gsub!("<", "&lt;")
+      unfrozen_value.gsub!("<", "&lt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
@@ -165,22 +159,26 @@ module HtmlCleaner
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end
-      # the screencast field shouldn't be wrapped in <p> tags
-      unless field.to_s == "screencast"
-        value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value),
-                               Sanitize::Config::ARCHIVE.merge(transformers: transformers)))
+      # Now that we know what transformers we need, let's sanitize the unfrozen value
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+      else
+        # the screencast field shouldn't be wrapped in <p> tags
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
+                               Sanitize::Config::ARCHIVE.merge(transformers: transformers))) unless field.to_s == "screencast"
       end
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
-      value = doc.fragment(value).to_xhtml
+      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
     else
       # clean out all tags
-      value = Sanitize.clean(fix_bad_characters(value))
+      unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
     end
 
     # Plain text fields can't contain &amp; entities:
-    value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
-    value
+    unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+    unfrozen_value
   end
 
   # grabbed from http://code.google.com/p/sanitizeparams/ and tweaked
@@ -192,7 +190,9 @@ module HtmlCleaner
     hash.keys.each do |key|
       if hash[key].is_a? String
         hash[key] = sanitize_value(key, hash[key])
-      elsif hash[key].is_a? Hash
+      elsif hash[key].is_a?(ActionController::Parameters)
+        hash[key] = hash[key].to_hash
+      elsif hash[key].is_a?(Hash)
         hash[key] = walk_hash(hash[key])
       elsif hash[key].is_a? Array
         hash[key] = walk_array(hash[key])
@@ -268,7 +268,7 @@ module HtmlCleaner
       return [stack, out_html]
     end
 
-    # Don't decend into node if we don't want to touch the content of
+    # Don't descend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
@@ -403,4 +403,8 @@ module HtmlCleaner
           strip
   end
 
+  def add_break_between_paragraphs(value)
+    return "" if value.blank?
+    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+  end
 end

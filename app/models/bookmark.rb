@@ -1,17 +1,16 @@
-class Bookmark < ActiveRecord::Base
+class Bookmark < ApplicationRecord
 
   include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
-  include Tire::Model::Search
-  # include Tire::Model::Callbacks
+  include Responder
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  validates_length_of :notes,
+  validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
@@ -52,17 +51,39 @@ class Bookmark < ActiveRecord::Base
   }
 
   scope :visible_to_all, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
-      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+    is_public.with_bookmarkable_visible_to_all
   }
 
   scope :visible_to_registered_user, -> {
-    is_public.join_bookmarkable.
-    where("(works.posted = 1 AND works.hidden_by_admin = 0) OR
+    is_public.with_bookmarkable_visible_to_registered_user
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to registered
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_registered_user, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.hidden_by_admin = 0) OR
       (series.hidden_by_admin = 0) OR
-      (external_works.hidden_by_admin = 0)")
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a bookmarkable visible to logged-out
+  # users (regardless of the bookmark's hidden_by_admin/private status).
+  scope :with_bookmarkable_visible_to_all, -> {
+    join_bookmarkable.where(
+      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
+      (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+      (external_works.hidden_by_admin = 0)"
+    )
+  }
+
+  # Scope for retrieving bookmarks with a missing bookmarkable (regardless of
+  # the bookmark's hidden_by_admin/private status).
+  scope :with_missing_bookmarkable, -> {
+    join_bookmarkable.where(
+      "works.id IS NULL AND series.id IS NULL AND external_works.id IS NULL"
+    )
   }
 
   scope :visible_to_admin, -> { not_private }
@@ -92,13 +113,22 @@ class Bookmark < ActiveRecord::Base
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count, :update_pseud_index
+
+  after_create :update_work_stats
+  after_destroy :update_work_stats, :update_pseud_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
       work.first.invalidate_public_bookmarks_count
     end
+  end
+
+  # We index the bookmark count, so if it should change, update the pseud
+  def update_pseud_index
+    return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
+    IndexQueue.enqueue_id(Pseud, pseud_id, :background)
   end
 
   def visible?(current_user=User.current_user)
@@ -175,55 +205,35 @@ class Bookmark < ActiveRecord::Base
     bookmarks = bookmarks.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
+  # TODO: Is this necessary anymore?
+  before_destroy :save_parent_info
+
+  # Because of the way the elasticsearch parent/child index is set up, we need
+  # to know what the bookmarkable type and id was in order to delete the
+  # bookmark from the index after it's been deleted from the database
+  def save_parent_info
+    expire_time = (Time.now + 2.weeks).to_i
+    REDIS_GENERAL.setex(
+      "deleted_bookmark_parent_#{self.id}",
+      expire_time,
+      "#{bookmarkable_id}-#{bookmarkable_type.underscore}"
+    )
+  end
+
   #################################
   ## SEARCH #######################
   #################################
 
-  mapping do
-    indexes :notes
-    indexes :private, type: 'boolean'
-    indexes :bookmarkable_type
-    indexes :bookmarkable_id
-    indexes :created_at,          type: 'date'
-    indexes :bookmarkable_date,   type: 'date'
-  end
-
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods:
-      [ :bookmarker,
-        :with_notes,
-        :bookmarkable_pseud_names,
-        :bookmarkable_pseud_ids,
-        :tag,
-        :tag_ids,
-        :filter_names,
-        :filter_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :bookmarkable_title,
-        :bookmarkable_posted,
-        :bookmarkable_restricted,
-        :bookmarkable_hidden,
-        :bookmarkable_complete,
-        :bookmarkable_language_id,
-        :collection_ids,
-        :bookmarkable_collection_ids,
-        :bookmarkable_date
-      ])
+  def document_json
+    BookmarkIndexer.new({}).document(self)
   end
 
   def bookmarker
-    pseud.try(:name)
+    pseud.try(:byline)
   end
 
   def with_notes
-    notes.present?
+    bookmarker_notes.present?
   end
 
   def bookmarkable_pseud_names

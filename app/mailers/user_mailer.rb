@@ -3,7 +3,6 @@ class UserMailer < BulletproofMailer::Base
 
   layout 'mailer'
 
-  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -63,7 +62,7 @@ class UserMailer < BulletproofMailer::Base
     @token = @invitation.token
     mail(
       to: @invitation.invitee_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      subject: t("user_mailer.invitation_to_claim.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
@@ -158,22 +157,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
-  # Sends an admin message to a user
-  def archive_notification(admin_login, user_id, subject, message)
-    @user = User.find(user_id)
-    @message = message
-    @admin_login = admin_login
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
+        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -231,20 +215,6 @@ class UserMailer < BulletproofMailer::Base
       mail(
         to: @user.email,
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
-  # Sends a temporary password to the user
-  def reset_password(user_id, activation_code)
-    @user = User.find(user_id)
-    @password = activation_code
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.reset_password.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
@@ -337,9 +307,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -357,9 +328,10 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
+    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
+    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -381,21 +353,14 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  def delete_signup_notification(user, challenge_signup)
-    @user = user
-    @signup = challenge_signup
-    signup_copy = generate_attachment_content_from_signup(@signup)
-    filename = @signup.collection.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: signup_copy}
-    attachments["#{filename}.html"] = {content: signup_copy}
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
+  def admin_spam_work_notification(creation_id, user_id)
+    @user = User.find_by(id: user_id)
+    @work = Work.find_by(id: creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+    )
   end
 
   ### OTHER NOTIFICATIONS ###
@@ -442,69 +407,6 @@ class UserMailer < BulletproofMailer::Base
       attachment_string += "<br/>Notes: " + chapter.notes + "<br/>\n" unless chapter.notes.blank?
       attachment_string += "<br/>End Notes: " + chapter.endnotes + "<br/>\n" unless chapter.endnotes.blank?
       attachment_string += "<br/>" + chapter.content + "<br />\n"
-    end
-    return attachment_string
-  end
-
-  def generate_attachment_content_from_signup(signup)
-    attachment_string =  "Collection: " + signup.collection + "<br />\n"
-    signup.requests.each_with_index do |prompt, index|
-      attachment_string += "Request " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
-    end
-    signup.offers.each_with_index do |offer, index|
-      attachment_string += "Offer " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
     end
     return attachment_string
   end

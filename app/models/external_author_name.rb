@@ -1,4 +1,4 @@
-class ExternalAuthorName < ActiveRecord::Base
+class ExternalAuthorName < ApplicationRecord
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 100
 

@@ -1,4 +1,4 @@
-class Profile < ActiveRecord::Base
+class Profile < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   PROFILE_TITLE_MAX = 255
@@ -21,7 +21,7 @@ class Profile < ActiveRecord::Base
     return unless self.date_of_birth
     if self.date_of_birth > 13.years.ago.to_date
       errors.add(:base, "You must be over 13.")
-      return false
+      throw :abort
     end
   end
 

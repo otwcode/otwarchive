@@ -1,7 +1,7 @@
 # This is essentially a mirror of the taggings table as applied to works (right now)
 # except with all works connected to canonical tags instead of their synonyms for
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
-class FilterTagging < ActiveRecord::Base
+class FilterTagging < ApplicationRecord
   self.primary_key = 'id'
 
   belongs_to :filter, class_name: 'Tag' # , dependent: :destroy # TODO: poke this separately
@@ -10,6 +10,13 @@ class FilterTagging < ActiveRecord::Base
   validates_presence_of :filter, :filterable
 
   before_destroy :expire_caches
+  after_create :update_pseud_index
+  after_destroy :update_pseud_index
+
+  def update_pseud_index
+    return unless filter.is_a?(Fandom) && filterable.is_a?(Work)
+    IndexQueue.enqueue_ids(Pseud, filterable.pseud_ids, :background)
+  end
 
   def self.find(*args)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
@@ -81,16 +88,9 @@ class FilterTagging < ActiveRecord::Base
 
   def self.update_filter_counts_since(date)
     if date
-      filters = FilterTagging.includes(:filter).where("created_at > ?", date).collect(&:filter).compact.uniq
-      count = filters.length
-      filters.each_with_index do |filter, i|
-        begin
-          filter.reset_filter_count
-          puts "Updating filter #{i + 1} of #{count} - #{filter.name}"
-        rescue
-          puts "Did not update filter #{i + 1} of #{count} - #{filter.name}"
-        end
-      end
+      FilterCount.enqueue_filters(
+        FilterTagging.where("created_at > ?", date).distinct.pluck(:filter_id)
+      )
     else
       raise "date not set for filter count suspension! very bad!"
     end

@@ -66,7 +66,7 @@ Feature: Subscriptions
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
     And I press "Post Without Preview"
-    And all search indexes are updated
+    And all indexing jobs have been run
   Then I should see "Anonymous"
     And I should see "Collections: Hidden Treasury"
   When I am logged in as "author"

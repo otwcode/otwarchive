@@ -9,7 +9,7 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></li>
+  <li><%= link_to ts("Edit Your Search"), url_for(params.permit!.merge(edit_search: true)) %></li>
 </ul>
 <!--/subnav-->
 
@@ -17,7 +17,7 @@
 <% if @works.blank? %>
   <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
 <% else %>
-  <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
+  <h3 class="heading"><%= search_results_found(@works) %> <%= link_to_help "work-search-results-help" %></h3>
 
   <h3 class="landmark heading">Works List</h3>
   <ol class="work index group">

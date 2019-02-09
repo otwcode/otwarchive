@@ -1,24 +1,29 @@
 class CommentsController < ApplicationController
-  skip_before_filter :store_location, except: [:show, :index, :new]
-  before_filter :load_commentable, only: [ :index, :new, :create, :edit, :update,
+  skip_before_action :store_location, except: [:show, :index, :new]
+  before_action :load_commentable, only: [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
                                               :cancel_comment_reply,
                                               :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
-  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
-  before_filter :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
-  before_filter :check_visibility, only: [:show]
-  before_filter :check_if_restricted
-  before_filter :check_tag_wrangler_access
-  before_filter :check_pseud_ownership, only: [:create, :update]
-  before_filter :check_ownership, only: [:edit, :update, :cancel_comment_edit]
-  before_filter :check_permission_to_edit, only: [:edit, :update ]
-  before_filter :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_filter :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
-  before_filter :check_unreviewed, only: [:add_comment_reply]
-  before_filter :check_permission_to_review, only: [:unreviewed]
-  before_filter :check_permission_to_access_single_unreviewed, only: [:show]
-  before_filter :check_permission_to_moderate, only: [:approve, :reject]
+  before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject]
+  before_action :check_visibility, only: [:show]
+  before_action :check_if_restricted
+  before_action :check_tag_wrangler_access
+  before_action :check_parent
+  before_action :check_modify_parent,
+                only: [:new, :create, :edit, :update, :add_comment,
+                       :add_comment_reply, :cancel_comment_reply,
+                       :cancel_comment_edit, :cancel_comment]
+  before_action :check_pseud_ownership, only: [:create, :update]
+  before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
+  before_action :check_permission_to_edit, only: [:edit, :update ]
+  before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :check_anonymous_comment_preference, only: [:new, :create, :add_comment_reply]
+  before_action :check_unreviewed, only: [:add_comment_reply]
+  before_action :check_permission_to_review, only: [:unreviewed]
+  before_action :check_permission_to_access_single_unreviewed, only: [:show]
+  before_action :check_permission_to_moderate, only: [:approve, :reject]
 
   cache_sweeper :comment_sweeper
 
@@ -38,9 +43,37 @@ class CommentsController < ApplicationController
     @check_visibility_of = @comment
   end
 
+  def check_parent
+    parent = find_parent
+    # Only admins and the owner can see comments on something hidden by an admin.
+    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
+    end
+    # Only admins and the owner can see comments on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
+    end
+  end
+
+  def check_modify_parent
+    parent = find_parent
+    # No one can create or update comments on something hidden by an admin.
+    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+      flash[:error] = ts("Sorry, you can't add or edit comments on a hidden work.")
+      redirect_to work_path(parent)
+    end
+    # No one can create or update comments on unrevealed works.
+    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+      flash[:error] = ts("Sorry, you can't add or edit comments on an unrevealed work.")
+      redirect_to work_path(parent)
+    end
+  end
+
   def find_parent
     if @comment.present?
       @comment.ultimate_parent
+    elsif @commentable.is_a?(Comment)
+      @commentable.ultimate_parent
     elsif @commentable.present? && @commentable.respond_to?(:work)
       @commentable.work
     else
@@ -52,7 +85,7 @@ class CommentsController < ApplicationController
   def check_if_restricted
     parent = find_parent
     if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
-      redirect_to login_path(restricted_commenting: true) and return
+      redirect_to new_user_session_path(restricted_commenting: true) and return
     end
   end
 
@@ -71,7 +104,7 @@ class CommentsController < ApplicationController
       if logged_in?
         redirect_to root_path and return
       else
-        redirect_to login_path and return
+        redirect_to new_user_session_path and return
       end
     end
   end
@@ -83,7 +116,7 @@ class CommentsController < ApplicationController
       if logged_in?
         redirect_to root_path and return
       else
-        redirect_to login_path and return
+        redirect_to new_user_session_path and return
       end
     end
   end
@@ -96,7 +129,7 @@ class CommentsController < ApplicationController
         if logged_in?
           redirect_to root_path and return
         else
-          redirect_to login_path and return
+          redirect_to new_user_session_path and return
         end
       end
     end
@@ -106,7 +139,7 @@ class CommentsController < ApplicationController
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
       flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
-      redirect_to(logged_in? ? root_path : login_path)
+      redirect_to(logged_in? ? root_path : new_user_session_path)
     end
   end
 
@@ -250,9 +283,9 @@ class CommentsController < ApplicationController
           end
           respond_to do |format|
             format.html do
-              if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user, filters: params[:filters], page: params[:page])
-              elsif request.referer.match(/new/)
+              if request.referer&.match(/inbox/)
+                redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+              elsif request.referer&.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
@@ -312,7 +345,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_to :back
+      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -331,7 +364,7 @@ class CommentsController < ApplicationController
       respond_to do |format|
         format.html do
           if params[:approved_from] == "inbox"
-            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters]) and return
+            redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters]) and return
           elsif params[:approved_from] == "home"
             redirect_to root_path and return
           else
@@ -543,7 +576,11 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(
-      :pseud_id, :content, :name, :email, :edited_at
+      :pseud_id, :comment_content, :name, :email, :edited_at
     )
+  end
+
+  def filter_params
+    params.permit!
   end
 end

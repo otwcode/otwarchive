@@ -1,4 +1,4 @@
-class CreateFannishNextOfKins < ActiveRecord::Migration
+class CreateFannishNextOfKins < ActiveRecord::Migration[4.2]
   def change
     create_table :fannish_next_of_kins do |t|
       t.integer :user_id

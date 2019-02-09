@@ -1,18 +1,20 @@
-class Series < ActiveRecord::Base
+class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
+  include Creatable
+  include Searchable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
-  has_many :work_tags, -> { uniq }, through: :works, source: :tags
-  has_many :work_pseuds, -> { uniq }, through: :works, source: :pseuds
+  has_many :work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
-  has_many :users, -> { uniq }, through: :pseuds
+  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
@@ -25,6 +27,9 @@ class Series < ActiveRecord::Base
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  after_create :notify_after_creation
+  before_update :notify_before_update
+
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -35,7 +40,7 @@ class Series < ActiveRecord::Base
     maximum: ArchiveConfig.SUMMARY_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :notes,
+  validates_length_of :series_notes,
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
@@ -126,13 +131,24 @@ class Series < ActiveRecord::Base
   def adjust_restricted
     unless self.restricted? == !(self.works.where(restricted: false).count > 0)
       self.restricted = !(self.works.where(restricted: false).count > 0)
-      self.save(validate: false)
+      self.save!(validate: false)
     end
+  end
+
+  # Visibility has changed, which means we need to reindex
+  # the series' bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id restricted hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
   # Change the positions of the serial works in the series
   def reorder(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
+
+  def position_of(work)
+    serial_works.where(work_id: work.id).pluck(:position).first
   end
 
   # return list of pseuds on this series
@@ -215,7 +231,8 @@ class Series < ActiveRecord::Base
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :created_at],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
@@ -223,8 +240,13 @@ class Series < ActiveRecord::Base
     ).merge(
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Series'
+      bookmarkable_type: 'Series',
+      bookmarkable_join: { name: "bookmarkable" }
     )
+  end
+
+  def word_count
+    self.works.posted.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?
@@ -244,7 +266,7 @@ class Series < ActiveRecord::Base
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (work_tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets

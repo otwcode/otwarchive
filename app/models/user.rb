@@ -1,34 +1,23 @@
-  class User < ActiveRecord::Base
+class User < ApplicationRecord
   audited
   include ActiveModel::ForbiddenAttributesProtection
   include WorksOwner
 
+  devise :database_authenticatable,
+         :confirmable,
+         :registerable,
+         :rememberable,
+         :trackable,
+         :validatable,
+         :lockable,
+         :recoverable
+
+  # Must come after Devise modules in order to alias devise_valid_password?
+  # properly
+  include BackwardsCompatiblePasswordDecryptor
+
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-
-  # Authlogic gem
-  acts_as_authentic do |config|
-    config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT || "true") == "true"
-      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    else
-      config.crypto_provider = Authlogic::CryptoProviders::Sha512
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    end
-    # Use our own validations for login
-    config.validate_login_field = false
-    config.validates_length_of_password_field_options = { on: :update,
-                                                          minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                          if: :has_no_credentials? }
-    config.validates_length_of_password_confirmation_field_options = { on: :update,
-                                                                       minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                                       if: :has_no_credentials? }
-  end
-
-  def has_no_credentials?
-    self.crypted_password.blank?
-  end
 
   # Authorization plugin
   acts_as_authorized_user
@@ -73,6 +62,8 @@
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
+  after_commit :reindex_user_creations_after_rename
+
   has_many :collection_participants, through: :pseuds
   has_many :collections, through: :collection_participants
   has_many :invited_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::INVITED) }, through: :collection_participants, source: :collection
@@ -85,9 +76,9 @@
   has_many :pinch_hit_assignments, through: :pseuds
   has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "claiming_user_id", inverse_of: :claiming_user
   has_many :gifts, -> { where(rejected: false) }, through: :pseuds
-  has_many :gift_works, -> { uniq }, through: :pseuds
+  has_many :gift_works, -> { distinct }, through: :pseuds
   has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", through: :pseuds
-  has_many :rejected_gift_works, -> { uniq }, through: :pseuds
+  has_many :rejected_gift_works, -> { distinct }, through: :pseuds
   has_many :readings, dependent: :destroy
   has_many :bookmarks, through: :pseuds
   has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
@@ -179,8 +170,10 @@
   after_update :expire_caches
 
   def expire_caches
-    if login_changed?
-      self.works.each{ |work| work.touch }
+    return unless saved_change_to_login?
+    self.works.each do |work|
+      work.touch
+      work.expire_caches
     end
   end
 
@@ -225,10 +218,9 @@
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
   validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
 
-  validates :email, email_veracity: true
+  validates :email, email_veracity: true, email_format: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -249,6 +241,23 @@
     login
   end
 
+  # Override of Devise method to allow user to login with login OR username as
+  # well as to make login case insensitive without losing user-preferred case
+  # for login display
+  def self.find_first_by_auth_conditions(tainted_conditions, options = {})
+    conditions = devise_parameter_filter.filter(tainted_conditions).merge(options)
+    login = conditions.delete(:login)
+    relation = self.where(conditions)
+
+    if login.present?
+      # MySQL is case-insensitive with utf8mb4_unicode_ci so we don't have to use
+      # lowercase values
+      relation = relation.where(["login = :value OR email = :value",
+                                 value: login])
+    end
+
+    relation.first
+  end
 
   def self.for_claims(claims_ids)
     joins(:request_claims).
@@ -261,7 +270,7 @@
     return if role.blank? && query.blank?
     users = User.select("DISTINCT users.*").order(:login)
     if options[:inactive]
-      users = users.where("activated_at IS NULL")
+      users = users.where("confirmed_at IS NULL")
     end
     if role.present?
       users = users.joins(:roles).where("roles.id = ?", role.id)
@@ -281,33 +290,18 @@
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
-    !activated_at.nil?
-  end
-
-  def generate_password(length = 8)
-    chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789"
-    password = ""
-    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
-    password
-  end
-
-  # use update_all to force the update even if the user is invalid
-  def reset_user_password
-    temp_password = generate_password(20)
-    User.where("id = #{self.id}").update_all("activation_code = '#{temp_password}', recently_reset = 1")
-    # send synchronously to prevent getting caught in backed-up mail queue
-    UserMailer.reset_password(self.id, temp_password).deliver!
+    !confirmed_at.nil?
   end
 
   def activate
     return false if self.active?
-    self.update_attribute(:activated_at, Time.now.utc)
+    self.update_attribute(:confirmed_at, Time.now.utc)
   end
 
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new
+    self.preference = Preference.new(preferred_locale: Locale.default.id)
   end
 
   protected
@@ -345,16 +339,22 @@
     self.pseuds.where(is_default: true).first
   end
 
+  def default_pseud_id
+    pseuds.where(is_default: true).pluck(:id).first
+  end
+
   # Checks authorship of any sort of object
   def is_author_of?(item)
-    if item.respond_to?(:user)
-      self == item.user
-    elsif item.respond_to?(:pseud)
-      self.pseuds.include?(item.pseud)
+    if item.respond_to?(:pseud_id)
+      pseuds.pluck(:id).include?(item.pseud_id)
+    elsif item.respond_to?(:user_id)
+      id == item.user_id
     elsif item.respond_to?(:pseuds)
-      !(self.pseuds & item.pseuds).empty?
+      !(pseuds.pluck(:id) & item.pseuds.pluck(:id)).empty?
     elsif item.respond_to?(:author)
       self == item.author
+    elsif item.respond_to?(:creator_id)
+      self.id == item.creator_id
     else
       false
     end
@@ -503,13 +503,6 @@
     end
   end
 
-  def reindex_user_works
-    # reindex the user's works to make sure they show up on the user's works page
-    works.each do |work|
-      IndexQueue.enqueue(work, :main)
-    end
-  end
-
   def set_user_work_dates
     # Fix user stats page error caused by the existence of works with nil revised_at dates
     works.each do |work|
@@ -520,12 +513,11 @@
     end
   end
 
-  def reindex_user_bookmarks
-    # Reindex a user's bookmarks.
-    bookmarks.each do |bookmark|
-      bookmark.update_index
-    end
-    update_works_index_timestamp!
+  def reindex_user_creations
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
   end
 
   private
@@ -540,27 +532,41 @@
   end
 
   def update_pseud_name
-    return unless login_changed? && login_was.present?
-    old_pseud = self.pseuds.where(name: login_was).first
-    if login.downcase == login_was.downcase
+    return unless saved_change_to_login? && login_before_last_save.present?
+    old_pseud = pseuds.where(name: login_before_last_save).first
+    if login.downcase == login_before_last_save.downcase
       old_pseud.name = login
       old_pseud.save!
     else
-      new_pseud = self.pseuds.where(name: login).first
+      new_pseud = pseuds.where(name: login).first
       # do nothing if they already have the matching pseud
-      return if new_pseud.present?
-
-      if old_pseud.present?
-        # change the old pseud to match
-        old_pseud.update_attribute(:name, login)
-      else
-        # shouldn't be able to get here, but just in case
-        Pseud.create(name: login, user_id: self.id)
+      if new_pseud.blank?
+        if old_pseud.present?
+          # change the old pseud to match
+          old_pseud.name = login
+          old_pseud.save!(validate: false)
+        else
+          # shouldn't be able to get here, but just in case
+          Pseud.create!(name: login, user_id: id)
+        end
       end
     end
   end
 
+  def reindex_user_creations_after_rename
+    return unless saved_change_to_login? && login_before_last_save.present?
+    # Everything is indexed with the user's byline,
+    # which has the old username, so they all need to be reindexed.
+    reindex_user_creations
+  end
+
    def log_change_if_login_was_edited
-     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}" }) if login_changed?
+     create_log_item(options = { action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}" }) if saved_change_to_login?
    end
+
+  def remove_stale_from_autocomplete
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
+  end
+
 end

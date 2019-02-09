@@ -4,7 +4,7 @@ include CssCleaner
 include SkinCacheHelper
 include SkinWizard
 
-class Skin < ActiveRecord::Base
+class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
@@ -89,7 +89,6 @@ class Skin < ActiveRecord::Base
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
-    return false
   end
 
   validates_presence_of :title
@@ -155,10 +154,14 @@ class Skin < ActiveRecord::Base
 
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
-      where(public: true, official: true)
+      approved_skins
     else
-      where("(public = 1 AND official = 1) OR author_id = ?", user.id)
+      approved_or_owned_by_any([user])
     end
+  end
+
+  def self.approved_or_owned_by_any(users)
+    where("(public = 1 AND official = 1) OR author_id in (?)", users.map(&:id))
   end
 
   def self.usable
@@ -272,7 +275,7 @@ class Skin < ActiveRecord::Base
 
   def get_css
     if filename
-      File.read(Rails.public_path.join("." + filename))
+      File.read(Rails.public_path.join(filename))
     else
       css
     end
@@ -499,7 +502,9 @@ class Skin < ActiveRecord::Base
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Rails.cache.fetch("site_default_skin") do
+      Skin.find_by(title: "Default", official: true) || Skin.create_default
+    end
   end
 
   def self.create_default

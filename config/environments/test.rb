@@ -6,6 +6,7 @@ Otwarchive::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
+  config.eager_load = true
 
   # Log error messages when you accidentally call methods on nil.
   # config.whiny_nils = true
@@ -13,6 +14,7 @@ Otwarchive::Application.configure do
   # Show full error reports and enable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  config.action_mailer.perform_caching = true
   config.cache_store = :dalli_store, '127.0.0.1:11211',
                           { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 
@@ -48,4 +50,7 @@ Otwarchive::Application.configure do
   config.serve_static_files = true
   config.eager_load = false
   config.assets.enabled = false
+
+  # Make sure that we don't have a host mismatch:
+  config.action_mailer.default_url_options = { host: "http://www.example.com" }
 end

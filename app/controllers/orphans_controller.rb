@@ -1,14 +1,14 @@
 class OrphansController < ApplicationController
-  # You must be logged in to orphan works - relies on current_user data 
-  before_filter :users_only, except: [:index, :about]
-  
-  before_filter :load_orphans, except: [:index, :about]
-  
+  # You must be logged in to orphan works - relies on current_user data
+  before_action :users_only, except: [:index, :about]
+
+  before_action :load_orphans, except: [:index, :about]
+
   def index
     @user = User.orphan_account
     @works = @user.works
   end
-  
+
   def load_orphans
     if params[:work_id]
       work = Work.find(params[:work_id])
@@ -20,26 +20,26 @@ class OrphansController < ApplicationController
     elsif params[:series_id]
       series = Series.find(params[:series_id])
       @pseuds = (current_user.pseuds & series.pseuds)
-      @orphans = [series]            
+      @orphans = [series]
     elsif params[:pseud_id]
       @pseuds = [Pseud.find(params[:pseud_id])]
       @orphans = @pseuds.first.works
-    else 
+    else
       @pseuds = current_user.pseuds
-      @orphans = current_user.works      
+      @orphans = current_user.works
     end
-    
+
     if @pseuds.empty?
       flash[:error] = ts("You don't have permission to orphan that!")
       redirect_to root_path and return
       false
     end
   end
-    
-  
+
+
   def new
   end
-  
+
   def create
     new_orphans = {}
     use_default = params[:use_default] == "true"
@@ -49,7 +49,7 @@ class OrphansController < ApplicationController
     else
       flash[:error] = ts("You don't seem to have permission to orphan this.")
       redirect_to root_path
-    end 
+    end
   end
-  
+
 end
