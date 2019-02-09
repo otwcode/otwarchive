@@ -4,7 +4,7 @@ class EmailValidator < ActiveModel::EachValidator
     begin
       m = Mail::Address.new(value)
       # We must check that value contains a domain, the domain has at least
-      # one '.' and that value is an email address      
+      # one '.' and that value is an email address
       r = !m.domain.nil? && m.domain.match('\.') && m.address == value
 
       # Update 2015-Mar-24
@@ -17,7 +17,7 @@ class EmailValidator < ActiveModel::EachValidator
       # We exclude valid email values like <user@localhost.com>
       # Hence we use m.__send__(tree).domain
       # r &&= (t.domain.dot_atom_text.elements.size > 1)
-    rescue   
+    rescue
       r = false
     end
     record.errors[attribute] << (options[:message] || "is invalid") unless r

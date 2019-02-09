@@ -79,6 +79,14 @@ public
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
 
+    if collection.challenge.assignments_sent_at.present?
+      # If assignments have been sent, we don't want to delete everything and
+      # regenerate. (If the challenge moderator wants to recalculate potential
+      # matches after sending assignments, they can use the Purge Assignments
+      # button.)
+      return
+    end
+
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)

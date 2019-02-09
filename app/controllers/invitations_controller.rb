@@ -4,6 +4,13 @@ class InvitationsController < ApplicationController
   before_action :check_permission
   before_action :admin_only, only: [:create, :destroy]
   before_action :check_user_status, only: [:index, :manage, :invite_friend, :update]
+  before_action :load_invitation, only: [:show, :invite_friend, :update, :destroy]
+  before_action :check_ownership_or_admin, only: [:show, :invite_friend, :update]
+
+  def load_invitation
+    @invitation = Invitation.find(params[:id] || invitation_params[:id])
+    @check_ownership_of = @invitation
+  end
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
@@ -23,12 +30,9 @@ class InvitationsController < ApplicationController
   end
 
   def show
-    @invitation = Invitation.find(params[:id])
   end
 
   def invite_friend
-    @invitation = @user.invitations.find(invitation_params[:id])
-
     if !invitation_params[:invitee_email].blank?
       @invitation.invitee_email = invitation_params[:invitee_email]
       if @invitation.save
@@ -54,7 +58,6 @@ class InvitationsController < ApplicationController
   end
 
   def update
-    @invitation = Invitation.find(params[:id])
     @invitation.attributes = invitation_params
 
     if @invitation.invitee_email_changed? && @invitation.update_attributes(invitation_params)
@@ -71,7 +74,6 @@ class InvitationsController < ApplicationController
   end
 
   def destroy
-    @invitation = Invitation.find(params[:id])
     @user = @invitation.creator
     if @invitation.destroy
       flash[:notice] = "Invitation successfully destroyed"

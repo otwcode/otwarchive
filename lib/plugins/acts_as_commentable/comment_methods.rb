@@ -4,6 +4,9 @@ module CommentMethods
     comment.class_eval do
       #extend ClassMethods
       include InstanceMethods
+
+      before_destroy :fix_threading_on_destroy
+      after_destroy :check_can_destroy_parent
     end
   end
   #
@@ -30,7 +33,7 @@ module CommentMethods
     def destroy_or_mark_deleted
       if self.children_count > 0
         self.is_deleted = true
-        self.content = "deleted comment" # wipe out the content
+        self.comment_content = "deleted comment" # wipe out the content
         self.save
       else
         self.destroy
@@ -103,11 +106,24 @@ module CommentMethods
 
     # Adjusts left and right threading counts when a comment is deleted
     # otherwise, children_count is wrong
-    def before_destroy
+    def fix_threading_on_destroy
       Comment.transaction {
         Comment.where(["thread = (?) AND threaded_left > (?)", self.thread, self.threaded_left]).update_all("threaded_left = (threaded_left - 2)")
         Comment.where(["thread = (?) AND threaded_right > (?)", self.thread, self.threaded_right]).update_all("threaded_right = (threaded_right - 2)")
       }
+    end
+
+    # When we delete a comment, we may be deleting the last of our parent's
+    # children. If our parent was marked as deleted (but not actually
+    # destroyed), we may be able to destroy it.
+    def check_can_destroy_parent
+      immediate_parent = commentable.reload
+
+      return unless immediate_parent.is_a?(Comment)
+      return unless immediate_parent.is_deleted
+      return unless immediate_parent.children_count.zero?
+
+      immediate_parent.destroy
     end
   end
 end

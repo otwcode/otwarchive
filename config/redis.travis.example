@@ -6,3 +6,5 @@ redis_general:
   test: localhost:6381
 redis_rollout:
   test: localhost:6382
+redis_autocomplete:
+  test: localhost:6383
