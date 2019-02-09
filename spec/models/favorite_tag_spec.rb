@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe FavoriteTag do
   let(:noncanonical_favorite) { build(:favorite_tag,
-                                      tag_id: create(:freeform,
-                                                     canonical: false).id) }
+                                      tag_id: create(:freeform).id) }
   let(:no_tag_favorite) { build(:favorite_tag, tag_id: nil) }
   let(:no_user_favorite) { build(:favorite_tag, user_id: nil) }
 
@@ -17,7 +16,7 @@ describe FavoriteTag do
 
   it "is invalid when the user has already favorited the tag" do
     user = create(:user)
-    tag = create(:freeform)
+    tag = create(:canonical_freeform)
     create(:favorite_tag, tag_id: tag.id, user_id: user.id)
     expect(build(:favorite_tag, tag_id: tag.id, user_id: user.id).save).to be_falsey
   end
