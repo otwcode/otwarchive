@@ -293,7 +293,7 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     # If Edit or Cancel is pressed, bail out and display relevant form
-    if params[:edit_button] || work_is_invalid?
+    if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :new
     elsif work_has_pseuds_to_fix?
@@ -364,7 +364,7 @@ class WorksController < ApplicationController
     @work.set_challenge_claim_info
     set_work_form_fields
 
-    if params[:edit_button] || work_is_invalid?
+    if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :edit
     elsif work_has_pseuds_to_fix?
@@ -405,7 +405,7 @@ class WorksController < ApplicationController
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
 
-    if params[:edit_button] || work_is_invalid?
+    if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :edit_tags
     elsif params[:preview_button]
@@ -790,7 +790,7 @@ class WorksController < ApplicationController
 
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
-  def work_is_invalid?
+  def work_cannot_be_saved?
     if @work.authors.present? && (@work.authors & current_user.pseuds).empty?
       flash.now[:error] = ts("You're not allowed to use that pseud.")
       return true

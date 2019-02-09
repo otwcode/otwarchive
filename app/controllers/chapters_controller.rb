@@ -114,7 +114,7 @@ class ChaptersController < ApplicationController
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
 
-    if params[:edit_button] || chapter_is_invalid?
+    if params[:edit_button] || chapter_cannot_be_saved?
       render :new
     elsif chapter_has_pseuds_to_fix?
       render :_choose_coauthor
@@ -149,7 +149,7 @@ class ChaptersController < ApplicationController
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
 
-    if params[:edit_button] || chapter_is_invalid?
+    if params[:edit_button] || chapter_cannot_be_saved?
       render :edit
     elsif chapter_has_pseuds_to_fix?
       render :_choose_coauthor
@@ -243,7 +243,7 @@ class ChaptersController < ApplicationController
 
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
-  def chapter_is_invalid?
+  def chapter_cannot_be_saved?
     # make sure at least one of the pseuds is actually owned by this user
     if @chapter.authors.present? && (@chapter.authors & current_user.pseuds).empty?
       flash.now[:error] = ts("You're not allowed to use that pseud.")
