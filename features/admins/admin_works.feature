@@ -1,7 +1,7 @@
 @admin
-Feature: Admin Actions for Works and Bookmarks
+Feature: Admin Actions for Works, Comments, Series, Bookmarks
   As an admin
-  I should be able to perform special actions on works
+  I should be able to perform special actions
 
   Scenario: Can reindex works
     Given I am logged in as "regular_user"
@@ -29,9 +29,11 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
+      And all indexing jobs have been run
     Then I should see "Item has been hidden."
       And all emails have been delivered
     When I follow "Make Work Visible"
+      And all indexing jobs have been run
     Then I should see "Item is no longer hidden."
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
@@ -43,15 +45,16 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "ToS Violation"
       And I follow "Delete Work"
+      And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
       And the email should not contain "translation missing"
     When I am logged out
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
     When I am logged in
-      And I am on regular_users's works page
+      And I am on regular_user's works page
     Then I should not see "ToS Violation"
 
   Scenario: Can hide bookmarks
@@ -63,10 +66,12 @@ Feature: Admin Actions for Works and Bookmarks
     When I follow "Bookmark"
       And I fill in "bookmark_notes" with "Rude comment"
       And I press "Create"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
     When I am logged in as an admin
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
+      And all indexing jobs have been run
     Then I should see "Item has been hidden."
     When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
@@ -236,3 +241,82 @@ Feature: Admin Actions for Works and Bookmarks
     When I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
+
+  Scenario: can mark a work as spam
+  Given the work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark As Spam"
+  When I follow "Mark As Spam"
+  Then I should see "marked as spam and hidden"
+    And I should see "Mark Not Spam"
+    And the work "Spammity Spam" should be marked as spam
+    And the work "Spammity Spam" should be hidden
+
+  Scenario: can mark a spam work as not-spam
+  Given the spam work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark Not Spam"
+  When I follow "Mark Not Spam"
+  Then I should see "marked not spam and unhidden"
+    And I should see "Mark As Spam"
+    And the work "Spammity Spam" should not be marked as spam
+    And the work "Spammity Spam" should not be hidden
+
+  Scenario: Admin can hide a series (e.g. if the series description or notes contain a TOS Violation)
+    Given I am logged in as "tosser"
+      And I add the work "Legit Work" to series "Violation"
+    When I am logged in as an admin
+      And I view the series "Violation"
+      And I follow "Hide Series"
+    Then I should see "Item has been hidden."
+      And I should see the image "title" text "Hidden by Administrator"
+      And I should see "Make Series Visible"
+    When I am logged out
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+    When I am logged in as "other_user"
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+    When I am logged in as "tosser"
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+    When I view the series "Violation"
+    Then I should see the image "title" text "Hidden by Administrator"
+
+  Scenario: Admin can un-hide a series
+    Given I am logged in as "tosser"
+      And I add the work "Legit Work" to series "Violation"
+      And I am logged in as an admin
+      And I view the series "Violation"
+      And I follow "Hide Series"
+    When I follow "Make Series Visible"
+    Then I should see "Item is no longer hidden."
+      And I should not see the image "title" text "Hidden by Administrator"
+      And I should see "Hide Series"
+    When I am logged out
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"
+    When I am logged in as "other_user"
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"
+    When I am logged in as "tosser"
+      And I go to tosser's series page
+    Then I should see "Series (1)"
+      And I should see "Violation"
+    When I view the series "Violation"
+    Then I should see "Violation"

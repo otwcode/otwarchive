@@ -5,7 +5,7 @@
 <%= render :partial => 'tags/search_form' %>
 
 <% if @tags %>
-  <h3 class="heading"><%= @tags.total_entries %> Found <%= link_to_help "tag-search-results-help" %></h3>
+  <h3 class="heading"><%= search_results_found(@tags) %> <%= link_to_help "tag-search-results-help" %></h3>
   <h4 class="landmark heading">Listing Tags</h4>
   <ol class="tag index group">
     <% for tag in @tags %>

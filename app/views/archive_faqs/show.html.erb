@@ -6,6 +6,12 @@
 <!--/subnav-->
 
 <!--main content-->
+<% if @archive_faq.slug == "search-and-browse" %>
+  <p class="notice">
+    <%= ts("Our search engine has recently been updated, and this FAQ is based on our old version. We're working on bringing you more up-to-date information, but in the meantime, you can find out more in our %{elasticsearch_post}!", elasticsearch_post: link_to(ts("news post announcing the search and filter updates"), admin_post_path(10575))).html_safe %>
+  </p>
+<% end %>
+
 <div class="admin" role="article">
   <% if logged_in_as_admin? %>
     <div class="header">
