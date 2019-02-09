@@ -187,7 +187,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
@@ -258,6 +258,13 @@ class Work < ApplicationRecord
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # If the work gets posted, we should (potentially) reindex the tags,
+  # so they get the correct draft-only status.
+  def update_tag_index
+    return unless saved_change_to_posted?
+    taggings.each(&:update_search)
   end
 
   def self.work_blurb_tag_cache_key(id)
@@ -333,13 +340,6 @@ class Work < ApplicationRecord
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
-  end
-
-  def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).pluck(:id)
-    Chapter.where(work_id: draft_ids).order("position DESC").map(&:destroy)
-    Work.where(id: draft_ids).map(&:destroy)
-    draft_ids.size
   end
 
   ########################################################################
@@ -675,6 +675,10 @@ class Work < ApplicationRecord
   def series_attributes=(attributes)
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
+      if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
+        errors.add(:base, ts("You can't add a work to that series."))
+        return
+      end
       self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
@@ -831,8 +835,8 @@ class Work < ApplicationRecord
 
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
-  def set_word_count
-    if self.new_record?
+  def set_word_count(preview = false)
+    if self.new_record? || preview
       self.word_count = 0
       chapters.each do |chapter|
         self.word_count += chapter.set_word_count
@@ -844,46 +848,7 @@ class Work < ApplicationRecord
 
   after_update :remove_outdated_downloads
   def remove_outdated_downloads
-    FileUtils.rm_rf(self.download_dir)
-  end
-
-  # spread downloads out by first two letters of authorname
-  def download_dir
-    "/tmp/#{self.id}"
-  end
-
-  # split out so we can use this in works_helper
-  def download_folder
-    dl_authors = self.download_authors
-    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
-  end
-
-  def download_fandoms
-    string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = string.to_ascii
-    string.gsub(/[^[\w _-]]+/, '')
-  end
-
-  def display_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
-    string.to_ascii
-  end
-
-  # need the next two to be filesystem safe and not overly long
-  def download_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
-    string.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-
-  def download_title
-    string = title.to_ascii.gsub(/[^[\w _]]+/, '')
-    string = "Work by " + download_authors if string.blank?
-    string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-
-  def download_basename
-    "#{self.download_dir}/#{self.download_title}"
+    Download.remove(self)
   end
 
   #######################################################################

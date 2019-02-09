@@ -26,7 +26,7 @@ class FeedbackReporter
 
   def send_report!
     HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
-                  body: "&xml=#{xml.to_str}")
+                  body: "&xml=#{URI.encode_www_form_component(xml.to_str)}")
   end
 
   def xml

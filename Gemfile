@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read(File.expand_path('../.ruby_version', __FILE__)).strip.gsub("ruby","")
+ruby '2.3.4'
 
 gem 'test-unit', '~> 3.2'
 
@@ -53,7 +53,7 @@ gem 'akismetor'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>= 1.8.3'
+gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
 # Until there is a working solution to
@@ -78,7 +78,6 @@ gem 'fastimage'
 # Gems for authentication
 gem 'devise'
 gem 'devise-async'       # To mails through queues
-gem 'authlogic', '~> 3.6.0'
 gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
@@ -102,7 +101,7 @@ gem 'timeliness'
 # gem 'rpm_contrib', '2.2.0'
 
 # for generating graphs
-gem 'google_visualr', git: 'https://github.com/stephendolan/google_visualr'
+gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
@@ -140,7 +139,7 @@ group :test do
   gem 'rspec-rails', '~> 3.6.0'
   gem 'pickle'
   gem 'shoulda'
-  gem 'capybara', '~> 2.6.2'
+  gem 'capybara', '~> 2.16.1'
   gem 'database_cleaner', '1.5.2'
   gem 'cucumber', '~> 2.4.0'
   gem 'poltergeist'
@@ -175,7 +174,7 @@ group :development do
 end
 
 group :test, :development, :staging do
-  gem 'bullet', '~> 5.6.0'
+  gem 'bullet', '>= 5.7.3'
 end
 
 # Deploy with Capistrano
