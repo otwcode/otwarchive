@@ -21,6 +21,21 @@ end
 
 ### CHALLENGE TAGS
 
+Given /^signup summaries are always visible$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT = 0
+end
+
+Given /^all signup summaries are delayed$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 0
+end
+
+Given /^all signup summaries are live$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 1_000_000
+end
+
 Given /^I have standard challenge tags set ?up$/ do
   begin
     unless UserSession.find
@@ -111,6 +126,11 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   step %{I follow "Sign Up"}
 end
 
+When /^I view the sign-up summary for "(.*?)"$/ do |title|
+  visit collection_path(Collection.find_by(title: title))
+  step %(I follow "Sign-up Summary")
+end
+
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
@@ -179,6 +199,7 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is anonymous"}
     step %{I press "Update"}
+    step %{all indexing jobs have been run}
 end
 
 # Notification messages

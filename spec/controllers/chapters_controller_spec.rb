@@ -73,7 +73,7 @@ describe ChaptersController do
       it "errors and redirects to login when work is restricted" do
         restricted_work = create(:work, posted: true, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
-        it_redirects_to(login_path(restricted: true))
+        it_redirects_to(new_user_session_path(restricted: true))
       end
 
       it "assigns @chapters to only posted chapters" do
@@ -296,7 +296,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :new, params: { work_id: banned_users_work.id }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
     end
@@ -343,7 +343,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :edit, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -388,7 +388,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         post :create, params: { work_id: banned_users_work.id, chapter: @chapter_attributes }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -522,7 +522,7 @@ describe ChaptersController do
 
           it "gives a notice that the work and chapter are drafts and redirects to the chapter preview" do
             post :create, params: { work_id: unposted_work.id, chapter: @chapter_attributes, preview_button: true }
-            it_redirects_to(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
+            it_redirects_to_simple(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
             expect(flash[:notice]).to include("This is a draft chapter in an unposted work")
           end
         end
@@ -578,7 +578,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         put :update, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id, chapter: @chapter_attributes }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 

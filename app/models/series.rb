@@ -2,6 +2,7 @@ class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Creatable
+  include Searchable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -39,7 +40,7 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.SUMMARY_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :notes,
+  validates_length_of :series_notes,
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
@@ -134,9 +135,20 @@ class Series < ApplicationRecord
     end
   end
 
+  # Visibility has changed, which means we need to reindex
+  # the series' bookmarker pseuds, to update their bookmark counts.
+  def should_reindex_pseuds?
+    pertinent_attributes = %w[id restricted hidden_by_admin]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
   # Change the positions of the serial works in the series
   def reorder(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
+
+  def position_of(work)
+    serial_works.where(work_id: work.id).pluck(:position).first
   end
 
   # return list of pseuds on this series
@@ -219,7 +231,8 @@ class Series < ApplicationRecord
   def bookmarkable_json
     as_json(
       root: false,
-      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :created_at],
+      only: [:title, :summary, :hidden_by_admin, :restricted, :created_at,
+        :complete],
       methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id,
@@ -227,8 +240,13 @@ class Series < ApplicationRecord
     ).merge(
       anonymous: anonymous?,
       unrevealed: unrevealed?,
-      bookmarkable_type: 'Series'
+      bookmarkable_type: 'Series',
+      bookmarkable_join: { name: "bookmarkable" }
     )
+  end
+
+  def word_count
+    self.works.posted.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?
@@ -248,7 +266,7 @@ class Series < ApplicationRecord
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (work_tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets

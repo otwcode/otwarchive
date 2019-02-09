@@ -1,14 +1,19 @@
 class BookmarkIndexer < Indexer
 
   def self.klass
-    'Bookmark'
+    "Bookmark"
   end
 
-  def self.index_all(options={})
-    options[:skip_delete] = true
-    BookmarkableIndexer.delete_index
-    BookmarkableIndexer.create_index
-    create_mapping
+  # Create the bookmarkable index/mapping first
+  # Skip delete on the subclasses so it doesn't delete the ones we've just
+  # reindexed
+  def self.index_all(options = {})
+    unless options[:skip_delete]
+      options[:skip_delete] = true
+      BookmarkableIndexer.delete_index
+      BookmarkableIndexer.create_index(18)
+      create_mapping
+    end
     BookmarkedExternalWorkIndexer.index_all(skip_delete: true)
     BookmarkedSeriesIndexer.index_all(skip_delete: true)
     BookmarkedWorkIndexer.index_all(skip_delete: true)
@@ -18,25 +23,34 @@ class BookmarkIndexer < Indexer
   def self.mapping
     {
       "bookmark" => {
-        "_parent" => {
-          type: 'bookmarkable'
-        },
-        properties: {
-          bookmarkable_type: {
-            type: 'string',
-            index: 'not_analyzed'
+        "properties" => {
+          "bookmarkable_join" => {
+            "type" => "join",
+            "relations" => {
+              "bookmarkable" => "bookmark"
+            }
           },
-          bookmarker: {
-            type: 'string',
-            analyzer: 'simple'
+          "title" => {
+            "type" => "text",
+            "analyzer" => "simple"
           },
-          notes: {
-            type: 'string',
-            analyzer: 'snowball'
+          "creators" => {
+            "type" => "text",
+            "analyzer" => "simple"
           },
-          tag: {
-            type: 'string',
-            analyzer: 'simple'
+          "work_types" => {
+            "type" => "keyword"
+          },
+          "bookmarkable_type" => {
+            "type" => "keyword"
+          },
+          "bookmarker" => {
+            type: "text",
+            analyzer: "simple"
+          },
+          "tag" => {
+            "type" => "text",
+            "analyzer" => "simple"
           }
         }
       }
@@ -47,29 +61,53 @@ class BookmarkIndexer < Indexer
   # INSTANCE METHODS
   ####################
 
-  # TODO: Make this work for deleted bookmarks
   def routing_info(id)
     object = objects[id.to_i]
-    { 
-      '_index' => index_name, 
-      '_type' => document_type,
-      '_id' => id,
-      'parent' => "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
+    {
+      "_index" => index_name,
+      "_type" => document_type,
+      "_id" => id,
+      "routing" => parent_id(id, object)
     }
+  end
+
+  def parent_id(id, object)
+    if object.nil?
+      deleted_bookmark_info(id)
+    else
+      "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
+    end
   end
 
   def document(object)
     tags = object.tags
-    filters = tags.map{ |t| t.filter }.compact
-
-    object.as_json(
+    json_object = object.as_json(
       root: false,
-      except: [:notes_sanitizer_version, :delta],
-      methods: [:bookmarker, :collection_ids, :with_notes]
+      only: [
+        :id, :created_at, :bookmarkable_type, :bookmarkable_id, :user_id,
+        :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
+      ],
+      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
     ).merge(
-      tag: (tags + filters).map(&:name).uniq,
+      user_id: object.pseud&.user_id,
+      tag: tags.map(&:name),
       tag_ids: tags.map(&:id),
-      filter_ids: filters.map(&:id)
+      notes: object.bookmarker_notes
     )
+
+    unless parent_id(object.id, object).match("deleted")
+      json_object.merge!(
+        bookmarkable_join: {
+          name: "bookmark",
+          parent: parent_id(object.id, object)
+        }
+      )
+    end
+
+    json_object
+  end
+
+  def deleted_bookmark_info(id)
+    REDIS_GENERAL.get("deleted_bookmark_parent_#{id}")
   end
 end
