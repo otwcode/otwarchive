@@ -4,16 +4,15 @@ class Sanitize
   # This defines the configuration we use for HTML tags and attributes allowed in the archive.
   module Config
 
-    ARCHIVE = {
+    ARCHIVE = freeze_config(
       elements: [
         'a', 'abbr', 'acronym', 'address', 'b', 'big', 'blockquote', 'br', 'caption', 'center', 'cite', 'code', 'col',
         'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
         'i', 'img', 'ins', 'kbd', 'li', 'ol', 'p', 'pre', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong',
         'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'tt', 'u', 'ul', 'var'],
 
-      # see in the Transformers section for what classes we strip
       attributes: {
-        all: ['align', 'title', 'class', 'dir'],
+        all: ['align', 'title', 'dir'],
         'a' => ['href', 'name'],
         'blockquote' => ['cite'],
         'col' => ['span', 'width'],
@@ -27,6 +26,10 @@ class Sanitize
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
         'ul' => ['type'],
       },
+      
+      add_attributes: {
+        'a' => {'rel' => 'nofollow'}
+      },
 
       protocols: {
         'a' => {'href' => ['ftp', 'http', 'https', 'mailto', :relative]},
@@ -34,9 +37,18 @@ class Sanitize
         'img' => {'src' => ['http', 'https', :relative]},
         'q' => {'cite' => ['http', 'https', :relative]}
       }
-    }
+    )
+
+    CLASS_ATTRIBUTE = freeze_config(
+      # see in the Transformers section for what classes we strip
+      attributes: {
+        all: ARCHIVE[:attributes][:all] + ['class']
+      }
+    )
+
+    CSS_ALLOWED = freeze_config(merge(ARCHIVE, CLASS_ATTRIBUTE))
   end
-  
+
   # This defines the custom sanitizing transformers we use for cleaning data
   module Transformers
     
@@ -44,7 +56,7 @@ class Sanitize
     ALLOW_USER_CLASSES = lambda do |env|
       node      = env[:node]
       classval  = node['class']
-      
+
       # if we don't have a class attribute, away we go
       return if classval.blank?
 
@@ -106,7 +118,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"
@@ -117,9 +129,26 @@ class Sanitize
       end
       
       # if we don't know the source, sorry
-      return if source.nil?           
+      return if source.nil?
 
       allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
+      supports_https = [
+        "8tracks",
+        "archiveorg",
+        "archiveofourown",
+        "dailymotion",
+        "podfic",
+        "soundcloud",
+        "spotify",
+        "viddertube",
+        "vimeo",
+        "youtube"
+      ]
+
+      # For sites that support https, ensure we use a secure embed
+      if supports_https.include?(source) && node['src'].present?
+        node['src'] = node['src'].gsub("http:", "https:")
+      end
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
@@ -148,7 +177,7 @@ class Sanitize
           attributes: {
             'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (allow_flashvars.include?(source) ? ['wmode', 'flashvars'] : [])),
             'iframe'  => ['frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
-          }          
+          }
         })
         
         if node_name == 'embed'
@@ -162,7 +191,6 @@ class Sanitize
         return {node_whitelist: [node, parent]}
       end
     end
-    
   end
 
 end

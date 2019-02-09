@@ -1,7 +1,6 @@
 class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
-  index_name Tag.index_name
 
   # Types of tags to which a character tag can belong via common taggings or meta taggings
   def parent_types
@@ -30,12 +29,12 @@ class Character < Tag
   def medias
     parents.by_type('Media').by_name
   end
-  
+
   def add_association(tag)
     if tag.is_a?(Fandom) || tag.is_a?(Media)
       self.parents << tag unless self.parents.include?(tag)
     else
       self.children << tag unless self.children.include?(tag)
-    end   
+    end
   end
 end

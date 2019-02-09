@@ -73,6 +73,7 @@ li.blurb:after, .blurb .blurb:after {
 
 .blurb dl.stats {
   float: right;
+  line-height: 2.143;
 }
 
 .blurb .fandoms .landmark {
@@ -335,9 +336,12 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	top: 28px;
 }
 
+.bookmark div.user, .bookmark div.recent {
+  clear: right;
+}
+
 .bookmark .user {
   border: 1px solid #ccc;
-  clear: right;
   margin-top: 0.643em;
   overflow: hidden;
 }
@@ -368,10 +372,14 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 }
 
 .bookmark .short .status {
-	left: 30px;
+	left: 0;
 	margin-top: 0;
 	top: 0;
 	width: 25px;
+}
+
+.bookmark .short .header h5 {
+  margin-left: 35px;
 }
 
 .bookmark .dynamic {
@@ -379,7 +387,8 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 }
 
 .bookmark .recent .index {
-    width: 100%;
+  float: none;
+  width: 100%;
 }
 
 /* mod: READING */

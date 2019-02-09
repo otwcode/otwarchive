@@ -13,8 +13,8 @@ describe User, :ready do
       let(:user) {build(:user)}
       it "should encrypt password" do
         user.save
-        expect(user.crypted_password).not_to be_empty
-        expect(user.crypted_password).not_to eq(user.password)
+        expect(user.encrypted_password).not_to be_empty
+        expect(user.encrypted_password).not_to eq(user.password)
       end
 
       let(:user) {build(:user)}
@@ -110,22 +110,6 @@ describe User, :ready do
         end
 
       end
-
     end
-
-    describe "has_no_credentials?" do
-      it "is true if password is blank" do
-        @user = build(:user, password: nil)
-        puts @user.password
-        expect(@user.has_no_credentials?).to be_truthy
-      end
-      it "is false if password is not blank" do
-        @user = build(:user)
-        expect(@user.has_no_credentials?).to be_falsey
-      end
-    end
-
   end
-
-
 end

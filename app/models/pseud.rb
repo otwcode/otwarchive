@@ -1,8 +1,5 @@
 class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-
-  include Tire::Model::Search
-  # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
 
@@ -73,6 +70,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -450,28 +448,25 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  mapping do
-    indexes :name, boost: 20
-  end
-
   def collection_ids
     collections.pluck(:id)
   end
 
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:user_login, :collection_ids])
+  def document_json
+    PseudIndexer.new({}).document(self)
   end
 
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
-        end
-      end
-    end
+  def should_reindex_creations?
+    pertinent_attributes = %w[id name]
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # If the pseud gets renamed, anything indexed with the old name needs to be reindexed:
+  # works, series, bookmarks.
+  def reindex_creations
+    return unless should_reindex_creations?
+    IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
+    IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
 end
