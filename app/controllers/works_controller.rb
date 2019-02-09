@@ -303,9 +303,6 @@ class WorksController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
 
       if @work.save
-        # HACK: for empty chapter authors in cucumber series tests
-        @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
-
         if params[:preview_button] || params[:cancel_coauthor_button]
           flash[:notice] = ts("Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}", deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
