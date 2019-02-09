@@ -132,7 +132,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
         relationship_string: params[:relationship_string],
         character_string: params[:character_string]
       },
-      notes: params[:notes],
+      bookmarker_notes: params[:bookmarker_notes],
       tag_string: params[:tag_string],
       collection_names: params[:collection_names],
       private: params[:private].blank? ? false : params[:private],

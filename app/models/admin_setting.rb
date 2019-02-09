@@ -12,53 +12,39 @@ class AdminSetting < ApplicationRecord
 
   belongs_to :default_skin, class_name: 'Skin'
 
-  def self.invite_from_queue_enabled?
-    self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
+  DEFAULT_SETTINGS = {
+    invite_from_queue_enabled?: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+    request_invite_enabled?: false,
+    invite_from_queue_at: nil,
+    invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+    invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+    account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
+    days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
+    suspend_filter_counts?: false,
+    disable_filtering?: false,
+    enable_test_caching?: false,
+    cache_expiration: 10,
+    tag_wrangling_off?: false,
+    downloads_enabled?: true,
+    stats_updated_at: nil,
+    disable_support_form?: false
+  }.freeze
+
+  def self.current
+    Rails.cache.fetch("admin_settings") { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
-  def self.request_invite_enabled?
-    self.first ? self.first.request_invite_enabled? : false
+
+  class << self
+    delegate *DEFAULT_SETTINGS.keys, :to => :current
   end
-  def self.invite_from_queue_at
-    self.first.invite_from_queue_at
-  end
-  def self.invite_from_queue_number
-    self.first ? self.first.invite_from_queue_number : ArchiveConfig.INVITE_FROM_QUEUE_NUMBER
-  end
-  def self.invite_from_queue_frequency
-    self.first ? self.first.invite_from_queue_frequency : ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY
-  end
-  def self.account_creation_enabled?
-    self.first ? self.first.account_creation_enabled? : ArchiveConfig.ACCOUNT_CREATION_ENABLED
-  end
-  def self.days_to_purge_unactivated
-    self.first ? self.first.days_to_purge_unactivated : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-  end
-  def self.suspend_filter_counts?
-    self.first ? self.first.suspend_filter_counts? : false
-  end
-  def self.disable_filtering?
-    self.first ? self.first.disable_filtering? : false
-  end
-  def self.enable_test_caching?
-    self.first ? self.first.enable_test_caching? : false
-  end
-  def self.cache_expiration
-    self.first ? self.first.cache_expiration : 10
-  end
-  def self.tag_wrangling_off?
-    self.first ? self.first.tag_wrangling_off? : false
-  end
-  def self.guest_downloading_off?
-    self.first ? self.first.guest_downloading_off? : false
-  end
-  def self.downloads_enabled?
-    self.first ? self.first.downloads_enabled? : true
-  end
+
   def self.default_skin
-    self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.default) : Skin.default
-  end
-  def self.stats_updated_at
-    self.first ? self.first.stats_updated_at : nil
+    settings = current
+    if settings.default_skin_id.present?
+      Rails.cache.fetch("admin_default_skin") { settings.default_skin }
+    else
+      Skin.default
+    end
   end
 
   # run once a day from cron

@@ -1,4 +1,9 @@
 class WorkQuery < Query
+  include TaggableQuery
+
+  def klass
+    'Work'
+  end
 
   def index_name
     WorkIndexer.index_name
@@ -10,20 +15,54 @@ class WorkQuery < Query
 
   # Combine the available filters
   def filters
+    add_owner
+    set_language
+
     @filters ||= (
       visibility_filters +
       work_filters +
-      pseud_filters +
+      creator_filters +
       collection_filters +
       tag_filters +
       range_filters
-    ).compact
+    ).flatten.compact
+  end
+
+  def exclusion_filters
+    @exclusion_filters ||= [
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
+    ].flatten.compact
   end
 
   # Combine the available queries
   # In this case, name is the only text field
   def queries
-    @queries = [general_query] if options[:q]
+    @queries = [general_query] unless general_query.blank? #if options[:q] || options[:query].present?
+  end
+
+  def add_owner
+    owner = options[:works_parent]
+    field = case owner
+            when Tag
+              :filter_ids
+            when Pseud
+              :pseud_ids
+            when User
+              :user_ids
+            when Collection
+              :collection_ids
+            end
+    return unless field.present?
+    options[field] ||= []
+    options[field] << owner.id
+  end
+
+  def set_language
+    if options[:language_id].present? && options[:language_id].to_i == 0
+      language = Language.find_by(short: options[:language_id])
+      options[:language_id] = language.id if language.present?
+    end
   end
 
   ####################
@@ -50,8 +89,8 @@ class WorkQuery < Query
     ]
   end
 
-  def pseud_filters
-    [pseud_filter]
+  def creator_filters
+    [user_filter, pseud_filter]
   end
 
   def collection_filters
@@ -59,16 +98,20 @@ class WorkQuery < Query
   end
 
   def tag_filters
-    [filter_id_filter]
+    [
+      filter_id_filter,
+      named_tag_inclusion_filter
+    ].flatten.compact
   end
 
   def range_filters
     ranges = []
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
       if options[countable].present?
-        ranges << { range: { countable => Search.range_to_search(options[countable]) } }
+        ranges << { range: { countable => SearchRange.parsed(options[countable]) } }
       end
     end
+    ranges += [date_range_filter, word_count_filter].compact
     ranges
   end
 
@@ -77,57 +120,110 @@ class WorkQuery < Query
   ####################
 
   def posted_filter
-    { term: { posted: 'T' } }
+    term_filter(:posted, 'true')
   end
 
   def hidden_filter
-    { term: { hidden_by_admin: 'F' } }
+    term_filter(:hidden_by_admin, 'false')
   end
 
   def restricted_filter
-    { term: { restricted: 'F' } } unless include_restricted?
+    term_filter(:restricted, 'false') unless include_restricted?
   end
 
   def unrevealed_filter
-    { term: { in_unrevealed_collection: 'F' } } unless include_unrevealed?
+    term_filter(:in_unrevealed_collection, 'false') unless include_unrevealed?
   end
 
   def anon_filter
-    { term: { in_anon_collection: 'F' } } unless include_anon?
+    term_filter(:in_anon_collection, 'false') unless include_anon?
   end
 
   def complete_filter
-    { term: { complete: 'T' } } if options[:complete]
+    term_filter(:complete, bool_value(options[:complete])) if options[:complete].present?
   end
 
   def single_chapter_filter
-    { term: { expected_number_of_chapters: 1 } } if options[:single_chapter]
+    term_filter(:expected_number_of_chapters, 1) if options[:single_chapter].present?
   end
 
   def language_filter
-    { term: { language_id: options[:language_id] } } if options[:language_id]
+    term_filter(:language_id, options[:language_id]) if options[:language_id].present?
   end
 
   def crossover_filter
-    { term: { crossover: options[:crossover] } } if options[:crossover]
+    term_filter(:crossover, bool_value(options[:crossover])) if options[:crossover].present?
   end
 
   def type_filter
-    { terms: { work_type: options[:work_types] } } if options[:work_types]
+    terms_filter(:work_type, options[:work_types]) if options[:work_types]
+  end
+
+  def user_filter
+    terms_filter(:user_ids, user_ids) if user_ids.present?
   end
 
   def pseud_filter
-    { terms: { pseud_ids: pseud_ids } } if pseud_ids.present?
+    terms_filter(:pseud_ids, pseud_ids) if pseud_ids.present?
   end
 
   def collection_filter
-    if options[:collection_ids].present?
-      { terms: { collection_ids: options[:collection_ids] } }
-    end
+    terms_filter(:collection_ids, options[:collection_ids]) if options[:collection_ids].present?
   end
 
   def filter_id_filter
-    { terms: { filter_ids: filter_ids, execution: 'and' } } if filter_ids.present?
+    if filter_ids.present?
+      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
+    end
+  end
+
+  def tag_exclusion_filter
+    if exclusion_ids.present?
+      exclusion_ids.map { |exclusion_id| term_filter(:filter_ids, exclusion_id) }
+    end
+  end
+
+  # This filter is used to restrict our results to only include works
+  # whose "tag" text matches all of the tag names in included_tag_names. This
+  # is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.filter_ids function.
+  def named_tag_inclusion_filter
+    return if included_tag_names.blank?
+    match_filter(:tag, included_tag_names.join(" "))
+  end
+
+  # This set of filters is used to prevent us from matching any works whose
+  # "tag" text matches one of the passed-in tag names. This is useful when the
+  # user enters a non-existent tag, which would be discarded by the
+  # TaggableQuery.exclusion_ids function.
+  #
+  # Unlike the inclusion filter, we must separate these into different match
+  # filters to get the results that we want (that is, excluding "A B" and "C D"
+  # is the same as "not(A and B) and not(C and D)").
+  def named_tag_exclusion_filter
+    excluded_tag_names.map do |tag_name|
+      match_filter(:tag, tag_name)
+    end
+  end
+
+  def date_range_filter
+    return unless options[:date_from].present? || options[:date_to].present?
+    begin
+      range = {}
+      range[:gte] = clamp_search_date(options[:date_from].to_date) if options[:date_from].present?
+      range[:lte] = clamp_search_date(options[:date_to].to_date) if options[:date_to].present?
+      { range: { revised_at: range } }
+    rescue ArgumentError
+      nil
+    end
+  end
+
+  def word_count_filter
+    return unless options[:words_from].present? || options[:words_to].present?
+    range = {}
+    range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
+    range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    { range: { word_count: range } }
   end
 
   ####################
@@ -135,42 +231,105 @@ class WorkQuery < Query
   ####################
 
   # Search for a tag by name
+  # Note that fields don't need to be explicitly included in the
+  # field list to be searchable directly (ie, "complete:true" will still work)
   def general_query
-    { query_string: { query: options[:q] } }
+    input = (options[:q] || options[:query] || "").dup
+    query = generate_search_text(input)
+
+    return {
+      query_string: {
+        query: query,
+        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag"],
+        default_operator: "AND"
+      }
+    } unless query.blank?
+  end
+
+  def generate_search_text(query = '')
+    search_text = query
+    [:title, :creators].each do |field|
+      search_text << split_query_text_words(field, options[field])
+    end
+    if options[:collection_ids].blank? && collected?
+      search_text << " collection_ids:*"
+    end
+    escape_slashes(search_text.strip)
+  end
+
+  def sort
+    column = options[:sort_column].present? ? options[:sort_column] : default_sort
+    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
+    sort_hash = { column => { order: direction } }
+
+    if column == 'revised_at'
+      sort_hash[column][:unmapped_type] = 'date'
+    end
+
+    sort_hash
+  end
+
+  # When searching outside of filters, use relevance instead of date
+  def default_sort
+    facet_tags? || collected? ? 'revised_at' : '_score'
+  end
+
+  def aggregations
+    aggs = {}
+    if collected?
+      aggs[:collections] = { terms: { field: 'collection_ids' } }
+    end
+
+    if facet_tags?
+      %w(rating warning category fandom character relationship freeform).each do |facet_type|
+        aggs[facet_type] = { terms: { field: "#{facet_type}_ids" } }
+      end
+    end
+
+    { aggs: aggs }
   end
 
   ####################
   # HELPERS
   ####################
 
+  def facet_tags?
+    options[:faceted]
+  end
+
+  def collected?
+    options[:collected]
+  end
+
   def include_restricted?
-    User.current_user.present?
+    User.current_user.present? || options[:show_restricted]
   end
 
+  # Include unrevealed works only if we're on a collection page
+  # OR the collected works page of a user
   def include_unrevealed?
-    false
+    options[:collection_ids].present? || collected?
   end
 
+  # Include anonymous works if we're not on a user/pseud page
+  # OR if the user is viewing their own collected works
   def include_anon?
-    pseud_ids.blank?
+    (user_ids.blank? && pseud_ids.blank?) ||
+      (collected? && options[:works_parent].present? && options[:works_parent] == User.current_user)
+  end
+
+  def user_ids
+    options[:user_ids]
   end
 
   def pseud_ids
-    return @pseud_ids if @pseud_ids.present?
-    @pseud_ids = options[:pseud_ids] || []
-    if options[:user_id].present?
-      @pseud_ids += Pseud.where(user_id: options[:user_id]).pluck(:id)
-    end
-    @pseud_ids.uniq
+    options[:pseud_ids]
   end
 
-  def filter_ids
-    return @filter_ids if @filter_ids.present?
-    @filter_ids = options[:filter_ids] || []
-    %w(fandom rating warning category character relationship freeform).each do |tag_type|
-      @filter_ids += options["#{tag_type}_ids".to_sym] || []
-    end
-    @filter_ids.uniq
+  # By default, ES6 expects yyyy-MM-dd and can't parse years with 4+ digits.
+  def clamp_search_date(date)
+    return date.change(year: 0) if date.year.negative?
+    return date.change(year: 9999) if date.year > 9999
+    date
   end
-
 end

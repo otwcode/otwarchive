@@ -79,37 +79,13 @@ Feature: Invite requests
     When I click the first link in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
-        | user_login                  | user2     |
-        | user_password               | password1 |
-        | user_password_confirmation  | password1 |
+        | user_registration_login                  | user2     |
+        | user_registration_password               | password1 |
+        | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
     Then I should see "Within 24 hours, you should receive an email at the address you gave us."
       And I should see how long I have to activate my account
       And I should see "If you don't hear from us within 24 hours"
-
-  Scenario: When not logged in, there is a Create an Account button
-  when account creation is enabled and invitations are not required
-
-    Given account creation does not require an invitation
-      And I am a visitor
-    When I go to the homepage
-      And I should see "Create an Account!"
-
-  Scenario: When not logged in, there is a Get Invited! button
-    when account creation requires an invitation
-
-    Given account creation requires an invitation
-      And I am a visitor
-    When I go to the homepage
-    Then I should see "Get Invited!"
-
-  Scenario: When not logged in, there is no Get Invited! or Create an Account! button when account creation is disabled
-
-    Given account creation is disabled
-      And I am a visitor
-    When I go to the homepage
-    Then I should not see "Get Invited!"
-      And I should not see "Create an Account!"
 
   Scenario: Banned users cannot access their invitations page
 
@@ -133,6 +109,20 @@ Feature: Invite requests
     When I fill in "invitation[invitee_email]" with "user6@example.org"
       And I press "Update Invitation"
     Then I should see "Invitation was successfully sent."
+
+  Scenario: An admin can get to a user's invitations page
+    Given I am logged in as an admin
+      And the user "steven" exists and is activated
+    When I go to the abuse administration page for "steven"
+      And I follow "Add User Invitations"
+    Then I should be on steven's invitations page
+
+  Scenario: An admin can get to a user's manage invitations page
+    Given I am logged in as an admin
+      And the user "steven" exists and is activated
+    When I go to the abuse administration page for "steven"
+      And I follow "Manage User Invitations"
+    Then I should be on steven's manage invitations page
 
   Scenario: An admin can create a user's invitations
     Given I am logged in as an admin

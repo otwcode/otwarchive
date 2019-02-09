@@ -24,7 +24,7 @@ Scenario: Adding Abuse support for a language
     | Espanol     | es    |
   When I am logged in as an admin
     And I go to the languages page
-    # Languages are sorted by short name, so the first "Edit" is for Arabic    
+    # Languages are sorted by short name, so the first "Edit" is for Arabic
     And I follow "Edit"
     And I check "Abuse support available"
     And I press "Update Language"
@@ -41,7 +41,7 @@ Scenario: Adding a language to the Support form
       | Klingon  | tlh   |
   When I am logged in as an admin
     And I go to the languages page
-    # Languages are sorted by short name, so the first "Edit" is for Sindarin 
+    # Languages are sorted by short name, so the first "Edit" is for Sindarin
     And I follow "Edit"
     And I check "Support available"
     And I press "Update Language"

@@ -7,7 +7,7 @@ bookmark_00017:
   delta: true
   updated_at: 2009-07-18 00:16:47 Z
   private: false
-  notes: How much do I want to see Dean's scandalised face? THIS MUCH.
+  bookmarker_notes: How much do I want to see Dean's scandalised face? THIS MUCH.
   rec: false
   id: 17
   user_id: 
@@ -20,7 +20,7 @@ bookmark_00039:
   delta: true
   updated_at: 2009-07-18 10:43:57 Z
   private: true
-  notes: I'm so ashamed about wanting to re-read this that I'm going to bookmark it privately.
+  bookmarker_notes: I'm so ashamed about wanting to re-read this that I'm going to bookmark it privately.
   rec: false
   id: 39
   user_id: 
@@ -33,7 +33,7 @@ bookmark_00028:
   delta: true
   updated_at: 2009-07-18 10:04:33 Z
   private: false
-  notes: Testing fandom is the BEST! It's where all the best works of art live.
+  bookmarker_notes: Testing fandom is the BEST! It's where all the best works of art live.
   rec: false
   id: 28
   user_id: 
@@ -46,7 +46,7 @@ bookmark_00006:
   delta: true
   updated_at: 2009-03-20 23:41:05 Z
   private: false
-  notes: ack, I hope this is not the conclusion to the series ;_;
+  bookmarker_notes: ack, I hope this is not the conclusion to the series ;_;
   rec: false
   id: 6
   user_id: 
@@ -59,7 +59,7 @@ bookmark_00007:
   delta: true
   updated_at: 2009-07-17 23:46:13 Z
   private: false
-  notes: Bela! &lt;3 I was so gutted to see her go.
+  bookmarker_notes: Bela! &lt;3 I was so gutted to see her go.
   rec: false
   id: 7
   user_id: 
@@ -72,7 +72,7 @@ bookmark_00029:
   delta: true
   updated_at: 2009-07-18 10:07:01 Z
   private: false
-  notes: "Awwwwwwwwww, I loved this. Now I will write super long notes longer than the actual work to explain why: love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love "
+  bookmarker_notes: "Awwwwwwwwww, I loved this. Now I will write super long notes longer than the actual work to explain why: love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love "
   rec: false
   id: 29
   user_id: 
@@ -85,7 +85,7 @@ bookmark_00040:
   delta: true
   updated_at: 2009-07-18 10:45:22 Z
   private: true
-  notes: Here's a private bookmark on a work the admin is going to hide
+  bookmarker_notes: Here's a private bookmark on a work the admin is going to hide
   rec: false
   id: 40
   user_id: 
@@ -98,7 +98,7 @@ bookmark_00018:
   delta: true
   updated_at: 2009-07-18 00:18:28 Z
   private: false
-  notes: Kind of disturbing, and yet.
+  bookmarker_notes: Kind of disturbing, and yet.
   rec: false
   id: 18
   user_id: 
@@ -111,7 +111,7 @@ bookmark_00019:
   delta: true
   updated_at: 2009-07-18 00:21:37 Z
   private: false
-  notes: Heeee, boys! Don't worry, Jared, everyone has a crush on Dean, it's part of the nature of the universe.
+  bookmarker_notes: Heeee, boys! Don't worry, Jared, everyone has a crush on Dean, it's part of the nature of the universe.
   rec: false
   id: 19
   user_id: 
@@ -124,7 +124,7 @@ bookmark_00041:
   delta: true
   updated_at: 2009-07-18 10:46:23 Z
   private: false
-  notes: Work with no author's summary
+  bookmarker_notes: Work with no author's summary
   rec: false
   id: 41
   user_id: 
@@ -137,7 +137,7 @@ bookmark_00030:
   delta: true
   updated_at: 2009-07-18 10:10:30 Z
   private: false
-  notes: My love for Uriel knows no bounds. He can get righteous on <em>my</em> ass any time.
+  bookmarker_notes: My love for Uriel knows no bounds. He can get righteous on <em>my</em> ass any time.
   rec: false
   id: 30
   user_id: 
@@ -150,7 +150,7 @@ bookmark_00008:
   delta: true
   updated_at: 2009-07-17 23:48:57 Z
   private: false
-  notes: Blah blah blah blah blah really long user notes. Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+  bookmarker_notes: Blah blah blah blah blah really long user notes. Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
   rec: false
   id: 8
   user_id: 
@@ -163,7 +163,7 @@ bookmark_00009:
   delta: true
   updated_at: 2009-07-17 23:51:41 Z
   private: false
-  notes: I really want a bouquet of chocolate flowers now.
+  bookmarker_notes: I really want a bouquet of chocolate flowers now.
   rec: false
   id: 9
   user_id: 
@@ -176,7 +176,7 @@ bookmark_00031:
   delta: true
   updated_at: 2009-07-18 10:16:59 Z
   private: false
-  notes: |-
+  bookmarker_notes: |-
     Notes with allowed html in them!
     <a href="http://parenthetical.livejournal.com/friends">Link</a>
     <b>b</b>
@@ -219,7 +219,7 @@ bookmark_00042:
   delta: true
   updated_at: 2009-07-18 10:47:31 Z
   private: true
-  notes: All the bookmarks on this work are private.
+  bookmarker_notes: All the bookmarks on this work are private.
   rec: false
   id: 42
   user_id: 
@@ -232,7 +232,7 @@ bookmark_00020:
   delta: true
   updated_at: 2009-07-18 00:23:43 Z
   private: false
-  notes: I really enjoyed this too!
+  bookmarker_notes: I really enjoyed this too!
   rec: false
   id: 20
   user_id: 
@@ -245,7 +245,7 @@ bookmark_00021:
   delta: true
   updated_at: 2009-07-18 00:33:05 Z
   private: false
-  notes: Genius fic of geniusness. &lt;3
+  bookmarker_notes: Genius fic of geniusness. &lt;3
   rec: false
   id: 21
   user_id: 
@@ -258,7 +258,7 @@ bookmark_00043:
   delta: true
   updated_at: 2009-07-18 10:48:43 Z
   private: false
-  notes: It's a tragedy that this work wasn't recced earlier.
+  bookmarker_notes: It's a tragedy that this work wasn't recced earlier.
   rec: false
   id: 43
   user_id: 
@@ -271,7 +271,7 @@ bookmark_00032:
   delta: true
   updated_at: 2009-07-18 10:23:33 Z
   private: false
-  notes: I've never seen Torchwood, but this fic made me want to.
+  bookmarker_notes: I've never seen Torchwood, but this fic made me want to.
   rec: false
   id: 32
   user_id: 
@@ -284,7 +284,7 @@ bookmark_00010:
   delta: true
   updated_at: 2009-07-17 23:53:17 Z
   private: false
-  notes: Bookmark on a work which is going to be hidden by an admin for being TOO SCHMOOPY TO LIVE.
+  bookmarker_notes: Bookmark on a work which is going to be hidden by an admin for being TOO SCHMOOPY TO LIVE.
   rec: false
   id: 10
   user_id: 
@@ -297,7 +297,7 @@ bookmark_00011:
   delta: true
   updated_at: 2009-07-17 23:56:42 Z
   private: false
-  notes: A bookmark on an external work
+  bookmarker_notes: A bookmark on an external work
   rec: false
   id: 11
   user_id: 
@@ -310,7 +310,7 @@ bookmark_00033:
   delta: true
   updated_at: 2009-07-18 10:25:53 Z
   private: false
-  notes: Ash is too hot for <em>anyone</em> to handle. TRUFAX. (It's the mullet.)
+  bookmarker_notes: Ash is too hot for <em>anyone</em> to handle. TRUFAX. (It's the mullet.)
   rec: false
   id: 33
   user_id: 
@@ -323,7 +323,7 @@ bookmark_00044:
   delta: true
   updated_at: 2009-08-26 21:17:46 Z
   private: true
-  notes: This is a marvellous story
+  bookmarker_notes: This is a marvellous story
   rec: true
   id: 44
   user_id: 
@@ -336,7 +336,7 @@ bookmark_00022:
   delta: true
   updated_at: 2009-07-18 00:38:19 Z
   private: false
-  notes: Woe, the angst bunny made me cry. :(
+  bookmarker_notes: Woe, the angst bunny made me cry. :(
   rec: false
   id: 22
   user_id: 
@@ -349,7 +349,7 @@ bookmark_00001:
   delta: true
   updated_at: 2009-03-18 13:14:26 Z
   private: false
-  notes: "Girls always get what they want. "
+  bookmarker_notes: "Girls always get what they want. "
   rec: false
   id: 1
   user_id: 
@@ -362,7 +362,7 @@ bookmark_00023:
   delta: true
   updated_at: 2009-07-18 09:56:43 Z
   private: false
-  notes: There needs to be moar Bela in the world.
+  bookmarker_notes: There needs to be moar Bela in the world.
   rec: false
   id: 23
   user_id: 
@@ -375,7 +375,7 @@ bookmark_00045:
   delta: true
   updated_at: 2009-12-17 13:52:03 Z
   private: false
-  notes: oh wow this form is broken remind me to come back and fix this layout
+  bookmarker_notes: oh wow this form is broken remind me to come back and fix this layout
   rec: true
   id: 45
   user_id: 
@@ -388,7 +388,7 @@ bookmark_00034:
   delta: true
   updated_at: 2009-07-18 10:29:29 Z
   private: false
-  notes: I do love a good, long, multi-chapter epic. OF DOOM.
+  bookmarker_notes: I do love a good, long, multi-chapter epic. OF DOOM.
   rec: false
   id: 34
   user_id: 
@@ -401,7 +401,7 @@ bookmark_00012:
   delta: true
   updated_at: 2009-07-17 23:59:25 Z
   private: false
-  notes: Sam is totally onto something re Shakira.
+  bookmarker_notes: Sam is totally onto something re Shakira.
   rec: false
   id: 12
   user_id: 
@@ -414,7 +414,7 @@ bookmark_00013:
   delta: true
   updated_at: 2009-07-18 00:03:03 Z
   private: false
-  notes: Poor wee!Dean! He needs lots and lots of hugs, omg.
+  bookmarker_notes: Poor wee!Dean! He needs lots and lots of hugs, omg.
   rec: false
   id: 13
   user_id: 
@@ -427,7 +427,7 @@ bookmark_00035:
   delta: true
   updated_at: 2009-07-18 10:58:01 Z
   private: false
-  notes: Awwwwwww, boys. I'm going to go into such graphic detail about what I want to do with them that an admin is going to feel it necessary to hide this bookmark. Dude.
+  bookmarker_notes: Awwwwwww, boys. I'm going to go into such graphic detail about what I want to do with them that an admin is going to feel it necessary to hide this bookmark. Dude.
   rec: false
   id: 35
   user_id: 
@@ -440,7 +440,7 @@ bookmark_00046:
   delta: true
   updated_at: 2009-12-17 13:53:30 Z
   private: false
-  notes: Looks like the inside fieldset is em-widthed. This might cause issues in IE6 and 7
+  bookmarker_notes: Looks like the inside fieldset is em-widthed. This might cause issues in IE6 and 7
   rec: true
   id: 46
   user_id: 
@@ -453,7 +453,7 @@ bookmark_00024:
   delta: true
   updated_at: 2009-07-18 09:58:41 Z
   private: false
-  notes: It's all so tragic!
+  bookmarker_notes: It's all so tragic!
   rec: false
   id: 24
   user_id: 
@@ -466,7 +466,7 @@ bookmark_00002:
   delta: true
   updated_at: 2009-03-18 13:14:26 Z
   private: false
-  notes: I'm not sure why, but I'm slightly weirded out by this. The characters seem familiar somehow...
+  bookmarker_notes: I'm not sure why, but I'm slightly weirded out by this. The characters seem familiar somehow...
   rec: false
   id: 2
   user_id: 
@@ -479,7 +479,7 @@ bookmark_00003:
   delta: true
   updated_at: 2009-03-20 23:36:59 Z
   private: false
-  notes: awesome story with OT3 potential
+  bookmarker_notes: awesome story with OT3 potential
   rec: false
   id: 3
   user_id: 
@@ -492,7 +492,7 @@ bookmark_00025:
   delta: true
   updated_at: 2009-07-18 10:00:31 Z
   private: false
-  notes: Man, I love the way it loads the summary for me SO MUCH. ...The fic's awesome too! \0/
+  bookmarker_notes: Man, I love the way it loads the summary for me SO MUCH. ...The fic's awesome too! \0/
   rec: false
   id: 25
   user_id: 
@@ -505,7 +505,7 @@ bookmark_00036:
   delta: true
   updated_at: 2009-07-18 10:34:58 Z
   private: false
-  notes: Long author's notes are long, dude.
+  bookmarker_notes: Long author's notes are long, dude.
   rec: false
   id: 36
   user_id: 
@@ -518,7 +518,7 @@ bookmark_00014:
   delta: true
   updated_at: 2009-07-18 00:09:10 Z
   private: true
-  notes: I really enjoyed this! Private bookmark on an external work
+  bookmarker_notes: I really enjoyed this! Private bookmark on an external work
   rec: false
   id: 14
   user_id: 
@@ -531,7 +531,7 @@ bookmark_00015:
   delta: true
   updated_at: 2009-07-18 00:12:40 Z
   private: false
-  notes: Dean breaks my heart! *huggles him*
+  bookmarker_notes: Dean breaks my heart! *huggles him*
   rec: false
   id: 15
   user_id: 
@@ -544,7 +544,7 @@ bookmark_00037:
   delta: true
   updated_at: 2009-07-18 10:38:18 Z
   private: false
-  notes: Man, I suck at writing summaries.
+  bookmarker_notes: Man, I suck at writing summaries.
   rec: false
   id: 37
   user_id: 
@@ -557,7 +557,7 @@ bookmark_00026:
   delta: true
   updated_at: 2009-07-18 10:01:39 Z
   private: false
-  notes: I really don't want to eat popcorn any time soon now.
+  bookmarker_notes: I really don't want to eat popcorn any time soon now.
   rec: false
   id: 26
   user_id: 
@@ -570,7 +570,7 @@ bookmark_00004:
   delta: true
   updated_at: 2009-03-20 23:38:19 Z
   private: false
-  notes: rather disturbing but good
+  bookmarker_notes: rather disturbing but good
   rec: false
   id: 4
   user_id: 
@@ -583,7 +583,7 @@ bookmark_00005:
   delta: true
   updated_at: 2009-03-20 23:39:06 Z
   private: true
-  notes: nnggg, so hot
+  bookmarker_notes: nnggg, so hot
   rec: false
   id: 5
   user_id: 
@@ -596,7 +596,7 @@ bookmark_00027:
   delta: true
   updated_at: 2009-07-18 10:03:11 Z
   private: false
-  notes: Some other fucking pseud is a great author. I love their name, too. &lt;3
+  bookmarker_notes: Some other fucking pseud is a great author. I love their name, too. &lt;3
   rec: false
   id: 27
   user_id: 
@@ -609,7 +609,7 @@ bookmark_00038:
   delta: true
   updated_at: 2009-07-18 10:42:57 Z
   private: false
-  notes: These authors chose not to to warn for Mary Sue, clearly.
+  bookmarker_notes: These authors chose not to to warn for Mary Sue, clearly.
   rec: false
   id: 38
   user_id: 
@@ -622,7 +622,7 @@ bookmark_00016:
   delta: true
   updated_at: 2009-07-18 00:14:46 Z
   private: false
-  notes: I love Luna SO MUCH, omg. She wins at life! Dean/Luna is a bit of a random pairing, but I love the idea of them hanging out together.
+  bookmarker_notes: I love Luna SO MUCH, omg. She wins at life! Dean/Luna is a bit of a random pairing, but I love the idea of them hanging out together.
   rec: false
   id: 16
   user_id: 

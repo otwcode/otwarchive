@@ -40,11 +40,6 @@ class Challenge::PromptMemeController < ChallengesController
       @collection.challenge = @challenge
       @collection.save
       flash[:notice] = ts('Challenge was successfully created.')
-
-      # see if we initialized the tag set
-      if initializing_tag_sets?
-        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
-      end
       redirect_to collection_profile_path(@collection)
     else
       render action: :new
@@ -54,15 +49,8 @@ class Challenge::PromptMemeController < ChallengesController
   def update
     if @challenge.update_attributes(prompt_meme_params)
       flash[:notice] = 'Challenge was successfully updated.'
-
       # expire the cache on the signup form
       ActionController::Base.new.expire_fragment('challenge_signups/new')
-
-      # see if we initialized the tag set
-      if initializing_tag_sets?
-        # we were asked to initialize the tag set
-        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
-      end
       redirect_to @collection
     else
       render action: :edit
@@ -76,15 +64,6 @@ class Challenge::PromptMemeController < ChallengesController
   end
 
   private
-
-  # creating automatic list of most popular or least popular tags on the archive
-  def initializing_tag_sets?
-    # uuughly :P but check params to see if we're initializing
-    !params[:prompt_meme][:request_restriction_attributes].keys.
-      select {|k| k=~ /init_(less|greater)/}.
-      select {|k| params[:prompt_meme][:request_restriction_attributes][k] == "1"}.
-      empty?
-  end
 
   def prompt_meme_params
     params.require(:prompt_meme).permit(
