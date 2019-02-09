@@ -10,7 +10,7 @@ Feature: Edit Works
     When I view the work "First work"
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
-      And all search indexes are updated
+      And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
@@ -33,11 +33,12 @@ Feature: Edit Works
       # line below fails with perform_caching: true because of issue 3461
       # And I should see "Additional Tags: new tag"
       And I should see "first chapter content"
+      And I should see "Words:3"
     When I press "Update"
     Then I should see "Work was successfully updated."
       And I should see "Additional Tags: new tag"
       And I should see "Words:3"
-    When all search indexes are updated
+    When all indexing jobs have been run
       And I go to testuser's works page
     Then I should see "First work"
       And I should see "first fandom"
@@ -69,7 +70,8 @@ Feature: Edit Works
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
       And I press "Cancel"
-      Then I should see "second chapter content"
+    Then I should see "second chapter content"
+      And I should see "Words:7"
     # Test changing pseuds on a work
     When I go to testuser's works page
       And I follow "Edit"
@@ -138,11 +140,27 @@ Feature: Edit Works
     When I view the work "Shared"
     Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
+      And I wait 1 second
       And I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the work"
-    When I view the work "Shared"
-    Then I should see "ex_friend" within ".byline"
-      And I should not see "coolperson" within ".byline"
+      And "ex_friend" should be the creator on the work "Shared"
+      And "coolperson" should not be a creator on the work "Shared"
+
+  Scenario: User applies a coauthor's work skin to their work
+    Given the following activated users with private work skins
+        | login       |
+        | lead_author |
+        | coauthor    |
+        | random_user |
+      And I coauthored the work "Shared" as "lead_author" with "coauthor"
+      And I am logged in as "lead_author"
+    When I edit the work "Shared"
+    Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
+      And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
+      And I should not see "Random User's Work Skin" within "#work_work_skin_id"
+    When I select "Coauthor's Work Skin" from "Select Work Skin"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully updated"
 
   Scenario: A work cannot be edited to remove its fandom
     Given basic tags
@@ -161,3 +179,10 @@ Feature: Edit Works
       And I press "Cancel"
     When I view the work "Work 1"
       Then I should see "Fandom: testing"
+
+  Scenario: When editing a work, the title field should not escape HTML
+    Given I have a work "What a title! :< :& :>"
+      And I go to the works page
+      And I follow "What a title! :< :& :>"
+      And I follow "Edit"
+    Then I should see "What a title! :< :& :>" in the "Work Title" input

@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
 
@@ -9,11 +9,13 @@ class Comment < ActiveRecord::Base
   has_many :inbox_comments, foreign_key: 'feedback_comment_id', dependent: :destroy
   has_many :users, through: :inbox_comments
 
+  has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
+
   validates_presence_of :name, unless: :pseud_id
   validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
-  validates_presence_of :content
-  validates_length_of :content,
+  validates_presence_of :comment_content
+  validates_length_of :comment_content,
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
@@ -23,7 +25,11 @@ class Comment < ActiveRecord::Base
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
-  validates :content, uniqueness: {scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id], message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
+  validates :comment_content, uniqueness: {
+    scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
+    unless: :is_deleted?,
+    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+  }
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
@@ -46,7 +52,7 @@ class Comment < ActiveRecord::Base
       user_agent: user_agent,
       comment_author: name,
       comment_author_email: email,
-      comment_content: content
+      comment_content: comment_content
     }
   end
 
@@ -64,15 +70,15 @@ class Comment < ActiveRecord::Base
     users = []
     admins = []
 
-    if self.edited_at_changed? && self.content_changed? && self.moderated_commenting_enabled? && !self.is_creator_comment?
+    if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
       # we might need to put it back into moderation
-      if content_too_different?(self.content, self.content_was)
+      if content_too_different?(self.comment_content, self.comment_content_was)
         # we use update_column because we don't want to invoke this callback again
         self.update_column(:unreviewed, true)
       end
     end
 
-    if self.edited_at_changed? || (self.unreviewed_changed? && !self.unreviewed?)
+    if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
       # Potentially we are notifying the original commenter of a newly-approved reply to their comment
       if (parent_comment_owner = notify_parent_comment_owner)
@@ -80,7 +86,7 @@ class Comment < ActiveRecord::Base
       end
     end
 
-    if self.edited_at_changed?
+    if self.saved_change_to_edited_at?
       # notify the commenter
       if self.comment_owner && notify_user_of_own_comments?(self.comment_owner)
         users << self.comment_owner
@@ -263,14 +269,14 @@ class Comment < ActiveRecord::Base
         # send notification to the owner of the original comment if they're not the same as the commenter
         if (have_different_owner?(parent_comment))
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-            if self.edited_at_changed?
+            if self.saved_change_to_edited_at?
               CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver
             else
               CommentMailer.comment_reply_notification(parent_comment, self).deliver
             end
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
-            if self.edited_at_changed?
+            if self.saved_change_to_edited_at?
               update_feedback_in_inbox(parent_comment_owner)
             else
               add_feedback_to_inbox(parent_comment_owner)
@@ -280,8 +286,8 @@ class Comment < ActiveRecord::Base
             return parent_comment_owner
           end
         end
+        return nil
       end
-      return nil
     end
 
   public
@@ -392,7 +398,7 @@ class Comment < ActiveRecord::Base
   end
 
   def sanitized_content
-    sanitize_field self, :content
+    sanitize_field self, :comment_content
   end
   include Responder
 

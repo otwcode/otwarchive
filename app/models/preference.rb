@@ -1,4 +1,4 @@
-class Preference < ActiveRecord::Base
+class Preference < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   belongs_to :user
@@ -18,15 +18,6 @@ class Preference < ActiveRecord::Base
      return true if param == 'light' || param == 'disable'
      return false unless User.current_user.is_a? User
      return User.current_user.try(:preference).try(:disable_work_skins)
-  end
-
-  #FIXME hack because time zones are being html encoded. couldn't figure out why.
-  before_save :fix_time_zone
-  def fix_time_zone
-    return true if self.time_zone.nil?
-    return true if ActiveSupport::TimeZone[self.time_zone]
-    try = self.time_zone.gsub('&amp;', '&')
-    self.time_zone = try if ActiveSupport::TimeZone[try]
   end
 
   def hide_hit_counts

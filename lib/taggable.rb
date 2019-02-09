@@ -230,8 +230,7 @@ module Taggable
     klass_symbol = klass.to_s.downcase.pluralize.to_sym
     if incoming_tags.is_a?(String)
       # Replace unicode full-width commas
-      incoming_tags.gsub!(/\uff0c|\u3001/, ',')
-      tag_array = incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+      tag_array = incoming_tags.gsub(/\uff0c|\u3001/, ',').split(ArchiveConfig.DELIMITER_FOR_INPUT)
     else
       tag_array = incoming_tags
     end
@@ -273,7 +272,7 @@ module Taggable
 
   # Index all the filters for pulling works
   def filter_ids
-    filters.pluck :id
+    (tags.pluck(:id) + filters.pluck(:id)).uniq
   end
 
   # Index only direct filters (non meta-tags) for facets

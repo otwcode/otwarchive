@@ -21,7 +21,7 @@
       </span>
       <%= ts("claimed by") %>
       <span class="byline">
-        <%= claim.claiming_user.default_pseud.byline %>
+        <%= claim.claim_byline %>
       </span>
     </h5>
 
@@ -35,7 +35,7 @@
     </p>
 
     <div class="icon">
-      <%= image_tag(claim.collection.icon.url(:standard), :size => "100x100", :alt => claim.collection.icon_alt_text, :class => "icon") %>
+      <%= image_tag(claim.collection.icon.url(:standard), :size => "100x100", :alt => claim.collection.icon_alt_text, :class => "icon", skip_pipeline: true) %>
     </div>
   </div>
 

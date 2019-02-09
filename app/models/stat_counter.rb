@@ -1,4 +1,4 @@
-class StatCounter < ActiveRecord::Base
+class StatCounter < ApplicationRecord
   include LogfileReader
   include WorkStats
 
@@ -14,6 +14,11 @@ class StatCounter < ActiveRecord::Base
 
   def enqueue_to_index
     IndexQueue.enqueue(self, :stats)
+  end
+
+  # Specify the indexer that should be used for this class
+  def indexers
+    [StatCounterIndexer]
   end
 
   ###############################################

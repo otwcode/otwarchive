@@ -1,5 +1,5 @@
 module BookmarksHelper
-  
+
   # if the current user has the current object bookmarked return the existing bookmark
   # since the user may have multiple bookmarks for different pseuds we prioritize by current default pseud if more than one bookmark exists
   def bookmark_if_exists(bookmarkable)
@@ -11,14 +11,14 @@ module BookmarksHelper
     else
       bookmarks.last
     end
-  end  
-  
+  end
+
   # returns just a url to the new bookmark form
   def get_new_bookmark_path(bookmarkable)
     return case bookmarkable.class.to_s
     when "Chapter"
       new_work_bookmark_path(bookmarkable.work)
-    when "Work"    
+    when "Work"
       new_work_bookmark_path(bookmarkable)
     when "ExternalWork"
       new_external_work_bookmark_path(bookmarkable)
@@ -26,7 +26,7 @@ module BookmarksHelper
       new_series_bookmark_path(bookmarkable)
     end
   end
-  
+
   def get_bookmark_link_text(bookmarkable, blurb=false)
     @bookmark = bookmark_if_exists(bookmarkable)
     case bookmarkable.class.to_s
@@ -35,12 +35,12 @@ module BookmarksHelper
     when "Series"
       @bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")
     when "ExternalWork"
-      @bookmark ? ts("Edit Bookmark") : ts("Add A New Bookmark")    
+      @bookmark ? ts("Edit Bookmark") : ts("Add A New Bookmark")
     else
-      @bookmark ? ts("Edit Bookmark") : ts("Bookmark")      
+      @bookmark ? ts("Edit Bookmark") : ts("Bookmark")
     end
   end
-      
+
   # Link to bookmark
   def bookmark_link(bookmarkable, blurb=false)
     return "" unless logged_in?
@@ -48,32 +48,32 @@ module BookmarksHelper
     text = get_bookmark_link_text(bookmarkable, blurb)
     link_to text, url
   end
-  
+
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
     id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
     link_to "You have saved multiple bookmarks for this item", {controller: :bookmarks, action: :index, id_symbol => bookmarkable, existing: true}
   end
-  
+
   # tag_bookmarks_path was behaving badly for tags with slashes
   def link_to_tag_bookmarks(tag)
     {controller: 'bookmarks', action: 'index', tag_id: tag}
   end
-  
+
   def link_to_bookmarkable_bookmarks(bookmarkable, link_text='')
-    if link_text.blank? 
+    if link_text.blank?
       link_text = Bookmark.count_visible_bookmarks(bookmarkable, current_user)
     end
     path = case bookmarkable.class.name
            when "Work"
              then work_bookmarks_path(bookmarkable)
            when "ExternalWork"
-             then external_work_bookmarks_path(bookmarkable) 
+             then external_work_bookmarks_path(bookmarkable)
            when "Series"
              then series_bookmarks_path(bookmarkable)
            end
     link_to link_text, path
   end
-  
+
   # returns the appropriate small single icon for a bookmark -- not hardcoded, these are in css so they are skinnable
   def get_symbol_for_bookmark(bookmark)
     if bookmark.private?
@@ -91,9 +91,9 @@ module BookmarksHelper
     end
     link_to_help('bookmark-symbols-key', content_tag(:span, content_tag(:span, title_string, class: "text"), class: css_class, title: title_string))
   end
-  
+
   def bookmark_form_path(bookmark, bookmarkable)
-    if bookmark && bookmark.new_record? 
+    if bookmark && bookmark.new_record?
       return "" unless bookmarkable
       case bookmarkable.class.to_s
       when "Work"
@@ -106,6 +106,13 @@ module BookmarksHelper
     elsif bookmark
       bookmark_path(bookmark)
     end
+  end
+
+  def get_count_for_bookmark_blurb(bookmarkable)
+    count = bookmarkable.public_bookmark_count
+    link = link_to (count < 100 ? count.to_s : "*"),
+              polymorphic_path([bookmarkable, Bookmark])
+    content_tag(:span, link, class: "count")
   end
 
 end

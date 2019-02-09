@@ -53,11 +53,11 @@ describe WranglingGuidelinesController do
   describe "GET #edit" do
     it "blocks non-admins" do
       fake_logout
-      get :edit
+      get :edit, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      get :edit
+      get :edit, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -136,11 +136,11 @@ describe WranglingGuidelinesController do
   describe "PUT #update" do
     it "blocks non-admins" do
       fake_logout
-      put :update
+      put :update, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      put :update
+      put :update, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -204,11 +204,11 @@ describe WranglingGuidelinesController do
   describe "DELETE #destroy" do
     it "blocks non-admins" do
       fake_logout
-      delete :destroy
+      delete :destroy, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      delete :destroy
+      delete :destroy, params: { id: 1 }
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 

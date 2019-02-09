@@ -1,4 +1,4 @@
-class AbuseReport < ActiveRecord::Base
+class AbuseReport < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   validates :email, email_veracity: { allow_blank: false }
@@ -6,31 +6,53 @@ class AbuseReport < ActiveRecord::Base
   validates_presence_of :summary
   validates_presence_of :comment
   validates_presence_of :url
-  validate :work_is_not_over_reported
+  validate :url_is_not_over_reported
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  validate :check_for_spam
+  def check_for_spam
+    errors.add(:base, ts("This report looks like spam to our system!")) if Akismetor.spam?(akismet_attributes)
+  end
+
+  def akismet_attributes
+    name = username ? username : ""
+    {
+      comment_type: "contact-form",
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_author: name,
+      comment_author_email: email,
+      comment_content: comment
+    }
+  end
+
   scope :by_date, -> { order('created_at DESC') }
 
-  # if the URL ends like "works/123", add a / at the end
-  # if the URL contains "works/123?", remove the parameters and add a /
-  # work_is_not_over_reported uses the / so "/works/1234" isn't a match
+  # Clean work or profile URLs so we can prevent the same URLs from
+  # getting reported too many times.
+  # If the URL ends without a / at the end, add it:
+  # url_is_not_over_reported uses the / so "/works/1234" isn't a match
   # for "/works/123"
-  before_validation :clean_work_url, on: :create
-  def clean_work_url
-    if url.match(/(works\/\d+)$/)
-      self.url = url + '/'
-    elsif url.match(/(works\/\d+\?)/)
-      self.url = url.split('?').first + '/'
+  before_validation :clean_url, on: :create
+  def clean_url
+    # Work URLs: "works/123"
+    # Profile URLs: "users/username"
+    if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
+      uri = Addressable::URI.parse url
+      uri.query = nil
+      uri.fragment = nil
+      uri.path += "/" unless uri.path.end_with? "/"
+      self.url = uri.to_s
     else
       url
     end
   end
 
-  app_url_regex = Regexp.new('^https?:\/\/(www\.)?' +
-                             ArchiveConfig.APP_HOST, true)
+  app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
   validates_format_of :url, with: app_url_regex,
                             message: ts('does not appear to be on this site.'),
                             multiline: true
@@ -56,10 +78,14 @@ class AbuseReport < ActiveRecord::Base
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")
-  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times
-  # per month
-  def work_is_not_over_reported
-    if url.match(/\/works\/\d+/)
+  # or a user profile (i.e. contains "/users/username")
+  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
+  # or ABUSE_REPORTS_PER_USER_MAX times per month
+  def url_is_not_over_reported
+    message = ts('URL has already been reported. To make sure the Abuse Team
+                 can handle reports quickly and efficiently, we limit the number
+                 of times a URL can be reported.')
+    if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
@@ -67,10 +93,16 @@ class AbuseReport < ActiveRecord::Base
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors[:base] << ts('URL has already been reported. To make sure the
-                            Abuse Team can handle reports quickly and
-                            efficiently, we limit the number of times a URL can
-                            be reported.')
+        errors[:base] << message
+      end
+    elsif url =~ /\/users\/\w+/
+      user_params_only = url.match(/\/users\/\w+\//).to_s
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?',
+                                                 1.month.ago,
+                                                 "%#{user_params_only}%").count
+      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
+        errors[:base] << message
       end
     end
   end

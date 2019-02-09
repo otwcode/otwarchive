@@ -7,9 +7,11 @@ describe CollectionParticipantsController do
 
   describe "join" do
     context "where user isn't logged in" do
-      it "redirects to new user session" do
-        get :join
-        it_redirects_to new_user_session_path
+      it "redirects to new user session with error" do
+        get :join, params: { collection_id: 1 }
+        it_redirects_to_with_error(new_user_session_path,
+                                   "Sorry, you don't have permission to access the page"\
+                                   " you were trying to reach. Please log in.")
       end
     end
 
@@ -22,8 +24,9 @@ describe CollectionParticipantsController do
 
       context "where there is no collection" do
         it "redirects to index and displays an error" do
-          get :join, params: { collection_id: nil }
-          it_redirects_to_with_error(root_path, "Which collection did you want to join?")
+          get :join, params: { collection_id: 0 }
+          it_redirects_to_with_error(root_path,
+                                     "Which collection did you want to join?")
         end
 
         context "where the HTTP_REFERER is set" do
@@ -32,8 +35,9 @@ describe CollectionParticipantsController do
           end
 
           it "navigates back to the previously viewed page" do
-            get :join
-            it_redirects_to_with_error(collections_path, "Which collection did you want to join?")
+            get :join, params: { collection_id: 0 }
+            it_redirects_to_with_error(collections_path,
+                                       "Which collection did you want to join?")
           end
         end
       end
@@ -58,14 +62,16 @@ describe CollectionParticipantsController do
             it "approves the participant and redirects to the index" do
               get :join, params: { collection_id: collection.name }
               expect(CollectionParticipant.find(participant.id).participant_role).to eq CollectionParticipant::MEMBER
-              it_redirects_to_with_notice(root_path, "You are now a member of #{collection.title}.")
+              it_redirects_to_with_notice(root_path,
+                                          "You are now a member of #{collection.title}.")
             end
           end
 
           context "where the user is not currently invited" do
             it "redirects to the index and displays a notice that the user has already joined or applied" do
               get :join, params: { collection_id: collection.name }
-              it_redirects_to_with_notice(root_path, "You have already joined (or applied to) this collection.")
+              it_redirects_to_with_notice(root_path,
+                                          "You have already joined (or applied to) this collection.")
             end
           end
         end
@@ -76,7 +82,8 @@ describe CollectionParticipantsController do
             participant = CollectionParticipant.find_by(pseud_id: user.default_pseud.id)
             expect(participant).to be_present
             expect(participant.participant_role).to eq CollectionParticipant::NONE
-            it_redirects_to_with_notice(root_path, "You have applied to join #{collection.title}.")
+            it_redirects_to_with_notice(root_path,
+                                        "You have applied to join #{collection.title}.")
           end
         end
       end
@@ -161,6 +168,7 @@ describe CollectionParticipantsController do
     let(:id_to_update) { nil }
     let(:params) do
       {
+        collection_id: collection.id,
         collection_participant: {
           participant_role:  CollectionParticipant::MEMBER,
           id: id_to_update
@@ -232,7 +240,7 @@ describe CollectionParticipantsController do
       )
     end
     let(:params) do
-      { id: user_participant.id }
+      { id: user_participant.id, collection_id: collection.id }
     end
 
     before do
@@ -240,7 +248,7 @@ describe CollectionParticipantsController do
     end
 
     context "where there is no participant found" do
-      let(:params) { { id: nil } }
+      let(:params) { { id: 0, collection_id: create(:collection).id } }
 
       it "displays an error and redirects to the index" do
         delete :destroy, params: params
@@ -267,11 +275,10 @@ describe CollectionParticipantsController do
             )
           end
           let(:pseud_name) { other_participant.pseud.name }
-          let(:params) { { id: other_participant.id } }
+          let(:params) { { id: other_participant.id, collection_id: collection.id } }
 
           it "doesn't allow the destroy and redirects to the collection page" do
             delete :destroy, params: params
-            it_redirects_to collection_path(collection)
             it_redirects_to_with_error(collection_path(collection), "Sorry, you're not allowed to do that.")
             expect(CollectionParticipant.find(other_participant.id)).to be_present
           end
@@ -290,7 +297,7 @@ describe CollectionParticipantsController do
         end
         let(:pseud_name) { other_participant.pseud.name }
         let(:params) do
-          { id: other_participant.id }
+          { id: other_participant.id, collection_id: collection.id }
         end
 
         context "where participant to be destroyed is not an owner" do
@@ -303,7 +310,7 @@ describe CollectionParticipantsController do
 
         context "where participant to be destroyed is an owner" do
           let(:delete_participant_id) { CollectionParticipant.find_by(pseud_id: collection.owners.first.id) }
-          let(:params) { { id: delete_participant_id } }
+          let(:params) { { id: delete_participant_id, collection_id: collection.id } }
 
           context "where there are no other owners" do
             it "displays an error and redirects to the collection participants path" do
@@ -387,7 +394,7 @@ describe CollectionParticipantsController do
 
         it "approves those users, redirects to the collection participants page and displays a notification" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "Members added:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline
@@ -400,7 +407,7 @@ describe CollectionParticipantsController do
       context "where the users to be added haven't yet applied to the collection" do
         it "creates new participants with the member role and redirects" do
           get :add, params: params
-          it_redirects_to collection_participants_path(collection)
+          it_redirects_to_simple(collection_participants_path(collection))
           expect(flash[:notice]).to include "New members invited:"
           users.each do |user|
             expect(flash[:notice]).to include user.default_pseud.byline

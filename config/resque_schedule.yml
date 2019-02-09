@@ -33,3 +33,17 @@ run_stats_reindex_queue:
   queue: utilities
   args: stats
   description: "Kick off a reindex of works with stats updates"
+
+run_update_filter_counts_small:
+  every: 2m
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_small_queue
+  description: "Update filter counts for small filters"
+
+run_update_filter_counts_large:
+  every: 1h
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_large_queue
+  description: "Update filter counts for large filters"

@@ -1,4 +1,4 @@
-class OwnedSetTagging < ActiveRecord::Base
+class OwnedSetTagging < ApplicationRecord
   belongs_to :owned_tag_set
   belongs_to :set_taggable, polymorphic: :true
 

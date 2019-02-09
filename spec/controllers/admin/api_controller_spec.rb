@@ -1,17 +1,17 @@
 # frozen_string_literal: true
-require 'spec_helper'
+require "spec_helper"
 
 describe Admin::ApiController do
   include LoginMacros
   include RedirectExpectationHelper
 
   describe "GET #index" do
-    let(:params) { nil }
+    let(:params) { {} }
 
     context "where there is no user or admin logged in" do
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params: params
-        it_redirects_to root_path
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
     end
 
@@ -22,9 +22,9 @@ describe Admin::ApiController do
         fake_login_known_user(user)
       end
 
-      it "redirects to the homepage" do
+      it "redirects to the homepage with a notice" do
         get :index, params: params
-        it_redirects_to root_path
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
       end
     end
 
@@ -66,21 +66,6 @@ describe Admin::ApiController do
     end
   end
 
-  describe "GET #show" do
-    context "where an admin is logged in" do
-      let(:admin) { FactoryGirl.create(:admin) }
-
-      before do
-        fake_login_admin(admin)
-      end
-
-      it "redirects to the homepage" do
-        get :show
-        it_redirects_to admin_api_index_path
-      end
-    end
-  end
-
   describe "GET #new" do
     context "where an admin is logged in" do
       let(:admin) { FactoryGirl.create(:admin) }
@@ -99,7 +84,7 @@ describe Admin::ApiController do
   describe "POST #create" do
     context "where an admin is logged in" do
       let(:admin) { FactoryGirl.create(:admin) }
-      let(:params) { nil }
+      let(:params) { {} }
 
       before do
         fake_login_admin(admin)
@@ -113,8 +98,7 @@ describe Admin::ApiController do
         it "redirects to the homepage and notifies of the success" do
           post :create, params: params
           expect(ApiKey.where(name: api_key_name)).to_not be_empty
-          it_redirects_to admin_api_index_path
-          expect(flash[:notice]).to include("New token successfully created")
+          it_redirects_to_with_notice(admin_api_index_path, "New token successfully created")
         end
       end
 
@@ -205,8 +189,7 @@ describe Admin::ApiController do
             expect(ApiKey.where(name: new_name)).to be_empty
             post :update, params: params
             expect(ApiKey.where(name: new_name)).to_not be_empty
-            it_redirects_to admin_api_index_path
-            expect(flash[:notice]).to include("Access token was successfully updated")
+            it_redirects_to_with_notice(admin_api_index_path, "Access token was successfully updated")
           end
         end
 

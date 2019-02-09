@@ -1,4 +1,4 @@
-class OwnedTagSet < ActiveRecord::Base
+class OwnedTagSet < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   # Rather than use STI or polymorphic associations, since really what we want to do here
   # is build an extra layer of functionality on top of the generic tag set structure,
@@ -70,6 +70,7 @@ class OwnedTagSet < ActiveRecord::Base
   end
 
   def add_tagnames(tag_type, tagnames_to_add)
+    return true if tagnames_to_add.blank?
     self.tag_set.send("#{tag_type}_tagnames_to_add=", tagnames_to_add)
     return false unless self.tag_set.save && self.save
 
@@ -79,6 +80,7 @@ class OwnedTagSet < ActiveRecord::Base
   end
 
   def remove_tagnames(tag_type, tagnames_to_remove)
+    return true if tagnames_to_remove.blank?
     self.tag_set.tagnames_to_remove = tagnames_to_remove.join(',')
     return false unless self.save
     TagNomination.for_tag_set(self).where(type: "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).where(approved: false).update_all(rejected: true)
@@ -263,5 +265,16 @@ class OwnedTagSet < ActiveRecord::Base
     return failed
   end
 
+  # Turn our various tag nomination limits into a single hash object
+  def limits
+    limit_hash = {}
+    %w(fandom character relationship freeform).each do |tag_type|
+      limit_hash[tag_type] = send("#{tag_type}_nomination_limit")
+    end
+    limit_hash.with_indifferent_access
+  end
 
+  def includes_fandoms?
+    fandom_nomination_limit > 0
+  end
 end

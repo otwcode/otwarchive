@@ -1,4 +1,4 @@
-class SerialWork < ActiveRecord::Base
+class SerialWork < ApplicationRecord
   belongs_to :series, touch: true
   belongs_to :work, touch: true
   validates_uniqueness_of :work_id, scope: [:series_id]
@@ -7,6 +7,8 @@ class SerialWork < ActiveRecord::Base
   after_create :adjust_series_visibility
   after_destroy :adjust_series_visibility
   after_destroy :delete_empty_series
+  after_create :update_series_index
+  after_destroy :update_series_index
 
   scope :in_order, -> { order(:position) }
 
@@ -20,5 +22,12 @@ class SerialWork < ActiveRecord::Base
     if self.series.present? && self.series.serial_works.blank?
       self.series.destroy
     end
+  end
+
+  # Ensure series bookmarks are reindexed when a new work is added to a series
+  def update_series_index
+    return if series.blank?
+    series.enqueue_to_index
+    IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :main)
   end
 end
