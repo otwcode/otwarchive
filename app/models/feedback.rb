@@ -51,6 +51,17 @@ class Feedback < ApplicationRecord
     send_report
   end
 
+  def rollout_string
+    string = ""
+    # ES UPGRADE TRANSITION #
+    # Remove ES version logic, but leave this method for future rollout use
+    # string << if Feedback.use_new_search?
+    #             "ES 6.0"
+    #           else
+    #             "ES 0.90"
+    #           end
+  end
+
   def send_report
     return unless %w(staging production).include?(Rails.env)
     reporter = SupportReporter.new(
@@ -60,7 +71,8 @@ class Feedback < ApplicationRecord
       email: email,
       username: username,
       user_agent: user_agent,
-      site_revision: ArchiveConfig.REVISION.to_s
+      site_revision: ArchiveConfig.REVISION.to_s,
+      rollout: rollout
     )
     reporter.send_report!
   end

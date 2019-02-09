@@ -14,8 +14,8 @@ class Comment < ApplicationRecord
   validates_presence_of :name, unless: :pseud_id
   validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
-  validates_presence_of :content
-  validates_length_of :content,
+  validates_presence_of :comment_content
+  validates_length_of :comment_content,
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
@@ -25,7 +25,11 @@ class Comment < ApplicationRecord
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
-  validates :content, uniqueness: {scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id], message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
+  validates :comment_content, uniqueness: {
+    scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
+    unless: :is_deleted?,
+    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+  }
 
   scope :recent, lambda { |*args|  where("created_at > ?", (args.first || 1.week.ago.to_date)) }
   scope :limited, lambda {|limit| {limit: limit.kind_of?(Fixnum) ? limit : 5} }
@@ -48,7 +52,7 @@ class Comment < ApplicationRecord
       user_agent: user_agent,
       comment_author: name,
       comment_author_email: email,
-      comment_content: content
+      comment_content: comment_content
     }
   end
 
@@ -66,9 +70,9 @@ class Comment < ApplicationRecord
     users = []
     admins = []
 
-    if self.saved_change_to_edited_at? && self.saved_change_to_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
+    if self.saved_change_to_edited_at? && self.saved_change_to_comment_content? && self.moderated_commenting_enabled? && !self.is_creator_comment?
       # we might need to put it back into moderation
-      if content_too_different?(self.content, self.content_was)
+      if content_too_different?(self.comment_content, self.comment_content_was)
         # we use update_column because we don't want to invoke this callback again
         self.update_column(:unreviewed, true)
       end
@@ -394,7 +398,7 @@ class Comment < ApplicationRecord
   end
 
   def sanitized_content
-    sanitize_field self, :content
+    sanitize_field self, :comment_content
   end
   include Responder
 

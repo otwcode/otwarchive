@@ -1,5 +1,4 @@
 @bookmarks @collections @works
-
 Feature: Collectible items
   As a user
   I want to add my items to collections
@@ -29,7 +28,7 @@ Feature: Collectible items
     When I add my bookmark to the collection "Various_Penguins"
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (1)" within "#dashboard"
+    Then I should see "Bookmarked Items (1)" within "#dashboard"
       And I should see "Tundra penguins"
 
   Scenario: Bookmarks of deleted items are included on the collection's Manage
@@ -77,4 +76,3 @@ Feature: Collectible items
     When I am logged in as the owner of "Various Penguins"
       And I view the approved collection items page for "Various Penguins"
     Then I should see "Sweater Penguins (Draft)"
-
