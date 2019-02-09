@@ -1,19 +1,19 @@
 <% content_for :message do %>
   <h2 class="heading">
-    Hello from the Archive of Our Own!
+    <%= t '.greeting', app_name: ArchiveConfig.APP_NAME %>
   </h2>
 
-  <p>You're receiving this e-mail because an archive has recently been imported by <%= style_link('Open Doors', 'http://opendoors.transformativeworks.org/') %> into the <%= style_link('Archive of Our Own', root_url) %> (AO3), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!</p>
+  <p><%= t('.html.part1', open_doors_link: style_link(t('.html.open_doors'), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)).html_safe %></p>
 
-  <p>You can read announcements about recent archive moves at <%= style_link('AO3 News', 'http://archiveofourown.org/admin_posts?tag=18') %>, and find additional information on Open Doors' <%= style_link('FAQ page', 'http://opendoors.transformativeworks.org/faq') %> or <%= style_link('tutorials page', 'http://opendoors.transformativeworks.org/tutorials') %>. For any questions not answered in the FAQ, tutorials, or this e-mail, please <%= support_link('contact AO3 Support') %>.</p>
+  <p><%= t('.html.part2', news_link: style_link(t('.html.ao3_news'), admin_posts_url + "?tag=18"), open_doors_faq_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), open_doors_tutorial_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
-  <p>If this is a mistake and these are not your works, please don't delete them! Please just <%= style_link('contact Open Doors', 'http://transformativeworks.org/contact/open%20doors') %> and we will sort it out.</p>
+  <p><%= t('.html.part3', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
-  <p>Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please <%= support_link('contact Support') %>.</p>
+  <p><%= t('.html.part4', support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
-  <p><%= style_link('Claim or remove your works here.', claim_url(:invitation_token => @token)) %></p>
+  <p><%= style_link(t('.html.part5'), claim_url(:invitation_token => @token)) %></p>
 
-  <p>The works uploaded include:</p>
+  <p><%= t '.part6' %></p>
 
   <ul>
   <% @external_author.works.each do |work| %>
@@ -22,19 +22,19 @@
   <% end %>
   </ul>
 
-  <p>If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please <%= support_link('contact Support') %>.)</p>
+  <p><%= t('.html.part7', support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
-  <p>To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive. </p>
+  <p><%= t '.part8' %></p>
 
-  <p>If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and <%= style_link('contact Open Doors', 'http://transformativeworks.org/contact/open%20doors') %> with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)</p>
+  <p><%= t('.html.part9', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
-  <p>If you had other works on the imported archive under an e-mail address you can no longer access, please <%= style_link('contact Open Doors', 'http://transformativeworks.org/contact/open%20doors') %> with any information that can help verify your identity.</p>
+  <p><%= t('.html.part10', open_doors_link: style_link(t('.html.contact_open_doors'), 'http://transformativeworks.org/contact/open%20doors')).html_safe %></p>
 
-  <p>For other inquiries, please <%= support_link('contact AO3 Support') %>.</p>
+  <p><%= t('.html.part11', support_link: support_link(t '.html.contact_support')).html_safe %></p>
 
-  <p>If you're contacting us, please whitelist email addresses from @transformativeworks.org and check your spam folders for our reply.</p>
+  <p><%= t '.part12' %></p>
 
-  <p>Best,<br/>
-    The Open Doors team<br/>
-    Organization for Transformative Works</p>
+  <p><%= t '.html.part13' %><br/>
+    <%= t '.html.part14' %><br/>
+    <%= t '.html.part15' %></p>
 <% end %>

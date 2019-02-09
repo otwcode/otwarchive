@@ -10,7 +10,7 @@ I want to use an invitation to create an account
     And I am a visitor
   When I use an invitation to sign up
   Then I should see "Create Account"
-  
+
   Scenario: user attempts to use an already redeemed invitation
 
   Given account creation is enabled

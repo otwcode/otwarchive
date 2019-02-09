@@ -1,6 +1,10 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+  <% if @bookmarkable_items %>
+    <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>
+  <% else %>
+    <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+  <% end %>
 </h2>
 <!-- /descriptions-->
 
@@ -11,7 +15,7 @@
       <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
       <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
-      <% # let the user reading this bookmark save a copy for themselves %>	
+      <% # let the user reading this bookmark save a copy for themselves %>
       <% if logged_in? && !is_author_of?(@bookmark) %>
         <li>
           <% if (current_user_bookmark ||= bookmark_if_exists(@bookmarkable)) %>
@@ -45,18 +49,20 @@
 
 <% if @bookmarks.respond_to?(:total_pages) %>
   <%= will_paginate @bookmarks %>
+<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarkable_items %>
 <% end %>
 
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Bookmarks") %></h3>
 <ol class="bookmark index group">
-	<%= render 'bookmarks/bookmarks' %>
+  <%= render "bookmarks/bookmarks" %>
 </ol>
 <!-- /content-->
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render 'filters' %>
+  <%= render "filters" %>
 <% end %>
 <!---/subnav-->
 
@@ -65,6 +71,8 @@
 <!--subnav-->
 <% if @bookmarks.respond_to?(:total_pages) %>
   <%= will_paginate @bookmarks %>
+<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarkable_items %>
 <% end %>
 <!-- /subnav-->
 
