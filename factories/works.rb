@@ -26,6 +26,10 @@ FactoryGirl.define do
     factory :posted_work do
       posted true
     end
+
+    factory :draft do
+      posted false
+    end
   end
 
   factory :external_work do

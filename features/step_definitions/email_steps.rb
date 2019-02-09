@@ -15,6 +15,16 @@ Given(/^all emails? (?:have|has) been delivered$/) do
   ActionMailer::Base.deliveries.should be_empty # Sanity check, ftw
 end
 
+Given(/^confirmation emails have been delivered$/) do
+  ActionMailer::Base.deliveries.reject! do |delivery|
+    delivery.subject == "Confirmation instructions"
+  end
+
+  ActionMailer::Base.deliveries.select do |delivery|
+    delivery.subject == "Confirmation instructions"
+  end.should be_empty
+end
+
 Given(/^(\d)+ emails? should be delivered$/) do |count|
   emails.size.should == count.to_i
 end

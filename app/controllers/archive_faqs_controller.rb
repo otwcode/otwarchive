@@ -19,7 +19,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1
   def show
     @questions = []
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = ArchiveFaq.find_by!(slug: params[:id])
     if params[:language_id] == "en"
       @questions = @archive_faq.questions
     else

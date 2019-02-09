@@ -45,7 +45,7 @@ end
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   work = Work.find_by(title: work)
   visit work_path(work)
-  fill_in("comment[content]", with: comment_text)
+  fill_in("comment[comment_content]", with: comment_text)
 end
 
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
@@ -81,13 +81,13 @@ end
 
 When /^I edit a comment$/ do
   step %{I follow "Edit"}
-  fill_in("comment[content]", with: "Edited comment")
+  fill_in("comment[comment_content]", with: "Edited comment")
   click_button "Update"
 end
 
 # this step assumes we are on a page with a comment form
 When /^I post a comment "([^"]*)"$/ do |comment_text|
-  fill_in("comment[content]", with: comment_text)
+  fill_in("comment[comment_content]", with: comment_text)
   click_button("Comment")
 end
 
@@ -96,7 +96,7 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
   step %{I follow "Reply"}
   step %{I should see the reply to comment form}
   with_scope(".odd") do
-    fill_in("comment[content]", with: comment_text)
+    fill_in("comment[comment_content]", with: comment_text)
     click_button("Comment")
   end
 end
@@ -109,8 +109,28 @@ end
 When /^I comment on an admin post$/ do
   step "I go to the admin-posts page"
     step %{I follow "Comment"}
-    step %{I fill in "comment[content]" with "Excellent, my dear!"}
+    step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
     step %{I press "Comment"}
+end
+
+When /^I post a spam comment$/ do
+  fill_in("comment[name]", with: "spammer")
+  fill_in("comment[email]", with: "spammer@example.org")
+  fill_in("comment[comment_content]", with: "Buy my product! http://spam.org")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^I post a guest comment$/ do
+  fill_in("comment[name]", with: "guest")
+  fill_in("comment[email]", with: "guest@example.org")
+  fill_in("comment[comment_content]", with: "This was really lovely!")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^all comments by "([^"]*)" are marked as spam$/ do |name|
+  Comment.where(name: name).update_all(approved: false)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
@@ -126,6 +146,11 @@ end
 
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
+  step %{I follow "Yes, delete!"}
+end
+
+When /^I delete the reply comment$/ do
+  step %{I follow "Delete" within ".even"}
   step %{I follow "Yes, delete!"}
 end
 
@@ -202,7 +227,7 @@ When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
     commentable = Comment.create(
       commentable: commentable,
       parent: chapter,
-      content: "This is a comment at depth #{i}.",
+      comment_content: "This is a comment at depth #{i}.",
       pseud: user.default_pseud
     )
   end
@@ -214,7 +239,7 @@ When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
     Comment.create(
       commentable: commentable,
       parent: chapter,
-      content: "This is the #{ordinal} hidden comment.",
+      comment_content: "This is the #{ordinal} hidden comment.",
       pseud: user.default_pseud
     )
   end
