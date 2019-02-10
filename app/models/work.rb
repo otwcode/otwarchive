@@ -806,17 +806,32 @@ class Work < ApplicationRecord
     return true
   end
 
+  # When the filters on a work change, we need to perform some extra checks.
   def self.reindex_for_filter_changes(ids, filter_taggings, queue)
+    # The crossover/OTP status of a work can change without actually changing
+    # the filters (e.g. if you have a work tagged with canonical fandom A and
+    # unfilterable fandom B, synning B to A won't change the work's filters,
+    # but the work will immediately stop qualifying as a crossover). So we want
+    # to reindex all works whose filters were checked, not just the works that
+    # had their filters changed.
     IndexQueue.enqueue_ids(Work, ids, queue)
+
+    # Only works are included in the filter count, so if a work's
+    # filter-taggings change, the FilterCount probably needs updating.
     FilterCount.enqueue_filters(filter_taggings.map(&:filter_id))
 
+    # From here, we only want to update works whose filter_taggings have
+    # actually changed.
     changed_ids = filter_taggings.map(&:filterable_id)
     return unless changed_ids.present?
 
+    # Reindex any series associated with works whose filters have changed.
     series_ids = SerialWork.where(work_id: changed_ids).pluck(:series_id)
+    IndexQueue.enqueue_ids(Series, series_ids, queue)
+
+    # Reindex any pseuds associated with works whose filters have changed.
     pseud_ids = Creatorship.where(creation_id: changed_ids,
                                   creation_type: "Work").pluck(:pseud_id)
-    IndexQueue.enqueue_ids(Series, series_ids, queue)
     IndexQueue.enqueue_ids(Pseud, pseud_ids, queue)
   end
 
