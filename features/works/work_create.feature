@@ -16,14 +16,15 @@ Feature: Create Works
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
+      And I fill in "Work Title" with "All Hell Breaks Loose 🤬💩"
+      And I fill in "content" with "Bad things happen, etc. 🤬💩"
     When I press "Preview"
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
+      And I should see "Bad things happen, etc. 🤬💩"
     When I go to the works page
-    Then I should see "All Hell Breaks Loose"
+    Then I should see "All Hell Breaks Loose 🤬💩"
 
   Scenario: Creating a new minimally valid work and posting without preview
     Given I am logged in as "newbie"

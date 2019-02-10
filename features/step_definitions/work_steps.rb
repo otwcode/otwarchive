@@ -127,7 +127,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
     visit work_url(work)
-    fill_in("comment[content]", with: "Bla bla")
+    fill_in("comment[comment_content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
   end
@@ -209,6 +209,18 @@ Given /^there is a work "([^"]*)" in an unrevealed collection "([^"]*)"$/ do |wo
   step %{I am logged out}
 end
 
+Given /^there is a work "([^"]*)" in an anonymous collection "([^"]*)"$/ do |work, collection|
+  step %{I have the anonymous collection "#{collection}"}
+  step %{I am logged in as a random user}
+  step %{I post the work "#{work}" to the collection "#{collection}"}
+  step %{I am logged out}
+end
+
+Given /^I am logged in as the author of "([^"]*)"$/ do |work|
+  work = Work.find_by_title(work)
+  step %{I am logged in as "#{work.users.first.login}"}
+end
+
 Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I have a work "#{work}"}
   step %{I am logged out}
@@ -227,13 +239,13 @@ end
 
 When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title(work)
-  visit work_url(work).gsub("http://www.example.com","")
+  visit work_path(work)
   step %{I follow "Entire Work"} if mode == "full"
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 When /^I view the work "([^"]*)" with comments$/ do |work|
   work = Work.find_by(title: work)
-  visit work_url(work, anchor: "comments", show_comments: true)
+  visit work_path(work, anchor: "comments", show_comments: true)
 end
 
 When /^I view a deleted work$/ do
@@ -406,7 +418,7 @@ When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coau
 end
 
 When /^the purge_old_drafts rake task is run$/ do
-  Work.purge_old_drafts
+  step %{I run the rake task "work:purge_old_drafts"}
 end
 
 When /^the work "([^"]*)" was created (\d+) days ago$/ do |title, number|
@@ -530,8 +542,8 @@ When /^I post the work$/ do
   step %{all indexing jobs have been run}
 end
 When /^the statistics_tasks rake task is run$/ do
-  StatCounter.hits_to_database
-  StatCounter.stats_to_database
+  step %{I run the rake task "statistics:update_stat_counters"}
+  step %{I run the rake task "statistics:update_stats"}
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|

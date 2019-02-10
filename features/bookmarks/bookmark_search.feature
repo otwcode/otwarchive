@@ -154,8 +154,7 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "Skies Grown Darker"
     When I follow "Edit Your Search"
-    When "AO3-3583" is fixed
-    # Then "External Work" should be selected within "Type"
+    Then "External Work" should be selected within "Type"
     When I select "Series" from "Type"
       And I press "Search Bookmarks"
     Then I should see "You searched for: Type: Series"
@@ -226,3 +225,20 @@ Feature: Search Bookmarks
       And I should not see "Finished Work"
       And I should not see "Complete Series"
       And I should not see "External Work"
+
+  Scenario: Search bookmarks by work language
+    Given "someuser" has bookmarks of works in various languages
+    # reload search page to bring new language-id mappings for dropdown
+    When I reload the page
+      And I select "English" from "Work language"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Work language: English"
+      And I should see "1 Found"
+      And I should see "english work"
+      And I should not see "german work"
+
+  Scenario: Inputting bad queries
+  When I fill in "Any field on work" with "bad~query~~!!!"
+    And I press "Search Bookmarks"
+  Then I should see "Your search failed because of a syntax error"
