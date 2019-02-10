@@ -35,18 +35,8 @@ class FilterCount < ApplicationRecord
   # DELAYED JOBS
   ####################
 
+  include AsyncWithResque
   @queue = :utilities
-
-  # This will be called by a worker when it's trying to perform a delayed task.
-  # This just calls the passed-in class method with the passed-in arguments.
-  def self.perform(method, *args)
-    send(method, *args)
-  end
-
-  # Queue up a method to be called later.
-  def self.async(method, *args)
-    Resque.enqueue(self, method, *args)
-  end
 
   ####################
   # QUEUE MANAGEMENT

@@ -413,17 +413,8 @@ class Collection < ApplicationRecord
     UserMailer.collection_notification(self.id, subject, message).deliver
   end
 
+  include AsyncWithResque
   @queue = :collection
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  # We can pass this any Collection instance method that we want to
-  # run later.
-  def async(method, *args)
-    Resque.enqueue(Collection, id, method, *args)
-  end
 
   def reveal!
     async(:reveal_collection_items)
