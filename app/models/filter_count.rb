@@ -55,8 +55,11 @@ class FilterCount < ApplicationRecord
   # Queue up a list of filters (or filter IDs) to have their filter counts
   # recalculated in the next periodic task.
   def self.enqueue_filters(filters)
-    return if suspended?
-    ids = filters.map { |filter| filter.respond_to?(:id) ? filter.id : filter }
+    return if suspended? || filters.blank?
+
+    ids = filters.map do |filter|
+      filter.respond_to?(:id) ? filter.id : filter
+    end.uniq
 
     # Separate the large filters from the small filters, so that they can be
     # processed at different intervals.

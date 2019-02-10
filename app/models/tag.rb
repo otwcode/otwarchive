@@ -143,9 +143,9 @@ class Tag < ApplicationRecord
            after_remove: :update_wrangler
 
   has_many :meta_taggings, foreign_key: 'sub_tag_id', dependent: :destroy
-  has_many :meta_tags, through: :meta_taggings, source: :meta_tag, before_remove: :update_meta_filters
+  has_many :meta_tags, through: :meta_taggings, source: :meta_tag, before_remove: :destroy_meta_tagging
   has_many :sub_taggings, class_name: 'MetaTagging', foreign_key: 'meta_tag_id', dependent: :destroy
-  has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :remove_sub_filters
+  has_many :sub_tags, through: :sub_taggings, source: :sub_tag, before_remove: :destroy_sub_tagging
   has_many :direct_meta_tags, -> { where('meta_taggings.direct = 1') }, through: :meta_taggings, source: :meta_tag
   has_many :direct_sub_tags, -> { where('meta_taggings.direct = 1') }, through: :sub_taggings, source: :sub_tag
   has_many :taggings, as: :tagger
@@ -767,194 +767,65 @@ class Tag < ApplicationRecord
       self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
   end
 
-  def filtered_items
-    filtered_works + filtered_external_works
-  end
-
-  def reindex_filtered_item(item)
-    if item.is_a?(Work)
-      RedisSearchIndexQueue.reindex(item, priority: :low)
-      IndexQueue.enqueue_ids(Series, item.series.pluck(:id), :background)
-    else
-      IndexQueue.enqueue_id("ExternalWork", item.id, :background)
-    end 
-  end
-
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
 
-  before_update :update_filters_for_canonical_change
-  before_update :update_filters_for_merger_change
+  # Update filters for all works and external works directly tagged with this
+  # tag.
+  def update_filters_for_taggables
+    works.update_filters
+    external_works.update_filters
+  end
 
-  # If a tag was not canonical but is now, it needs new filter_taggings
-  # If it was canonical but isn't anymore, we need to change or remove
-  # the filter_taggings as appropriate
-  def update_filters_for_canonical_change
-    if self.canonical_changed?
-      if self.canonical?
-        self.async(:add_filter_taggings)
-      elsif self.merger && self.merger.canonical?
-        self.async(:move_filter_taggings_to_merger)
-      else
-        self.async(:remove_filter_taggings)
-      end
+  # Update filters for all works and external works that already have this tag
+  # as one of their filters.
+  def update_filters_for_filterables
+    filtered_works.update_filters
+    filtered_external_works.update_filters
+  end
+
+  # When canonical or merger_id changes, only the items directly tagged with
+  # this tag need their filters updated, so we queue up a call to
+  # update_filters_for_taggables after commit.
+  #
+  # Note that when a tag becomes non-canonical, all of its filter-taggings need
+  # to be deleted. But when a tag becomes non-canonical, all of its mergers and
+  # sub-tags will be deleted, which will result in the necessary items having
+  # their filters fixed.
+  after_update :update_filters_for_canonical_or_merger_change
+  def update_filters_for_canonical_or_merger_change(*)
+    if saved_change_to_canonical? || saved_change_to_merger_id?
+      async_after_commit(:update_filters_for_taggables)
     end
   end
 
-  # this tag was canonical and now isn't anymore
-  # move the filter taggings from this tag to its new synonym and
-  # update the search index for the works under this tag and its subtags
-  def move_filter_taggings_to_merger
-    # we pass the code to be done to reindex taggables so the work and bookmark ids that will need to be reindexed
-    # get saved BEFORE we change the merger in all the filters!
-    reindex_taggables do
-      self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+  # Recalculate the inherited meta tags for this tag, and once those changes
+  # are committed, update the filters for every work or external work that's
+  # filter-tagged with this tag.
+  def update_inherited_meta_tags
+    MetaTagging.transaction do
+      InheritedMetaTagUpdater.new(self).update
+
+      sub_tags.find_each do |sub_tag|
+        InheritedMetaTagUpdater.new(sub_tag).update
+      end
     end
-    reset_filter_count
+
+    async_after_commit(:update_filters_for_filterables)
   end
 
-  # If a tag has a new merger, add to the filter_taggings for that merger
-  # If a tag has a new merger but had an old merger, add new filter_taggings
-  # and get rid of the old filter_taggings as appropriate
-  def update_filters_for_merger_change
-    if self.merger_id_changed?
-      # setting the merger_id doesn't update the merger so we do it here
-      if self.merger_id
-        self.merger = Tag.find_by(id: self.merger_id)
-      else
-        self.merger = nil
-      end
-      if self.merger && self.merger.canonical?
-        self.async(:add_filter_taggings)
-      end
-      old_merger = Tag.find_by(id: self.merger_id_was)
-      if old_merger && old_merger.canonical?
-        self.async(:remove_filter_taggings, old_merger.id)
-      end
-    end
+  # When deleting a meta tag, we destroy the meta-tagging first to trigger the
+  # appropriate destroy callback.
+  def destroy_meta_tagging(meta_tag)
+    meta_taggings.find_by(meta_tag: meta_tag)&.destroy
   end
 
-  # Add filter taggings for a given tag
-  # This is currently called only if this tag has just become canonical
-  def add_filter_taggings
-    # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
-    # this method only gets called when this tag is canonical and therefore cannot have a merger
-    filter_tag = self.filter
-    return unless filter_tag && !filter_tag.new_record?
-
-    # we collect tags for resetting count so that it's only done once after we've added all filters to works
-    tags_that_need_filter_count_reset = []
-    items = self.works + self.external_works
-    items.each do |item|
-      if item.filters.include?(filter_tag)
-        # If the item filters already included the filter tag (e.g. because the
-        # new filter tag is a meta tag of an existing tag) we make sure to set
-        # the inheritance to false, since the item is now directly tagged with
-        # the filter or one of its synonyms
-        ft = item.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
-        ft.update_attribute(:inherited, false)
-      else
-        FilterTagging.create(
-          filter: filter_tag,
-          filterable: item
-        )
-        # As of Rails 5 upgrade, this triggers a stack level too deep error
-        # because it triggers the `before_update
-        # :update_filters_for_canonical_change` callback. In 4.2 and before,
-        # after this point `canonical_changed?` has been reset and returns
-        # false. Now it returns true and causes an endless loop.
-        #
-        # Reference: https://github.com/rails/rails/issues/28908
-        #
-        # TODO: Keep an eye on this issue. We should not have to create the
-        # FilterTagging directly.
-        #
-        # work.filters << filter_tag
-        unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(filter_tag)
-          tags_that_need_filter_count_reset << filter_tag
-        end
-      end
-      unless filter_tag.meta_tags.empty?
-        filter_tag.meta_tags.each do |m|
-          next if item.filters.include?(m)
-          item.filter_taggings.create!(inherited: true, filter_id: m.id)
-          unless item.is_a?(ExternalWork) || tags_that_need_filter_count_reset.include?(m)
-            tags_that_need_filter_count_reset << m
-          end
-        end
-      end
-    end
-
-    # make sure that all the works and bookmarks under this tag get reindexed
-    # for filtering/searching
-    async(:reindex_taggables)
-
-    FilterCount.enqueue_filters(tags_that_need_filter_count_reset)
-  end
-
-  # Remove filter taggings for a given tag
-  # If an old_filter value is given, remove filter_taggings from it with due regard
-  # for potential duplication (ie, items tagged with more than one synonymous tag)
-  def remove_filter_taggings(old_filter_id = nil)
-    # we're going to have to reindex all the taggables that WERE attached to this work after
-    # we do this
-    reindex_taggables do
-      if old_filter_id
-        old_filter = Tag.find(old_filter_id)
-        # An old merger of a tag needs to be removed
-        # This means we remove the old merger itself and all its meta tags unless they
-        # should remain because of other existing tags of the item (or because they are
-        # also meta tags of the new merger)
-        filters_to_remove = [old_filter] + old_filter.meta_tags
-        items = self.works + self.external_works
-        items.each do |item|
-          filters_to_remove.each do |filter_to_remove|
-            next unless item.filters.include?(filter_to_remove)
-            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
-            # meta. If any of these or its mergers (synonyms) are tags of the item, the
-            # filter_to_remove remains
-            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-            # don't include self because at this point in time (before the save) self
-            # is still in the list of submergers from when it was a synonym to the old filter
-            remaining_tags = item.tags - [self]
-            # instead we add the new merger of self (if there is one) as the relevant one to check
-            remaining_tags += [self.merger] unless self.merger.nil?
-            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-              item.filter_taggings.where(filter_id: filter_to_remove).destroy_all
-            else # we should keep filter_to_remove, but check if inheritence needs to be updated
-              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-                ft = item.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-                ft.update_attribute(:inherited, true)
-              end
-            end
-          end
-        end
-
-        FilterCount.enqueue_filters(filters_to_remove)
-      else
-        self.filter_taggings.destroy_all
-        self.reset_filter_count
-      end
-    end
-  end
-
-  # Add filter taggings to this tag's items for one of its meta tags
-  def inherit_meta_filters(meta_tag_id)
-    meta_tag = Tag.find_by(id: meta_tag_id)
-    return unless meta_tag.present?
-    filtered_items.each do |item|
-      unless item.filters.include?(meta_tag)
-        item.filter_taggings.create!(inherited: true, filter_id: meta_tag.id)
-        reindex_filtered_item(item)
-      end
-    end
-
-    meta_tag.reset_filter_count
+  # When deleting a sub tag, we destroy the sub-tagging first to trigger the
+  # appropriate destroy callback.
+  def destroy_sub_tagging(sub_tag)
+    sub_taggings.find_by(sub_tag: sub_tag)&.destroy
   end
 
   def reset_filter_count
@@ -1034,54 +905,27 @@ class Tag < ApplicationRecord
     self.touch
   end
 
-  # Making this asynchronous
-  def update_meta_filters(meta_tag)
-    async(:remove_meta_filters, meta_tag.id)
-  end
-
-  # When a meta tagging relationship is removed, things filter-tagged with the meta tag
-  # and the sub tag should have the meta filter-tagging removed unless it's directly tagged
-  # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
-  def remove_meta_filters(meta_tag_id)
-    meta_tag = Tag.find(meta_tag_id)
-    # remove meta tag from this tag's sub tags
-    sub_tags.each { |sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag) }
-    # remove inherited meta tags from this tag and all of its sub tags
-    inherited_meta_tags = meta_tag.meta_tags
-    inherited_meta_tags.each do |tag|
-      self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
-      sub_tags.each { |sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag) }
+  # When canonical or merger is changed, we need to make sure that the
+  # associations (parents, children, meta tags, mergers) are fixed. Note that
+  # these are all async calls, so we use async_after_commit to reduce the
+  # likelihood of issues with stale data.
+  before_update :update_associations_for_canonical_or_merger_change
+  def update_associations_for_canonical_or_merger_change
+    if merger_id_changed? && merger_id.present?
+      async_after_commit(:transfer_favorite_tags)
+      async_after_commit(:add_merger_associations)
+    elsif canonical_changed? && !canonical?
+      async_after_commit(:remove_favorite_tags)
+      async_after_commit(:remove_canonical_associations)
     end
-    # remove filters for meta tag from this tag's works and external works
-    other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
-    filtered_items.each do |item|
-      to_remove = [meta_tag] + inherited_meta_tags
-      to_remove.each do |tag|
-        next unless item.filters.include?(tag) && (item.filters & other_sub_tags).empty?
-        unless item.tags.include?(tag) || !(item.tags & tag.mergers).empty?
-          item.filter_taggings.where(filter_id: tag.id).destroy_all
-          reindex_filtered_item(item)
-        end
-      end
-    end
-    meta_tag.update_works_index_timestamp!
-    FilterCount.enqueue_filters([meta_tag] + inherited_meta_tags)
   end
 
-  def remove_sub_filters(sub_tag)
-    sub_tag.update_meta_filters(self)
-  end
-
-  # If we're making a tag non-canonical, we need to update its synonyms and children and favorite tags
-  before_update :check_canonical
-  def check_canonical
-    if self.canonical_changed? && !self.canonical?
-      self.async(:remove_canonical_associations)
-      async(:remove_favorite_tags)
-    elsif self.canonical_changed? && self.canonical?
+  # Make it possible to go from a synonym to a canonical in one step.
+  before_validation :reset_merger_when_becoming_canonical
+  def reset_merger_when_becoming_canonical
+    if self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
-    true
   end
 
   def remove_canonical_associations
@@ -1089,6 +933,15 @@ class Tag < ApplicationRecord
     self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
     self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
     self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
+  end
+
+  # Move all of the "Favorite Tags" for this tag to its new merger.
+  def transfer_favorite_tags
+    if merger&.canonical
+      favorite_tags.update_all(tag_id: merger_id)
+    else
+      remove_favorite_tags
+    end
   end
 
   def remove_favorite_tags
@@ -1204,34 +1057,33 @@ class Tag < ApplicationRecord
         if new_merger && self.errors.empty?
           self.canonical = false
           self.merger_id = new_merger.id
-          async(:add_merger_associations)
         end
       end
     end
   end
 
 
-  # When we make this tag a synonym of another canonical tag, we want to move all the associations this tag has
-  # (subtags, meta tags, etc) over to that canonical tag.
-  # We also need to make sure that the works under those other tags get reindexed
+  # When we make this tag a synonym of another canonical tag, we want to move
+  # all the associations this tag has (subtags, meta tags, etc) over to that
+  # canonical tag.
+  #
+  # The callbacks that occur when changing the associations will trigger the
+  # necessary reindexing, so we don't need to call extra reindexing code here.
   def add_merger_associations
-    # we want to pass this whole block to reindex_taggables so we get the right work_ids
-    reindex_taggables do
-      new_merger = self.merger
-      return unless new_merger.present?
-      ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
-      if new_merger.is_a?(Fandom)
-        (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
-      else
-        (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
-      end
-      self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-      self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
-      self.mergers.each {|m| m.update_attributes(merger_id: new_merger.id)}
-      self.children = []
-      self.meta_tags = []
-      self.sub_tags = []
+    new_merger = self.merger
+    return unless new_merger.present?
+    ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
+    if new_merger.is_a?(Fandom)
+      (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
+    else
+      (new_merger.parents.by_type("Fandom").canonical - self.parents.by_type("Fandom")).each {|fandom| self.add_association(fandom)}
     end
+    self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+    self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
+    self.mergers.each {|m| m.update_attributes(merger_id: new_merger.id)}
+    self.children = []
+    self.meta_tags = []
+    self.sub_tags = []
   end
 
   def merger_string=(tag_string)
@@ -1240,13 +1092,6 @@ class Tag < ApplicationRecord
       syn = Tag.find_by_name(name)
       if syn && !syn.canonical?
         syn.update_attributes(merger_id: self.id)
-        if syn.is_a?(Fandom)
-          syn.medias.each {|medium| self.add_association(medium)}
-          self.medias.each {|medium| syn.add_association(medium)}
-        else
-          syn.parents.by_type("Fandom").canonical.each {|fandom| self.add_association(fandom)}
-          self.parents.by_type("Fandom").canonical.each {|fandom| syn.add_association(fandom)}
-        end
       end
     end
   end
@@ -1352,7 +1197,7 @@ class Tag < ApplicationRecord
       if tag.merger_id.present?
         tag.merger.update_works_index_timestamp!
       end
-      async(:queue_child_tags_for_reindex)
+      async_after_commit(:queue_child_tags_for_reindex)
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)

@@ -1,5 +1,5 @@
 class Work < ApplicationRecord
-  include Taggable
+  include Filterable
   include CreationNotifier
   include Collectible
   include Bookmarkable
@@ -299,11 +299,6 @@ class Work < ApplicationRecord
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
     chapters.sort_by(&:position).reverse.each(&:destroy)
-  end
-
-  after_destroy :clean_up_filter_taggings
-  def clean_up_filter_taggings
-    FilterTagging.where("filterable_type = 'Work' AND filterable_id = #{self.id}").destroy_all
   end
 
   after_destroy :clean_up_assignments
@@ -811,59 +806,22 @@ class Work < ApplicationRecord
     return true
   end
 
+  def self.reindex_for_filter_changes(ids, filter_taggings, queue)
+    IndexQueue.enqueue_ids(Work, ids, queue)
+    FilterCount.enqueue_filters(filter_taggings.map(&:filter_id))
+
+    changed_ids = filter_taggings.map(&:filterable_id)
+    return unless changed_ids.present?
+
+    series_ids = SerialWork.where(work_id: changed_ids).pluck(:series_id)
+    pseud_ids = Creatorship.where(creation_id: changed_ids,
+                                  creation_type: "Work").pluck(:pseud_id)
+    IndexQueue.enqueue_ids(Series, series_ids, queue)
+    IndexQueue.enqueue_ids(Pseud, pseud_ids, queue)
+  end
+
   # FILTERING CALLBACKS
   after_save :adjust_filter_counts
-
-  # Creates a filter_tagging relationship between the work and the tag or its
-  # canonical synonym. Also updates the series index because series inherit tags
-  # from works
-  def add_filter_tagging(tag, meta = false)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter
-      if !self.filters.include?(filter)
-        if meta
-          self.filter_taggings.create(filter_id: filter.id, inherited: true)
-        else
-          self.filters << filter
-        end
-        filter.reset_filter_count
-      elsif !meta
-        ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
-        ft.update_attribute(:inherited, false)
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
-
-  # Removes filter_tagging relationship unless the work is tagged with more than
-  # one synonymous tags. Also updates the series index because series inherit
-  # tags from works
-  def remove_filter_tagging(tag)
-    filter = tag.filter
-    if filter
-      filters_to_remove = [filter] + filter.meta_tags
-      filters_to_remove.each do |filter_to_remove|
-        if self.filters.include?(filter_to_remove)
-          all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-          sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-          all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-          remaining_tags = self.tags - [tag]
-          if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-            self.filter_taggings.where(filter_id: filter_to_remove.id).destroy_all
-            filter_to_remove.reset_filter_count
-            filter_to_remove.update_works_index_timestamp!
-          else # we should keep filter_to_remove, but check if inheritence needs to be updated
-            direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-            if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-              ft = self.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-              ft.update_attribute(:inherited, true)
-            end
-          end
-        end
-      end
-      IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
-    end
-  end
 
   # Must be called before save
   def visibility_changed?

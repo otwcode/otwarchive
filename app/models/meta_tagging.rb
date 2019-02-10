@@ -9,9 +9,9 @@ class MetaTagging < ApplicationRecord
                           scope: :sub_tag_id,
                           message: "has already been added (possibly as an indirect meta tag)."
 
-  before_create :add_filters, :inherit_meta_tags
   after_create :expire_caching
   after_destroy :expire_caching
+  after_commit :update_inherited
 
   validate :meta_tag_validation
   def meta_tag_validation
@@ -31,36 +31,8 @@ class MetaTagging < ApplicationRecord
     end
   end
 
-  # When you filter by the meta tag, you should get the works associated with the sub tag
-  # but not vice versa
-  def add_filters
-    if self.meta_tag.canonical?
-      self.sub_tag.async(:inherit_meta_filters, self.meta_tag.id)
-    end
-  end
-
-  # The meta tag of my meta tag is my meta tag
-  def inherit_meta_tags
-    unless self.meta_tag.meta_tags.empty?
-      self.meta_tag.meta_tags.each do |m|
-        if self.sub_tag.meta_tags.include?(m)
-          meta_tagging = self.sub_tag.meta_taggings.where(meta_tag_id: m.id).first
-          meta_tagging.update_attribute(:direct, false)
-        else
-          MetaTagging.create!(meta_tag: m, sub_tag: self.sub_tag, direct: false)
-        end
-      end
-    end
-    unless self.sub_tag.sub_tags.empty?
-      self.sub_tag.sub_tags.each do |s|
-        if s.meta_tags.include?(self.meta_tag)
-          meta_tagging = s.meta_taggings.where(meta_tag_id: self.meta_tag.id).first
-          meta_tagging.update_attribute!(:direct, false)
-        else
-          MetaTagging.create!(meta_tag: self.meta_tag, sub_tag: s, direct: false)
-        end
-      end
-    end
+  def update_inherited
+    sub_tag.async(:update_inherited_meta_tags) if direct
   end
 
   def expire_caching
