@@ -111,3 +111,72 @@ describe "rake Tag:destroy_invalid_meta_taggings" do
     expect { meta_tagging.reload }.not_to raise_exception
   end
 end
+
+describe "rake Tag:reset_meta_tags" do
+  let(:sub) { create(:canonical_fandom) }
+  let(:meta) { create(:canonical_fandom) }
+
+  it "deletes phantom inherited meta tags" do
+    MetaTagging.create(sub_tag: sub, meta_tag: meta, direct: false)
+
+    expect(sub.meta_tags.reload).to include(meta)
+    subject.invoke
+    expect(sub.meta_tags.reload).not_to include(meta)
+  end
+
+  it "constructs missing inherited meta tags" do
+    mid = create(:canonical_fandom)
+    mid.meta_tags << meta
+    mid.sub_tags << sub
+    sub.meta_tags.delete(meta)
+
+    expect(sub.meta_tags.reload).not_to include(meta)
+    subject.invoke
+    expect(sub.meta_tags.reload).to include(meta)
+  end
+end
+
+describe "rake Tag:reset_filters" do
+  let(:sub) { create(:canonical_fandom) }
+  let(:syn) { create(:fandom, merger: sub) }
+  let(:meta) { create(:canonical_fandom) }
+  let(:work) { create(:work, fandom_string: syn.name) }
+  let(:extra) { create(:fandom) }
+
+  before { sub.meta_tags << meta }
+
+  it "adds missing inherited filters" do
+    work.filters.delete(meta)
+    subject.invoke
+    expect(work.filters.reload).to include(meta)
+    expect(work.direct_filters.reload).not_to include(meta)
+  end
+
+  it "adds missing direct filters" do
+    work.filters.delete(sub)
+    subject.invoke
+    expect(work.filters.reload).to include(sub)
+    expect(work.direct_filters.reload).to include(sub)
+  end
+
+  it "removes incorrect inherited filters" do
+    work.filter_taggings.create(filter: extra, inherited: true)
+    subject.invoke
+    expect(work.filters.reload).not_to include(extra)
+    expect(work.direct_filters.reload).not_to include(extra)
+  end
+
+  it "removes incorrect direct filters" do
+    work.filter_taggings.create(filter: extra, inherited: false)
+    subject.invoke
+    expect(work.filters.reload).not_to include(extra)
+    expect(work.direct_filters.reload).not_to include(extra)
+  end
+
+  it "remove duplicate filters" do
+    work.filter_taggings.build(filter: sub).save!(validate: false)
+    expect(sub.filtered_works.reload.count).to eq(2)
+    subject.invoke
+    expect(sub.filter_taggings.reload.count).to eq(1)
+  end
+end
