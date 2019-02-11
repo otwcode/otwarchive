@@ -45,21 +45,24 @@ class DownloadWriter
     return unless %w(azw3 epub mobi pdf).include?(download.file_type)
     return if download.exists?
 
-    cmd = get_command
+    cmds = get_commands
 
     # Make sure the command is sanitary, and use popen3 in order to
     # capture and discard the stdin/out info
     # See http://stackoverflow.com/a/5970819/469544 for details
-    exit_status = nil
-    Open3.popen3(*cmd) { |_stdin, _stdout, _stderr, wait_thread| exit_status = wait_thread.value }
-    unless exit_status
-      Rails.logger.debug "Download generation failed: " + cmd.to_s
+    cmds.each do |cmd|
+      exit_status = nil
+      Open3.popen3(*cmd) { |_stdin, _stdout, _stderr, wait_thread| exit_status = wait_thread.value }
+      unless exit_status
+        Rails.logger.debug "Download generation failed: " + cmd.to_s
+      end
     end
   end
 
   # Get the version of the command we need to execute
-  def get_command
-    download.file_type == "pdf" ? get_pdf_command : get_calibre_command
+  def get_commands
+    download.file_type == "pdf" ? [get_pdf_command] :
+      [get_web2disk_command, get_zip_command, get_calibre_command]
   end
 
   # We're sticking with wkhtmltopdf for PDF files since using calibre for PDF requires the use of xvfb
@@ -89,7 +92,7 @@ class DownloadWriter
 
     [
       'ebook-convert',
-      html_download.file_path,
+      download.zip_path,
       download.file_path,
       '--input-encoding', 'utf-8',
       '--use-auto-toc',
@@ -108,6 +111,30 @@ class DownloadWriter
       # second for multi-chapter, and third for the preface and afterword
       '--chapter', "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
     ] + series + epub
+  end
+
+  # Grab the HTML file and any images and put them in --base-dir.
+  # --max-recursions 0 prevents it from grabbing all the linked pages.
+  # --dont-download-stylesheets isn't strictly necessary for us but avoids
+  # creating an empty stylesheets directory.
+  def get_web2disk_command
+    [
+      'web2disk',
+      '--base-dir', download.assets_path,
+      '--max-recursions', '0',
+      '--dont-download-stylesheets',
+      "file://#{html_download.file_path}"
+    ]
+  end
+
+  # Zip the directory containing the HTML file and images.
+  def get_zip_command
+    [
+      'zip',
+      '-r',
+      download.zip_path,
+      download.assets_path
+    ]
   end
 
   # A hash of the work data calibre needs
