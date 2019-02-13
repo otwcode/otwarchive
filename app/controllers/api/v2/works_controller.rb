@@ -5,7 +5,7 @@ class Api::V2::WorksController < Api::V2::BaseController
   def search
     works = params[:works]
     original_urls = works.map { |w| w[:original_urls] }.flatten
-    
+
     results = []
     messages = []
     if original_urls.nil? || original_urls.blank? || original_urls.empty?
@@ -35,7 +35,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       # Process the works, updating the flags
       works_responses = external_works.map { |external_work| import_work(archivist, external_work.merge(params.permit!)) }
       success_works, error_works = works_responses.partition { |r| [:ok, :created, :found].include?(r[:status]) }
-      
+
       # Send claim notification emails for successful works
       if params[:send_claim_emails] && success_works.present?
         notified_authors = notify_and_return_authors(success_works, archivist)
@@ -80,7 +80,7 @@ class Api::V2::WorksController < Api::V2::BaseController
     status = :ok if errors.empty?
     [status, errors]
   end
-  
+
   # Search for works imported from the provided URLs
   def find_existing_works(original_urls)
     results = []
@@ -93,7 +93,7 @@ class Api::V2::WorksController < Api::V2::BaseController
         original_id = original[:id]
         original_url = original[:url]
       end
-      
+
       # Search for works - there may be duplicates
       search_results = find_work_by_import_url(original_url)
       if search_results[:works].empty?
@@ -102,7 +102,7 @@ class Api::V2::WorksController < Api::V2::BaseController
                      original_url: original_url,
                      messages: [search_results[:error]] }
       else
-        work_results = search_results[:works].map do |work| 
+        work_results = search_results[:works].map do |work|
             archive_url = work_url(work)
             message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\"."
             messages << message
@@ -139,8 +139,8 @@ class Api::V2::WorksController < Api::V2::BaseController
       error: error
     }
   end
-  
-  
+
+
   # Use the story parser to scrape works from the chapter URLs
   def import_work(archivist, external_work)
     work_status, work_messages = work_errors(external_work)
@@ -182,7 +182,7 @@ class Api::V2::WorksController < Api::V2::BaseController
     external_authors = success_works.map(&:external_authors).flatten.uniq
     external_authors&.each do |external_author|
       external_author.find_or_invite(archivist)
-      # One of the external author pseuds is its email address so filter that one out 
+      # One of the external author pseuds is its email address so filter that one out
       author_names = external_author.names.select { |a| a.name != external_author.email }.map(&:name).flatten. join(", ")
       notified_authors << author_names
     end
@@ -190,7 +190,7 @@ class Api::V2::WorksController < Api::V2::BaseController
   end
 
   # Request and response hashes
-  
+
   # Create options map for StoryParser
   def story_parser_options(archivist, work_params)
     {
@@ -205,7 +205,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       collection_names: work_params[:collection_names],
       title: work_params[:title],
       fandom: work_params[:fandoms],
-      warning: work_params[:warnings],
+      archive_warning: work_params[:archive_warnings],
       character: work_params[:characters],
       rating: work_params[:rating],
       relationship: work_params[:relationships],

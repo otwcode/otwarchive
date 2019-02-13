@@ -754,7 +754,7 @@ class StoryParser
     meta = {}
     metapatterns = detect_tags ? REQUIRED_META.merge(OPTIONAL_META) : REQUIRED_META
     is_tag = {}.tap do |h|
-      %w[fandom_string relationship_string freeform_string rating_string warning_string].each do |c|
+      %w[fandom_string relationship_string freeform_string rating_string archive_warning_string].each do |c|
         h[c.to_sym] = true
       end
     end

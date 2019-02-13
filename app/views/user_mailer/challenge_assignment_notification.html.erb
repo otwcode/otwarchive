@@ -6,7 +6,7 @@
   </p>
 
   <%= style_bold(t(".prompts")) %>
-  
+
   <% @request.requests.each_with_index do |prompt, index| %>
     <% tag_groups = prompt.tag_groups %>
 
@@ -19,7 +19,7 @@
     <% chars = prompt.any_character ? t(".any") : styled_tag_list(tag_groups["Character"]) %>
     <% ships = prompt.any_relationship ? t(".any") : styled_tag_list(tag_groups["Relationship"]) %>
     <% ratings = prompt.any_rating ? t(".any") : (tag_groups["Rating"] ? get_title_string(tag_groups["Rating"]) : nil) %>
-    <% warnings = prompt.any_warning ? t(".any") : (tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil) %>
+    <% warnings = prompt.any_warning ? t(".any") : (tag_groups["ArchiveWarning"] ? get_title_string(tag_groups["ArchiveWarning"]) : nil) %>
     <% categories = prompt.any_category ? t(".any") : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
     <% atags = prompt.any_freeform ? t(".any") : styled_tag_list(tag_groups["Freeform"]) %>
     <% otags = prompt.optional_tag_set ? styled_tag_list(prompt.optional_tag_set.tags) : nil %>

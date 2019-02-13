@@ -4,10 +4,10 @@ class TagSet < ApplicationRecord
   # a complete match is numerically represented with ALL
   ALL = -1
 
-  TAG_TYPES = %w(fandom character relationship freeform category rating warning)
+  TAG_TYPES = %w(fandom character relationship freeform category rating archive_warning)
   TAG_TYPES_INITIALIZABLE = %w(fandom character relationship freeform)
   TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
-  TAGS_AS_CHECKBOXES = %w(category rating warning)
+  TAGS_AS_CHECKBOXES = %w(category rating archive_warning)
 
   attr_accessor :from_owned_tag_set
 

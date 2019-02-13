@@ -56,7 +56,7 @@ When 'I reload the page' do
 end
 
 Then /^I should see Posted now$/ do
-	now = Time.zone.now.to_s
+  now = Time.zone.now.to_s
   step "I should see \"Posted #{now}\""
 end
 
