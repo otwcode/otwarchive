@@ -2,7 +2,7 @@ class DownloadsController < ApplicationController
 
   skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
-  before_action :check_visibility, only: :show
+  before_action :check_download_visibility, only: :show
   after_action :remove_downloads, only: :show
 
   def show
@@ -45,14 +45,18 @@ protected
       redirect_to work_path(@work)
       return
     end
-
-    # Set this for checking visibility.
-    @check_visibility_of = @work
   end
 
   # We're currently just writing everything to tmp and feeding them through
   # nginx so we don't want to keep the files around.
   def remove_downloads
     @download&.remove unless Rails.env.test?
+  end
+
+  # check_visibility would prevent everyone from downloading restricted works.
+  def check_download_visibility
+    is_hidden = !@work.visible
+    can_view_hidden = logged_in_as_admin? || current_user_owns?(@work)
+    access_denied if (is_hidden && !can_view_hidden)
   end
 end
