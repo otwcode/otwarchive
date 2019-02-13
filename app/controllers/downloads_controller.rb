@@ -55,8 +55,14 @@ protected
 
   # check_visibility would prevent everyone from downloading restricted works.
   def check_download_visibility
-    is_hidden = !@work.visible
-    can_view_hidden = logged_in_as_admin? || current_user_owns?(@work)
-    access_denied if (is_hidden && !can_view_hidden)
+    if !@work.posted? || @work.hidden_by_admin
+      message = if !@work.posted?
+                  ts("Sorry, you can't download a draft.")
+                else
+                  ts("Sorry, you can't download a work that has been hidden by an admin.")
+                end
+      flash[:error] = message
+      redirect_to work_path(@work)
+    end
   end
 end
