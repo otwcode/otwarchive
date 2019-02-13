@@ -2,7 +2,7 @@ class DownloadsController < ApplicationController
 
   skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
-  before_action :check_visibility, only: :show
+  before_action :authenticate_user!, only: :show
   after_action :remove_downloads, only: :show
 
   def show
