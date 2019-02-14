@@ -39,12 +39,6 @@ protected
     end
 
     @work = Work.find(params[:id])
-
-    if @work.in_unrevealed_collection?
-      flash[:error] = ts("Sorry, you can't download an unrevealed work.")
-      redirect_to work_path(@work)
-      return
-    end
   end
 
   # We're currently just writing everything to tmp and feeding them through
@@ -53,16 +47,18 @@ protected
     @download&.remove unless Rails.env.test?
   end
 
-  # check_visibility would prevent everyone from downloading restricted works.
+  # We can't use check_visibility because this controller doesn't have access to
+  # cookies on production or staging.
   def check_download_visibility
-    if !@work.posted? || @work.hidden_by_admin
-      message = if !@work.posted?
-                  ts("Sorry, you can't download a draft.")
-                else
-                  ts("Sorry, you can't download a work that has been hidden by an admin.")
-                end
-      flash[:error] = message
-      redirect_to work_path(@work)
-    end
+    return unless !@work.posted? || @work.hidden_by_admin || @work.in_unrevealed_collection?
+    message = if !@work.posted?
+                ts("Sorry, you can't download a draft.")
+              elsif @work.hidden_by_admin
+                ts("Sorry, you can't download a work that has been hidden by an admin.")
+              else
+                ts("Sorry, you can't download an unrevealed work.")
+              end
+    flash[:error] = message
+    redirect_to work_path(@work)
   end
 end
