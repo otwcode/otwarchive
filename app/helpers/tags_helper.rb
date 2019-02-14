@@ -124,7 +124,7 @@ module TagsHelper
 
   # Link to show tags if they're currently hidden
   def show_hidden_tags_link(creation, tag_type)
-    text = ts("Show %{tag_type}", tag_type: (tag_type == 'freeforms' ? "additional tags" : tag_type))
+    text = ts("Show %{tag_type}", tag_type: (tag_type == 'freeforms' ? "additional tags" : tag_type.humanize.downcase.split.last))
     url = {controller: 'tags', action: 'show_hidden', creation_type: creation.class.to_s, creation_id: creation.id, tag_type: tag_type }
     link_to text, url, remote: true
   end
@@ -224,12 +224,12 @@ module TagsHelper
     categories.each do |category|
       if tags = tag_groups[category]
         unless tags.empty?
-          class_name = category == "ArchiveWarning" ? "warnings" : category.downcase.pluralize
-          if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
+          class_name = category.tableize
+          if (class_name == "archive_warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
             open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
             close_tags = "</strong></li>"
             tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
-          elsif class_name == "warnings"
+          elsif class_name == "archive_warnings"
             open_tags = "<li class='#{class_name}'><strong>"
             close_tags = "</strong></li>"
             link_array = tags.collect{|tag| link_to_tag_works(tag)}

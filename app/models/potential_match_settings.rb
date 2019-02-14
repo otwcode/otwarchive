@@ -28,7 +28,7 @@ class PotentialMatchSettings < ApplicationRecord
   end
 
   def required_types
-    TagSet::TAG_TYPES.select {|type| self.send("num_required_#{type.pluralize}") != 0}
+    TagSet::TAG_TYPES.select {|type| self.send("num_required_#{type.tableize}") != 0}
   end
 
   def topmost_required_type
@@ -36,6 +36,6 @@ class PotentialMatchSettings < ApplicationRecord
   end
 
   def include_optional?(type)
-    send("include_optional_#{type.downcase.pluralize}")
+    send("include_optional_#{type.tableize}")
   end
 end

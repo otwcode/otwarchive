@@ -266,7 +266,7 @@ Feature: Edit preferences
   Then I should not see "No Archive Warnings Apply" within ".warning"
     And I should see "Show warnings"
     # The following line is commented out, because the test is seeing the text that
-    # would is in the 'Share' textarea. We need to rework this so we can somehow do a 
+    # would is in the 'Share' textarea. We need to rework this so we can somehow do a
     # 'should not have this' UNLESS 'this'.
     #And I should not see "Scary tag"
     And I should see "Show additional tags"
@@ -411,6 +411,6 @@ Feature: Edit preferences
       And I should not see "Ed is a sweetie"
     When I follow "Show additional tags"
     Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply" within "li.warnings"
+      And I should not see "No Archive Warnings Apply" within "li.archive_warnings"
     When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply" within "li.warnings"
+    Then I should see "No Archive Warnings Apply" within "li.archive_warnings"
