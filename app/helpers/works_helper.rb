@@ -133,6 +133,12 @@ module WorksHelper
     work.approved_related_works.where(translation: false)
   end
 
+  # Can the work be downloaded, i.e. is it posted and visible to all registered
+  # users.
+  def downloadable?
+    @work.posted? && !@work.hidden_by_admin && !@work.in_unrevealed_collection?
+  end
+
   def download_url_for_work(work, format)
     path = Download.new(work, format: format).public_path
     url_for("#{path}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')

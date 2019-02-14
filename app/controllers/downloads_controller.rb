@@ -2,7 +2,8 @@ class DownloadsController < ApplicationController
 
   skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
-  before_action :check_visibility, only: :show
+  before_action :check_download_posted_status, only: :show
+  before_action :check_download_visibility, only: :show
   after_action :remove_downloads, only: :show
 
   def show
@@ -39,20 +40,30 @@ protected
     end
 
     @work = Work.find(params[:id])
-
-    if @work.in_unrevealed_collection?
-      flash[:error] = ts("Sorry, you can't download an unrevealed work.")
-      redirect_to work_path(@work)
-      return
-    end
-
-    # Set this for checking visibility.
-    @check_visibility_of = @work
   end
 
   # We're currently just writing everything to tmp and feeding them through
   # nginx so we don't want to keep the files around.
   def remove_downloads
     @download&.remove unless Rails.env.test?
+  end
+
+  # We can't use check_visibility because this controller doesn't have access to
+  # cookies on production or staging.
+  def check_download_visibility
+    return unless @work.hidden_by_admin || @work.in_unrevealed_collection?
+    message = if @work.hidden_by_admin
+                ts("Sorry, you can't download a work that has been hidden by an admin.")
+              else
+                ts("Sorry, you can't download an unrevealed work.")
+              end
+    flash[:error] = message
+    redirect_to work_path(@work)
+  end
+
+  def check_download_posted_status
+    return if @work.posted
+    flash[:error] = ts("Sorry, you can't download a draft.")
+    redirect_to work_path(@work)
   end
 end
