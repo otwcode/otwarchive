@@ -87,7 +87,7 @@ When /^I fill in single-fandom gift exchange challenge options$/ do
   select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_characters")
   check("gift_exchange_offer_restriction_attributes_allow_any_rating")
   check("gift_exchange_offer_restriction_attributes_allow_any_category")
-  check("gift_exchange_offer_restriction_attributes_allow_any_warning")
+  check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
   check("gift_exchange_offer_restriction_attributes_character_restrict_to_fandom")
   check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
 end

@@ -361,7 +361,7 @@ protected
       :any_freeform,
       :any_category,
       :any_rating,
-      :any_warning,
+      :any_archive_warning,
       :anonymous,
       :description,
       :_destroy,
