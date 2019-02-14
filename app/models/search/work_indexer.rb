@@ -65,7 +65,7 @@ class WorkIndexer < Indexer
       methods: [
         :authors_to_sort_on,
         :rating_ids,
-        :warning_ids,
+        :archive_warning_ids,
         :category_ids,
         :fandom_ids,
         :character_ids,

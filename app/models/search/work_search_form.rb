@@ -31,7 +31,7 @@ class WorkSearchForm
     :fandom_ids,
     :rating_ids,
     :category_ids,
-    :warning_ids,
+    :archive_warning_ids,
     :character_names,
     :character_ids,
     :relationship_names,

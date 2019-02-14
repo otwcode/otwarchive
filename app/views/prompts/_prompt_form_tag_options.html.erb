@@ -2,7 +2,7 @@
 <% form.object.build_tag_set unless form.object.tag_set %>
 <%= form.fields_for :tag_set do |tag_set_form| %>
   <% TagSet::TAG_TYPES.each do |tag_type| %>
-    <% tag_name = tag_type.titleize.constantize::NAME # constantize safe as iterating over safe list %>
+    <% tag_name = tag_type.classify.constantize::NAME # constantize safe as iterating over safe list %>
     <% num_allowed = restriction.allowed(tag_type) %>
     <% num_required = restriction.required(tag_type) %>
     <% if num_allowed > 0 %>
@@ -53,9 +53,9 @@
                             autocomplete_options(autocomplete_method, :autocomplete_min_chars => 0, :autocomplete_token_limit => num_allowed,
                                     :autocomplete_hint_text => ts("Please select a fandom first!"),
                                     :autocomplete_searching_text => ts("Searching by fandom..."),
-      															:autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
+                                    :autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
           <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
-      	</dd>
+        </dd>
       <% else # all other cases %>
         <% # save the field id to pass for autocompleting based on fandoms in autocomplete if we use autocomplete %>
         <% @fandom_tag_id = tag_field_id if tag_type == 'fandom' %>

@@ -315,7 +315,7 @@ class Bookmark < ApplicationRecord
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
 
-  def warning_ids
+  def archive_warning_ids
     filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
 

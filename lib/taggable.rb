@@ -282,7 +282,7 @@ module Taggable
   def rating_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
   end
-  def warning_ids
+  def archive_warning_ids
     filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
   end
   def category_ids

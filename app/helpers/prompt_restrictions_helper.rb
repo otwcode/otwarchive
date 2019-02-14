@@ -46,7 +46,7 @@ module PromptRestrictionsHelper
     result += required_and_allowed(form, "freeform", hasprompts, allowany)
 
     result += content_tag(:dt, form.label(:archive_warning_num_required, ts("Archive Warning(s):")))
-    result += required_and_allowed(form, "warning", hasprompts, allowany)
+    result += required_and_allowed(form, "archive_warning", hasprompts, allowany)
   end
 
   def required_and_allowed_boolean(form, fieldname, hasprompts)

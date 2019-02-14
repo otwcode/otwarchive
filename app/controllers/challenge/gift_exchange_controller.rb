@@ -87,7 +87,7 @@ class Challenge::GiftExchangeController < ChallengesController
         :category_num_required, :category_num_allowed, :allow_any_category,
         :require_unique_category, :freeform_num_required, :freeform_num_allowed,
         :allow_any_freeform, :require_unique_freeform, :archive_warning_num_required,
-        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_warning
+        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_archive_warning
       ],
       offer_restriction_attributes: [
         :id, :optional_tags_allowed, :title_required, :title_allowed,
@@ -100,7 +100,7 @@ class Challenge::GiftExchangeController < ChallengesController
         :category_num_required, :category_num_allowed, :allow_any_category,
         :require_unique_category, :freeform_num_required, :freeform_num_allowed,
         :allow_any_freeform, :require_unique_freeform, :archive_warning_num_required,
-        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_warning,
+        :archive_warning_num_allowed, :allow_any_archive_warning, :require_unique_archive_warning,
         :tag_sets_to_add, :character_restrict_to_fandom,
         :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
         :relationship_restrict_to_tag_set,
@@ -109,10 +109,10 @@ class Challenge::GiftExchangeController < ChallengesController
       potential_match_settings_attributes: [
         :id, :num_required_prompts, :num_required_fandoms, :num_required_characters,
         :num_required_relationships, :num_required_freeforms, :num_required_categories,
-        :num_required_ratings, :num_required_warnings, :include_optional_fandoms,
+        :num_required_ratings, :num_required_archive_warnings, :include_optional_fandoms,
         :include_optional_characters, :include_optional_relationships,
         :include_optional_freeforms, :include_optional_categories, :include_optional_ratings,
-        :include_optional_warnings
+        :include_optional_archive_warnings
       ]
     )
   end

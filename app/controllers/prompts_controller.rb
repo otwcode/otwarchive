@@ -199,14 +199,14 @@ class PromptsController < ApplicationController
         :freeform_tagnames,
         :category_tagnames,
         :rating_tagnames,
-        :warning_tagnames,
+        :archive_warning_tagnames,
         fandom_tagnames: [],
         character_tagnames: [],
         relationship_tagnames: [],
         freeform_tagnames: [],
         category_tagnames: [],
         rating_tagnames: [],
-        warning_tagnames: []
+        archive_warning_tagnames: []
       ],
       optional_tag_set_attributes: [
         :tagnames

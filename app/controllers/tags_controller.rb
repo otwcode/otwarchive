@@ -148,7 +148,7 @@ class TagsController < ApplicationController
           @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
         end
       else
-        if %w(warnings freeforms).include?(params[:tag_type])
+        if %w(archive_warnings freeforms).include?(params[:tag_type])
           @display_tags = @display_creation.send(params[:tag_type])
         end
       end

@@ -1105,7 +1105,7 @@ class WorksController < ApplicationController
       :words_from,
       :words_to,
 
-      warning_ids: [],
+      archive_warning_ids: [],
       category_ids: [],
       rating_ids: [],
       fandom_ids: [],

@@ -1424,7 +1424,7 @@ class Work < ApplicationRecord
       root: false,
       only: [:title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :language_id, :word_count, :complete],
-      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids,
+      methods: [:tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
         :pseud_ids, :creators, :collection_ids, :work_types]
     ).merge(

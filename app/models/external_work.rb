@@ -146,7 +146,7 @@ class ExternalWork < ApplicationRecord
       ],
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
-        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators, :revised_at
       ]
     ).merge(

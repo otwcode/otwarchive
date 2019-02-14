@@ -389,7 +389,7 @@ class BookmarksController < ApplicationController
       :other_bookmark_tag_names,
       :excluded_bookmark_tag_names,
       rating_ids: [],
-      warning_ids: [],
+      archive_warning_ids: [],
       category_ids: [],
       fandom_ids: [],
       character_ids: [],
