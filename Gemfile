@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 
 ruby '2.3.4'
@@ -133,8 +134,6 @@ gem 'newrelic-redis'
 gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
-
-gem 'scrypt', '~> 3.0.6'
 
 group :test do
   gem 'rspec', '~> 3.4'
