@@ -1,4 +1,3 @@
-
 source 'https://rubygems.org'
 
 ruby '2.3.4'
@@ -38,7 +37,7 @@ gem 'activerecord-mysql-reconnect', '~> 0.4.1'
 gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
-# Here are all our application-specific ge
+# Here are all our application-specific gems
 
 # Used to convert strings to ascii
 gem 'unicode'
