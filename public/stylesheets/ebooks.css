@@ -26,12 +26,3 @@
 .userstuff div.userstuff {
   margin: 1em 0;
 }
-
-img, embed, iframe, object {
-  max-width: 100% !important;
-}
-
-/* override default Calibre style for better obedience of max-width */
-embed, iframe, object {
-  border: none !important;
-}

@@ -72,16 +72,6 @@ class Download
     "/downloads/#{work.id}/#{file_name}.#{file_type}"
   end
 
-  # The path to the zip file (eg, "/tmp/42/42.zip")
-  def zip_path
-    "#{dir}/#{work.id}.zip"
-  end
-
-  # The path to the folder where web2disk downloads the xhtml and images
-  def assets_path
-    "#{dir}/assets"
-  end
-
   # The full path to the file (eg, "/tmp/42/The Hobbit.epub")
   def file_path
     "#{dir}/#{file_name}.#{file_type}"
