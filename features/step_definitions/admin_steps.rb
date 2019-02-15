@@ -286,8 +286,6 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-### THEN
-
 When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
@@ -300,6 +298,14 @@ When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
   click_button("Post")
 end
+
+When /^I hide the work "(.*?)"$/ do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Hide Work"}
+end
+
+### THEN
 
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
