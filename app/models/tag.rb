@@ -938,7 +938,12 @@ class Tag < ApplicationRecord
   # Move all of the "Favorite Tags" for this tag to its new merger.
   def transfer_favorite_tags
     if merger&.canonical
-      favorite_tags.update_all(tag_id: merger_id)
+      favorite_tags.find_each do |ft|
+        # If updating fails -- which is what would happen if a user had both
+        # this tag and its merger listed in their favorite tags -- then just
+        # destroy the favorite_tag instead.
+        ft.destroy unless ft.update(tag_id: merger_id)
+      end
     else
       remove_favorite_tags
     end
