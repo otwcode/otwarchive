@@ -23,10 +23,7 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   padding-right: 0.25em;
 }
 
-/* INTERACTION: OLD FILTERS */
-/* ES UPGRADE TRANSITION: REMOVE .old-filters SELECTORS WHEN DONE */
-.filters .tags li, .review .tags,
-.old-filters .tags li {
+.filters .tags li, .review .tags {
   display: block;
 }
 

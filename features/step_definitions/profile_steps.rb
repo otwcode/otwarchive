@@ -8,7 +8,7 @@ end
 When /^I fill in the details of my profile$/ do
   fill_in("Title", with: "Test title thingy")
   fill_in("Location", with: "Alpha Centauri")
-  fill_in("About Me", with: "This is some text about me.")  
+  fill_in("About Me", with: "This is some text about me.")
   click_button("Update")
 end
 
@@ -16,7 +16,7 @@ end
 When /^I change the details in my profile$/ do
   fill_in("Title", with: "Alternative title thingy")
   fill_in("Location", with: "Beta Centauri")
-  fill_in("About Me", with: "This is some different text about me.") 
+  fill_in("About Me", with: "This is some different text about me.")
   click_button("Update")
 end
 
@@ -53,7 +53,7 @@ When /^I view my profile$/ do
   click_link("Profile")
 end
 
-		
+
 When /^I enter an invalid email$/ do
   click_link("Change Email")
   fill_in("new_email", with: "bob.bob.bob")
@@ -65,7 +65,9 @@ end
 
 When /^I enter a duplicate email$/ do
   user = FactoryGirl.create(:user, login: "testuser2", password: "password", email: "foo@ao3.org")
+  step %{confirmation emails have been delivered}
   user.activate
+
   click_link("Change Email")
   fill_in("new_email", with: "foo@ao3.org")
   fill_in("email_confirmation", with: "foo@ao3.org")
@@ -81,7 +83,7 @@ When /^I enter a birthdate that shows I am under age$/ do
   select(date.day, from: "profile_attributes[date_of_birth(3i)]")
   click_button("Update")
 end
-	
+
 
 When /^I change my preferences to display my date of birth$/ do
   click_link("Preferences")

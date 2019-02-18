@@ -249,25 +249,18 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the field labeled "Additional Tags" should contain "Alternate Universe"
 
-  # TODO: As detailed in issue AO3-5331, this test no longer works for the new
-  # search, because of changes in the way that Work Search handles
-  # non-canonical tags. Once that's resolved, either the @old-search tag should
-  # be removed from this test, or the test should be modified to reflect the
-  # new search behavior.
-  @old-search
   Scenario: Searching by additional tags (freeforms) for a synonym of a metatag
-  returns works using (a) the exact tag or (b) other tags containing the search
-  term, regardless of tag type
+  returns only works using the exact tag
     Given a set of alternate universe works for searching
     When I am on the search works page
       And I fill in "Additional Tags" with "AU"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Tags: AU"
-      And I should see "4 Found"
+      And I should see "1 Found"
       And the results should contain the freeform tag "AU"
-      And the results should contain the freeform tag "High School AU"
-      And the results should contain the freeform tag "Coffee Shop AU"
-      And the results should contain a character mentioning "AU"
+      And the results should not contain the freeform tag "High School AU"
+      And the results should not contain the freeform tag "Coffee Shop AU"
+      And the results should not contain a character mentioning "AU"
     When I follow "Edit Your Search"
     Then the field labeled "Additional Tags" should contain "AU"
 

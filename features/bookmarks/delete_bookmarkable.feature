@@ -10,7 +10,6 @@ Feature: Bookmarks of deleted items
       And I delete the work "Mayfly"
       And all indexing jobs have been run
       And I am logged in as "Charlotte"
-      And Charlotte can use the new search
     When I go to the search people page
       And I fill in "Name" with "Beth"
       And I press "Search People"
@@ -32,7 +31,6 @@ Feature: Bookmarks of deleted items
       And I delete the series "Shorts"
       And all indexing jobs have been run
       And I am logged in as "Charlotte"
-      And Charlotte can use the new search
     When I go to the search people page
       And I fill in "Name" with "Beth"
       And I press "Search People"
@@ -53,7 +51,6 @@ Feature: Bookmarks of deleted items
       And I follow "Delete External Work"
       And all indexing jobs have been run
       And I am logged in as "Beth"
-      And Beth can use the new search
     When I go to the search people page
       And I fill in "Name" with "Alice"
       And I press "Search People"
@@ -65,7 +62,6 @@ Feature: Bookmarks of deleted items
       And I should see "This has been deleted, sorry!"
       And I should not see "Extremely Objectionable Content"
 
-  @new-search
   Scenario: Deleting a restricted work with bookmarks makes the public bookmark count on all bookmarker's pseuds increase.
     Given I am logged in as "Alice"
       And I post the locked work "Mayfly"

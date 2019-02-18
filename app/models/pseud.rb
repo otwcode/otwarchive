@@ -1,8 +1,5 @@
 class Pseud < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include Searchable
   include WorksOwner
 
@@ -73,7 +70,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
-  after_update :reindex_creations
+  after_commit :reindex_creations
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -126,16 +123,6 @@ class Pseud < ApplicationRecord
     group("pseuds.id").
     includes(:user)
   }
-
-  # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
-  def self.index_name
-    if use_new_search?
-      "ao3_#{Rails.env}_pseuds"
-    else
-      tire.index.name
-    end
-  end
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -461,34 +448,12 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block
-  mapping do
-    indexes :name, boost: 20
-  end
-
   def collection_ids
     collections.pluck(:id)
   end
 
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:user_login, :collection_ids])
-  end
-
   def document_json
     PseudIndexer.new({}).document(self)
-  end
-
-  def self.search(options={})
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
-        end
-      end
-    end
   end
 
   def should_reindex_creations?

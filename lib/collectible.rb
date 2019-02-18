@@ -3,15 +3,16 @@ module Collectible
   def self.included(collectible)
     collectible.class_eval do
 
-      has_many :collection_items, as: :item, dependent: :destroy, inverse_of: :item
+      has_many :collection_items, as: :item, inverse_of: :item
       accepts_nested_attributes_for :collection_items, allow_destroy: true
       has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
       has_many :user_approved_collection_items, -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
 
       has_many :collections,
                through: :collection_items,
-               after_add: [:set_visibility, :expire_item_caches],
-               after_remove: [:update_visibility, :expire_item_caches]
+               after_add: :set_visibility,
+               after_remove: :set_visibility,
+               before_remove: :destroy_collection_item
       has_many :approved_collections, -> { Collection.approved },
                through: :collection_items,
                source: :collection
@@ -21,6 +22,8 @@ module Collectible
       has_many :rejected_collections, -> { Collection.rejected },
                through: :collection_items,
                source: :collection
+
+      after_destroy :clean_up_collection_items
     end
   end
 
@@ -111,39 +114,31 @@ module Collectible
   # Only include collections approved by the user
   def update_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.user_approved_collection_items.select(&:anonymous?).empty?
-      self.in_unrevealed_collection = !self.user_approved_collection_items.select(&:unrevealed?).empty?
+      self.in_anon_collection = self.user_approved_collection_items.anonymous.any?
+      self.in_unrevealed_collection = self.user_approved_collection_items.unrevealed.any?
     end
-    return true
   end
 
-  # save as well
-  def set_anon_unrevealed!
-    set_anon_unrevealed
-    save!
-  end
+  #### CALLBACKS
 
-  def update_anon_unrevealed!
-    update_anon_unrevealed
-    save!
-  end
-
+  # Calculate (but don't save) whether this work should be anonymous and/or
+  # unrevealed. Saving the results of this will be handled when the work saves,
+  # or by the collection item's callbacks.
   def set_visibility(collection)
     set_anon_unrevealed
-    return true
   end
 
-  def update_visibility(collection)
-    set_anon_unrevealed!
-    return true
+  # We want to do this after the work is deleted to avoid issues with
+  # accidentally trying to reveal the work during deletion (which wouldn't
+  # successfully reveal the work because it'd fail while trying to save the
+  # partially invalid work, but would cause an error).
+  def clean_up_collection_items
+    self.collection_items.destroy_all
   end
 
-  def expire_item_caches(collection)
-    if self.respond_to?(:expire_caches)
-      CacheMaster.record(self.id, 'collection', collection.id)
-      self.expire_caches
-    end
+  # Destroy the collection item before the collection is deleted, so that we
+  # trigger the CollectionItem's after_destroy callbacks.
+  def destroy_collection_item(collection)
+    self.collection_items.find_by(collection: collection).try(:destroy)
   end
-
-
 end

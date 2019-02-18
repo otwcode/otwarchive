@@ -22,7 +22,7 @@
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
-          <%= link_to_help "filters-#{filter_action}-tags-help" %>
+          <%= link_to_help "bookmark-filters-#{filter_action}-tags" %>
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>
@@ -99,6 +99,13 @@
           </dt>
           <dd class="bookmarker search">
             <%= f.text_field :bookmark_query %>
+          </dd>
+
+          <dt class="language">
+            <%= f.label :language_id, ts("Work language") %>
+          </dt>
+          <dd class="language">
+            <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
           </dd>
 
           <dt class="options"><%= ts("Bookmark types") %></dt>

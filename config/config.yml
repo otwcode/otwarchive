@@ -14,6 +14,11 @@ SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672f
 DEFAULT_SESSION_LENGTH_IN_WEEKS: 2
 REMEMBERED_SESSION_LENGTH_IN_MONTHS: 3
 
+# This length is hardcoded into the reset_password_instructions email message,
+# defined in config/locales/devise.en.yml. If you change this value, you should
+# also change the message (and vice versa).
+DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
@@ -54,11 +59,7 @@ ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
-ELASTICSEARCH_URL: 'http://127.0.0.1:9500'
-ELASTICSEARCH_1_URL: 'http://127.0.0.1:9500'
-# ES UPGRADE TRANSITION #
-# Remove UPGRADED_ELASTICSEARCH_URL
-UPGRADED_ELASTICSEARCH_URL: 'http://127.0.0.1:9400'
+ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
@@ -159,8 +160,22 @@ MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
 MAX_FAVORITE_TAGS: 20
 
+# The number of tags to show on the search page:
+TAGS_PER_SEARCH_PAGE: 50
+
+# When updating tag counts, how many to do in one transaction
+TAG_UPDATE_BATCH_SIZE: 100
+
+# We only start caching tag counts for tags used more than a certain number of times
+TAGGINGS_COUNT_MIN_CACHE_COUNT: 1000
+
+# For tagging changes, we only reindex tags used less than a certain number of times
+TAGGINGS_COUNT_REINDEX_LIMIT: 1000
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
+
+DOWNLOAD_FORMATS: ['azw3', 'epub', 'mobi', 'pdf', 'html']
 
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
@@ -216,6 +231,13 @@ SEARCH_TIPS: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen
 # enabled, cached on production/test environments.
 MAX_RECENT: 20
 
+# This determines the maximum value of (from + size) for searches
+# to all indices (Elasticsearch index setting max_result_window).
+# If a search has more results than this limit, the last page of
+# search results will include a message advising the user to narrow
+# their search or change their sorting options.
+MAX_SEARCH_RESULTS: 100000
+
 # This is used to determine how many works or how many authors have to be
 # present in order for anonymous or mystery works to begin being displayed
 ANONYMOUS_THRESHOLD_COUNT: 10
@@ -231,6 +253,9 @@ SANITIZER_VERSION: 1
 NONZERO_INTEGER_PARAMETERS:
   page: 1
   per_page: 25
+
+# These fields are encrypted and should not have characters escaped or be treated as HTML
+FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmation"]
 
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
@@ -253,8 +278,8 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmark
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
 #
-FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
-  "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary", "screencast"]
+FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_content", "content", "description", "disabled_support_form_text", "endnotes", "faq", "intro", "note", "notes",
+  "rules", "screencast", "series_notes", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
@@ -315,12 +340,16 @@ AKISMET_NAME: 'http://transformativeworks.org'
 DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
 DEFENSIO_NAME: 'http://archiveofourown.org'
 
-# bug-reporting site for the archive -- we use 16bugs; if you use something else,
-# you will need to change feedbacks_controller.rb and abuse_reports_controller.rb
-# to properly send to your own support tool.
-BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
-BUGS_USER: 'admin username for your 16bugs site which should only be put into your local.yml on your production server'
-BUGS_PASSWORD: 'admin password for your 16bugs site which should only be put into your local.yml on your production server'
+# Abuse and support ticket trackers; you may need to change
+# feedbacks_controller.rb and abuse_reports_controller.rb
+# to properly send to your own ticket tracker.
+NEW_BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
+ABUSE_AUTH: 'authtoken'
+ABUSE_PORTAL: 'ao3abuse'
+ABUSE_DEPARTMENT: 'AO3%20Abuse'
+SUPPORT_AUTH: 'authtoken'
+SUPPORT_PORTAL: 'ao3support'
+SUPPORT_DEPARTMENT: 'Support'
 
 DEFAULT_LANGUAGE_SHORT: 'en'
 DEFAULT_LANGUAGE_NAME: 'English'
@@ -366,6 +395,13 @@ ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 
 
+# Elasticsearch index prefix
+# If you're using webdev or another shared environment, change this to include
+# your username (e.g. ao3_testy) to ensure all users have separate search
+# indexes
+ELASTICSEARCH_PREFIX: 'ao3'
+
+
 ##### For dumping the seed database and NOT clearing emails on stage
 
 # users who have webdavs or asked to be added
@@ -401,3 +437,9 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
+
+# List of Unicode scripts where spaces are not used as separators, and
+# character counts should be used for word counts.
+# Check if a script is supported by the version of Ruby we use:
+# https://ruby-doc.org/core/Regexp.html#class-Regexp-label-Character+Properties
+CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]

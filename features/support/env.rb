@@ -8,8 +8,9 @@
 require 'simplecov'
 require 'cucumber/timecop'
 require 'capybara/poltergeist'
+require 'cucumber/rspec/doubles'
 SimpleCov.command_name "features-" + (ENV['TEST_RUN'] || 'local')
-if ENV["CI"] == "true"
+if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
   # Only on Travis...
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
@@ -73,11 +74,9 @@ Before do
 end
 
 After do
-  # ES UPGRADE TRANSITION #
-  # Change all instances of $new_elasticsearch to $elasticsearch
-  indices = $new_elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
   indices.each do |index|
-    $new_elasticsearch.indices.delete(index: index)
+    $elasticsearch.indices.delete(index: index)
   end
 end
 
