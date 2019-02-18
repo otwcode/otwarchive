@@ -94,20 +94,6 @@ When /^I set my time zone to "([^"]*)"$/ do |time_zone|
   user.preference.save
 end
 
-When /^I set my preferences to hide warnings by browser$/ do
-  step %{I follow "My Preferences"}
-  check("preference[hide_warnings]")
-  click_button("Update")
-  step %{I should see "Your preferences were successfully updated"}
-end
-
-When /^I set my preferences to hide freeform by browser$/ do
-  step %{I follow "My Preferences"}
-  check("preference[hide_freeform]")
-  click_button("Update")
-  step %{I should see "Your preferences were successfully updated"}
-end
-
 When /^I set my preferences to automatically agree to my work being collected$/ do
   user = User.current_user
   user.preference.automatically_approve_collections = true
@@ -118,4 +104,11 @@ When /^I set my preferences to require my approval for my work to be collected$/
   user = User.current_user
   user.preference.automatically_approve_collections = false
   user.preference.save
+end
+
+When /^I set my preferences to hide both warnings and freeforms$/ do
+  step %{I follow "My Preferences"}
+  check("preference_hide_warnings")
+  check("preference_hide_freeform")
+  click_button("Update")
 end

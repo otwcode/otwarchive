@@ -43,7 +43,7 @@ Feature: Edit preferences
     And I should see "Turn off the banner showing on every page."
 
 
-  Scenario: View and edit preferences - viewing history, personal details, view entire work
+  Scenario: View and edit preferences for viewing history, personal details, view entire work
 
   Given the following activated user exists
     | login         | password   |
@@ -376,41 +376,52 @@ Feature: Edit preferences
     And I should see "Show additional tags"
 
   @javascript
-  Scenario: A user can see hidden tags
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
-      And I should see "Work was successfully posted."
-      And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-    When I view the work "Asteroid Blues"
-      And I follow "Show additional tags"
-    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
-     And I should not see "Show additional tags"
+  Scenario: A user can reveal hidden tags in a work's blurb and meta.
 
-  @javascript
-  Scenario: A user can see hidden tags on a series
+    Given I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie"
+    When I am logged in
+      And I set my preferences to hide both warnings and freeforms
+      And I go to first_user's works page
 
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I limit myself to the Archive
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
-      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
-    When I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-      And I go to first_user's user page
-      And I follow "Cowboy Bebop Blues"
+    # Check hidden tags on the blurb
     Then I should see "Asteroid Blues"
-      And I should see "Wild Horses"
+      And I should not see "No Archive Warnings Apply"
       And I should not see "Ed is a sweetie"
     When I follow "Show additional tags"
     Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply" within "li.warnings"
+      And I should not see "No Archive Warnings Apply"
     When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply" within "li.warnings"
+    Then I should see "No Archive Warnings Apply"
+
+    # Check hidden tags in the meta
+    When I view the work "Asteroid Blues"
+      And I follow "Show additional tags"
+    Then I should see "Ed is a sweetie"
+      And I should not see "Show additional tags"
+    When I follow "Show warnigns"
+    Then I should see "No Archive Warnings Apply"
+      And I should not see "Show warnings" 
+
+  @javascript
+  Scenario: A user can reveal hidden tags on a series blurb.
+
+    Given I limit myself to the Archive
+      And I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
+      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
+    When I am logged in
+      And I set my preferences to hide both warnings and freeforms
+      And I go to first_user's series page
+    Then I should see "Cowboy Bebop Blues"
+      And I should not see "No Archive Warnings Apply"
+      And I should not see "Ed is a sweetie"
+      And I should not see "Faye Valentine is a sweetie"
+    When I follow "Show additional tags"
+    Then I should see "Ed is a sweetie"
+      And I should see "Faye Valentine is a sweetie"
+      And I should not see "No Archive Warnings Apply"
+      And I should not see "Show additional tags"
+    When I follow "Show warnings"
+    Then I should see "No Archive Warnings Apply"
+      And I should not see "Show warnings"
