@@ -23,15 +23,15 @@ When /^I set my preferences to turn off notification emails for gifts$/ do
 end
 
 When /^I set my preferences to hide warnings$/ do
-  user = User.current_user
-  user.preference.hide_warnings = true
-  user.preference.save
+  step %{I follow "My Preferences"}
+  check("preference_hide_warnings")
+  click_button("Update")
 end
 
 When /^I set my preferences to hide freeform$/ do
-  user = User.current_user
-  user.preference.hide_freeform = true
-  user.preference.save
+  step %{I follow "My Preferences"}
+  check("preference_hide_freeform")
+  click_button("Update")
 end
 
 When /^I set my preferences to hide all hit counts$/ do
