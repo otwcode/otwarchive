@@ -386,13 +386,13 @@ Feature: Edit preferences
 
     # Check hidden tags on the blurb
     Then I should see "Asteroid Blues"
-      And I should not see "No Archive Warnings Apply"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
       And I should not see "Ed is a sweetie"
     When I follow "Show additional tags"
     Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
     When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply"
+    Then I should see "No Archive Warnings Apply" within "li.warnings"
 
     # Check hidden tags in the meta
     When I view the work "Asteroid Blues"
@@ -400,7 +400,7 @@ Feature: Edit preferences
     Then I should see "Ed is a sweetie"
       And I should not see "Show additional tags"
     When I follow "Show warnigns"
-    Then I should see "No Archive Warnings Apply"
+    Then I should see "No Archive Warnings Apply" within "li.warnings"
       And I should not see "Show warnings" 
 
   @javascript
@@ -414,13 +414,13 @@ Feature: Edit preferences
       And I set my preferences to hide both warnings and freeforms
       And I go to first_user's series page
     Then I should see "Cowboy Bebop Blues"
-      And I should not see "No Archive Warnings Apply"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
       And I should not see "Ed is a sweetie"
       And I should not see "Faye Valentine is a sweetie"
     When I follow "Show additional tags"
     Then I should see "Ed is a sweetie"
       And I should see "Faye Valentine is a sweetie"
-      And I should not see "No Archive Warnings Apply"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
       And I should not see "Show additional tags"
     When I follow "Show warnings"
     Then I should see "No Archive Warnings Apply"
