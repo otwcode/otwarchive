@@ -95,6 +95,9 @@ class DownloadWriter
       download.zip_path,
       download.file_path,
       '--input-encoding', 'utf-8',
+      # Prevent it from turning links to endnotes into entries for the table of
+      # contents on works with fewer than the specified number of chapters.
+      '--toc-threshold', '0',
       '--use-auto-toc',
       '--title', meta[:title],
       '--title-sort', meta[:sortable_title],
