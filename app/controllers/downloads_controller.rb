@@ -4,7 +4,7 @@ class DownloadsController < ApplicationController
   before_action :load_work, only: :show
   before_action :check_download_posted_status, only: :show
   before_action :check_download_visibility, only: :show
-  after_action :remove_downloads, only: :show
+  around_action :remove_downloads, only: :show
 
   def show
     respond_to :html, :pdf, :mobi, :epub, :azw3
@@ -45,7 +45,11 @@ protected
   # We're currently just writing everything to tmp and feeding them through
   # nginx so we don't want to keep the files around.
   def remove_downloads
-    @download&.remove unless Rails.env.test?
+    begin
+      yield
+    ensure
+      Download.remove(@work) unless Rails.env.test?
+    end
   end
 
   # We can't use check_visibility because this controller doesn't have access to
