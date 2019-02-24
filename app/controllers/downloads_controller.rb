@@ -45,11 +45,9 @@ protected
   # We're currently just writing everything to tmp and feeding them through
   # nginx so we don't want to keep the files around.
   def remove_downloads
-    begin
-      yield
-    ensure
-      Download.remove(@work) unless Rails.env.test?
-    end
+    yield
+  ensure
+    Download.remove(@work) unless Rails.env.test?
   end
 
   # We can't use check_visibility because this controller doesn't have access to
