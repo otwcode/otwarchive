@@ -2,8 +2,8 @@
 set -e
 
 # PDF
-wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb
-sudo dpkg -i ./wkhtmltox_0.12.5-1.trusty_amd64.deb
+wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb
+sudo dpkg -i ./wkhtmltox_0.12.5-1.bionic_amd64.deb
 sudo apt-get install -f
 wkhtmltopdf --version
 
