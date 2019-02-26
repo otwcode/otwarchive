@@ -4,16 +4,15 @@ class Sanitize
   # This defines the configuration we use for HTML tags and attributes allowed in the archive.
   module Config
 
-    ARCHIVE = {
+    ARCHIVE = freeze_config(
       elements: [
         'a', 'abbr', 'acronym', 'address', 'b', 'big', 'blockquote', 'br', 'caption', 'center', 'cite', 'code', 'col',
         'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
         'i', 'img', 'ins', 'kbd', 'li', 'ol', 'p', 'pre', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong',
         'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'tt', 'u', 'ul', 'var'],
 
-      # see in the Transformers section for what classes we strip
       attributes: {
-        all: ['align', 'title', 'class', 'dir'],
+        all: ['align', 'title', 'dir'],
         'a' => ['href', 'name'],
         'blockquote' => ['cite'],
         'col' => ['span', 'width'],
@@ -38,7 +37,16 @@ class Sanitize
         'img' => {'src' => ['http', 'https', :relative]},
         'q' => {'cite' => ['http', 'https', :relative]}
       }
-    }
+    )
+
+    CLASS_ATTRIBUTE = freeze_config(
+      # see in the Transformers section for what classes we strip
+      attributes: {
+        all: ARCHIVE[:attributes][:all] + ['class']
+      }
+    )
+
+    CSS_ALLOWED = freeze_config(merge(ARCHIVE, CLASS_ATTRIBUTE))
   end
 
   # This defines the custom sanitizing transformers we use for cleaning data
@@ -110,7 +118,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"

@@ -70,20 +70,6 @@ Given /^advanced languages$/ do
   Language.find_or_create_by(short: "FR", name: "Francais")
 end
 
-Given /^guest downloading is off$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Turn off downloading for guests")
-  click_button("Update")
-end
-
-Given /^guest downloading is on$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  uncheck("Turn off downloading for guests")
-  click_button("Update")
-end
-
 Given /^downloads are off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
@@ -105,6 +91,21 @@ Given /^tag wrangling is on$/ do
   step("I uncheck \"Turn off tag wrangling for non-admins\"")
   step("I press \"Update\"")
   step("I am logged out as an admin")
+end
+
+Given /^the support form is disabled and its text field set to "Please don't contact us"$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  check("Turn off support form")
+  fill_in(:admin_setting_disabled_support_form_text, with: "Please don't contact us")
+  click_button("Update")
+end
+
+Given /^the support form is enabled$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  uncheck("Turn off support form")
+  click_button("Update")
 end
 
 Given /^I have posted a FAQ$/ do
@@ -183,6 +184,10 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^the abuse report will not be considered spam$/ do
+  allow(Akismetor).to receive(:spam?).and_return(false)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -193,13 +198,6 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/  do |field, login|
   user = User.find_by(login: login)
   token = user.invitations.first.token
   fill_in(field, with: token)
-end
-
-When /^I turn off guest downloading$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  step("I check \"Turn off downloading for guests\"")
-  step("I press \"Update\"")
 end
 
 When /^I make an admin post$/ do
@@ -251,29 +249,9 @@ When /^there are (\d+) Archive FAQs$/ do |n|
   end
 end
 
-When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
-  n ||= 1
-  visit new_admin_post_path
-  fill_in("admin_post_title", with: "Amazing News #{n}")
-  fill_in("content", with: "This is the content for the #{n} Admin Post")
-  click_button("Post")
-end
-
-When /^there are (\d+) Admin Posts$/ do |n|
-  (1..n.to_i).each do |i|
-    step %{I make a #{i} Admin Post}
-  end
-end
-
 When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
-  end
-end
-
-When /^(\d+) Admin Posts? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryGirl.create(:admin_post, id: i)
   end
 end
 
@@ -282,7 +260,7 @@ When /^the invite_from_queue_at is yesterday$/ do
 end
 
 When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
+  step %{I run the rake task "invitations:check_queue"}
 end
 
 When /^I edit known issues$/ do
@@ -308,9 +286,7 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-### THEN
-
-When (/^I make a translation of an admin post$/) do
+When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -319,8 +295,17 @@ When (/^I make a translation of an admin post$/) do
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
+  fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
   click_button("Post")
 end
+
+When /^I hide the work "(.*?)"$/ do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Hide Work"}
+end
+
+### THEN
 
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}

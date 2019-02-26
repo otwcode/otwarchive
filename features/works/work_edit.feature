@@ -10,7 +10,7 @@ Feature: Edit Works
     When I view the work "First work"
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
-      And all search indexes are updated
+      And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
@@ -33,11 +33,12 @@ Feature: Edit Works
       # line below fails with perform_caching: true because of issue 3461
       # And I should see "Additional Tags: new tag"
       And I should see "first chapter content"
+      And I should see "Words:3"
     When I press "Update"
     Then I should see "Work was successfully updated."
       And I should see "Additional Tags: new tag"
       And I should see "Words:3"
-    When all search indexes are updated
+    When all indexing jobs have been run
       And I go to testuser's works page
     Then I should see "First work"
       And I should see "first fandom"
@@ -69,7 +70,8 @@ Feature: Edit Works
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
       And I press "Cancel"
-      Then I should see "second chapter content"
+    Then I should see "second chapter content"
+      And I should see "Words:7"
     # Test changing pseuds on a work
     When I go to testuser's works page
       And I follow "Edit"

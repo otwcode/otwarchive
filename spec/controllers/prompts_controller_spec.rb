@@ -3,6 +3,7 @@ require "spec_helper"
 describe PromptsController do
   include LoginMacros
   include RedirectExpectationHelper
+
   let(:collection) { create(:collection) }
   let(:open_signup) do
     signups = create(:challenge_signup)
@@ -15,6 +16,69 @@ describe PromptsController do
   let(:user) { create(:user) }
   before do
     fake_login_known_user(user)
+  end
+
+  describe "show" do
+    shared_examples "displays the prompt" do
+      # expects let variables :collection, :prompt
+      it "displays the prompt" do
+        get :show, params: { collection_id: collection.name, id: prompt.id }
+        expect(flash[:error]).blank?
+        expect(response).to have_http_status(200)
+        expect(response).to render_template("prompts/show")
+        expect(assigns(:prompt)).to eq(prompt)
+      end
+    end
+
+    context "in a prompt meme" do
+      let(:signup) { create(:prompt_meme_signup) }
+      let(:collection) { signup.collection }
+      let(:prompt) { signup.requests.first }
+
+      context "when logged in as a random user" do
+        let(:user) { create(:user) }
+        include_examples "displays the prompt"
+      end
+    end
+
+    context "in a gift exchange" do
+      let(:signup) { create(:gift_exchange_signup) }
+      let(:collection) { signup.collection }
+      let(:prompt) { signup.requests.first }
+
+      context "when logged in as the prompt owner" do
+        let(:user) { prompt.pseud.user }
+        include_examples "displays the prompt"
+      end
+
+      context "when logged in as the collection owner" do
+        let(:user) { collection.owners.first.user }
+        include_examples "displays the prompt"
+      end
+
+      context "when logged in as a random user" do
+        let(:user) { create(:user) }
+
+        it "redirects and shows an error" do
+          get :show, params: { collection_id: collection.name, id: prompt.id }
+          it_redirects_to_with_error(collection, "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+    end
+
+    context "when the prompt is in another collection" do
+      let(:target_signup) { create(:gift_exchange_signup) }
+      let(:target_prompt) { target_signup.requests.first }
+
+      let(:other_collection) { create(:collection, challenge: create(:gift_exchange)) }
+      let(:user) { other_collection.owners.first.user }
+
+      it "redirects and shows an error" do
+        get :show, params: { collection_id: other_collection.name,
+                             id: target_prompt.id }
+        it_redirects_to_with_error(other_collection, "Sorry, that prompt isn't associated with that collection.")
+      end
+    end
   end
 
   describe "no_challenge" do
@@ -64,10 +128,8 @@ describe PromptsController do
     let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
     it "should have no errors and redirect to the edit page" do
       post :create, params: { collection_id: open_signup.collection.name, prompt_type: "offer", prompt: { collection_id: nil } }
-      it_redirects_to "#{collection_signups_path(open_signup.collection)}/"\
-                      "#{open_signup.collection.prompts.first.challenge_signup_id}/edit"
-      expect(flash[:error]).blank?
-      expect(flash[:notice]).blank?
+      it_redirects_to_simple("#{collection_signups_path(open_signup.collection)}/"\
+                      "#{open_signup.collection.prompts.first.challenge_signup_id}/edit")
     end
   end
 

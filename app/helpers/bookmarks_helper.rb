@@ -108,4 +108,11 @@ module BookmarksHelper
     end
   end
 
+  def get_count_for_bookmark_blurb(bookmarkable)
+    count = bookmarkable.public_bookmark_count
+    link = link_to (count < 100 ? count.to_s : "*"),
+              polymorphic_path([bookmarkable, Bookmark])
+    content_tag(:span, link, class: "count")
+  end
+
 end
