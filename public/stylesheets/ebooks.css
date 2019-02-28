@@ -5,11 +5,19 @@
 
 .meta dl.tags > dt, .meta dl.tags > dd {
   display: block;
+}
+
+.meta dl.tags > dt {
+  font-weight: bold;
   margin: 0;
 }
 
-.meta dt {
-  font-weight: bold;
+.meta dl.tags > dd {
+  margin: 0 0 1em 1em;
+}
+
+.meta dl.tags > dd:last-of-type {
+  margin-bottom: 0;
 }
 
 #chapters, .userstuff {
