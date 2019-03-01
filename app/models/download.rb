@@ -89,7 +89,7 @@ class Download
 
   # Write to temp and then immediately clean it up
   def dir
-    "/tmp/#{work.id}"
+    "tmp/#{work.id}"
   end
 
   # Utility methods which clean up work data for use in downloads
