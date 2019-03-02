@@ -1,5 +1,5 @@
 class Download
-  attr_reader :work, :file_type, :mime_type, :timestamp
+  attr_reader :work, :file_type, :mime_type
 
   def initialize(work, options = {})
     @work = work
@@ -7,7 +7,6 @@ class Download
     # TODO: Our current version of the mime-types gem doesn't include azw3, but
     # the gem cannot be updated without updating rest-client
     @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
-    @timestamp = Time.now.to_i
   end
 
   def generate
@@ -63,7 +62,7 @@ class Download
     "/downloads/#{work.id}/#{file_name}.#{file_type}"
   end
 
-  # The path to the zip file (eg, "/tmp/42_epub_1551241277/42.zip")
+  # The path to the zip file (eg, "/tmp/42_epub_20190301-24600-17164a8/42.zip")
   def zip_path
     "#{dir}/#{work.id}.zip"
   end
@@ -73,19 +72,22 @@ class Download
     "#{dir}/assets"
   end
 
-  # The full path to the HTML file (eg, "/tmp/42_epub_1551241277/The Hobbit.html")
+  # The full path to the HTML file (eg, "/tmp/42_epub_20190301-24600-17164a8/The Hobbit.html")
   def html_file_path
     "#{dir}/#{file_name}.html"
   end
 
-  # The full path to the file (eg, "/tmp/42_epub_1551241277/The Hobbit.epub")
+  # The full path to the file (eg, "/tmp/42_epub_20190301-24600-17164a8/The Hobbit.epub")
   def file_path
     "#{dir}/#{file_name}.#{file_type}"
   end
 
-  # Write to temp and then immediately clean it up
+  # Get the temporary directory where downloads will be generated,
+  # creating the directory if it doesn't exist.
   def dir
-    "/tmp/#{work.id}_#{file_type}_#{timestamp}"
+    return @tmpdir if @tmpdir
+    @tmpdir = Dir.mktmpdir("#{work.id}_#{file_type}_")
+    @tmpdir
   end
 
   # Utility methods which clean up work data for use in downloads

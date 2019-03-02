@@ -9,8 +9,6 @@ class DownloadWriter
   end
 
   def write
-    # Create the directory
-    FileUtils.mkdir_p download.dir
     generate_html_download
     generate_ebook_download unless download.file_type == "html"
     download

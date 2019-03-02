@@ -48,7 +48,7 @@ protected
   def remove_downloads
     yield
   ensure
-    @download.remove unless Rails.env.test?
+    @download.remove
   end
 
   # We can't use check_visibility because this controller doesn't have access to
