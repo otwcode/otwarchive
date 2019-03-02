@@ -60,7 +60,7 @@ namespace :Tag do
           work.warnings = choose_not_to_warn if work.warnings.count <= 1
         end
         # Once we get becomes!  ( rails 4.0.2 ) use it
-        warning.type = "Freeform"
+        warning.becomes!(Freeform)
         warning.save!
       end
     end
