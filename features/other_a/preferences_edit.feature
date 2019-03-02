@@ -411,6 +411,6 @@ Feature: Edit preferences
       And I should not see "Ed is a sweetie"
     When I follow "Show additional tags"
     Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply" within "li.archive_warnings"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
     When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply" within "li.archive_warnings"
+    Then I should see "No Archive Warnings Apply" within "li.warnings"

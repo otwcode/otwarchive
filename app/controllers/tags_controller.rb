@@ -131,6 +131,7 @@ class TagsController < ApplicationController
     end
   end
 
+  # TODO: Refactor the tag_type checking logic
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
       raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
@@ -140,21 +141,30 @@ class TagsController < ApplicationController
                 nil
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
+
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
-        if params[:tag_type] == 'archive_warnings'
+        if params[:tag_type] == 'warnings'
           @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq.sort
         else
           @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
         end
       else
-        if %w(archive_warnings freeforms).include?(params[:tag_type])
-          @display_tags = @display_creation.send(params[:tag_type])
+        @display_tags = case params[:tag_type]
+        when 'warnings'
+          @display_creation.archive_warnings
+        when 'freeforms'
+          @display_creation.freeforms
         end
       end
-      binding.pry if @display_tags.nil?
-      @display_category = @display_tags.first.class.name.tableize
+
+      if params[:tag_type] == 'warnings'
+        @display_category = 'warnings'
+      else
+        @display_category = @display_tags.first.class.name.tableize
+      end
     end
+
     respond_to do |format|
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
