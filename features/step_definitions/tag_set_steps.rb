@@ -9,7 +9,9 @@ end
 # If you want ratings, warnings, or categories, first load basic or default tags for those types
 When /^I add (.*) to the tag ?set$/ do |tags|
   tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
-    if type == "category" || type == "rating" || type == "archive_warning"
+    type = "warning" if type == "archive_warning"
+
+    if type == "category" || type == "rating" || type == "warning"
       tags = scanned_tags.split(/, ?/)
       tags.each { |tag| check(tag) }
     else
@@ -51,7 +53,9 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
   tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
     tags = scanned_tags.split(/, ?/)
-    if type == "category" || type == "rating" || type == "archive_warning"
+    type = "warning" if type == "archive_warning"
+
+    if type == "category" || type == "rating" || type == "warning"
       tags.each { |tag| uncheck(tag) }
     else
       tags.each { |tag| check(tag) }

@@ -7,7 +7,7 @@ module TagsHelper
     when 'freeform'
       "Additional Tags"
     else
-      tag_type.capitalize.pluralize
+      tag_type.titleize.pluralize
     end
   end
 

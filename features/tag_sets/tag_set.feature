@@ -100,11 +100,11 @@ Feature: Creating and editing tag sets
   Scenario: A user should be able to add and remove warning tags for a tag set they own
   Given the basic warnings exist
     And I am logged in
-    And I set up the tag set "Archive Warnings" with the archive_warning tags "Choose Not To Use Archive Warnings"
-  When I add the archive_warning tags "No Archive Warnings Apply" to the tag set "Archive Warnings"
+    And I set up the tag set "Archive Warnings" with the warning tags "Choose Not To Use Archive Warnings"
+  When I add the warning tags "No Archive Warnings Apply" to the tag set "Archive Warnings"
   Then I should see "Choose Not To Use Archive Warnings"
     And I should see "No Archive Warnings Apply"
-  When I remove the archive_warning tags "Choose Not To Use Archive Warnings" from the tag set "Archive Warnings"
+  When I remove the warning tags "Choose Not To Use Archive Warnings" from the tag set "Archive Warnings"
   Then I should see "No Archive Warnings Apply"
     And I should not see "Choose Not To Use Archive Warnings"
 
