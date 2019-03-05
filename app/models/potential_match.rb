@@ -1,4 +1,4 @@
-class PotentialMatch < ActiveRecord::Base
+class PotentialMatch < ApplicationRecord
 
   # We use "-1" to represent all the requested items matching
   ALL = -1
@@ -35,7 +35,7 @@ public
   def self.clear!(collection)
     # rapidly delete all potential prompt matches and potential matches
     # WITHOUT CALLBACKS
-    pmids = collection.potential_matches.value_of(:id)
+    pmids = collection.potential_matches.pluck(:id)
     PotentialMatch.where(id: pmids).delete_all
   end
 
@@ -78,6 +78,14 @@ public
   # The actual method that generates the potential matches for an entire collection
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
+
+    if collection.challenge.assignments_sent_at.present?
+      # If assignments have been sent, we don't want to delete everything and
+      # regenerate. (If the challenge moderator wants to recalculate potential
+      # matches after sending assignments, they can use the Purge Assignments
+      # button.)
+      return
+    end
 
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)
@@ -139,28 +147,28 @@ public
     end
 
     # get the tagsets used in the signup we are trying to match
-    signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    signup_tagsets = signup.send(prompt_type.pluralize).pluck(:tag_set_id, :optional_tag_set_id).flatten.compact
 
     # get the ids of all the tags of the required types in the signup's tagsets
-    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
+    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).pluck(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
       return collection.signups.pluck(:id)
     else
       # now find all the tagsets in the collection that share the original signup's tags
-      match_tagsets = SetTagging.where(tag_id: signup_tags, tag_set_id: collection_tag_sets).value_of(:tag_set_id).uniq
+      match_tagsets = SetTagging.where(tag_id: signup_tags, tag_set_id: collection_tag_sets).pluck(:tag_set_id).uniq
 
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
       # looking for requests with the same tag.
       matching_signup_ids = (prompt_type == "request" ? Offer : Request).
                             where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
-                            value_of(:challenge_signup_id).compact
+                            pluck(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
       condition = "any_#{required_types.first.downcase} = 1"
-      matching_signup_ids += collection.prompts.where(condition).value_of(:challenge_signup_id)
+      matching_signup_ids += collection.prompts.where(condition).pluck(:challenge_signup_id)
     end
 
     matching_signup_ids.uniq
@@ -178,7 +186,7 @@ public
 
     # Get all the data
     settings = collection.challenge.potential_match_settings
-    collection_tag_sets = Prompt.where(collection_id: collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    collection_tag_sets = Prompt.where(collection_id: collection.id).pluck(:tag_set_id, :optional_tag_set_id).flatten.compact
     required_types = settings.required_types.map {|t| t.classify}
 
     # clear the existing potential matches for this signup in each direction

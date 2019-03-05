@@ -11,10 +11,11 @@ $j(document).ready(function() {
     attachCharacterCounters();
     setupAccordion();
     setupDropdown();
+    updateCachedTokens();
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
-    
+
     // add clear to items on the splash page in older browsers
     $j('.splash').children('div:nth-of-type(odd)').addClass('odd');
 
@@ -206,7 +207,7 @@ function setupToggled(){
 
     if (node.hasClass('open')) {
       close_toggles.each(function(){$j(this).show();});
-      open_toggles.each(function(){$j(this).hide();});    
+      open_toggles.each(function(){$j(this).hide();});
     } else {
       node.hide();
       close_toggles.each(function(){$j(this).hide();});
@@ -384,24 +385,25 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  var panes = $j(".expandable");
-  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
-    var expander = $j(this);
-    if (expander.attr('href') == '#') {
-      e.preventDefault();
-    }
-    // We need to treat the pseud menu differently so it will be properly responsive
-    // The other accordions need to be converted to a similar system
-    // Otherwise we run into bugs if one @media uses inline display and another uses block
-    if (expander.attr('title') == 'Pseud Switcher') {
-      if (expander.hasClass('expanded')) {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
-      } else {
-        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
-      }
-    } else {
-      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-    }
+  $j(".expandable").each(function() {
+    var pane = $j(this);
+    // hide the pane element if it's not hidden by default
+    if ( !pane.hasClass("hidden") ) {
+      pane.addClass("hidden");
+    };
+
+    // make the expander visible
+    // add the default collapsed state
+    // make it do the expanding and collapsing
+    pane.prev().removeClass("hidden").addClass("collapsed").click(function(e) {
+      var expander = $j(this);
+      if (expander.attr('href') == '#') {
+        e.preventDefault();
+      };
+
+      // change the classes upon clicking the expander
+      expander.toggleClass("collapsed").toggleClass("expanded").next().toggleClass("hidden");
+    });
   });
 }
 
@@ -456,7 +458,7 @@ $j(document).ready(function() {
         if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
           msg = "You have already left kudos here. :)";
         }
-        
+
         if (data.errors && data.errors.cannot_be_author) {
           msg = "You can't leave kudos on your own work.";
         }
@@ -499,7 +501,7 @@ $j(document).ready(function() {
     var formSubmit = form.find('[type="submit"]');
     var createValue = form.data('create-value');
     var destroyValue = form.data('destroy-value');
-    var flashContainer = $j('.flash');  
+    var flashContainer = $j('.flash');
 
     $j.ajax({
       type: 'POST',
@@ -538,7 +540,7 @@ $j(document).ready(function() {
 });
 
 // For simple forms that update or destroy records and remove them from a listing
-// e.g. delete from history, mark as read
+// e.g. delete from history, mark as read, delete invitation request
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
@@ -547,10 +549,14 @@ $j(document).ready(function() {
 
     var form = $j(this);
     var formAction = form.attr('action');
-    var formParent = form.closest('li.group');
-    var parentContainer = formParent.closest('div');
-    var flashContainer = parentContainer.find('.flash');  
-  
+    // The record we're removing is probably in a list, but might be in a table
+    if (form.closest('li.group').length !== 0) {
+      formParent = form.closest('li.group');
+    } else { formParent = form.closest('tr'); };
+    // The admin div does not hold a flash container
+    var parentContainer = formParent.closest('div:not(.admin)');
+    var flashContainer = parentContainer.find('.flash');
+
     $j.ajax({
       type: 'POST',
       url: formAction,
@@ -589,7 +595,7 @@ function thermometer() {
     var banner_content = $j(this).find('blockquote')
         banner_goal_text = banner_content.find('span.goal').text()
         banner_progress_text = banner_content.find('span.progress').text()
-        if ($j(this).find('span.goal').hasClass('stretch')){ 
+        if ($j(this).find('span.goal').hasClass('stretch')){
           stretch = true
         } else { stretch = false }
 
@@ -615,7 +621,7 @@ function thermometer() {
         'width': percentage_amount + '%',
         'background': '#4d7c10',
         'background-image': 'linear-gradient(to bottom, #6e992f 0%, #4d7c10 50%, #3b7000 51%, #5d8e13 100%)'
-      });     
+      });
     } else if (percentage_amount >= 100) {
       banner_content.find('div.progress').css({
         'width': '100%',
@@ -639,7 +645,21 @@ function thermometer() {
         'width': percentage_amount + '%',
         'background': '#f17432',
         'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
-      });  
+      });
     }
   });
+}
+
+function updateCachedTokens() {
+  // we only do full page caching when users are logged out
+  if ($j('#small_login').length > 0) {
+    $j.getJSON("/token_dispenser.json", function( data ) {
+      var token = data.token;
+      // set token on fields
+      $j('input[name=authenticity_token]').each(function(){
+        $j(this).attr('value', token);
+      });
+      $j('meta[name=csrf-token]').attr('value', token);
+    });
+  }
 }

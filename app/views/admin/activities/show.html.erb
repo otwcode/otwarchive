@@ -16,7 +16,7 @@
       <dd><%= @activity.created_at %></dd>
 
       <dt><%= ts("Admin") %></dt>
-      <dd><%= @activity.admin_login %></dd>
+      <dd><%= admin_activity_login_string(@activity) %></dd>
 
       <dt><%= ts("Action") %></dt>
       <dd><%= @activity.action %></dd>

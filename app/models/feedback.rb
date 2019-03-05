@@ -1,5 +1,5 @@
 # Class which holds feedback sent to the archive administrators about the archive as a whole
-class Feedback < ActiveRecord::Base
+class Feedback < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   # note -- this has NOTHING to do with the Comment class!
@@ -8,7 +8,7 @@ class Feedback < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :summary
   validates_presence_of :language
-  validates :email, email_veracity: {allow_blank: true}
+  validates :email, email_veracity: { allow_blank: false }
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
@@ -47,10 +47,19 @@ class Feedback < ActiveRecord::Base
 
   def email_and_send
     AdminMailer.feedback(id).deliver
-    if email.present?
-      UserMailer.feedback(id).deliver
-    end
+    UserMailer.feedback(id).deliver
     send_report
+  end
+
+  def rollout_string
+    string = ""
+    # ES UPGRADE TRANSITION #
+    # Remove ES version logic, but leave this method for future rollout use
+    # string << if Feedback.use_new_search?
+    #             "ES 6.0"
+    #           else
+    #             "ES 0.90"
+    #           end
   end
 
   def send_report
@@ -62,7 +71,8 @@ class Feedback < ActiveRecord::Base
       email: email,
       username: username,
       user_agent: user_agent,
-      site_revision: ArchiveConfig.REVISION.to_s
+      site_revision: ArchiveConfig.REVISION.to_s,
+      rollout: rollout
     )
     reporter.send_report!
   end

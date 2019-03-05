@@ -3,6 +3,9 @@ Feature: Filing an abuse report
   As an annoyed user
   I want to file an abuse ticket
 
+  Background:
+  Given the abuse report will not be considered spam
+
   Scenario: File an abuse request with default options
 
   Given basic languages
@@ -53,10 +56,11 @@ Feature: Filing an abuse report
     And I fill in "Your comment (required)" with "This is wrong"
     And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
     And I fill in "Your email (required)" with ""
+    And I select "Deutsch" from "abuse_report_language"
     And I press "Submit"
     And I should see "Email does not seem to be a valid address."
+    And "Deutsch" should be selected within "Select language (required)"
   Then I fill in "Your email" with "valid@archiveofourown.org"
     And I press "Submit"
     And I should see "Your abuse report was sent to the Abuse team."
     And 2 email should be delivered
-
