@@ -6,6 +6,8 @@ module TagsHelper
       "Bookmarker's Tags"
     when 'freeform'
       "Additional Tags"
+    when 'archive_warning'
+      "Warnings"
     else
       tag_type.titleize.pluralize
     end
