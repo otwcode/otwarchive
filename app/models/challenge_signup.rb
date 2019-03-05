@@ -120,7 +120,7 @@ class ChallengeSignup < ApplicationRecord
                 new_tags = prompt.tag_set.send("#{tag_type}_taglist")
                 unless (all_tags_used & new_tags).empty?
                   errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
-                                      prompt_type: prompt_type.singularize, tag_type: tag_type)
+                                      prompt_type: prompt_type.singularize, tag_type: TagSet.find_type_label(tag_type))
                   break
                 end
                 all_tags_used += new_tags
