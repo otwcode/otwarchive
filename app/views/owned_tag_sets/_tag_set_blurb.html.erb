@@ -25,12 +25,12 @@
   <% if tag_set.tag_set %>
     <dl class="stats">
       <% %w(fandom character relationship freeform).each do |tag_type| %>
-        <dt><%= ts("#{tag_type.classify.pluralize}") %>:</dt>
+        <dt><%= ts("#{tag_type.humanize.titleize.pluralize}") %>:</dt>
         <dd><%= tag_set.with_type(tag_type).count %></dd>
       <% end %>
     </dl>
   <% end %>
-    
+
   <% if logged_in? && (tag_set.user_is_moderator?(current_user) || tag_set.nominated) %>
     <h6 class="landmark heading"><%= ts('User Actions') %></h6>
     <ul class="actions" role="navigation">

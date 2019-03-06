@@ -1,17 +1,21 @@
 
 <% form.object.build_tag_set unless form.object.tag_set %>
 <%= form.fields_for :tag_set do |tag_set_form| %>
+
   <% TagSet::TAG_TYPES.each do |tag_type| %>
+    <% tag_label = TagSet.find_type_label(tag_type) %>
+
     <% tag_name = tag_type.classify.constantize::NAME # constantize safe as iterating over safe list %>
     <% num_allowed = restriction.allowed(tag_type) %>
     <% num_required = restriction.required(tag_type) %>
+
     <% if num_allowed > 0 %>
       <% # save some local variables to make the tag_set_form cleaner %>
       <% tag_fieldname = field_name(tag_set_form, "#{tag_type}_tagnames") %>
       <% tag_field_id =  field_id(tag_set_form, "#{tag_type}_tagnames") %>
 
       <dt<%= num_required > 0 ? ' class="required"'.html_safe : '' %>>
-        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, challenge_signup_label(tag_name, num_allowed, num_required), :class => tag_type %>
+        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, challenge_signup_label(tag_name, num_allowed, num_required), :class => tag_label %>
 
         <% # kludge required for bug in nested_attributes_for:https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes %>
       </dt>
@@ -36,7 +40,7 @@
 
       <% if TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
         <% # do ratings, warnings, categories as taglists if not already specified %>
-        <dd class="<%= ts("#{tag_type}") %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
+        <dd class="<%= tag_label %> listbox group" title="<%= ts("choose #{tag_label.pluralize.downcase}") %>">
           <h4 class="heading"><%= ts("#{tag_name.pluralize.titleize}") %></h4>
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames",
             (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name}, # constantize safe as itterating over safe list
@@ -67,7 +71,7 @@
             <% @fandom_tag_id += "_checkboxes" if tag_type == 'fandom' %>
 
             <% # create a scrollable checkboxes section to wrap the tags, see application_helper %>
-            <dd class="<%= ts("#{tag_type}") %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
+            <dd class="<%= "#{tag_label}" %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
               <h4 class="heading"><%= ts("#{tag_name.titleize}") %></h4>
               <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", restriction.tags(tag_type).by_name_without_articles.pluck(:name),
                   :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>

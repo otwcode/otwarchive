@@ -14,25 +14,25 @@ is verbose-->
 
     <% if is_offer %>
       <!-- skip the notes -->
-    	<legend><%= ts("Offer Settings") %></legend>
-    	<h3 class="landmark"><%= ts("Offer Settings") %></h3>
-    	<p class="note">
-    	  <%= ts("These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!") %>
-    	</p>
+      <legend><%= ts("Offer Settings") %></legend>
+      <h3 class="landmark"><%= ts("Offer Settings") %></h3>
+      <p class="note">
+        <%= ts("These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!") %>
+      </p>
     <% else %>
-    	<legend><%= ts("Request Settings") %></legend>
-    	<h3 class="landmark"><%= ts("Request Settings") %></h3>
-    	<p class="note">
-    	  <%= ts("These settings determine what each separate request can contain, and in particular how many different tags of each kind.") %>
-    	  <% unless type == "prompt_meme" %><%= ts("If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.") %><% end %>
-    	</p>
-    	<% unless type == "prompt_meme" %><p class="note">
-    	  <%= ts('Checking "Allow Any?" allows users to select "Any" for that field; this means they will match') %> <em><%= ts("anything") %></em> <%= ts("put in that field. This option is safer for offers than requests!") %>
-    	</p><% end %>
-    	<p class="note">
-    	  <%= ts('If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
-    	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!') %>
-    	</p>
+      <legend><%= ts("Request Settings") %></legend>
+      <h3 class="landmark"><%= ts("Request Settings") %></h3>
+      <p class="note">
+        <%= ts("These settings determine what each separate request can contain, and in particular how many different tags of each kind.") %>
+        <% unless type == "prompt_meme" %><%= ts("If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.") %><% end %>
+      </p>
+      <% unless type == "prompt_meme" %><p class="note">
+        <%= ts('Checking "Allow Any?" allows users to select "Any" for that field; this means they will match') %> <em><%= ts("anything") %></em> <%= ts("put in that field. This option is safer for offers than requests!") %>
+      </p><% end %>
+      <p class="note">
+        <%= ts('If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
+        for all three prompts -- no overlap allowed. Please explain this in your signup instructions!') %>
+      </p>
     <% end %>
     <dl>
       <% if @challenge.new_record? || !@challenge.collection.prompts.exists? %>
@@ -67,7 +67,7 @@ is verbose-->
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use:") %></dt>
         <dd title="<%= ts('tag sets to use') %>"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
-          <dt><%= ts("#{tag_type.classify} Settings:") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
+          <dt><%= ts("#{tag_type.humanize.titleize} Settings:") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
           <dd>
             <ul>
               <li>

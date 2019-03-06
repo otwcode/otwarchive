@@ -99,6 +99,7 @@ class Prompt < ApplicationRecord
         # get the tags of this type the user has specified
         taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") : []
         tag_count = taglist.count
+        tag_label = TagSet.find_type_label(tag_type)
 
         # check if user has chosen the "Any" option
         if self.send("any_#{tag_type}")
@@ -117,13 +118,13 @@ class Prompt < ApplicationRecord
               ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} cannot include any #{tag_label} tags, but you have included %{taglist}.",
               taglist: taglist_string))
           elsif required == allowed
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include exactly %{required} #{tag_label} tags, but you have included #{tag_count} #{tag_label} tags in your current #{prompt_type}.",
               required: required))
           else
-            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("^#{prompt_type}: Your #{prompt_type} must include between %{required} and %{allowed} #{tag_label} tags, but you have included #{tag_count} #{tag_label} tags in your current #{prompt_type}.",
               required: required, allowed: allowed))
           end
         end
@@ -153,7 +154,7 @@ class Prompt < ApplicationRecord
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
+            errors.add(:base, ts("^These %{TagSet.find_type_label(tag_type)} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               tag_type: tag_type,
               prompt_type: self.class.name.downcase,
               taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
