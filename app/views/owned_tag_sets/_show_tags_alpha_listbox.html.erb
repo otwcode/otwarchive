@@ -12,7 +12,7 @@
 <% itemcount ||= 30 %>
 <li class="<%= tag_type %> alphabet tagset index group listbox">
   <h3>
-    <%= ts("#{tag_type.humanize.titleize.pluralize}") %>
+    <%= t("tag_types.#{tag_type}").humanize.titleize.pluralize %>
     <%= expand_contract_all %>
   </h3>
   <ol class="index group">

@@ -1,7 +1,7 @@
 <% # not too many, so just show them in a single group %>
 <li class="<%= tag_type %> listbox group">
   <h3 class="expander_parent heading">
-    <%= ts("#{tag_type.titleize.pluralize}") %>
+    <%= t("tag_types.#{tag_type}").titleize.pluralize %>
     (<%= @tag_set.with_type(tag_type).count %>)
     <%= expand_contract_shuffle("list_for_#{tag_type}") %>
   </h3>

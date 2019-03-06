@@ -6,7 +6,7 @@
         <% if @tag_set.with_type(tag_type).empty? %>
           <h4 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add #{tag_type.humanize.titleize.pluralize}:") %></h5>
         <% else %>
-          <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.humanize.titlelize.pluralize}") %></h4>
+          <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.humanize.titleize.pluralize}") %></h4>
           <%= check_all_none %>
           <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.with_type(tag_type).by_name_without_articles) %>
           <h5 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add:") %></h5>
@@ -16,7 +16,10 @@
 
     <% else %>
       <% # ratings, categories, archive_warnings %>
-        <h4 class="heading"><%= tag_type.gsub(/\s+/, "").humanize.titleize.pluralize %></h4>
+        <h4 class="heading">
+          <%= t("tag_types.#{tag_type}").humanize.titleize.pluralize %>
+        </h4>
+
         <%= check_all_none %>
         <% raise "Redshirt: Attempted to constantize invalid class initialize _internal_tag_set_fields.html.erb (2) #{tag_type.gsub(/\s+/, "").classify}" unless %w(Category Rating ArchiveWarning).include?(tag_type.gsub(/\s+/, "").classify) %>
         <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.gsub(/\s+/, "").classify.constantize.pluck(:name),
