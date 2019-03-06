@@ -25,7 +25,7 @@
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) %></dd>
 
       <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
-        <dt class="<%= type.downcase %>"><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
+        <dt class="<%= type.downcase %>"><%= match_settings_form.label("num_required_#{type}", "#{type.humanize.titleize}:") %></dt>
         <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) %></dd>
       <% end %>
 
@@ -36,11 +36,13 @@
         <dd>
           <fieldset>
             <ul>
-            <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
-            <li class="<%= type.downcase %>"><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
-          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %></li>
-      <% end %>
-      </ul>
+            <% TagSet::TAG_TYPES.map.each do |type| %>
+              <li class="<%= TagSet.find_type_label(type) %>">
+                <%= match_settings_form.check_box("include_optional_#{type.pluralize}", :checked => potential_match_settings.send("include_optional_#{type.pluralize}")) %>
+                <%= match_settings_form.label("include_optional_#{type.pluralize}", type.capitalize) %>
+              </li>
+            <% end %>
+            </ul>
     </fieldset>
     </dd>
     </dl>
