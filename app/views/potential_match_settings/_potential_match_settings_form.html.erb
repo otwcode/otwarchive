@@ -39,7 +39,7 @@
             <% TagSet::TAG_TYPES.map.each do |type| %>
               <li class="<%= TagSet.find_type_label(type) %>">
                 <%= match_settings_form.check_box("include_optional_#{type.pluralize}", :checked => potential_match_settings.send("include_optional_#{type.pluralize}")) %>
-                <%= match_settings_form.label("include_optional_#{type.pluralize}", t("tag_types.#{type}").capitalize) %>
+                <%= match_settings_form.label("include_optional_#{type.pluralize}", type.titleize.pluralize) %>
               </li>
             <% end %>
             </ul>
