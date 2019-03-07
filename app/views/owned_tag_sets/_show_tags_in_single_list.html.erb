@@ -1,5 +1,5 @@
 <% # not too many, so just show them in a single group %>
-<li class="<%= tag_type %> listbox group">
+<li class="<%= tag_type_class(tag_type) %> listbox group">
   <h3 class="expander_parent heading">
     <%= t("tag_types.#{tag_type.underscore}").titleize.pluralize %>
     (<%= @tag_set.with_type(tag_type).count %>)

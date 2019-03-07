@@ -13,6 +13,18 @@ module TagsHelper
     end
   end
 
+  def tag_type_class(tag_type)
+    tag_type = tag_type.classify
+    case tag_type
+    when "AdditionalTag"
+      "freeform"
+    when "ArchiveWarning"
+      "warning"
+    else
+      tag_type.downcase
+    end
+  end
+
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
     tags = tags.uniq.compact.map {|tag| content_tag(:li, link_to_works ? link_to_tag_works(tag) : link_to_tag(tag))}.join.html_safe

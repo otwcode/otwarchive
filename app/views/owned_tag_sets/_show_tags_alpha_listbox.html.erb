@@ -10,7 +10,7 @@
   # in a list item
 %>
 <% itemcount ||= 30 %>
-<li class="<%= tag_type %> alphabet tagset index group listbox">
+<li class="<%= tag_type_class(tag_type) %> alphabet tagset index group listbox">
   <h3>
     <%= t("tag_types.#{tag_type}").humanize.titleize.pluralize %>
     <%= expand_contract_all %>
@@ -18,7 +18,7 @@
   <ol class="index group">
     <% slice_index = 0 %>
     <% tagname_list.each_slice(itemcount) do |tagnames| %>
-      <li class="<%= tag_type %> letter range listbox">
+      <li class="<%= tag_type_class(tag_type) %> letter range listbox">
         <h3 class="expander_parent heading">
           <span class="range">
             <%= tagnames.first %>
