@@ -151,7 +151,7 @@ group :test do
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
-  gem 'webmock', '~> 1.24.2'
+  gem 'webmock', '~> 2.3.1'
   gem 'timecop'
   gem 'cucumber-timecop', :require => false
   # Code coverage

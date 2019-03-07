@@ -200,7 +200,7 @@ GEM
     gherkin (4.1.3)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.4)
+    hashdiff (0.3.8)
     highline (1.7.8)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
@@ -381,7 +381,7 @@ GEM
       et-orbi (~> 1.0)
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sanitize (4.6.5)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
@@ -440,7 +440,7 @@ GEM
       rack (>= 1.0.0)
     warden (1.2.7)
       rack (>= 1.0)
-    webmock (1.24.6)
+    webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -544,7 +544,7 @@ DEPENDENCIES
   unicorn (>= 5.1.0)
   unidecoder
   vcr (~> 3.0, >= 3.0.1)
-  webmock (~> 1.24.2)
+  webmock (~> 2.3.1)
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
@@ -553,4 +553,4 @@ RUBY VERSION
    ruby 2.4.5p335
 
 BUNDLED WITH
-   1.16.2
+   1.17.3
