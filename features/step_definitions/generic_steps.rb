@@ -245,5 +245,5 @@ end
 
 When /^I should see the correct time zone for "(.*)"$/ do |zone|
   Time.zone = zone
-  page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
+  page.body.should =~ /#{Regexp.escape(Time.zone.now.time_zone.name)}/
 end
