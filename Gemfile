@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.5'
+ruby '2.5.3'
 
 gem 'test-unit', '~> 3.2'
 
@@ -76,7 +76,7 @@ gem 'paperclip', '>= 5.2.0'
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise'
+gem 'devise', '>= 4.4.0'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
 
@@ -112,7 +112,7 @@ gem 'globalize', git: 'https://github.com/panorama-berlin/globalize'
 gem 'activemodel-serializers-xml'
 
 # Add a clean notifier that shows we are on dev or test
-gem 'rack-dev-mark', '>=0.7.5'
+gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
