@@ -846,11 +846,6 @@ class Work < ApplicationRecord
     end
   end
 
-  after_update :remove_outdated_downloads
-  def remove_outdated_downloads
-    Download.remove(self)
-  end
-
   #######################################################################
   # TAGGING
   # Works are taggable objects.

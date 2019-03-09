@@ -8,10 +8,11 @@ class DownloadsController < ApplicationController
 
   def show
     respond_to :html, :pdf, :mobi, :epub, :azw3
-    @download = Download.generate(@work, mime_type: request.format)
+    @download = Download.new(@work, mime_type: request.format)
+    @download.generate
 
     # Make sure we were able to generate the download.
-    unless @download.present? && @download.exists?
+    unless @download.exists?
       flash[:error] = ts("We were not able to render this work. Please try again in a little while or try another format.")
       redirect_to work_path(@work)
       return
@@ -47,7 +48,7 @@ protected
   def remove_downloads
     yield
   ensure
-    Download.remove(@work) unless Rails.env.test?
+    @download.remove
   end
 
   # We can't use check_visibility because this controller doesn't have access to
