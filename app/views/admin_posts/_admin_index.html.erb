@@ -16,10 +16,10 @@
       <ul class="actions">
 	      <li><%= link_to ts("Show"), admin_post %></li>
 			  <li><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></li>
-    	  <li><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></li>
+    	  <li><%= link_to ts("Delete"), admin_post, data: {confirm: 'Are you sure?'}, :method => :delete %></li>
       </ul>
 	  </dd>
-  <% end %> 
+  <% end %>
 </dl>
 <!--/content-->
 <!--subnav-->

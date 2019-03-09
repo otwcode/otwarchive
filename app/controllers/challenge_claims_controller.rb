@@ -42,6 +42,7 @@ class ChallengeClaimsController < ApplicationController
     false
   end
 
+
   def allowed_to_destroy
     @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
@@ -56,6 +57,7 @@ class ChallengeClaimsController < ApplicationController
       return unless load_collection
       @challenge = @collection.challenge if @collection
       @claims = ChallengeClaim.unposted_in_collection(@collection)
+
       @claims = @claims.where(claiming_user_id: current_user.id) if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
 
 

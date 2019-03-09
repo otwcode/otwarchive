@@ -1,9 +1,9 @@
-<% if File.size?("#{ChallengeSignup.summary_file(@collection)}") %>
-  <%=raw File.read("#{ChallengeSignup.summary_file(@collection)}") %>
-<% elsif @generated_live %>
+<% if @generated_live %>
   <% # render differently based on the challenge %>
   <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary", 
              :locals => {:challenge_collection => @collection, :tag_type => @tag_type, :summary_tags => @summary_tags, :generated_live => @generated_live} %>
+<% elsif (cached_summary = @summary.cached_contents).present? %>
+  <%=raw cached_summary %>
 <% else %>
   <h2 class="heading"><%= ts("Sign-up Summary for %{collection}", :collection => @collection.title) %></h2>
 

@@ -9,7 +9,8 @@ module SkinWizard
         a.tag:hover,
         .listbox .heading a.tag:visited:hover,
         .splash .favorite li:nth-of-type(odd) a:hover,
-        .splash .favorite li:nth-of-type(odd) a:focus { 
+        .splash .favorite li:nth-of-type(odd) a:focus,
+        #tos_prompt .heading { 
           background-image: none;
           background-color: #{color};
         }
@@ -45,6 +46,10 @@ module SkinWizard
         #dashboard.own {
           border-color: #{color};
         }
+
+        .actions .reindex a {
+          border-bottom-color: #{color};
+        }
       "
     else
       ""
@@ -75,6 +80,7 @@ module SkinWizard
         pre,
         input,
         textarea,
+        button,
         .heading .actions,
         .heading .action,
         .heading span.actions,
@@ -117,7 +123,8 @@ module SkinWizard
         .unreviewed,
         .thread .even,
         .listbox .index,
-        .nomination dt {
+        .nomination dt,
+        #tos_prompt {
           background: #{color};
         }
 
@@ -174,6 +181,7 @@ module SkinWizard
         dd.required,
         .required .autocomplete,
         span.series .divider,
+        .filters .expander,
         .userstuff h2 {
           color: #{color};
         }
@@ -202,6 +210,7 @@ module SkinWizard
         }
 
         form dt,
+        .filters .group dt.bookmarker,
         .faq .categories h3,
         .splash .module h3,
         .userstuff h3 {

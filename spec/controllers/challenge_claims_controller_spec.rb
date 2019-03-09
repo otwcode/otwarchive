@@ -71,6 +71,7 @@ RSpec.describe ChallengeClaimsController, type: :controller do
         fake_login_known_user(User.find(collection.all_owners.first.user_id))
         delete :destroy, id: claim.id, collection_id: collection.name
         it_redirects_to_with_error(collection_claims_path(collection), "We couldn't delete that right now, sorry! Please try again later.")
+
       end
     end
   end

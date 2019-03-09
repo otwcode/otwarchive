@@ -1,13 +1,13 @@
 class TagsController < ApplicationController
-  before_filter :load_collection
-  before_filter :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_filter :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_filter :load_tag_and_subtags, only: [:show]
+  before_action :load_collection
+  before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
+  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
+  before_action :load_tag_and_subtags, only: [:show]
 
   caches_page :feed
 
-  cache_sweeper :tag_sweeper
+  # cache_sweeper :tag_sweeper
 
   def load_tag
     @tag = Tag.find_by_name(params[:id])
@@ -61,13 +61,16 @@ class TagsController < ApplicationController
   def search
     @page_subtitle = ts('Search Tags')
     if params[:query].present?
-      options = params[:query].dup
+      # TODO: tag_search_params
+      options = params[:query].permit!.dup
       @query = options
       if @query[:name].present?
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options[:page] = params[:page] || 1
-      @tags = TagSearch.search(options)
+      search = TagSearchForm.new(options)
+      @tags = search.search_results
+      flash_search_warnings(@tags)
     end
   end
 
@@ -97,7 +100,7 @@ class TagsController < ApplicationController
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
         children[child_type] = tags.to_a.uniq unless tags.blank?
       end
       children
@@ -177,7 +180,7 @@ class TagsController < ApplicationController
 
   # POST /tags
   def create
-    type = params[:tag][:type] if params[:tag]
+    type = tag_params[:type] if params[:tag]
     if type
       raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
       model = begin
@@ -185,20 +188,20 @@ class TagsController < ApplicationController
               rescue
                 nil
               end
-      @tag = model.find_or_create_by_name(params[:tag][:name]) if model.is_a? Class
+      @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
     else
       flash[:error] = ts('Please provide a category.')
-      @tag = Tag.new(name: params[:tag][:name])
+      @tag = Tag.new(name: tag_params[:name])
       render(action: 'new') && return
     end
     if @tag && @tag.valid?
-      if (@tag.name != params[:tag][:name]) && @tag.name.casecmp(params[:tag][:name].downcase).zero? # only capitalization different
-        @tag.update_attribute(:name, params[:tag][:name]) # use the new capitalization
+      if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
+        @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
         flash[:notice] = ts('Tag was successfully modified.')
       else
         flash[:notice] = ts('Tag was successfully created.')
       end
-      @tag.update_attribute(:canonical, params[:tag][:canonical])
+      @tag.update_attribute(:canonical, tag_params[:canonical])
       redirect_to url_for(controller: 'tags', action: 'edit', id: @tag)
     else
       render(action: 'new') && return
@@ -223,9 +226,9 @@ class TagsController < ApplicationController
     @counts['External Works'] = @tag.visible_external_works_count
     @counts['Taggings Count'] = @tag.taggings_count
 
-    @parents = @tag.parents.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-    @children = @tag.children.find(:all, order: :name).group_by { |tag| tag[:type] }
+    @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
 
@@ -234,7 +237,7 @@ class TagsController < ApplicationController
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
-    @suggested_fandoms = @tag.suggested_fandoms - @tag.fandoms if @tag.respond_to?(:fandoms)
+    @suggested_fandoms = @tag.suggested_parent_tags("Fandom") - @tag.fandoms if @tag.respond_to?(:fandoms)
   end
 
   def update
@@ -249,9 +252,11 @@ class TagsController < ApplicationController
       @tag = @tag.recategorize(new_tag_type)
     end
 
-    @tag.attributes = params[:tag]
+    unless params[:tag].empty?
+      @tag.attributes = tag_params
+    end
 
-    @tag.syn_string = syn_string if @tag.save
+    @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
     if @tag.errors.empty? && @tag.save
       # check if a resetting of the taggings_count was requsted
@@ -271,9 +276,9 @@ class TagsController < ApplicationController
         redirect_to url_for(controller: :tags, action: :edit, id: @tag)
       end
     else
-      @parents = @tag.parents.find(:all, order: :name).group_by { |tag| tag[:type] }
+      @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
       @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-      @children = @tag.children.find(:all, order: :name).group_by { |tag| tag[:type] }
+      @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
       @children['SubTag'] = @tag.direct_sub_tags.by_name
       @children['Merger'] = @tag.mergers.by_name
 
@@ -293,16 +298,19 @@ class TagsController < ApplicationController
       params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + ' ' + params[:sort_direction]
       # add a secondary sorting key when the main one is not discerning enough
-      if sort.include?('suggested') || sort.include?('taggings_count')
+      if sort.include?('suggested') || sort.include?('taggings_count_cache')
         sort += ', name ASC'
       end
       # this makes sure params[:status] is safe
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
         @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == 'unwrangled'
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.unwrangled_tags(
+          params[:show].singularize.camelize,
+          params.permit!.slice(:sort_column, :sort_direction, :page)
+        )
       else
-        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end
@@ -392,5 +400,17 @@ class TagsController < ApplicationController
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to url_for({ controller: :tags, action: :wrangle, id: params[:id] }.merge(options))
+  end
+
+  private
+
+  def tag_params
+    params.require(:tag).permit(
+      :name, :fix_taggings_count, :type, :canonical, :unwrangleable, :adult,
+      :fandom_string, :meta_tag_string, :syn_string, :sortable_name, :media_string,
+      :character_string, :relationship_string, :freeform_string, :sub_tag_string,
+      :merger_string,
+      associations_to_remove: []
+    )
   end
 end

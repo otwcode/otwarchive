@@ -29,7 +29,7 @@ module UsesTempFiles
     end
 
     define_method(:mtime_for_file) do |filename, mtime|
-      FileUtils.touch(@dirname + filename, :mtime => mtime)
+      FileUtils.touch(@dirname + filename, mtime: mtime)
     end
 
     after do

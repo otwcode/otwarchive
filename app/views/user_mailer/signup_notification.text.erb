@@ -3,7 +3,7 @@
            login: @user.login) %>
 
 <%= t('.text.part1',
-           activate_account_url: activate_url(id: @user.activation_code)) %>
+           activate_account_url: activate_url(id: @user.confirmation_token)) %>
 
 <%= t('.text.part2') %>
 
