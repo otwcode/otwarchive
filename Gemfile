@@ -181,7 +181,7 @@ end
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
 gem 'rvm-capistrano'
 
-group :production do
-  # Use unicorn as the web server
-  gem 'unicorn', '>= 5.1.0', :require => false
-end
+# Use unicorn as the web server
+gem 'unicorn', '~> 5.5', :require => false
+# User god as the monitor
+gem 'god', '~> 0.13.7'
