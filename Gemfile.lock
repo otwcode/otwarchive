@@ -49,6 +49,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_record_query_trace (1.6.1)
     activejob (5.1.6.1)
       activesupport (= 5.1.6.1)
       globalid (>= 0.3.6)
@@ -464,6 +465,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
+  active_record_query_trace (~> 1.6, >= 1.6.1)
   activemodel-serializers-xml
   activerecord-mysql-reconnect (~> 0.4.1)
   acts_as_list (~> 0.9.7)
