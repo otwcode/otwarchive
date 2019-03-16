@@ -7,7 +7,13 @@
   <p class="note">
     <%= ts("To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose \"Troubleshoot Account.\"")%></p>
   <ul class="navigation actions" role="navigation">
-    <li><%= link_to ts("Troubleshoot Account"), { action: "troubleshoot", id: @user } %></li>
+    <li>
+      <%= link_to ts("Manage User Invitations"), manage_user_invitations_path(user_id: @user.login) %>
+    </li>
+    <li>
+      <%= link_to ts("Add User Invitations"), user_invitations_path(user_id: @user.login) %>
+    </li>
+    <li><%= link_to ts("Troubleshoot Account"), troubleshoot_admin_user_path(id: @user.login) %></li>
     <li>
       <%= button_to ts("Send Activation Email"), { action: "send_activation", id: @user }, disabled: @user.active? %>
     </li>

@@ -1,8 +1,8 @@
 class WorkLinksController < ApplicationController
 
-  before_filter :users_only
-  before_filter :load_user_and_work
-  before_filter :check_ownership
+  before_action :users_only
+  before_action :load_user_and_work
+  before_action :check_ownership
 
   # only let users look at stats for their own work
   def load_user_and_work
@@ -12,7 +12,7 @@ class WorkLinksController < ApplicationController
   end
 
   def index
-    @work_links = WorkLink.where(:work_id => @work.id).order(:created_at).paginate(:page => params[:page])
+    @work_links = WorkLink.where(work_id: @work.id).order(:created_at).paginate(page: params[:page])
   end
 
 end

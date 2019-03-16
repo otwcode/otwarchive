@@ -10,12 +10,14 @@ I'd like to comment on a tag'
         | login     |
         | dizmo     |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
+      And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I view the tag "Stargate Atlantis"
     Then I should see "0 comments"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis" via web
     Then I should see "Shouldn't this be a metatag with Stargate?"
       And the comment's posted date should be nowish
+      And I jump in our Delorean and return to the present
 
   Scenario: Edit a comment on a tag
 
@@ -23,6 +25,7 @@ I'd like to comment on a tag'
         | login     |
         | dizmo     |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
+      And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
     When I follow "Edit"
@@ -31,10 +34,10 @@ I'd like to comment on a tag'
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
       And I press "Update"
     Then I should see "Comment was successfully updated."
-    When "the weird issue with tag comments not updating" is fixed
-      #And I should see "Yep, we should have a Stargate franchise metatag."
-      #And I should not see "Shouldn't this be a metatag with Stargate?"
-      #And I should see Last Edited nowish
+      And I should see "Yep, we should have a Stargate franchise metatag."
+      And I should not see "Shouldn't this be a metatag with Stargate?"
+      And I should see Last Edited nowish
+    When I jump in our Delorean and return to the present
 
   Scenario: Multiple comments on a tag increment correctly
 
@@ -90,12 +93,12 @@ I'd like to comment on a tag'
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
 
     Given the following activated tag wranglers exist
-        | login       | password      | email             |
-        | dizmo       | wrangulator   | dizmo@example.org |
-        | Enigel      | wrangulator   | enigel@example.org|
-        | Cesy        | wrangulator   | cesy@example.org|
-      And a fandom exists with name: "Eroica", canonical: true
-      And a fandom exists with name: "Doctor Who", canonical: true
+        | login       | password      | email              |
+        | dizmo       | wrangulator   | dizmo@example.org  |
+        | Enigel      | wrangulator   | enigel@example.org |
+        | Cesy        | wrangulator   | cesy@example.org   |
+      And a canonical fandom "Eroica"
+      And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Eroica"
       And the tag wrangler "Cesy" with password "wrangulator" is wrangler of "Doctor Who"
       And the tag wrangler "dizmo" with password "wrangulator" is wrangler of "Doctor Who"
@@ -129,26 +132,21 @@ I'd like to comment on a tag'
     # check that the links in the email go where they should; this is wonky and I don't know why
     # I'm having the tests only check the html based email for now
     When I follow "Go to the thread starting from this comment" in the email
-    # the session is lost for some reason and I have to log in! I'll log in as dizmo though
-      And I fill in "User name:" with "dizmo"
-      And I fill in "Password:" with "wrangulator"
-      And I press "Log In"
-    # I get redirected to the tag comments page
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
       And I log out
     When I follow "Read all comments on Eroica" in the email
-      And I fill in "User name:" with "Cesy"
+      And I fill in "User name or email:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-     Then I should see "Reading Comments on Eroica"
-     And I should see "really clever stuff"
-     And I log out
+    Then I should see "Reading Comments on Eroica"
+      And I should see "really clever stuff"
+      And I log out
     When I follow "Reply to this comment" in the email
-      And I fill in "User name:" with "Enigel"
+      And I fill in "User name or email:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-     Then I should see "Reading Comments on Eroica"
+    Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
       And all emails have been delivered
       And I am logged in as "Enigel" with password "wrangulator"
@@ -187,7 +185,7 @@ I'd like to comment on a tag'
         | login       | password      | email             |
         | dizmo       | wrangulator   | dizmo@example.org |
         | Enigel      | wrangulator   | enigel@example.org|
-      And a fandom exists with name: "Doctor Who", canonical: true
+      And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
       And a synonym "Dr Who" of the tag "Doctor Who"
     When I am logged in as "dizmo" with password "wrangulator"
@@ -228,7 +226,7 @@ I'd like to comment on a tag'
     Then I should see "Comment created"
     # all it checks is that the pagination links aren't broken
     When I follow "Next" within ".pagination"
-    Then I should see "And now things should not break!" 
+    Then I should see "And now things should not break!"
 
   Scenario: Comments pagination for a tag with slashes and periods in the name
 
@@ -239,3 +237,26 @@ I'd like to comment on a tag'
     # all it checks is that the pagination links aren't broken
     When I follow "Next" within ".pagination"
     Then I should see "And now things should not break!"
+
+  Scenario: Comments on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Top-secret plans." on the tag "World Domination"
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."
+
+  Scenario: Comments replying to a comment on a tag should not be visible to non-wranglers.
+
+    Given a canonical fandom "World Domination"
+      And I am logged in as a tag wrangler
+      And I post the comment "Anyone have a plan?" on the tag "World Domination"
+      And I reply to a comment with "Top-secret plans."
+      And I am logged out
+
+    When I view the latest comment
+
+    Then I should not see "Top-secret plans."

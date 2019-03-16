@@ -27,7 +27,7 @@
         <tr id="admin_activity_<%= admin_activity.id %>">
           <td><%= link_to admin_activity.created_at, admin_activity %></td>
           <td>
-            <%= admin_activity.admin.nil? ? ts('Admin deleted') : admin_activity.admin_login %>
+            <%= admin_activity_login_string(admin_activity) %>
           </td>
           <td><%= admin_activity.action %></td>
           <td>

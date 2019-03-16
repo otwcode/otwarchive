@@ -16,54 +16,12 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
-  def created_faq(archive_faq_id, admin)
-    @admin = admin
-    @archive_faq = ArchiveFaq.find(archive_faq_id)
-    @email = "translation@transformativeworks.org"
-    mail(
-      to: @email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
-    )
-  end
-
-  def edited_faq(archive_faq_id, admin)
-    @admin = admin
-    @archive_faq = ArchiveFaq.find(archive_faq_id)
-    @email = "translation@transformativeworks.org"
-    mail(
-      to: @email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
-         )
-  end
-
   def feedback(feedback_id)
-    feedback = Feedback.find(feedback_id)
-    @summary = feedback.summary
-    @comment = feedback.comment
-    @username = feedback.username if feedback.username.present?
-    @email = if feedback.email.present?
-               feedback.email
-             end
-    @language = feedback.language
+    @feedback = Feedback.find(feedback_id)
     mail(
-      from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
+      from: @feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : @feedback.email,
       to: ArchiveConfig.FEEDBACK_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
-    )
-  end
-
-  def archive_notification(admin_login, user_ids, subject, message)
-    @admin_login = admin_login
-    @subject = subject
-    @message = message
-    @user_login_string = if user_ids.size < 20
-      User.find(user_ids).map(&:login).join(", ")
-    else
-      user_ids.size.to_s + " users, including: " + User.limit(20).find(user_ids).map(&:login).join(", ")
-    end
-    mail(
-      to: ArchiveConfig.WEBMASTER_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(@feedback.summary)}"
     )
   end
   

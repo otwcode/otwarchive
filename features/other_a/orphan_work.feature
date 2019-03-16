@@ -28,10 +28,10 @@ Feature: Orphan work
     Then I should see "Read More About The Orphaning Process"
     When I choose "Take my pseud off as well"
       And I press "Yes, I'm sure"
+      And all indexing jobs have been run
     Then I should see "Orphaning was successful."
-    When all search indexes are updated
-      And I follow "Bookmarks (0)"
-      And I follow "Works (0)"
+      And I should see "Bookmarks (0)"
+    When I follow "Works (0)"
     Then I should not see "Shenanigans"
     When I view the work "Shenanigans"
     Then I should see "orphan_account"
@@ -134,8 +134,23 @@ Feature: Orphan work
   When I follow "Orphan Works Instead"
   Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
   When I press "Yes, I'm sure"
+    And all indexing jobs have been run
   Then I should see "Orphaning was successful."
   When I go to my works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
+
+  Scenario: Orphaning a shared work should not affect chapters created solely by the other creator
+
+    Given I am logged in as "keeper"
+      And I post the work "Half-Orphaned"
+      And I add the co-author "orphaneer" to the work "Half-Orphaned"
+      And I post a chapter for the work "Half-Orphaned"
+    # Verify that the authorship has been set up properly
+    Then "orphaneer" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "orphaneer" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+    When I am logged in as "orphaneer"
+      And I orphan the work "Half-Orphaned"
+    Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"

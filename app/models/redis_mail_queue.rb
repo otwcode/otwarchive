@@ -66,7 +66,8 @@ class RedisMailQueue
       begin
         # don't die if we hit one deleted subscription
         UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver
-      rescue
+      rescue ActiveRecord::RecordNotFound
+        # never rescue all errors
       end
     end
   end
@@ -74,7 +75,7 @@ class RedisMailQueue
   def self.clear_queue(notification_type)
     redis = redis_for_type(notification_type)
     keys = redis.keys("#{notification_type}_*")
-    redis.del(*keys)
+    redis.del(*keys) unless keys.empty?
     redis.del("notification_#{notification_type}")
   end
 

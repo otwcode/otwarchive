@@ -1,7 +1,17 @@
 namespace :work do
   desc "Purge drafts created more than a month ago"
   task(:purge_old_drafts => :environment) do
-    count = Work.purge_old_drafts
+    count = 0
+    Work.unposted.where('works.created_at < ?', 1.month.ago).find_each do |work|
+      begin
+        work.destroy!
+        count += 1
+      rescue StandardError => e
+        puts "The following error occurred while trying to destroy draft #{work.id}:"
+        puts "#{e.class}: #{e.message}"
+        puts e.backtrace
+      end
+    end
     puts "Unposted works (#{count}) created more than one month ago have been purged"
   end
 
