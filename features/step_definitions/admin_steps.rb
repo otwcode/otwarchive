@@ -307,6 +307,12 @@ end
 
 ### THEN
 
+Then(/^I should see the last login time for "(.*?)"/) do |user|
+  u = User.find_by_login(user)
+  assert Time.now - u.last_active_at < 2.minutes
+  step %{I should see "#{u.last_active_at}"}
+end
+
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
   step %{the "content" field should contain "Deutsch Woerter"}
@@ -415,6 +421,12 @@ end
 When(/^the user "(.*?)" is unbanned in the background/) do |user|
   u = User.find_by(login: user)
   u.update_attribute(:banned, false)
+end
+
+Then(/^I should see the last login time for "(.*?)"/) do |user|
+  u = User.find_by_login(user)
+  assert Time.now - u.last_active_at < 2.minutes
+  step %{I should see "#{u.last_active_at}"}
 end
 
 Given(/^I have blacklisted the address "([^"]*)"$/) do |email|

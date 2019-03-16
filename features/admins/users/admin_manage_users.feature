@@ -55,3 +55,14 @@ Feature: Admin Actions to manage users
       And I press "Send Activation Email"
     Then I should see "Activation email sent"
       And 1 email should be delivered to "torres"
+
+  Scenario: User's last login date is saved
+    Given the user "new_user" exists and is activated
+    And I am logged in as an admin
+    When I go to the abuse administration page for "new_user"
+    Then I should see "No logins recorded"
+    When I am logged in as "new_user"
+    And I am logged in as an admin
+    And I go to the abuse administration page for "new_user"
+    Then I should not see "No logins recorded"
+    And I should see the last login time for "new_user"
