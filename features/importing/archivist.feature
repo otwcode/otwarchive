@@ -3,7 +3,7 @@ Feature: Archivist bulk imports
   Background:
     Given I have an archivist "archivist"
       And the default ratings exist
-    When I am logged in as "archivist"
+      And I am logged in as "archivist"
 
   Scenario: Non-archivist cannot import for others
     Given I am logged in as a random user
@@ -73,7 +73,7 @@ Feature: Archivist bulk imports
       | user1 | a@ao3.org |
       | user2 | b@ao3.org |
     When I go to the import page
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     Then I should see "Story"
       And I should see "user1"
       And I should see "user2"
@@ -97,12 +97,32 @@ Feature: Archivist bulk imports
       | login | email                     |
       | ao3   | ao3testing@dreamwidth.org |
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
+      And all indexing jobs have been run
     Then I should see import confirmation
       And I should see "ao3"
       And I should not see "[archived by archivist]"
       And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should not contain "translation missing"
       And the email should contain claim information
+    When I go to ao3's works page
+    Then I should see "Story"
+
+  Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
+    Given the user "creator" exists and is activated
+    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
+      And the system processes jobs
+      And all indexing jobs have been run
+    Then 1 email should be delivered to "not_creators_account_email@example.com"
+    When I am logged in as "creator"
+      # Use the URL because we get logged out if we follow the link in the email
+      And I go to the claim page for "not_creators_account_email@example.com"
+    Then I should see "Claim your works with your logged-in account."
+    When I press "Add these works to my currently-logged-in account"
+      And all indexing jobs have been run
+    Then I should see "Author Identities for creator"
+      And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
+    When I go to creator's works page
+    Then I should see "Story"
 
   Scenario: Importing sends an email to a guessed address if it can't find the author
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
@@ -161,13 +181,12 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "imported_stories_orphan"
+    When I choose "Orphan my works and take my email address off them, but keep my name."
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
       And I view the work "Story"
-    Then I should see "randomtestname"
-      And I should see "orphan_account"
+    Then I should see "randomtestname (orphan_account)"
 
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
@@ -180,8 +199,8 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "imported_stories_orphan"
-      And I check "remove_pseud"
+    When I choose "Orphan my works and take my email address off them, but keep my name."
+      And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
@@ -189,7 +208,7 @@ Feature: Archivist bulk imports
     Then I should not see "randomtestname"
       And I should see "orphan_account"
 
-  Scenario: Refuse all further contact
+  Scenario: Delete an imported work and choose not to be notified of future imports of your works
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
       And the system processes jobs
     Then 1 email should be delivered to "random@example.com"
@@ -198,10 +217,15 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "imported_stories_delete"
-      And I check "external_author_do_not_email"
+    When I choose "Please remove my works from the archive entirely."
+      And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
     Then I should see "Your imported stories have been deleted. Your preferences have been saved."
+    When the email queue is clear
+      And I am logged in as "archivist"
+      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And the system processes jobs
+     Then 0 emails should be delivered to "random@example.com"
 
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
@@ -234,11 +258,18 @@ Feature: Archivist bulk imports
     When I go to the Open Doors tools page
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
-  Scenario: Open Doors committee members can see their tools
-    Given I have an Open Doors committee member "OpenDoors"
+  Scenario: Open Doors committee members can update the redirect URL of a work
+    Given the work "My Immortal"
+      And I have an Open Doors committee member "OpenDoors"
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
     Then I should see "Update Redirect URL"
+    When I fill in "imported_from_url" with "http://example.com/my-immortal"
+      And I fill in "work_url" with the path to the "My Immortal" work page
+      And I submit with the 2nd button
+    Then I should see "Updated imported-from url for My Immortal to http://example.com/my-immortal"
+    When I follow "http://example.com/my-immortal"
+    Then I should be on the "My Immortal" work page
 
   Scenario: Open Doors committee members can block an email address from having imports
     Given I have an Open Doors committee member "OpenDoors"

@@ -1,6 +1,6 @@
 class TagSweeper < ActionController::Caching::Sweeper
   observe Tag
-  
+
   def after_create(tag)
     if tag.canonical
       tag.add_to_autocomplete
@@ -22,7 +22,7 @@ class TagSweeper < ActionController::Caching::Sweeper
       tag.remove_stale_from_autocomplete
       tag.add_to_autocomplete
     end
-    
+
     # Expire caching when a merger is added or removed
     if tag.merger_id_changed?
       if tag.merger_id_was.present?
@@ -37,7 +37,7 @@ class TagSweeper < ActionController::Caching::Sweeper
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
     if tag.type_changed?
       tag.parents.each do |parent_tag|
-        expire_fragment("views/tags/#{parent_tag.id}/children")
+        ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
       end
     end
 
@@ -50,7 +50,7 @@ class TagSweeper < ActionController::Caching::Sweeper
     end
     update_tag_nominations(tag, deleted=true)
   end
-  
+
   private
 
   def update_tag_nominations(tag, deleted=false)
@@ -64,10 +64,10 @@ class TagSweeper < ActionController::Caching::Sweeper
       values[:canonical] = tag.canonical
       values[:synonym] = tag.merger.nil? ? nil : tag.merger.name
       values[:parented] = tag.parents.any? {|p| p.is_a?(Fandom)}
-      values[:exists] = true    
+      values[:exists] = true
     end
-    TagNomination.where(:tagname => tag.name).update_all(values)
+    TagNomination.where(tagname: tag.name).update_all(values)
   end
-    
+
 
 end

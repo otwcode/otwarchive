@@ -104,7 +104,7 @@
       <p>
         <% content_id = "comment_content_for_#{commentable.id}" %>
         <label for="<%= content_id %>" class="landmark"><%= ts("Comment") %></label>
-        <%= f.text_area :content, :id => content_id, :class => "comment_form observe_textlength", :title => ts("Enter Comment") %>
+        <%= f.text_area :comment_content, :id => content_id, :class => "comment_form observe_textlength", :title => ts("Enter Comment") %>
         <input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
       </p>
       <%= generate_countdown_html("comment_content_for_#{commentable.id}", ArchiveConfig.COMMENT_MAX) %>
@@ -113,7 +113,7 @@
               :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
       <p class="submit actions">
-        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", :disable_with => ts("Please wait...") %>
+        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", data: {disable_with: ts("Please wait...")} %>
         <% if controller.controller_name == 'inbox' %>
           <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
         <% elsif commentable.class.name == "Comment" || !comment.new_record? %>

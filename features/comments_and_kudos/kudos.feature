@@ -33,7 +33,8 @@ Feature: Leave kudos
     When I press "Kudos ♥"
     Then I should see "You have already left kudos here. :)"
       And I should not see "myname2 and myname2 left kudos on this work!"
-    When I log out
+    When I am logged out
+      And I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "myname2 as well as 1 guest left kudos on this work!"

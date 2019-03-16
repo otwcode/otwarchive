@@ -47,6 +47,7 @@ ul.actions {
 }
 
 button {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
   box-sizing: content-box;
 }
 
@@ -55,7 +56,8 @@ label.action {
 }
 
 input[type="submit"] {
-  height: 1.929em;
+  height: auto;
+  white-space: normal;
 }
 
 p.submit, input.submit, dd.submit {
@@ -72,7 +74,7 @@ p.submit, input.submit, dd.submit {
   padding: 0;
 }
 
-/*subtypes and modes 
+/*subtypes and modes
 test note: this pagination clear needs to be kept an eye on*/
 
 ol.pagination, div.pagination, ol.year {
@@ -150,7 +152,7 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
-  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont',sans-serif;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
   padding: 0.15em 0.375em;
 }
 
@@ -186,13 +188,13 @@ dl.stats + .landmark + .actions {
   padding: 0 0 0.15em 0;
 }
 
-.many p.actions { 
-  float: none; 
-  text-align: right; 
+.many p.actions {
+  float: none;
+  text-align: right;
 }
 
-.concise label.action { 
-  float: left; 
+.concise label.action {
+  float: left;
 }
 
 dd.any label.action {

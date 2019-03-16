@@ -25,6 +25,7 @@ Feature: Basic collection navigation
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
+    And all indexing jobs have been run
     And I follow "My Collection"
   When I follow "Profile"
   Then I should see "About My Collection (my_collection)"
@@ -35,15 +36,14 @@ Feature: Basic collection navigation
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
-    And all search indexes are updated
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
-  When I follow "Bookmarks (0)"
-  Then I should see "0 Bookmarks"
+  When I follow "Bookmarked Items" within "#dashboard"
+  Then I should see "0 Bookmarked Items"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People" within "div#dashboard"
-    Then I should see "A Random Selection of Participants in My Collection"
+    Then I should see "Participants in My Collection"
     And I should see "mod"
   When I follow "Tags" within "div#dashboard"
     Then I should see "Free"
@@ -88,3 +88,17 @@ Feature: Basic collection navigation
       And I press "Show"
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"
+
+  Scenario: A collection's fandom count shouldn't include inherited metatags.
+    Given I have the collection "MCU Party"
+      And a canonical fandom "The Avengers"
+      And a canonical fandom "MCU"
+      And "MCU" is a metatag of the fandom "The Avengers"
+      And I am logged in as "mcu_fan"
+      And I post the work "Ensemble Piece" with fandom "The Avengers" in the collection "MCU Party"
+
+    When I go to the collections page
+    Then I should see "Fandoms: 1"
+
+    When I go to "MCU Party" collection's page
+    Then I should see "Fandoms (1)"

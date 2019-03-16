@@ -4,7 +4,7 @@
 
 <div id="kudos">
   <% if @kudos.length > 0 || @guest_kudos_count > 0 %>
-    <% cache "#{@work.cache_key}/kudos/full" do %>
+    <% cache "#{@work.cache_key}/kudos/full", skip_digest: true do %>
       <p class="kudos">
         <%= @kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
             to_sentence.
