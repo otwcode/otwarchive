@@ -35,10 +35,10 @@
     </tr>
     <tr>
       <td>
-        <% if @user.last_login_at.nil? %>
+        <% if @user.current_sign_in_at.nil? %>
           <%= ts('No logins recorded') %>
         <% else %>
-          <%= @user.last_login_at %> ( <%= @user.current_sign_in_ip %>
+          <%= @user.last_sign_in_at %> ( <%= @user.current_sign_in_ip %>
           )(<abbr class="timeago" title="<%= @user.current_sign_in_at %>"><%= @user.current_sign_in_at.iso8601 %></abbr>)
         <% end %>
       </td>
