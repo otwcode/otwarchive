@@ -20,6 +20,29 @@ Feature: Archivist bulk imports
     When I go to the import page
     Then I should see "Import for others ONLY with permission"
 
+  Scenario: Importing for others without an email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Name*" with "Name"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author email specified"
+
+  Scenario: Importing for others without a name should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I fill in "Author Email Address*" with "foo@example.com"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No author name specified"
+
+  Scenario: Importing for others without a name or email address should give an error
+    Given I am logged in as "archivist"
+    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+      And I check "Import for others ONLY with permission"
+      And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: No external author name or email specified"
+
   Scenario: Importing for an author without an account should have the correct byline and email
     When I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
@@ -62,7 +85,7 @@ Feature: Archivist bulk imports
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     When the system processes jobs
-    Then 1 email should be delivered to "a@ao3.org"
+      Then 1 email should be delivered to "a@ao3.org"
       And the email should not contain "translation missing"
       And 1 email should be delivered to "b@ao3.org"
       And the email should not contain "translation missing"
@@ -148,7 +171,7 @@ Feature: Archivist bulk imports
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "ra_ndo!m-t??est n@me." with email "random@example.com"
     Then I should see import confirmation
-      And I should see "ra_ndom-test n@me."
+    And I should see "ra_ndom-test n@me."
     When the system processes jobs
     Then 1 email should be delivered to "random@example.com"
       And the email should not contain "translation missing"
@@ -163,11 +186,11 @@ Feature: Archivist bulk imports
     When I am logged out
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
+    And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
     When I press "Sign me up and give me my works! Yay!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
-      And I press "Create Account"
+    And I press "Create Account"
     Then I should see "Account Created!"
 
   Scenario: Orphan a work in response to an invite, leaving name on it
@@ -234,14 +257,14 @@ Feature: Archivist bulk imports
       And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
-      And I fill in "work_collection_names" with "Club"
-      And I press "Post Without Preview"
+    And I fill in "work_collection_names" with "Club"
+    And I press "Post Without Preview"
     Then I should see "Story"
-      And I should see "randomtestname"
-      And I should see "Club"
+    And I should see "randomtestname"
+    And I should see "Club"
     When the system processes jobs
     Then 1 email should be delivered to "random@example.com"
-      And the email should not contain "translation missing"
+    And the email should not contain "translation missing"
 
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
@@ -251,7 +274,7 @@ Feature: Archivist bulk imports
     When I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
-      And I press "Import"
+    And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Archivist can't see Open Doors tools
