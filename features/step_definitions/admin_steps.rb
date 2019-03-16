@@ -309,8 +309,8 @@ end
 
 Then(/^I should see the last login time for "(.*?)"/) do |user|
   u = User.find_by_login(user)
-  assert Time.now - u.last_active_at < 2.minutes
-  step %{I should see "#{u.last_active_at}"}
+  assert Time.now - u.current_sign_in_at < 2.minutes
+  step %{I should see "#{u.current_sign_in_at}"}
 end
 
 Then (/^the translation information should still be filled in$/) do
