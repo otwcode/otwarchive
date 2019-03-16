@@ -20,9 +20,13 @@ class FeedbackReporter
     strip_html_breaks_simple(@title)
   end
 
+  def description
+    add_break_between_paragraphs(@description)
+  end
+
   def send_report!
     HTTParty.post("#{ArchiveConfig.NEW_BUGS_SITE}#{project_path}",
-                  body: "&xml=#{xml.to_str}")
+                  body: "&xml=#{URI.encode_www_form_component(xml.to_str)}")
   end
 
   def xml

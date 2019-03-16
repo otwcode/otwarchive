@@ -44,9 +44,7 @@ class BookmarkableQuery < Query
     # Delete the bookmark aggregations.
     modified_query[:aggs].delete(:bookmarks)
 
-    # ES UPGRADE TRANSITION #
-    # Change $new_elasticsearch to $elasticsearch
-    $new_elasticsearch.search(
+    $elasticsearch.search(
       index: index_name,
       type: document_type,
       body: modified_query
@@ -234,7 +232,7 @@ class BookmarkableQuery < Query
   # updated).
   def date_filter
     if options[:bookmarkable_date].present?
-      { range: { revised_at: Search.range_to_search(options[:bookmarkable_date]) } }
+      { range: { revised_at: SearchRange.parsed(options[:bookmarkable_date]) } }
     end
   end
 

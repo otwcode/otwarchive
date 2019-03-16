@@ -38,9 +38,7 @@
   <div class="work listbox group" id="user-works">
     <h3 class="heading"><%= ts("Recent works") %></h3>
     <ul class="index group">
-      <% for work in @works %>
-    	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-      <% end %>
+      <%= render partial: 'works/work_blurb', collection: @works, as: :work %>
     </ul>
     <% if @pseud %>
       <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
@@ -58,9 +56,7 @@
   <div class="series listbox group" id="user-series">
     <h3 class="heading"><%= ts("Recent series") %></h3>
     <ol class="index group">
-      <% for series in @series %>
-        <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
-      <% end %>
+      <%= render partial: 'series/series_blurb', collection: @series, as: :series %>
     </ol>
     <% if @pseud %>
       <% if @pseud.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
@@ -78,9 +74,7 @@
   <div class="bookmark listbox group" id="user-bookmarks">
     <h3 class="heading"><%= ts("Recent bookmarks") %></h3>
     <ol class="index group">
-      <% for bookmark in @bookmarks %>
-        <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
-      <% end %>
+      <%= render partial: 'bookmarks/bookmark_blurb', collection: @bookmarks, as: :bookmark %>
     </ol>
     <% unless @user == User.orphan_account %>
       <% if @pseud %>

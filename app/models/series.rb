@@ -40,7 +40,7 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.SUMMARY_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :notes,
+  validates_length_of :series_notes,
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
@@ -145,6 +145,10 @@ class Series < ApplicationRecord
   # Change the positions of the serial works in the series
   def reorder(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
+
+  def position_of(work)
+    serial_works.where(work_id: work.id).pluck(:position).first
   end
 
   # return list of pseuds on this series

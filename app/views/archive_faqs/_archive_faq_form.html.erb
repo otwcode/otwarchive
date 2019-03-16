@@ -5,21 +5,21 @@
         <legend><%= ts("Add Questions") %></legend>
         <h3 class="landmark heading"><%= ts("Add Questions") %></h3>
         <p class="notes">
-          <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", :num => @archive_faq.questions.count) %>
+          <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", num: @archive_faq.questions.count) %>
         </p>
         <p>
           <%= label_tag "num_questions", ts("Questions:") %>
-          <%= text_field_tag "num_questions", params["num_questions"], :class => "number" %>
+          <%= text_field_tag "num_questions", params["num_questions"], class: "number" %>
         </p>
-        <p class="submit"><%= submit_tag ts('Update Form') %></p>
+        <p class="submit"><%= submit_tag ts("Update Form") %></p>
       </fieldset>
     <% end %>
     <% end %>
 </noscript>
 
-<%= form_for(@archive_faq, :html => {:class => "create faq"}) do |form| %>
+<%= form_for(@archive_faq, html: { class: "create faq" }) do |form| %>
   <%= error_messages_for @archive_faq %>
-  <p class="required notice"><%= ts('* Required information') %></p>
+  <p class="required notice"><%= ts("* Required information") %></p>
   <fieldset>
     <legend><%= ts("Set Preferences") %></legend>
     <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
@@ -29,13 +29,7 @@
       </dt>
       <dd class="required">
         <%= form.text_field :title %>
-        <%= live_validation_for_field(field_id(form, "title").to_sym, :failureMessage => ts("Please enter a category name.")) %>
-      </dd>
-      <dt>
-        <%= form.check_box :notify_translations %>
-      </dt>
-      <dd>
-        <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ category?") %>
+        <%= live_validation_for_field(field_id(form, "title").to_sym, failureMessage: ts("Please enter a category name.")) %>
       </dd>
     </dl>
   </fieldset>
@@ -47,7 +41,7 @@
 
     <% form.object.questions.each_with_index do |question, index| %>
       <%= form.fields_for :questions, question do |question_form| %>
-        <%= render 'question_answer_fields', :form => question_form, :index => index %>
+        <%= render "question_answer_fields", form: question_form, index: index %>
       <% end %>
     <% end %>
     <% if Globalize.locale.to_s == "en" %>
@@ -61,7 +55,7 @@
     <legend><%= ts("Submit") %></legend>
     <h3 class="landmark heading"><%= ts("Submit") %></h3>
     <p class="submit actions">
-      <%= submit_tag ts('Post'), :name => 'post_button' %>
+      <%= submit_tag ts("Post"), name: "post_button" %>
     </p>
   </fieldset>
 <% end %>
