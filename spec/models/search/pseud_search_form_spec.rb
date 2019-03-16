@@ -9,7 +9,7 @@ describe PseudSearchForm do
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr]) }
     let!(:work_4) { create(:posted_work, fandoms: [fandom_mlaatr], restricted: true) }
 
-    before { update_and_refresh_indexes "pseud" }
+    before { run_all_indexing_jobs }
 
     it "returns all pseuds writing in the fandom when logged in" do
       User.current_user = User.new
@@ -38,7 +38,7 @@ describe PseudSearchForm do
     let!(:work_2) { create(:posted_work, fandoms: [fandom_kp], authors: [user.default_pseud]) }
     let!(:work_3) { create(:posted_work, fandoms: [fandom_mlaatr], authors: [user.default_pseud], restricted: true) }
 
-    before { update_and_refresh_indexes "pseud" }
+    before { run_all_indexing_jobs }
 
     it "returns all pseuds writing in all fandoms" do
       User.current_user = User.new
@@ -53,6 +53,31 @@ describe PseudSearchForm do
       # This author posts in both fandoms, but their only work for fandom_mlaatr is restricted.
       # To logged out users, this author does not post in both specified fandoms.
       expect(results).not_to include user.default_pseud
+    end
+  end
+
+  context "a user with multiple pseuds" do
+    let!(:user) { create(:user, login: "avatar") }
+    let!(:second_pseud) { create(:pseud, name: "kyoshi", user: user) }
+
+    before { run_all_indexing_jobs }
+
+    it "reindexes all pseuds when changing username" do
+      results = PseudSearchForm.new(name: "avatar").search_results
+      expect(results).to include(user.default_pseud)
+      expect(results).to include(second_pseud)
+
+      user.reload
+      user.login = "aang"
+      user.save
+      run_all_indexing_jobs
+
+      results = PseudSearchForm.new(name: "avatar").search_results
+      expect(results).to be_empty
+
+      results = PseudSearchForm.new(name: "aang").search_results
+      expect(results).to include(user.default_pseud)
+      expect(results).to include(second_pseud)
     end
   end
 

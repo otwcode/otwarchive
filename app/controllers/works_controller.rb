@@ -30,13 +30,7 @@ class WorksController < ApplicationController
     options = params[:work_search].present? ? clean_work_search_params : {}
     options[:page] = params[:page] if params[:page].present?
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-    # ES UPGRADE TRANSITION #
-    # Remove conditional and call to WorkSearch
-    if use_new_search?
-      @search = WorkSearchForm.new(options)
-    else
-      @search = WorkSearch.new(options)
-    end
+    @search = WorkSearchForm.new(options)
     @page_subtitle = ts("Search Works")
 
     if params[:work_search].present? && params[:edit_search].blank?
@@ -45,6 +39,8 @@ class WorksController < ApplicationController
       end
 
       @works = @search.search_results
+      set_own_works
+      flash_search_warnings(@works)
       render 'search_results'
     end
   end
@@ -98,13 +94,7 @@ class WorksController < ApplicationController
       if @admin_settings.disable_filtering?
         @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
       else
-        # ES UPGRADE TRANSITION #
-        # Remove conditional and call to WorkSearch
-        if use_new_search?
-          @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-        else
-          @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        end
+        @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
         # If we're using caching we'll try to get the results from cache
         # Note: we only cache some first initial number of pages since those are biggest bang for
         # the buck -- users don't often go past them
@@ -113,7 +103,7 @@ class WorksController < ApplicationController
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = @tag.present? && @tag != @owner ? @tag : nil
           user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -123,6 +113,8 @@ class WorksController < ApplicationController
         else
           @works = @search.search_results
         end
+
+        flash_search_warnings(@works)
 
         @facets = @works.facets
         if @search.options[:excluded_tag_ids].present?
@@ -140,6 +132,7 @@ class WorksController < ApplicationController
     else
       @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).to_a
     end
+    set_own_works
   end
 
   def collected
@@ -154,17 +147,12 @@ class WorksController < ApplicationController
     if @admin_settings.disable_filtering?
       @works = Work.collected_without_filters(@user, options)
     else
-      # ES UPGRADE TRANSITION #
-      # Remove conditional and call to WorkSearch
-      if use_new_search?
-        @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
-      else
-        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-      end
+      @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
       @works = @search.search_results
+      flash_search_warnings(@works)
       @facets = @works.facets
     end
-
+    set_own_works
     @page_subtitle = ts('%{username} - Collected Works', username: @user.login)
   end
 
@@ -791,7 +779,7 @@ class WorksController < ApplicationController
 
   def load_owner
     if params[:user_id].present?
-      @user = User.find_by(login: params[:user_id])
+      @user = User.find_by!(login: params[:user_id])
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by(name: params[:pseud_id])
       end
@@ -852,6 +840,10 @@ class WorksController < ApplicationController
 
     @chapter = @work.first_chapter
 
+    if params[:claim_id]
+      @posting_claim = ChallengeClaim.find_by(id: params[:claim_id])
+    end
+
     # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
     if params[:work] && work_params[:chapter_attributes]
       @chapter.attributes = work_params[:chapter_attributes]
@@ -869,6 +861,7 @@ class WorksController < ApplicationController
                            end
 
       @work.attributes = work_params
+      @work.set_word_count(@work.preview_mode)
       @work.save_parents if @work.preview_mode
     end
   end
@@ -941,6 +934,17 @@ class WorksController < ApplicationController
   rescue
   end
 
+  def set_own_works
+    return unless @works
+    @own_works = []
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.pluck(:id)
+      @own_works = @works.select do |work|
+        (pseud_ids & work.pseuds.pluck(:id)).present?
+      end
+    end
+  end
+
   def cancel_posting_and_redirect
     if @work && @work.posted
       flash[:notice] = ts('The work was not updated.')
@@ -948,19 +952,6 @@ class WorksController < ApplicationController
     else
       flash[:notice] = ts('The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.')
       redirect_to drafts_user_works_path(current_user)
-    end
-  end
-
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.distinct.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect { |tag| tag.name + ', ' }.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ''
     end
   end
 

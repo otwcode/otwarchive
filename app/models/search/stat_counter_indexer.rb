@@ -35,7 +35,7 @@ class StatCounterIndexer
   end
 
   def index_documents
-    $new_elasticsearch.bulk(body: batch)
+    $elasticsearch.bulk(body: batch)
   end
 
   # Use the routing information from the WorkIndexer, since we don't have an
