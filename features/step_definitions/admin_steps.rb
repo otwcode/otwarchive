@@ -423,12 +423,6 @@ When(/^the user "(.*?)" is unbanned in the background/) do |user|
   u.update_attribute(:banned, false)
 end
 
-Then(/^I should see the last login time for "(.*?)"/) do |user|
-  u = User.find_by_login(user)
-  assert Time.now - u.last_active_at < 2.minutes
-  step %{I should see "#{u.last_active_at}"}
-end
-
 Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email", with: email)
