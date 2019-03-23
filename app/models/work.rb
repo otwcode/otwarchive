@@ -1078,26 +1078,6 @@ class Work < ApplicationRecord
     end
   end
 
-  protected
-
-  # a string for use in joins: clause to add ownership lookup
-  OWNERSHIP_JOIN = "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                    INNER JOIN users ON pseuds.user_id = users.id"
-
-  COMMON_TAG_JOIN = "INNER JOIN common_taggings ON (works.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Work')
-                  INNER JOIN tags ON common_taggings.common_tag_id = tags.id"
-
-
-  VISIBLE_TO_ALL_CONDITIONS = {posted: true, restricted: false, hidden_by_admin: false}
-
-  VISIBLE_TO_USER_CONDITIONS = {posted: true, hidden_by_admin: false}
-
-  VISIBLE_TO_ADMIN_CONDITIONS = {posted: true}
-
-
-
-
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
