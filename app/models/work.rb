@@ -1169,68 +1169,7 @@ class Work < ApplicationRecord
     visible_to_user(user)
   end
 
-  scope :with_filter, lambda { |tag|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag.id}})
-  }
-
-  # Note: this version will work only on canonical tags (filters)
-  scope :with_all_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}}).
-    group("works.id").
-    having("count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}})
-  }
-
-  scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
-    group("works.id").
-    having("count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find)
-  }
-
-  scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_all_filters, lambda {|tags_to_find| with_all_filter_ids(tags_to_find.collect(&:id))}
-  scope :with_any_filters, lambda {|tags_to_find| with_any_filter_ids(tags_to_find.collect(&:id))}
-
-  scope :ids_only, -> { select("DISTINCT(works.id)") }
-
-  scope :tags_with_count, -> {
-    select("tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count").
-    joins(:tags).
-    group("tags.name").
-    order("tags.type, tags.name ASC")
-  }
-
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
-  scope :written_by_id, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids)
-  }
-  scope :written_by_id_having, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id").
-    having("count(DISTINCT pseuds.id) = #{pseud_ids.size}")
-  }
 
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
@@ -1243,74 +1182,6 @@ class Work < ApplicationRecord
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
-  end
-
-  scope :for_recipient, lambda {|recipient|
-    select("DISTINCT works.*").
-    joins(:gifts).
-    where('gifts.recipient_name = ?', recipient)
-  }
-
-  # shouldn't really use a named scope for this, but I'm afraid to try
-  # to change the way work filtering works
-  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
-
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a scope, please do!
-  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
-  def self.no_tags(tag_category, options = {})
-    tags = tag_category.tags
-    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uniq
-  end
-
-  # Used when admins have disabled filtering
-  def self.list_without_filters(owner, options)
-    works = case owner.class.to_s
-            when 'Pseud'
-              works = Work.written_by_id([owner.id])
-            when 'User'
-              works = Work.owned_by(owner)
-            when 'Collection'
-              works = Work.in_collection(owner)
-            else
-              if owner.is_a?(Tag)
-                works = owner.filtered_works
-              end
-            end
-
-    # Need to support user + fandom and collection + tag pages
-    if options[:fandom_id] || options[:filter_ids]
-      id = options[:fandom_id] || options[:filter_ids].first
-      tag = Tag.find_by(id: id)
-      if tag.present?
-        works = works.with_filter(tag)
-      end
-    end
-
-    if %w(Pseud User).include?(owner.class.to_s)
-      works = works.where(in_anon_collection: false)
-    end
-    unless owner.is_a?(Collection)
-      works = works.revealed
-    end
-    if User.current_user.nil? || User.current_user == :false
-      works = works.unrestricted
-    end
-
-    works = works.posted
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-  end
-
-  def self.collected_without_filters(user, options)
-    works = Work.written_by_id([user.id])
-    works = works.join(:collection_items)
-    unless User.current_user == user
-      works = works.where(in_anon_collection: false)
-      works = works.posted
-    end
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   ########################################################################
