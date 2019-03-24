@@ -25,8 +25,7 @@ class WorkIndexer < Indexer
             type: "text"
           },
           tag: {
-            type: "text",
-            analyzer: "simple"
+            type: "text"
           },
           authors_to_sort_on: {
             type: "keyword"
