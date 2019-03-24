@@ -3,9 +3,11 @@ class Api::V2::WorksController < Api::V2::BaseController
 
   # POST - search for works based on imported url
   def search
+    Rails.logger.debug("------- API v2: search for works ----------")
+    Rails.logger.info(params)
     works = params[:works]
     original_urls = works.map { |w| w[:original_urls] }.flatten
-    
+
     results = []
     messages = []
     if original_urls.nil? || original_urls.blank? || original_urls.empty?
@@ -24,6 +26,8 @@ class Api::V2::WorksController < Api::V2::BaseController
 
   # POST - create a work and invite authors to claim
   def create
+    Rails.logger.debug("------- API v2: import works ----------")
+    Rails.logger.info(params)
     archivist = User.find_by(login: params[:archivist])
     external_works = params[:items] || params[:works]
     works_responses = []
@@ -161,6 +165,7 @@ class Api::V2::WorksController < Api::V2::BaseController
         work_url = work_url(work)
         work_messages << response[:message]
       rescue => exception
+        Rails.logger.error("--------- API v2: error: #{exception.inspect}")
         work_status = :unprocessable_entity
         work_messages << "Unable to import this work."
         work_messages << exception.message
