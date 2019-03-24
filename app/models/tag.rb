@@ -579,8 +579,6 @@ class Tag < ApplicationRecord
 
   ## END AUTOCOMPLETE
 
-
-
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String
@@ -911,12 +909,10 @@ class Tag < ApplicationRecord
   # likelihood of issues with stale data.
   before_update :update_associations_for_canonical_or_merger_change
   def update_associations_for_canonical_or_merger_change
-    if merger_id_changed? && merger_id.present?
-      async_after_commit(:transfer_favorite_tags)
-      async_after_commit(:add_merger_associations)
-    elsif canonical_changed? && !canonical?
-      async_after_commit(:remove_favorite_tags)
-      async_after_commit(:remove_canonical_associations)
+    if (merger_id_changed? && merger_id.present?) ||
+        (canonical_changed? && !canonical?)
+      async_after_commit(:transfer_or_remove_favorite_tags)
+      async_after_commit(:transfer_or_remove_associations)
     end
   end
 
@@ -928,15 +924,54 @@ class Tag < ApplicationRecord
     end
   end
 
-  def remove_canonical_associations
-    self.mergers.each {|tag| tag.update_attributes(merger_id: nil) if tag.merger_id == self.id }
-    self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
-    self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
-    self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
+  # If this tag has a canonical merger, transfer associations to the merger.
+  # Then, regardless of whether it has a merger, delete all canonical
+  # associations (i.e. meta taggings, and associations where this tag is the
+  # parent).
+  def transfer_or_remove_associations
+    transaction do
+      if self.merger&.canonical?
+        add_associations_to_merger
+      end
+
+      self.mergers.find_each { |tag| tag.update(merger_id: nil) }
+      self.child_taggings.destroy_all
+      self.sub_taggings.destroy_all
+      self.meta_taggings.destroy_all
+    end
   end
 
-  # Move all of the "Favorite Tags" for this tag to its new merger.
-  def transfer_favorite_tags
+  # When we make this tag a synonym of another canonical tag, we want to move
+  # all the associations this tag has (subtags, meta tags, etc) over to that
+  # canonical tag.
+  #
+  # The callbacks that occur when changing the associations will trigger the
+  # necessary reindexing, so we don't need to call extra reindexing code here.
+  def add_associations_to_merger
+    self.parents.find_each do |tag|
+      self.merger.add_association(tag)
+    end
+
+    self.children.find_each do |tag|
+      self.merger.add_association(tag)
+    end
+
+    merger.parents.where(type: %w[Media Fandom]).find_each do |tag|
+      self.add_association(tag)
+    end
+
+    self.direct_meta_tags.find_each do |tag|
+      self.merger.meta_taggings.create(meta_tag: tag)
+    end
+
+    self.direct_sub_tags.find_each do |tag|
+      self.merger.sub_taggings.create(sub_tag: tag)
+    end
+  end
+
+  # If this tag has a canonical merger, move all favorite tags to the merger.
+  # Otherwise, delete all favorite tags.
+  def transfer_or_remove_favorite_tags
     if merger&.canonical
       favorite_tags.find_each do |ft|
         # If updating fails -- which is what would happen if a user had both
@@ -945,12 +980,8 @@ class Tag < ApplicationRecord
         ft.destroy unless ft.update(tag_id: merger_id)
       end
     else
-      remove_favorite_tags
+      favorite_tags.destroy_all
     end
-  end
-
-  def remove_favorite_tags
-    favorite_tags.destroy_all
   end
 
   attr_reader :meta_tag_string, :sub_tag_string, :merger_string
@@ -1065,30 +1096,6 @@ class Tag < ApplicationRecord
         end
       end
     end
-  end
-
-
-  # When we make this tag a synonym of another canonical tag, we want to move
-  # all the associations this tag has (subtags, meta tags, etc) over to that
-  # canonical tag.
-  #
-  # The callbacks that occur when changing the associations will trigger the
-  # necessary reindexing, so we don't need to call extra reindexing code here.
-  def add_merger_associations
-    new_merger = self.merger
-    return unless new_merger.present?
-    ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
-    if new_merger.is_a?(Fandom)
-      (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
-    else
-      (new_merger.parents.by_type("Fandom").canonical - self.parents.by_type("Fandom")).each {|fandom| self.add_association(fandom)}
-    end
-    self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-    self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
-    self.mergers.each {|m| m.update_attributes(merger_id: new_merger.id)}
-    self.children = []
-    self.meta_tags = []
-    self.sub_tags = []
   end
 
   def merger_string=(tag_string)
