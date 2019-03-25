@@ -1,6 +1,6 @@
 <!-- START of single comment -->
 <li class="<% if single_comment.unreviewed? %>unreviewed <% end %>comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
-  <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
+  <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && can_edit_comment?(single_comment) %>
     <!-- we're editing this comment -->
     <%= render 'comments/comment_form',
         :comment => single_comment,
@@ -51,7 +51,7 @@
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
         </div>
-        <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
         <% unless single_comment.edited_at.blank? %>
           <p class="edited datetime">
             <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>

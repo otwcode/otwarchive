@@ -7,9 +7,5 @@
       <% end %>
     </li>
   <% end %>
-
   <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
-  <% if work.chapters.count > 1 %>
-    <li><%= link_to ts('Delete Chapter'), [:confirm_delete, work, chapter], data: {confirm: ts('Are you sure you want to delete this chapter? This will delete all comments on the chapter as well and cannot be undone!')} %></li>
-  <% end %>
 </ul>

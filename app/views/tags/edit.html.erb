@@ -9,6 +9,10 @@
 
 <!--main content-->
 
+<% if logged_in_as_admin? %>
+  <p class="notes"><%= ts("Last updated by %{wrangler} on %{date}", wrangler: @tag.last_wrangler.try(:login) || '---', date: @tag.updated_at) %></p>
+<% end %>
+
 <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
   <fieldset>
@@ -95,16 +99,11 @@
           <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
             <dt><%= ts("Suggested Fandoms") %>:</dt>
             <dd>
-            <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
               <ul class="tags commas">
-              <% for tag in fandom_list %>
+              <% @suggested_fandoms.each do |tag| %>
                 <li><%= link_to_edit_tag(tag) %></li>
               <% end %>
               </ul>
-            <% end %>
-            <% if @suggested_fandoms.length > 20 %>
-              <p><%= link_to ts("See all (%{fandoms_len})", :fandoms_len => @suggested_fandoms.length), {:controller => :tags, :action => :wrangle, :id => @tag, :show => :suggested_fandoms} %></p>
-            <% end %>
             </dd>
           <% end %>
           <dt><%= tag_category_name(tag_type) %></dt>
@@ -185,9 +184,6 @@
   </fieldset>
 <% end %>
 
-<% if logged_in_as_admin? %>
-  <p><%= ts("Last updated by") %> <%= @tag.last_wrangler.try(:login) || '---' %> <%= ts("on") %> <%= @tag.updated_at %></p>
-<% end %>
 <!--/content-->
 
 <!--subnav-->
