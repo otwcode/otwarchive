@@ -157,7 +157,7 @@ module WorksHelper
     text << "<ul>"
     %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
       if tags[type]
-        text << "<li>#{type.constantize.label_name}: #{tags[type].map{ |t| link_to_tag_works(t, {full_path: true }) }.join(', ')}</li>"
+        text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end
     end
     text << "</ul>"

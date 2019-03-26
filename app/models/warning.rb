@@ -1,5 +1,4 @@
 class Warning < Tag
-
   NAME = ArchiveConfig.WARNING_CATEGORY_NAME
 
   DISPLAY_NAME_MAPPING = {
@@ -23,5 +22,4 @@ class Warning < Tag
   def display_name
     DISPLAY_NAME_MAPPING[name] || name
   end
-
 end
