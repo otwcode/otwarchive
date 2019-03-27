@@ -236,125 +236,8 @@ class Bookmark < ApplicationRecord
     bookmarker_notes.present?
   end
 
-  def bookmarkable_pseud_names
-    if bookmarkable.respond_to?(:creator)
-      bookmarkable.creator
-    elsif bookmarkable.respond_to?(:pseuds)
-      bookmarkable.pseuds.pluck(:name)
-    elsif bookmarkable.respond_to?(:author)
-      bookmarkable.author
-    end
-  end
-
-  def bookmarkable_pseud_ids
-    if bookmarkable.respond_to?(:creatorships)
-      bookmarkable.creatorships.pluck(:pseud_id)
-    end
-  end
-
-  def tag
-    names = self.tags.pluck(:name) + filter_names
-    if bookmarkable.respond_to?(:tags)
-      names += bookmarkable.tags.where(canonical: false).pluck :name
-    end
-    if bookmarkable.respond_to?(:work_tags)
-      names += bookmarkable.work_tags.where(canonical: false).pluck :name
-    end
-    names.uniq
-  end
-
-  def tag_ids
-    self.tags.pluck(:id)
-  end
-
-  def filters
-    if @filters.nil?
-      @filters = filters_for_facets
-      if bookmarkable.respond_to?(:filters)
-        @filters = (@filters + bookmarkable.filters.where("filter_taggings.inherited = 1")).uniq
-      end
-    end
-    @filters
-  end
-
-  def filters_for_facets
-    if @facet_filters.nil?
-      @facet_filters = self.tags.map{ |t| t.filter }.compact
-      if bookmarkable.respond_to?(:filters)
-        @facet_filters = (@facet_filters + bookmarkable.filters.where("filter_taggings.inherited = 0")).uniq
-      end
-    end
-    @facet_filters
-  end
-
-  def filter_names
-    filters.map{ |t| t.name }
-  end
-
-  def filter_ids
-    filters.map{ |t| t.id }
-  end
-
-  def fandom_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
-  end
-
-  def character_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
-  end
-
-  def relationship_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
-  end
-
-  def freeform_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
-  end
-
-  def rating_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
-  end
-
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
-  end
-
-  def category_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
-  end
-
   def collection_ids
     approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
-  end
-
-  def bookmarkable_collection_ids
-    if bookmarkable.respond_to?(:approved_collections)
-      bookmarkable.approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
-    end
-  end
-
-  def bookmarkable_title
-    bookmarkable.try(:title)
-  end
-
-  def bookmarkable_posted
-    !bookmarkable.respond_to?(:posted) || bookmarkable.posted?
-  end
-
-  def bookmarkable_restricted
-    bookmarkable.respond_to?(:restricted) && bookmarkable.restricted?
-  end
-
-  def bookmarkable_hidden
-    bookmarkable.respond_to?(:hidden_by_admin) && bookmarkable.hidden_by_admin?
-  end
-
-  def bookmarkable_complete
-    !bookmarkable.respond_to?(:complete) || bookmarkable.complete?
-  end
-
-  def bookmarkable_language_id
-    bookmarkable.language_id if bookmarkable.respond_to?(:language_id)
   end
 
   def bookmarkable_date
@@ -364,5 +247,4 @@ class Bookmark < ApplicationRecord
       bookmarkable.updated_at
     end
   end
-
 end
