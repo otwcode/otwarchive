@@ -23,10 +23,9 @@ namespace :opendoors do
             puts "Where is the Open Doors CSV located?"
              STDIN.gets.chomp
           else
-            loc = args[:csv]
-            puts loc
+            args[:csv]
           end
-    
+
     begin
       f = File.open("opendoors_result.txt", "w")
       url_updater = UrlUpdater.new
