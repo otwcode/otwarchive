@@ -1170,14 +1170,13 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  # TODO drop unused database column authors_to_sort_on
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
     elsif self.authors.present?
-      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.authors.map(&:name).sort.join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     else
-      self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.pseuds.map(&:name).sort.join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
   end
 
