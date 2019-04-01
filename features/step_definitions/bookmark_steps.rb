@@ -283,6 +283,24 @@ Given /^bookmarks of external works and series tagged with the (character|relati
   step %{all indexing jobs have been run}
 end
 
+Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
+  step %{I have loaded the "languages" fixture}
+
+  step %{the user "#{user}" exists and is activated}
+  user_pseud = User.find_by(login: user).default_pseud
+
+  lang_en = Language.find_by(name: "English")
+  lang_de = Language.find_by(name: "Deutsch")
+
+  work1 = FactoryGirl.create(:posted_work, title: "english work", language_id: lang_en.id)
+  work2 = FactoryGirl.create(:posted_work, title: "german work", language_id: lang_de.id)
+
+  FactoryGirl.create(:bookmark, bookmarkable_id: work1.id, pseud_id: user_pseud.id)
+  FactoryGirl.create(:bookmark, bookmarkable_id: work2.id, pseud_id: user_pseud.id)
+
+  step %{all indexing jobs have been run}
+end
+
 When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
   step %{I start a new bookmark for "#{title}"}
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
@@ -359,7 +377,7 @@ When(/^I attempt to transfer my bookmark of "([^"]*)" to a pseud that is not min
   step %{I edit the bookmark for "#{work}"}
   pseud_id = User.find_by(login: "not_the_bookmarker").pseuds.first.id
   find("#bookmark_pseud_id", visible: false).set(pseud_id)
-  click_button "Edit"
+  click_button "Update"
 end
 
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|

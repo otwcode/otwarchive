@@ -167,8 +167,16 @@ TAGS_PER_SEARCH_PAGE: 50
 # When updating tag counts, how many to do in one transaction
 TAG_UPDATE_BATCH_SIZE: 100
 
+# We only start caching tag counts for tags used more than a certain number of times
+TAGGINGS_COUNT_MIN_CACHE_COUNT: 1000
+
+# For tagging changes, we only reindex tags used less than a certain number of times
+TAGGINGS_COUNT_REINDEX_LIMIT: 1000
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
+
+DOWNLOAD_FORMATS: ['azw3', 'epub', 'mobi', 'pdf', 'html']
 
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'

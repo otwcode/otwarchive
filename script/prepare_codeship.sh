@@ -35,7 +35,7 @@ bundle exec rake db:migrate --trace
 #sed -e 's/PRODUCTION_CACHE.*$//' -i config/config.yml
 #wget http://media.transformativeworks.org/ao3/codeship/prepare_part2.sh -O - | bash -x
 
-ES_VERSION="6.5.0"
+ES_VERSION="6.6.1"
 ES_PORT="9400"
 cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.zip
@@ -50,3 +50,5 @@ echo
 cd ~/clone
 echo "BCRYPT_COST: 4"  >> config/local.yml
 tail config/local.yml
+
+bash script/codeship_ebook_converters.sh

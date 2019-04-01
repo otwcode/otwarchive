@@ -21,7 +21,6 @@ class AdminSetting < ApplicationRecord
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
     days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
     suspend_filter_counts?: false,
-    disable_filtering?: false,
     enable_test_caching?: false,
     cache_expiration: 10,
     tag_wrangling_off?: false,
