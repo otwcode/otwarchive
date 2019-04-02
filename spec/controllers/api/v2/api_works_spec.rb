@@ -131,6 +131,8 @@ describe "API v2 WorksController - Create works", type: :request do
     describe "Provided API metadata should be used if present" do
       before(:all) do
         Rails.cache.clear
+        Language.find_or_create_by(short: "es", name: "Español")
+
         mock_external
 
         archivist = create(:archivist)
@@ -148,10 +150,12 @@ describe "API v2 WorksController - Create works", type: :request do
               relationships: api_fields[:relationships],
               categories: api_fields[:categories],
               additional_tags: api_fields[:freeform],
+              language_code: api_fields[:language_code],
               external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
               notes: api_fields[:notes],
-              chapter_urls: ["http://foo"] }
+              chapter_urls: ["http://foo"]
+            }
           ]
         }
 
@@ -195,6 +199,9 @@ describe "API v2 WorksController - Create works", type: :request do
       end
       it "API should override content for Additional Tags" do
         expect(@work.freeforms.flat_map(&:name)).to eq(api_fields[:freeform].split(", "))
+      end
+      it "API should override content for Language" do
+        expect(Language.find_by(id: @work.language_id).short).to eq(api_fields[:language_code])
       end
       it "API should override content for Notes" do
         expect(@work.notes).to eq("<p>" + api_fields[:notes] + "</p>")
@@ -328,6 +335,9 @@ describe "API v2 WorksController - Create works", type: :request do
       end
       it "Additional Tags should be empty" do
         expect(@work.freeforms).to be_empty
+      end
+      it "Language should be English" do
+        expect(@work.language_id).to eq(Language.find_by(short: "en").id)
       end
       it "Notes should be empty" do
         expect(@work.notes).to be_empty
