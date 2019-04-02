@@ -145,6 +145,47 @@ describe WorkSearchForm do
       end
     end
 
+    describe "when searching by series title" do
+      before do
+        work.series_attributes = { title: "Megami Tensei" }
+        work.save!
+
+        second_work.series_attributes = { title: "Persona" }
+        second_work.save!
+
+        run_all_indexing_jobs
+      end
+
+      it "returns only works in series matching the title" do
+        results = WorkSearchForm.new(series_titles: "megami").search_results
+        expect(results).to include(work)
+        expect(results).not_to include(second_work)
+        results = WorkSearchForm.new(query: "series_titles: *").search_results
+        expect(results).to include(work, second_work)
+
+        # Rename a series
+        work.series.first.update!(title: "Persona: Dancing in Starlight")
+        run_all_indexing_jobs
+        results = WorkSearchForm.new(series_titles: "persona").search_results
+        expect(results).to include(work, second_work)
+
+        # Remove a work from a series
+        work.serial_works.first.destroy
+        run_all_indexing_jobs
+        results = WorkSearchForm.new(series_titles: "persona").search_results
+        expect(results).not_to include(work)
+        expect(results).to include(second_work)
+
+        # Delete a series
+        second_work.series.first.destroy
+        run_all_indexing_jobs
+        results = WorkSearchForm.new(series_titles: "persona").search_results
+        expect(results).not_to include(work, second_work)
+        results = WorkSearchForm.new(query: "series_titles: *").search_results
+        expect(results).to be_empty
+      end
+    end
+
     describe "when searching by word count" do
       before(:each) do
         work.chapters.first.update_attributes(content: "This is a work with a word count of ten.", posted: true)

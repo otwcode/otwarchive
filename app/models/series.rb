@@ -29,6 +29,7 @@ class Series < ApplicationRecord
 
   after_create :notify_after_creation
   before_update :notify_before_update
+  after_update :update_work_index
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -243,6 +244,10 @@ class Series < ApplicationRecord
       bookmarkable_type: 'Series',
       bookmarkable_join: { name: "bookmarkable" }
     )
+  end
+
+  def update_work_index
+    self.works.each(&:enqueue_to_index) if saved_change_to_title?
   end
 
   def word_count

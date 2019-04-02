@@ -85,7 +85,8 @@ class WorkQuery < Query
       single_chapter_filter,
       language_filter,
       crossover_filter,
-      type_filter
+      type_filter,
+      series_title_filter
     ]
   end
 
@@ -157,6 +158,10 @@ class WorkQuery < Query
 
   def type_filter
     terms_filter(:work_type, options[:work_types]) if options[:work_types]
+  end
+
+  def series_title_filter
+    term_filter(:series_titles, options[:series_titles]) if options[:series_titles].present?
   end
 
   def user_filter

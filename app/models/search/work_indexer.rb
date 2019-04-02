@@ -1,5 +1,4 @@
 class WorkIndexer < Indexer
-
   def self.klass
     "Work"
   end
@@ -85,8 +84,9 @@ class WorkIndexer < Indexer
         :otp,
         :work_types,
         :nonfiction
-      ]
+      ],
+    ).merge(
+      series_titles: object.series.pluck(:title)
     )
   end
-
 end
