@@ -335,7 +335,7 @@ describe Work do
         work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
 
-        work.authors = [Pseud.new(name: "tiziano"), Pseud.new(name: "squalo")]
+        work.authors = [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
         expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end

@@ -1174,9 +1174,9 @@ class Work < ApplicationRecord
     if self.anonymous?
       "Anonymous"
     elsif self.authors.present?
-      self.authors.map(&:name).sort.join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.authors.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     else
-      self.pseuds.map(&:name).sort.join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
+      self.pseuds.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
   end
 
