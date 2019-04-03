@@ -117,8 +117,8 @@ if (!(KeyboardEvent.prototype.hasOwnProperty("key"))) {
 // IE/Edge compatibility for event.key
 if (browserHasKeyProp) {
     (function() {
-        var eventProto = KeyboardEvent.prototype
-        var keyProp = Object.getOwnPropertyDescriptor(eventProto, "key")
+        var eventProto = KeyboardEvent.prototype;
+        var keyProp = Object.getOwnPropertyDescriptor(eventProto, "key");
         var keys = {
             Spacebar: " ",
             Esc: "Escape",
@@ -136,7 +136,7 @@ if (browserHasKeyProp) {
                 var key = keyProp.get.call(this);
                 return keys.hasOwnProperty(key) ? keys[key] : key;
             }
-        })
+        });
     })();
 }
 
