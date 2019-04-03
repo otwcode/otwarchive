@@ -92,7 +92,7 @@ if (!(KeyboardEvent.prototype.hasOwnProperty("key"))) {
             }
         });
 } else {
-    // TODO: Check if we're on IE/Edge and modify that list accordingly
+    var browserHasKeyProp = true;
     KEY = {
         BACKSPACE: "Backspace",
         TAB: "Tab",
@@ -111,6 +111,33 @@ if (!(KeyboardEvent.prototype.hasOwnProperty("key"))) {
         NUMPAD_ENTER: "Enter",
         COMMA: ","
     };
+}
+
+
+// IE/Edge compatibility for event.key
+if (browserHasKeyProp) {
+    (function() {
+        var eventProto = KeyboardEvent.prototype
+        var keyProp = Object.getOwnPropertyDescriptor(eventProto, "key")
+        var keys = {
+            Spacebar: " ",
+            Esc: "Escape",
+            Left: "ArrowLeft",
+            Up: "ArrowUp",
+            Right: "ArrowRight",
+            Down: "ArrowDown",
+            Del: "Delete",
+        };
+
+        Object.defineProperty(eventProto, "key", {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+                var key = keyProp.get.call(this);
+                return keys.hasOwnProperty(key) ? keys[key] : key;
+            }
+        })
+    })();
 }
 
 
