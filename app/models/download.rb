@@ -1,20 +1,12 @@
 class Download
-  # Given a work and a format or mime type, generate a download file
-  def self.generate(work, options = {})
-    new(work, options).generate
-  end
-
-  # Remove all downloads for this work
-  def self.remove(work)
-    new(work).remove
-  end
-
   attr_reader :work, :file_type, :mime_type
 
   def initialize(work, options = {})
     @work = work
     @file_type = set_file_type(options.slice(:mime_type, :format))
-    @mime_type = MIME::Types.type_for(@file_type).first
+    # TODO: Our current version of the mime-types gem doesn't include azw3, but
+    # the gem cannot be updated without updating rest-client
+    @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
   end
 
   def generate
@@ -48,14 +40,21 @@ class Download
   # Given a mime type, return a file extension
   def file_type_from_mime(mime)
     ext = MimeMagic.new(mime.to_s).subtype
-    ext == "x-mobipocket-ebook" ? "mobi" : ext
+    case ext
+    when "x-mobipocket-ebook"
+      "mobi"
+    when "x-mobi8-ebook"
+      "azw3"
+    else
+      ext
+    end
   end
 
   # The base name of the file (eg, "War and Peace")
   def file_name
     name = clean(work.title)
     name += " Work #{work.id}" if name.length < 3
-    name
+    name.strip
   end
 
   # The public route to this download
@@ -63,14 +62,32 @@ class Download
     "/downloads/#{work.id}/#{file_name}.#{file_type}"
   end
 
-  # The full path to the file (eg, "/tmp/42/The Hobbit.epub")
+  # The path to the zip file (eg, "/tmp/42_epub_20190301-24600-17164a8/42.zip")
+  def zip_path
+    "#{dir}/#{work.id}.zip"
+  end
+
+  # The path to the folder where web2disk downloads the xhtml and images
+  def assets_path
+    "#{dir}/assets"
+  end
+
+  # The full path to the HTML file (eg, "/tmp/42_epub_20190301-24600-17164a8/The Hobbit.html")
+  def html_file_path
+    "#{dir}/#{file_name}.html"
+  end
+
+  # The full path to the file (eg, "/tmp/42_epub_20190301-24600-17164a8/The Hobbit.epub")
   def file_path
     "#{dir}/#{file_name}.#{file_type}"
   end
 
-  # Write to temp and then immediately clean it up
+  # Get the temporary directory where downloads will be generated,
+  # creating the directory if it doesn't exist.
   def dir
-    "/tmp/#{work.id}"
+    return @tmpdir if @tmpdir
+    @tmpdir = Dir.mktmpdir("#{work.id}_#{file_type}_")
+    @tmpdir
   end
 
   # Utility methods which clean up work data for use in downloads
@@ -106,13 +123,12 @@ class Download
   # make filesystem-safe
   # ascii encoding
   # squash spaces
-  # strip all alphanumeric
+  # strip all non-alphanumeric
   # truncate to 24 chars at a word boundary
   def clean(string)
     # get rid of any HTML entities to avoid things like "amp" showing up in titles
     string = string.gsub(/\&(\w+)\;/, '')
-    string = ActiveSupport::Inflector.transliterate(string)
-    string = string.encode("us-ascii", "utf-8")
+    string = string.to_ascii
     string = string.gsub(/[^[\w _-]]+/, '')
     string = string.gsub(/ +/, " ")
     string = string.strip

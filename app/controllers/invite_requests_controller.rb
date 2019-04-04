@@ -30,6 +30,7 @@ class InviteRequestsController < ApplicationController
     end
 
     @invite_request = InviteRequest.new(invite_request_params)
+    @invite_request.ip_address = request.remote_ip
     if @invite_request.save
       flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
