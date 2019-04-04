@@ -9,6 +9,15 @@ class Tagging < ApplicationRecord
   after_destroy :update_taggings_count
   after_commit :update_search
 
+  after_create :update_filters
+  after_destroy :update_filters
+
+  def update_filters
+    if taggable.is_a?(Filterable)
+      taggable.update_filters
+    end
+  end
+
   def self.find_by_tag(taggable, tag)
     Tagging.find_by(tagger_id: tag.id, taggable_id: taggable.id, tagger_type: 'Tag', taggable_type: taggable.class.name)
   end

@@ -18,8 +18,6 @@ module Filterable
       source: :filter,
       through: :direct_filter_taggings
 
-    after_save :update_filters
-    after_touch :update_filters
     after_destroy :clean_up_filter_taggings
   end
 
