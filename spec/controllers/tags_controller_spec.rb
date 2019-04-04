@@ -176,20 +176,7 @@ describe TagsController do
 
   describe "update" do
     context "when updating a tag" do
-      let(:tag) { create(:freeform) }
       let(:unsorted_tag) { create(:unsorted_tag) }
-
-      it "resets the taggings count" do
-        # manufacture a tag with borked taggings_count
-        tag.taggings_count = 10
-        tag.save
-
-        put :update, params: { id: tag, tag: { fix_taggings_count: true } }
-        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
-
-        tag.reload
-        expect(tag.taggings_count).to eq(0)
-      end
 
       it "changes just the tag type" do
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
