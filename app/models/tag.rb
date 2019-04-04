@@ -113,8 +113,6 @@ class Tag < ApplicationRecord
     end
   end
 
-  attr_accessor :fix_taggings_count
-
   has_many :mergers, foreign_key: 'merger_id', class_name: 'Tag'
   belongs_to :merger, class_name: 'Tag'
   belongs_to :fandom
@@ -657,112 +655,37 @@ class Tag < ApplicationRecord
 
   #### FILTERING ####
 
-  # Usage is either:
-  # reindex_taggables
-  #
-  # or:
-  # reindex taggables do
-  #   # some other code
-  # end
-  #
-  # If you use the second method, what will happen is that the ids of the works and
-  # bookmarks that need to be re-indexed for the search engine will first be saved,
-  # then the code will be executed, and then the works/bookmarks will be sent off for
-  # reindexing. (that's what the "yield" does -- it yields to the block you pass in)
-  #
-  # Otherwise, if you removed the works from this tag in the code, you wouldn't have
-  # a way of finding their ids to reindex them. :)
-  def reindex_taggables
-    work_ids = all_filtered_work_ids
-    series_ids = all_filtered_series_ids
-    external_work_ids = all_filtered_external_work_ids
-    bookmark_ids = all_bookmark_ids
-    yield if block_given?
-    reindex_all_works(work_ids)
-    reindex_all_series(series_ids)
-    reindex_all_external_works(external_work_ids)
-    reindex_all_bookmarks(bookmark_ids)
-    reindex_pseuds if type == "Fandom"
+  before_update :reindex_all_for_name_or_type_change
+  def reindex_all_for_name_or_type_change
+    return unless name_changed? || type_changed?
+    reindex_pseuds = (type == "Fandom") || (type_was == "Fandom")
+    async_after_commit(:reindex_all, reindex_pseuds)
   end
 
-  # Take the most direct route from tag to pseud and queue up to reindex
-  def reindex_pseuds
-    Creatorship.select(:id, :pseud_id).
-                joins("JOIN filter_taggings ON filter_taggings.filterable_id = creatorships.creation_id").
-                where("filter_taggings.filter_id = ? AND filter_taggings.filterable_type = 'Work' AND creatorships.creation_type = 'Work'", id).
-                find_in_batches do |batch|
-      IndexQueue.enqueue_ids(Pseud, batch.map(&:pseud_id), :background)
+  # Reindex anything even remotely related to this tag. This is overkill in
+  # most cases, but necessary when something fundamental like the name or type
+  # of a tag has changed.
+  def reindex_all(reindex_pseuds = false)
+    works.reindex_all
+    external_works.reindex_all
+    bookmarks.reindex_all
+
+    filtered_works.reindex_all
+    filtered_external_works.reindex_all
+
+    Series.joins(works: :taggings).
+      merge(self.taggings).reindex_all
+    Series.joins(works: :filter_taggings).
+      merge(self.filter_taggings).reindex_all
+
+    # We only want to reindex pseuds if this tag is a Fandom. Unfortunately, we
+    # can't just check the current type, because tags can change type, and we'd
+    # still need to reindex if the old type was Fandom. So we have an option to
+    # control it.
+    if reindex_pseuds
+      Pseud.joins(works: :filter_taggings).
+        merge(self.direct_filter_taggings).reindex_all
     end
-  end
-
-  # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)
-  # if work_ids are passed in, those will be used (eg if we need to save the ids before making changes, then
-  # reindex after the changes are done)
-  def reindex_all_works(work_ids = [])
-    if work_ids.empty?
-      work_ids = all_filtered_work_ids
-    end
-    RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
-  end
-
-  # In the case of works, the filter_taggings table already collects all the things tagged
-  # by this tag or its subtags/synonyms
-  def all_filtered_work_ids
-    # all synned and subtagged works should be under filter taggings
-    # add in the direct works for any noncanonical tags
-    (self.filter_taggings.where(filterable_type: "Work").pluck(:filterable_id) +
-      self.works.pluck(:id)).uniq
-  end
-
-  # Reindex all series (series_ids argument works as above)
-  def reindex_all_series(series_ids = [])
-    if series_ids.empty?
-      series_ids = all_filtered_series_ids
-    end
-    IndexQueue.enqueue_ids(Series, series_ids, :background)
-  end
-
-  # Series get their filters through works, so we go through SerialWork, which has
-  # both work and series ids
-  def all_filtered_series_ids
-    SerialWork.where(work_id: all_filtered_work_ids).pluck(:series_id).uniq
-  end
-
-  # In the case of external works, the filter_taggings table already collects all the
-  # things tagged by this tag or its subtags/synonyms
-  def all_filtered_external_work_ids
-    # all synned and subtagged external works should be under filter taggings
-    # add in the direct external works for any noncanonical tags
-    (filter_taggings.where(filterable_type: "ExternalWork").pluck(:filterable_id) +
-      external_works.pluck(:id)).uniq
-  end
-
-  # Reindex all external works (external_work_ids argument works as above)
-  def reindex_all_external_works(external_work_ids = [])
-    if external_work_ids.empty?
-      external_work_ids = all_filtered_external_work_ids
-    end
-    IndexQueue.enqueue_ids(ExternalWork, external_work_ids, :background)
-  end
-
-  # Reindex all bookmarks (bookmark_ids argument works as above)
-  def reindex_all_bookmarks(bookmark_ids = [])
-    if bookmark_ids.empty?
-      bookmark_ids = all_bookmark_ids
-    end
-    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
-  end
-
-  # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
-  # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around
-  # Per discussion with TW chair Emilie, I'm limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop
-  # That means that if we ever have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
-  # have that much nesting anyway -- current max is 4 we think
-  def all_bookmark_ids(depth = 0)
-    return [] if depth == 10
-    self.bookmarks.pluck(:id) +
-      self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten +
-      self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
   end
 
   # The version of the tag that should be used for filtering, if any

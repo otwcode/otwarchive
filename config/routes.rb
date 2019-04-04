@@ -95,7 +95,6 @@ Otwarchive::Application.routes.draw do
       post :mass_update
       get :remove_association
       get :wrangle
-      get :reindex
     end
     collection do
       get :show_hidden
@@ -104,6 +103,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :tag_sets, controller: 'owned_tag_sets' do
@@ -317,7 +317,6 @@ Otwarchive::Application.routes.draw do
       get :mark_for_later
       get :mark_as_read
       get :confirm_delete
-      get :reindex
     end
     resources :bookmarks
     resources :chapters do
@@ -346,6 +345,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
+    resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 
   resources :chapters do

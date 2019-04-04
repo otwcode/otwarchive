@@ -1,0 +1,32 @@
+<% type = @item.is_a?(Tag) ? "Tag" : @item.model_name.human %>
+<h2 class="heading"><%= ts("Troubleshoot %{type}", type: type) %></h2>
+<p><%= ts("If this %{type} is exhibiting undesirable behavior, try one of " \
+          "these options to fix it.",
+          type: type.downcase) %></p>
+
+<% if @item.is_a?(Tag) %>
+  <p><%= link_to @item.name, @item %> (<%= @item.type %>)</p>
+<% elsif @item.is_a?(Work) %>
+  <%= render "works/work_blurb", work: @item %>
+<% end %>
+
+<%= form_tag troubleshooting_path, method: "patch" do %>
+  <dl>
+    <%= collection_check_boxes "", :actions, @allowed_actions, :to_s, :to_s do |builder| %>
+      <dt>
+        <%= builder.label do %>
+          <%= builder.check_box %>
+          <%= t(".#{builder.text}.title") %>
+        <% end %>
+      </dt>
+      <dd>
+        <%= t(".#{builder.text}.description") %>
+      </dd>
+    <% end %>
+  </dl>
+  <ul class="actions">
+    <li>
+      <%= submit_tag "Troubleshoot" %>
+    </li>
+  </ul>
+<% end %>

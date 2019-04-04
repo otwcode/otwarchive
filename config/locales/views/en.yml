@@ -26,3 +26,23 @@ en:
         works_summary: "You have %{work_count} work(s) under the following pseuds: %{pseuds}."
         collections_summary: "You have %{collection_count} collection(s) under the following pseuds: %{pseuds}."
         options_info: "You can delete them, but please consider %{orphaning_link} them instead!"
+  troubleshooting:
+    show:
+      update_work_filters:
+        title: "Update Work Filters"
+        description: "Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)"
+      reindex_work:
+        title: "Reindex Work"
+        description: "Send in this work to be reindexed. Use this option if the work isn't appearing in searches, or is appearing in searches that it shouldn't. (e.g. If someone has orphaned their work and it can still be found with the old name, or if it's not behaving as expected when you filter crossovers, completion status, word count, etc.)"
+      update_tag_filters:
+        title: "Update Tag Filters"
+        description: "Recalculate filters for all works directly tagged with this tag or one of its synonyms. Does not include subtags. Use this option if wrangling seems to have gone wrong. (e.g. If the tag works list is missing works tagged with a synonym, or if the tags listed in the sidebar are extremely wrong. Keep in mind that the tags listed in the sidebar will never be 100% correct, but if there's a non-canonical tag listed, or if the count is off by an order of magnitude, you should probably use this option.)"
+      reindex_tag:
+        title: "Reindex Tag"
+        description: "Reindex this tag and all related works, bookmarks, series, pseuds, and external works."
+      fix_counts:
+        title: "Fix Tag Counts"
+        description: "Try to recalculate some counts associated with this tag (both filter counts and taggings counts). Keep in mind that the tag counts listed in the fandom lists include unrevealed works, so if the count is only a little off it may just be unrevealed drafts."
+      fix_associations:
+        title: "Fix Tag Associations"
+        description: "Try to delete invalid associations involving this tag. (e.g. Parents of the wrong type, children of the wrong type, duplicate parents/children/meta-tags/sub-tags, etc.)"

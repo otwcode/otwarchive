@@ -164,19 +164,6 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts('Taggings Count') %></legend>
-    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
-
-    <dl>
-      <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
-      <dd>
-        <%= f.check_box(:fix_taggings_count) %>&nbsp;
-        <p><%= ts('Enable this if the number of taggings on search or wrangle pages needs to be fixed.') %></p>
-      </dd>
-    </dl>
-  </fieldset>
-
-  <fieldset>
     <legend><%= ts('Submit') %></legend>
     <p class="submit actions">
       <%= submit_tag ts('Save changes') %>

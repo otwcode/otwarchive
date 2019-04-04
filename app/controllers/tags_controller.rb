@@ -24,23 +24,6 @@ class TagsController < ApplicationController
     end
   end
 
-  def reindex
-    work_ids = []
-    unless logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
-      redirect_to(request.env['HTTP_REFERER'] || root_path) && return
-    end
-    @tag = Tag.find_by_name(params[:id])
-    work_ids = @tag.work_ids
-    @tag.synonyms.each do |syn|
-      work_ids.push syn.work_ids
-    end
-    work_ids.flatten!
-    @tag.reindex_all_works(work_ids)
-    flash[:notice] = ts('Tag sent to be reindexed')
-    redirect_to(request.env['HTTP_REFERER'] || root_path) && return
-  end
-
   # GET /tags
   def index
     if @collection
@@ -258,7 +241,6 @@ class TagsController < ApplicationController
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     new_tag_type = params[:tag].delete(:type)
-    fix_taggings_count = params[:tag].delete(:fix_taggings_count)
 
     # Limiting the conditions under which you can update the tag type
     if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
@@ -272,11 +254,6 @@ class TagsController < ApplicationController
     @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
     if @tag.errors.empty? && @tag.save
-      # check if a resetting of the taggings_count was requsted
-      if fix_taggings_count.present?
-        @tag.taggings_count = @tag.taggings.count
-        @tag.save
-      end
       flash[:notice] = ts('Tag was updated.')
 
       if params[:commit] == 'Wrangle'
@@ -421,10 +398,10 @@ class TagsController < ApplicationController
 
   def tag_params
     params.require(:tag).permit(
-      :name, :fix_taggings_count, :type, :canonical, :unwrangleable, :adult,
-      :fandom_string, :meta_tag_string, :syn_string, :sortable_name, :media_string,
-      :character_string, :relationship_string, :freeform_string, :sub_tag_string,
-      :merger_string,
+      :name, :type, :canonical, :unwrangleable, :adult, :sortable_name,
+      :meta_tag_string, :sub_tag_string, :merger_string, :syn_string,
+      :media_string, :fandom_string, :character_string, :relationship_string,
+      :freeform_string,
       associations_to_remove: []
     )
   end
