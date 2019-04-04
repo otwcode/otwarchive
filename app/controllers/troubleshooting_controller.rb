@@ -6,7 +6,7 @@ class TroubleshootingController < ApplicationController
   end
 
   def update
-    actions = params[:actions].map(&:to_s).reject(&:blank?)
+    actions = params.fetch(:actions, []).map(&:to_s).reject(&:blank?)
 
     disallowed = actions - @allowed_actions
 
@@ -34,9 +34,9 @@ class TroubleshootingController < ApplicationController
 
   def allowed_actions
     if @item.is_a?(Tag) && logged_in_as_admin?
-      %w[fix_counts fix_associations update_tag_filters reindex_tag]
+      %w[fix_counts update_tag_filters reindex_tag]
     elsif @item.is_a?(Tag)
-      %w[fix_counts fix_associations]
+      %w[fix_counts]
     elsif @item.is_a?(Work)
       %w[update_work_filters reindex_work]
     end
@@ -68,7 +68,7 @@ class TroubleshootingController < ApplicationController
 
       if @item.nil?
         raise ActiveRecord::RecordNotFound,
-          ts("Could not find tag with name '%{name}'", name: string)
+          ts("Could not find tag with name '%{name}'", name: params[:tag_id])
       end
     elsif params[:work_id]
       @item = Work.find(params[:work_id])
@@ -113,11 +113,13 @@ class TroubleshootingController < ApplicationController
   end
 
   def fix_counts
-    @item.filter_count.update_counts
-    @item.taggings_count = @item.taggings.count
+    @item.filter_count.update_counts if @item.filter_count
+    @item.update(taggings_count: @item.taggings.count)
     flash[:notice] << ts("Tag counts updated.")
   end
 
+  # TODO Make sure that this is working, and add it to the list of allowed
+  # actions.
   def fix_associations
     @item.async(:fix_associations)
     flash[:notice] << ts("Tag association job enqueued.")

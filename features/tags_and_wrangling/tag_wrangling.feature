@@ -252,12 +252,12 @@ Feature: Tag wrangling
     Then I should see "Wrangle Tags for Stargate SG-1"
       And I should see "Showing All Merger Tags"
 
-  Scenario: Wrangler has option to reindex a work
+  Scenario: Wrangler has option to troubleshoot a work
 
     Given the work "Indexing Issues"
       And I am logged in as a tag wrangler
      When I view the work "Indexing Issues"
-     Then I should see "Reindex Work"
+     Then I should see "Troubleshoot"
 
   @javascript
   Scenario: AO3-1698 Sign up for a fandom from the edit fandom page,
@@ -299,25 +299,23 @@ Feature: Tag wrangling
     Then I should not see "Sign Up"
       And I should see the tag wrangler listed as an editor of the tag
 
-  Scenario: A user can not see the reindex button on a tag page
+  Scenario: A user can not see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And I am logged in as a random user
     When I view the tag "Cowboy Bebop"
-    Then I should not see "Reindex Tag"
+    Then I should not see "Troubleshoot"
 
-  Scenario: A tag wrangler can not see the reindex button on a tag page
+  Scenario: A tag wrangler can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
     When I view the tag "Cowboy Bebop"
-    Then I should not see "Reindex Tag"
+    Then I should see "Troubleshoot"
 
-  Scenario: An admin can see the reindex button on a tag page
-    and will receive the correct message when pressed.
+  Scenario: An admin can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
       And I am logged in as an admin
     When I view the tag "Cowboy Bebop"
-    Then I follow "Reindex Tag"
-      And I should see "Tag sent to be reindexed"
+    Then I should see "Troubleshoot"

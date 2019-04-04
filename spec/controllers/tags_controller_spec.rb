@@ -152,19 +152,6 @@ describe TagsController do
     end
   end
 
-  describe "reindex" do
-    context "when reindexing a tag" do
-      before do
-        @tag = FactoryBot.create(:freeform)
-      end
-
-      it "Only an admin can reindex a tag" do
-        get :reindex, params: { id: @tag.name }
-        it_redirects_to_with_error(root_path, "Please log in as admin")
-      end
-    end
-  end
-
   describe "feed" do
     it "You can only get a feed on Fandom, Character and Relationships" do
       @tag = FactoryBot.create(:banned, canonical: false)
