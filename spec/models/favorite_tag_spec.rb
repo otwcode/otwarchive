@@ -11,7 +11,7 @@ describe FavoriteTag do
   end
 
   it "is invalid without a tag_id" do
-    expect(no_tag_favorite.save).to be_falsey
+    expect(no_tag_favorite.valid?).to be_falsey
   end
 
   it "is invalid when the user has already favorited the tag" do
@@ -22,11 +22,11 @@ describe FavoriteTag do
   end
 
   it "is invalid without a user_id" do
-    expect(no_user_favorite.save).to be_falsey
+    expect(no_user_favorite.valid?).to be_falsey
   end
 
   it "is invalid with a non-canonical tag" do
-    expect(noncanonical_favorite.save).to be_falsey
+    expect(noncanonical_favorite.valid?).to be_falsey
     expect(noncanonical_favorite.errors[:base].first).to include("Sorry, you can only add canonical tags to your favorite tags.")
   end
 
@@ -42,7 +42,7 @@ describe FavoriteTag do
 
     it "is invalid" do
       expect(FavoriteTag.count).to eq(ArchiveConfig.MAX_FAVORITE_TAGS)
-      expect(favorite_tag.save).to be_falsey
+      expect(favorite_tag.valid?).to be_falsey
       expect(favorite_tag.errors[:base].first).to include("Sorry, you can only save #{ArchiveConfig.MAX_FAVORITE_TAGS} favorite tags.")
     end
   end
