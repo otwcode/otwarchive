@@ -63,7 +63,7 @@ class WranglingGuidelinesController < ApplicationController
   def destroy
     @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
-
+    flash[:notice] = ts('Wrangling Guideline was successfully deleted.')
     redirect_to(wrangling_guidelines_path)
   end
 

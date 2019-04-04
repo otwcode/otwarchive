@@ -148,8 +148,6 @@ module Taggable
           errors.add(:base, error)
         end
       end
-
-      throw :abort
     end
   end
 

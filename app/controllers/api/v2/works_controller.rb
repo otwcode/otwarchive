@@ -211,6 +211,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       relationship: work_params[:relationships],
       category: work_params[:categories],
       freeform: work_params[:additional_tags],
+      language_id: Language.find_by(short: work_params[:language_code])&.id,
       summary: work_params[:summary],
       notes: work_params[:notes],
       encoding: work_params[:encoding],

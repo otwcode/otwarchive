@@ -9,32 +9,12 @@ class ArchiveFaq < ApplicationRecord
 
   validates :slug, presence: true, uniqueness: true
 
-  attr_accessor :notify_translations
-
   belongs_to :language
 
   before_validation :set_slug
   def set_slug
     if I18n.locale == :en
       self.slug = self.title.parameterize
-    end
-  end
-
-  # When we modify either a FAQs Category name or one of the Questions,
-  # we send an email to Translations.
-  before_save :notify_translations_committee
-  def notify_translations_committee
-    # Check first to see if we are asked to send an email return if not
-    unless !self.email_translations?
-      self.questions.each do |question|
-        if question.changed?
-          (@changed_questions ||= []) << question
-        end
-      end
-      # A Question or the Title of the FAQ Category could have changed
-      if @changed_questions.present? || self.title_changed?
-        AdminMailer.edited_faq(self.id, User.current_user.login).deliver
-      end
     end
   end
 
@@ -45,10 +25,6 @@ class ArchiveFaq < ApplicationRecord
 
   def to_param
     slug_was
-  end
-
-  def email_translations?
-    notify_translations == "1"
   end
 
   def self.reorder(positions)
