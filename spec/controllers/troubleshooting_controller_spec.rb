@@ -6,7 +6,7 @@ describe TroubleshootingController do
   include RedirectExpectationHelper
 
   let(:tag) { create(:canonical_fandom) }
-  let(:work) { create(:work) }
+  let(:work) { create(:posted_work) }
   let(:tag_wrangler) { create(:user, roles: [Role.new(name: "tag_wrangler")]) }
   let(:non_tag_wrangler) { create(:user) }
 
@@ -34,7 +34,7 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[fix_counts])
+          contain_exactly(*%w[fix_counts fix_meta_tags])
       end
 
       it "shows a form with the allowed actions for works" do
@@ -52,7 +52,7 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[reindex_tag update_tag_filters fix_counts])
+          contain_exactly(*%w[reindex_tag update_tag_filters fix_counts fix_meta_tags])
       end
 
       it "shows a form with the allowed actions for works" do
@@ -95,6 +95,22 @@ describe TroubleshootingController do
         it_redirects_to_simple(tag_path(tag))
       end
 
+      it "fixes meta tags and redirects to the tag" do
+        meta = create(:canonical_fandom)
+        grand = create(:canonical_fandom)
+        phantom = create(:canonical_fandom)
+
+        tag.meta_tags << meta
+        meta.meta_tags << grand
+        tag.meta_tags.delete(grand)
+        MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
+
+        expect(tag.meta_tags.reload).to contain_exactly(meta, grand)
+        it_redirects_to_simple(tag_path(tag))
+      end
+
       it "doesn't allow the user to reindex a tag" do
         put :update, params: { tag_id: tag.to_param, actions: ["reindex_tag"] }
         it_redirects_to_with_error(tag_troubleshooting_path(tag), "The following actions aren't allowed: reindex_tag.")
@@ -113,13 +129,13 @@ describe TroubleshootingController do
       end
 
       it "recalculates the work's filters and redirects" do
-        tag_work = create(:work, fandoms: [tag])
-        tag_work.filter_taggings.destroy_all
+        work.fandoms = [tag]
+        work.filter_taggings.destroy_all
 
-        put :update, params: { work_id: tag_work.id, actions: ["update_work_filters"] }
+        put :update, params: { work_id: work.id, actions: ["update_work_filters"] }
 
-        expect(tag_work.filters.reload).to include(tag)
-        it_redirects_to_simple(tag_work)
+        expect(work.filters.reload).to include(tag)
+        it_redirects_to_simple(work)
       end
     end
 
@@ -137,10 +153,26 @@ describe TroubleshootingController do
         it_redirects_to_simple(tag_path(tag))
       end
 
+      it "fixes meta tags and redirects to the tag" do
+        meta = create(:canonical_fandom)
+        grand = create(:canonical_fandom)
+        phantom = create(:canonical_fandom)
+
+        tag.meta_tags << meta
+        meta.meta_tags << grand
+        tag.meta_tags.delete(grand)
+        MetaTagging.create(sub_tag: tag, meta_tag: phantom, direct: false)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_meta_tags"] }
+
+        expect(tag.meta_tags.reload).to contain_exactly(meta, grand)
+        it_redirects_to_simple(tag_path(tag))
+      end
+
       it "reindexes everything related to the tag and redirects" do
         bookmark = create(:bookmark, tags: [tag])
         series = create(:series)
-        work = create(:work, fandoms: [tag], series: [series])
+        work = create(:posted_work, fandoms: [tag], series: [series])
         external_work = create(:external_work, fandoms: [tag])
         pseud = work.pseuds.first
 
@@ -159,9 +191,9 @@ describe TroubleshootingController do
 
       it "recalculates filters and redirects to the tag" do
         syn = create(:fandom, merger: tag)
-        tag_work = create(:work, fandoms: [tag])
+        tag_work = create(:posted_work, fandoms: [tag])
         tag_work.filter_taggings.destroy_all
-        syn_work = create(:work, fandoms: [syn])
+        syn_work = create(:posted_work, fandoms: [syn])
         syn_work.filter_taggings.destroy_all
 
         put :update, params: { tag_id: tag.to_param, actions: ["update_tag_filters"] }
@@ -179,13 +211,13 @@ describe TroubleshootingController do
       end
 
       it "recalculates the work's filters and redirects" do
-        tag_work = create(:work, fandoms: [tag])
-        tag_work.filter_taggings.destroy_all
+        work.fandoms = [tag]
+        work.filter_taggings.destroy_all
 
-        put :update, params: { work_id: tag_work.id, actions: ["update_work_filters"] }
+        put :update, params: { work_id: work.id, actions: ["update_work_filters"] }
 
-        expect(tag_work.filters.reload).to include(tag)
-        it_redirects_to_simple(tag_work)
+        expect(work.filters.reload).to include(tag)
+        it_redirects_to_simple(work)
       end
     end
   end
