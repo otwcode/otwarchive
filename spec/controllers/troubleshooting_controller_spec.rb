@@ -84,6 +84,21 @@ describe TroubleshootingController do
     context "when logged in as a tag wrangler" do
       before { fake_login_known_user(tag_wrangler) }
 
+      it "removes invalid tag associations and redirects to the tag" do
+        pending "AO3-2452"
+        tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
+        tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
+        tag.meta_taggings.build(meta_tag: tag).save(validate: false)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_associations"] }
+
+        expect(tag.parents.reload).to contain_exactly(Media.uncategorized)
+        expect(tag.children.reload).to contain_exactly
+        expect(tag.meta_tags.reload).to contain_exactly
+
+        it_redirects_to_simple(tag_path(tag))
+      end
+
       it "fixes tag counts and redirects to the tag" do
         tag.create_filter_count(public_works_count: 100)
 
@@ -141,6 +156,21 @@ describe TroubleshootingController do
 
     context "when logged in as an admin" do
       before { fake_login_admin(create(:admin)) }
+
+      it "removes invalid tag associations and redirects to the tag" do
+        pending "AO3-2452"
+        tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
+        tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
+        tag.meta_taggings.build(meta_tag: tag).save(validate: false)
+
+        put :update, params: { tag_id: tag.to_param, actions: ["fix_associations"] }
+
+        expect(tag.parents.reload).to contain_exactly(Media.uncategorized)
+        expect(tag.children.reload).to contain_exactly
+        expect(tag.meta_tags.reload).to contain_exactly
+
+        it_redirects_to_simple(tag_path(tag))
+      end
 
       it "fixes tag counts and redirects to the tag" do
         tag.create_filter_count(public_works_count: 100)
