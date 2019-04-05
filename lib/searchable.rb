@@ -12,7 +12,7 @@ module Searchable
     # A class method to reindex every item in the current relation.
     def reindex_all(queue = :background)
       distinct.select(:id).find_in_batches do |batch|
-        IndexQueue.enqueue_ids(self, batch.map(&:id), queue)
+        IndexQueue.enqueue_ids(base_class, batch.map(&:id), queue)
       end
     end
 

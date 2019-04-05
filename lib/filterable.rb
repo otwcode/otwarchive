@@ -23,7 +23,7 @@ module Filterable
 
   # Update filters for this particular filterable.
   def update_filters
-    FilterUpdater.new(self.class.to_s, [id], :main).update
+    FilterUpdater.new(self.class.base_class, [id], :main).update
   end
 
   # Destroy the filter-taggings and manually trigger callbacks.
@@ -39,7 +39,7 @@ module Filterable
       batch_size = ArchiveConfig.FILTER_UPDATE_BATCH_SIZE || 100
 
       select(:id).find_in_batches(batch_size: batch_size) do |batch|
-        FilterUpdater.new(self.to_s, batch.map(&:id), :background).update
+        FilterUpdater.new(base_class, batch.map(&:id), :background).update
 
         # Allow for progress messages in long-running updates.
         yield if block_given?
@@ -52,7 +52,7 @@ module Filterable
     # issues with stale data.
     def reindex_for_filter_changes(ids, filter_taggings, queue)
       changed_ids = filter_taggings.map(&:filterable_id)
-      IndexQueue.enqueue_ids(self.to_s, changed_ids, queue)
+      IndexQueue.enqueue_ids(base_class, changed_ids, queue)
     end
   end
 
