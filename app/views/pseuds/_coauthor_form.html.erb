@@ -1,26 +1,23 @@
 <!-- expects a local variable "form" -->
-<% if creation.invalid_pseuds.present? %>
+<% unless creation.invalid_pseuds.blank? %>
   <h4 class="heading"><%= ts('These pseuds are invalid:') %> </h4>
   <ul>
     <% for name in creation.invalid_pseuds %>
-      <li><%= name %><% if creation.disallowed_pseuds.include?(name) %> does not allow others to add them as a co-creator.<% end %></li>
+      <li><%= name %><li><%= name %><% if creation.disallowed_pseuds.include?(name) %> does not allow others to add them as a co-creator.<% end %></li></li>
     <% end %>
   </ul>
-<% end %>
-
-<% if  creation&.invalid_pseuds&.present?  %>
-  <p><%= form.label :pseud, ts('Try again:') %>
+  <p><%= form.label :pseud, ts('Try again:') %></p>
   <p title="try again">
     <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
   </p>
-<% end %> 
+<% end %>
 
 <% unless creation.ambiguous_pseuds.blank? %>
   <% creation.ambiguous_pseuds.each_pair do |name, pseuds| %>
-   
+
     <p><label for="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]"><%= ts("There's more than one user with the pseud %{name}. Please choose the one you want:", :name => name) %></label></p>
     <select name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
       <%= options_from_collection_for_select(pseuds, :id, :user_name) %>
-    </select>  
-  <% end %>  
+    </select>
+  <% end %>
 <% end %>
