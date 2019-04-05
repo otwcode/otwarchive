@@ -37,6 +37,13 @@ describe Tag do
                not_add_to_reindex_queue(work, :main))
       end
 
+      it "removes favorite tags" do
+        user = create(:user)
+        user.favorite_tags.create(tag: fandom)
+        fandom.update_attributes!(canonical: false)
+        expect(user.favorite_tags.count).to eq 0
+      end
+
       context "when the tag has a synonym" do
         let!(:synonym) { create(:fandom, merger: fandom) }
 
@@ -173,6 +180,23 @@ describe Tag do
 
           expect(fandom.children.reload).to contain_exactly(child)
           expect(synonym.children.reload).to contain_exactly
+        end
+
+        it "transfers favorite tags" do
+          user = create(:user)
+          user.favorite_tags.create(tag: synonym)
+          synonym.update_attributes!(syn_string: fandom.name)
+          expect(user.favorite_tags.count).to eq 1
+          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+        end
+
+        it "handles duplicate favorite tags" do
+          user = create(:user)
+          user.favorite_tags.create(tag: fandom)
+          user.favorite_tags.create(tag: synonym)
+          synonym.update_attributes!(syn_string: fandom.name)
+          expect(user.favorite_tags.count).to eq 1
+          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
         end
       end
     end

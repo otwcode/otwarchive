@@ -153,7 +153,6 @@ class Tag < ApplicationRecord
   has_many :external_works, through: :taggings, source: :taggable, source_type: 'ExternalWork'
   has_many :approved_collections, through: :filtered_works
 
-  # TODO Update favorite_tags for this tag_id when a canonical tag becomes a synonym of a new canonical tag
   has_many :favorite_tags, dependent: :destroy
 
   has_many :set_taggings, dependent: :destroy
@@ -899,14 +898,16 @@ class Tag < ApplicationRecord
   def transfer_or_remove_favorite_tags
     if merger&.canonical
       favorite_tags.find_each do |ft|
-        # If updating fails -- which is what would happen if a user had both
-        # this tag and its merger listed in their favorite tags -- then just
-        # destroy the favorite_tag instead.
-        ft.destroy unless ft.update(tag_id: merger_id)
+        ft.update(tag_id: merger_id)
       end
-    else
-      favorite_tags.destroy_all
     end
+
+    # We perform this after the if (instead of as a separate branch) because
+    # updating the tag_id can fail if the user has both this tag and its merger
+    # as favorite tags. So we want to clean up any failures, which just so
+    # happens to be exactly the same thing we need to do if there's no
+    # canonical merger to transfer the favorite tags to.
+    favorite_tags.find_each(&:destroy)
   end
 
   attr_reader :meta_tag_string, :sub_tag_string, :merger_string
