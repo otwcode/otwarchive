@@ -879,6 +879,8 @@ class Tag < ApplicationRecord
       self.merger.add_association(tag)
     end
 
+    self.mergers.find_each { |tag| tag.update(merger: self.merger) }
+
     merger.parents.where(type: %w[Media Fandom]).find_each do |tag|
       self.add_association(tag)
     end
