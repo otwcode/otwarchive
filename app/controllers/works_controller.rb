@@ -794,7 +794,8 @@ class WorksController < ApplicationController
   # Check whether we should display _choose_coauthor.
   def work_has_pseuds_to_fix?
     !(@work.invalid_pseuds.blank? &&
-      @work.ambiguous_pseuds.blank?)
+      @work.ambiguous_pseuds.blank? &&
+      @work.disallowed_pseuds.blank? )
   end
 
   # set the author attributes

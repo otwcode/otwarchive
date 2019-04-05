@@ -81,6 +81,7 @@ class Work < ApplicationRecord
   attr_accessor :authors
   attr_accessor :authors_to_remove
   attr_accessor :invalid_pseuds
+  attr_accessor :disallowed_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
@@ -422,6 +423,7 @@ class Work < ApplicationRecord
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      self.disallowed_pseuds = results[:disallowed_pseuds]
       if results[:banned_pseuds].present?
         self.errors.add(
           :base,
