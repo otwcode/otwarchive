@@ -49,9 +49,8 @@ class StatCounter < ApplicationRecord
       REDIS_GENERAL.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
 
-    # queue the works for reindexing
-    # we might have to reduce the frequency of this -- will see!
-    # RedisSearchIndexQueue.queue_works(work_ids, without_bookmarks: true)
+    # We don't need to enqueue works for reindexing because StatCounters
+    # enqueue themselves when they're updated.
   end
 
   # Update stat counters and search indexes for works with new kudos, comments, or bookmarks.
