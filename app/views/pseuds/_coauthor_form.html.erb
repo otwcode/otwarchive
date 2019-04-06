@@ -3,7 +3,7 @@
   <h4 class="heading"><%= ts('These pseuds are invalid:') %> </h4>
   <ul>
     <% for name in creation.invalid_pseuds %>
-      <li><%= name %><li><%= name %><% if creation.disallowed_pseuds.include?(name) %> does not allow others to add them as a co-creator.<% end %></li></li>
+      <li><%= name %><% if creation.disallowed_pseuds.include?(name) %> does not allow others to add them as a co-creator.<% end %></li>
     <% end %>
   </ul>
   <p><%= form.label :pseud, ts('Try again:') %></p>

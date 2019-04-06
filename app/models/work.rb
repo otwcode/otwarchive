@@ -419,7 +419,7 @@ class Work < ApplicationRecord
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
+      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true, remove_disallowed: true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]

@@ -271,8 +271,8 @@ class Pseud < ApplicationRecord
         pseuds = pseuds - banned_pseuds
         banned_pseuds = banned_pseuds.map(&:byline)
       end
-      disallowed_pseuds = pseuds.select { |pseud| ! pseud.user&.preference&.allow_cocreator? }
-      if disallowed_pseuds.present?
+      disallowed_pseuds = pseuds.reject { |pseud| pseud.user&.preference&.allow_cocreator? }
+      if disallowed_pseuds.present? && options[:remove_disallowed]
         pseuds = pseuds - disallowed_pseuds
         disallowed_pseuds = disallowed_pseuds.map(&:byline)
       end
