@@ -197,6 +197,7 @@ Given /^the work "([^"]*)"$/ do |work|
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
+  step %{the user "#{coauthor}" exists and is activated and allows cocreators}
   step %{I am logged in as "#{author}"}
   step %{I post the work "#{work}"}
   step %{a chapter with the co-author "#{coauthor}" is added to "#{work}"}
@@ -547,6 +548,7 @@ When /^the statistics_tasks rake task is run$/ do
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
+  step %{the user "#{coauthor}" exists and is activated and allows cocreators}
   step %{I wait 1 second}
   step %{I edit the work "#{work}"}
   step %{I add the co-author "#{coauthor}"}
@@ -554,14 +556,14 @@ When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
 end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
-  step %{the user "#{coauthor}" exists and is activated}
+  step %{the user "#{coauthor}" exists and is activated and allows cocreators}
   check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
 When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
-  step %{the user "#{coauthor1}" exists and is activated}
-  step %{the user "#{coauthor2}" exists and is activated}
+  step %{the user "#{coauthor1}" exists and is activated and allows cocreators}
+  step %{the user "#{coauthor2}" exists and is activated and allows cocreators}
   fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
 end
 

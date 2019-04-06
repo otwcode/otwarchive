@@ -435,7 +435,12 @@ describe WorksController do
     end
 
     context "where the coauthor is being updated" do
-      let(:new_coauthor) { create(:user) }
+      let(:new_coauthor) {
+        coauthor = create(:user)
+        coauthor.preference.allow_cocreator = true
+        coauthor.preference.save
+        coauthor
+      }
       let(:params) do
         {
           work: { title: "New title" },
