@@ -305,6 +305,8 @@ Feature: Create Works
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
+    And the user "myself" exists and is activated and allows cocreators
+    And the user "herself" exists and is activated and allows cocreators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "All Hell Breaks Loose"
