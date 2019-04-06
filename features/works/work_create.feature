@@ -59,6 +59,7 @@ Feature: Create Works
         | recipient      | recipient@example.org |
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
+      And the user "coauthor" exists and is activated and allows cocreators
       And I am logged in as "thorough"
       And "thorough" creates the pseud "Pseud2"
       And "thorough" creates the pseud "Pseud3"
@@ -168,6 +169,7 @@ Feature: Create Works
         | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
       And user "badcoauthor" is banned
+      And the user "coauthor" exists and is activated and allows cocreators
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
       And I fill in "Work Title" with "/"
