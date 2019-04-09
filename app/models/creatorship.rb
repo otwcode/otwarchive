@@ -2,11 +2,22 @@ class Creatorship < ApplicationRecord
   belongs_to :pseud
   belongs_to :creation, polymorphic: true, touch: true
 
+
   before_destroy :expire_caches
   after_create :update_pseud_index
   after_destroy :update_pseud_index
 
   validate :unique_index
+  validate :allowed_creator
+
+  def allowed_creator
+    user = User.find(Pseud.find(pseud_id).user_id)
+    # A user can always create their own works.
+    return if user.id == User.current_user.id
+    # A user who allows co creation can be an owner.
+    return if user&.preference&.allow_cocreator
+    errors.add(:base,"Trying to add a invalid co creator")
+  end
 
   def unique_index
     duplicate_creatorships = Creatorship.where(
