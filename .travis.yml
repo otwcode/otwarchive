@@ -1,7 +1,11 @@
-language: ruby
-dist: trusty
-cache: bundler
 sudo: required
+dist: xenial
+
+language: ruby
+cache: bundler
+
+if: tag IS blank
+
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rake db:otwseed"
@@ -24,39 +28,32 @@ env:
   - TEST_GROUP="cucumber -r features features/tags_and_wrangling -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/users              -f Ao3Cucumber::Formatter --color"
   - TEST_GROUP="cucumber -r features features/works              -f Ao3Cucumber::Formatter --color"
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-      - mysql-client
-rvm:
-  - "`cat .ruby-version| sed -e 's/ruby //'`"
+
 services:
-  - redis-server
+  - mysql
+  - redis
   - memcached
+
 before_install:
   - bash script/travis_ebook_converters.sh
-script:
-  - RAILS_ENV=test bundle exec rake db:schema:load --trace
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec $TEST_GROUP
+
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
   - bash script/travis_multiple_redis.sh
   - bash script/travis_mysql.sh
+
+script:
+  - RAILS_ENV=test bundle exec rake db:schema:load --trace
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec $TEST_GROUP
+
 after_failure:
   - tail -v -n +1 $TRAVIS_BUILD_DIR/tmp/capybara/*.html
+
 notifications:
   email:
     recipients:
       - otw-coders-extra@transformativeworks.org
     on_success: change
     on_failure: always
-  irc:
-   channels:
-     - "irc.freenode.org#otw-dev"
-   on_success: change
-   on_failure: change
