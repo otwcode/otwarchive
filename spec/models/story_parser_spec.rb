@@ -156,7 +156,7 @@ describe StoryParser do
   end
 
   describe "#parse_common" do
-    it "should convert relative to absolute links" do
+    it "converts relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
       # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
       {
@@ -174,6 +174,14 @@ describe StoryParser do
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
+    end
+
+    it "does NOT convert raw anchor links to absolute links" do
+      location = "http://external_site"
+      story_in = "<html><body><p><a href=#local>local href</p></body></html>"
+      result = @sp.parse_common(story_in, location)
+      expect(result[:chapter_attributes][:content]).not_to include(location)
+      expect(result[:chapter_attributes][:content]).to include("#local")
     end
   end
 
@@ -277,7 +285,7 @@ describe StoryParser do
         detect_tags: true
       }
 
-      archivist = create_archivist
+      archivist = create(:archivist)
       User.current_user = archivist
 
       WebMock.allow_net_connect!

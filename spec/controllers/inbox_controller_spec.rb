@@ -6,15 +6,17 @@ describe InboxController do
   let(:user) { create(:user) }
 
   describe "GET #show" do
-    it "redirects to user page when not logged in" do
+    it "redirects to user page when not logged in and displays an error" do
       get :show, params: { user_id: user.login }
-      it_redirects_to user_path(user)
+      it_redirects_to_with_error(user_path(user),
+                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
-    it "redirects to user page when logged in as another user" do
+    it "redirects to user page when logged in as another user and displays an error" do
       fake_login_known_user(create(:user))
       get :show, params: { user_id: user.login }
-      it_redirects_to user_path(user)
+      it_redirects_to_with_error(user_path(user),
+                                 "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
     context "when logged in as the same user" do
@@ -101,7 +103,7 @@ describe InboxController do
         add_comment_reply_id: feedback_comment.id,
         anchor: "comment_" + feedback_comment.id.to_s
       }
-      it_redirects_to comment_path(feedback_comment, path_params)
+      it_redirects_to(comment_path(feedback_comment, path_params))
       expect(assigns(:commentable)).to eq(feedback_comment)
       expect(assigns(:comment)).to be_a_new(Comment)
     end
@@ -124,17 +126,19 @@ describe InboxController do
     before { fake_login_known_user(user) }
 
     context "with no comments selected" do
-      it "redirects to inbox with caution" do
+      it "redirects to inbox with caution and a notice" do
         put :update, params: { user_id: user.login, read: "yeah" }
-        it_redirects_to_with_caution user_inbox_path(user), "Please select something first"
-        # A notice also appears!
-        expect(flash[:notice]).to eq("Inbox successfully updated.")
+        it_redirects_to_with_caution_and_notice(user_inbox_path(user),
+                                                "Please select something first",
+                                                "Inbox successfully updated.")
       end
 
-      it "redirects to the previously viewed page if HTTP_REFERER is set" do
+      it "redirects to the previously viewed page if HTTP_REFERER is set, with a caution and a notice" do
         @request.env['HTTP_REFERER'] = root_path
         put :update, params: { user_id: user.login, read: "yeah" }
-        it_redirects_to_with_caution root_path, "Please select something first"
+        it_redirects_to_with_caution_and_notice(root_path,
+                                                "Please select something first",
+                                                "Inbox successfully updated.")
       end
     end
 
@@ -142,7 +146,7 @@ describe InboxController do
       let!(:inbox_comment_1) { create(:inbox_comment, user: user) }
       let!(:inbox_comment_2) { create(:inbox_comment, user: user) }
 
-      it "marks all as read" do
+      it "marks all as read and redirects to inbox with a notice" do
         parameters = {
           user_id: user.login,
           inbox_comments: [inbox_comment_1.id, inbox_comment_2.id],
@@ -150,7 +154,7 @@ describe InboxController do
         }
 
         put :update, params: parameters
-        it_redirects_to_with_notice user_inbox_path(user), "Inbox successfully updated."
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment_1.reload
         expect(inbox_comment_1.read).to be_truthy
@@ -158,9 +162,9 @@ describe InboxController do
         expect(inbox_comment_2.read).to be_truthy
       end
 
-      it "marks one as read" do
+      it "marks one as read and redirects to inbox with a notice" do
         put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], read: "yeah" }
-        it_redirects_to_with_notice user_inbox_path(user), "Inbox successfully updated."
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment_1.reload
         expect(inbox_comment_1.read).to be_truthy
@@ -168,9 +172,9 @@ describe InboxController do
         expect(inbox_comment_2.read).to be_falsy
       end
 
-      it "deletes one" do
+      it "deletes one and redirects to inbox with a notice" do
         put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], delete: "yeah" }
-        it_redirects_to_with_notice user_inbox_path(user), "Inbox successfully updated."
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         expect(InboxComment.find_by(id: inbox_comment_1.id)).to be_nil
         inbox_comment_2.reload
@@ -178,12 +182,12 @@ describe InboxController do
       end
     end
 
-    context "with a read comment" do
+    context "with a read comment and redirects to inbox with a notice" do
       let!(:inbox_comment) { create(:inbox_comment, user: user, read: true) }
 
-      it "marks as unread" do
+      it "marks as unread and redirects to inbox with a notice" do
         put :update, params: { user_id: user.login, inbox_comments: [inbox_comment.id], unread: "yeah" }
-        it_redirects_to_with_notice user_inbox_path(user), "Inbox successfully updated."
+        it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
         inbox_comment.reload
         expect(inbox_comment.read).to be_falsy

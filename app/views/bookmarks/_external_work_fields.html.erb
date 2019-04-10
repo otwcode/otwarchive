@@ -70,12 +70,12 @@
                                %>
     </dd>
     <dt>
-      <%= Category::NAME %> <%= link_to_help "categories-help" %>
+      <%= Category::NAME.pluralize %> <%= link_to_help "categories-help" %>
     </dt>
     <dd>
       <ul>
         <% for tag in Category.canonical.by_name.sort %>
-          <li>               
+          <li>
             <%= check_box_tag "bookmark[external][category_string][]", tag.name, false, id: "bookmark_external_category_string_#{tag.id}" %>
             <%= label_tag "bookmark_external_category_string_#{tag.id}", tag.name %>
           </li>
