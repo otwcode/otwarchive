@@ -3,22 +3,35 @@
 AllCops:
   TargetRubyVersion: 2.3
 
-# stop checking quotation marks
-Style/StringLiterals:
+Layout/TrailingWhitespace:
   Enabled: false
 
-# stop checking line length
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
 Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false
 
 # prefer template tokens (like %{foo}) over annotated tokens (like %s)
 Style/FormatStringToken:
   EnforcedStyle: template
 
-# stop checking for trailing whitespace
-Style/TrailingWhitespace:
+# stop checking if uses of "self" are redundant
+Style/RedundantSelf:
   Enabled: false
 
-# stop checking for ambiguous regexp literal
-Lint/AmbiguousRegexpLiteral:
+# stop checking quotation marks
+Style/StringLiterals:
   Enabled: false

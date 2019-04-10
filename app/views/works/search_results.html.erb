@@ -17,7 +17,7 @@
 <% if @works.blank? %>
   <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
 <% else %>
-  <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
+  <h3 class="heading"><%= search_results_found(@works) %> <%= link_to_help "work-search-results-help" %></h3>
 
   <h3 class="landmark heading">Works List</h3>
   <ol class="work index group">

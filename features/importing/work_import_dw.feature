@@ -95,13 +95,10 @@ Feature: Import Works from DW
   @import_dw_comm
   Scenario: Creating a new work from an DW story that is posted to a community
     Given basic tags
-      And the following activated user exists
-        | login          | password    |
-        | cosomeone      | something   |
-      And I am logged in as "cosomeone" with password "something"
+      And I am logged in as "cosomeone"
     When I go to the import page
       And I fill in "urls" with "https://ao3testingcomm.dreamwidth.org/702.html"
-    When I press "Import"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Testing" within "dd.fandom"
       And I should see "Explicit" within "dd.rating"
@@ -118,8 +115,11 @@ Feature: Import Works from DW
       And I should not see "Entry tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page
-      Then I should see "Rails 5.1 Single Chapter from Comm (DW)"
+    When I follow "Edit"
+    Then the "content" field should contain "class"
+      And the "content" field should contain "entry-content"
+    When I go to cosomeone's user page
+    Then I should see "Rails 5.1 Single Chapter from Comm (DW)"
 
   @import_dw_multi_chapter
   Scenario: Creating a new multichapter work from a DW story
