@@ -12,6 +12,8 @@ class Creatorship < ApplicationRecord
 
   def allowed_creator
     user = User.find(Pseud.find(pseud_id).user_id)
+    # The orphan_account will aloways accept co creations
+    return if user.login == "orphan_account"
     # A user can always create their own works.
     return if user.id == User.current_user.id
     # A user who allows co creation can be an owner.

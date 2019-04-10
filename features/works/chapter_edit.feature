@@ -394,6 +394,7 @@ Feature: Edit chapters
   be saved
 
     Given I am logged in as "originalposter"
+      And the user "opsfriend" allows cocreators
       And I post the work "OP's Work"
       And a chapter with the co-author "opsfriend" is added to "OP's Work"
     When I am logged in as "opsfriend"
@@ -412,6 +413,8 @@ Feature: Edit chapters
   whom is already on the work and the other of whom is not
 
     Given I am logged in as "rusty"
+      And the user "sharon" allows cocreators
+      And the user "brenda" allows cocreators
       And I set up the draft "Rusty Has Two Moms"
       And I add the co-author "brenda"
       And I post the work without preview
@@ -430,6 +433,8 @@ Feature: Edit chapters
   on the work, one of whom has an ambiguous pseud
 
     Given "thebadmom" has the pseud "sharon"
+      And the user "sharon" allows cocreators
+      And the user "brenda" allows cocreators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I post the work "Rusty Has Two Moms"
@@ -450,6 +455,7 @@ Feature: Edit chapters
   whom is already on the work and the other of whom has an ambiguous pseud
 
     Given "thebadmom" has the pseud "sharon"
+      And the user "brenda" allows cocreators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I set up the draft "Rusty Has Two Moms"

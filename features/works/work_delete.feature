@@ -42,8 +42,8 @@ Feature: Delete Works
         | cosomeone      | cosomeone@example.org |
         | giftee         | giftee@example.org    |
         | recipient      | recipient@example.org |
-      And the user "coauthor" exists and is activated and allows cocreators
-      And the user "cosomeone" exists and is activated and allows cocreators
+      And the user "coauthor" allows cocreators
+      And the user "cosomeone" allows cocreators
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
