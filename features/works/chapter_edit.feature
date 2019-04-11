@@ -277,8 +277,8 @@ Feature: Edit chapters
 
   Scenario: Posting a new chapter with a co-creator does not add them to
   previous or subsequent chapters
-
-    Given I am logged in as "karma" with password "the1nonly"
+    Given the user "sabrina" allows cocreators
+      And I am logged in as "karma" with password "the1nonly"
       And I post the work "Summer Friends"
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
