@@ -10,7 +10,7 @@ FactoryGirl.define do
 
     factory :series_with_a_work do
       after(:build) do |series|
-        series.works = [create(:posted_work)]
+        series.works = [create(:posted_work, authors: User.current_user&.pseuds)]
       end
     end
   end

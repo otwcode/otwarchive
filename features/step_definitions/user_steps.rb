@@ -179,7 +179,11 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
+  author1.user.preference.allow_cocreator = true
+  author1.user.preference.save
   author2 = User.find_by(login: coauthor).default_pseud
+  author2.user.preference.allow_cocreator = true
+  author2.user.preference.save
   FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
 end
 

@@ -231,15 +231,15 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   work = if tag_type == "character"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              character_string: tag)
+                              character_string: tag, authors: User.current_user&.pseuds)
          elsif tag_type == "relationship"
            FactoryGirl.create(:posted_work,
                               title: "BoomarkedWork",
-                              relationship_string: tag)
+                              relationship_string: tag, authors: User.current_user&.pseuds)
          elsif tag_type == "fandom"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              fandom_string: tag)
+                              fandom_string: tag, authors: User.current_user&.pseuds)
          end
 
   FactoryGirl.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
@@ -251,11 +251,11 @@ end
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   # Series get their tags from works, so we have to create the work first
   work = if tag_type == "character"
-           FactoryGirl.create(:posted_work, character_string: tag)
+           FactoryGirl.create(:posted_work, character_string: tag, authors: User.current_user&.pseuds)
          elsif tag_type == "relationship"
-           FactoryGirl.create(:posted_work, relationship_string: tag)
+           FactoryGirl.create(:posted_work, relationship_string: tag, authors: User.current_user&.pseuds)
          elsif tag_type == "fandom"
-           FactoryGirl.create(:posted_work, fandom_string: tag)
+           FactoryGirl.create(:posted_work, fandom_string: tag, authors: User.current_user&.pseuds)
          end
 
   # We're going to need to use the series ID, so make the series

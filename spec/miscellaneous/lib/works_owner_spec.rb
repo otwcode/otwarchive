@@ -66,7 +66,7 @@ describe WorksOwner do
 
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
-        new_work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true, authors: [ User.current_user&.pseuds&.first])
+        new_work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true, authors: User.current_user&.pseuds )
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
