@@ -274,30 +274,30 @@ Feature: Edit chapters
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
 
-
   Scenario: Posting a new chapter with a co-creator does not add them to
   previous or subsequent chapters
-    Given the user "sabrina" allows cocreators
-      And I am logged in as "karma" with password "the1nonly"
-      And I post the work "Summer Friends"
+
+    Given I am logged in as "karma" with password "the1nonly"
+      And the user "sabrina" allows cocreators
+    And I post the work "Summer Friends"
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
     When I add the co-author "sabrina"
-      And I post the chapter
+    And I post the chapter
     Then I should see "karma, sabrina"
     When I follow "Previous Chapter"
     Then I should see "Chapter by karma"
     When a chapter is set up for "Summer Friends"
     Then I should see "Chapter co-creators"
-      And the "sabrina" checkbox should not be checked
+    And the "sabrina" checkbox should not be checked
     When I post the chapter
     Then I should see "Chapter by karma"
-
 
   Scenario: You should be able to edit a chapter to add a co-creator who is not
   already on the work
 
     Given I am logged in as "karma" with password "the1nonly"
+      And the user "amy" allows cocreators
       And I post the work "Forever Friends"
       And a chapter is added to "Forever Friends"
     When I view the work "Forever Friends"
@@ -456,6 +456,7 @@ Feature: Edit chapters
 
     Given "thebadmom" has the pseud "sharon"
       And the user "brenda" allows cocreators
+      And the user "sharon" allows cocreators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I set up the draft "Rusty Has Two Moms"

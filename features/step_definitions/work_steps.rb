@@ -197,7 +197,7 @@ Given /^the work "([^"]*)"$/ do |work|
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
-  step %{the user "#{coauthor}}" allows cocreators}
+  step %{the user "#{coauthor}" allows cocreators}
   step %{I am logged in as "#{author}"}
   step %{I post the work "#{work}"}
   step %{a chapter with the co-author "#{coauthor}" is added to "#{work}"}
@@ -562,8 +562,8 @@ When /^I add the co-author "([^"]*)"$/ do |coauthor|
 end
 
 When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
-  step %{the user "#{coauthor1}}" allows cocreators}
-  step %{the user "#{coauthor2}}" allows cocreators}
+  step %{the user "#{coauthor1}" allows cocreators}
+  step %{the user "#{coauthor2}" allows cocreators}
   fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
 end
 
