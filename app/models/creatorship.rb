@@ -21,7 +21,9 @@ class Creatorship < ApplicationRecord
     return if user.id == User.current_user.id
     # A user who allows co creation can be an owner.
     return if user&.preference&.allow_cocreator
-    #puts "#{user.login} does not accept co creations (#{self.creation_type})"
+    # Archivists can can allways co create.
+    return if User.current_user.is_archivist?
+    puts "#{user.login} does not accept co creations (#{self.creation_type})"
     errors.add(:base,"Trying to add a invalid co creator")
   end
 

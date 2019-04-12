@@ -126,8 +126,8 @@ Feature: Bookmark Indexing
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
-    Given I am logged in as "creator"
-      And I have bookmarks of old series to search
+    Given I have bookmarks of old series to search
+      And I am logged in as "creator"
     When a chapter is added to "WIP in a Series"
       And I go to the search bookmarks page
       And I select "Series" from "Type"

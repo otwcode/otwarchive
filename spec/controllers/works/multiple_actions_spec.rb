@@ -135,8 +135,18 @@ describe WorksController do
     end
 
     context 'adding and removing coauthors' do
-      let(:coauthor_to_remove_pseud) { FactoryGirl.create(:pseud) }
-      let(:coauthor_to_add_pseud) { FactoryGirl.create(:pseud) }
+      let(:coauthor_to_remove_pseud) {
+        pseud = FactoryGirl.create(:pseud)
+        pseud.user.preference.allow_cocreator = true
+        pseud.user.preference.save
+        pseud
+      }
+      let(:coauthor_to_add_pseud) {
+        pseud = FactoryGirl.create(:pseud)
+        pseud.user.preference.allow_cocreator = true
+        pseud.user.preference.save
+        pseud
+      }
       let(:work_params) {
         {
           work: {
