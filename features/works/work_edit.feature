@@ -125,7 +125,7 @@ Feature: Edit Works
 
   Scenario: You can add a co-author to an already-posted work
     Given I am logged in as "leadauthor"
-      And the user "coauthor" allows cocreators"
+      And the user "coauthor" allows cocreators
       And I post the work "Dialogue"
     When I add the co-author "coauthor" to the work "Dialogue"
     Then I should see "Work was successfully updated"
@@ -136,7 +136,7 @@ Feature: Edit Works
         | login          |
         | coolperson     |
         | ex_friend      |
-      And the user "ex-friend" allows cocreators"
+      And the user "ex-friend" allows cocreators
       And I coauthored the work "Shared" as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
@@ -154,7 +154,7 @@ Feature: Edit Works
         | lead_author |
         | coauthor    |
         | random_user |
-    And the user "coauthor" allows cocreators"
+    And the user "coauthor" allows cocreators
       And I coauthored the work "Shared" as "lead_author" with "coauthor"
       And I am logged in as "lead_author"
     When I edit the work "Shared"

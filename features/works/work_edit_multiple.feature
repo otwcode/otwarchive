@@ -130,7 +130,7 @@ Feature: Edit Multiple Works
       | login     |
       | author    |
       | coauthor  |
-      And the user "coauthor" allows cocreators"
+      And the user "coauthor" allows cocreators
       And I am logged in as "author"
       And I edit multiple works coauthored as "author" with "coauthor"
     When I check "coauthor" within "#work_pseuds_to_remove_checkboxes"
@@ -146,7 +146,7 @@ Feature: Edit Multiple Works
       | login       |
       | lead_author |
       | coauthor    |
-      And the user "coauthor" allows cocreators"
+      And the user "coauthor" allows cocreators
       And I am logged in as "lead_author"
       And I edit multiple works coauthored as "lead_author" with "coauthor"
     Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
