@@ -31,7 +31,8 @@ Feature: Search restricted works
 
   Scenario: Searching for restricted works only returns results for logged in
   users or admins
-    Given a set of works with various access levels for searching
+    Given I am logged in as a random user
+      And a set of works with various access levels for searching
       And I am logged in as a random user
     When I search for works containing "restricted: true"
     Then I should see "You searched for: restricted: true"
