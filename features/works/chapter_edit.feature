@@ -433,8 +433,8 @@ Feature: Edit chapters
   on the work, one of whom has an ambiguous pseud
 
     Given "thebadmom" has the pseud "sharon"
-      And the user "sharon" allows cocreators
-      And the user "brenda" allows cocreators
+      And the user "thebadmom" allows cocreators
+      And the user "thegoodmom" allows cocreators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I post the work "Rusty Has Two Moms"
@@ -454,9 +454,9 @@ Feature: Edit chapters
   Scenario: You should be able to add a chapter with two co-creators, one of
   whom is already on the work and the other of whom has an ambiguous pseud
 
-    Given "thebadmom" has the pseud "sharon"
-      And the user "brenda" allows cocreators
-      And the user "sharon" allows cocreators
+    Given "thebadmom" has the pseud "grace1"
+      And the user "thegoodmom" allows cocreators
+      And the user "thebadmom" allows cocreators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I set up the draft "Rusty Has Two Moms"

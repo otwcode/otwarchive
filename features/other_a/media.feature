@@ -4,6 +4,7 @@ Feature: The All Fandoms page.
 
   Scenario: Fandoms with more works should appear before fandoms with fewer.
     Given a media exists with name: "Movies", canonical: true
+      And I am logged in as "ticking"
       And a canonical "Movies" fandom "Marvel Cinematic Universe" with 3 works
       And a canonical "Movies" fandom "Star Wars" with 2 works
 
@@ -14,6 +15,7 @@ Feature: The All Fandoms page.
 
   Scenario: Only the top 5 fandoms of each type should appear.
     Given a media exists with name: "TV Shows", canonical: true
+      And I am logged in as "tocking"
       And a canonical "TV Shows" fandom "Doctor Who" with 2 works
       And a canonical "TV Shows" fandom "Sherlock" with 2 works
       And a canonical "TV Shows" fandom "Star Trek" with 2 works
