@@ -556,12 +556,15 @@ When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
 end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
+  step %{the user "#{coauthor}" exists and is activated}
   step %{the user "#{coauthor}" allows cocreators}
   check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
 When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
+  step %{the user "#{coauthor1}" exists and is activated}
+  step %{the user "#{coauthor2}" exists and is activated}
   step %{the user "#{coauthor1}" allows cocreators}
   step %{the user "#{coauthor2}" allows cocreators}
   fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")

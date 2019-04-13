@@ -34,5 +34,3 @@ We benefit from software and services that are free to use for Open Source proje
 * [Full list of acknowledgments](ACKNOWLEGMENTS.md)
 
 Thank you kindly!
-
-

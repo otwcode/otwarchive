@@ -283,13 +283,13 @@ Feature: Edit chapters
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
     When I add the co-author "sabrina"
-    And I post the chapter
+      And I post the chapter
     Then I should see "karma, sabrina"
     When I follow "Previous Chapter"
     Then I should see "Chapter by karma"
     When a chapter is set up for "Summer Friends"
     Then I should see "Chapter co-creators"
-    And the "sabrina" checkbox should not be checked
+      And the "sabrina" checkbox should not be checked
     When I post the chapter
     Then I should see "Chapter by karma"
 
@@ -454,7 +454,7 @@ Feature: Edit chapters
   Scenario: You should be able to add a chapter with two co-creators, one of
   whom is already on the work and the other of whom has an ambiguous pseud
 
-    Given "thebadmom" has the pseud "grace1"
+    Given "thebadmom" has the pseud "grace"
       And the user "thegoodmom" allows cocreators
       And the user "thebadmom" allows cocreators
       And "thegoodmom" has the pseud "sharon"
