@@ -136,7 +136,7 @@ Feature: Edit Works
         | login          |
         | coolperson     |
         | ex_friend      |
-      And the user "ex-friend" allows cocreators
+      And the user "ex_friend" allows cocreators
       And I coauthored the work "Shared" as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
