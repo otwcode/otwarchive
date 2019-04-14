@@ -11,19 +11,7 @@ class Creatorship < ApplicationRecord
   validate :allowed_creator
 
   def allowed_creator
-    user = User.find(Pseud.find(pseud_id).user_id)
-    # The orphan_account will aloways accept co creations
-    return if user.login == "orphan_account"
-    # Factory girl and its friends do not set the current user. So if we are running in test
-    # And current_user is nil assume everything is ok so test pass :()
-    return if User.current_user.nil? && ENV["RAILS_ENV"] == 'test'
-    # A user can always create their own works.
-    return if user.id == User.current_user.id
-    # A user who allows co creation can be an owner.
-    return if user&.preference&.allow_cocreator
-    # Archivists can can allways co create.
-    return if User.current_user.is_archivist?
-    puts "#{user.login} does not accept co creations (#{self.creation_type})"
+    return if Pseeud.check_pseud_coauthor?(pseud_id)
     errors.add(:base,"Trying to add a invalid co creator")
   end
 
