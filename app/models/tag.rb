@@ -22,6 +22,10 @@ class Tag < ApplicationRecord
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
+  def self.label_name
+    to_s.pluralize
+  end
+
   delegate :document_type, to: :class
 
   def document_json
@@ -506,6 +510,10 @@ class Tag < ApplicationRecord
     # can't find a tag with a name that hasn't been saved yet
     saved_name = self.name_changed? ? self.name_was : self.name
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
+  end
+
+  def display_name
+    name
   end
 
   ## AUTOCOMPLETE

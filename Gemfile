@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.1.6.2'
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -15,13 +15,13 @@ gem 'rails-controller-testing'
 
 # the published gem does not include fixes that are in Rails
 # specifically https://github.com/rails/strong_parameters/issues/16
-# gem 'strong_parameters', :git => 'https://github.com/rails/strong_parameters.git',  :ref => '904af2910c57b71bc992e8364aa48896be230c2f'
+# gem 'strong_parameters', git: 'https://github.com/rails/strong_parameters.git',  ref: '904af2910c57b71bc992e8364aa48896be230c2f'
 
 # Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# gem 'rails', git: 'git://github.com/rails/rails.git'
 
 # Database
-# gem 'sqlite3-ruby', :require => 'sqlite3'
+# gem 'sqlite3-ruby', require: 'sqlite3'
 gem 'mysql2', '0.3.20'
 
 #https://github.com/qertoip/transaction_retry
@@ -52,7 +52,7 @@ gem 'akismetor'
 
 gem 'httparty'
 gem 'htmlentities'
-gem 'whenever', '~>0.6.2', :require => false
+gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
 gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
@@ -60,11 +60,11 @@ gem 'sanitize', '>= 4.6.5'
 # https://otwarchive.atlassian.net/browse/AO3-4957
 # https://github.com/rubys/nokogumbo/issues/50
 gem 'nokogumbo', '1.4.9'
-gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
+gem 'rest-client', '~> 1.8.0', require: 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler'
-#gem 'daemon-spawn', :require => 'daemon_spawn'
+#gem 'daemon-spawn', require: 'daemon_spawn'
 gem 'elasticsearch', '>=6.0.0'
 gem 'aws-sdk'
 gem 'css_parser'
@@ -153,7 +153,7 @@ group :test do
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 1.24.2'
   gem 'timecop'
-  gem 'cucumber-timecop', :require => false
+  gem 'cucumber-timecop', require: false
   # Code coverage
   gem 'simplecov', '~> 0.14.0'
   gem 'codecov', '~> 0.1.10', require: false
@@ -171,6 +171,7 @@ end
 group :development do
   gem 'factory_girl_rails'
   gem 'bundler-audit'
+  gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
 
 group :test, :development, :staging do
@@ -178,10 +179,10 @@ group :test, :development, :staging do
 end
 
 # Deploy with Capistrano
-gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
+gem 'capistrano-gitflow_version', '>=0.0.3', require: false
 gem 'rvm-capistrano'
 
-group :production do
-  # Use unicorn as the web server
-  gem 'unicorn', '>= 5.1.0', :require => false
-end
+# Use unicorn as the web server
+gem 'unicorn', '~> 5.5', require: false
+# Use god as the monitor
+gem 'god', '~> 0.13.7'

@@ -401,8 +401,7 @@ Feature: Edit chapters
     Then I should see "Chapter 1"
       And I should see "Chapter by originalposter"
     When I follow "Edit Chapter"
-      And "AO3-4699" is fixed
-    # Then I should not see "You're not allowed to use that pseud."
+    Then I should not see "You're not allowed to use that pseud."
     When I fill in "content" with "opsfriend was here"
       And I post the chapter
     Then I should see "opsfriend was here"

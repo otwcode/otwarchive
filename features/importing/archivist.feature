@@ -176,7 +176,7 @@ Feature: Archivist bulk imports
       And I follow "Claim or remove your works" in the email
     Then I should see "Claiming Your Imported Works"
     And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I press "Sign me up and give me my works! Yay!"
+    When I press "Sign me up and give me my works!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
