@@ -26,7 +26,7 @@ Feature: Share Works
   Given I am logged in as "PrivaC"
     And I set my preferences to hide the share buttons on my work
     And I post the work "Don't Lie When You're Hurting Inside"
-    And the user "EitherWay" allows cocreators
+    And the user "EitherWay" allows co-creators
   When I view the work "Don't Lie When You're Hurting Inside"
   Then I should not see "Share"
   When I add the co-author "EitherWay" to the work "Don't Lie When You're Hurting Inside"

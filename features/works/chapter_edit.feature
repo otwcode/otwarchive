@@ -278,7 +278,7 @@ Feature: Edit chapters
   previous or subsequent chapters
 
     Given I am logged in as "karma" with password "the1nonly"
-      And the user "sabrina" allows cocreators
+      And the user "sabrina" allows co-creators
     And I post the work "Summer Friends"
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
@@ -297,7 +297,7 @@ Feature: Edit chapters
   already on the work
 
     Given I am logged in as "karma" with password "the1nonly"
-      And the user "amy" allows cocreators
+      And the user "amy" allows co-creators
       And I post the work "Forever Friends"
       And a chapter is added to "Forever Friends"
     When I view the work "Forever Friends"
@@ -394,7 +394,7 @@ Feature: Edit chapters
   be saved
 
     Given I am logged in as "originalposter"
-      And the user "opsfriend" allows cocreators
+      And the user "opsfriend" allows co-creators
       And I post the work "OP's Work"
       And a chapter with the co-author "opsfriend" is added to "OP's Work"
     When I am logged in as "opsfriend"
@@ -413,8 +413,8 @@ Feature: Edit chapters
   whom is already on the work and the other of whom is not
 
     Given I am logged in as "rusty"
-      And the user "sharon" allows cocreators
-      And the user "brenda" allows cocreators
+      And the user "sharon" allows co-creators
+      And the user "brenda" allows co-creators
       And I set up the draft "Rusty Has Two Moms"
       And I add the co-author "brenda"
       And I post the work without preview
@@ -433,8 +433,8 @@ Feature: Edit chapters
   on the work, one of whom has an ambiguous pseud
 
     Given "thebadmom" has the pseud "sharon"
-      And the user "thebadmom" allows cocreators
-      And the user "thegoodmom" allows cocreators
+      And the user "thebadmom" allows co-creators
+      And the user "thegoodmom" allows co-creators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I post the work "Rusty Has Two Moms"
@@ -455,8 +455,8 @@ Feature: Edit chapters
   whom is already on the work and the other of whom has an ambiguous pseud
 
     Given "thebadmom" has the pseud "grace"
-      And the user "thegoodmom" allows cocreators
-      And the user "thebadmom" allows cocreators
+      And the user "thegoodmom" allows co-creators
+      And the user "thebadmom" allows co-creators
       And "thegoodmom" has the pseud "sharon"
       And I am logged in as "rusty"
       And I set up the draft "Rusty Has Two Moms"

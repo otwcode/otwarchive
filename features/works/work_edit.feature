@@ -125,7 +125,7 @@ Feature: Edit Works
 
   Scenario: You can add a co-author to an already-posted work
     Given I am logged in as "leadauthor"
-      And the user "coauthor" allows cocreators
+      And the user "coauthor" allows co-creators
       And I post the work "Dialogue"
     When I add the co-author "coauthor" to the work "Dialogue"
     Then I should see "Work was successfully updated"
@@ -136,7 +136,7 @@ Feature: Edit Works
         | login          |
         | coolperson     |
         | ex_friend      |
-      And the user "ex_friend" allows cocreators
+      And the user "ex_friend" allows co-creators
       And I coauthored the work "Shared" as "coolperson" with "ex_friend"
       And I am logged in as "coolperson"
     When I view the work "Shared"
@@ -154,7 +154,7 @@ Feature: Edit Works
         | lead_author |
         | coauthor    |
         | random_user |
-    And the user "coauthor" allows cocreators
+    And the user "coauthor" allows co-creators
       And I coauthored the work "Shared" as "lead_author" with "coauthor"
       And I am logged in as "lead_author"
     When I edit the work "Shared"
@@ -194,7 +194,7 @@ Feature: Edit Works
     Given basic tags
       And "Burnham" has the pseud "Michael"
       And "Pike" has the pseud "Christopher"
-      And the user "Burnham" allows cocreators
+      And the user "Burnham" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
@@ -208,7 +208,7 @@ Feature: Edit Works
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
-   Then the user "Burnham" disallows cocreators
+   Then the user "Burnham" disallows co-creators
    When I edit the work "Thats not my Spock"
      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
      And I press "Post Without Preview"
@@ -219,8 +219,8 @@ Feature: Edit Works
      Given basic tags
       And "Burnham" has the pseud "Michael"
       And "Georgiou" has the pseud "Philippa"
-      And the user "Burnham" allows cocreators
-      And the user "Georgiou" allows cocreators
+      And the user "Burnham" allows co-creators
+      And the user "Georgiou" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
@@ -229,7 +229,7 @@ Feature: Edit Works
       And I press "Post Without Preview"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
-   Then the user "Burnham" disallows cocreators
+   Then the user "Burnham" disallows co-creators
    When I edit the work "Thats not my Spock"
      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
      And I press "Post Without Preview"

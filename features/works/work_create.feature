@@ -57,8 +57,8 @@ Feature: Create Works
         | cosomeone      | cosomeone@example.org |
         | giftee         | giftee@example.org    |
         | recipient      | recipient@example.org |
-      And the user "coauthor" allows cocreators
-      And the user "cosomeone" allows cocreators
+      And the user "coauthor" allows co-creators
+      And the user "cosomeone" allows co-creators
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -170,7 +170,7 @@ Feature: Create Works
         | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
       And user "badcoauthor" is banned
-      And the user "coauthor" allows cocreators
+      And the user "coauthor" allows co-creators
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
       And I fill in "Work Title" with "/"
@@ -306,8 +306,8 @@ Feature: Create Works
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
-    And the user "myself" allows cocreators
-    And the user "herself" allows cocreators
+    And the user "myself" allows co-creators
+    And the user "herself" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "All Hell Breaks Loose"
@@ -326,7 +326,7 @@ Feature: Create Works
     Given basic tags
       And "Burnham" has the pseud "Michael"
       And "Pike" has the pseud "Christopher"
-      And the user "Burnham" allows cocreators
+      And the user "Burnham" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"

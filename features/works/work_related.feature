@@ -373,7 +373,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I have related works setup
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"
-    And the user "misterdeejay" allows cocreators
+    And the user "misterdeejay" allows co-creators
   When I am logged in as "inspired"
     And I set up the draft "Seedling of an Idea"
     And I add the co-author "misterdeejay"
