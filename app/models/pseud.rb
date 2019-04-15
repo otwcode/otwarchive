@@ -290,7 +290,7 @@ class Pseud < ApplicationRecord
       disallowed_pseuds = pseuds.reject { |pseud| Pseud.check_pseud_coauthor?(pseud.id)}
       if disallowed_pseuds.present? && options[:remove_disallowed]
         pseuds = pseuds - disallowed_pseuds
-        disallowed_pseuds = disallowed_pseuds.map(&:byline)
+        disallowed_pseuds = byline.strip
       end
       if pseuds.length == 1
         valid_pseuds << pseuds.first

@@ -322,6 +322,25 @@ Feature: Create Works
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Me (myself), testuser"
 
+  Scenario: Users can only create a work with a co-creator who allows it.
+    Given basic tags
+      And "Burnham" has the pseud "Michael"
+      And "Pike" has the pseud "Christopher"
+      And the user "Burnham" allows cocreators
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Thats not my Spock"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Michael,Christopher"
+      And I press "Post Without Preview"
+   Then I should see "Christopher does not allow others to add them as a co-creator."
+      And I fill in "pseud_byline" with "Michael"
+      And I press "Preview"
+   Then I should see "Draft was successfully created."
+      And I press "Post"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Michael (Burnham), testuser"
+
   Scenario: Users can't set a publication date that is in the future, e.g. set
   the date to April 30 when it is April 26
     Given I am logged in

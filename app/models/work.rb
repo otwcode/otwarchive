@@ -124,7 +124,14 @@ class Work < ApplicationRecord
       errors.add(:base, ts("Work must have at least one author."))
       throw :abort
     elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
+      errors.add(:base, ts("These pseuds are invalid: ") )
+      self.invalid_pseuds.each do |p|
+        if self.disallowed_pseuds.include?(p)
+          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",p))
+        else
+          errors.add(:base, ts("%{pseud}: Is invalid",p))
+        end
+      end
       throw :abort
     end
   end
