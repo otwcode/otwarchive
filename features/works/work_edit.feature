@@ -189,3 +189,53 @@ Feature: Edit Works
       And I follow "What a title! :< :& :>"
       And I follow "Edit"
     Then I should see "What a title! :< :& :>" in the "Work Title" input
+
+  Scenario: Users can not revoke the right of co-creation on an already existing work.
+    Given basic tags
+      And "Burnham" has the pseud "Michael"
+      And "Pike" has the pseud "Christopher"
+      And the user "Burnham" allows cocreators
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Thats not my Spock"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Michael,Christopher"
+      And I press "Post Without Preview"
+   Then I should see "Christopher does not allow others to add them as a co-creator."
+      And I fill in "pseud_byline" with "Michael"
+      And I press "Preview"
+   Then I should see "Draft was successfully created."
+      And I press "Post"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Michael (Burnham), testuser"
+   Then the user "Burnham" disallows cocreators
+   When I edit the work "Thats not my Spock"
+     And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
+     And I press "Post Without Preview"
+   Then I should see "Thats not my Spock, it has too much beard"
+    And I should see "Michael (Burnham), testuser"
+
+  Scenario: You can add a co-author to an already-posted work with a change in co creator preferences.
+     Given basic tags
+      And "Burnham" has the pseud "Michael"
+      And "Georgiou" has the pseud "Philippa"
+      And the user "Burnham" allows cocreators
+      And the user "Georgiou" allows cocreators
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Thats not my Spock"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Michael"
+      And I press "Post Without Preview"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Michael (Burnham), testuser"
+   Then the user "Burnham" disallows cocreators
+   When I edit the work "Thats not my Spock"
+     And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
+     And I press "Post Without Preview"
+   Then I should see "Thats not my Spock, it has too much beard"
+    And I should see "Michael (Burnham), testuser"
+   When I add the co-author "Georgiou" to the work "Thats not my Spock, it has too much beard"
+    Then I should see "Work was successfully updated"
+      And I should see "Georgiou, Michael (Burnham), testuser"
+
