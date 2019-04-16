@@ -9,6 +9,7 @@ class Work < ApplicationRecord
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
+  include CreatorshipTests
 
   ########################################################################
   # ASSOCIATIONS
@@ -118,24 +119,6 @@ class Work < ApplicationRecord
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
 
-  # Checks that work has at least one author
-  def validate_authors
-    if self.authors.blank? && self.pseuds.blank?
-      errors.add(:base, ts("Work must have at least one author."))
-      throw :abort
-    elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: ") )
-      self.invalid_pseuds.each do |p|
-        if self.disallowed_pseuds.include?(p)
-          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",p))
-        else
-          errors.add(:base, ts("%{pseud}: Is invalid",p))
-        end
-      end
-      throw :abort
-    end
-  end
-
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
 
@@ -180,6 +163,7 @@ class Work < ApplicationRecord
   # consistency and that associated variables are updated.
   ########################################################################
 
+  # validate_auhhors to be found in concerns/creatorship_tests.rb
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter

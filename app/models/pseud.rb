@@ -136,7 +136,7 @@ class Pseud < ApplicationRecord
     # A user who allows co creation can be an owner.
     return true if user&.preference&.allow_cocreator
     # Archivists can can allways co create.
-    return true if User.current_user.is_archivist?
+    return true if User.current_user.is_a?(User) && User.current_user.is_archivist?
     return false
   end
 

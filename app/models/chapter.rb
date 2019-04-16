@@ -5,6 +5,7 @@ class Chapter < ApplicationRecord
   include HtmlCleaner
   include WorkChapterCountCaching
   include Creatable
+  include CreatorshipTests
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
@@ -190,22 +191,6 @@ class Chapter < ApplicationRecord
     end
     self.authors.flatten!
     self.authors.uniq!
-  end
-
-  # Checks that chapter has at least one author
-  # Skip the initial creation of the first chapter, since that's covered in the works model
-  def validate_authors
-    return if self.new_record? && self.position == 1
-    if self.authors.blank? && self.pseuds.empty?
-      errors.add(:base, ts("Chapter must have at least one author."))
-      throw :abort
-    end
-    self.pseuds.each do |pseud|
-      unless  Pseud.check_pseud_coauthor?(pseud.id)
-        errors.add(:base,"Trying to add a invalid co creator")
-        throw :abort
-      end
-    end
   end
 
   # Checks the chapter published_at date isn't in the future
