@@ -43,6 +43,7 @@ class Chapter < ApplicationRecord
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
+  # validate_authors to be found in concerns/creatorship_tests.rb
   before_save :validate_authors, :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
@@ -172,26 +173,26 @@ class Chapter < ApplicationRecord
     self.wip_length_placeholder = number
   end
 
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline],keep_ambiguous: true, remove_disallowed: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-      self.disallowed_pseuds = results[:disallowed_pseuds]
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
+  # # Virtual attribute for pseuds
+  # def author_attributes=(attributes)
+  #   selected_pseuds = Pseud.find(attributes[:ids])
+  #   (self.authors ||= []) << selected_pseuds
+  #   # if current user has selected different pseuds
+  #   current_user = User.current_user
+  #   if current_user.is_a? User
+  #     self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
+  #   end
+  #   self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
+  #   if !attributes[:byline].blank?
+  #     results = Pseud.parse_bylines(attributes[:byline],keep_ambiguous: true, remove_disallowed: true)
+  #     self.authors << results[:pseuds]
+  #     self.invalid_pseuds = results[:invalid_pseuds]
+  #     self.ambiguous_pseuds = results[:ambiguous_pseuds]
+  #     self.disallowed_pseuds = results[:disallowed_pseuds]
+  #   end
+  #   self.authors.flatten!
+  #   self.authors.uniq!
+  # end
 
   # Checks the chapter published_at date isn't in the future
   def validate_published_at

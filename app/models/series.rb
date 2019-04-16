@@ -161,25 +161,25 @@ class Series < ApplicationRecord
     self.authors.collect(&:user)
   end
 
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
+  # # Virtual attribute for pseuds
+  # def author_attributes=(attributes)
+  #   selected_pseuds = Pseud.find(attributes[:ids])
+  #   (self.authors ||= []) << selected_pseuds
+  #   # if current user has selected different pseuds
+  #   current_user = User.current_user
+  #   if current_user.is_a? User
+  #     self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
+  #   end
+  #   self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
+  #   if !attributes[:byline].blank?
+  #     results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
+  #     self.authors << results[:pseuds]
+  #     self.invalid_pseuds = results[:invalid_pseuds]
+  #     self.ambiguous_pseuds = results[:ambiguous_pseuds]
+  #   end
+  #   self.authors.flatten!
+  #   self.authors.uniq!
+  # end
 
   # Remove a user as an author of this series
   def remove_author(author_to_remove)

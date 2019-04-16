@@ -1,4 +1,6 @@
 class SeriesController < ApplicationController
+
+
   before_action :check_user_status, only: [:new, :create, :edit, :update]
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
