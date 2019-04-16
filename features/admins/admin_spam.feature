@@ -5,7 +5,8 @@ Feature: Admin spam management
   I want to be able to view and update works marked as spam
 
 Scenario: Review spam
-  Given the spam work "Spammity Spam"
+  Given I am logged in as "Spamster"
+    And the spam work "Spammity Spam"
     And the spam work "Totally Legit"
     And I am logged in as an admin
   Then I should see "Spam"
