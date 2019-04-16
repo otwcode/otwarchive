@@ -349,6 +349,8 @@ describe ChaptersController do
 
       it "removes user, gives notice, and redirects to work when user removes themselves" do
         other_user = create(:user)
+        other_user.preference.allow_cocreator = true
+        other_user.preference.save
         chapter = create(:chapter, work: work, posted: true, authors: [user.pseuds.first, other_user.pseuds.first])
         get :edit, params: { work_id: work.id, id: chapter.id, remove: "me" }
         expect(assigns[:chapter].pseuds).to eq [other_user.pseuds.first]

@@ -125,8 +125,6 @@ class Pseud < ApplicationRecord
   }
 
   def self.check_pseud_coauthor?(pseud_id)
-    # An admin could for example be marking a work as spam
-    return if User.current_user.is_a?(Admin)
     user = User.find(Pseud.find(pseud_id).user_id)
     # The orphan_account will aloways accept co creations
     return true  if user.login == User.orphan_account.login
