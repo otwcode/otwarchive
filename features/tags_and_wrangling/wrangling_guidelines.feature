@@ -43,9 +43,10 @@ Feature: Wrangling Guidelines
     And I should see "3. The 1 Wrangling Guideline"
 
   Scenario: Delete Wrangling Guideline
-  
+
   Given I am logged in as an admin
     And I have posted a Wrangling Guideline titled "Relationship Tags"
   When I go to the Wrangling Guidelines page
     And I follow "Delete"
-  Then I should not see "Relationship Tags"
+  Then I should see "Wrangling Guideline was successfully deleted"
+    And I should not see "Relationship Tags"

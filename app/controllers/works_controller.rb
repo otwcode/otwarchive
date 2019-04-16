@@ -91,38 +91,35 @@ class WorksController < ApplicationController
     end
 
     if @owner.present?
-      if @admin_settings.disable_filtering?
-        @works = Work.includes(:tags, :external_creatorships, :series, :language, collections: [:collection_items], pseuds: [:user]).list_without_filters(@owner, options)
-      else
-        @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
-        # If we're using caching we'll try to get the results from cache
-        # Note: we only cache some first initial number of pages since those are biggest bang for
-        # the buck -- users don't often go past them
-        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
-           (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
-          # the subtag is for eg collections/COLL/tags/TAG
-          subtag = @tag.present? && @tag != @owner ? @tag : nil
-          user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
-            results = @search.search_results
-            # calling this here to avoid frozen object errors
-            results.items
-            results.facets
-            results
-          end
-        else
-          @works = @search.search_results
+      @search = WorkSearchForm.new(options.merge(faceted: true, works_parent: @owner))
+      # If we're using caching we'll try to get the results from cache
+      # Note: we only cache some first initial number of pages since those are biggest bang for
+      # the buck -- users don't often go past them
+      if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
+         params[:include_work_search].blank? && params[:exclude_work_search].blank? &&
+         (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
+        # the subtag is for eg collections/COLL/tags/TAG
+        subtag = @tag.present? && @tag != @owner ? @tag : nil
+        user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: 20.minutes) do
+          results = @search.search_results
+          # calling this here to avoid frozen object errors
+          results.items
+          results.facets
+          results
         end
+      else
+        @works = @search.search_results
+      end
 
-        flash_search_warnings(@works)
+      flash_search_warnings(@works)
 
-        @facets = @works.facets
-        if @search.options[:excluded_tag_ids].present?
-          tags = Tag.where(id: @search.options[:excluded_tag_ids])
-          tags.each do |tag|
-            @facets[tag.class.to_s.downcase] ||= []
-            @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
-          end
+      @facets = @works.facets
+      if @search.options[:excluded_tag_ids].present?
+        tags = Tag.where(id: @search.options[:excluded_tag_ids])
+        tags.each do |tag|
+          @facets[tag.class.to_s.downcase] ||= []
+          @facets[tag.class.to_s.downcase] << QueryFacet.new(tag.id, tag.name, 0)
         end
       end
     elsif use_caching?
@@ -144,14 +141,10 @@ class WorksController < ApplicationController
 
     return unless @user.present?
 
-    if @admin_settings.disable_filtering?
-      @works = Work.collected_without_filters(@user, options)
-    else
-      @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
-      @works = @search.search_results
-      flash_search_warnings(@works)
-      @facets = @works.facets
-    end
+    @search = WorkSearchForm.new(options.merge(works_parent: @user, collected: true))
+    @works = @search.search_results
+    flash_search_warnings(@works)
+    @facets = @works.facets
     set_own_works
     @page_subtitle = ts('%{username} - Collected Works', username: @user.login)
   end
@@ -950,6 +943,7 @@ class WorksController < ApplicationController
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       :unrestricted,
+      collections_to_remove: [],
       pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
