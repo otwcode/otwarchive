@@ -38,6 +38,7 @@ class Chapter < ApplicationRecord
   attr_accessor :authors
   attr_accessor :authors_to_remove
   attr_accessor :invalid_pseuds
+  attr_accessor :disallowed_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
@@ -181,10 +182,11 @@ class Chapter < ApplicationRecord
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
+      results = Pseud.parse_bylines(attributes[:byline],keep_ambiguous: true, remove_disallowed: true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      self.disallowed_pseuds = results[:disallowed_pseuds]
     end
     self.authors.flatten!
     self.authors.uniq!
@@ -197,6 +199,12 @@ class Chapter < ApplicationRecord
     if self.authors.blank? && self.pseuds.empty?
       errors.add(:base, ts("Chapter must have at least one author."))
       throw :abort
+    end
+    self.pseuds.each do |pseud|
+      unless  Pseud.check_pseud_coauthor?(pseud.id)
+        errors.add(:base,"Trying to add a invalid co creator")
+        throw :abort
+      end
     end
   end
 

@@ -127,7 +127,7 @@ class Pseud < ApplicationRecord
   def self.check_pseud_coauthor?(pseud_id)
     user = User.find(Pseud.find(pseud_id).user_id)
     # The orphan_account will aloways accept co creations
-    return true  if user.login == "orphan_account"
+    return true  if user.login == User.orphan_account.login
     # Factory girl and its friends do not set the current user. So if we are running in test
     # And current_user is nil assume everything is ok so test pass :()
     return true if User.current_user.nil? && ENV["RAILS_ENV"] == 'test'
