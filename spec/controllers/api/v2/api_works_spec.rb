@@ -12,10 +12,6 @@ describe "API v2 WorksController - Create works", type: :request do
       mock_external
     end
 
-    before :each do
-      Rails.cache.clear
-    end
-
     after :each do
       WebMock.reset!
     end
@@ -147,7 +143,6 @@ describe "API v2 WorksController - Create works", type: :request do
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
-        Rails.cache.clear
         Language.find_or_create_by(short: "es", name: "Español")
 
         mock_external

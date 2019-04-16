@@ -139,8 +139,6 @@ class StoryParser
   # Given an array of urls for chapters of a single story,
   # download them all and combine into a single work
   def import_chapters_into_story(locations, options = {})
-    Rails.logger.debug("------- STORY PARSER: import_chapters_into_story ------")
-    Rails.logger.debug(locations)
     status = :created
     work = Work.find_by_url(locations.first)
     if work.nil?
@@ -261,6 +259,7 @@ class StoryParser
 
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
+
   protected
 
   # tries to create an external author for a given url
@@ -443,7 +442,6 @@ class StoryParser
   end
 
   def download_text(location)
-    Rails.logger.debug("------- STORY PARSER: download_text ------")
     source = get_source_if_known(KNOWN_STORY_LOCATIONS, location)
     if source.nil?
       download_with_timeout(location)
@@ -788,8 +786,6 @@ class StoryParser
   end
 
   def download_with_timeout(location, limit = 10)
-    Rails.logger.debug("------- STORY PARSER: download_with_timeout: #{location} with timeout: #{STORY_DOWNLOAD_TIMEOUT} ------")
-
     story = ""
     Timeout.timeout(STORY_DOWNLOAD_TIMEOUT) do
       begin
@@ -800,17 +796,16 @@ class StoryParser
         uri.host.downcase!
         uri.host.tr!(" ", "-")
         response = Net::HTTP.get_response(uri)
-        Rails.logger.debug("------- STORY PARSER: download_with_timeout: response:\n#{response.inspect} ------")
         case response
-          when Net::HTTPSuccess
-            story = response.body
-          when Net::HTTPRedirection
-            if limit > 0
-              story = download_with_timeout(response['location'], limit - 1)
-            end
-          else
-            Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
-            nil
+        when Net::HTTPSuccess
+          story = response.body
+        when Net::HTTPRedirection
+          if limit.positive?
+            story = download_with_timeout(response['location'], limit - 1)
+          end
+        else
+          Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
+          nil
         end
       rescue Errno::ECONNREFUSED, SocketError, EOFError => e
         Rails.logger.error("------- STORY PARSER: download_with_timeout: error rescue: \n#{e.inspect} ------")
