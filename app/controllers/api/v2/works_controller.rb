@@ -141,7 +141,6 @@ class Api::V2::WorksController < Api::V2::BaseController
     }
   end
 
-
   # Use the story parser to scrape works from the chapter URLs
   def import_work(archivist, external_work)
     work_status, work_messages = work_errors(external_work)
@@ -185,7 +184,7 @@ class Api::V2::WorksController < Api::V2::BaseController
     external_authors&.each do |external_author|
       external_author.find_or_invite(archivist)
       # One of the external author pseuds is its email address so filter that one out 
-      author_names = external_author.names.select { |a| a.name != external_author.email }.map(&:name).flatten.join(", ")
+      author_names = external_author.names.reject { |a| a.name == external_author.email }.map(&:name).flatten.join(", ")
       notified_authors << author_names
     end
     notified_authors
