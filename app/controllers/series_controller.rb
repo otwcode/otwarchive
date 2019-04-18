@@ -122,12 +122,11 @@ class SeriesController < ApplicationController
       redirect_to edit_series_path(@series) and return
     end
 
-    correctly_saved = @series.update_attributes(series_params)
     if series_has_pseuds_to_fix?
       render :_choose_coauthor and return
     end
 
-    if correctly_saved
+    if @series.update_attributes(series_params)
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
