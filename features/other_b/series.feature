@@ -201,10 +201,9 @@ Feature: Create and Edit Series
       And I fill in the basic work information for "Sweetie Bell"
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "son"
-      #And I fill in "work[series_attributes][title]" with "Ponies"
+      And I fill in "work[series_attributes][title]" with "Ponies"
       And I press "Post Without Preview"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And debug
     When I view the series "Ponies"
       And I follow "Edit Series"
       And I check "Add co-creators?"
@@ -213,11 +212,9 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And I should see "moon, son"
       And I follow "Remove Me As Author"
-      And debug
     Then I should see "You have been removed as an author from the series and its works."
-    When "AO3-5083" is fixed
-      # And "moon" should be the creator of the series "Ponies"
-      # And "sun" should not be a creator on the series "Ponies"
+      And "moon" should not be the creator of the series "Ponies"
+      And "son" should be a creator on the series "Ponies"
     When I go to my works page
     Then I should not see "Sweetie Bell"
 
