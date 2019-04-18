@@ -510,7 +510,7 @@ describe Work do
       authors = [@creator.pseuds.first, @co_creator1.pseuds.first]
       expect {work.authors = authors}.to_not raise_error
       expect {work.save!}.to_not raise_error
-      expect(work.authors).to match_array(authors)
+      expect(work.authors).to
     end
 
     it 'checks a creator can not add a standard user' do

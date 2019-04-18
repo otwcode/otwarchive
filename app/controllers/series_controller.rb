@@ -1,10 +1,11 @@
 class SeriesController < ApplicationController
-
+ include CommonCreatership
 
   before_action :check_user_status, only: [:new, :create, :edit, :update]
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_visibility, only: [:show]
+  before_action :set_author_attributes, only: [:create, :update]
 
   def load_series
     @series = Series.find_by(id: params[:id])
@@ -106,24 +107,27 @@ class SeriesController < ApplicationController
     end
   end
 
+    # Check whether we should display _choose_coauthor.
+  def series_has_pseuds_to_fix?
+    !(@series.invalid_pseuds.blank? &&
+      @series.ambiguous_pseuds.blank?)
+  end
+
   # PUT /series/1
   # PUT /series/1.xml
   def update
+
     unless params[:series][:author_attributes][:ids]
       flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
 
-    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && params[:series][:author_attributes]
-      valid_pseuds = Pseud.parse_bylines(params[:pseud][:byline])[:pseuds] # an array
-      valid_pseuds.each do |valid_pseud|
-        existing_ids = series_params[:author_attributes][:ids]
-        params[:series][:author_attributes][:ids] = existing_ids.push(valid_pseud.id) rescue nil
-      end
-      params[:pseud][:byline] = ""
+    correctly_saved = @series.update_attributes(series_params)
+    if series_has_pseuds_to_fix?
+      render :_choose_coauthor and return
     end
 
-    if @series.update_attributes(series_params)
+    if correctly_saved
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
@@ -173,10 +177,7 @@ class SeriesController < ApplicationController
   def series_params
     params.require(:series).permit(
       :title, :summary, :series_notes, :complete,
-      author_attributes: [
-        ids: [],
-        coauthors: []
-      ]
+      author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []]
     )
   end
 end

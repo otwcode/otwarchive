@@ -1,6 +1,8 @@
 # encoding=utf-8
 
 class WorksController < ApplicationController
+  include CommonCreatership
+
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
@@ -795,34 +797,6 @@ class WorksController < ApplicationController
   def work_has_pseuds_to_fix?
     !(@work.invalid_pseuds.blank? &&
       @work.ambiguous_pseuds.blank?)
-  end
-
-  # set the author attributes
-  def set_author_attributes
-    # params[:work] is required for every if statement below, so it is hoisted to
-    # the top to avoid repeating ourselves.
-    return unless params[:work]
-
-    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
-    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = ts("You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.")
-
-    if !params[:work][:author_attributes] || !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = sorry
-      params[:work][:author_attributes] ||= {}
-      params[:work][:author_attributes][:ids] = [current_user.default_pseud.id]
-    end
-
-    # stuff new bylines into author attributes to be parsed by the work model
-    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ''
-      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:pseud][:byline] = ''
-    end
-
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
-      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
-    end
   end
 
   def set_work_tag_error_messages

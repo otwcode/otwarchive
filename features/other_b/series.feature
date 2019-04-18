@@ -179,14 +179,41 @@ Feature: Create and Edit Series
     When I follow "Next"
     Then I should see "penguins0"
 
-  Scenario: Removing self as co-author from co-authored series
+  Scenario: Removing self as co-author from co-authored series when you are the only creator of a work.
     Given I am logged in as "sun"
-      And I set up the draft "Sweetie Bell" as part of a series "Ponies"
-      And I add the co-author "moon"
-      And I post the work without preview
+      And the user "moon" allows co-creators
+      And I post the work "Sweetie Bell" as part of a series "Ponies"
     When I view the series "Ponies"
-      And I wait 1 second
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "moon"
+      And I press "Update"
+    Then I should see "Series was successfully updated."
+      And I should see "moon, sun"
       And I follow "Remove Me As Author"
+    Then I should see "Sorry, we can't remove all authors of a work."
+
+  Scenario: Removing self as co-author from co-authored series
+    Given basic tags
+      And the user "son" allows co-creators
+    When I am logged in as "moon" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Sweetie Bell"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "son"
+      #And I fill in "work[series_attributes][title]" with "Ponies"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And debug
+    When I view the series "Ponies"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "son"
+      And I press "Update"
+    Then I should see "Series was successfully updated."
+      And I should see "moon, son"
+      And I follow "Remove Me As Author"
+      And debug
     Then I should see "You have been removed as an author from the series and its works."
     When "AO3-5083" is fixed
       # And "moon" should be the creator of the series "Ponies"
@@ -227,3 +254,49 @@ Feature: Create and Edit Series
       And I follow "What a title! :< :& :>"
       And I follow "Edit Series"
     Then I should see "What a title! :< :& :>" in the "Series Title" input
+
+  Scenario: A series can have a co creator if they allow it.
+    Given I am logged in as "author"
+      And the user "cocreator" allows co-creators
+      And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
+    When I view the series "Gentleman Jack"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "cocreator"
+      And I press "Update"
+    Then I should see "Series was successfully updated."
+      And I should see "author, cocreator"
+
+  Scenario: A series ensures only valid users can be added as cocreators.
+    Given I am logged in as "author"
+      And the user "notcocreator" exists and is activated
+      And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
+    When I view the series "Gentleman Jack"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "notcocreator"
+      And I press "Update"
+    Then I should see "These pseuds are invalid:"
+      And I should see "notcocreator does not allow others to add them as a co-creator."
+    Then I press "Preview"
+      And I should see "Series was successfully updated."
+
+  Scenario: A series can support ambiguous co creators.
+    Given "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+    And the user "myself" allows co-creators
+    And the user "herself" allows co-creators
+    When I am logged in as "testuser" with password "testuser"
+      And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
+    When I view the series "Gentleman Jack"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Me"
+      And I press "Update"
+   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
+      And I select "myself" from "series[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+   Then I should see "Series was successfully updated."
+      And "testuser" should be the creator of the series "Gentleman Jack"
+      And "Me (myself)" should be the creator of the series "Gentleman Jack"
+      And I should see "Me (myself), testuser"

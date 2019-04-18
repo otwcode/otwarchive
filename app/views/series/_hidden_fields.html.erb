@@ -1,0 +1,9 @@
+<!-- expects a local variable "form" -->
+
+<!-- put in all the information uploaded in hidden fields -->
+<div>
+  <%= form.hidden_field :title, :value => "#{@series.title}" %>
+  <%= form.hidden_field :summary, :value => "#{@series.summary}" %>
+  <%= form.hidden_field :series_notes, :value => "#{@series.series_notes}" %>
+  <%= form.hidden_field :complete, :value => "#{@series.complete}" %>
+</div>

@@ -17,7 +17,6 @@ module CreatorshipTests
           errors.add(:base, ts("%{pseud}: Is invalid",p))
         end
       end
-      puts "error"
       throw :abort
     end
   end

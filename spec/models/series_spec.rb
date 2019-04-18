@@ -2,11 +2,11 @@
 require 'spec_helper'
 
 describe Series do
-
-  let(:unrestricted_work) { FactoryGirl.create(:work, restricted: false) }
-  let(:restricted_work) { FactoryGirl.create(:work, restricted: true) }
+  let(:unrestricted_work) { FactoryGirl.create(:work, restricted: false, authors:  User.current_user.pseuds ) }
+  let(:restricted_work) { FactoryGirl.create(:work, restricted: true, authors:  User.current_user.pseuds) }
 
   before(:each) do
+    User.current_user = FactoryGirl.create(:user)
     @series = FactoryGirl.create(:series)
   end
 
@@ -28,4 +28,37 @@ describe Series do
     expect(@series.restricted).not_to be_truthy
   end
 
+  it "should be have pseuds for all the works it has" do
+    @series.works = [restricted_work, unrestricted_work]
+    @series.reload
+    expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
+  end
+
+  describe 'cocreaters' do
+    before(:each) do
+      @creator = User.current_user
+      @co_creator = FactoryGirl.create(:user)
+      @co_creator1 = FactoryGirl.create(:user)
+      @no_co_creator = FactoryGirl.create(:user)
+      @co_creator.preference.allow_cocreator = true
+      @co_creator1.preference.allow_cocreator = true
+      @co_creator.preference.save
+      @co_creator1.preference.save
+    end
+
+    it 'checks that normal co creator can co create' do
+      @series.works = [restricted_work, unrestricted_work]
+      @series.reload
+      expect{@series.pseuds = @creator.pseuds + @co_creator1.pseuds }.not_to raise_error
+      expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
+    end
+
+    it 'checks a creator can not add a standard user' do
+      @series.works = [restricted_work, unrestricted_work]
+      @series.reload
+      expect {@series.pseuds = @creator.pseuds + @no_co_creator.pseuds}.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
+      expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
+    end
+
+  end
 end
