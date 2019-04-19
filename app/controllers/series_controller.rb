@@ -115,30 +115,33 @@ class SeriesController < ApplicationController
 
   # PUT /series/1
   # PUT /series/1.xml
-  def update
+ def update
+    @allpseuds = (current_user.pseuds + (@series.authors ||= []) + @series.pseuds).uniq
+    @pseuds = current_user.pseuds
+    @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
+    to_select = @series.authors.blank? ? @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds : @series.authors
+    @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }.uniq
 
-    if flash[:notice] != nil && flash[:notice]&.present?
-      # Issues found are promoted to errors and the series edited.
-      flash[:error] = flash[:notice]
-      flash[:notice] = ""
-      redirect_to edit_series_path(@series) and return
-    end
+   if flash[:notice] != nil && flash[:notice]&.present?
+     # Issues found are promoted to errors and the series edited.
+     flash[:error] = flash[:notice]
+     flash[:notice] = ""
+     redirect_to edit_series_path(@series) and return
+   end
 
-    if series_has_pseuds_to_fix?
-      render :_choose_coauthor and return
-    end
-
-    if @series.update_attributes(series_params)
-      flash[:notice] = ts('Series was successfully updated.')
-      redirect_to(@series)
-    else
-      @pseuds = current_user.pseuds
-      @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
-      to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-      render action: "edit"
-    end
-  end
+   if @series.update_attributes(series_params)
+     if series_has_pseuds_to_fix?
+       render :_choose_coauthor and return
+     end
+     flash[:notice] = ts('Series was successfully updated.')
+     redirect_to(@series)
+   else
+      if series_has_pseuds_to_fix?
+       render :_choose_coauthor and return
+     end
+     render action: "edit"
+   end
+ end
 
   def update_positions
     if params[:serial_works]

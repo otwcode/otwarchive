@@ -12,9 +12,9 @@ module CreatorshipTests
       errors.add(:base, ts("These pseuds are invalid: ") )
       self.invalid_pseuds.each do |p|
         if self.disallowed_pseuds.include?(p)
-          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",p))
+          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",pseud: p))
         else
-          errors.add(:base, ts("%{pseud}: Is invalid",p))
+          errors.add(:base, ts("%{pseud}: Is invalid",pseud: p))
         end
       end
       throw :abort
