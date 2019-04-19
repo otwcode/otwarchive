@@ -117,7 +117,7 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
 
-    unless flash[:notice]&.empty?
+    if flash[:notice] != nil && flash[:notice]&.present?
       # Issues found are promoted to errors and the series edited.
       flash[:error] = flash[:notice]
       flash[:notice] = ""
