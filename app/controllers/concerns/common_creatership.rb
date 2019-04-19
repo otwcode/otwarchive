@@ -10,7 +10,9 @@ module CommonCreatership
 
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = ts("You haven't selected any pseuds for this %{type}. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.", type: params[controller] )
+    sorry = { :work => ts("You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."),
+              :series=> ts("Sorry, you cannot remove yourself entirely as an author of a series right now."),
+              :chapter => ts("you cannot remove yourself entirely as an author of a chapter right now. ") }[controller]
 
     if !params[controller][:author_attributes] || !params[controller][:author_attributes][:ids]
       flash.now[:notice] = sorry

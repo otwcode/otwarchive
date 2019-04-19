@@ -117,8 +117,10 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
 
-    unless params[:series][:author_attributes][:ids]
-      flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
+    unless flash[:notice].empty?
+      # Issues found are promoted to errors and the series edited.
+      flash[:error] = flash[:notice]
+      flash[:notice] = ""
       redirect_to edit_series_path(@series) and return
     end
 
