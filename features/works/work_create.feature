@@ -333,13 +333,11 @@ Feature: Create Works
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Michael,Christopher"
       And I press "Post Without Preview"
-      And debug
    Then I should see "Christopher does not allow others to add them as a co-creator."
       And I fill in "pseud_byline" with "Michael"
       And I press "Preview"
    Then I should see "Draft was successfully created."
       And I press "Post"
-      And debug
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
 

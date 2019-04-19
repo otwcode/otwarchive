@@ -62,7 +62,7 @@ RSpec.describe SeriesController, type: :controller do
       expect(assigns(:pseuds))
       expect(assigns(:coauthors))
       expect(assigns(:selected_pseuds))
-      response.should redirect_to edit_series_path(series)
+      expect(response).to render_template('edit')
     end
   end
 
