@@ -2,7 +2,6 @@ class Creatorship < ApplicationRecord
   belongs_to :pseud
   belongs_to :creation, polymorphic: true, touch: true
 
-
   before_destroy :expire_caches
   after_create :update_pseud_index
   after_destroy :update_pseud_index
