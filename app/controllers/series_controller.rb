@@ -66,34 +66,37 @@ class SeriesController < ApplicationController
     @series = Series.new
   end
 
+ def load_pseuds
+   @pseuds = current_user.pseuds
+   @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
+   to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
+   @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+ end
   # GET /series/1/edit
-  def edit
-    @pseuds = current_user.pseuds
-    @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+ def edit
+   load_pseuds
 
-    if params["remove"] == "me"
-      pseuds_with_author_removed = @series.pseuds - current_user.pseuds
-      if pseuds_with_author_removed.empty?
-        redirect_to controller: 'orphans', action: 'new', series_id: @series.id
-      else
-        begin
-          @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as an author from the series and its works.")
-          redirect_to @series
-        rescue Exception => error
-          flash[:error] = error.message
-          redirect_to @series
-        end
-      end
-    end
-  end
+   if params["remove"] == "me"
+     pseuds_with_author_removed = @series.pseuds - current_user.pseuds
+     if pseuds_with_author_removed.empty?
+       redirect_to controller: 'orphans', action: 'new', series_id: @series.id
+     else
+       begin
+         @series.remove_author(current_user)
+         flash[:notice] = ts("You have been removed as an author from the series and its works.")
+         redirect_to @series
+       rescue Exception => error
+         flash[:error] = error.message
+         redirect_to @series
+       end
+     end
+   end
+ end
 
   # GET /series/1/manage
-  def manage
-    @serial_works = @series.serial_works.includes(:work).order(:position)
-  end
+ def manage
+   @serial_works = @series.serial_works.includes(:work).order(:position)
+ end
 
   # POST /series
   # POST /series.xml
@@ -116,11 +119,7 @@ class SeriesController < ApplicationController
   # PUT /series/1
   # PUT /series/1.xml
  def update
-    @allpseuds = (current_user.pseuds + (@series.authors ||= []) + @series.pseuds).uniq
-    @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
-    to_select = @series.authors.blank? ? @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds : @series.authors
-    @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }.uniq
+   load_pseuds
 
    if flash[:notice] != nil && flash[:notice]&.present?
      # Issues found are promoted to errors and the series edited.
