@@ -313,6 +313,8 @@ Feature: Create Works
       And I fill in the basic work information for "All Hell Breaks Loose"
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Me"
+      And I check "This work is part of a series"
+      And I fill in "Or create and use a new one:" with "My new series"
       And I press "Post Without Preview"
    Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
       And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
@@ -321,6 +323,7 @@ Feature: Create Works
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Me (myself), testuser"
+      And I should see "My new series"
 
   Scenario: Users can only create a work with a co-creator who allows it.
     Given basic tags
