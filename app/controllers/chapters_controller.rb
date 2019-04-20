@@ -1,4 +1,6 @@
 class ChaptersController < ApplicationController
+  include CommonCreatership
+
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
@@ -292,13 +294,6 @@ class ChaptersController < ApplicationController
     end
   end
 
-  # Stuff new bylines into author attributes to be parsed by the chapter model.
-  def set_author_attributes
-    if params[:chapter] && params[:pseud] && params[:pseud][:byline] && params[:chapter][:author_attributes]
-      params[:chapter][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:pseud][:byline] = ""
-    end
-  end
 
   def post_chapter
     if !@work.posted
