@@ -13,6 +13,10 @@
 <% end %>
 
 <% unless @work.series.blank? %>
+  <select name="work[series_attributes][id]" id="work_series_attributes_id">
+    <%= options_from_collection_for_select(@work.series, :id, :title, @work.series) %>
+  </select>
+<% end %>
 <select name="work[series_attributes][id]" id="work_series_attributes_id">
 <%= options_from_collection_for_select(@work.series, :id, :title, @work.series) %>
 </select>
