@@ -208,7 +208,7 @@ Feature: Edit Works
     When I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
-   Then the user "Burnham" disallows co-creators
+   When the user "Burnham" disallows co-creators
      And I edit the work "Thats not my Spock"
      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
      And I press "Post Without Preview"
