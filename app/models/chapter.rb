@@ -39,7 +39,7 @@ class Chapter < ApplicationRecord
   before_save :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
-  before_action :set_author_attributes, only: [:create, :update]
+  before_save :validate_authors
 
   after_create :notify_after_creation
   before_update :notify_before_update
