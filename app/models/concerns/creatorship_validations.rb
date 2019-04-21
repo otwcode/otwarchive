@@ -9,21 +9,20 @@ module CreatorshipValidations
   attr_accessor :disallowed_pseuds
   attr_accessor :ambiguous_pseuds
 
-  # Checks that work has at least one author
+  # Checks that work has valid pseuds.
   def validate_authors
     if self.authors.blank? && self.pseuds.blank? && self.is_a?(Work)
       errors.add(:base, ts("Work must have at least one author."))
       throw :abort
-    end
-
-    if (invalid_pseuds & disallowed_pseuds).present?
-      errors.add(:base, ts("These pseuds do not allow others to add them as co-creator: %{pseuds}.", pseuds: (invalid_pseuds & disallowed_pseuds).to_sentence))
-      throw :abort
-    end
-
-    issues = (invalid_pseuds || [] ) - (disallowed_pseuds || [] )
-    if issues.present?
-      errors.add(:base, ts("These pseuds are invalid: %{pseuds}.", pseuds: issues.to_sentence))
+    elsif !self.invalid_pseuds.blank?
+      errors.add(:base, ts("These pseuds are invalid: ") )
+      self.invalid_pseuds.each do |p|
+        if self.disallowed_pseuds.include?(p)
+          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",pseud: p))
+        else
+          errors.add(:base, ts("%{pseud}: Is invalid",pseud: p))
+        end
+      end
       throw :abort
     end
   end
