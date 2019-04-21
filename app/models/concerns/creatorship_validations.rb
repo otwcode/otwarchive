@@ -1,4 +1,4 @@
-module CreatorshipTests
+module CreatorshipValidations
   extend ActiveSupport::Concern
 
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved

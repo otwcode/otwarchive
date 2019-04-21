@@ -9,7 +9,7 @@ class Work < ApplicationRecord
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
-  include CreatorshipTests
+  include CreatorshipValidations
 
   ########################################################################
   # ASSOCIATIONS
@@ -158,7 +158,7 @@ class Work < ApplicationRecord
   # consistency and that associated variables are updated.
   ########################################################################
 
-  # validate_authors to be found in concerns/creatorship_tests.rb
+  # validate_authors to be found in concerns/creatorship_validations.rb
   before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter

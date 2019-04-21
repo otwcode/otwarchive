@@ -3,7 +3,7 @@ class Series < ApplicationRecord
   include Bookmarkable
   include Creatable
   include Searchable
-  include CreatorshipTests
+  include CreatorshipValidations
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works

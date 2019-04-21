@@ -5,7 +5,7 @@ class Chapter < ApplicationRecord
   include HtmlCleaner
   include WorkChapterCountCaching
   include Creatable
-  include CreatorshipTests
+  include CreatorshipValidations
 
   has_many :creatorships, as: :creation
   has_many :pseuds, through: :creatorships
