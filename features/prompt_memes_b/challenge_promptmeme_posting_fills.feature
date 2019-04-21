@@ -365,7 +365,7 @@ Feature: Prompt Meme Challenge
   Scenario: When a prompt is filled with a co-authored work, the e-mail should link to each author's URL instead of showing escaped HTML
 
   Given I have Battle 12 prompt meme fully set up
-    When I am logged in as "myname3"
+    And I am logged in as "myname3"
     And I go to myname3's user page
     And I follow "Preferences"
     And I check "Allow other users to add me as a co-creator."
