@@ -190,7 +190,7 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "moon, sun"
-      And I follow "Remove Me As Author"
+    When I follow "Remove Me As Author"
     Then I should see "Sorry, we can't remove all authors of a work."
 
   Scenario: Removing self as co-author from co-authored series
@@ -211,7 +211,7 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "moon, son"
-      And I follow "Remove Me As Author"
+    When I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
@@ -275,8 +275,9 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "These pseuds are invalid:"
       And I should see "notcocreator does not allow others to add them as a co-creator."
-    Then I press "Preview"
-      And I should see "Series was successfully updated."
+    When I press "Preview"
+    Then I should see "Series was successfully updated."
+      And "notcocreator" should not be the creator of the series "Gentleman Jack"
 
   Scenario: If you edit a series to add a co-creator with an ambiguous pseud, you will be prompted to clarify which user you mean.
     Given "myself" has the pseud "Me"

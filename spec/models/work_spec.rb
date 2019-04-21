@@ -349,12 +349,12 @@ describe Work do
       end
 
       let(:work_author) { @skin_author }
-      let(:work){ build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id) }
+      let(:work) { build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "can be used by the work skin author" do
         expect(work.save).to be_truthy
       end
 
-      let(:work){ build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id) }
+      let(:work) { build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "cannot be used by another user" do
         work.work_skin_allowed
         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
@@ -507,7 +507,7 @@ describe Work do
     it 'checks that normal co creator can co create' do
       work = valid_work
       expect { work.save! }.to_not raise_error
-      authors = [ @creator.pseuds.first, @co_creator1.pseuds.first ]
+      authors = [@creator.pseuds.first, @co_creator1.pseuds.first]
       expect { work.authors = authors }.to_not raise_error
       expect { work.save! }.to_not raise_error
       expect(work.authors).to match_array(authors)
@@ -515,7 +515,7 @@ describe Work do
 
     it 'checks a creator can not add a standard user' do
       work = valid_work_co_creator
-      work.authors = [ @creator.pseuds.first, @no_co_creator.pseuds.first ]
+      work.authors = [@creator.pseuds.first, @no_co_creator.pseuds.first]
       expect { work.save! }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
     end
   end

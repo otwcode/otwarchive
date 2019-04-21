@@ -43,12 +43,12 @@ describe Chapter do
 
     it 'checks that normal co creator can co create' do
       work = valid_work
-      authors = [ @creator.pseuds.first, @co_creator.pseuds.first ]
-      chapter =  Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
+      authors = [@creator.pseuds.first, @co_creator.pseuds.first]
+      chapter = Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
       expect{ chapter.save! }.to_not raise_error
       expect( chapter.authors ).to match_array(authors)
-      expect( work.authors ).to match_array([@creator.pseuds.first])
-      expect( chapter.authors ).to match_array(authors)
+      expect(work.authors).to match_array([@creator.pseuds.first])
+      expect(chapter.authors).to match_array(authors)
     end
 
     it 'checks a creator can not add a standard user' do
