@@ -190,7 +190,7 @@ Feature: Edit Works
       And I follow "Edit"
     Then I should see "What a title! :< :& :>" in the "Work Title" input
 
-  Scenario: Users can not revoke the right of co-creation on an already existing work.
+  Scenario: When a user changes their co-creator preference, it does not remove them from works they have already co-created.
     Given basic tags
       And "Burnham" has the pseud "Michael"
       And "Pike" has the pseud "Christopher"
