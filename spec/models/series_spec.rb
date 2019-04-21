@@ -2,8 +2,8 @@
 require 'spec_helper'
 
 describe Series do
-  let(:unrestricted_work) { FactoryGirl.create(:work, restricted: false, authors:  User.current_user.pseuds) }
-  let(:restricted_work) { FactoryGirl.create(:work, restricted: true, authors:  User.current_user.pseuds) }
+  let(:unrestricted_work) { FactoryGirl.create(:work, restricted: false, authors: User.current_user.pseuds) }
+  let(:restricted_work) { FactoryGirl.create(:work, restricted: true, authors: User.current_user.pseuds) }
 
   before(:each) do
     User.current_user = FactoryGirl.create(:user)
