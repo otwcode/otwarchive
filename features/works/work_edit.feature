@@ -154,7 +154,7 @@ Feature: Edit Works
         | lead_author |
         | coauthor    |
         | random_user |
-    And the user "coauthor" allows co-creators
+      And the user "coauthor" allows co-creators
       And I coauthored the work "Shared" as "lead_author" with "coauthor"
       And I am logged in as "lead_author"
     When I edit the work "Shared"
