@@ -1,5 +1,5 @@
 class ChaptersController < ApplicationController
-  include CommonCreatership
+  include CommonCreatorship
 
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]

@@ -1,24 +1,31 @@
 module CreatorshipTests
   extend ActiveSupport::Concern
 
+  # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
+  # Can't write to chapter.pseuds until the chapter has an id
+  attr_accessor :authors
+  attr_accessor :authors_to_remove
+  attr_accessor :invalid_pseuds
+  attr_accessor :disallowed_pseuds
+  attr_accessor :ambiguous_pseuds
+
+  before_save :validate_authors
 
   # Checks that work has at least one author
   def validate_authors
     if self.authors.blank? && self.pseuds.blank? && self.is_a?(Work)
       errors.add(:base, ts("Work must have at least one author."))
-      puts "error2"
-      throw :abort
-    elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: ") )
-      self.invalid_pseuds.each do |p|
-        if self.disallowed_pseuds.include?(p)
-          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",pseud: p))
-        else
-          errors.add(:base, ts("%{pseud}: Is invalid",pseud: p))
-        end
-      end
       throw :abort
     end
+
+    if (invalid_pseuds & disallowed_pseuds).present?
+      errors.add(:base, ts("These pseuds do not allow others to add them as co-creator: %{pseuds}.", pseuds: (invalid_pseuds & disallowed_pseuds).to_sentence))
+    end
+
+    if (invalid_pseuds - disallowed_pseuds).present?
+      errors.add(:base, ts("These pseuds are invalid: %{pseuds}.", pseuds: (invalid_pseuds - disallowed_pseuds).to_sentence))
+    end
+    throw :abort
   end
 
   # Virtual attribute for pseuds

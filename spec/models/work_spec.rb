@@ -27,12 +27,12 @@ describe Work do
   context "invalid title" do
     it { expect(build(:work, title: nil)).to be_invalid }
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
+    let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
       expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
     end
 
-    let(:too_long) {ArchiveConfig.TITLE_MAX + 1}
+    let(:too_long) { ArchiveConfig.TITLE_MAX + 1 }
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
@@ -48,7 +48,7 @@ describe Work do
       expect(@work.title).to eq("Has Leading Spaces")
     end
 
-    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
+    let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
       expect {
         @work = create(:work, title: "     #{too_short}")
@@ -63,14 +63,14 @@ describe Work do
   end
 
   context "invalid summary" do
-    let(:too_long) {ArchiveConfig.SUMMARY_MAX + 1}
+    let(:too_long) { ArchiveConfig.SUMMARY_MAX + 1 }
     it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
   context "invalid notes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
+    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
@@ -78,7 +78,7 @@ describe Work do
 
 
   context "invalid endnotes" do
-    let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
+    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
@@ -348,13 +348,13 @@ describe Work do
         @private_skin = create(:private_work_skin, author_id: @skin_author.id)
       end
 
-      let(:work_author) {@skin_author}
-      let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
+      let(:work_author) { @skin_author }
+      let(:work){ build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "can be used by the work skin author" do
         expect(work.save).to be_truthy
       end
 
-      let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
+      let(:work){ build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id) }
       it "cannot be used by another user" do
         work.work_skin_allowed
         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
@@ -496,8 +496,8 @@ describe Work do
       @co_creator.preference.save
       @co_creator1.preference.save
     end
-    let(:valid_work) {build(:work, authors: [@creator.pseuds.first])}
-    let(:valid_work_co_creator) {build(:work, authors: [@creator.pseuds.first, @co_creator.pseuds.first])}
+    let(:valid_work) { build(:work, authors: [ @creator.pseuds.first ]) }
+    let(:valid_work_co_creator) { build(:work, authors: [ @creator.pseuds.first, @co_creator.pseuds.first ] ) }
 
     it 'allows a normal user to create a work' do
       work = valid_work
@@ -506,18 +506,17 @@ describe Work do
 
     it 'checks that normal co creator can co create' do
       work = valid_work
-      expect {work.save!}.to_not raise_error
-      authors = [@creator.pseuds.first, @co_creator1.pseuds.first]
-      expect {work.authors = authors}.to_not raise_error
-      expect {work.save!}.to_not raise_error
+      expect { work.save! }.to_not raise_error
+      authors = [ @creator.pseuds.first, @co_creator1.pseuds.first ]
+      expect { work.authors = authors }.to_not raise_error
+      expect { work.save! }.to_not raise_error
       expect(work.authors).to match_array(authors)
     end
 
     it 'checks a creator can not add a standard user' do
       work = valid_work_co_creator
-      work.authors = [@creator.pseuds.first, @no_co_creator.pseuds.first]
-      expect {work.save!}.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
+      work.authors = [ @creator.pseuds.first, @no_co_creator.pseuds.first ]
+      expect { work.save! }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
     end
   end
-
 end

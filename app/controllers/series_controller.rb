@@ -1,5 +1,5 @@
 class SeriesController < ApplicationController
- include CommonCreatership
+ include CommonCreatorship
 
   before_action :check_user_status, only: [:new, :create, :edit, :update]
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
@@ -121,7 +121,7 @@ class SeriesController < ApplicationController
  def update
    load_pseuds
 
-   if flash[:notice] != nil && flash[:notice]&.present?
+   if flash[:notice].present?
      # Issues found are promoted to errors and the series edited.
      flash[:error] = flash[:notice]
      flash[:notice] = ""

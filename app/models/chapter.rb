@@ -34,17 +34,9 @@ class Chapter < ApplicationRecord
   validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
     too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
 
-  # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
-  # Can't write to chapter.pseuds until the chapter has an id
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :disallowed_pseuds
-  attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
-  # validate_authors to be found in concerns/creatorship_tests.rb
-  before_save :validate_authors, :strip_title #, :clean_emdashes
+  before_save :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
 

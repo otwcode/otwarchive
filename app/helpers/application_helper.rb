@@ -110,7 +110,7 @@ module ApplicationHelper
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
     pseuds_cache_key = ""
-    pseuds_cache_key = creation&.pseuds.cache_key unless  creation.is_a?(ExternalWork)
+    pseuds_cache_key = creation.pseuds.cache_key unless creation.is_a?(ExternalWork)
     Rails.cache.fetch("#{creation&.cache_key}/#{pseuds_cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end

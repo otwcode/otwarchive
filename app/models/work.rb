@@ -79,11 +79,6 @@ class Work < ApplicationRecord
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :disallowed_pseuds
-  attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
 
@@ -164,7 +159,7 @@ class Work < ApplicationRecord
   ########################################################################
 
   # validate_authors to be found in concerns/creatorship_tests.rb
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter
   before_save :set_word_count

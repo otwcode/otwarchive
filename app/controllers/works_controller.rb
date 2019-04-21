@@ -1,7 +1,7 @@
 # encoding=utf-8
 
 class WorksController < ApplicationController
-  include CommonCreatership
+  include CommonCreatorship
 
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection

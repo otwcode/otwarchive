@@ -31,9 +31,6 @@ class Series < ApplicationRecord
   after_create :notify_after_creation
   before_update :notify_before_update
 
-    # validate_authors to be found in concerns/creatorship_tests.rb
-  before_save :validate_authors
-
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -50,12 +47,6 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
-
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :disallowed_pseuds
-  attr_accessor :ambiguous_pseuds
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }

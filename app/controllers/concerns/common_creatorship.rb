@@ -1,4 +1,4 @@
-module CommonCreatership
+module CommonCreatorship
   extend ActiveSupport::Concern
 
 # set the author attributes

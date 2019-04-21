@@ -368,7 +368,7 @@ Feature: Prompt Meme Challenge
     When I am logged in as "myname3"
     And I go to myname3's user page
     And I follow "Preferences"
-    And I check "Allow other users to add me as a co-creator."
+    And I check "Allow others to add me as a co-creator"
     And I press "Update"
   When I am logged in as "myname1"
     And I sign up for Battle 12 with combination A
