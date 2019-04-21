@@ -5,6 +5,7 @@ class SeriesController < ApplicationController
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_visibility, only: [:show]
+  before_action :set_author_attributes, only: [:create, :update]
 
   def load_series
     @series = Series.find_by(id: params[:id])
