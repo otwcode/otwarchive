@@ -279,7 +279,7 @@ Feature: Edit chapters
 
     Given I am logged in as "karma" with password "the1nonly"
       And the user "sabrina" allows co-creators
-    And I post the work "Summer Friends"
+      And I post the work "Summer Friends"
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
     When I add the co-author "sabrina"
