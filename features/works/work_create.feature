@@ -307,7 +307,7 @@ Feature: Create Works
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
       And the user "myself" allows co-creators
-    And the user "herself" allows co-creators
+      And the user "herself" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "All Hell Breaks Loose"
