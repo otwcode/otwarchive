@@ -563,6 +563,6 @@ Feature: Edit chapters
       And I should see "Taylor does not allow others to add them as a co-creator."
     When I press "Preview"
     Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-      And I press "Post"
+    When I press "Post"
     Then I should see "Chapter was successfully posted."
       And I should see "brenda, rusty"
