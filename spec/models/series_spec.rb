@@ -53,7 +53,7 @@ describe Series do
       expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
     end
 
-    it 'checks a creator can not add a standard user' do
+    it "raises an error when adding a co-creator whose preferences are not set to allow co-creation" do
       @series.works = [restricted_work, unrestricted_work]
       @series.reload
       expect {@series.pseuds = @creator.pseuds + @no_co_creator.pseuds}.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
