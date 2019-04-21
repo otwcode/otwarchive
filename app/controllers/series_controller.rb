@@ -68,11 +68,12 @@ class SeriesController < ApplicationController
 
  def load_pseuds
    @pseuds = current_user.pseuds
-   @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
+   @coauthors = @series.pseuds.reject { |p| p.user.id == current_user.id }
    to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-   @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+   @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }
    @allpseuds = (current_user.pseuds + (@series.authors ||= []) + @series.pseuds).uniq
  end
+
   # GET /series/1/edit
  def edit
    load_pseuds
@@ -112,14 +113,14 @@ class SeriesController < ApplicationController
   end
 
   # Check whether we should display _choose_coauthor.
- def series_has_pseuds_to_fix?
-   !(@series.invalid_pseuds.blank? &&
-       @series.ambiguous_pseuds.blank?)
- end
+  def series_has_pseuds_to_fix?
+    !(@series.invalid_pseuds.blank? &&
+        @series.ambiguous_pseuds.blank?)
+  end
 
   # PUT /series/1
   # PUT /series/1.xml
- def update
+  def update
    load_pseuds
 
    if flash[:notice].present?
@@ -136,12 +137,12 @@ class SeriesController < ApplicationController
      flash[:notice] = ts('Series was successfully updated.')
      redirect_to(@series)
    else
-      if series_has_pseuds_to_fix?
+     if series_has_pseuds_to_fix?
        render :_choose_coauthor and return
      end
      render action: "edit"
    end
- end
+  end
 
   def update_positions
     if params[:serial_works]

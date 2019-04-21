@@ -111,7 +111,7 @@ module ApplicationHelper
     only_path = url_path.nil? ? true : url_path
     pseuds_cache_key = ""
     pseuds_cache_key = creation.pseuds.cache_key unless creation.is_a?(ExternalWork)
-    Rails.cache.fetch("#{creation&.cache_key}/#{pseuds_cache_key}/byline-nonanon/#{only_path.to_s}") do
+    Rails.cache.fetch("#{creation&.cache_key}/#{pseuds_cache_key}/byline-nonanon/#{only_path}") do
       byline_text(creation, only_path)
     end
   end

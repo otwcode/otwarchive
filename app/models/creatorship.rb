@@ -11,7 +11,7 @@ class Creatorship < ApplicationRecord
 
   def allowed_creator
     return if Pseud.check_pseud_coauthor?(pseud_id)
-    errors.add(:base,"Trying to add a invalid co creator")
+    errors.add(:base, "Trying to add a invalid co creator")
   end
 
   def unique_index

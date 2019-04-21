@@ -137,7 +137,7 @@ class Pseud < ApplicationRecord
     return true if user&.preference&.allow_cocreator
     # Archivists can can always co-create.
     return true if User.current_user.is_a?(User) && User.current_user.is_archivist?
-    return false
+    false
   end
 
   def self.not_orphaned

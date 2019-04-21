@@ -15,12 +15,12 @@ module CreatorshipValidations
       errors.add(:base, ts("Work must have at least one author."))
       throw :abort
     elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: ") )
+      errors.add(:base, ts("These pseuds are invalid: "))
       self.invalid_pseuds.each do |p|
         if self.disallowed_pseuds.include?(p)
-          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.",pseud: p))
+          errors.add(:base, ts("%{pseud}: does not allow others to add them as a co-creator.", pseud: p))
         else
-          errors.add(:base, ts("%{pseud}: Is invalid",pseud: p))
+          errors.add(:base, ts("%{pseud}: Is invalid", pseud: p))
         end
       end
       throw :abort
@@ -37,7 +37,7 @@ module CreatorshipValidations
       self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
+    unless attributes[:byline].blank?
       results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true, remove_disallowed: true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
@@ -45,15 +45,13 @@ module CreatorshipValidations
       self.disallowed_pseuds = results[:disallowed_pseuds]
       if results[:banned_pseuds].present?
         self.errors.add(
-            :base,
-            ts("%{name} is currently banned and cannot be listed as a co-creator.",
-               name: results[:banned_pseuds].to_sentence
-            )
+          :base,
+          ts("%{name} is currently banned and cannot be listed as a co-creator.",
+            name: results[:banned_pseuds].to_sentence)
         )
       end
     end
     self.authors.flatten!
     self.authors.uniq!
   end
-
 end

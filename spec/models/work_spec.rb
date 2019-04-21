@@ -496,8 +496,8 @@ describe Work do
       @co_creator.preference.save
       @co_creator1.preference.save
     end
-    let(:valid_work) { build(:work, authors: [ @creator.pseuds.first ]) }
-    let(:valid_work_co_creator) { build(:work, authors: [ @creator.pseuds.first, @co_creator.pseuds.first ] ) }
+    let(:valid_work) { build(:work, authors: [@creator.pseuds.first]) }
+    let(:valid_work_co_creator) { build(:work, authors: [@creator.pseuds.first, @co_creator.pseuds.first]) }
 
     it 'allows a normal user to create a work' do
       work = valid_work
