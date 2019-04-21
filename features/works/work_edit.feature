@@ -202,7 +202,7 @@ Feature: Edit Works
       And I fill in "pseud_byline" with "Michael,Christopher"
       And I press "Post Without Preview"
    Then I should see "Christopher does not allow others to add them as a co-creator."
-      And I fill in "pseud_byline" with "Michael"
+    When I fill in "pseud_byline" with "Michael"
       And I press "Preview"
    Then I should see "Draft was successfully created."
     When I press "Post"
