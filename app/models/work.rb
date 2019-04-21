@@ -173,6 +173,7 @@ class Work < ApplicationRecord
   after_update :adjust_series_restriction
 
   before_save :hide_spam
+  before_action :set_author_attributes, only: [:create, :update]
   after_save :moderate_spam
   after_save :notify_of_hiding
 
