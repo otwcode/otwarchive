@@ -279,7 +279,7 @@ Feature: Edit chapters
 
     Given I am logged in as "karma" with password "the1nonly"
       And the user "sabrina" allows co-creators
-    And I post the work "Summer Friends"
+      And I post the work "Summer Friends"
     When a chapter is set up for "Summer Friends"
     Then I should not see "Chapter co-creators"
     When I add the co-author "sabrina"
@@ -499,7 +499,27 @@ Feature: Edit chapters
     When I follow "Next Chapter"
     Then I should see "This chapter is a draft and hasn't been posted yet!"
 
-  Scenario: You should not be able to add a co-author to a cheapter if they do allow it.
+  Scenario: You should be able to add a co-creator to a chapter if they allow it.
+
+    Given the following activated users exist
+      | login       | password |
+      | Taylor      | secret   |
+      | thegoodmom  | secret   |
+      | thebadmom   | secret   |
+      And "thegoodmom" has the pseud "sharon"
+      And "thebadmom" has the pseud "sharon"
+      And the user "thegoodmom" allows co-creators
+      And the user "thebadmom" allows co-creators
+      And the user "Taylor" allows co-creators
+      And I am logged in as "rusty"
+      And I set up the draft "Rusty Has Two Moms"
+      And I add the co-author "brenda"
+      And I post the work without preview
+    When a chapter is set up for "Rusty Has Two Moms"
+      And I add the co-author "Taylor" without coauthor permissions
+      And I press "Post Without Preview"
+    Then I should see "Chapter has been posted!"
+      And I should see "Chapter by rusty, Taylor"
 
     Given the following activated users exist
       | login       | password |
@@ -521,7 +541,7 @@ Feature: Edit chapters
     Then I should see "Chapter has been posted!"
     Then I should see "Chapter by rusty, Taylor"
 
-  Scenario: You should not be able to add a co-author to a cheapter if they do not allow it.
+  Scenario: You should not be able to add a co-creator to a chapter if they do not allow it.
 
     Given the following activated users exist
       | login       | password |
@@ -540,9 +560,9 @@ Feature: Edit chapters
       And I add the co-author "Taylor" without coauthor permissions
       And I press "Post Without Preview"
     Then I should see "Please verify the names of your co-authors"
-    Then I should see "Taylor does not allow others to add them as a co-creator."
-      And I press "Preview"
+      And I should see "Taylor does not allow others to add them as a co-creator."
+    When I press "Preview"
     Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-      And I press "Post"
+    When I press "Post"
     Then I should see "Chapter was successfully posted."
       And I should see "brenda, rusty"

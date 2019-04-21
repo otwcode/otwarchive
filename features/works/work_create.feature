@@ -306,8 +306,8 @@ Feature: Create Works
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
-    And the user "myself" allows co-creators
-    And the user "herself" allows co-creators
+      And the user "myself" allows co-creators
+      And the user "herself" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "All Hell Breaks Loose"
@@ -337,10 +337,10 @@ Feature: Create Works
       And I fill in "pseud_byline" with "Michael,Christopher"
       And I press "Post Without Preview"
    Then I should see "Christopher does not allow others to add them as a co-creator."
-      And I fill in "pseud_byline" with "Michael"
+    When I fill in "pseud_byline" with "Michael"
       And I press "Preview"
    Then I should see "Draft was successfully created."
-      And I press "Post"
+    When I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
 
