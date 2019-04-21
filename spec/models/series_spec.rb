@@ -28,7 +28,7 @@ describe Series do
     expect(@series.restricted).not_to be_truthy
   end
 
-  it "should be have pseuds for all the works it has" do
+  it "has all of the pseuds from all of its serial works" do
     @series.works = [restricted_work, unrestricted_work]
     @series.reload
     expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
