@@ -560,7 +560,7 @@ Feature: Edit chapters
       And I add the co-author "Taylor" without coauthor permissions
       And I press "Post Without Preview"
     Then I should see "Please verify the names of your co-authors"
-    Then I should see "Taylor does not allow others to add them as a co-creator."
+      And I should see "Taylor does not allow others to add them as a co-creator."
       And I press "Preview"
     Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
       And I press "Post"
