@@ -541,7 +541,7 @@ Feature: Edit chapters
     Then I should see "Chapter has been posted!"
     Then I should see "Chapter by rusty, Taylor"
 
-  Scenario: You should not be able to add a co-author to a cheapter if they do not allow it.
+  Scenario: You should not be able to add a co-creator to a chapter if they do not allow it.
 
     Given the following activated users exist
       | login       | password |
