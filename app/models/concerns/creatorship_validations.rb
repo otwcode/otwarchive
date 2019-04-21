@@ -18,13 +18,14 @@ module CreatorshipValidations
 
     if (invalid_pseuds & disallowed_pseuds).present?
       errors.add(:base, ts("These pseuds do not allow others to add them as co-creator: %{pseuds}.", pseuds: (invalid_pseuds & disallowed_pseuds).to_sentence))
+      throw :abort
     end
 
     issues = (invalid_pseuds || [] ) - (disallowed_pseuds || [] )
     if issues.present?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}.", pseuds: issues.to_sentence))
+      throw :abort
     end
-    throw :abort
   end
 
   # Virtual attribute for pseuds
