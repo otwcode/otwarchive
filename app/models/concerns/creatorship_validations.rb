@@ -9,8 +9,6 @@ module CreatorshipValidations
   attr_accessor :disallowed_pseuds
   attr_accessor :ambiguous_pseuds
 
-  before_save :validate_authors
-
   # Checks that work has at least one author
   def validate_authors
     if self.authors.blank? && self.pseuds.blank? && self.is_a?(Work)
