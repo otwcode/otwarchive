@@ -9,7 +9,6 @@ class ChaptersController < ApplicationController
   before_action :check_ownership, except: [:index, :show]
   before_action :check_visibility, only: [:show]
   before_action :load_chapter, only: [:show, :edit, :update, :preview, :post, :confirm_delete, :destroy]
-  before_action :set_author_attributes, only: [:create, :update]
 
   cache_sweeper :feed_sweeper
 

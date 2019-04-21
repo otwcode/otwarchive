@@ -5,7 +5,6 @@ class SeriesController < ApplicationController
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_visibility, only: [:show]
-  before_action :set_author_attributes, only: [:create, :update]
 
   def load_series
     @series = Series.find_by(id: params[:id])
@@ -110,11 +109,11 @@ class SeriesController < ApplicationController
     end
   end
 
-    # Check whether we should display _choose_coauthor.
-  def series_has_pseuds_to_fix?
-    !(@series.invalid_pseuds.blank? &&
-      @series.ambiguous_pseuds.blank?)
-  end
+  # Check whether we should display _choose_coauthor.
+ def series_has_pseuds_to_fix?
+   !(@series.invalid_pseuds.blank? &&
+       @series.ambiguous_pseuds.blank?)
+ end
 
   # PUT /series/1
   # PUT /series/1.xml

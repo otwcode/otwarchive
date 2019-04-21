@@ -1,11 +1,11 @@
 module CommonCreatorship
   extend ActiveSupport::Concern
 
+  before_action :set_author_attributes, only: [:create, :update]
+
 # set the author attributes
   def set_author_attributes
     controller = params[:controller].singularize.to_sym
-    # params[:work] is required for every if statement below, so it is hoisted to
-    # the top to avoid repeating ourselves.
     return unless params[controller]
 
     # stuff co-authors into author attributes too so we won't lose them

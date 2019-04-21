@@ -17,7 +17,6 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
-  before_action :set_author_attributes, only: [:create, :update]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
