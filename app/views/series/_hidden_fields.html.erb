@@ -10,7 +10,9 @@
       <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
     </select>
   <% end %>
+  <% unless @allpseuds.blank? %>
   <select name="series[author_attributes][ids][]" multiple="multiple" style="display:none;">
     <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>
   </select>
+  <% end %>
 </div>

@@ -71,6 +71,7 @@ class SeriesController < ApplicationController
    @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
    to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+   @allpseuds = (current_user.pseuds + (@series.authors ||= []) + @series.pseuds).uniq
  end
   # GET /series/1/edit
  def edit

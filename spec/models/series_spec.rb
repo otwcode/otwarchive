@@ -57,7 +57,5 @@ describe Series do
       @series.works = [restricted_work, unrestricted_work]
       @series.reload
       expect { @series.pseuds = @creator.pseuds + @no_co_creator.pseuds}.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator' )
-      expect ( @series.work_pseuds).to match_array(User.current_user.pseuds )
-    end
   end
 end
