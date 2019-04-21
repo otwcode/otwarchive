@@ -154,7 +154,7 @@ Feature: Bookmark Indexing
     Then I should see "BookmarkedWork"
       And I should see "BookmarkedSeries"
       And I should see "BookmarkedExternalWork"
-      And I edit the tag "Miss Ellie"
+    When I edit the tag "Miss Ellie"
       And I fill in "Synonym of" with "Ellie Farlow"
       And I press "Save changes"
       And all indexing jobs have been run
