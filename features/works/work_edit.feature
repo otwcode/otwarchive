@@ -215,7 +215,29 @@ Feature: Edit Works
    Then I should see "Thats not my Spock, it has too much beard"
     And I should see "Michael (Burnham), testuser"
 
-  Scenario: You can add a co-author to an already-posted work with a change in co creator preferences.
+  Scenario: When you have a work with two co-creators, and one of them changes their preference to disallow co-creation, the other should still be able to edit the work and add a third co-creator.
+    Given basic tags
+      And "Burnham" has the pseud "Michael"
+      And "Georgiou" has the pseud "Philippa"
+      And the user "Burnham" allows co-creators
+      And the user "Georgiou" allows co-creators
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Thats not my Spock"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Michael"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "Michael (Burnham), testuser"
+    When the user "Burnham" disallows co-creators
+      And I edit the work "Thats not my Spock"
+      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
+      And I press "Post Without Preview"
+    Then I should see "Thats not my Spock, it has too much beard"
+      And I should see "Michael (Burnham), testuser"
+    When I add the co-author "Georgiou" to the work "Thats not my Spock, it has too much beard"
+    Then I should see "Work was successfully updated"
+      And I should see "Georgiou, Michael (Burnham), testuser"
      Given basic tags
       And "Burnham" has the pseud "Michael"
       And "Georgiou" has the pseud "Philippa"
