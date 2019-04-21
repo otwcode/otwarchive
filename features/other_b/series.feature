@@ -179,7 +179,7 @@ Feature: Create and Edit Series
     When I follow "Next"
     Then I should see "penguins0"
 
-  Scenario: Removing self as co-author from co-authored series when you are the only creator of a work.
+  Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
     Given I am logged in as "sun"
       And the user "moon" allows co-creators
       And I post the work "Sweetie Bell" as part of a series "Ponies"
