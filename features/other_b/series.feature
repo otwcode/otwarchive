@@ -264,7 +264,7 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And I should see "author, cocreator"
 
-  Scenario: A series ensures only valid users can be added as cocreators.
+  Scenario: You cannot edit a series to add someone as a co-creator if their preferences don't permit it.
     Given I am logged in as "author"
       And the user "notcocreator" exists and is activated
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
