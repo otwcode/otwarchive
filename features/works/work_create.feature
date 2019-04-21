@@ -340,7 +340,7 @@ Feature: Create Works
     When I fill in "pseud_byline" with "Michael"
       And I press "Preview"
    Then I should see "Draft was successfully created."
-      And I press "Post"
+    When I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Michael (Burnham), testuser"
 
