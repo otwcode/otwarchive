@@ -278,7 +278,25 @@ Feature: Create and Edit Series
     Then I press "Preview"
       And I should see "Series was successfully updated."
 
-  Scenario: A series can support ambiguous co creators.
+  Scenario: If you edit a series to add a co-creator with an ambiguous pseud, you will be prompted to clarify which user you mean.
+    Given "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+      And the user "myself" allows co-creators
+      And the user "herself" allows co-creators
+    When I am logged in as "testuser" with password "testuser"
+      And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
+      And I view the series "Gentleman Jack"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Me"
+      And I press "Update"
+   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
+   When I select "myself" from "series[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+   Then I should see "Series was successfully updated."
+      And "testuser" should be the creator of the series "Gentleman Jack"
+      And "Me (myself)" should be the creator of the series "Gentleman Jack"
+      And I should see "Me (myself), testuser"
     Given "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
     And the user "myself" allows co-creators
