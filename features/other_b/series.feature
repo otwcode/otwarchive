@@ -252,7 +252,7 @@ Feature: Create and Edit Series
       And I follow "Edit Series"
     Then I should see "What a title! :< :& :>" in the "Series Title" input
 
-  Scenario: A series can have a co creator if they allow it.
+  Scenario: You can edit a series to add someone as a co-creator if their preferences are set to permit it.
     Given I am logged in as "author"
       And the user "cocreator" allows co-creators
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
