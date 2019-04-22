@@ -279,6 +279,26 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And "notcocreator" should not be the creator of the series "Gentleman Jack"
 
+  Scenario: You can edit a series to add someone as a co-creator if their preferences don't permit it and they are a co creator on a work in the series
+    Given basic tags
+      And I am logged in as "author"
+      And the user "notcocreator" allows co-creators
+      And I go to the new work page
+      And I fill in the basic work information for "Behind her back she’s Gentleman Jack"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "notcocreator"
+      And I fill in "work[series_attributes][title]" with "Gentleman Jack"
+    When I press "Post"
+      And I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+    Then the user "notcocreator" disallows co-creators
+    When I view the series "Gentleman Jack"
+      And I follow "Edit Series"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "notcocreator"
+      And I press "Update"
+    Then I should see "Series was successfully updated."
+      And I should see "author, notcocreator"
+
   Scenario: If you edit a series to add a co-creator with an ambiguous pseud, you will be prompted to clarify which user you mean.
     Given "myself" has the pseud "Me"
       And "herself" has the pseud "Me"

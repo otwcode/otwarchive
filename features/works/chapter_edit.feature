@@ -546,3 +546,25 @@ Feature: Edit chapters
     When I press "Post"
     Then I should see "Chapter was successfully posted."
       And I should see "brenda, rusty"
+
+  Scenario: You should be able to add  a co-creator to a chapter if they do not allow it, if they are a co creator of the work.
+
+    Given the user "thegoodmom" allows co-creators
+      And I am logged in as "rusty"
+      And I set up the draft "Rusty Has Two Moms"
+      And I add the co-author "thegoodmom"
+      And I post the work without preview
+    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And the user "thegoodmom" disallows co-creators
+    When I post a chapter for the work "Rusty Has Two Moms"
+    Then I should see "Chapter has been posted!"
+      And I follow "Chapter 2"
+      And I should see "Chapter by rusty"
+      And I follow "Edit Chapter"
+    Then I check "Add co-creators?"
+      And I fill in "pseud_byline" with "thegoodmom"
+      And I press "Post Without Preview"
+    Then I should see "Chapter was successfully updated."
+     And I follow "Chapter 2"
+     And I follow "Edit Chapter"
+     And checkbox should be have a disabled option "chapter_author_attributes_ids_1"
