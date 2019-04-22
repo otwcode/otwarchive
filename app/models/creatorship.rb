@@ -19,7 +19,6 @@ class Creatorship < ApplicationRecord
       whitelist = Chapter.find(creation_id).work.pseuds.collect{ |p| p.id }.flatten
       return if whitelist.include?(pseud_id)
     end
-    puts self.inspect
     errors.add(:base, "Trying to add a invalid co creator")
   end
 
