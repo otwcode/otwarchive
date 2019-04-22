@@ -6,27 +6,25 @@ class PseudIndexer < Indexer
 
   def self.mapping
     {
-      pseud: {
-        properties: {
-          name: {
-            type: "text",
-            analyzer: "simple"
-          },
-          # adding extra name field for sorting
-          sortable_name: {
-            type: "keyword"
-          },
-          byline: {
-            type: "text",
-            analyzer: "standard"
-          },
-          user_login: {
-            type: "text",
-            analyzer: "simple"
-          },
-          fandom: {
-            type: "nested"
-          }
+      properties: {
+        name: {
+          type: "text",
+          analyzer: "simple"
+        },
+        # adding extra name field for sorting
+        sortable_name: {
+          type: "keyword"
+        },
+        byline: {
+          type: "text",
+          analyzer: "standard"
+        },
+        user_login: {
+          type: "text",
+          analyzer: "simple"
+        },
+        fandom: {
+          type: "nested"
         }
       }
     }
@@ -66,24 +64,26 @@ class PseudIndexer < Indexer
   # [{id: 1, name: "Star Trek", count: 5}]
   def tag_info(pseud, tag_type)
     info = []
-    info += pseud.direct_filters.where(works: countable_works_conditions)
-                 .by_type(tag_type).group_by(&:id)
-                 .map do |id, tags|
-                   {
-                     id: id,
-                     name: tags.first.name,
-                     count: tags.length
-                   }
-                 end
-    info += pseud.direct_filters.where(works: countable_works_conditions.merge(restricted: false))
-                 .by_type(tag_type).group_by(&:id)
-                 .map do |id, tags|
-                   {
-                     id_for_public: id,
-                     name: tags.first.name,
-                     count: tags.length
-                   }
-                 end
+    info +=
+      pseud.direct_filters.where(works: countable_works_conditions)
+        .by_type(tag_type).group_by(&:id)
+        .map do |id, tags|
+        {
+          id: id,
+          name: tags.first.name,
+          count: tags.length
+        }
+      end
+    info +=
+      pseud.direct_filters.where(works: countable_works_conditions.merge(restricted: false))
+        .by_type(tag_type).group_by(&:id)
+        .map do |id, tags|
+        {
+          id_for_public: id,
+          name: tags.first.name,
+          count: tags.length
+        }
+      end
     info
   end
 
@@ -92,8 +92,8 @@ class PseudIndexer < Indexer
   def general_bookmarks
     @general_bookmarks ||=
       Bookmark.with_missing_bookmarkable.
-      or(Bookmark.with_bookmarkable_visible_to_registered_user).
-      is_public
+        or(Bookmark.with_bookmarkable_visible_to_registered_user).
+        is_public
   end
 
   # The relation containing all bookmarks that should be included in the count
@@ -101,8 +101,8 @@ class PseudIndexer < Indexer
   def public_bookmarks
     @public_bookmarks ||=
       Bookmark.with_missing_bookmarkable.
-      or(Bookmark.with_bookmarkable_visible_to_all).
-      is_public
+        or(Bookmark.with_bookmarkable_visible_to_all).
+        is_public
   end
 
   def general_bookmarks_count(pseud)

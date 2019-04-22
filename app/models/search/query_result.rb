@@ -104,7 +104,7 @@ class QueryResult
   end
 
   def unlimited_total_entries
-    response.dig('hits', 'total') || 0
+    response.dig('hits', 'total', 'value') || 0
   end
 
   def offset
