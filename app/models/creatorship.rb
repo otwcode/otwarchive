@@ -12,11 +12,11 @@ class Creatorship < ApplicationRecord
   def allowed_creator
     return if Pseud.check_pseud_coauthor?(pseud_id)
     if creation_type == "Series"
-      whitelist = Series.find(creation_id).works.collect{ |w| w.pseuds.collect{ |p| p.id } }.flatten
+      whitelist = Series.find(creation_id).works.collect{ |w| w.pseuds.collect(&:id) }.flatten
       return if whitelist.include?(pseud_id)
     end
     if creation_type == "Chapter"
-      whitelist = Chapter.find(creation_id).work.pseuds.collect{ |p| p.id }.flatten
+      whitelist = Chapter.find(creation_id).work.pseuds.collect(&:id).flatten
       return if whitelist.include?(pseud_id)
     end
     errors.add(:base, "Trying to add a invalid co creator")
