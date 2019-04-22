@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Chapter do
-
   it "has a valid factory" do
     expect(build(:chapter)).to be_valid
   end
@@ -17,7 +17,6 @@ describe Chapter do
   end
 
   describe "save" do
-
     before(:each) do
       @work = FactoryGirl.create(:work)
       @chapter = Chapter.new(work: @work, content: "Cool story, bro!")
@@ -26,7 +25,6 @@ describe Chapter do
     it "should save minimalistic chapter" do
       expect(@chapter.save).to be_truthy
     end
-
   end
 
   describe 'Cocreators' do

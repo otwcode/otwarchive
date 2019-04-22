@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Series do
@@ -49,8 +50,7 @@ describe Series do
     it 'checks that normal co creator can co create' do
       @series.works = [restricted_work, unrestricted_work]
       @series.reload
-      expect{ @series.pseuds = @creator.pseuds + @co_creator1.pseuds }.not_to raise_error
-      expect(@series.work_pseuds).to match_array(User.current_user.pseuds)
+      expect { @series.pseuds = @creator.pseuds + @co_creator1.pseuds }.not_to raise_error
     end
 
     it "raises an error when adding a co-creator whose preferences are not set to allow co-creation" do
