@@ -44,11 +44,9 @@ module CreatorshipValidations
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
       self.disallowed_pseuds = results[:disallowed_pseuds]
       if results[:banned_pseuds].present?
-        self.errors.add(
-          :base,
-          ts("%{name} is currently banned and cannot be listed as a co-creator.",
-            name: results[:banned_pseuds].to_sentence)
-        )
+        self.errors.add(:base,
+                        ts("%{name} is currently banned and cannot be listed as a co-creator.",
+                           name: results[:banned_pseuds].to_sentence))
       end
     end
     self.authors.flatten!

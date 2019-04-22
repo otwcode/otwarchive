@@ -120,29 +120,26 @@ class SeriesController < ApplicationController
 
   # PUT /series/1
   # PUT /series/1.xml
-  def update
-   load_pseuds
+   def update
+     load_pseuds
 
-   if flash[:notice].present?
-     # Issues found are promoted to errors and the series edited.
-     flash[:error] = flash[:notice]
-     flash[:notice] = ""
-     redirect_to edit_series_path(@series) and return
-   end
+     if flash[:notice].present?
+       # Issues found are promoted to errors and the series edited.
+       flash[:error] = flash[:notice]
+       flash[:notice] = ""
+       redirect_to edit_series_path(@series) and return
+     end
 
-   if @series.update_attributes(series_params)
      if series_has_pseuds_to_fix?
        render :_choose_coauthor and return
      end
-     flash[:notice] = ts('Series was successfully updated.')
-     redirect_to(@series)
-   else
-     if series_has_pseuds_to_fix?
-       render :_choose_coauthor and return
+     if @series.update_attributes(series_params)
+       flash[:notice] = ts('Series was successfully updated.')
+       redirect_to(@series)
+     else
+       render action: "edit"
      end
-     render action: "edit"
    end
-  end
 
   def update_positions
     if params[:serial_works]

@@ -51,7 +51,7 @@ describe Chapter do
     it 'checks a creator can not add a standard user' do
       work = valid_work
       authors = [@creator.pseuds.first, @no_co_creator.pseuds.first]
-      chapter =  Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
+      chapter = Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
       expect { chapter.save! }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
     end
   end

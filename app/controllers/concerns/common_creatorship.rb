@@ -28,5 +28,4 @@ module CommonCreatorship
       params[:pseud][:byline] = ''
     end
   end
-
 end
