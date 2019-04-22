@@ -105,10 +105,6 @@ Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   page.has_select?(field, selected: value).should == true
 end
 
-Then /^checkbox should be have a disabled option "(.*)?"$/ do |id|
-  expect(page).to have_field(id, type: 'checkbox', disabled: true)
-end
-
 Then /^"(.*)?" should( not)? be an option within "(.*)?"$/ do |value, negation, field|
   expect(page.has_select?(field, with_options: [value])).to be !negation
 end

@@ -567,4 +567,4 @@ Feature: Edit chapters
     Then I should see "Chapter was successfully updated."
      And I follow "Chapter 2"
      And I follow "Edit Chapter"
-     And checkbox should be have a disabled option "chapter_author_attributes_ids_1"
+     And I should see "Remove Me As Chapter Co-Creator"
