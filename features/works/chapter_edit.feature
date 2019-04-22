@@ -516,7 +516,7 @@ Feature: Edit chapters
       And I add the co-author "brenda"
       And I post the work without preview
     When a chapter is set up for "Rusty Has Two Moms"
-      And I add the co-author "Taylor" without coauthor permissions
+      And I add the co-author "Taylor"
       And I press "Post Without Preview"
     Then I should see "Chapter has been posted!"
       And I should see "Chapter by rusty, Taylor"
@@ -537,7 +537,7 @@ Feature: Edit chapters
       And I add the co-author "brenda"
       And I post the work without preview
     When a chapter is set up for "Rusty Has Two Moms"
-      And I add the co-author "Taylor" without coauthor permissions
+      And I just add the co-author "Taylor"
       And I press "Post Without Preview"
     Then I should see "Please verify the names of your co-authors"
       And I should see "Taylor does not allow others to add them as a co-creator."

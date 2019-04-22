@@ -555,15 +555,14 @@ When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I post the work without preview}
 end
 
-When(/^I add the co\-author "([^"]*)" without coauthor permissions$/) do |coauthor|
-  step %{the user "#{coauthor}" exists and is activated}
+When(/^I just add the co\-author "([^"]*)"$/) do |coauthor|
   check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
 When /^I add the co-author "([^"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" allows co-creators}
-  step %{I add the co-author "#{coauthor}" without coauthor permissions}
+  step %{I just add the co-author "#{coauthor}"}
 end
 
 When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
