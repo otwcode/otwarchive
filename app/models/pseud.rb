@@ -124,13 +124,15 @@ class Pseud < ApplicationRecord
     includes(:user)
   }
 
-  def self.check_pseud_coauthor?(pseud_id)
-    user = User.find(Pseud.find(pseud_id).user_id)
+  def check_pseud_coauthor?
+    user = User.find(self.user_id)
     # The orphan_account will always accept co-creations
     return true if ArchiveConfig.ORPHANING_ALLOWED && user.login == User.orphan_account.login
     # Factory girl and its friends do not set the current user. So if we are running in test
     # And current_user is nil assume everything is ok so test pass :()
     return true if User.current_user.nil? && ENV["RAILS_ENV"] == 'test'
+    # Admins can't force things.
+    return false unless User.current_user.is_a?(User)
     # A user can always create their own works.
     return true if user.id == User.current_user.id
     # A user who allows co creation can be an owner.
@@ -288,7 +290,7 @@ class Pseud < ApplicationRecord
         pseuds = pseuds - banned_pseuds
         banned_pseuds = banned_pseuds.map(&:byline)
       end
-      disallowed_pseuds = pseuds.reject { |pseud| Pseud.check_pseud_coauthor?(pseud.id) || whitelist.include?(pseud.id) }
+      disallowed_pseuds = pseuds.reject { |pseud| pseud.check_pseud_coauthor? || whitelist.include?(pseud.id) }
       if disallowed_pseuds.present? && options[:remove_disallowed]
         pseuds = pseuds - disallowed_pseuds
         disallowed_pseuds = byline.strip

@@ -10,7 +10,7 @@ class Creatorship < ApplicationRecord
   validate :allowed_creator
 
   def allowed_creator
-    return if Pseud.check_pseud_coauthor?(pseud_id)
+    return if Pseud.find(pseud_id).check_pseud_coauthor?
     if creation_type == "Series"
       whitelist = Series.find(creation_id).works.collect{ |w| w.pseuds.collect(&:id) }.flatten
       return if whitelist.include?(pseud_id)
