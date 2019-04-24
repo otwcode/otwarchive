@@ -277,38 +277,39 @@ class Pseud < ApplicationRecord
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    whitelist = options[:whitelist] || []
     disallowed_pseuds = []
     valid_pseuds = []
     ambiguous_pseuds = {}
     failures = []
+    banned_pseuds = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned_pseuds.present?
-        pseuds = pseuds - banned_pseuds
-        banned_pseuds = banned_pseuds.map(&:byline)
-      end
-      disallowed_pseuds = pseuds.reject { |pseud| pseud.check_pseud_coauthor? || whitelist.include?(pseud.id) }
-      if disallowed_pseuds.present? && options[:remove_disallowed]
-        pseuds = pseuds - disallowed_pseuds
-        disallowed_pseuds = byline.strip
-      end
-      if pseuds.length == 1
-        valid_pseuds << pseuds.first
-      elsif pseuds.length > 1
-        ambiguous_pseuds[pseuds.first.name] = pseuds
-      else
+      if pseuds.size == 0
         failures << byline.strip
+        next
       end
+      if pseuds.size > 1
+        ambiguous_pseuds[pseuds.first.name] = pseuds
+      end
+      banned = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
+      if banned.present?
+        pseuds = pseuds - banned
+        banned_pseuds << banned
+      end
+      disallowed = pseuds.reject { |pseud| pseud.check_pseud_coauthor? }
+      if disallowed.present? && options[:remove_disallowed]
+        pseuds = pseuds - disallowed
+        disallowed_pseuds << disallowed
+      end
+      valid_pseuds << pseuds
     end
     {
-      pseuds: valid_pseuds,
+      pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
-      invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds,
-      disallowed_pseuds: disallowed_pseuds
+      invalid_pseuds: (failures+disallowed_pseuds+banned_pseuds).flatten.uniq.map(&:byline),
+      banned_pseuds: banned_pseuds.flatten.uniq,
+      disallowed_pseuds: disallowed_pseuds.flatten.uniq.map(&:byline)
     }
   end
 

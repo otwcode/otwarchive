@@ -12,12 +12,18 @@
   </p>
 <% end %>
 
+<% @valid_p = [] %>
 <% unless creation.ambiguous_pseuds.blank? %>
   <% creation.ambiguous_pseuds.each_pair do |name, pseuds| %>
-
-    <p><label for="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]"><%= ts("There's more than one user with the pseud %{name}. Please choose the one you want:", :name => name) %></label></p>
-    <select name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
-      <%= options_from_collection_for_select(pseuds, :id, :user_name) %>
-    </select>
+    <% @valid_p = @valid_p + pseuds.reject{ |p| creation.disallowed_pseuds.include?(p.byline) } %>
   <% end %>
+  <% if @valid_p.size == 1 %>
+    <p><label for="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]"><%= ts("There is one user with the pseud %{name}", :name => name) %></label></p>
+  <% else %>
+    <p><label for="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]"><%= ts("There are %{number} valid users. Please choose the ones you want:", name: name, number: @valid_p.size ) %></label></p>
+  <% end %>
+  <select multiple name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
+    <%= options_from_collection_for_select(@valid_p, :id, :byline, []) %>
+  </select>
 <% end %>
+

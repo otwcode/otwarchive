@@ -302,7 +302,7 @@ Feature: Create Works
       And I should not see "Author Chose Not To Use Archive Warnings"
       And I should see "It wasn't my fault, you know."
 
-  Scenario: Users can co-create a work with a co-creator who has multiple pseuds
+  Scenario: Users can co-create a work with a pseuds that is ambiguous.
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
@@ -316,7 +316,7 @@ Feature: Create Works
       And I check "This work is part of a series"
       And I fill in "Or create and use a new one:" with "My new series"
       And I press "Post Without Preview"
-   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
+   Then I should see "There are 2 valid users. Please choose the ones you want:"
       And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
       And I press "Preview"
    Then I should see "Draft was successfully created."
@@ -324,6 +324,36 @@ Feature: Create Works
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       And I should see "Me (myself), testuser"
       And I should see "My new series"
+
+  Scenario: Users can co-create a work with a pseuds that is ambiguous even if they don't allow cocreation
+    Given basic tags
+      And "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+      And "memyself" has the pseud "I"
+      And "myselfme" has the pseud "I"
+      And "Burnham" has the pseud "disco"
+      And "Pike" has the pseud "disco"
+      And the user "Burnham" allows co-creators
+      And the user "Pike" allows co-creators
+      And the user "myself" allows co-creators
+   When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "All Hell Breaks Loose"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Me,I,disco"
+   Then I press "Post Without Preview"
+      And I should see "Me (herself) does not allow others to add them as a co-creator."
+      And I should see "I (memyself) does not allow others to add them as a co-creator."
+      And I should see "I (myselfme) does not allow others to add them as a co-creator."
+   Then I should see "There are 3 valid users. Please choose the ones you want:"
+      And I select "disco (Burnham)" from "work[author_attributes][ambiguous_pseuds][]"
+      And I select "Me (myself)" from "work[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+   Then I should see "Draft was successfully created."
+      And I press "Post"
+   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should see "disco (Burnham), Me (myself), testuser"
+
 
   Scenario: Users can only create a work with a co-creator who allows it.
     Given basic tags

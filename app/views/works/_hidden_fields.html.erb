@@ -2,20 +2,23 @@
 
 <!-- put in all the information uploaded in hidden fields -->
 <div>
+
+
 <select name="work[author_attributes][ids][]" multiple="multiple" style="display:none;">
-  <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>
+<%= options_from_collection_for_select(@work.authors, :id, :name, @work.authors) %>
 </select>
 
+
 <% unless @coauthors.blank? %>
-  <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
-    <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
-  </select>
+<select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
+<%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
+</select>
 <% end %>
 
 <% unless @work.series.blank? %>
-  <select name="work[series_attributes][id]" id="work_series_attributes_id">
-    <%= options_from_collection_for_select(@work.series, :id, :title, @work.series) %>
-  </select>
+<select name="work[series_attributes][id]" id="work_series_attributes_id">
+<%= options_from_collection_for_select(@work.series, :id, :title, @work.series) %>
+</select>
 <% end %>
 
 <%= form.hidden_field :rating_string, :value => "#{@work.rating_string}" %>
