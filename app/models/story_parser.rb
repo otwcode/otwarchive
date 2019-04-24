@@ -259,6 +259,7 @@ class StoryParser
 
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
+
   protected
 
   # tries to create an external author for a given url
@@ -799,13 +800,15 @@ class StoryParser
         when Net::HTTPSuccess
           story = response.body
         when Net::HTTPRedirection
-          if limit > 0
+          if limit.positive?
             story = download_with_timeout(response['location'], limit - 1)
           end
         else
+          Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
           nil
         end
-      rescue Errno::ECONNREFUSED, SocketError, EOFError
+      rescue Errno::ECONNREFUSED, SocketError, EOFError => e
+        Rails.logger.error("------- STORY PARSER: download_with_timeout: error rescue: \n#{e.inspect} ------")
         nil
       end
     end
