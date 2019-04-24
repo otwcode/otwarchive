@@ -263,7 +263,7 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.18.1.330)
     nio4r (2.3.1)
-    nokogiri (1.10.1)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.4.9)
       nokogiri
