@@ -298,7 +298,7 @@ class Pseud < ApplicationRecord
         pseuds = pseuds - banned
         banned_pseuds << banned
       end
-      disallowed = pseuds.reject { |pseud| pseud.check_pseud_coauthor? || whitelist.include?(pseud.id)  }
+      disallowed = pseuds.reject { |pseud| pseud.check_pseud_coauthor? || whitelist.include?(pseud.id) }
       if disallowed.present? && options[:remove_disallowed]
         pseuds = pseuds - disallowed
         disallowed_pseuds << disallowed
