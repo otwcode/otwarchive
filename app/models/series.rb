@@ -1,7 +1,6 @@
 class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
-  include Creatable
   include Searchable
   include CreatorshipValidations
 
@@ -13,10 +12,6 @@ class Series < ApplicationRecord
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships
-  has_many :users, -> { distinct }, through: :pseuds
-
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
   validates_presence_of :title
@@ -27,10 +22,6 @@ class Series < ApplicationRecord
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
-
-  after_create :notify_after_creation
-  before_update :notify_before_update
-  before_save :validate_authors
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -272,10 +263,6 @@ class Series < ApplicationRecord
   end
   def freeform_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
   end
 
   def creators

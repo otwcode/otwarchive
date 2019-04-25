@@ -1,15 +1,13 @@
 module Creatable
   def notify_after_creation # after_create
-    notify_co_authors
-    return unless !self.is_a?(Series) && self.posted?
+    return unless self.posted?
     do_notify
   end
 
-  def notify_before_update # before_update
-    notify_co_authors
-    return unless !self.is_a?(Series) && self.valid? && self.posted?
+  def notify_after_update # after_update
+    return unless self.valid? && self.posted?
 
-    if self.posted_changed?
+    if self.saved_change_to_posted?
       do_notify
     else
       notify_subscribers_on_reveal
@@ -25,21 +23,6 @@ module Creatable
     elsif self.is_a?(Chapter) && self.position != 1
       notify_subscribers
     end
-  end
-
-  # Notify new co-authors that they've been added to a creation
-  def notify_co_authors
-    this_creation = self
-    creation = self.is_a?(Chapter) ? self.work : self
-    if self && !self.authors.blank? && User.current_user.is_a?(User)
-      new_authors = (self.authors - (self.pseuds + User.current_user.pseuds)).uniq
-      unless new_authors.blank?
-        for pseud in new_authors
-          UserMailer.coauthor_notification(pseud.user.id, creation.id, creation.class.name).deliver
-        end
-      end
-    end
-    save_creatorships(this_creation)
   end
 
   # notify recipients that they have gotten a story!
@@ -84,7 +67,8 @@ module Creatable
 
     # If we've reached here, the creator of the work must be public.
     # So now we want to check whether that's a recent thing.
-    if self.in_anon_collection_changed? || self.in_unrevealed_collection_changed?
+    pertinent = %w[in_anon_collection in_unrevealed_collection]
+    if (pertinent & saved_changes.keys).any?
       # Prior to this save, the work was either anonymous or unrevealed.
       # Either way, the author was just revealed, so we should trigger
       # a creator subscription email.
@@ -112,32 +96,6 @@ module Creatable
   def notify_parents
     if !self.parent_work_relationships.empty? && !self.unrevealed?
       self.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
-    end
-  end
-
-  # Save creatorships after the creation is saved
-  def save_creatorships(creation)
-    if self.nil?
-      raise "Bad creation..."
-    end
-
-    if !self.authors.blank?
-      new_authors = (self.authors - self.pseuds).uniq
-      new_authors.each do |pseud|
-        self.pseuds << pseud
-        if self.is_a?(Chapter) && self.work
-          self.work.pseuds << pseud unless self.work.pseuds.include?(pseud)
-        elsif self.is_a?(Work)
-          self.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
-          self.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }
-        end
-      end
-    end
-    unless self.authors_to_remove.blank?
-      self.pseuds.delete(self.authors_to_remove)
-      if self.is_a?(Work)
-        self.chapters.first.pseuds.delete(self.authors_to_remove)
-      end
     end
   end
 end

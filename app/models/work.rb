@@ -15,22 +15,13 @@ class Work < ApplicationRecord
   # ASSOCIATIONS
   ########################################################################
 
-  # creatorships can't have dependent => destroy because we email the
-  # user in a before_destroy callback
-  has_many :creatorships, as: :creation
-  has_many :pseuds,
-           through: :creatorships,
-           after_remove: [:expire_pseud, :reindex_changed_pseud]
-  has_many :users, -> { distinct }, through: :pseuds
-
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
   has_many :external_author_names, through: :external_creatorships, inverse_of: :works
   has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters
-  validates_associated :chapters
+  has_many :chapters, inverse_of: :work, autosave: true
 
   has_many :serial_works, dependent: :destroy
   has_many :series, through: :serial_works
@@ -158,7 +149,6 @@ class Work < ApplicationRecord
   # consistency and that associated variables are updated.
   ########################################################################
 
-  # validate_authors to be found in concerns/creatorship_validations.rb
   before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter
@@ -169,19 +159,18 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_update :validate_tags, :notify_before_update
-  after_update :adjust_series_restriction
+  before_update :validate_tags
+  after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
-  before_save :validate_authors
   after_save :moderate_spam
   after_save :notify_of_hiding
 
   after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
-  before_destroy :before_destroy
 
-  def before_destroy
+  before_destroy :send_deleted_work_notification, prepend: true
+  def send_deleted_work_notification
     if self.posted?
       users = self.pseuds.collect(&:user).uniq
       orphan_account = User.orphan_account
@@ -312,14 +301,15 @@ class Work < ApplicationRecord
     Collection.expire_ids(collection_ids)
   end
 
-  after_destroy :destroy_chapters_in_reverse
+  around_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
-    self.chapters.order("position DESC").map(&:destroy)
-  end
+    yield
 
-  after_destroy :clean_up_creatorships
-  def clean_up_creatorships
-    self.creatorships.each{ |c| c.destroy }
+    # We want to destroy the chapters after the work is destroyed, so that the
+    # fix_positions callback won't fire. But we also want to ensure that they
+    # occur before every after_destroy callback (and, in particular, the
+    # callback to destroy creatorships).
+    chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 
   after_destroy :clean_up_filter_taggings
@@ -394,27 +384,31 @@ class Work < ApplicationRecord
   def remove_author(author_to_remove)
     pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
     raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
-    self.pseuds = pseuds_with_author_removed
-    save
-    self.chapters.each do |chapter|
-      chapter.pseuds = (chapter.pseuds - author_to_remove.pseuds).uniq
-      if chapter.pseuds.empty?
-        chapter.pseuds = self.pseuds
+
+    transaction do
+      chapters.each do |chapter|
+        if (chapter.pseuds - author_to_remove.pseuds).empty?
+          pseuds_with_author_removed.each do |new_pseud|
+            chapter.creatorships.find_or_create_by(pseud: new_pseud)
+          end
+        end
+
+        chapter.creatorships.where(pseud: author_to_remove.pseuds).destroy_all
       end
-      chapter.save
+
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
-    # Update cache_key after chapter pseuds have been updated.
-    self.touch
   end
 
   def add_creator(creator_to_add, new_pseud = nil)
     new_pseud = creator_to_add.default_pseud if new_pseud.nil?
-    self.pseuds << new_pseud
-    self.chapters.each do |chapter|
-      chapter.pseuds << new_pseud
-      chapter.save
+
+    transaction do
+      chapters.each do |chapter|
+        chapter.creatorships.find_or_create_by(pseud: new_pseud)
+      end
+      creatorships.find_or_create_by(pseud: new_pseud)
     end
-    save
   end
 
   # Transfer ownership of the work from one user to another
@@ -457,7 +451,7 @@ class Work < ApplicationRecord
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
-      select {|assign| ((self.authors.blank? ? [] : self.authors.collect(&:user)) + (self.users + [User.current_user])).compact.include?(assign.offering_user)}
+      select {|assign| (self.users + [User.current_user]).compact.include?(assign.offering_user)}
   end
 
   def recipients=(recipient_names)
@@ -648,7 +642,11 @@ class Work < ApplicationRecord
       new_series = Series.new
       new_series.title = attributes[:title]
       new_series.restricted = self.restricted
-      new_series.authors = (self.pseuds + (self.authors.blank? ? [] : self.authors)).flatten.uniq
+      (User.current_user.pseuds & self.pseuds_after_saving).each do |pseud|
+        # Only add the current user's pseuds now -- the after_create callback
+        # on the serial work will do the rest.
+        new_series.creatorships.build(pseud: pseud)
+      end
       new_series.save
       self.series << new_series
     end
@@ -1130,8 +1128,6 @@ class Work < ApplicationRecord
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
-    elsif self.authors.present?
-      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     else
       self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
@@ -1242,14 +1238,6 @@ class Work < ApplicationRecord
       bookmarkable_type: 'Work',
       bookmarkable_join: { name: "bookmarkable" }
     )
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
-  end
-
-  def user_ids
-    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids

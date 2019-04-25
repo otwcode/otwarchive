@@ -2,21 +2,17 @@
 
 <!-- put in all the information uploaded in hidden fields -->
 <div>
-<select name="work[author_attributes][ids][]" multiple="multiple" style="display:none;">
-  <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>
-</select>
+  <%= form.fields_for :author_attributes do |creator_form| %>
+    <% (@work.current_user_pseuds || []).each do |pseud| %>
+      <%= creator_form.hidden_field :ids, value: pseud.id, multiple: true %>
+    <% end %>
 
-<% unless @coauthors.blank? %>
-  <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
-    <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
-  </select>
-<% end %>
-
-<% unless @work.series.blank? %>
-  <select name="work[series_attributes][id]" id="work_series_attributes_id">
-    <%= options_from_collection_for_select(@work.series, :id, :title, @work.series) %>
-  </select>
-<% end %>
+    <% @work.creatorships.each do |creatorship| %>
+      <% if creatorship.new_record? %>
+        <%= creator_form.hidden_field :coauthors, value: creatorship.pseud_id, multiple: true %>
+      <% end %>
+    <% end %>
+  <% end %>
 
 <%= form.hidden_field :rating_string, :value => "#{@work.rating_string}" %>
 <%= form.hidden_field :warning_string, :value => "#{@work.warning_string}" %>

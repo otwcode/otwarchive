@@ -1,8 +1,6 @@
 # encoding=utf-8
 
 class WorksController < ApplicationController
-  include CommonCreatorship
-
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
@@ -17,7 +15,6 @@ class WorksController < ApplicationController
   before_action :check_visibility, only: [:show, :navigate]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
-  before_action :set_author_attributes, only: [:create, :update]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
@@ -291,14 +288,12 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :new
-    elsif work_has_pseuds_to_fix?
-      render :_choose_coauthor
     else
       @work.posted = @chapter.posted = true if params[:post_button]
       @work.set_revised_at_by_chapter(@chapter)
 
       if @work.save
-        if params[:preview_button] || params[:cancel_coauthor_button]
+        if params[:preview_button]
           flash[:notice] = ts("Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}", deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
@@ -343,8 +338,7 @@ class WorksController < ApplicationController
       return cancel_posting_and_redirect
     end
 
-    @work.preview_mode = !!(params[:preview_button] || params[:edit_button] ||
-                            params[:cancel_coauthor_button])
+    @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
     @work.ip_address = request.remote_ip
@@ -359,9 +353,7 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       set_work_tag_error_messages
       render :edit
-    elsif work_has_pseuds_to_fix?
-      render :_choose_coauthor
-    elsif params[:preview_button] || params[:cancel_coauthor_button]
+    elsif params[:preview_button]
       unless @work.posted?
         flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
       end
@@ -418,7 +410,6 @@ class WorksController < ApplicationController
   # GET /works/1/preview
   def preview
     @preview_mode = true
-    load_pseuds
   end
 
   def preview_tags
@@ -515,7 +506,6 @@ class WorksController < ApplicationController
     unless @work && @work.save
       flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
-      load_pseuds
       @series = current_user.series.distinct
       render(:new) && return
     end
@@ -755,14 +745,6 @@ class WorksController < ApplicationController
     @owner = @pseud || @user || @collection || @tag
   end
 
-  def load_pseuds
-    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-    @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
-    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
-    @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }.uniq
-  end
-
   def load_work
     @work = Work.find_by(id: params[:id])
     unless @work
@@ -783,20 +765,9 @@ class WorksController < ApplicationController
   # Check whether we should display :new or :edit instead of previewing or
   # saving the user's changes.
   def work_cannot_be_saved?
-    if @work.authors.present? && (@work.authors & current_user.pseuds).empty?
-      flash.now[:error] = ts("You're not allowed to use that pseud.")
-      return true
-    end
-
     !(@work.errors.empty? &&
       @work.has_required_tags? &&
       @work.valid?)
-  end
-
-  # Check whether we should display _choose_coauthor.
-  def work_has_pseuds_to_fix?
-    !(@work.invalid_pseuds.blank? &&
-      @work.ambiguous_pseuds.blank?)
   end
 
   def set_work_tag_error_messages
@@ -811,8 +782,6 @@ class WorksController < ApplicationController
   end
 
   def set_work_form_fields
-    load_pseuds
-
     @work.reset_published_at(@chapter)
     @series = current_user.series.distinct
     @serial_works = @work.serial_works
@@ -923,7 +892,7 @@ class WorksController < ApplicationController
       challenge_claim_ids: [],
       category_string: [],
       warning_strings: [],
-      author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
+      author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
       chapter_attributes: [

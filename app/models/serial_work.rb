@@ -30,4 +30,15 @@ class SerialWork < ApplicationRecord
     series.enqueue_to_index
     IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :main)
   end
+
+  after_create :update_series_creatorships
+  def update_series_creatorships
+    return unless work && series
+
+    work.pseuds_after_saving.each do |pseud|
+      # Because the creatorships are approved on the work, we also want to make
+      # sure that they're approved on the series:
+      series.creatorships.approve_or_create_by(pseud: pseud)
+    end
+  end
 end

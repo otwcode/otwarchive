@@ -25,13 +25,17 @@ class Pseud < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
+
   has_many :creatorships
-  has_many :works, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Work'
+  has_many :approved_creatorships, -> { where(approved: true) }, class_name: "Creatorship"
+
+  has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
+  has_many :chapters, through: :approved_creatorships, source: :creation, source_type: "Chapter"
+  has_many :series, through: :approved_creatorships, source: :creation, source_type: "Series"
+
   has_many :tags, through: :works
   has_many :filters, through: :works
   has_many :direct_filters, through: :works
-  has_many :chapters, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Chapter'
-  has_many :series, -> { readonly(false) }, through: :creatorships, source: :creation, source_type: 'Series'
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
   has_many :tag_set_ownerships, dependent: :destroy

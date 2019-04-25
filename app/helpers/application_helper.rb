@@ -109,9 +109,13 @@ module ApplicationHelper
 
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
-    pseuds_cache_key = ""
-    pseuds_cache_key = creation.pseuds.cache_key unless creation.is_a?(ExternalWork)
-    Rails.cache.fetch("#{creation&.cache_key}/#{pseuds_cache_key}/byline-nonanon/#{only_path}") do
+
+    if @preview_mode
+      # Skip cache in preview mode
+      return byline_text(creation, only_path)
+    end
+
+    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
       byline_text(creation, only_path)
     end
   end
@@ -120,9 +124,7 @@ module ApplicationHelper
     if creation.respond_to?(:author)
       creation.author
     else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
       pseuds = pseuds.flatten.uniq.sort
 
       archivists = Hash.new []

@@ -307,17 +307,17 @@ describe Work do
 
     context "when the pseuds start with special characters" do
       it "should remove those characters" do
-        work.authors = [Pseud.new(name: "-jolyne")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "-jolyne")]
         expect(work.authors_to_sort_on).to eq "jolyne"
 
-        work.authors = [Pseud.new(name: "_hermes")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "_hermes")]
         expect(work.authors_to_sort_on).to eq "hermes"
       end
     end
 
     context "when the pseuds start with numbers" do
       it "should not remove numbers" do
-        work.authors = [Pseud.new(name: "007james")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "007james")]
         expect(work.authors_to_sort_on).to eq "007james"
       end
     end
@@ -325,14 +325,14 @@ describe Work do
     context "when the work is anonymous" do
       it "should set the author sorting to Anonymous" do
         work.in_anon_collection = true
-        work.authors = [Pseud.new(name: "stealthy")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "stealthy")]
         expect(work.authors_to_sort_on).to eq "Anonymous"
       end
     end
 
     context "when the work has multiple pseuds" do
       it "should combine them with commas" do
-        work.authors = [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
       end
     end

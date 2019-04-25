@@ -50,6 +50,11 @@ en:
         <<: *errors_template
       full_messages:
         format: "%{attribute} %{message}"
+      models:
+        creatorship:
+          attributes:
+            pseud_id:
+              taken: "is already listed as a creator."
     models:
       bookmark: "Bookmark"
       category:
@@ -105,6 +110,21 @@ en:
         name_with_colon:
           one: "Warning:"
           other: "Warnings:"
+      creatorships:
+        pseud_id: "Pseud"
+        base: "Invalid creator:"
+      series/creatorships:
+        pseud_id: "Pseud"
+        base: "Invalid creator:"
+      chapters/creatorships:
+        pseud_id: "Pseud"
+        base: "Invalid creator:"
+      work/creatorships:
+        pseud_id: "Pseud"
+        base: "Invalid creator:"
+      work/chapters:
+        content: "Content"
+        base: "Invalid chapter:"
 
   mailer:
     general:
@@ -180,20 +200,27 @@ en:
         part2: "If you have questions, please %{support} (%{url})."
         part1_other: "Your work \"%{title}\" was deleted at the request of %{pseud}."
         part1_yourself: "Your work \"%{title}\" was deleted at your request."
-    coauthor_notification:
+    creatorship_notification:
       subject: "[%{app_name}] Co-creator Notification"
-      edit_the_work: "Edit the work"
-      edit_the_series: "Edit the series"
-      part1_work: "You have been listed as a co-creator on the following work:"
-      part1_series: "You have been listed as a co-creator on the following series:"
+      part1: "You have been listed as a co-creator on the following %{type}:"
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        part2_work: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
-        part2_series: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+        part2: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
+        edit: "Edit the %{type}"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        part2_work: "Edit the work to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
-        part2_series: "Edit the series to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+        part2: "Edit the %{type} to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+    creatorship_invitation:
+      subject: "[%{app_name}] Co-creator Invitation"
+      intro: "You have been invited to be listed as a co-creator on the following %{type}:"
+      html:
+        creation: "%{creation_link} by %{pseud_links}"
+        accept: "If you wish to be listed as a co-creator, you can view the %{type} and accept the invitation, or %{view} and accept the invitation from there."
+        view: "view your co-creator invitations page"
+      text:
+        creation: "%{title} (%{url}) by %{pseuds}"
+        accept: "If you wish to be listed as a co-creator, you can view the %{type} and accept the invitation, or view your co-creator invitations page and accept the invitation from there: %{url}"
+      reject: "If you've been added in error or don't want to be listed as a creator, you can ignore this message."
     change_email:
       subject: "[%{app_name}] Email changed"
       part1: "%{login}, the email associated with your account has been changed to %{email}"

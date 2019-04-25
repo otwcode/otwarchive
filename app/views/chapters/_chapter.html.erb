@@ -7,7 +7,7 @@
     </p>
   <% end %>
   <!-- chapter management -->
-  <% if is_author_of?(@work) && !@downloading && !@preview_mode%>
+  <% if logged_in? && (is_author_of?(@work) || chapter.user_has_creator_invite?(current_user)) && !@preview_mode%>
     <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
@@ -57,9 +57,7 @@
 
   <!--main content-->
   <div class="userstuff module" role="article">
-    <% unless @downloading %>
-      <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
-    <% end %>
+    <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
     <%=raw sanitize_field(chapter, :content) %>
   </div>
   <!--/main-->

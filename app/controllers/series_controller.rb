@@ -1,11 +1,8 @@
 class SeriesController < ApplicationController
- include CommonCreatorship
-
   before_action :check_user_status, only: [:new, :create, :edit, :update]
   before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_action :check_visibility, only: [:show]
-  before_action :set_author_attributes, only: [:create, :update]
 
   def load_series
     @series = Series.find_by(id: params[:id])
@@ -66,18 +63,8 @@ class SeriesController < ApplicationController
     @series = Series.new
   end
 
- def load_pseuds
-   @pseuds = current_user.pseuds
-   @coauthors = @series.pseuds.reject { |p| p.user.id == current_user.id }
-   to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
-   @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }
-   @allpseuds = (current_user.pseuds + (@series.authors ||= []) + @series.pseuds).uniq
- end
-
   # GET /series/1/edit
  def edit
-   load_pseuds
-
    if params["remove"] == "me"
      pseuds_with_author_removed = @series.pseuds - current_user.pseuds
      if pseuds_with_author_removed.empty?
@@ -112,35 +99,15 @@ class SeriesController < ApplicationController
     end
   end
 
-  # Check whether we should display _choose_coauthor.
-  def series_has_pseuds_to_fix?
-    !(@series.invalid_pseuds.blank? &&
-        @series.ambiguous_pseuds.blank?)
-  end
-
   # PUT /series/1
   # PUT /series/1.xml
  def update
-   load_pseuds
-
-   if flash[:notice].present?
-     # Issues found are promoted to errors and the series edited.
-     flash[:error] = flash[:notice]
-     flash[:notice] = ""
-     redirect_to edit_series_path(@series) and return
-   end
-
-   if @series.update_attributes(series_params)
+   @series.attributes = series_params
+   if @series.errors.empty? && @series.save
      # The duplicated if here does not work if you try and place it above.
-     if series_has_pseuds_to_fix?
-       render :_choose_coauthor and return
-     end
      flash[:notice] = ts('Series was successfully updated.')
      redirect_to(@series)
    else
-     if series_has_pseuds_to_fix?
-       render :_choose_coauthor and return
-     end
      render action: "edit"
    end
  end
@@ -183,7 +150,7 @@ class SeriesController < ApplicationController
   def series_params
     params.require(:series).permit(
       :title, :summary, :series_notes, :complete,
-      author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []]
+      author_attributes: [:byline, ids: [], coauthors: []]
     )
   end
 end

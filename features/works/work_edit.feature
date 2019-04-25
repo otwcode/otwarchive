@@ -75,8 +75,8 @@ Feature: Edit Works
     # Test changing pseuds on a work
     When I go to testuser's works page
       And I follow "Edit"
-      And I select "testy" from "work_author_attributes_ids_"
-      And I unselect "testuser" from "work_author_attributes_ids_"
+      And I select "testy" from "work_author_attributes_ids"
+      And I unselect "testuser" from "work_author_attributes_ids"
       And I press "Post Without Preview"
     Then I should see "testy"
       And I should not see "testuser,"

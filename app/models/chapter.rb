@@ -7,10 +7,7 @@ class Chapter < ApplicationRecord
   include Creatable
   include CreatorshipValidations
 
-  has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships
-
-  belongs_to :work
+  belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
@@ -36,19 +33,28 @@ class Chapter < ApplicationRecord
 
   attr_accessor :wip_length_placeholder
 
-  before_save :validate_authors, :strip_title
+  before_validation :inherit_creatorships, on: :create
+  def inherit_creatorships
+    if work && creatorships.empty?
+      work.pseuds_after_saving.each do |pseud|
+        creatorships.build(pseud: pseud)
+      end
+    end
+  end
+
+  before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
 
   after_create :notify_after_creation
-  before_update :notify_before_update
+  after_update :notify_after_update
 
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 
   after_save :fix_positions
   def fix_positions
-    if work && !work.new_record?
+    if work && work.persisted?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
@@ -73,11 +79,9 @@ class Chapter < ApplicationRecord
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
 
-  after_save :expire_cache_on_coauthor_removal
-
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
-    if work && position
+    if work && work.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}
     end
@@ -187,18 +191,4 @@ class Chapter < ApplicationRecord
   def commentable_name
     self.work.title
   end
-
-  private
-
-  def expire_cache_on_coauthor_removal
-    if self.authors_to_remove.present?
-      self.touch
-    end
-  end
-
-   # private
-   #
-   # def add_to_list_bottom
-   # end
-
 end

@@ -44,8 +44,7 @@ class UsersController < ApplicationController
 
     visible = visible_items(current_user)
 
-    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
-    @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible[:works].order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     if current_user.respond_to?(:subscriptions)
@@ -280,18 +279,16 @@ class UsersController < ApplicationController
     #       .visible_to_registered_user.
     visible_method = current_user.nil? && current_admin.nil? ? :visible_to_all : :visible_to_registered_user
 
-    # hahaha omg so ugly BUT IT WORKS :P
-    @fandoms = Fandom.select('tags.*, count(tags.id) as work_count')
-                     .joins(:direct_filter_taggings)
-                     .joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'")
-                     .group('tags.id')
-                     .merge(Work.send(visible_method).revealed.non_anon)
-                     .merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-  INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-  INNER JOIN users ON pseuds.user_id = users.id").where('users.id = ?', @user.id))
     visible_works = @user.works.send(visible_method)
     visible_series = @user.series.send(visible_method)
     visible_bookmarks = @user.bookmarks.send(visible_method)
+
+    visible_works = visible_works.revealed.non_anon
+    @fandoms = \
+      Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
+      joins(:filtered_works).group("tags.id").merge(visible_works).
+      where(filter_taggings: { inherited: false }).
+      order('work_count DESC').load
 
     {
       works: visible_works,

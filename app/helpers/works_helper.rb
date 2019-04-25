@@ -183,7 +183,7 @@ module WorksHelper
   end
 
   def all_coauthor_skins
-    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+    WorkSkin.approved_or_owned_by_any(@work.users).order(:title)
   end
 
   def sorted_languages
