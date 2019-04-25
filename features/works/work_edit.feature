@@ -201,7 +201,7 @@ Feature: Edit Works
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Michael,Christopher"
       And I press "Post Without Preview"
-    Then I should see "Christopher does not allow others to add them as a co-creator."
+    Then I should see "Christopher (Pike) does not allow others to add them as a co-creator."
     When I fill in "pseud_byline" with "Michael"
       And I press "Preview"
     Then I should see "Draft was successfully created."

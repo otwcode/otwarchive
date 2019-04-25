@@ -325,7 +325,7 @@ Feature: Create Works
       And I should see "Me (myself), testuser"
       And I should see "My new series"
 
-  Scenario: Users can co-create a work with a pseuds that is ambiguous even if they don't allow cocreation
+  Scenario: Users can co-create a work with pseuds that is ambiguous even if they don't allow cocreation
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"

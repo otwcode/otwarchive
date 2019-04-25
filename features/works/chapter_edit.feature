@@ -568,3 +568,36 @@ Feature: Edit chapters
      And I follow "Chapter 2"
      And I follow "Edit Chapter"
      And I should see "Remove Me As Chapter Co-Creator"
+
+  Scenario: Users can co-create a chapter with pseuds that is ambiguous even if they don't allow cocreation
+    Given basic tags
+      And "myself" has the pseud "Me"
+      And "herself" has the pseud "Me"
+      And "memyself" has the pseud "I"
+      And "myselfme" has the pseud "I"
+      And "Burnham" has the pseud "disco"
+      And "Pike" has the pseud "disco"
+      And the user "Burnham" allows co-creators
+      And the user "Pike" allows co-creators
+      And the user "myself" allows co-creators
+   When I am logged in as "testuser" with password "testuser"
+      And I post the work "Behind her back she’s Gentleman Jack"
+   When I post a chapter for the work "Behind her back she’s Gentleman Jack"
+    Then I should see "Chapter has been posted!"
+      And I follow "Chapter 2"
+      And I follow "Edit Chapter"
+    Then I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Me,I,disco"
+   Then I press "Preview"
+      And I should see "Me (herself) does not allow others to add them as a co-creator."
+      And I should see "I (memyself) does not allow others to add them as a co-creator."
+      And I should see "I (myselfme) does not allow others to add them as a co-creator."
+   Then I should see "There are 3 valid users. Please choose the ones you want:"
+      And I select "disco (Burnham)" from "chapter[author_attributes][ambiguous_pseuds][]"
+      And I select "Me (myself)" from "chapter[author_attributes][ambiguous_pseuds][]"
+      And I press "Preview"
+      And I press "Update"
+   Then I should see "Chapter was successfully updated."
+     And I follow "Chapter 2"
+     And I follow "Edit Chapter"
+     And I should see "Remove Me As Chapter Co-Creator"
