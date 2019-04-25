@@ -285,7 +285,7 @@ class Pseud < ApplicationRecord
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      if pseuds.size == 0
+      if pseuds.empty?
         failures << byline.strip
         next
       end
@@ -307,8 +307,8 @@ class Pseud < ApplicationRecord
     {
       pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
-      invalid_pseuds: (failures+disallowed_pseuds+banned_pseuds).flatten.uniq.map(&:byline),
-      banned_pseuds: banned_pseuds.flatten.uniq,
+      invalid_pseuds: (disallowed_pseuds + banned_pseuds).flatten.uniq.map(&:byline) + failures,
+      banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline),
       disallowed_pseuds: disallowed_pseuds.flatten.uniq.map(&:byline)
     }
   end

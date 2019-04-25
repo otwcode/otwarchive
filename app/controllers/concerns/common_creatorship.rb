@@ -7,7 +7,7 @@ module CommonCreatorship
 
     # stuff co-authors into author attributes too so we won't lose them
     if params[controller][:author_attributes] && params[controller][:author_attributes][:coauthors]
-      (params[controller][:author_attributes][:ids] || [] ).concat(params[controller][:author_attributes][:coauthors] || []).uniq!
+      (params[controller][:author_attributes][:ids] || []).concat(params[controller][:author_attributes][:coauthors] || []).uniq!
     end
 
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen

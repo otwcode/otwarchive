@@ -910,7 +910,6 @@ class WorksController < ApplicationController
   end
 
   def work_params
-
     params.require(:work).permit(
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :warning_string, :category_string, :expected_number_of_chapters, :revised_at,

@@ -31,14 +31,14 @@ module CreatorshipValidations
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    selected_pseuds = attributes[:ids].map{ |p| Pseud.find(p)}
+    selected_pseuds = attributes[:ids].map { |p| Pseud.find(p) }
     (self.authors ||= []) << selected_pseuds
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
       self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
     end
-    self.authors << attributes[:ambiguous_pseuds].map{ |p| Pseud.find(p) } if attributes[:ambiguous_pseuds]
+    self.authors << attributes[:ambiguous_pseuds].map { |p| Pseud.find(p) } if attributes[:ambiguous_pseuds]
     unless attributes[:byline].blank?
       whitelist = []
       whitelist = self.works&.collect{ |w| w.pseuds.collect(&:id) }&.flatten if self.is_a?(Series)
