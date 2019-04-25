@@ -8,9 +8,19 @@ FactoryGirl.define do
   factory :series do
     title { generate(:series_title) }
 
+    transient do
+      authors { [FactoryGirl.build(:pseud)] }
+    end
+
+    after(:build) do |series, evaluator|
+      evaluator.authors.each do |pseud|
+        series.creatorships.build(pseud: pseud)
+      end
+    end
+
     factory :series_with_a_work do
       after(:build) do |series|
-        series.works = [create(:posted_work, authors: User.current_user&.pseuds)]
+        series.works = [create(:posted_work)]
       end
     end
   end

@@ -66,7 +66,7 @@ describe WorksOwner do
 
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
-        new_work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true, authors: User.current_user&.pseuds)
+        new_work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true)
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
@@ -140,13 +140,15 @@ describe WorksOwner do
         before do
           Delorean.time_travel_to "10 minutes ago"
           @owner = FactoryGirl.create(:collection)
-          # Stub out User.current_user to get past the collection needing to be owned by same person as parent
-          allow(User).to receive(:current_user).and_return(@owner.owners.first.user)
+          # Temporarily set User.current_user to get past the collection
+          # needing to be owned by same person as parent:
+          User.current_user = @owner.owners.first.user
           @child = FactoryGirl.create(:collection, parent_name: @owner.name)
+          User.current_user = nil
           # reload the parent collection
           @owner.reload
           @work1 = @work
-          @work = FactoryGirl.create(:work, collection_names: @child.name, posted: true, authors: [User.current_user&.pseuds&.first])
+          @work = FactoryGirl.create(:work, collection_names: @child.name, posted: true)
           @child.collection_items.each {|ci| ci.approve(nil); ci.save}
           @original_cache_key = @owner.works_index_cache_key
           Delorean.back_to_the_present

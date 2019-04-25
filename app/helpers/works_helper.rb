@@ -183,7 +183,9 @@ module WorksHelper
   end
 
   def all_coauthor_skins
-    WorkSkin.approved_or_owned_by_any(@work.users).order(:title)
+    users = @work.users.to_a
+    users << User.current_user if User.current_user.is_a?(User)
+    WorkSkin.approved_or_owned_by_any(users).order(:title)
   end
 
   def sorted_languages

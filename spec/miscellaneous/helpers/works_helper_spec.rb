@@ -41,7 +41,8 @@ describe WorksHelper, type: :helper do
 
   describe '#all_coauthor_skins' do
     before do
-      @allpseuds = Array.new(5) { |i| FactoryGirl.create(:pseud, name: "Pseud-#{i}") }
+      @users = Array.new(5) { |i| FactoryGirl.create(:user) }
+      @work = create(:work, authors: @users.flat_map(&:pseuds))
     end
 
     context 'no public work skins or private work skins' do
@@ -64,8 +65,8 @@ describe WorksHelper, type: :helper do
 
       context 'private work skins exist' do
         before do
-          FactoryGirl.create(:private_work_skin, title: 'A Private Skin', author: @allpseuds[3].user)
-          FactoryGirl.create(:private_work_skin, title: 'M Private Skin', author: @allpseuds[0].user)
+          FactoryGirl.create(:private_work_skin, title: 'A Private Skin', author: @users[3])
+          FactoryGirl.create(:private_work_skin, title: 'M Private Skin', author: @users[0])
           FactoryGirl.create(:private_work_skin, title: 'Unowned Private Skin')
         end
 

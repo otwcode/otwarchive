@@ -27,30 +27,87 @@ describe Chapter do
     end
   end
 
-  describe 'Cocreators' do
-    before(:each) do
-      @creator = FactoryGirl.create(:user)
-      User.current_user = @creator
-      @co_creator = FactoryGirl.create(:user)
-      @no_co_creator = FactoryGirl.create(:user)
-      @co_creator.preference.allow_cocreator = true
-      @co_creator.preference.save
-    end
-    let(:valid_work) { build(:work, authors: [@creator.pseuds.first]) }
+  describe "co-creator permissions" do
+    let(:creator) { create(:user) }
+    let(:co_creator) { create(:user) }
+    let(:no_co_creator) { create(:user) }
 
-    it 'checks that normal co creator can co create' do
-      work = valid_work
-      authors = [@creator.pseuds.first, @co_creator.pseuds.first]
-      chapter = Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
-      expect(work.authors).to match_array([@creator.pseuds.first])
-      expect(chapter.authors).to match_array(authors)
+    before do
+      # In order to enable co-creator checks (instead of just having everything
+      # be automatically approved), we need to make sure that User.current_user
+      # is not nil.
+      User.current_user = creator
+      co_creator.preference.update(allow_cocreator: true)
+      no_co_creator.preference.update(allow_cocreator: false)
     end
 
-    it 'checks a creator can not add a standard user' do
-      work = valid_work
-      authors = [@creator.pseuds.first, @no_co_creator.pseuds.first]
-      chapter = Chapter.new(work: work, content: "Cool story, bro!", authors: authors)
-      expect { chapter.save! }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Trying to add a invalid co creator')
+    it "allows normal users to invite others as chapter co-creators" do
+      work = create(:work, authors: creator.pseuds)
+      attributes = {
+        content: "new chapter content",
+        author_attributes: {
+          ids: creator.pseud_ids,
+          byline: co_creator.login
+        }
+      }
+      chapter = work.chapters.build(attributes)
+      expect(chapter).to be_valid
+      expect(chapter.save).to be_truthy
+      expect(chapter.user_has_creator_invite?(co_creator)).to be_truthy
+    end
+
+    it "doesn't allow users to invite others who disallow co-creators" do
+      work = create(:work, authors: creator.pseuds)
+      attributes = {
+        content: "new chapter content",
+        author_attributes: {
+          ids: creator.pseud_ids,
+          byline: no_co_creator.login
+        }
+      }
+      chapter = work.chapters.build(attributes)
+      expect(chapter).to be_invalid
+      expect(chapter.save).to be_falsey
+      expect(chapter.user_has_creator_invite?(no_co_creator)).to be_falsey
+    end
+
+    it "allows users to automatically add work co-creators as chapter co-creators" do
+      # Set up a work co-created with a user that doesn't allow co-creators:
+      no_co_creator.preference.update(allow_cocreator: true)
+      work = create(:work, authors: creator.pseuds + no_co_creator.pseuds)
+      work.creatorships.for_user(no_co_creator).each(&:accept!)
+      no_co_creator.preference.update(allow_cocreator: false)
+
+      attributes = {
+        content: "new chapter content",
+        author_attributes: {
+          ids: creator.pseud_ids,
+          coauthors: no_co_creator.pseud_ids
+        }
+      }
+      chapter = work.reload.chapters.build(attributes)
+      expect(chapter).to be_valid
+      expect(chapter.save).to be_truthy
+      expect(chapter.pseuds.reload).to include(*no_co_creator.pseuds)
+    end
+
+    it "doesn't allow users to automatically add invited work co-creators" do
+      # Set up a work with an invitation for a user that doesn't allow co-creators:
+      no_co_creator.preference.update(allow_cocreator: true)
+      work = create(:work, authors: creator.pseuds + no_co_creator.pseuds)
+      no_co_creator.preference.update(allow_cocreator: false)
+
+      attributes = {
+        content: "new chapter content",
+        author_attributes: {
+          ids: creator.pseud_ids,
+          coauthors: no_co_creator.pseud_ids
+        }
+      }
+      chapter = work.reload.chapters.build(attributes)
+      expect(chapter).to be_invalid
+      expect(chapter.save).to be_falsey
+      expect(chapter.creatorships.for_user(no_co_creator)).to be_empty
     end
   end
 end

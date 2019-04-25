@@ -155,8 +155,8 @@ class Series < ApplicationRecord
   def remove_author(author_to_remove)
     pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
     raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
-    Series.transaction do
-      self.pseuds = pseuds_with_author_removed
+    transaction do
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
       authored_works_in_series = (author_to_remove.works & self.works)
       authored_works_in_series.each do |work|
         work.remove_author(author_to_remove)
