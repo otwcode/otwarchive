@@ -235,8 +235,9 @@ Feature: Collection
       And I add the work "Cone of Silence" to the collection "Various Penguins"
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
-      And I add the co-author "Amos"
+      And I invite the co-author "Amos"
       And I press "Post Without Preview"
+      And the user "Amos" accepts all co-creator invites
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me

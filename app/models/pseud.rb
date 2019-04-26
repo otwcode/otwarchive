@@ -114,38 +114,6 @@ class Pseud < ApplicationRecord
   scope :alphabetical, -> { order(:name) }
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
-  scope :coauthor_of, lambda {|pseuds|
-    select("pseuds.*").
-    joins("LEFT JOIN creatorships ON creatorships.pseud_id = pseuds.id
-          LEFT JOIN creatorships c2 ON c2.creation_id = creatorships.creation_id").
-    where(["creatorships.creation_type = 'Work' AND
-          c2.creation_type = 'Work' AND
-          c2.pseud_id IN (?) AND
-          creatorships.pseud_id NOT IN (?)",
-          pseuds.collect(&:id),
-          pseuds.collect(&:id)]).
-    group("pseuds.id").
-    includes(:user)
-  }
-
-  def check_pseud_coauthor?
-    user = User.find(self.user_id)
-    # The orphan_account will always accept co-creations
-    return true if ArchiveConfig.ORPHANING_ALLOWED && user.login == User.orphan_account.login
-    # Factory girl and its friends do not set the current user. So if we are running in test
-    # And current_user is nil assume everything is ok so test pass :()
-    return true if User.current_user.nil? && ENV["RAILS_ENV"] == 'test'
-    # Admins can't force things.
-    return false unless User.current_user.is_a?(User)
-    # A user can always create their own works.
-    return true if user.id == User.current_user.id
-    # A user who allows co creation can be an owner.
-    return true if user&.preference&.allow_cocreator
-    # Archivists can can always co-create.
-    return true if User.current_user.is_a?(User) && User.current_user.is_archivist?
-    false
-  end
-
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
   end
@@ -281,23 +249,17 @@ class Pseud < ApplicationRecord
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    whitelist = options[:whitelist] || []
-    disallowed_pseuds = []
+    banned_pseuds = []
     valid_pseuds = []
     ambiguous_pseuds = {}
     failures = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned_pseuds.present?
-        pseuds = pseuds - banned_pseuds
-        banned_pseuds = banned_pseuds.map(&:byline)
-      end
-      disallowed_pseuds = pseuds.reject { |pseud| pseud.check_pseud_coauthor? || whitelist.include?(pseud.id) }
-      if disallowed_pseuds.present? && options[:remove_disallowed]
-        pseuds = pseuds - disallowed_pseuds
-        disallowed_pseuds = byline.strip
+      banned = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
+      if banned.present?
+        pseuds = pseuds - banned
+        banned_pseuds += banned.map(&:byline)
       end
       if pseuds.length == 1
         valid_pseuds << pseuds.first
@@ -311,8 +273,7 @@ class Pseud < ApplicationRecord
       pseuds: valid_pseuds,
       ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds,
-      disallowed_pseuds: disallowed_pseuds
+      banned_pseuds: banned_pseuds
     }
   end
 
@@ -383,32 +344,44 @@ class Pseud < ApplicationRecord
   end
 
   # Change the ownership of a creation from one pseud to another
-  # Options: skip_series -- if you begin by changing ownership of the series, you don't
-  # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
-    # Should only transfer creatorship if we're a co-creator.
-    if creation.pseuds.include?(self)
-      creation.pseuds.delete(self)
-      creation.pseuds << pseud unless pseud.nil? || creation.pseuds.include?(pseud)
+    # Update children before updating the creation itself, since deleting
+    # creatorships from the creation will also delete them from the creation's
+    # children.
+    unless options[:skip_children]
+      children = if creation.is_a?(Work)
+                   creation.chapters
+                 elsif creation.is_a?(Series)
+                   creation.works
+                 else
+                   []
+                 end
+
+      children.each do |child|
+        change_ownership(child, pseud, options)
+      end
     end
 
+    # Should only add new creatorships if we're an approved co-creator.
+    if creation.creatorships.approved.where(pseud: self).exists?
+      creation.creatorships.find_or_create_by(pseud: pseud)
+    end
+
+    # But we should delete all creatorships, even invited ones:
+    creation.creatorships.where(pseud: self).destroy_all
+
     if creation.is_a?(Work)
-      creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
-      unless options[:skip_series]
-        for series in creation.series
-          if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
-            series.pseuds << pseud rescue nil
-          else
-            self.change_ownership(series, pseud)
-          end
+      for series in creation.series
+        if series.work_pseuds.where(id: id).exists?
+          series.creatorships.find_or_create_by(pseud: pseud)
+        else
+          change_ownership(series, pseud, options.merge(skip_children: true))
         end
       end
       comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
       comments.each do |comment|
         comment.update_attribute(:pseud_id, pseud.id)
       end
-    elsif creation.is_a?(Series) && options[:skip_series]
-      creation.works.each {|work| self.change_ownership(work, pseud)}
     end
     # make sure changes affect caching/search/author fields
     creation.save rescue nil

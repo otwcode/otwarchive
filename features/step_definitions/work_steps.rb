@@ -197,7 +197,6 @@ Given /^the work "([^"]*)"$/ do |work|
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
-  step %{the user "#{coauthor}" allows co-creators}
   step %{I am logged in as "#{author}"}
   step %{I post the work "#{work}"}
   step %{a chapter with the co-author "#{coauthor}" is added to "#{work}"}
@@ -296,8 +295,9 @@ end
 
 When /^a chapter with the co-author "([^\"]*)" is added to "([^\"]*)"$/ do |coauthor, work_title|
   step %{a chapter is set up for "#{work_title}"}
-  step %{I add the co-author "#{coauthor}"}
+  step %{I invite the co-author "#{coauthor}"}
   click_button("Post")
+  step %{the user "#{coauthor}" accepts all co-creator invitations}
   step %{all indexing jobs have been run}
   Tag.write_redis_to_database
 end
@@ -548,29 +548,28 @@ When /^the statistics_tasks rake task is run$/ do
 end
 
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
-  step %{the user "#{coauthor}" allows co-creators}
-  step %{I wait 1 second}
   step %{I edit the work "#{work}"}
-  step %{I add the co-author "#{coauthor}"}
+  step %{I invite the co-author "#{coauthor}"}
   step %{I post the work without preview}
+  step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
-When(/^I just add the co\-author "([^"]*)"$/) do |coauthor|
+When /^the user "([^"]*)" accepts the creator invite for the work "([^"]*)"/ do |user, work|
+  u = User.find_by(login: user)
+  w = Work.find_by(title: work)
+  w.creatorships.invited.for_user(u).each(&:accept!)
+end
+
+When(/^I try to invite the co-authors? "([^"]*)"$/) do |coauthor|
   check("co-authors-options-show")
   fill_in("pseud_byline", with: "#{coauthor}")
 end
 
-When /^I add the co-author "([^"]*)"$/ do |coauthor|
-  step %{the user "#{coauthor}" allows co-creators}
-  step %{I just add the co-author "#{coauthor}"}
-end
-
-When /^I add the co-authors "([^"]*)" and "([^"]*)"$/ do |coauthor1, coauthor2|
-  step %{the user "#{coauthor1}" exists and is activated}
-  step %{the user "#{coauthor2}" exists and is activated}
-  step %{the user "#{coauthor1}" allows co-creators}
-  step %{the user "#{coauthor2}" allows co-creators}
-  fill_in("pseud_byline", with: "#{coauthor1}, #{coauthor2}")
+When /^I invite the co-authors? "([^"]*)"$/ do |coauthor|
+  coauthor.split(",").map(&:strip).reject(&:blank?).each do |user|
+    step %{the user "#{user}" allows co-creators}
+  end
+  step %{I try to invite the co-authors "#{coauthor}"}
 end
 
 When /^I give the work to "([^"]*)"$/ do |recipient|

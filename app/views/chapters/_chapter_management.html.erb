@@ -3,12 +3,14 @@
   <% if chapter.user_has_creator_invite?(current_user) %>
     <li><%= link_to ts("Accept Co-Creator Invite"), accept_chapter_creatorships_path(chapter), method: :put %></li>
   <% end %>
-  <% unless chapter.posted? %>
-    <li>
-      <%= form_tag post_work_chapter_path(work, chapter) do %>
-      <%= submit_tag ts('Post Chapter') %>
-      <% end %>
-    </li>
+  <% if current_user.is_author_of?(work) %>
+    <% unless chapter.posted? %>
+      <li>
+        <%= form_tag post_work_chapter_path(work, chapter) do %>
+        <%= submit_tag ts('Post Chapter') %>
+        <% end %>
+      </li>
+    <% end %>
+    <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
   <% end %>
-  <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
 </ul>

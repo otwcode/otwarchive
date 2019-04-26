@@ -376,12 +376,13 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname2"
     And I claim a prompt from "Battle 12"
     And I start to fulfill my claim with "Co-authored Fill"
-    And I add the co-author "myname3" 
+    And I invite the co-author "myname3" 
   When I press "Post Without Preview"
   Then 1 email should be delivered to "myname3"
-    And the email should contain "You have been listed as a co-creator on the following work"
+    And the email should contain "You have been invited to be listed as a co-creator on the following work"
     And the email should not contain "translation missing"
-  When I am logged in as "mod1"
+  When the user "myname3" accepts all co-creator invites
+    And I am logged in as "mod1"
     And I reveal the authors of the "Battle 12" challenge
     And I reveal the "Battle 12" challenge
   Then 1 email should be delivered to "myname1"

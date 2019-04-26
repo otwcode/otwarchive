@@ -33,6 +33,11 @@ class Creatorship < ApplicationRecord
     # the work:
     self.approved ||= (creation.is_a?(Chapter) &&
                        creation.work.pseuds.include?(pseud))
+
+    # Approve if the creation is a series and the pseud is already listed on
+    # one of the works:
+    self.approved ||= (creation.is_a?(Series) &&
+                       creation.work_pseuds.include?(pseud))
   end
 
   # Make sure that the pseud exists, and isn't ambiguous.
@@ -162,7 +167,8 @@ class Creatorship < ApplicationRecord
       creation.class.where(id: creation.id).empty? ||
       creation.creatorships.all.count > 1
 
-    errors.add(:base, ts("Sorry, we cannot remove the last creator."))
+    errors.add(:base, ts("Sorry, we can't remove all creators of a %{type}.",
+                         type: creation.model_name.human.downcase))
     raise ActiveRecord::RecordInvalid, self
   end
 
@@ -229,8 +235,7 @@ class Creatorship < ApplicationRecord
       for new_orphan in orphans
         unless pseud.blank? || new_orphan.blank? || !new_orphan.pseuds.include?(pseud)
           orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: pseud.name)
-          options = (new_orphan.is_a?(Series)) ? {skip_series: true} : {}
-          pseud.change_ownership(new_orphan, orphan_pseud, options)
+          pseud.change_ownership(new_orphan, orphan_pseud)
         end
       end
     end

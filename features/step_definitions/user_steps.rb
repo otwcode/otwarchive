@@ -185,12 +185,11 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
-  author1.user.preference.allow_cocreator = true
-  author1.user.preference.save
+  author1.user.preference.update(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
-  author2.user.preference.allow_cocreator = true
-  author2.user.preference.save
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
+  author2.user.preference.update(allow_cocreator: true)
+  work = FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
+  work.creatorships.each(&:accept!)
 end
 
 # WHEN
@@ -247,6 +246,13 @@ end
 When /^I visit the change username page for (.*)$/ do |login|
   user = User.find_by(login: login)
   visit change_username_user_path(user)
+end
+
+When /^the user "(.*?)" accepts all (?:co-)?creator (?:invitations|invites)$/ do |login|
+  # To make sure that we don't have caching issues with the byline:
+  step %{I wait 1 second}
+  user = User.find_by(login: login)
+  user.creatorships.invited.each(&:accept!)
 end
 
 # THEN

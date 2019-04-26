@@ -35,7 +35,7 @@ class Chapter < ApplicationRecord
 
   before_validation :inherit_creatorships, on: :create
   def inherit_creatorships
-    if work && creatorships.empty?
+    if work && creatorships.empty? && current_user_pseuds.blank?
       work.pseuds_after_saving.each do |pseud|
         creatorships.build(pseud: pseud)
       end

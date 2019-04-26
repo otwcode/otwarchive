@@ -123,13 +123,24 @@ Feature: Edit Works
       And I press "Preview"
     Then I should not see "draft"
 
-  Scenario: You can add a co-author to an already-posted work
+  Scenario: You can invite a co-author to an already-posted work
     Given I am logged in as "leadauthor"
+      And the user "coauthor" exists and is activated
       And the user "coauthor" allows co-creators
       And I post the work "Dialogue"
-    When I add the co-author "coauthor" to the work "Dialogue"
+    When I follow "Edit"
+      And I invite the co-author "coauthor"
+      And I press "Post"
     Then I should see "Work was successfully updated"
-      And I should see "coauthor, leadauthor" within ".byline"
+      And I should not see "coauthor" within ".byline"
+      But 1 email should be delivered to "coauthor"
+      And the email should contain "You have been invited to be listed as a co-creator on the following work"
+    When I am logged in as "coauthor"
+      And I follow "Dialogue" in the email
+    Then I should not see "Edit"
+    When I follow "Accept Co-Creator Invite"
+    Then I should see "coauthor, leadauthor" within ".byline"
+      And I should see "Edit"
 
   Scenario: You can remove yourself as coauthor from a work
     Given the following activated users exist
@@ -198,16 +209,15 @@ Feature: Edit Works
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Michael,Christopher"
+      And I try to invite the co-authors "Michael,Christopher"
       And I press "Post Without Preview"
-    Then I should see "Christopher does not allow others to add them as a co-creator."
-    When I fill in "pseud_byline" with "Michael"
-      And I press "Preview"
-    Then I should see "Draft was successfully created."
+    Then I should see "Christopher (Pike) does not allow others to add them as a co-creator."
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Michael (Burnham), testuser"
+      But I should not see "Michael"
+    When the user "Burnham" accepts all creator invites
+      And I view the work "Thats not my Spock"
+    Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
@@ -224,17 +234,26 @@ Feature: Edit Works
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Michael"
+      And I try to invite the co-author "Michael"
       And I press "Post Without Preview"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Michael (Burnham), testuser"
+      But I should not see "Michael"
+    When the user "Burnham" accepts all co-creator invites
+      And I view the work "Thats not my Spock"
+    Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
       And I press "Post Without Preview"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
-    When I add the co-author "Georgiou" to the work "Thats not my Spock, it has too much beard"
+    When I edit the work "Thats not my Spock, it has too much beard"
+      And I invite the co-author "Georgiou"
+      And I press "Post"
     Then I should see "Work was successfully updated"
-      And I should see "Georgiou, Michael (Burnham), testuser"
+      And I should see "Michael (Burnham), testuser"
+      But I should not see "Georgiou"
+    When the user "Georgiou" accepts all co-creator invites
+      And I view the work "Thats not my Spock, it has too much beard"
+    Then I should see "Georgiou, Michael (Burnham), testuser"
+

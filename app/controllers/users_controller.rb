@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   before_action :check_user_status, only: [:edit, :update]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :browse, :delete_confirmation, :index, :show]
+  before_action :check_ownership, except: [:activate, :delete_confirmation, :index, :show]
   skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -233,20 +233,6 @@ class UsersController < ApplicationController
   def end_tos_prompt
     @user.update_attribute(:accepted_tos_version, @current_tos_version)
     head :no_content
-  end
-
-  def browse
-    @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
-    @tag_types = %w(Fandom Character Relationship Freeform)
-    @tags = @user.tags.with_scoped_count.includes(:merger)
-
-    @tags = if params[:sort] == 'count'
-              @tags.order('count DESC')
-            else
-              @tags.order('name ASC')
-            end
-
-    @tags = @tags.group_by { |t| t.type.to_s }
   end
 
   private

@@ -4,7 +4,7 @@
 
   <p>
     <%= t(".html.creation",
-    creation_link: "<i><b>#{style_link(creation_title(@creation), polymorphic_url(@creation))}</b></i>".html_safe, 
+    creation_link: "<i><b>#{style_link(creation_title(@creation), polymorphic_url(@creation))}</b></i>".html_safe,
     pseud_links: @creation.pseuds.map{ |p| style_pseud_link(p) }.to_sentence.html_safe).html_safe %>
   </p>
 

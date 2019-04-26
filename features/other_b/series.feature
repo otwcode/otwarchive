@@ -185,32 +185,27 @@ Feature: Create and Edit Series
       And I post the work "Sweetie Bell" as part of a series "Ponies"
     When I view the series "Ponies"
       And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "moon"
+      And I try to invite the co-author "moon"
       And I press "Update"
     Then I should see "Series was successfully updated."
-      And I should see "moon, sun"
-    When I follow "Remove Me As Author"
-    Then I should see "Sorry, we can't remove all authors of a work."
+      But I should not see "moon"
+    When the user "moon" accepts all co-creator invites
+    Then "moon" should be a creator of the series "Ponies"
+    When I view the series "Ponies"
+      And I follow "Remove Me As Author"
+    Then I should see "Sorry, we can't remove all creators of a work."
 
   Scenario: Removing self as co-author from co-authored series
     Given basic tags
       And the user "son" allows co-creators
     When I am logged in as "moon" with password "testuser"
-      And I go to the new work page
-      And I fill in the basic work information for "Sweetie Bell"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "son"
-      And I fill in "work[series_attributes][title]" with "Ponies"
-      And I press "Post Without Preview"
-    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-    When I view the series "Ponies"
-      And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "son"
-      And I press "Update"
-    Then I should see "Series was successfully updated."
-      And I should see "moon, son"
+      And I coauthored the work "Sweetie Bell" as "moon" with "son"
+      And I edit the work "Sweetie Bell"
+      And I fill in "work_series_attributes_title" with "Ponies"
+      And I post the work
+    Then I should see "Work was successfully updated."
+      And "moon" should be a creator of the series "Ponies"
+      And "son" should be a creator on the series "Ponies"
     When I follow "Remove Me As Author"
     Then I should see "You have been removed as an author from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
@@ -253,51 +248,38 @@ Feature: Create and Edit Series
     Then I should see "What a title! :< :& :>" in the "Series Title" input
 
   Scenario: You can edit a series to add someone as a co-creator if their preferences are set to permit it.
-    Given I am logged in as "author"
-      And the user "cocreator" allows co-creators
+    Given I am logged in as "foobar"
+      And the user "barbaz" exists and is activated
+      And the user "barbaz" allows co-creators
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
     When I view the series "Gentleman Jack"
-      And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "cocreator"
+    And I follow "Edit Series"
+      And I try to invite the co-author "barbaz"
       And I press "Update"
     Then I should see "Series was successfully updated."
-      And I should see "author, cocreator"
+      But I should not see "barbaz"
+      And 1 email should be delivered to "barbaz"
+      And the email should contain "You have been invited to be listed as a co-creator on the following series"
+    When I am logged in as "barbaz"
+      And I follow "Gentleman Jack" in the email
+    Then I should not see "Edit Series"
+    When I follow "Accept Co-Creator Invite"
+    Then I should see "Edit Series"
+      And "barbaz" should be a co-creator of the series "Gentleman Jack"
 
   Scenario: You cannot edit a series to add someone as a co-creator if their preferences don't permit it.
-    Given I am logged in as "author"
-      And the user "notcocreator" exists and is activated
+    Given I am logged in as "foobar"
+      And the user "barbaz" exists and is activated
+      And the user "barbaz" disallows co-creators
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
     When I view the series "Gentleman Jack"
       And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "notcocreator"
+      And I try to invite the co-author "barbaz"
       And I press "Update"
-    Then I should see "These pseuds are invalid:"
-      And I should see "notcocreator does not allow others to add them as a co-creator."
-    When I press "Preview"
+    Then I should see "Invalid creator: barbaz does not allow others to add them as a co-creator."
+    When I press "Update"
     Then I should see "Series was successfully updated."
-      And "notcocreator" should not be the creator of the series "Gentleman Jack"
-
-  Scenario: You can edit a series to add someone as a co-creator if their preferences don't permit it and they are a co creator on a work in the series
-    Given basic tags
-      And I am logged in as "author"
-      And the user "notcocreator" allows co-creators
-      And I go to the new work page
-      And I fill in the basic work information for "Behind her back she’s Gentleman Jack"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "notcocreator"
-      And I fill in "work[series_attributes][title]" with "Gentleman Jack"
-    When I press "Post"
-      And I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-    Then the user "notcocreator" disallows co-creators
-    When I view the series "Gentleman Jack"
-      And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "notcocreator"
-      And I press "Update"
-    Then I should see "Series was successfully updated."
-      And I should see "author, notcocreator"
+      And "barbaz" should not be the creator of the series "Gentleman Jack"
 
   Scenario: If you edit a series to add a co-creator with an ambiguous pseud, you will be prompted to clarify which user you mean.
     Given "myself" has the pseud "Me"
@@ -308,13 +290,17 @@ Feature: Create and Edit Series
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
       And I view the series "Gentleman Jack"
       And I follow "Edit Series"
-      And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Me"
+      And I try to invite the co-author "Me"
       And I press "Update"
     Then I should see "There's more than one user with the pseud Me."
     When I select "myself" from "Please choose the one you want:"
       And I press "Update"
     Then I should see "Series was successfully updated."
-      And "testuser" should be the creator of the series "Gentleman Jack"
+      And I should not see "Me (myself)"
+      And 1 email should be delivered to "myself"
+      And the email should contain "You have been invited to be listed as a co-creator on the following series"
+    When the user "myself" accepts all co-creator invites
+      And I view the series "Gentleman Jack"
+    Then "testuser" should be the creator of the series "Gentleman Jack"
       And "Me (myself)" should be the creator of the series "Gentleman Jack"
       And I should see "Me (myself), testuser"

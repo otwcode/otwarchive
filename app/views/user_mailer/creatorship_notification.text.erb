@@ -2,7 +2,7 @@
 <% content_for :message do %>
 <%= t ".part1", type: creation_type %>
 
-<%= t ".text.creation", title: creation_title(@creation), 
+<%= t ".text.creation", title: creation_title(@creation),
   url: polymorphic_url(@creation),
   pseuds: @creation.pseuds.map(&:byline).to_sentence %>
 
