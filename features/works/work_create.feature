@@ -317,12 +317,14 @@ Feature: Create Works
       And I fill in "Or create and use a new one:" with "My new series"
       And I press "Post Without Preview"
    Then I should see "There are 2 valid users. Please choose the ones you want:"
-      And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
+      And I select "Me (myself)" from "work[author_attributes][ambiguous_pseuds][]"
       And I press "Preview"
    Then I should see "Draft was successfully created."
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Me (myself), testuser"
+      And I should see "testuser"
+      And I should see "Me (myself)"
+      And I should not see "Me (herself)"
       And I should see "My new series"
 
   Scenario: Users can co-create a work with pseuds that is ambiguous even if they don't allow cocreation
@@ -352,7 +354,11 @@ Feature: Create Works
    Then I should see "Draft was successfully created."
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "disco (Burnham), Me (myself), testuser"
+      And I should see "Me (myself)"
+      And I should see "disco (Burnham)"
+      And I should see "testuser"
+      And I should not see "disco (Pike)"
+
 
 
   Scenario: Users can only create a work with a co-creator who allows it.

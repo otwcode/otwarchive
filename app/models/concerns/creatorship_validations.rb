@@ -43,7 +43,7 @@ module CreatorshipValidations
       whitelist = []
       whitelist = self.works&.collect{ |w| w.pseuds.collect(&:id) }&.flatten if self.is_a?(Series)
       whitelist = self.work&.pseuds&.collect(&:id)&.flatten if self.is_a?(Chapter)
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true, remove_disallowed: true, whitelist: whitelist)
+      results = Pseud.parse_bylines(attributes[:byline], remove_ambiguous: true, remove_disallowed: true, whitelist: whitelist)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]

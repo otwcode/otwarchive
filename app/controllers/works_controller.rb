@@ -759,7 +759,8 @@ class WorksController < ApplicationController
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
     @pseuds = current_user.pseuds
     @coauthors = @allpseuds.select { |p| p.user.id != current_user.id }
-    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
+    to_select = (@work.pseuds + @work.authors).flatten.uniq
+    to_select = [current_user.default_pseud] if to_select.blank?
     @selected_pseuds = to_select.collect { |pseud| pseud.id.to_i }.uniq
   end
 
