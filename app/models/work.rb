@@ -159,7 +159,7 @@ class Work < ApplicationRecord
   ########################################################################
 
   # validate_authors to be found in concerns/creatorship_validations.rb
-  before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter
   before_save :set_word_count
@@ -173,7 +173,6 @@ class Work < ApplicationRecord
   after_update :adjust_series_restriction
 
   before_save :hide_spam
-  before_save :validate_authors
   after_save :moderate_spam
   after_save :notify_of_hiding
 

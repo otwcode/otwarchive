@@ -7,8 +7,8 @@
   <%= render 'hidden_fields', :form => f %>
 
   <p class="submit cancel actions">
-    <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-    <%= submit_tag ts('Cancel'), :name => 'cancel_coauthor_button' %>
+    <%= submit_tag ts('Save'), :name => 'save_button' %>
+    <%= link_to ts("Cancel"), series_path %>
   </p>
 
 <% end %>
