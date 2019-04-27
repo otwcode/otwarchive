@@ -90,11 +90,14 @@ Feature: Create Works
     Then I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted."
+      And I should see "Pseud2" within ".byline"
+      And I should see "Pseud3" within ".byline"
       And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a co-creator on the following work"
       And the email should not contain "translation missing"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
+      And the email should not contain "translation missing"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -322,9 +325,9 @@ Feature: Create Works
    Then I should see "Draft was successfully created."
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "testuser"
-      And I should see "Me (myself)"
-      And I should not see "Me (herself)"
+      And I should see "testuser" within ".byline"
+      And I should see "Me (myself)" within ".byline"
+      And I should not see "Me (herself)" within ".byline"
       And I should see "My new series"
 
   Scenario: Users can co-create a work with pseuds that is ambiguous even if they don't allow cocreation
@@ -354,9 +357,9 @@ Feature: Create Works
    Then I should see "Draft was successfully created."
       And I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Me (myself)"
-      And I should see "disco (Burnham)"
-      And I should see "testuser"
+      And I should see "Me (myself)" within ".byline"
+      And I should see "disco (Burnham)" within ".byline"
+      And I should see "testuser" within ".byline"
       And I should not see "disco (Pike)"
 
 
@@ -378,7 +381,8 @@ Feature: Create Works
    Then I should see "Draft was successfully created."
     When I press "Post"
    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Michael (Burnham), testuser"
+      And I should see "Michael (Burnham)" within ".byline"
+      And I should see "testuser" within ".byline"
 
   Scenario: Users can't set a publication date that is in the future, e.g. set
   the date to April 30 when it is April 26

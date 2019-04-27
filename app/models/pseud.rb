@@ -305,7 +305,7 @@ class Pseud < ApplicationRecord
         pseuds = pseuds - disallowed
         disallowed_pseuds << disallowed
       end
-      if options[:remove_ambiguous]
+      if remove_psueds
         pseuds = []
       end
       valid_pseuds << pseuds
