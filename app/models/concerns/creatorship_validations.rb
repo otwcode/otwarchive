@@ -41,7 +41,7 @@ module CreatorshipValidations
     self.authors << attributes[:ambiguous_pseuds].map { |p| Pseud.find(p) } if attributes[:ambiguous_pseuds]
     unless attributes[:byline].blank?
       whitelist = []
-      whitelist = self.works&.collect{ |w| w.pseuds.collect(&:id) }&.flatten if self.is_a?(Series)
+      whitelist = self.works&.collect { |w| w.pseuds.collect(&:id) }&.flatten if self.is_a?(Series)
       whitelist = self.work&.pseuds&.collect(&:id)&.flatten if self.is_a?(Chapter)
       results = Pseud.parse_bylines(attributes[:byline], remove_ambiguous: true, remove_disallowed: true, whitelist: whitelist)
       self.authors << results[:pseuds]
