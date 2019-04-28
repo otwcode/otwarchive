@@ -258,19 +258,18 @@ end
 
 Given /^a set of works with various access levels for searching$/ do
   # Create a draft
-  FactoryGirl.create(:work, title: "Draft Work", authors: User.current_user&.pseuds)
+  FactoryGirl.create(:work, title: "Draft Work")
 
   # Create a work
-  FactoryGirl.create(:posted_work, title: "Posted Work", authors: User.current_user&.pseuds)
+  FactoryGirl.create(:posted_work, title: "Posted Work")
 
   # Create a work restricted to registered users
-  FactoryGirl.create(:posted_work, restricted: true, title: "Restricted Work", authors: User.current_user&.pseuds)
+  FactoryGirl.create(:posted_work, restricted: true, title: "Restricted Work")
 
   # Create a work hidden by an admin
   FactoryGirl.create(:posted_work,
                      hidden_by_admin: true,
-                     title: "Work Hidden by Admin",
-                     authors: User.current_user&.pseuds)
+                     title: "Work Hidden by Admin")
 
   step %{all indexing jobs have been run}
 end

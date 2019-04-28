@@ -412,8 +412,8 @@ describe ChaptersController do
       end
 
       it "renders new if chapter has ambiguous pseuds" do
-        pseud1 = create(:pseud, name: "ambiguous")
-        pseud2 = create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
         @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
         post :create, params: { work_id: work.id, chapter: @chapter_attributes }
         expect(response).to render_template(:new)
@@ -577,8 +577,8 @@ describe ChaptersController do
       end
 
       it "renders edit if chapter has ambiguous pseuds" do
-        pseud1 = create(:pseud, name: "ambiguous")
-        pseud2 = create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
+        create(:pseud, name: "ambiguous")
         @chapter_attributes[:author_attributes] = { byline: "ambiguous" }
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
         expect(response).to render_template(:edit)

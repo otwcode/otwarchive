@@ -33,7 +33,7 @@ class Chapter < ApplicationRecord
 
   attr_accessor :wip_length_placeholder
 
-  before_validation :inherit_creatorships, on: :create
+  before_validation :inherit_creatorships
   def inherit_creatorships
     if work && creatorships.empty? && current_user_pseuds.blank?
       work.pseuds_after_saving.each do |pseud|

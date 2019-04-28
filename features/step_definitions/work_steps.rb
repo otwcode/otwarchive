@@ -555,6 +555,8 @@ When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
 end
 
 When /^the user "([^"]*)" accepts the creator invite for the work "([^"]*)"/ do |user, work|
+  # Make sure that we don't have caching issues:
+  step %{I wait 1 second}
   u = User.find_by(login: user)
   w = Work.find_by(title: work)
   w.creatorships.invited.for_user(u).each(&:accept!)

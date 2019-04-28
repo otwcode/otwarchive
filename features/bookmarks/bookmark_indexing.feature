@@ -60,10 +60,10 @@ Feature: Bookmark Indexing
   Scenario: Synning a canonical tag used on bookmarked series and external works
   should move the bookmarks to the new canonical's bookmark listings; de-synning
   should remove them
-    Given I am logged in as a tag wrangler
-      And a canonical fandom "Veronica Mars"
+    Given a canonical fandom "Veronica Mars"
       And a canonical fandom "Veronica Mars (TV)"
       And bookmarks of external works and series tagged with the fandom tag "Veronica Mars"
+      And I am logged in as a tag wrangler
     When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
     Then I should see "BookmarkedExternalWork"
@@ -84,10 +84,10 @@ Feature: Bookmark Indexing
   Scenario: Subtagging a tag used on bookmarked series and external works should
   make the bookmarks appear in the metatag's bookmark listings; de-subbing
   should remove them
-    Given  I am logged in as a tag wrangler
-      And a canonical character "Laura"
+    Given a canonical character "Laura"
       And a canonical character "Laura Roslin"
       And bookmarks of external works and series tagged with the character tag "Laura Roslin"
+      And I am logged in as a tag wrangler
       And I subtag the tag "Laura Roslin" to "Laura"
       And I go to the bookmarks tagged "Laura"
     Then I should see "BookmarkedExternalWork"
@@ -126,8 +126,7 @@ Feature: Bookmark Indexing
 
   Scenario: Adding a chapter to a work in a series should update the series, as
   should deleting a chapter from a work in a series
-    Given I am logged in as "creator"
-      And I have bookmarks of old series to search
+    Given I have bookmarks of old series to search
     When a chapter is added to "WIP in a Series"
       And I go to the search bookmarks page
       And I select "Series" from "Type"
@@ -145,11 +144,11 @@ Feature: Bookmark Indexing
 
   Scenario: When a wrangler edits a tag's merger using the "Synonym of" field,
   the tag's bookmarks should be transfered to the new merger's bookmark listings
-    Given I am logged in as a tag wrangler
-      And a canonical character "Ellie Ewing"
+    Given a canonical character "Ellie Ewing"
       And a canonical character "Ellie Farlow"
       And a synonym "Miss Ellie" of the tag "Ellie Ewing"
       And bookmarks of all types tagged with the character tag "Miss Ellie"
+      And I am logged in as a tag wrangler
     When I go to the bookmarks tagged "Ellie Ewing"
     Then I should see "BookmarkedWork"
       And I should see "BookmarkedSeries"

@@ -217,8 +217,8 @@ describe WorksController do
     end
 
     it "renders new if the work has ambiguous pseuds" do
-      pseud1 = create(:pseud, name: "ambiguous")
-      pseud2 = create(:pseud, name: "ambiguous")
+      create(:pseud, name: "ambiguous")
+      create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work)
       work_attributes[:author_attributes] = { ids: @user.pseud_ids,
                                               byline: "ambiguous" }

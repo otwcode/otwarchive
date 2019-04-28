@@ -382,7 +382,7 @@ class Work < ApplicationRecord
   end
 
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
 
     transaction do
@@ -398,24 +398,6 @@ class Work < ApplicationRecord
 
       creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
-  end
-
-  def add_creator(creator_to_add, new_pseud = nil)
-    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
-
-    transaction do
-      chapters.each do |chapter|
-        chapter.creatorships.find_or_create_by(pseud: new_pseud)
-      end
-      creatorships.find_or_create_by(pseud: new_pseud)
-    end
-  end
-
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud = nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    add_creator(new_user, new_pseud)
-    remove_author(old_user) if old_user && users.include?(old_user)
   end
 
   def set_challenge_info

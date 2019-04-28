@@ -135,18 +135,18 @@ describe WorksController do
     end
 
     context 'adding and removing coauthors' do
-      let(:coauthor_to_remove_pseud) {
-        pseud = FactoryGirl.create(:pseud)
-        pseud.user.preference.allow_cocreator = true
-        pseud.user.preference.save
-        pseud
-      }
-      let(:coauthor_to_add_pseud) {
-        pseud = FactoryGirl.create(:pseud)
-        pseud.user.preference.allow_cocreator = true
-        pseud.user.preference.save
-        pseud
-      }
+      let(:coauthor_to_remove_pseud) do
+        user = FactoryGirl.create(:user)
+        user.preference.update(allow_cocreator: true)
+        user.default_pseud
+      end
+
+      let(:coauthor_to_add_pseud) do
+        user = FactoryGirl.create(:user)
+        user.preference.update(allow_cocreator: true)
+        user.default_pseud
+      end
+
       let(:work_params) {
         {
           work: {
@@ -157,19 +157,21 @@ describe WorksController do
       }
 
       before do
-        multiple_work2.update_attribute(:authors, [multiple_works_user.default_pseud, coauthor_to_remove_pseud])
+        multiple_work2.creatorships.create(pseud: coauthor_to_remove_pseud,
+                                           approved: true)
         put :update_multiple, params: params
       end
 
       it "removes coauthors when pseuds_to_remove param exists" do
         assigns(:works).each do |work|
-          expect(work.pseuds).not_to include(coauthor_to_remove_pseud)
+          expect(work.pseuds.reload).not_to include(coauthor_to_remove_pseud)
         end
       end
 
-      it "adds coauthors when pseuds_to_add param exists" do
+      it "invites coauthors when pseuds_to_add param exists" do
         assigns(:works).each do |work|
-          expect(work.pseuds).to include(coauthor_to_add_pseud)
+          expect(work.pseuds.reload).not_to include(coauthor_to_add_pseud)
+          expect(work.creatorships.invited.map(&:pseud)).to include(coauthor_to_add_pseud)
         end
       end
     end

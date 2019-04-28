@@ -371,7 +371,7 @@ class Pseud < ApplicationRecord
     creation.creatorships.where(pseud: self).destroy_all
 
     if creation.is_a?(Work)
-      for series in creation.series
+      creation.series.each do |series|
         if series.work_pseuds.where(id: id).exists?
           series.creatorships.find_or_create_by(pseud: pseud)
         else

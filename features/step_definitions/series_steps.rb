@@ -24,7 +24,7 @@ When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?
     step "I set up the draft \"#{work_title}\""
   end
   if pseud
-    select(pseud, from: "work_author_attributes_ids_")
+    select(pseud, from: "work_author_attributes_ids")
   end
   step %{I add the series "#{series_title}"}
   click_button("Post Without Preview")

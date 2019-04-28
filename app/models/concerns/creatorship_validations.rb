@@ -27,6 +27,7 @@ module CreatorshipValidations
     attr_reader :current_user_pseuds
 
     validate :check_no_creators
+    validate :check_current_user_pseuds
     after_save :update_current_user_pseuds
     after_destroy :destroy_creatorships
   end
@@ -48,6 +49,22 @@ module CreatorshipValidations
 
     errors.add(:base, ts("%{type} must have at least one creator.",
                          type: model_name.human))
+  end
+
+  # Make sure that if @current_user_pseuds is not nil, then the user has
+  # selected at least one pseud, and that all of the pseuds they've selected
+  # are their own.
+  def check_current_user_pseuds
+    return unless @current_user_pseuds && User.current_user.is_a?(User)
+
+    if @current_user_pseuds.empty?
+      errors.add(:base, ts("You haven't selected any pseuds for this %{type}.",
+                           type: model_name.human.downcase))
+    end
+
+    if @current_user_pseuds.any? { |p| p.user_id != User.current_user.id }
+      errors.add(:base, ts("You're not allowed to use that pseud."))
+    end
   end
 
   # The variable @current_user_pseuds stores which pseuds the current editor
@@ -101,17 +118,7 @@ module CreatorshipValidations
   # after saving.
   def current_user_pseud_ids=(ids)
     return unless User.current_user.is_a?(User)
-
-    pseuds = Pseud.where(id: ids).to_a
-
-    if pseuds.empty?
-      errors.add(:base, ts("You haven't selected any pseuds for this %{type}.",
-                           type: model_name.human.downcase))
-    elsif pseuds.any? { |p| p.user_id != User.current_user.id }
-      errors.add(:base, ts("You're not allowed to use that pseud."))
-    else
-      @current_user_pseuds = pseuds
-    end
+    @current_user_pseuds = Pseud.where(id: ids).to_a
   end
 
   ########################################

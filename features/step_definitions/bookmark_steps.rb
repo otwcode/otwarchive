@@ -209,12 +209,15 @@ Given /^I have bookmarks of various completion statuses to search$/ do
 end
 
 Given /^I have bookmarks of old series to search$/ do
-  newer_series = nil
+  step %{basic tags}
+  step %{the user "creator" exists and is activated}
+  creator = User.find_by(login: "creator").default_pseud
 
   Timecop.freeze(30.days.ago) do
-    step %{I post the work "WIP in a Series" as part of a series "Older WIP Series"}
+    older_work = FactoryGirl.create(:posted_work, title: "WIP in a Series", authors: [creator])
+    older_series = FactoryGirl.create(:series, title: "Older WIP Series", works: [older_work])
     FactoryGirl.create(:bookmark,
-                       bookmarkable_id: Series.find_by(title: "Older WIP Series").id,
+                       bookmarkable_id: older_series.id,
                        bookmarkable_type: "Series")
   end
 
@@ -231,15 +234,15 @@ Given /^bookmarks of all types tagged with the (character|relationship|fandom) t
   work = if tag_type == "character"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              character_string: tag, authors: User.current_user&.pseuds)
+                              character_string: tag)
          elsif tag_type == "relationship"
            FactoryGirl.create(:posted_work,
                               title: "BoomarkedWork",
-                              relationship_string: tag, authors: User.current_user&.pseuds)
+                              relationship_string: tag)
          elsif tag_type == "fandom"
            FactoryGirl.create(:posted_work,
                               title: "BookmarkedWork",
-                              fandom_string: tag, authors: User.current_user&.pseuds)
+                              fandom_string: tag)
          end
 
   FactoryGirl.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
@@ -251,11 +254,11 @@ end
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   # Series get their tags from works, so we have to create the work first
   work = if tag_type == "character"
-           FactoryGirl.create(:posted_work, character_string: tag, authors: User.current_user&.pseuds)
+           FactoryGirl.create(:posted_work, character_string: tag)
          elsif tag_type == "relationship"
-           FactoryGirl.create(:posted_work, relationship_string: tag, authors: User.current_user&.pseuds)
+           FactoryGirl.create(:posted_work, relationship_string: tag)
          elsif tag_type == "fandom"
-           FactoryGirl.create(:posted_work, fandom_string: tag, authors: User.current_user&.pseuds)
+           FactoryGirl.create(:posted_work, fandom_string: tag)
          end
 
   # We're going to need to use the series ID, so make the series

@@ -309,17 +309,7 @@ class UsersController < ApplicationController
       # Removes user as an author from co-authored works
 
       @coauthored_works.each do |w|
-        pseuds_with_author_removed = w.pseuds - @user.pseuds
-        w.pseuds = pseuds_with_author_removed
-
-        w.save && w.touch # force cache_key to bust
-
-        w.chapters.each do |c|
-          c.pseuds = c.pseuds - @user.pseuds
-
-          c.pseuds = w.pseuds if c.pseuds.empty?
-          c.save
-        end
+        w.remove_author(@user)
       end
     end
 

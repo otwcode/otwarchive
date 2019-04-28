@@ -189,7 +189,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
   work = FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
-  work.creatorships.each(&:accept!)
+  work.creatorships.invited.each(&:accept!)
 end
 
 # WHEN

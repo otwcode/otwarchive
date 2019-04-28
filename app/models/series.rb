@@ -51,7 +51,7 @@ class Series < ApplicationRecord
   }
 
   scope :for_pseuds, lambda {|pseuds|
-    joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
+    joins(:approved_creatorships).
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
 
@@ -153,7 +153,7 @@ class Series < ApplicationRecord
 
   # Remove a user as an author of this series
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
     transaction do
       creatorships.where(pseud: author_to_remove.pseuds).destroy_all
