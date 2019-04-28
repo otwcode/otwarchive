@@ -249,31 +249,37 @@ class Pseud < ApplicationRecord
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
   def self.parse_bylines(list, options = {})
-    banned_pseuds = []
     valid_pseuds = []
     ambiguous_pseuds = {}
     failures = []
+    banned_pseuds = []
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
+      remove_pseuds = false
+      if pseuds.empty?
+        failures << byline.strip
+        next
+      end
+      if pseuds.size > 1
+        ambiguous_pseuds[pseuds.first.name] = pseuds
+        remove_pseuds = options[:remove_ambiguous]
+      end
       banned = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
       if banned.present?
         pseuds = pseuds - banned
-        banned_pseuds += banned.map(&:byline)
+        banned_pseuds << banned
       end
-      if pseuds.length == 1
-        valid_pseuds << pseuds.first
-      elsif pseuds.length > 1
-        ambiguous_pseuds[pseuds.first.name] = pseuds
-      else
-        failures << byline.strip
+      if remove_pseuds
+        pseuds = []
       end
+      valid_pseuds << pseuds
     end
     {
-      pseuds: valid_pseuds,
+      pseuds: valid_pseuds.flatten.uniq,
       ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
-      banned_pseuds: banned_pseuds
+      banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline)
     }
   end
 
