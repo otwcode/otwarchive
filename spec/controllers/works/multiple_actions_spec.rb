@@ -158,7 +158,7 @@ describe WorksController do
 
       before do
         multiple_work2.creatorships.create(pseud: coauthor_to_remove_pseud,
-                                           approved: true)
+                                           approval_status: Creatorship::APPROVED)
         put :update_multiple, params: params
       end
 
@@ -171,7 +171,7 @@ describe WorksController do
       it "invites coauthors when pseuds_to_add param exists" do
         assigns(:works).each do |work|
           expect(work.pseuds.reload).not_to include(coauthor_to_add_pseud)
-          expect(work.creatorships.invited.map(&:pseud)).to include(coauthor_to_add_pseud)
+          expect(work.creatorships.pending.map(&:pseud)).to include(coauthor_to_add_pseud)
         end
       end
     end
