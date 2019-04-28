@@ -64,28 +64,28 @@ class SeriesController < ApplicationController
   end
 
   # GET /series/1/edit
- def edit
-   if params["remove"] == "me"
-     pseuds_with_author_removed = @series.pseuds - current_user.pseuds
-     if pseuds_with_author_removed.empty?
-       redirect_to controller: 'orphans', action: 'new', series_id: @series.id
-     else
-       begin
-         @series.remove_author(current_user)
-         flash[:notice] = ts("You have been removed as an author from the series and its works.")
-         redirect_to @series
-       rescue Exception => error
-         flash[:error] = error.message
-         redirect_to @series
-       end
-     end
-   end
- end
+  def edit
+    if params["remove"] == "me"
+      pseuds_with_author_removed = @series.pseuds - current_user.pseuds
+      if pseuds_with_author_removed.empty?
+        redirect_to controller: 'orphans', action: 'new', series_id: @series.id
+      else
+        begin
+          @series.remove_author(current_user)
+          flash[:notice] = ts("You have been removed as an author from the series and its works.")
+          redirect_to @series
+        rescue Exception => error
+          flash[:error] = error.message
+          redirect_to @series
+        end
+      end
+    end
+  end
 
   # GET /series/1/manage
- def manage
-   @serial_works = @series.serial_works.includes(:work).order(:position)
- end
+  def manage
+    @serial_works = @series.serial_works.includes(:work).order(:position)
+  end
 
   # POST /series
   # POST /series.xml
@@ -101,16 +101,16 @@ class SeriesController < ApplicationController
 
   # PUT /series/1
   # PUT /series/1.xml
- def update
-   @series.attributes = series_params
-   if @series.errors.empty? && @series.save
-     # The duplicated if here does not work if you try and place it above.
-     flash[:notice] = ts('Series was successfully updated.')
-     redirect_to(@series)
-   else
-     render action: "edit"
-   end
- end
+  def update
+    @series.attributes = series_params
+    if @series.errors.empty? && @series.save
+      # The duplicated if here does not work if you try and place it above.
+      flash[:notice] = ts('Series was successfully updated.')
+      redirect_to(@series)
+    else
+      render action: "edit"
+    end
+  end
 
   def update_positions
     if params[:serial_works]

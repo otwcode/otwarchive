@@ -88,7 +88,7 @@ Feature: Bookmark Indexing
       And a canonical character "Laura Roslin"
       And bookmarks of external works and series tagged with the character tag "Laura Roslin"
       And I am logged in as a tag wrangler
-      And I subtag the tag "Laura Roslin" to "Laura"
+    When I subtag the tag "Laura Roslin" to "Laura"
       And I go to the bookmarks tagged "Laura"
     Then I should see "BookmarkedExternalWork"
       And I should see "BookmarkedSeries"

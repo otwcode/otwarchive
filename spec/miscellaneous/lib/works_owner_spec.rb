@@ -81,6 +81,8 @@ describe WorksOwner do
       end
 
       it "should change after a work is orphaned" do
+        # Ensure that the orphan account exists:
+        build(:user, login: "orphan_account").save
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
         Creatorship.orphan([author], [@work])
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)

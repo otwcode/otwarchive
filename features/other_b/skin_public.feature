@@ -111,12 +111,12 @@ Feature: Public skins
 
   Scenario: A user can preview a cached public site skin, and it will take the 
   user to the works page for a canonical tag with between 10 and 20 works
-  Given the approved public skin "Usable Skin"
-    And the skin "Usable Skin" is cached
-    And I am logged in as "skinner"
-    And the canonical fandom "Dallas" with 2 works
+  Given the canonical fandom "Dallas" with 2 works
     And the canonical fandom "Major Crimes" with 11 works
     And the canonical fandom "Rizzoli and Isles" with 21 works
+    And the approved public skin "Usable Skin"
+    And the skin "Usable Skin" is cached
+    And I am logged in as "skinner"
   When I go to the public skins page
     And I follow "Preview"
   Then I should be on the works tagged "Major Crimes"
