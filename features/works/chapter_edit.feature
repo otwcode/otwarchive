@@ -526,7 +526,7 @@ Feature: Edit chapters
     When I am logged in as "brenda"
       And I follow "Rusty Has Two Moms" in the email
     Then I should not see "Edit"
-    When I follow "Accept Co-Creator Invite"
+    When I follow "Accept Co-Creator Invitation"
     Then I should see "brenda, rusty"
       And I should see "Edit"
 

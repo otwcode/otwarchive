@@ -189,7 +189,7 @@ Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, logi
   author2 = User.find_by(login: coauthor).default_pseud
   author2.user.preference.update(allow_cocreator: true)
   work = FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
-  work.creatorships.invited.each(&:accept!)
+  work.creatorships.unapproved.each(&:accept!)
 end
 
 # WHEN
@@ -252,7 +252,7 @@ When /^the user "(.*?)" accepts all (?:co-)?creator (?:invitations|invites)$/ do
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
   user = User.find_by(login: login)
-  user.creatorships.invited.each(&:accept!)
+  user.creatorships.unapproved.each(&:accept!)
 end
 
 # THEN

@@ -8,7 +8,7 @@
   <% @bookmark ||= bookmark_if_exists(@series) %>
   <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
   <% if @series.user_has_creator_invite?(current_user) %>
-    <li><%= link_to ts("Accept Co-Creator Invite"), accept_series_creatorships_path(@series), method: :put %></li>
+    <li><%= link_to ts("Accept Co-Creator Invitation"), accept_series_creatorships_path(@series), method: :put %></li>
   <% end %>
   <% if is_author_of?(@series) %>
     <li><%= span_if_current ts("Edit Series"), edit_series_path(@series) %></li>

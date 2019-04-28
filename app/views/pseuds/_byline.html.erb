@@ -9,8 +9,8 @@
 
   selected = valid_creatorships.map(&:pseud)
 
-  invited = valid_creatorships.reject(&:approved).map(&:pseud) - editor_pseuds
-  approved = valid_creatorships.select(&:approved).map(&:pseud) - editor_pseuds
+  invited = valid_creatorships.reject(&:approved?).map(&:pseud) - editor_pseuds
+  approved = valid_creatorships.select(&:approved?).map(&:pseud) - editor_pseuds
   saved = valid_creatorships.reject(&:new_record?).map(&:pseud)
 
   if object.is_a?(Chapter)

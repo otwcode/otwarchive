@@ -559,7 +559,7 @@ When /^the user "([^"]*)" accepts the creator invite for the work "([^"]*)"/ do 
   step %{I wait 1 second}
   u = User.find_by(login: user)
   w = Work.find_by(title: work)
-  w.creatorships.invited.for_user(u).each(&:accept!)
+  w.creatorships.unapproved.for_user(u).each(&:accept!)
 end
 
 When(/^I try to invite the co-authors? "([^"]*)"$/) do |coauthor|

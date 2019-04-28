@@ -1,7 +1,7 @@
 <h3 class="landmark heading"><%= ts("Chapter Management") %></h3>
 <ul class="chapter actions" role="menu">
   <% if chapter.user_has_creator_invite?(current_user) %>
-    <li><%= link_to ts("Accept Co-Creator Invite"), accept_chapter_creatorships_path(chapter), method: :put %></li>
+    <li><%= link_to ts("Accept Co-Creator Invitation"), accept_chapter_creatorships_path(chapter), method: :put %></li>
   <% end %>
   <% if current_user.is_author_of?(work) %>
     <% unless chapter.posted? %>

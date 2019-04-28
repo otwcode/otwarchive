@@ -6,7 +6,7 @@
   <% end %>
 
   <% if @work.user_has_creator_invite?(current_user) %>
-    <li class="accept"><%= link_to ts("Accept Co-Creator Invite"), accept_work_creatorships_path(@work), method: :put %></li>
+    <li class="accept"><%= link_to ts("Accept Co-Creator Invitation"), accept_work_creatorships_path(@work), method: :put %></li>
   <% end %>
 
   <% if is_author_of?(@work) %>

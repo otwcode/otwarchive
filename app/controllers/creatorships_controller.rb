@@ -14,6 +14,12 @@ class CreatorshipsController < ApplicationController
   # form where the user can select multiple creatorships and perform actions
   # (accept, remove) in bulk.
   def show
+    if params[:show] == "rejected"
+      @creatorships = @creatorships.rejected
+    else
+      @creatorships = @creatorships.pending
+    end
+
     @creatorships = @creatorships.order(id: :desc).paginate(page: params[:page])
   end
 
@@ -23,6 +29,8 @@ class CreatorshipsController < ApplicationController
 
     if params[:accept]
       accept_update
+    elsif params[:reject]
+      reject_update
     else
       delete_update
     end
@@ -32,7 +40,7 @@ class CreatorshipsController < ApplicationController
 
   # Accept all creatorships associated with a particular item.
   def accept
-    @creatorships = @item.creatorships.invited.for_user(current_user)
+    @creatorships = @item.creatorships.unapproved.for_user(current_user)
 
     unless @creatorships.exists?
       flash[:error] = ts("You don't have any creator invitations for this %{type}.",
@@ -63,6 +71,16 @@ class CreatorshipsController < ApplicationController
     end
   end
 
+  # When the user presses "Reject" on the creator invitation listing, this is
+  # the code that runs.
+  def reject_update
+    @creatorships.each do |creatorship|
+      creatorship.update(approval_status: Creatorship::REJECTED)
+    end
+
+    flash[:notice] = ts("Invitations marked as rejected.")
+  end
+
   # When the user presses "Delete" on the creator invitation listing, this is
   # the code that runs.
   def delete_update
@@ -85,7 +103,7 @@ class CreatorshipsController < ApplicationController
   def load_user
     @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
-    @creatorships = Creatorship.invited.for_user(@user)
+    @creatorships = Creatorship.unapproved.for_user(@user)
   end
 
   # Load the desired item.

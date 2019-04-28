@@ -138,7 +138,7 @@ Feature: Edit Works
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"
-    When I follow "Accept Co-Creator Invite"
+    When I follow "Accept Co-Creator Invitation"
     Then I should see "coauthor, leadauthor" within ".byline"
       And I should see "Edit"
 

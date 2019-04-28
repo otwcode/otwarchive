@@ -7,17 +7,27 @@ describe CreatorshipsController do
   include RedirectExpectationHelper
 
   let(:user) { create(:user) }
-  let(:work) { create(:work) }
+  let(:pending_work) { create(:work) }
+  let(:rejected_work) { create(:work) }
   let(:other_user) { create(:user) }
 
-  let(:invitation) do
-    Creatorship.new(pseud: user.default_pseud, creation: work)
+  let(:pending) do
+    Creatorship.new(pseud: user.default_pseud, creation: pending_work,
+                    approval_status: Creatorship::PENDING)
+  end
+
+  let(:rejected) do
+    Creatorship.new(pseud: user.default_pseud, creation: rejected_work,
+                    approval_status: Creatorship::REJECTED)
   end
 
   before do
-    # Make sure that the invitation is saved with approval set to false.
-    invitation.save(validate: false)
-    expect(invitation.reload.approved).to be_falsy
+    # Make sure that both invitations are saved without altering the approval
+    # status:
+    pending.save(validate: false)
+    expect(pending.reload.approval_status).to eq(Creatorship::PENDING)
+    rejected.save(validate: false)
+    expect(rejected.reload.approval_status).to eq(Creatorship::REJECTED)
   end
 
   describe "#show" do
@@ -44,7 +54,14 @@ describe CreatorshipsController do
       it "displays invitations" do
         fake_login_admin(create(:admin))
         get :show, params: params
-        expect(assigns[:creatorships]).to contain_exactly(invitation)
+        expect(assigns[:creatorships]).to contain_exactly(pending)
+        expect(response).to render_template :show
+      end
+
+      it "displays rejected invitations" do
+        fake_login_admin(create(:admin))
+        get :show, params: params.merge(show: "rejected")
+        expect(assigns[:creatorships]).to contain_exactly(rejected)
         expect(response).to render_template :show
       end
     end
@@ -53,24 +70,27 @@ describe CreatorshipsController do
       it "displays invitations" do
         fake_login_known_user(user)
         get :show, params: params
-        expect(assigns[:creatorships]).to contain_exactly(invitation)
+        expect(assigns[:creatorships]).to contain_exactly(pending)
+        expect(response).to render_template :show
+      end
+
+      it "displays rejected invitations" do
+        fake_login_known_user(user)
+        get :show, params: params.merge(show: "rejected")
+        expect(assigns[:creatorships]).to contain_exactly(rejected)
         expect(response).to render_template :show
       end
     end
   end
 
   describe "#update" do
-    let(:accept_params) do
-      { user_id: user.login, selected: [invitation.id], accept: "Accept" }
-    end
-
-    let(:delete_params) do
-      { user_id: user.login, selected: [invitation.id], delete: "Delete" }
+    let(:params) do
+      { user_id: user.login, selected: [pending.id] }
     end
 
     context "when logged out" do
       it "redirects with an error message" do
-        put :update, params: accept_params
+        put :update, params: params
         it_redirects_to_with_error(user, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -78,7 +98,7 @@ describe CreatorshipsController do
     context "when logged in as another user" do
       it "redirects with an error message" do
         fake_login_known_user(other_user)
-        put :update, params: accept_params
+        put :update, params: params
         it_redirects_to_with_error(user, "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
@@ -86,7 +106,7 @@ describe CreatorshipsController do
     context "when logged in as an admin" do
       it "redirects with an error message" do
         fake_login_admin(create(:admin))
-        put :update, params: accept_params
+        put :update, params: params
         it_redirects_to_with_error(user, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -94,17 +114,26 @@ describe CreatorshipsController do
     context "when logged in as the user" do
       it "accepts invitations after pressing 'Accept'" do
         fake_login_known_user(user)
-        put :update, params: accept_params
-        expect(assigns[:creatorships]).to contain_exactly(invitation)
-        expect(invitation.reload.approved).to be_truthy
-        expect(work.pseuds.reload).to include(user.default_pseud)
+        put :update, params: params.merge(accept: "Accept")
+        expect(assigns[:creatorships]).to contain_exactly(pending)
+        expect(pending.reload.approval_status).to eq(Creatorship::APPROVED)
+        expect(pending_work.pseuds.reload).to include(user.default_pseud)
+      end
+
+      it "rejects invitations after pressing 'Reject'" do
+        fake_login_known_user(user)
+        put :update, params: params.merge(reject: "Reject")
+        expect(assigns[:creatorships]).to contain_exactly(pending)
+        expect(pending.reload.approval_status).to eq(Creatorship::REJECTED)
+        expect(pending_work.pseuds.reload).not_to include(user.default_pseud)
       end
 
       it "deletes invitations after pressing 'Delete'" do
         fake_login_known_user(user)
-        put :update, params: delete_params
-        expect(assigns[:creatorships]).to contain_exactly(invitation)
-        expect { invitation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        put :update, params: params.merge(delete: "Delete")
+        expect(assigns[:creatorships]).to contain_exactly(pending)
+        expect { pending.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(pending_work.pseuds.reload).not_to include(user.default_pseud)
       end
     end
   end
@@ -112,7 +141,7 @@ describe CreatorshipsController do
   describe "#accept" do
     context "when logged out" do
       it "redirects with an error message" do
-        put :accept, params: { work_id: work.id }
+        put :accept, params: { work_id: pending_work.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -120,7 +149,7 @@ describe CreatorshipsController do
     context "when logged in as an admin" do
       it "redirects with an error message" do
         fake_login_admin(create(:admin))
-        put :accept, params: { work_id: work.id }
+        put :accept, params: { work_id: pending_work.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
@@ -131,7 +160,7 @@ describe CreatorshipsController do
 
         # Override the default definition of invitation so that we have a
         # different type of creation.
-        let(:invitation) { Creatorship.new(pseud: user.default_pseud, creation: item) }
+        let(:pending) { Creatorship.new(pseud: user.default_pseud, creation: item) }
 
         let(:params) do
           { "#{type}_id": item.id }
@@ -141,7 +170,7 @@ describe CreatorshipsController do
           it "accepts the invitation and redirects to the item" do
             fake_login_known_user(user)
             put :accept, params: params
-            expect(invitation.reload.approved).to be_truthy
+            expect(pending.reload.approved?).to be_truthy
             expect(item.pseuds.reload).to include(user.default_pseud)
             it_redirects_to_with_notice(item, "You have accepted the invitation to become a co-creator.")
           end
@@ -151,7 +180,7 @@ describe CreatorshipsController do
           it "redirects with an error and doesn't accept the invitation" do
             fake_login_known_user(other_user)
             put :accept, params: params
-            expect(invitation.reload.approved).to be_falsy
+            expect(pending.reload.approved?).to be_falsy
             expect(item.pseuds.reload).not_to include(user.default_pseud)
             it_redirects_to_with_error(item, "You don't have any creator invitations for this #{type}.")
           end

@@ -10,7 +10,7 @@ module CreatorshipValidations
       inverse_of: :creation
 
     has_many :approved_creatorships,
-      -> { where(approved: true) },
+      -> { Creatorship.approved },
       class_name: "Creatorship",
       as: :creation,
       inverse_of: :creation
@@ -168,7 +168,7 @@ module CreatorshipValidations
   # Calculate what the pseuds on this work will be after saving, taking into
   # account validity, approval, and @current_user_pseuds.
   def pseuds_after_saving
-    pseuds = creatorships_after_saving.select(&:approved).map(&:pseud)
+    pseuds = creatorships_after_saving.select(&:approved?).map(&:pseud)
 
     if @current_user_pseuds
       pseuds = (pseuds - User.current_user.pseuds) + @current_user_pseuds
@@ -180,6 +180,6 @@ module CreatorshipValidations
   # Check whether the passed-in user has been invited to become a creator.
   def user_has_creator_invite?(user)
     return false unless user.is_a?(User)
-    creatorships.invited.for_user(user).exists?
+    creatorships.unapproved.for_user(user).exists?
   end
 end

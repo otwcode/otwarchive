@@ -2,8 +2,15 @@ class Creatorship < ApplicationRecord
   belongs_to :pseud, inverse_of: :creatorships
   belongs_to :creation, inverse_of: :creatorships, polymorphic: true, touch: true
 
-  scope :approved, -> { where(approved: true) }
-  scope :invited, -> { where(approved: false) }
+  APPROVED = 1
+  PENDING = 0
+  REJECTED = -1
+
+  scope :approved, -> { where(approval_status: APPROVED) }
+  scope :unapproved, -> { where.not(approval_status: APPROVED) }
+  scope :pending, -> { where(approval_status: PENDING) }
+  scope :rejected, -> { where(approval_status: REJECTED) }
+
   scope :for_user, ->(user) { joins(:pseud).merge(user.pseuds) }
 
   ########################################
@@ -15,29 +22,18 @@ class Creatorship < ApplicationRecord
   validates_presence_of :creation
   validates_uniqueness_of :pseud, scope: [:creation_type, :creation_id], on: :create
 
+  validates_inclusion_of :approval_status, in: [APPROVED, PENDING, REJECTED]
+
   validate :check_invalid, on: :create
   validate :check_disallowed, on: :create
   validate :check_banned, on: :create
   validate :check_approved_becoming_false
 
-  # Calculate whether this creatorship should count as approved, or whether
-  # it's just a creatorship invitation.
+  # Update approval status if this creatorship should be automatically approved.
   def update_approved
-    # Approve if the current user has special permissions:
-    self.approved ||= (User.current_user.nil? ||
-                       pseud&.user == User.current_user ||
-                       pseud&.user == User.orphan_account ||
-                       User.current_user.try(:is_archivist?))
-
-    # Approve if the creation is a chapter and the pseud is already listed on
-    # the work:
-    self.approved ||= (creation.is_a?(Chapter) &&
-                       creation.work.pseuds.include?(pseud))
-
-    # Approve if the creation is a series and the pseud is already listed on
-    # one of the works:
-    self.approved ||= (creation.is_a?(Series) &&
-                       creation.work_pseuds.include?(pseud))
+    if approval_status == PENDING && should_automatically_approve?
+      self.approval_status = APPROVED
+    end
   end
 
   # Make sure that the pseud exists, and isn't ambiguous.
@@ -56,7 +52,7 @@ class Creatorship < ApplicationRecord
   # Make sure that if this is an invitation, we're not inviting someone who has
   # disabled invitations.
   def check_disallowed
-    return if approved || pseud.nil?
+    return if approved? || pseud.nil?
     return if pseud&.user&.preference&.allow_cocreator
 
     errors.add(:base, ts("%{name} does not allow others to add them as a co-creator.",
@@ -75,8 +71,8 @@ class Creatorship < ApplicationRecord
   # potentially violate some rules about co-creators. (e.g. Having a user
   # listed as a chapter co-creator, but not a work co-creator.)
   def check_approved_becoming_false
-    if approved_changed?(from: true, to: false)
-      errors.add(:approved, "cannot become false.")
+    if approval_status_changed? && approval_status_was == APPROVED
+      errors.add(:base, "Once approved, a creatorship cannot become unapproved.")
     end
   end
 
@@ -85,7 +81,7 @@ class Creatorship < ApplicationRecord
   ########################################
 
   after_create :add_to_parents
-  after_update :add_to_parents, if: :saved_change_to_approved?
+  after_update :add_to_parents, if: :saved_change_to_approval_status?
 
   before_destroy :expire_caches
   before_destroy :check_not_last
@@ -100,7 +96,7 @@ class Creatorship < ApplicationRecord
   # pseud is listed as a chapter co-creator, they should also be listed on the
   # work.
   def add_to_parents
-    return unless approved
+    return unless approved?
 
     parents = if creation.is_a?(Work)
                 creation.series.to_a
@@ -152,7 +148,7 @@ class Creatorship < ApplicationRecord
     return if (User.current_user == pseud.user ||
                User.orphan_account == pseud.user)
 
-    if approved
+    if approved?
       UserMailer.creatorship_notification(id).deliver
     else
       UserMailer.creatorship_invitation(id).deliver
@@ -219,13 +215,18 @@ class Creatorship < ApplicationRecord
     pseud.nil? && @ambiguous_pseuds.present?
   end
 
+  # Check whether the creatorship is approved.
+  def approved?
+    approval_status == APPROVED
+  end
+
   # Find or initialize a creatorship matching the options, and then set
   # approved to true and save the results. This is a way of adding a new
   # approved creatorship without potentially running into issues with a
   # pre-existing unapproved creatorship.
   def self.approve_or_create_by(options)
     creatorship = find_or_initialize_by(options)
-    creatorship.approved = true
+    creatorship.approval_status = APPROVED
     creatorship.save
   end
 
@@ -241,12 +242,28 @@ class Creatorship < ApplicationRecord
     end
   end
 
+  # Calculate whether this creatorship should count as approved, or whether
+  # it's just a creatorship invitation.
+  def should_automatically_approve?
+    # Approve if the current user has special permissions:
+    return true if (User.current_user.nil? ||
+                    pseud&.user == User.current_user ||
+                    pseud&.user == User.orphan_account ||
+                    User.current_user.try(:is_archivist?))
+
+    # Approve if the creation is a chapter and the pseud is already listed on
+    # the work, or if the creation is a series and the pseud is already listed
+    # on one of the works::
+    (creation.is_a?(Chapter) && creation.work.pseuds.include?(pseud)) ||
+      (creation.is_a?(Series) && creation.work_pseuds.include?(pseud))
+  end
+
   # Accept the creatorship invitation. This consists of setting approved to
   # true, and, if the creation is a work, adding the pseud to all of its
   # chapters as well.
   def accept!
     transaction do
-      update(approved: true)
+      update(approval_status: APPROVED)
 
       if creation.is_a?(Work)
         creation.chapters.each do |chapter|

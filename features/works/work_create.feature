@@ -381,7 +381,7 @@ Feature: Create Works
     When I am logged in as "barbaz"
       And I view the work "Chaptered Work"
     Then I should not see "Edit"
-    When I follow "Accept Co-Creator Invite"
+    When I follow "Accept Co-Creator Invitation"
     Then I should see "Edit"
       And I should see "barbaz, foobar"
       And I should not see "Chapter by"

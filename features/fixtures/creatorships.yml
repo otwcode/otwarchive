@@ -2,34 +2,34 @@ work1:
   pseud_id: 1
   creation_id: 1
   creation_type: Work
-  approved: true
+  approval_status: 1
 chapter1:
   pseud_id: 1
   creation_id: 1
   creation_type: Chapter
-  approved: true
+  approval_status: 1
 work2:
   pseud_id: 1
   creation_id: 2
   creation_type: Work
-  approved: true
+  approval_status: 1
 work3:
   pseud_id: 1
   creation_id: 3
   creation_type: Work
-  approved: true
+  approval_status: 1
 work4:
   pseud_id: 6
   creation_id: 4
   creation_type: Work
-  approved: true
+  approval_status: 1
 work5:
   pseud_id: 6
   creation_id: 5
   creation_type: Work
-  approved: true
+  approval_status: 1
 work6:
   pseud_id: 6
   creation_id: 6
   creation_type: Work
-  approved: true
+  approval_status: 1

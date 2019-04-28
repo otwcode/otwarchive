@@ -27,7 +27,7 @@ class Pseud < ApplicationRecord
   has_many :comments
 
   has_many :creatorships
-  has_many :approved_creatorships, -> { where(approved: true) }, class_name: "Creatorship"
+  has_many :approved_creatorships, -> { Creatorship.approved }, class_name: "Creatorship"
 
   has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
   has_many :chapters, through: :approved_creatorships, source: :creation, source_type: "Chapter"
