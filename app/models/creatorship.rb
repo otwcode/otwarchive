@@ -115,6 +115,12 @@ class Creatorship < ApplicationRecord
   # and all work co-creators are listed on the work's series, we need to make
   # sure that when a creatorship is deleted, the deletion cascades downwards.
   def remove_from_children
+    # If this is being deleted and it's a work, then its chapters are also going
+    # to be deleted (which will cause their creatorships to be deleted as
+    # well). If this is being deleted and it's a series, then we shouldn't
+    # delete the work creatorships.
+    return if creation.nil? || creation.destroyed?
+
     children = if creation.is_a?(Work)
                  creation.chapters.to_a
                elsif creation.is_a?(Series)
@@ -158,10 +164,13 @@ class Creatorship < ApplicationRecord
   # When deleting a creatorship, we want to make sure we're not deleting the
   # very last creatorship for that item.
   def check_not_last
-    # Check that the creation hasn't been deleted:
+    # We can always delete unapproved creatorships:
+    return unless approved?
+
+    # Check that the creation hasn't been deleted, and still has creatorships
+    # left:
     return if creation.nil? || creation.destroyed? ||
-      creation.class.where(id: creation.id).empty? ||
-      creation.creatorships.all.count > 1
+      creation.creatorships.approved.count > 1
 
     errors.add(:base, ts("Sorry, we can't remove all creators of a %{type}.",
                          type: creation.model_name.human.downcase))

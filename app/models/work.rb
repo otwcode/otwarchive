@@ -301,14 +301,8 @@ class Work < ApplicationRecord
     Collection.expire_ids(collection_ids)
   end
 
-  around_destroy :destroy_chapters_in_reverse
+  after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
-    yield
-
-    # We want to destroy the chapters after the work is destroyed, so that the
-    # fix_positions callback won't fire. But we also want to ensure that they
-    # occur before every after_destroy callback (and, in particular, the
-    # callback to destroy creatorships).
     chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 

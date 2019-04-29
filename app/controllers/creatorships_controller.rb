@@ -15,8 +15,10 @@ class CreatorshipsController < ApplicationController
   # (accept, remove) in bulk.
   def show
     if params[:show] == "rejected"
+      @page_subtitle = ts("Rejected Creator Invitations")
       @creatorships = @creatorships.rejected
     else
+      @page_subtitle = ts("Creator Invitations")
       @creatorships = @creatorships.pending
     end
 

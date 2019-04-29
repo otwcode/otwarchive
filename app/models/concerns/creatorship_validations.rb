@@ -174,7 +174,7 @@ module CreatorshipValidations
       pseuds = (pseuds - User.current_user.pseuds) + @current_user_pseuds
     end
 
-    pseuds
+    pseuds.uniq
   end
 
   # Check whether the passed-in user has been invited to become a creator.
