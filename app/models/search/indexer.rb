@@ -92,9 +92,9 @@ class Indexer
 
   def self.mapping
     {
-        properties: {
-          # add properties in subclasses
-        }
+      properties: {
+        # add properties in subclasses
+      }
     }
   end
 
@@ -107,8 +107,8 @@ class Indexer
       }
     }
   end
-  
-  def self.index_all(options={})
+
+  def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
       create_index
