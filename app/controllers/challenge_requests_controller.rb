@@ -21,7 +21,7 @@ class ChallengeRequestsController < ApplicationController
     set_sort_order
     
     # actual content, do the efficient method unless we need the full query
-    
+
     if @sort_column == "fandom"
       query = "SELECT prompts.*, GROUP_CONCAT(tags.name) AS tagnames FROM prompts INNER JOIN set_taggings ON prompts.tag_set_id = set_taggings.tag_set_id 
       INNER JOIN tags ON tags.id = set_taggings.tag_id 
@@ -29,9 +29,9 @@ class ChallengeRequestsController < ApplicationController
       @requests = Prompt.paginate_by_sql(query, page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     elsif @sort_column == "prompter" && !@collection.prompts.where(anonymous: true).exists?
       @requests = @collection.prompts.where("type = 'Request'").
-                              joins(challenge_signup: :pseud).
-                              order("pseuds.name #{@sort_direction}").
-                              paginate(page: params[:page])
+        joins(challenge_signup: :pseud).
+        order(["pseuds.name ?", @sort_direction]).
+        paginate(page: params[:page])
     else
       @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     end

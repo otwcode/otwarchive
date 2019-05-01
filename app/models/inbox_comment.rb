@@ -16,17 +16,21 @@ class InboxComment < ApplicationRecord
       when 'true' then true
       when 'false' then false
       else [true, false]
-    end
+                 end
+    direction = case filters[:date]&.upcase
+                when "ASC" then "created_at ASC"
+                else "created_at DESC"
+                end
 
-    includes(feedback_comment: :pseud)
-    .order("created_at #{filters[:date] || 'DESC'}")
-    .where(read: read, replied_to: replied_to)
+    includes(feedback_comment: :pseud).
+      order(direction).
+      where(read: read, replied_to: replied_to)
   }
 
   scope :for_homepage, -> {
-    where(read: false)
-    .order(created_at: :desc)
-    .limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
+    where(read: false).
+      order(created_at: :desc).
+      limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
   }
 
   # Gets the number of unread comments

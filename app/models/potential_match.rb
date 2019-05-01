@@ -167,7 +167,15 @@ public
                             pluck(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
-      condition = "any_#{required_types.first.downcase} = 1"
+      condition = {
+        fandom: "any_fandom = 1",
+        character: "any_character = 1",
+        rating: "any_tating = 1",
+        relationship: "any_relationship = 1",
+        category: "any_category = 1",
+        warning: "any_warning = 1",
+        freeform: "any_freeform = 1"
+      }[ required_types.first.downcase.to_sym ]
       matching_signup_ids += collection.prompts.where(condition).pluck(:challenge_signup_id)
     end
 

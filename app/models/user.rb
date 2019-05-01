@@ -178,9 +178,9 @@ class User < ApplicationRecord
   end
 
   def remove_pseud_from_kudos
-    ids = self.pseuds.collect(&:id).join(",")
     # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
-    Kudo.where("pseud_id IN (#{ids})").update_all("pseud_id = NULL") if ids.present?
+    pseuds_list = pseuds.map(&:id)
+    Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
   end
 
   def read_inbox_comments

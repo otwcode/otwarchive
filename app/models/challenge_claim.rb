@@ -48,11 +48,11 @@ class ChallengeClaim < ApplicationRecord
   scope :order_by_date, -> { order("created_at ASC") }
 
   def self.order_by_requesting_pseud(dir="ASC")
-    joins(REQUESTING_PSEUD_JOIN).order("pseuds.name #{dir}")
+    joins(REQUESTING_PSEUD_JOIN).order(["pseuds.name ?", dir])
   end
 
   def self.order_by_offering_pseud(dir="ASC")
-    joins(CLAIMING_PSEUD_JOIN).order("pseuds.name #{dir}")
+    joins(CLAIMING_PSEUD_JOIN).order(["pseuds.name ?", dir])
   end
 
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_claims.creation_id AND challenge_claims.creation_type = 'Work'"
