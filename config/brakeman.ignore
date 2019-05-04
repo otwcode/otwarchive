@@ -59,26 +59,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "0161e4568c5086f4fb269998a800b95789e35aefecce9ce8c3bdff5a60d03433",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(params[:creation_type].classify.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Format Validation",
       "warning_code": 30,
       "fingerprint": "0280569f35d7e7c8b6ff5f242786c74b80a13d1d6bd5236aa6b649049bdd0148",
@@ -463,26 +443,6 @@
       "note": ""
     },
     {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 24,
-      "fingerprint": "31b4360e5ac45b4b88f666d03efd105491971918dfb6fccfa1dc0aa630052716",
-      "check_name": "UnsafeReflection",
-      "message": "Unsafe reflection method constantize called with parameter value",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 138,
-      "link": "http://brakemanscanner.org/docs/warning_types/remote_code_execution/",
-      "code": "params[:creation_type].classify.constantize",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:creation_type].classify",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "31c7c22b0d7c87430fb6be7fbe63789ade04c009603587d270da4083eba6c2f4",
@@ -575,47 +535,6 @@
         "template": "profile/show"
       },
       "user_input": "User.find_by(:login => params[:user_id]).profile",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "3b5ea2f1532d60d6d3df8d1eed60f7558b6ee8e4f602e38e387eb2b9c8064756",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 32,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:relationship].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
       "confidence": "Weak",
       "note": ""
     },
@@ -793,46 +712,6 @@
         "method": "update"
       },
       "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 306,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 313,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
       "confidence": "High",
       "note": ""
     },
@@ -1767,67 +1646,6 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "9c55ed4d66b9f3de6a19df35cc5ce2e7a822e3a798bbb28771487496db7f4b9c",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/skins_controller.rb",
-      "line": 159,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:skin).permit(:title, :description, :public, :css, :role, :ie_condition, :unusable, :font, :base_em, :margin, :paragraph_margin, :background_color, :foreground_color, :headercolor, :accent_color, :icon, { :media => ([]) }, :skin_parents_attributes => ([:id, :position, :parent_skin_id, :parent_skin_title, :child_skin_id, :_destroy]))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "SkinsController",
-        "method": "skin_params"
-      },
-      "user_input": ":role",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "9e838dfb3325088dd9a3a6b11076e55841c22e21643dcedad5a36d9a15d87e3e",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 31,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:character].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Dangerous Eval",
       "warning_code": 13,
       "fingerprint": "a49a7e4d9fda814675993ac5eb9390b0bd0aae4ce83fc712da433ccd72d9e9a0",
@@ -2160,26 +1978,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "bd266fab375afe427a4c1d856b89375e0d5d0f2a1ec60c49a3797912c04f081e",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(:BRAKEMAN_SAFE_LITERAL.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "be9c158f0cf37661f67085fc1140ea30289797dda66c9612697487d2d7ca4384",
@@ -2196,26 +1994,6 @@
       },
       "user_input": "Work.find(params[:work_id]).kudos",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "c01011e19807abc66b27dd91e27cce6b382d1254caf5ab2850a4a8f86e5d1286",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/invitations_controller.rb",
-      "line": 28,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "User.find_by(:login => params[:user_id]).invitations.send(params[:status])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "InvitationsController",
-        "method": "manage"
-      },
-      "user_input": "params[:status]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -2546,26 +2324,6 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "e43d5ad85f88568ed86bcde06aa361031aee5b20e58f8ae86b3f01022825baca",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/admin/api_controller.rb",
-      "line": 58,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:api_key).permit(:name, :access_token, :banned)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::ApiController",
-        "method": "api_key_params"
-      },
-      "user_input": ":banned",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "eb513f789cb36ff4075c984f36084eed5863254c29e8e337d3f963e6a914855b",
@@ -2684,26 +2442,6 @@
       "note": ""
     },
     {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "f2695ad9966bb13703d4b547aa9bb8a0ce7728db788f830c1cc0bdda9acb01a2",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/redis_test_setup.rb",
-      "line": 13,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`cat #{File.expand_path(File.join(rails_root, \"log\"))}/redis-#{env}.pid`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "RedisTestSetup",
-        "method": "start_redis!"
-      },
-      "user_input": "File.expand_path(File.join(rails_root, \"log\"))",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "f699011dba7b420946da332030a020538f9646b9e3d27bc84af5cb9597c7928c",
@@ -2801,6 +2539,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-05-08 22:12:43 +0000",
+  "updated": "2019-05-14 20:18:13 +0000",
   "brakeman_version": "3.7.2"
 }

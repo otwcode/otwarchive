@@ -134,11 +134,11 @@ class TagsController < ApplicationController
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
       raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
-      model = begin
-                params[:creation_type].classify.constantize
-              rescue
-                nil
-              end
+      model = {
+        series: Series,
+        work: Work,
+        chapter: Chapter
+      }[params[:creation_type].to_sym]
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
@@ -148,8 +148,11 @@ class TagsController < ApplicationController
           @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
         end
       else
-        if %w(warnings freeforms).include?(params[:tag_type])
-          @display_tags = @display_creation.send(params[:tag_type])
+        if params[:tag_type] == "warnings"
+          @display_tags = @display_creation.tags.where(type: "warning")
+        end
+        if params[:tag_type] == "freeforms"
+          @display_tags = @display_creation.tags.where(type: "freeform")
         end
       end
       @display_category = @display_tags.first.class.name.downcase.pluralize
@@ -301,16 +304,35 @@ class TagsController < ApplicationController
       if sort.include?('suggested') || sort.include?('taggings_count_cache')
         sort += ', name ASC'
       end
+      type = params[:show].singularize
       # this makes sure params[:status] is safe
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
-        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        status = params[:status].downcase
+        tags_filtered = {
+          character: @tag.characters,
+          relationship: @tag.relationships,
+          freeform: @tag.freeforms
+        }[type.to_sym]
+        @tags = {
+          canonical: tags_filtered.canonical,
+          unwrangleable: tags_filtered.unwrangleable,
+          unfilterable: tags_filtered.unfilterable,
+          synonymous: tags_filtered.synonymous
+        }[status.to_sym].order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == 'unwrangled'
         @tags = @tag.unwrangled_tags(
           params[:show].singularize.camelize,
           params.permit!.slice(:sort_column, :sort_direction, :page)
         )
       else
-        @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = {
+          character: @tag.characters,
+          relationship: @tag.relationships,
+          freeform: @tag.freeforms,
+          sub_tag: @tag.sub_tags,
+          merger: @tag.mergers,
+          fandom: @tag.fandom
+        }[type.to_sym].order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end
