@@ -27,6 +27,6 @@ class PeopleController < ApplicationController
 
   def people_search_params
     return {} unless params[:people_search].present?
-    params[:people_search].permit!
+    params[:people_search].permit(:query, :name, :fandom)
   end
 end

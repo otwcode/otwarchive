@@ -581,6 +581,6 @@ class CommentsController < ApplicationController
   end
 
   def filter_params
-    params.permit!
+    params.permit(:read,:replied_to,:date)
   end
 end
