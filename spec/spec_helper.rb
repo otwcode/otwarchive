@@ -1,5 +1,11 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require 'knapsack'
+
+# CUSTOM_CONFIG_GOES_HERE
+
+Knapsack::Adapters::RSpecAdapter.bind
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'simplecov'
 SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
