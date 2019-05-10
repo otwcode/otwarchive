@@ -19,6 +19,7 @@ env:
     - CI_NODE_INDEX=3
     - CI_NODE_INDEX=4
 
+
 services:
   - mysql
   - redis
