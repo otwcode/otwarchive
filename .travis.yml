@@ -3,14 +3,21 @@ dist: xenial
 
 language: ruby
 cache: bundler
+  matrix:
+    - CI_NODE_INDEX=0
+    - CI_NODE_INDEX=1
 
 if: tag IS blank
 
 env:
-  - TEST_GROUP="./script/check_syntax"
-  - TEST_GROUP="rake db:otwseed"
-  - KNAPSACK_GENERATE_REPORT=true TEST_GROUP="rspec spec"
-  - KNAPSACK_GENERATE_REPORT=true TEST_GROUP="cucumber features"
+  global:
+    - CI_NODE_TOTAL=5 
+  matrix:
+    - CI_NODE_INDEX=0
+    - CI_NODE_INDEX=1
+    - CI_NODE_INDEX=2
+    - CI_NODE_INDEX=3
+    - CI_NODE_INDEX=4
 
 services:
   - mysql
@@ -29,4 +36,5 @@ before_script:
   - RAILS_ENV=test bundle exec rake db:migrate
 
 script:
-  - bundle exec $TEST_GROUP
+  - bundle exec cucumber features
+  - bundle exec rspec spec
