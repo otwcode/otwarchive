@@ -109,9 +109,12 @@ class CollectionsController < ApplicationController
     if @collection.save
       flash[:notice] = ts('Collection was successfully created.')
       unless params[:challenge_type].blank?
-        # This is a challenge collection
-        # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-        redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+        if params[:challenge_type] == "PromptMeme"
+          redirect_to new_collection_prompt_meme_path(@collection) and return
+        end
+        if params[:challenge_type] == "GiftExchange"
+          redirect_to new_collection_gift_exchange_path(@collection) and return
+        end
       else
         redirect_to(@collection)
       end
@@ -134,14 +137,20 @@ class CollectionsController < ApplicationController
           if @collection.challenge.class.name != params[:challenge_type]
             flash[:error] = ts("Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page.")
           else
-            # editing existing challenge
-            # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-            redirect_to eval("edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+            if params[:challenge_type] == "PromptMeme"
+              redirect_to edit_collection_prompt_meme_path(@collection) and return
+            end
+            if params[:challenge_type] == "GiftExchange"
+              redirect_to edit_collection_gift_exchange_path(@collection) and return
+            end
           end
         else
-          # adding a new challenge
-          # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
-          redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
+          if pparams[:challenge_type] == "PromptMeme"
+            redirect_to new_collection_prompt_meme_path(@collection) and return
+          end
+          if params[:challenge_type] == "GiftExchange"
+            redirect_to new_collection_gift_exchange_path(@collection) and return
+          end
         end
       end
       redirect_to(@collection)

@@ -10,7 +10,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> the collection %{collection_name}? All collection settings will be lost. (Works will not be deleted.)\", :collection_name => Collection.find_by(:name => params[:collection_id]).title)",
-      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":155,"file":"app/controllers/collections_controller.rb"}],
+      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":164,"file":"app/controllers/collections_controller.rb"}],
       "location": {
         "type": "template",
         "template": "collections/confirm_delete"
@@ -267,25 +267,6 @@
       },
       "user_input": "Work.find_by(:id => params[:work_id])",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "2720851e62deff0d384b45b2cf580d695a8a7a7e9fa44ae01a320aea2cf309db",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/challenge/shared/_challenge_form_delete.html.erb",
-      "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"Delete Challenge\"), eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\"), :data => ({ :confirm => ts(\"Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)\") }), :method => :delete)",
-      "render_path": [{"type":"controller","class":"Challenge::GiftExchangeController","method":"new","line":25,"file":"app/controllers/challenge/gift_exchange_controller.rb"},{"type":"template","name":"challenge/gift_exchange/new","line":1,"file":"app/views/challenge/gift_exchange/new.html.erb"},{"type":"template","name":"challenge/gift_exchange/_gift_exchange_form","line":6,"file":"app/views/challenge/gift_exchange/_gift_exchange_form.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "challenge/shared/_challenge_form_delete"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -579,47 +560,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "3b5ea2f1532d60d6d3df8d1eed60f7558b6ee8e4f602e38e387eb2b9c8064756",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 32,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:relationship].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "3d66ffcf48e7509ecd8c6e3d47442515354cf51d16f487306551161eb14e9e6b",
@@ -777,26 +717,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "4eaafeda127dc38372e728ce01ef6d8684bde59886a42bd5d8d9b3268e68e0c3",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 139,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "update"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Dangerous Send",
       "warning_code": 23,
       "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
@@ -833,25 +753,6 @@
         "method": "wrangle"
       },
       "user_input": "params[:show]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "4f6c04b41bf5880c5fa2a572c328bcbbcc94cc2549956ed8bb4a6d957f2dcf63",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/collections/_sidebar.html.erb",
-      "line": 51,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"ApplicationController","method":"load_collection","line":315,"file":"app/controllers/application_controller.rb"},{"type":"template","name":"layouts/application","line":49,"file":"app/views/layouts/application.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "collections/_sidebar"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
       "confidence": "High",
       "note": ""
     },
@@ -949,26 +850,6 @@
         "method": "update_positions"
       },
       "user_input": "params[:serial_works]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "537b3eec85cd223672ce57eb7085ecf414705967e428a0fb32ecab01f67b083c",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 144,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "update"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
       "confidence": "High",
       "note": ""
     },
@@ -1303,25 +1184,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "6bf40a9a7583b0ebd3a6d3c11e743716d6a9787c9051bd121dbac3210a9a0291",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/challenge/shared/_challenge_form_delete.html.erb",
-      "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"Challenge::GiftExchangeController","method":"new","line":25,"file":"app/controllers/challenge/gift_exchange_controller.rb"},{"type":"template","name":"challenge/gift_exchange/new","line":1,"file":"app/views/challenge/gift_exchange/new.html.erb"},{"type":"template","name":"challenge/gift_exchange/_gift_exchange_form","line":6,"file":"app/views/challenge/gift_exchange/_gift_exchange_form.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "challenge/shared/_challenge_form_delete"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Format Validation",
       "warning_code": 30,
       "fingerprint": "70298f7f185bd7c9c1f1092ac4e98f11d063d5394385295f96881fc863102f25",
@@ -1419,25 +1281,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "73692669bdaca5d617ed72a3aa777c040dd87f0fa8787e8ca2dbe7a4b1964695",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/collection_profile/show.html.erb",
-      "line": 101,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\")",
-      "render_path": [{"type":"controller","class":"CollectionProfileController","method":"show","line":11,"file":"app/controllers/collection_profile_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "collection_profile/show"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Denial of Service",
       "warning_code": 76,
       "fingerprint": "77deaa30a5237709bf458d4d64dbedfebc8a669bd5c72274b2e65ba2d9d9ea92",
@@ -1493,26 +1336,6 @@
       },
       "user_input": "Work.find_by(:id => params[:id]).title",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "7b8cf3f933110738049c4c37245c414d999cc72feb088f0a7c369ac02afb4af0",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/stats_controller.rb",
-      "line": 97,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"w.#{(\"hits\" or ((\"\" or (params[:sort_column] or \"kudos.count\")) or (params[:sort_column] or \"hits\")))}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "StatsController",
-        "method": "index"
-      },
-      "user_input": "params[:sort_column]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -1590,25 +1413,6 @@
       },
       "user_input": "Work.find(params[:work_id])",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "8181b7ef559c868ad0a159b22e57eabbfc459c705f7b48771530032c05d081c1",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/collection_profile/show.html.erb",
-      "line": 101,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"Delete Challenge\"), eval(\"collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection)\"), :data => ({ :confirm => ts(\"Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection.)\") }), :method => :delete)",
-      "render_path": [{"type":"controller","class":"CollectionProfileController","method":"show","line":11,"file":"app/controllers/collection_profile_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "collection_profile/show"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -1729,25 +1533,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "9261c4d6deb6c62a5c58751d471c2960723a6ebcbbdcecd7732d3dbad046bdd8",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/views/potential_matches/_no_match_required.html.erb",
-      "line": 8,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection, :anchor => 'match_settings')\")",
-      "render_path": [{"type":"controller","class":"ChallengeAssignmentsController","method":"set","line":180,"file":"app/controllers/challenge_assignments_controller.rb"},{"type":"template","name":"potential_matches/index","line":34,"file":"app/views/potential_matches/index.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "potential_matches/_no_match_required"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "991f44ca4542d6fb1588b5cee20245ca99869c155430a6d4270b9252f1a80d90",
@@ -1764,87 +1549,6 @@
       },
       "user_input": "Work.find_by(:id => params[:id]).first_chapter",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "9c55ed4d66b9f3de6a19df35cc5ce2e7a822e3a798bbb28771487496db7f4b9c",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/skins_controller.rb",
-      "line": 159,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:skin).permit(:title, :description, :public, :css, :role, :ie_condition, :unusable, :font, :base_em, :margin, :paragraph_margin, :background_color, :foreground_color, :headercolor, :accent_color, :icon, { :media => ([]) }, :skin_parents_attributes => ([:id, :position, :parent_skin_id, :parent_skin_title, :child_skin_id, :_destroy]))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "SkinsController",
-        "method": "skin_params"
-      },
-      "user_input": ":role",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "9e838dfb3325088dd9a3a6b11076e55841c22e21643dcedad5a36d9a15d87e3e",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/owned_tag_sets/_show_tag_set_tags.html.erb",
-      "line": 31,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "([] or HashWithIndifferentAccess.new[:character].values_at(*(([] + TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\")) do\n (oldval | newval)\n end.keys).compact.uniq.sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end - Tag.names_by_parent(Fandom.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"media\").values.flatten)).flatten.compact.uniq).sort do\n (a.gsub(/^(the |an |a )/, \"\") <=> b.gsub(/^(the |an |a )/, \"\"))\n end.map do\n content_tag(:li, tag)\n end.join(\"\\n\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "OwnedTagSetsController",
-          "method": "show",
-          "line": 71,
-          "file": "app/controllers/owned_tag_sets_controller.rb",
-          "rendered": {
-            "name": "owned_tag_sets/show",
-            "file": "/vagrant/app/views/owned_tag_sets/show.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "owned_tag_sets/show",
-          "line": 55,
-          "file": "app/views/owned_tag_sets/show.html.erb",
-          "rendered": {
-            "name": "owned_tag_sets/_show_tag_set_tags",
-            "file": "/vagrant/app/views/owned_tag_sets/_show_tag_set_tags.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "owned_tag_sets/_show_tag_set_tags"
-      },
-      "user_input": "TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(OwnedTagSet.find_by(:id => params[:id])), :BRAKEMAN_SAFE_LITERAL).merge(Tag.names_by_parent(:BRAKEMAN_SAFE_LITERAL.classify.constantize.in_tag_set(OwnedTagSet.find_by(:id => params[:id])), \"fandom\"))",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "a49a7e4d9fda814675993ac5eb9390b0bd0aae4ce83fc712da433ccd72d9e9a0",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/stats_controller.rb",
-      "line": 54,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"w.#{((\"\" or (params[:sort_column] or \"kudos.count\")) or (params[:sort_column] or \"hits\"))}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "StatsController",
-        "method": "index"
-      },
-      "user_input": "params[:sort_column]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -2064,25 +1768,6 @@
     },
     {
       "warning_type": "Cross Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "b86b1c5328815563779a2d1d1ce340c7fe291d2768d7fe68a3ba3b5d83a64f44",
-      "check_name": "LinkToHref",
-      "message": "Unsafe model attribute in link_to href",
-      "file": "app/views/potential_matches/_no_match_required.html.erb",
-      "line": 8,
-      "link": "http://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(ts(\"challenge match settings\"), eval(\"edit_collection_#{challenge_class_name(Collection.find_by(:name => params[:collection_id]))}_path(@collection, :anchor => 'match_settings')\"))",
-      "render_path": [{"type":"controller","class":"ChallengeAssignmentsController","method":"set","line":180,"file":"app/controllers/challenge_assignments_controller.rb"},{"type":"template","name":"potential_matches/index","line":34,"file":"app/views/potential_matches/index.html.erb"}],
-      "location": {
-        "type": "template",
-        "template": "potential_matches/_no_match_required"
-      },
-      "user_input": "Collection.find_by(:name => params[:collection_id])",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "b8bd9260607acb9638bb7835292ba4b0c62a81751c80322cfc530aabe1887f59",
       "check_name": "CrossSiteScripting",
@@ -2156,26 +1841,6 @@
         "method": "create"
       },
       "user_input": "User.find_by(:login => params[:user_id]).subscriptions.build(subscription_params).subscribable",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "bd266fab375afe427a4c1d856b89375e0d5d0f2a1ec60c49a3797912c04f081e",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(:BRAKEMAN_SAFE_LITERAL.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
       "confidence": "High",
       "note": ""
     },
@@ -2546,26 +2211,6 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "e43d5ad85f88568ed86bcde06aa361031aee5b20e58f8ae86b3f01022825baca",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/admin/api_controller.rb",
-      "line": 58,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:api_key).permit(:name, :access_token, :banned)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::ApiController",
-        "method": "api_key_params"
-      },
-      "user_input": ":banned",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "eb513f789cb36ff4075c984f36084eed5863254c29e8e337d3f963e6a914855b",
@@ -2601,26 +2246,6 @@
         "method": "update_positions"
       },
       "user_input": "params[:archive_faqs]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "eb7aa2b843511df716f40ca4f031615f5e672e727ee694b9609a80464b552cc6",
-      "check_name": "Evaluation",
-      "message": "User input in eval",
-      "file": "app/controllers/collections_controller.rb",
-      "line": 114,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "eval(\"new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CollectionsController",
-        "method": "create"
-      },
-      "user_input": "params[:challenge_type].demodulize.tableize.singularize",
       "confidence": "High",
       "note": ""
     },
@@ -2681,26 +2306,6 @@
       },
       "user_input": "BookmarkSearchForm.new((bookmark_search_params or {})).summary",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "f2695ad9966bb13703d4b547aa9bb8a0ce7728db788f830c1cc0bdda9acb01a2",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/redis_test_setup.rb",
-      "line": 13,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`cat #{File.expand_path(File.join(rails_root, \"log\"))}/redis-#{env}.pid`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "RedisTestSetup",
-        "method": "start_redis!"
-      },
-      "user_input": "File.expand_path(File.join(rails_root, \"log\"))",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -2801,6 +2406,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-05-08 22:12:43 +0000",
+  "updated": "2019-05-14 21:26:45 +0000",
   "brakeman_version": "3.7.2"
 }
