@@ -90,6 +90,7 @@ GEM
       aws-sdk-core (= 2.9.35)
     aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
+    brakeman (3.7.2)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
@@ -475,6 +476,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk
   bcrypt
+  brakeman (= 3.7.2)
   bullet (>= 5.7.3)
   bundler
   bundler-audit
@@ -557,4 +559,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.16.6
+   1.17.3
