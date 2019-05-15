@@ -145,7 +145,7 @@ class CollectionsController < ApplicationController
             end
           end
         else
-          if pparams[:challenge_type] == "PromptMeme"
+          if params[:challenge_type] == "PromptMeme"
             redirect_to new_collection_prompt_meme_path(@collection) and return
           end
           if params[:challenge_type] == "GiftExchange"
