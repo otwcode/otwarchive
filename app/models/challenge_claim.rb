@@ -48,7 +48,11 @@ class ChallengeClaim < ApplicationRecord
   scope :order_by_date, -> { order("created_at ASC") }
 
   def self.order_by_requesting_pseud(dir="ASC")
-    joins(REQUESTING_PSEUD_JOIN).order(["pseuds.name ?", dir])
+    if dir.casecmp("ASC")
+      joins(REQUESTING_PSEUD_JOIN)).order("pseuds.name ASC")
+    else
+      joins(REQUESTING_PSEUD_JOIN).order("pseuds.name DESC")
+    end
   end
 
   def self.order_by_offering_pseud(dir="ASC")
