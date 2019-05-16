@@ -49,7 +49,7 @@ class ChallengeClaim < ApplicationRecord
 
   def self.order_by_requesting_pseud(dir="ASC")
     if dir.casecmp("ASC")
-      joins(REQUESTING_PSEUD_JOIN)).order("pseuds.name ASC")
+      joins(REQUESTING_PSEUD_JOIN).order("pseuds.name ASC")
     else
       joins(REQUESTING_PSEUD_JOIN).order("pseuds.name DESC")
     end
