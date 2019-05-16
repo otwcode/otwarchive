@@ -49,7 +49,7 @@ class InviteRequestsController < ApplicationController
     end
   end
 
-  def reorder
+  def reorder_list
     if InviteRequest.reset_order
       flash[:notice] = "The queue has been successfully updated."
     else
