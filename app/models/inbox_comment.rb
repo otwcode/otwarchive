@@ -17,10 +17,7 @@ class InboxComment < ApplicationRecord
       when 'false' then false
       else [true, false]
                  end
-    direction = case filters[:date]&.upcase
-                when "ASC" then "created_at ASC"
-                else "created_at DESC"
-                end
+    direction = (filters[:date]&.upcase == "ASC" ? "ASC" : "DESC")
 
     includes(feedback_comment: :pseud).
       order(direction).

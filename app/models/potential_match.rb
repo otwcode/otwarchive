@@ -175,7 +175,7 @@ public
         category: "any_category = 1",
         warning: "any_warning = 1",
         freeform: "any_freeform = 1"
-      }[ required_types.first.downcase.to_sym ]
+      }[required_types.first.downcase.to_sym]
       matching_signup_ids += collection.prompts.where(condition).pluck(:challenge_signup_id)
     end
 

@@ -52,7 +52,11 @@ class ChallengeClaim < ApplicationRecord
   end
 
   def self.order_by_offering_pseud(dir="ASC")
-    joins(CLAIMING_PSEUD_JOIN).order(["pseuds.name ?", dir])
+    if dir.upcase == "ASC"
+      joins(CLAIMING_PSEUD_JOIN).order("pseuds.name ASC")
+    else
+      joins(CLAIMING_PSEUD_JOIN).order("pseuds.name DESC")
+    end
   end
 
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_claims.creation_id AND challenge_claims.creation_type = 'Work'"

@@ -195,11 +195,11 @@ describe InviteRequestsController do
 
   describe "POST #reorder" do
     it "blocks non-admins" do
-      post :reorder
+      post :reorder_list
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
 
       fake_login
-      post :reorder
+      post :reorder_list
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
 
@@ -212,7 +212,7 @@ describe InviteRequestsController do
         let!(:invite_request_3) { create(:invite_request, position: 7) }
 
         it "redirects to manage with notice" do
-          post :reorder
+          post :reorder_list
           it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
 
           invite_request_1.reload
@@ -230,7 +230,7 @@ describe InviteRequestsController do
       it "redirects to manage with notice given no invite requests" do
         # with nothing to order, technically everything's in order
         expect(InviteRequest.count).to eq(0)
-        post :reorder
+        post :reorder_list
         it_redirects_to_with_notice(manage_invite_requests_path, "The queue has been successfully updated.")
       end
 
@@ -239,7 +239,7 @@ describe InviteRequestsController do
 
         it "redirects to manage with error" do
           expect(invite_request.position).to eq(1)
-          post :reorder
+          post :reorder_list
           it_redirects_to_with_error(manage_invite_requests_path, "Something went wrong. Please try that again.")
         end
       end
