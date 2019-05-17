@@ -1,5 +1,5 @@
 class InviteRequestsController < ApplicationController
-  before_action :admin_only, only: [:manage, :reorder, :destroy]
+  before_action :admin_only, only: [:manage, :reorder_list, :destroy]
 
   # GET /invite_requests
   def index
@@ -50,7 +50,7 @@ class InviteRequestsController < ApplicationController
     end
   end
 
-  def reorder
+  def reorder_list
     if InviteRequest.reset_order
       flash[:notice] = "The queue has been successfully updated."
     else
