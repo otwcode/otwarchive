@@ -170,7 +170,7 @@ public
       condition = {
         fandom: "any_fandom = 1",
         character: "any_character = 1",
-        rating: "any_tating = 1",
+        rating: "any_rating = 1",
         relationship: "any_relationship = 1",
         category: "any_category = 1",
         warning: "any_warning = 1",

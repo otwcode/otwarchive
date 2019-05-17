@@ -16,7 +16,6 @@ class ChallengeRequestsController < ApplicationController
 
   def index
     @show_request_fandom_tags = (@collection.challenge.request_restriction.allowed("fandom") > 0 || (!@collection.challenge.prompt_restriction.nil? && @collection.challenge.prompt_restriction.allowed("fandom") > 0))
-    direction = (@sort_direction == "ASC" ? "ASC" : "DESC")
     # sorting
     set_sort_order
     
@@ -30,7 +29,7 @@ class ChallengeRequestsController < ApplicationController
     elsif @sort_column == "prompter" && !@collection.prompts.where(anonymous: true).exists?
       @requests = @collection.prompts.where("type = 'Request'").
         joins(challenge_signup: :pseud).
-        order("pseuds.name #{direction}").
+        order("pseuds.name #{@sort_direction}").
         paginate(page: params[:page])
     else
       @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
