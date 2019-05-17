@@ -177,7 +177,7 @@ class ChaptersController < ApplicationController
 
   def update_positions
     if params[:chapters]
-      @work.reorder(params[:chapters])
+      @work.reorder_list(params[:chapters])
       flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
