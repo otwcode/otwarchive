@@ -58,7 +58,7 @@ Otwarchive::Application.routes.draw do
   resources :invite_requests do
     collection do
       get :manage
-      post :reorder
+      post :reorder_list
       get :status
     end
   end
