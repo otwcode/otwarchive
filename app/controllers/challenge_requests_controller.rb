@@ -19,7 +19,7 @@ class ChallengeRequestsController < ApplicationController
 
     # sorting
     set_sort_order
-    direction = (@sort_direction == "ASC" ? "ASC" : "DESC")
+    direction = (@sort_direction.casecmp("ASC").zero? ? "ASC" : "DESC")
 
     # actual content, do the efficient method unless we need the full query
 
