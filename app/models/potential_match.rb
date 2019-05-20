@@ -179,7 +179,7 @@ public
                   when "category"
                     "any_category = 1"
                   when "warning"
-                    "any_warning = 1",
+                    "any_warning = 1"
                   when "freeform"
                     "any_freeform = 1"
                   else
