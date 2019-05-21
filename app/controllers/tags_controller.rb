@@ -342,7 +342,7 @@ class TagsController < ApplicationController
                   @tag.relationships
                 when "freeform"
                   @tag.freeforms
-                  whne "sub_tag"
+                when "sub_tag"
                   @tag.sub_tags
                 when "merger"
                   @tag.mergers
