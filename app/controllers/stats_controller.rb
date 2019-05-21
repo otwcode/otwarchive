@@ -108,12 +108,20 @@ class StatsController < ApplicationController
   private
 
   def stat_element(work, element)
-    { "date": work.date,
-      "hits": work.hits,
-      "kudos.count": work.kudos.count,
-      "comment_thread_count": work.comment_thread_count,
-      "bookmarks.count": work.bookmarks.count,
-      "subscriptions.count": work.subscriptions.count,
-      "word_count": work.word_count }[element.to_sym]
+    case element.downcase
+    when "date"
+      work.date
+    when "hits"
+      work.hits
+    when "kudos.count"
+      work.kudos.count
+    when "comment_thread_count"
+      work.comment_thread_count
+    when "bookmarks.count"
+      work.bookmarks.count
+    when "subscriptions.count"
+      work.subscriptions.count
+    when "word_count"
+      work.word_count
+    end
   end
-end
