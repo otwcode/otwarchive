@@ -125,3 +125,4 @@ class StatsController < ApplicationController
       work.word_count
     end
   end
+end
