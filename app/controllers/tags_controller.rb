@@ -134,11 +134,14 @@ class TagsController < ApplicationController
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
       raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
-      model = {
-        series: Series,
-        work: Work,
-        chapter: Chapter
-      }[params[:creation_type].to_sym]
+      model = case params[:creation_type].downcase
+              when "series"
+                Series
+              when "work"
+                Work
+              when "chapter"
+                Chapter
+              end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
@@ -308,31 +311,44 @@ class TagsController < ApplicationController
       # this makes sure params[:status] is safe
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
         status = params[:status].downcase
-        tags_filtered = {
-          character: @tag.characters,
-          relationship: @tag.relationships,
-          freeform: @tag.freeforms
-        }[type.to_sym]
-        @tags = {
-          canonical: tags_filtered.canonical,
-          unwrangleable: tags_filtered.unwrangleable,
-          unfilterable: tags_filtered.unfilterable,
-          synonymous: tags_filtered.synonymous
-        }[status.to_sym].order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        tags_filtered = case type.downcase
+                        when "character"
+                          @tag.characters
+                        when "relationship"
+                          @tag.relationships
+                        when "freeform"
+                          @tag.freeforms
+                        end
+        @tags = case status
+                when "canonical"
+                  tags_filtered.canonical
+                when "unwrangleable"
+                  tags_filtered.unwrangleable
+                when "unfilterable"
+                  tags_filtered.unfilterable
+                when "synonymous"
+                  tags_filtered.synonymous
+                end.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == 'unwrangled'
         @tags = @tag.unwrangled_tags(
           params[:show].singularize.camelize,
           params.permit!.slice(:sort_column, :sort_direction, :page)
         )
       else
-        @tags = {
-          character: @tag.characters,
-          relationship: @tag.relationships,
-          freeform: @tag.freeforms,
-          sub_tag: @tag.sub_tags,
-          merger: @tag.mergers,
-          fandom: @tag.fandom
-        }[type.to_sym].order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = case type.downcase
+                when "character"
+                  @tag.characters
+                when "relationship"
+                  @tag.relationships
+                when "freeform"
+                  @tag.freeforms
+                  whne "sub_tag"
+                  @tag.sub_tags
+                when "merger"
+                  @tag.mergers
+                when "fandom"
+                  @tag.fandom
+                end.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end
