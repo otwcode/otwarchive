@@ -50,8 +50,7 @@
         <% if @collection.challenge %>
           <% if @collection.prompt_meme? %>
             <li><%= span_if_current ts('Challenge Settings', key: 'dashboard'), edit_collection_prompt_meme_path(@collection) %></li>
-          <% end %>
-          <% if @collection.gift_exchange? %>
+          <% elsif @collection.gift_exchange? %>
             <li><%= span_if_current ts('Challenge Settings', key: 'dashboard'), edit_collection_gift_exchange_path(@collection) %></li>
           <% end %>
         <% end %>
