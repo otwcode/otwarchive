@@ -153,8 +153,7 @@ class TagsController < ApplicationController
       else
         if params[:tag_type] == "warnings"
           @display_tags = @display_creation.tags.where(type: "warning")
-        end
-        if params[:tag_type] == "freeforms"
+        elsif params[:tag_type] == "freeforms"
           @display_tags = @display_creation.tags.where(type: "freeform")
         end
       end
