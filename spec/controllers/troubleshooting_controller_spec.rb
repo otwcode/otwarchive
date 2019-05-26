@@ -34,7 +34,7 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[fix_counts fix_meta_tags])
+          contain_exactly(*%w[fix_associations fix_counts fix_meta_tags])
       end
 
       it "shows a form with the allowed actions for works" do
@@ -52,7 +52,7 @@ describe TroubleshootingController do
         get :show, params: { tag_id: tag.to_param }
         expect(response).to render_template(:show)
         expect(assigns[:allowed_actions]).to \
-          contain_exactly(*%w[reindex_tag update_tag_filters fix_counts fix_meta_tags])
+          contain_exactly(*%w[fix_associations reindex_tag update_tag_filters fix_counts fix_meta_tags])
       end
 
       it "shows a form with the allowed actions for works" do
@@ -85,7 +85,6 @@ describe TroubleshootingController do
       before { fake_login_known_user(tag_wrangler) }
 
       it "removes invalid tag associations and redirects to the tag" do
-        pending "AO3-2452"
         tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
         tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
         tag.meta_taggings.build(meta_tag: tag).save(validate: false)
@@ -158,7 +157,6 @@ describe TroubleshootingController do
       before { fake_login_admin(create(:admin)) }
 
       it "removes invalid tag associations and redirects to the tag" do
-        pending "AO3-2452"
         tag.common_taggings.build(filterable: create(:freeform)).save(validate: false)
         tag.child_taggings.build(common_tag: create(:media)).save(validate: false)
         tag.meta_taggings.build(meta_tag: tag).save(validate: false)

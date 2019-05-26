@@ -21,7 +21,7 @@ class TroubleshootingController < ApplicationController
     disallowed = actions - @allowed_actions
 
     if disallowed.any?
-      flash[:error] = 
+      flash[:error] =
         ts("The following actions aren't allowed: %{actions}.",
            actions: disallowed.to_sentence)
       redirect_to troubleshooting_path
@@ -56,9 +56,9 @@ class TroubleshootingController < ApplicationController
   # the i18n scope en.troubleshooting.show.
   def allowed_actions
     if @item.is_a?(Tag) && logged_in_as_admin?
-      %w[fix_counts fix_meta_tags update_tag_filters reindex_tag]
+      %w[fix_associations fix_counts fix_meta_tags update_tag_filters reindex_tag]
     elsif @item.is_a?(Tag)
-      %w[fix_counts fix_meta_tags]
+      %w[fix_associations fix_counts fix_meta_tags]
     elsif @item.is_a?(Work)
       %w[update_work_filters reindex_work]
     end
