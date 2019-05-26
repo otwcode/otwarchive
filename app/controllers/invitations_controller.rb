@@ -22,10 +22,16 @@ class InvitationsController < ApplicationController
   end
 
   def manage
-    @invitations = @user.invitations
-    @invitations = @invitations.unsent if params[:status] == "unsent"
-    @invitations = @invitations.unredeemed if params[:status] == "unredeemed"
-    @invitations = @invitations.redeemed if params[:status] == "redeemed"
+    @invitations = case params[:status]
+                   when "unsent"
+                     @user.invitations.unsent
+                   when "unredeemed"
+                     @user.invitations.unredeemed
+                   when "redeemed"
+                     @user.invitations.redeemed
+                   else
+                     @user.invitations
+                   end
   end
 
   def show
