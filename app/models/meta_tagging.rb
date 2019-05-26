@@ -64,7 +64,7 @@ class MetaTagging < ApplicationRecord
   end
 
   def expire_caching
-    self.meta_tag.update_works_index_timestamp!
+    self.meta_tag&.update_works_index_timestamp!
   end
 
   # Go through all MetaTaggings and destroy the invalid ones.
@@ -75,10 +75,18 @@ class MetaTagging < ApplicationRecord
       # Let callers do something on each iteration.
       yield mt, valid if block_given?
 
-      # We use this method instead of mt.destroy because we want to trigger the
-      # before_remove callbacks on mt.sub_tag, thus ensuring that we clean up
-      # the filter_taggings associated with this MetaTagging.
-      mt.sub_tag.meta_tags.delete(mt.meta_tag) unless valid
+      next if valid
+
+      if mt.sub_tag && mt.meta_tag
+        # We use this method instead of mt.destroy because we want to trigger the
+        # before_remove callbacks on mt.sub_tag, thus ensuring that we clean up
+        # the filter_taggings associated with this MetaTagging.
+        mt.sub_tag.meta_tags.delete(mt.meta_tag)
+      else
+        # But in this case, one of the two tags is missing, so we can only
+        # properly delete the meta tagging by calling mt.destroy:
+        mt.destroy
+      end
     end
   end
 end

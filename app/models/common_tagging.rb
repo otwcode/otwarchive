@@ -62,7 +62,7 @@ class CommonTagging < ApplicationRecord
 
   # If a tag's parent changes, reindex immediately to update unwrangled bins.
   def update_search
-    common_tag.reindex_document
+    common_tag&.reindex_document
   end
 
   # Go through all CommonTaggings and destroy the invalid ones.
