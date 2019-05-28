@@ -948,7 +948,7 @@ class WorksController < ApplicationController
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],
-      warning_strings: [],
+      archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: [], ambiguous_pseuds: []],
       series_attributes: [:id, :title],
       parent_attributes: [:url, :title, :author, :language_id, :translation],
