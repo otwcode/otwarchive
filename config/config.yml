@@ -59,7 +59,7 @@ ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
-ES_URL: 'http://127.0.0.1:9200'
+ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
