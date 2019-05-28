@@ -4,14 +4,15 @@ class DownloadsController < ApplicationController
   before_action :load_work, only: :show
   before_action :check_download_posted_status, only: :show
   before_action :check_download_visibility, only: :show
-  after_action :remove_downloads, only: :show
+  around_action :remove_downloads, only: :show
 
   def show
     respond_to :html, :pdf, :mobi, :epub, :azw3
-    @download = Download.generate(@work, mime_type: request.format)
+    @download = Download.new(@work, mime_type: request.format)
+    @download.generate
 
     # Make sure we were able to generate the download.
-    unless @download.present? && @download.exists?
+    unless @download.exists?
       flash[:error] = ts("We were not able to render this work. Please try again in a little while or try another format.")
       redirect_to work_path(@work)
       return
@@ -45,7 +46,9 @@ protected
   # We're currently just writing everything to tmp and feeding them through
   # nginx so we don't want to keep the files around.
   def remove_downloads
-    @download&.remove unless Rails.env.test?
+    yield
+  ensure
+    @download.remove
   end
 
   # We can't use check_visibility because this controller doesn't have access to

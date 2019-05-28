@@ -59,7 +59,7 @@ ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
-ES_URL: 'http://127.0.0.1:9400'
+ES_URL: 'http://127.0.0.1:9200'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
@@ -332,7 +332,7 @@ SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
 # resource will be allowed
-SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
+SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'

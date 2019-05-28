@@ -259,6 +259,7 @@ class StoryParser
 
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
+
   protected
 
   # tries to create an external author for a given url
@@ -549,14 +550,15 @@ class StoryParser
     @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
 
     # Try to convert all relative links to absolute
-    base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
+    base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
     if base.present?
-      @doc.css('a').each do |link|
-        next if link['href'].blank?
+      @doc.css("a").each do |link|
+        next if link["href"].blank? || link["href"].start_with?("#")
         begin
-          query = link['href'].match(/(\?.*)$/) ? $1 : ''
-          link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
+          query = link["href"].match(/(\?.*)$/) ? $1 : ""
+          link["href"] = URI.join(base, link["href"].gsub(/(\?.*)$/, "")).to_s + query
         rescue
+# ignored
         end
       end
     end
@@ -798,13 +800,15 @@ class StoryParser
         when Net::HTTPSuccess
           story = response.body
         when Net::HTTPRedirection
-          if limit > 0
+          if limit.positive?
             story = download_with_timeout(response['location'], limit - 1)
           end
         else
+          Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
           nil
         end
-      rescue Errno::ECONNREFUSED, SocketError, EOFError
+      rescue Errno::ECONNREFUSED, SocketError, EOFError => e
+        Rails.logger.error("------- STORY PARSER: download_with_timeout: error rescue: \n#{e.inspect} ------")
         nil
       end
     end

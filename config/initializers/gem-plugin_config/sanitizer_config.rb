@@ -1,6 +1,6 @@
 # Sanitize: http://github.com/rgrove/sanitize.git
 class Sanitize
-  
+
   # This defines the configuration we use for HTML tags and attributes allowed in the archive.
   module Config
 
@@ -26,7 +26,7 @@ class Sanitize
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
         'ul' => ['type'],
       },
-      
+
       add_attributes: {
         'a' => {'rel' => 'nofollow'}
       },
@@ -51,7 +51,7 @@ class Sanitize
 
   # This defines the custom sanitizing transformers we use for cleaning data
   module Transformers
-    
+
     # allow users to specify class attributes in their html
     ALLOW_USER_CLASSES = lambda do |env|
       node      = env[:node]
@@ -87,12 +87,12 @@ class Sanitize
         # extra work needed.
         url = node['src']
       end
-      
+
       # Verify that the video URL is actually a valid video URL from a site we trust.
-      
+
       # strip off optional protocol and www
       url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
-      
+
       source = case url
       when /^archive\.org\//
         then "archiveorg"
@@ -127,7 +127,7 @@ class Sanitize
       else
         nil
       end
-      
+
       # if we don't know the source, sorry
       return if source.nil?
 
@@ -162,11 +162,11 @@ class Sanitize
             'param'  => ['name', 'value']
           }
         })
-        
+
         # disable script access and networking
         parent['allowscriptaccess'] = 'never'
         parent['allownetworking'] = 'internal'
-        
+
         parent.search("param").each {|paramnode| paramnode.unlink if paramnode[:name].downcase == "allowscriptaccess"}
         parent.search("param").each {|paramnode| paramnode.unlink if paramnode[:name].downcase == "allownetworking"}
 
@@ -176,10 +176,10 @@ class Sanitize
           elements: ['embed', 'iframe'],
           attributes: {
             'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (allow_flashvars.include?(source) ? ['wmode', 'flashvars'] : [])),
-            'iframe'  => ['frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
+            'iframe'  => ['allowfullscreen', 'frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
           }
         })
-        
+
         if node_name == 'embed'
           # disable script access and networking
           node['allowscriptaccess'] = 'never'
