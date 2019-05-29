@@ -830,7 +830,7 @@ class WorksController < ApplicationController
       error_message = 'Please add all required tags.'
       error_message << ' Fandom is missing.' if @work.fandoms.blank?
 
-      error_message << ' Warning is missing.' if @work.warnings.blank?
+      error_message << ' Warning is missing.' if @work.archive_warnings.blank?
 
       @work.errors.add(:base, error_message)
     end
