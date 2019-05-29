@@ -151,7 +151,7 @@ module TagsHelper
 
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
-    Warning::DISPLAY_NAME_MAPPING[name] || name
+    ArchiveWarning::DISPLAY_NAME_MAPPING[name] || name
   end
 
   # Individual results for a tag search
