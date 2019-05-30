@@ -1,18 +1,5 @@
 module TagsHelper
 
-  def tag_type_label(tag_type)
-    case tag_type
-    when 'tag'
-      "Bookmarker's Tags"
-    when 'freeform'
-      "Additional Tags"
-    when 'archive_warning'
-      "Warnings"
-    else
-      tag_type.titleize.pluralize
-    end
-  end
-
   def tag_type_class(tag_type)
     tag_type = tag_type.classify
     case tag_type
@@ -152,14 +139,6 @@ module TagsHelper
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
     ArchiveWarning::DISPLAY_NAME_MAPPING[name] || name
-  end
-
-  def tag_type_label_name(tag_type)
-    if tag_type == 'archive_warning'
-      "Warnings"
-    else
-      tag_type.humanize.titleize.pluralize
-    end
   end
 
   # Individual results for a tag search

@@ -20,6 +20,10 @@ class ArchiveWarning < Tag
     warning_tags.include? warning
   end
 
+  def self.label_name
+    "Warnings"
+  end
+
   def display_name
     DISPLAY_NAME_MAPPING[name] || name
   end

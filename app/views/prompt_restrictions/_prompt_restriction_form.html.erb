@@ -67,7 +67,7 @@ is verbose-->
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use:") %></dt>
         <dd title="<%= ts('tag sets to use') %>"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
-          <dt><%= t("tag_types.#{tag_type}").humanize.titleize %> Settings: <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
+          <dt><%= tag_type_label_name(tag_type) %> Settings: <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
           <dd>
             <ul>
               <li>

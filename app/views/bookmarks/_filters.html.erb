@@ -32,7 +32,7 @@
                 <% # The space needs to be in the landmark to keep the text aligned %>
                 <%= ts("<span class=\"landmark\">%{filter_action} </span>%{tag_type}",
                     filter_action: filter_action.titleize,
-                    tag_type: tag_type_label(tag_type)
+                    tag_type: tag_type_label_name(tag_type)
                     ).html_safe %>
               </dt>
               <dd id="<%= filter_action %>_<%= tag_type %>_tags" class="expandable <%= tag_type_class(tag_type) %> tags">

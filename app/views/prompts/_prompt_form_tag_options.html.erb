@@ -3,7 +3,7 @@
 <%= form.fields_for :tag_set do |tag_set_form| %>
 
   <% TagSet::TAG_TYPES.each do |tag_type| %>
-    <% tag_label = TagSet.find_type_label(tag_type) %>
+    <% tag_label = tag_type_label_name(tag_type) %>
 
     <% tag_name = tag_type.classify.constantize::NAME # constantize safe as iterating over safe list %>
     <% num_allowed = restriction.allowed(tag_type) %>

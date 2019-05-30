@@ -25,7 +25,7 @@
   <% if tag_set.tag_set %>
     <dl class="stats">
       <% %w(fandom character relationship freeform).each do |tag_type| %>
-        <dt><%= t("tag_types.#{tag_type}").humanize.titleize.pluralize %>:</dt>
+        <dt><%= tag_type_label_name(tag_type) %>:</dt>
         <dd><%= tag_set.with_type(tag_type).count %></dd>
       <% end %>
     </dl>

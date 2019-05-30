@@ -199,22 +199,6 @@ class TagSet < ApplicationRecord
     ""
   end
 
-  # Returns a label for a tag type. In most cases, it's the same as the tag types in TAG_TYPES,
-  # but in some instances there are overrides. This is mostly need for classes form labels,
-  # error messages, css classes, etc.
-  #
-  # Example:
-  #   TagSet.find_type_label("archive_warning") => "warning"
-  #   TagSet.find_type_label("freeform") => "freeform"
-  #
-  def self.find_type_label(value)
-    raise "Tag label doesn't exist for that type" unless TAG_TYPES.include?(value.to_s)
-
-    label = TAG_TYPES_LABELS_OVERRIDES[value.to_sym] || value
-
-    label.to_s
-  end
-
   ### Matching
 
   # Computes the "match rank" of the two arrays. The match rank is ALL if the
