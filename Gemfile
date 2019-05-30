@@ -127,7 +127,6 @@ gem 'rollout'
 #  Place the New Relic gem as low in the list as possible, allowing the
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm'
-gem 'newrelic-redis'
 
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
