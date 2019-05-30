@@ -285,18 +285,18 @@ class UsersController < ApplicationController
                  []
                else
                  Fandom.select('tags.*, count(tags.id) as work_count').
-                        joins(:direct_filter_taggings).
-                        joins("INNER JOIN works
-                               ON filter_taggings.filterable_id = works.id
-                               AND filter_taggings.filterable_type = 'Work'").
-                        group('tags.id').
-                        merge(Work.send(visible_method).revealed.non_anon).
-                        merge(Work.joins("INNER JOIN creatorships
-                                          ON creatorships.creation_id = works.id
-                                          AND creatorships.creation_type = 'Work'
-                                          INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                                          INNER JOIN users ON pseuds.user_id = users.id").
-                                  where('users.id = ?', @user.id))
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works
+                     ON filter_taggings.filterable_id = works.id
+                     AND filter_taggings.filterable_type = 'Work'").
+                   group('tags.id').
+                   merge(Work.send(visible_method).revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships
+                     ON creatorships.creation_id = works.id
+                     AND creatorships.creation_type = 'Work'
+                     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                     INNER JOIN users ON pseuds.user_id = users.id").
+                   where('users.id = ?', @user.id))
                end
     visible_works = @user.works.send(visible_method)
     visible_series = @user.series.send(visible_method)
