@@ -7,6 +7,17 @@ en:
         one: "one email found"
         other: "%{count} emails found"
 
+  tag_types:
+    archive_warning: "warning"
+    rating: "rating"
+    category: "category"
+    fandom: "fandom"
+    relationship: "relationship"
+    freeform: "freeform"
+    character: "character"
+    media: "media"
+    banned: "banned"
+
   errors:
     format: "%{attribute} %{message}"
     messages: &errors_messages

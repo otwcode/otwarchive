@@ -219,7 +219,7 @@ class TagSet < ApplicationRecord
   # possible.)
   def tag_ids_by_type
     if @tag_ids_by_type.nil?
-      @tag_ids_by_type = tags.group_by { |tag| tag.type.downcase }
+      @tag_ids_by_type = tags.group_by { |tag| tag.type.underscore }
       @tag_ids_by_type.each_value { |tag_list| tag_list.map!(&:id) }
     end
 

@@ -1,6 +1,6 @@
 <% cache("tagsets_#{@tag_set_ids.join('-')}_#{@tag_sets.collect(&:updated_at).sort.last}", skip_digest: true) do %>
   <h2>
-   <%=  tag_type_label_name(tag_type) %> Options
+   <%= t("tag_types.#{@tag_type}").humanize.titleize %> Options
     <%= ts("From") %>:</h2>
     <ul class="commas">
       <% @tag_sets.each do |ts| %>

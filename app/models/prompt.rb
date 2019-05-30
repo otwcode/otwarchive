@@ -105,7 +105,7 @@ class Prompt < ApplicationRecord
         # check if user has chosen the "Any" option
         if self.send("any_#{tag_type}")
           if tag_count > 0
-            errors.add(:base, ts("^You have specified tags for %{tag_type} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.",
+            errors.add(:base, ts("^You have specified tags for %{tag_label} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.",
                                 tag_type: tag_type, prompt_type: prompt_type))
           end
           next
@@ -147,7 +147,9 @@ class Prompt < ApplicationRecord
         elsif restriction.has_tags?(tag_type)
           disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+            tag_label = tag_type_label_name(tag_type)
+
+            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               tag_type: tag_type,
               prompt_type: self.class.name.downcase,
               taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
@@ -179,7 +181,8 @@ class Prompt < ApplicationRecord
           # check for tag set associations
           disallowed_taglist.reject! {|tag| TagSetAssociation.where(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist).exists?}
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
+            tag_label = tag_type_label_name(tag_type)
+            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
                               prompt_type: self.class.name.downcase,
                               tag_type: tag_type, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
                               taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
