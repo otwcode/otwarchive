@@ -55,7 +55,7 @@
           <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
             <% if @limit[tag_type] > 0 %>
               <div class="<%= tag_type.to_s.pluralize.downcase %> listbox group">
-                <h5 class="heading"><%= tag_type_label_name(tag_type) %></h5>
+                <h5 class="heading"><%= tag_type_label_name(tag_type).pluralize %></h5>
                 <ul class="index group">
                   <% if fandom_nom.send("#{tag_type}_nominations").count == 0 %>
                     <li><%= ts("None nominated in this fandom.") %></li>

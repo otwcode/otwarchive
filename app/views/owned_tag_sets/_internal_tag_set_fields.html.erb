@@ -4,9 +4,9 @@
       <% # fandoms, chars, relationships, freeforms %>
 
         <% if @tag_set.with_type(tag_type).empty? %>
-          <h4 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add #{tag_type_label_name(tag_type)}:") %></h4>
+          <h4 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add #{tag_type_label_name(tag_type).pluralize}:") %></h4>
         <% else %>
-          <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type_label_name(tag_type)}") %></h4>
+          <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type_label_name(tag_type).pluralize}") %></h4>
           <%= check_all_none %>
           <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.with_type(tag_type).by_name_without_articles) %>
           <h5 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add:") %></h5>

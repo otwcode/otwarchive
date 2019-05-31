@@ -12,7 +12,7 @@
 <% itemcount ||= 30 %>
 <li class="<%= tag_type_class(tag_type) %> alphabet tagset index group listbox">
   <h3>
-    <%= tag_type_label_name(tag_type) %>
+    <%= tag_type_label_name(tag_type).pluralize %>
     <%= expand_contract_all %>
   </h3>
   <ol class="index group">
