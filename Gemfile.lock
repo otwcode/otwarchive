@@ -259,10 +259,7 @@ GEM
     net-ssh-gateway (2.0.0)
       net-ssh (>= 4.0.0)
     netrc (0.11.0)
-    newrelic-redis (2.0.2)
-      newrelic_rpm (~> 3.11)
-      redis (< 4.0)
-    newrelic_rpm (3.18.1.330)
+    newrelic_rpm (6.4.0.356)
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
@@ -514,7 +511,6 @@ DEPENDENCIES
   mechanize
   minitest
   mysql2 (= 0.3.20)
-  newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.8.5)
   nokogumbo (= 1.4.9)
