@@ -28,8 +28,11 @@ module TagTypeHelper
   #
   # Returns String label in singular form
   def tag_type_label_name(tag_type)
-    label = if tag_type.underscore == 'archive_warning'
+    label = case tag_type.underscore
+    when 'archive_warning'
       ArchiveWarning.label_name
+    when 'tag'
+      "Bookmarker's Tag"
     else
       tag_type.humanize.titleize
     end
