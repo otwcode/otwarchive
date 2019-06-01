@@ -276,10 +276,20 @@ class User < ApplicationRecord
       users = users.joins(:roles).where("roles.id = ?", role.id)
     end
     if query.present?
-      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+      users = filter_by_name_or_email(users, query, options[:exact])
     end
     users.paginate(page: options[:page] || 1)
   end
+
+  def self.filter_by_name_or_email(users, query, exact)
+    if exact
+      users.joins(:pseuds).where("pseuds.name = ? OR email = ?", query.to_s, query.to_s)
+    else
+      users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+    end
+  end
+
+  private_class_method :filter_by_name_or_email
 
   def self.search_multiple_by_email(emails = [])
     users = User.where(email: emails)
