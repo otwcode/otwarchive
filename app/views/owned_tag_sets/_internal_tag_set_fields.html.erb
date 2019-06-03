@@ -17,7 +17,7 @@
     <% else %>
       <% # ratings, categories, archive_warnings %>
         <h4 class="heading">
-          <%= tag_type_label_name(tag_type) %>
+          <%= ts("%{tag_type}", tag_type: tag_type_label_name(tag_type)) %>
         </h4>
 
         <%= check_all_none %>
