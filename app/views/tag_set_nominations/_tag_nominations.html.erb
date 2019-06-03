@@ -3,7 +3,7 @@
     <% @tag_set_nomination.send("#{tag_type}_nominations").each_with_index do |nom, index| %>
       <%= f.fields_for "#{tag_type}_nominations".to_sym, nom do |nom_form| %>
 
-        <dt><%= nom_form.label :tagname, tag_type_label_name(tag_type) + " #{index+1}" %>
+        <dt><%= nom_form.label :tagname, ts("%{tag_type} %{index}", tag_type: tag_type_label_name(tag_type), index: index + 1) %>
         <dd>
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %> <%= nomination_status(nom) %>
