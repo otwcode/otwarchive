@@ -131,18 +131,17 @@ class TagsController < ApplicationController
     end
   end
 
-  # TODO: Refactor the tag_type checking logic
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
       raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
-      model = begin
-                params[:creation_type].classify.constantize
-              rescue
-                nil
-              end
+
+      model = if Object.const_defined?(params[:creation_type].classify)
+        params[:creation_type].classify.constantize
+      end
+
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
-      # Tags aren't directly on series, so we need to handle them differently
+      #Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
         if params[:tag_type] == 'warnings'
           @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq.sort
