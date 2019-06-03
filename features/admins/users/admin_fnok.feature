@@ -14,7 +14,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's username" with "libby"
       And I fill in "Fannish next of kin's email" with "testy@foo.com"
       And I press "Update"
-    Then I should see "Fannish next of kin added."
+    Then I should see "Fannish next of kin was updated."
 
     When I go to the manage users page
       And I fill in "Name or email" with "harrykim"
@@ -56,8 +56,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's username" with "newlibby"
       And I fill in "Fannish next of kin's email" with "newlibby@foo.com"
       And I press "Update"
-    Then I should see "Fannish next of kin user updated."
-      And I should see "Fannish next of kin email updated."
+    Then I should see "Fannish next of kin was updated."
 
   Scenario: A Fannish Next of Kin is removed
     Given the fannish next of kin "libby" for the user "harrykim"
@@ -66,7 +65,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's username" with ""
       And I fill in "Fannish next of kin's email" with ""
       And I press "Update"
-    Then I should see "Fannish next of kin removed."
+    Then I should see "Fannish next of kin was updated."
 
   Scenario: A Fannish Next of Kin updates when the next of kin user changes their username
     Given the fannish next of kin "libby" for the user "harrykim"
@@ -108,6 +107,6 @@ Feature: Admin Fannish Next Of Kind actions
     When I fill in "Fannish next of kin's username" with "harrysmom"
       And I fill in "Fannish next of kin's email" with "harrysmom@example.com"
       And I press "Update"
-    Then I should see "Fannish next of kin user updated."
+    Then I should see "Fannish next of kin was updated."
       And the "Fannish next of kin's username" field should contain "harrysmom"
       And the "Fannish next of kin's email" field should contain "harrysmom@example.com"
