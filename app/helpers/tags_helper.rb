@@ -202,7 +202,7 @@ module TagsHelper
             open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
             close_tags = "</strong></li>"
             tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
-          elsif class_name == "archive_warnings"
+          elsif class_name == "warnings"
             open_tags = "<li class='#{class_name}'><strong>"
             close_tags = "</strong></li>"
             link_array = tags.collect{|tag| link_to_tag_works(tag)}
