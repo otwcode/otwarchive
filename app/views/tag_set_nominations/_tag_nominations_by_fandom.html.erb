@@ -16,7 +16,7 @@
         <% %w(character relationship).each do |tag_type| %>
           <% if @limit[tag_type] > 0 %>
             <%= nom_form.fields_for "#{tag_type}_nominations".to_sym do |nom_form2| %>
-              <dt><%= nom_form2.label :tagname, tag_type_label_name(tag_type) %>
+              <dt><%= nom_form2.label :tagname, ts("%{tag_type}", tag_type: tag_type_label_name(tag_type)) %>
               <dd>
                 <% if nom_form2.object.approved  || nom_form2.object.rejected %>
                   <%= nom_form2.object.tagname %> <%= nomination_status(nom_form2.object) %>
