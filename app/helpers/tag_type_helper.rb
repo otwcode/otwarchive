@@ -7,7 +7,6 @@ module TagTypeHelper
   #   tag_type_class("ArchiveWarning")
   #   # => "warning"
   def tag_type_class(tag_type)
-
     tag_type = tag_type.classify
     case tag_type
     when "AdditionalTag"
@@ -29,14 +28,13 @@ module TagTypeHelper
   # Returns String label in singular form
   def tag_type_label_name(tag_type)
     label = case tag_type.underscore
-    when 'archive_warning'
-      ArchiveWarning.label_name
-    when 'tag'
-      "Bookmarker's Tag"
-    else
-      tag_type.humanize.titleize
-    end
-
+            when 'archive_warning'
+              ArchiveWarning.label_name
+            when 'tag'
+              "Bookmarker's Tag"
+            else
+              tag_type.humanize.titleize
+            end
     label.singularize
   end
 end

@@ -49,7 +49,7 @@ module WorksHelper
   # select the default warning if this is a new work
   def check_archive_warning(work, warning)
     if work.nil? || work.archive_warning_strings.empty?
-     warning.name == nil
+      warning.name == nil
     else
       work.archive_warning_strings.include?(warning.name)
     end

@@ -136,12 +136,12 @@ class TagsController < ApplicationController
       raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
 
       model = if Object.const_defined?(params[:creation_type].classify)
-        params[:creation_type].classify.constantize
-      end
+                params[:creation_type].classify.constantize
+              end
 
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
-      #Tags aren't directly on series, so we need to handle them differently
+      # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
         if params[:tag_type] == 'warnings'
           @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq.sort
@@ -150,11 +150,11 @@ class TagsController < ApplicationController
         end
       else
         @display_tags = case params[:tag_type]
-        when 'warnings'
-          @display_creation.archive_warnings
-        when 'freeforms'
-          @display_creation.freeforms
-        end
+                        when 'warnings'
+                          @display_creation.archive_warnings
+                        when 'freeforms'
+                          @display_creation.freeforms
+                        end
       end
 
       if params[:tag_type] == 'warnings'
