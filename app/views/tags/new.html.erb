@@ -30,7 +30,7 @@
         <% types.each do |type| %>
           <li>
             <%= f.radio_button("type", type) %>
-            <%= f.label("type_#{type.downcase}", ts("%{type}", type: tag_type_label_name(type).singularize)) %>
+            <%= f.label("type_#{type.downcase}", ts("%{type}", type: tag_type_label_name(type))) %>
           </li>
         <% end %>
       </ul>
