@@ -40,7 +40,7 @@
 
       <% if TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
         <% # do ratings, warnings, categories as taglists if not already specified %>
-        <dd class="<%= tag_type_class(tag_type) %> listbox group" title="<%= ts("choose #{tag_label.pluralize.downcase}") %>">
+        <dd class="<%= tag_type_css_class(tag_type) %> listbox group" title="<%= ts("choose #{tag_label.pluralize.downcase}") %>">
           <h4 class="heading"><%= ts("#{tag_name.pluralize.titleize}") %></h4>
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames",
             (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name}, # constantize safe as itterating over safe list
@@ -71,7 +71,7 @@
             <% @fandom_tag_id += "_checkboxes" if tag_type == 'fandom' %>
 
             <% # create a scrollable checkboxes section to wrap the tags, see application_helper %>
-            <dd class="<%= "#{tag_type_class(tag_type)}" %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
+            <dd class="<%= "#{tag_type_css_class(tag_type)}" %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
               <h4 class="heading"><%= ts("#{tag_name.titleize}") %></h4>
               <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", restriction.tags(tag_type).by_name_without_articles.pluck(:name),
                   :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>

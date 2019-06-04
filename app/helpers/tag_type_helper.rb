@@ -4,9 +4,9 @@ module TagTypeHelper
   #
   # Examples
   #
-  #   tag_type_class("ArchiveWarning")
+  #   tag_type_css_class("ArchiveWarning")
   #   # => "warning"
-  def tag_type_class(tag_type)
+  def tag_type_css_class(tag_type)
     tag_type = tag_type.classify
     case tag_type
     when "AdditionalTag"

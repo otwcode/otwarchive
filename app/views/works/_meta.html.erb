@@ -8,7 +8,7 @@
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
         <% unless tags.blank? %>
-          <dt class="<%= tag_type_class(type) %> tags">
+          <dt class="<%= tag_type_css_class(type) %> tags">
 
             <% if type == "ArchiveWarning" %>
               <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
@@ -19,7 +19,7 @@
             <% end %>
           </dt>
 
-          <dd class="<%= tag_type_class(type) %> tags">
+          <dd class="<%= tag_type_css_class(type) %> tags">
             <ul class="commas">
               <% if (type == "ArchiveWarning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
 
