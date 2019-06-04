@@ -9,7 +9,7 @@
             <%= nom.tagname %> <%= nomination_status(nom) %>
           <% else %>
 
-            <div title="<%= t("tag_sets.#{tag_type}").humanize.titleize %> <%= index+1 %>">
+            <div title="<%= ts("%{tag_type} %{index}", tag_type: tag_type_label_name(tag_type), index: index + 1) %>">
               <%= nom_form.text_field :tagname, autocomplete_options(tag_type, :autocomplete_token_limit => 1) %>
             </div>
           <% end %>

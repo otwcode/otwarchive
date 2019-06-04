@@ -62,7 +62,6 @@ module TagsHelper
   def link_to_tag_with_text(tag, link_text, options = {})
     if options[:full_path] 
       link_to_with_tag_class(tag_url(tag), link_text, options)
-
     else
       link_to_with_tag_class(tag_path(tag), link_text, options)
     end

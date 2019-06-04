@@ -14,17 +14,17 @@ describe TagTypeHelper do
   end
 
   it "finds the correct CSS class for the ArchiveWarning tag type" do
-    result = tag_type_class('ArchiveWarning')
+    result = tag_type_css_class('ArchiveWarning')
     expect(result).to eq("warning")
   end
 
   it "finds the correct CSS class for the AdditionalTag tag type" do
-    result = tag_type_class('AdditionalTag')
+    result = tag_type_css_class('AdditionalTag')
     expect(result).to eq("freeform")
   end
 
   it "finds the correct CSS class for all other tag types" do
-    result = tag_type_class('Category')
+    result = tag_type_css_class('Category')
     expect(result).to eq("category")
   end
 end
