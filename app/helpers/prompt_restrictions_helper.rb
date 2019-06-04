@@ -69,7 +69,7 @@ module PromptRestrictionsHelper
         h(ts("Must Be Unique?")) + form.check_box("require_unique_#{tag_type}".to_sym, disabled: (hasprompts ? false : true))
       end
     end
-    content_tag(:dd, fields.html_safe, title: ts("#{tag_type.pluralize}")) + "\n".html_safe
+    content_tag(:dd, fields.html_safe, title: ts("#{tag_type_label_name(tag_type).pluralize.downcase}")) + "\n".html_safe
   end
 
   # generate the string to use for the labels on sign-up forms
