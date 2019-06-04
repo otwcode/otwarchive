@@ -7,7 +7,7 @@ module TagTypeHelper
   #   tag_type_css_class("ArchiveWarning")
   #   # => "warning"
   def tag_type_css_class(tag_type)
-    tag_type = tag_type.classify
+    tag_type = tag_type.singularize.classify
     case tag_type
     when "AdditionalTag"
       "freeform"
@@ -27,7 +27,7 @@ module TagTypeHelper
   #
   # Returns String label in singular form
   def tag_type_label_name(tag_type)
-    label = case tag_type.underscore
+    label = case tag_type.singularize.underscore
             when 'archive_warning'
               ArchiveWarning.label_name
             when 'tag'
