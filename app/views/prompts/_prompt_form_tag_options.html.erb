@@ -15,7 +15,7 @@
       <% tag_field_id =  field_id(tag_set_form, "#{tag_type}_tagnames") %>
 
       <dt<%= num_required > 0 ? ' class="required"'.html_safe : '' %>>
-        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, challenge_signup_label(tag_name, num_allowed, num_required), :class => tag_label %>
+        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, challenge_signup_label(tag_name, num_allowed, num_required), class: tag_type_css_class(tag_type) %>
 
         <% # kludge required for bug in nested_attributes_for:https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes %>
       </dt>
