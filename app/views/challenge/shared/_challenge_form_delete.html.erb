@@ -1,7 +1,7 @@
 <ul class="navigation actions" role="menu">
   <% if @collection.challenge %>
     <li><%= link_to ts("Delete Challenge"),
-                    if  @collection.prompt_meme?
+                    if @collection.prompt_meme?
                       collection_prompt_meme_path(@collection)
                     else
                       collection_gift_exchange_path(@collection)

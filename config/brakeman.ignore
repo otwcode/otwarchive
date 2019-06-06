@@ -10,7 +10,7 @@
       "line": 6,
       "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "ts(\"Are you sure you want to <strong><em>delete</em></strong> the collection %{collection_name}? All collection settings will be lost. (Works will not be deleted.)\", :collection_name => Collection.find_by(:name => params[:collection_id]).title)",
-      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":164,"file":"app/controllers/collections_controller.rb"}],
+      "render_path": [{"type":"controller","class":"CollectionsController","method":"confirm_delete","line":161,"file":"app/controllers/collections_controller.rb"}],
       "location": {
         "type": "template",
         "template": "collections/confirm_delete"
@@ -2406,6 +2406,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-05-14 21:26:45 +0000",
+  "updated": "2019-06-06 18:32:04 +0000",
   "brakeman_version": "3.7.2"
 }
