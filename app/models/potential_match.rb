@@ -167,7 +167,7 @@ public
                             pluck(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
-      condition = "any_#{required_types.first.downcase} = 1"
+      condition = "any_#{required_types.first.underscore} = 1"
       matching_signup_ids += collection.prompts.where(condition).pluck(:challenge_signup_id)
     end
 

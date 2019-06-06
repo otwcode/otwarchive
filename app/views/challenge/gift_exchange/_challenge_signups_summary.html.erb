@@ -12,12 +12,12 @@
 <% if summary_tags.empty? %>
   <p class="notice"><%= ts("Tags were not used in this Challenge, so there is no summary to display here.") %></p>
 <% else %>
-  <h3 class="heading"><%= ts("Requested %{tag_type}", :tag_type => tag_type.pluralize.capitalize) %></h3>
+  <h3 class="heading"><%= ts("Requested %{tag_type}", tag_type: tag_type_label_name(tag_type).pluralize) %></h3>
   <p class="note">
     <%= ts('Listed by fewest offers and most requests.') %>
   </p>
-  <table id="challenge_summary" summary="<%= ts("Number of requests and offers for each requested %{tag_type} in this challenge, listed by fewest offers and most requests.", :tag_type => tag_type) %>">
-    <caption><%=ts("Requests and Offers for Requested %{tag_type}", :tag_type => tag_type.pluralize.capitalize) %></caption>
+  <table id="challenge_summary" summary="<%= ts("Number of requests and offers for each requested %{tag_type} in this challenge, listed by fewest offers and most requests.", tag_type: tag_type_label_name(tag_type)) %>">
+    <caption><%=ts("Requests and Offers for Requested %{tag_type}", tag_type: tag_type_label_name(tag_type).pluralize) %></caption>
     <thead>
       <tr>
         <th scope="col"><%= tag_type.capitalize %></th>
@@ -40,4 +40,3 @@
     </tbody>
   </table>
 <% end %>
-
