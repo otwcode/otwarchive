@@ -17,7 +17,7 @@
     <%= ts('Listed by fewest offers and most requests.') %>
   </p>
   <table id="challenge_summary" summary="<%= ts("Number of requests and offers for each requested %{tag_type} in this challenge, listed by fewest offers and most requests.", tag_type: tag_type_label_name(tag_type)) %>">
-    <caption><%=ts("Requests and Offers for Requested %{tag_type}", tag_type: tag_type_label_name(tag_type).pluralize) %></caption>
+    <caption><%=ts("Requests and Offers for Requested %{tag_type}", tag_type: tag_type_label_name(tag_type)) %></caption>
     <thead>
       <tr>
         <th scope="col"><%= tag_type.capitalize %></th>
