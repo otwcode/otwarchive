@@ -21,7 +21,7 @@ describe "API v2 BookmarksController", type: :request do
                rec: "0" }
 
   before do
-    mock_external
+    ApiHelper.mock_external
   end
 
   after do

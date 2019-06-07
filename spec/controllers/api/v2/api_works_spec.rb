@@ -8,8 +8,8 @@ describe "API v2 WorksController - Create works", type: :request do
   let(:archivist) { create(:archivist) }
 
   describe "API import with a valid archivist" do
-    before :all do
-      mock_external
+    before :each do
+      ApiHelper.mock_external
     end
 
     after :each do
