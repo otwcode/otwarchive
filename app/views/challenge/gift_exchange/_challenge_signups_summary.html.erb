@@ -20,7 +20,7 @@
     <caption><%=ts("Requests and Offers for Requested %{tag_type}", tag_type: tag_type_label_name(tag_type)) %></caption>
     <thead>
       <tr>
-        <th scope="col"><%= tag_type.capitalize %></th>
+        <th scope="col"><%= tag_type_label_name(tag_type) %></th>
         <th scope="col"><%= ts('Requests') %></th>
         <th scope="col"><%= ts('Offers') %></th>
       </tr>

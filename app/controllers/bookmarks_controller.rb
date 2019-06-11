@@ -122,7 +122,7 @@ class BookmarksController < ApplicationController
           tags = Tag.where(id: excluded_tag_ids + excluded_bookmark_tag_ids)
           tags.each do |tag|
             if excluded_tag_ids.include?(tag.id.to_s)
-              key = tag.class.to_s.downcase
+              key = tag.class.to_s.underscore
               @facets[key] ||= []
               @facets[key] << QueryFacet.new(tag.id, tag.name, 0)
             end
