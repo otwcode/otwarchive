@@ -264,10 +264,10 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name or email
-  # Options: inactive, page
-  def self.search_by_role(role, query, options = {})
-    return if role.blank? && query.blank?
+  # Find users with a particular role and/or by name and/or by email
+  # Options: inactive, page, exact
+  def self.search_by_role(role, name, email, options = {})
+    return if role.blank? && name.blank? && email.blank?
     users = User.select("DISTINCT users.*").order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
@@ -275,21 +275,32 @@ class User < ApplicationRecord
     if role.present?
       users = users.joins(:roles).where("roles.id = ?", role.id)
     end
-    if query.present?
-      users = filter_by_name_or_email(users, query, options[:exact])
+    if name.present?
+      users = users.filter_by_name(name, options[:exact])
+    end
+    if email.present?
+      users = users.filter_by_email(email, options[:exact])
     end
     users.paginate(page: options[:page] || 1)
   end
 
-  def self.filter_by_name_or_email(users, query, exact)
+  # Scope to look for users by pseud name:
+  def self.filter_by_name(name, exact)
     if exact
-      users.joins(:pseuds).where("pseuds.name = ? OR email = ?", query.to_s, query.to_s)
+      joins(:pseuds).where(["pseuds.name = ?", name])
     else
-      users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+      joins(:pseuds).where(["pseuds.name LIKE ?", "%#{name}%"])
     end
   end
 
-  private_class_method :filter_by_name_or_email
+  # Scope to look for users by email:
+  def self.filter_by_email(email, exact)
+    if exact
+      where(["email = ?", email])
+    else
+      where(["email LIKE ?", "%#{email}%"])
+    end
+  end
 
   def self.search_multiple_by_email(emails = [])
     users = User.where(email: emails)
