@@ -268,7 +268,7 @@ class User < ApplicationRecord
   # Options: inactive, page, exact
   def self.search_by_role(role, name, email, options = {})
     return if role.blank? && name.blank? && email.blank?
-    users = User.select("DISTINCT users.*").order(:login)
+    users = User.distinct.order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
     end
