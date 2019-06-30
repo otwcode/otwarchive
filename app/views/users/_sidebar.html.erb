@@ -40,7 +40,6 @@
   <h4 class="landmark heading"><%= ts("Catch")%></h4>
   <ul class="navigation actions">
 	  <li><%= span_if_current ts("Inbox (%{inbox_number})", :inbox_number => @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
-	  <li><%= span_if_current ts("Creator Invitations (%{count})", count: Creatorship.pending.for_user(@user).count), user_creatorships_path(@user) %></li>
 	  <li><%= span_if_current ts("Statistics"), user_stats_path(@user) %></li>
     <% if @user.preference.try(:history_enabled?) %>
       <li><%= span_if_current ts("History"), user_readings_path(@user) %></li>
@@ -52,6 +51,7 @@
 <h4 class="landmark heading"><%= ts("Switch")%></h4>
 <ul class="navigation actions">
   <% if @user == current_user %>
+    <li><%= span_if_current ts("Creator Invitations (%{count})", count: Creatorship.pending.for_user(@user).count), user_creatorships_path(@user) %></li>
     <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
     <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
     <li><%= span_if_current ts("Claims (%{claim_number})", :claim_number => (@user.request_claims.unposted.count)), user_claims_path(@user) %></li>
