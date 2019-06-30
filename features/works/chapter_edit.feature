@@ -526,7 +526,11 @@ Feature: Edit chapters
     When I am logged in as "brenda"
       And I follow "Rusty Has Two Moms" in the email
     Then I should not see "Edit"
-    When I follow "Accept Co-Creator Invitation"
+    When I follow "Creator Invitations page"
+      And I check "selected[]"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Chapter 2 of 'Rusty Has Two Moms'."
+    When I follow "Rusty Has Two Moms"
     Then I should see "brenda, rusty"
       And I should see "Edit"
 

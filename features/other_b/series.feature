@@ -263,7 +263,11 @@ Feature: Create and Edit Series
     When I am logged in as "barbaz"
       And I follow "Gentleman Jack" in the email
     Then I should not see "Edit Series"
-    When I follow "Accept Co-Creator Invitation"
+    When I follow "Creator Invitations page"
+      And I check "selected[]"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Gentleman Jack."
+    When I follow "Gentleman Jack"
     Then I should see "Edit Series"
       And "barbaz" should be a co-creator of the series "Gentleman Jack"
 

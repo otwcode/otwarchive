@@ -138,7 +138,11 @@ Feature: Edit Works
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"
-    When I follow "Accept Co-Creator Invitation"
+    When I follow "Creator Invitations page"
+      And I check "selected[]"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Dialogue."
+    When I follow "Dialogue"
     Then I should see "coauthor, leadauthor" within ".byline"
       And I should see "Edit"
 
