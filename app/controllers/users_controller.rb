@@ -270,11 +270,14 @@ class UsersController < ApplicationController
     visible_bookmarks = @user.bookmarks.send(visible_method)
 
     visible_works = visible_works.revealed.non_anon
-    @fandoms = \
-      Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
-      joins(:filtered_works).group("tags.id").merge(visible_works).
-      where(filter_taggings: { inherited: false }).
-      order('work_count DESC').load
+    @fandoms = if @user == User.orphan_account
+                 []
+               else
+                 Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
+                   joins(:filtered_works).group("tags.id").merge(visible_works).
+                   where(filter_taggings: { inherited: false }).
+                   order('work_count DESC').load
+               end
 
     {
       works: visible_works,

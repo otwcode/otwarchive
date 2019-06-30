@@ -1,5 +1,5 @@
 #!/bin/bash
-ES_VERSION="6.6.1"
+ES_VERSION="6.7.0"
 ES_PORT="9400"
 cd /tmp
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz

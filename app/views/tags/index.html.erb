@@ -29,7 +29,7 @@
   <ul class="tags cloud index group">
     <!--FRONT END REVIEW: these classes are irregular-->
     <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
-      <li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
+      <li><%= link_to_tag_works(tag, class: css_class.dup, collection: @collection) %></li>
     <% end %>
   </ul>
 <% end %>
