@@ -345,11 +345,6 @@ Otwarchive::Application.routes.draw do
         put :review_all
       end
     end
-    resource :creatorships, controller: "creatorships", only: [] do
-      member do
-        put :accept
-      end
-    end
     resources :kudos, only: [:index]
     resources :links, controller: "work_links", only: [:index]
   end
@@ -360,11 +355,6 @@ Otwarchive::Application.routes.draw do
       post :post
     end
     resources :comments
-    resource :creatorships, controller: "creatorships", only: [] do
-      member do
-        put :accept
-      end
-    end
   end
 
   resources :external_works do
@@ -386,11 +376,6 @@ Otwarchive::Application.routes.draw do
       post :update_positions
     end
     resources :bookmarks
-    resource :creatorships, controller: "creatorships", only: [] do
-      member do
-        put :accept
-      end
-    end
   end
 
   #### COLLECTIONS ####

@@ -7,9 +7,6 @@ class CreatorshipsController < ApplicationController
   before_action :check_ownership_or_admin, only: [:show]
   before_action :check_ownership, only: [:update]
 
-  before_action :users_only, only: [:accept]
-  before_action :load_item, only: [:accept]
-
   # Show all of the creatorships associated with the current user. Displays a
   # form where the user can select multiple creatorships and perform actions
   # (accept, remove) in bulk.
@@ -38,23 +35,6 @@ class CreatorshipsController < ApplicationController
     end
 
     redirect_to user_creatorships_path(@user, page: params[:page])
-  end
-
-  # Accept all creatorships associated with a particular item.
-  def accept
-    @creatorships = @item.creatorships.unapproved.for_user(current_user)
-
-    unless @creatorships.exists?
-      flash[:error] = ts("You don't have any creator invitations for this %{type}.",
-                         type: @item.model_name.human.downcase)
-      redirect_to @item
-      return
-    end
-
-    @creatorships.each(&:accept!)
-
-    flash[:notice] = ts("You have accepted the invitation to become a co-creator.")
-    redirect_to @item
   end
 
   private
@@ -106,16 +86,5 @@ class CreatorshipsController < ApplicationController
     @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
     @creatorships = Creatorship.unapproved.for_user(@user)
-  end
-
-  # Load the desired item.
-  def load_item
-    if params[:chapter_id]
-      @item = Chapter.find(params[:chapter_id])
-    elsif params[:work_id]
-      @item = Work.find(params[:work_id])
-    elsif params[:series_id]
-      @item = Series.find(params[:series_id])
-    end
   end
 end
