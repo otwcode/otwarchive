@@ -206,7 +206,7 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and series information still filled in
+  Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and the newly created series selected
     Given basic tags
       And I am logged in as "thorough" with password "something"
     When I set up the draft "Bad Draft"
@@ -220,7 +220,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
-      And the field labeled "Or create and use a new one:" should contain "My new series"
+      And "My new series" should be selected within "Choose one of your existing series:"
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
