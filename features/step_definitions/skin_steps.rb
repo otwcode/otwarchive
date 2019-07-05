@@ -36,7 +36,7 @@ Given /^I create the skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^I edit the skin "([^"]*)"$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   visit edit_skin_path(skin)
 end
 
@@ -121,54 +121,54 @@ When /^I create and use a skin to change the accent color$/ do
 end
 
 When /^I edit the skin "([^\"]*)" with the wizard$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   visit edit_skin_path(skin, wizard: true)
 end
 
 When /^I edit my pink header skin to have a purple logo$/ do
-  skin = Skin.find_by_title("Pink header")
+  skin = Skin.find_by(title: "Pink header")
   visit edit_skin_path(skin)
   fill_in("CSS", with: "#header .heading a {color: purple;}")
   click_button("Update")
 end
 
 When /^I view the skin "([^\"]*)"$/ do |skin|
-  skin = Skin.find_by_title!(skin)
+  skin = Skin.find_by(title: skin)
   visit skin_url(skin)
 end
 
 When /^the skin "([^\"]*)" is in the chooser$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   skin.in_chooser = true
   skin.save
 end
 
 When /^the skin "([^\"]*)" is cached$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   skin.cached = true
   skin.save
   skin.cache!
 end
 
 When /^I preview the skin "([^\"]*)"$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   visit preview_skin_path(skin)
 end
 
 When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   visit set_skin_path(skin)
 end
 
 ### THEN
 
 Then /^the page should have the cached skin "([^"]*)"$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   page.should have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
 end
 
 Then /^the page should not have the cached skin "([^"]*)"$/ do |skin_name|
-  skin = Skin.find_by_title(skin_name)
+  skin = Skin.find_by(title: skin_name)
   page.should_not have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
 end
 
@@ -186,18 +186,18 @@ Then /^the page should have a skin with the media query "([^"]*)"$/ do |query|
   page.should have_xpath("//style[@media='#{query}']")
 end
 
-Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title| 
-  skin = Skin.find_by_title(title)
+Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title|
+  skin = Skin.find_by(title: title)
   orig_cache_key = skin_cache_value(skin)
-  visit edit_skin_path(skin) 
+  visit edit_skin_path(skin)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
-  click_button("Update") 
-  assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}." 
-end 
+  click_button("Update")
+  assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}."
+end
 
 Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/) do |arg1, arg2|
-  skin = Skin.find_by_title(arg1)
-  save_me = Skin.find_by_title(arg2)
+  skin = Skin.find_by(title: arg1)
+  save_me = Skin.find_by(title: arg2)
   orig_skin_key = skin_cache_value(skin)
   orig_save_me_key = skin_cache_value(save_me)
   visit edit_skin_path(save_me)
@@ -208,7 +208,7 @@ Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/
 end
 
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
-  skin = Skin.find_by_title(arg1)
+  skin = Skin.find_by(title: arg1)
   orig_skin_key = skin_cache_value(skin)
   parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)

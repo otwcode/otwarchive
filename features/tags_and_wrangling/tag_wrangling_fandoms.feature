@@ -40,8 +40,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I should not see "Synonyms"
   When I follow "Edit Stargate Atlantis"
     And I should see "SGA"
-  Then the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+  Then the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical fandoms from work posting
   When I go to the new work page
@@ -85,8 +84,9 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I edit the tag "Stargate Atlantis"
     And I fill in "MetaTags" with "Stargate Franchise"
     And I press "Save changes"
-  Then I should see "Tag was updated"
-    But I should not see "Stargate Franchise" within ".tags"
+  Then I should see "Invalid meta tag 'Stargate Franchise':"
+    And I should see "Meta tag does not exist."
+    And I should not see "Stargate Franchise" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Stargate Franchise"
     And I check "Canonical"

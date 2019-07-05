@@ -38,8 +38,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should not see "Synonyms"
   When I follow "Edit Alternate Universe Space Pirates"
     And I should see "Pirates! in Spaaaaace! AU"
-    And the "Canonical" checkbox should be checked
-    And the "Canonical" checkbox should be disabled
+    And the "Canonical" checkbox should be checked and disabled
 
   # creating non-canonical freeforms from work posting
   When I go to the new work page
@@ -77,8 +76,9 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "Edit Alternate Universe Pirates"
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
-  Then I should see "Tag was updated"
-    But I should not see "Alternate Universe" within "dd.tags"
+  Then I should see "Invalid meta tag 'Alternate Universe':"
+    And I should see "Meta tag does not exist."
+    And I should not see "Alternate Universe" within "form"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "Canonical"

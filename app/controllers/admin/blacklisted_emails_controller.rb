@@ -1,6 +1,6 @@
 class Admin::BlacklistedEmailsController < ApplicationController
 
-  before_filter :admin_only
+  before_action :admin_only
 
   def index
     @admin_blacklisted_email = AdminBlacklistedEmail.new
@@ -19,7 +19,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
 
     if @admin_blacklisted_email.save
       flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} added to blacklist.")
-      redirect_to admin_blacklisted_emails_url
+      redirect_to admin_blacklisted_emails_path
     else
       render action: "index"
     end
@@ -30,7 +30,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
     @admin_blacklisted_email.destroy
 
     flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} removed from blacklist.")
-    redirect_to admin_blacklisted_emails_url
+    redirect_to admin_blacklisted_emails_path
   end
 
   private

@@ -19,15 +19,16 @@ end
 ### WHEN
 
 When /^I make "([^\"]*)" an archivist$/ do |name|
-  step(%{I fill in "query" with "#{name}"})
-    step(%{I press "Find"})
+  step(%{I fill in "Name" with "#{name}"})
+  step(%{I check "Exact match only"})
+  step(%{I press "Find"})
   step(%{I check "user_roles_4"})
-    step(%{I press "Update"})
+  step(%{I press "Update"})
 end
 
 When /^I make "([^\"]*)" an Open Doors committee member$/ do |name|
-  @user = User.find_by_login(name)
-  @role = Role.find_or_create_by_name("opendoors")
+  @user = User.find_by(login: name)
+  @role = Role.find_or_create_by(name: "opendoors")
   @user.roles = [@role]
 end
 
@@ -69,7 +70,7 @@ When /^I import the works "([^\"]*)"$/ do |urls|
   step(%{I fill in "urls" with "#{urls}"})
   step(%{I check "Post without previewing"})
   step(%{I press "Import"})
-end  
+end
 
 ### THEN
 
