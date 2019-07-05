@@ -304,7 +304,7 @@ When /^I change my username to "([^"]*)"/ do |new_name|
   step %{I should get confirmation that I changed my username}
 end
 
-When(/^I am logged in as "([^"]*)" at "([^"]*)"$/) do |login,time|
+When(/^I am logged in as "([^"]*)" at "([^"]*)"$/) do |login, time|
   Timecop.freeze(time) do
     step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
   end
