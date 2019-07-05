@@ -166,7 +166,6 @@ class ChallengeAssignment < ApplicationRecord
   end
   alias_method :defaulted?, :defaulted
 
-  include Comparable
   # sort in order that puts assignments with no request ahead of assignments with no offer,
   # ahead of assignments with both request and offer, and within each group sorts by
   # request byline and then offer byline.
