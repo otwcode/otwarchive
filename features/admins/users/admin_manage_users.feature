@@ -10,7 +10,7 @@ Feature: Admin Actions to manage users
       | dizmo | wrangulator |
     And I have loaded the "roles" fixture
     When I am logged in as an admin
-    And I fill in "query" with "dizmo"
+    And I fill in "Name" with "dizmo"
     And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
 

@@ -50,6 +50,12 @@ describe Skin do
         li.relationships + li.freeforms:before { content: 'Freeform: '; }
         li:before {content: url('http://foo.com/bullet.jpg')}",
 
+      "allows whitelisted image extensions" =>
+        ".a { background: url('http://example.com/i.jpg'); }
+        .b { background: url('http://example.com/i.jpeg'); }
+        .c { background: url('http://example.com/i.png'); }
+        .d { background: url('http://example.com/i.gif'); }",
+
       "should allow through properties that are variations on the ones in the shorthand config list" =>
         "#main ul.sorting {
           background: rgba(120,120,120,1) 5%;
