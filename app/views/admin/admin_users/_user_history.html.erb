@@ -60,3 +60,7 @@
     </tbody>
   </table>
 </div>
+
+<% content_for :footer_js do %>
+  <%= javascript_include_tag 'jquery.timeago.min', skip_pipeline: true %>
+<% end %>

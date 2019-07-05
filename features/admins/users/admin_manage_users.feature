@@ -58,11 +58,11 @@ Feature: Admin Actions to manage users
 
   Scenario: User's last login date is saved
     Given the user "new_user" exists and is activated
-    And I am logged in as an admin
+      And I am logged in as an admin
     When I go to the abuse administration page for "new_user"
     Then I should see "No logins recorded"
-    When I am logged in as "new_user"
-    And I am logged in as an admin
-    And I go to the abuse administration page for "new_user"
+    When I am logged in as "new_user" at "2019-07-05 21:59:01 +0000"
+      And I am logged in as an admin
+      And I go to the abuse administration page for "new_user"
     Then I should not see "No logins recorded"
-    And I should see the last login time for "new_user"
+      And I should see the last login time for "new_user" is "2019-07-05 21:59:01 +0000"
