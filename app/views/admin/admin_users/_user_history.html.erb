@@ -63,4 +63,6 @@
 
 <% content_for :footer_js do %>
   <%= javascript_include_tag 'jquery.timeago.min', skip_pipeline: true %>
+  // convert an absolute time to a relative time, e.g. 1 day ago
+  $j('.timeago').timeago();
 <% end %>

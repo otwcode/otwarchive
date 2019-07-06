@@ -25,9 +25,6 @@ $j(document).ready(function() {
     // make Approve buttons on inbox items visible
     $j('#inbox-form, .messages').find('.unreviewed').find('.review').find('a').removeClass('hidden');
 
-    // convert an absolute time to a relative time, e.g. 1 day ago
-    $j('.timeago').timeago();
-
     prepareDeleteLinks();
     thermometer();
     $j('body').addClass('javascript');
