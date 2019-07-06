@@ -1,19 +1,32 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe AdminMailer, type: :mailer do
   describe "send_spam_email" do
     let(:spam_user) { create(:user) }
 
-    let(:spam1) { create(:posted_work, spam: true, title: "First Spam",
-                         authors: [spam_user.default_pseud]) }
-    let(:spam2) { create(:posted_work, spam: true, title: "Second Spam",
-                         authors: [spam_user.default_pseud]) }
-    let(:spam3) { create(:posted_work, spam: true, title: "Third Spam",
-                         authors: [spam_user.default_pseud]) }
+    let(:spam1) do
+      create(:posted_work, spam: true, title: "First Spam",
+                           authors: [spam_user.default_pseud])
+    end
+
+    let(:spam2) do
+      create(:posted_work, spam: true, title: "Second Spam",
+                           authors: [spam_user.default_pseud])
+    end
+
+    let(:spam3) do
+      create(:posted_work, spam: true, title: "Third Spam",
+                           authors: [spam_user.default_pseud])
+    end
 
     let(:other_user) { create(:user) }
-    let(:other_spam) { create(:posted_work, spam: true, title: "Mistaken Spam",
-                              authors: [other_user.default_pseud]) }
+
+    let(:other_spam) do
+      create(:posted_work, spam: true, title: "Mistaken Spam",
+                           authors: [other_user.default_pseud])
+    end
 
     let!(:report) do
       {
