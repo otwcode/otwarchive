@@ -96,8 +96,7 @@ class CommentsController < ApplicationController
   end
 
   def check_unreviewed
-
-    return unless @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
+    return unless @commentable&.respond_to?(:unreviewed?) && @commentable&.unreviewed?
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
     redirect_to logged_in? ? root_path : login_path
   end
@@ -126,7 +125,7 @@ class CommentsController < ApplicationController
   end
 
   def check_tag_wrangler_access
-    if @commentable.is_a?(Tag) || (@comment && @comment.parent.is_a?(Tag))
+    if @commentable.is_a?(Tag) || (@comment&.parent&is_a?(Tag))
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
@@ -138,7 +137,7 @@ class CommentsController < ApplicationController
 
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
-    return if @comment && @comment.count_all_comments == 0
+    return if @comment&.count_all_comments&.zero?
     flash[:error] = ts("Comments with replies cannot be edited")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
@@ -293,7 +292,6 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update_attributes(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
