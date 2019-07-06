@@ -84,7 +84,7 @@ class CommentsController < ApplicationController
     parent = find_parent
 
     return unless parent.respond_to?(:restricted) && parent.restricted? && !(logged_in? || logged_in_as_admin?)
-    redirect_to login_path(restricted_commenting: true)
+    redirect_to new_user_session_path(restricted_commenting: true)
   end
 
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
@@ -98,14 +98,14 @@ class CommentsController < ApplicationController
   def check_unreviewed
     return unless @commentable&.respond_to?(:unreviewed?) && @commentable&.unreviewed?
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
-    redirect_to logged_in? ? root_path : login_path
+    redirect_to logged_in? ? root_path : new_user_session_path
   end
 
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
-    redirect_to logged_in? ? root_path : login_path
+    redirect_to logged_in? ? root_path : new_user_session_path
   end
 
   def check_permission_to_access_single_unreviewed
@@ -113,7 +113,7 @@ class CommentsController < ApplicationController
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
-    redirect_to logged_in? ? root_path : login_path
+    redirect_to logged_in? ? root_path : new_user_session_path
   end
 
   def check_permission_to_moderate
@@ -341,7 +341,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if params[:approved_from] == "inbox"
-          redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters])
+          redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters])
         elsif params[:approved_from] == "home"
           redirect_to root_path
         else
