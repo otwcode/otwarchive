@@ -332,7 +332,6 @@ class CommentsController < ApplicationController
   end
 
   def review
-    @comment = Comment.find(params[:id])
     return unless @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
