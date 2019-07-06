@@ -294,11 +294,8 @@ Feature: Gift Exchange Challenge
       And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-      And "AO3-4571" is fixed
-    # "I start to fulfill" will use the first Fulfill option on the page
-    # which will be for the oldest assignment
-    # Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-    #   And the "Second Challenge (myname3)" checkbox should not be checked
+    Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+      And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
