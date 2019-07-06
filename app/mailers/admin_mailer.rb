@@ -1,4 +1,4 @@
-class AdminMailer < BulletproofMailer::Base
+class AdminMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -48,7 +48,7 @@ class AdminMailer < BulletproofMailer::Base
   # Sends a spam report
   def send_spam_alert(spam)
     @users = User.where(id: spam.keys).to_a
-    abort_delivery if @users.empty?
+    return if @users.empty?
 
     # Make sure that the keys of the spam array are integers, so that we can do
     # an easy look-up with user IDs.

@@ -105,7 +105,7 @@ describe AdminMailer, type: :mailer do
         end
 
         it "aborts delivery" do
-          expect(mail.actual_message).to eq(BulletproofMailer::BlackholeMailMessage)
+          expect(mail.actual_message).to be_a(ActionMailer::Base::NullMail)
         end
       end
     end
