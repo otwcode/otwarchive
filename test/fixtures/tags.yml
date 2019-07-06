@@ -7,7 +7,7 @@ tag_1063753983:
   created_at: 2009-07-18 09:58:41 Z
   delta: false
   updated_at: 2009-07-18 09:58:41 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753983
@@ -20,7 +20,7 @@ tag_1063753794:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 20:52:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753794
@@ -33,7 +33,7 @@ tag_1063753936:
   created_at: 2009-07-17 23:08:04 Z
   delta: false
   updated_at: 2009-07-17 23:08:04 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753936
@@ -46,7 +46,7 @@ tag_1063753746:
   created_at: 2008-11-21 07:48:03 Z
   delta: false
   updated_at: 2008-11-21 08:02:32 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753746
@@ -59,7 +59,7 @@ tag_1063754079:
   created_at: 2009-12-12 23:51:59 Z
   delta: false
   updated_at: 2009-12-12 23:51:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754079
@@ -72,7 +72,7 @@ tag_1063753984:
   created_at: 2009-07-18 09:58:41 Z
   delta: false
   updated_at: 2009-07-18 09:58:41 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753984
@@ -85,7 +85,7 @@ tag_1063753795:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 20:52:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753795
@@ -98,7 +98,7 @@ tag_1063753937:
   created_at: 2009-07-17 23:08:05 Z
   delta: false
   updated_at: 2009-07-17 23:08:05 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753937
@@ -111,7 +111,7 @@ tag_1063753747:
   created_at: 2008-11-21 07:48:52 Z
   delta: false
   updated_at: 2009-02-20 20:18:28 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753747
@@ -124,7 +124,7 @@ tag_1063753985:
   created_at: 2009-07-18 10:03:11 Z
   delta: false
   updated_at: 2009-07-18 10:03:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753985
@@ -137,7 +137,7 @@ tag_1063754130:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754130
@@ -150,7 +150,7 @@ tag_1063753938:
   created_at: 2009-07-17 23:08:05 Z
   delta: false
   updated_at: 2009-07-17 23:08:05 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753938
@@ -163,7 +163,7 @@ tag_1063753748:
   created_at: 2008-11-21 07:48:52 Z
   delta: false
   updated_at: 2009-02-20 20:17:27 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753748
@@ -176,7 +176,7 @@ tag_1063753986:
   created_at: 2009-07-18 10:04:33 Z
   delta: false
   updated_at: 2009-07-18 10:04:33 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753986
@@ -189,7 +189,7 @@ tag_1063753796:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 20:52:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753796
@@ -202,7 +202,7 @@ tag_1063754131:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754131
@@ -215,7 +215,7 @@ tag_1063753939:
   created_at: 2009-07-17 23:08:05 Z
   delta: false
   updated_at: 2009-07-17 23:08:05 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753939
@@ -228,7 +228,7 @@ tag_1063753749:
   created_at: 2008-11-21 07:48:52 Z
   delta: false
   updated_at: 2009-02-20 20:16:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753749
@@ -241,7 +241,7 @@ tag_1063753987:
   created_at: 2009-07-18 10:10:30 Z
   delta: false
   updated_at: 2009-07-18 10:10:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753987
@@ -254,7 +254,7 @@ tag_1063753797:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 21:07:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753797
@@ -267,7 +267,7 @@ tag_1063754132:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754132
@@ -280,7 +280,7 @@ tag_1063753988:
   created_at: 2009-07-18 10:16:59 Z
   delta: false
   updated_at: 2009-07-18 10:16:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753988
@@ -293,7 +293,7 @@ tag_1063753798:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 21:07:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753798
@@ -306,7 +306,7 @@ tag_1063754133:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754133
@@ -319,7 +319,7 @@ tag_741440589:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 17
+  taggings_count_cache: 17
   last_wrangler_id: 
   adult: false
   id: 741440589
@@ -332,7 +332,7 @@ tag_788108366:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 788108366
@@ -345,7 +345,7 @@ tag_1063753800:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2009-02-20 20:05:08 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753800
@@ -358,7 +358,7 @@ tag_1063753799:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2009-02-20 20:05:07 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753799
@@ -371,7 +371,7 @@ tag_1063754134:
   created_at: 2009-12-17 13:52:03 Z
   delta: false
   updated_at: 2009-12-17 13:52:03 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754134
@@ -384,7 +384,7 @@ tag_1063753801:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2009-03-20 19:59:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753801
@@ -397,7 +397,7 @@ tag_1063753989:
   created_at: 2009-07-18 10:23:33 Z
   delta: false
   updated_at: 2009-07-18 10:23:33 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753989
@@ -410,7 +410,7 @@ tag_1063754135:
   created_at: 2009-12-17 13:52:03 Z
   delta: false
   updated_at: 2009-12-17 13:52:03 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754135
@@ -423,7 +423,7 @@ tag_1063753850:
   created_at: 2009-03-12 00:02:41 Z
   delta: false
   updated_at: 2009-03-12 00:02:41 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753850
@@ -436,7 +436,7 @@ tag_1063753802:
   created_at: 2008-12-07 20:52:13 Z
   delta: false
   updated_at: 2009-02-18 21:53:49 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753802
@@ -449,7 +449,7 @@ tag_1063754136:
   created_at: 2009-12-17 13:52:03 Z
   delta: false
   updated_at: 2009-12-17 13:52:03 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754136
@@ -462,7 +462,7 @@ tag_1063753803:
   created_at: 2008-12-07 20:52:13 Z
   delta: false
   updated_at: 2008-12-07 21:05:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753803
@@ -475,7 +475,7 @@ tag_1063753851:
   created_at: 2009-03-12 00:02:41 Z
   delta: false
   updated_at: 2009-03-12 00:02:41 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753851
@@ -488,7 +488,7 @@ tag_426547448:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:52 Z
-  taggings_count: 12
+  taggings_count_cache: 12
   last_wrangler_id: 
   adult: false
   id: 426547448
@@ -501,7 +501,7 @@ tag_1063753804:
   created_at: 2008-12-07 20:52:13 Z
   delta: false
   updated_at: 2008-12-07 21:05:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753804
@@ -514,7 +514,7 @@ tag_1063754137:
   created_at: 2009-12-17 13:53:30 Z
   delta: false
   updated_at: 2009-12-17 13:53:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754137
@@ -527,7 +527,7 @@ tag_1063753852:
   created_at: 2009-03-12 00:23:24 Z
   delta: false
   updated_at: 2009-03-12 00:23:24 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753852
@@ -540,7 +540,7 @@ tag_1063753805:
   created_at: 2008-12-07 20:52:13 Z
   delta: false
   updated_at: 2008-12-07 21:05:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753805
@@ -553,7 +553,7 @@ tag_1063754138:
   created_at: 2009-12-17 13:53:30 Z
   delta: false
   updated_at: 2009-12-17 13:53:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754138
@@ -566,7 +566,7 @@ tag_1063753853:
   created_at: 2009-03-12 00:23:24 Z
   delta: false
   updated_at: 2009-03-12 00:23:24 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753853
@@ -579,7 +579,7 @@ tag_1063753806:
   created_at: 2008-12-07 20:52:13 Z
   delta: false
   updated_at: 2008-12-07 21:05:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753806
@@ -592,7 +592,7 @@ tag_1063754139:
   created_at: 2009-12-17 13:53:30 Z
   delta: false
   updated_at: 2009-12-17 13:53:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754139
@@ -605,7 +605,7 @@ tag_1063753854:
   created_at: 2009-03-12 00:23:25 Z
   delta: false
   updated_at: 2009-03-12 00:23:25 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753854
@@ -618,7 +618,7 @@ tag_1063753807:
   created_at: 2009-02-16 05:54:21 Z
   delta: false
   updated_at: 2009-02-16 05:54:21 Z
-  taggings_count: 18
+  taggings_count_cache: 18
   last_wrangler_id: 
   adult: false
   id: 1063753807
@@ -631,7 +631,7 @@ tag_1063753855:
   created_at: 2009-03-12 00:23:25 Z
   delta: false
   updated_at: 2009-03-12 00:23:25 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753855
@@ -644,7 +644,7 @@ tag_1063754000:
   created_at: 2009-12-12 21:10:08 Z
   delta: false
   updated_at: 2009-12-12 21:10:08 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754000
@@ -657,7 +657,7 @@ tag_1063753808:
   created_at: 2009-02-16 06:01:04 Z
   delta: false
   updated_at: 2009-02-16 06:01:04 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753808
@@ -670,7 +670,7 @@ tag_1063753856:
   created_at: 2009-03-12 00:29:31 Z
   delta: false
   updated_at: 2009-03-12 00:29:31 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753856
@@ -683,7 +683,7 @@ tag_1063754001:
   created_at: 2009-12-12 21:10:08 Z
   delta: false
   updated_at: 2009-12-12 21:10:08 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754001
@@ -696,7 +696,7 @@ tag_1063753809:
   created_at: 2009-02-16 06:05:19 Z
   delta: false
   updated_at: 2009-03-20 20:06:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753809
@@ -709,7 +709,7 @@ tag_1063753857:
   created_at: 2009-03-12 00:29:31 Z
   delta: false
   updated_at: 2009-03-12 00:29:31 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753857
@@ -722,7 +722,7 @@ tag_1063754002:
   created_at: 2009-12-12 21:10:08 Z
   delta: false
   updated_at: 2009-12-12 21:10:08 Z
-  taggings_count: 20
+  taggings_count_cache: 20
   last_wrangler_id: 
   adult: false
   id: 1063754002
@@ -735,7 +735,7 @@ tag_1063754050:
   created_at: 2009-12-12 23:06:06 Z
   delta: false
   updated_at: 2009-12-12 23:06:06 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063754050
@@ -748,7 +748,7 @@ tag_1063753858:
   created_at: 2009-03-12 00:29:32 Z
   delta: false
   updated_at: 2009-03-12 00:29:32 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753858
@@ -761,7 +761,7 @@ tag_1063754003:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754003
@@ -774,7 +774,7 @@ tag_1063754051:
   created_at: 2009-12-12 23:06:06 Z
   delta: false
   updated_at: 2009-12-12 23:06:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754051
@@ -787,7 +787,7 @@ tag_1063753859:
   created_at: 2009-03-12 00:29:32 Z
   delta: false
   updated_at: 2009-03-12 00:29:32 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753859
@@ -800,7 +800,7 @@ tag_1063754004:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754004
@@ -813,7 +813,7 @@ tag_1063754052:
   created_at: 2009-12-12 23:06:06 Z
   delta: false
   updated_at: 2009-12-12 23:06:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754052
@@ -826,7 +826,7 @@ tag_1063754005:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754005
@@ -839,7 +839,7 @@ tag_946152233:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 946152233
@@ -852,7 +852,7 @@ tag_1063753910:
   created_at: 2009-03-20 23:11:55 Z
   delta: false
   updated_at: 2009-03-20 23:11:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753910
@@ -865,7 +865,7 @@ tag_1063754054:
   created_at: 2009-12-12 23:12:44 Z
   delta: false
   updated_at: 2009-12-12 23:12:44 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754054
@@ -878,7 +878,7 @@ tag_1063754006:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754006
@@ -891,7 +891,7 @@ tag_1063753911:
   created_at: 2009-03-20 23:14:14 Z
   delta: false
   updated_at: 2009-03-20 23:14:14 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753911
@@ -904,7 +904,7 @@ tag_1063754055:
   created_at: 2009-12-12 23:12:44 Z
   delta: false
   updated_at: 2009-12-12 23:12:44 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754055
@@ -917,7 +917,7 @@ tag_1063753960:
   created_at: 2009-07-17 23:46:14 Z
   delta: false
   updated_at: 2009-07-17 23:46:14 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753960
@@ -930,7 +930,7 @@ tag_1063753770:
   created_at: 2008-12-06 23:23:59 Z
   delta: false
   updated_at: 2008-12-06 23:23:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753770
@@ -943,7 +943,7 @@ tag_1063754007:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754007
@@ -956,7 +956,7 @@ tag_1063753912:
   created_at: 2009-03-20 23:14:14 Z
   delta: false
   updated_at: 2009-03-20 23:14:14 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753912
@@ -969,7 +969,7 @@ tag_1063754056:
   created_at: 2009-12-12 23:12:44 Z
   delta: false
   updated_at: 2009-12-12 23:12:44 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754056
@@ -982,7 +982,7 @@ tag_1063753771:
   created_at: 2008-12-06 23:23:59 Z
   delta: false
   updated_at: 2008-12-06 23:23:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753771
@@ -995,7 +995,7 @@ tag_1063754008:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754008
@@ -1008,7 +1008,7 @@ tag_1063753913:
   created_at: 2009-03-20 23:20:17 Z
   delta: false
   updated_at: 2009-03-20 23:20:17 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753913
@@ -1021,7 +1021,7 @@ tag_1063754057:
   created_at: 2009-12-12 23:12:45 Z
   delta: false
   updated_at: 2009-12-12 23:12:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754057
@@ -1034,7 +1034,7 @@ tag_1063753961:
   created_at: 2009-07-17 23:48:57 Z
   delta: false
   updated_at: 2009-07-17 23:48:57 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753961
@@ -1047,7 +1047,7 @@ tag_1063753772:
   created_at: 2008-12-06 23:23:59 Z
   delta: false
   updated_at: 2008-12-06 23:23:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753772
@@ -1060,7 +1060,7 @@ tag_1063754009:
   created_at: 2009-12-12 21:11:01 Z
   delta: false
   updated_at: 2009-12-12 21:11:01 Z
-  taggings_count: 13
+  taggings_count_cache: 13
   last_wrangler_id: 
   adult: false
   id: 1063754009
@@ -1073,7 +1073,7 @@ tag_1063753914:
   created_at: 2009-03-20 23:20:17 Z
   delta: false
   updated_at: 2009-03-20 23:20:17 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753914
@@ -1086,7 +1086,7 @@ tag_1063754058:
   created_at: 2009-12-12 23:21:25 Z
   delta: false
   updated_at: 2009-12-12 23:21:25 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754058
@@ -1099,7 +1099,7 @@ tag_1063753962:
   created_at: 2009-07-17 23:48:57 Z
   delta: false
   updated_at: 2009-07-17 23:48:57 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753962
@@ -1112,7 +1112,7 @@ tag_1063753773:
   created_at: 2008-12-06 23:24:00 Z
   delta: false
   updated_at: 2009-02-16 06:14:51 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753773
@@ -1125,7 +1125,7 @@ tag_1063753915:
   created_at: 2009-03-20 23:21:13 Z
   delta: false
   updated_at: 2009-03-20 23:21:13 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753915
@@ -1138,7 +1138,7 @@ tag_1063754059:
   created_at: 2009-12-12 23:24:55 Z
   delta: false
   updated_at: 2009-12-12 23:24:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754059
@@ -1151,7 +1151,7 @@ tag_1063753963:
   created_at: 2009-07-17 23:51:41 Z
   delta: false
   updated_at: 2009-07-17 23:51:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753963
@@ -1164,7 +1164,7 @@ tag_1063753916:
   created_at: 2009-03-20 23:21:13 Z
   delta: false
   updated_at: 2009-03-20 23:21:13 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753916
@@ -1177,7 +1177,7 @@ tag_1063753964:
   created_at: 2009-07-17 23:51:42 Z
   delta: false
   updated_at: 2009-07-17 23:51:42 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753964
@@ -1190,7 +1190,7 @@ tag_1063753774:
   created_at: 2008-12-06 23:24:00 Z
   delta: false
   updated_at: 2009-03-20 20:01:33 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753774
@@ -1203,7 +1203,7 @@ tag_1063753917:
   created_at: 2009-03-20 23:37:00 Z
   delta: false
   updated_at: 2009-03-20 23:37:00 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753917
@@ -1216,7 +1216,7 @@ tag_1063753965:
   created_at: 2009-07-17 23:53:17 Z
   delta: false
   updated_at: 2009-07-17 23:53:17 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753965
@@ -1229,7 +1229,7 @@ tag_1063753775:
   created_at: 2008-12-06 23:24:00 Z
   delta: false
   updated_at: 2008-12-07 21:04:07 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753775
@@ -1242,7 +1242,7 @@ tag_1063754110:
   created_at: 2009-12-13 16:31:12 Z
   delta: false
   updated_at: 2009-12-13 16:31:12 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754110
@@ -1255,7 +1255,7 @@ tag_1063753918:
   created_at: 2009-03-20 23:38:19 Z
   delta: false
   updated_at: 2009-03-20 23:38:19 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753918
@@ -1268,7 +1268,7 @@ tag_1063753966:
   created_at: 2009-07-17 23:53:18 Z
   delta: false
   updated_at: 2009-07-17 23:53:18 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753966
@@ -1281,7 +1281,7 @@ tag_1063753776:
   created_at: 2008-12-06 23:24:00 Z
   delta: false
   updated_at: 2008-12-07 21:04:06 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753776
@@ -1294,7 +1294,7 @@ tag_1063754111:
   created_at: 2009-12-13 16:31:12 Z
   delta: false
   updated_at: 2009-12-13 16:31:12 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754111
@@ -1307,7 +1307,7 @@ tag_1063753919:
   created_at: 2009-03-20 23:39:06 Z
   delta: false
   updated_at: 2009-03-20 23:39:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753919
@@ -1320,7 +1320,7 @@ tag_986046160:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-03-20 21:17:18 Z
-  taggings_count: 6
+  taggings_count_cache: 6
   last_wrangler_id: 
   adult: false
   id: 986046160
@@ -1333,7 +1333,7 @@ tag_1063753967:
   created_at: 2009-07-17 23:56:43 Z
   delta: false
   updated_at: 2009-07-17 23:56:43 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753967
@@ -1346,7 +1346,7 @@ tag_1063753777:
   created_at: 2008-12-06 23:26:40 Z
   delta: false
   updated_at: 2008-12-06 23:26:40 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753777
@@ -1359,7 +1359,7 @@ tag_1063754112:
   created_at: 2009-12-13 16:31:12 Z
   delta: false
   updated_at: 2009-12-13 16:31:12 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754112
@@ -1372,7 +1372,7 @@ tag_1063754160:
   created_at: 2010-07-28 13:10:00 Z
   delta: true
   updated_at: 2010-07-28 13:10:00 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754160
@@ -1385,7 +1385,7 @@ tag_1063753968:
   created_at: 2009-07-17 23:56:43 Z
   delta: false
   updated_at: 2009-07-17 23:56:43 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753968
@@ -1398,7 +1398,7 @@ tag_1063753778:
   created_at: 2008-12-06 23:26:40 Z
   delta: false
   updated_at: 2008-12-06 23:26:40 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753778
@@ -1411,7 +1411,7 @@ tag_1063754113:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754113
@@ -1424,7 +1424,7 @@ tag_1063754161:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754161
@@ -1437,7 +1437,7 @@ tag_1063753969:
   created_at: 2009-07-17 23:56:43 Z
   delta: false
   updated_at: 2009-07-17 23:56:43 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753969
@@ -1450,7 +1450,7 @@ tag_1063753779:
   created_at: 2008-12-06 23:26:40 Z
   delta: false
   updated_at: 2009-02-16 06:01:05 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753779
@@ -1463,7 +1463,7 @@ tag_1063754114:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754114
@@ -1476,7 +1476,7 @@ tag_1063754162:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754162
@@ -1489,7 +1489,7 @@ tag_1019428968:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1019428968
@@ -1502,7 +1502,7 @@ tag_1063754163:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754163
@@ -1515,7 +1515,7 @@ tag_1063754115:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754115
@@ -1528,7 +1528,7 @@ tag_1063753830:
   created_at: 2009-03-09 19:15:47 Z
   delta: false
   updated_at: 2009-03-09 19:15:47 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753830
@@ -1541,7 +1541,7 @@ tag_1063754164:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754164
@@ -1554,7 +1554,7 @@ tag_1063754116:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754116
@@ -1567,7 +1567,7 @@ tag_1063754165:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754165
@@ -1580,7 +1580,7 @@ tag_1063753880:
   created_at: 2009-03-12 01:45:59 Z
   delta: false
   updated_at: 2009-03-12 01:45:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753880
@@ -1593,7 +1593,7 @@ tag_1063754117:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754117
@@ -1606,7 +1606,7 @@ tag_1063753832:
   created_at: 2009-03-11 21:56:06 Z
   delta: false
   updated_at: 2009-03-11 21:56:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753832
@@ -1619,7 +1619,7 @@ tag_1063754166:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754166
@@ -1632,7 +1632,7 @@ tag_1063753881:
   created_at: 2009-03-12 01:52:01 Z
   delta: false
   updated_at: 2009-03-12 01:52:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753881
@@ -1645,7 +1645,7 @@ tag_1063754118:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754118
@@ -1658,7 +1658,7 @@ tag_1063753833:
   created_at: 2009-03-11 22:22:24 Z
   delta: false
   updated_at: 2009-03-11 22:22:24 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753833
@@ -1671,7 +1671,7 @@ tag_1063754167:
   created_at: 2010-07-28 13:10:01 Z
   delta: true
   updated_at: 2010-07-28 13:10:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754167
@@ -1684,7 +1684,7 @@ tag_1063753882:
   created_at: 2009-03-12 01:52:02 Z
   delta: false
   updated_at: 2009-03-12 01:52:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753882
@@ -1697,7 +1697,7 @@ tag_1063754119:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754119
@@ -1710,7 +1710,7 @@ tag_1063753834:
   created_at: 2009-03-11 22:22:25 Z
   delta: false
   updated_at: 2009-03-11 22:22:25 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753834
@@ -1723,7 +1723,7 @@ tag_1063753883:
   created_at: 2009-03-12 01:56:37 Z
   delta: false
   updated_at: 2009-03-12 01:56:37 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753883
@@ -1736,7 +1736,7 @@ tag_1063753835:
   created_at: 2009-03-11 22:22:25 Z
   delta: false
   updated_at: 2009-03-11 22:22:25 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753835
@@ -1749,7 +1749,7 @@ tag_1063753836:
   created_at: 2009-03-11 22:25:03 Z
   delta: false
   updated_at: 2009-03-11 22:25:03 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753836
@@ -1762,7 +1762,7 @@ tag_1063753884:
   created_at: 2009-03-12 02:02:52 Z
   delta: false
   updated_at: 2009-03-12 02:02:52 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753884
@@ -1775,7 +1775,7 @@ tag_1063753837:
   created_at: 2009-03-11 22:25:03 Z
   delta: false
   updated_at: 2009-03-11 22:25:03 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753837
@@ -1788,7 +1788,7 @@ tag_1063753885:
   created_at: 2009-03-12 02:53:33 Z
   delta: false
   updated_at: 2009-03-12 02:53:33 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753885
@@ -1801,7 +1801,7 @@ tag_1063754030:
   created_at: 2009-12-12 22:12:41 Z
   delta: false
   updated_at: 2009-12-12 22:12:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754030
@@ -1814,7 +1814,7 @@ tag_1063753838:
   created_at: 2009-03-11 22:25:04 Z
   delta: false
   updated_at: 2009-03-11 22:25:04 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753838
@@ -1827,7 +1827,7 @@ tag_1063753886:
   created_at: 2009-03-18 20:15:26 Z
   delta: false
   updated_at: 2009-03-18 20:22:09 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753886
@@ -1840,7 +1840,7 @@ tag_1063754031:
   created_at: 2009-12-12 22:12:41 Z
   delta: false
   updated_at: 2009-12-12 22:12:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754031
@@ -1853,7 +1853,7 @@ tag_1063753839:
   created_at: 2009-03-11 22:30:06 Z
   delta: false
   updated_at: 2009-03-11 22:30:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753839
@@ -1866,7 +1866,7 @@ tag_611729728:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 32
+  taggings_count_cache: 32
   last_wrangler_id: 
   adult: false
   id: 611729728
@@ -1879,7 +1879,7 @@ tag_1063753887:
   created_at: 2009-03-18 20:15:26 Z
   delta: false
   updated_at: 2009-03-18 20:25:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753887
@@ -1892,7 +1892,7 @@ tag_1063754032:
   created_at: 2009-12-12 22:12:41 Z
   delta: false
   updated_at: 2009-12-12 22:12:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754032
@@ -1905,7 +1905,7 @@ tag_1063753888:
   created_at: 2009-03-18 20:15:26 Z
   delta: false
   updated_at: 2009-03-18 20:21:22 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753888
@@ -1918,7 +1918,7 @@ tag_1063754033:
   created_at: 2009-12-12 22:12:41 Z
   delta: false
   updated_at: 2009-12-12 22:12:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754033
@@ -1931,7 +1931,7 @@ tag_1063754081:
   created_at: 2009-12-12 23:51:59 Z
   delta: false
   updated_at: 2009-12-12 23:51:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754081
@@ -1944,7 +1944,7 @@ tag_1063753889:
   created_at: 2009-03-18 20:16:25 Z
   delta: false
   updated_at: 2009-03-18 20:25:26 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753889
@@ -1957,7 +1957,7 @@ tag_1063754034:
   created_at: 2009-12-12 22:14:12 Z
   delta: false
   updated_at: 2009-12-12 22:14:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754034
@@ -1970,7 +1970,7 @@ tag_112726825:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 20
+  taggings_count_cache: 20
   last_wrangler_id: 
   adult: true
   id: 112726825
@@ -1983,7 +1983,7 @@ tag_1063754082:
   created_at: 2009-12-13 16:31:10 Z
   delta: false
   updated_at: 2009-12-13 16:31:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754082
@@ -1996,7 +1996,7 @@ tag_1063754035:
   created_at: 2009-12-12 22:43:14 Z
   delta: false
   updated_at: 2009-12-12 22:43:14 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063754035
@@ -2009,7 +2009,7 @@ tag_713695255:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:59:44 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 713695255
@@ -2022,7 +2022,7 @@ tag_1063753750:
   created_at: 2008-11-21 07:50:08 Z
   delta: false
   updated_at: 2009-02-16 06:09:21 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753750
@@ -2035,7 +2035,7 @@ tag_1063754083:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754083
@@ -2048,7 +2048,7 @@ tag_1063754036:
   created_at: 2009-12-12 22:47:33 Z
   delta: false
   updated_at: 2009-12-12 22:47:33 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754036
@@ -2061,7 +2061,7 @@ tag_1063753940:
   created_at: 2009-07-17 23:13:48 Z
   delta: false
   updated_at: 2009-07-17 23:13:48 Z
-  taggings_count: 8
+  taggings_count_cache: 8
   last_wrangler_id: 
   adult: false
   id: 1063753940
@@ -2074,7 +2074,7 @@ tag_1063753751:
   created_at: 2008-11-21 07:50:08 Z
   delta: false
   updated_at: 2009-02-20 20:16:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753751
@@ -2087,7 +2087,7 @@ tag_1063754084:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754084
@@ -2100,7 +2100,7 @@ tag_1063754037:
   created_at: 2009-12-12 22:47:33 Z
   delta: false
   updated_at: 2009-12-12 22:47:33 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754037
@@ -2113,7 +2113,7 @@ tag_1063753941:
   created_at: 2009-07-17 23:13:48 Z
   delta: false
   updated_at: 2009-07-17 23:13:48 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753941
@@ -2126,7 +2126,7 @@ tag_1063754085:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754085
@@ -2139,7 +2139,7 @@ tag_1063753990:
   created_at: 2009-07-18 10:25:53 Z
   delta: false
   updated_at: 2009-07-18 10:25:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753990
@@ -2152,7 +2152,7 @@ tag_1063753942:
   created_at: 2009-07-17 23:13:49 Z
   delta: false
   updated_at: 2009-07-17 23:13:49 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753942
@@ -2165,7 +2165,7 @@ tag_1063753752:
   created_at: 2008-11-21 07:50:08 Z
   delta: false
   updated_at: 2009-02-20 20:16:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753752
@@ -2178,7 +2178,7 @@ tag_1063754086:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754086
@@ -2191,7 +2191,7 @@ tag_1063753991:
   created_at: 2009-07-18 10:29:29 Z
   delta: false
   updated_at: 2009-07-18 10:29:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753991
@@ -2204,7 +2204,7 @@ tag_1063754038:
   created_at: 2009-12-12 22:47:33 Z
   delta: false
   updated_at: 2009-12-12 22:47:33 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754038
@@ -2217,7 +2217,7 @@ tag_1063753943:
   created_at: 2009-07-17 23:13:50 Z
   delta: false
   updated_at: 2009-07-17 23:13:50 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753943
@@ -2230,7 +2230,7 @@ tag_1063753753:
   created_at: 2008-11-21 07:52:36 Z
   delta: false
   updated_at: 2009-02-16 05:59:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753753
@@ -2243,7 +2243,7 @@ tag_1063754087:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754087
@@ -2256,7 +2256,7 @@ tag_1063753992:
   created_at: 2009-07-18 10:29:29 Z
   delta: false
   updated_at: 2009-07-18 10:29:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753992
@@ -2269,7 +2269,7 @@ tag_1063754039:
   created_at: 2009-12-12 22:51:13 Z
   delta: false
   updated_at: 2009-12-12 22:51:13 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754039
@@ -2282,7 +2282,7 @@ tag_1063753944:
   created_at: 2009-07-17 23:21:51 Z
   delta: false
   updated_at: 2009-07-17 23:21:51 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753944
@@ -2295,7 +2295,7 @@ tag_1063754088:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754088
@@ -2308,7 +2308,7 @@ tag_1063753993:
   created_at: 2009-07-18 10:32:40 Z
   delta: false
   updated_at: 2009-07-18 10:32:40 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753993
@@ -2321,7 +2321,7 @@ tag_1063753945:
   created_at: 2009-07-17 23:21:51 Z
   delta: false
   updated_at: 2009-07-17 23:21:51 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753945
@@ -2334,7 +2334,7 @@ tag_1063753755:
   created_at: 2008-12-05 13:59:13 Z
   delta: false
   updated_at: 2009-02-16 05:57:08 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753755
@@ -2347,7 +2347,7 @@ tag_1063754089:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754089
@@ -2360,7 +2360,7 @@ tag_1063753946:
   created_at: 2009-07-17 23:21:51 Z
   delta: false
   updated_at: 2009-07-17 23:21:51 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753946
@@ -2373,7 +2373,7 @@ tag_1063753756:
   created_at: 2008-12-05 13:59:13 Z
   delta: false
   updated_at: 2008-12-07 21:03:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753756
@@ -2386,7 +2386,7 @@ tag_26796919:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 07:59:52 Z
-  taggings_count: 12
+  taggings_count_cache: 12
   last_wrangler_id: 
   adult: false
   id: 26796919
@@ -2399,7 +2399,7 @@ tag_1063753994:
   created_at: 2009-07-18 10:42:57 Z
   delta: false
   updated_at: 2009-07-18 10:42:57 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753994
@@ -2412,7 +2412,7 @@ tag_1063753947:
   created_at: 2009-07-17 23:21:52 Z
   delta: false
   updated_at: 2009-07-17 23:21:52 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753947
@@ -2425,7 +2425,7 @@ tag_1063753757:
   created_at: 2008-12-06 22:28:52 Z
   delta: false
   updated_at: 2008-12-07 21:06:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753757
@@ -2438,7 +2438,7 @@ tag_1063753995:
   created_at: 2009-07-18 10:43:57 Z
   delta: false
   updated_at: 2009-07-18 10:43:57 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753995
@@ -2451,7 +2451,7 @@ tag_1063754140:
   created_at: 2009-12-17 13:53:30 Z
   delta: false
   updated_at: 2009-12-17 13:53:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754140
@@ -2464,7 +2464,7 @@ tag_1063753948:
   created_at: 2009-07-17 23:25:24 Z
   delta: false
   updated_at: 2009-07-17 23:25:24 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753948
@@ -2477,7 +2477,7 @@ tag_1063753758:
   created_at: 2008-12-06 22:28:52 Z
   delta: false
   updated_at: 2009-03-20 20:02:54 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753758
@@ -2490,7 +2490,7 @@ tag_1063753996:
   created_at: 2009-08-26 21:17:47 Z
   delta: false
   updated_at: 2009-08-26 21:17:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753996
@@ -2503,7 +2503,7 @@ tag_1063754141:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754141
@@ -2516,7 +2516,7 @@ tag_1063753949:
   created_at: 2009-07-17 23:25:24 Z
   delta: false
   updated_at: 2009-07-17 23:25:24 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753949
@@ -2529,7 +2529,7 @@ tag_1063753759:
   created_at: 2008-12-06 22:33:22 Z
   delta: false
   updated_at: 2008-12-07 21:06:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753759
@@ -2542,7 +2542,7 @@ tag_1063753997:
   created_at: 2009-08-26 21:17:48 Z
   delta: false
   updated_at: 2009-08-26 21:17:48 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753997
@@ -2555,7 +2555,7 @@ tag_1063754142:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754142
@@ -2568,7 +2568,7 @@ tag_1063753810:
   created_at: 2009-02-16 06:06:17 Z
   delta: false
   updated_at: 2009-02-25 19:14:32 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753810
@@ -2581,7 +2581,7 @@ tag_1063753998:
   created_at: 2009-12-12 21:10:07 Z
   delta: false
   updated_at: 2009-12-12 21:10:07 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753998
@@ -2594,7 +2594,7 @@ tag_1063754143:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754143
@@ -2607,7 +2607,7 @@ tag_1063753811:
   created_at: 2009-02-16 06:09:19 Z
   delta: false
   updated_at: 2009-02-20 20:59:35 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753811
@@ -2620,7 +2620,7 @@ tag_1063753999:
   created_at: 2009-12-12 21:10:07 Z
   delta: false
   updated_at: 2009-12-12 21:10:07 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753999
@@ -2633,7 +2633,7 @@ tag_1063754144:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754144
@@ -2646,7 +2646,7 @@ tag_1063753812:
   created_at: 2009-02-16 06:16:46 Z
   delta: false
   updated_at: 2009-02-25 19:14:32 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753812
@@ -2659,7 +2659,7 @@ tag_1063754145:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754145
@@ -2672,7 +2672,7 @@ tag_1063753860:
   created_at: 2009-03-12 00:31:21 Z
   delta: false
   updated_at: 2009-03-12 00:31:21 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753860
@@ -2685,7 +2685,7 @@ tag_1063753813:
   created_at: 2009-02-16 06:17:17 Z
   delta: false
   updated_at: 2009-02-21 00:18:36 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753813
@@ -2698,7 +2698,7 @@ tag_177887685:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-03-20 20:04:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 177887685
@@ -2711,7 +2711,7 @@ tag_1063754146:
   created_at: 2009-12-18 17:56:45 Z
   delta: false
   updated_at: 2009-12-18 17:56:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754146
@@ -2724,7 +2724,7 @@ tag_1063753861:
   created_at: 2009-03-12 00:31:21 Z
   delta: false
   updated_at: 2009-03-12 00:31:21 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753861
@@ -2737,7 +2737,7 @@ tag_1063753814:
   created_at: 2009-02-16 06:18:36 Z
   delta: false
   updated_at: 2009-02-22 00:40:43 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753814
@@ -2750,7 +2750,7 @@ tag_1063754147:
   created_at: 2010-01-04 12:35:10 Z
   delta: false
   updated_at: 2010-01-04 12:35:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754147
@@ -2763,7 +2763,7 @@ tag_362175678:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:34:57 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 362175678
@@ -2776,7 +2776,7 @@ tag_1063753862:
   created_at: 2009-03-12 00:31:21 Z
   delta: false
   updated_at: 2009-03-12 00:31:21 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753862
@@ -2789,7 +2789,7 @@ tag_1063753816:
   created_at: 2009-02-19 00:09:34 Z
   delta: false
   updated_at: 2009-02-19 00:11:46 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753816
@@ -2802,7 +2802,7 @@ tag_1063754148:
   created_at: 2010-07-28 09:36:23 Z
   delta: true
   updated_at: 2010-07-28 09:36:23 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754148
@@ -2815,7 +2815,7 @@ tag_1063753863:
   created_at: 2009-03-12 00:31:21 Z
   delta: false
   updated_at: 2009-03-12 00:31:21 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753863
@@ -2828,7 +2828,7 @@ tag_1063753817:
   created_at: 2009-02-19 00:10:12 Z
   delta: false
   updated_at: 2009-02-19 00:11:46 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753817
@@ -2841,7 +2841,7 @@ tag_1063754149:
   created_at: 2010-07-28 09:36:23 Z
   delta: true
   updated_at: 2010-07-28 09:36:23 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754149
@@ -2854,7 +2854,7 @@ tag_1063753864:
   created_at: 2009-03-12 00:35:50 Z
   delta: false
   updated_at: 2009-03-12 00:35:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753864
@@ -2867,7 +2867,7 @@ tag_1063753818:
   created_at: 2009-02-21 00:11:59 Z
   delta: false
   updated_at: 2009-02-25 19:14:32 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753818
@@ -2880,7 +2880,7 @@ tag_1063753865:
   created_at: 2009-03-12 00:35:50 Z
   delta: false
   updated_at: 2009-03-12 00:35:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753865
@@ -2893,7 +2893,7 @@ tag_1063754011:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754011
@@ -2906,7 +2906,7 @@ tag_1063753819:
   created_at: 2009-02-22 00:40:43 Z
   delta: false
   updated_at: 2009-02-22 00:40:43 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753819
@@ -2919,7 +2919,7 @@ tag_545584597:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-02-16 05:56:31 Z
-  taggings_count: 4
+  taggings_count_cache: 4
   last_wrangler_id: 
   adult: false
   id: 545584597
@@ -2932,7 +2932,7 @@ tag_1063753866:
   created_at: 2009-03-12 00:35:50 Z
   delta: false
   updated_at: 2009-03-12 00:35:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753866
@@ -2945,7 +2945,7 @@ tag_1063754012:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754012
@@ -2958,7 +2958,7 @@ tag_552317390:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-02-25 19:14:31 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 552317390
@@ -2971,7 +2971,7 @@ tag_1063753867:
   created_at: 2009-03-12 00:46:20 Z
   delta: false
   updated_at: 2009-03-12 00:46:20 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753867
@@ -2984,7 +2984,7 @@ tag_1063754013:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754013
@@ -2997,7 +2997,7 @@ tag_344412843:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-07-17 23:41:40 Z
-  taggings_count: 15
+  taggings_count_cache: 15
   last_wrangler_id: 
   adult: false
   id: 344412843
@@ -3010,7 +3010,7 @@ tag_1063754060:
   created_at: 2009-12-12 23:24:55 Z
   delta: false
   updated_at: 2009-12-12 23:24:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754060
@@ -3023,7 +3023,7 @@ tag_1063754014:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754014
@@ -3036,7 +3036,7 @@ tag_66216446:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-22 05:09:26 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 66216446
@@ -3049,7 +3049,7 @@ tag_1063754061:
   created_at: 2009-12-12 23:24:55 Z
   delta: false
   updated_at: 2009-12-12 23:24:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754061
@@ -3062,7 +3062,7 @@ tag_1063753869:
   created_at: 2009-03-12 00:51:54 Z
   delta: false
   updated_at: 2009-03-12 00:51:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753869
@@ -3075,7 +3075,7 @@ tag_711936337:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-02-16 05:55:58 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 711936337
@@ -3088,7 +3088,7 @@ tag_1063754015:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754015
@@ -3101,7 +3101,7 @@ tag_1063754062:
   created_at: 2009-12-12 23:24:55 Z
   delta: false
   updated_at: 2009-12-12 23:24:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754062
@@ -3114,7 +3114,7 @@ tag_402275454:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 24
+  taggings_count_cache: 24
   last_wrangler_id: 
   adult: true
   id: 402275454
@@ -3127,7 +3127,7 @@ tag_1063753920:
   created_at: 2009-03-20 23:40:25 Z
   delta: false
   updated_at: 2009-03-20 23:40:25 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753920
@@ -3140,7 +3140,7 @@ tag_1063754063:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754063
@@ -3153,7 +3153,7 @@ tag_1063754016:
   created_at: 2009-12-12 21:11:53 Z
   delta: false
   updated_at: 2009-12-12 21:11:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754016
@@ -3166,7 +3166,7 @@ tag_1063753921:
   created_at: 2009-05-10 13:20:04 Z
   delta: false
   updated_at: 2009-05-10 13:20:04 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753921
@@ -3179,7 +3179,7 @@ tag_1063754064:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754064
@@ -3192,7 +3192,7 @@ tag_1063753922:
   created_at: 2009-06-19 12:03:11 Z
   delta: false
   updated_at: 2009-06-19 12:03:13 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753922
@@ -3205,7 +3205,7 @@ tag_1063753732:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:52 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 1063753732
@@ -3218,7 +3218,7 @@ tag_1063754065:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754065
@@ -3231,7 +3231,7 @@ tag_1063753970:
   created_at: 2009-07-17 23:59:26 Z
   delta: false
   updated_at: 2009-07-17 23:59:26 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753970
@@ -3244,7 +3244,7 @@ tag_1063753780:
   created_at: 2008-12-06 23:26:40 Z
   delta: false
   updated_at: 2009-03-20 20:03:11 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753780
@@ -3257,7 +3257,7 @@ tag_1063754017:
   created_at: 2009-12-12 21:13:12 Z
   delta: false
   updated_at: 2009-12-12 21:13:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754017
@@ -3270,7 +3270,7 @@ tag_1063753923:
   created_at: 2009-07-17 22:50:29 Z
   delta: false
   updated_at: 2009-07-17 22:50:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753923
@@ -3283,7 +3283,7 @@ tag_1063754066:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754066
@@ -3296,7 +3296,7 @@ tag_1063753971:
   created_at: 2009-07-18 00:03:03 Z
   delta: false
   updated_at: 2009-07-18 00:03:03 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753971
@@ -3309,7 +3309,7 @@ tag_1063753781:
   created_at: 2008-12-06 23:26:40 Z
   delta: false
   updated_at: 2008-12-07 21:05:30 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753781
@@ -3322,7 +3322,7 @@ tag_1063754018:
   created_at: 2009-12-12 21:13:13 Z
   delta: false
   updated_at: 2009-12-12 21:13:13 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754018
@@ -3335,7 +3335,7 @@ tag_1063753924:
   created_at: 2009-07-17 22:50:29 Z
   delta: false
   updated_at: 2009-07-17 22:50:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753924
@@ -3348,7 +3348,7 @@ tag_1063753734:
   created_at: 2008-11-21 06:14:51 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 1063753734
@@ -3361,7 +3361,7 @@ tag_1063754067:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754067
@@ -3374,7 +3374,7 @@ tag_1063753782:
   created_at: 2008-12-06 23:26:41 Z
   delta: false
   updated_at: 2008-12-07 21:05:30 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753782
@@ -3387,7 +3387,7 @@ tag_569823665:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 14
+  taggings_count_cache: 14
   last_wrangler_id: 
   adult: false
   id: 569823665
@@ -3400,7 +3400,7 @@ tag_1063754019:
   created_at: 2009-12-12 21:13:35 Z
   delta: false
   updated_at: 2009-12-12 21:13:35 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754019
@@ -3413,7 +3413,7 @@ tag_1063753925:
   created_at: 2009-07-17 22:50:29 Z
   delta: false
   updated_at: 2009-07-17 22:50:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753925
@@ -3426,7 +3426,7 @@ tag_1063753735:
   created_at: 2008-11-21 06:14:51 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 14
+  taggings_count_cache: 14
   last_wrangler_id: 
   adult: false
   id: 1063753735
@@ -3439,7 +3439,7 @@ tag_1063754068:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754068
@@ -3452,7 +3452,7 @@ tag_1063753972:
   created_at: 2009-07-18 00:09:11 Z
   delta: false
   updated_at: 2009-07-18 00:09:11 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753972
@@ -3465,7 +3465,7 @@ tag_1063753783:
   created_at: 2008-12-06 23:34:38 Z
   delta: false
   updated_at: 2008-12-06 23:34:38 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753783
@@ -3478,7 +3478,7 @@ tag_1063753926:
   created_at: 2009-07-17 22:50:30 Z
   delta: false
   updated_at: 2009-07-17 22:50:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753926
@@ -3491,7 +3491,7 @@ tag_1063753736:
   created_at: 2008-11-21 06:14:51 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 21
+  taggings_count_cache: 21
   last_wrangler_id: 
   adult: false
   id: 1063753736
@@ -3504,7 +3504,7 @@ tag_1063754069:
   created_at: 2009-12-12 23:24:56 Z
   delta: false
   updated_at: 2009-12-12 23:24:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754069
@@ -3517,7 +3517,7 @@ tag_1063753973:
   created_at: 2009-07-18 00:09:11 Z
   delta: false
   updated_at: 2009-07-18 00:09:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753973
@@ -3530,7 +3530,7 @@ tag_1063753784:
   created_at: 2008-12-06 23:34:38 Z
   delta: false
   updated_at: 2009-02-16 05:57:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753784
@@ -3543,7 +3543,7 @@ tag_211186876:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-03-20 20:02:27 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 211186876
@@ -3556,7 +3556,7 @@ tag_1063753927:
   created_at: 2009-07-17 22:55:31 Z
   delta: false
   updated_at: 2009-07-17 22:55:31 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753927
@@ -3569,7 +3569,7 @@ tag_1063753737:
   created_at: 2008-11-21 06:14:51 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 7
+  taggings_count_cache: 7
   last_wrangler_id: 
   adult: false
   id: 1063753737
@@ -3582,7 +3582,7 @@ tag_1063753974:
   created_at: 2009-07-18 00:12:40 Z
   delta: false
   updated_at: 2009-07-18 00:12:40 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753974
@@ -3595,7 +3595,7 @@ tag_1063754120:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754120
@@ -3608,7 +3608,7 @@ tag_1063753928:
   created_at: 2009-07-17 22:55:31 Z
   delta: false
   updated_at: 2009-07-17 22:55:31 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753928
@@ -3621,7 +3621,7 @@ tag_1063753738:
   created_at: 2008-11-21 06:14:52 Z
   delta: false
   updated_at: 2008-11-21 06:14:52 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753738
@@ -3634,7 +3634,7 @@ tag_1063753975:
   created_at: 2009-07-18 00:12:41 Z
   delta: false
   updated_at: 2009-07-18 00:12:41 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753975
@@ -3647,7 +3647,7 @@ tag_1063753785:
   created_at: 2008-12-06 23:34:39 Z
   delta: false
   updated_at: 2008-12-07 21:05:37 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753785
@@ -3660,7 +3660,7 @@ tag_1063754121:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754121
@@ -3673,7 +3673,7 @@ tag_1063753929:
   created_at: 2009-07-17 22:55:31 Z
   delta: false
   updated_at: 2009-07-17 22:55:31 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 1063753929
@@ -3686,7 +3686,7 @@ tag_1063753976:
   created_at: 2009-07-18 00:14:47 Z
   delta: false
   updated_at: 2009-07-18 00:14:47 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753976
@@ -3699,7 +3699,7 @@ tag_1063754122:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754122
@@ -3712,7 +3712,7 @@ tag_1063753977:
   created_at: 2009-07-18 00:14:47 Z
   delta: false
   updated_at: 2009-07-18 00:14:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753977
@@ -3725,7 +3725,7 @@ tag_1063754123:
   created_at: 2009-12-13 16:35:54 Z
   delta: false
   updated_at: 2009-12-13 16:35:54 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754123
@@ -3738,7 +3738,7 @@ tag_1063753978:
   created_at: 2009-07-18 00:16:47 Z
   delta: false
   updated_at: 2009-07-18 00:16:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753978
@@ -3751,7 +3751,7 @@ tag_1063753788:
   created_at: 2008-12-07 20:52:11 Z
   delta: false
   updated_at: 2008-12-07 20:52:11 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753788
@@ -3764,7 +3764,7 @@ tag_1063754124:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754124
@@ -3777,7 +3777,7 @@ tag_1063753979:
   created_at: 2009-07-18 00:18:29 Z
   delta: false
   updated_at: 2009-07-18 00:18:29 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753979
@@ -3790,7 +3790,7 @@ tag_1063753789:
   created_at: 2008-12-07 20:52:11 Z
   delta: false
   updated_at: 2008-12-07 20:52:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753789
@@ -3803,7 +3803,7 @@ tag_1063754125:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754125
@@ -3816,7 +3816,7 @@ tag_1063753840:
   created_at: 2009-03-11 22:30:06 Z
   delta: false
   updated_at: 2009-03-19 01:53:57 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753840
@@ -3829,7 +3829,7 @@ tag_1063753841:
   created_at: 2009-03-11 22:30:07 Z
   delta: false
   updated_at: 2009-03-19 01:55:30 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753841
@@ -3842,7 +3842,7 @@ tag_1063754126:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754126
@@ -3855,7 +3855,7 @@ tag_951091623:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 951091623
@@ -3868,7 +3868,7 @@ tag_1063753842:
   created_at: 2009-03-11 22:30:07 Z
   delta: false
   updated_at: 2009-03-19 01:57:14 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753842
@@ -3881,7 +3881,7 @@ tag_1063753890:
   created_at: 2009-03-18 20:21:22 Z
   delta: false
   updated_at: 2009-03-18 20:21:22 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753890
@@ -3894,7 +3894,7 @@ tag_1063754127:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754127
@@ -3907,7 +3907,7 @@ tag_1063753843:
   created_at: 2009-03-11 23:22:49 Z
   delta: false
   updated_at: 2009-03-11 23:22:49 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753843
@@ -3920,7 +3920,7 @@ tag_221905380:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 07:59:52 Z
-  taggings_count: 8
+  taggings_count_cache: 8
   last_wrangler_id: 
   adult: false
   id: 221905380
@@ -3933,7 +3933,7 @@ tag_1063753891:
   created_at: 2009-03-18 20:25:09 Z
   delta: false
   updated_at: 2009-03-18 20:25:26 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753891
@@ -3946,7 +3946,7 @@ tag_1063754128:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754128
@@ -3959,7 +3959,7 @@ tag_1063753844:
   created_at: 2009-03-11 23:22:50 Z
   delta: false
   updated_at: 2009-03-11 23:22:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753844
@@ -3972,7 +3972,7 @@ tag_1063753892:
   created_at: 2009-03-18 21:14:50 Z
   delta: false
   updated_at: 2009-03-18 21:14:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753892
@@ -3985,7 +3985,7 @@ tag_1063754129:
   created_at: 2009-12-13 16:35:55 Z
   delta: false
   updated_at: 2009-12-13 16:35:55 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754129
@@ -3998,7 +3998,7 @@ tag_1063753845:
   created_at: 2009-03-11 23:22:50 Z
   delta: false
   updated_at: 2009-03-11 23:22:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753845
@@ -4011,7 +4011,7 @@ tag_1063753893:
   created_at: 2009-03-18 22:37:22 Z
   delta: false
   updated_at: 2009-03-18 22:41:29 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753893
@@ -4024,7 +4024,7 @@ tag_1063753846:
   created_at: 2009-03-11 23:55:35 Z
   delta: false
   updated_at: 2009-03-11 23:55:35 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753846
@@ -4037,7 +4037,7 @@ tag_1063753894:
   created_at: 2009-03-19 01:02:12 Z
   delta: false
   updated_at: 2009-03-19 01:06:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753894
@@ -4050,7 +4050,7 @@ tag_1063753847:
   created_at: 2009-03-12 00:00:00 Z
   delta: false
   updated_at: 2009-03-12 00:00:00 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753847
@@ -4063,7 +4063,7 @@ tag_1063753848:
   created_at: 2009-03-12 00:02:40 Z
   delta: false
   updated_at: 2009-03-12 00:02:40 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753848
@@ -4076,7 +4076,7 @@ tag_1063753895:
   created_at: 2009-03-19 01:05:41 Z
   delta: false
   updated_at: 2009-03-19 01:06:03 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753895
@@ -4089,7 +4089,7 @@ tag_1063753849:
   created_at: 2009-03-12 00:02:41 Z
   delta: false
   updated_at: 2009-03-12 00:02:41 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753849
@@ -4102,7 +4102,7 @@ tag_1063753896:
   created_at: 2009-03-19 12:21:02 Z
   delta: false
   updated_at: 2009-03-19 12:25:46 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753896
@@ -4115,7 +4115,7 @@ tag_1063753897:
   created_at: 2009-03-19 12:30:38 Z
   delta: false
   updated_at: 2009-03-19 12:53:06 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753897
@@ -4128,7 +4128,7 @@ tag_1063754043:
   created_at: 2009-12-12 22:57:03 Z
   delta: false
   updated_at: 2009-12-12 22:57:03 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754043
@@ -4141,7 +4141,7 @@ tag_1063753900:
   created_at: 2009-03-19 12:47:34 Z
   delta: false
   updated_at: 2009-03-19 12:48:07 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753900
@@ -4154,7 +4154,7 @@ tag_1063754090:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754090
@@ -4167,7 +4167,7 @@ tag_1063753898:
   created_at: 2009-03-19 12:33:51 Z
   delta: false
   updated_at: 2009-03-19 12:49:19 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753898
@@ -4180,7 +4180,7 @@ tag_130714128:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 130714128
@@ -4193,7 +4193,7 @@ tag_1063753901:
   created_at: 2009-03-19 12:50:32 Z
   delta: false
   updated_at: 2009-03-19 12:51:06 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753901
@@ -4206,7 +4206,7 @@ tag_1063754091:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754091
@@ -4219,7 +4219,7 @@ tag_1063753899:
   created_at: 2009-03-19 12:39:15 Z
   delta: false
   updated_at: 2009-03-19 12:44:50 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753899
@@ -4232,7 +4232,7 @@ tag_1063754044:
   created_at: 2009-12-12 22:57:03 Z
   delta: false
   updated_at: 2009-12-12 22:57:03 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754044
@@ -4245,7 +4245,7 @@ tag_1063753760:
   created_at: 2008-12-06 22:33:22 Z
   delta: false
   updated_at: 2008-12-07 21:06:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753760
@@ -4258,7 +4258,7 @@ tag_1063753902:
   created_at: 2009-03-19 12:51:47 Z
   delta: false
   updated_at: 2009-03-19 12:53:52 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753902
@@ -4271,7 +4271,7 @@ tag_1063754092:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754092
@@ -4284,7 +4284,7 @@ tag_1063754045:
   created_at: 2009-12-12 22:57:03 Z
   delta: false
   updated_at: 2009-12-12 22:57:03 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754045
@@ -4297,7 +4297,7 @@ tag_1063753950:
   created_at: 2009-07-17 23:25:24 Z
   delta: false
   updated_at: 2009-07-17 23:25:24 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753950
@@ -4310,7 +4310,7 @@ tag_1063753761:
   created_at: 2008-12-06 22:52:01 Z
   delta: false
   updated_at: 2008-12-06 22:52:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753761
@@ -4323,7 +4323,7 @@ tag_1063754093:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754093
@@ -4336,7 +4336,7 @@ tag_1063753903:
   created_at: 2009-03-19 12:53:52 Z
   delta: false
   updated_at: 2009-03-19 12:53:52 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753903
@@ -4349,7 +4349,7 @@ tag_1063754046:
   created_at: 2009-12-12 22:57:04 Z
   delta: false
   updated_at: 2009-12-12 22:57:04 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754046
@@ -4362,7 +4362,7 @@ tag_1063753951:
   created_at: 2009-07-17 23:25:24 Z
   delta: false
   updated_at: 2009-07-17 23:25:24 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753951
@@ -4375,7 +4375,7 @@ tag_1063753762:
   created_at: 2008-12-06 22:52:02 Z
   delta: false
   updated_at: 2008-12-07 21:06:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753762
@@ -4388,7 +4388,7 @@ tag_1063754094:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754094
@@ -4401,7 +4401,7 @@ tag_1063753904:
   created_at: 2009-03-20 20:06:37 Z
   delta: false
   updated_at: 2009-03-20 20:06:52 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753904
@@ -4414,7 +4414,7 @@ tag_1063754047:
   created_at: 2009-12-12 22:57:04 Z
   delta: false
   updated_at: 2009-12-12 22:57:04 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063754047
@@ -4427,7 +4427,7 @@ tag_1063753952:
   created_at: 2009-07-17 23:25:25 Z
   delta: false
   updated_at: 2009-07-17 23:25:25 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753952
@@ -4440,7 +4440,7 @@ tag_1063754095:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754095
@@ -4453,7 +4453,7 @@ tag_1063753905:
   created_at: 2009-03-20 21:22:56 Z
   delta: false
   updated_at: 2009-03-20 21:23:08 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 1063753905
@@ -4466,7 +4466,7 @@ tag_1063754048:
   created_at: 2009-12-12 23:00:53 Z
   delta: false
   updated_at: 2009-12-12 23:00:53 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754048
@@ -4479,7 +4479,7 @@ tag_1063753953:
   created_at: 2009-07-17 23:28:45 Z
   delta: false
   updated_at: 2009-07-17 23:28:45 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753953
@@ -4492,7 +4492,7 @@ tag_1063753763:
   created_at: 2008-12-06 22:55:58 Z
   delta: false
   updated_at: 2008-12-06 22:55:58 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753763
@@ -4505,7 +4505,7 @@ tag_1063754096:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754096
@@ -4518,7 +4518,7 @@ tag_1063753906:
   created_at: 2009-03-20 21:26:06 Z
   delta: false
   updated_at: 2009-03-20 21:26:06 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753906
@@ -4531,7 +4531,7 @@ tag_1063753954:
   created_at: 2009-07-17 23:28:46 Z
   delta: false
   updated_at: 2009-07-17 23:28:46 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753954
@@ -4544,7 +4544,7 @@ tag_1063753764:
   created_at: 2008-12-06 22:55:58 Z
   delta: false
   updated_at: 2008-12-07 21:06:54 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753764
@@ -4557,7 +4557,7 @@ tag_1063754097:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754097
@@ -4570,7 +4570,7 @@ tag_1063753907:
   created_at: 2009-03-20 23:11:55 Z
   delta: false
   updated_at: 2009-03-20 23:11:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753907
@@ -4583,7 +4583,7 @@ tag_1063753955:
   created_at: 2009-07-17 23:38:10 Z
   delta: false
   updated_at: 2009-07-17 23:38:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753955
@@ -4596,7 +4596,7 @@ tag_1063754100:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754100
@@ -4609,7 +4609,7 @@ tag_1063754098:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754098
@@ -4622,7 +4622,7 @@ tag_1063753908:
   created_at: 2009-03-20 23:11:55 Z
   delta: false
   updated_at: 2009-03-20 23:11:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753908
@@ -4635,7 +4635,7 @@ tag_1063753956:
   created_at: 2009-07-17 23:38:10 Z
   delta: false
   updated_at: 2009-07-17 23:38:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753956
@@ -4648,7 +4648,7 @@ tag_1063753766:
   created_at: 2008-12-06 23:19:49 Z
   delta: false
   updated_at: 2008-12-06 23:19:49 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753766
@@ -4661,7 +4661,7 @@ tag_1063754101:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754101
@@ -4674,7 +4674,7 @@ tag_1063754099:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754099
@@ -4687,7 +4687,7 @@ tag_1063753909:
   created_at: 2009-03-20 23:11:55 Z
   delta: false
   updated_at: 2009-03-20 23:11:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753909
@@ -4700,7 +4700,7 @@ tag_385776504:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2009-03-20 20:01:08 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 385776504
@@ -4713,7 +4713,7 @@ tag_1063753957:
   created_at: 2009-07-17 23:38:10 Z
   delta: false
   updated_at: 2009-07-17 23:38:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753957
@@ -4726,7 +4726,7 @@ tag_1063753767:
   created_at: 2008-12-06 23:19:49 Z
   delta: false
   updated_at: 2008-12-06 23:19:49 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753767
@@ -4739,7 +4739,7 @@ tag_899944269:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 899944269
@@ -4752,7 +4752,7 @@ tag_1063754102:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754102
@@ -4765,7 +4765,7 @@ tag_1063754150:
   created_at: 2010-07-28 09:36:23 Z
   delta: true
   updated_at: 2010-07-28 09:36:23 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754150
@@ -4778,7 +4778,7 @@ tag_1063753958:
   created_at: 2009-07-17 23:38:10 Z
   delta: false
   updated_at: 2009-07-17 23:38:10 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753958
@@ -4791,7 +4791,7 @@ tag_1063753768:
   created_at: 2008-12-06 23:19:49 Z
   delta: false
   updated_at: 2008-12-06 23:19:49 Z
-  taggings_count: 5
+  taggings_count_cache: 5
   last_wrangler_id: 
   adult: false
   id: 1063753768
@@ -4804,7 +4804,7 @@ tag_1063754103:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754103
@@ -4817,7 +4817,7 @@ tag_1063753959:
   created_at: 2009-07-17 23:46:14 Z
   delta: false
   updated_at: 2009-07-17 23:46:14 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753959
@@ -4830,7 +4830,7 @@ tag_1063753769:
   created_at: 2008-12-06 23:19:49 Z
   delta: false
   updated_at: 2008-12-06 23:19:49 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753769
@@ -4843,7 +4843,7 @@ tag_1063754151:
   created_at: 2010-07-28 09:36:23 Z
   delta: true
   updated_at: 2010-07-28 09:36:23 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754151
@@ -4856,7 +4856,7 @@ tag_1063754104:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754104
@@ -4869,7 +4869,7 @@ tag_1063754152:
   created_at: 2010-07-28 09:36:23 Z
   delta: true
   updated_at: 2010-07-28 09:36:23 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754152
@@ -4882,7 +4882,7 @@ tag_1063754105:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754105
@@ -4895,7 +4895,7 @@ tag_1063753820:
   created_at: 2009-02-22 02:28:36 Z
   delta: false
   updated_at: 2009-02-22 02:28:48 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753820
@@ -4908,7 +4908,7 @@ tag_1063754153:
   created_at: 2010-07-28 09:36:24 Z
   delta: true
   updated_at: 2010-07-28 09:36:24 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 1
   adult: false
   id: 1063754153
@@ -4921,7 +4921,7 @@ tag_1063754106:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754106
@@ -4934,7 +4934,7 @@ tag_1063753821:
   created_at: 2009-02-22 02:30:15 Z
   delta: false
   updated_at: 2009-02-22 02:30:16 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753821
@@ -4947,7 +4947,7 @@ tag_791950904:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 791950904
@@ -4960,7 +4960,7 @@ tag_1063754154:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754154
@@ -4973,7 +4973,7 @@ tag_1063753870:
   created_at: 2009-03-12 00:51:55 Z
   delta: false
   updated_at: 2009-03-18 21:14:50 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753870
@@ -4986,7 +4986,7 @@ tag_1063754107:
   created_at: 2009-12-13 16:31:11 Z
   delta: false
   updated_at: 2009-12-13 16:31:11 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754107
@@ -4999,7 +4999,7 @@ tag_1063753822:
   created_at: 2009-02-22 02:30:54 Z
   delta: false
   updated_at: 2009-02-22 02:31:13 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753822
@@ -5012,7 +5012,7 @@ tag_1063754155:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754155
@@ -5025,7 +5025,7 @@ tag_1063753871:
   created_at: 2009-03-12 00:51:55 Z
   delta: false
   updated_at: 2009-03-12 00:51:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753871
@@ -5038,7 +5038,7 @@ tag_1063754108:
   created_at: 2009-12-13 16:31:12 Z
   delta: false
   updated_at: 2009-12-13 16:31:12 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754108
@@ -5051,7 +5051,7 @@ tag_1063753823:
   created_at: 2009-02-22 04:25:23 Z
   delta: false
   updated_at: 2009-02-22 04:26:17 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753823
@@ -5064,7 +5064,7 @@ tag_1063754156:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754156
@@ -5077,7 +5077,7 @@ tag_1063753872:
   created_at: 2009-03-12 00:51:55 Z
   delta: false
   updated_at: 2009-03-12 00:51:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753872
@@ -5090,7 +5090,7 @@ tag_1063754109:
   created_at: 2009-12-13 16:31:12 Z
   delta: false
   updated_at: 2009-12-13 16:31:12 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754109
@@ -5103,7 +5103,7 @@ tag_1063753824:
   created_at: 2009-02-22 04:25:23 Z
   delta: false
   updated_at: 2009-03-05 22:14:00 Z
-  taggings_count: 14
+  taggings_count_cache: 14
   last_wrangler_id: 
   adult: false
   id: 1063753824
@@ -5116,7 +5116,7 @@ tag_1063754157:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754157
@@ -5129,7 +5129,7 @@ tag_1063753825:
   created_at: 2009-03-07 20:08:27 Z
   delta: false
   updated_at: 2009-03-07 20:08:27 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753825
@@ -5142,7 +5142,7 @@ tag_885489802:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 18
+  taggings_count_cache: 18
   last_wrangler_id: 
   adult: true
   id: 885489802
@@ -5155,7 +5155,7 @@ tag_1063754158:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754158
@@ -5168,7 +5168,7 @@ tag_1063753873:
   created_at: 2009-03-12 00:51:55 Z
   delta: false
   updated_at: 2009-03-12 00:51:55 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753873
@@ -5181,7 +5181,7 @@ tag_1063753826:
   created_at: 2009-03-07 20:08:28 Z
   delta: false
   updated_at: 2009-03-07 20:08:28 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753826
@@ -5194,7 +5194,7 @@ tag_1063753874:
   created_at: 2009-03-12 01:00:20 Z
   delta: false
   updated_at: 2009-03-12 01:00:20 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753874
@@ -5207,7 +5207,7 @@ tag_1063753827:
   created_at: 2009-03-07 20:08:28 Z
   delta: false
   updated_at: 2009-03-07 20:08:28 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753827
@@ -5220,7 +5220,7 @@ tag_1063754159:
   created_at: 2010-07-28 13:09:59 Z
   delta: true
   updated_at: 2010-07-28 13:09:59 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 1
   adult: false
   id: 1063754159
@@ -5233,7 +5233,7 @@ tag_1063754020:
   created_at: 2009-12-12 21:19:12 Z
   delta: false
   updated_at: 2009-12-12 21:19:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754020
@@ -5246,7 +5246,7 @@ tag_1063753875:
   created_at: 2009-03-12 01:00:21 Z
   delta: false
   updated_at: 2009-03-12 01:00:21 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063753875
@@ -5259,7 +5259,7 @@ tag_1063753828:
   created_at: 2009-03-07 20:48:06 Z
   delta: false
   updated_at: 2009-03-07 20:48:06 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753828
@@ -5272,7 +5272,7 @@ tag_1063753829:
   created_at: 2009-03-09 16:33:09 Z
   delta: false
   updated_at: 2009-03-09 16:33:09 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753829
@@ -5285,7 +5285,7 @@ tag_1063753876:
   created_at: 2009-03-12 01:43:35 Z
   delta: false
   updated_at: 2009-03-12 01:43:35 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753876
@@ -5298,7 +5298,7 @@ tag_1063754021:
   created_at: 2009-12-12 21:19:12 Z
   delta: false
   updated_at: 2009-12-12 21:19:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754021
@@ -5311,7 +5311,7 @@ tag_1063754022:
   created_at: 2009-12-12 21:20:47 Z
   delta: false
   updated_at: 2009-12-12 21:20:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754022
@@ -5324,7 +5324,7 @@ tag_1063753877:
   created_at: 2009-03-12 01:43:36 Z
   delta: false
   updated_at: 2009-03-12 01:43:36 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753877
@@ -5337,7 +5337,7 @@ tag_1063754023:
   created_at: 2009-12-12 21:20:47 Z
   delta: false
   updated_at: 2009-12-12 21:20:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754023
@@ -5350,7 +5350,7 @@ tag_1063753878:
   created_at: 2009-03-12 01:43:36 Z
   delta: false
   updated_at: 2009-03-12 01:43:36 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753878
@@ -5363,7 +5363,7 @@ tag_1063754070:
   created_at: 2009-12-12 23:27:56 Z
   delta: false
   updated_at: 2009-12-12 23:27:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754070
@@ -5376,7 +5376,7 @@ tag_1063754071:
   created_at: 2009-12-12 23:27:56 Z
   delta: false
   updated_at: 2009-12-12 23:27:56 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754071
@@ -5389,7 +5389,7 @@ tag_1063753879:
   created_at: 2009-03-12 01:45:59 Z
   delta: false
   updated_at: 2009-03-12 01:45:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753879
@@ -5402,7 +5402,7 @@ tag_1063754024:
   created_at: 2009-12-12 21:20:47 Z
   delta: false
   updated_at: 2009-12-12 21:20:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754024
@@ -5415,7 +5415,7 @@ tag_1063753740:
   created_at: 2008-11-21 06:35:38 Z
   delta: false
   updated_at: 2008-11-21 06:35:47 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753740
@@ -5428,7 +5428,7 @@ tag_1063754025:
   created_at: 2009-12-12 21:20:47 Z
   delta: false
   updated_at: 2009-12-12 21:20:47 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063754025
@@ -5441,7 +5441,7 @@ tag_1063754072:
   created_at: 2009-12-12 23:30:02 Z
   delta: false
   updated_at: 2009-12-12 23:30:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754072
@@ -5454,7 +5454,7 @@ tag_1063754073:
   created_at: 2009-12-12 23:30:02 Z
   delta: false
   updated_at: 2009-12-12 23:30:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754073
@@ -5467,7 +5467,7 @@ tag_1063754026:
   created_at: 2009-12-12 21:20:47 Z
   delta: false
   updated_at: 2009-12-12 21:20:47 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754026
@@ -5480,7 +5480,7 @@ tag_441672848:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-09 01:26:02 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 441672848
@@ -5493,7 +5493,7 @@ tag_992891255:
   created_at: 2008-11-09 01:26:02 Z
   delta: false
   updated_at: 2008-11-21 06:14:51 Z
-  taggings_count: 30
+  taggings_count_cache: 30
   last_wrangler_id: 
   adult: false
   id: 992891255
@@ -5506,7 +5506,7 @@ tag_1063753930:
   created_at: 2009-07-17 23:03:01 Z
   delta: false
   updated_at: 2009-07-17 23:03:01 Z
-  taggings_count: 4
+  taggings_count_cache: 4
   last_wrangler_id: 
   adult: false
   id: 1063753930
@@ -5519,7 +5519,7 @@ tag_1063753741:
   created_at: 2008-11-21 07:45:41 Z
   delta: false
   updated_at: 2009-02-20 18:50:13 Z
-  taggings_count: 21
+  taggings_count_cache: 21
   last_wrangler_id: 
   adult: false
   id: 1063753741
@@ -5532,7 +5532,7 @@ tag_1063753931:
   created_at: 2009-07-17 23:03:01 Z
   delta: false
   updated_at: 2009-07-17 23:03:01 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753931
@@ -5545,7 +5545,7 @@ tag_1063754074:
   created_at: 2009-12-12 23:30:02 Z
   delta: false
   updated_at: 2009-12-12 23:30:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754074
@@ -5558,7 +5558,7 @@ tag_1063753742:
   created_at: 2008-11-21 07:45:41 Z
   delta: false
   updated_at: 2008-11-21 07:45:41 Z
-  taggings_count: 8
+  taggings_count_cache: 8
   last_wrangler_id: 
   adult: false
   id: 1063753742
@@ -5571,7 +5571,7 @@ tag_1063753932:
   created_at: 2009-07-17 23:03:01 Z
   delta: false
   updated_at: 2009-07-17 23:03:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753932
@@ -5584,7 +5584,7 @@ tag_1063753980:
   created_at: 2009-07-18 00:21:37 Z
   delta: false
   updated_at: 2009-07-18 00:21:37 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753980
@@ -5597,7 +5597,7 @@ tag_1063753790:
   created_at: 2008-12-07 20:52:11 Z
   delta: false
   updated_at: 2008-12-07 20:52:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753790
@@ -5610,7 +5610,7 @@ tag_1063754027:
   created_at: 2009-12-12 21:27:28 Z
   delta: false
   updated_at: 2009-12-12 21:27:28 Z
-  taggings_count: 0
+  taggings_count_cache: 0
   last_wrangler_id: 
   adult: false
   id: 1063754027
@@ -5623,7 +5623,7 @@ tag_1063754075:
   created_at: 2009-12-12 23:30:02 Z
   delta: false
   updated_at: 2009-12-12 23:30:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754075
@@ -5636,7 +5636,7 @@ tag_1063753743:
   created_at: 2008-11-21 07:45:41 Z
   delta: false
   updated_at: 2008-11-21 07:45:41 Z
-  taggings_count: 10
+  taggings_count_cache: 10
   last_wrangler_id: 
   adult: false
   id: 1063753743
@@ -5649,7 +5649,7 @@ tag_1063753933:
   created_at: 2009-07-17 23:03:01 Z
   delta: false
   updated_at: 2009-07-17 23:03:01 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753933
@@ -5662,7 +5662,7 @@ tag_1063753981:
   created_at: 2009-07-18 00:33:05 Z
   delta: false
   updated_at: 2009-07-18 00:33:05 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753981
@@ -5675,7 +5675,7 @@ tag_1063753791:
   created_at: 2008-12-07 20:52:11 Z
   delta: false
   updated_at: 2008-12-07 20:52:11 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753791
@@ -5688,7 +5688,7 @@ tag_1063754028:
   created_at: 2009-12-12 22:12:39 Z
   delta: false
   updated_at: 2009-12-12 22:12:39 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754028
@@ -5701,7 +5701,7 @@ tag_1063754076:
   created_at: 2009-12-12 23:30:02 Z
   delta: false
   updated_at: 2009-12-12 23:30:02 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754076
@@ -5714,7 +5714,7 @@ tag_1063753744:
   created_at: 2008-11-21 07:48:03 Z
   delta: false
   updated_at: 2009-02-16 05:56:32 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753744
@@ -5727,7 +5727,7 @@ tag_1063753792:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 20:52:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753792
@@ -5740,7 +5740,7 @@ tag_1063753982:
   created_at: 2009-07-18 09:56:43 Z
   delta: false
   updated_at: 2009-07-18 09:56:43 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753982
@@ -5753,7 +5753,7 @@ tag_1063754029:
   created_at: 2009-12-12 22:12:39 Z
   delta: false
   updated_at: 2009-12-12 22:12:39 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754029
@@ -5766,7 +5766,7 @@ tag_1063753934:
   created_at: 2009-07-17 23:08:03 Z
   delta: false
   updated_at: 2009-07-17 23:08:03 Z
-  taggings_count: 2
+  taggings_count_cache: 2
   last_wrangler_id: 
   adult: false
   id: 1063753934
@@ -5779,7 +5779,7 @@ tag_1063753935:
   created_at: 2009-07-17 23:08:03 Z
   delta: false
   updated_at: 2009-07-17 23:08:03 Z
-  taggings_count: 3
+  taggings_count_cache: 3
   last_wrangler_id: 
   adult: false
   id: 1063753935
@@ -5792,7 +5792,7 @@ tag_1063753793:
   created_at: 2008-12-07 20:52:12 Z
   delta: false
   updated_at: 2008-12-07 20:52:12 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063753793
@@ -5805,7 +5805,7 @@ tag_1063754078:
   created_at: 2009-12-12 23:51:59 Z
   delta: false
   updated_at: 2009-12-12 23:51:59 Z
-  taggings_count: 1
+  taggings_count_cache: 1
   last_wrangler_id: 
   adult: false
   id: 1063754078

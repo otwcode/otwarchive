@@ -1,6 +1,16 @@
 class Indexer
 
   BATCH_SIZE = 1000
+  INDEXERS_FOR_CLASS = {
+    "Work" => %w(WorkIndexer BookmarkedWorkIndexer),
+    "Bookmark" => %w(BookmarkIndexer),
+    "Tag" => %w(TagIndexer),
+    "Pseud" => %w(PseudIndexer),
+    "Series" => %w(BookmarkedSeriesIndexer),
+    "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
+  }.freeze
+
+  delegate :klass, :index_name, :document_type, to: :class
 
   ##################
   # CLASS METHODS
@@ -10,23 +20,33 @@ class Indexer
     raise "Must be defined in subclass"
   end
 
+  # Originally added to allow IndexSweeper to find the Elasticsearch document
+  # ids when they do not match the associated ActiveRecord objects' ids.
+  #
+  # Override in subclasses if necessary.
+  def self.find_elasticsearch_ids(ids)
+    ids
+  end
+
   def self.delete_index
     if $elasticsearch.indices.exists(index: index_name)
       $elasticsearch.indices.delete(index: index_name)
     end
   end
 
-  def self.create_index
+  def self.create_index(shards = 5)
     $elasticsearch.indices.create(
       index: index_name,
-      type: document_type,
       body: {
         settings: {
           index: {
-            number_of_shards: 5
+            # static settings
+            number_of_shards: shards,
+            # dynamic settings
+            max_result_window: ArchiveConfig.MAX_SEARCH_RESULTS,
           }
-        },
-        mappings: mapping
+        }.merge(settings),
+        mappings: mapping,
       }
     )
   end
@@ -42,14 +62,24 @@ class Indexer
 
   def self.mapping
     {
-      document_type => {
+      document_type: {
         properties: {
-          #add properties in subclasses
+          # add properties in subclasses
         }
       }
     }
   end
 
+  def self.settings
+    {
+      analyzer: {
+        custom_analyzer: {
+          # add properties in subclasses
+        }
+      }
+    }
+  end
+  
   def self.index_all(options={})
     unless options[:skip_delete]
       delete_index
@@ -70,38 +100,41 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}" 
+    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}"
     klass.constantize
   end
 
   def self.index_name
-    "ao3_#{Rails.env}_#{klass.underscore.pluralize}"
+    "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_#{klass.underscore.pluralize}"
   end
 
   def self.document_type
     klass.underscore
   end
 
+  # Given a searchable object, what indexers should handle it?
+  # Returns an array of indexers
+  def self.for_object(object)
+    name = object.is_a?(Tag) ? 'Tag' : object.class.to_s
+    (INDEXERS_FOR_CLASS[name] || []).map(&:constantize)
+  end
+
+  # Should be called after a batch update, with the IDs that were successfully
+  # updated. Calls successful_reindex on the indexable class.
+  def self.handle_success(ids)
+    if indexables.respond_to?(:successful_reindex)
+      indexables.successful_reindex(ids)
+    end
+  end
+
   ####################
   # INSTANCE METHODS
-  ####################     
+  ####################
 
   attr_reader :ids
 
   def initialize(ids)
     @ids = ids
-  end
-
-  def klass
-    self.class.klass
-  end
-
-  def index_name
-    self.class.index_name
-  end
-
-  def document_type
-    self.class.document_type
   end
 
   def objects
@@ -129,6 +162,19 @@ class Indexer
     $elasticsearch.bulk(body: batch)
   end
 
+  def index_document(object)
+    info = {
+      index: index_name,
+      type: document_type,
+      id: document_id(object.id),
+      body: document(object)
+    }
+    if respond_to?(:parent_id)
+      info.merge!(routing: parent_id(object.id, object))
+    end
+    $elasticsearch.index(info)
+  end
+
   def routing_info(id)
     {
       '_index' => index_name,
@@ -140,4 +186,10 @@ class Indexer
   def document(object)
     object.as_json(root: false)
   end
+
+  # can be overriden by our bookmarkable indexers
+  def document_id(id)
+    id
+  end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150901132832) do
+ActiveRecord::Schema.define(:version => 20160706031054) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -20,8 +20,11 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ip_address"
-    t.string   "category"
     t.integer  "comment_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.string   "summary"
+    t.string   "summary_sanitizer_version"
+    t.string   "language"
+    t.string   "username"
   end
 
   create_table "admin_activities", :force => true do |t|
@@ -41,6 +44,14 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.string  "banner_type"
     t.boolean "active",                                 :default => false, :null => false
   end
+
+  create_table "admin_blacklisted_emails", :force => true do |t|
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "admin_blacklisted_emails", ["email"], :name => "index_admin_blacklisted_emails_on_email", :unique => true
 
   create_table "admin_post_taggings", :force => true do |t|
     t.integer  "admin_post_tag_id"
@@ -93,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.boolean  "disable_filtering",                        :default => false,                 :null => false
     t.boolean  "request_invite_enabled",                   :default => false,                 :null => false
     t.boolean  "creation_requires_invite",                 :default => false,                 :null => false
+    t.boolean  "downloads_enabled",                        :default => true
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -102,9 +114,8 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "login"
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.string   "persistence_token", :null => false
+    t.string   "encrypted_password"
+    t.string   "password_salt"
   end
 
   create_table "api_keys", :force => true do |t|
@@ -490,6 +501,8 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.boolean  "approved",                               :default => false, :null => false
     t.string   "ip_address"
+    t.string   "username"
+    t.string   "language"
   end
 
   create_table "filter_counts", :force => true do |t|
@@ -554,6 +567,7 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "pseud_id"
+    t.boolean  "rejected",       :default => false, :null => false
   end
 
   add_index "gifts", ["pseud_id"], :name => "index_gifts_on_pseud_id"
@@ -626,8 +640,10 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
   add_index "kudos", ["pseud_id"], :name => "index_kudos_on_pseud_id"
 
   create_table "languages", :force => true do |t|
-    t.string "short", :limit => 4
-    t.string "name"
+    t.string  "short",                   :limit => 4
+    t.string  "name"
+    t.boolean "support_available",                    :default => false, :null => false
+    t.boolean "abuse_support_available",              :default => false, :null => false
   end
 
   add_index "languages", ["short"], :name => "index_languages_on_short"
@@ -742,30 +758,12 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.boolean  "assigned",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "max_tags_matched"
   end
 
   add_index "potential_matches", ["collection_id"], :name => "index_potential_matches_on_collection_id"
   add_index "potential_matches", ["offer_signup_id"], :name => "index_potential_matches_on_offer_signup_id"
   add_index "potential_matches", ["request_signup_id"], :name => "index_potential_matches_on_request_signup_id"
-
-  create_table "potential_prompt_matches", :force => true do |t|
-    t.integer  "potential_match_id"
-    t.integer  "offer_id"
-    t.integer  "request_id"
-    t.integer  "num_fandoms_matched"
-    t.integer  "num_characters_matched"
-    t.integer  "num_relationships_matched"
-    t.integer  "num_freeforms_matched"
-    t.integer  "num_categories_matched"
-    t.integer  "num_ratings_matched"
-    t.integer  "num_warnings_matched"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "potential_prompt_matches", ["offer_id"], :name => "index_potential_prompt_matches_on_offer_id"
-  add_index "potential_prompt_matches", ["potential_match_id"], :name => "index_potential_prompt_matches_on_potential_match_id"
-  add_index "potential_prompt_matches", ["request_id"], :name => "index_potential_prompt_matches_on_request_id"
 
   create_table "preferences", :force => true do |t|
     t.integer  "user_id"
@@ -945,6 +943,7 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.text     "content"
     t.integer  "content_sanitizer_version",    :limit => 2, :default => 0, :null => false
     t.integer  "screencast_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.string   "is_translated"
   end
 
   add_index "question_translations", ["locale"], :name => "index_question_translations_on_locale"

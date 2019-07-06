@@ -10,7 +10,7 @@ Feature: Admin Actions to manage users
       | dizmo | wrangulator |
     And I have loaded the "roles" fixture
     When I am logged in as an admin
-    And I fill in "query" with "dizmo"
+    And I fill in "Name" with "dizmo"
     And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
 
@@ -47,8 +47,8 @@ Feature: Admin Actions to manage users
 
   Scenario: A admin can send an activation email for a user account
     Given the following users exist
-      | login  | password  | email                | activation_code |
-      | torres | something | torres@starfleet.org | fake_code       |
+      | login  | password  | email                | confirmation_token |
+      | torres | something | torres@starfleet.org | fake_code          |
       And I am logged in as an admin
       And all emails have been delivered
     When I go to the abuse administration page for "torres"

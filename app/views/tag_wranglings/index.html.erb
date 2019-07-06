@@ -89,7 +89,7 @@
                   </ul>
                 </th>
                 <th scope="col" title="<%= ts('sort by') %>">
-                  <%= sort_link ts('Taggings'), :taggings_count, {desc_default: true} %>
+                  <%= sort_link ts('Taggings'), :taggings_count_cache, { desc_default: true } %>
                 </th>
                 <th scope="col"><%= ts('Manage') %></th>
               </tr>
@@ -153,5 +153,5 @@
 </div>
 
 <% content_for :footer_js do %>
-  <%= javascript_include_tag 'select_all' %>
+  <%= javascript_include_tag 'select_all', skip_pipeline: true %>
 <% end %>
