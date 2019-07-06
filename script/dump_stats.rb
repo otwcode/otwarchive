@@ -10,10 +10,10 @@ if ENV['QUICK'].nil?
 end
 first_time = Work.first.created_at
 days = 1
-to = DateTime.now.beginning_of_day
-from = to - 1.day
+end_date = DateTime.now.beginning_of_day
+start_date = end_date - 1.day
 loop do
-  w = Work.where(posted: true, created_at: from..to)
+  w = Work.where(posted: true, created_at: start_date..end_date)
   fandoms = {}
   fandoms.default = 0
   categories = {}
@@ -62,46 +62,55 @@ loop do
   end
   next unless ENV['QUICK'].nil?
 
-  stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},works,all_works,#{w.count}"
+  stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},works,all_works,#{w.count}"
   categories.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},category,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},category,#{id},#{value}"
   end
   categories_multi.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},category_multi,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},category_multi,#{id},#{value}"
   end
   warnings.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},warning,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},warning,#{id},#{value}"
   end
   warnings_multi.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},warning_multi,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},warning_multi,#{id},#{value}"
   end
   fandoms.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},fandom,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},fandom,#{id},#{value}"
   end
   ratings.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},rating,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},rating,#{id},#{value}"
   end
   characters.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},characters,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},characters,#{id},#{value}"
   end
   freeforms.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},freeform,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},freeform,#{id},#{value}"
   end
   relationships.each do |id, value|
-    stats_output.puts "#{days},#{to},#{from},#{from.strftime('%A')},relationships,#{id},#{value}"
+    stats_output.puts "#{days},#{end_date},#{start_date},#{start_date.strftime('%A')},relationships,#{id},#{value}"
   end
   stats_output.flush
 
   days += 1
-  to = from
-  from -= 1.day
-  break if to < first_time
+  end_date = start_date
+  start_date -= 1.day
+  break if end_date < first_time
 end
 work_output.close
 stats_output.close unless ENV['QUICK'].nil?
 tag_output = File.open(ENV['TAGS_FILENAME'] || '/tmp/tags.csv', 'w')
-tag_output.puts "id,type,name,canonical,cached_count,adult,merger_id,unwrangleable\n"
+tag_output.puts "id,type,name,canonical,cached_count,merger_id,unwrangleable\n"
 Tag.find_in_batches do |batch|
-  batch.each { |tag| tag_output.puts "#{tag.id},#{tag.type},#{tag.name},#{tag.canonical},#{tag.taggings_count_cache},#{tag.adult},#{tag.merger_id},#{tag.unwrangleable}\n" }
+  batch.each do |tag|
+    tag_output.puts "#{tag.id},#{tag.type}," \
+    "#{
+    if tag.taggings_count_cache <= (ENV['TAGS_REDACTED_COUNT'] || 5) && !tag.canonical
+      "Redacted"
+    else
+      tag.name
+    end
+    },#{tag.canonical},#{tag.taggings_count_cache},#{tag.merger_id},#{tag.unwrangleable}\n"
+  end
 end
 tag_output.close
