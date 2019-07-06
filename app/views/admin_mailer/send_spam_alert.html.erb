@@ -1,8 +1,8 @@
 <% content_for :message do %>
 
   <p>The following accounts have a suspicious level of traffic:</p>
-  <% @spam.each_pair do |user_id, info| %>
-    <% user = User.find(user_id) %>
+  <% @users.each do |user| %>
+    <% info = @spam[user.id] %>
     User <%= style_link(user.login, user_works_url(user)) %> has a score of 
     <%= info["score"] %>
     <ul>
