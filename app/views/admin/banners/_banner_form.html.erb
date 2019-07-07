@@ -35,6 +35,11 @@
       <dt><%= f.check_box :active %></dt>
       <dd><%= f.label :active, ts('Active') %></dd>
 
+      <% if @admin_banner.active? %>
+        <dt><%= check_box_tag :admin_banner_minor_edit %></dt>
+        <dd><%= label_tag :admin_banner_minor_edit, ts('This is a minor update (Do not turn the banner back on for users who have dismissed it)') %></dd>
+      <% end %>
+
     </dl>
   </fieldset>
   

@@ -1,4 +1,4 @@
-/*==REGION: HEADER is #1 of the 4 regions shown on every page 
+/*==REGION: HEADER is #1 of the 4 regions shown on every page
 http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
 
@@ -45,7 +45,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   background: #ddd;
 }
 
-#header .current { 
+#header .current {
   background: #ccc;
 }
 
@@ -256,7 +256,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   padding: 0.75em 0.5em 0.5em;
 }
 
-/* search */ 
+/* search */
 
 #header .search {
   float: right;
@@ -277,11 +277,11 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 #header #search .text {
   margin: 0.2857em 0.429em;
 }
- 
+
 #header #search .button {
-  height: auto;
+  margin: 0;
 }
- 
+
 /*CONTEXT: collections*/
 
 #header h2 {

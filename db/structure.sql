@@ -6,8 +6,11 @@ CREATE TABLE `abuse_reports` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `ip_address` varchar(255) DEFAULT NULL,
-  `category` varchar(255) DEFAULT NULL,
   `comment_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
+  `summary` varchar(255) DEFAULT NULL,
+  `summary_sanitizer_version` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -31,6 +34,15 @@ CREATE TABLE `admin_banners` (
   `banner_type` varchar(255) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `admin_blacklisted_emails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_admin_blacklisted_emails_on_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `admin_post_taggings` (
@@ -63,8 +75,8 @@ CREATE TABLE `admin_posts` (
   `translated_post_id` int(11) DEFAULT NULL,
   `language_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_admin_posts_on_created_at` (`created_at`),
-  KEY `index_admin_posts_on_post_id` (`translated_post_id`)
+  KEY `index_admin_posts_on_post_id` (`translated_post_id`),
+  KEY `index_admin_posts_on_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `admin_settings` (
@@ -89,9 +101,10 @@ CREATE TABLE `admin_settings` (
   `disable_filtering` tinyint(1) NOT NULL DEFAULT '0',
   `request_invite_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `creation_requires_invite` tinyint(1) NOT NULL DEFAULT '0',
+  `downloads_enabled` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_admin_settings_on_last_updated_by` (`last_updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `admins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -99,9 +112,8 @@ CREATE TABLE `admins` (
   `updated_at` datetime DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `login` varchar(255) DEFAULT NULL,
-  `crypted_password` varchar(255) DEFAULT NULL,
-  `salt` varchar(255) DEFAULT NULL,
-  `persistence_token` varchar(255) NOT NULL,
+  `encrypted_password` varchar(255) DEFAULT NULL,
+  `password_salt` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -113,8 +125,8 @@ CREATE TABLE `api_keys` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_api_keys_on_access_token` (`access_token`),
-  UNIQUE KEY `index_api_keys_on_name` (`name`)
+  UNIQUE KEY `index_api_keys_on_name` (`name`),
+  UNIQUE KEY `index_api_keys_on_access_token` (`access_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `archive_faq_translations` (
@@ -158,10 +170,10 @@ CREATE TABLE `audits` (
   `remote_address` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `associated_index` (`associated_id`,`associated_type`),
   KEY `auditable_index` (`auditable_id`,`auditable_type`),
-  KEY `index_audits_on_created_at` (`created_at`),
-  KEY `user_index` (`user_id`,`user_type`)
+  KEY `associated_index` (`associated_id`,`associated_type`),
+  KEY `user_index` (`user_id`,`user_type`),
+  KEY `index_audits_on_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `bookmarks` (
@@ -179,10 +191,10 @@ CREATE TABLE `bookmarks` (
   `delta` tinyint(1) DEFAULT '1',
   `notes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_bookmarkable_pseud` (`bookmarkable_id`,`bookmarkable_type`,`pseud_id`),
-  KEY `index_bookmarks_on_private_and_hidden_by_admin_and_created_at` (`private`,`hidden_by_admin`,`created_at`),
+  KEY `fk_bookmarks_user` (`user_id`),
   KEY `index_bookmarks_on_pseud_id` (`pseud_id`),
-  KEY `fk_bookmarks_user` (`user_id`)
+  KEY `index_bookmarkable_pseud` (`bookmarkable_id`,`bookmarkable_type`,`pseud_id`),
+  KEY `index_bookmarks_on_private_and_hidden_by_admin_and_created_at` (`private`,`hidden_by_admin`,`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `challenge_assignments` (
@@ -201,13 +213,13 @@ CREATE TABLE `challenge_assignments` (
   `pinch_request_signup_id` int(11) DEFAULT NULL,
   `covered_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_challenge_assignments_on_collection_id` (`collection_id`),
   KEY `assignments_on_creation_id` (`creation_id`),
   KEY `assignments_on_creation_type` (`creation_type`),
-  KEY `assignments_on_defaulted_at` (`defaulted_at`),
   KEY `assignments_on_offer_signup_id` (`offer_signup_id`),
+  KEY `assignments_on_offer_sent_at` (`sent_at`),
   KEY `assignments_on_pinch_hitter_id` (`pinch_hitter_id`),
-  KEY `assignments_on_offer_sent_at` (`sent_at`)
+  KEY `assignments_on_defaulted_at` (`defaulted_at`),
+  KEY `index_challenge_assignments_on_collection_id` (`collection_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `challenge_claims` (
@@ -224,10 +236,10 @@ CREATE TABLE `challenge_claims` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_challenge_claims_on_claiming_user_id` (`claiming_user_id`),
-  KEY `index_challenge_claims_on_collection_id` (`collection_id`),
   KEY `creations` (`creation_id`,`creation_type`),
-  KEY `index_challenge_claims_on_request_signup_id` (`request_signup_id`)
+  KEY `index_challenge_claims_on_claiming_user_id` (`claiming_user_id`),
+  KEY `index_challenge_claims_on_request_signup_id` (`request_signup_id`),
+  KEY `index_challenge_claims_on_collection_id` (`collection_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `challenge_signups` (
@@ -239,8 +251,8 @@ CREATE TABLE `challenge_signups` (
   `assigned_as_request` tinyint(1) DEFAULT '0',
   `assigned_as_offer` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_challenge_signups_on_collection_id` (`collection_id`),
-  KEY `signups_on_pseud_id` (`pseud_id`)
+  KEY `signups_on_pseud_id` (`pseud_id`),
+  KEY `index_challenge_signups_on_collection_id` (`collection_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `chapters` (
@@ -263,8 +275,8 @@ CREATE TABLE `chapters` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `endnotes_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_chapters_on_work_id` (`work_id`),
-  KEY `works_chapter_index` (`work_id`)
+  KEY `works_chapter_index` (`work_id`),
+  KEY `index_chapters_on_work_id` (`work_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_items` (
@@ -280,10 +292,10 @@ CREATE TABLE `collection_items` (
   `unrevealed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `by collection and item` (`collection_id`,`item_id`,`item_type`),
-  KEY `collection_items_anonymous` (`anonymous`),
   KEY `index_collection_items_approval_status` (`collection_id`,`user_approval_status`,`collection_approval_status`),
-  KEY `collection_items_item_id` (`item_id`),
-  KEY `collection_items_unrevealed` (`unrevealed`)
+  KEY `collection_items_unrevealed` (`unrevealed`),
+  KEY `collection_items_anonymous` (`anonymous`),
+  KEY `collection_items_item_id` (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_participants` (
@@ -383,8 +395,8 @@ CREATE TABLE `comments` (
   `unreviewed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_comments_commentable` (`commentable_id`,`commentable_type`),
-  KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `index_comments_on_pseud_id` (`pseud_id`),
+  KEY `index_comments_parent` (`parent_id`,`parent_type`),
   KEY `comments_by_thread` (`thread`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -425,10 +437,10 @@ CREATE TABLE `delayed_jobs` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `delayed_jobs_failed_at` (`failed_at`),
+  KEY `delayed_jobs_run_at` (`run_at`),
   KEY `delayed_jobs_locked_at` (`locked_at`),
   KEY `delayed_jobs_locked_by` (`locked_by`),
-  KEY `delayed_jobs_run_at` (`run_at`)
+  KEY `delayed_jobs_failed_at` (`failed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `external_author_names` (
@@ -451,8 +463,8 @@ CREATE TABLE `external_authors` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_external_authors_on_email` (`email`),
-  KEY `index_external_authors_on_user_id` (`user_id`)
+  KEY `index_external_authors_on_user_id` (`user_id`),
+  KEY `index_external_authors_on_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `external_creatorships` (
@@ -464,9 +476,9 @@ CREATE TABLE `external_creatorships` (
   `archivist_id` int(11) DEFAULT NULL,
   `external_author_name_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_external_creatorships_on_archivist_id` (`archivist_id`),
   KEY `index_external_creatorships_on_creation_id_and_creation_type` (`creation_id`,`creation_type`),
-  KEY `index_external_creatorships_on_external_author_name_id` (`external_author_name_id`)
+  KEY `index_external_creatorships_on_external_author_name_id` (`external_author_name_id`),
+  KEY `index_external_creatorships_on_archivist_id` (`archivist_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `external_works` (
@@ -514,6 +526,8 @@ CREATE TABLE `feedbacks` (
   `summary_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `approved` tinyint(1) NOT NULL DEFAULT '0',
   `ip_address` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -526,8 +540,8 @@ CREATE TABLE `filter_counts` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_filter_counts_on_filter_id` (`filter_id`),
-  KEY `index_public_works_count` (`public_works_count`),
-  KEY `index_unhidden_works_count` (`unhidden_works_count`)
+  KEY `index_unhidden_works_count` (`unhidden_works_count`),
+  KEY `index_public_works_count` (`public_works_count`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `filter_taggings` (
@@ -539,8 +553,8 @@ CREATE TABLE `filter_taggings` (
   `updated_at` datetime DEFAULT NULL,
   `inherited` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`),
-  KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`)
+  KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`),
+  KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gift_exchanges` (
@@ -584,10 +598,11 @@ CREATE TABLE `gifts` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `pseud_id` int(11) DEFAULT NULL,
+  `rejected` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_gifts_on_pseud_id` (`pseud_id`),
   KEY `index_gifts_on_recipient_name` (`recipient_name`),
-  KEY `index_gifts_on_work_id` (`work_id`)
+  KEY `index_gifts_on_work_id` (`work_id`),
+  KEY `index_gifts_on_pseud_id` (`pseud_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `inbox_comments` (
@@ -599,8 +614,8 @@ CREATE TABLE `inbox_comments` (
   `read` tinyint(1) NOT NULL DEFAULT '0',
   `replied_to` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_inbox_comments_on_feedback_comment_id` (`feedback_comment_id`),
   KEY `index_inbox_comments_on_read_and_user_id` (`read`,`user_id`),
+  KEY `index_inbox_comments_on_feedback_comment_id` (`feedback_comment_id`),
   KEY `index_inbox_comments_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -620,9 +635,9 @@ CREATE TABLE `invitations` (
   `from_queue` tinyint(1) NOT NULL DEFAULT '0',
   `external_author_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_invitations_on_creator_id_and_creator_type` (`creator_id`,`creator_type`),
-  KEY `index_invitations_on_external_author_id` (`external_author_id`),
   KEY `index_invitations_on_invitee_id_and_invitee_type` (`invitee_id`,`invitee_type`),
+  KEY `index_invitations_on_external_author_id` (`external_author_id`),
+  KEY `index_invitations_on_creator_id_and_creator_type` (`creator_id`,`creator_type`),
   KEY `index_invitations_on_token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -656,18 +671,20 @@ CREATE TABLE `kudos` (
   `updated_at` datetime DEFAULT NULL,
   `ip_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_kudos_on_commentable_id_and_commentable_type_and_pseud_id` (`commentable_id`,`commentable_type`,`pseud_id`),
+  KEY `index_kudos_on_pseud_id` (`pseud_id`),
   KEY `index_kudos_on_ip_address` (`ip_address`),
-  KEY `index_kudos_on_pseud_id` (`pseud_id`)
+  KEY `index_kudos_on_commentable_id_and_commentable_type_and_pseud_id` (`commentable_id`,`commentable_type`,`pseud_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `short` varchar(4) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `support_available` tinyint(1) NOT NULL DEFAULT '0',
+  `abuse_support_available` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_languages_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -681,9 +698,9 @@ CREATE TABLE `locales` (
   `email_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_locales_on_iso` (`iso`),
-  KEY `index_locales_on_language_id` (`language_id`),
-  KEY `index_locales_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `index_locales_on_short` (`short`),
+  KEY `index_locales_on_language_id` (`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `log_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -697,9 +714,9 @@ CREATE TABLE `log_items` (
   `updated_at` datetime DEFAULT NULL,
   `note_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  KEY `index_log_items_on_user_id` (`user_id`),
   KEY `index_log_items_on_admin_id` (`admin_id`),
-  KEY `index_log_items_on_role_id` (`role_id`),
-  KEY `index_log_items_on_user_id` (`user_id`)
+  KEY `index_log_items_on_role_id` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `meta_taggings` (
@@ -793,30 +810,11 @@ CREATE TABLE `potential_matches` (
   `assigned` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `max_tags_matched` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_potential_matches_on_collection_id` (`collection_id`),
   KEY `index_potential_matches_on_offer_signup_id` (`offer_signup_id`),
   KEY `index_potential_matches_on_request_signup_id` (`request_signup_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `potential_prompt_matches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `potential_match_id` int(11) DEFAULT NULL,
-  `offer_id` int(11) DEFAULT NULL,
-  `request_id` int(11) DEFAULT NULL,
-  `num_fandoms_matched` int(11) DEFAULT NULL,
-  `num_characters_matched` int(11) DEFAULT NULL,
-  `num_relationships_matched` int(11) DEFAULT NULL,
-  `num_freeforms_matched` int(11) DEFAULT NULL,
-  `num_categories_matched` int(11) DEFAULT NULL,
-  `num_ratings_matched` int(11) DEFAULT NULL,
-  `num_warnings_matched` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_potential_prompt_matches_on_offer_id` (`offer_id`),
-  KEY `index_potential_prompt_matches_on_potential_match_id` (`potential_match_id`),
-  KEY `index_potential_prompt_matches_on_request_id` (`request_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `preferences` (
@@ -968,11 +966,11 @@ CREATE TABLE `prompts` (
   `any_freeform` tinyint(1) NOT NULL DEFAULT '0',
   `anonymous` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_prompts_on_challenge_signup_id` (`challenge_signup_id`),
+  KEY `index_prompts_on_tag_set_id` (`tag_set_id`),
+  KEY `index_prompts_on_type` (`type`),
   KEY `index_prompts_on_collection_id` (`collection_id`),
   KEY `index_prompts_on_optional_tag_set_id` (`optional_tag_set_id`),
-  KEY `index_prompts_on_tag_set_id` (`tag_set_id`),
-  KEY `index_prompts_on_type` (`type`)
+  KEY `index_prompts_on_challenge_signup_id` (`challenge_signup_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pseuds` (
@@ -992,8 +990,8 @@ CREATE TABLE `pseuds` (
   `description_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `icon_comment_text` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `index_psueds_on_name` (`name`),
-  KEY `index_pseuds_on_user_id_and_name` (`user_id`,`name`)
+  KEY `index_pseuds_on_user_id_and_name` (`user_id`,`name`),
+  KEY `index_psueds_on_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `question_translations` (
@@ -1006,9 +1004,10 @@ CREATE TABLE `question_translations` (
   `content` text,
   `content_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
   `screencast_sanitizer_version` smallint(6) NOT NULL DEFAULT '0',
+  `is_translated` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_question_translations_on_locale` (`locale`),
-  KEY `index_question_translations_on_question_id` (`question_id`)
+  KEY `index_question_translations_on_question_id` (`question_id`),
+  KEY `index_question_translations_on_locale` (`locale`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `questions` (
@@ -1037,8 +1036,8 @@ CREATE TABLE `readings` (
   `toread` tinyint(1) NOT NULL DEFAULT '0',
   `toskip` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_readings_on_user_id` (`user_id`),
-  KEY `index_readings_on_work_id` (`work_id`)
+  KEY `index_readings_on_work_id` (`work_id`),
+  KEY `index_readings_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `related_works` (
@@ -1111,8 +1110,8 @@ CREATE TABLE `serial_works` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_serial_works_on_series_id` (`series_id`),
-  KEY `index_serial_works_on_work_id` (`work_id`)
+  KEY `index_serial_works_on_work_id` (`work_id`),
+  KEY `index_serial_works_on_series_id` (`series_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
@@ -1189,11 +1188,11 @@ CREATE TABLE `skins` (
   `featured` tinyint(1) NOT NULL DEFAULT '0',
   `in_chooser` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  KEY `index_skins_on_type` (`type`),
+  KEY `index_skins_on_public_and_official` (`public`,`official`),
   KEY `index_skins_on_author_id` (`author_id`),
   KEY `index_skins_on_in_chooser` (`in_chooser`),
-  KEY `index_skins_on_public_and_official` (`public`,`official`),
-  KEY `index_skins_on_title` (`title`),
-  KEY `index_skins_on_type` (`type`)
+  KEY `index_skins_on_title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `stat_counters` (
@@ -1218,8 +1217,8 @@ CREATE TABLE `subscriptions` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `subscribable` (`subscribable_id`,`subscribable_type`),
-  KEY `user_id` (`user_id`)
+  KEY `user_id` (`user_id`),
+  KEY `subscribable` (`subscribable_id`,`subscribable_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tag_nominations` (
@@ -1306,12 +1305,12 @@ CREATE TABLE `tags` (
   `sortable_name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_tags_on_name` (`name`),
+  KEY `index_tags_on_merger_id` (`merger_id`),
+  KEY `index_tags_on_id_and_type` (`id`,`type`),
   KEY `index_tags_on_canonical` (`canonical`),
   KEY `tag_created_at_index` (`created_at`),
-  KEY `index_tags_on_id_and_type` (`id`,`type`),
-  KEY `index_tags_on_merger_id` (`merger_id`),
-  KEY `index_tags_on_sortable_name` (`sortable_name`),
-  KEY `index_tags_on_type` (`type`)
+  KEY `index_tags_on_type` (`type`),
+  KEY `index_tags_on_sortable_name` (`sortable_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_invite_requests` (
@@ -1399,13 +1398,13 @@ CREATE TABLE `works` (
   `spam_checked_at` datetime DEFAULT NULL,
   `moderated_commenting_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
-  KEY `index_works_on_delta` (`delta`),
-  KEY `index_works_on_imported_from_url` (`imported_from_url`),
-  KEY `index_works_on_ip_address` (`ip_address`),
   KEY `index_works_on_language_id` (`language_id`),
-  KEY `visible_works` (`restricted`,`posted`,`hidden_by_admin`),
+  KEY `index_works_on_imported_from_url` (`imported_from_url`),
   KEY `index_works_on_revised_at` (`revised_at`),
+  KEY `index_works_on_delta` (`delta`),
+  KEY `visible_works` (`restricted`,`posted`,`hidden_by_admin`),
+  KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
+  KEY `index_works_on_ip_address` (`ip_address`),
   KEY `index_works_on_spam` (`spam`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1430,6 +1429,538 @@ CREATE TABLE `wrangling_guidelines` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO schema_migrations (version) VALUES ('1');
+
+INSERT INTO schema_migrations (version) VALUES ('20080726215505');
+
+INSERT INTO schema_migrations (version) VALUES ('20080727030151');
+
+INSERT INTO schema_migrations (version) VALUES ('20080803045759');
+
+INSERT INTO schema_migrations (version) VALUES ('20080803124959');
+
+INSERT INTO schema_migrations (version) VALUES ('20080803125332');
+
+INSERT INTO schema_migrations (version) VALUES ('20080805021608');
+
+INSERT INTO schema_migrations (version) VALUES ('20080901172442');
+
+INSERT INTO schema_migrations (version) VALUES ('20080904135616');
+
+INSERT INTO schema_migrations (version) VALUES ('20080906193922');
+
+INSERT INTO schema_migrations (version) VALUES ('20080912233749');
+
+INSERT INTO schema_migrations (version) VALUES ('20080914202646');
+
+INSERT INTO schema_migrations (version) VALUES ('20080916213733');
+
+INSERT INTO schema_migrations (version) VALUES ('20080920020544');
+
+INSERT INTO schema_migrations (version) VALUES ('20080920052318');
+
+INSERT INTO schema_migrations (version) VALUES ('20080922015228');
+
+INSERT INTO schema_migrations (version) VALUES ('20080922060611');
+
+INSERT INTO schema_migrations (version) VALUES ('20080927172047');
+
+INSERT INTO schema_migrations (version) VALUES ('20080927172113');
+
+INSERT INTO schema_migrations (version) VALUES ('20080927191115');
+
+INSERT INTO schema_migrations (version) VALUES ('20080929233315');
+
+INSERT INTO schema_migrations (version) VALUES ('20080930163408');
+
+INSERT INTO schema_migrations (version) VALUES ('20081001035116');
+
+INSERT INTO schema_migrations (version) VALUES ('20081001160257');
+
+INSERT INTO schema_migrations (version) VALUES ('20081002011129');
+
+INSERT INTO schema_migrations (version) VALUES ('20081002011130');
+
+INSERT INTO schema_migrations (version) VALUES ('20081012185902');
+
+INSERT INTO schema_migrations (version) VALUES ('20081014183856');
+
+INSERT INTO schema_migrations (version) VALUES ('20081026180141');
+
+INSERT INTO schema_migrations (version) VALUES ('20081102050355');
+
+INSERT INTO schema_migrations (version) VALUES ('20081109004140');
+
+INSERT INTO schema_migrations (version) VALUES ('20081114043420');
+
+INSERT INTO schema_migrations (version) VALUES ('20081114164535');
+
+INSERT INTO schema_migrations (version) VALUES ('20081115041645');
+
+INSERT INTO schema_migrations (version) VALUES ('20081122025525');
+
+INSERT INTO schema_migrations (version) VALUES ('20090127012544');
+
+INSERT INTO schema_migrations (version) VALUES ('20090127045219');
+
+INSERT INTO schema_migrations (version) VALUES ('20090214045954');
+
+INSERT INTO schema_migrations (version) VALUES ('20090218223404');
+
+INSERT INTO schema_migrations (version) VALUES ('20090307152243');
+
+INSERT INTO schema_migrations (version) VALUES ('20090313212917');
+
+INSERT INTO schema_migrations (version) VALUES ('20090315182538');
+
+INSERT INTO schema_migrations (version) VALUES ('20090318004340');
+
+INSERT INTO schema_migrations (version) VALUES ('20090322182529');
+
+INSERT INTO schema_migrations (version) VALUES ('20090328235607');
+
+INSERT INTO schema_migrations (version) VALUES ('20090329002541');
+
+INSERT INTO schema_migrations (version) VALUES ('20090331012516');
+
+INSERT INTO schema_migrations (version) VALUES ('20090331205830');
+
+INSERT INTO schema_migrations (version) VALUES ('20090419175827');
+
+INSERT INTO schema_migrations (version) VALUES ('20090419184639');
+
+INSERT INTO schema_migrations (version) VALUES ('20090420003418');
+
+INSERT INTO schema_migrations (version) VALUES ('20090420032457');
+
+INSERT INTO schema_migrations (version) VALUES ('20090504020354');
+
+INSERT INTO schema_migrations (version) VALUES ('20090524195217');
+
+INSERT INTO schema_migrations (version) VALUES ('20090524201025');
+
+INSERT INTO schema_migrations (version) VALUES ('20090604221238');
+
+INSERT INTO schema_migrations (version) VALUES ('20090610010041');
+
+INSERT INTO schema_migrations (version) VALUES ('20090613092005');
+
+INSERT INTO schema_migrations (version) VALUES ('20090706214616');
+
+INSERT INTO schema_migrations (version) VALUES ('20090723205349');
+
+INSERT INTO schema_migrations (version) VALUES ('20090816092821');
+
+INSERT INTO schema_migrations (version) VALUES ('20090816092952');
+
+INSERT INTO schema_migrations (version) VALUES ('20090902191851');
+
+INSERT INTO schema_migrations (version) VALUES ('20090907021029');
+
+INSERT INTO schema_migrations (version) VALUES ('20090913221007');
+
+INSERT INTO schema_migrations (version) VALUES ('20090913234257');
+
+INSERT INTO schema_migrations (version) VALUES ('20090916140506');
+
+INSERT INTO schema_migrations (version) VALUES ('20090917004451');
+
+INSERT INTO schema_migrations (version) VALUES ('20090918112658');
+
+INSERT INTO schema_migrations (version) VALUES ('20090918212755');
+
+INSERT INTO schema_migrations (version) VALUES ('20090919125723');
+
+INSERT INTO schema_migrations (version) VALUES ('20090919161520');
+
+INSERT INTO schema_migrations (version) VALUES ('20090921210056');
+
+INSERT INTO schema_migrations (version) VALUES ('20090930033753');
+
+INSERT INTO schema_migrations (version) VALUES ('20091018155535');
+
+INSERT INTO schema_migrations (version) VALUES ('20091018161438');
+
+INSERT INTO schema_migrations (version) VALUES ('20091018174444');
+
+INSERT INTO schema_migrations (version) VALUES ('20091019013949');
+
+INSERT INTO schema_migrations (version) VALUES ('20091021225848');
+
+INSERT INTO schema_migrations (version) VALUES ('20091029224425');
+
+INSERT INTO schema_migrations (version) VALUES ('20091107214504');
+
+INSERT INTO schema_migrations (version) VALUES ('20091121200119');
+
+INSERT INTO schema_migrations (version) VALUES ('20091122210634');
+
+INSERT INTO schema_migrations (version) VALUES ('20091205204625');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206140850');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206150153');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206172751');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206180109');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206180907');
+
+INSERT INTO schema_migrations (version) VALUES ('20091207234702');
+
+INSERT INTO schema_migrations (version) VALUES ('20091208200602');
+
+INSERT INTO schema_migrations (version) VALUES ('20091209202619');
+
+INSERT INTO schema_migrations (version) VALUES ('20091209215213');
+
+INSERT INTO schema_migrations (version) VALUES ('20091212035917');
+
+INSERT INTO schema_migrations (version) VALUES ('20091212051923');
+
+INSERT INTO schema_migrations (version) VALUES ('20091213013846');
+
+INSERT INTO schema_migrations (version) VALUES ('20091213035516');
+
+INSERT INTO schema_migrations (version) VALUES ('20091216001101');
+
+INSERT INTO schema_migrations (version) VALUES ('20091216150855');
+
+INSERT INTO schema_migrations (version) VALUES ('20091217004235');
+
+INSERT INTO schema_migrations (version) VALUES ('20091217005945');
+
+INSERT INTO schema_migrations (version) VALUES ('20091217162252');
+
+INSERT INTO schema_migrations (version) VALUES ('20091219192317');
+
+INSERT INTO schema_migrations (version) VALUES ('20091220182557');
+
+INSERT INTO schema_migrations (version) VALUES ('20091221011225');
+
+INSERT INTO schema_migrations (version) VALUES ('20091221145401');
+
+INSERT INTO schema_migrations (version) VALUES ('20091223002020');
+
+INSERT INTO schema_migrations (version) VALUES ('20091223003205');
+
+INSERT INTO schema_migrations (version) VALUES ('20091223180731');
+
+INSERT INTO schema_migrations (version) VALUES ('20091227192528');
+
+INSERT INTO schema_migrations (version) VALUES ('20091228042140');
+
+INSERT INTO schema_migrations (version) VALUES ('20100104041510');
+
+INSERT INTO schema_migrations (version) VALUES ('20100104144922');
+
+INSERT INTO schema_migrations (version) VALUES ('20100104232731');
+
+INSERT INTO schema_migrations (version) VALUES ('20100104232756');
+
+INSERT INTO schema_migrations (version) VALUES ('20100105043033');
+
+INSERT INTO schema_migrations (version) VALUES ('20100108002148');
+
+INSERT INTO schema_migrations (version) VALUES ('20100112034428');
+
+INSERT INTO schema_migrations (version) VALUES ('20100123004135');
+
+INSERT INTO schema_migrations (version) VALUES ('20100202154135');
+
+INSERT INTO schema_migrations (version) VALUES ('20100202154255');
+
+INSERT INTO schema_migrations (version) VALUES ('20100210180708');
+
+INSERT INTO schema_migrations (version) VALUES ('20100210214240');
+
+INSERT INTO schema_migrations (version) VALUES ('20100220022635');
+
+INSERT INTO schema_migrations (version) VALUES ('20100220031906');
+
+INSERT INTO schema_migrations (version) VALUES ('20100220062829');
+
+INSERT INTO schema_migrations (version) VALUES ('20100222011208');
+
+INSERT INTO schema_migrations (version) VALUES ('20100222074558');
+
+INSERT INTO schema_migrations (version) VALUES ('20100223204450');
+
+INSERT INTO schema_migrations (version) VALUES ('20100223205231');
+
+INSERT INTO schema_migrations (version) VALUES ('20100223212822');
+
+INSERT INTO schema_migrations (version) VALUES ('20100225063636');
+
+INSERT INTO schema_migrations (version) VALUES ('20100227013502');
+
+INSERT INTO schema_migrations (version) VALUES ('20100301211829');
+
+INSERT INTO schema_migrations (version) VALUES ('20100304193643');
+
+INSERT INTO schema_migrations (version) VALUES ('20100307211947');
+
+INSERT INTO schema_migrations (version) VALUES ('20100312165910');
+
+INSERT INTO schema_migrations (version) VALUES ('20100313165910');
+
+INSERT INTO schema_migrations (version) VALUES ('20100314021317');
+
+INSERT INTO schema_migrations (version) VALUES ('20100314035644');
+
+INSERT INTO schema_migrations (version) VALUES ('20100314044409');
+
+INSERT INTO schema_migrations (version) VALUES ('20100320165910');
+
+INSERT INTO schema_migrations (version) VALUES ('20100326170256');
+
+INSERT INTO schema_migrations (version) VALUES ('20100326170652');
+
+INSERT INTO schema_migrations (version) VALUES ('20100326170924');
+
+INSERT INTO schema_migrations (version) VALUES ('20100326171229');
+
+INSERT INTO schema_migrations (version) VALUES ('20100328215724');
+
+INSERT INTO schema_migrations (version) VALUES ('20100402163915');
+
+INSERT INTO schema_migrations (version) VALUES ('20100403191349');
+
+INSERT INTO schema_migrations (version) VALUES ('20100404223432');
+
+INSERT INTO schema_migrations (version) VALUES ('20100405191217');
+
+INSERT INTO schema_migrations (version) VALUES ('20100407222411');
+
+INSERT INTO schema_migrations (version) VALUES ('20100413231821');
+
+INSERT INTO schema_migrations (version) VALUES ('20100414231821');
+
+INSERT INTO schema_migrations (version) VALUES ('20100415231821');
+
+INSERT INTO schema_migrations (version) VALUES ('20100416145044');
+
+INSERT INTO schema_migrations (version) VALUES ('20100419131629');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420211328');
+
+INSERT INTO schema_migrations (version) VALUES ('20100502024059');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506203017');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506231821');
+
+INSERT INTO schema_migrations (version) VALUES ('20100530152111');
+
+INSERT INTO schema_migrations (version) VALUES ('20100530161827');
+
+INSERT INTO schema_migrations (version) VALUES ('20100618021343');
+
+INSERT INTO schema_migrations (version) VALUES ('20100620185742');
+
+INSERT INTO schema_migrations (version) VALUES ('20100727212342');
+
+INSERT INTO schema_migrations (version) VALUES ('20100728220657');
+
+INSERT INTO schema_migrations (version) VALUES ('20100804185744');
+
+INSERT INTO schema_migrations (version) VALUES ('20100812175429');
+
+INSERT INTO schema_migrations (version) VALUES ('20100821165448');
+
+INSERT INTO schema_migrations (version) VALUES ('20100901154501');
+
+INSERT INTO schema_migrations (version) VALUES ('20100901165448');
+
+INSERT INTO schema_migrations (version) VALUES ('20100907015632');
+
+INSERT INTO schema_migrations (version) VALUES ('20100929044155');
+
+INSERT INTO schema_migrations (version) VALUES ('20101015053927');
+
+INSERT INTO schema_migrations (version) VALUES ('20101016131743');
+
+INSERT INTO schema_migrations (version) VALUES ('20101022002353');
+
+INSERT INTO schema_migrations (version) VALUES ('20101022160603');
+
+INSERT INTO schema_migrations (version) VALUES ('20101024232837');
+
+INSERT INTO schema_migrations (version) VALUES ('20101025022733');
+
+INSERT INTO schema_migrations (version) VALUES ('20101103185307');
+
+INSERT INTO schema_migrations (version) VALUES ('20101107005107');
+
+INSERT INTO schema_migrations (version) VALUES ('20101107212421');
+
+INSERT INTO schema_migrations (version) VALUES ('20101108003021');
+
+INSERT INTO schema_migrations (version) VALUES ('20101109204730');
+
+INSERT INTO schema_migrations (version) VALUES ('20101128051309');
+
+INSERT INTO schema_migrations (version) VALUES ('20101130074147');
+
+INSERT INTO schema_migrations (version) VALUES ('20101204042756');
+
+INSERT INTO schema_migrations (version) VALUES ('20101204061318');
+
+INSERT INTO schema_migrations (version) VALUES ('20101204062558');
+
+INSERT INTO schema_migrations (version) VALUES ('20101205015909');
+
+INSERT INTO schema_migrations (version) VALUES ('20101216165336');
+
+INSERT INTO schema_migrations (version) VALUES ('20101219191929');
+
+INSERT INTO schema_migrations (version) VALUES ('20101231171104');
+
+INSERT INTO schema_migrations (version) VALUES ('20101231174606');
+
+INSERT INTO schema_migrations (version) VALUES ('20110130093600');
+
+INSERT INTO schema_migrations (version) VALUES ('20110130093601');
+
+INSERT INTO schema_migrations (version) VALUES ('20110130093602');
+
+INSERT INTO schema_migrations (version) VALUES ('20110130093604');
+
+INSERT INTO schema_migrations (version) VALUES ('20110212162042');
+
+INSERT INTO schema_migrations (version) VALUES ('20110214171104');
+
+INSERT INTO schema_migrations (version) VALUES ('20110222093602');
+
+INSERT INTO schema_migrations (version) VALUES ('20110223031701');
+
+INSERT INTO schema_migrations (version) VALUES ('20110304042756');
+
+INSERT INTO schema_migrations (version) VALUES ('20110312174241');
+
+INSERT INTO schema_migrations (version) VALUES ('20110401185831');
+
+INSERT INTO schema_migrations (version) VALUES ('20110401201033');
+
+INSERT INTO schema_migrations (version) VALUES ('20110513145847');
+
+INSERT INTO schema_migrations (version) VALUES ('20110515182045');
+
+INSERT INTO schema_migrations (version) VALUES ('20110526203419');
+
+INSERT INTO schema_migrations (version) VALUES ('20110601200556');
+
+INSERT INTO schema_migrations (version) VALUES ('20110619091214');
+
+INSERT INTO schema_migrations (version) VALUES ('20110619091342');
+
+INSERT INTO schema_migrations (version) VALUES ('20110621015359');
+
+INSERT INTO schema_migrations (version) VALUES ('20110710033732');
+
+INSERT INTO schema_migrations (version) VALUES ('20110712003637');
+
+INSERT INTO schema_migrations (version) VALUES ('20110712140002');
+
+INSERT INTO schema_migrations (version) VALUES ('20110713013317');
+
+INSERT INTO schema_migrations (version) VALUES ('20110801134913');
+
+INSERT INTO schema_migrations (version) VALUES ('20110810012317');
+
+INSERT INTO schema_migrations (version) VALUES ('20110810150044');
+
+INSERT INTO schema_migrations (version) VALUES ('20110812012725');
+
+INSERT INTO schema_migrations (version) VALUES ('20110823015903');
+
+INSERT INTO schema_migrations (version) VALUES ('20110827153658');
+
+INSERT INTO schema_migrations (version) VALUES ('20110827185228');
+
+INSERT INTO schema_migrations (version) VALUES ('20110828172403');
+
+INSERT INTO schema_migrations (version) VALUES ('20110829125505');
+
+INSERT INTO schema_migrations (version) VALUES ('20110905184626');
+
+INSERT INTO schema_migrations (version) VALUES ('20110908191743');
+
+INSERT INTO schema_migrations (version) VALUES ('20111006032145');
+
+INSERT INTO schema_migrations (version) VALUES ('20111007235357');
+
+INSERT INTO schema_migrations (version) VALUES ('20111013010307');
+
+INSERT INTO schema_migrations (version) VALUES ('20111027173425');
+
+INSERT INTO schema_migrations (version) VALUES ('20111122225340');
+
+INSERT INTO schema_migrations (version) VALUES ('20111122225341');
+
+INSERT INTO schema_migrations (version) VALUES ('20111123011929');
+
+INSERT INTO schema_migrations (version) VALUES ('20111206225341');
+
+INSERT INTO schema_migrations (version) VALUES ('20120131225520');
+
+INSERT INTO schema_migrations (version) VALUES ('20120206034312');
+
+INSERT INTO schema_migrations (version) VALUES ('20120226024139');
+
+INSERT INTO schema_migrations (version) VALUES ('20120415134615');
+
+INSERT INTO schema_migrations (version) VALUES ('20120501210459');
+
+INSERT INTO schema_migrations (version) VALUES ('20120809161528');
+
+INSERT INTO schema_migrations (version) VALUES ('20120809164434');
+
+INSERT INTO schema_migrations (version) VALUES ('20120825165632');
+
+INSERT INTO schema_migrations (version) VALUES ('20120901113344');
+
+INSERT INTO schema_migrations (version) VALUES ('20120913222728');
+
+INSERT INTO schema_migrations (version) VALUES ('20120921094037');
+
+INSERT INTO schema_migrations (version) VALUES ('20121023221449');
+
+INSERT INTO schema_migrations (version) VALUES ('20121102002223');
+
+INSERT INTO schema_migrations (version) VALUES ('20121129192353');
+
+INSERT INTO schema_migrations (version) VALUES ('20121205215503');
+
+INSERT INTO schema_migrations (version) VALUES ('20121220012746');
+
+INSERT INTO schema_migrations (version) VALUES ('20130113003307');
+
+INSERT INTO schema_migrations (version) VALUES ('20130327164311');
+
+INSERT INTO schema_migrations (version) VALUES ('20130707160714');
+
+INSERT INTO schema_migrations (version) VALUES ('20130707160814');
+
+INSERT INTO schema_migrations (version) VALUES ('20140206031705');
+
+INSERT INTO schema_migrations (version) VALUES ('20140208200234');
+
+INSERT INTO schema_migrations (version) VALUES ('20140326130206');
+
+INSERT INTO schema_migrations (version) VALUES ('20140327111111');
+
+INSERT INTO schema_migrations (version) VALUES ('20140406043239');
+
+INSERT INTO schema_migrations (version) VALUES ('20140808220904');
+
+INSERT INTO schema_migrations (version) VALUES ('20140922024405');
+
+INSERT INTO schema_migrations (version) VALUES ('20140922025054');
+
+INSERT INTO schema_migrations (version) VALUES ('20140924023950');
+
 INSERT INTO schema_migrations (version) VALUES ('20141003204623');
 
 INSERT INTO schema_migrations (version) VALUES ('20141003205439');
@@ -1438,8 +1969,34 @@ INSERT INTO schema_migrations (version) VALUES ('20141004123421');
 
 INSERT INTO schema_migrations (version) VALUES ('20141127004302');
 
+INSERT INTO schema_migrations (version) VALUES ('20150106211421');
+
+INSERT INTO schema_migrations (version) VALUES ('20150111203000');
+
+INSERT INTO schema_migrations (version) VALUES ('20150217034225');
+
 INSERT INTO schema_migrations (version) VALUES ('20150725141326');
 
 INSERT INTO schema_migrations (version) VALUES ('20150901024743');
 
 INSERT INTO schema_migrations (version) VALUES ('20150901132832');
+
+INSERT INTO schema_migrations (version) VALUES ('20151018165632');
+
+INSERT INTO schema_migrations (version) VALUES ('20151129234505');
+
+INSERT INTO schema_migrations (version) VALUES ('20151130183602');
+
+INSERT INTO schema_migrations (version) VALUES ('20160331005706');
+
+INSERT INTO schema_migrations (version) VALUES ('201604030319571');
+
+INSERT INTO schema_migrations (version) VALUES ('20160416163754');
+
+INSERT INTO schema_migrations (version) VALUES ('20160706031054');
+
+INSERT INTO schema_migrations (version) VALUES ('20160724234958');
+
+INSERT INTO schema_migrations (version) VALUES ('20160916172116');
+
+INSERT INTO schema_migrations (version) VALUES ('20160918223157');

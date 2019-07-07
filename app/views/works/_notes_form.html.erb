@@ -14,9 +14,8 @@
       </span>
       <fieldset id="front-notes-options" class="start">
         <legend><%= f.label :notes, ts("Notes") %></legend>
-        <% if !params[:claim_id].blank? %>
-        <% posting_claim = ChallengeClaim.find(params[:claim_id]) %>
-          <%= f.text_area :notes, :class => "observe_textlength", :value => "<strong>Prompt:</strong> " << posting_claim.request_prompt.description %>
+        <% if @posting_claim && @posting_claim.prompt_description.present? %>
+          <%= f.text_area :notes, :class => "observe_textlength", :value => "<strong>Prompt:</strong> #{@posting_claim.prompt_description}" %>
           <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
         <% else %>
           <%= f.text_area :notes, :class => "observe_textlength" %>
