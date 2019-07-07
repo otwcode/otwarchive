@@ -21,8 +21,8 @@ class ExternalWorksController < ApplicationController
 
   def index
     if params[:show] == 'duplicates'
-       works = ExternalWork.all.group(:url).having("count(*) >1").order("created_at DESC")
-       @external_works = works.paginate(page: params[:page])
+      works = ExternalWork.all.group(:url).having("count(*) >1").order("created_at DESC")
+      @external_works = works.paginate(page: params[:page])
     else
       @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
     end
