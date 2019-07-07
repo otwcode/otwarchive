@@ -501,6 +501,17 @@ namespace :After do
     end
   end
 
+  desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collection"
+  task(:unhide_invited_works) do
+    works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
+    works.find_in_batches.each do |batch|
+      batch.each do |work|
+        work.update_anon_unrevealed
+        work.save if work.changed?
+      end
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
