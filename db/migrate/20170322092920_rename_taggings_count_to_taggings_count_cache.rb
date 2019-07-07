@@ -1,4 +1,4 @@
-class RenameTaggingsCountToTaggingsCountCache < ActiveRecord::Migration
+class RenameTaggingsCountToTaggingsCountCache < ActiveRecord::Migration[4.2]
   def up
     rename_column :tags, :taggings_count, :taggings_count_cache
     add_index :tags, :taggings_count_cache

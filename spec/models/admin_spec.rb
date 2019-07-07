@@ -78,11 +78,10 @@ describe Admin, :ready do
                     "Validation failed: Login has already been taken")
     end
 
-    # Why does this get a double error ?
     it "is invalid if email already exists" do
       expect { create(:admin, email: existing_user.email) }.to \
         raise_error(ActiveRecord::RecordInvalid, \
-                    "Validation failed: Email has already been taken, Email has already been taken")
+                    "Validation failed: Email has already been taken")
     end
   end
 end

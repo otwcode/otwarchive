@@ -1,176 +1,113 @@
-# encoding=utf-8
-
 @works
-
 Feature: Download a work
-  @wip
-  Scenario: Download an ordinary work
 
-  Given the work "Tittle with doubble letters"
-  When I view the work "Tittle with doubble letters"
-  Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
-  When I follow "MOBI"
-  Then I should see "Tittle with doubble letters"
-    And I should see the text with tags "Tittle with doubble letters"
-  When I view the work "Tittle with doubble letters"
-    And I follow "PDF"
-  # Then...
-  When I view the work "Tittle with doubble letters"
-    And I follow "HTML"
-  Then I should see "Tittle with doubble letters"
-  When I view the work "Tittle with doubble letters"
-    And I follow "EPUB"
-  # Then...
+  Scenario: Download a work in various formats
 
-  @wip
-  Scenario: Download works with quotation marks in the title doesn't bomb
+  Given I am logged in as "myname"
+    And I post the work "Tittle with doubble letters"
+  Then I should be able to download all versions of "Tittle with doubble letters"
 
-  Given I am logged in as a random user
-    And I set up the draft "Title I'll Replace In A Sec"
+
+  Scenario: Download works with double quotes in title
+
+  Given I am logged in as "myname"
+    And I set up the draft "Foo"
     And I fill in "Work Title" with
-      """
-      "Has double quotes"
-      """
-  When I press "Post Without Preview"
-    And I follow "MOBI"
-  # Then...
-  When I go to the work page with title "Has double quotes"
+        """
+        "Has double quotes"
+        """
+    And I fill in "content" with "some random stuff"
+  When I press "Preview"
+    And I press "Post"
     And I follow "PDF"
-  # Then...
+  Then I should receive a file of type "pdf"
   When I go to the work page with title "Has double quotes"
-    And I follow "HTML"
-  # Then...
+    And I follow "MOBI"
+  Then I should receive a file of type "mobi"
   When I go to the work page with title "Has double quotes"
     And I follow "EPUB"
-  # Then...
+  Then I should receive a file of type "epub"
+  When I go to the work page with title "Has double quotes"
+    And I follow "AZW3"
+  Then I should receive a file of type "azw3"
 
-  @wip
-  Scenario: Download works with Cyrillic in the title doesn't bomb
 
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      Первый_маг
-      """
-  When I press "Post Without Preview"
-  # TODO: Think about whether we can invent a better name than this
-  Then I should see the text with tags "_.mobi"
-  When I follow "MOBI"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "PDF"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "HTML"
-  # Then...
-  When I go to the work page with title Первый_маг
-    And I follow "EPUB"
-  # Then...
+  Scenario: Download works with non-ASCII characters in title
 
-  @wip
-  Scenario: Download works with curly quotes in the title doesn't bomb
+  Given I am logged in as "myname"
+  When I post the work "Первый_маг"
+  Then I should be able to download all versions of "Первый_маг"
+  When I post the work "Hàs curly’d quotes"
+  Then I should be able to download all versions of "Hàs curly’d quotes"
+  When I post the work "♥ é Türkçe Karakterler başlıkta nasıl görünüyor"
+  Then I should be able to download all versions of "♥ é Türkçe Karakterler başlıkta nasıl görünüyor"
+  When I post the work "à ø something"
+  Then I should be able to download all versions of "à ø something"
+  When I post the work "流亡在阿尔比恩"
+  Then I should be able to download all versions of "流亡在阿尔比恩"
+  When I post the work "-dash in title-"
+  Then I should be able to download all versions of "-dash in title-"
+  When I post the work "Emjoi 🤩 Yay 🥳"
+  Then I should be able to download all versions of "Emjoi 🤩 Yay 🥳"
 
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      Has curly’d quotes
-      """
-  When I press "Post Without Preview"
-    And I follow "MOBI"
-  # Then...
-  When I go to the work page with title Has curly’d quotes
-    And I follow "PDF"
-  # Then...
-  When I go to the work page with title Has curly’d quotes
-    And I follow "HTML"
-  # Then...
-  When I go to the work page with title Has curly’d quotes
-    And I follow "EPUB"
-  # Then...
 
-  @wip
-  Scenario: Download works with curly and straight quotes and accented 
-  characters in the title doesn't bomb
-
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      "Hàs curly’d quotes"
-      """
-  When I press "Post Without Preview"
-    And I follow "MOBI"
-  # Then...
-  When I go to the work page with title "Hàs curly’d quotes"
-    And I follow "PDF"
-  # Then...
-  When I go to the work page with title "Hàs curly’d quotes"
-    And I follow "HTML"
-  # Then...
-  When I go to the work page with title "Hàs curly’d quotes"
-    And I follow "EPUB"
-  # Then...
-
-  @wip
-  Scenario: Download chaptered works doesn't bomb
- 
-  Given the chaptered work "Epic Novel"
-  When I view the work "Epic Novel"
-    And I follow "HTML"
-  Then I should see "Epic Novel"
-    And I should see "Another Chapter"
-    And I should not see "Comments"
-  When I view the work "Epic Novel"
-    And I follow "PDF"
-  # Then...
-  When I view the work "Epic Novel"
-    And I follow "MOBI"
-  # Then...
-  When I view the work "Epic Novel"
-    And I follow "EPUB"
-
-  @wip
-  Scenario: Download MOBI and PDF for works with unusual characters in the title
-
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
-      """
-  When I press "Post Without Preview"
-    And I follow "MOBI"
-  # Then...
-  When I go to the work page with title ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
-    And I follow "PDF"
-  # Then...
-
-  @wip
-  Scenario: Download MOBI and PDF for works with more unusual characters in the title
-
-  Given I set up the draft "Title I'll Replace In A Sec"
-    And I fill in "Work Title" with
-      """
-      à ø something
-      """
-  When I press "Post Without Preview"
-    And I follow "MOBI"
-  # Then...
-  When I go to the work page with title à ø something
-    And I follow "PDF"
-  # Then...
-
-  Scenario: Download chaptered works as HTML
+  Scenario: Download of chaptered works includes chapters
 
   Given the chaptered work "Bazinga"
   When I view the work "Bazinga"
     And I follow "HTML"
   Then I should see "Chapter 2"
 
-  Scenario: Unrevealed works cannot be downloaded
 
-  Given there is a work "Now You See Me" in an unrevealed collection "Invisibility"
-  When I am logged in as the owner of "Invisibility"
-    And I view the work "Now You See Me"
+  Scenario: Download chaptered works
+
+  Given I am logged in as "author"
+  When I post the chaptered work "Epic Novel"
+  Then I should be able to download all versions of "Epic Novel"
+
+
+  Scenario: Works can be downloaded when anonymous
+
+  Given there is a work "Test Work" in an anonymous collection "Anonymous"
+  When I am logged out
+    And I view the work "Test Work"
     And I follow "HTML"
-    And "AO3-4706" is fixed
-  # Then I should see "Sorry, you can't download an unrevealed work"
-  #   And I should be on the works page
+  Then I should see "Anonymous"
+    And I should be able to download all versions of "Test Work"
+
+
+  Scenario: Multifandom works can be downloaded
+
+  Given I am logged in
+    And I set up the draft "Many Fandom Work"
+    And I fill in "Fandoms" with "Fandom 1, Fandom 2, Fandom 3, Fandom 4"
+    And I press "Post Without Preview"
+  When I am logged out
+    And I view the work "Many Fandom Work"
+    And I follow "HTML"
+  Then I should see "Multifandom"
+    And I should be able to download all versions of "Many Fandom Work"
+
+
+  Scenario: Download option is unavailable if work is unrevealed.
+
+  Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
+    And I am logged in as the author of "Blabla"
+  Then I should not see "Download"
+
+
+  Scenario: Download option is unavailable if work is unposted.
+
+  Given I am logged in
+    And the draft "Unposted Work"
+  When I view the work "Unposted Work"
+  Then I should not see "Download"
+
+
+  Scenario: Download option is unavailable if work is hidden by admin.
+
+  Given I am logged in
+    And I post the work "TOS Violation"
+  When I am logged in as an admin
+    And I hide the work "TOS Violation"
+  Then I should not see "Download"
