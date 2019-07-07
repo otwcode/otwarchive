@@ -16,7 +16,7 @@ describe TagSetAssociationsController do
   describe "PUT update_multiple" do
     context "when user is not logged in" do
       it "redirects and returns an error message" do
-        put :update_multiple, tag_set_id: owned_tag_set.id
+        put :update_multiple, params: { tag_set_id: owned_tag_set.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
           "were trying to reach. Please log in.")
       end
@@ -29,8 +29,8 @@ describe TagSetAssociationsController do
 
       context "no tag associations are saved" do
         it "redirects and returns a notice" do
-          put :update_multiple, tag_set_id: owned_tag_set.id
-          it_redirects_to(tag_set_path(owned_tag_set))
+          put :update_multiple, params: { tag_set_id: owned_tag_set.id }
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
           expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
@@ -41,7 +41,7 @@ describe TagSetAssociationsController do
             tag_set_id: owned_tag_set.id,
             "create_association_#{tag.id}_#{parent_tag.name}": "1",
           }
-          put :update_multiple, params
+          put :update_multiple, params: params
         end
 
         it "creates the new tag association" do
@@ -53,7 +53,7 @@ describe TagSetAssociationsController do
         end
 
         it "redirects and returns a notice" do
-          it_redirects_to(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
           expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
@@ -99,7 +99,7 @@ describe TagSetAssociationsController do
             "create_association_#{child_tag_2.id}_#{parent_tag.name}": "1",
             "create_association_#{child_tag_3.id}_#{parent_tag.name}": "",
           }
-          put :update_multiple, params
+          put :update_multiple, params: params
         end
 
         it "creates the new tag association" do
@@ -117,7 +117,7 @@ describe TagSetAssociationsController do
         end
 
         it "redirects and returns a notice" do
-          it_redirects_to(tag_set_path(owned_tag_set))
+          it_redirects_to_simple(tag_set_path(owned_tag_set))
           expect(flash[:notice]).to include("Nominated associations were added.")
         end
       end
@@ -128,7 +128,7 @@ describe TagSetAssociationsController do
             tag_set_id: owned_tag_set.id,
             "create_association_99999999_Hawaii+Seven-0+(2022)": "1",
           }
-          put :update_multiple, params
+          put :update_multiple, params: params
           expect(response).to render_template("index")
           expect(flash[:error]).to include("We couldn't add all of your specified associations.")
         end

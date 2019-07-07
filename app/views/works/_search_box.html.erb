@@ -1,4 +1,4 @@
-<%= form_for WorkSearch.new, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
+<%= form_for WorkSearchForm.new, as: :work_search, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
   <fieldset>
     <legend><%= ts('Search Works', key: 'header') %></legend>
     <p>

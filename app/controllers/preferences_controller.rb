@@ -1,23 +1,23 @@
 class PreferencesController < ApplicationController
-  before_filter :load_user
-  before_filter :check_ownership
-  skip_before_filter :store_location
+  before_action :load_user
+  before_action :check_ownership
+  skip_before_action :store_location
 
   # Ensure that the current user is authorized to view and change this information
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
   end
 
   def index
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
   end
 
   def update
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
     @user.preference.attributes = preference_params
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
@@ -32,7 +32,7 @@ class PreferencesController < ApplicationController
       redirect_to @user
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
-      render :action => :index
+      render action: :index
     end
   end
 

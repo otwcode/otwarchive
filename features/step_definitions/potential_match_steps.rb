@@ -3,7 +3,7 @@
 Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |name, table|
   # Set up the gift exchange with the correct owner.
   step %{the user "moderator" exists and is activated}
-  user = User.find_by_login("moderator")
+  user = User.find_by(login: "moderator")
   collection = Collection.new(
     name: name,
     title: name,
@@ -84,10 +84,10 @@ end
 Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/ do |user_name, collection_name, table|
   # Set up the username.
   step %{the user "#{user_name}" exists and is activated}
-  user = User.find_by_login(user_name).default_pseud
+  user = User.find_by(login: user_name).default_pseud
 
   # Set up the basics of the signup.
-  collection = Collection.find_by_name(collection_name)
+  collection = Collection.find_by(name: collection_name)
   signup = ChallengeSignup.new(pseud: user, collection: collection)
   offers = []
   requests = []
@@ -147,18 +147,18 @@ Given /^the user "([^\"]*)" signs up for "([^\"]*)" with the following prompts$/
 end
 
 When /^potential matches are generated for "([^\"]*)"$/ do |name|
-  collection = Collection.find_by_name(name)
+  collection = Collection.find_by(name: name)
   PotentialMatch.generate_in_background collection.id
 end
 
 Then /^there should be no potential matches for "([^\"]*)"$/ do |name|
-  collection = Collection.find_by_name(name)
+  collection = Collection.find_by(name: name)
   collection.potential_matches.count.should == 0
 end
 
 Then /^the potential matches for "([^\"]*)" should be$/ do |name, table|
   # First extract the set of potential matches for the given challenge.
-  collection = Collection.find_by_name(name)
+  collection = Collection.find_by(name: name)
   matches = collection.potential_matches.includes(
     request_signup: :pseud,
     offer_signup: :pseud
