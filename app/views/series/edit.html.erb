@@ -41,11 +41,11 @@
       </dd>
       
       <dt>
-        <%= f.label :notes, ts("Series Notes") %>
+        <%= f.label :series_notes, ts("Series Notes") %>
       </dt>
       <dd>
         <%= allowed_html_instructions %>
-        <%= f.text_area :notes, :class => "observe_textlength" %>
+        <%= f.text_area :series_notes, :class => "observe_textlength" %>
         <%= live_validation_for_field('series_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) %>
         <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) %>
       </dd>

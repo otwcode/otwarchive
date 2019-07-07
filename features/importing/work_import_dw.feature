@@ -4,27 +4,26 @@ Feature: Import Works from DW
   As an author
   I want to create new works by importing them from DW
   @import_dw
-  Scenario: Creating a new work from an DW story with automatic metadata
+  Scenario: Importing a new work from an DW story with automatic metadata
     Given basic tags
-      And a fandom exists with name: "Lewis", canonical: true
+      And a fandom exists with name: "Testing", canonical: true
       And the following activated user exists
         | login          | password    |
         | cosomeone      | something   |
       And I am logged in as "cosomeone" with password "something"
     When I go to the import page
-      And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3506.html"
+      And I fill in "urls" with "https://ao3testing.dreamwidth.org/1726.html"
     When I press "Import"
     Then I should see "Preview"
-      And I should see "Lewis" within "dd.fandom"
+      And I should see "Testing" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
-      And I should see "Lewis/Hathaway" within "dd.relationship"
-      And I should see "Published:2000-01-10"
+      And I should see "Character A/Character B" within "dd.relationship"
+      And I should see "Published:2017-07-03"
       And I should see "Importing Test" within "h2.title"
-      And I should not see "[FIC]" within "h2.title"
+      And I should not see "Import Test" within "h2.title"
       And I should see "Something I made for testing purposes." within "div.summary"
-      And I should see "Yes, this is really only for testing. :)" within "div.notes"
-      And I should see "My first paragraph."
-      And I should see "My second paragraph."
+      And I should see "THIS IS USED FOR AUTOMATED TESTS" within "div.notes"
+      And I should see "This is the body of my single-chapter work."
       And I should not see the image "alt" text "Add to memories"
       And I should not see the image "alt" text "Next Entry"
       And I should not see "location"
@@ -43,35 +42,29 @@ Feature: Import Works from DW
   # DW metadata tables esp. when there's no DW metadata table
 
     Given basic tags
-      And a fandom exists with name: "Lewis", canonical: true
       And the following activated user exists
         | login          | password    |
         | cosomeone      | something   |
       And I am logged in as "cosomeone" with password "something"
     When I go to the import page
-      And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3601.html"
+      And I fill in "urls" with "https://ao3testing.dreamwidth.org/1836.html"
     When I press "Import"
     Then I should see "Preview"
-      And I should see "Lewis" within "dd.fandom"
-      And I should see "General Audiences" within "dd.rating"
-      And I should see "Lewis/Hathaway" within "dd.relationship"
-      And I should see "Published:2000-01-10"
-      And I should see "Importing Test" within "h2.title"
-      And I should not see "[FIC]" within "h2.title"
-      And I should see "Something I made for testing purposes." within "div.summary"
-      And I should see "Yes, this is really only for testing. :)" within "div.notes"
-      And I should see "My first paragraph."
-      And I should see "My second paragraph."
+      And I should see "Testing" within "dd.fandom"
+      And I should see "Teen And Up Audiences" within "dd.rating"
+      And I should see "Character A/Character B" within "dd.relationship"
+      And I should see "Published:2017-07-03"
+      And I should see "Single Chapter Fic from DW" within "h2.title"
+      And I should see "THIS IS USED FOR AUTOMATED TESTS" within "div.notes"
+      And I should see "This is the body of my single-chapter work."
       And I should not see the image "alt" text "Add to memories"
       And I should not see the image "alt" text "Next Entry"
       And I should see "My location"
       And I should see "My music"
-      And I should see "My mood"
-      And I should see "My tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+      Then I should see "Single Chapter Fic from DW"
 
   @import_dw_tables_no_backdate
   Scenario: Creating a new work from an DW story without backdating it
@@ -81,7 +74,7 @@ Feature: Import Works from DW
         | cosomeone      | something   |
       And I am logged in as a random user
     When I go to the import page
-      And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3506.html"
+      And I fill in "urls" with "https://ao3testing.dreamwidth.org/1726.html"
     When I press "Import"
     Then I should see "Preview"
       And I should see "Importing Test"
@@ -95,41 +88,38 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "Importing Test" within "h2.title"
+      And I should not see "Created:2017-08-29"
       And I should not see the image "alt" text "Add to memories!"
       And I should not see the image "alt" text "Next Entry"
 
   @import_dw_comm
   Scenario: Creating a new work from an DW story that is posted to a community
     Given basic tags
-      And the following activated user exists
-        | login          | password    |
-        | cosomeone      | something   |
-      And I am logged in as "cosomeone" with password "something"
+      And I am logged in as "cosomeone"
     When I go to the import page
-      And I fill in "urls" with "http://rarelitfic.dreamwidth.org/5572.html"
-    When I press "Import"
+      And I fill in "urls" with "https://ao3testingcomm.dreamwidth.org/702.html"
+      And I press "Import"
     Then I should see "Preview"
-      And I should see "Poirot - Agatha Christie" within "dd.fandom"
-      And I should see "General Audiences" within "dd.rating"
-      And I should see "Published:2010-10-23"
-      And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
-      And I should not see "[Poirot]" within "h2.title"
-      And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
-      And I should see "more to their friendship than he'd thought." within "div.summary"
-      And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should see the image "src" text "http://www.rbreu.de/fan/stanwood_title_400.png"
-      And I should see "Follow me to AO3"
-      And I should not see "Rare Literature Fanfiction"
-      And I should not see "rarelitfic"
-      And I should not see "rebecca2525"
+      And I should see "Testing" within "dd.fandom"
+      And I should see "Explicit" within "dd.rating"
+      And I should see "Published:2017-08-29"
+      And I should see "Rails 5.1 Single Chapter from Comm (DW)" within "h2.title"
+      And I should see "This is an imported work" within "div.summary"
+      And I should see "This is a Rails 5.1 importing test."
+      And I should see the image "src" text "https://ao3testing.dreamwidth.org/file/495.jpg"
+      And I should not see "ao3testingcomm"
+      And I should not see "ao3testing"
       And I should not see the image "alt" text "Add to memories"
       And I should not see the image "alt" text "Next Entry"
       And I should not see "mood"
       And I should not see "Entry tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page
-      Then I should see "Mrs Stanwood's Birthday Party"
+    When I follow "Edit"
+    Then the "content" field should contain "class"
+      And the "content" field should contain "entry-content"
+    When I go to cosomeone's user page
+    Then I should see "Rails 5.1 Single Chapter from Comm (DW)"
 
   @import_dw_multi_chapter
   Scenario: Creating a new multichapter work from a DW story
@@ -142,33 +132,32 @@ Feature: Import Works from DW
     When I go to the import page
       And I fill in "urls" with
          """
-         http://rebecca2525.dreamwidth.org/3506.html
-         http://rebecca2525.dreamwidth.org/4024.html
+         https://ao3testing.dreamwidth.org/2460.html
+         https://ao3testing.dreamwidth.org/2664.html
+         https://ao3testing.dreamwidth.org/2968.html
          """
       And I choose "import_multiple_chapters"
     When I press "Import"
     Then I should see "Preview"
-      And I should see "Lewis" within "dd.fandom"
+      And I should see "Testing" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
-      And I should see "Importing Test" within "h2.title"
+      And I should see "Rails 5.1 Chaptered (DW)" within "h2.title"
       And I should not see "[FIC]" within "h2.title"
       And I should see "Something I made for testing purposes." within "div.summary"
-      And I should see "Yes, this is really only for testing. :)" within "div.notes"
-      And I should see "My first paragraph."
-      And I should see "My second paragraph."
+      And I should see "THIS IS USED FOR AUTOMATED TESTS" within "div.notes"
+      And I should see "This is a Rails 5.1 importing test, chapter 1."
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And I should see "Chapters:2/2"
-      And I should see "Published:2000-01-10"
-      And I should see "Completed:2000-01-22"
-      And I should see "My first paragraph."
-      And I should see "My second paragraph."
+      And I should see "Chapters:3/3"
+      And I should see "Published:2017-08-29"
+      And I should see "Completed:2017-08-29"
+      And I should see "This is a Rails 5.1 importing test, chapter 1."
     When I follow "Next Chapter"
-    Then I should see "The long awaited second part."
-      And I should see "And another paragraph."
-      And I should see "The plot thickens." within "div.summary"
-      And I should see "MOAR TESTING! :)" within "div.notes"
-      And I should see "Importing Test Part 2" within "h3.title"
+    Then I should see "This is a Rails 5.1 importing test, chapter 2."
+      And I should see "This is the summary for chapter 2." within "div.summary"
+      And I should see "THIS IS USED FOR AUTOMATED TESTS" within "div.notes"
+      And I should see "My note on chapter 2." within "div.notes"
+      And I should see "Rails 5.1 Chaptered (DW)" within "h3.title"
     When I am on cosomeone's user page
-      Then I should see "Importing Test"
+      Then I should see "Rails 5.1 Chaptered (DW)"
 

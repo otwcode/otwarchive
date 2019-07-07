@@ -210,40 +210,53 @@ describe Tag do
     end
   end
 
-  describe "unwrangled?" do
-    it "should be false for a canonical" do
+  describe "unfilterable?" do
+    it "is false for a canonical" do
       tag = Freeform.create(name: "canonical", canonical: true)
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for an unwrangleable" do
+    it "is false for an unwrangleable" do
       tag = Tag.create(name: "unwrangleable", unwrangleable: true)
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for a synonym" do
+    it "is false for a synonym" do
       tag = Tag.create(name: "synonym")
       tag_merger = Tag.create(name: "merger")
       tag.merger = tag_merger
       tag.save
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be false for a merger tag" do
+    it "is false for a merger tag" do
       tag = Tag.create(name: "merger")
       tag_syn = Tag.create(name: "synonym")
       tag_syn.merger = tag
       tag_syn.save
-      expect(tag.unwrangled?).to be_falsey
+      expect(tag.unfilterable?).to be_falsey
     end
 
-    it "should be true for a tag with a Fandom parent" do
+    it "is true for a tag with a Fandom parent" do
       tag_character = FactoryGirl.create(:character, canonical: false)
       tag_fandom = FactoryGirl.create(:fandom, canonical: true)
       tag_character.parents = [tag_fandom]
       tag_character.save
 
-      expect(tag_character.unwrangled?).to be_truthy
+      expect(tag_character.unfilterable?).to be_truthy
+    end
+  end
+
+  describe "has_posted_works?" do
+    before do
+      create(:posted_work, fandom_string: "love live,jjba")
+      create(:draft, fandom_string: "zombie land saga,jjba")
+    end
+
+    it "is true if used in posted works" do
+      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
     end
   end
 
@@ -277,21 +290,8 @@ describe Tag do
       tag = FactoryGirl.create(:unsorted_tag)
       expect(tag.can_change_type?).to be_truthy
 
-      # TODO: use factories when they stop giving validation errors and stack too deep errors
-      creator = User.new(terms_of_service: '1', age_over_13: '1')
-      creator.login = "Creator"
-      creator.email = "creator@muse.net"
-      creator.save
-      bookmarker = User.new(terms_of_service: '1', age_over_13: '1')
-      bookmarker.login = "Bookmarker"
-      bookmarker.email = "bookmarker@avidfan.net"
-      bookmarker.save
-      chapter = Chapter.new(content: "Whatever 10 characters", authors: [creator.pseuds.first])
-      work = Work.new(title: "Work", fandom_string: "Whatever", authors: [creator.pseuds.first], chapters: [chapter])
-      work.posted = true
-      work.save
+      bookmark = FactoryGirl.create(:bookmark, tag_string: tag.name)
 
-      bookmark = Bookmark.create(bookmarkable_type: "Work", bookmarkable_id: work.id, pseud_id: bookmarker.pseuds.first.id, tag_string: tag.name)
       expect(bookmark.tags).to include(tag)
       expect(tag.can_change_type?).to be_truthy
     end
@@ -458,9 +458,9 @@ describe Tag do
   describe "multiple tags of the same type" do
     before do
       # set up three tags of the same type
-      @canonical_tag = FactoryGirl.create(:fandom)
+      @canonical_tag = FactoryGirl.create(:canonical_fandom)
       @syn_tag = FactoryGirl.create(:fandom)
-      @sub_tag = FactoryGirl.create(:fandom)
+      @sub_tag = FactoryGirl.create(:canonical_fandom)
     end
 
     it "should let you make a tag the synonym of a canonical one" do
