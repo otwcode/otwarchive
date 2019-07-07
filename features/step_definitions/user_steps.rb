@@ -99,7 +99,6 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.save
 end
 
-
 Given /^I am logged in (to the current page )?as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |current_page, login, password, hidden|
   user = find_or_create_new_user(login, password)
   step("I am logged out")
@@ -111,6 +110,8 @@ Given /^I am logged in (to the current page )?as "([^"]*)" with password "([^"]*
   unless current_page
     step %{I am on the homepage}
   end
+  find_link('login-dropdown').click
+  
   fill_in "User name or email:", with: login
   fill_in "Password:", with: password
   check "Remember Me"
@@ -267,7 +268,6 @@ Then /^I should be logged out$/ do
   expect(User.current_user).to be(nil)
 end
 
-
 def get_work_name(age, classname, name)
   klass = classname.classify.constantize
   owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
@@ -314,7 +314,6 @@ Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by(login: login)
   assert user.active?
 end
-
 
 Then /^I should see the current user's preferences in the console$/ do
   puts User.current_user.preference.inspect
