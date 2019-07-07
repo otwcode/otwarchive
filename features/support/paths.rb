@@ -178,8 +178,10 @@ module NavigationHelpers
       collection_requests_path(Collection.find_by(title: $1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by(title: $1))
-    when /^the "(.*)" participants page$/i # e.g. when I go to the "Collection name" participants page
+    when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
       collection_participants_path(Collection.find_by(title: $1))
+    when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
+      collection_url(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
