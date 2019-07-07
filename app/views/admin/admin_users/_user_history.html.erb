@@ -27,22 +27,14 @@
       <td><%= ts("System Generated") %></td>
     </tr>
     <tr>
-      <td><%= @user.created_at %>
-        (<abbr class="timeago" title="<%= @user.created_at %>"><%= @user.created_at.iso8601 %></abbr>)
-      </td>
-      <td><%= ts('Account Created') %></td>
-      <td><%= ts('System Generated') %></td>
-    </tr>
-    <tr>
       <td>
         <% if @user.current_sign_in_at.nil? %>
           <%= ts('No logins recorded') %>
         <% else %>
-          <%= @user.last_sign_in_at %> ( <%= @user.current_sign_in_ip %>
-          )(<abbr class="timeago" title="<%= @user.current_sign_in_at %>"><%= @user.current_sign_in_at.iso8601 %></abbr>)
+          <%= @user.current_sign_in_at %> ( <%= @user.current_sign_in_ip %> )
         <% end %>
       </td>
-      <td><%= ts('Last Login') %></td>
+      <td><%= ts('Current Login') %></td>
       <td><%= ts('System Generated') %></td>
     </tr>
     <tr>
@@ -50,19 +42,12 @@
         <% if @user.last_sign_in_at.nil? %>
           <%= ts('No previous login recorded') %>
         <% else %>
-          <%= @user.last_sign_in_at %> ( <%= @user.last_sign_in_ip %>
-          )(<abbr class="timeago" title="<%= @user.last_sign_in_at %>"><%= @user.last_sign_in_at.iso8601 %></abbr>)
+          <%= @user.last_sign_in_at %> ( <%= @user.last_sign_in_ip %> )
         <% end %>
       </td>
-      <td><%= ts('Last Activity') %></td>
+      <td><%= ts('Previous Login') %></td>
       <td><%= ts('System Generated') %></td>
     </tr>
     </tbody>
   </table>
 </div>
-
-<% content_for :footer_js do %>
-  <%= javascript_include_tag 'jquery.timeago.min', skip_pipeline: true %>
-  // convert an absolute time to a relative time, e.g. 1 day ago
-  $j('.timeago').timeago();
-<% end %>

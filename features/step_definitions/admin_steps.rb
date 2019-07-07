@@ -307,9 +307,9 @@ end
 
 ### THEN
 
-Then(/^I should see the last login time for "(.*?)" is "(.*?)"/) do |user, time|
+Then(/^I should see the current login time for "(.*?)" is "(.*?)"/) do |user, time|
   u = User.find_by_login(user)
-  assert time.to_time - u.current_sign_in_at < 2.minutes
+  assert time.to_time == u.current_sign_in_at
   step %{I should see "#{u.current_sign_in_at}"}
 end
 

@@ -56,7 +56,7 @@ Feature: Admin Actions to manage users
     Then I should see "Activation email sent"
       And 1 email should be delivered to "torres"
 
-  Scenario: User's last login date is saved
+  Scenario: An admin can view a user's last login date
     Given the user "new_user" exists and is activated
       And I am logged in as an admin
     When I go to the abuse administration page for "new_user"
@@ -65,4 +65,4 @@ Feature: Admin Actions to manage users
       And I am logged in as an admin
       And I go to the abuse administration page for "new_user"
     Then I should not see "No logins recorded"
-      And I should see the last login time for "new_user" is "2019-07-05 21:59:01 +0000"
+      And I should see the current login time for "new_user" is "2019-07-05 21:59:01 +0000"
