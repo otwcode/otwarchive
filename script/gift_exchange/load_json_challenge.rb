@@ -3,30 +3,30 @@
 require 'json'
 
 unless ARGV.size == 2
-  puts %q| 
+  puts %q|
     Usage: rails runner load_json_challenge.rb <EXCHANGE> <JSON_SIGNUPS>
-    
+
     Clears all existing signups for the specified exchange, and then
     creates signups using the information in the specified JSON file. The
     JSON file must contain a list of signups, each of which should be in
     (roughly) the following format:
-    
+
     {
-    
+
       "pseud": "testuser1",
-    
+
       "requests": [
         {"fandoms": ["Jessica Jones"], "any": ["relationship"]}
         {"fandoms": ["Wynonna Earp"], "freeforms": ["Fanfiction"]}
       ],
-    
+
       "offers": [
         {"fandoms": ["Supernatural", "Harry Potter"], "any": ["character"]},
         {"any": ["fandom", "character"], "freeforms": ["Fanart"]}
       ]
-    
+
     }
-    
+
     Note that the tag types should be singular when used in the "any"
     field, and plural when used in the hash.
 
@@ -36,7 +36,7 @@ unless ARGV.size == 2
     you really don't care about the current state of your database.
 
     This may take a VERY long time to run, depending on the size of your
-    exchange. 
+    exchange.
   |
   exit
 end
@@ -48,7 +48,7 @@ data = JSON.load(File.open(json_input, 'r'))
 
 puts "Getting collection ..."
 
-collection = Collection.find_by_name(challenge_name)
+collection = Collection.find_by(name: challenge_name)
 
 puts "Creating all signed-up users ..."
 
@@ -105,7 +105,7 @@ def make_prompt(challenge_signup, info, prompt_type)
   # Create the tag set for the prompt.
   tag_set = TagSet.new
   tag_names = TagSet::TAG_TYPES.flat_map do |type|
-    info[type.pluralize] 
+    info[type.pluralize]
   end.compact.uniq
 
   tag_set.tags = Tag.where(name: tag_names)

@@ -2,10 +2,8 @@ class ScheduledReindexJob
 
   def self.perform(reindex_type)
     classes = case reindex_type
-              when 'main'
-                %w(Pseud Tag Work Bookmark)
-              when 'background'
-                %w(Work Bookmark)
+              when 'main', 'background'
+                %w(Pseud Tag Work Bookmark Series ExternalWork)
               when 'stats'
                 %w(StatCounter)
               end

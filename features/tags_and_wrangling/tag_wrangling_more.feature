@@ -106,22 +106,20 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Sign Up"
 
   Scenario: Updating multiple tags works.
-    Given the following typed tags exists
-        | name                                   | type         |
-        | Cowboy Bebop                           | Fandom       |
-        | Spike Spiegel is a sweetie             | Freeform     |
-        | Jet Black is a sweetie                 | Freeform     |
+    Given a canonical fandom "Cowboy Bebop"
+      And a noncanonical freeform "Spike Spiegel is a sweetie"
+      And a noncanonical freeform "Jet Black is a sweetie"
       And I am logged in as a random user
       And I post the work "Brain Scratch" with fandom "Cowboy Bebop" with freeform "Spike Spiegel is a sweetie"
       And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Jet Black is a sweetie"
-     When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
-       And I follow "Tag Wrangling"
-       And I follow "2"
-       And I fill in "fandom_string" with "Cowboy Bebop"
-       And I check the mass wrangling option for "Spike Spiegel is a sweetie"
-       And I check the mass wrangling option for "Jet Black is a sweetie"
-       And I press "Wrangle"
-     Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"
+    When the tag wrangler "lain" with password "lainnial" is wrangler of "Cowboy Bebop"
+      And I follow "Tag Wrangling"
+      And I follow "2"
+      And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
+      And I check the mass wrangling option for "Spike Spiegel is a sweetie"
+      And I check the mass wrangling option for "Jet Black is a sweetie"
+      And I press "Wrangle"
+    Then I should see "The following tags were successfully wrangled to Cowboy Bebop: Spike Spiegel is a sweetie, Jet Black is a sweetie"
 
   Scenario: Updating multiple tags works and set them as canonical
     Given the following typed tags exists
@@ -223,42 +221,35 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should not see "Please log in as an admin"
      And I should see "Cowboy Bebop"
 
-  @javascript
-  Scenario: A user can see hidden tags
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
-      And I should see "Work was successfully posted."
-      And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-    When I view the work "Asteroid Blues"
-      And I follow "Show additional tags"
-    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
-     And I should not see "Show additional tags"
+  Scenario: Synning a fandom to a canonical fandom moves its unwrangled tags to the canonical's unwrangled bins; de-synning takes them out.
+    Given the tag wrangler "krebbs" with password "southfork" is wrangler of "Canonical Fandom"
+      And I post the work "Populating My Syn Fandom" with fandom "Syn Fandom" with character "Syn Fandom Character" with freeform "Syn Fandom Freeform" with relationship "Syn Fandom Relationship"
+    When I syn the tag "Syn Fandom" to "Canonical Fandom"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Character"
+    When I view the unwrangled freeform bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Freeform"
+    When I view the unwrangled relationship bin for "Canonical Fandom"
+    Then I should see "Syn Fandom Relationship"
+    When I de-syn the tag "Syn Fandom" from "Canonical Fandom"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Character"
+    When I view the unwrangled freeform bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Freeform"
+    When I view the unwrangled relationship bin for "Canonical Fandom"
+    Then I should not see "Syn Fandom Relationship"
 
-  @javascript
-  Scenario: A user can see hidden tags on a series
-
-    Given the following typed tags exists
-        | name                                   | type         | canonical |
-        | Cowboy Bebop                           | Fandom       | true      |
-        | Faye Valentine is a sweetie            | Freeform     | false     |
-        | Ed is a sweetie                        | Freeform     | false     |
-      And I limit myself to the Archive
-      And I am logged in as "first_user"
-      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
-      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
-    When I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
-      And I go to first_user's user page
-      And I follow "Cowboy Bebop Blues"
-    Then I should see "Asteroid Blues"
-      And I should see "Wild Horses"
-      And I should not see "Ed is a sweetie"
-    When I follow "Show additional tags"
-    Then I should see "Ed is a sweetie"
-      And I should not see "No Archive Warnings Apply" within "li.warnings"
-    When I follow "Show warnings"
-    Then I should see "No Archive Warnings Apply" within "li.warnings"
+  Scenario: Synning a character to a canonical character moves its unwrangled relationships to the canonical's unwrangled bin; de-synning takes them out.
+    Given a canonical character "Canonical Character"
+      And I am logged in as a tag wrangler
+      And I post the work "Populating My Syn Character" with character "Syn Character" with relationship "Syn Character/OC"
+    When I syn the tag "Syn Character" to "Canonical Character"
+      And all indexing jobs have been run
+      And I view the unwrangled relationship bin for "Canonical Character"
+    Then I should see "Syn Character/OC"
+    When I de-syn the tag "Syn Character" from "Canonical Character"
+      And all indexing jobs have been run
+      And I view the unwrangled relationship bin for "Canonical Character"
+    Then I should not see "Syn Character/OC"

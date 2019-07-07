@@ -7,7 +7,7 @@ module CollectionsHelper
     end
     if logged_in?
       if item.class == Work
-        link_to ts("Add To Collection"), new_work_collection_item_path(item), :remote => true
+        link_to ts("Add To Collection"), new_work_collection_item_path(item), remote: true
       elsif item.class == Bookmark
         link_to ts("Add To Collection"), new_bookmark_collection_item_path(item)
       end
@@ -52,15 +52,15 @@ module CollectionsHelper
   #   content_tag(:li, 
   #     (form.label fieldname do 
   #       ts("Approve") +
-  #       form.radio_button fieldname, CollectionItem::APPROVED, :checked => (status == CollectionItem::APPROVED)
+  #       form.radio_button fieldname, CollectionItem::APPROVED, checked: (status == CollectionItem::APPROVED)
   #     end), 
-  #     :class => "action status") + 
+  #     class: "action status") + 
   #   content_tag(:li, 
   #     (form.label fieldname do
   #       ts("Reject") +
-  #       form.radio_button fieldname, CollectionItem::REJECTED, :checked => (status == CollectionItem::REJECTED)
+  #       form.radio_button fieldname, CollectionItem::REJECTED, checked: (status == CollectionItem::REJECTED)
   #     end),
-  #     :class => "action status")
+  #     class: "action status")
   # end
 
   def challenge_assignment_byline(assignment)
@@ -82,7 +82,7 @@ module CollectionsHelper
       user = nil
     end
     if user
-      mailto_link user, :subject => "[#{(@collection.title)}] Message from Collection Maintainer"
+      mailto_link user, subject: "[#{(@collection.title)}] Message from Collection Maintainer"
     end
   end
 

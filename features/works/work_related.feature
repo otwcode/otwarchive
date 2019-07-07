@@ -136,7 +136,7 @@ Scenario: A user cannot see another user's related works page
   When I am logged in as "inspiration"
   When I go to remixer's user page
   Then I should not see "Related Works"
-  When I go to remixers's related works page
+  When I go to remixer's related works page
   # It's currently possible to access a user's related works page directly
   # Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
 
@@ -284,13 +284,14 @@ Scenario: Listing external works as inspirations
   When I view my related works
   Then I should see "From N/A to English"
   # inactive URL should give a helpful message (AO3-1783)
+  # unreachable URL should give a more helpful message (A03-3536)
   When I edit the work "Followup"
     And I check "parent-options-show"
     And I fill in "URL" with "http://example.org/404"
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
-  Then I should see "Parent work info would not save."
+  Then I should see "Parent work Url could not be reached. If the URL is correct and the site is currently down, please try again later."
 
 Scenario: External work language
 
@@ -343,7 +344,32 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
 
-  Scenario: When a user is notified that a co-authored work has been inspired by a work they posted, the e-mail should link to each author's URL instead of showing escaped HTML
+Scenario: Anonymous works listed as inspiration should have links to the authors,
+  but only for the authors themselves and admins
+  Given I have related works setup
+    And I have the anonymous collection "Muppets Anonymous"
+    And a related work has been posted and approved
+
+  When I am logged in as "remixer"
+    And I add the work "Followup" to the collection "Muppets Anonymous"
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on my "remixer" pseud page
+
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
+  When I follow "remixer" within ".afterword .children"
+  Then I should be on remixer's "remixer" pseud page
+
+  When I am logged out
+    And I view the work "Worldbuilding"
+  Then I should see "Works inspired by this one: Followup by Anonymous"
+    And I should not see "remixer" within ".afterword .children"
+
+Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
+  the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup
     And I am logged in as "inspiration"
     And I post the work "Seed of an Idea"

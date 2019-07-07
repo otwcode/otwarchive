@@ -18,7 +18,7 @@ Feature: Delete Works
       And I am logged in as "newbie"
       And "newbie" creates the default pseud "Pointless Pseud"
     When I set up the draft "All Hell Breaks Loose" with fandom "Supernatural"
-      And I select "Pointless Pseud" from "work_author_attributes_ids_"
+      And I select "Pointless Pseud" from "Creator/Pseud(s)"
       And I press "Preview"
       And I press "Post"
     Then I should see "Work was successfully posted."
@@ -33,14 +33,15 @@ Feature: Delete Works
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
+  @javascript
   Scenario: Deleting a work with everything filled in, and we do mean everything
     Given basic tags
       And the following activated users exist
-        | login          | password    | email                 |
-        | coauthor       | something   | coauthor@example.org  |
-        | cosomeone      | something   | cosomeone@example.org |
-        | giftee         | something   | giftee@example.org    |
-        | recipient      | something   | recipient@example.org |
+        | login          | email                 |
+        | coauthor       | coauthor@example.org  |
+        | cosomeone      | cosomeone@example.org |
+        | giftee         | giftee@example.org    |
+        | recipient      | recipient@example.org |
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -54,19 +55,19 @@ Feature: Delete Works
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
-      And I check "front-notes-options-show"
-      And I fill in "work_notes" with "This is my beginning note"
-      And I fill in "work_endnotes" with "This is my endingnote"
+      And I check "at the beginning"
+      And I fill in "Notes" with "This is my beginning note"
+      And I fill in "End Notes" with "This is my endingnote"
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
       And I fill in "Gift this work to" with "Someone else, recipient"
-      And I check "series-options-show"
-      And I fill in "work_series_attributes_title" with "My new series"
-      And I select "Pseud2" from "work_author_attributes_ids_"
-      And I select "Pseud3" from "work_author_attributes_ids_"
+      And I check "This work is part of a series"
+      And I fill in "Or create and use a new one:" with "My new series"
+      And I select "Pseud2" from "Creator/Pseud(s)"
+      And I select "Pseud3" from "Creator/Pseud(s)"
       And I fill in "pseud_byline" with "coauthor"
-      And I fill in "work_collection_names" with "collection1, collection2"
+      And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Preview"
     When I press "Post"
@@ -116,16 +117,14 @@ Feature: Delete Works
     Then I should see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Edit"
-      And I check "co-authors-options-show"
+      And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Does_not_exist"
       And I press "Preview"
     Then I should see "Please verify the names of your co-authors"
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
-      And I fill in "pseud_byline" with "cosomeone"
-    When "autocomplete tests with JavaScript" is fixed
-#      Then I should see "cosomeone" in the autocomplete
-    When I press "Preview"
+      And I choose "cosomeone" from the "pseud_byline_autocomplete" autocomplete
+      And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "cosomeone" within ".byline"
@@ -140,7 +139,7 @@ Feature: Delete Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-    When I am logged in as "someone_else" with password "something"
+    When I am logged in as "someone_else"
       And I view the work "All Something Breaks Loose"
       And I press "Kudos"
     Then I should see "someone_else left kudos on this work!"
@@ -150,10 +149,11 @@ Feature: Delete Works
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
-    When I am logged in as "thorough" with password "something"
+    When I am logged in as "thorough"
       And I go to giftee's user page
     Then I should see "Gifts (1)"
     When I delete the work "All Something Breaks Loose"
+      And all indexing jobs have been run
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"
@@ -163,7 +163,8 @@ Feature: Delete Works
     When I go to thorough's user page
     Then I should not see "All Something Breaks Loose"
     # This is correct behaviour - bookmark details are preserved even though the work is gone
-    When I go to the bookmarks page
+    Then all indexing jobs have been run
+    Then I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
     When I go to someone_else's bookmarks page
     Then I should not see "All Something Breaks Loose"

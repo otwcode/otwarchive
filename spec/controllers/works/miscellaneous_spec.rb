@@ -17,10 +17,10 @@ describe WorksController do
 
       it "should queue the work for reindex" do
         expect(RedisSearchIndexQueue).to receive(:queue_works)
-        post :reindex, { id: work }
+        post :reindex, params: { id: work }
       end
       it "should redirect to the root path and display a success message" do
-        post :reindex, { id: work }
+        post :reindex, params: { id: work }
         it_redirects_to_with_notice(root_path, "Work queued to be reindexed")
       end
     end
@@ -28,7 +28,7 @@ describe WorksController do
     context "if the user is not an admin" do
       it "should redirect to the root path and display an error" do
         fake_login
-        post :reindex, { id: work }
+        post :reindex, params: { id: work }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to perform this action.")
       end
     end

@@ -25,6 +25,7 @@ Feature: Basic collection navigation
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
+    And all indexing jobs have been run
     And I follow "My Collection"
   When I follow "Profile"
   Then I should see "About My Collection (my_collection)"
@@ -35,15 +36,14 @@ Feature: Basic collection navigation
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
-    And all search indexes are updated
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
-  When I follow "Bookmarks (0)"
-  Then I should see "0 Bookmarks"
+  When I follow "Bookmarked Items" within "#dashboard"
+  Then I should see "0 Bookmarked Items"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People" within "div#dashboard"
-    Then I should see "A Random Selection of Participants in My Collection"
+    Then I should see "Participants in My Collection"
     And I should see "mod"
   When I follow "Tags" within "div#dashboard"
     Then I should see "Free"
@@ -102,3 +102,33 @@ Feature: Basic collection navigation
 
     When I go to "MCU Party" collection's page
     Then I should see "Fandoms (1)"
+
+  Scenario: Browse tags within a collection (or not)
+    Given I have a collection "Randomness"
+      And a canonical fandom "Naruto"
+      And a canonical freeform "Crack"
+      And I am logged in
+      And I post the work "Has some tags" with fandom "Naruto" with freeform "Crack" in the collection "Randomness"
+
+    # Tag links from the work blurb in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Naruto" within "#collection-works"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from the work meta in a collection should not be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Has some tags"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto"
+
+    # Tag links from a collection's fandoms page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Fandoms (1)"
+      And I follow "Naruto"
+    Then I should be on the works tagged "Naruto" in collection "Randomness"
+
+    # Tag links from a collection's tags page should be collection-scoped
+    When I go to "Randomness" collection's page
+      And I follow "Tags" within "#dashboard"
+      And I follow "Crack"
+    Then I should be on the works tagged "Crack" in collection "Randomness"

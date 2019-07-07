@@ -4,7 +4,7 @@ include CssCleaner
 include SkinCacheHelper
 include SkinWizard
 
-class Skin < ActiveRecord::Base
+class Skin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
 
   TYPE_OPTIONS = [
@@ -23,8 +23,8 @@ class Skin < ActiveRecord::Base
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
 
-  SKIN_PATH = '/stylesheets/skins/'
-  SITE_SKIN_PATH = '/stylesheets/site/'
+  SKIN_PATH = 'stylesheets/skins/'
+  SITE_SKIN_PATH = 'stylesheets/site/'
 
   belongs_to :author, class_name: 'User'
   has_many :preferences
@@ -35,7 +35,7 @@ class Skin < ActiveRecord::Base
   has_many :skin_parents, foreign_key: 'child_skin_id',
                           class_name: 'SkinParent',
                           dependent: :destroy, inverse_of: :child_skin
-  has_many :parent_skins, through: :skin_parents, order: "skin_parents.position ASC", inverse_of: :child_skins
+  has_many :parent_skins, -> { order("skin_parents.position ASC") }, through: :skin_parents, inverse_of: :child_skins
 
   has_many :skin_children, foreign_key: 'parent_skin_id',
                                   class_name: 'SkinParent', dependent: :destroy, inverse_of: :parent_skin
@@ -89,10 +89,7 @@ class Skin < ActiveRecord::Base
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
-    return false
   end
-
-  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
 
   validates_presence_of :title
   validates_uniqueness_of :title, message: ts('must be unique')
@@ -126,12 +123,12 @@ class Skin < ActiveRecord::Base
     self.css = clean_css_code(self.css)
   end
 
-  scope :public_skins, where(public: true)
-  scope :approved_skins, where(official: true, public: true)
-  scope :unapproved_skins, where(public: true, official: false, rejected: false)
-  scope :rejected_skins, where(public: true, official: false, rejected: true)
-  scope :site_skins, where(type: nil)
-  scope :wizard_site_skins, where("type IS NULL AND (
+  scope :public_skins, -> { where(public: true) }
+  scope :approved_skins, -> { where(official: true, public: true) }
+  scope :unapproved_skins, -> { where(public: true, official: false, rejected: false) }
+  scope :rejected_skins, -> { where(public: true, official: false, rejected: true) }
+  scope :site_skins, -> { where(type: nil) }
+  scope :wizard_site_skins, -> { where("type IS NULL AND (
       margin IS NOT NULL OR
       background_color IS NOT NULL OR
       foreground_color IS NOT NULL OR
@@ -141,7 +138,7 @@ class Skin < ActiveRecord::Base
       headercolor IS NOT NULL OR
       accent_color IS NOT NULL
     )
-  ")
+  ") }
 
   def self.cached
     where(cached: true)
@@ -157,10 +154,14 @@ class Skin < ActiveRecord::Base
 
   def self.approved_or_owned_by(user = User.current_user)
     if user.nil?
-      where(public: true, official: true)
+      approved_skins
     else
-      where("(public = 1 AND official = 1) OR author_id = ?", user.id)
+      approved_or_owned_by_any([user])
     end
+  end
+
+  def self.approved_or_owned_by_any(users)
+    where("(public = 1 AND official = 1) OR author_id in (?)", users.map(&:id))
   end
 
   def self.usable
@@ -176,7 +177,7 @@ class Skin < ActiveRecord::Base
   end
 
   def remove_me_from_preferences
-    Preference.update_all("skin_id = #{Skin.default.id}", "skin_id = #{self.id}")
+    Preference.where("skin_id = #{self.id}").update_all("skin_id = #{Skin.default.id}")
   end
 
   def editable?
@@ -273,10 +274,10 @@ class Skin < ActiveRecord::Base
   end
 
   def get_css
-    if self.filename
-      File.read(Rails.public_path + self.filename)
+    if filename
+      File.read(Rails.public_path.join(filename))
     else
-      self.css
+      css
     end
   end
 
@@ -388,7 +389,8 @@ class Skin < ActiveRecord::Base
   end
 
   def stylesheet_link(file, media)
-    '<link rel="stylesheet" type="text/css" media="' + media + '" href="' + file + '" />'
+    # we want one and only one / in the url path
+    '<link rel="stylesheet" type="text/css" media="' + media + '" href="/' + file.gsub(/^\/*/,"") + '" />'
   end
 
   def self.naturalized(string)
@@ -397,7 +399,7 @@ class Skin < ActiveRecord::Base
 
   def self.load_site_css
     Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).each do |version|
-      version_dir = Skin.site_skins_dir + version + '/'
+      version_dir = "#{Skin.site_skins_dir + version}/"
       if File.directory?(version_dir)
         # let's load up the file
         skins = []
@@ -425,7 +427,7 @@ class Skin < ActiveRecord::Base
           end
 
           full_title = "Archive #{version}: (#{position}) #{title}"
-          skin = Skin.find_by_title(full_title)
+          skin = Skin.find_by(title: full_title)
           if skin.nil?
             skin = Skin.new
           end
@@ -446,7 +448,7 @@ class Skin < ActiveRecord::Base
         end
 
         # set up the parent relationship of all the skins in this version
-        top_skin = Skin.find_by_title("Archive #{version}")
+        top_skin = Skin.find_by(title: "Archive #{version}")
         if top_skin
           top_skin.clear_cache! if top_skin.cached?
           top_skin.skin_parents.delete_all
@@ -474,7 +476,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.skins_dir
-    Rails.public_path + SKIN_PATH
+    Rails.public_path.join(SKIN_PATH).to_s
   end
 
   def self.skin_dir_entries(dir, regex)
@@ -482,7 +484,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.site_skins_dir
-    Rails.public_path + SITE_SKIN_PATH
+    Rails.public_path.join(SITE_SKIN_PATH).to_s
   end
 
   # Get the most recent version and find the topmost skin
@@ -493,23 +495,25 @@ class Skin < ActiveRecord::Base
   def self.get_current_site_skin
     current_version = Skin.get_current_version
     if current_version
-      Skin.find_by_title_and_official("Archive #{Skin.get_current_version}", true)
+      Skin.find_by(title: "Archive #{Skin.get_current_version}", official: true)
     else
       nil
     end
   end
 
   def self.default
-    Skin.find_by_title_and_official("Default", true) || Skin.create_default
+    Rails.cache.fetch("site_default_skin") do
+      Skin.find_by(title: "Default", official: true) || Skin.create_default
+    end
   end
 
   def self.create_default
-    skin = Skin.find_or_create_by_title_and_official(title: "Default", css: "", public: true, role: "user")
+    skin = Skin.find_or_create_by(title: "Default", css: "", public: true, role: "user")
     current_version = Skin.get_current_version
     if current_version
       File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     else
-      File.open(Skin.site_skins_dir + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+      File.open(Skin.site_skins_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
     end
     skin.official = true
     skin.save!

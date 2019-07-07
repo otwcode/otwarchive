@@ -34,14 +34,14 @@ run_stats_reindex_queue:
   description: "Kick off a reindex of works with stats updates"
 
 run_clean_subscription_series:
-  every: 24h
+  every: 1w
   class: "ScheduledDatabaseCheckJob"
   queue: utilities
   args: "clean_subscription_series"
   description: "Fix the subscription for deleted series"
 
 run_clean_subscription_user:
-  every: 24h
+  every: 1w
   class: "ScheduledDatabaseCheckJob"
   queue: utilities
   args: "clean_subscription_user"
@@ -53,3 +53,18 @@ run_clean_subscription_work:
   queue: utilities
   args: "clean_subscription_work"
   description: "Fix the subscription for deleted works"
+
+run_update_filter_counts_small:
+  every: 2m
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_small_queue
+  description: "Update filter counts for small filters"
+
+run_update_filter_counts_large:
+  every: 1h
+  class: "FilterCount"
+  queue: utilities
+  args: update_counts_for_large_queue
+  description: "Update filter counts for large filters"
+
