@@ -25,7 +25,7 @@
   <dl class="statistics meta group" role="complementary">
     <% { user_subscriptions: ts("User Subscriptions:"), 
          kudos: ts("Kudos:"), 
-         comments: ts("Comment Threads:"), 
+         comment_thread_count: ts("Comment Threads:"),
          bookmarks: ts("Bookmarks:"), 
          subscriptions: ts("Subscriptions:"), 
          word_count: ts("Word Count:") }.each do |stat, stat_text| %>
@@ -54,15 +54,15 @@
       <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
     <% end %>
     <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Comment Threads'), "comment_thread_count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), url_for(params.merge :flat_view => nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
+    <li><%= span_if_current ts("Fandoms View"), url_for(params.permit!.merge :flat_view => nil), params[:flat_view].blank? %></li>
+    <li><%= span_if_current ts("Flat View"), url_for(params.permit!.merge :flat_view => true) %></li>
   </ul>
 </div>
 
@@ -96,7 +96,7 @@
                   <dt class="kudos"><%= ts("Kudos:") %></dt>
                   <dd class="kudos"><%= work.kudos.count %></dd>
                   <dt class="comments"><%= ts("Comment Threads:") %></dt>
-                  <dd class="comments"><%= work.comments.count %></dd>
+                  <dd class="comments"><%= work.comment_thread_count %></dd>
                   <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
                   <dd class="bookmarks"><%= work.bookmarks.count %></dd>
                   <% # dt ts("Newest Link:") /dt %>

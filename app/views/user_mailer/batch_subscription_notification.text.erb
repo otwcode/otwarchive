@@ -2,9 +2,16 @@
 <% @seen = {} %>
 <% @seen_summary = {} %>
 <% @creations.each_with_index do |creation, index| %>
-<% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-<% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
-<% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
+<% this_work = Rails.cache.fetch("#{creation.cache_key}/this_work", expires_in: 1.hour) do
+  creation.respond_to?(:work) ? creation.work : creation
+end %>
+
+<% pseud = Rails.cache.fetch("#{creation.cache_key}/this_work_pseud_text", expires_in: 1.hour) do
+     this_work.pseuds.map{|p| p.name}.to_sentence.html_safe
+ end %>
+<% byline = Rails.cache.fetch("#{creation.cache_key}/this_work_byline", expires_in: 1.hour) do
+    this_work.pseuds.map{|p| p.byline}.to_sentence
+    end %>
 <% title = this_work.title %>
 <%
   if creation.is_a?(Work)
@@ -26,7 +33,7 @@
 <% else %>
   <%= t '.text.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
 <% end %>
-<%= t '.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
+<%= t '.text.collected_by', pseud: pseud %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
   <%= t '.chapter_summary' %> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>

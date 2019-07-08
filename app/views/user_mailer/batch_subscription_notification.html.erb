@@ -3,9 +3,15 @@
   <% @seen_summary = {} %>
   <% @creations.each_with_index do |creation, index| %>
 
-    <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
-    <% byline = this_work.pseuds.map{|p| p.byline}.to_sentence %>
+    <% this_work = Rails.cache.fetch("#{creation.cache_key}/this_work", expires_in: 1.hour) do
+        creation.respond_to?(:work) ? creation.work : creation
+        end %>
+    <% pseud = Rails.cache.fetch("#{creation.cache_key}/this_work_pseud_html", expires_in: 1.hour) do
+        this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe
+        end %>
+    <% byline = Rails.cache.fetch("#{creation.cache_key}/this_work_byline", expires_in: 1.hour) do
+    this_work.pseuds.map{|p| p.byline}.to_sentence
+    end %>
     <% title = this_work.title.html_safe %>
     <% pretty_title = "<i>#{style_bold(title)}</i>".html_safe %>
     <%
@@ -28,7 +34,7 @@
     <% else %>
       <%= t('.html.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
     <% end %>
-    <%= t('.html.collected_by', pseud: this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe).html_safe %>
+    <%= t('.html.collected_by', pseud: pseud ) %>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
       <%= t '.chapter_summary'%> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary)))  %>

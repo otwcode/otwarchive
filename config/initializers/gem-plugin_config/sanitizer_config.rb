@@ -1,19 +1,18 @@
 # Sanitize: http://github.com/rgrove/sanitize.git
 class Sanitize
-  
+
   # This defines the configuration we use for HTML tags and attributes allowed in the archive.
   module Config
 
-    ARCHIVE = {
-      :elements => [
+    ARCHIVE = freeze_config(
+      elements: [
         'a', 'abbr', 'acronym', 'address', 'b', 'big', 'blockquote', 'br', 'caption', 'center', 'cite', 'code', 'col',
         'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
         'i', 'img', 'ins', 'kbd', 'li', 'ol', 'p', 'pre', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong',
         'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'tt', 'u', 'ul', 'var'],
 
-      # see in the Transformers section for what classes we strip
-      :attributes => {
-        :all => ['align', 'title', 'class', 'dir'],
+      attributes: {
+        all: ['align', 'title', 'dir'],
         'a' => ['href', 'name'],
         'blockquote' => ['cite'],
         'col' => ['span', 'width'],
@@ -28,23 +27,36 @@ class Sanitize
         'ul' => ['type'],
       },
 
-      :protocols => {
+      add_attributes: {
+        'a' => {'rel' => 'nofollow'}
+      },
+
+      protocols: {
         'a' => {'href' => ['ftp', 'http', 'https', 'mailto', :relative]},
         'blockquote' => {'cite' => ['http', 'https', :relative]},
         'img' => {'src' => ['http', 'https', :relative]},
         'q' => {'cite' => ['http', 'https', :relative]}
       }
-    }
+    )
+
+    CLASS_ATTRIBUTE = freeze_config(
+      # see in the Transformers section for what classes we strip
+      attributes: {
+        all: ARCHIVE[:attributes][:all] + ['class']
+      }
+    )
+
+    CSS_ALLOWED = freeze_config(merge(ARCHIVE, CLASS_ATTRIBUTE))
   end
-  
+
   # This defines the custom sanitizing transformers we use for cleaning data
   module Transformers
-    
+
     # allow users to specify class attributes in their html
     ALLOW_USER_CLASSES = lambda do |env|
       node      = env[:node]
       classval  = node['class']
-      
+
       # if we don't have a class attribute, away we go
       return if classval.blank?
 
@@ -75,12 +87,12 @@ class Sanitize
         # extra work needed.
         url = node['src']
       end
-      
+
       # Verify that the video URL is actually a valid video URL from a site we trust.
-      
+
       # strip off optional protocol and www
       url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
-      
+
       source = case url
       when /^archive\.org\//
         then "archiveorg"
@@ -106,7 +118,7 @@ class Sanitize
         then "archiveofourown"
       when /^podfic\.com\//
         then "podfic"
-      when /^(embed\.)?spotify\.com\//
+      when /^(open\.)?spotify\.com\//
         then "spotify"
       when /^8tracks\.com\//
         then "8tracks"
@@ -115,42 +127,59 @@ class Sanitize
       else
         nil
       end
-      
+
       # if we don't know the source, sorry
-      return if source.nil?           
+      return if source.nil?
 
       allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
+      supports_https = [
+        "8tracks",
+        "archiveorg",
+        "archiveofourown",
+        "dailymotion",
+        "podfic",
+        "soundcloud",
+        "spotify",
+        "viddertube",
+        "vimeo",
+        "youtube"
+      ]
+
+      # For sites that support https, ensure we use a secure embed
+      if supports_https.include?(source) && node['src'].present?
+        node['src'] = node['src'].gsub("http:", "https:")
+      end
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
       # attributes that don't belong in a video embed can sneak in.
       if parent && parent.name.to_s.downcase == 'object'
         Sanitize.clean_node!(parent, {
-          :elements   => ['embed', 'object', 'param'],
-          :attributes => {
+          elements: ['embed', 'object', 'param'],
+          attributes: {
             'embed'  => ['allowfullscreen', 'height', 'src', 'type', 'width'],
             'object' => ['height', 'width'],
             'param'  => ['name', 'value']
           }
         })
-        
+
         # disable script access and networking
         parent['allowscriptaccess'] = 'never'
         parent['allownetworking'] = 'internal'
-        
+
         parent.search("param").each {|paramnode| paramnode.unlink if paramnode[:name].downcase == "allowscriptaccess"}
         parent.search("param").each {|paramnode| paramnode.unlink if paramnode[:name].downcase == "allownetworking"}
 
-        return {:node_whitelist => [node, parent]}
+        return {node_whitelist: [node, parent]}
       else
         Sanitize.clean_node!(node, {
-          :elements   => ['embed', 'iframe'],
-          :attributes => {
+          elements: ['embed', 'iframe'],
+          attributes: {
             'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (allow_flashvars.include?(source) ? ['wmode', 'flashvars'] : [])),
-            'iframe'  => ['frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
-          }          
+            'iframe'  => ['allowfullscreen', 'frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
+          }
         })
-        
+
         if node_name == 'embed'
           # disable script access and networking
           node['allowscriptaccess'] = 'never'
@@ -159,10 +188,9 @@ class Sanitize
             node['flashvars'] = ""
           end
         end
-        return {:node_whitelist => [node, parent]}
+        return {node_whitelist: [node, parent]}
       end
     end
-    
   end
 
 end

@@ -1,18 +1,18 @@
-class Admin < ActiveRecord::Base
+class Admin < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
-  # Authlogic gem
-  acts_as_authentic do |config|
-    config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT  || "true")  == "true" then
-      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    else
-      config.crypto_provider = Authlogic::CryptoProviders::Sha512
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    end
-  end
-  
+
+  devise :database_authenticatable,
+         :validatable,
+         password_length: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX
+
+  include BackwardsCompatiblePasswordDecryptor
+
   has_many :log_items
-  has_many :invitations, :as => :creator
-  has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler 
+  has_many :invitations, as: :creator
+  has_many :wrangled_tags, class_name: 'Tag', as: :last_wrangler
+
+  validates :login, presence: true, uniqueness: true, length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
+  validates :email, uniqueness: true
+  validates_presence_of :password_confirmation, if: :new_record?
+  validates_confirmation_of :password, if: :new_record?
 end

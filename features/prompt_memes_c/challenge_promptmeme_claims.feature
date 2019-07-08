@@ -407,7 +407,7 @@ Feature: Prompt Meme Challenge
     And I press "Submit"
   Then I should see "There were some problems with this submission. Please correct the mistakes below."
     And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
-    And the "Semi-anonymous prompt" checkbox should be checked
+    And the "Semi-anonymous Prompt" checkbox should be checked
 
   Scenario: Dates should be correctly set on PromptMemes
     Given I am logged in as "mod1"
