@@ -344,13 +344,12 @@ class UserMailer < BulletproofMailer::Base
 
   # Sends email to authors when a creation is hidden by an Admin
   def admin_hidden_work_notification(creation_id, user_id)
-
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
     mail(
         to: @user.email,
-        subject: t('user_mailer.admin_hidden_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.admin_hidden_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
     end
   ensure
