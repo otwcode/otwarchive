@@ -25,33 +25,33 @@ end %>
 <% if creation.is_a?(Work) %>
   <%=
     if this_work.backdate
-     t('.text.work_backdated', byline: byline, title: title, link: link, word_count: word_count)
+     t(".text.work_backdated", byline: byline, title: title, link: link, word_count: word_count)
     else
-      t('.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
+      t(".text.work_new", byline: byline, title: title, link: link, word_count: word_count)
     end
    %>
 <% else %>
-  <%= t '.text.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
+  <%= t(".text.new_chapter_of", byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title) %>
 <% end %>
-<%= t '.text.collected_by', pseud: pseud %>
+<%= t(".text.collected_by", pseud: pseud) %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-  <%= t '.chapter_summary' %> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+  <%= t(".chapter_summary") %> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 <% end %>
 
 <% unless @seen[this_work.id] %>
-<%= t 'user_mailer.chapters' %> <%= this_work.chapter_total_display %>
-<%= t 'user_mailer.fandom' %> <%= this_work.fandoms.map{|f| f.name}.to_sentence %>
-<%= t 'user_mailer.rating' %> <%= this_work.rating_string %>
-<%= t 'user_mailer.warning' %> <%= this_work.warning_string %>
-<% if this_work.relationship_string && !this_work.relationship_string.blank? %><%= t 'user_mailer.relationships' %> <%= this_work.relationship_string %><% end %>
-<% if this_work.character_string && !this_work.character_string.blank? %><%=t 'user_mailer.characters' %> <%= this_work.character_string %><% end %>
-<% if this_work.freeform_string && !this_work.freeform_string.blank? %><%=t 'user_mailer.additional_tags' %> <%= this_work.freeform_string %><% end %>
-<% if this_work.series.count > 0 %><%=t 'user_mailer.series'%> <%=raw to_plain_text(series_list_for_feeds(this_work)) %><% end %>
+<%= t("user_mailer.chapters") %> <%= this_work.chapter_total_display %>
+<%= t("user_mailer.fandom") %> <%= this_work.fandoms.map{|f| f.name}.to_sentence %>
+<%= t("user_mailer.rating") %> <%= this_work.rating_string %>
+<%= t("user_mailer.warning") %> <%= this_work.warning_string %>
+<% if this_work.relationship_string && !this_work.relationship_string.blank? %><%= t("user_mailer.relationships") %> <%= this_work.relationship_string %><% end %>
+<% if this_work.character_string && !this_work.character_string.blank? %><%= t("user_mailer.characters") %> <%= this_work.character_string %><% end %>
+<% if this_work.freeform_string && !this_work.freeform_string.blank? %><%= t("user_mailer.additional_tags") %> <%= this_work.freeform_string %><% end %>
+<% if this_work.series.count > 0 %><%= t("user_mailer.series") %> <%=raw to_plain_text(series_list_for_feeds(this_work)) %><% end %>
 <% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-<%= t '.summary' %>
+<%= t(".summary") %>
     <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>
@@ -59,5 +59,5 @@ end %>
 <% end %><% end %><% end %>
 
 <% content_for :footer_note do %>
-<%= t '.text.footer', who: @subscription.name, url: polymorphic_url(@subscription.subscribable) %>
+<%= t(".text.footer", who: @subscription.name, url: polymorphic_url(@subscription.subscribable)) %>
 <% end %>

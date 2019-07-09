@@ -26,36 +26,36 @@
     <% if creation.is_a?(Work) %>
       <%=
         if this_work.backdate
-          t('.html.work_backdated', byline: byline, title: title, link: link, word_count: word_count).html_safe
+          t(".html.work_backdated", byline: byline, title: title, link: link, word_count: word_count).html_safe
         else
-          t('.html.work_new', byline: byline, title: title, link: link, word_count: word_count).html_safe
+          t(".html.work_new", byline: byline, title: title, link: link, word_count: word_count).html_safe
         end
       %>
     <% else %>
-      <%= t('.html.new_chapter_of', byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
+      <%= t(".html.new_chapter_of", byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title).html_safe %>
     <% end %>
-    <%= t('.html.collected_by', pseud: pseud ) %>
+    <%= t(".html.collected_by", pseud: pseud) %>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <%= t '.chapter_summary'%> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary)))  %>
+      <%= t(".chapter_summary")%> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary)))  %>
     <% end %>
     <% unless @seen[this_work.id] %>
       <p>
-        <%= style_bold(t 'user_mailer.chapters') %> <%= this_work.chapter_total_display %>
-        <br><%= style_bold(t 'user_mailer.fandom') %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
-        <br><%= style_bold(t 'user_mailer.rating') %> <%= this_work.rating_string %>
-        <br><%= style_bold(t 'user_mailer.warning') %> <%= this_work.warning_string %>
+        <%= style_bold(t("user_mailer.chapters")) %> <%= this_work.chapter_total_display %>
+        <br><%= style_bold(t("user_mailer.fandom")) %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
+        <br><%= style_bold(t("user_mailer.rating")) %> <%= this_work.rating_string %>
+        <br><%= style_bold(t("user_mailer.warning")) %> <%= this_work.warning_string %>
         <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
-          <br><%= style_bold(t 'user_mailer.relationships') %> <%= this_work.relationship_string %>
+          <br><%= style_bold(t("user_mailer.relationships")) %> <%= this_work.relationship_string %>
         <% end %>
         <% if this_work.character_string && !this_work.character_string.blank? %>
-          <br><%= style_bold(t 'user_mailer.characters') %> <%= this_work.character_string %>
+          <br><%= style_bold(t("user_mailer.characters")) %> <%= this_work.character_string %>
         <% end %>
         <% if this_work.freeform_string && !this_work.freeform_string.blank? %>
-          <br><%= style_bold(t 'user_mailer.additional_tags') %> <%= this_work.freeform_string %>
+          <br><%= style_bold(t("user_mailer.additional_tags")) %> <%= this_work.freeform_string %>
         <% end %>
         <% if this_work.series.count > 0 %>
-          <br><%= style_bold(t 'user_mailer.series') %> <%= series_list_for_feeds(this_work).html_safe %>
+          <br><%= style_bold(t("user_mailer.series")) %> <%= series_list_for_feeds(this_work).html_safe %>
         <% end %>
       </p>
 
@@ -64,7 +64,7 @@
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
         <p>
-          <%= style_bold(t 'user_mailer.summary') %>
+          <%= style_bold(t("user_mailer.summary")) %>
           <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
         </p>
         <% @seen_summary[this_work.id] = true %>
@@ -79,5 +79,5 @@
 
 
 <% content_for :footer_note do %>
-  <%=t( '.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))).html_safe %>
+  <%=t(".html.footer", who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))).html_safe %>
 <% end %>

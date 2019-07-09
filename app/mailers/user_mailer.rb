@@ -123,7 +123,7 @@ class UserMailer < BulletproofMailer::Base
 
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
-      subject += t 'user_mailer.batch_subscription_notification.subject_linker', extra: @creations.count - 1
+      subject += t(".subject_linker", extra: @creations.count - 1)
     end
     I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
       mail(
