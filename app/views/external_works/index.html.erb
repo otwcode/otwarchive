@@ -2,7 +2,7 @@
 
 <!--navigation-->
 <% if logged_in_as_admin? %>
-<p class="navigation actions"><%= link_to "Show duplicates (#{ExternalWork.duplicate.count})", url_for(:show => 'duplicates') %></p>
+<p class="navigation actions"><%= link_to "Show duplicates (#{ExternalWork.duplicate.length})", url_for(:show => 'duplicates') %></p>
 <% end %>
  <%= will_paginate @external_works %>
 

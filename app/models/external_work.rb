@@ -8,6 +8,7 @@ class ExternalWork < ApplicationRecord
 
   belongs_to :language
 
+  # Need to use length as this scope will fail with count ( and be inconsistent with size)
   scope :duplicate, -> { group("url HAVING count(DISTINCT id) > 1") }
 
   AUTHOR_LENGTH_MAX = 500

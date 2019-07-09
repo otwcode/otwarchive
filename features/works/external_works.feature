@@ -12,6 +12,15 @@ Feature: External works are not hosted on the Archive
     When I go to the external works page
     Then I should see "External Changes"
       And I should see "All changes"
+      But I should not see "Show duplicates"
     When I go to the external works with only duplicates page
     Then I should see "External Changes"
       And I should not see "All changes"
+    When I am logged in as an admin
+      And I go to the external works page
+    Then I should see "External Changes"
+      And I should see "All changes"
+      And I should see "Show duplicates (1)"
+    When I follow "Show duplicates"
+    Then I should see "External Changes"
+      But I should not see "All changes"
