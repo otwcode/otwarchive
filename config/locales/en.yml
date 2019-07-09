@@ -6,7 +6,6 @@ en:
       emails_found:
         one: "one email found"
         other: "%{count} emails found"
-
   errors:
     format: "%{attribute} %{message}"
     messages: &errors_messages
@@ -166,7 +165,7 @@ en:
         part3: "If you have any questions, please %{abuse}."
       text:
         part1: "Your work %{title} has been been reported as being in violation of the Archive of Our Own's Terms of Service (%{tos_url})."
-        part3: "If you have any questions, please contact our Abuse Team (%{abuse})."
+        part3: "If you have any questions, please %{abuse}"
     admin_deleted_work_notification:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       hello: "Dear %{user},"
