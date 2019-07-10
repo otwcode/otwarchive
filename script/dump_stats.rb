@@ -100,7 +100,7 @@ end
 work_output.close
 stats_output.close unless ENV['QUICK'].nil?
 tag_output = File.open(ENV['TAGS_FILENAME'] || '/tmp/tags.csv', 'w')
-tag_output.puts "id,type,name,canonical,cached_count,merger_id,unwrangleable\n"
+tag_output.puts "id,type,name,canonical,cached_count,merger_id\n"
 Tag.find_in_batches do |batch|
   batch.each do |tag|
     tag_output.puts "#{tag.id},#{tag.type}," \
@@ -110,7 +110,7 @@ Tag.find_in_batches do |batch|
     else
       tag.name
     end
-    },#{tag.canonical},#{tag.taggings_count_cache},#{tag.merger_id},#{tag.unwrangleable}\n"
+    },#{tag.canonical},#{tag.taggings_count_cache},#{tag.merger_id}\n"
   end
 end
 tag_output.close
