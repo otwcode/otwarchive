@@ -21,9 +21,7 @@ class ExternalWorksController < ApplicationController
 
   def index
     if params[:show] == 'duplicates'
-      works = ExternalWork.duplicate.order("created_at DESC")
-      # Length is important here as the scope fails with count.
-      @external_works = works.paginate(page: params[:page], total_entries: works.length)
+      @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(page: params[:page])
     else
       @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
     end
