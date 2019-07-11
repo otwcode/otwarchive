@@ -13,9 +13,7 @@
     <% unless @log_items.blank?
          @log_items.each do |item| %>
         <tr>
-          <td><%= item.created_at %>
-            <%= item.created_at %>
-          </td>
+          <td><%= item.created_at %></td>
           <td><%= log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
           <td><%= item.note %></td>
         </tr>
@@ -29,9 +27,9 @@
     <tr>
       <td>
         <% if @user.current_sign_in_at.nil? %>
-          <%= ts('No logins recorded') %>
+          <%= ts("No login recorded") %>
         <% else %>
-          <%= @user.current_sign_in_at %> ( <%= @user.current_sign_in_ip %> )
+          <%= @user.current_sign_in_at %> (<%= @user.current_sign_in_ip %>)
         <% end %>
       </td>
       <td><%= ts('Current Login') %></td>
@@ -42,7 +40,7 @@
         <% if @user.last_sign_in_at.nil? %>
           <%= ts('No previous login recorded') %>
         <% else %>
-          <%= @user.last_sign_in_at %> ( <%= @user.last_sign_in_ip %> )
+          <%= @user.last_sign_in_at %> (<%= @user.last_sign_in_ip %>)
         <% end %>
       </td>
       <td><%= ts('Previous Login') %></td>

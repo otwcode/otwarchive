@@ -307,12 +307,6 @@ end
 
 ### THEN
 
-Then(/^I should see the current login time for "(.*?)" is "(.*?)"/) do |user, time|
-  u = User.find_by_login(user)
-  assert time.to_time == u.current_sign_in_at
-  step %{I should see "#{u.current_sign_in_at}"}
-end
-
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
   step %{the "content" field should contain "Deutsch Woerter"}

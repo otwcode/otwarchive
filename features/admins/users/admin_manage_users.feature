@@ -60,9 +60,13 @@ Feature: Admin Actions to manage users
     Given the user "new_user" exists and is activated
       And I am logged in as an admin
     When I go to the abuse administration page for "new_user"
-    Then I should see "No logins recorded"
-    When I am logged in as "new_user" at "2019-07-05 21:59:01 +0000"
+    Then I should see "No login recorded"
+    Then time is frozen at 1/1/2019
+    When I am logged in as "new_user"
+    Then I jump in our Delorean and return to the present
       And I am logged in as an admin
       And I go to the abuse administration page for "new_user"
-    Then I should not see "No logins recorded"
-      And I should see the current login time for "new_user" is "2019-07-05 21:59:01 +0000"
+    Then I should not see "No login recorded"
+      And I should see "2019-01-01 12:00:00 -0500 (127.0.0.1) Current Login System Generated"
+      And I should see "2019-01-01 12:00:00 -0500 (127.0.0.1) Previous Login System Generated"
+
