@@ -61,9 +61,9 @@ Feature: Admin Actions to manage users
       And I am logged in as an admin
     When I go to the abuse administration page for "new_user"
     Then I should see "No login recorded"
-    Then time is frozen at 1/1/2019
-    When I am logged in as "new_user"
-    Then I jump in our Delorean and return to the present
+    When time is frozen at 1/1/2019
+      And I am logged in as "new_user"
+      And I jump in our Delorean and return to the present
       And I am logged in as an admin
       And I go to the abuse administration page for "new_user"
     Then I should not see "No login recorded"

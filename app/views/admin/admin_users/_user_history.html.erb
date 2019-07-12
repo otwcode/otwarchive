@@ -32,19 +32,19 @@
           <%= @user.current_sign_in_at %> (<%= @user.current_sign_in_ip %>)
         <% end %>
       </td>
-      <td><%= ts('Current Login') %></td>
-      <td><%= ts('System Generated') %></td>
+      <td><%= ts("Current Login") %></td>
+      <td><%= ts("System Generated") %></td>
     </tr>
     <tr>
       <td>
         <% if @user.last_sign_in_at.nil? %>
-          <%= ts('No previous login recorded') %>
+          <%= ts("No previous login recorded") %>
         <% else %>
           <%= @user.last_sign_in_at %> (<%= @user.last_sign_in_ip %>)
         <% end %>
       </td>
-      <td><%= ts('Previous Login') %></td>
-      <td><%= ts('System Generated') %></td>
+      <td><%= ts("Previous Login") %></td>
+      <td><%= ts("System Generated") %></td>
     </tr>
     </tbody>
   </table>
