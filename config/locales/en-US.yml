@@ -225,6 +225,7 @@
         <<: *errors_template
       full_messages:
         format: "%{attribute} %{message}"
+
   mailer:
     general:
       footer:
@@ -270,16 +271,19 @@
       txt: "Hi %{login}\nWe just wanted to let you know that you have %{total} new
         invitation(s),\nwhich can be used to create new accounts at the archive. You
         can invite a\nfriend at %{invitation_page}.\nCheers, \n%{archive_name}"
+
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
       url_para: "URL of the page the abuse is on:"
       description_para: "Description of the abuse:"
-  
+
   validators:
     email:
       blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
       veracity:
         allow_blank: "does not seem to be a valid address. Please use a different address or leave blank."
         no_blank: "does not seem to be a valid address."
-        
+      format:
+        allow_blank: "should look like an email address. Please use a different address or leave blank."
+        no_blank: "should look like an email address."

@@ -3,19 +3,19 @@ module EmailHelpers
 
   def email_for(to)
     case to
-  
+
     # add your own name => email address mappings here
-  
+
     when /^#{capture_model}$/
       model($1).email
 
     when /^"([^@]*)"$/
-      user = User.find_by_login($1)
-      user.email 
+      user = User.find_by(login: $1)
+      user.email
 
     when /^"(.*)"$/
       $1
-  
+
     else
       to
     end

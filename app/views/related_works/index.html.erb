@@ -8,9 +8,9 @@
 <!--/subnav-->
 
 <!--main content-->
-<% unless @translations_of_user.blank? %>  
+<% unless @translations_of_user.blank? %>
   <h3 class="heading"><%= ts("Translations of %{user_login}'s works", :user_login => @user.login) %></h3>
-  <% # FRONT END!!! 
+  <% # FRONT END!!!
     # This page is:
     # Foo's Related Works
     # works by foo that someone has translated
@@ -58,9 +58,9 @@
     <% end %>
     </tbody>
   </table>
-<% end %>  
- 
-<% unless @translations_by_user.blank? %>  
+<% end %>
+
+<% unless @translations_by_user.blank? %>
   <h3 class="heading"><%= ts("Works translated by %{user_login}", :user_login => @user.login) %></h3>
   <table summary="<%= ts("Works %{user_login} has translated, including links to the original and the translation. The languages of both works are listed.", :user_login => @user.login) %><% if current_user == @user %><%= ' ' + ts("Also includes management options.") %><% end %>" id="translationsbyme">
     <caption><%= ts("Works Translated by %{user_login}", :user_login => @user.login) %></caption>
@@ -87,16 +87,16 @@
               <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
             </td>
             <% if current_user == @user %>
-              <td><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+              <td><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  data: {confirm: ts('Are you sure?')}, :method => :delete %></td>
             <% end %>
           <% end %>
-        </tr>    
+        </tr>
       <% end %>
     <% end %>
     </tbody>
   </table>
 <% end %>
- 
+
 <% unless @remixes_of_user.blank? %>
   <h3 class="heading"><%= ts("Works inspired by %{user_login}", :user_login => @user.login) %></h3>
   <dl class="inspired index group">
@@ -123,8 +123,8 @@
       <% end %>
     <% end %>
   </dl>
-<% end %>  
-  
+<% end %>
+
 <% unless @remixes_by_user.blank? %>
   <h3 class="heading"><%= ts("Works that inspired %{user_login}", :user_login => @user.login) %></h3>
   <dl class="inspired index group">
@@ -148,7 +148,7 @@
               <%= link_to related_work.work.title, related_work.work %>
             <% end %>
             <% if current_user == @user %>
-              <span class="actions" role="button"><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
+              <span class="actions" role="button"><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  data: {confirm: ts('Are you sure?')}, :method => :delete %></span>
             <% end %>
           </dd>
         <% end %>
@@ -156,5 +156,5 @@
     <% end %>
   </dl>
 <% end %>
-  
+
 <!--/main content-->

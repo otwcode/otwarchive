@@ -11,7 +11,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user = User.current_user
   user.preference.comment_emails_off = true
   user.preference.kudos_emails_off = true
-  user.preference.admin_emails_off = true
   user.preference.save
 end
 
@@ -44,15 +43,15 @@ end
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   visit work_path(work)
-  fill_in("comment[content]", with: comment_text)
+  fill_in("comment[comment_content]", with: comment_text)
 end
 
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
   step %{I am logged in as "commenter"}
   step %{I set up the comment "This is a test" on the work "#{work}"}
-  work_id = Work.find_by_title!(work).id
+  work_id = Work.find_by(title: work).id
   pseud_id = User.first.pseuds.first.id
   find("#comment_pseud_id_for_#{work_id}", visible: false).set(pseud_id)
   click_button "Comment"
@@ -82,13 +81,13 @@ end
 
 When /^I edit a comment$/ do
   step %{I follow "Edit"}
-  fill_in("comment[content]", with: "Edited comment")
+  fill_in("comment[comment_content]", with: "Edited comment")
   click_button "Update"
 end
 
 # this step assumes we are on a page with a comment form
 When /^I post a comment "([^"]*)"$/ do |comment_text|
-  fill_in("comment[content]", with: comment_text)
+  fill_in("comment[comment_content]", with: comment_text)
   click_button("Comment")
 end
 
@@ -97,21 +96,41 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
   step %{I follow "Reply"}
   step %{I should see the reply to comment form}
   with_scope(".odd") do
-    fill_in("comment[content]", with: comment_text)
+    fill_in("comment[comment_content]", with: comment_text)
     click_button("Comment")
   end
 end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
-  work = Work.find_by_title!(work)
-  visit new_work_comment_path(work, :only_path => false)
+  work = Work.find_by(title: work)
+  visit new_work_comment_path(work, only_path: false)
 end
 
 When /^I comment on an admin post$/ do
   step "I go to the admin-posts page"
     step %{I follow "Comment"}
-    step %{I fill in "comment[content]" with "Excellent, my dear!"}
+    step %{I fill in "comment[comment_content]" with "Excellent, my dear!"}
     step %{I press "Comment"}
+end
+
+When /^I post a spam comment$/ do
+  fill_in("comment[name]", with: "spammer")
+  fill_in("comment[email]", with: "spammer@example.org")
+  fill_in("comment[comment_content]", with: "Buy my product! http://spam.org")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^I post a guest comment$/ do
+  fill_in("comment[name]", with: "guest")
+  fill_in("comment[email]", with: "guest@example.org")
+  fill_in("comment[comment_content]", with: "This was really lovely!")
+  click_button("Comment")
+  step %{I should see "Comment created!"}
+end
+
+When /^all comments by "([^"]*)" are marked as spam$/ do |name|
+  Comment.where(name: name).update_all(approved: false)
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
@@ -130,6 +149,15 @@ When /^I delete the comment$/ do
   step %{I follow "Yes, delete!"}
 end
 
+When /^I delete the reply comment$/ do
+  step %{I follow "Delete" within ".even"}
+  step %{I follow "Yes, delete!"}
+end
+
+When /^I view the latest comment$/ do
+  visit comment_path(Comment.last)
+end
+
 Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}
@@ -138,37 +166,37 @@ Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
 end
 
 Then /^comment moderation should be enabled on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.moderated_commenting_enabled?
 end
 
 Then /^comment moderation should not be enabled on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert !w.moderated_commenting_enabled?
 end
 
 Then /^the comment on "([^\"]*?)" should be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.comments.first.unreviewed?
 end
 
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert !w.comments.first.unreviewed?
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   visit unreviewed_work_comments_path(w)
 end
 
 When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   visit comment_path(w.comments.first)
 end
 
 Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   assert w.find_all_comments.count == num.to_i
 end
 
@@ -182,12 +210,12 @@ Given /^the moderated work "([^\"]*)" by "([^\"]*)" with the approved comment "(
 end
 
 When /^I reload the comments on "([^\"]*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.find_all_comments.each { |c| c.reload }
 end
 
 When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
   chapter = work.chapters[0]
   user = User.current_user
 
@@ -199,7 +227,7 @@ When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
     commentable = Comment.create(
       commentable: commentable,
       parent: chapter,
-      content: "This is a comment at depth #{i}.",
+      comment_content: "This is a comment at depth #{i}.",
       pseud: user.default_pseud
     )
   end
@@ -211,7 +239,7 @@ When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
     Comment.create(
       commentable: commentable,
       parent: chapter,
-      content: "This is the #{ordinal} hidden comment.",
+      comment_content: "This is the #{ordinal} hidden comment.",
       pseud: user.default_pseud
     )
   end
@@ -223,7 +251,7 @@ Then /^I (should|should not) see the deeply nested comments$/ do |should_or_shou
 end
 
 When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
-  work = Work.find_by_title!(work)
+  work = Work.find_by(title: work)
 
   loop do
     visit work_url(work, show_comments: true)

@@ -1,13 +1,58 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception, prepend: true
+  rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
+  rescue_from ActionController::UnknownFormat, with: :raise_not_found
+
+  def raise_not_found
+    redirect_to '/404'
+  end
 
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
-  before_filter :sanitize_params
+  before_action :sanitize_ac_params
 
-  # Authlogic login helpers
+  # sanitize_params works best with a hash, and will convert
+  # ActionController::Parameters to a hash in order to work with them anyway.
+  #
+  # Controllers need to deal with ActionController::Parameters, not hashes.
+  # These methods hand the params as a hash to sanitize_params, and then
+  # transforms the results back into ActionController::Parameters.
+  def sanitize_ac_params
+    sanitize_params(params.to_unsafe_h).each do |key, value|
+      params[key] = transform_sanitized_hash_to_ac_params(key, value)
+    end
+  end
+
+  def display_auth_error
+    respond_to do |format|
+      format.html do
+        redirect_to auth_error_path
+      end
+      format.js do
+        render json: {
+          errors: {
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+          }
+        }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def transform_sanitized_hash_to_ac_params(key, value)
+    if value.is_a?(Hash)
+      ActionController::Parameters.new(value)
+    elsif value.is_a?(Array)
+      value.map.with_index do |val, index|
+        value[index] = transform_sanitized_hash_to_ac_params(key,  val)
+      end
+    else
+      value
+    end
+  end
+
   helper_method :current_user
   helper_method :current_admin
   helper_method :logged_in?
@@ -17,30 +62,52 @@ class ApplicationController < ActionController::Base
   helper_method :process_title
 
   # clear out the flash-being-set
-  before_filter :clear_flash_cookie
+  before_action :clear_flash_cookie
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
 
-  after_filter :check_for_flash
+  after_action :check_for_flash
   def check_for_flash
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  # So if there is not a user_credentials cookie and the user appears to be logged in then
-  # redirect to the logout page
-  before_filter :logout_if_not_user_credentials
+  after_action :ensure_admin_credentials
+  def ensure_admin_credentials
+    if logged_in_as_admin?
+      # if we are logged in as an admin and we don't have the admin_credentials
+      # set then set that cookie
+      cookies.permanent[:admin_credentials] = 1 unless cookies[:admin_credentials]
+    else
+      # if we are NOT logged in as an admin and we have the admin_credentials
+      # set then delete that cookie
+      cookies.delete :admin_credentials unless cookies[:admin_credentials].nil?
+    end
+  end
+
+  # If there is no user_credentials cookie and the user appears to be logged in,
+  # redirect to the lost cookie page. Needs to be before the code to fix
+  # the user_credentials cookie or it won't fire.
+  before_action :logout_if_not_user_credentials
   def logout_if_not_user_credentials
-    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
+    if logged_in? && cookies[:user_credentials].nil? && controller_name != "sessions"
       logger.error "Forcing logout"
-      @user_session = UserSession.find
-      if @user_session
-        @user_session.destroy
-      end
+      sign_out
       redirect_to '/lost_cookie' and return
     end
   end
 
+  # The user_credentials cookie is used by nginx to figure out whether or not
+  # to cache the page, so we want to make sure that it's set when the user is
+  # logged in, and cleared when the user is logged out.
+  after_action :ensure_user_credentials
+  def ensure_user_credentials
+    if logged_in?
+      cookies.permanent[:user_credentials] = 1 unless cookies[:user_credentials]
+    else
+      cookies.delete :user_credentials unless cookies[:user_credentials].nil?
+    end
+  end
 
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
@@ -50,30 +117,21 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
-  def current_user
-    @current_user ||= current_user_session && current_user_session.record
-  end
-
 protected
 
   def record_not_found (exception)
     @message=exception.message
     respond_to do |f|
-      f.html{ render :template => "errors/404", :status => 404 }
+      f.html{ render template: "errors/404", status: 404 }
     end
   end
 
-  def current_user_session
-    return @current_user_session if defined?(@current_user_session)
-    @current_user_session = UserSession.find
-  end
-
   def logged_in?
-    current_user.nil? ? false : true
+    user_signed_in?
   end
 
   def logged_in_as_admin?
-    current_admin.nil? ? false : true
+    admin_signed_in?
   end
 
   def guest?
@@ -91,36 +149,43 @@ protected
 
 public
 
-  before_filter :fetch_admin_settings
+  before_action :fetch_admin_settings
   def fetch_admin_settings
-    if Rails.env.development?
-      @admin_settings = AdminSetting.first
-    else
-      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    end
+    @admin_settings = AdminSetting.current
   end
-  
-  before_filter :load_admin_banner
+
+  before_action :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
-      @admin_banner = AdminBanner.where(:active => true).last
+      @admin_banner = AdminBanner.where(active: true).last
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do 
-        banner = AdminBanner.where(:active => true).last
+      @admin_banner = Rails.cache.fetch("admin_banner") do
+        banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end
       @admin_banner = nil if @admin_banner == ""
     end
   end
 
+  before_action :load_tos_popup
+  def load_tos_popup
+    # Integers only, YYYY-MM-DD format of date Board approved TOS
+    @current_tos_version = 20180523
+  end
+
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
-  before_filter :store_location
+  before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
       Rails.logger.debug "Return to back would cause infinite loop"
+      session.delete(:return_to)
+    elsif request.fullpath.length > 200
+      # Sessions are stored in cookies, which has a 4KB size limit.
+      # Don't store paths that are too long (e.g. filters with lots of exclusions).
+      # Also remove the previous stored path.
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
@@ -144,7 +209,14 @@ public
   end
 
   def after_sign_in_path_for(resource)
-    admin_users_path
+    if resource.is_a?(Admin)
+      admin_users_path
+    else
+      back = session[:return_to]
+      session.delete(:return_to)
+
+      back || user_path(current_user)
+    end
   end
 
   def authenticate_admin!
@@ -153,7 +225,7 @@ public
     else
       redirect_to root_path, notice: "I'm sorry, only an admin can look at that area"
       ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      ## render file: File.join(Rails.root, 'public/404'), formats: [:html], status: 404, layout: false
     end
   end
 
@@ -217,7 +289,7 @@ public
   end
 
   # Hide admin banner via cookies
-  before_filter :hide_banner
+  before_action :hide_banner
   def hide_banner
     if params[:hide_banner]
       session[:hide_banner] = true
@@ -226,7 +298,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_filter :set_current_user
+  before_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -239,7 +311,7 @@ public
   end
 
   def load_collection
-    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+    @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
   def collection_maintainers_only
@@ -281,47 +353,21 @@ public
   end
 
   # Define media for fandoms menu
-  before_filter :set_media
+  before_action :set_media
   def set_media
     uncategorized = Media.uncategorized
     @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
-
-  ### GLOBALIZATION ###
-
-#  before_filter :load_locales
-#  before_filter :set_preferred_locale
-
-#  I18n.backend = I18nDB::Backend::DBBased.new
-#  I18n.record_missing_keys = false # if you want to record missing translations
-  protected
-
-  def load_locales
-    @loaded_locales ||= Locale.order(:iso)
-  end
-
-  # Sets the locale
-  def set_preferred_locale
-    # Loading the current locale
-    if session[:locale] && @loaded_locales.detect { |loc| loc.iso == session[:locale]}
-      set_locale session[:locale].to_sym
-    else
-      set_locale Locale.find_main_cached.iso.to_sym
-    end
-    @current_locale = Locale.find_by_iso(I18n.locale.to_s)
-  end
-
-  ### -- END GLOBALIZATION -- ###
 
   public
 
   #### -- AUTHORIZATION -- ####
 
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
-  before_filter :set_redirects
+  before_action :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({:controller => 'session', :action => 'new'})
+    @logged_out_redirect = new_user_session_path
   end
 
   def is_registered_user?
@@ -368,18 +414,18 @@ public
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-  	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+  	access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
   def check_ownership_or_admin
      return true if logged_in_as_admin?
-     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+     access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      redirect_to new_user_session_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -415,7 +461,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
-      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count_cache']
+      allowed = ['name', 'created_at', 'taggings_count_cache']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
@@ -440,8 +486,20 @@ public
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
 
-  #### -- AUTHORIZATION -- ####
+  def flash_search_warnings(result)
+    if result.respond_to?(:error) && result.error
+      flash.now[:error] = result.error
+    elsif result.respond_to?(:notice) && result.notice
+      flash.now[:notice] = result.notice
+    end
+  end
 
-  protect_from_forgery
+  # Don't get unnecessary data for json requests
+  skip_before_action  :fetch_admin_settings,
+                      :load_admin_banner,
+                      :set_redirects,
+                      :set_media,
+                      :store_location,
+                      if: proc { %w(js json).include?(request.format) }
 
 end
