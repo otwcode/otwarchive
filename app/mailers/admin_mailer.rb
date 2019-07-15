@@ -47,7 +47,17 @@ class AdminMailer < ActionMailer::Base
 
   # Sends a spam report
   def send_spam_alert(spam)
-    @spam = spam
+    @users = User.where(id: spam.keys).to_a
+    return if @users.empty?
+
+    # Make sure that the keys of the spam array are integers, so that we can do
+    # an easy look-up with user IDs.
+    @spam = spam.transform_keys(&:to_i)
+
+    # The users might have been retrieved from the database out of order, so
+    # re-sort them by their score.
+    @users.sort_by! { |user| @spam[user.id]["score"] }.reverse!
+
     mail(
       to: ArchiveConfig.SPAM_ALERT_ADDRESS,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"

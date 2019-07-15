@@ -245,16 +245,20 @@ class Tag < ApplicationRecord
     end
   end
 
-  before_save :check_type_changes, if: :type_changed?
+  after_save :check_type_changes, if: :saved_change_to_type?
   def check_type_changes
-    # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
-    # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
-    if self.type_was == "Fandom" || self.type == "UnsortedTag" && !self.type_was.nil?
-      self.parents = []
-    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
-    elsif self.type == "Fandom" && !self.type_was.nil?
-      self.parents = [Media.uncategorized]
-    end
+    return if type_before_last_save.nil?
+
+    retyped = Tag.find(self.id)
+
+    # Clean up invalid CommonTaggings.
+    retyped.common_taggings.destroy_invalid
+    retyped.child_taggings.destroy_invalid
+
+    # If the tag has just become a Fandom, it needs the Uncategorized media
+    # added to it manually (the after_save hook on Fandom won't take effect,
+    # since it's not a Fandom yet)
+    retyped.add_media_for_uncategorized if retyped.is_a?(Fandom)
   end
 
   # Callback for has_many :parents.
@@ -1001,9 +1005,8 @@ class Tag < ApplicationRecord
   end
 
   # Add a common tagging association
-  # Offloading most of the logic to the inherited tag models
   def add_association(tag)
-    self.parents << tag unless self.has_parent?(tag)
+    build_association(tag).save
   end
 
   def has_parent?(tag)
@@ -1107,49 +1110,83 @@ class Tag < ApplicationRecord
     favorite_tags.destroy_all
   end
 
-  attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
+  attr_reader :meta_tag_string, :sub_tag_string, :merger_string
 
-  def add_parent_string(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = Tag.find_by_name(name)
-      if parent && parent.canonical?
-        add_association(parent)
+  # Uses the value of parent_types to determine whether the passed-in tag
+  # should be added as a parent or a child, and then generates the association
+  # (if it doesn't already exist). If it does already exist, returns the
+  # existing CommonTagging object.
+  def build_association(tag)
+    if parent_types.include?(tag&.type)
+      common_taggings.find_or_initialize_by(filterable: tag)
+    else
+      child_taggings.find_or_initialize_by(common_tag: tag)
+    end
+  end
+
+  # Splits up the passed-in string into a sequence of individual tag names,
+  # then finds (and yields) the tag for each. Used by add_association_string,
+  # meta_tag_string=, and sub_tag_string=.
+  def parse_tag_string(tag_string)
+    tag_string.split(",").map(&:squish).each do |name|
+      yield name, Tag.find_by_name(name)
+    end
+  end
+
+  # Try to create new associations with the tags of type tag_type whose names
+  # are listed in tag_string.
+  def add_association_string(tag_type, tag_string)
+    parse_tag_string(tag_string) do |name, parent|
+      prefix = "Cannot add association to '#{name}':"
+      if parent && parent.type != tag_type
+        errors.add(:base, "#{prefix} #{parent.type} added in #{tag_type} field.")
       else
-        errors.add(:base, "Cannot add association: '#{name}' tag " +
-          (parent ? "is not canonical." : "does not exist."))
+        association = build_association(parent)
+        save_and_gather_errors(association, prefix)
       end
     end
   end
 
-  def fandom_string=(tag_string); self.add_parent_string(tag_string); end
-  def media_string=(tag_string); self.add_parent_string(tag_string); end
-  def character_string=(tag_string); self.add_parent_string(tag_string); end
-  def relationship_string=(tag_string); self.add_parent_string(tag_string); end
-  def freeform_string=(tag_string); self.add_parent_string(tag_string); end
+  # Save an item to the database, if it's valid. If it's invalid, read in the
+  # error messages from the item and copy them over to this tag.
+  def save_and_gather_errors(item, prefix)
+    return unless item.new_record? || item.changed?
+    return if item.valid? && item.save
+
+    item.errors.full_messages.each do |message|
+      errors.add(:base, "#{prefix} #{message}")
+    end
+  end
+
+  # Find and destroy all invalid CommonTaggings and MetaTaggings associated
+  # with this tag.
+  def destroy_invalid_associations
+    common_taggings.destroy_invalid
+    child_taggings.destroy_invalid
+    meta_taggings.destroy_invalid
+    sub_taggings.destroy_invalid
+  end
+
+  # defines fandom_string=, media_string=, character_string=, relationship_string=, freeform_string= 
+  %w(Fandom Media Character Relationship Freeform).each do |tag_type|
+    attr_reader "#{tag_type.downcase}_string"
+
+    define_method("#{tag_type.downcase}_string=") do |tag_string|
+      add_association_string(tag_type, tag_string)
+    end
+  end
+
   def meta_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      parent = self.class.find_by_name(name)
-      if parent
-        meta_tagging = self.meta_taggings.build(meta_tag: parent, direct: true)
-        unless meta_tagging.valid? && meta_tagging.save
-          self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
-        end
-      end
+    parse_tag_string(tag_string) do |name, parent|
+      meta_tagging = meta_taggings.build(meta_tag: parent, direct: true)
+      save_and_gather_errors(meta_tagging, "Invalid meta tag '#{name}':")
     end
   end
 
   def sub_tag_string=(tag_string)
-    names = tag_string.split(',').map(&:squish)
-    names.each do |name|
-      sub = self.class.find_by_name(name)
-      if sub
-        meta_tagging = sub.meta_taggings.build(meta_tag: self, direct: true)
-        unless meta_tagging.valid? && meta_tagging.save
-          self.errors.add(:base, "You attempted to create an invalid meta tagging. :(")
-        end
-      end
+    parse_tag_string(tag_string) do |name, sub|
+      sub_tagging = sub_taggings.build(sub_tag: sub, direct: true)
+      save_and_gather_errors(sub_tagging, "Invalid sub tag '#{name}':")
     end
   end
 
@@ -1323,8 +1360,8 @@ class Tag < ApplicationRecord
 
     # Expire caching when a merger is added or removed
     if tag.saved_change_to_merger_id?
-      if tag.merger_id_was.present?
-        old = Tag.find(tag.merger_id_was)
+      if tag.merger_id_before_last_save.present?
+        old = Tag.find(tag.merger_id_before_last_save)
         old.update_works_index_timestamp!
       end
       if tag.merger_id.present?

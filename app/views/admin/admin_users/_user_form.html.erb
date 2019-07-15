@@ -1,6 +1,6 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 
-<%= form_tag action: "update_user", controller: "admin/admin_users" do %>
+<%= form_tag action: "update", controller: "admin/admin_users" do %>
   <%= hidden_field_tag :query, params[:query] %>
   <%= hidden_field_tag :role, params[:role] %>
   <%= hidden_field_tag "id", user.login %>

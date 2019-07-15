@@ -7,7 +7,7 @@ Feature: Tag wrangling
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as an admin
-      And I fill in "query" with "dizmo"
+      And I fill in "Name" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"    
     # admin making user tag wrangler
@@ -147,8 +147,8 @@ Feature: Tag wrangling
     # trying to assign a non-canonical fandom to a character
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
-    Then I should see "Cannot add association"
-      And I should see "'Stargate Atlantis' tag is not canonical"
+    Then I should see "Cannot add association to 'Stargate Atlantis':"
+      And I should see "Parent tag is not canonical."
       And I should not see "Stargate Atlantis" within "form"
       
     # making a fandom tag canonical, then assigning it to a character

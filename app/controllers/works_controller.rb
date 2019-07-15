@@ -96,6 +96,7 @@ class WorksController < ApplicationController
       # Note: we only cache some first initial number of pages since those are biggest bang for
       # the buck -- users don't often go past them
       if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? &&
+         params[:include_work_search].blank? && params[:exclude_work_search].blank? &&
          (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
@@ -942,6 +943,7 @@ class WorksController < ApplicationController
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       :unrestricted,
+      collections_to_remove: [],
       pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
