@@ -39,26 +39,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "0161e4568c5086f4fb269998a800b95789e35aefecce9ce8c3bdff5a60d03433",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 152,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(params[:creation_type].classify.constantize rescue nil).find(params[:creation_id]).send(params[:tag_type])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:tag_type]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Format Validation",
       "warning_code": 30,
       "fingerprint": "0280569f35d7e7c8b6ff5f242786c74b80a13d1d6bd5236aa6b649049bdd0148",
@@ -443,26 +423,6 @@
       "note": ""
     },
     {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 24,
-      "fingerprint": "31b4360e5ac45b4b88f666d03efd105491971918dfb6fccfa1dc0aa630052716",
-      "check_name": "UnsafeReflection",
-      "message": "Unsafe reflection method constantize called with parameter value",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 138,
-      "link": "http://brakemanscanner.org/docs/warning_types/remote_code_execution/",
-      "code": "params[:creation_type].classify.constantize",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "show_hidden"
-      },
-      "user_input": "params[:creation_type].classify",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "31c7c22b0d7c87430fb6be7fbe63789ade04c009603587d270da4083eba6c2f4",
@@ -732,46 +692,6 @@
         "method": "update"
       },
       "user_input": "params[:challenge_type].demodulize.tableize.singularize",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 306,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "4f23316dd25962cd6143c0f020f7ef59fbc6da975038e56fc79eae354a063d00",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/tags_controller.rb",
-      "line": 313,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "Tag.find_by_name(params[:id]).send(params[:show])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TagsController",
-        "method": "wrangle"
-      },
-      "user_input": "params[:show]",
       "confidence": "High",
       "note": ""
     },
@@ -1858,26 +1778,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "c01011e19807abc66b27dd91e27cce6b382d1254caf5ab2850a4a8f86e5d1286",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/invitations_controller.rb",
-      "line": 28,
-      "link": "http://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "User.find_by(:login => params[:user_id]).invitations.send(params[:status])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "InvitationsController",
-        "method": "manage"
-      },
-      "user_input": "params[:status]",
-      "confidence": "High",
-      "note": ""
-    },
-    {
       "warning_type": "Cross Site Scripting",
       "warning_code": 2,
       "fingerprint": "c04c41ba3a91fc8ea691d08fcf4aaad3ba713212c9997ff5c4cca1c4d56861bc",
@@ -2340,6 +2240,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-05-14 19:54:37 +0000",
+  "updated": "2019-05-26 17:13:46 +0000",
   "brakeman_version": "3.7.2"
 }
