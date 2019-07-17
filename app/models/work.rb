@@ -270,7 +270,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v1/work_blurb_tag_cache_key/#{id}"
+    "/v2/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -741,7 +741,7 @@ class Work < ApplicationRecord
   end
 
   # Change the positions of the chapters in the work
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
@@ -820,7 +820,7 @@ class Work < ApplicationRecord
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.will_save_change_to_attribute?(:complete)
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+      Work.where(id: id).update_all(["complete = ?", complete])
     end
   end
 
