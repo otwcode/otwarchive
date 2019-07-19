@@ -18,7 +18,7 @@ Feature: User statistics
     And I set up the draft "Charlie Helps"
   When I am logged in as "reader"
     And I view the work "Don Solves Crime"
-  When I am logged in as "NUMB3RSfan"
+    And I am logged in as "NUMB3RSfan"
     And I go to my stats page
   Then I should see "Don Solves Crime" before "Don Solves More Crime"
     And I should not see "Charlie Helps"
