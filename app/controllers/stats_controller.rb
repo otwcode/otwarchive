@@ -48,7 +48,7 @@ class StatsController < ApplicationController
       end_date = DateTime.parse("01/01/#{next_year}")
       work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
     end
-    works = work_query.all.sort_by {|w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i)}
+    works = work_query.all.sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
     # on the off-chance a new user decides to look at their stats and have no works
     if works.blank?
