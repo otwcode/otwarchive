@@ -23,9 +23,9 @@ Feature: User statistics
   Then I should see "Don Solves Crime" before "Don Solves More Crime"
     And I should not see "Charlie Helps"
   When I follow "Date"
-    And I should see "Don Solves More Crime" before "Don Solves Crime"
+  Then I should see "Don Solves More Crime" before "Don Solves Crime"
   When I follow "Date"
-    And I should see "Don Solves Crime" before "Don Solves More Crime"
+  Then I should see "Don Solves Crime" before "Don Solves More Crime"
 
   Scenario: Do not show hit counts on stats page when user has set preference to hide hit counts on their own works
   
