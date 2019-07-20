@@ -5,14 +5,14 @@ http_interactions:
     uri: https://collector.newrelic.com/agent_listener/12//get_redirect_host?marshal_format=json
     body:
       encoding: UTF-8
-      string: ! '[]'
+      string: "[]"
     headers:
       Content-Encoding:
       - identity
       Host:
       - collector.newrelic.com
       Accept:
-      - ! '*/*'
+      - "*/*"
       User-Agent:
       - NewRelic-RubyAgent/3.9.3.241 (ruby 1.9.3 x86_64-darwin13.1.0) zlib/1.2.5
       Content-Type:
@@ -28,7 +28,7 @@ http_interactions:
       - '133'
     body:
       encoding: US-ASCII
-      string: ! '{"exception":{"message":"Invalid license key, please contact support@newrelic.com","error_type":"NewRelic::Agent::LicenseException"}}'
+      string: '{"exception":{"message":"Invalid license key, please contact support@newrelic.com","error_type":"NewRelic::Agent::LicenseException"}}'
     http_version: 
   recorded_at: Tue, 19 May 2015 05:59:11 GMT
 - request:
@@ -38,10 +38,14 @@ http_interactions:
       encoding: US-ASCII
       string: ''
     headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - "*/*"
       User-Agent:
       - Ruby
+      Host:
+      - rebecca2525.dreamwidth.org
   response:
     status:
       code: 200
@@ -50,42 +54,42 @@ http_interactions:
       Server:
       - nginx/1.1.19
       Date:
-      - Tue, 19 May 2015 05:59:14 GMT
+      - Thu, 09 Jun 2016 23:05:08 GMT
       Content-Type:
       - text/html; charset=utf-8
-      Transfer-Encoding:
-      - chunked
+      Content-Length:
+      - '2999'
       Connection:
       - keep-alive
       Set-Cookie:
-      - ljuniq=GXFGOQsWX5Psfkk%3A1432015154; domain=.dreamwidth.org; path=/; expires=Sat,
-        18-Jul-2015 05:59:14 GMT
+      - ljuniq=gESjwmnvJQfIOhL%3A1465513508; domain=.dreamwidth.org; path=/; expires=Mon,
+        08-Aug-2016 23:05:08 GMT
       Vary:
       - Accept-Encoding
     body:
-      encoding: US-ASCII
-      string: ! "\n<!DOCTYPE html>\n<html>\n<head>\n<link rel=\"home\" title=\"Home\"
+      encoding: UTF-8
+      string: "\n<!DOCTYPE html>\n<html>\n<head>\n<link rel=\"home\" title=\"Home\"
         href=\"http://www.dreamwidth.org/\" />\n<link rel=\"contents\" title=\"Site
         Map\" href=\"http://www.dreamwidth.org/site/\" />\n<link rel=\"help\" title=\"Technical
         Support\" href=\"http://www.dreamwidth.org/support/\" /><style>\n    #Comments
         q { padding-left: 2.5em; font-style: italic; }\n</style><title>rebecca2525
         | [TEST][FIC] Importing Test</title>\n\n            <script type=\"text/javascript\">\n
         \               var Site;\n                if (!Site)\n                    Site
-        = {};\n\n                var site_p = {\"media_embed_enabled\": 1,\n\"inbox_update_poll\":
-        1,\n\"ctx_popup_userhead\": 1,\n\"iconprefix\": \"http://v.dreamwidth.org\",\n\"ctx_popup_icons\":
-        1,\n\"has_remote\": 0,\n\"statprefix\": \"http://s.dreamwidth.org/stc\",\n\"ctx_popup\":
-        1,\n\"imgprefix\": \"http://s.dreamwidth.org/img\",\n\"esn_async\": 1,\n\"currentJournal\":
-        \"rebecca2525\",\n\"user_domain\": \"dreamwidth.org\",\n\"siteroot\": \"http://www.dreamwidth.org\",\n\"currentJournalBase\":
-        \"http://rebecca2525.dreamwidth.org\"};\n                var site_k = [\"media_embed_enabled\",
-        \"inbox_update_poll\", \"ctx_popup_userhead\", \"iconprefix\", \"ctx_popup_icons\",
-        \"has_remote\", \"statprefix\", \"ctx_popup\", \"imgprefix\", \"esn_async\",
-        \"currentJournal\", \"user_domain\", \"siteroot\", \"currentJournalBase\"];\n
-        \               for (var i = 0; site_k.length > i; i++) {\n                    Site[site_k[i]]
+        = {};\n\n                var site_p = {\"imgprefix\": \"http://s.dreamwidth.org/img\",\n\"inbox_update_poll\":
+        1,\n\"statprefix\": \"http://s.dreamwidth.org/stc\",\n\"ctx_popup\": 1,\n\"ctx_popup_userhead\":
+        1,\n\"ctx_popup_icons\": 1,\n\"currentJournalBase\": \"http://rebecca2525.dreamwidth.org\",\n\"media_embed_enabled\":
+        1,\n\"currentJournal\": \"rebecca2525\",\n\"user_domain\": \"dreamwidth.org\",\n\"iconprefix\":
+        \"http://v.dreamwidth.org\",\n\"siteroot\": \"http://www.dreamwidth.org\",\n\"has_remote\":
+        0,\n\"esn_async\": 1};\n                var site_k = [\"imgprefix\", \"inbox_update_poll\",
+        \"statprefix\", \"ctx_popup\", \"ctx_popup_userhead\", \"ctx_popup_icons\",
+        \"currentJournalBase\", \"media_embed_enabled\", \"currentJournal\", \"user_domain\",
+        \"iconprefix\", \"siteroot\", \"has_remote\", \"esn_async\"];\n                for
+        (var i = 0; site_k.length > i; i++) {\n                    Site[site_k[i]]
         = site_p[site_k[i]];\n                }\n           </script>\n        <link
-        rel=\"stylesheet\" type=\"text/css\" href=\"http://s.dreamwidth.org/stc/??lj_base.css,esn.css,jquery/jquery.ui.core.css,jquery/jquery.ui.tooltip.css,jquery.contextualhover.css,lj_base-app.css,base-colors-light.css,lynx/lynx.css?v=1426479404\"
+        rel=\"stylesheet\" type=\"text/css\" href=\"http://s.dreamwidth.org/stc/??lj_base.css,esn.css,jquery/jquery.ui.core.css,jquery/jquery.ui.tooltip.css,jquery.contextualhover.css,lj_base-app.css,base-colors-light.css,lynx/lynx.css?v=1448242038\"
         />\n<link rel=\"stylesheet\" type=\"text/css\" href=\"http://s.dreamwidth.org/stc/??jquery/jquery.ui.button.css,jquery/jquery.ui.dialog.css,jquery.commentmanage.css,jquery/jquery.ui.theme.smoothness.css,entrypage.css,siteviews/lynx.css?v=1426479404\"
-        />\n<script type=\"text/javascript\" src=\"http://s.dreamwidth.org/js/??jquery/jquery-1.8.3.js,dw/dw-core.js,jquery/jquery.ui.core.js,jquery/jquery.ui.widget.js,jquery/jquery.ui.tooltip.js,jquery.ajaxtip.js,jquery/jquery.ui.position.js,jquery.hoverIntent.js,jquery.contextualhover.js?v=1422681579\"></script>\n<script
-        type=\"text/javascript\" src=\"http://s.dreamwidth.org/js/??jquery.quickreply.js,jquery.threadexpander.js,jquery/jquery.ui.button.js,jquery/jquery.ui.dialog.js,jquery.commentmanage.js,jquery.esn.js,jquery.poll.js,journals/jquery.tag-nav.js,jquery.mediaplaceholder.js?v=1426527185\"></script>\n\n<meta
+        />\n<script type=\"text/javascript\" src=\"//s.dreamwidth.org/js/??jquery/jquery-1.8.3.js,dw/dw-core.js,jquery/jquery.ui.core.js,jquery/jquery.ui.widget.js,jquery/jquery.ui.tooltip.js,jquery.ajaxtip.js,jquery/jquery.ui.position.js,jquery.hoverIntent.js,jquery.contextualhover.js?v=1440903277\"></script>\n<script
+        type=\"text/javascript\" src=\"//s.dreamwidth.org/js/??jquery.quickreply.js,jquery.threadexpander.js,jquery/jquery.ui.button.js,jquery/jquery.ui.dialog.js,jquery.commentmanage.js,jquery.esn.js,jquery.poll.js,journals/jquery.tag-nav.js,jquery.mediaplaceholder.js?v=1460259022\"></script>\n\n<meta
         http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n<link
         rel=\"meta\" type=\"application/rdf+xml\" title=\"FOAF\" href=\"http://rebecca2525.dreamwidth.org/data/foaf\"
         />\n<link rel=\"help\" href=\"http://www.dreamwidth.org/support/faq\" />\n<link
@@ -95,8 +99,8 @@ http_interactions:
         />\n<link rel=\"next\" href=\"http://www.dreamwidth.org/go?dir=next&format=light&itemid=3506&journal=rebecca2525\"
         />\n<link rel=\"canonical\" href=\"http://rebecca2525.dreamwidth.org/3506.html\"
         />\n<script>\n// don't crawl this.  read http://www.livejournal.com/developer/exporting\nvar
-        LJ_cmtinfo = {\"form_auth\": \"c0:1432011600:3554:86400:rZNfoiM7JY-0-GXFGOQsWX5Psfkk:c2a272812c3b8f8dc19ad8603cccfe81\",\n\"canSpam\":
-        1,\n\"remote\": \"\",\n\"journal\": \"rebecca2525\",\n\"canAdmin\": \"\"}\n</script>\n</head>\n\n<body
+        LJ_cmtinfo = {\"canSpam\": 1,\n\"canAdmin\": \"\",\n\"journal\": \"rebecca2525\",\n\"remote\":
+        \"\",\n\"form_auth\": \"c0:1465513200:308:86400:V9db6L1usf-0-gESjwmnvJQfIOhL:b7ec26db2864147fcdd254550a4138d8\"}\n</script>\n</head>\n\n<body
         >\n\n<div role=\"main\" id=\"content\">\n    <div class=\"row\">\n        <div
         class=\"columns large-12\">\n        <h1></h1>\n        </div>\n    </div>\n\n\n
         \   <div class=\"row\"><div class=\"large-12 columns\"><div class=\"entry-wrapper
@@ -131,7 +135,7 @@ http_interactions:
         ><img border='0' width=\"16\" height=\"16\" alt=\"Next Entry\" title=\"Next
         Entry\" src=\"//s.dreamwidth.org/img/silk/entry/next.png\"  /></a></li>\n</ul></div>\n</div>\n</div>\n<div
         class=\"currents\">\n<div class=\"metadata bottom-metadata\">\n<ul>\n<li id=\"metadata-mood\"><span
-        class=\"metadata-label metadata-label-mood\">Current Mood:</span>  <img src=\"http://s.dreamwidth.org/img/mood/bunnies-black/curious.gif\"
+        class=\"metadata-label metadata-label-mood\">Current Mood:</span>  <img src=\"https://s.dreamwidth.org/img/mood/bunnies-black/curious.gif\"
         title=\"\" alt=\"\"  height=\"30\" width=\"17\" /> <span class=\"metadata-item
         metadata-item-mood\">curious</span></li>\n<li id=\"metadata-location\"><span
         class=\"metadata-label metadata-label-location\">Current Location:</span>
@@ -171,7 +175,7 @@ http_interactions:
         | \n    <a href='http://www.dreamwidth.org/manage/settings/'>Browse Options</a>
         | \n    <a href='http://www.dreamwidth.org/site/'>Site Map</a> ]</p></div>\n
         \   <div id='statistics' style='text-align: left; font-size:0; line-height:0;
-        height:0; overflow:hidden;'></div>\n</div></div>\n</body>\n</html>"
+        height:0; overflow:hidden;'></div></div></div>\n</body>\n</html>"
     http_version: 
-  recorded_at: Tue, 19 May 2015 05:59:14 GMT
-recorded_with: VCR 2.5.0
+  recorded_at: Thu, 09 Jun 2016 23:05:08 GMT
+recorded_with: VCR 3.0.1

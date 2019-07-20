@@ -22,7 +22,7 @@
 
 <h4 class="heading">Names used:</h4>
 <ul class="commas">
-  <% external_author.external_author_names.value_of(:name).each do |name| %>
+  <% external_author.external_author_names.pluck(:name).each do |name| %>
     <li><%= name %></li>
   <% end %>
 </ul>

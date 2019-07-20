@@ -1,4 +1,5 @@
 class FeedSweeper < ActionController::Caching::Sweeper
+  include Rails.application.routes.url_helpers
 
   observe Chapter, Work
 
@@ -22,17 +23,13 @@ class FeedSweeper < ActionController::Caching::Sweeper
   def expire_caches(record)
     work = record
     work = record.work if record.is_a?(Chapter)
-    
+
     return unless work.present?
 
     work.filters.each do |tag|
       # expire the atom feed page for the tags on the work and the corresponding filter tags
-      expire_page :controller => 'tags',
-                  :action => 'feed',
-                  :id => tag.id,
-                  :format => 'atom'
+      ActionController::Base.expire_page feed_tag_path(tag.id, format: 'atom')
     end
   end
 
 end
-

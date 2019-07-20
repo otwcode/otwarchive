@@ -47,4 +47,42 @@ Feature: Delete a comment
     Then I should see "Comment deleted."
       And I should see "(Previous comment deleted.)"
       And I should see "I didn't mean that"
-  
+
+  Scenario: Deleting higher-level comments in a deep comment thread should still allow readers to access the deeper comments.
+
+    Given the work "Testing"
+      And I am logged in as "commenter"
+
+    When I post a deeply nested comment thread on "Testing"
+      And I view the work "Testing" with comments
+    Then I should see "(2 more comments in this thread)"
+      And I should not see the deeply nested comments
+
+    When I delete all visible comments on "Testing"
+      And I view the work "Testing" with comments
+    Then I should see "(Previous comment deleted.)"
+      And I should see "(2 more comments in this thread)"
+      And I should not see the deeply nested comments
+
+    When I follow "2 more comments in this thread"
+    Then I should see the deeply nested comments
+
+  Scenario: Deleting a comment followed by its reply should hide the deleted comment placeholder.
+
+    Given the work "Amazing Story"
+      And I am logged in as "commenter"
+      And I post the comment "I love it!" on the work "Amazing Story"
+      And I reply to a comment with "Is there going to be a sequel?"
+    When I delete the comment
+      And I delete the reply comment
+    Then I should not see "(Previous comment deleted.)"
+
+  Scenario: Deleting a reply comment followed by its parent should hide the deleted comment placeholder.
+
+    Given the work "Amazing Story"
+      And I am logged in as "commenter"
+      And I post the comment "I love it!" on the work "Amazing Story"
+      And I reply to a comment with "Is there going to be a sequel?"
+    When I delete the reply comment
+      And I delete the comment
+    Then I should not see "(Previous comment deleted.)"

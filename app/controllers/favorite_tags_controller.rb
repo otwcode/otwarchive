@@ -1,14 +1,14 @@
 class FavoriteTagsController < ApplicationController
-  skip_before_filter :store_location, only: [:create, :destroy]
-  before_filter :users_only
-  before_filter :load_user
-  before_filter :check_ownership
+  skip_before_action :store_location, only: [:create, :destroy]
+  before_action :users_only
+  before_action :load_user
+  before_action :check_ownership
 
   respond_to :html, :json
 
   # POST /favorites_tags
   def create
-    @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
+    @favorite_tag = current_user.favorite_tags.build(favorite_tag_params)
     success_message = ts("You have successfully added %{tag_name} to your favorite tags. You can find them on the <a href='#{root_path}'>Archive homepage</a>.", tag_name: @favorite_tag.tag_name)
     if @favorite_tag.save
       respond_to do |format|
@@ -40,7 +40,13 @@ class FavoriteTagsController < ApplicationController
   private
 
   def load_user
-    @user = User.find_by_login(params[:user_id])
+    @user = User.find_by(login: params[:user_id])
     @check_ownership_of = @user
+  end
+
+  def favorite_tag_params
+    params.require(:favorite_tag).permit(
+      :tag_id
+    )
   end
 end

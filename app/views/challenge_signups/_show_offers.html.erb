@@ -14,7 +14,7 @@
       <% end %>
     </h3>
 
-    <ol class="index group">
+    <ol class="prompt index group">
       <% challenge_signup.offers.each_with_index do |offer, index| %>
         <%= render "prompts/prompt_blurb", :prompt => offer, :index => index %>
       <% end %>

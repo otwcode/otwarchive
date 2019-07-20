@@ -1,9 +1,9 @@
-<th scope="row"><%=h user.login %></th>
-<td><%=h user.email, :title => t('.email', :default => "Email") %>%></td>
-<td><%= t('.translation_admin', :default => "Translation Admin") if user.is_translation_admin? %></td>
-<td><%= t('.tag_wrangler', :default => "Tag Wrangler") if user.tag_wrangler %></td>
-<td><%= t('.archivist', :default => "Archivist") if user.archivist %></td>
-<td><%= t('.suspended', :default => "Suspended") if user.suspended %></td>
-<td><%= t('.banned', :default => "Banned") if user.banned %></td>
-<td><%= link_to t('.links.edit', :default => "Edit"), {:url => edit_admin_user_path(user), :method => :get}, :remote => true, :href => edit_admin_user_path(user) %>
-<td><%=h t('.links.delete', :default => "Delete") %></td> 
+<th scope="row"><%= user.login.html_safe %></th>
+<td title="<%= ts("Email") %>"><%= user.email.html_safe %></td>
+<td><%= ts("Translation Admin") if user.is_translation_admin? %></td>
+<td><%= ts("Tag Wrangler") if user.tag_wrangler %></td>
+<td><%= ts("Archivist") if user.archivist %></td>
+<td><%= ts("Suspended") if user.suspended %></td>
+<td><%= ts("Banned") if user.banned %></td>
+<td><%= link_to ts("Edit"), { url: edit_admin_user_path(user), method: :get }, remote: true, href: edit_admin_user_path(user) %>
+<td><%= ts("Delete") %></td>

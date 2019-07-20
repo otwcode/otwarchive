@@ -19,7 +19,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   background: #ccc;
   color: #900;
   width: auto;
-  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont', sans-serif;
+  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
   height: 1.286em;
   vertical-align: middle;
   display: inline-block;
@@ -42,7 +42,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   font-weight: 700;
 }
 
-.hidden, body .hidden, .actions .hidden, .actions a.hidden {
+.hidden, body .hidden, .actions .hidden, .actions a.hidden, #dashboard .hidden {
   display: none;
 }
 
@@ -69,11 +69,11 @@ span.offered.requested {
 /* Arrows for the accordion widget */
 
 .collapsed:after { 
-  content: " \2191";
+  content: " \2193";
 }
 
 .expanded:after {
-  content: " \2193";
+  content: " \2191";
 }
 
 /*This is a helper for Back End and can be overridden contextually anywhere*/

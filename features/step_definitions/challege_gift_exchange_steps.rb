@@ -17,7 +17,7 @@ Then /^"([^\"]*)" gift exchange should be correctly created$/ do |title|
   step %{I should see "Setting Up the #{title} Gift Exchange"}
   step %{I should see "Offer Settings"}
   step %{I should see "Request Settings"}
-  step %{I should see "If you plan to use automated matching"} 
+  step %{I should see "If you plan to use automated matching"}
   step %{I should see "Allow Any"}
 end
 
@@ -34,7 +34,7 @@ Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |c
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   step "I fill in gift exchange challenge options"
     step "I submit"
-  step %{I should see "Challenge was successfully created"}  
+  step %{I should see "Challenge was successfully created"}
 end
 
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
@@ -53,17 +53,17 @@ end
 
 When /^I fill in gift exchange challenge options$/ do
   current_date = DateTime.current
-  fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
-    fill_in("Sign-up closes", :with => "#{current_date.years_since(1)}")
-    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
-    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+  fill_in("Sign-up opens", with: "#{current_date.months_ago(2)}")
+    fill_in("Sign-up closes", with: "#{current_date.years_since(1)}")
+    select("(GMT-05:00) Eastern Time (US & Canada)", from: "gift_exchange_time_zone")
+    fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", with: "2")
+    select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
 When /^I fill in single-fandom gift exchange challenge options$/ do
@@ -100,20 +100,42 @@ end
 
 Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
+  step %{I have created the gift exchange "#{title}"}
+  step %{I open signups for "#{title}"}
 end
 
 ## Signing up
 
-When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+When /^I set up a signup for "([^\"]*)" with combination A$/ do |title|
   step %{I start signing up for "#{title}"}
-    step %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    step %{I check the 2nd checkbox with value "Stargate SG-1"}
-    step %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
-    step %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
-    click_button "Submit"
+  step %{I check the 1st checkbox with the value "Stargate Atlantis"}
+  step %{I check the 2nd checkbox with value "Stargate SG-1"}
+  step %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
+  step %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
+end
 
+When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+  step %{I set up a signup for "#{title}" with combination A}
+  click_button "Submit"
+end
+
+When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |title|
+  step %{the user "gooduser" exists and is activated}
+  step %{I am logged in as "baduser"}
+  step %{I set up a signup for "#{title}" with combination A}
+  pseud_id = Pseud.where(name: "gooduser").first.id
+  find("#challenge_signup_pseud_id", visible: false).set(pseud_id)
+  click_button "Submit"
+end
+
+When /^I attempt to update my signup for "([^\"]*)" with a pseud that is not mine$/ do |title|
+  step %{the user "gooduser" exists and is activated}
+  step %{I am logged in as "baduser"}
+  step %{I sign up for "#{title}" with combination A}
+  step %{I follow "Edit Sign-up"}
+  pseud_id = Pseud.where(name: "gooduser").first.id
+  find("#challenge_signup_pseud_id", visible: false).set(pseud_id)
+  click_button "Update"
 end
 
 When /^I sign up for "([^\"]*)" with combination B$/ do |title|
@@ -149,19 +171,19 @@ When /^I sign up for "([^\"]*)" with a mismatched combination$/ do |title|
     step %{I check the 2nd checkbox with the value "Bad Choice"}
     click_button "Submit"
 end
-  
+
 
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SGA love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SGA love")
     click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SG1 love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SG1 love")
     click_button "Submit"
 end
 
@@ -178,7 +200,7 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
 end
 
 When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
   step %{I fill in "Description" with "random text"}
   step %{I press "Submit"}
@@ -193,7 +215,7 @@ Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
 end
 
 Given /^I create an invalid signup in the gift exchange "([^\"]*)"$/ do |challengename|
-  collection = Collection.find_by_title(challengename)
+  collection = Collection.find_by(title: challengename)
   # create an invalid signup by deleting the first one's offers,
   # bypassing the validation checks
   collection.signups.first.offers.delete_all
@@ -209,12 +231,12 @@ When /^I assign a recipient to herself$/ do
   id = first_recip_field['id']
   if id.match(/assignments_(\d+)_request/)
     num = $1
-    fill_in "challenge_assignments_#{num}_offer_signup_pseud", :with => recip
+    fill_in "challenge_assignments_#{num}_offer_signup_pseud", with: recip
   end
 end
 
 When /^I manually destroy the assignments for "([^\"]*)"$/ do |title|
-  collection = Collection.find_by_title(title)
+  collection = Collection.find_by(title: title)
   collection.assignments.destroy_all
 end
 
@@ -224,8 +246,8 @@ end
 
 When /^I assign a pinch recipient$/ do
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
-  pseud = Pseud.find_by_name(name)
-  request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  pseud = Pseud.find_by(name: name)
+  request_pseud = ChallengeSignup.where(pseud_id: pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
   step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
 end
 
@@ -258,6 +280,12 @@ Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
   step %{I should not see "Assignments are now being sent out"}
 end
 
+Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
+  step %{the gift exchange "#{challenge_title}" is ready for matching}
+  step %{I have generated matches for "#{challenge_title}"}
+  step %{I have sent assignments for "#{challenge_title}"}
+end
+
 ### Fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
@@ -279,12 +307,7 @@ When /^I fulfill my assignment$/ do
 end
 
 When /^an assignment has been fulfilled in a gift exchange$/ do
-  step %{I am logged in as "mod1"}
-  step %{I have created the gift exchange "Awesome Gift Exchange"}
-  step %{I open signups for "Awesome Gift Exchange"}
-  step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
-  step %{I have generated matches for "Awesome Gift Exchange"}
-  step %{I have sent assignments for "Awesome Gift Exchange"}
+  step %{everyone has their assignments for "Awesome Gift Exchange"}
   step %{I am logged in as "myname1"}
   step %{I fulfill my assignment}
 end
@@ -292,7 +315,7 @@ end
 # we're not testing the process of rejection here, just that
 # it doesn't affect the completion status of the challenge assignment
 When /^I refuse my gift story "(.*?)"/ do |work|
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.gifts.first.toggle!(:rejected)
 end
 
@@ -310,4 +333,29 @@ When /^I have set up matching for "([^\"]*)" with no required matching$/ do |cha
   step %{I have created the gift exchange "Awesome Gift Exchange"}
   step %{I open signups for "Awesome Gift Exchange"}
   step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
+end
+
+### Deleting a gift exchange
+
+Then /^I should not see the gift exchange dashboard for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by(title: challenge_title)
+  visit collection_path(collection)
+  step %{I should not see "Gift Exchange" within "#dashboard"}
+  step %{I should not see "Sign-up Form" within "#dashboard"}
+  step %{I should not see "My Sign-up" within "#dashboard"}
+  step %{I should not see "Sign-ups" within "#dashboard"}
+  step %{I should not see "Challenge Settings" within "#dashboard"}
+  step %{I should not see "Sign-up Summary" within "#dashboard"}
+  step %{I should not see "Requests Summary" within "#dashboard"}
+  step %{I should not see "Matching" within "#dashboard"}
+  step %{I should not see "Assignments" within "#dashboard"}
+  step %{I should not see "Challenge Settings" within "#dashboard"}
+end
+
+Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by(title: challenge_title)
+  User.all.each do |user|
+    user.offer_assignments.in_collection(collection).should be_empty
+    user.pinch_hit_assignments.in_collection(collection).should be_empty
+  end
 end
