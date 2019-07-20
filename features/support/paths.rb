@@ -182,24 +182,18 @@ module NavigationHelpers
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^the works tagged "(.*?)" in collection "(.*?)"$/i
+      step %{all indexing jobs have been run}
+      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the works tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_works_path(Tag.find_by_name($1))
     when /^the bookmarks tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_bookmarks_path(Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)"$/i
-      step %{all indexing jobs have been run}
-      tag_works_url(Tag.find_by_name($1))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
-    when /^the works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
-    when /^the url for works tagged "(.*)" in collection "(.*)"$/i
-      step %{all indexing jobs have been run}
-      collection_tag_works_url(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the tag comments? page for "(.*)"$/i
       tag_comments_path(Tag.find_by_name($1))
     when /^the work comments? page for "(.*?)"$/i

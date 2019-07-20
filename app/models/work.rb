@@ -163,6 +163,9 @@ class Work < ApplicationRecord
     end
   end
 
+  # Run Taggable#check_for_invalid_tags as a validation.
+  validate :check_for_invalid_tags
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -179,7 +182,6 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
@@ -283,7 +285,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v1/work_blurb_tag_cache_key/#{id}"
+    "/v2/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -489,13 +491,18 @@ class Work < ApplicationRecord
     end
   end
 
+  # If this is fulfilling a challenge claim, add the collection.
+  #
+  # Unlike set_challenge_info, we don't automatically add the prompter as a
+  # recipient, because (a) some prompters are anonymous, so there has to be a
+  # prompter notification (separate from the recipient notification) ensuring
+  # that anonymous prompters are notified, and (b) if the prompter is not
+  # anonymous, they'll receive two notifications with roughly the same info
+  # (gift notification + prompter notification).
   def set_challenge_claim_info
-    # if this is fulfilling a challenge claim, add the collection and recipient
-    challenge_claims.each do |assignment|
+    challenge_claims.each do |claim|
       add_to_collection(claim.collection)
-      self.gifts << Gift.new(pseud: claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
     end
-    save
   end
 
   def challenge_assignment_ids
@@ -749,7 +756,7 @@ class Work < ApplicationRecord
   end
 
   # Change the positions of the chapters in the work
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
@@ -828,7 +835,7 @@ class Work < ApplicationRecord
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.will_save_change_to_attribute?(:complete)
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+      Work.where(id: id).update_all(["complete = ?", complete])
     end
   end
 
@@ -1086,26 +1093,6 @@ class Work < ApplicationRecord
     end
   end
 
-  protected
-
-  # a string for use in joins: clause to add ownership lookup
-  OWNERSHIP_JOIN = "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                    INNER JOIN users ON pseuds.user_id = users.id"
-
-  COMMON_TAG_JOIN = "INNER JOIN common_taggings ON (works.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Work')
-                  INNER JOIN tags ON common_taggings.common_tag_id = tags.id"
-
-
-  VISIBLE_TO_ALL_CONDITIONS = {posted: true, restricted: false, hidden_by_admin: false}
-
-  VISIBLE_TO_USER_CONDITIONS = {posted: true, hidden_by_admin: false}
-
-  VISIBLE_TO_ADMIN_CONDITIONS = {posted: true}
-
-
-
-
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1177,68 +1164,7 @@ class Work < ApplicationRecord
     visible_to_user(user)
   end
 
-  scope :with_filter, lambda { |tag|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag.id}})
-  }
-
-  # Note: this version will work only on canonical tags (filters)
-  scope :with_all_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}}).
-    group("works.id").
-    having("count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}})
-  }
-
-  scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
-    group("works.id").
-    having("count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find)
-  }
-
-  scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_all_filters, lambda {|tags_to_find| with_all_filter_ids(tags_to_find.collect(&:id))}
-  scope :with_any_filters, lambda {|tags_to_find| with_any_filter_ids(tags_to_find.collect(&:id))}
-
-  scope :ids_only, -> { select("DISTINCT(works.id)") }
-
-  scope :tags_with_count, -> {
-    select("tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count").
-    joins(:tags).
-    group("tags.name").
-    order("tags.type, tags.name ASC")
-  }
-
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
-  scope :written_by_id, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids)
-  }
-  scope :written_by_id_having, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id").
-    having("count(DISTINCT pseuds.id) = #{pseud_ids.size}")
-  }
 
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
@@ -1251,74 +1177,6 @@ class Work < ApplicationRecord
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
-  end
-
-  scope :for_recipient, lambda {|recipient|
-    select("DISTINCT works.*").
-    joins(:gifts).
-    where('gifts.recipient_name = ?', recipient)
-  }
-
-  # shouldn't really use a named scope for this, but I'm afraid to try
-  # to change the way work filtering works
-  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
-
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a scope, please do!
-  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
-  def self.no_tags(tag_category, options = {})
-    tags = tag_category.tags
-    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uniq
-  end
-
-  # Used when admins have disabled filtering
-  def self.list_without_filters(owner, options)
-    works = case owner.class.to_s
-            when 'Pseud'
-              works = Work.written_by_id([owner.id])
-            when 'User'
-              works = Work.owned_by(owner)
-            when 'Collection'
-              works = Work.in_collection(owner)
-            else
-              if owner.is_a?(Tag)
-                works = owner.filtered_works
-              end
-            end
-
-    # Need to support user + fandom and collection + tag pages
-    if options[:fandom_id] || options[:filter_ids]
-      id = options[:fandom_id] || options[:filter_ids].first
-      tag = Tag.find_by(id: id)
-      if tag.present?
-        works = works.with_filter(tag)
-      end
-    end
-
-    if %w(Pseud User).include?(owner.class.to_s)
-      works = works.where(in_anon_collection: false)
-    end
-    unless owner.is_a?(Collection)
-      works = works.revealed
-    end
-    if User.current_user.nil? || User.current_user == :false
-      works = works.unrestricted
-    end
-
-    works = works.posted
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-  end
-
-  def self.collected_without_filters(user, options)
-    works = Work.written_by_id([user.id])
-    works = works.join(:collection_items)
-    unless User.current_user == user
-      works = works.where(in_anon_collection: false)
-      works = works.posted
-    end
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   ########################################################################

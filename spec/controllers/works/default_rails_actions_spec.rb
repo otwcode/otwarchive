@@ -302,16 +302,6 @@ describe WorksController do
           expect(assigns(:works).items).not_to include(@work)
         end
 
-        it "shows results when filters are disabled" do
-          allow(controller).to receive(:fetch_admin_settings).and_return(true)
-          admin_settings = AdminSetting.new(disable_filtering: true)
-          controller.instance_variable_set("@admin_settings", admin_settings)
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works)).to include(@work)
-
-          allow(controller).to receive(:fetch_admin_settings).and_call_original
-        end
-
         context "with restricted works" do
           before do
             @work2 = create(:posted_work, fandom_string: @fandom.name, restricted: true)
