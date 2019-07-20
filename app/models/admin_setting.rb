@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 include SkinCacheHelper
 
 class AdminSetting < ApplicationRecord
