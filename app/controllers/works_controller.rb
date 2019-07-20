@@ -381,7 +381,7 @@ class WorksController < ApplicationController
         in_moderated_collection
         redirect_to(@work)
       else
-        @chapter.errors.each { |err| @work.errors.add(:base, err) }
+        @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
         render :edit
       end
     end
