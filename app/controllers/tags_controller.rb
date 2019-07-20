@@ -109,8 +109,6 @@ class TagsController < ApplicationController
     # work: The list of works
     # tag: the tag the feed is for
     hash = Rails.cache.fetch(Tag.tag_feeds_key(params[:id])) do
-      path = nil
-      works = nil 
       begin
         tag = Tag.find(params[:id])
       rescue ActiveRecord::RecordNotFound
@@ -125,14 +123,11 @@ class TagsController < ApplicationController
       else
         path = tag_works_path(tag_id: tag.to_param)
       end
-      { path: path, works: works, tag: tag }
+      { path: path || nil, works: works || nil, tag: tag }
     end
-    redirect = hash[:path]
     @works = hash[:works]
     @tag = hash[:tag]
-    unless redirect.nil? 
-      redirect_to redirect and return
-    end
+    redirect_to hash[:path] and return unless hash[:path].nil?
 
     respond_to do |format|
       format.html
