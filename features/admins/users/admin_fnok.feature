@@ -17,7 +17,7 @@ Feature: Admin Fannish Next Of Kind actions
     Then I should see "Fannish next of kin was updated."
 
     When I go to the manage users page
-      And I fill in "Name or email" with "harrykim"
+      And I fill in "Name" with "harrykim"
       And I press "Find"
     Then I should see "libby"
 
@@ -77,7 +77,7 @@ Feature: Admin Fannish Next Of Kind actions
     Then I should get confirmation that I changed my username
     When I am logged in as an admin
       And I go to the manage users page
-      And I fill in "Name or email" with "harrykim"
+      And I fill in "Name" with "harrykim"
       And I press "Find"
     Then I should see "newlibby"
 
@@ -91,7 +91,7 @@ Feature: Admin Fannish Next Of Kind actions
     Then I should get confirmation that I changed my username
     When I am logged in as an admin
       And I go to the manage users page
-      And I fill in "Name or email" with "harrykim2"
+      And I fill in "Name" with "harrykim2"
       And I press "Find"
     Then I should see "libby"
 

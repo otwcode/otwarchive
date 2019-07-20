@@ -19,10 +19,11 @@ end
 ### WHEN
 
 When /^I make "([^\"]*)" an archivist$/ do |name|
-  step(%{I fill in "query" with "#{name}"})
-    step(%{I press "Find"})
+  step(%{I fill in "Name" with "#{name}"})
+  step(%{I check "Exact match only"})
+  step(%{I press "Find"})
   step(%{I check "user_roles_4"})
-    step(%{I press "Update"})
+  step(%{I press "Update"})
 end
 
 When /^I make "([^\"]*)" an Open Doors committee member$/ do |name|
