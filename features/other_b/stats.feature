@@ -20,12 +20,12 @@ Feature: User statistics
     And I view the work "Don Solves Crime"
     And I am logged in as "NUMB3RSfan"
     And I go to my stats page
-  Then I should see "Don Solves Crime" before "Don Solves More Crime"
+  Then "Don Solves Crime" should appear before "Don Solves More Crime"
     And I should not see "Charlie Helps"
   When I follow "Date"
-  Then I should see "Don Solves More Crime" before "Don Solves Crime"
+  Then "Don Solves More Crime" should appear before "Don Solves Crime"
   When I follow "Date"
-  Then I should see "Don Solves Crime" before "Don Solves More Crime"
+  Then "Don Solves Crime" should appear before "Don Solves More Crime"
 
   Scenario: Do not show hit counts on stats page when user has set preference to hide hit counts on their own works
   

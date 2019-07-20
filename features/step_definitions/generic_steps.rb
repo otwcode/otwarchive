@@ -55,10 +55,6 @@ When 'I reload the page' do
   visit current_url
 end
 
-Then /^I should see "([^"]*)" before "([^"]*)"$/ do |first, second|
-  page.body.should =~ /#{Regexp.escape(first) + ".*" + Regexp.escape(second)}/m
-end
-
 Then /^I should see Posted now$/ do
 	now = Time.zone.now.to_s
   step "I should see \"Posted #{now}\""
