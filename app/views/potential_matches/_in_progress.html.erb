@@ -5,12 +5,12 @@
 </p>
 
 <p>
-  <%= ts("Potential matches are generated in random order, not alphabetically. If the name below doesn't change when you reload the page 
+  <%= ts("If the progress value below doesn't change when you reload the page 
           after about 10 minutes, there may have been a problem. Please check again after an hour, and then contact archive support.") %>
 </p>
 
 <p>
-  <%= ts("Currently generating potential matches for:") %> <strong><%= @current_position %></strong> (<%= @progress %>%)
+  <%= ts("Potential match generation progress:") %> <strong><%= @progress %>%</strong>
 </p>
 
 <p class="actions" role="button"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>

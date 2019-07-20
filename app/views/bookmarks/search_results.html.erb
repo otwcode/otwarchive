@@ -3,13 +3,13 @@
 
 <h4 class="heading">
   <%= ts("You searched for:") %>
-  <%= strip_tags @search.summary %>
+  <%= (strip_tags @search.summary).html_safe %>
 </h4>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></li>
+  <li><%= link_to ts("Edit Your Search"), url_for(params.permit!.merge(edit_search: true)) %></li>
 </ul>
 <!--/subnav-->
 
@@ -17,7 +17,7 @@
 <% if @bookmarks.blank? %>
   <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
 <% else %>
-  <h3 class="heading"><%= @bookmarks.total_entries %> Found <%= link_to_help "bookmark-search-results-help" %></h3>
+  <h3 class="heading"><%= search_results_found(@bookmarks) %> <%= link_to_help "bookmark-search-results-help" %></h3>
 
   <h3 class="landmark heading">Bookmarks List</h3>
   <ol class="bookmark index group">

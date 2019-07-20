@@ -38,12 +38,12 @@ module WorksHelper
   end
 
   def show_hit_count_to_public?(work)
-    !Preference.where(user_id: work.pseuds.value_of(:user_id), hide_public_hit_count: true).exists?
+    !Preference.where(user_id: work.pseuds.pluck(:user_id), hide_public_hit_count: true).exists?
   end
 
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
-    work.gifts.not_rejected.map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
+    work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
   # select the default warning if this is a new work
@@ -73,6 +73,13 @@ module WorksHelper
     end
   end
 
+  # Passes value of fields for series back to form when an error occurs on posting
+  def work_series_value(field)
+    if params[:work] && params[:work][:series_attributes]
+      params[:work][:series_attributes][field]
+    end
+  end
+
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
@@ -92,7 +99,7 @@ module WorksHelper
 
   def marked_for_later?(work)
     return unless current_user
-    reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+    reading = Reading.find_by(work_id: work.id, user_id: current_user.id)
     reading && reading.toread?
   end
 
@@ -105,19 +112,19 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(:controller => 'chapters', :action => 'show')
+    if current_page?(controller: 'chapters', action: 'show')
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
         chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
       end
-    else 
+    else
       "#work_endnotes"
     end
   end
 
   def get_related_works_url
-    current_page?(:controller => 'chapters', :action => 'show') ?
+    current_page?(controller: 'chapters', action: 'show') ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end
@@ -126,9 +133,15 @@ module WorksHelper
     work.approved_related_works.where(translation: false)
   end
 
+  # Can the work be downloaded, i.e. is it posted and visible to all registered
+  # users.
+  def downloadable?
+    @work.posted? && !@work.hidden_by_admin && !@work.in_unrevealed_collection?
+  end
+
   def download_url_for_work(work, format)
-    base = Rails.cache.fetch("download_base_#{work.id}", race_condition_ttl: 10, expires_in: 1.day) { "/#{work.download_folder}/#{work.download_title}." }
-    url_for ("#{base}#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
+    path = Download.new(work, format: format).public_path
+    url_for("#{path}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
 
   # Generates a list of a work's tags and details for use in feeds
@@ -144,15 +157,7 @@ module WorksHelper
     text << "<ul>"
     %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
       if tags[type]
-        label = case type
-        when 'Freeform'
-          'Additional Tags'
-        when 'Rating'
-          'Rating'
-        else
-          type.pluralize
-        end
-        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t, {full_path: true }) }.join(', ')}</li>"
+        text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end
     end
     text << "</ul>"
@@ -177,5 +182,11 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
+  def all_coauthor_skins
+    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+  end
 
+  def sorted_languages
+    Language.default_order
+  end
 end

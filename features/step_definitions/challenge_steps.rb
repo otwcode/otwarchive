@@ -3,14 +3,14 @@ Then /^I should see a not\-in\-fandom error message for "([^"]+)" in "([^"]+)"$/
   step %{I should see "are not in the selected fandom(s), #{fandom}: #{tag}"}
 end
 
-Then /^I should see a not\-in\-fandom error message$/ do 
+Then /^I should see a not\-in\-fandom error message$/ do
   step %{I should see "are not in the selected fandom(s)"}
 end
 
 ### Set up dates correctly ###
 Then /^I set up the challenge dates$/ do
-  fill_in("Sign-up opens:", :with => Date.yesterday)
-  fill_in("Sign-up closes:", :with => Date.tomorrow)
+  fill_in("Sign-up opens:", with: Date.yesterday)
+  fill_in("Sign-up closes:", with: Date.tomorrow)
 end
 
 ### Clear out old data
@@ -21,14 +21,29 @@ end
 
 ### CHALLENGE TAGS
 
+Given /^signup summaries are always visible$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT = 0
+end
+
+Given /^all signup summaries are delayed$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 0
+end
+
+Given /^all signup summaries are live$/ do
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY = 1_000_000
+end
+
 Given /^I have standard challenge tags set ?up$/ do
-  begin 
+  begin
     unless UserSession.find
       step %{I am logged in as "mod1"}
     end
   rescue
-    step %{I am logged in as "mod1"}    
-  end  
+    step %{I am logged in as "mod1"}
+  end
   step "I have no tags"
     step "basic tags"
     step %{a canonical fandom "Stargate Atlantis"}
@@ -56,7 +71,7 @@ end
 ### General Challenge Settings
 
 When /^I edit settings for "([^\"]*)" challenge$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Challenge Settings"}
 end
 
@@ -86,7 +101,7 @@ end
 
 When /^I open signups for "([^\"]*)"$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Challenge Settings"}
     step %{I check "Sign-up open?"}
     step %{I submit}
@@ -107,22 +122,30 @@ end
 ### Signup process
 
 When /^I start signing up for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
+end
+
+When /^I view the sign-up summary for "(.*?)"$/ do |title|
+  visit collection_path(Collection.find_by(title: title))
+  step %(I follow "Sign-up Summary")
 end
 
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "Edit Sign-up"}
 end
 
 ### WHEN other
 
 When /^I close signups for "([^\"]*)"$/ do |title|
-  step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  collection = Collection.find_by(title: title)
+  user_id = collection.all_owners.first.user_id
+  mod_login = User.find_by(id: user_id).login
+  step %{I am logged in as "#{mod_login}"}
+  visit collection_path(collection)
   step %{I follow "Challenge Settings"}
     step %{I uncheck "Sign-up open?"}
     step %{I press "Update"}
@@ -130,20 +153,15 @@ When /^I close signups for "([^\"]*)"$/ do |title|
 end
 
 When /^I delete my signup for the prompt meme "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "My Prompts"}
   step %{I delete the signup}
 end
 
 When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
   step %{I follow "My Sign-up"}
   step %{I delete the signup}
-end
-
-When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
 end
 
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
@@ -157,23 +175,16 @@ When /^I delete the signup$/ do
   step %{I should see "Challenge sign-up was deleted."}
 end
 
-When /^I edit the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  click_link("#{participant}")
-  step %{I follow "Edit"}
-end
-
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is unrevealed"}
     step %{I press "Update"}
 end
 
 When /^I approve the first item in the collection "([^\"]*)"$/ do |collection|
-  collection = Collection.find_by_title(collection)
+  collection = Collection.find_by(title: collection)
   collection_item = collection.collection_items.first.id
   visit collection_path(collection)
   step %{I follow "Manage Items"}
@@ -184,9 +195,86 @@ end
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
+  visit collection_path(Collection.find_by(title: title))
     step %{I follow "Collection Settings"}
     step %{I uncheck "This collection is anonymous"}
     step %{I press "Update"}
+    step %{all indexing jobs have been run}
 end
 
+# Notification messages
+
+When /^I create an assignment notification message with (an ampersand|linebreaks) for "([^\"]*)"$/ do |message_content, title|
+  c = Collection.find_by(title: title)
+  field = "collection_collection_profile_attributes_assignment_notification"
+  message = if message_content == "an ampersand"
+              "The first thing & the second thing."
+            else
+              "First Line\nSecond Line"
+            end
+
+  step %{I am logged in as "#{c.owners.first.name}"}
+  visit collection_path(c)
+
+  # TODO: Once AO3-3376 is fixed, this will need to change.
+  step %{I follow "Collection Settings"}
+
+  fill_in(field, with: message)
+  step %{I press "Update"}
+end
+
+Then /^the notification message to "([^\"]*)" should contain linebreaks$/ do |user|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  text_lines = email.text_part.body.to_s.split("\n")
+  html_lines = email.html_part.body.to_s.split(%r{<(?:\/?p|br|div)\b[^>]*>}i)
+
+  (text_lines + html_lines).each do |line|
+    # We shouldn't see "First Line" and "Second Line" on the same line.
+    line.should_not =~ /Second Line/ if line =~ /First Line/
+  end
+
+  email.text_part.body.should =~ /First Line/
+  email.text_part.body.should =~ /Second Line/
+  email.html_part.body.should =~ /First Line/
+  email.html_part.body.should =~ /Second Line/
+end
+
+Then /^the notification message to "([^\"]*)" should escape the ampersand$/ do |user|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  email.multipart?.should be == true
+
+  email.html_part.body.should =~ /The first thing &amp; the second thing./
+  email.html_part.body.should_not =~ /The first thing & the second thing./
+end
+
+# Delete challenge
+
+Given /^the challenge "([^\"]*)" is deleted$/ do |challenge_title|
+  collection = Collection.find_by(title: challenge_title)
+  collection.challenge.destroy
+end
+
+When /^I delete the challenge "([^\"]*)"$/ do |challenge_title|
+  step %{I edit settings for "#{challenge_title}" challenge}
+  step %{I follow "Delete Challenge"}
+end
+
+Then /^no one should be signed up for "([^\"]*)"$/ do |challenge_title|
+  collection = Collection.find_by(title: challenge_title)
+  if collection.present?
+    User.all.each do |user|
+      user.challenge_signups.in_collection(collection).should be_empty
+    end
+  # we don't have a collection id because the collection has been deleted
+  # so let's make sure any remaining sign ups are for exisiting collections
+  else
+    ChallengeSignup.all.each do |signup|
+      collection_id = signup.collection_id
+      Collection.find_by(id: collection_id).should_not be_nil
+    end
+  end
+end

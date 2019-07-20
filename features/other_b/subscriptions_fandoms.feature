@@ -6,7 +6,7 @@ Feature: Subscriptions
   Scenario: Subscribe to a test fandom when there are no works in it
 
   When I am logged in as "author"
-    And I post a work "My Work Title" with category "M/F"
+    And I post a work "My Work Title" with category "F/M"
   When I am logged in as "reader"
     And I view the "F/F" works index
   Then I should see "RSS Feed"
@@ -66,7 +66,7 @@ Feature: Subscriptions
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
     And I press "Post Without Preview"
-    And all search indexes are updated
+    And all indexing jobs have been run
   Then I should see "Anonymous"
     And I should see "Collections: Hidden Treasury"
   When I am logged in as "author"
@@ -76,3 +76,10 @@ Feature: Subscriptions
   Then I should see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"
+
+  Scenario: A user can see a feed for non canonical tags
+   
+  Given I am logged in as "author"
+    And I post the work "Glorious" with fandom "SGA"
+  When I view the "SGA" works feed
+  Then I should see "Glorious"

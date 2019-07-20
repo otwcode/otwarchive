@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
     <meta name="language" content="en-US" />
     <meta name="subject" content="fandom" />
@@ -53,7 +54,7 @@
 
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> region" role="main">
-          <%= flash_div :error, :caution, :notice %>
+          <%= flash_div :error, :caution, :notice, :alert %>
           <div class="flash"></div>
           <%= yield %>
           <div class="clear"><!--presentational--></div>

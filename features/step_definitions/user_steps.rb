@@ -9,7 +9,7 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, :login => 'orphan_account')
+  user = FactoryGirl.create(:user, login: 'orphan_account')
   user.activate
 end
 
@@ -17,6 +17,60 @@ Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = FactoryGirl.create(:user, hash)
     user.activate
+    user.pseuds.first.add_to_autocomplete
+    step %{confirmation emails have been delivered}
+  end
+end
+
+Given /the following users exist with BCrypt encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::BCrypt.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = BCrypt::Password.create(
+                           [hash[:password], salt].flatten.join,
+                           cost: ArchiveConfig.BCRYPT_COST || 14)
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
+  end
+end
+
+Given /the following users exist with SHA-512 encrypted passwords/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    user.pseuds.first.add_to_autocomplete
+
+    # salt = Authlogic::Random.friendly_token
+    # same as
+    salt = SecureRandom.urlsafe_base64(15)
+    # encrypted_password = Authlogic::CryptoProviders::Sha512.encrypt(hash[:password], salt)
+    # same as
+    encrypted_password = [hash[:password], salt].flatten.join
+    20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
+
+    user.update(
+      password_salt: salt,
+      encrypted_password: encrypted_password
+    )
+  end
+end
+
+Given /the following activated users with private work skins/ do |table|
+  table.hashes.each do |hash|
+    user = FactoryGirl.create(:user, hash)
+    user.activate
+    FactoryGirl.create(:private_work_skin, author: user, title: "#{user.login.titleize}'s Work Skin")
+    step %{confirmation emails have been delivered}
   end
 end
 
@@ -25,37 +79,45 @@ Given /the following activated tag wranglers? exists?/ do |table|
     user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
+    user.pseuds.first.add_to_autocomplete
   end
 end
 
-Given /^the user "([^\"]*)" exists and is activated$/ do |login|
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
-    user.activate
-  end
+Given /^the user "([^"]*)" exists and is activated$/ do |login|
+  find_or_create_new_user(login, DEFAULT_PASSWORD)
+  step %{confirmation emails have been delivered}
 end
 
-Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+Given /^the user "([^"]*)" exists and is not activated$/ do |login|
+  find_or_create_new_user(login, DEFAULT_PASSWORD, activate: false)
+end
+
+Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD)
+  role = Role.find_or_create_by(name: role)
+  user.roles = [role]
+  user.save
+end
+
+Given /^I am logged in as "([^"]*)" with password "([^"]*)"(?:( with preferences set to hidden warnings and additional tags))?$/ do |login, password, hidden|
+  user = find_or_create_new_user(login, password)
   step("I am logged out")
-  user = User.find_by_login(login)
-  if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
-    user.activate
-  else
-    user.password = password
-    user.password_confirmation = password
-    user.save
+  if hidden.present?
+    user.preference.hide_warnings = true
+    user.preference.hide_freeform = true
+    user.preference.save
   end
-  visit login_path
-  fill_in "User name", :with => login
-  fill_in "Password", :with => password
+  step %{I am on the homepage}
+  find_link('login-dropdown').click
+
+  fill_in "User name or email:", with: login
+  fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  step %{confirmation emails have been delivered}
 end
 
-Given /^I am logged in as "([^\"]*)"$/ do |login|
+Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
@@ -64,63 +126,38 @@ Given /^I am logged in$/ do
 end
 
 Given /^I am logged in as a random user$/ do
-  step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = FactoryGirl.create(:user, :login => name, :password => DEFAULT_PASSWORD)
-  user.activate
-  visit login_path
-  fill_in "User name", :with => name
-  fill_in "Password", :with => DEFAULT_PASSWORD
-  check "Remember me"
-  click_button "Log In"
-  assert UserSession.find
+  step(%{I am logged in as "#{name}" with password "#{DEFAULT_PASSWORD}"})
+  step(%{confirmation emails have been delivered})
 end
 
 Given /^I am logged in as a banned user$/ do
-  step("I am logged out")
-  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
-  user.activate
-  user.banned = true
-  user.save
-  visit login_path
-  fill_in "User name", :with => "banned"
-  fill_in "Password", :with => DEFAULT_PASSWORD
-  check "Remember Me"
-  click_button "Log In"
-  assert UserSession.find
+  step(%{user "banned" is banned})
+  step(%{I am logged in as "banned"})
 end
 
-Given /^user "([^\"]*)" is banned$/ do |login|
-  user = User.where(login: login).first
-  if user.nil?
-    user = FactoryGirl.create(
-      :user,
-      { login: login, password: DEFAULT_PASSWORD }
-    )
-    user.activate
-  end
+Given /^user "([^"]*)" is banned$/ do |login|
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   user.banned = true
   user.save
 end
 
 Given /^I am logged out$/ do
-  visit logout_path
-  assert !UserSession.find
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_user_session_path
+  visit destroy_admin_session_path
 end
 
 Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
+Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
   step (%{I am logged in as "#{username}"})
   step(%{"#{username}" creates the pseud "#{pseud}"})
   step("I am logged out")
 end
 
-Given /^"([^\"]*)" deletes their account/ do |username|
+Given /^"([^"]*)" deletes their account/ do |username|
   visit user_path(username)
   step(%{I follow "Profile"})
   step(%{I follow "Delete My Account"})
@@ -131,49 +168,52 @@ Given /^I am a visitor$/ do
   step(%{I am logged out})
 end
 
-Given /^I view the people page$/ do
-  visit people_path
-end
-
-Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
-  author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
-  author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
-  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
+Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
+  step %{basic tags}
+  author1 = User.find_by(login: login).default_pseud
+  author2 = User.find_by(login: coauthor).default_pseud
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: title)
 end
 
 # WHEN
 
-When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
+When /^I follow the link for "([^"]*)" first invite$/ do |login|
+  user = User.find_by(login: login)
+  invite = user.invitations.first
+  step(%{I follow "#{invite.token}"})
+end
+
+When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
+  user = User.find_by(login: login)
+  user.update(failed_attempts: count.to_i)
+end
+
+When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   check("pseud_is_default")
   click_button "Create"
 end
 
-When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
-  user = User.find_by_login(login)
-  fill_in "Password", :with => user.activation_code
-end
-
-When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
+When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 
-When /^I create the pseud "([^\"]*)"$/ do |newpseud|
+When /^I create the pseud "([^"]*)"$/ do |newpseud|
   visit new_user_pseud_path(User.current_user)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 
 When /^I fill in the sign up form with valid data$/ do
-  step(%{I fill in "user_login" with "#{NEW_USER}"})
-  step(%{I fill in "user_email" with "test@archiveofourown.org"})
-  step(%{I fill in "user_password" with "password1"})
-  step(%{I fill in "user_password_confirmation" with "password1"})
-  step(%{I check "user_age_over_13"})
-  step(%{I check "user_terms_of_service"})
+  step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
+  step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
+  step(%{I fill in "user_registration_password" with "password1"})
+  step(%{I fill in "user_registration_password_confirmation" with "password1"})
+  step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_terms_of_service"})
 end
 
 When /^I try to delete my account as (.*)$/ do |login|
@@ -187,8 +227,8 @@ When /^I try to delete my account$/ do
 end
 
 When /^I visit the change username page for (.*)$/ do |login|
-  user = User.find_by_login(login)
-  visit change_username_user_path(user) 
+  user = User.find_by(login: login)
+  visit change_username_user_path(user)
 end
 
 # THEN
@@ -201,7 +241,7 @@ Then /^I should get an activation email for "(.*?)"$/ do |login|
   step(%{1 email should be delivered})
   step(%{the email should contain "Welcome to the Archive of Our Own,"})
   step(%{the email should contain "#{login}"})
-  step(%{the email should contain "Please activate your account"})
+  step(%{the email should contain "activate your account"})
 end
 
 Then /^I should get a new user activation email$/ do
@@ -209,12 +249,12 @@ Then /^I should get a new user activation email$/ do
 end
 
 Then /^a user account should exist for "(.*?)"$/ do |login|
-   user = User.find_by_login(login)
+   user = User.find_by(login: login)
    assert !user.blank?
 end
 
 Then /^a user account should not exist for "(.*)"$/ do |login|
-  user = User.find_by_login(login)
+  user = User.find_by(login: login)
   assert user.blank?
 end
 
@@ -223,12 +263,12 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert !UserSession.find
+  expect(User.current_user).to be(nil)
 end
 
 def get_work_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.works.order("revised_at DESC").first.title
   elsif age == "oldest"
@@ -238,25 +278,25 @@ end
 
 def get_series_name(age, classname, name)
   klass = classname.classify.constantize
-  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  owner = (classname == "user") ? klass.find_by(login: name) : klass.find_by(name: name)
   if age == "most recent"
     owner.series.order("updated_at DESC").first.title
   elsif age == "oldest"
     owner.series.order("updated_at DESC").last.title
   end
 end
-  
-Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+
+Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should see "#{title}"}
 end
 
-Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should not see "#{title}"}
 end
 
-When /^I change my username to "([^\"]*)"/ do |new_name|
+When /^I change my username to "([^"]*)"/ do |new_name|
   visit change_username_user_path(User.current_user)
   fill_in("New user name", with: new_name)
   fill_in("Password", with: "password")
@@ -267,4 +307,12 @@ end
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
- 
+
+Then /^the user "([^"]*)" should be activated$/ do |login|
+  user = User.find_by(login: login)
+  assert user.active?
+end
+
+Then /^I should see the current user's preferences in the console$/ do
+  puts User.current_user.preference.inspect
+end

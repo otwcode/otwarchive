@@ -28,6 +28,12 @@ When /^I set my preferences to hide warnings$/ do
   user.preference.save
 end
 
+When /^I set my preferences to hide freeform$/ do
+  user = User.current_user
+  user.preference.hide_freeform = true
+  user.preference.save
+end
+
 When /^I set my preferences to hide all hit counts$/ do
   user = User.current_user
   user.preference.hide_all_hit_counts = true
@@ -85,5 +91,31 @@ end
 When /^I set my time zone to "([^"]*)"$/ do |time_zone|
   user = User.current_user
   user.preference.time_zone = time_zone
+  user.preference.save
+end
+
+When /^I set my preferences to hide warnings by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_warnings]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+
+When /^I set my preferences to hide freeform by browser$/ do
+  step %{I follow "My Preferences"}
+  check("preference[hide_freeform]")
+  click_button("Update")
+  step %{I should see "Your preferences were successfully updated"}
+end
+
+When /^I set my preferences to automatically agree to my work being collected$/ do
+  user = User.current_user
+  user.preference.automatically_approve_collections = true
+  user.preference.save
+end
+
+When /^I set my preferences to require my approval for my work to be collected$/ do
+  user = User.current_user
+  user.preference.automatically_approve_collections = false
   user.preference.save
 end

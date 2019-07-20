@@ -1,25 +1,21 @@
-<!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
 <!--Descriptive page names, messages and instructions-->
-<h2 class="heading"><%= ts('Create New Skin')  %></h2>
-
-<%= render 'skin_top_navigation' %>
+<h2 class="heading"><%= ts('Create New Skin') %></h2>
 
 <%= error_messages_for :skin %>
+<!--/descriptions-->
 
+<!--subnav-->
+<%= render 'skin_navigation' %>
+<!--/subnav-->
+
+<!--main content-->
 <p class="notes">
   <%= ts('This form allows you to create a new site or work skin. Select "Work Skin" or "Site Skin" in the Type option list to choose which type of skin you are creating.') %>
   <%= link_to_help 'skins-basics' %>
 </p>
-<!--/descriptions-->
-
-<!--subnav-->
-<%= render :partial => 'skin_type_navigation' %>
-<!--/subnav-->
-
-<!--main content-->
 <h3 class="landmark heading"><%= ts('Create New Skin') %></h3>
 
-<%= form_for @skin, :html => {:multipart => true, :class => "skin verbose post"} do |f| %>
-  <%= render 'form', :f => f %>
+<%= form_for @skin, html: { multipart: true, class: "skin verbose post" } do |f| %>
+  <%= render 'form', f: f %>
 <% end %>
 <!--/content-->

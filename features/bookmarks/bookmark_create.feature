@@ -6,7 +6,7 @@ Feature: Create bookmarks
 
 Scenario: Create a bookmark
   Given I am logged in as "first_bookmark_user"
-    When I am on first_bookmark_user's user page 
+    When I am on first_bookmark_user's user page
       Then I should see "have anything posted under this name yet"
     When I am logged in as "another_bookmark_user"
       And I post the work "Revenge of the Sith"
@@ -21,6 +21,7 @@ Scenario: Create a bookmark
       And I fill in "bookmark_tag_string" with "This is a tag, and another tag,"
       And I check "bookmark_rec"
       And I press "Create"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
       And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"
@@ -30,80 +31,26 @@ Scenario: Create a bookmark
       And I should see "and another tag"
       And I should see "I liked this story"
     When I am logged in as "first_bookmark_user"
-      And I go to first_bookmark_user's user page 
+      And I go to first_bookmark_user's user page
     Then I should not see "You don't have anything posted under this name yet"
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
       And I check "bookmark_private"
-      And I press "Edit"
+      And I press "Update"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully updated"
     When I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's bookmarks page
     Then I should see "I liked this story"
-    
+
     # privacy check for the private bookmark '
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to first_bookmark_user's user page
     Then I should not see "I liked this story"
-    
-  @bookmark_fandom_error
-  Scenario: Create a bookmark on an external work (fandom error)
-    Given basic tags
-      And I am logged in as "first_bookmark_user"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should not see "Stuck with You"
-    When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
-      And I press "Create"
-    Then I should see "Fandom tag is required"
-    When I fill in "bookmark_external_fandom_string" with "Popslash"
-      And I press "Create"
-    Then I should see "This work isn't hosted on the Archive"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should see "Stuck with You"
 
-  @bookmark_url_error
-  Scenario: Create a bookmark on an external work (url error)
-    Given the following activated users exist
-      | login           | password   |
-      | first_bookmark_user   | password   |
-      And I am logged in as "first_bookmark_user"
-      And the default ratings exist
-    When I go to first_bookmark_user's bookmarks page
-    Then I should not see "Stuck with You"
-    When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_fandom_string" with "Popslash"
-      And I press "Create"
-    Then I should see "does not appear to be a valid URL"
-    When I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
-      And I press "Create"
-    Then I should see "This work isn't hosted on the Archive"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should see "Stuck with You"
-    
-    # edit external bookmark
-    When I follow "Edit"
-    Then I should see "Editing bookmark for Stuck with You"
-    When I fill in "Notes" with "I wish this author would join AO3"
-      And I fill in "Your tags" with "WIP"
-      And I press "Update"
-    Then I should see "Bookmark was successfully updated"
-    
-    # delete external bookmark
-    When I follow "Delete"
-    Then I should see "Are you sure you want to delete"
-      And I should see "Stuck with You"
-    When I press "Yes, Delete Bookmark"
-    Then I should see "Bookmark was successfully deleted."
-      And I should not see "Stuck with You"
-      
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           |
@@ -137,6 +84,7 @@ Scenario: Create a bookmark
     When I view the work "Publicky"
       And I follow "Bookmark"
       And I press "Create"
+      And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
     When I log out
       And I go to the bookmarks page
@@ -175,6 +123,7 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "five_pillars"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created"
     And I should see "The collection Five Pillars is currently moderated."
   When I go to bookmarker's bookmarks page
@@ -182,10 +131,10 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
   When I log out
     And I am logged in as "moderator" with password "password"
     And I approve the first item in the collection "Five Pillars"
+    And all indexing jobs have been run
     And I am logged in as "bookmarker" with password "password"
     And I go to bookmarker's bookmarks page
   Then I should not see "The collection Five Pillars is currently moderated."
-
 
 Scenario: bookmarks added to moderated collections appear correctly
   Given the following activated users exist
@@ -194,6 +143,9 @@ Scenario: bookmarks added to moderated collections appear correctly
     | bookmarker | password |
     | otheruser  | password |
     And I have a moderated collection "JBs Greatest" with name "jbs_greatest"
+    And I have a moderated collection "Bedknobs and Broomsticks" with name "beds_and_brooms"
+    And I have a moderated collection "Death by Demographics" with name "death_by_demographics"
+    And I have a moderated collection "Murder a la Mode" with name "murder_a_la_mode"
     And I have the collection "Mrs. Pots" with name "mrs_pots"
     And I am logged in as "workauthor" with password "password"
     And I post the work "The Murder of Sherlock Holmes"
@@ -203,8 +155,22 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+    # UPDATE the bookmark and add it to a second MODERATED collection and
+    # recheck all the things
+  When I follow "Edit"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms"
+    And I press "Update"
+    And all indexing jobs have been run
+  Then I should see "Bookmark was successfully updated."
+    And I should see "to the moderated collection 'Bedknobs and Broomsticks'."
+  When I follow "Edit"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
+    And I press "Update"
+    And all indexing jobs have been run
+  Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
   When I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
     And I should see "Bookmarker's Collections: JBs Greatest"
@@ -231,9 +197,9 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I am logged in as "bookmarker" with password "password"
     And I view the work "The Murder of Sherlock Holmes"
     And I follow "Edit Bookmark"
-    And I fill in "bookmark_collection_names" with "jbs_greatest,mrs_pots"
-    And I press "Edit" within "div#bookmark-form"
-    And all search indexes are updated
+    And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
+    And I press "Update" within "div#bookmark-form"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
   When I go to bookmarker's bookmarks page
@@ -343,7 +309,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I view the work "Sing a Song of Murder"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
-    And I press "Edit"
+    And I press "Update"
   Then I should see "Bookmark was successfully updated."
 
 Scenario: Delete bookmarks of a work and a series
@@ -362,56 +328,41 @@ Scenario: Delete bookmarks of a work and a series
     And I view the work "A Mighty Duck"
     And I follow "Bookmark"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created."
     And I should see "Delete"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
   When I view the series "The Funky Bunch"
     And I follow "Bookmark Series"
     And I press "Create"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created."
   When I follow "Delete"
-    And I press "Yes, Delete Bookmark"
+  And I press "Yes, Delete Bookmark"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
   When I go to my bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
   When I log out
     And I am logged in as "wahlly"
     And I delete the work "A Mighty Duck2 the sequel"
-    Then I should see "A Mighty Duck2 the sequel was deleted."
+    And all indexing jobs have been run
+  Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
-  When I go to my bookmarks page
+    And I go to my bookmarks page
   Then I should see "This has been deleted, sorry!"
     And I follow "Edit"
     And I check "bookmark_private"
     And I press "Update"
+    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated"
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
   Then I should see "Bookmark was successfully deleted."
-
-
-Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
-  Given a fandom exists with name: "Testing BEW Button", canonical: true
-    And I am logged in as "markie" with password "theunicorn"
-    And I create the collection "Testing BEW Collection"
-  When I go to my bookmarks page
-  Then I should see "Bookmark External Work"
-  When I go to the bookmarks page
-  Then I should see "Bookmark External Work"
-  When I go to the bookmarks in collection "Testing BEW Collection"
-  Then I should see "Bookmark External Work"
-  When I log out
-    And I go to markie's bookmarks page
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks page
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks tagged "Testing BEW Button"
-  Then I should not see "Bookmark External Work"
-  When I go to the bookmarks in collection "Testing BEW Collection"
-  Then I should not see "Bookmark External Work"
 
 Scenario: Editing a bookmark's tags should expire the bookmark cache
   Given I am logged in as "some_user"
@@ -425,3 +376,40 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
   Then I should see "Bookmark was successfully created"
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
+
+Scenario: I cannot create a bookmark that I don't own
+  Given the work "Random Work"
+  When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
+  Then I should not see "Bookmark was successfully created"
+    And I should see "You can't bookmark with that pseud."
+
+Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't own
+  Given I am logged in as "original_bookmarker"
+    And I have a bookmark for "Random Work"
+  When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
+  Then I should not see "Bookmark was successfully updated"
+    And I should see "You can't bookmark with that pseud."
+
+@javascript
+Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
+  Given the work "Popular Work"
+    And I am logged in as "bookmarker1"
+    And I bookmark the work "Popular Work" with the note "Love it"
+    And I log out
+    And I am logged in as "bookmarker2"
+    And I bookmark the work "Popular Work"
+    And the statistics for the work "Popular Work" are updated
+  When I am on the bookmarks page
+    # There are two of these links, but bookmarker2's bookmark is more recent,
+    # and it follows the first link matching the specified text
+    And I follow "Show Most Recent Bookmarks"
+  # Again, we're relying on the fact that it uses the first element that
+  # matches the specified selector, since each bookmark on the page will have a
+  # div with the class .recent
+  Then I should see "bookmarker1" within ".recent"
+    And I should see "Love it" within ".recent"
+    And I should see "Hide Most Recent Bookmarks" within ".recent"
+  When I follow "Hide Most Recent Bookmarks"
+  Then I should not see "bookmarker1" within ".recent"
+    And I should not see "Love it" within ".recent"
+    And I should see "Show Most Recent Bookmarks" within "li.bookmark"

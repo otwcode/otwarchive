@@ -1,4 +1,6 @@
-class FavoriteTag < ActiveRecord::Base
+class FavoriteTag < ApplicationRecord
+  include ActiveModel::ForbiddenAttributesProtection
+
   belongs_to :user
   belongs_to :tag
 
@@ -14,13 +16,13 @@ class FavoriteTag < ActiveRecord::Base
   after_destroy :expire_cached_home_favorite_tags
 
   def within_limit
-    if user.favorite_tags(:reload).count >= ArchiveConfig.MAX_FAVORITE_TAGS
+    if user.favorite_tags.reload.count >= ArchiveConfig.MAX_FAVORITE_TAGS
       errors.add(:base, ts('Sorry, you can only save %{maximum} favorite tags.', maximum: ArchiveConfig.MAX_FAVORITE_TAGS))
     end
   end
 
   def tag
-    Tag.find_by_id(tag_id)
+    Tag.find_by(id: tag_id)
   end
 
   def tag_name

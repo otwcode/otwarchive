@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("My Inbox") %> (<%= ts("%{total} comments, %{unread} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
+<h2 class="heading"><%= ts("My Inbox") %> (<%= ts("%{total} comments, %{unread} unread", total: @inbox_total, unread: @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
@@ -16,16 +16,16 @@
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form', class: 'inbox manage' do %>
+  <%= form_tag user_inbox_path(@user, page: params[:page], filters: @filters), method: :put, id: "inbox-form", class: "inbox manage" do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
-      <ul role="menu">
+      <ul>
         <li><a class="check_all"><%= ts("Select All") %></a></li>
         <li><a class="check_none"><%= ts("Select None") %></a></li>
-        <li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
-        <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
-        <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
+        <li><%= submit_tag ts("Mark Read"), name: "read" %></li>
+        <li><%= submit_tag ts("Mark Unread"), name: "unread" %></li>
+        <li><%= submit_tag ts("Delete From Inbox"), name: "delete" %></li>
       </ul>
     </fieldset>
 
@@ -39,7 +39,7 @@
           <!-- START of single comment -->
           <li class="<% if feedback_comment.unreviewed? %>unreviewed <% end %><%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article" id="feedback_comment_<%= feedback_comment.id %>">
 
-            <%= render 'inbox_comment_contents', feedback_comment: feedback_comment %>
+            <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
 
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
@@ -77,12 +77,12 @@
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
-      <ul role="menu">
+      <ul>
         <li><a class="check_all"><%= ts("Select All") %></a></li>
         <li><a class="check_none"><%= ts("Select None") %></a></li>
-        <li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
-        <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
-        <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
+        <li><%= submit_tag ts("Mark Read"), name: "read" %></li>
+        <li><%= submit_tag ts("Mark Unread"), name: "unread" %></li>
+        <li><%= submit_tag ts("Delete From Inbox"), name: "delete" %></li>
       </ul>
     </fieldset>
     <!-- coming soon <%= submit_tag ts("mass reply") %> -->
@@ -96,24 +96,30 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), method: :get, class: 'narrow-hidden filters', id: 'inbox-filters') do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: "narrow-hidden filters", id: "inbox-filters") do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
-    <dl class="filters" role="menu">
+    <dl>
       <dt><%= ts("Filter by read") %></dt>
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
-            <%= label_tag 'filters_read_all', ts("Show all") %>
+            <%= label_tag "filters_read_all" do %>
+              <%= radio_button_tag "filters[read]", "all", (!%w(true false).include?(@filters[:read])) %>
+              <%= label_indicator_and_text(ts("Show all")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
-            <%= label_tag 'filters_read_false', ts("Show unread") %>
+            <%= label_tag "filters_read_false" do %>
+              <%= radio_button_tag "filters[read]", "false", @filters[:read] == "false" %>
+              <%= label_indicator_and_text(ts("Show unread")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
-            <%= label_tag 'filters_read_true', ts("Show read") %>
+            <%= label_tag "filters_read_true" do %>
+              <%= radio_button_tag "filters[read]", "true", @filters[:read] == "true" %>
+              <%= label_indicator_and_text(ts("Show read")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -122,16 +128,22 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
-            <%= label_tag 'filters_replied_to_all', ts("Show all") %>
+            <%= label_tag "filters_replied_to_all" do %>
+              <%= radio_button_tag "filters[replied_to]", "all", (!%w(true false).include?(@filters[:replied_to])) %>
+              <%= label_indicator_and_text(ts("Show all")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
-            <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
+            <%= label_tag "filters_replied_to_false" do %>
+              <%= radio_button_tag "filters[replied_to]", "false", @filters[:replied_to] == "false" %>
+              <%= label_indicator_and_text(ts("Show without replies")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
-            <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
+            <%= label_tag "filters_replied_to_true" do %>
+              <%= radio_button_tag "filters[replied_to]", "true", @filters[:replied_to] == "true" %>
+              <%= label_indicator_and_text(ts("Show replied to")) %>
+            <% end %>
           </li>
         </ul>
       </dd>
@@ -140,12 +152,16 @@
       <dd>
         <ul>
           <li>
-            <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
-            <%= label_tag 'filters_date_desc', ts("Newest first") %>
+            <%= label_tag "filters_date_desc" do %>
+              <%= radio_button_tag "filters[date]", "desc", @filters[:date] != "asc" %>
+              <%= label_indicator_and_text(ts("Newest first")) %>
+            <% end %>
           </li>
           <li>
-            <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
-            <%= label_tag 'filters_date_asc', ts("Oldest first") %>
+            <%= label_tag "filters_date_asc" do %>
+              <%= radio_button_tag "filters[date]", "asc", @filters[:date] == "asc" %>
+              <%= label_indicator_and_text(ts("Oldest first")) %>
+            <% end %>
           </li>
         </ul>
       </dd>

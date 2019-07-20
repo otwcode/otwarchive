@@ -1,7 +1,14 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
-#require File.expand_path('../../features/support/factories.rb', __FILE__)
+require 'simplecov'
+SimpleCov.command_name "rspec-" + (ENV['TEST_RUN'] || '')
+if ENV["CI"] == "true" && ENV["TRAVIS"] == "true"
+  # Only on Travis...
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
@@ -20,58 +27,50 @@ FactoryGirl.find_definitions
 FactoryGirl.definition_file_paths = %w(factories)
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
-  #config.raise_errors_for_deprecations!
+
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
   config.include FactoryGirl::Syntax::Methods
-  config.include(EmailSpec::Helpers)
-  config.include(EmailSpec::Matchers)
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
+  config.include EmailSpec::Helpers
+  config.include EmailSpec::Matchers
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Capybara::DSL
+  config.include TaskExampleGroup, type: :task
 
-  config.before(:suite) do
+  config.before :suite do
+    Rails.application.load_tasks
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean
   end
 
-  config.before(:each) do
+  config.before :each do
     DatabaseCleaner.start
+    User.current_user = nil
+    clean_the_database
   end
 
-  config.after(:each) do
+  config.after :each do
     DatabaseCleaner.clean
+    delete_test_indices
   end
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.after :suite do
+    DatabaseCleaner.clean_with :truncation
+    delete_test_indices
+  end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
 
-  BAD_EMAILS = ['Abc.example.com','A@b@c@example.com','a\"b(c)d,e:f;g<h>i[j\k]l@example.com','just"not"right@example.com','this is"not\allowed@example.com','this\ still\"not/\/\allowed@example.com', 'nodomain']
-  INVALID_URLS = ['no_scheme.com', 'ftp://ftp.address.com','http://www.b@d!35.com','https://www.b@d!35.com','http://b@d!35.com','https://www.b@d!35.com']
-  VALID_URLS = ['http://rocksalt-recs.livejournal.com/196316.html','https://rocksalt-recs.livejournal.com/196316.html']
-  INACTIVE_URLS = ['https://www.iaminactive.com','http://www.iaminactive.com','https://iaminactive.com','http://iaminactive.com']
+  BAD_EMAILS = ['Abc.example.com', 'A@b@c@example.com', 'a\"b(c)d,e:f;g<h>i[j\k]l@example.com', 'this is"not\allowed@example.com', 'this\ still\"not/\/\allowed@example.com', 'nodomain', 'foo@oops'].freeze
+  INVALID_URLS = ['no_scheme.com', 'ftp://ftp.address.com', 'http://www.b@d!35.com', 'https://www.b@d!35.com', 'http://b@d!35.com', 'https://www.b@d!35.com'].freeze
+  VALID_URLS = ['http://rocksalt-recs.livejournal.com/196316.html', 'https://rocksalt-recs.livejournal.com/196316.html'].freeze
+  INACTIVE_URLS = ['https://www.iaminactive.com', 'http://www.iaminactive.com', 'https://iaminactive.com', 'http://iaminactive.com'].freeze
 
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
@@ -79,10 +78,85 @@ RSpec.configure do |config|
   # To explicitly tag specs without using automatic inference, set the `:type`
   # metadata manually:
   #
-  #     describe ThingsController, :type => :controller do
+  #     describe ThingsController, type: :controller do
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
+  config.define_derived_metadata(file_path: %r{/spec/miscellaneous/lib/tasks/}) do |metadata|
+    metadata[:type] = :task
+  end
+
+  # Set default formatter to print out the description of each test as it runs
+  config.color = true
+  config.formatter = :documentation
+
+  config.file_fixture_path = "spec/support/fixtures"
+end
+
+def clean_the_database
+  # Now clear memcached
+  Rails.cache.clear
+  # Now reset redis ...
+  REDIS_GENERAL.flushall
+  REDIS_KUDOS.flushall
+  REDIS_RESQUE.flushall
+  REDIS_ROLLOUT.flushall
+  REDIS_AUTOCOMPLETE.flushall
+
+  ['work', 'bookmark', 'pseud', 'tag'].each do |index|
+    update_and_refresh_indexes index
+  end
+end
+
+def update_and_refresh_indexes(klass_name, shards = 5)
+  indexer_class = "#{klass_name.capitalize.constantize}Indexer".constantize
+
+  indexer_class.delete_index
+  indexer_class.create_index(shards)
+
+  if klass_name == 'bookmark'
+    bookmark_indexers = {
+      BookmarkedExternalWorkIndexer => ExternalWork,
+      BookmarkedSeriesIndexer => Series,
+      BookmarkedWorkIndexer => Work
+    }
+
+    bookmark_indexers.each do |indexer, bookmarkable|
+      indexer.new(bookmarkable.all.pluck(:id)).index_documents if bookmarkable.any?
+    end
+  end
+
+  indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
+  indexer.index_documents if klass_name.capitalize.constantize.any?
+
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+end
+
+def refresh_index_without_updating(klass_name)
+  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+end
+
+def run_all_indexing_jobs
+  %w[main background stats].each do |reindex_type|
+    ScheduledReindexJob.perform reindex_type
+  end
+  %w[work bookmark pseud tag].each do |index|
+    refresh_index_without_updating index
+  end
+end
+
+def delete_index(index)
+  index_name = "ao3_test_#{index}s"
+  if $elasticsearch.indices.exists? index: index_name
+    $elasticsearch.indices.delete index: index_name
+  end
+end
+
+def delete_test_indices
+  indices = $elasticsearch.indices.get_mapping.keys.select { |key| key.match("test") }
+  indices.each do |index|
+    $elasticsearch.indices.delete(index: index)
+  end
 end
 
 def get_message_part (mail, content_type)

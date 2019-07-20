@@ -1,4 +1,5 @@
-class CollectionItem < ActiveRecord::Base
+class CollectionItem < ApplicationRecord
+  include ActiveModel::ForbiddenAttributesProtection
 
   NEUTRAL = 0
   APPROVED = 1
@@ -13,40 +14,41 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
 
-  belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
-  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
-  belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
+  belongs_to :collection, inverse_of: :collection_items
+  belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
+  belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
+  belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
-  has_many :approved_collections, :through => :collection_items, :source => :collection,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :approved_collections, -> {
+    where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
+   }, through: :collection_items, source: :collection
 
-  validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type],
-    :message => ts("already contains this item.")
+  validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
+    message: ts("already contains this item.")
 
-  validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :user_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :user_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => ts("is not a valid approval status.")
+  validates_numericality_of :collection_approval_status, allow_blank: true, only_integer: true
+  validates_inclusion_of :collection_approval_status, in: [-1, 0, 1], allow_blank: true,
+    message: ts("is not a valid approval status.")
 
-  validate :collection_is_open, :on => :create
+  validate :collection_is_open, on: :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("The collection %{title} is not currently open.", :title => self.collection.title))
+      errors.add(:base, ts("The collection %{title} is not currently open.", title: self.collection.title))
     end
   end
 
-  scope :include_for_works, :include => [{:work => :pseuds}]
-  scope :unrevealed, :conditions => {:unrevealed => true}
-  scope :anonymous, :conditions =>  {:anonymous => true}
-  
+  scope :include_for_works, -> { includes(work: :pseuds)}
+  scope :unrevealed, -> { where(unrevealed: true) }
+  scope :anonymous, -> { where(anonymous:  true) }
+
   def self.for_user(user=User.current_user)
     # get ids of user's bookmarks and works
-    bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).value_of(:id)
-    work_ids = Work.joins(:pseuds).where("pseuds.user_id = ?", user.id).value_of(:id)
+    bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).pluck(:id)
+    work_ids = Work.joins(:pseuds).where("pseuds.user_id = ?", user.id).pluck(:id)
     # now return the relation
     where("(item_id IN (?) AND item_type = 'Work') OR (item_id IN (?) AND item_type = 'Bookmark')", work_ids, bookmark_ids)
   end
@@ -62,7 +64,7 @@ class CollectionItem < ActiveRecord::Base
   def self.unreviewed_by_user
     where(user_approval_status: NEUTRAL)
   end
-  
+
   def self.approved_by_collection
     where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
   end
@@ -74,7 +76,7 @@ class CollectionItem < ActiveRecord::Base
   def self.rejected_by_collection
     where(collection_approval_status: REJECTED)
   end
-  
+
   def self.unreviewed_by_collection
     where(collection_approval_status: NEUTRAL)
   end
@@ -82,43 +84,50 @@ class CollectionItem < ActiveRecord::Base
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed
     if self.new_record? && collection
-      self.unrevealed = true if collection.unrevealed?
-      self.anonymous = true if collection.anonymous?
+      self.unrevealed = true if collection.reload.unrevealed?
+      self.anonymous = true if collection.reload.anonymous?
     end
   end
-  
+
   after_save :update_work
-  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
-  #  this is a has-many-through relationship!!!
-  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
-  # itself -- see collectible.rb
-  
-  # Set associated works to anonymous or unrevealed as appropriate
-  # Check for chapters to avoid work association creation order shenanigans
+  after_destroy :update_work
+
+  # Set associated works to anonymous or unrevealed as appropriate.
+  #
+  # Inverses are set up properly on self.item, so we use that field to check
+  # whether we're currently in the process of saving a brand new work, or
+  # whether the work is in the process of being destroyed. (In which case we
+  # rely on the Work's callbacks to set anon/unrevealed status properly.) But
+  # because we want to discard changes made in preview mode, we perform the
+  # actual anon/unrevealed updates on self.work, which doesn't have proper
+  # inverses and therefore is freshly loaded from the database.
   def update_work
-    return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
-    # Check if this is new - can't use new_record? with after_save
-    if self.id_changed?
-      work.set_anon_unrevealed!
-    else
-      work.update_anon_unrevealed!
+    return unless item.is_a?(Work) && item.persisted? && !item.saved_change_to_id?
+
+    if work.present?
+      work.update_anon_unrevealed
+
+      # For a more helpful error message, raise an error saying that the work
+      # is invalid if we fail to save it.
+      raise ActiveRecord::RecordInvalid, work unless work.save
     end
   end
 
   # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
   after_update :update_item_for_status_change
   def update_item_for_status_change
-    if user_approval_status_changed? || collection_approval_status_changed?
-      item.save
+    if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
+      item.save!
     end
   end
 
-  after_create :notify_of_association
-  # TODO: make this work for bookmarks instead of skipping them
+  after_create_commit :notify_of_association
   def notify_of_association
-    self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
-    if self.collection.collection_preference.email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
+    email_notify = self.collection.collection_preference &&
+                    self.collection.collection_preference.email_notify
+
+    if email_notify && !self.collection.email.blank?
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver
     end
   end
 
@@ -144,7 +153,7 @@ class CollectionItem < ActiveRecord::Base
         when "Work"
           users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
         when "Bookmark"
-          users = [item.user] || [User.current_user]
+          users = [item.pseud.user] || [User.current_user]
         end
 
         users.each do |user|
@@ -182,21 +191,18 @@ class CollectionItem < ActiveRecord::Base
 
   after_update :notify_of_status_change
   def notify_of_status_change
-    if unrevealed_changed?
-      # making sure that creation_observer.rb has not already notified the user
-      if !work.new_recipients.blank?
+    if saved_change_to_unrevealed? && item.respond_to?(:new_recipients)
+      # making sure notify_recipients in the work model has not already notified
+      if item.new_recipients.present?
         notify_of_reveal
       end
     end
-    if anonymous_changed?
-      notify_of_author_reveal
-    end
   end
-  
+
   after_destroy :expire_caches
-  
   def expire_caches
     if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
       CacheMaster.record(item_id, 'collection', collection_id)
     end
   end
@@ -271,7 +277,7 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
-    if user.nil? 
+    if user.nil?
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
@@ -279,12 +285,12 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
-  
+
   # Reveal an individual collection item
   # Can't use update_attribute because of potential validation issues
   # with closed collections
   def reveal!
-    collection.collection_items.update_all("unrevealed = 0", "id = #{self.id}")
+    collection.collection_items.where("id = #{self.id}").update_all("unrevealed = 0")
     notify_of_reveal
   end
 
@@ -294,7 +300,7 @@ class CollectionItem < ActiveRecord::Base
 
   def notify_of_reveal
     unless self.unrevealed? || !self.posted?
-      recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver
@@ -314,20 +320,4 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
-
-  # When the authors of anonymous works are revealed, notify users
-  # subscribed to those authors
-  def notify_of_author_reveal
-    unless self.anonymous? || !self.posted?
-      if item_type == "Work"
-        subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
-                                  item.pseuds.map{|p| p.user_id}]).
-                            group(:user_id)
-        subs.each do |subscription|
-          RedisMailQueue.queue_subscription(subscription, item)
-        end
-      end      
-    end
-  end
-
 end

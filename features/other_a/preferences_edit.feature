@@ -34,7 +34,6 @@ Feature: Edit preferences
     And I should see "Turn off messages to your inbox about comments."
     And I should see "Turn off copies of your own comments."
     And I should see "Turn off emails about kudos."
-    And I should see "Turn off admin emails."
     And I should see "Automatically agree to your work being collected by others in the Archive."
     And I should see "Turn off emails from collections."
     And I should see "Turn off inbox messages from collections."
@@ -151,8 +150,9 @@ Feature: Edit preferences
   When I follow "All Fandoms"
   Then I should see "Stargate SG-1"
     And I should see "Stargate SG-2"
-  # we are now looking at a canonical fandom tag
-  When I follow "Stargate SG-1"
+    # we are now looking at a canonical fandom tag
+  When all indexing jobs have been run
+    And I follow "Stargate SG-1"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
     And I should see "No Archive Warnings Apply" within ".tags"
@@ -374,3 +374,43 @@ Feature: Edit preferences
     And I should not see "Scary tag"
     And I should not see "Scarier"
     And I should see "Show additional tags"
+
+  @javascript
+  Scenario: A user can see hidden tags
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+      And I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" with second freeform "Faye Valentine is a sweetie"
+      And I should see "Work was successfully posted."
+      And I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
+    When I view the work "Asteroid Blues"
+      And I follow "Show additional tags"
+    Then I should see "Additional Tags: Ed is a sweetie, Faye Valentine is a sweetie"
+     And I should not see "Show additional tags"
+
+  @javascript
+  Scenario: A user can see hidden tags on a series
+
+    Given the following typed tags exists
+        | name                                   | type         | canonical |
+        | Cowboy Bebop                           | Fandom       | true      |
+        | Faye Valentine is a sweetie            | Freeform     | false     |
+        | Ed is a sweetie                        | Freeform     | false     |
+      And I limit myself to the Archive
+      And I am logged in as "first_user"
+      And I post the work "Asteroid Blues" with fandom "Cowboy Bebop" with freeform "Ed is a sweetie" as part of a series "Cowboy Bebop Blues"
+      And I post the work "Wild Horses" with fandom "Cowboy Bebop" with freeform "Faye Valentine is a sweetie" as part of a series "Cowboy Bebop Blues"
+    When I am logged in as "second_user" with password "secure_password" with preferences set to hidden warnings and additional tags
+      And I go to first_user's user page
+      And I follow "Cowboy Bebop Blues"
+    Then I should see "Asteroid Blues"
+      And I should see "Wild Horses"
+      And I should not see "Ed is a sweetie"
+    When I follow "Show additional tags"
+    Then I should see "Ed is a sweetie"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should see "No Archive Warnings Apply" within "li.warnings"
