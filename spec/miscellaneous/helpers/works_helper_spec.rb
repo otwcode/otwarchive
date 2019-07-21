@@ -41,7 +41,7 @@ describe WorksHelper, type: :helper do
 
   describe '#all_coauthor_skins' do
     before do
-      @users = Array.new(5) { |i| FactoryGirl.create(:user) }
+      @users = Array.new(5) { FactoryGirl.create(:user) }
       @work = create(:work, authors: @users.flat_map(&:pseuds))
     end
 

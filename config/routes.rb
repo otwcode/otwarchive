@@ -210,7 +210,6 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password

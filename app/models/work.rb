@@ -9,7 +9,7 @@ class Work < ApplicationRecord
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
-  include CreatorshipValidations
+  include HasCreatorships
 
   ########################################################################
   # ASSOCIATIONS
@@ -427,7 +427,7 @@ class Work < ApplicationRecord
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
-      select {|assign| (self.users + [User.current_user]).compact.include?(assign.offering_user)}
+      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)

@@ -1,28 +1,30 @@
 # frozen_string_literal: true
 
-module CreatorshipValidations
+# A module used for classes that can appear as the "creation" in a Creatorship
+# (i.e. Work, Series, and Chapter).
+module HasCreatorships
   extend ActiveSupport::Concern
 
   included do
     has_many :creatorships,
-      autosave: true,
-      as: :creation,
-      inverse_of: :creation
+             autosave: true,
+             as: :creation,
+             inverse_of: :creation
 
     has_many :approved_creatorships,
-      -> { Creatorship.approved },
-      class_name: "Creatorship",
-      as: :creation,
-      inverse_of: :creation
+             -> { Creatorship.approved },
+             class_name: "Creatorship",
+             as: :creation,
+             inverse_of: :creation
 
     has_many :pseuds,
-      through: :approved_creatorships,
-      before_add: :disallow_pseud_changes,
-      before_remove: :disallow_pseud_changes
+             through: :approved_creatorships,
+             before_add: :disallow_pseud_changes,
+             before_remove: :disallow_pseud_changes
 
     has_many :users,
-      -> { distinct },
-      through: :pseuds
+             -> { distinct },
+             through: :pseuds
 
     attr_reader :current_user_pseuds
 
@@ -72,6 +74,7 @@ module CreatorshipValidations
   # User.current_user.
   def update_current_user_pseuds
     return unless @current_user_pseuds
+
     set_current_user_pseuds(@current_user_pseuds)
     @current_user_pseuds = nil
   end
@@ -118,11 +121,12 @@ module CreatorshipValidations
   # after saving.
   def current_user_pseud_ids=(ids)
     return unless User.current_user.is_a?(User)
+
     @current_user_pseuds = Pseud.where(id: ids).to_a
   end
 
   ########################################
-  # VIRTUAL ATTRIBUTES
+  # USEFUL FUNCTIONS
   ########################################
 
   # Update the pseuds on this item so that User.current_user's pseuds are
@@ -131,6 +135,7 @@ module CreatorshipValidations
   # Work, we also update the user's byline on any owned chapters in the series.
   def set_current_user_pseuds(new_pseuds)
     return unless User.current_user.is_a?(User)
+
     user_id = User.current_user.id
 
     children = if is_a?(Work)

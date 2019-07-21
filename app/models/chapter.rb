@@ -5,7 +5,7 @@ class Chapter < ApplicationRecord
   include HtmlCleaner
   include WorkChapterCountCaching
   include Creatable
-  include CreatorshipValidations
+  include HasCreatorships
 
   belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'

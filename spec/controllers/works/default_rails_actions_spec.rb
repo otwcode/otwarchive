@@ -203,7 +203,7 @@ describe WorksController do
       }.to_not change(Work, :count)
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-       include "You're not allowed to use that pseud."
+        include "You're not allowed to use that pseud."
     end
 
     it "renders new if the work has invalid pseuds" do
