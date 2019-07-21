@@ -11,15 +11,9 @@ class CreatorshipsController < ApplicationController
   # form where the user can select multiple creatorships and perform actions
   # (accept, remove) in bulk.
   def show
-    if params[:show] == "rejected"
-      @page_subtitle = ts("Rejected Creator Invitations")
-      @creatorships = @creatorships.rejected
-    else
-      @page_subtitle = ts("Creator Invitations")
-      @creatorships = @creatorships.pending
-    end
-
-    @creatorships = @creatorships.order(id: :desc).paginate(page: params[:page])
+    @page_subtitle = ts("Creator Invitations")
+    @creatorships = @creatorships.unapproved.order(id: :desc).
+      paginate(page: params[:page])
   end
 
   # Update the selected creatorships.
@@ -28,8 +22,6 @@ class CreatorshipsController < ApplicationController
 
     if params[:accept]
       accept_update
-    elsif params[:reject]
-      reject_update
     else
       delete_update
     end
@@ -51,16 +43,6 @@ class CreatorshipsController < ApplicationController
       flash[:notice] << ts("You are now listed as a co-creator on %{link}.",
                            link: link).html_safe
     end
-  end
-
-  # When the user presses "Reject" on the creator invitation listing, this is
-  # the code that runs.
-  def reject_update
-    @creatorships.each do |creatorship|
-      creatorship.update(approval_status: Creatorship::REJECTED)
-    end
-
-    flash[:notice] = ts("Invitations marked as rejected.")
   end
 
   # When the user presses "Delete" on the creator invitation listing, this is

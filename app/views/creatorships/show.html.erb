@@ -1,16 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
-<% if params[:show] != "rejected" %>
-  <h2 class="heading"><%= ts("Creator Invitations") %></h2>
-<% else %>
-  <h2 class="heading"><%= ts("Rejected Creator Invitations") %></h2>
-<% end %>
+<h2 class="heading"><%= ts("Creator Invitations") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Awaiting Approval"), user_creatorships_path(@user), !params[:show] %></li>
-  <li><%= span_if_current ts("Rejected"), user_creatorships_path(@user, show: "rejected") %></li>
-</ul>
 <!--/subnav-->
 
 <!--main content-->
@@ -26,9 +18,6 @@
         <li><a class="check_all"><%= ts("Select All") %></a></li>
         <li><a class="check_none"><%= ts("Select None") %></a></li>
         <li><%= submit_tag ts("Accept"), name: "accept" %></li>
-        <% if params[:show] != "rejected" %>
-          <li><%= submit_tag ts("Reject"), name: "reject" %></li>
-        <% end %>
         <li><%= submit_tag ts("Delete"), name: "delete" %></li>
       </ul>
     </fieldset>
@@ -65,9 +54,6 @@
         <li><a class="check_all"><%= ts("Select All") %></a></li>
         <li><a class="check_none"><%= ts("Select None") %></a></li>
         <li><%= submit_tag ts("Accept"), name: "accept" %></li>
-        <% if params[:show] != "rejected" %>
-          <li><%= submit_tag ts("Reject"), name: "reject" %></li>
-        <% end %>
         <li><%= submit_tag ts("Delete"), name: "delete" %></li>
       </ul>
     </fieldset>

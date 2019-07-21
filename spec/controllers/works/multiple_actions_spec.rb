@@ -157,8 +157,7 @@ describe WorksController do
       }
 
       before do
-        multiple_work2.creatorships.create(pseud: coauthor_to_remove_pseud,
-                                           approval_status: Creatorship::APPROVED)
+        multiple_work2.creatorships.create(pseud: coauthor_to_remove_pseud)
         put :update_multiple, params: params
       end
 

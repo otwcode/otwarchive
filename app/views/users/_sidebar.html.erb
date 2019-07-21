@@ -51,7 +51,9 @@
 <h4 class="landmark heading"><%= ts("Switch")%></h4>
 <ul class="navigation actions">
   <% if @user == current_user %>
-    <li><%= span_if_current ts("Creator Invitations (%{count})", count: Creatorship.pending.for_user(@user).count), user_creatorships_path(@user) %></li>
+    <% if @user.preference.allow_cocreator %>
+      <li><%= span_if_current ts("Creator Invitations (%{count})", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
+    <% end %>
     <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
     <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
     <li><%= span_if_current ts("Claims (%{claim_number})", :claim_number => (@user.request_claims.unposted.count)), user_claims_path(@user) %></li>

@@ -2,14 +2,8 @@ class Creatorship < ApplicationRecord
   belongs_to :pseud, inverse_of: :creatorships
   belongs_to :creation, inverse_of: :creatorships, polymorphic: true, touch: true
 
-  APPROVED = 1
-  PENDING = 0
-  REJECTED = -1
-
-  scope :approved, -> { where(approval_status: APPROVED) }
-  scope :unapproved, -> { where.not(approval_status: APPROVED) }
-  scope :pending, -> { where(approval_status: PENDING) }
-  scope :rejected, -> { where(approval_status: REJECTED) }
+  scope :approved, -> { where(approved: true) }
+  scope :unapproved, -> { where(approved: false) }
 
   scope :for_user, ->(user) { joins(:pseud).merge(user.pseuds) }
 
@@ -22,17 +16,15 @@ class Creatorship < ApplicationRecord
   validates_presence_of :creation
   validates_uniqueness_of :pseud, scope: [:creation_type, :creation_id], on: :create
 
-  validates_inclusion_of :approval_status, in: [APPROVED, PENDING, REJECTED]
-
   validate :check_invalid, on: :create
   validate :check_disallowed, on: :create
   validate :check_banned, on: :create
-  validate :check_approved_becoming_false
+  validate :check_approved_becoming_false, on: :update
 
   # Update approval status if this creatorship should be automatically approved.
   def update_approved
-    if approval_status == PENDING && should_automatically_approve?
-      self.approval_status = APPROVED
+    if !approved? && should_automatically_approve?
+      self.approved = true
     end
   end
 
@@ -71,7 +63,7 @@ class Creatorship < ApplicationRecord
   # potentially violate some rules about co-creators. (e.g. Having a user
   # listed as a chapter co-creator, but not a work co-creator.)
   def check_approved_becoming_false
-    if approval_status_changed? && approval_status_was == APPROVED
+    if !approved? && approved_changed?
       errors.add(:base, "Once approved, a creatorship cannot become unapproved.")
     end
   end
@@ -81,7 +73,7 @@ class Creatorship < ApplicationRecord
   ########################################
 
   after_create :add_to_parents
-  after_update :add_to_parents, if: :saved_change_to_approval_status?
+  after_update :add_to_parents, if: :saved_change_to_approved?
 
   before_destroy :expire_caches
   before_destroy :check_not_last
@@ -224,18 +216,13 @@ class Creatorship < ApplicationRecord
     pseud.nil? && @ambiguous_pseuds.present?
   end
 
-  # Check whether the creatorship is approved.
-  def approved?
-    approval_status == APPROVED
-  end
-
   # Find or initialize a creatorship matching the options, and then set
   # approved to true and save the results. This is a way of adding a new
   # approved creatorship without potentially running into issues with a
   # pre-existing unapproved creatorship.
   def self.approve_or_create_by(options)
     creatorship = find_or_initialize_by(options)
-    creatorship.approval_status = APPROVED
+    creatorship.approved = true
     creatorship.save
   end
 
@@ -272,7 +259,7 @@ class Creatorship < ApplicationRecord
   # chapters as well.
   def accept!
     transaction do
-      update(approval_status: APPROVED)
+      update(approved: true)
 
       if creation.is_a?(Work)
         creation.chapters.each do |chapter|

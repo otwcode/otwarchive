@@ -8,26 +8,18 @@ describe CreatorshipsController do
 
   let(:user) { create(:user) }
   let(:pending_work) { create(:work) }
-  let(:rejected_work) { create(:work) }
   let(:other_user) { create(:user) }
 
   let(:pending) do
     Creatorship.new(pseud: user.default_pseud, creation: pending_work,
-                    approval_status: Creatorship::PENDING)
-  end
-
-  let(:rejected) do
-    Creatorship.new(pseud: user.default_pseud, creation: rejected_work,
-                    approval_status: Creatorship::REJECTED)
+                    approved: false)
   end
 
   before do
-    # Make sure that both invitations are saved without altering the approval
-    # status:
+    # Make sure that the invitation is saved without altering the current value
+    # of approved:
     pending.save(validate: false)
-    expect(pending.reload.approval_status).to eq(Creatorship::PENDING)
-    rejected.save(validate: false)
-    expect(rejected.reload.approval_status).to eq(Creatorship::REJECTED)
+    expect(pending.reload.approved).to be_falsey
   end
 
   describe "#show" do
@@ -57,13 +49,6 @@ describe CreatorshipsController do
         expect(assigns[:creatorships]).to contain_exactly(pending)
         expect(response).to render_template :show
       end
-
-      it "displays rejected invitations" do
-        fake_login_admin(create(:admin))
-        get :show, params: params.merge(show: "rejected")
-        expect(assigns[:creatorships]).to contain_exactly(rejected)
-        expect(response).to render_template :show
-      end
     end
 
     context "when logged in as the user" do
@@ -71,13 +56,6 @@ describe CreatorshipsController do
         fake_login_known_user(user)
         get :show, params: params
         expect(assigns[:creatorships]).to contain_exactly(pending)
-        expect(response).to render_template :show
-      end
-
-      it "displays rejected invitations" do
-        fake_login_known_user(user)
-        get :show, params: params.merge(show: "rejected")
-        expect(assigns[:creatorships]).to contain_exactly(rejected)
         expect(response).to render_template :show
       end
     end
@@ -116,16 +94,8 @@ describe CreatorshipsController do
         fake_login_known_user(user)
         put :update, params: params.merge(accept: "Accept")
         expect(assigns[:creatorships]).to contain_exactly(pending)
-        expect(pending.reload.approval_status).to eq(Creatorship::APPROVED)
+        expect(pending.reload.approved).to be_truthy
         expect(pending_work.pseuds.reload).to include(user.default_pseud)
-      end
-
-      it "rejects invitations after pressing 'Reject'" do
-        fake_login_known_user(user)
-        put :update, params: params.merge(reject: "Reject")
-        expect(assigns[:creatorships]).to contain_exactly(pending)
-        expect(pending.reload.approval_status).to eq(Creatorship::REJECTED)
-        expect(pending_work.pseuds.reload).not_to include(user.default_pseud)
       end
 
       it "deletes invitations after pressing 'Delete'" do
