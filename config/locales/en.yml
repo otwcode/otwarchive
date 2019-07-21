@@ -215,11 +215,11 @@ en:
       intro: "You have been invited to be listed as a co-creator on the following %{type}:"
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        accept: "If you wish to be listed as a co-creator, you can view the %{type} and accept the invitation, or %{view} and accept the invitation from there."
+        accept: "If you wish to be listed as a co-creator on the %{type}, you can %{view} and accept the invitation from there."
         view: "view your co-creator invitations page"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        accept: "If you wish to be listed as a co-creator, you can view the %{type} and accept the invitation, or view your co-creator invitations page and accept the invitation from there: %{url}"
+        accept: "If you wish to be listed as a co-creator on the %{type}, you can view your co-creator invitations page and accept the invitation from there: %{url}"
       reject: "If you've been added in error or don't want to be listed as a creator, you can ignore this message."
     change_email:
       subject: "[%{app_name}] Email changed"
