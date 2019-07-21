@@ -125,21 +125,55 @@ Feature: Edit Multiple Works
   When I view the work "Work with Anonymous Commenting Enabled"
   Then I should not see "doesn't allow non-Archive users to comment"
 
-  Scenario: User can remove coauthors from multiple works at once
-    Given the following activated users exists
-      | login     |
-      | author    |
-      | coauthor  |
+  Scenario: User can change the pseud on multiple works at once
+    Given I am logged in as "author"
+      And I add the pseud "My New Pseud"
+      And I edit the multiple works "First" and "Second"
+    When I select "My New Pseud" from "Creator/Pseud(s)"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+    When I view the work "First"
+    Then I should see "My New Pseud" within ".byline"
+    When I view the work "Second"
+    Then I should see "My New Pseud" within ".byline"
+
+  Scenario: User can invite a co-creator to multiple works at once
+    Given the following activated users exist
+      | login       |
+      | lead_author |
+      | coauthor    |
       And the user "coauthor" allows co-creators
-      And I am logged in as "author"
-      And I edit multiple works coauthored as "author" with "coauthor"
-    When I check "coauthor" within "#work_pseuds_to_remove_checkboxes"
+      And I am logged in as "lead_author"
+      And I edit the multiple works "First Shared" and "Second Shared"
+    When I fill in "Add Co-Creators" with "coauthor"
+      And I press "Update All Works"
+    Then I should see "Your edits were put through"
+      And 2 emails should be delivered to "coauthor"
+    When I view the work "First Shared"
+    Then I should not see "coauthor" within ".byline"
+    When I view the work "First Shared"
+    Then I should not see "coauthor" within ".byline"
+    When the user "coauthor" accepts all co-creator invitations
+      And I view the work "First Shared"
+    Then I should see "coauthor" within ".byline"
+    When I view the work "Second Shared"
+    Then I should see "coauthor" within ".byline"
+
+  Scenario: User can remove themselves from multiple works at once
+    Given the following activated users exist
+      | login       |
+      | lead_author |
+      | coauthor    |
+      And the user "coauthor" allows co-creators
+      And I am logged in as "lead_author"
+      And I edit multiple works coauthored as "lead_author" with "coauthor"
+    When I check "Remove me as co-creator"
       And I press "Update All Works"
     Then I should see "Your edits were put through"
     When I view the work "Shared Work 1"
-    Then I should not see "coauthor" within ".byline"
+    Then I should not see "lead_author" within ".byline"
     When I view the work "Shared Work 2"
-    Then I should not see "coauthor" within ".byline"
+    Then I should not see "lead_author" within ".byline"
 
   Scenario: User applies a private work skin to multiple coauthored works
     Given the following activated users with private work skins

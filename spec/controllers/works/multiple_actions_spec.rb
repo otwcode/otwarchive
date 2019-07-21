@@ -5,12 +5,7 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:multiple_user_pseud) { create(:pseud) }
-  let!(:multiple_works_user) {
-    user = create(:user)
-    user.pseuds << multiple_user_pseud
-    user
-  }
+  let!(:multiple_works_user) { create(:user) }
 
   describe "edit_multiple" do
     it "should redirect to the orphan path when the Orphan button was clicked" do
@@ -134,43 +129,40 @@ describe WorksController do
       end
     end
 
-    context 'adding and removing coauthors' do
-      let(:coauthor_to_remove_pseud) do
+    context "updating creators" do
+      let(:pseud_to_invite) do
         user = FactoryGirl.create(:user)
         user.preference.update(allow_cocreator: true)
         user.default_pseud
       end
 
-      let(:coauthor_to_add_pseud) do
-        user = FactoryGirl.create(:user)
-        user.preference.update(allow_cocreator: true)
-        user.default_pseud
-      end
+      let(:other_editor_pseud) { create(:pseud, user: multiple_works_user) }
 
       let(:work_params) {
         {
           work: {
-            pseuds_to_remove: [coauthor_to_remove_pseud.id.to_s, ""],
-            pseuds_to_add: coauthor_to_add_pseud.name
+            pseuds_to_add: pseud_to_invite.name,
+            current_user_pseud_ids: [other_editor_pseud.id]
           }
         }
       }
 
       before do
-        multiple_work2.creatorships.create(pseud: coauthor_to_remove_pseud)
         put :update_multiple, params: params
-      end
-
-      it "removes coauthors when pseuds_to_remove param exists" do
-        assigns(:works).each do |work|
-          expect(work.pseuds.reload).not_to include(coauthor_to_remove_pseud)
-        end
       end
 
       it "invites coauthors when pseuds_to_add param exists" do
         assigns(:works).each do |work|
-          expect(work.pseuds.reload).not_to include(coauthor_to_add_pseud)
-          expect(work.creatorships.pending.map(&:pseud)).to include(coauthor_to_add_pseud)
+          expect(work.pseuds.reload).not_to include(pseud_to_invite)
+          expect(work.creatorships.unapproved.map(&:pseud)).to include(pseud_to_invite)
+        end
+      end
+
+      it "modifies the editor's pseuds when current_user_pseud_ids param exists" do
+        assigns(:works).each do |work|
+          work.pseuds.reload
+          expect(work.pseuds).to include(other_editor_pseud)
+          expect(work.pseuds).not_to include(multiple_works_user.default_pseud)
         end
       end
     end

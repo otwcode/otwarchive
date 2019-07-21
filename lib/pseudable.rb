@@ -11,13 +11,8 @@ module Pseudable
         possible_pseuds = Pseud.parse_byline(name, assume_matching_login: true)
       end
       pseud = possible_pseuds.first
-      creatorships.find_or_create_by(pseud: pseud) if pseud
+      creatorships.find_or_initialize_by(pseud: pseud) if pseud
     end
-  end
-
-  def pseuds_to_remove=(pseud_ids)
-    to_remove = Pseud.where(id: pseud_ids).to_a
-    creatorships.where(pseud: to_remove).destroy_all
   end
 end
   

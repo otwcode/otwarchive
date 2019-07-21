@@ -671,17 +671,25 @@ class WorksController < ApplicationController
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(updated_work_params)
-        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors_on.to_s)
+        @errors << ts('The work %{title} could not be edited: %{error}', title: work.title, error: work.errors.full_messages.join(" "))
+      end
+
+      if params[:remove_me]
+        if work.pseuds.where.not(user_id: current_user.id).exists?
+          work.remove_author(current_user)
+        else
+          @errors << ts("You cannot remove yourself as co-creator of the work %{title} because you are the only listed creator. If you have invited another co-creator, you must wait for them to accept before you can remove yourself.", title: work.title)
+        end
       end
     end
 
     if @errors.empty?
       flash[:notice] = ts('Your edits were put through! Please check over the works to make sure everything is right.')
-      redirect_to show_multiple_user_works_path(@user, work_ids: @works.collect(&:id))
     else
-      flash[:error] = ts('There were problems editing some works: %{errors}', errors: @errors.join(', '))
-      redirect_to edit_multiple_user_works_path(@user)
+      flash[:error] = @errors
     end
+
+    redirect_to show_multiple_user_works_path(@user, work_ids: @works.map(&:id))
   end
 
   # Reindex the work.
@@ -886,8 +894,8 @@ class WorksController < ApplicationController
       :backdate, :language_id, :work_skin_id, :restricted, :anon_commenting_disabled,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
       :unrestricted,
+      current_user_pseud_ids: [],
       collections_to_remove: [],
-      pseuds_to_remove: [],
       challenge_assignment_ids: [],
       challenge_claim_ids: [],
       category_string: [],
