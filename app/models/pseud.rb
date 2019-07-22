@@ -26,7 +26,7 @@ class Pseud < ApplicationRecord
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
 
-  has_many :creatorships
+  has_many :creatorships, dependent: :destroy
   has_many :approved_creatorships, -> { Creatorship.approved }, class_name: "Creatorship"
 
   has_many :works, through: :approved_creatorships, source: :creation, source_type: "Work"
@@ -334,15 +334,28 @@ class Pseud < ApplicationRecord
 
   ## END AUTOCOMPLETE
 
-  def creations
-    self.works + self.chapters + self.series
-  end
-
   def replace_me_with_default
-    self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
-    Comment.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.comments.blank?
+    replacement = user.default_pseud
+
+    # We don't use change_ownership here because we want to transfer both
+    # approved and unapproved creatorships.
+    self.creatorships.includes(:creation).each do |creatorship|
+      existing =
+        replacement.creatorships.find_by(creation: creatorship.creation)
+
+      if existing
+        existing.update(approved: existing.approved || creatorship.approved)
+      else
+        creatorship.update(pseud: replacement)
+      end
+    end
+
+    # Update the pseud ID for all comments. Also updates the timestamp, so that
+    # the cache is invalidated and the pseud change will be visible.
+    Comment.where(pseud_id: self.id).update_all(pseud_id: replacement.id,
+                                                updated_at: Time.now)
     # NB: updates the kudos to use the new default pseud, but the cache will not expire
-    Kudo.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}") unless self.kudos.blank?
+    Kudo.where(pseud_id: self.id).update_all(pseud_id: replacement.id)
     change_collections_membership
     change_gift_recipients
     change_challenge_participation

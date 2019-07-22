@@ -90,3 +90,42 @@ Feature: Delete pseud.
     When I view the collection "PromptsGalore"
       And I follow "My Prompts"
     Then I should see "Antidisestablishmentarianism."
+
+  Scenario: Deleting a pseud should preserve creatorships and creator invites.
+    Given I am logged in as "original_pseud"
+      And I add the pseud "other_pseud"
+      And I am logged in as "coauthor"
+      And the user "original_pseud" allows co-creators
+
+    When I set up the draft "Original Invited"
+      And I try to invite the co-authors "original_pseud, other_pseud"
+      And I press "Post"
+    Then I should see "Work was successfully posted."
+
+    When I set up the draft "Other Invited"
+      And I try to invite the co-author "other_pseud"
+      And I press "Post"
+    Then I should see "Work was successfully posted."
+
+    When I am logged in as "original_pseud"
+      And I go to my creator invitations page
+      And I check the 2nd checkbox with id matching "selected"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Original Invited."
+      And I should see "original_pseud" within ".creatorships"
+      And I should see "other_pseud" within ".creatorships"
+      And I should see "Original Invited" within ".creatorships"
+      And I should see "Other Invited" within ".creatorships"
+      And I should see "Creator Invitations (2)"
+
+    When I go to my pseuds page
+      And I follow "Delete"
+    Then I should see "The pseud was successfully deleted."
+
+    When I go to my creator invitations page
+    Then I should see "Other Invited"
+      And I should see "Creator Invitations (1)"
+      And I should not see "Original Invited"
+
+    When I view the work "Original Invited"
+    Then I should see "Edit"
