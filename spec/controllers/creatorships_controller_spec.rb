@@ -98,9 +98,9 @@ describe CreatorshipsController do
         expect(pending_work.pseuds.reload).to include(user.default_pseud)
       end
 
-      it "deletes invitations after pressing 'Delete'" do
+      it "rejects invitations after pressing 'Reject'" do
         fake_login_known_user(user)
-        put :update, params: params.merge(delete: "Delete")
+        put :update, params: params.merge(reject: "Reject")
         expect(assigns[:creatorships]).to contain_exactly(pending)
         expect { pending.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect(pending_work.pseuds.reload).not_to include(user.default_pseud)

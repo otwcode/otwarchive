@@ -22,8 +22,8 @@ class CreatorshipsController < ApplicationController
 
     if params[:accept]
       accept_update
-    else
-      delete_update
+    elsif params[:reject]
+      reject_update
     end
 
     redirect_to user_creatorships_path(@user, page: params[:page])
@@ -45,11 +45,12 @@ class CreatorshipsController < ApplicationController
     end
   end
 
-  # When the user presses "Delete" on the creator invitation listing, this is
-  # the code that runs.
-  def delete_update
+  # When the user presses "Reject" on the creator invitation listing, this is
+  # the code that runs. Note that rejection is equivalent to destroying the
+  # invitation.
+  def reject_update
     @creatorships.each(&:destroy)
-    flash[:notice] = ts("Invitations destroyed.")
+    flash[:notice] = ts("Invitations rejected.")
   end
 
   # A helper method used to display a nicely formatted title for a creation.
