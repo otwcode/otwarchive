@@ -193,7 +193,8 @@ class UsersController < ApplicationController
     @sole_owned_collections = @user.collections.to_a.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? }
 
     if @works.empty? && @sole_owned_collections.empty?
-      @user.wipeout_unposted_works if @user.unposted_works
+      @user.wipeout_unposted_works
+      @user.destroy_empty_series
 
       @user.destroy
       flash[:notice] = ts('You have successfully deleted your account.')
@@ -338,7 +339,8 @@ class UsersController < ApplicationController
     @works = @user.works.where(posted: true)
 
     if @works.blank?
-      @user.wipeout_unposted_works if @user.unposted_works
+      @user.wipeout_unposted_works
+      @user.destroy_empty_series
 
       @user.destroy
 

@@ -307,9 +307,13 @@ class User < ApplicationRecord
 
   # removes ALL unposted works
   def wipeout_unposted_works
-    works.where(posted: false).each do |w|
-      w.destroy
-    end
+    works.where(posted: false).destroy_all
+  end
+
+  # Removes all of the user's series that don't have any listed works.
+  def destroy_empty_series
+    series.left_joins(:serial_works).where(serial_works: { id: nil }).
+      destroy_all
   end
 
   # Retrieve the current default pseud

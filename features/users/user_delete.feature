@@ -94,3 +94,26 @@ Scenario: Delete a user who has coauthored a work
   When I go to the works page
   Then I should see "otheruser"
     And I should not see "testuser"
+
+  Scenario: Can delete a user who has an empty series
+    Given I am logged in as "testuser"
+    When I set up a draft "Invalid" with fandom "%" as part of a series "Empty"
+      And I press "Post"
+    Then I should see "Sorry! We couldn't save this work because:"
+      And I should see "Fandom is missing."
+    When I try to delete my account
+    Then I should see "You have successfully deleted your account."
+      And a user account should not exist for "testuser"
+
+  Scenario: Can orphan a series when deleting
+    Given I have an orphan account
+      And I am logged in as "testuser"
+      And I post a work "Masterpiece" as part of a series "Epic"
+    When I try to delete my account
+    Then I should see "What do you want to do with your works?"
+    When I choose "Change my pseud to 'orphan' and attach to the orphan account"
+      And I press "Save"
+    Then I should see "You have successfully deleted your account."
+      And a user account should not exist for "testuser"
+    When I go to orphan_account's series page
+    Then I should see "Epic"
