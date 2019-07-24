@@ -360,7 +360,7 @@ class WorksController < ApplicationController
       render :_choose_coauthor
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       unless @work.posted?
-        flash[:notice] = ts("Your changes have not been saved. Please post your work or save without posting if you want to keep them.")
+        flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
       end
 
       in_moderated_collection
