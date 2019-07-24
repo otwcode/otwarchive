@@ -6,10 +6,10 @@
 <!--/subnav-->
 
 <!--main content-->
+<%= will_paginate @creatorships %>
 <% if @creatorships.blank? %>
   <p><%= ts("No creator invitations found.") %></p>
 <% else %>
-  <%= will_paginate @creatorships %>
   <%= form_tag user_creatorships_path(@user, page: params[:page]), method: :put do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
@@ -58,6 +58,6 @@
       </ul>
     </fieldset>
   <% end %>
-  <%= will_paginate @creatorships %>
 <% end %>
+<%= will_paginate @creatorships %>
 <!--/main content-->
