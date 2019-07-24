@@ -104,7 +104,6 @@ class SeriesController < ApplicationController
   def update
     @series.attributes = series_params
     if @series.errors.empty? && @series.save
-      # The duplicated if here does not work if you try and place it above.
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
