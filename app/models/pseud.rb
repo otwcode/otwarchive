@@ -364,46 +364,48 @@ class Pseud < ApplicationRecord
 
   # Change the ownership of a creation from one pseud to another
   def change_ownership(creation, pseud, options={})
-    # Update children before updating the creation itself, since deleting
-    # creatorships from the creation will also delete them from the creation's
-    # children.
-    unless options[:skip_children]
-      children = if creation.is_a?(Work)
-                   creation.chapters
-                 elsif creation.is_a?(Series)
-                   creation.works
-                 else
-                   []
-                 end
+    transaction do
+      # Update children before updating the creation itself, since deleting
+      # creatorships from the creation will also delete them from the creation's
+      # children.
+      unless options[:skip_children]
+        children = if creation.is_a?(Work)
+                     creation.chapters
+                   elsif creation.is_a?(Series)
+                     creation.works
+                   else
+                     []
+                   end
 
-      children.each do |child|
-        change_ownership(child, pseud, options)
-      end
-    end
-
-    # Should only add new creatorships if we're an approved co-creator.
-    if creation.creatorships.approved.where(pseud: self).exists?
-      creation.creatorships.find_or_create_by(pseud: pseud)
-    end
-
-    # But we should delete all creatorships, even invited ones:
-    creation.creatorships.where(pseud: self).destroy_all
-
-    if creation.is_a?(Work)
-      creation.series.each do |series|
-        if series.work_pseuds.where(id: id).exists?
-          series.creatorships.find_or_create_by(pseud: pseud)
-        else
-          change_ownership(series, pseud, options.merge(skip_children: true))
+        children.each do |child|
+          change_ownership(child, pseud, options)
         end
       end
-      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
-      comments.each do |comment|
-        comment.update_attribute(:pseud_id, pseud.id)
+
+      # Should only add new creatorships if we're an approved co-creator.
+      if creation.creatorships.approved.where(pseud: self).exists?
+        creation.creatorships.find_or_create_by(pseud: pseud)
       end
+
+      # But we should delete all creatorships, even invited ones:
+      creation.creatorships.where(pseud: self).destroy_all
+
+      if creation.is_a?(Work)
+        creation.series.each do |series|
+          if series.work_pseuds.where(id: id).exists?
+            series.creatorships.find_or_create_by(pseud: pseud)
+          else
+            change_ownership(series, pseud, options.merge(skip_children: true))
+          end
+        end
+        comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+        comments.each do |comment|
+          comment.update_attribute(:pseud_id, pseud.id)
+        end
+      end
+      # make sure changes affect caching/search/author fields
+      creation.save rescue nil
     end
-    # make sure changes affect caching/search/author fields
-    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
