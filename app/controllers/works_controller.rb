@@ -403,7 +403,7 @@ class WorksController < ApplicationController
       Work.expire_work_tag_groups_id(@work.id)
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Post Without Preview
+    else # Save As Draft
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
       @work.save
