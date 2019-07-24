@@ -3,9 +3,8 @@
 # A controller for viewing co-creator invites -- that is, creatorships where
 # the creator hasn't yet approved it.
 class CreatorshipsController < ApplicationController
-  before_action :load_user, only: [:show, :update]
-  before_action :check_ownership_or_admin, only: [:show]
-  before_action :check_ownership, only: [:update]
+  before_action :load_user
+  before_action :check_ownership
 
   # Show all of the creatorships associated with the current user. Displays a
   # form where the user can select multiple creatorships and perform actions

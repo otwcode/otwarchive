@@ -43,11 +43,10 @@ describe CreatorshipsController do
     end
 
     context "when logged in as an admin" do
-      it "displays invitations" do
+      it "redirects with an error message" do
         fake_login_admin(create(:admin))
         get :show, params: params
-        expect(assigns[:creatorships]).to contain_exactly(pending)
-        expect(response).to render_template :show
+        it_redirects_to_with_error(user, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
 
