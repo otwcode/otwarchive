@@ -340,6 +340,8 @@ class Pseud < ApplicationRecord
     # We don't use change_ownership here because we want to transfer both
     # approved and unapproved creatorships.
     self.creatorships.includes(:creation).each do |creatorship|
+      next if creatorship.creation.nil?
+
       existing =
         replacement.creatorships.find_by(creation: creatorship.creation)
 

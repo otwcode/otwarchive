@@ -166,8 +166,12 @@ module HasCreatorships
   end
 
   # Figure out which creatorships will exist after saving.
+  #
+  # Excludes creatorships with a missing pseud, because those orphaned
+  # creatorships can break various bits of code if they're considered valid.
   def creatorships_after_saving
-    creatorships.select(&:valid?).reject(&:marked_for_destruction?)
+    creatorships.select(&:valid?).reject(&:marked_for_destruction?).
+      reject { |creatorship| creatorship.pseud.nil? }
   end
 
   # Calculate what the pseuds on this work will be after saving, taking into

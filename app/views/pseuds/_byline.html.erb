@@ -4,8 +4,7 @@
   editor_selected = (object.current_user_pseuds || object.pseuds) & editor_pseuds
   editor_selected << User.current_user.default_pseud if editor_selected.empty?
 
-  valid_creatorships =
-    object.creatorships.select(&:valid?).reject(&:marked_for_destruction?)
+  valid_creatorships = object.creatorships_after_saving
 
   selected = valid_creatorships.map(&:pseud)
 
