@@ -223,7 +223,7 @@ class Creatorship < ApplicationRecord
   def self.approve_or_create_by(options)
     creatorship = find_or_initialize_by(options)
     creatorship.approved = true
-    creatorship.save
+    creatorship.save if creatorship.changed?
   end
 
   # Change authorship of works or series from a particular pseud to the orphan account
