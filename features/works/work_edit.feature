@@ -214,7 +214,7 @@ Feature: Edit Works
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
       And I try to invite the co-authors "Michael,Christopher"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Christopher (Pike) does not allow others to add them as a co-creator."
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
@@ -225,7 +225,7 @@ Feature: Edit Works
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
 
@@ -239,7 +239,7 @@ Feature: Edit Works
       And I go to the new work page
       And I fill in the basic work information for "Thats not my Spock"
       And I try to invite the co-author "Michael"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"
     When the user "Burnham" accepts all co-creator invites
@@ -248,7 +248,7 @@ Feature: Edit Works
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
     When I edit the work "Thats not my Spock, it has too much beard"
@@ -260,4 +260,3 @@ Feature: Edit Works
     When the user "Georgiou" accepts all co-creator invites
       And I view the work "Thats not my Spock, it has too much beard"
     Then I should see "Georgiou, Michael (Burnham), testuser"
-

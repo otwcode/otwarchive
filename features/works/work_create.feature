@@ -344,7 +344,7 @@ Feature: Create Works
       And I fill in the basic work information for "Thats not my Spock"
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Michael,Christopher"
-      And I press "Post Without Preview"
+      And I press "Post"
     Then I should see "Christopher (Pike) does not allow others to add them as a co-creator."
     When I fill in "pseud_byline" with "Michael"
       And I press "Preview"
