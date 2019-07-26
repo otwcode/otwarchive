@@ -111,4 +111,3 @@ describe Chapter do
     end
   end
 end
-

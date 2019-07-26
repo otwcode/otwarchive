@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "rake creatorships:remove_deleted_chapter_creatorships" do

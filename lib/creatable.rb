@@ -4,7 +4,7 @@ module Creatable
     do_notify
   end
 
-  def notify_after_update # after_update
+  def notify_after_update
     return unless self.valid? && self.posted?
 
     if self.saved_change_to_posted?
