@@ -308,7 +308,7 @@ Feature: Edit chapters
       And I post the chapter
     Then I should not see "amy, karma"
       And 1 email should be delivered to "amy"
-      And the email should contain "You have been invited to be listed as a co-creator on the following chapter"
+      And the email should contain "The user karma has invited your pseud amy to be listed as a co-creator on the following chapter"
       And the email should not contain "translation missing"
     When the user "amy" accepts all co-creator invites
       And I view the work "Forever Friends"
@@ -521,7 +521,7 @@ Feature: Edit chapters
     Then I should see "Chapter has been posted!"
       And I should not see "brenda"
       But 1 email should be delivered to "brenda"
-      And the email should contain "You have been invited to be listed as a co-creator on the following chapter"
+      And the email should contain "The user rusty has invited your pseud brenda to be listed as a co-creator on the following chapter"
       And the email should not contain "translation missing"
     When I am logged in as "brenda"
       And I follow "Rusty Has Two Moms" in the email

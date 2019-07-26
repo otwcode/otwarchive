@@ -259,7 +259,7 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       But I should not see "barbaz"
       And 1 email should be delivered to "barbaz"
-      And the email should contain "You have been invited to be listed as a co-creator on the following series"
+      And the email should contain "The user foobar has invited your pseud barbaz to be listed as a co-creator on the following series"
     When I am logged in as "barbaz"
       And I follow "Gentleman Jack" in the email
     Then I should not see "Edit Series"
@@ -302,7 +302,7 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And I should not see "Me (myself)"
       And 1 email should be delivered to "myself"
-      And the email should contain "You have been invited to be listed as a co-creator on the following series"
+      And the email should contain "The user testuser has invited your pseud Me to be listed as a co-creator on the following series"
     When the user "myself" accepts all co-creator invites
       And I view the series "Gentleman Jack"
     Then "testuser" should be the creator of the series "Gentleman Jack"

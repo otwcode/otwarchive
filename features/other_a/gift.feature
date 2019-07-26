@@ -199,7 +199,7 @@ Feature: Create Gifts
       And I give the work to "giftee1"
       And I preview the work
     Then 1 email should be delivered to "gifter2"
-      And the email should contain "You have been invited to be listed as a co-creator on the following work"
+      And the email should contain "The user gifter has invited your pseud gifter2 to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
     When all emails have been delivered
       And the user "gifter2" accepts all co-creator invites

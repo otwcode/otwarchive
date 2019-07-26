@@ -379,7 +379,7 @@ Feature: Prompt Meme Challenge
     And I invite the co-author "myname3" 
   When I press "Post Without Preview"
   Then 1 email should be delivered to "myname3"
-    And the email should contain "You have been invited to be listed as a co-creator on the following work"
+    And the email should contain "The user myname2 has invited your pseud myname3 to be listed as a co-creator on the following work"
     And the email should not contain "translation missing"
   When the user "myname3" accepts all co-creator invites
     And I am logged in as "mod1"

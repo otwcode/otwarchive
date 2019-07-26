@@ -143,13 +143,14 @@ class Creatorship < ApplicationRecord
 
   # Notify the pseud of their new creatorship.
   def notify_creator
-    return if (User.current_user == pseud.user ||
-               User.orphan_account == pseud.user)
+    return unless (User.current_user.is_a?(User) &&
+                   pseud.user != User.current_user &&
+                   pseud.user != User.orphan_account)
 
     if approved?
-      UserMailer.creatorship_notification(id).deliver
+      UserMailer.creatorship_notification(id, User.current_user.id).deliver
     else
-      UserMailer.creatorship_invitation(id).deliver
+      UserMailer.creatorship_invitation(id, User.current_user.id).deliver
     end
   end
 

@@ -91,7 +91,7 @@ Feature: Create Works
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 1 email should be delivered to "coauthor@example.org"
-      And the email should contain "You have been invited to be listed as a co-creator on the following work"
+      And the email should contain "The user thorough has invited your pseud coauthor to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"

@@ -134,7 +134,7 @@ Feature: Edit Works
     Then I should see "Work was successfully updated"
       And I should not see "coauthor" within ".byline"
       But 1 email should be delivered to "coauthor"
-      And the email should contain "You have been invited to be listed as a co-creator on the following work"
+      And the email should contain "The user leadauthor has invited your pseud coauthor to be listed as a co-creator on the following work"
     When I am logged in as "coauthor"
       And I follow "Dialogue" in the email
     Then I should not see "Edit"

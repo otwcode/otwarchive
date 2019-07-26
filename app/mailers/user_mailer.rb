@@ -239,10 +239,11 @@ class UserMailer < BulletproofMailer::Base
   ### WORKS NOTIFICATIONS ###
 
   # Sends email when a user is added as a co-author
-  def creatorship_notification(creatorship_id)
-    creatorship = Creatorship.find(creatorship_id)
-    @user = creatorship.pseud.user
-    @creation = creatorship.creation
+  def creatorship_notification(creatorship_id, adding_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @adding_user = User.find(adding_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
@@ -255,10 +256,11 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
-  def creatorship_invitation(creatorship_id)
-    creatorship = Creatorship.find(creatorship_id)
-    @user = creatorship.pseud.user
-    @creation = creatorship.creation
+  def creatorship_invitation(creatorship_id, inviting_user_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @inviting_user = User.find(inviting_user_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
