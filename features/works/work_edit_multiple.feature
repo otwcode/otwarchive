@@ -175,6 +175,24 @@ Feature: Edit Multiple Works
     When I view the work "Shared Work 2"
     Then I should not see "lead_author" within ".byline"
 
+  Scenario: User can remove themselves from one work even if they're the only creator on the other
+    Given the user "lead_creator" exists and is activated
+      And the user "co_creator" exists and is activated
+      And I am logged in as "lead_creator"
+      And I post the work "Solo"
+      And I coauthored the work "Shared" as "lead_creator" with "co_creator"
+    When I go to my edit multiple works page
+      And I select "Solo" for editing
+      And I select "Shared" for editing
+      And I press "Edit"
+      And I check "Remove me as co-creator"
+      And I press "Update All Works"
+    Then I should see "You cannot remove yourself as co-creator of the work Solo because you are the only listed creator."
+    When I view the work "Solo"
+    Then I should see "lead_creator" within ".byline"
+    When I view the work "Shared"
+    Then I should not see "lead_creator" within ".byline"
+
   Scenario: User applies a private work skin to multiple coauthored works
     Given the following activated users with private work skins
       | login       |
