@@ -54,7 +54,7 @@ class Chapter < ApplicationRecord
 
   after_save :fix_positions
   def fix_positions
-    if work && work.persisted?
+    if work&.persisted?
       positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
@@ -81,7 +81,7 @@ class Chapter < ApplicationRecord
 
   before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
-    if work && work.persisted? && position
+    if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}
     end

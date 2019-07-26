@@ -143,9 +143,9 @@ class Creatorship < ApplicationRecord
 
   # Notify the pseud of their new creatorship.
   def notify_creator
-    return unless (User.current_user.is_a?(User) &&
-                   pseud.user != User.current_user &&
-                   pseud.user != User.orphan_account)
+    return unless User.current_user.is_a?(User) &&
+                  pseud.user != User.current_user &&
+                  pseud.user != User.orphan_account
 
     if approved?
       UserMailer.creatorship_notification(id, User.current_user.id).deliver
@@ -163,7 +163,7 @@ class Creatorship < ApplicationRecord
     # Check that the creation hasn't been deleted, and still has creatorships
     # left:
     return if creation.nil? || creation.destroyed? ||
-      creation.creatorships.approved.count > 1
+              creation.creatorships.approved.count > 1
 
     errors.add(:base, ts("Sorry, we can't remove all creators of a %{type}.",
                          type: creation.model_name.human.downcase))
@@ -243,10 +243,10 @@ class Creatorship < ApplicationRecord
   # it's just a creatorship invitation.
   def should_automatically_approve?
     # Approve if the current user has special permissions:
-    return true if (User.current_user.nil? ||
-                    pseud&.user == User.current_user ||
-                    pseud&.user == User.orphan_account ||
-                    User.current_user.try(:is_archivist?))
+    return true if User.current_user.nil? ||
+                   pseud&.user == User.current_user ||
+                   pseud&.user == User.orphan_account ||
+                   User.current_user.try(:is_archivist?)
 
     # Approve if the creation is a chapter and the pseud is already listed on
     # the work, or if the creation is a series and the pseud is already listed

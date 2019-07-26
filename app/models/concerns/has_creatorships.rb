@@ -159,8 +159,8 @@ module HasCreatorships
       end
 
       creatorships.each do |creatorship|
-        creatorship.destroy unless (new_pseuds.include?(creatorship.pseud) ||
-                                    creatorship.pseud&.user_id != user_id)
+        creatorship.destroy unless new_pseuds.include?(creatorship.pseud) ||
+                                   creatorship.pseud&.user_id != user_id
       end
     end
   end

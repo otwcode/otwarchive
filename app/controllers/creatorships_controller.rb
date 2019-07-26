@@ -12,7 +12,7 @@ class CreatorshipsController < ApplicationController
   def show
     @page_subtitle = ts("Creator Invitations")
     @creatorships = @creatorships.unapproved.order(id: :desc).
-      paginate(page: params[:page])
+                    paginate(page: params[:page])
   end
 
   # Update the selected creatorships.

@@ -267,7 +267,7 @@ class Pseud < ApplicationRecord
       end
       banned = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
       if banned.present?
-        pseuds = pseuds - banned
+        pseuds -= banned
         banned_pseuds << banned
       end
       if remove_pseuds
@@ -406,7 +406,7 @@ class Pseud < ApplicationRecord
         end
       end
       # make sure changes affect caching/search/author fields
-      creation.save rescue nil
+      creation.save
     end
   end
 
