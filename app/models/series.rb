@@ -146,11 +146,6 @@ class Series < ApplicationRecord
     works.collect(&:pseuds).flatten.compact.uniq.sort
   end
 
-  # return list of users on this series
-  def owners
-    self.authors.collect(&:user)
-  end
-
   # Remove a user as an author of this series
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
