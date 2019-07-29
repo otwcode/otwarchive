@@ -24,20 +24,27 @@
 <!--/subnav-->
 
 <!--main content-->
-  <table summary="<%= ts("Lists each request/email and its current place in the queue. You can also delete each request.") %>">
+  <table summary="<%= ts("Lists each request, its email, IP, and current place in the queue. You can also delete each request.") %>">
     <caption><%= ts("Manage the Invitation Queue") %></caption>
     <thead>
       <tr>
         <th scope="col"><%= ts("Queue Position") %></th>
         <th scope="col"><%= ts("Email Address") %></th>
+        <th scope="col"><%= ts("IP Address") %></th>
         <th scope="col"><%= ts("Action") %></th>
       </tr>
     </thead>
     <tbody>
       <% @invite_requests.each do |request| %>
+        <% ip_address = if request.ip_address.present?
+                          request.ip_address
+                        else
+                          ts("No IP recorded")
+                        end %>
         <tr>
           <td><%= request.position %></td>
           <td><%= request.email %></td>
+          <td><%= ip_address %></td>
           <td>
             <%= form_tag invite_request_path(request, page: params[:page], query: params[:query]), method: "delete", class: "ajax-remove" do |f| %>
               <%= submit_tag ts("Delete") %>

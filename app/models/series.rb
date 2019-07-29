@@ -143,8 +143,12 @@ class Series < ApplicationRecord
   end
 
   # Change the positions of the serial works in the series
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
+
+  def position_of(work)
+    serial_works.where(work_id: work.id).pluck(:position).first
   end
 
   # return list of pseuds on this series

@@ -178,9 +178,9 @@ class User < ApplicationRecord
   end
 
   def remove_pseud_from_kudos
-    ids = self.pseuds.collect(&:id).join(",")
     # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
-    Kudo.where("pseud_id IN (#{ids})").update_all("pseud_id = NULL") if ids.present?
+    pseuds_list = pseuds.map(&:id)
+    Kudo.where(["pseud_id IN (?)", pseuds_list]).update_all("pseud_id = NULL") if pseuds_list.present?
   end
 
   def read_inbox_comments
@@ -264,21 +264,42 @@ class User < ApplicationRecord
     where("challenge_claims.id IN (?)", claims_ids)
   end
 
-  # Find users with a particular role and/or by name or email
-  # Options: inactive, page
-  def self.search_by_role(role, query, options = {})
-    return if role.blank? && query.blank?
-    users = User.select("DISTINCT users.*").order(:login)
+  # Find users with a particular role and/or by name and/or by email
+  # Options: inactive, page, exact
+  def self.search_by_role(role, name, email, options = {})
+    return if role.blank? && name.blank? && email.blank?
+    users = User.distinct.order(:login)
     if options[:inactive]
       users = users.where("confirmed_at IS NULL")
     end
     if role.present?
       users = users.joins(:roles).where("roles.id = ?", role.id)
     end
-    if query.present?
-      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email LIKE ?", "%#{query}%", "%#{query}%")
+    if name.present?
+      users = users.filter_by_name(name, options[:exact])
+    end
+    if email.present?
+      users = users.filter_by_email(email, options[:exact])
     end
     users.paginate(page: options[:page] || 1)
+  end
+
+  # Scope to look for users by pseud name:
+  def self.filter_by_name(name, exact)
+    if exact
+      joins(:pseuds).where(["pseuds.name = ?", name])
+    else
+      joins(:pseuds).where(["pseuds.name LIKE ?", "%#{name}%"])
+    end
+  end
+
+  # Scope to look for users by email:
+  def self.filter_by_email(email, exact)
+    if exact
+      where(["email = ?", email])
+    else
+      where(["email LIKE ?", "%#{email}%"])
+    end
   end
 
   def self.search_multiple_by_email(emails = [])

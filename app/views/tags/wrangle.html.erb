@@ -40,7 +40,7 @@
 
   <%= form_tag url_for(controller: 'tags', action: 'mass_update'), method: :post, id: 'wrangulator' do %>
 
-    <% if @tag.is_a?(Fandom) %>
+    <% if @tag.is_a?(Fandom) && !%w(sub_tags mergers).include?(params[:show]) %>
       <fieldset>
         <legend><%= ts('Assign and Mass Select') %></legend>
 
@@ -173,5 +173,5 @@
 <!--/subnav-->
 
 <% content_for :footer_js do %>
-  <%= javascript_include_tag 'select_all' %>
+  <%= javascript_include_tag 'select_all', skip_pipeline: true %>
 <% end %>

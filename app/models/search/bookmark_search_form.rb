@@ -18,6 +18,7 @@ class BookmarkSearchForm
     :bookmarkable_pseud_names,
     :bookmarkable_pseud_ids,
     :bookmarkable_type,
+    :language_id,
     :excluded_tag_names,
     :excluded_bookmark_tag_names,
     :excluded_tag_ids,
@@ -37,7 +38,6 @@ class BookmarkSearchForm
     :bookmarkable_title,
     :bookmarkable_date,
     :bookmarkable_complete,
-    :bookmarkable_language_id,
     :collection_ids,
     :bookmarkable_collection_ids,
     :sort_column,
@@ -49,11 +49,18 @@ class BookmarkSearchForm
   attr_accessor :options
 
   def self.count_for_user(user)
-    BookmarkQuery.new(user_ids: [user.id]).count
+    BookmarkQuery.new(
+      user_ids: [user.id],
+      show_private: User.current_user.is_a?(Admin) || user == User.current_user
+    ).count
   end
 
   def self.count_for_pseuds(pseuds)
-    BookmarkQuery.new(pseud_ids: pseuds.map(&:id)).count
+    BookmarkQuery.new(
+      pseud_ids: pseuds.map(&:id),
+      show_private: User.current_user.is_a?(Admin) ||
+                    pseuds.map(&:user).uniq == [User.current_user]
+    ).count
   end
 
   ATTRIBUTES.each do |filterable|
@@ -123,6 +130,12 @@ class BookmarkSearchForm
     end
     if self.bookmarkable_type.present?
       summary << "Type: #{self.bookmarkable_type}"
+    end
+    if self.language_id.present?
+      language = Language.find_by(id: self.language_id)
+      if language.present?
+        summary << "Work language: #{language.name}"
+      end
     end
     if %w(1 true).include?(self.rec.to_s)
       summary << "Rec"

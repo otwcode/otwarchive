@@ -89,6 +89,24 @@ describe BookmarkSearchForm do
         end
       end
     end
+
+    describe "searching" do
+      let(:work1) { create(:posted_work, language_id: 1) }
+      let(:work2) { create(:posted_work, language_id: 2) }
+
+      let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }
+      let!(:bookmark2) { create(:bookmark, bookmarkable: work2) }
+
+      before { run_all_indexing_jobs }
+
+      context "by work language" do
+        it "returns work bookmarkables with specified language" do
+          results = BookmarkSearchForm.new(language_id: 2).bookmarkable_search_results
+          expect(results).not_to include work1
+          expect(results).to include work2
+        end
+      end
+    end
   end
 
   describe "when searching by bookmarker" do
