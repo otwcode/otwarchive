@@ -43,7 +43,7 @@
         <ul class="tags index group">
           <% for fandom in fandoms %>
             <li>
-              <%= link_to_tag_works_with_text(fandom, fandom.name) %>
+              <%= link_to_tag_works(fandom, collection: @collection) %>
               <% if fandom.respond_to?(:count) %>
                 (<%= fandom.count %>)
               <% end %>

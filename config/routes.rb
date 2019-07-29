@@ -183,7 +183,8 @@ Otwarchive::Application.routes.draw do
       collection do
         get :bulk_search
         post :bulk_search
-        post :update_user
+        post :update
+        post :update_status
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -467,14 +468,6 @@ Otwarchive::Application.routes.draw do
   #### API ####
 
   namespace :api do
-    namespace :v1 do
-      resources :bookmarks, only: [:create], defaults: { format: :json }
-      resources :works, only: [:create], defaults: { format: :json }
-      post 'bookmarks/import', to: 'bookmarks#create'
-      post 'works/import', to: 'works#create'
-      post 'works/urls', to: 'works#batch_urls'
-    end
-
     namespace :v2 do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
