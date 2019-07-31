@@ -382,8 +382,7 @@ class Work < ApplicationRecord
       chapters.each do |chapter|
         if (chapter.pseuds - author_to_remove.pseuds).empty?
           pseuds_with_author_removed.each do |new_pseud|
-            cs = chapter.creatorships.find_or_initialize_by(pseud: new_pseud)
-            cs.update!(disable_notifications: true)
+            chapter.creatorships.find_or_create_by(pseud: new_pseud)
           end
         end
 

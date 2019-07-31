@@ -156,14 +156,10 @@ class ExternalAuthor < ApplicationRecord
     new_pseud = creator_to_add.default_pseud if new_pseud.nil?
 
     work.transaction do
-      # We have our own notifications in this class, so suppress notifications
-      # for any new creatorships:
-      c = work.creatorships.find_or_initialize_by(pseud: new_pseud)
-      c.update!(disable_notifications: true)
+      work.creatorships.find_or_create_by(pseud: new_pseud)
 
       work.chapters.each do |chapter|
-        c = chapter.creatorships.find_or_initialize_by(pseud: new_pseud)
-        c.update!(disable_notifications: true)
+        chapter.creatorships.find_or_create_by(pseud: new_pseud)
       end
     end
   end

@@ -315,12 +315,9 @@ class StoryParser
     pseuds = pseuds.flatten.compact.uniq
     raise Error, "A work must have at least one author specified" if pseuds.empty?
     pseuds.each do |pseud|
-      work.creatorships.build(pseud: pseud)
+      work.creatorships.build(pseud: pseud, enable_notifications: true)
       work.chapters.each do |chapter|
-        # Anyone added in this step will already receive notifications about
-        # being co-creator on the work, so to reduce the amount of spam we
-        # disable notifications for the chapters:
-        chapter.creatorships.build(pseud: pseud, disable_notifications: true)
+        chapter.creatorships.build(pseud: pseud)
       end
     end
 

@@ -81,7 +81,7 @@ class Creatorship < ApplicationRecord
 
   after_commit :update_indices
 
-  after_create_commit :notify_creator, unless: :disable_notifications
+  after_create_commit :notify_creator, if: :enable_notifications
 
   # If a pseud is listed as a work co-creator (not invited, actually listed),
   # they should also be listed on all of the work's series. Similarly, if a
@@ -138,8 +138,8 @@ class Creatorship < ApplicationRecord
     end
   end
 
-  # Allow notifications about new creatorships to be disabled.
-  attr_accessor :disable_notifications
+  # Only enable notifications for new creatorships when explicitly enabled.
+  attr_accessor :enable_notifications
 
   # Notify the pseud of their new creatorship.
   def notify_creator

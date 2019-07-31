@@ -36,9 +36,10 @@ class SerialWork < ApplicationRecord
     return unless work && series
 
     work.pseuds_after_saving.each do |pseud|
-      # Because the creatorships are approved on the work, we also want to make
-      # sure that they're approved on the series:
-      series.creatorships.approve_or_create_by(pseud: pseud)
+      creatorship = series.creatorships.find_or_initialize_by(pseud: pseud)
+      creatorship.approved = true
+      creatorship.enable_notifications = true
+      creatorship.save
     end
   end
 end
