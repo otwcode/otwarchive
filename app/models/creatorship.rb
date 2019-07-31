@@ -148,7 +148,11 @@ class Creatorship < ApplicationRecord
                   pseud.user != User.orphan_account
 
     if approved?
-      UserMailer.creatorship_notification(id, User.current_user.id).deliver
+      if User.current_user.try(:is_archivist?)
+        UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver
+      else
+        UserMailer.creatorship_notification(id, User.current_user.id).deliver
+      end
     else
       UserMailer.creatorship_invitation(id, User.current_user.id).deliver
     end

@@ -238,6 +238,23 @@ class UserMailer < BulletproofMailer::Base
 
   ### WORKS NOTIFICATIONS ###
 
+  # Sends email when an archivist adds someone as a co-creator.
+  def creatorship_notification_archivist(creatorship_id, archivist_id)
+    @creatorship = Creatorship.find(creatorship_id)
+    @archivist = User.find(archivist_id)
+    @user = @creatorship.pseud.user
+    @creation = @creatorship.creation
+    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+      mail(
+        to: @user.email,
+        subject: t("user_mailer.creatorship_notification.subject",
+                   app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  ensure
+    I18n.locale = I18n.default_locale
+  end
+
   # Sends email when a user is added as a co-author
   def creatorship_notification(creatorship_id, adding_user_id)
     @creatorship = Creatorship.find(creatorship_id)

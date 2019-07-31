@@ -200,16 +200,31 @@ en:
         part2: "If you have questions, please %{support} (%{url})."
         part1_other: "Your work \"%{title}\" was deleted at the request of %{pseud}."
         part1_yourself: "Your work \"%{title}\" was deleted at your request."
-    creatorship_notification:
-      subject: "[%{app_name}] Co-creator Notification"
-      part1: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following %{type}:"
+    creatorship_notification_archivist:
+      subject: "[%{app_name}] Archivist Co-creator Notification"
+      intro: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following %{type}:"
+      explanation: "Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without an invitation, even if you have co-creation disabled."
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        part2: "%{edit} to remove yourself as creator if you've been added in error or don't want to be listed as a creator."
-        edit: "Edit the %{type}"
+        remove: "If you've been added in error or don't want to be listed as a creator, you can %{edit} to remove yourself as creator."
+        edit: "edit the %{type}"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        part2: "Edit the %{type} to remove yourself as creator if you've been added in error or don't want to be listed as a creator: %{url}"
+        remove: "If you've been added in error or don't want to be listed as a creator, you can edit the %{type} to remove yourself as creator: %{url}"
+    creatorship_notification:
+      subject: "[%{app_name}] Co-creator Notification"
+      intro: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following %{type}:"
+      chapter:
+        explanation: "Because you previously co-created this work with %{adding_user}, they are allowed to add you to chapters on this work without an invitation, even if you have co-creation disabled."
+      series:
+        explanation: "Because you previously co-created one of the works in this series with %{adding_user}, they are allowed to add you to the series without an invitation, even if you have co-creation disabled."
+      html:
+        creation: "%{creation_link} by %{pseud_links}"
+        remove: "If you've been added in error or don't want to be listed as a creator, you can %{edit} to remove yourself as creator."
+        edit: "edit the %{type}"
+      text:
+        creation: "%{title} (%{url}) by %{pseuds}"
+        remove: "If you've been added in error or don't want to be listed as a creator, you can edit the %{type} to remove yourself as creator: %{url}"
     creatorship_invitation:
       subject: "[%{app_name}] Co-creator Invitation"
       intro: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following %{type}:"

@@ -1,6 +1,6 @@
 <% creation_type = @creation.model_name.human.downcase %>
 <% content_for :message do %>
-  <p><%= t(".intro", type: creation_type, adding_user: @adding_user.login,
+  <p><%= t(".intro", type: creation_type, archivist: @archivist.login,
            pseud: @creatorship.pseud.name) %></p>
 
   <p>
@@ -9,10 +9,7 @@
     pseud_links: @creation.pseuds.map{ |p| style_pseud_link(p) }.to_sentence.html_safe).html_safe %>
   </p>
 
-  <p>
-    <%= t(".#{@creation.model_name.to_s.underscore}.explanation",
-          adding_user: @adding_user.login) %>
-  </p>
+  <p><%= t(".explanation") %></p>
 
   <p><%= t(".html.remove", edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %></p>
 <% end %>
