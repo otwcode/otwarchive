@@ -2,7 +2,7 @@ class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Searchable
-  include HasCreatorships
+  include Creatable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works

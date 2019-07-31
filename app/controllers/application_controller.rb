@@ -435,7 +435,7 @@ public
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
 
       # Override the standard visibility check if the user has a creator invite:
-      if @check_visibility_of.is_a?(HasCreatorships)
+      if @check_visibility_of.is_a?(Creatable)
         can_view_hidden ||= @check_visibility_of.user_has_creator_invite?(current_user)
       end
 

@@ -2,6 +2,31 @@
 
 require "spec_helper"
 
+describe "rake creatorships:remove_deleted_work_creatorships" do
+  let(:work) { create(:posted_work) }
+
+  let(:work_creatorships_relation) do
+    Creatorship.where(creation_type: "Work", creation_id: work.id)
+  end
+
+  context "when the creatorship belongs to a valid work" do
+    it "doesn't delete the creatorship" do
+      expect(work_creatorships_relation.reset.count).to eq(1)
+      subject.invoke
+      expect(work_creatorships_relation.reset.count).to eq(1)
+    end
+  end
+
+  context "when the creatorship belongs to a deleted work" do
+    it "does delete the creatorship" do
+      work.delete # use delete to avoid deleting the creatorships
+      expect(work_creatorships_relation.reset.count).to eq(1)
+      subject.invoke
+      expect(work_creatorships_relation.reset.count).to eq(0)
+    end
+  end
+end
+
 describe "rake creatorships:remove_deleted_chapter_creatorships" do
   let(:chapter) { create(:posted_work).chapters.first }
 

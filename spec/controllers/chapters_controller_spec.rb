@@ -7,13 +7,12 @@ describe ChaptersController do
   let(:user) { create(:user) }
   let!(:work) { create(:posted_work, authors: [user.pseuds.first]) }
   let(:unposted_work) { create(:work, authors: [user.pseuds.first]) }
-  let(:banned_user) { create(:user, banned: true) }
 
-  let(:banned_users_work) do
-    banned_user.update(banned: false)
-    work = create(:work, posted: true, authors: banned_user.pseuds)
-    banned_user.update(banned: true)
-    work
+  let(:banned_users_work) { create(:posted_work) }
+  let(:banned_user) do
+    user = banned_users_work.users.first
+    user.update(banned: true)
+    user
   end
 
   describe "index" do

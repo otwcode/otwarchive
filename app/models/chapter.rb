@@ -4,8 +4,8 @@ class Chapter < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
+  include CreationNotifier
   include Creatable
-  include HasCreatorships
 
   belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'
@@ -79,8 +79,8 @@ class Chapter < ApplicationRecord
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
 
-  before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
-  def fix_positions_after_destroy
+  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count
+  def fix_positions_before_destroy
     if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}

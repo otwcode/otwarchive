@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 namespace :creatorships do
+  desc "Clean up creatorships for deleted works"
+  task(remove_deleted_work_creatorships: :environment) do
+    Creatorship.joins("LEFT JOIN works ON " \
+                      "creatorships.creation_id = works.id AND " \
+                      "creatorships.creation_type = \"Work\"").
+      where(works: { id: nil }).
+      in_batches.delete_all
+  end
+
   desc "Clean up creatorships for deleted chapters"
   task(remove_deleted_chapter_creatorships: :environment) do
     Creatorship.joins("LEFT JOIN chapters ON " \

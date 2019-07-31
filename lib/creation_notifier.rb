@@ -1,4 +1,4 @@
-module Creatable
+module CreationNotifier
   def notify_after_creation # after_create
     return unless self.posted?
     do_notify

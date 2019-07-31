@@ -1,15 +1,14 @@
 class Work < ApplicationRecord
   include Taggable
-  include Creatable
+  include CreationNotifier
   include Collectible
   include Bookmarkable
-  include Pseudable
   include Searchable
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
-  include HasCreatorships
+  include Creatable
 
   ########################################################################
   # ASSOCIATIONS
