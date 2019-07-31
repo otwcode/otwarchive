@@ -35,9 +35,9 @@ class Creatorship < ApplicationRecord
   # different error messages.
   def check_invalid
     if missing?
-      errors.add(:base, ts("Could not find a pseud '%{name}'.", name: byline))
+      errors.add(:base, ts("Could not find a pseud %{name}.", name: byline))
     elsif ambiguous?
-      errors.add(:base, ts("The pseud '%{name}' is ambiguous.", name: byline))
+      errors.add(:base, ts("The pseud %{name} is ambiguous.", name: byline))
     end
   end
 
@@ -175,9 +175,9 @@ class Creatorship < ApplicationRecord
   end
 
   def expire_caches
-    if creation_type == 'Work' && self.pseud.present?
-      CacheMaster.record(creation_id, 'pseud', self.pseud_id)
-      CacheMaster.record(creation_id, 'user', self.pseud.user_id)
+    if creation_type == "Work" && self.pseud.present?
+      CacheMaster.record(creation_id, "pseud", self.pseud_id)
+      CacheMaster.record(creation_id, "user", self.pseud.user_id)
     end
   end
 

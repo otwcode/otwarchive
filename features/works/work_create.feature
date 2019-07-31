@@ -142,7 +142,7 @@ Feature: Create Works
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Does_not_exist"
       And I press "Preview"
-    Then I should see "Invalid creator: Could not find a pseud 'Does_not_exist'."
+    Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
       And I choose "cosomeone" from the "pseud_byline_autocomplete" autocomplete
       And I press "Preview"

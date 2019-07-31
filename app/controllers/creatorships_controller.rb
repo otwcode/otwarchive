@@ -8,7 +8,7 @@ class CreatorshipsController < ApplicationController
 
   # Show all of the creatorships associated with the current user. Displays a
   # form where the user can select multiple creatorships and perform actions
-  # (accept, remove) in bulk.
+  # (accept, reject) in bulk.
   def show
     @page_subtitle = ts("Creator Invitations")
     @creatorships = @creatorships.unapproved.order(id: :desc).
@@ -56,7 +56,7 @@ class CreatorshipsController < ApplicationController
   helper_method :title_for_creation
   def title_for_creation(creation)
     if creation.is_a?(Chapter)
-      "Chapter #{creation.position} of '#{creation.work.title}'"
+      "Chapter #{creation.position} of #{creation.work.title}"
     else
       creation.title
     end

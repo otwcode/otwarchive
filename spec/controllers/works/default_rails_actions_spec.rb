@@ -213,7 +213,7 @@ describe WorksController do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Invalid creator: Could not find a pseud '*impossible*'."
+        include "Invalid creator: Could not find a pseud *impossible*."
     end
 
     it "renders new if the work has ambiguous pseuds" do
@@ -225,7 +225,7 @@ describe WorksController do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Invalid creator: The pseud 'ambiguous' is ambiguous."
+        include "Invalid creator: The pseud ambiguous is ambiguous."
     end
   end
 

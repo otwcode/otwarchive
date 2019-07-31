@@ -407,7 +407,7 @@ describe ChaptersController do
         post :create, params: { work_id: work.id, chapter: @chapter_attributes }
         expect(response).to render_template(:new)
         expect(assigns[:chapter].errors.full_messages).to \
-          include("Invalid creator: Could not find a pseud '*impossible*'.")
+          include("Invalid creator: Could not find a pseud *impossible*.")
       end
 
       it "renders new if chapter has ambiguous pseuds" do
@@ -417,7 +417,7 @@ describe ChaptersController do
         post :create, params: { work_id: work.id, chapter: @chapter_attributes }
         expect(response).to render_template(:new)
         expect(assigns[:chapter].errors.full_messages).to \
-          include("Invalid creator: The pseud 'ambiguous' is ambiguous.")
+          include("Invalid creator: The pseud ambiguous is ambiguous.")
       end
 
       it "renders new if the edit button has been clicked" do
@@ -572,7 +572,7 @@ describe ChaptersController do
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
         expect(response).to render_template(:edit)
         expect(assigns[:chapter].errors.full_messages).to \
-          include("Invalid creator: Could not find a pseud '*impossible*'.")
+          include("Invalid creator: Could not find a pseud *impossible*.")
       end
 
       it "renders edit if chapter has ambiguous pseuds" do
@@ -582,7 +582,7 @@ describe ChaptersController do
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
         expect(response).to render_template(:edit)
         expect(assigns[:chapter].errors.full_messages).to \
-          include("Invalid creator: The pseud 'ambiguous' is ambiguous.")
+          include("Invalid creator: The pseud ambiguous is ambiguous.")
       end
 
       context "when the preview button is clicked" do

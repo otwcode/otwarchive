@@ -88,20 +88,6 @@ Given /^the user "([^"]*)" exists and is activated$/ do |login|
   step %{confirmation emails have been delivered}
 end
 
-Given(/^the user "([^"]*)" disallows co-creators$/) do |login|
-  user = User.where(login: login).first
-  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
-  user.preference.allow_cocreator = false
-  user.preference.save
-end
-
-Given(/^the user "([^"]*)" allows co-creators$/) do |login|
-  user = User.where(login: login).first
-  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
-  user.preference.allow_cocreator = true
-  user.preference.save
-end
-
 Given /^the user "([^"]*)" exists and is not activated$/ do |login|
   find_or_create_new_user(login, DEFAULT_PASSWORD, activate: false)
 end

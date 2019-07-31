@@ -449,7 +449,7 @@ Feature: Edit chapters
     When a chapter is set up for "Rusty Has Two Moms"
       And I try to invite the co-authors "sharon, brenda"
       And I post the chapter
-    Then I should see "The pseud 'sharon' is ambiguous."
+    Then I should see "The pseud sharon is ambiguous."
     When I select "thegoodmom" from "There's more than one user with the pseud sharon."
       And I press "Post"
     Then I should not see "brenda"
@@ -478,7 +478,7 @@ Feature: Edit chapters
       And I invite the co-author "sharon"
       And I check "brenda"
       And I post the chapter
-    Then I should see "The pseud 'sharon' is ambiguous."
+    Then I should see "The pseud sharon is ambiguous."
     When I select "thegoodmom" from "There's more than one user with the pseud sharon."
       And I press "Post"
     Then I should see "brenda, rusty"
@@ -529,7 +529,7 @@ Feature: Edit chapters
     When I follow "Creator Invitations page"
       And I check "selected[]"
       And I press "Accept"
-    Then I should see "You are now listed as a co-creator on Chapter 2 of 'Rusty Has Two Moms'."
+    Then I should see "You are now listed as a co-creator on Chapter 2 of Rusty Has Two Moms."
     When I follow "Rusty Has Two Moms"
     Then I should see "brenda, rusty"
       And I should see "Edit"

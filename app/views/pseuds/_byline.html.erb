@@ -77,7 +77,7 @@
         <% pseuds = creatorship.ambiguous_pseuds %>
         <% key = :"author_attributes_#{name.downcase.gsub(/\W+/, "")}" %>
         <p class="error">
-          <%= label_tag key, ts("There's more than one user with the pseud %{name}. Please choose the one you want:", :name => name) %>
+          <%= label_tag key, ts("There's more than one user with the pseud %{name}. Please choose the one you want:", name: name) %>
           <%= creator_form.collection_select :coauthors, pseuds, :id, :user_login, { include_blank: true }, { id: key, name: "#{creator_form.object_name}[coauthors][]" } %>
         </p>
       <% end %>
