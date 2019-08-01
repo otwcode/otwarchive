@@ -12,7 +12,7 @@ describe "rake creatorships:remove_deleted_work_creatorships" do
   context "when the creatorship belongs to a valid work" do
     it "doesn't delete the creatorship" do
       expect(work_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(0)
       expect(work_creatorships_relation.reset.count).to eq(1)
     end
   end
@@ -21,7 +21,7 @@ describe "rake creatorships:remove_deleted_work_creatorships" do
     it "does delete the creatorship" do
       work.delete # use delete to avoid deleting the creatorships
       expect(work_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(-1)
       expect(work_creatorships_relation.reset.count).to eq(0)
     end
   end
@@ -37,7 +37,7 @@ describe "rake creatorships:remove_deleted_chapter_creatorships" do
   context "when the creatorship belongs to a valid chapter" do
     it "doesn't delete the creatorship" do
       expect(chapter_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(0)
       expect(chapter_creatorships_relation.reset.count).to eq(1)
     end
   end
@@ -46,7 +46,7 @@ describe "rake creatorships:remove_deleted_chapter_creatorships" do
     it "does delete the creatorship" do
       chapter.delete # use delete to avoid deleting the creatorships
       expect(chapter_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(-1)
       expect(chapter_creatorships_relation.reset.count).to eq(0)
     end
   end
@@ -62,7 +62,7 @@ describe "rake creatorships:remove_deleted_series_creatorships" do
   context "when the creatorship belongs to a valid series" do
     it "doesn't delete the creatorship" do
       expect(series_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(0)
       expect(series_creatorships_relation.reset.count).to eq(1)
     end
   end
@@ -71,7 +71,7 @@ describe "rake creatorships:remove_deleted_series_creatorships" do
     it "does delete the creatorship" do
       series.delete # use delete to avoid deleting the creatorships
       expect(series_creatorships_relation.reset.count).to eq(1)
-      subject.invoke
+      expect { subject.invoke }.to change { Creatorship.count }.by(-1)
       expect(series_creatorships_relation.reset.count).to eq(0)
     end
   end
