@@ -255,7 +255,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.locale = I18n.default_locale
   end
 
-  # Sends email when a user is added as a co-author
+  # Sends email when a user is added as a co-creator
   def creatorship_notification(creatorship_id, adding_user_id)
     @creatorship = Creatorship.find(creatorship_id)
     @adding_user = User.find(adding_user_id)

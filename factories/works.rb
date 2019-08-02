@@ -10,7 +10,7 @@ FactoryGirl.define do
     chapter_attributes chapter_info
 
     transient do
-      authors { [FactoryGirl.build(:pseud)] }
+      authors { [build(:pseud)] }
     end
 
     after(:build) do |work, evaluator|

@@ -107,10 +107,11 @@ class Creatorship < ApplicationRecord
   # and all work co-creators are listed on the work's series, we need to make
   # sure that when a creatorship is deleted, the deletion cascades downwards.
   def remove_from_children
-    # If this is being deleted and it's a work, then its chapters are also going
-    # to be deleted (which will cause their creatorships to be deleted as
-    # well). If this is being deleted and it's a series, then we shouldn't
-    # delete the work creatorships.
+    # If the creation is being deleted and it's a work, then its chapters are
+    # also going to be deleted (which will cause their creatorships to be
+    # deleted as well). If the creation is being deleted and it's a series,
+    # then we shouldn't delete the work creatorships. So if the creation is
+    # being deleted, we don't want to cascade the deletion downwards.
     return if creation.nil? || creation.destroyed?
 
     children = if creation.is_a?(Work)
@@ -246,7 +247,8 @@ class Creatorship < ApplicationRecord
   # Calculate whether this creatorship should count as approved, or whether
   # it's just a creatorship invitation.
   def should_automatically_approve?
-    # Approve if the current user has special permissions:
+    # Approve if we're using an API key, or if the current user has special
+    # permissions:
     return true if User.current_user.nil? ||
                    pseud&.user == User.current_user ||
                    pseud&.user == User.orphan_account ||

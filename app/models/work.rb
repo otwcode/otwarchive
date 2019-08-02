@@ -219,11 +219,6 @@ class Work < ApplicationRecord
     Work.expire_work_tag_groups_id(self.id)
   end
 
-  def reindex_changed_pseud(pseud)
-    pseud = pseud.id if pseud.respond_to?(:id)
-    IndexQueue.enqueue_id(Pseud, pseud, :background)
-  end
-
   def update_pseud_index
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
@@ -268,11 +263,6 @@ class Work < ApplicationRecord
 
   def tag_groups_key
     Work.tag_groups_key_id(self.id)
-  end
-
-  def expire_pseud(pseud)
-    CacheMaster.record(self.id, 'pseud', pseud.id)
-    CacheMaster.record(self.id, 'user', pseud.user_id)
   end
 
   # When works are done being reindexed, expire the appropriate caches

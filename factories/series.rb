@@ -9,7 +9,7 @@ FactoryGirl.define do
     title { generate(:series_title) }
 
     transient do
-      authors { [FactoryGirl.build(:pseud)] }
+      authors { [build(:pseud)] }
     end
 
     after(:build) do |series, evaluator|

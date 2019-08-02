@@ -282,7 +282,7 @@ Feature: Edit chapters
     When a chapter is set up for "Summer Friends"
       And I invite the co-author "sabrina"
       And I post the chapter
-    Then I should not see "karma, sabrina"
+    Then I should not see "sabrina"
     When the user "sabrina" accepts all co-creator invites
       And I view the work "Summer Friends"
     Then I should see "karma, sabrina"
