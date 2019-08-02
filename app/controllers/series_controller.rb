@@ -136,7 +136,7 @@ class SeriesController < ApplicationController
   def update_positions
     if params[:serial_works]
       @series = Series.find(params[:id])
-      @series.reorder(params[:serial_works])
+      @series.reorder_list(params[:serial_works])
       flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]
       params[:serial].each_with_index do |id, position|
