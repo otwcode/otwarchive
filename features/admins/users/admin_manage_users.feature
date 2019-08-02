@@ -60,13 +60,14 @@ Feature: Admin Actions to manage users
     Given the user "new_user" exists and is activated
       And I am logged in as an admin
     When I go to the abuse administration page for "new_user"
-    Then I should see "No login recorded"
+    Then I should see "Current IP: None recorded"
+      And I should see "Previous IP: None recorded"
     When time is frozen at 1/1/2019
       And I am logged in as "new_user"
       And I jump in our Delorean and return to the present
       And I am logged in as an admin
       And I go to the abuse administration page for "new_user"
     Then I should not see "No login recorded"
-      And I should see "2019-01-01 12:00:00 -0500 (127.0.0.1) Current Login System Generated"
-      And I should see "2019-01-01 12:00:00 -0500 (127.0.0.1) Previous Login System Generated"
+      And I should see "Current IP: 2019-01-01 12:00:00 -0500 (127.0.0.1)"
+      And I should see "Previous IP: 2019-01-01 12:00:00 -0500 (127.0.0.1)"
 
