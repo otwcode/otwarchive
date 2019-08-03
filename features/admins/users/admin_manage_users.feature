@@ -69,6 +69,6 @@ Feature: Admin Actions to manage users
       And I am logged in as an admin
       And I go to the abuse administration page for "new_user"
     Then I should not see "No login recorded"
-      And I should see "Current Login IP Address: 127.0.0.1 2019-01-01 12:00:00 -0500"
-      And I should see "Previous Login IP Address: 127.0.0.1"
+      And I should see "2019-01-01 12:00:00 -0500 Current Login IP Address: 127.0.0.1"
+      And I should see "2019-01-01 12:00:00 -0500 Previous Login IP Address: 127.0.0.1"
 
