@@ -618,7 +618,7 @@ namespace :After do
   end
   
   desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collection"
-  task(:unhide_invited_works :environment) do
+  task(unhide_invited_works: :environment) do
     works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
     works.find_in_batches.each do |batch|
       batch.each do |work|
