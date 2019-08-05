@@ -195,7 +195,7 @@ Feature: Create and Edit Series
       And I follow "Remove Me As Author"
     Then I should see "Sorry, we can't remove all creators of a work."
 
-  Scenario: Removing self as co-author from co-authored series
+  Scenario: Removing self as co-creator from co-created series
     Given basic tags
       And the user "son" allows co-creators
     When I am logged in as "moon" with password "testuser"
@@ -253,7 +253,7 @@ Feature: Create and Edit Series
       And the user "barbaz" allows co-creators
       And I post the work "Behind her back she’s Gentleman Jack" as part of a series "Gentleman Jack"
     When I view the series "Gentleman Jack"
-    And I follow "Edit Series"
+      And I follow "Edit Series"
       And I try to invite the co-author "barbaz"
       And I press "Update"
     Then I should see "Series was successfully updated."

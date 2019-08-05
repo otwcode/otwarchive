@@ -498,4 +498,51 @@ describe Work do
       expect(work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
   end
+
+  describe "#remove_author" do
+    let(:to_remove) { create(:user) }
+    let(:other) { create(:user) }
+
+    context "when all the pseuds on the work are owned by one user" do
+      let(:pseud1) { create(:pseud, user: to_remove) }
+      let(:pseud2) { create(:pseud, user: to_remove) }
+      let(:pseud3) { create(:pseud, user: to_remove) }
+
+      let!(:work) do
+        create(:work, authors: [pseud1, pseud2, pseud3])
+      end
+
+      let!(:solo1) { create(:chapter, work: work, authors: [pseud1]) }
+      let!(:solo2) { create(:chapter, work: work, authors: [pseud2]) }
+      let!(:solo3) { create(:chapter, work: work, authors: [pseud3]) }
+
+      before { work.reload }
+
+      it "raises an error" do
+        expect { work.remove_author(to_remove) }.to raise_exception(
+          ActiveRecord::RecordInvalid,
+          "Validation failed: Sorry, we can't remove all creators of a work."
+        )
+      end
+    end
+
+    context "when the work has a chapter whose sole creator is being removed" do
+      let!(:work) do
+        create(:work, authors: [to_remove.default_pseud, other.default_pseud])
+      end
+
+      let!(:solo_chapter) do
+        create(:chapter, work: work, authors: [to_remove.default_pseud])
+      end
+
+      # Make sure we see the newest chapter:
+      before { work.reload }
+
+      it "sets the chapter's creators equal to the work's" do
+        work.remove_author(to_remove)
+        expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
+        expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
+      end
+    end
+  end
 end

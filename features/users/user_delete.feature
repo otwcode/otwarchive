@@ -97,6 +97,9 @@ Scenario: Delete a user who has coauthored a work
 
   Scenario: Can delete a user who has an empty series
     Given I am logged in as "testuser"
+    # The only way to create an empty series is to add a new series to an
+    # unsaved work that's invalid in some way (in this case, the work has a
+    # fandom tag with invalid characters):
     When I set up a draft "Invalid" with fandom "%" as part of a series "Empty"
       And I press "Post"
     Then I should see "Sorry! We couldn't save this work because:"

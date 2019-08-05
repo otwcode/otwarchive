@@ -256,24 +256,18 @@ class Pseud < ApplicationRecord
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      remove_pseuds = false
-      if pseuds.empty?
-        failures << byline.strip
-        next
-      end
-      if pseuds.size > 1
+      if pseuds.length == 1
+        pseud = pseuds.first
+        if pseud.user.banned? || pseud.user.suspended?
+          banned_pseuds << pseud
+        else
+          valid_pseuds << pseud
+        end
+      elsif pseuds.length > 1
         ambiguous_pseuds[pseuds.first.name] = pseuds
-        remove_pseuds = options[:remove_ambiguous]
+      else
+        failures << byline.strip
       end
-      banned = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
-      if banned.present?
-        pseuds -= banned
-        banned_pseuds << banned
-      end
-      if remove_pseuds
-        pseuds = []
-      end
-      valid_pseuds << pseuds
     end
     {
       pseuds: valid_pseuds.flatten.uniq,

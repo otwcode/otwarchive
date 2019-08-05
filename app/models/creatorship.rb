@@ -189,7 +189,7 @@ class Creatorship < ApplicationRecord
   attr_reader :ambiguous_pseuds
 
   # We define a virtual "byline" attribute to make it easier to handle
-  # ambigous/missing pseuds. By storing the desired name in the @byline
+  # ambiguous/missing pseuds. By storing the desired name in the @byline
   # variable, we can generate nicely formatted messages.
   def byline=(byline)
     pseuds = Pseud.parse_byline(byline).to_a

@@ -79,4 +79,35 @@ describe Series do
                                                   no_co_creator.pseuds)
     end
   end
+
+  describe "#remove_author" do
+    context "when a work in the series has a chapter whose sole creator is being removed" do
+      let(:to_remove) { create(:user, login: "to_remove") }
+      let(:other) { create(:user, login: "other") }
+
+      let!(:work) do
+        create(:work, authors: [to_remove.default_pseud, other.default_pseud])
+      end
+
+      let!(:solo_chapter) do
+        create(:chapter, work: work, authors: [to_remove.default_pseud])
+      end
+
+      let!(:series) do
+        create(:series,
+               works: [work],
+               authors: [to_remove.default_pseud, other.default_pseud])
+      end
+
+      # Make sure we see the newest chapter:
+      before { series.reload }
+
+      it "sets the chapter's creators equal to the creators of the series" do
+        series.remove_author(to_remove)
+        expect(series.pseuds.reload).to contain_exactly(other.default_pseud)
+        expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
+        expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
+      end
+    end
+  end
 end

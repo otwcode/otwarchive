@@ -324,6 +324,7 @@ Feature: Edit chapters
     Given I am logged in as "karma" with password "the1noly"
       And I post the work "Past Friends"
       And a chapter with the co-author "sabrina" is added to "Past Friends"
+      And all emails have been delivered
       And a chapter is added to "Past Friends"
     When I view the work "Past Friends"
       And I view the 3rd chapter
@@ -333,6 +334,10 @@ Feature: Edit chapters
     When I check "sabrina"
       And I post the chapter
     Then I should not see "Chapter by karma"
+      And 1 email should be delivered to "sabrina"
+      And the email should contain "The user karma has listed your pseud sabrina as a co-creator on the following chapter"
+      And the email should contain "Because you previously co-created this work with karma, they are allowed to add you to chapters on this work without an invitation, even if you have co-creation disabled."
+      And the email should not contain "translation missing"
 
 
   Scenario: Editing a chapter with a co-creator does not allow you to remove the co-creator

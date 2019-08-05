@@ -364,6 +364,13 @@ class Work < ApplicationRecord
     end
   end
 
+  # Remove all pseuds associated with a particular user. Raises an exception if
+  # this would result in removing all creators from the work.
+  #
+  # Callbacks handle most of the work when deleting creatorships, but we do
+  # have one special case: if a co-created work has a chapter that's only has
+  # one listed creator, and that creator removes themselves from the work, we
+  # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?

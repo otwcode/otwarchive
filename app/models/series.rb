@@ -146,16 +146,21 @@ class Series < ApplicationRecord
     works.collect(&:pseuds).flatten.compact.uniq.sort
   end
 
-  # Remove a user as an author of this series
+  # Remove a user (and all their pseuds) as an author of this series.
+  #
+  # We call Work#remove_author before destroying the series creatorships to
+  # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
     transaction do
-      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
-      authored_works_in_series = (author_to_remove.works & self.works)
+      authored_works_in_series = self.works.merge(author_to_remove.works)
+
       authored_works_in_series.each do |work|
         work.remove_author(author_to_remove)
       end
+
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
   end
 
