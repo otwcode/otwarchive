@@ -46,3 +46,73 @@ describe "rake After:reset_word_counts" do
     end
   end
 end
+
+
+
+
+describe "rake After:unhide_invited_works" do
+
+
+  let(:anonymous_collection) { create (:anonymous_collection) }
+  let(:unrevealed_collection) { create (:unrevealed_collection) }
+  let(:other_collection) { create (:collection) }
+  let(:anonymous_unrevealed_collection) { create (:anonymous_unrevealed_collection)}
+
+  let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
+  let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
+  let(:normal_work) { create(:posted_work, collections: [other_collection]) }
+  let(:anonymous_unrevealed_work) { create(:posted_work, collections: [anonymous_unrevealed_collection]) }
+
+  it "works start as expected" do
+    expect(normal_work.unrevealed?).to be(false)
+    expect(normal_work.anonymous?).to be(false)
+    expect(anonymous_work.unrevealed?).to be(false)
+    expect(anonymous_work.anonymous?).to be(true)
+    expect(unrevealed_work.unrevealed?).to be(true)
+    expect(unrevealed_work.anonymous?).to be(false)
+    expect(anonymous_unrevealed_work.anonymous?).to be(true)
+    expect(anonymous_unrevealed_work.unrevealed?).to be(true)
+  end
+
+  context "When works get stuck" do
+    let(:chapter) { create(:chapter, work: en_work, posted: true, position: 2, authors: en_work.authors, content: "A few more words never hurt.") }
+
+    before do
+      # Screw up collections
+      anonymous_work.collection_items.first.update_columns(user_approval_status: 0)
+      unrevealed_work.collection_items.first.update_columns(user_approval_status: 0)
+      anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: 0)
+    end
+
+    it "works can get stuck" do
+      normal_work.reload
+      anonymous_work.reload
+      unrevealed_work.reload
+      anonymous_unrevealed_work.reload
+      expect(normal_work.unrevealed?).to be(false)
+      expect(normal_work.anonymous?).to be(false)
+      expect(anonymous_work.unrevealed?).to be(false)
+      expect(anonymous_work.anonymous?).to be(true)
+      expect(unrevealed_work.unrevealed?).to be(true)
+      expect(unrevealed_work.anonymous?).to be(false)
+      expect(anonymous_unrevealed_work.anonymous?).to be(true)
+      expect(anonymous_unrevealed_work.unrevealed?).to be(true)
+    end
+
+    it "will be fixed by running the rake task" do
+      subject.invoke
+      normal_work.reload
+      anonymous_work.reload
+      unrevealed_work.reload
+      anonymous_unrevealed_work.reload
+      expect(normal_work.unrevealed?).to be(false)
+      expect(normal_work.anonymous?).to be(false)
+      expect(anonymous_work.unrevealed?).to be(false)
+      expect(anonymous_work.anonymous?).to be(false)
+      expect(unrevealed_work.unrevealed?).to be(false)
+      expect(unrevealed_work.anonymous?).to be(false)
+      expect(anonymous_unrevealed_work.anonymous?).to be(false)
+      expect(anonymous_unrevealed_work.unrevealed?).to be(false)
+    end
+  end
+end
