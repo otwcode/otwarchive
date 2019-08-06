@@ -193,7 +193,7 @@ Feature: Create and Edit Series
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
       And I follow "Remove Me As Author"
-    Then I should see "Sorry, we can't remove all creators of a work."
+    Then I should see "Sorry, we can't remove all authors of a work."
 
   Scenario: Removing self as co-creator from co-created series
     Given basic tags
