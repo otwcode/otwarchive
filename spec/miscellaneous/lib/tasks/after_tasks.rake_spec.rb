@@ -53,7 +53,7 @@ describe "rake After:unhide_invited_works" do
   let(:anonymous_collection) { create(:anonymous_collection) }
   let(:unrevealed_collection) { create(:unrevealed_collection) }
   let(:other_collection) { create(:collection) }
-  let(:invited_anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection)}
+  let(:invited_anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
   let(:invited_anonymous_work) { create(:posted_work, collections: [invited_anonymous_collection]) }
   let(:invited_unrevealed_work) { create(:posted_work, collections: [invited_unrevealed_collection]) }
   let(:normal_work) { create(:posted_work, collections: [other_collection]) }
