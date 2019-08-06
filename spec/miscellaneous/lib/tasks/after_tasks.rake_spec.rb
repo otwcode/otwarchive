@@ -47,17 +47,11 @@ describe "rake After:reset_word_counts" do
   end
 end
 
-
-
-
 describe "rake After:unhide_invited_works" do
-
-
   let(:anonymous_collection) { create (:anonymous_collection) }
   let(:unrevealed_collection) { create (:unrevealed_collection) }
   let(:other_collection) { create (:collection) }
   let(:anonymous_unrevealed_collection) { create (:anonymous_unrevealed_collection)}
-
   let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
   let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
   let(:normal_work) { create(:posted_work, collections: [other_collection]) }
