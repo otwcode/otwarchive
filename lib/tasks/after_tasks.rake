@@ -619,13 +619,16 @@ namespace :After do
   
   desc "Reveal works and creators hidden upon invitation to unrevealed or anonymous collection"
   task(unhide_invited_works: :environment) do
+    print "Total number of works to check: #{ Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true").count }\n"
     works = Work.where("in_anon_collection IS true OR in_unrevealed_collection IS true")
-    works.find_in_batches.each do |batch|
+    works.find_in_batches do |batch|
+      print(".") && STDOUT.flush
       batch.each do |work|
         work.update_anon_unrevealed
         work.save if work.changed?
       end
     end
+    print "\n"
   end
 end # this is the end that you have to put new tasks above
 

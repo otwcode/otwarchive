@@ -52,11 +52,11 @@ describe "rake After:unhide_invited_works" do
   let(:invited_unrevealed_collection) { create(:unrevealed_collection) }
   let(:anonymous_collection) { create(:anonymous_collection) }
   let(:unrevealed_collection) { create(:unrevealed_collection) }
-  let(:other_collection) { create(:collection) }
+  let(:collection) { create(:collection) }
   let(:invited_anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
   let(:invited_anonymous_work) { create(:posted_work, collections: [invited_anonymous_collection]) }
   let(:invited_unrevealed_work) { create(:posted_work, collections: [invited_unrevealed_collection]) }
-  let(:normal_work) { create(:posted_work, collections: [other_collection]) }
+  let(:work) { create(:posted_work, collections: [collection]) }
   let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [invited_anonymous_unrevealed_collection]) }
   let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
   let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
@@ -64,31 +64,36 @@ describe "rake After:unhide_invited_works" do
   context "When invited works are incorrectly anonymous or unrevealed" do
     before do
       # Screw up collection items
-      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: 0)
-      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: 0)
-      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: 0)
+      invited_anonymous_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
+      invited_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
+      invited_anonymous_unrevealed_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
     end
 
-    it "updates the anonymous and unrevealed status of invited work" do
+    it "updates the anonymous and unrevealed status of invited works" do
       subject.invoke
-      normal_work.reload
+
+      work.reload
       invited_anonymous_work.reload
       invited_unrevealed_work.reload
       invited_anonymous_unrevealed_work.reload
       unrevealed_work.reload
       anonymous_work.reload
-      expect(normal_work.unrevealed?).to be(false)
-      expect(normal_work.anonymous?).to be(false)
+
+      # Accepted works should be unchanged
+      expect(work.unrevealed?).to be(false)
+      expect(work.anonymous?).to be(false)
+      expect(anonymous_work.unrevealed?).to be(false)
+      expect(anonymous_work.anonymous?).to be(true)
+      expect(unrevealed_work.unrevealed?).to be(true)
+      expect(unrevealed_work.anonymous?).to be(false)
+
+      # Invited works should no longer be anonymous or unrevealed
       expect(invited_anonymous_work.unrevealed?).to be(false)
       expect(invited_anonymous_work.anonymous?).to be(false)
       expect(invited_unrevealed_work.unrevealed?).to be(false)
       expect(invited_unrevealed_work.anonymous?).to be(false)
       expect(invited_anonymous_unrevealed_work.anonymous?).to be(false)
       expect(invited_anonymous_unrevealed_work.unrevealed?).to be(false)
-      expect(anonymous_work.unrevealed?).to be(false)
-      expect(anonymous_work.anonymous?).to be(true)
-      expect(unrevealed_work.unrevealed?).to be(true)
-      expect(unrevealed_work.anonymous?).to be(false)
     end
   end
 end
