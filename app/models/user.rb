@@ -88,8 +88,8 @@ class User < ApplicationRecord
   # Nested associations through creatorships got weird after 3.0.x
   has_many :creatorships, through: :pseuds
 
-  has_many :works, through: :pseuds
-  has_many :series, through: :pseuds
+  has_many :works, -> { distinct }, through: :pseuds
+  has_many :series, -> { distinct }, through: :pseuds
   has_many :chapters, through: :pseuds
 
   has_many :related_works, through: :works

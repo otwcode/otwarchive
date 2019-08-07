@@ -368,7 +368,7 @@ class Work < ApplicationRecord
   # this would result in removing all creators from the work.
   #
   # Callbacks handle most of the work when deleting creatorships, but we do
-  # have one special case: if a co-created work has a chapter that's only has
+  # have one special case: if a co-created work has a chapter that only has
   # one listed creator, and that creator removes themselves from the work, we
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)

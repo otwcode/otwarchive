@@ -280,7 +280,7 @@ Feature: Create and Edit Series
       And I follow "Edit Series"
       And I try to invite the co-author "barbaz"
       And I press "Update"
-    Then I should see "Invalid creator: barbaz does not allow others to add them as a co-creator."
+    Then I should see "Invalid creator: barbaz does not allow others to invite them to be a co-creator."
     When I press "Update"
     Then I should see "Series was successfully updated."
       And "barbaz" should not be the creator of the series "Gentleman Jack"

@@ -547,7 +547,7 @@ Feature: Edit chapters
     When a chapter is set up for "Rusty Has Two Moms"
       And I try to invite the co-author "brenda"
       And I press "Post"
-    Then I should see "brenda does not allow others to add them as a co-creator."
+    Then I should see "brenda does not allow others to invite them to be a co-creator."
       And 0 emails should be delivered to "brenda"
     When I press "Preview"
     Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."

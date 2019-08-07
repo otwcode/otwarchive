@@ -215,7 +215,7 @@ Feature: Edit Works
       And I fill in the basic work information for "Thats not my Spock"
       And I try to invite the co-authors "Michael,Christopher"
       And I press "Post"
-    Then I should see "Christopher (Pike) does not allow others to add them as a co-creator."
+    Then I should see "Christopher (Pike) does not allow others to invite them to be a co-creator."
     When I press "Post"
     Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
       But I should not see "Michael"

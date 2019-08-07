@@ -47,7 +47,7 @@ class Creatorship < ApplicationRecord
     return if approved? || pseud.nil?
     return if pseud&.user&.preference&.allow_cocreator
 
-    errors.add(:base, ts("%{name} does not allow others to add them as a co-creator.",
+    errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
                          name: pseud.byline))
   end
 

@@ -463,7 +463,7 @@ describe WorksController do
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
       expect(response).to render_template :edit
       expect(assigns[:work].errors.full_messages).to \
-        include "Invalid creator: #{no_co_creator.login} does not allow others to add them as a co-creator."
+        include "Invalid creator: #{no_co_creator.login} does not allow others to invite them to be a co-creator."
       expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
     end
