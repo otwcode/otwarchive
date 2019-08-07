@@ -48,16 +48,14 @@ describe "rake After:reset_word_counts" do
 end
 
 describe "rake After:unhide_invited_works" do
-  let(:invited_anonymous_collection) { create(:anonymous_collection) }
-  let(:invited_unrevealed_collection) { create(:unrevealed_collection) }
   let(:anonymous_collection) { create(:anonymous_collection) }
   let(:unrevealed_collection) { create(:unrevealed_collection) }
+  let(:anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
   let(:collection) { create(:collection) }
-  let(:invited_anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
-  let(:invited_anonymous_work) { create(:posted_work, collections: [invited_anonymous_collection]) }
-  let(:invited_unrevealed_work) { create(:posted_work, collections: [invited_unrevealed_collection]) }
+  let(:invited_anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
+  let(:invited_unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
   let(:work) { create(:posted_work, collections: [collection]) }
-  let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [invited_anonymous_unrevealed_collection]) }
+  let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [anonymous_unrevealed_collection]) }
   let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
   let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
 
