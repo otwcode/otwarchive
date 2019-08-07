@@ -61,7 +61,7 @@ describe "rake After:unhide_invited_works" do
   let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
   let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
 
-  context "When invited works are incorrectly anonymous or unrevealed" do
+  context "when invited works are incorrectly anonymous or unrevealed" do
     before do
       # Screw up collection items
       invited_anonymous_work.collection_items.first.update_columns(user_approval_status: CollectionItem::NEUTRAL)
