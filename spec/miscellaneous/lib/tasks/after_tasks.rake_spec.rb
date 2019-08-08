@@ -52,12 +52,14 @@ describe "rake After:unhide_invited_works" do
   let(:unrevealed_collection) { create(:unrevealed_collection) }
   let(:anonymous_unrevealed_collection) { create(:anonymous_unrevealed_collection) }
   let(:collection) { create(:collection) }
-  let(:invited_anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
-  let(:invited_unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
-  let(:work) { create(:posted_work, collections: [collection]) }
-  let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [anonymous_unrevealed_collection]) }
+
   let(:anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
   let(:unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
+  let(:work) { create(:posted_work, collections: [collection]) }
+
+  let(:invited_anonymous_work) { create(:posted_work, collections: [anonymous_collection]) }
+  let(:invited_unrevealed_work) { create(:posted_work, collections: [unrevealed_collection]) }
+  let(:invited_anonymous_unrevealed_work) { create(:posted_work, collections: [anonymous_unrevealed_collection]) }
 
   context "when invited works are incorrectly anonymous or unrevealed" do
     before do
@@ -70,20 +72,20 @@ describe "rake After:unhide_invited_works" do
     it "updates the anonymous and unrevealed status of invited works" do
       subject.invoke
 
+      anonymous_work.reload
+      unrevealed_work.reload
       work.reload
       invited_anonymous_work.reload
       invited_unrevealed_work.reload
       invited_anonymous_unrevealed_work.reload
-      unrevealed_work.reload
-      anonymous_work.reload
 
       # Accepted works should be unchanged
-      expect(work.unrevealed?).to be(false)
-      expect(work.anonymous?).to be(false)
       expect(anonymous_work.unrevealed?).to be(false)
       expect(anonymous_work.anonymous?).to be(true)
       expect(unrevealed_work.unrevealed?).to be(true)
       expect(unrevealed_work.anonymous?).to be(false)
+      expect(work.unrevealed?).to be(false)
+      expect(work.anonymous?).to be(false)
 
       # Invited works should no longer be anonymous or unrevealed
       expect(invited_anonymous_work.unrevealed?).to be(false)
