@@ -100,17 +100,15 @@ describe Skin do
                 background:-ms-linear-gradient(top,#fafafa,#ddd);
                 background:-o-linear-gradient(top,#fafafa,#ddd);
                 background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }"
+                color:#555 }",
+ 
+        "saves box shadows with multiple shadows" =>
+          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
         expect(@skin.save).to be_truthy
       end
-    end
-
-    it "should save CSS3 box shadows with multiple shadows" do
-      @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
-      expect(@skin.save).to be_truthy
     end
 
     # bad bad bad css
