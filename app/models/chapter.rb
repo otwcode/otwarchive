@@ -64,7 +64,7 @@ class Chapter < ApplicationRecord
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
           if chapter.position != i+1
-            Chapter.where("id = #{chapter.id}").update_all("position = #{i+1}")
+            Chapter.where(["id = ?", chapter.id]).update_all(["position = ?", i + 1])
             positions_changed = true
           end
         end

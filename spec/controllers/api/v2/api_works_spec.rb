@@ -8,15 +8,11 @@ describe "API v2 WorksController - Create works", type: :request do
   let(:archivist) { create(:archivist) }
 
   describe "API import with a valid archivist" do
-    before :all do
-      mock_external
-    end
-    
     before :each do
-      Rails.cache.clear
+      ApiHelper.mock_external
     end
 
-    after :all do
+    after :each do
       WebMock.reset!
     end
 
@@ -85,9 +81,24 @@ describe "API v2 WorksController - Create works", type: :request do
       expect(parsed_body[:works].first[:original_id]).to eq("123")
     end
 
+    it "returns human-readable messages as an array" do
+      valid_params = {
+        archivist: archivist.login,
+        works: [
+          { id: "123",
+            external_author_name: "bar",
+            external_author_email: "bar@foo.com",
+            chapter_urls: ["http://foo"] }
+        ]
+      }
+
+      post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_body[:works].first[:messages]).to be_a(Array)
+    end
+
     it "sends claim emails if send_claim_email is true" do
-      # This test hits the call to #notify_and_return_authors in #create for coverage
-      # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
       valid_params = {
         archivist: archivist.login,
         send_claim_emails: 1,
@@ -100,6 +111,9 @@ describe "API v2 WorksController - Create works", type: :request do
       }
 
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_body[:messages]).to include("Claim emails sent to bar.")
     end
 
     it "returns 400 Bad Request if no works are specified" do
@@ -130,7 +144,6 @@ describe "API v2 WorksController - Create works", type: :request do
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
-        Rails.cache.clear
         Language.find_or_create_by(short: "es", name: "Español")
 
         mock_external
@@ -503,7 +516,7 @@ describe "API v2 WorksController - Unit Tests", type: :request do
 
   it "work_url_from_external returns an error message when the work URL is blank" do
     work_url_response = @under_test.instance_eval { find_work_by_import_url("") }
-    expect(work_url_response[:error]).to eq "Please provide the original URL for the work."
+    expect(work_url_response[:message]).to eq "Please provide the original URL for the work."
   end
 
   it "work_url_from_external returns the work url when a work is found" do

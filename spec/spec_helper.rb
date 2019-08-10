@@ -89,6 +89,8 @@ RSpec.configure do |config|
   # Set default formatter to print out the description of each test as it runs
   config.color = true
   config.formatter = :documentation
+
+  config.file_fixture_path = "spec/support/fixtures"
 end
 
 def clean_the_database
