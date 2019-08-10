@@ -64,8 +64,6 @@ describe Skin do
           box-shadow:0 2px 5px rgba(0,0,0,0.5);
           float:none !important;
           text-align:center;
-          flex: 4 1 content;
-          flex-wrap: wrap-reverse;
         }
         #main ul.sorting a {
           border-color:rgba(86,86,86,1) !important;
@@ -78,6 +76,10 @@ describe Skin do
         }
         #main .navigation ul.sorting a:visited{
           color:rgba(254,254,254,1)
+        }
+        .flex-container {
+          flex: 2 2 20em;
+          flex-flow: row-reverse wrap;
         }",
 
       "should allow through gradients, clip, scale, skew, translate, rotate" =>
@@ -115,14 +117,19 @@ describe Skin do
         .flex-container-inline { display: inline-flex; }",
 
       "allows align-content property" =>
-        ".a { align-content: flex-start; }
-        .b { align-content: flex-end; }
-        .c { align-content: center; }
-        .d { align-content: space-between; }
-        .e { align-content: space-around; }
-        .f { align-content: stretch; }
-        .g { align-content: auto; }
-        .h { align-content: some-future-value; }",
+        "div { align-content: flex-start; }",
+
+      "allows align-items property" =>
+        "div { align-items: stretch }",
+
+      "allows align-self property" =>
+        ".flex-item { align-self: center; }",
+
+      "allows justify-content property" =>
+        "div { justify-content: flex-end; }",
+
+      "allows order property with negative value" =>
+        "div { order: -1 }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
