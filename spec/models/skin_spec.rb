@@ -64,11 +64,13 @@ describe Skin do
           box-shadow:0 2px 5px rgba(0,0,0,0.5);
           float:none !important;
           text-align:center;
+          flex: 4 1 content;
+          flex-wrap: wrap-reverse;
         }
         #main ul.sorting a {
           border-color:rgba(86,86,86,1) !important;
           color:rgba(231,231,231,1);
-          text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
+          text-shadow:-1px -1px 0 rgba(0,0,0,0.75);
         }
         ul.sorting  a:hover {
           background: rgba(71,71,71,1) 5% !important;
@@ -106,7 +108,21 @@ describe Skin do
                 background:-ms-linear-gradient(top,#fafafa,#ddd);
                 background:-o-linear-gradient(top,#fafafa,#ddd);
                 background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }"
+                color:#555 }",
+
+      "allows display property with flex values" =>
+        ".flex-container { display: flex; }
+        .flex-container-inline { display: inline-flex; }",
+
+      "allows align-content property" =>
+        ".a { align-content: flex-start; }
+        .b { align-content: flex-end; }
+        .c { align-content: center; }
+        .d { align-content: space-between; }
+        .e { align-content: space-around; }
+        .f { align-content: stretch; }
+        .g { align-content: auto; }
+        .h { align-content: some-future-value; }",
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
