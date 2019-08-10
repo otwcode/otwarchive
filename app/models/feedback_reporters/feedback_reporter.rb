@@ -1,9 +1,9 @@
-require 'zoho_auth_client'
-require 'zoho_resource_client'
+require "zoho_auth_client"
+require "zoho_resource_client"
 
 class FeedbackReporter
   include HtmlCleaner
-  require 'url_formatter'
+  require "url_formatter"
 
   attr_accessor :title,
                 :description,
@@ -28,9 +28,7 @@ class FeedbackReporter
   end
 
   def send_report!
-    zoho_resource_client.create_ticket(
-      ticket_attributes: report_attributes,
-    )
+    zoho_resource_client.create_ticket(ticket_attributes: report_attributes)
   end
 
   def report_attributes
@@ -38,7 +36,7 @@ class FeedbackReporter
       "email" => email,
       "contactId" => zoho_contact_id,
       "cf" => {
-        "Language" => language.presence || "English",
+        "Language" => language.presence || "English"
       }
     }
   end
@@ -57,7 +55,7 @@ class FeedbackReporter
     @zoho_resource_client ||= ZohoResourceClient.new(
       access_token: access_token,
       email: email,
-      username: username,
+      username: username
     )
   end
 end

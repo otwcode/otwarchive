@@ -1,24 +1,24 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe FeedbackReporter do
   include ZohoClientSpecHelper
 
   let(:generic_report_attributes) do
     {
-      title: 'This is a tragesy',
-      description: 'Nothing more to say',
-      language: 'English',
-      email: 'walrus@example.org',
-      username: 'Walrus',
+      title: "This is a tragesy",
+      description: "Nothing more to say",
+      language: "English",
+      email: "walrus@example.org",
+      username: "Walrus",
     }
   end
 
   let(:expected_ticket_attributes) do
     {
-      'email' => 'walrus@example.org',
-      'contactId' => '1',
-      'cf' => {
-        'Language' => 'English',
+      "email" => "walrus@example.org",
+      "contactId" => "1",
+      "cf" => {
+        "Language" => "English",
       }
     }
   end
@@ -30,30 +30,30 @@ describe FeedbackReporter do
 
   let(:subject) { FeedbackReporter.new(generic_report_attributes) }
 
-  describe '#title' do
-    it 'strips html breaks' do
-      generic_report_attributes.merge!(title: '  No breaks here  ')
+  describe "#title" do
+    it "strips html breaks" do
+      generic_report_attributes.merge!(title: "  No breaks here  ")
 
-      expect(subject.title).to eq('No breaks here')
+      expect(subject.title).to eq("No breaks here")
     end
   end
 
-  describe '#description' do
-    it 'adds breaks between paragraphs' do
-      generic_report_attributes.merge!(description: 'Bla </p><p> Bla')
+  describe "#description" do
+    it "adds breaks between paragraphs" do
+      generic_report_attributes.merge!(description: "Bla </p><p> Bla")
 
-      expect(subject.description).to eq('Bla</p><br /><p>Bla')
+      expect(subject.description).to eq("Bla</p><br /><p>Bla")
     end
   end
 
-  describe '#send_report!' do
-    it 'requests an access token from the Zoho auth client' do
+  describe "#send_report!" do
+    it "requests an access token from the Zoho auth client" do
       expect(ZohoAuthClient).to receive_message_chain(:new, :access_token)
 
       subject.send_report!
     end
 
-    it 'calls the Zoho ticket creator with the expected arguments' do
+    it "calls the Zoho ticket creator with the expected arguments" do
       expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket)
         .with(ticket_attributes: expected_ticket_attributes)
 
@@ -61,8 +61,8 @@ describe FeedbackReporter do
     end
   end
 
-  describe '#report_attributes' do
-    it 'returns the expected attributes' do
+  describe "#report_attributes" do
+    it "returns the expected attributes" do
       expect(subject.report_attributes).to eq(expected_ticket_attributes)
     end
   end

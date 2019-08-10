@@ -3,12 +3,12 @@ class AbuseReporter < FeedbackReporter
   attr_accessor :ip_address
 
   def report_attributes
-    super.deep_merge({
+    super.deep_merge(
       "departmentId" => department_id,
       "subject" => subject,
       "description" => ticket_description,
-      "cf" => custom_zoho_fields,
-    })
+      "cf" => custom_zoho_fields
+    )
   end
 
   private
@@ -16,7 +16,7 @@ class AbuseReporter < FeedbackReporter
   def custom_zoho_fields
     {
       "IP" => ip_address.presence || "Unknown IP",
-      "URL" => url.presence || "Unknown URL",
+      "URL" => url.presence || "Unknown URL"
     }
   end
 
@@ -26,6 +26,7 @@ class AbuseReporter < FeedbackReporter
 
   def subject
     return "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{title.html_safe}" if title.present?
+
     "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - No Subject"
   end
 

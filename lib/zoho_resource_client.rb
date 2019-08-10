@@ -28,7 +28,7 @@ class ZohoResourceClient
   def find_contact
     response_raw = HTTParty.get(
       CONTACT_SEARCH_ENDPOINT + '?' + query_string(search_params),
-      headers: headers,
+      headers: headers
     )
     return if response_raw.nil?
 
@@ -48,7 +48,7 @@ class ZohoResourceClient
     {
       email: @email,
       limit: 1,
-      sortBy: 'modifiedTime',
+      sortBy: 'modifiedTime'
     }
   end
 
@@ -63,11 +63,11 @@ class ZohoResourceClient
   def contact_body
     {
       "lastName" => @username.presence || @email,
-      "email" => @email,
+      "email" => @email
     }
   end
 
   def query_string(params)
-    params.map {|k, v| "#{k}=#{v}" }.join('&')
+    params.map { |k, v| "#{k}=#{v}" }.join('&')
   end
 end

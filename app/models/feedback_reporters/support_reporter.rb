@@ -3,12 +3,12 @@ class SupportReporter < FeedbackReporter
   attr_accessor :user_agent, :site_revision, :rollout
 
   def report_attributes
-    super.deep_merge({
+    super.deep_merge(
       "departmentId" => department_id,
       "subject" => subject,
       "description" => ticket_description,
-      "cf" => custom_zoho_fields,
-    })
+      "cf" => custom_zoho_fields
+    )
   end
 
   private
@@ -17,7 +17,7 @@ class SupportReporter < FeedbackReporter
     {
       "Archive Version" => site_revision.presence || "Unknown site revision",
       "Rollout" => rollout.presence || "Unknown",
-      "User Agent" => user_agent.presence || "Unknown user agent",
+      "User Agent" => user_agent.presence || "Unknown user agent"
     }
   end
 
@@ -27,6 +27,7 @@ class SupportReporter < FeedbackReporter
 
   def subject
     return "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{title.html_safe}" if title.present?
+
     "[#{ArchiveConfig.APP_SHORT_NAME}] Support - No Title"
   end
 

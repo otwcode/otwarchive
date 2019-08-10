@@ -946,7 +946,7 @@ describe HtmlCleaner do
       expect(add_break_between_paragraphs(original)).to eq(result)
     end
 
-    it 'removes any blank spaces before, between, and after the paragraph marks' do
+    it "removes any blank spaces before, between, and after the paragraph marks" do
       original = "bla.  </p>   <p>   Bla"
       result = "bla.</p><br /><p>Bla"
       expect(add_break_between_paragraphs(original)).to eq(result)

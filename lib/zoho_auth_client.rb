@@ -30,11 +30,11 @@ class ZohoAuthClient
       redirect_uri: REDIRECT_URI,
       scope: SCOPE,
       grant_type: 'refresh_token',
-      refresh_token: ZOHO_REFRESH_TOKEN,
+      refresh_token: ZOHO_REFRESH_TOKEN
     }
   end
 
   def query_string(params)
-    params.map {|k, v| "#{k}=#{v}" }.join('&')
+    params.map { |k, v| "#{k}=#{v}" }.join('&')
   end
 end
