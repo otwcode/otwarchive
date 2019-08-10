@@ -4,8 +4,7 @@ describe ZohoResourceClient do
   let(:resource_params) do
     {
       access_token: "1a2b3c",
-      email: "email@example.org",
-      username: "Username"
+      email: "email@example.org"
     }
   end
 
@@ -56,28 +55,17 @@ describe ZohoResourceClient do
         allow(HTTParty).to receive(:post).and_return(contact_create_response)
       end
 
-      it "creates a new contact" do
-        subject.retrieve_contact_id
-
-        expect(HTTParty).to have_received(:post).
-          with("https://desk.zoho.com/api/v1/contacts",
-               headers: expected_headers,
-               body: { "lastName" => "Username", "email" => "email@example.org" }.to_json)
-      end
-
-      it "returns the new contact id" do
-        expect(subject.retrieve_contact_id).to eq("2")
-      end
-
-      it "uses the email as the lastName if no username was given" do
-        subject = ZohoResourceClient.new(access_token: "1a2b3c", email: "email@example.org", username: "")
-
+      it "creates a new contact using the email for the required field lastName" do
         subject.retrieve_contact_id
 
         expect(HTTParty).to have_received(:post).
           with("https://desk.zoho.com/api/v1/contacts",
                headers: expected_headers,
                body: { "lastName" => "email@example.org", "email" => "email@example.org" }.to_json)
+      end
+
+      it "returns the new contact id" do
+        expect(subject.retrieve_contact_id).to eq("2")
       end
     end
   end

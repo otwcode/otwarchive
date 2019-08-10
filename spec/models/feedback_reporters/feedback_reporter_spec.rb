@@ -54,6 +54,13 @@ describe FeedbackReporter do
       subject.send_report!
     end
 
+    it "calls the ZohoResourceClient with the expected arguments" do
+      expect(ZohoResourceClient).to receive(:new).
+        with(access_token: "x7y8z9", email: "walrus@example.org")
+
+      subject.send_report!
+    end
+
     it "calls the Zoho ticket creator with the expected arguments" do
       expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket).
         with(ticket_attributes: expected_ticket_attributes)

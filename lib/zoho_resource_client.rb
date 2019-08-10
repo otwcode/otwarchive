@@ -5,10 +5,9 @@ class ZohoResourceClient
   CONTACT_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/contacts"
   TICKET_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/tickets"
 
-  def initialize(access_token:, email:, username: nil)
+  def initialize(access_token:, email:)
     @access_token = access_token
     @email = email
-    @username = username
   end
 
   def retrieve_contact_id
@@ -64,7 +63,7 @@ class ZohoResourceClient
 
   def contact_body
     {
-      "lastName" => @username.presence || @email,
+      "lastName" => @email,
       "email" => @email
     }
   end

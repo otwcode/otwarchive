@@ -56,8 +56,7 @@ class FeedbackReporter
   def zoho_resource_client
     @zoho_resource_client ||= ZohoResourceClient.new(
       access_token: access_token,
-      email: email,
-      username: username
+      email: email
     )
   end
 end
