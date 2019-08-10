@@ -9,7 +9,7 @@ class ZohoAuthClient
   end
 
   def access_token
-    response_raw = HTTParty.post(ACCESS_TOKEN_REQUEST_ENDPOINT + "?" + query_string(access_token_params))
+    response_raw = HTTParty.post(ACCESS_TOKEN_REQUEST_ENDPOINT, query: access_token_params.to_query)
     JSON.parse(response_raw.body)["access_token"]
   end
 
@@ -24,9 +24,5 @@ class ZohoAuthClient
       grant_type: "refresh_token",
       refresh_token: ArchiveConfig.ZOHO_REFRESH_TOKEN
     }
-  end
-
-  def query_string(params)
-    params.map { |k, v| "#{k}=#{v}" }.join("&")
   end
 end
