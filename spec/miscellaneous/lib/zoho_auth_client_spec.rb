@@ -27,12 +27,14 @@ describe ZohoAuthClient do
       it "makes a well formed request" do
         ZohoAuthClient.new
 
-        expect(HTTParty).to have_received(:post)
-          .with("https://accounts.zoho.com/oauth/v2/token?" \
-                "client_id=111&client_secret=a1b2c3&" \
-                "redirect_uri=https://archiveofourown.org/support&" \
-                "scope=Desk.tickets.ALL,Desk.contacts.READ,Desk.contacts.WRITE,Desk.contacts.CREATE,Desk.basic.READ,Desk.search.READ&" \
-                "grant_type=refresh_token&refresh_token=x1y2z3")
+        expect(HTTParty).to have_received(:post).
+          with("https://accounts.zoho.com/oauth/v2/token",
+               query: { client_id: "111",
+                        client_secret: "a1b2c3",
+                        redirect_uri: "https://archiveofourown.org/support",
+                        scope: "Desk.tickets.ALL,Desk.contacts.READ,Desk.contacts.WRITE,Desk.contacts.CREATE,Desk.basic.READ,Desk.search.READ",
+                        grant_type: "refresh_token",
+                        refresh_token: "x1y2z3" })
       end
     end
   end

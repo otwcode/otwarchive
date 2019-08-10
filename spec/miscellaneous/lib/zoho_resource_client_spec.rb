@@ -34,10 +34,10 @@ describe ZohoResourceClient do
     it "makes a get request to the correct endpoint with the expected arguments" do
       subject.retrieve_contact_id
 
-      expect(HTTParty).to have_received(:get)
-        .with("https://desk.zoho.com/api/v1/contacts/search?" \
-              "email=email@example.org&limit=1&sortBy=modifiedTime",
-              headers: expected_headers)
+      expect(HTTParty).to have_received(:get).
+        with("https://desk.zoho.com/api/v1/contacts/search",
+             query: { email: "email@example.org", limit: 1, sortBy: "modifiedTime" },
+             headers: expected_headers)
     end
 
     it "returns the contact id" do
