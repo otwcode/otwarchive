@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class ZohoResourceClient
-  CONTACT_SEARCH_ENDPOINT = 'https://desk.zoho.com/api/v1/contacts/search'.freeze
-  CONTACT_CREATE_ENDPOINT = 'https://desk.zoho.com/api/v1/contacts'.freeze
-  TICKET_CREATE_ENDPOINT = 'https://desk.zoho.com/api/v1/tickets'.freeze
+  CONTACT_SEARCH_ENDPOINT = "https://desk.zoho.com/api/v1/contacts/search"
+  CONTACT_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/contacts"
+  TICKET_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/tickets"
 
   def initialize(access_token:, email:, username: nil)
     @access_token = access_token
@@ -10,7 +12,7 @@ class ZohoResourceClient
   end
 
   def retrieve_contact_id
-    (find_contact || create_contact).fetch('id')
+    (find_contact || create_contact).fetch("id")
   end
 
   def create_ticket(ticket_attributes:)
@@ -26,12 +28,13 @@ class ZohoResourceClient
 
   def find_contact
     response_raw = HTTParty.get(
-      CONTACT_SEARCH_ENDPOINT, query: search_params,
+      CONTACT_SEARCH_ENDPOINT,
+      query: search_params,
       headers: headers
     )
     return if response_raw.nil?
 
-    JSON.parse(response_raw.body).fetch('data').first
+    JSON.parse(response_raw.body).fetch("data").first
   end
 
   def create_contact
@@ -47,7 +50,7 @@ class ZohoResourceClient
     {
       email: @email,
       limit: 1,
-      sortBy: 'modifiedTime'
+      sortBy: "modifiedTime"
     }
   end
 

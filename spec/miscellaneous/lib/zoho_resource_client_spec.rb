@@ -59,10 +59,10 @@ describe ZohoResourceClient do
       it "creates a new contact" do
         subject.retrieve_contact_id
 
-        expect(HTTParty).to have_received(:post)
-          .with("https://desk.zoho.com/api/v1/contacts",
-                headers: expected_headers,
-                body: { "lastName" => "Username", "email" => "email@example.org" }.to_json)
+        expect(HTTParty).to have_received(:post).
+          with("https://desk.zoho.com/api/v1/contacts",
+               headers: expected_headers,
+               body: { "lastName" => "Username", "email" => "email@example.org" }.to_json)
       end
 
       it "returns the new contact id" do
@@ -74,10 +74,10 @@ describe ZohoResourceClient do
 
         subject.retrieve_contact_id
 
-        expect(HTTParty).to have_received(:post)
-          .with("https://desk.zoho.com/api/v1/contacts",
-                headers: expected_headers,
-                body: { "lastName" => "email@example.org", "email" => "email@example.org" }.to_json)
+        expect(HTTParty).to have_received(:post).
+          with("https://desk.zoho.com/api/v1/contacts",
+               headers: expected_headers,
+               body: { "lastName" => "email@example.org", "email" => "email@example.org" }.to_json)
       end
     end
   end
@@ -96,10 +96,10 @@ describe ZohoResourceClient do
     it "submits a post request to the correct endpoint with the expected arguments" do
       subject.create_ticket(ticket_attributes: minimum_viable_ticket_attrs)
 
-      expect(HTTParty).to have_received(:post)
-        .with("https://desk.zoho.com/api/v1/tickets",
-              headers: expected_headers,
-              body: minimum_viable_ticket_attrs.to_json)
+      expect(HTTParty).to have_received(:post).
+        with("https://desk.zoho.com/api/v1/tickets",
+             headers: expected_headers,
+             body: minimum_viable_ticket_attrs.to_json)
     end
   end
 end

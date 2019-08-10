@@ -1,5 +1,4 @@
 class AbuseReporter < FeedbackReporter
-
   attr_accessor :ip_address
 
   def report_attributes

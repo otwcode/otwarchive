@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class ZohoAuthClient
-  ACCESS_TOKEN_REQUEST_ENDPOINT = "https://accounts.zoho.com/oauth/v2/token".freeze
-  ACCESS_TOKEN_CACHE_KEY = "/v1/zoho_access_token".freeze
+  ACCESS_TOKEN_REQUEST_ENDPOINT = "https://accounts.zoho.com/oauth/v2/token"
+  ACCESS_TOKEN_CACHE_KEY = "/v1/zoho_access_token"
 
   # TODO: Can we reduce this?
-  SCOPE = "Desk.tickets.ALL,Desk.contacts.READ,Desk.contacts.WRITE,Desk.contacts.CREATE,Desk.basic.READ,Desk.search.READ".freeze
+  SCOPE = "Desk.tickets.ALL,Desk.contacts.READ,Desk.contacts.WRITE,Desk.contacts.CREATE,Desk.basic.READ,Desk.search.READ"
 
   def access_token
     if (cached_token = Rails.cache.read(ACCESS_TOKEN_CACHE_KEY)).present?

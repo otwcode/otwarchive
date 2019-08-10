@@ -1,3 +1,5 @@
+ # frozen_string_literal: true
+
 require "zoho_auth_client"
 require "zoho_resource_client"
 

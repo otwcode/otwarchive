@@ -1,5 +1,4 @@
 class SupportReporter < FeedbackReporter
-
   attr_accessor :user_agent, :site_revision, :rollout
 
   def report_attributes

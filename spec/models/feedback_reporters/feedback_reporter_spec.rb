@@ -55,8 +55,8 @@ describe FeedbackReporter do
     end
 
     it "calls the Zoho ticket creator with the expected arguments" do
-      expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket)
-        .with(ticket_attributes: expected_ticket_attributes)
+      expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket).
+        with(ticket_attributes: expected_ticket_attributes)
 
       subject.send_report!
     end
