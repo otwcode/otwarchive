@@ -1,12 +1,13 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_action :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
-  # only authors of a work should be able to edit its chapters
-  before_action :check_ownership, only: [ :new, :create, :edit, :update, :manage, :preview, :destroy, :confirm_delete ]
-  before_action :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
-  before_action :check_visibility, only: [ :show]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :load_work
+  # only authors of a work should be able to edit its chapters
+  before_action :check_ownership, except: [:index, :show]
+  before_action :check_visibility, only: [:show]
+  before_action :load_chapter, only: [:show, :edit, :update, :preview, :post, :confirm_delete, :destroy]
+  before_action :set_author_attributes, only: [:create, :update]
 
   cache_sweeper :feed_sweeper
 
@@ -34,11 +35,6 @@ class ChaptersController < ApplicationController
 
     if params[:selected_id]
       redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
-    end
-    @chapter = @work.chapters.find_by(id: params[:id])
-    unless @chapter
-      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
-      redirect_to work_path(@work) and return
     end
     @chapters = @work.chapters_in_order(false)
     if !logged_in? || !current_user.is_author_of?(@work)
@@ -86,10 +82,14 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/new
   # GET /work/:work_id/chapters/new.xml
   def new
+    @chapter = @work.chapters.build(position: @work.number_of_chapters + 1)
+    load_pseuds
   end
 
   # GET /work/:work_id/chapters/1/edit
   def edit
+    load_pseuds
+
     if params["remove"] == "me"
       @chapter.authors_to_remove = current_user.pseuds
       @chapter.save
@@ -105,15 +105,19 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-  	@work.wip_length = params[:chapter][:wip_length]
+    if params[:cancel_button]
+      redirect_back_or_default(root_path)
+      return
+    end
+
+    @chapter = @work.chapters.build(chapter_params)
+    @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
 
-    if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :_choose_coauthor) : (render :new)
-    elsif params[:edit_button]
+    if params[:edit_button] || chapter_cannot_be_saved?
       render :new
-    elsif params[:cancel_button]
-      redirect_back_or_default('/')
+    elsif chapter_has_pseuds_to_fix?
+      render :_choose_coauthor
     else  # :post_without_preview, :preview or :cancel_coauthor_button
       @work.major_version = @work.major_version + 1
       @chapter.posted = true if params[:post_without_preview_button]
@@ -135,12 +139,20 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
+    if params[:cancel_button]
+      # Not quite working yet - should send the user back to wherever they were before they hit edit
+      redirect_back_or_default(root_path)
+      return
+    end
+
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
 
-    if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :_choose_coauthor) : (render :new)
+    if params[:edit_button] || chapter_cannot_be_saved?
+      render :edit
+    elsif chapter_has_pseuds_to_fix?
+      render :_choose_coauthor
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @chapter.posted?
@@ -149,12 +161,6 @@ class ChaptersController < ApplicationController
         draft_flash_message(@work)
       end
       render :preview
-    elsif params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default('/')
-    elsif params[:edit_button]
-      flash[:notice] = nil
-      render :edit
     else
       @work.minor_version = @work.minor_version + 1
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
@@ -171,12 +177,11 @@ class ChaptersController < ApplicationController
 
   def update_positions
     if params[:chapters]
-      @work = Work.find(params[:work_id])
-      @work.reorder(params[:chapters])
+      @work.reorder_list(params[:chapters])
       flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
-        Chapter.update(id, position: position + 1)
+        @work.chapters.update(id, position: position + 1)
         (@chapters ||= []) << Chapter.find(id)
       end
     end
@@ -189,6 +194,7 @@ class ChaptersController < ApplicationController
   # GET /chapters/1/preview
   def preview
     @preview_mode = true
+    load_pseuds
   end
 
   # POST /chapters/1/post
@@ -216,7 +222,6 @@ class ChaptersController < ApplicationController
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
-    @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_path(@work))
@@ -236,12 +241,33 @@ class ChaptersController < ApplicationController
 
   private
 
+  # Check whether we should display :new or :edit instead of previewing or
+  # saving the user's changes.
+  def chapter_cannot_be_saved?
+    # make sure at least one of the pseuds is actually owned by this user
+    if @chapter.authors.present? && (@chapter.authors & current_user.pseuds).empty?
+      flash.now[:error] = ts("You're not allowed to use that pseud.")
+      return true
+    end
+
+    @chapter.errors.any? || @chapter.invalid?
+  end
+
+  # Check whether we should display _choose_coauthor.
+  def chapter_has_pseuds_to_fix?
+    @chapter.invalid_pseuds.present? || @chapter.ambiguous_pseuds.present?
+  end
+
+  # Set a bunch of instance variables concerning the chapter's pseuds. Requires
+  # @work and @chapter to be defined. Needs to be called for new, create, edit,
+  # update, and preview, before the views are rendered, but after the attribute
+  # author_attributes has been set.
   def load_pseuds
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    @coauthors = @allpseuds.reject { |p| p.user_id == current_user.id }
+    @to_select = [@chapter.authors, @chapter.pseuds, @work.pseuds].detect(&:present?)
+    @selected_pseuds = @to_select.map { |pseud| pseud.id.to_i }
   end
 
   # fetch work these chapters belong to from db
@@ -255,39 +281,23 @@ class ChaptersController < ApplicationController
     @check_visibility_of = @work
   end
 
-  # Sets values for @chapter, @coauthor_results, @pseuds, and @selected_pseuds
-  def set_instance_variables
-    # stuff new bylines into author attributes to be parsed by the chapter model
+  # Loads the specified chapter from the database. Redirects to the work if no
+  # chapter is specified, or if the specified chapter doesn't exist.
+  def load_chapter
+    @chapter = @work.chapters.find_by(id: params[:id])
+
+    unless @chapter
+      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+      redirect_to work_path(@work)
+    end
+  end
+
+  # Stuff new bylines into author attributes to be parsed by the chapter model.
+  def set_author_attributes
     if params[:chapter] && params[:pseud] && params[:pseud][:byline] && params[:chapter][:author_attributes]
       params[:chapter][:author_attributes][:byline] = params[:pseud][:byline]
       params[:pseud][:byline] = ""
     end
-
-    if params[:id] # edit, update, preview, post
-      @chapter = @work.chapters.find(params[:id])
-      if params[:chapter]  # editing, save our changes
-        # @chapter.attributes = params[:chapter]
-        @chapter.attributes = chapter_params
-      end
-    elsif params[:chapter] # create
-      @chapter = @work.chapters.build(chapter_params)
-    else # new
-      @chapter = @work.chapters.build(position: @work.number_of_chapters + 1)
-    end
-
-    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
-    @pseuds = current_user.pseuds
-    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id }
-    @to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
-    @selected_pseuds = @to_select.collect { |pseud| pseud.id.to_i }
-
-    # make sure at least one of the pseuds is actually owned by this user
-    user_ids = Pseud.where(id: @selected_pseuds).pluck(:user_id).uniq
-    unless user_ids.include?(current_user.id)
-      flash.now[:error] = ts("You're not allowed to use that pseud.")
-      render :new and return
-    end
-
   end
 
   def post_chapter

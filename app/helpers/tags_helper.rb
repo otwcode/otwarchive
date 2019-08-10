@@ -49,11 +49,6 @@ module TagsHelper
     }
   end
 
-  # Displays a list of links for navigating the tag wrangling section of the site
-  def tag_wrangler_footer
-    render partial: 'tag_wranglings/footer'
-  end
-
   def wrangler_list(wranglers, tag)
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
@@ -68,18 +63,18 @@ module TagsHelper
   end
 
   def link_to_tag(tag, options = {})
-    link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_with_text(tag, tag.display_name, options)
   end
 
   def link_to_tag_works(tag, options = {})
-    link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_works_with_text(tag, tag.display_name, options)
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})
     if options[:full_path] 
-      link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
+      link_to_with_tag_class(tag_url(tag), link_text, options)
     else
-      link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
+      link_to_with_tag_class(tag_path(tag), link_text, options)
     end
   end
 
@@ -87,16 +82,12 @@ module TagsHelper
     link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
   end
 
-  def tag_with_link_to_edit(tag, options = {})
-    options.reverse_merge!({target: "_blank"})
-    content_tag(:span, tag.name, class:"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
-  end
-
   def link_to_tag_works_with_text(tag, link_text, options = {})
+    collection = options[:collection]
     if options[:full_path]
-      link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+      link_to_with_tag_class(collection ? collection_tag_works_url(collection, tag) : tag_works_url(tag), link_text, options)
     else 
-      link_to_with_tag_class(@collection ? collection_tag_works_path(@collection, tag) : tag_works_path(tag), link_text, options)
+      link_to_with_tag_class(collection ? collection_tag_works_path(collection, tag) : tag_works_path(tag), link_text, options)
     end
   end
 
@@ -120,15 +111,6 @@ module TagsHelper
   # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
     logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
-  end
-
-  def taggable_list(tag, controller_class)
-    taggable_things = ["bookmarks", "works"]
-    list = []
-    taggable_things.each do |tt|
-      list << link_to(h(ts(tt.titlecase)), {controller: tt, action: :index, tag_id: tag}) unless tt == controller_class
-    end
-    list.map{|li| "<li>" + li + "</li>"}.join.html_safe
   end
 
   # Determines whether or not to display warnings for a creation
@@ -156,24 +138,7 @@ module TagsHelper
 
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
-    case name
-    when ArchiveConfig.WARNING_DEFAULT_TAG_NAME
-      return ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONE_TAG_NAME
-      return ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_SOME_TAG_NAME
-      return ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
-      return ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_DEATH_TAG_NAME
-      return ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_NONCON_TAG_NAME
-      return ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME.to_s : name
-    when ArchiveConfig.WARNING_CHAN_TAG_NAME
-      return ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME.to_s : name
-    else
-      return name
-    end
+    Warning::DISPLAY_NAME_MAPPING[name] || name
   end
 
   # Individual results for a tag search

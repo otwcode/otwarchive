@@ -5,7 +5,6 @@ first:
   word_count: 100
   title_to_sort_on: First work
   language: english
-  authors_to_sort_on: testuser
   created_at: 2010-04-30
   revised_at: 2012-04-30
   complete: true
@@ -16,7 +15,6 @@ second:
   word_count: 1000
   title_to_sort_on: second work
   language: english
-  authors_to_sort_on: testuser
   created_at: 2004-04-30
   revised_at: 2004-04-30
   complete: true
@@ -27,7 +25,6 @@ third:
   word_count: 10000
   title_to_sort_on: third work
   language: german
-  authors_to_sort_on: testuser
   created_at: 2009-02-03
   revised_at: 2012-07-10
   summary: for the second time
@@ -40,7 +37,6 @@ fourth:
   word_count: 10000
   title_to_sort_on: fourth work
   language: french
-  authors_to_sort_on: testuser2
   created_at: 2010-04-30
   revised_at: 2012-04-30
   complete: true
@@ -51,7 +47,6 @@ fifth:
   word_count: 1000
   title_to_sort_on: fifth work
   language: english
-  authors_to_sort_on: testuser2
   created_at: 2011-06-30
   revised_at: 2012-04-30
   expected_number_of_chapters: 5
@@ -63,7 +58,6 @@ sixth:
   word_count: 500
   title_to_sort_on: I am &lt;strong&gt;er Than Yesterday &amp; Other Lies
   language: english
-  authors_to_sort_on: testuser2
   created_at: 2013-04-30
   revised_at: 2013-04-30
   expected_number_of_chapters: 2

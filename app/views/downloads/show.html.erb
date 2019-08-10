@@ -1,15 +1,16 @@
-<%= render 'download_preface.html' %>
+<%= render 'downloads/download_preface.html' %>
 
 <div id="chapters" class="userstuff">
   <% if @chapters.size > 1 %>
     <% for chapter in @chapters %>
-      <%= render 'download_chapter.html', :chapter => chapter %>
+      <%= render 'downloads/download_chapter.html', :chapter => chapter %>
     <% end %>
   <% else %>
+    <h2 class="toc-heading"><%= @work.title.html_safe %></h2>
     <div class="userstuff">
       <%=raw sanitize_field(@chapters.first, :content) %>
     </div>
   <% end %>
 </div>
 
-<%= render 'download_afterword.html' %>
+<%= render 'downloads/download_afterword.html' %>

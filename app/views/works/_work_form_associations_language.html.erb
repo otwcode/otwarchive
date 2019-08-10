@@ -10,7 +10,7 @@
   <% else %>
     <select id="work_language_id" name="work[language_id]">
   <% end %>
-    <%= options_from_collection_for_select(Language.all.order(:short), :id, :name,
+    <%= options_from_collection_for_select(sorted_languages, :id, :name,
       @work.language_id || Language.default.id) %>
   </select>
 </dd>
