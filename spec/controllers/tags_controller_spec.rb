@@ -248,7 +248,7 @@ describe TagsController do
         it "succeeds and redirects to the edit page" do
           fake_login_admin(create(:admin))
           put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
-          it_redirects_to_with_notice edit_tag_path(tag), "Tag was updated."
+          it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
 
           tag.reload
           expect(tag.merger_id).to eq(synonym.id)
