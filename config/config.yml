@@ -344,12 +344,13 @@ DEFENSIO_NAME: 'http://archiveofourown.org'
 # Abuse and Support ticket trackers; you may need to change
 # feedbacks_controller.rb and abuse_reports_controller.rb
 # to properly send to your own ticket tracker.
-ABUSE_ZOHO_DEPARTMENT_ID: ""
-SUPPORT_ZOHO_DEPARTMENT_ID: ""
 ZOHO_CLIENT_ID: ""
 ZOHO_CLIENT_SECRET: ""
 ZOHO_REFRESH_TOKEN: ""
 ZOHO_ORG_ID: ""
+ZOHO_REDIRECT_URI: ""
+ABUSE_ZOHO_DEPARTMENT_ID: ""
+SUPPORT_ZOHO_DEPARTMENT_ID: ""
 
 DEFAULT_LANGUAGE_SHORT: 'en'
 DEFAULT_LANGUAGE_NAME: 'English'

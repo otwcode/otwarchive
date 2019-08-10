@@ -9,10 +9,11 @@ describe ZohoAuthClient do
 
   before do
     stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
-    ArchiveConfig.ZOHO_CLIENT_ID = '111'
-    ArchiveConfig.ZOHO_CLIENT_SECRET = 'a1b2c3'
-    ArchiveConfig.ZOHO_REFRESH_TOKEN = 'x1y2z3'
-    ArchiveConfig.ZOHO_ORG_ID = '123'
+    ArchiveConfig.ZOHO_CLIENT_ID = "111"
+    ArchiveConfig.ZOHO_CLIENT_SECRET = "a1b2c3"
+    ArchiveConfig.ZOHO_REFRESH_TOKEN = "x1y2z3"
+    ArchiveConfig.ZOHO_ORG_ID = "123"
+    ArchiveConfig.ZOHO_REDIRECT_URI = "https://archiveofourown.org/support"
 
     stub_access_token_request
   end
@@ -38,7 +39,7 @@ describe ZohoAuthClient do
 
   describe "#access_token" do
     it "returns the access token from the response" do
-      expect(ZohoAuthClient.new.access_token).to eq('1a2b3c')
+      expect(ZohoAuthClient.new.access_token).to eq("1a2b3c")
     end
   end
 end
