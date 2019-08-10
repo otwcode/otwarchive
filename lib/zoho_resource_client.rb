@@ -1,5 +1,4 @@
 class ZohoResourceClient
-  ZOHO_ORG_ID = ArchiveConfig.ZOHO_ORG_ID
   CONTACT_SEARCH_ENDPOINT = 'https://desk.zoho.com/api/v1/contacts/search'.freeze
   CONTACT_CREATE_ENDPOINT = 'https://desk.zoho.com/api/v1/contacts'.freeze
   TICKET_CREATE_ENDPOINT = 'https://desk.zoho.com/api/v1/tickets'.freeze
@@ -55,7 +54,7 @@ class ZohoResourceClient
   def headers
     {
       "Content-Type" => "application/json",
-      "orgId" => ZOHO_ORG_ID,
+      "orgId" => ArchiveConfig.ZOHO_ORG_ID,
       "Authorization" => "Zoho-oauthtoken #{@access_token}"
     }
   end

@@ -1,10 +1,6 @@
 class ZohoAuthClient
   ACCESS_TOKEN_REQUEST_ENDPOINT = 'https://accounts.zoho.com/oauth/v2/token'.freeze
 
-  CLIENT_ID = ArchiveConfig.ZOHO_CLIENT_ID
-  CLIENT_SECRET = ArchiveConfig.ZOHO_CLIENT_SECRET
-  ZOHO_REFRESH_TOKEN = ArchiveConfig.ZOHO_REFRESH_TOKEN
-
   # TODO: Can we get rid of this? We don't redirect, but it has to match
   # whatever was filled in when creating the original grant_code
   REDIRECT_URI = 'https://archiveofourown.org/support'.freeze
@@ -25,12 +21,12 @@ class ZohoAuthClient
 
   def access_token_params
     {
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
+      client_id: ArchiveConfig.ZOHO_CLIENT_ID,
+      client_secret: ArchiveConfig.ZOHO_CLIENT_SECRET,
       redirect_uri: REDIRECT_URI,
       scope: SCOPE,
       grant_type: 'refresh_token',
-      refresh_token: ZOHO_REFRESH_TOKEN
+      refresh_token: ArchiveConfig.ZOHO_REFRESH_TOKEN
     }
   end
 
