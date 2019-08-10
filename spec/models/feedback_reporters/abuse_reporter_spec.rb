@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe AbuseReporter do
@@ -11,7 +13,7 @@ describe AbuseReporter do
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",
-      url: "http://localhost",
+      url: "http://localhost"
     }
   end
 
@@ -25,7 +27,7 @@ describe AbuseReporter do
       "cf" => {
         "Language" => "English",
         "IP" => "127.0.0.1",
-        "URL" => "http://localhost",
+        "URL" => "http://localhost"
       }
     }
   end

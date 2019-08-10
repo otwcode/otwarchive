@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe FeedbackReporter do
@@ -8,7 +10,7 @@ describe FeedbackReporter do
       title: "This is a tragesy",
       description: "Nothing more to say",
       email: "walrus@example.org",
-      username: "Walrus",
+      username: "Walrus"
     }
   end
 
@@ -17,7 +19,7 @@ describe FeedbackReporter do
       "email" => "walrus@example.org",
       "contactId" => "1",
       "cf" => {
-        "Language" => "English",
+        "Language" => "English"
       }
     }
   end
@@ -31,7 +33,7 @@ describe FeedbackReporter do
 
   describe "#title" do
     it "strips html breaks" do
-      generic_report_attributes.merge!(title: "  No breaks here  ")
+      generic_report_attributes[:title] = "  No breaks here  "
 
       expect(subject.title).to eq("No breaks here")
     end
@@ -39,7 +41,7 @@ describe FeedbackReporter do
 
   describe "#description" do
     it "adds breaks between paragraphs" do
-      generic_report_attributes.merge!(description: "Bla </p><p> Bla")
+      generic_report_attributes[:description] = "Bla </p><p> Bla"
 
       expect(subject.description).to eq("Bla</p><br /><p>Bla")
     end

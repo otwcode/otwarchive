@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe SupportReporter do
@@ -12,7 +14,7 @@ describe SupportReporter do
       username: "Walrus",
       user_agent: "HTTParty",
       site_revision: "eternal_beta",
-      rollout: "rollout_value",
+      rollout: "rollout_value"
     }
   end
 
@@ -27,7 +29,7 @@ describe SupportReporter do
         "Language" => "English",
         "Archive Version" => "eternal_beta",
         "Rollout" => "rollout_value",
-        "User Agent" => "HTTParty",
+        "User Agent" => "HTTParty"
       }
     }
   end
