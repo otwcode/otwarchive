@@ -27,6 +27,7 @@ describe SupportReporter do
       "description" => "Nothing more to say",
       "cf" => {
         "Language" => "English",
+        "Name" => "Walrus",
         "Archive Version" => "eternal_beta",
         "Rollout" => "rollout_value",
         "User Agent" => "HTTParty"

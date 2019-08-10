@@ -19,7 +19,8 @@ describe FeedbackReporter do
       "email" => "walrus@example.org",
       "contactId" => "1",
       "cf" => {
-        "Language" => "English"
+        "Language" => "English",
+        "Name" => "Walrus"
       }
     }
   end
@@ -72,6 +73,14 @@ describe FeedbackReporter do
   describe "#report_attributes" do
     it "returns the expected attributes" do
       expect(subject.report_attributes).to eq(expected_ticket_attributes)
+    end
+
+    context "if the report has an empty username" do
+      it "returns a hash containing 'Anonymous user'" do
+        allow(subject).to receive(:username).and_return("")
+
+        expect(subject.report_attributes.fetch("cf").fetch("Name")).to eq("Anonymous user")
+      end
     end
   end
 end

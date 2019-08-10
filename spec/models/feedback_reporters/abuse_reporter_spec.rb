@@ -26,6 +26,7 @@ describe AbuseReporter do
       "description" => "Nothing more to say",
       "cf" => {
         "Language" => "English",
+        "Name" => "Walrus",
         "IP" => "127.0.0.1",
         "URL" => "http://localhost"
       }
