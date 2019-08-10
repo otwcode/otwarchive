@@ -207,14 +207,13 @@
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= f.label :wip_length, ts("Chapter 1 of") %></dt>
+              <dt><%= ts("Chapter 1 of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= c.label :title, ts("Chapter Title:") %></dt>
+              <dt><%= ts("Chapter Title:") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>
         </dd>
-      
 
         <!--backdate-->
         <dt class="backdate">
@@ -287,7 +286,7 @@
   <% unless @chapters %>
     <!-- Work text field (chapter_attributes_content) -->
     <fieldset class="work text" role="article">
-      <legend class="required"><%= label_tag :content, ts("Work Text") %>*</legend>
+      <legend class="required"><%= ts("Work Text") %>*</legend>
       <ul class="hidden rtf-html-switch actions" role="menu">
         <li><a class="rtf-link" href="#"><%= ts("Rich Text") %></a></li>
         <li><a class="html-link" href="#"><%= ts("HTML") %></a></li>
