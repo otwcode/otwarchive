@@ -341,16 +341,15 @@ AKISMET_NAME: 'http://transformativeworks.org'
 DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
 DEFENSIO_NAME: 'http://archiveofourown.org'
 
-# Abuse and support ticket trackers; you may need to change
+# Abuse and Support ticket trackers; you may need to change
 # feedbacks_controller.rb and abuse_reports_controller.rb
 # to properly send to your own ticket tracker.
-NEW_BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
-ABUSE_AUTH: 'authtoken'
-ABUSE_PORTAL: 'ao3abuse'
-ABUSE_DEPARTMENT: 'AO3%20Abuse'
-SUPPORT_AUTH: 'authtoken'
-SUPPORT_PORTAL: 'ao3support'
-SUPPORT_DEPARTMENT: 'Support'
+ABUSE_ZOHO_DEPARTMENT_ID: ""
+SUPPORT_ZOHO_DEPARTMENT_ID: ""
+ZOHO_CLIENT_ID: ""
+ZOHO_CLIENT_SECRET: ""
+ZOHO_REFRESH_TOKEN: ""
+ZOHO_ORG_ID: ""
 
 DEFAULT_LANGUAGE_SHORT: 'en'
 DEFAULT_LANGUAGE_NAME: 'English'
