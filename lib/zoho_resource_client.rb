@@ -26,7 +26,7 @@ class ZohoResourceClient
 
   def find_contact
     response_raw = HTTParty.get(
-      CONTACT_SEARCH_ENDPOINT, query: search_params.to_query,
+      CONTACT_SEARCH_ENDPOINT, query: search_params,
       headers: headers
     )
     return if response_raw.nil?

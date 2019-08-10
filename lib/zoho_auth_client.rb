@@ -9,7 +9,7 @@ class ZohoAuthClient
   end
 
   def access_token
-    response_raw = HTTParty.post(ACCESS_TOKEN_REQUEST_ENDPOINT, query: access_token_params.to_query)
+    response_raw = HTTParty.post(ACCESS_TOKEN_REQUEST_ENDPOINT, query: access_token_params)
     JSON.parse(response_raw.body)["access_token"]
   end
 
