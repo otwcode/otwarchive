@@ -7,7 +7,6 @@ describe FeedbackReporter do
     {
       title: "This is a tragesy",
       description: "Nothing more to say",
-      language: "English",
       email: "walrus@example.org",
       username: "Walrus",
     }
