@@ -26,11 +26,11 @@ describe SupportReporter do
       "subject" => "[AO3] Support - This is a tragesy",
       "description" => "Nothing more to say",
       "cf" => {
-        "Language" => "English",
-        "Name" => "Walrus",
-        "Archive Version" => "eternal_beta",
-        "Rollout" => "rollout_value",
-        "User Agent" => "HTTParty"
+        "cf_language" => "English",
+        "cf_name" => "Walrus",
+        "cf_archive_version" => "eternal_beta",
+        "cf_rollout" => "rollout_value",
+        "cf_user_agent" => "HTTParty"
       }
     }
   end
@@ -70,7 +70,7 @@ describe SupportReporter do
       it "returns a hash containing 'Unknown site revision'" do
         allow(subject).to receive(:site_revision).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("Archive Version")).to eq("Unknown site revision")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_archive_version")).to eq("Unknown site revision")
       end
     end
 
@@ -78,7 +78,7 @@ describe SupportReporter do
       it "returns a hash containing 'Unknown'" do
         allow(subject).to receive(:rollout).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("Rollout")).to eq("Unknown")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_rollout")).to eq("Unknown")
       end
     end
 
@@ -86,7 +86,7 @@ describe SupportReporter do
       it "returns a hash containing 'Unknown user agent'" do
         allow(subject).to receive(:user_agent).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("User Agent")).to eq("Unknown user agent")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_user_agent")).to eq("Unknown user agent")
       end
     end
   end

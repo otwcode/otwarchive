@@ -14,9 +14,9 @@ class SupportReporter < FeedbackReporter
 
   def custom_zoho_fields
     {
-      "Archive Version" => site_revision.presence || "Unknown site revision",
-      "Rollout" => rollout.presence || "Unknown",
-      "User Agent" => user_agent.presence || "Unknown user agent"
+      "cf_archive_version" => site_revision.presence || "Unknown site revision",
+      "cf_rollout" => rollout.presence || "Unknown",
+      "cf_user_agent" => user_agent.presence || "Unknown user agent"
     }
   end
 

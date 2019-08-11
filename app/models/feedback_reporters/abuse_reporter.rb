@@ -14,8 +14,8 @@ class AbuseReporter < FeedbackReporter
 
   def custom_zoho_fields
     {
-      "IP" => ip_address.presence || "Unknown IP",
-      "URL" => url.presence || "Unknown URL"
+      "cf_ip" => ip_address.presence || "Unknown IP",
+      "cf_url" => url.presence || "Unknown URL"
     }
   end
 

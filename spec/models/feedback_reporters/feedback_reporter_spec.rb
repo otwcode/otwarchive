@@ -19,8 +19,8 @@ describe FeedbackReporter do
       "email" => "walrus@example.org",
       "contactId" => "1",
       "cf" => {
-        "Language" => "English",
-        "Name" => "Walrus"
+        "cf_language" => "English",
+        "cf_name" => "Walrus"
       }
     }
   end
@@ -79,7 +79,7 @@ describe FeedbackReporter do
       it "returns a hash containing 'Anonymous user'" do
         allow(subject).to receive(:username).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("Name")).to eq("Anonymous user")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_name")).to eq("Anonymous user")
       end
     end
   end

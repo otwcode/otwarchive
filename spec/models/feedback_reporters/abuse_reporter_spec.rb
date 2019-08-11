@@ -25,10 +25,10 @@ describe AbuseReporter do
       "subject" => "[AO3] Abuse - This is a tragesy",
       "description" => "Nothing more to say",
       "cf" => {
-        "Language" => "English",
-        "Name" => "Walrus",
-        "IP" => "127.0.0.1",
-        "URL" => "http://localhost"
+        "cf_language" => "English",
+        "cf_name" => "Walrus",
+        "cf_ip" => "127.0.0.1",
+        "cf_url" => "http://localhost"
       }
     }
   end
@@ -68,7 +68,7 @@ describe AbuseReporter do
       it "returns a hash containing 'Unknown IP'" do
         allow(subject).to receive(:ip_address).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("IP")).to eq("Unknown IP")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_ip")).to eq("Unknown IP")
       end
     end
 
@@ -76,7 +76,7 @@ describe AbuseReporter do
       it "returns a hash containing 'Unknown URL'" do
         allow(subject).to receive(:url).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("URL")).to eq("Unknown URL")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_url")).to eq("Unknown URL")
       end
     end
   end
