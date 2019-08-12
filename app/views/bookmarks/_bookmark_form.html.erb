@@ -65,7 +65,7 @@
       <fieldset>
         <legend><%= ts("Write Comments") %></legend>
         <dl>
-          <dt><%= f.label :notes, ts("Notes"), for: notes_id %></dt>
+          <dt><%= f.label :bookmarker_notes, ts("Notes"), for: notes_id %></dt>
           <dd>
             <p class="footnote" id="notes-field-description">
               <% if bookmarkable.class != ExternalWork %>
@@ -73,7 +73,7 @@
               <% end %>
               <%= allowed_html_instructions(show_list = false) %>
             </p>
-            <%= f.text_area :notes, rows: 4, id: notes_id, class: "observe_textlength",
+            <%= f.text_area :bookmarker_notes, rows: 4, id: notes_id, class: "observe_textlength",
                 "aria-describedby" => "notes-field-description" %>
             <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
           </dd>

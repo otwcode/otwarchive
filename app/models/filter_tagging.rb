@@ -88,16 +88,9 @@ class FilterTagging < ApplicationRecord
 
   def self.update_filter_counts_since(date)
     if date
-      filters = FilterTagging.includes(:filter).where("created_at > ?", date).collect(&:filter).compact.uniq
-      count = filters.length
-      filters.each_with_index do |filter, i|
-        begin
-          filter.reset_filter_count
-          puts "Updating filter #{i + 1} of #{count} - #{filter.name}"
-        rescue
-          puts "Did not update filter #{i + 1} of #{count} - #{filter.name}"
-        end
-      end
+      FilterCount.enqueue_filters(
+        FilterTagging.where("created_at > ?", date).distinct.pluck(:filter_id)
+      )
     else
       raise "date not set for filter count suspension! very bad!"
     end

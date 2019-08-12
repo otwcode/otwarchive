@@ -73,7 +73,7 @@ describe ChaptersController do
       it "errors and redirects to login when work is restricted" do
         restricted_work = create(:work, posted: true, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
-        it_redirects_to(login_path(restricted: true))
+        it_redirects_to(new_user_session_path(restricted: true))
       end
 
       it "assigns @chapters to only posted chapters" do
@@ -296,7 +296,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :new, params: { work_id: banned_users_work.id }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
     end
@@ -343,7 +343,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :edit, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -383,12 +383,13 @@ describe ChaptersController do
     context "when work owner is logged in" do
       before do
         fake_login_known_user(user)
+        @chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id] }
       end
 
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         post :create, params: { work_id: banned_users_work.id, chapter: @chapter_attributes }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -522,7 +523,7 @@ describe ChaptersController do
 
           it "gives a notice that the work and chapter are drafts and redirects to the chapter preview" do
             post :create, params: { work_id: unposted_work.id, chapter: @chapter_attributes, preview_button: true }
-            it_redirects_to(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
+            it_redirects_to_simple(preview_work_chapter_path(work_id: unposted_work.id, id: assigns[:chapter].id))
             expect(flash[:notice]).to include("This is a draft chapter in an unposted work")
           end
         end
@@ -578,7 +579,7 @@ describe ChaptersController do
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         put :update, params: { work_id: banned_users_work.id, id: banned_users_work.chapters.first.id, chapter: @chapter_attributes }
-        it_redirects_to(user_path(banned_user))
+        it_redirects_to_simple(user_path(banned_user))
         expect(flash[:error]).to include("Your account has been banned.")
       end
 
@@ -586,7 +587,7 @@ describe ChaptersController do
         user2 = create(:user)
         @chapter_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: @chapter_attributes }
-        expect(response).to render_template("new")
+        expect(response).to render_template("edit")
         expect(flash[:error]).to eq "You're not allowed to use that pseud."
       end
 
@@ -615,9 +616,9 @@ describe ChaptersController do
           expect(response).to render_template("_choose_coauthor")
         end
 
-        it "renders new if chapter is not valid" do
+        it "renders edit if chapter is not valid" do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
-          expect(response).to render_template(:new)
+          expect(response).to render_template(:edit)
         end
       end
 
@@ -630,9 +631,9 @@ describe ChaptersController do
           expect(response).to render_template("_choose_coauthor")
         end
 
-        it "renders new if chapter is not valid" do
+        it "renders edit if chapter is not valid" do
           put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: { content: "" } }
-          expect(response).to render_template(:new)
+          expect(response).to render_template(:edit)
         end
       end
 
@@ -899,14 +900,6 @@ describe ChaptersController do
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
         expect(assigns[:work].updated_at).not_to eq(old_updated_at)
       end
-
-      it "assigns instance variables correctly" do
-        post :post, params: { work_id: work.id, id: @chapter_to_post.id }
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
-      end
     end
 
     context "when other user is logged in" do
@@ -915,7 +908,6 @@ describe ChaptersController do
       end
 
       it "errors and redirects to work" do
-        pending "non-work owner should not be able to post works"
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
@@ -944,10 +936,6 @@ describe ChaptersController do
         get :confirm_delete, params: { work_id: work.id, id: work.chapters.first.id }
         expect(assigns[:work]).to eq work
         expect(assigns[:chapter]).to eq work.chapters.first
-        expect(assigns[:allpseuds]).to eq user.pseuds
-        expect(assigns[:pseuds]).to eq user.pseuds
-        expect(assigns[:coauthors]).to eq []
-        expect(assigns[:selected_pseuds]).to eq [user.pseuds.first.id]
       end
     end
 

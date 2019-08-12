@@ -10,7 +10,7 @@ FactoryGirl.define do
 
   factory :common_tagging do
     association :common_tag, factory: :relationship
-    association :filterable, factory: :fandom
+    association :filterable, factory: :canonical_fandom
   end
 
   factory :meta_tagging do

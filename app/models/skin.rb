@@ -502,7 +502,9 @@ class Skin < ApplicationRecord
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Rails.cache.fetch("site_default_skin") do
+      Skin.find_by(title: "Default", official: true) || Skin.create_default
+    end
   end
 
   def self.create_default

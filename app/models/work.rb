@@ -8,9 +8,6 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
-  # ES UPGRADE TRANSITION #
-  # Remove Tire::Model::Search
-  include Tire::Model::Search
   include ActiveModel::ForbiddenAttributesProtection
 
   ########################################################################
@@ -86,7 +83,6 @@ class Work < ApplicationRecord
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
   # return title.html_safe to overcome escaping done by sanitiser
@@ -167,6 +163,9 @@ class Work < ApplicationRecord
     end
   end
 
+  # Run Taggable#check_for_invalid_tags as a validation.
+  validate :check_for_invalid_tags
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
@@ -183,7 +182,6 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_save :check_for_invalid_tags
   before_update :validate_tags, :notify_before_update
   after_update :adjust_series_restriction
 
@@ -191,7 +189,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
   before_destroy :before_destroy
 
@@ -251,7 +249,6 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_index
-    return unless $rollout.active?(:start_new_indexing)
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
@@ -265,18 +262,15 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # ES UPGRADE TRANSITION #
-  # Remove conditional and Tire reference
-  def self.index_name
-    if use_new_search?
-      "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_works"
-    else
-      tire.index.name
-    end
+  # If the work gets posted, we should (potentially) reindex the tags,
+  # so they get the correct draft-only status.
+  def update_tag_index
+    return unless saved_change_to_posted?
+    taggings.each(&:update_search)
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v1/work_blurb_tag_cache_key/#{id}"
+    "/v2/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -348,13 +342,6 @@ class Work < ApplicationRecord
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
-  end
-
-  def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).pluck(:id)
-    Chapter.where(work_id: draft_ids).order("position DESC").map(&:destroy)
-    Work.where(id: draft_ids).map(&:destroy)
-    draft_ids.size
   end
 
   ########################################################################
@@ -489,13 +476,18 @@ class Work < ApplicationRecord
     end
   end
 
+  # If this is fulfilling a challenge claim, add the collection.
+  #
+  # Unlike set_challenge_info, we don't automatically add the prompter as a
+  # recipient, because (a) some prompters are anonymous, so there has to be a
+  # prompter notification (separate from the recipient notification) ensuring
+  # that anonymous prompters are notified, and (b) if the prompter is not
+  # anonymous, they'll receive two notifications with roughly the same info
+  # (gift notification + prompter notification).
   def set_challenge_claim_info
-    # if this is fulfilling a challenge claim, add the collection and recipient
-    challenge_claims.each do |assignment|
+    challenge_claims.each do |claim|
       add_to_collection(claim.collection)
-      self.gifts << Gift.new(pseud: claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
     end
-    save
   end
 
   def challenge_assignment_ids
@@ -690,6 +682,10 @@ class Work < ApplicationRecord
   def series_attributes=(attributes)
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
+      if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
+        errors.add(:base, ts("You can't add a work to that series."))
+        return
+      end
       self.series << old_series unless (old_series.blank? || self.series.include?(old_series))
       self.adjust_series_restriction
     elsif !attributes[:title].blank?
@@ -745,7 +741,7 @@ class Work < ApplicationRecord
   end
 
   # Change the positions of the chapters in the work
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
@@ -824,7 +820,7 @@ class Work < ApplicationRecord
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.will_save_change_to_attribute?(:complete)
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+      Work.where(id: id).update_all(["complete = ?", complete])
     end
   end
 
@@ -846,8 +842,8 @@ class Work < ApplicationRecord
 
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
-  def set_word_count
-    if self.new_record?
+  def set_word_count(preview = false)
+    if self.new_record? || preview
       self.word_count = 0
       chapters.each do |chapter|
         self.word_count += chapter.set_word_count
@@ -855,50 +851,6 @@ class Work < ApplicationRecord
     else
       self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(work_id: self.id, posted: true).first.work_word_count
     end
-  end
-
-  after_update :remove_outdated_downloads
-  def remove_outdated_downloads
-    FileUtils.rm_rf(self.download_dir)
-  end
-
-  # spread downloads out by first two letters of authorname
-  def download_dir
-    "/tmp/#{self.id}"
-  end
-
-  # split out so we can use this in works_helper
-  def download_folder
-    dl_authors = self.download_authors
-    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
-  end
-
-  def download_fandoms
-    string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = string.to_ascii
-    string.gsub(/[^[\w _-]]+/, '')
-  end
-
-  def display_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
-    string.to_ascii
-  end
-
-  # need the next two to be filesystem safe and not overly long
-  def download_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
-    string.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-
-  def download_title
-    string = title.to_ascii.gsub(/[^[\w _]]+/, '')
-    string = "Work by " + download_authors if string.blank?
-    string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-
-  def download_basename
-    "#{self.download_dir}/#{self.download_title}"
   end
 
   #######################################################################
@@ -932,7 +884,6 @@ class Work < ApplicationRecord
   end
 
   # FILTERING CALLBACKS
-  after_validation :check_filter_counts
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its
@@ -986,27 +937,28 @@ class Work < ApplicationRecord
     end
   end
 
-  # Determine if filter counts need to be reset after the work is saved
-  def check_filter_counts
-    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
-      self.should_reset_filters = false
-    end
-    return true
-  end
-
   # Must be called before save
   def visibility_changed?
     self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
   end
 
-  # Calls reset_filter_count on all the work's filters
+  # We need to do a recount for our filters if:
+  # - the work is brand new
+  # - the work is posted from a draft
+  # - the work is hidden or unhidden by an admin
+  # - the work's restricted status has changed
+  # Note that because the two filter counts both include unrevealed works, we
+  # don't need to check whether in_unrevealed_collection has changed -- it
+  # won't change the counts either way.
+  # (Modelled on Work.should_reindex_pseuds?)
+  def should_reset_filters?
+    pertinent_attributes = %w(id posted restricted hidden_by_admin)
+    (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Recalculates filter counts on all the work's filters
   def adjust_filter_counts
-    if self.should_reset_filters
-      self.filters.reload.each {|filter| filter.async(:reset_filter_count) }
-    end
-    return true
+    FilterCount.enqueue_filters(filters.reload) if should_reset_filters?
   end
 
   ################################################################################
@@ -1126,26 +1078,6 @@ class Work < ApplicationRecord
     end
   end
 
-  protected
-
-  # a string for use in joins: clause to add ownership lookup
-  OWNERSHIP_JOIN = "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                    INNER JOIN users ON pseuds.user_id = users.id"
-
-  COMMON_TAG_JOIN = "INNER JOIN common_taggings ON (works.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Work')
-                  INNER JOIN tags ON common_taggings.common_tag_id = tags.id"
-
-
-  VISIBLE_TO_ALL_CONDITIONS = {posted: true, restricted: false, hidden_by_admin: false}
-
-  VISIBLE_TO_USER_CONDITIONS = {posted: true, hidden_by_admin: false}
-
-  VISIBLE_TO_ADMIN_CONDITIONS = {posted: true}
-
-
-
-
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1217,68 +1149,7 @@ class Work < ApplicationRecord
     visible_to_user(user)
   end
 
-  scope :with_filter, lambda { |tag|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag.id}})
-  }
-
-  # Note: this version will work only on canonical tags (filters)
-  scope :with_all_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}}).
-    group("works.id").
-    having("count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}})
-  }
-
-  scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
-    group("works.id").
-    having("count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find)
-  }
-
-  scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_all_filters, lambda {|tags_to_find| with_all_filter_ids(tags_to_find.collect(&:id))}
-  scope :with_any_filters, lambda {|tags_to_find| with_any_filter_ids(tags_to_find.collect(&:id))}
-
-  scope :ids_only, -> { select("DISTINCT(works.id)") }
-
-  scope :tags_with_count, -> {
-    select("tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count").
-    joins(:tags).
-    group("tags.name").
-    order("tags.type, tags.name ASC")
-  }
-
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
-  scope :written_by_id, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids)
-  }
-  scope :written_by_id_having, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id").
-    having("count(DISTINCT pseuds.id) = #{pseud_ids.size}")
-  }
 
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
@@ -1291,74 +1162,6 @@ class Work < ApplicationRecord
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
-  end
-
-  scope :for_recipient, lambda {|recipient|
-    select("DISTINCT works.*").
-    joins(:gifts).
-    where('gifts.recipient_name = ?', recipient)
-  }
-
-  # shouldn't really use a named scope for this, but I'm afraid to try
-  # to change the way work filtering works
-  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
-
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a scope, please do!
-  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
-  def self.no_tags(tag_category, options = {})
-    tags = tag_category.tags
-    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uniq
-  end
-
-  # Used when admins have disabled filtering
-  def self.list_without_filters(owner, options)
-    works = case owner.class.to_s
-            when 'Pseud'
-              works = Work.written_by_id([owner.id])
-            when 'User'
-              works = Work.owned_by(owner)
-            when 'Collection'
-              works = Work.in_collection(owner)
-            else
-              if owner.is_a?(Tag)
-                works = owner.filtered_works
-              end
-            end
-
-    # Need to support user + fandom and collection + tag pages
-    if options[:fandom_id] || options[:filter_ids]
-      id = options[:fandom_id] || options[:filter_ids].first
-      tag = Tag.find_by(id: id)
-      if tag.present?
-        works = works.with_filter(tag)
-      end
-    end
-
-    if %w(Pseud User).include?(owner.class.to_s)
-      works = works.where(in_anon_collection: false)
-    end
-    unless owner.is_a?(Collection)
-      works = works.revealed
-    end
-    if User.current_user.nil? || User.current_user == :false
-      works = works.unrestricted
-    end
-
-    works = works.posted
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-  end
-
-  def self.collected_without_filters(user, options)
-    works = Work.written_by_id([user.id])
-    works = works.join(:collection_items)
-    unless User.current_user == user
-      works = works.where(in_anon_collection: false)
-      works = works.posted
-    end
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   ########################################################################
@@ -1424,7 +1227,7 @@ class Work < ApplicationRecord
 
   def hide_spam
     return unless spam?
-    admin_settings = Rails.cache.fetch("admin_settings"){ AdminSetting.first }
+    admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       self.hidden_by_admin = true
     end
@@ -1464,39 +1267,6 @@ class Work < ApplicationRecord
   # SEARCH INDEX
   #
   #############################################################################
-
-  # ES UPGRADE TRANSITION #
-  # Remove mapping block #
-  mapping do
-    indexes :authors_to_sort_on,  index: :not_analyzed
-    indexes :title_to_sort_on,    index: :not_analyzed
-    indexes :title,               boost: 20
-    indexes :creator,             boost: 15
-    indexes :revised_at,          type: 'date'
-  end
-
-  def to_indexed_json
-    to_json(
-      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
-      methods: [
-        :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
-        :pseud_ids,
-        :collection_ids,
-        :hits,
-        :comments_count,
-        :kudos_count,
-        :bookmarks_count,
-        :creator
-      ])
-  end
 
   def document_json
     WorkIndexer.new({}).document(self)
@@ -1540,23 +1310,6 @@ class Work < ApplicationRecord
     self.stat_counter.bookmarks_count
   end
 
-  # Deprecated: old search
-  def creator
-    names = ""
-    if anonymous?
-      names = "Anonymous"
-    else
-      pseuds.each do |pseud|
-        names << "#{pseud.name} #{pseud.user_login} "
-      end
-      external_author_names.pluck(:name).each do |name|
-        names << "#{name} "
-      end
-    end
-    names
-  end
-
-  # New version
   def creators
     if anonymous?
       ["Anonymous"]
@@ -1568,24 +1321,38 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # If the filter_taggings table is always correct, we only need one line:
-    # fandoms.count > 1 && filters.by_type('Fandom').first_class.count > 1
-
+    # Short-circuit the check if there's only one fandom tag:
     return false if fandoms.count == 1
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
-    unrelated_fandoms = fandoms.map { |f| f.merger ? f.merger : f }.uniq
+    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
 
-    # Replace each fandom with the top tags of the meta trees it belongs to
-    loop do
-      n = unrelated_fandoms.map { |f| f.meta_tags.any? ? f.meta_tags : f }.flatten.uniq
-      break if n == unrelated_fandoms
-      unrelated_fandoms = n
+    # For each fandom, find the set of all meta tags for that fandom (including
+    # the fandom itself).
+    meta_tag_groups = all_without_syns.map do |f|
+      # TODO: This is more complicated than it has to be. Once the
+      # meta_taggings table is fixed so that the inherited meta-tags are
+      # correctly calculated, this can be simplified.
+      boundary = [f] + f.meta_tags
+      all_meta_tags = []
+
+      until boundary.empty?
+        all_meta_tags.concat(boundary)
+        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
+      end
+
+      all_meta_tags.uniq
     end
 
-    # These fandoms have no meta tags, and they cannot be related
-    unrelated_fandoms.count > 1
+    # Two fandoms are "related" if they share at least one meta tag. A work is
+    # considered a crossover if there is no single fandom on the work that all
+    # the other fandoms on the work are "related" to.
+    meta_tag_groups.none? do |meta_tags1|
+      meta_tag_groups.all? do |meta_tags2|
+        (meta_tags1 & meta_tags2).any?
+      end
+    end
   end
 
   # Does this work have only one relationship tag?

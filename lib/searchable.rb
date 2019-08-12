@@ -38,23 +38,15 @@ module Searchable
   end
 
   def reindex_document(options = {})
-    # ES UPGRADE TRANSITION #
-    # Remove `update_index rescue nil`
-    update_index rescue nil
-
-    # ES UPGRADE TRANSITION #
-    # Remove outer conditional
-    if self.class.use_new_search?
-      responses = []
-      self.indexers.each do |indexer|
-        if options[:async]
-          queue = options[:queue] || :main
-          responses << AsyncIndexer.index(indexer, [id], queue)
-        else
-          responses << indexer.new([id]).index_document(self)
-        end
+    responses = []
+    self.indexers.each do |indexer|
+      if options[:async]
+        queue = options[:queue] || :main
+        responses << AsyncIndexer.index(indexer, [id], queue)
+      else
+        responses << indexer.new([id]).index_document(self)
       end
-      responses
     end
+    responses
   end
 end

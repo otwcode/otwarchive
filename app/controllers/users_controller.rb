@@ -2,9 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_action :check_user_status, only: [:edit, :update]
-  before_action :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
-  before_action :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_action :check_account_creation_status, only: [:new, :create]
+  before_action :load_user, except: [:activate, :delete_confirmation, :index]
+  before_action :check_ownership, except: [:activate, :browse, :delete_confirmation, :index, :show]
   skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -27,22 +26,6 @@ class UsersController < ApplicationController
   def load_user
     @user = User.find_by(login: params[:id])
     @check_ownership_of = @user
-  end
-
-  def check_account_creation_status
-    if is_registered_user?
-      flash[:error] = ts('You are already logged in!')
-      redirect_to(root_path) && return
-    end
-
-    token = params[:invitation_token]
-
-    if !@admin_settings.account_creation_enabled?
-      flash[:error] = ts('Account creation is suspended at the moment. Please check back with us later.')
-      redirect_to(root_path) && return
-    else
-      check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
-    end
   end
 
   def index
@@ -72,35 +55,20 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by(token: params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
-  end
-
   # GET /users/1/edit
   def edit
   end
 
   def changed_password
-    unless params[:password] && (@user.recently_reset? || reauthenticate)
+    unless params[:password] && reauthenticate
       render(:change_password) && return
     end
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.recently_reset = false
 
     if @user.save
-      flash[:notice] = ts('Your password has been changed')
+      flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
       @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
 
       redirect_to(user_profile_path(@user)) && return
@@ -113,9 +81,8 @@ class UsersController < ApplicationController
     render(:change_username) && return unless params[:new_login].present?
 
     @new_login = params[:new_login]
-    session = UserSession.new(login: @user.login, password: params[:password])
 
-    unless session.valid?
+    unless @user.valid_password?(params[:password])
       flash[:error] = ts('Your password was incorrect')
       render(:change_username) && return
     end
@@ -131,43 +98,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # POST /users
-  # POST /users.xml
-  def create
-    @hide_dashboard = true
-
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      @user = User.new
-      @user.login = user_params[:login]
-      @user.email = user_params[:email]
-      @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = user_params[:age_over_13]
-      @user.terms_of_service = user_params[:terms_of_service]
-      @user.accepted_tos_version = @current_tos_version
-
-      @user.password = user_params[:password] if user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation] if params[:user][:password_confirmation]
-
-      @user.activation_code = Digest::SHA1.hexdigest(Time.now.to_s.split(//).sort_by { rand }.join)
-
-      @user.transaction do
-        if @user.save
-          notify_and_show_confirmation_screen
-        else
-          render action: 'new'
-        end
-      end
-    end
-  end
-
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
     UserMailer.signup_notification(@user.id).deliver!
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        activation_url: activate_path(@user.activation_code)).html_safe if Rails.env.development?
+                        activation_url: activate_path(@user.confirmation_token)).html_safe if Rails.env.development?
 
     render 'confirmation'
   end
@@ -180,7 +116,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @user = User.find_by(activation_code: params[:id])
+    @user = User.find_by(confirmation_token: params[:id])
 
     unless @user
       flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
@@ -217,7 +153,7 @@ class UsersController < ApplicationController
       flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
     end
 
-    redirect_to(login_path)
+    redirect_to(new_user_session_path)
   end
 
   def update
@@ -323,9 +259,7 @@ class UsersController < ApplicationController
                              ts('You must enter your old password'))
     end
 
-    session = UserSession.new(login: @user.login, password: params[:password_check])
-
-    if session.valid?
+    if @user.valid_password?(params[:password_check])
       true
     else
       wrong_password!(params[:new_email],
@@ -341,44 +275,29 @@ class UsersController < ApplicationController
     false
   end
 
-  def check_account_creation_invite(token)
-    unless token.blank?
-      invitation = Invitation.find_by(token: token)
-
-      if !invitation
-        flash[:error] = ts('There was an error with your invitation token, please contact support')
-        redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at && invitation.invitee
-        flash[:error] = ts('This invitation has already been used to create an account, sorry!')
-        redirect_to root_path
-      end
-
-      return
-    end
-
-    if !@admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
-      redirect_to root_path
-    else
-      flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-      redirect_to invite_requests_path
-    end
-  end
-
   def visible_items(current_user)
     # NOTE: When current_user is nil, we use .visible_to_all, otherwise we use
     #       .visible_to_registered_user.
     visible_method = current_user.nil? && current_admin.nil? ? :visible_to_all : :visible_to_registered_user
 
     # hahaha omg so ugly BUT IT WORKS :P
-    @fandoms = Fandom.select('tags.*, count(tags.id) as work_count')
-                     .joins(:direct_filter_taggings)
-                     .joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'")
-                     .group('tags.id')
-                     .merge(Work.send(visible_method).revealed.non_anon)
-                     .merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-  INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-  INNER JOIN users ON pseuds.user_id = users.id").where('users.id = ?', @user.id))
+    @fandoms = if @user == User.orphan_account
+                 []
+               else
+                 Fandom.select('tags.*, count(tags.id) as work_count').
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works
+                     ON filter_taggings.filterable_id = works.id
+                     AND filter_taggings.filterable_type = 'Work'").
+                   group('tags.id').
+                   merge(Work.send(visible_method).revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships
+                     ON creatorships.creation_id = works.id
+                     AND creatorships.creation_type = 'Work'
+                     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                     INNER JOIN users ON pseuds.user_id = users.id").
+                   where('users.id = ?', @user.id))
+               end
     visible_works = @user.works.send(visible_method)
     visible_series = @user.series.send(visible_method)
     visible_bookmarks = @user.bookmarks.send(visible_method)

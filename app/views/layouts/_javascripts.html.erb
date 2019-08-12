@@ -38,12 +38,7 @@
 <script type="text/javascript">$j = jQuery.noConflict();</script>
 <%= javascript_include_tag "jquery.scrollTo.min", "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.min", "jquery-shuffle", "jquery.tokeninput.min", "jquery.trap.min", "ao3modal.min", "jquery.cookie",  skip_pipeline: true %>
 
-<% # ES UPGRADE TRANSITION # %>
-<% if use_new_search? %>
-  <%= javascript_include_tag "filters.min", skip_pipeline: true %>
-<% else %>
-  <%= javascript_include_tag "filters_old.min", skip_pipeline: true %>
-<% end %>
+<%= javascript_include_tag "filters.min", skip_pipeline: true %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>

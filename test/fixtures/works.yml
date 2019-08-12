@@ -23,8 +23,7 @@ work_00082:
   revised_at: 2009-12-12 21:14:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
-work_00059: 
+work_00059:
   restricted: true
   posted: true
   major_version: 1
@@ -48,8 +47,7 @@ work_00059:
   revised_at: 2004-09-17 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: sarkymoocow
-work_00040: 
+work_00040:
   restricted: false
   posted: true
   major_version: 1
@@ -73,8 +71,7 @@ work_00040:
   revised_at: 2009-12-11 02:48:40 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00017: 
+work_00017:
   restricted: false
   posted: true
   major_version: 1
@@ -98,8 +95,7 @@ work_00017:
   revised_at: 2009-12-11 08:47:23 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4,  non-default pseud
-work_00061: 
+work_00061:
   restricted: false
   posted: true
   major_version: 1
@@ -123,8 +119,7 @@ work_00061:
   revised_at: 2009-12-11 22:22:13 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
-work_00038: 
+work_00038:
   restricted: false
   posted: true
   major_version: 1
@@ -148,8 +143,7 @@ work_00038:
   revised_at: 2009-12-11 00:50:34 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00041: 
+work_00041:
   restricted: false
   posted: true
   major_version: 1
@@ -173,8 +167,7 @@ work_00041:
   revised_at: 2009-12-11 02:55:48 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
-work_00039: 
+work_00039:
   restricted: false
   posted: true
   major_version: 1
@@ -198,8 +191,7 @@ work_00039:
   revised_at: 2009-12-11 00:57:27 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
-work_00062: 
+work_00062:
   restricted: false
   posted: true
   major_version: 1
@@ -223,8 +215,7 @@ work_00062:
   revised_at: 2009-12-11 22:26:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
-work_00083: 
+work_00083:
   restricted: false
   posted: false
   major_version: 1
@@ -248,8 +239,7 @@ work_00083:
   revised_at: 2009-12-12 21:14:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
-work_00020: 
+work_00020:
   restricted: false
   posted: true
   major_version: 1
@@ -273,7 +263,6 @@ work_00020:
   revised_at: 2009-12-11 16:32:18 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  non-default pseud
 work_00019: 
   restricted: false
   posted: true
@@ -298,7 +287,6 @@ work_00019:
   revised_at: 2009-12-11 15:47:16 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  some other fucking pseud
 work_00063: 
   restricted: false
   posted: true
@@ -323,7 +311,6 @@ work_00063:
   revised_at: 2009-12-11 22:29:06 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00084: 
   restricted: false
   posted: false
@@ -348,7 +335,6 @@ work_00084:
   revised_at: 2009-12-12 21:14:02 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00042: 
   restricted: false
   posted: true
@@ -373,7 +359,6 @@ work_00042:
   revised_at: 2009-12-11 04:08:45 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  non-default pseud
 work_00085: 
   restricted: false
   posted: false
@@ -398,7 +383,6 @@ work_00085:
   revised_at: 2009-12-12 21:14:03 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00100: 
   restricted: false
   posted: false
@@ -423,7 +407,6 @@ work_00100:
   revised_at: 2009-12-12 23:24:57 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00001: 
   restricted: false
   posted: true
@@ -448,7 +431,6 @@ work_00001:
   revised_at: 2009-12-11 03:09:52 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  testuser2
 work_00043: 
   restricted: false
   posted: true
@@ -473,7 +455,6 @@ work_00043:
   revised_at: 2009-12-11 04:10:19 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  non-default pseud
 work_00064: 
   restricted: false
   posted: true
@@ -498,7 +479,6 @@ work_00064:
   revised_at: 2009-12-11 22:33:55 Z
   endnotes: 
   hidden_by_admin: true
-  authors_to_sort_on: cal
 work_00101: 
   restricted: false
   posted: true
@@ -523,7 +503,6 @@ work_00101:
   revised_at: 2009-12-12 23:32:30 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00002: 
   restricted: false
   posted: true
@@ -548,7 +527,6 @@ work_00002:
   revised_at: 2008-11-09 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud
 work_00044: 
   restricted: false
   posted: true
@@ -573,7 +551,6 @@ work_00044:
   revised_at: 2009-12-11 01:02:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
 work_00065: 
   restricted: false
   posted: true
@@ -598,7 +575,6 @@ work_00065:
   revised_at: 2009-12-11 22:38:29 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00086: 
   restricted: false
   posted: false
@@ -623,7 +599,6 @@ work_00086:
   revised_at: 2009-12-12 21:14:04 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00102: 
   restricted: false
   posted: true
@@ -651,7 +626,6 @@ work_00102:
   revised_at: 2009-12-12 23:53:29 Z
   endnotes: I hope you enjoyed it, R&R please! Feedback it like it's 1999!
   hidden_by_admin: false
-  authors_to_sort_on: enigel
 work_00003: 
   restricted: false
   posted: true
@@ -676,7 +650,6 @@ work_00003:
   revised_at: 2009-12-11 05:19:36 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00045: 
   restricted: false
   posted: true
@@ -701,7 +674,6 @@ work_00045:
   revised_at: 2009-12-11 01:24:40 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00087: 
   restricted: false
   posted: true
@@ -726,7 +698,6 @@ work_00087:
   revised_at: 2009-12-12 21:28:21 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: llwyden ferch gyfrinach
 work_00103: 
   restricted: false
   posted: true
@@ -765,7 +736,6 @@ work_00103:
   revised_at: 2009-12-13 00:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: non-default pseud,  cal
 work_00004: 
   restricted: false
   posted: true
@@ -790,7 +760,6 @@ work_00004:
   revised_at: 2008-11-09 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00025: 
   restricted: false
   posted: true
@@ -815,7 +784,6 @@ work_00025:
   revised_at: 2009-12-11 21:55:41 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  non-default pseud,  some other fucking pseud
 work_00046: 
   restricted: false
   posted: true
@@ -840,7 +808,6 @@ work_00046:
   revised_at: 2009-12-11 01:28:46 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4
 work_00090: 
   restricted: false
   posted: true
@@ -865,7 +832,6 @@ work_00090:
   revised_at: 2009-12-12 21:22:54 Z
   endnotes: Testing, testing.
   hidden_by_admin: false
-  authors_to_sort_on: hh_ook
 work_00067: 
   restricted: false
   posted: true
@@ -890,7 +856,6 @@ work_00067:
   revised_at: 2009-12-12 21:11:47 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: dawningstar
 work_00088: 
   restricted: false
   posted: false
@@ -915,7 +880,6 @@ work_00088:
   revised_at: 2009-12-12 21:14:05 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00070: 
   restricted: false
   posted: true
@@ -942,7 +906,6 @@ work_00070:
   revised_at: 2009-12-12 21:15:46 Z
   endnotes: <a name="oneyeah"></a><a href="#onefoot"><sup>1</sup></a> BWAHAHAHAHA I WIN.
   hidden_by_admin: false
-  authors_to_sort_on: shusu
 work_00047: 
   restricted: true
   posted: true
@@ -967,7 +930,6 @@ work_00047:
   revised_at: 2009-12-11 23:12:10 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00091: 
   restricted: false
   posted: true
@@ -992,7 +954,6 @@ work_00091:
   revised_at: 2009-12-12 21:45:15 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00068: 
   restricted: false
   posted: true
@@ -1017,8 +978,7 @@ work_00068:
   revised_at: 2009-12-12 21:11:11 Z
   endnotes: The End!!
   hidden_by_admin: false
-  authors_to_sort_on: jenn_calaelen
-work_00089: 
+work_00089:
   restricted: false
   posted: true
   major_version: 1
@@ -1042,7 +1002,6 @@ work_00089:
   revised_at: 2009-12-12 21:19:21 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: yulechatismadeofawesome
 work_00104: 
   restricted: false
   posted: true
@@ -1082,7 +1041,6 @@ work_00104:
   revised_at: 2009-12-18 17:57:27 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00005: 
   restricted: false
   posted: true
@@ -1107,7 +1065,6 @@ work_00005:
   revised_at: 2008-12-11 01:26:01 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser4
 work_00048: 
   restricted: true
   posted: true
@@ -1132,7 +1089,6 @@ work_00048:
   revised_at: 2009-12-11 23:14:26 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3
 work_00071: 
   restricted: false
   posted: false
@@ -1157,7 +1113,6 @@ work_00071:
   revised_at: 2009-12-12 21:13:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00092: 
   restricted: false
   posted: true
@@ -1182,7 +1137,6 @@ work_00092:
   revised_at: 2009-12-12 22:14:56 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: lizifer
 work_00069: 
   restricted: false
   posted: true
@@ -1207,7 +1161,6 @@ work_00069:
   revised_at: 2009-12-12 21:12:03 Z
   endnotes: Now to make a crossover with SPN.
   hidden_by_admin: false
-  authors_to_sort_on: badjuju
 work_00105: 
   restricted: false
   posted: true
@@ -1235,7 +1188,6 @@ work_00105:
   revised_at: 2010-01-04 12:35:37 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: thelongestpseudinthegoshdarnworldomgwtfo
 work_00006: 
   restricted: false
   posted: true
@@ -1260,7 +1212,6 @@ work_00006:
   revised_at: 2008-12-11 13:59:15 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: ash
 work_00050: 
   restricted: true
   posted: true
@@ -1285,7 +1236,6 @@ work_00050:
   revised_at: 2009-12-11 23:20:29 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00093: 
   restricted: false
   posted: true
@@ -1313,7 +1263,6 @@ work_00093:
   revised_at: 2008-02-07 00:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00106: 
   restricted: false
   posted: false
@@ -1338,7 +1287,6 @@ work_00106:
   revised_at: 2010-07-28 13:10:05 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00030: 
   restricted: false
   posted: true
@@ -1363,7 +1311,6 @@ work_00030:
   revised_at: 2009-12-11 21:54:49 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  non-default pseud,  non-default pseud
 work_00007: 
   restricted: false
   posted: true
@@ -1390,7 +1337,6 @@ work_00007:
   revised_at: 2008-12-06 22:32:20 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: boccaccio
 work_00051: 
   restricted: false
   posted: true
@@ -1415,7 +1361,6 @@ work_00051:
   revised_at: 2009-12-11 23:22:57 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00072: 
   restricted: false
   posted: false
@@ -1440,7 +1385,6 @@ work_00072:
   revised_at: 2009-12-12 21:13:51 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00049: 
   restricted: false
   posted: true
@@ -1465,7 +1409,6 @@ work_00049:
   revised_at: 2009-12-11 23:33:39 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00107: 
   restricted: false
   posted: true
@@ -1490,7 +1433,6 @@ work_00107:
   revised_at: 2010-07-28 13:11:34 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00008: 
   restricted: false
   posted: true
@@ -1515,7 +1457,6 @@ work_00008:
   revised_at: 2008-12-06 22:52:02 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: boccaccio
 work_00052: 
   restricted: true
   posted: true
@@ -1540,7 +1481,6 @@ work_00052:
   revised_at: 2009-12-11 23:24:17 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2
 work_00029: 
   restricted: false
   posted: true
@@ -1565,7 +1505,6 @@ work_00029:
   revised_at: 2009-12-11 00:24:31 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00073: 
   restricted: false
   posted: false
@@ -1590,7 +1529,6 @@ work_00073:
   revised_at: 2009-12-12 21:13:52 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00094: 
   restricted: false
   posted: true
@@ -1618,7 +1556,6 @@ work_00094:
   revised_at: 2009-12-12 22:47:44 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00010: 
   restricted: false
   posted: true
@@ -1643,7 +1580,6 @@ work_00010:
   revised_at: 2008-12-06 23:19:50 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00009: 
   restricted: false
   posted: true
@@ -1668,7 +1604,6 @@ work_00009:
   revised_at: 2008-12-06 22:55:59 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: chaucer
 work_00074: 
   restricted: false
   posted: false
@@ -1693,7 +1628,6 @@ work_00074:
   revised_at: 2009-12-12 21:13:53 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00095: 
   restricted: false
   posted: true
@@ -1721,7 +1655,6 @@ work_00095:
   revised_at: 2009-04-12 01:00:00 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00053: 
   restricted: false
   posted: true
@@ -1746,7 +1679,6 @@ work_00053:
   revised_at: 2009-12-11 12:50:55 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser
 work_00032: 
   restricted: false
   posted: true
@@ -1771,7 +1703,6 @@ work_00032:
   revised_at: 2009-12-11 22:23:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00011: 
   restricted: false
   posted: true
@@ -1796,7 +1727,6 @@ work_00011:
   revised_at: 2008-12-06 23:24:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00096: 
   restricted: false
   posted: true
@@ -1824,7 +1754,6 @@ work_00096:
   revised_at: 2009-12-12 22:54:18 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00075: 
   restricted: false
   posted: false
@@ -1849,7 +1778,6 @@ work_00075:
   revised_at: 2009-12-12 21:13:55 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00033: 
   restricted: false
   posted: true
@@ -1874,7 +1802,6 @@ work_00033:
   revised_at: 2009-12-11 22:26:06 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00012: 
   restricted: false
   posted: true
@@ -1899,7 +1826,6 @@ work_00012:
   revised_at: 2008-12-06 23:26:41 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: zooey_glass
 work_00054: 
   restricted: false
   posted: true
@@ -1955,7 +1881,6 @@ work_00054:
   revised_at: 2009-12-11 12:58:05 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: cal
 work_00097: 
   restricted: false
   posted: true
@@ -1983,7 +1908,6 @@ work_00097:
   revised_at: 2009-12-12 23:01:10 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00034: 
   restricted: false
   posted: true
@@ -2008,7 +1932,6 @@ work_00034:
   revised_at: 2009-12-11 22:31:04 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00013: 
   restricted: false
   posted: true
@@ -2033,7 +1956,6 @@ work_00013:
   revised_at: 2008-12-06 23:34:39 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: jessica
 work_00076: 
   restricted: false
   posted: false
@@ -2058,7 +1980,6 @@ work_00076:
   revised_at: 2009-12-12 21:13:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00056: 
   restricted: false
   posted: true
@@ -2083,7 +2004,6 @@ work_00056:
   revised_at: 2007-03-28 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00035: 
   restricted: false
   posted: true
@@ -2108,7 +2028,6 @@ work_00035:
   revised_at: 2009-12-11 04:06:51 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser2,  testuser4,  non-default pseud,  some other fucking pseud
 work_00014: 
   restricted: false
   posted: true
@@ -2133,7 +2052,6 @@ work_00014:
   revised_at: 2009-12-11 05:19:36 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: uriel
 work_00077: 
   restricted: false
   posted: false
@@ -2158,7 +2076,6 @@ work_00077:
   revised_at: 2009-12-12 21:13:56 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00098: 
   restricted: false
   posted: true
@@ -2186,7 +2103,6 @@ work_00098:
   revised_at: 2009-12-12 23:07:31 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00099: 
   restricted: false
   posted: true
@@ -2214,7 +2130,6 @@ work_00099:
   revised_at: 2009-12-12 23:18:43 Z
   endnotes: ""
   hidden_by_admin: false
-  authors_to_sort_on: tassos
 work_00078: 
   restricted: false
   posted: false
@@ -2239,7 +2154,6 @@ work_00078:
   revised_at: 2009-12-12 21:13:57 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00036: 
   restricted: false
   posted: true
@@ -2264,7 +2178,6 @@ work_00036:
   revised_at: 2009-12-11 00:30:26 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: some other fucking pseud
 work_00015: 
   restricted: false
   posted: true
@@ -2289,7 +2202,6 @@ work_00015:
   revised_at: 2009-12-11 04:25:24 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser,  testuser2,  testuser4,  non-default pseud,  some other fucking pseud
 work_00057: 
   restricted: false
   posted: true
@@ -2314,7 +2226,6 @@ work_00057:
   revised_at: 2008-12-23 23:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00080: 
   restricted: false
   posted: false
@@ -2339,7 +2250,6 @@ work_00080:
   revised_at: 2009-12-12 21:13:59 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00079: 
   restricted: false
   posted: false
@@ -2364,7 +2274,6 @@ work_00079:
   revised_at: 2009-12-12 21:13:58 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00081: 
   restricted: false
   posted: false
@@ -2389,7 +2298,6 @@ work_00081:
   revised_at: 2009-12-12 21:14:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: llwyden
 work_00058: 
   restricted: false
   posted: true
@@ -2414,7 +2322,6 @@ work_00058:
   revised_at: 2009-12-11 22:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00060: 
   restricted: false
   posted: true
@@ -2439,7 +2346,6 @@ work_00060:
   revised_at: 2009-12-11 22:00:00 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: parenthetical
 work_00016: 
   restricted: false
   posted: true
@@ -2464,4 +2370,3 @@ work_00016:
   revised_at: 2009-12-11 06:34:22 Z
   endnotes: 
   hidden_by_admin: false
-  authors_to_sort_on: testuser3,  testuser4
