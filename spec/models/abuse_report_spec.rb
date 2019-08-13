@@ -34,12 +34,12 @@ describe AbuseReport do
       end
     end
 
-    context "invalid emails" do
-      BAD_EMAILS.each do |email|
+    context "provided email is invalid" do
+      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
-        it "cannot be created if the email does not pass veracity check" do
+        it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
-          expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
+          expect(bad_email.errors[:email]).to include("should look like an email address.")
         end
       end
     end
