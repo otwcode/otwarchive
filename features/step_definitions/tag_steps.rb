@@ -368,7 +368,7 @@ end
 When /^I assign the fandom "([^"]*)" to the wrangler "([^"]*)"$/ do |fandomname, wrangler|
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
-  select(wrangler, from:"assignments_#{fandom.id}_")
+  select(wrangler, from: "assignments_#{fandom.id}_")
   click_button "Assign"
 end
 
