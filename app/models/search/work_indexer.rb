@@ -27,6 +27,9 @@ class WorkIndexer < Indexer
             type: "text",
             analyzer: "simple"
           },
+          series_titles: {
+            type: "text"
+          },
           authors_to_sort_on: {
             type: "keyword"
           },
@@ -84,7 +87,7 @@ class WorkIndexer < Indexer
         :otp,
         :work_types,
         :nonfiction
-      ],
+      ]
     ).merge(
       series_titles: object.series.pluck(:title)
     )

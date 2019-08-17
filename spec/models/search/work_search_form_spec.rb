@@ -147,7 +147,7 @@ describe WorkSearchForm do
 
     describe "when searching by series title" do
       let!(:main_series) { create(:series, title: "Persona: Dancing in Starlight", works: [work]) }
-      let!(:spinoff_series) { create(:series, title: "Persona", works: [second_work]) }
+      let!(:spinoff_series) { create(:series, title: "Persona 5", works: [second_work]) }
 
       it "returns only works in matching series" do
         run_all_indexing_jobs
@@ -160,11 +160,13 @@ describe WorkSearchForm do
         expect(results).to include(work)
         expect(results).not_to include(second_work)
 
-        results = WorkSearchForm.new(series_titles: "persona").search_results
-        expect(results).to include(work, second_work)
+        results = WorkSearchForm.new(series_titles: "persona 5").search_results
+        expect(results).not_to include(work)
+        expect(results).to include(second_work)
 
-        results = WorkSearchForm.new(query: "series_titles: persona").search_results
-        expect(results).to include(work, second_work)
+        results = WorkSearchForm.new(query: "series_titles: \"persona 5\"").search_results
+        expect(results).not_to include(work)
+        expect(results).to include(second_work)
 
         results = WorkSearchForm.new(query: "series_titles: *").search_results
         expect(results).to include(work, second_work)
