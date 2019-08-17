@@ -146,39 +146,55 @@ describe WorkSearchForm do
     end
 
     describe "when searching by series title" do
-      before do
-        create(:series, title: "Megami Tensei", authors: work.pseuds, works: [work])
-        create(:series, title: "Persona", authors: work.pseuds, works: [second_work])
+      let!(:main_series) { create(:series, title: "Persona: Dancing in Starlight", works: [work]) }
+      let!(:spinoff_series) { create(:series, title: "Persona", works: [second_work]) }
+
+      it "returns only works in matching series" do
         run_all_indexing_jobs
+
+        results = WorkSearchForm.new(series_titles: "dancing").search_results
+        expect(results).to include(work)
+        expect(results).not_to include(second_work)
+
+        results = WorkSearchForm.new(query: "series_titles: dancing").search_results
+        expect(results).to include(work)
+        expect(results).not_to include(second_work)
+
+        results = WorkSearchForm.new(series_titles: "persona").search_results
+        expect(results).to include(work, second_work)
+
+        results = WorkSearchForm.new(query: "series_titles: persona").search_results
+        expect(results).to include(work, second_work)
+
+        results = WorkSearchForm.new(query: "series_titles: *").search_results
+        expect(results).to include(work, second_work)
       end
 
-      it "returns only works in series matching the title" do
+      it "returns only works in matching series after a series is renamed" do
+        main_series.update!(title: "Megami Tensei")
+        run_all_indexing_jobs
+
         results = WorkSearchForm.new(series_titles: "megami").search_results
         expect(results).to include(work)
         expect(results).not_to include(second_work)
-        results = WorkSearchForm.new(query: "series_titles: *").search_results
-        expect(results).to include(work, second_work)
+      end
 
-        # Rename a series
-        work.reload.series.first.update!(title: "Persona: Dancing in Starlight")
+      it "returns only works in matching series after a works is removed from a series" do
+        work.serial_works.first.destroy!
         run_all_indexing_jobs
-        results = WorkSearchForm.new(series_titles: "persona").search_results
-        expect(results).to include(work, second_work)
 
-        # Remove a work from a series
-        work.reload.serial_works.first.destroy
-        run_all_indexing_jobs
         results = WorkSearchForm.new(series_titles: "persona").search_results
         expect(results).not_to include(work)
         expect(results).to include(second_work)
+      end
 
-        # Delete a series
-        second_work.reload.series.first.destroy
+      it "returns only works in matching series after a series is deleted" do
+        spinoff_series.destroy!
         run_all_indexing_jobs
+
         results = WorkSearchForm.new(series_titles: "persona").search_results
-        expect(results).not_to include(work, second_work)
-        results = WorkSearchForm.new(query: "series_titles: *").search_results
-        expect(results).to be_empty
+        expect(results).to include(work)
+        expect(results).not_to include(second_work)
       end
     end
 
