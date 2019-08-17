@@ -147,12 +147,8 @@ describe WorkSearchForm do
 
     describe "when searching by series title" do
       before do
-        work.series_attributes = { title: "Megami Tensei" }
-        work.save!
-
-        second_work.series_attributes = { title: "Persona" }
-        second_work.save!
-
+        create(:series, title: "Megami Tensei", authors: work.pseuds, works: [work])
+        create(:series, title: "Persona", authors: work.pseuds, works: [second_work])
         run_all_indexing_jobs
       end
 
@@ -164,20 +160,20 @@ describe WorkSearchForm do
         expect(results).to include(work, second_work)
 
         # Rename a series
-        work.series.first.update!(title: "Persona: Dancing in Starlight")
+        work.reload.series.first.update!(title: "Persona: Dancing in Starlight")
         run_all_indexing_jobs
         results = WorkSearchForm.new(series_titles: "persona").search_results
         expect(results).to include(work, second_work)
 
         # Remove a work from a series
-        work.serial_works.first.destroy
+        work.reload.serial_works.first.destroy
         run_all_indexing_jobs
         results = WorkSearchForm.new(series_titles: "persona").search_results
         expect(results).not_to include(work)
         expect(results).to include(second_work)
 
         # Delete a series
-        second_work.series.first.destroy
+        second_work.reload.series.first.destroy
         run_all_indexing_jobs
         results = WorkSearchForm.new(series_titles: "persona").search_results
         expect(results).not_to include(work, second_work)
