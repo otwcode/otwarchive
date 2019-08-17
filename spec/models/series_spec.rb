@@ -102,7 +102,7 @@ describe Series do
       # Make sure we see the newest chapter:
       before { series.reload }
 
-      it "sets the chapter's creators equal to the creators of the series" do
+      it "sets the chapter's and the work's creators" do
         series.remove_author(to_remove)
         expect(series.pseuds.reload).to contain_exactly(other.default_pseud)
         expect(work.pseuds.reload).to contain_exactly(other.default_pseud)

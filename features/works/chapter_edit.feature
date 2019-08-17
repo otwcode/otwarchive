@@ -556,7 +556,7 @@ Feature: Edit chapters
       And I should see "rusty"
       And I should not see "brenda"
 
-  Scenario: You should be able to add a co-creator to a chapter if they do not allow it, if they are a co creator of the work.
+  Scenario: You should be able to add a co-creator to a chapter if they do not allow it, if they are a co-creator of the work.
 
     Given the user "thegoodmom" allows co-creators
       And I am logged in as "rusty"

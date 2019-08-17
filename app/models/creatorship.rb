@@ -256,7 +256,7 @@ class Creatorship < ApplicationRecord
 
     # Approve if the creation is a chapter and the pseud is already listed on
     # the work, or if the creation is a series and the pseud is already listed
-    # on one of the works::
+    # on one of the works:
     (creation.is_a?(Chapter) && creation.work.pseuds.include?(pseud)) ||
       (creation.is_a?(Series) && creation.work_pseuds.include?(pseud))
   end
