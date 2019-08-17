@@ -326,7 +326,7 @@ describe Work do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
         expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
 
-        work.authors = [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
+        allow(work).to receive(:pseuds).and_return [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
         expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end
