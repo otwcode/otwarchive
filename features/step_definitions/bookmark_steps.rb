@@ -209,12 +209,15 @@ Given /^I have bookmarks of various completion statuses to search$/ do
 end
 
 Given /^I have bookmarks of old series to search$/ do
-  newer_series = nil
+  step %{basic tags}
+  step %{the user "creator" exists and is activated}
+  creator = User.find_by(login: "creator").default_pseud
 
   Timecop.freeze(30.days.ago) do
-    step %{I post the work "WIP in a Series" as part of a series "Older WIP Series"}
+    older_work = FactoryGirl.create(:posted_work, title: "WIP in a Series", authors: [creator])
+    older_series = FactoryGirl.create(:series, title: "Older WIP Series", works: [older_work])
     FactoryGirl.create(:bookmark,
-                       bookmarkable_id: Series.find_by(title: "Older WIP Series").id,
+                       bookmarkable_id: older_series.id,
                        bookmarkable_type: "Series")
   end
 
