@@ -34,12 +34,12 @@ describe AbuseReport do
       end
     end
 
-    context "invalid emails" do
-      BAD_EMAILS.each do |email|
+    context "provided email is invalid" do
+      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
-        it "cannot be created if the email does not pass veracity check" do
+        it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
-          expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
+          expect(bad_email.errors[:email]).to include("should look like an email address.")
         end
       end
     end
@@ -232,25 +232,24 @@ describe AbuseReport do
         expect(common_report.errors[:base]).to be_empty
       end
     end
-  end
 
-  context "alternate url" do
-    let(:no_protocol) { build(:abuse_report, url: "archiveofourown.org") }
-    it "no protocol" do
-      expect(no_protocol.save).to be_truthy
-      expect(no_protocol.errors[:url]).to be_empty
-    end
+    context "for alternate URL format" do
+      let(:report) { build(:abuse_report) }
 
-    let(:dot_com) { build(:abuse_report, url: "http://archiveofourown.com") }
-    it "dot com" do
-      expect(dot_com.save).to be_truthy
-      expect(dot_com.errors[:url]).to be_empty
-    end
+      it "no protocol" do
+        report.url = "archiveofourown.org"
+        expect(report.valid?).to be_truthy
+      end
 
-    let(:acronym) { build(:abuse_report, url: "http://ao3.org") }
-    it "acronym" do
-      expect(acronym.save).to be_truthy
-      expect(acronym.errors[:url]).to be_empty
+      it "dot com" do
+        report.url = "http://archiveofourown.com"
+        expect(report.valid?).to be_truthy
+      end
+
+      it "acronym" do
+        report.url = "http://ao3.org"
+        expect(report.valid?).to be_truthy
+      end
     end
   end
 

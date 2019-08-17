@@ -1,26 +1,18 @@
 class Work < ApplicationRecord
   include Taggable
-  include Creatable
+  include CreationNotifier
   include Collectible
   include Bookmarkable
-  include Pseudable
   include Searchable
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
+  include Creatable
 
   ########################################################################
   # ASSOCIATIONS
   ########################################################################
-
-  # creatorships can't have dependent => destroy because we email the
-  # user in a before_destroy callback
-  has_many :creatorships, as: :creation
-  has_many :pseuds,
-           through: :creatorships,
-           after_remove: [:expire_pseud, :reindex_changed_pseud]
-  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
@@ -28,8 +20,7 @@ class Work < ApplicationRecord
   has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters
-  validates_associated :chapters
+  has_many :chapters, inverse_of: :work, autosave: true
 
   has_many :serial_works, dependent: :destroy
   has_many :series, through: :serial_works
@@ -78,10 +69,6 @@ class Work < ApplicationRecord
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
 
@@ -116,17 +103,6 @@ class Work < ApplicationRecord
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
-
-  # Checks that work has at least one author
-  def validate_authors
-    if self.authors.blank? && self.pseuds.blank?
-      errors.add(:base, ts("Work must have at least one author."))
-      throw :abort
-    elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
-      throw :abort
-    end
-  end
 
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
@@ -172,7 +148,7 @@ class Work < ApplicationRecord
   # consistency and that associated variables are updated.
   ########################################################################
 
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter
   before_save :set_word_count
@@ -182,8 +158,8 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_update :validate_tags, :notify_before_update
-  after_update :adjust_series_restriction
+  before_update :validate_tags
+  after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
   after_save :moderate_spam
@@ -191,9 +167,9 @@ class Work < ApplicationRecord
 
   after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
-  before_destroy :before_destroy
 
-  def before_destroy
+  before_destroy :send_deleted_work_notification, prepend: true
+  def send_deleted_work_notification
     if self.posted?
       users = self.pseuds.collect(&:user).uniq
       orphan_account = User.orphan_account
@@ -243,11 +219,6 @@ class Work < ApplicationRecord
     Work.expire_work_tag_groups_id(self.id)
   end
 
-  def reindex_changed_pseud(pseud)
-    pseud = pseud.id if pseud.respond_to?(:id)
-    IndexQueue.enqueue_id(Pseud, pseud, :background)
-  end
-
   def update_pseud_index
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
@@ -270,7 +241,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v1/work_blurb_tag_cache_key/#{id}"
+    "/v2/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -292,11 +263,6 @@ class Work < ApplicationRecord
 
   def tag_groups_key
     Work.tag_groups_key_id(self.id)
-  end
-
-  def expire_pseud(pseud)
-    CacheMaster.record(self.id, 'pseud', pseud.id)
-    CacheMaster.record(self.id, 'user', pseud.user_id)
   end
 
   # When works are done being reindexed, expire the appropriate caches
@@ -326,12 +292,7 @@ class Work < ApplicationRecord
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
-    self.chapters.order("position DESC").map(&:destroy)
-  end
-
-  after_destroy :clean_up_creatorships
-  def clean_up_creatorships
-    self.creatorships.each{ |c| c.destroy }
+    chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 
   after_destroy :clean_up_filter_taggings
@@ -403,69 +364,30 @@ class Work < ApplicationRecord
     end
   end
 
-  ########################################################################
-  # AUTHORSHIP
-  ########################################################################
-
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-      if results[:banned_pseuds].present?
-        self.errors.add(
-          :base,
-          ts("%{name} is currently banned and cannot be listed as a co-creator.",
-             name: results[:banned_pseuds].to_sentence
-          )
-        )
-      end
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
-
+  # Remove all pseuds associated with a particular user. Raises an exception if
+  # this would result in removing all creators from the work.
+  #
+  # Callbacks handle most of the work when deleting creatorships, but we do
+  # have one special case: if a co-created work has a chapter that only has
+  # one listed creator, and that creator removes themselves from the work, we
+  # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
-    self.pseuds = pseuds_with_author_removed
-    save
-    self.chapters.each do |chapter|
-      chapter.pseuds = (chapter.pseuds - author_to_remove.pseuds).uniq
-      if chapter.pseuds.empty?
-        chapter.pseuds = self.pseuds
+
+    transaction do
+      chapters.each do |chapter|
+        if (chapter.pseuds - author_to_remove.pseuds).empty?
+          pseuds_with_author_removed.each do |new_pseud|
+            chapter.creatorships.find_or_create_by(pseud: new_pseud)
+          end
+        end
+
+        chapter.creatorships.where(pseud: author_to_remove.pseuds).destroy_all
       end
-      chapter.save
-    end
-    # Update cache_key after chapter pseuds have been updated.
-    self.touch
-  end
 
-  def add_creator(creator_to_add, new_pseud = nil)
-    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
-    self.pseuds << new_pseud
-    self.chapters.each do |chapter|
-      chapter.pseuds << new_pseud
-      chapter.save
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
-    save
-  end
-
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud = nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    add_creator(new_user, new_pseud)
-    remove_author(old_user) if old_user && users.include?(old_user)
   end
 
   def set_challenge_info
@@ -500,8 +422,9 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
-    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
-      select {|assign| ((self.authors.blank? ? [] : self.authors.collect(&:user)) + (self.users + [User.current_user])).compact.include?(assign.offering_user)}
+    self.challenge_assignments =
+      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
+      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
@@ -692,7 +615,11 @@ class Work < ApplicationRecord
       new_series = Series.new
       new_series.title = attributes[:title]
       new_series.restricted = self.restricted
-      new_series.authors = (self.pseuds + (self.authors.blank? ? [] : self.authors)).flatten.uniq
+      (User.current_user.pseuds & self.pseuds_after_saving).each do |pseud|
+        # Only add the current user's pseuds now -- the after_create callback
+        # on the serial work will do the rest.
+        new_series.creatorships.build(pseud: pseud)
+      end
       new_series.save
       self.series << new_series
     end
@@ -741,7 +668,7 @@ class Work < ApplicationRecord
   end
 
   # Change the positions of the chapters in the work
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
@@ -820,7 +747,7 @@ class Work < ApplicationRecord
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.will_save_change_to_attribute?(:complete)
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+      Work.where(id: id).update_all(["complete = ?", complete])
     end
   end
 
@@ -1173,8 +1100,6 @@ class Work < ApplicationRecord
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
-    elsif self.authors.present?
-      self.authors.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     else
       self.pseuds.sort.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
@@ -1285,14 +1210,6 @@ class Work < ApplicationRecord
       bookmarkable_type: 'Work',
       bookmarkable_join: { name: "bookmarkable" }
     )
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
-  end
-
-  def user_ids
-    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids

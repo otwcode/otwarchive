@@ -30,7 +30,7 @@ class AdminSetting < ApplicationRecord
   }.freeze
 
   def self.current
-    Rails.cache.fetch("admin_settings") { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self

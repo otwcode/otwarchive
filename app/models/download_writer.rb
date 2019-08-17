@@ -154,7 +154,7 @@ class DownloadWriter
       # it would otherwise be the work's rating, which is weird.
       tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),
       pubdate:           work.revised_at.to_date.to_s,
-      summary:           work.summary,
+      summary:           work.summary.to_s,
       language:          work.language.short
     }
     if work.series.exists?
