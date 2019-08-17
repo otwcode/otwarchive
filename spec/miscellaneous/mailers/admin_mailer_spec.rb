@@ -75,7 +75,13 @@ describe AdminMailer, type: :mailer do
     end
 
     context "when a user has been deleted" do
-      before { spam_user.destroy }
+      before do
+        # Users can't delete their account without doing something with their
+        # works first. Here we're orphaning the works:
+        create(:user, login: "orphan_account")
+        Creatorship.orphan(spam_user.pseuds, spam_user.works, true)
+        spam_user.destroy
+      end
 
       context "when there are other users to list" do
         it "silently omits the missing user" do

@@ -57,6 +57,8 @@ Feature: Create Works
         | cosomeone      | cosomeone@example.org |
         | giftee         | giftee@example.org    |
         | recipient      | recipient@example.org |
+      And the user "coauthor" allows co-creators
+      And the user "cosomeone" allows co-creators
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
@@ -88,8 +90,8 @@ Feature: Create Works
     Then I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And 2 emails should be delivered to "coauthor@example.org"
-      And the email should contain "You have been listed as a co-creator on the following work"
+      And 1 email should be delivered to "coauthor@example.org"
+      And the email should contain "The user thorough has invited your pseud coauthor to be listed as a co-creator on the following work"
       And the email should not contain "translation missing"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift work has been posted for you"
@@ -113,10 +115,14 @@ Feature: Create Works
       And I should see "This is my endingnote"
       And I should see "Summary"
       And I should see "Have a short summary"
-      And I should see "Pseud2" within ".byline"
-      And I should see "Pseud3" within ".byline"
       And I should see "My new series"
       And I should see "Bad things happen, etc."
+      And I should see "Pseud2" within ".byline"
+      And I should see "Pseud3" within ".byline"
+      But I should not see "coauthor" within ".byline"
+    When the user "coauthor" accepts all creator invites
+      And I view the work "All Something Breaks Loose"
+    Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
       And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
@@ -136,18 +142,20 @@ Feature: Create Works
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Does_not_exist"
       And I press "Preview"
-    Then I should see "Please verify the names of your co-authors"
-      And I should see "These pseuds are invalid: Does_not_exist"
+    Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
       And I choose "cosomeone" from the "pseud_byline_autocomplete" autocomplete
       And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
-      And I should see "cosomeone" within ".byline"
       And I should see "coauthor" within ".byline"
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
+      But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
+    When the user "cosomeone" accepts all creator invites
+      And I view the work "All Something Breaks Loose"
+    Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee"
@@ -168,6 +176,7 @@ Feature: Create Works
         | badcoauthor    | something   | badcoauthor@example.org |
       And I am logged in as "thorough" with password "something"
       And user "badcoauthor" is banned
+      And the user "coauthor" allows co-creators
     When I set up the draft "Bad Draft"
       And I fill in "Fandoms" with "Invalid12./"
       And I fill in "Work Title" with "/"
@@ -197,7 +206,7 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and series information still filled in
+  Scenario: Creating a new work in a new series with some invalid things should return to the new work page with an error message and the newly created series selected
     Given basic tags
       And I am logged in as "thorough" with password "something"
     When I set up the draft "Bad Draft"
@@ -211,7 +220,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
-      And the field labeled "Or create and use a new one:" should contain "My new series"
+      And "My new series" should be selected within "Choose one of your existing series:"
       And I should not see "Remove Work From Series"
 
   Scenario: Creating a new work in an existing series with some invalid things should return to the new work page with an error message and series information still filled in
@@ -303,19 +312,49 @@ Feature: Create Works
     Given basic tags
       And "myself" has the pseud "Me"
       And "herself" has the pseud "Me"
+      And the user "myself" allows co-creators
+      And the user "herself" allows co-creators
     When I am logged in as "testuser" with password "testuser"
       And I go to the new work page
       And I fill in the basic work information for "All Hell Breaks Loose"
       And I check "Add co-creators?"
       And I fill in "pseud_byline" with "Me"
+      And I check "This work is part of a series"
+      And I fill in "Or create and use a new one:" with "My new series"
       And I press "Post Without Preview"
-   Then I should see "There's more than one user with the pseud Me. Please choose the one you want:"
-      And I select "myself" from "work[author_attributes][ambiguous_pseuds][]"
+    Then I should see "There's more than one user with the pseud Me."
+      And I select "myself" from "Please choose the one you want:"
       And I press "Preview"
-   Then I should see "Draft was successfully created."
+    Then I should see "Draft was successfully created."
       And I press "Post"
-   Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
-      And I should see "Me (myself), testuser"
+    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      And I should not see "Me (myself)"
+      And I should see "My new series"
+    When the user "myself" accepts all creator invites
+      And I view the work "All Hell Breaks Loose"
+    Then I should see "Me (myself), testuser"
+
+  Scenario: Users can only create a work with a co-creator who allows it.
+    Given basic tags
+      And "Burnham" has the pseud "Michael"
+      And "Pike" has the pseud "Christopher"
+      And the user "Burnham" allows co-creators
+    When I am logged in as "testuser" with password "testuser"
+      And I go to the new work page
+      And I fill in the basic work information for "Thats not my Spock"
+      And I check "Add co-creators?"
+      And I fill in "pseud_byline" with "Michael,Christopher"
+      And I press "Post"
+    Then I should see "Christopher (Pike) does not allow others to invite them to be a co-creator."
+    When I fill in "pseud_byline" with "Michael"
+      And I press "Preview"
+    Then I should see "Draft was successfully created."
+    When I press "Post"
+    Then I should see "Work was successfully posted. It should appear in work listings within the next few minutes."
+      But I should not see "Michael (Burnham)"
+    When the user "Burnham" accepts all creator invites
+      And I view the work "Thats not my Spock"
+    Then I should see "Michael (Burnham), testuser"
 
   Scenario: Users can't set a publication date that is in the future, e.g. set
   the date to April 30 when it is April 26
@@ -328,14 +367,28 @@ Feature: Create Works
     Then I should see "Publication date can't be in the future."
     When I jump in our Delorean and return to the present
 
-  Scenario: Adding a coauthor to a work adds the coauthor to all existing chapters.
-    Given the user "author" exists and is activated
-      And the user "coauthor" exists and is activated
+  Scenario: Inviting a co-author adds the co-author to all existing chapters when they accept the invite
+    Given the user "foobar" exists and is activated
+      And the user "barbaz" exists and is activated
 
-    When I am logged in as "author"
+    When I am logged in as "foobar"
       And I post the chaptered work "Chaptered Work"
-      And I add the co-author "coauthor" to the work "Chaptered Work"
-    Then I should see "author, coauthor" within ".byline"
-    When I follow "Next Chapter →"
-    Then I should see "Chapter 2"
-      And I should see "author, coauthor" within ".byline"
+      And I edit the work "Chaptered Work"
+      And I invite the co-author "barbaz"
+      And I press "Post"
+    Then I should not see "barbaz"
+      But 1 email should be delivered to "barbaz"
+    When I am logged in as "barbaz"
+      And I view the work "Chaptered Work"
+    Then I should not see "Edit"
+    When I follow "Creator Invitations page"
+      And I check "selected[]"
+      And I press "Accept"
+    Then I should see "You are now listed as a co-creator on Chaptered Work."
+    When I follow "Chaptered Work"
+    Then I should see "Edit"
+      And I should see "barbaz, foobar"
+      And I should not see "Chapter by"
+    When I follow "Next Chapter"
+    Then I should see "barbaz, foobar"
+      And I should not see "Chapter by"
