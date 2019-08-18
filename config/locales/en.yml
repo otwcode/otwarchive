@@ -55,6 +55,10 @@ en:
           attributes:
             pseud_id:
               taken: "is already listed as a creator."
+        user:
+          attributes:
+            password_confirmation:
+              confirmation: "doesn't match new password"
     models:
       bookmark: "Bookmark"
       category:
