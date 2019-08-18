@@ -172,10 +172,6 @@ class User < ApplicationRecord
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
-  validates_confirmation_of :password,
-                            message: ts("doesn't match new password"),
-                            if: :password_required?
-
   validates_format_of :login,
                       message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
