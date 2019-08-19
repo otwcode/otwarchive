@@ -774,8 +774,8 @@ class WorksController < ApplicationController
   # saving the user's changes.
   def work_cannot_be_saved?
     !(@work.errors.empty? &&
-      @work.has_required_tags? &&
-      @work.valid?)
+      @work.valid? &&
+      @work.has_required_tags?)
   end
 
   def set_work_tag_error_messages
