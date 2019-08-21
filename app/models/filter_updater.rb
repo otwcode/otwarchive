@@ -50,9 +50,9 @@ class FilterUpdater
   # Calculate what the filters should be for every valid item in the batch, and
   # updates the existing FilterTaggings to match.
   def update
-    load_info
-
     FilterTagging.transaction do
+      load_info
+
       filter_taggings_by_id = FilterTagging.where(
         filterable_type: type, filterable_id: valid_item_ids
       ).group_by(&:filterable_id)
