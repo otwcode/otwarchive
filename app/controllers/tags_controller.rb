@@ -255,16 +255,7 @@ class TagsController < ApplicationController
 
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
-
-      if params[:commit] == 'Wrangle'
-        params[:page] = '1' if params[:page].blank?
-        params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
-        params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
-
-        redirect_to url_for(controller: :tags, action: :wrangle, id: params[:id], show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction], status: params[:status])
-      else
-        redirect_to url_for(controller: :tags, action: :edit, id: @tag)
-      end
+      redirect_to edit_tag_path(@tag)
     else
       @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
       @parents['MetaTag'] = @tag.direct_meta_tags.by_name

@@ -175,10 +175,10 @@ describe TagsController do
   end
 
   describe "update" do
-    context "when updating a tag" do
+    context "setting a new type for the tag" do
       let(:unsorted_tag) { create(:unsorted_tag) }
 
-      it "changes just the tag type" do
+      it "changes the tag type and redirects" do
         put :update, params: { id: unsorted_tag, tag: { type: "Fandom" }, commit: "Save changes" }
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         expect(Tag.find(unsorted_tag.id).class).to eq(Fandom)
@@ -187,19 +187,6 @@ describe TagsController do
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
         # The tag now has the original class, we can reload the original record without error.
         unsorted_tag.reload
-      end
-    end
-
-    context "when updating a canonical tag" do
-      let(:tag) { create(:canonical_freeform) }
-
-      it "wrangles" do
-        expect(tag.canonical?).to be_truthy
-        put :update, params: { id: tag, tag: { canonical: false }, commit: "Wrangle" }
-        tag.reload
-        expect(tag.canonical?).to be_falsy
-        it_redirects_to_with_notice(wrangle_tag_path(tag, page: 1, sort_column: "name", sort_direction: "ASC"),
-                                    "Tag was updated.")
       end
     end
 
