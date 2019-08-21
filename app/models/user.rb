@@ -299,10 +299,10 @@ class User < ApplicationRecord
     users = User.where(email: unique_emails)
     found_emails = users.map(&:email).map(&:downcase)
     # Remove found users from the total list of unique emails and count duplicates
-    not_found = unique_emails - found_emails
+    not_found_emails = unique_emails - found_emails
     num_duplicates = emails.size - unique_emails.size
-    
-    [users, not_found, num_duplicates]
+
+    [users, not_found_emails, num_duplicates]
   end
 
   ### AUTHENTICATION AND PASSWORDS

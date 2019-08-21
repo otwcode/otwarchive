@@ -129,16 +129,14 @@ describe User, :ready do
     end
 
     it "returns found users, not found emails and the number of duplicates" do
-      more_emails = [ user_bundle.second.email, user_bundle.first.email.upcase, "unknown@ao3.org", "UnKnown@AO3.org", "nobody@example.com"]
+      more_emails = [user_bundle.second.email, user_bundle.first.email.upcase, "unknown@ao3.org", "UnKnown@AO3.org", "nobody@example.com"]
       emails = user_bundle.map(&:email) + more_emails
 
       found, not_found, duplicates = User.search_multiple_by_email(emails)
 
-      expect(not_found).to eq([ "unknown@ao3.org", "nobody@example.com" ])
+      expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
       expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
       expect(duplicates).to eq(3)
     end
   end
-
-
 end
