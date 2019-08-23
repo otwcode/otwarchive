@@ -13,6 +13,7 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
   fill_in("Work Title", with: title)
+  select("English", from: "work_language_id")
   fill_in("content", with: DEFAULT_CONTENT)
 end
 # Here we set up a draft and can then post it as a draft, preview and post, post without preview,

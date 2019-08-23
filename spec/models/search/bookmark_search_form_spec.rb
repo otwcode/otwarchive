@@ -93,7 +93,7 @@ describe BookmarkSearchForm do
     describe "searching" do
       let(:language) { create(:language, short: "nl") }
 
-      let(:work1) { create(:posted_work, language_id: Language.default.id) }
+      let(:work1) { create(:posted_work) }
       let(:work2) { create(:posted_work, language_id: language.id) }
 
       let!(:bookmark1) { create(:bookmark, bookmarkable: work1) }

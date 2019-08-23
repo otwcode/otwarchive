@@ -76,11 +76,38 @@ describe Work do
     end
   end
 
-
   context "invalid endnotes" do
     let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+    end
+  end
+
+  context "invalid language" do
+    let(:deleted_language_id) do
+      briefly_lived_language = create(:language)
+      deleted_language_id = briefly_lived_language.id
+      briefly_lived_language.destroy
+      deleted_language_id
+    end
+
+    it "is valid with a supported language" do
+      work = build(:work, language_id: Language.default.id)
+      expect(work).to be_valid
+    end
+
+    it "is not valid with a language we don't support" do
+      work = build(:work, language_id: deleted_language_id)
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
+    end
+
+    it "is not valid without a language" do
+      work = build(:work, language_id: "")
+
+      expect(work).not_to be_valid
+      expect(work.errors.messages[:base]).to include("Language cannot be blank.")
     end
   end
 
@@ -385,7 +412,6 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
     end
-
   end
 
   describe "#find_by_url" do

@@ -302,6 +302,7 @@ Scenario: External work language
     And I go to the new work page
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Stargate"
     And I fill in "Work Title" with "Followup 4"
     And I fill in "content" with "That could be an amusing crossover."

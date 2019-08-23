@@ -126,8 +126,7 @@ describe WorkSearchForm do
                          character_string: "Bilbo Baggins",
                          posted: true,
                          expected_number_of_chapters: 3,
-                         complete: false,
-                         language_id: Language.default.id)
+                         complete: false)
     end
 
     let!(:second_work) do

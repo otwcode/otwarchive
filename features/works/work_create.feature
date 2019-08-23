@@ -15,6 +15,7 @@ Feature: Create Works
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Hell Breaks Loose 🤬💩"
       And I fill in "content" with "Bad things happen, etc. 🤬💩"
@@ -68,6 +69,7 @@ Feature: Create Works
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
+      And I select "English" from "Choose a language"
       And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
@@ -295,6 +297,7 @@ Feature: Create Works
     Given basic tags
       And I am logged in
     When I go to the new work page
+      And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Dallas"
       And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"
       And I fill in "content" with "It wasn't my fault, you know."
