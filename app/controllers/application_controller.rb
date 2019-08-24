@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
   rescue_from 'Pundit::NotAuthorizedError' do
-    access_denied
+    access_denied(admin_access_denied: true)
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
@@ -264,8 +264,8 @@ public
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
       redirect_to destination
-    elsif logged_in_as_admin?
-      admin_only_access_denied
+    elsif logged_in_as_admin? && options[:admin_access_denied]
+      admin_only_access_denied(redirect: options[:redirect])
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
@@ -274,9 +274,9 @@ public
     false
   end
 
-  def admin_only_access_denied
+  def admin_only_access_denied(options = {})
     flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
-    redirect_to root_path
+    redirect_to options[:redirect] || root_path
     false
   end
 
