@@ -73,10 +73,14 @@ module WorksHelper
     end
   end
 
-  # Passes value of fields for series back to form when an error occurs on posting
-  def work_series_value(field)
-    if params[:work] && params[:work][:series_attributes]
-      params[:work][:series_attributes][field]
+  # Passes value of series ID back to form when an error occurs on posting.
+  # Thanks to the way that series_attributes= is defined, series are saved
+  # and added to the work even before the work is saved. The only time that the
+  # series isn't added is when the work is a new record, and therefore the
+  # SerialWork can't be created.
+  def work_series_id(work)
+    if work.new_record? && (series = work.series.first)
+      series.id
     end
   end
 
@@ -88,12 +92,21 @@ module WorksHelper
     end
   end
 
+  # Check whether this user has permission to view this work even if it's
+  # unrevealed and they're not listed as a creator:
   def can_see_work(work, user)
-    unless work.collections.empty?
-      for collection in work.collections
-        return true if collection.user_is_maintainer?(user)
-      end
+    # Invited co-creators can also see unrevealed works, even though they're
+    # not officially listed as creators (because creators are allowed to edit,
+    # and invited co-creators aren't):
+    if work.user_has_creator_invite?(current_user)
+      return true
     end
+
+    # Moderators can see unrevealed works:
+    work.collections.each do |collection|
+      return true if collection.user_is_maintainer?(user)
+    end
+
     false
   end
 
@@ -133,9 +146,15 @@ module WorksHelper
     work.approved_related_works.where(translation: false)
   end
 
+  # Can the work be downloaded, i.e. is it posted and visible to all registered
+  # users.
+  def downloadable?
+    @work.posted? && !@work.hidden_by_admin && !@work.in_unrevealed_collection?
+  end
+
   def download_url_for_work(work, format)
-    base = Rails.cache.fetch("download_base_#{work.id}", race_condition_ttl: 10, expires_in: 1.day) { "/#{work.download_folder}/#{work.download_title}." }
-    url_for ("#{base}#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
+    path = Download.new(work, format: format).public_path
+    url_for("#{path}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
 
   # Generates a list of a work's tags and details for use in feeds
@@ -151,15 +170,7 @@ module WorksHelper
     text << "<ul>"
     %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
       if tags[type]
-        label = case type
-        when 'Freeform'
-          'Additional Tags'
-        when 'Rating'
-          'Rating'
-        else
-          type.pluralize
-        end
-        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t, {full_path: true }) }.join(', ')}</li>"
+        text << "<li>#{type.constantize.label_name}: #{tags[type].map { |t| link_to_tag_works(t, full_path: true) }.join(', ')}</li>"
       end
     end
     text << "</ul>"
@@ -185,7 +196,9 @@ module WorksHelper
   end
 
   def all_coauthor_skins
-    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+    users = @work.users.to_a
+    users << User.current_user if User.current_user.is_a?(User)
+    WorkSkin.approved_or_owned_by_any(users).order(:title)
   end
 
   def sorted_languages

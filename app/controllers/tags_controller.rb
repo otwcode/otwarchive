@@ -70,7 +70,7 @@ class TagsController < ApplicationController
       options[:page] = params[:page] || 1
       search = TagSearchForm.new(options)
       @tags = search.search_results
-      flash_max_search_results_notice(@tags)
+      flash_search_warnings(@tags)
     end
   end
 
@@ -133,11 +133,13 @@ class TagsController < ApplicationController
 
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
-      raise "Redshirt: Attempted to constantize invalid class initialize show_hidden #{params[:creation_type].classify}" unless %w(Series Work Chapter).include?(params[:creation_type].classify)
-      model = begin
-                params[:creation_type].classify.constantize
-              rescue
-                nil
+      model = case params[:creation_type].downcase
+              when "series"
+                Series
+              when "work"
+                Work
+              when "chapter"
+                Chapter
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
       # Tags aren't directly on series, so we need to handle them differently
@@ -148,8 +150,9 @@ class TagsController < ApplicationController
           @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
         end
       else
-        if %w(warnings freeforms).include?(params[:tag_type])
-          @display_tags = @display_creation.send(params[:tag_type])
+        tag_type = params[:tag_type]
+        if %w(warnings freeforms).include?(tag_type)
+          @display_tags = @display_creation.send(tag_type)
         end
       end
       @display_category = @display_tags.first.class.name.downcase.pluralize
@@ -237,7 +240,7 @@ class TagsController < ApplicationController
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
-    @suggested_fandoms = @tag.suggested_fandoms - @tag.fandoms if @tag.respond_to?(:fandoms)
+    @suggested_fandoms = @tag.suggested_parent_tags("Fandom") - @tag.fandoms if @tag.respond_to?(:fandoms)
   end
 
   def update
@@ -293,7 +296,8 @@ class TagsController < ApplicationController
       @counts[tag_type] = @tag.send(tag_type).count
     end
 
-    if %w(fandoms characters relationships freeforms sub_tags mergers).include?(params[:show])
+    show = params[:show]
+    if %w(fandoms characters relationships freeforms sub_tags mergers).include?(show)
       params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + ' ' + params[:sort_direction]
@@ -302,12 +306,16 @@ class TagsController < ApplicationController
         sort += ', name ASC'
       end
       # this makes sure params[:status] is safe
-      if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
-        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif params[:status] == 'unwrangled'
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      status = params[:status]
+      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
+        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      elsif status == 'unwrangled'
+        @tags = @tag.unwrangled_tags(
+          params[:show].singularize.camelize,
+          params.permit!.slice(:sort_column, :sort_direction, :page)
+        )
       else
-        @tags = @tag.send(params[:show]).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end

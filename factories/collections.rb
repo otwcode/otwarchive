@@ -37,9 +37,14 @@ FactoryGirl.define do
     factory :unrevealed_collection do
       association :collection_preference, unrevealed: true
     end
+
+    factory :anonymous_unrevealed_collection do
+      association :collection_preference, unrevealed: true, anonymous: true
+    end
   end
 
   factory :collection_item do
     item_type "Work"
+    collection
   end
 end

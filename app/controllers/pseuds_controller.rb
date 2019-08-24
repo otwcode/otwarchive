@@ -36,31 +36,24 @@ class PseudsController < ApplicationController
 
     # very similar to show under users - if you change something here, change it there too
     if !(logged_in? || logged_in_as_admin?)
-      # hahaha omg so ugly BUT IT WORKS :P
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").
-                   merge(Work.visible_to_all.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_all
       visible_series = @pseud.series.visible_to_all
       visible_bookmarks = @pseud.bookmarks.visible_to_all
     else
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").
-                   merge(Work.visible_to_registered_user.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_registered_user
       visible_series = @pseud.series.visible_to_registered_user
       visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
     end
-    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
-    @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+    visible_works = visible_works.revealed.non_anon
+
+    @fandoms = \
+      Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
+      joins(:filtered_works).group("tags.id").merge(visible_works).
+      where(filter_taggings: { inherited: false }).
+      order('work_count DESC').load
+
+    @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
@@ -128,21 +121,26 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1.xml
   def destroy
     @hide_dashboard = true
+    if params[:cancel_button]
+      flash[:notice] = ts("The pseud was not deleted.")
+      redirect_to(user_pseuds_path(@user)) && return
+    end
+
     @pseud = @user.pseuds.find_by(name: params[:id])
     if @pseud.is_default
       flash[:error] = ts("You cannot delete your default pseudonym, sorry!")
-   elsif @pseud.name == @user.login
+    elsif @pseud.name == @user.login
       flash[:error] = ts("You cannot delete the pseud matching your user name, sorry!")
-   elsif params[:bookmarks_action] == 'transfer_bookmarks'
-     @pseud.change_bookmarks_ownership
-     @pseud.replace_me_with_default
-     flash[:notice] = ts("The pseud was successfully deleted.")
-   elsif params[:bookmarks_action] == 'delete_bookmarks' || @pseud.bookmarks.empty?
-     @pseud.replace_me_with_default
-     flash[:notice] = ts("The pseud was successfully deleted.")
-   else
+    elsif params[:bookmarks_action] == "transfer_bookmarks"
+      @pseud.change_bookmarks_ownership
+      @pseud.replace_me_with_default
+      flash[:notice] = ts("The pseud was successfully deleted.")
+    elsif params[:bookmarks_action] == "delete_bookmarks" || @pseud.bookmarks.empty?
+      @pseud.replace_me_with_default
+      flash[:notice] = ts("The pseud was successfully deleted.")
+    else
       render 'delete_preview' and return
-   end
+    end
 
     redirect_to(user_pseuds_path(@user))
   end

@@ -8,5 +8,5 @@ Given /^(.*) first read "([^"]*)" on "([^"]*)"$/ do |login, title, date|
 end
 
 When /^the reading rake task is run$/ do
-   Reading.update_or_create_in_database
+  step %{I run the rake task "readings:to_database"}
 end

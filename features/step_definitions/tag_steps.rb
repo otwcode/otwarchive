@@ -116,7 +116,6 @@ Given /^I am logged in as a tag wrangler$/ do
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
-  require 'authlogic/test_case'
   tw = User.find_by(login: user)
 
   if tw.blank?
@@ -130,22 +129,15 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   tw.tag_wrangler = '1'
 
-  visit logout_path
-  activate_authlogic
-  assert !UserSession.find
+  visit destroy_user_session_path
 
-  visit login_path
-  activate_authlogic
+  visit new_user_session_path
   user_record = find_or_create_new_user(user, password)
 
-  fill_in "User name", with: user
-  fill_in "Password", with: password
+  fill_in "User name or email:", with: user
+  fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
-
-  activate_authlogic
-  UserSession.create!(user_record)
-  assert UserSession.find
 
   fandom = Fandom.where(name: fandomname, canonical: true).first_or_create
   visit tag_wranglers_url
@@ -371,6 +363,10 @@ When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
   visit edit_tag_path(subtag)
   check("parent_MetaTag_associations_to_remove_#{metatag_id}")
   click_button("Save changes")
+end
+
+When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
+  visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
 end
 
 ### THEN

@@ -26,7 +26,20 @@ class SerialWork < ApplicationRecord
 
   # Ensure series bookmarks are reindexed when a new work is added to a series
   def update_series_index
+    return if series.blank?
     series.enqueue_to_index
     IndexQueue.enqueue_ids(Bookmark, series.bookmarks.pluck(:id), :main)
+  end
+
+  after_create :update_series_creatorships
+  def update_series_creatorships
+    return unless work && series
+
+    work.pseuds_after_saving.each do |pseud|
+      creatorship = series.creatorships.find_or_initialize_by(pseud: pseud)
+      creatorship.approved = true
+      creatorship.enable_notifications = true
+      creatorship.save
+    end
   end
 end

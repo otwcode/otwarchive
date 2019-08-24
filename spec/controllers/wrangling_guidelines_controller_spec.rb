@@ -220,7 +220,7 @@ describe WranglingGuidelinesController do
       it "deletes and redirects to index" do
         delete :destroy, params: { id: guideline.id }
         expect(WranglingGuideline.find_by_id(guideline.id)).to be_nil
-        it_redirects_to(wrangling_guidelines_path)
+        it_redirects_to_with_notice(wrangling_guidelines_path, "Wrangling Guideline was successfully deleted.")
       end
     end
   end

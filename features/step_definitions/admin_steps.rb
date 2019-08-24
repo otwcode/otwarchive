@@ -191,6 +191,10 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^the abuse report will not be considered spam$/ do
+  allow(Akismetor).to receive(:spam?).and_return(false)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -263,7 +267,7 @@ When /^the invite_from_queue_at is yesterday$/ do
 end
 
 When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
+  step %{I run the rake task "invitations:check_queue"}
 end
 
 When /^I edit known issues$/ do
@@ -289,8 +293,6 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-### THEN
-
 When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
@@ -303,6 +305,14 @@ When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
   click_button("Post")
 end
+
+When /^I hide the work "(.*?)"$/ do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Hide Work"}
+end
+
+### THEN
 
 Then (/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}

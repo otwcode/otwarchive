@@ -1,8 +1,8 @@
 class Series < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
-  include Creatable
   include Searchable
+  include Creatable
 
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
@@ -11,10 +11,6 @@ class Series < ApplicationRecord
 
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
-
-  has_many :creatorships, as: :creation
-  has_many :pseuds, through: :creatorships
-  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
@@ -27,9 +23,6 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
-  after_create :notify_after_creation
-  before_update :notify_before_update
-
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -40,15 +33,12 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.SUMMARY_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_length_of :notes,
+  validates_length_of :series_notes,
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
-
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
@@ -61,7 +51,7 @@ class Series < ApplicationRecord
   }
 
   scope :for_pseuds, lambda {|pseuds|
-    joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
+    joins(:approved_creatorships).
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
 
@@ -143,8 +133,12 @@ class Series < ApplicationRecord
   end
 
   # Change the positions of the serial works in the series
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
+
+  def position_of(work)
+    serial_works.where(work_id: work.id).pluck(:position).first
   end
 
   # return list of pseuds on this series
@@ -152,41 +146,21 @@ class Series < ApplicationRecord
     works.collect(&:pseuds).flatten.compact.uniq.sort
   end
 
-  # return list of users on this series
-  def owners
-    self.authors.collect(&:user)
-  end
-
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
-
-  # Remove a user as an author of this series
+  # Remove a user (and all their pseuds) as an author of this series.
+  #
+  # We call Work#remove_author before destroying the series creatorships to
+  # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
     raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
-    Series.transaction do
-      self.pseuds = pseuds_with_author_removed
-      authored_works_in_series = (author_to_remove.works & self.works)
+    transaction do
+      authored_works_in_series = self.works.merge(author_to_remove.works)
+
       authored_works_in_series.each do |work|
         work.remove_author(author_to_remove)
       end
+
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
   end
 
@@ -289,10 +263,6 @@ class Series < ApplicationRecord
   end
   def freeform_ids
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
   end
 
   def creators
