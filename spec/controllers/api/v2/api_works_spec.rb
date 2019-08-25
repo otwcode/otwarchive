@@ -8,8 +8,8 @@ describe "API v2 WorksController - Create works", type: :request do
   let(:archivist) { create(:archivist) }
 
   describe "API import with a valid archivist" do
-    before :all do
-      mock_external
+    before :each do
+      ApiHelper.mock_external
     end
 
     after :each do
@@ -99,8 +99,6 @@ describe "API v2 WorksController - Create works", type: :request do
     end
 
     it "sends claim emails if send_claim_email is true" do
-      # This test hits the call to #notify_and_return_authors in #create for coverage
-      # but can't find a way to verify its side-effect (calling ExternalAuthor#find_or_invite)
       valid_params = {
         archivist: archivist.login,
         send_claim_emails: 1,
@@ -113,6 +111,9 @@ describe "API v2 WorksController - Create works", type: :request do
       }
 
       post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_body[:messages]).to include("Claim emails sent to bar.")
     end
 
     it "returns 400 Bad Request if no works are specified" do

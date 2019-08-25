@@ -14,7 +14,7 @@ Feature: Admin Find Users page
     Then I should see "Find Users"
 
   Scenario: The Find Users page should perform a partial match on name
-    When I fill in "query" with "user"
+    When I fill in "Name" with "user"
       And I submit
     Then I should see "userA"
       And I should see "userB"
@@ -22,16 +22,16 @@ Feature: Admin Find Users page
 
   Scenario: The Find Users page should perform a exact match on name if exact is checked
     When I check "exact"
-      And I fill in "query" with "user"
+      And I fill in "Name" with "user"
       And I submit
     Then I should see "0 users found"
-    When I fill in "query" with "userA"
+    When I fill in "Name" with "userA"
       And I submit
     Then the field labeled "user_email" should contain "a@ao3.org"
       But I should not see "UserB"
 
   Scenario: The Find Users page should perform a partial match by email
-    When I fill in "query" with "bo3"
+    When I fill in "Email" with "bo3"
       And I submit
     Then I should see "userB"
       And I should see "userCB"
@@ -39,10 +39,10 @@ Feature: Admin Find Users page
 
   Scenario: The Find Users page should perform a exact match on email if exact is checked
     When I check "exact"
-      And I fill in "query" with "not_email"
+      And I fill in "Email" with "not_email"
       And I submit
     Then I should see "0 users found"
-    When I fill in "query" with "a@ao3.org"
+    When I fill in "Email" with "a@ao3.org"
       And I submit
     Then I should see "userA"
       But I should not see "UserB"
@@ -55,7 +55,7 @@ Feature: Admin Find Users page
       And I should not see "userCB"
 
   Scenario: The Find Users should display an appropriate message if no users are found
-    When I fill in "query" with "co3"
+    When I fill in "Name" with "co3"
       And I submit
     Then I should see "0 users found"
 

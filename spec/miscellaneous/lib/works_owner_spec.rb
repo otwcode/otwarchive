@@ -81,6 +81,8 @@ describe WorksOwner do
       end
 
       it "should change after a work is orphaned" do
+        # Ensure that the orphan account exists:
+        build(:user, login: "orphan_account").save
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
         Creatorship.orphan([author], [@work])
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
@@ -140,9 +142,11 @@ describe WorksOwner do
         before do
           Delorean.time_travel_to "10 minutes ago"
           @owner = FactoryGirl.create(:collection)
-          # Stub out User.current_user to get past the collection needing to be owned by same person as parent
-          allow(User).to receive(:current_user).and_return(@owner.owners.first.user)
+          # Temporarily set User.current_user to get past the collection
+          # needing to be owned by same person as parent:
+          User.current_user = @owner.owners.first.user
           @child = FactoryGirl.create(:collection, parent_name: @owner.name)
+          User.current_user = nil
           # reload the parent collection
           @owner.reload
           @work1 = @work

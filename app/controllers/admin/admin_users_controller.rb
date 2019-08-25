@@ -6,9 +6,10 @@ class Admin::AdminUsersController < ApplicationController
   def index
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(@role,
-                                 params[:query],
-                                 inactive: params[:inactive], exact: params[:exact], page: params[:page])
+    @users = User.search_by_role(
+      @role, params[:name], params[:email],
+      inactive: params[:inactive], exact: params[:exact], page: params[:page]
+    )
   end
 
   def bulk_search

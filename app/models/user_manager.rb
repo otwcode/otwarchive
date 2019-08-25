@@ -96,6 +96,9 @@ class UserManager
 
   def save_next_of_kin
     return true if user.fannish_next_of_kin.nil? && kin_name.blank? && kin_email.blank?
+    same_kin_user = User.find_by(login: kin_name)&.id == user.fannish_next_of_kin&.kin_id
+    same_kin_email = user.fannish_next_of_kin&.kin_email == kin_email
+    return true if same_kin_user && same_kin_email
     if FannishNextOfKin.update_for_user(user, kin_name, kin_email)
       successes << "Fannish next of kin was updated."
     else

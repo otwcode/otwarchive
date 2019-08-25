@@ -73,10 +73,14 @@ module WorksHelper
     end
   end
 
-  # Passes value of fields for series back to form when an error occurs on posting
-  def work_series_value(field)
-    if params[:work] && params[:work][:series_attributes]
-      params[:work][:series_attributes][field]
+  # Passes value of series ID back to form when an error occurs on posting.
+  # Thanks to the way that series_attributes= is defined, series are saved
+  # and added to the work even before the work is saved. The only time that the
+  # series isn't added is when the work is a new record, and therefore the
+  # SerialWork can't be created.
+  def work_series_id(work)
+    if work.new_record? && (series = work.series.first)
+      series.id
     end
   end
 
@@ -88,12 +92,21 @@ module WorksHelper
     end
   end
 
+  # Check whether this user has permission to view this work even if it's
+  # unrevealed and they're not listed as a creator:
   def can_see_work(work, user)
-    unless work.collections.empty?
-      for collection in work.collections
-        return true if collection.user_is_maintainer?(user)
-      end
+    # Invited co-creators can also see unrevealed works, even though they're
+    # not officially listed as creators (because creators are allowed to edit,
+    # and invited co-creators aren't):
+    if work.user_has_creator_invite?(current_user)
+      return true
     end
+
+    # Moderators can see unrevealed works:
+    work.collections.each do |collection|
+      return true if collection.user_is_maintainer?(user)
+    end
+
     false
   end
 
@@ -183,7 +196,9 @@ module WorksHelper
   end
 
   def all_coauthor_skins
-    WorkSkin.approved_or_owned_by_any(@allpseuds.map(&:user)).order(:title)
+    users = @work.users.to_a
+    users << User.current_user if User.current_user.is_a?(User)
+    WorkSkin.approved_or_owned_by_any(users).order(:title)
   end
 
   def sorted_languages

@@ -34,17 +34,17 @@ class Api::V2::WorksController < Api::V2::BaseController
     if status == :ok
       # Process the works, updating the flags
       works_responses = external_works.map { |external_work| import_work(archivist, external_work.merge(params.permit!)) }
-      success_works, error_works = works_responses.partition { |r| [:ok, :created, :found].include?(r[:status]) }
+      success_responses, error_responses = works_responses.partition { |r| [:ok, :created, :found].include?(r[:status]) }
 
       # Send claim notification emails for successful works
-      if params[:send_claim_emails] && success_works.present?
-        notified_authors = notify_and_return_authors(success_works, archivist)
+      if params[:send_claim_emails] && success_responses.present?
+        notified_authors = notify_and_return_authors(success_responses.map { |r| r[:work] }, archivist)
         messages << "Claim emails sent to #{notified_authors.to_sentence}."
       end
 
       # set final status code and message depending on the flags
-      status = :bad_request if error_works.present?
-      messages = response_message(messages, success_works.present?, error_works.present?)
+      status = :bad_request if error_responses.present?
+      messages = response_message(messages, success_responses.present?, error_responses.present?)
     end
     render_api_response(status, messages, works: works_responses.map { |r| r.except!(:work) })
   end

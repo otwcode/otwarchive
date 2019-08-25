@@ -9,14 +9,18 @@ FactoryGirl.define do
     chapter_info = { content: "This is some chapter content for my work." }
     chapter_attributes chapter_info
 
-    after(:build) do |work|
-      work.authors = [FactoryGirl.build(:pseud)] if work.authors.blank?
+    transient do
+      authors { [build(:pseud)] }
+    end
+
+    after(:build) do |work, evaluator|
+      evaluator.authors.each do |pseud|
+        work.creatorships.build(pseud: pseud)
+      end
     end
 
     factory :no_authors do
-      after(:build) do |work|
-        work.authors = []
-      end
+      authors []
     end
 
     factory :custom_work_skin do
