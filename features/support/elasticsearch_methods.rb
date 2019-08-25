@@ -1,5 +1,5 @@
 def es_update(klass)
-  index_name = "ao3_test_#{klass.to_s.downcase}s"
+  index_name = "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{klass.to_s.downcase}s"
 
   if $elasticsearch.indices.exists? index: index_name
     $elasticsearch.indices.delete index: index_name
@@ -24,5 +24,5 @@ def es_update(klass)
   indexer = indexer_class.new(klass.capitalize.constantize.all.pluck(:id))
   indexer.index_documents rescue nil
 
-  $elasticsearch.indices.refresh index: "ao3_test_#{klass}s"
+  $elasticsearch.indices.refresh index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{klass}s"
 end

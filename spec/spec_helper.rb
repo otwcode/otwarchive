@@ -37,6 +37,7 @@ RSpec.configure do |config|
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Capybara::DSL
   config.include TaskExampleGroup, type: :task
 
@@ -132,11 +133,11 @@ def update_and_refresh_indexes(klass_name, shards = 5)
   indexer = indexer_class.new(klass_name.capitalize.constantize.all.pluck(:id))
   indexer.index_documents if klass_name.capitalize.constantize.any?
 
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{klass_name}s")
 end
 
 def refresh_index_without_updating(klass_name)
-  $elasticsearch.indices.refresh(index: "ao3_test_#{klass_name}s")
+  $elasticsearch.indices.refresh(index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{klass_name}s")
 end
 
 def run_all_indexing_jobs
@@ -149,7 +150,7 @@ def run_all_indexing_jobs
 end
 
 def delete_index(index)
-  index_name = "ao3_test_#{index}s"
+  index_name = "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{index}s"
   if $elasticsearch.indices.exists? index: index_name
     $elasticsearch.indices.delete index: index_name
   end

@@ -1,5 +1,4 @@
-class Admin::UserCreationsController < ApplicationController
-  before_action :admin_only
+class Admin::UserCreationsController < Admin::BaseController
   before_action :get_creation
   before_action :can_be_marked_as_spam, only: [:set_spam]
 

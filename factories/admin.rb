@@ -6,6 +6,14 @@ FactoryGirl.define do
     password "password"
     password_confirmation { |u| u.password }
     email
+
+    factory :superadmin do
+      login "superadmin"
+      password "IHaveThePower"
+      password_confirmation "IHaveThePower"
+      email
+      roles ["superadmin"]
+    end
   end
 
   factory :admin_activity do

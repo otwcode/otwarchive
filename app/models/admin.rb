@@ -29,6 +29,6 @@ class Admin < ApplicationRecord
   ### PERMISSIONS ###
 
   def admin_post_access?
-    AdminPostPolicy.new(self).can_post?
+    AdminPostPolicy.can_post?(self)
   end
 end

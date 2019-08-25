@@ -9,7 +9,7 @@ Given /^all search indexes are completely regenerated$/ do
 end
 
 Given /^the (\w+) indexes are refreshed$/ do |model|
-  $elasticsearch.indices.refresh index: "ao3_test_#{model}s"
+  $elasticsearch.indices.refresh index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_test_#{model}s"
 end
 
 Given /^all search indexes are refreshed$/ do

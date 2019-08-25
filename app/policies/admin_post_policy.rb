@@ -1,26 +1,17 @@
-class AdminPostPolicy
-  attr_reader :admin, :post
-
+class AdminPostPolicy < ApplicationPolicy
   POSTING_ROLES = %w(superadmin communications translation)
 
-  def initialize(admin, post=nil)
-    @admin = admin
-    @post = post
-  end
-
-  def create?
-    can_post?
-  end
-
-  def update?
-    can_post?
-  end
-
-  def destroy?
-    can_post?
+  def self.can_post?(user)
+    self.new(user, nil).can_post?
   end
 
   def can_post?
-    admin && (POSTING_ROLES & admin.roles).present?
+    user && (POSTING_ROLES & user.roles).present?
   end
+
+  alias_method :new?, :can_post?
+  alias_method :edit?, :can_post?
+  alias_method :create?, :can_post?
+  alias_method :update?, :can_post?
+  alias_method :destroy?, :can_post?
 end

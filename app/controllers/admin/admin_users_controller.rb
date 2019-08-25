@@ -1,7 +1,5 @@
-class Admin::AdminUsersController < ApplicationController
+class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
-
-  before_action :admin_only
 
   def index
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
