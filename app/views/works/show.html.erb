@@ -24,8 +24,8 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in_as_admin? %>
-  <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+<% if logged_in_as_admin? && current_admin.can_edit_works? %>
+  <%= render partial: 'admin/admin_options', locals: { item: @work } %>
 <% end %>
 <!--/subnav-->
 
@@ -33,10 +33,7 @@
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
-  <%= render :partial => 'works/work_header' %>
-  <% if logged_in_as_admin? %>
-    <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
-  <% end %>
+  <%= render partial: 'works/work_header' %>
 <!--/descriptions-->
 
 <!--chapter content-->

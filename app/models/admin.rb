@@ -31,4 +31,8 @@ class Admin < ApplicationRecord
   def admin_post_access?
     AdminPostPolicy.can_post?(self)
   end
+
+  def can_edit_works?
+    AdminModerationPolicy.can_edit_works?(self)
+  end
 end

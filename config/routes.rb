@@ -144,7 +144,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-
   namespace :admin do
     resources :activities, only: [:index, :show]
     resources :banners do
@@ -195,6 +194,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :api
   end
+  resources :admins, only: [:index]
 
   post '/admin/api/new', to: 'admin/api#create'
 

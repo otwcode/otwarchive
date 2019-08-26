@@ -2,6 +2,10 @@ class AdminModerationPolicy < ApplicationPolicy
   CONTENT_MODERATORS = %w(superadmin abuse)
   COMMENT_MODERATORS = %w(superadmin abuse communications support)
 
+  def self.can_edit_works?(user)
+    self.new(user, nil).can_moderate_content?
+  end
+
   def hide?
     can_moderate_record?
   end
