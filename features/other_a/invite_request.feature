@@ -111,14 +111,14 @@ Feature: Invite requests
     Then I should see "Invitation was successfully sent."
 
   Scenario: An admin can get to a user's invitations page
-    Given I am logged in as an admin
+    Given I am logged in as superadmin
       And the user "steven" exists and is activated
     When I go to the abuse administration page for "steven"
       And I follow "Add User Invitations"
     Then I should be on steven's invitations page
 
   Scenario: An admin can get to a user's manage invitations page
-    Given I am logged in as an admin
+    Given I am logged in as superadmin
       And the user "steven" exists and is activated
     When I go to the abuse administration page for "steven"
       And I follow "Manage User Invitations"
