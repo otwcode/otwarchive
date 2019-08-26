@@ -34,6 +34,10 @@ class ApplicationPolicy
     false
   end
 
+  def user_has_roles?(roles)
+    user.respond_to?(:roles) && (user.roles & roles).present?
+  end
+
   class Scope
     attr_reader :user, :scope
 

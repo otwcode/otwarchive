@@ -6,7 +6,7 @@ class AdminPostPolicy < ApplicationPolicy
   end
 
   def can_post?
-    user && (POSTING_ROLES & user.roles).present?
+    user_has_roles?(POSTING_ROLES)
   end
 
   alias_method :new?, :can_post?

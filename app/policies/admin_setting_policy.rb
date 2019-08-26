@@ -6,7 +6,7 @@ class AdminSettingPolicy < ApplicationPolicy
   end
 
   def update?
-    user && (SETTINGS_ROLES & user.roles).present?
+    user_has_roles?(SETTINGS_ROLES)
   end
 
   def permitted_attributes

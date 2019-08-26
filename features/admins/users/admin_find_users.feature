@@ -8,7 +8,7 @@ Feature: Admin Find Users page
         | userB  | b@bo3.org  |
         | userCB | cb@bo3.org |
       And the user "userB" exists and has the role "archivist"
-      And I am logged in as an admin
+      And I am logged in as superadmin
 
   Scenario: The default page for the Admin section should be the Find Users page
     Then I should see "Find Users"
