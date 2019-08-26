@@ -10,5 +10,5 @@ sudo dpkg -i ./wkhtmltox_0.12.5-1.xenial_amd64.deb
 wkhtmltopdf --version
 
 # Calibre
-sudo apt-get install -qq calibre
-ebook-convert --version
+# sudo apt-get install -qq calibre
+# ebook-convert --version
