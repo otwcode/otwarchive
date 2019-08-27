@@ -336,7 +336,7 @@ Feature: Edit chapters
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
       And the email should contain "The user karma has listed your pseud sabrina as a co-creator on the following chapter"
-      And the email should contain "Because you previously co-created this work with karma, they are allowed to add you to chapters on this work without an invitation, even if you have co-creation disabled."
+      And the email should contain "Regardless of your co-creation settings, you can be added to new chapters and series that are added to the work where you are already listed as one of the co-creators."
       And the email should not contain "translation missing"
 
 
