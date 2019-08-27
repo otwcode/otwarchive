@@ -227,7 +227,7 @@ en:
       intro: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following %{type}:"
       html:
         creation: "%{creation_link} by %{pseud_links}"
-        instructions: "You can accept or reject this invitation on your %{invitations_page} page."
+        instructions: "You can accept or reject this invitation on your %{page_name} page."
         page_name: "Creator Invitations"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
