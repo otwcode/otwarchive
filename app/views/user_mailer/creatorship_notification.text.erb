@@ -7,8 +7,8 @@
   url: polymorphic_url(@creation),
   pseuds: @creation.pseuds.map(&:byline).to_sentence %>
 
-<%= t(".#{@creation.model_name.to_s.underscore}.explanation",
-      adding_user: @adding_user.login) %>
+<%= t ".explanation" %>
 
-<%= t ".text.remove", type: creation_type, url: edit_polymorphic_url(@creation) %>
+<%= t ".text.remove", type: creation_type,
+  url: edit_polymorphic_url(@creation) %>
 <% end %>

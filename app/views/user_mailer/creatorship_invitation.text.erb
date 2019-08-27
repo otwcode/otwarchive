@@ -8,7 +8,6 @@
       url: polymorphic_url(@creation),
       pseuds: @creation.pseuds.map(&:byline).to_sentence) %>
 
-<%= t(".text.accept", type: creation_type, url: user_creatorships_url(@user)) %>
+<%= t(".text.instructions", type: creation_type, url: user_creatorships_url(@user)) %>
 
-<%= t ".reject" %>
 <% end %>
