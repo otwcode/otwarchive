@@ -12,8 +12,8 @@
       <% end %>
       <% if has_cocreators %>
         <%= label_tag :remove_me, class: "action" do %>
-          <%= check_box_tag :remove_me, "1", false, disabled: !has_cocreators %>
-          <%= ts("Remove me as co-creator") %>
+          <%= check_box_tag :remove_me, "1", false %>
+          <%= ts("Remove Me as Co-Creator") %>
         <% end %>
       <% end %>
   </dd>
