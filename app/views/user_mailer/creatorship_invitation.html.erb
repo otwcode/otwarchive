@@ -9,7 +9,8 @@
           pseud_links: @creation.pseuds.map{ |p| style_pseud_link(p) }.to_sentence.html_safe).html_safe %>
   </p>
 
-  <p><%= t(".html.accept", type: creation_type, view: style_link(t(".html.view"), user_creatorships_url(@user))).html_safe %></p>
-
-  <p><%= t ".reject" %></p>
+  <p>
+    <%= t(".html.instructions", type: creation_type,
+          page_name: style_link(t(".html.page_name"), user_creatorships_url(@user))).html_safe %>
+  </p>
 <% end %>
