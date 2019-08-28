@@ -185,7 +185,7 @@ Feature: Edit Multiple Works
       And I select "Solo" for editing
       And I select "Shared" for editing
       And I press "Edit"
-      And I check "Remove Me as Co-creator"
+      And I check "Remove Me as Co-Creator"
       And I press "Update All Works"
     Then I should see "You cannot remove yourself as co-creator of the work Solo because you are the only listed creator."
     When I view the work "Solo"
