@@ -164,12 +164,12 @@ group :test, :development do
   gem 'brakeman', '3.7.2'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_girl', '~> 4.8.0'
+  gem 'factory_bot', '4.8.2'
   gem 'minitest'
 end
 
 group :development do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'bundler-audit'
   gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end

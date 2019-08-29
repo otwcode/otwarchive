@@ -1,6 +1,6 @@
 require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:collection_name) do |n|
     "basic_collection_#{n}"
   end

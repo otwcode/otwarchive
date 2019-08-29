@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
     name { Faker::Name.first_name }
     comment_content { Faker::Lorem.sentence(25) }

@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
   end

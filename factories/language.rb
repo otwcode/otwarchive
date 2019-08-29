@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :language do
     short { "nl" }
     name { "Dutch" }

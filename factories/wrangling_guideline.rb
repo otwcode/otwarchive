@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
 
   sequence(:wrangling_guideline_title) do |n|
     "The #{n} Wrangling Guideline"

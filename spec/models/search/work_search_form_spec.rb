@@ -3,13 +3,13 @@ require 'spec_helper'
 describe WorkSearchForm do
   describe "searching" do
     let!(:collection) do
-      FactoryGirl.create(:collection, id: 1)
+      FactoryBot.create(:collection, id: 1)
     end
 
     let!(:work) do
-      FactoryGirl.create(:work,
+      FactoryBot.create(:work,
                          title: "There and back again",
-                         authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryGirl.create(:pseud, name: "JRR Tolkien")],
+                         authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryBot.create(:pseud, name: "JRR Tolkien")],
                          summary: "An unexpected journey",
                          fandom_string: "The Hobbit",
                          character_string: "Bilbo Baggins",
@@ -20,9 +20,9 @@ describe WorkSearchForm do
     end
 
     let!(:second_work) do
-      FactoryGirl.create(:work,
+      FactoryBot.create(:work,
                          title: "Harry Potter and the Sorcerer's Stone",
-                         authors: [Pseud.find_by(name: "JK Rowling") || FactoryGirl.create(:pseud, name: "JK Rowling")],
+                         authors: [Pseud.find_by(name: "JK Rowling") || FactoryBot.create(:pseud, name: "JK Rowling")],
                          summary: "Mr and Mrs Dursley, of number four Privet Drive...",
                          fandom_string: "Harry Potter",
                          character_string: "Harry Potter, Ron Weasley, Hermione Granger",

@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :work do
     title { "My title is long enough" }
@@ -42,7 +42,7 @@ FactoryGirl.define do
     url { "http://www.example.org" }
 
     after(:build) do |work|
-      work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
+      work.fandoms = [FactoryBot.build(:fandom)] if work.fandoms.blank?
     end
   end
 

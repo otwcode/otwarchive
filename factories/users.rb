@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:login) do |n|
     "#{Faker::Lorem.characters(8)}#{n}"
   end

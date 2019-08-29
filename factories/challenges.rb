@@ -1,5 +1,5 @@
 require 'faker'
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge_assignment do
     after(:build) do |assignment|
       assignment.collection_id = create(:collection, challenge: create(:gift_exchange)).id unless assignment.collection_id
