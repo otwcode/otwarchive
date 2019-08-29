@@ -115,7 +115,6 @@ Given /^"([^\"]*)" has two pinchhit assignments in the gift exchange "([^\"]*)"$
   end
 end
 
-
 ## Signing up
 
 When /^I set up a signup for "([^\"]*)" with combination A$/ do |title|
