@@ -2,7 +2,7 @@ require 'faker'
 
 FactoryGirl.define do
   factory :chapter do
-    content "Awesome content!"
+    content { "Awesome content!" }
     work
 
     transient do

@@ -2,12 +2,12 @@ require 'faker'
 FactoryGirl.define do
 
   factory :work do
-    title "My title is long enough"
-    fandom_string "Testing"
-    rating_string "Not Rated"
-    warning_string "No Archive Warnings Apply"
+    title { "My title is long enough" }
+    fandom_string { "Testing" }
+    rating_string { "Not Rated" }
+    warning_string { "No Archive Warnings Apply" }
     chapter_info = { content: "This is some chapter content for my work." }
-    chapter_attributes chapter_info
+    chapter_attributes { chapter_info }
 
     transient do
       authors { [build(:pseud)] }
@@ -20,26 +20,26 @@ FactoryGirl.define do
     end
 
     factory :no_authors do
-      authors []
+      authors { [] }
     end
 
     factory :custom_work_skin do
-      work_skin_id 1
+      work_skin_id { 1 }
     end
 
     factory :posted_work do
-      posted true
+      posted { true }
     end
 
     factory :draft do
-      posted false
+      posted { false }
     end
   end
 
   factory :external_work do
-    title "An External Work"
-    author "An Author"
-    url "http://www.example.org"
+    title { "An External Work" }
+    author { "An Author" }
+    url { "http://www.example.org" }
 
     after(:build) do |work|
       work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
@@ -55,8 +55,7 @@ FactoryGirl.define do
   end
 
   factory :external_creatorship do |f|
-    f.creation_type 'Work'
+    f.creation_type { 'Work' }
     f.association :external_author_name
   end
-
 end

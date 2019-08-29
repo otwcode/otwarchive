@@ -11,8 +11,7 @@ FactoryGirl.define do
   end
 
   factory :wrangling_guideline do |f|
-    title {generate(:wrangling_guideline_title)}
-    content {generate(:wrangling_guideline_content)}
+    title { generate(:wrangling_guideline_title) }
+    content { generate(:wrangling_guideline_content) }
   end
-
 end

@@ -10,7 +10,7 @@ FactoryGirl.define do
   end
 
   factory :locale do
-    language Language.default
+    language { Language.default }
     iso { generate(:locale_iso) }
     name { generate(:locale_name) }
   end

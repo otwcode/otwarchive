@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :language do
-    short "nl"
-    name "Dutch"
+    short { "nl" }
+    name { "Dutch" }
   end
 end

@@ -9,7 +9,7 @@ FactoryGirl.define do
   end
 
   factory :invitation do
-    invitee_email "default@email.com"
+    invitee_email { "default@email.com" }
   end
 
 end
