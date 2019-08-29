@@ -104,7 +104,7 @@ Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I open signups for "#{title}"}
 end
 
-Given /^"([^\"]*)" has two pinchhit assignments in the gift exchange "([^\"]*)"$/ do |user, collection_title|
+Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |user, collection_title|
   collection = Collection.find_by(title: collection_title)
   user = User.find_by(login: user)
   assignments = ChallengeAssignment.where(collection_id: collection.id).limit(2)
