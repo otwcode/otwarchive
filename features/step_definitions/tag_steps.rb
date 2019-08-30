@@ -119,7 +119,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   tw = User.find_by(login: user)
 
   if tw.blank?
-    tw = FactoryBot.create(:user, {login: user, password: password})
+    tw = FactoryBot.create(:user, login: user, password: password)
     tw.activate
   else
     tw.password = password

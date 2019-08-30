@@ -34,7 +34,7 @@ end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
-    admin = FactoryBot.create(:admin, hash)
+    FactoryBot.create(:admin, hash)
   end
 end
 
@@ -43,7 +43,7 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by(login: "testadmin")
   if admin.blank?
-    admin = FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
+    FactoryBot.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
   visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"

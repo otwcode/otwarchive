@@ -59,14 +59,14 @@ describe WorksOwner do
 
     shared_examples_for "an owner tag" do
       it "should change after a new work is created" do
-        new_work = FactoryBot.create(:work, fandom_string: @owner.name, posted: true)
+        FactoryBot.create(:work, fandom_string: @owner.name, posted: true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
     end
 
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
-        new_work = FactoryBot.create(:work, collection_names: @owner.name, posted: true)
+        FactoryBot.create(:work, collection_names: @owner.name, posted: true)
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
@@ -76,7 +76,7 @@ describe WorksOwner do
     shared_examples_for "an owner user" do
       it "should change after a new work is created" do
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
-        new_work = FactoryBot.create(:work, authors: [author], posted: true)
+        FactoryBot.create(:work, authors: [author], posted: true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
 
@@ -115,10 +115,9 @@ describe WorksOwner do
         it_should_behave_like "an owner tag"
 
         it "should change after a new work is created in the synonym" do
-          new_work = FactoryBot.create(:work, fandom_string: @syn_tag.name, posted: true)
+          FactoryBot.create(:work, fandom_string: @syn_tag.name, posted: true)
           expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
         end
-
       end
     end
 

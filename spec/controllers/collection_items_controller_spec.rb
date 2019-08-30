@@ -86,7 +86,7 @@ describe CollectionItemsController do
 
   describe "GET #create" do
     context "creation" do
-      let (:collection) { FactoryBot.create(:collection) }
+      let(:collection) { FactoryBot.create(:collection) }
 
       it "fails if collection names missing" do
         get :create, params: { collection_id: collection.id }
