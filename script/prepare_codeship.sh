@@ -8,6 +8,8 @@
 export RAILS_ENV=test
 export MYSQL_VERSION=5.7.22
 export REDIS_VERSION=3.2.1
+export ES_VERSION="6.8.2"
+export ES_PORT="9400"
 export PATH="$HOME/mysql-$MYSQL_VERSION/bin:$PATH"
 
 bundle install
@@ -35,8 +37,6 @@ bundle exec rake db:migrate --trace
 #sed -e 's/PRODUCTION_CACHE.*$//' -i config/config.yml
 #wget http://media.transformativeworks.org/ao3/codeship/prepare_part2.sh -O - | bash -x
 
-ES_VERSION="6.7.0"
-ES_PORT="9400"
 cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.zip
 unzip -o  elasticsearch-${ES_VERSION}.zip
