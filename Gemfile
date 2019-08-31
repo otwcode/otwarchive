@@ -141,7 +141,7 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.16.1'
-  gem 'database_cleaner', '1.5.2'
+  gem 'database_cleaner', '1.6.0'
   gem 'cucumber', '~> 2.4.0'
   gem 'poltergeist'
   gem 'capybara-screenshot'
