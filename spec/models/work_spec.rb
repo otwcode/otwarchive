@@ -520,7 +520,7 @@ describe Work do
 
       it "raises an error" do
         expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all authors of a work."
+          "Sorry, we can't remove all creators of a work."
         )
       end
     end
