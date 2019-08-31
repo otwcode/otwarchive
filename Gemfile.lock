@@ -495,7 +495,7 @@ DEPENDENCIES
   elasticsearch (>= 6.0.0)
   email_spec (= 1.6.0)
   escape_utils (= 1.2.1)
-  factory_bot (= 5.0.2)
+  factory_bot (~> 5.0.2)
   factory_bot_rails
   faker (~> 1.6.3)
   fastimage
