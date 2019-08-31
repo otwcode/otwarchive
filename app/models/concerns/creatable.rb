@@ -213,4 +213,11 @@ module Creatable
     return false unless user.is_a?(User)
     creatorships.unapproved.for_user(user).exists?
   end
+
+  # Check whether the given user has some kind of creatorship (approved or
+  # unapproved) associated with this item.
+  def user_is_owner_or_invited?(user)
+    return false unless user.is_a?(User)
+    creatorships.for_user(user).exists?
+  end
 end

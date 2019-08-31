@@ -7,15 +7,15 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    series = work.series.select { |s| s.visible?(current_user) }
+    series = work.series.select(&:visible?)
     series.map do |serial|
       serial_works = serial.serial_works
                            .includes(:work)
                            .where('works.posted = ?', true)
                            .order(:position)
                            .references(:works)
-                           .select { |sw| sw.work.visible(current_user) }
                            .map(&:work)
+                           .select(&:visible?)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra

@@ -30,7 +30,7 @@
 <!--/subnav-->
 
 <!-- BEGIN revealed -->
-<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(@work, current_user) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
   <%= render :partial => 'works/work_header' %>
@@ -41,11 +41,9 @@
 
 <!--chapter content-->
     <div id="chapters" role="article">
-      <% if @chapters && @chapters.size > 1 %>
+      <% if @chapters %>
         <% for chapter in @chapters %>
-          <% if chapter.posted? || is_author_of?(chapter) %>
-            <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter, :hide_work_info => true} %>
-          <% end %>
+          <%= render 'chapters/chapter', chapter: chapter, hide_work_info: true %>
         <% end %>
       <% else %>
         <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>

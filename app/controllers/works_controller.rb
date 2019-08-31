@@ -201,8 +201,11 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of entire work
     if @work.chaptered?
-      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
-        @chapters = @work.chapters_in_order
+      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+        @chapters = @work.chapters_in_order(
+          include_drafts: (logged_in_as_admin? ||
+                           @work.user_is_owner_or_invited?(current_user))
+        )
       else
         flash.keep
         redirect_to([@work, @chapter]) && return
@@ -224,7 +227,11 @@ class WorksController < ApplicationController
   end
 
   def navigate
-    @chapters = @work.chapters_in_order(false)
+    @chapters = @work.chapters_in_order(
+      include_content: false,
+      include_drafts: (logged_in_as_admin? ||
+                       @work.user_is_owner_or_invited?(current_user))
+    )
   end
 
   # GET /works/new
@@ -312,7 +319,10 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     @hide_dashboard = true
-    @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
+    if @work.number_of_chapters > 1
+      @chapters = @work.chapters_in_order(include_content: false,
+                                          include_drafts: true)
+    end
     set_work_form_fields
 
     return unless params['remove'] == 'me'

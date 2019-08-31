@@ -433,12 +433,6 @@ public
                   (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
-
-      # Override the standard visibility check if the user has a creator invite:
-      if @check_visibility_of.is_a?(Creatable)
-        can_view_hidden ||= @check_visibility_of.user_has_creator_invite?(current_user)
-      end
-
       access_denied if (is_hidden && !can_view_hidden)
     end
   end

@@ -75,18 +75,24 @@ class Series < ApplicationRecord
   end
 
   # visibility aped from the work model
-  def visible(current_user=User.current_user)
-    if current_user.is_a?(Admin) || (current_user.is_a?(User) && current_user.is_author_of?(self))
-      return self
-    elsif current_user == :false || !current_user
-      return self unless self.restricted || self.hidden_by_admin
-    elsif (!self.hidden_by_admin && !self.posted_works.empty?)
-      return self
+  def visible?(user = User.current_user)
+    return true if user.is_a?(Admin)
+
+    if posted && !hidden_by_admin
+      user.is_a?(User) || !restricted
+    else
+      user_is_owner_or_invited?(user)
     end
   end
 
-  def visible?(user=User.current_user)
-    self.visible(user) == self
+  # Override the default definition to check whether the user was invited to
+  # any works in the series.
+  def user_is_owner_or_invited?(user)
+    return false unless user.is_a?(User)
+    return true if super
+
+    works.joins(:creatorships).merge(user.creatorships).exists? ||
+      works.joins(:chapters => :creatorships).merge(user.creatorships).exists?
   end
 
   def visible_work_count
