@@ -159,7 +159,7 @@ Feature: Edit Works
     When I edit the work "Shared"
       And I wait 1 second
       And I follow "Remove Me As Co-Creator"
-    Then I should see "You have been removed as an author from the work"
+    Then I should see "You have been removed as a creator from the work."
       And "ex_friend" should be the creator on the work "Shared"
       And "coolperson" should not be a creator on the work "Shared"
 
