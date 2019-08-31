@@ -323,7 +323,7 @@ class WorksController < ApplicationController
       redirect_to controller: 'orphans', action: 'new', work_id: @work.id
     else
       @work.remove_author(current_user)
-      flash[:notice] = ts('You have been removed as an author from the work')
+      flash[:notice] = ts("You have been removed as a creator from the work.")
       redirect_to current_user
     end
   end

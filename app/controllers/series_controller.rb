@@ -72,7 +72,7 @@ class SeriesController < ApplicationController
       else
         begin
           @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as an author from the series and its works.")
+          flash[:notice] = ts("You have been removed as a creator from the series and its works.")
           redirect_to @series
         rescue Exception => error
           flash[:error] = error.message
