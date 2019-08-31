@@ -164,7 +164,7 @@ group :test, :development do
   gem 'brakeman', '3.7.2'
   gem 'pry-byebug'
   gem 'whiny_validation'
-  gem 'factory_bot', '4.8.2'
+  gem 'factory_bot', '4.11.1'
   gem 'minitest'
 end
 
