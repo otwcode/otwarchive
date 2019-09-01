@@ -9,13 +9,10 @@ module SeriesHelper
   def series_data_for_work(work)
     series = work.series.select(&:visible?)
     series.map do |serial|
-      serial_works = serial.serial_works
-                           .includes(:work)
-                           .where('works.posted = ?', true)
-                           .order(:position)
-                           .references(:works)
-                           .map(&:work)
-                           .select(&:visible?)
+      serial_works = \
+        serial.serial_works.includes(:work).references(:works).
+        where(works: { posted: true }).order(:position).
+        map(&:work).select(&:visible?)
       visible_position = serial_works.index(work) || serial_works.length
       unless !visible_position
         # Span used at end of previous_link and beginning of next_link to prevent extra

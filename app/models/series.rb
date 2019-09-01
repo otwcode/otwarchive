@@ -92,7 +92,7 @@ class Series < ApplicationRecord
     return true if super
 
     works.joins(:creatorships).merge(user.creatorships).exists? ||
-      works.joins(:chapters => :creatorships).merge(user.creatorships).exists?
+      works.joins(chapters: :creatorships).merge(user.creatorships).exists?
   end
 
   def visible_work_count

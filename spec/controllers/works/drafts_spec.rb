@@ -77,7 +77,6 @@ describe WorksController do
                                    "You can only see your own drafts, sorry!")
       end
     end
-
   end
 
   describe "post_draft" do
