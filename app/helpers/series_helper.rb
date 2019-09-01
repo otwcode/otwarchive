@@ -73,7 +73,7 @@ module SeriesHelper
     end
   end
 
-  # Generates confirmation message for "Remove Me As Co-creator"
+  # Generates confirmation message for "Remove Me As Co-Creator"
   def series_removal_confirmation(series, user)
     if !(series.work_pseuds & user.pseuds).empty?
       ts("You're listed as a creator of works in this series. Do you want to remove yourself as a creator of this series and all of its works?")
