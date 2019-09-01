@@ -24,7 +24,7 @@
 <h4 class="landmark heading"><%= ts("Pitch")%></h4>
 <ul class="navigation actions">
 	<li><%= print_works_link(@user, @pseud) %></li>
-	<% if @user == current_user %>
+	<% if @user == current_user || logged_in_as_admin? %>
 	  <li><%= span_if_current ts("Drafts") + " (#{@user.unposted_works.size})", drafts_user_works_path(@user) %></li>
   <% end %>
 	<li><%= print_series_link(@user, @pseud) %></li>

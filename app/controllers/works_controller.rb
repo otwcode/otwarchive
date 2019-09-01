@@ -4,7 +4,7 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex, :drafts]
   before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
@@ -149,17 +149,15 @@ class WorksController < ApplicationController
   end
 
   def drafts
-    unless params[:user_id]
+    unless params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       flash[:error] = ts('Whose drafts did you want to look at?')
-      redirect_to controller: :users, action: :index
+      redirect_to users_path
       return
     end
 
-    @user = User.find_by(login: params[:user_id])
-
-    unless current_user == @user
+    unless current_user == @user || logged_in_as_admin?
       flash[:error] = ts('You can only see your own drafts, sorry!')
-      redirect_to current_user
+      redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
 
