@@ -73,12 +73,12 @@ module SeriesHelper
     end
   end
 
-  # Generates confirmation message for 'remove me as author'
+  # Generates confirmation message for "Remove Me As Co-creator"
   def series_removal_confirmation(series, user)
     if !(series.work_pseuds & user.pseuds).empty?
-      "You're listed as an author of works in this series. Do you want to remove yourself as an author of this series and all of its works?"
+      ts("You're listed as a creator of works in this series. Do you want to remove yourself as a creator of this series and all of its works?")
     else
-      "Are you sure you want to be removed as an author of this series?"
+      ts("Are you sure you want to be removed as a creator of this series?")
     end
   end
 
