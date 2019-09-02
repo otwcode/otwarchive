@@ -4,7 +4,7 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :reindex, :drafts]
   before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :reindex]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
@@ -149,17 +149,15 @@ class WorksController < ApplicationController
   end
 
   def drafts
-    unless params[:user_id]
+    unless params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       flash[:error] = ts('Whose drafts did you want to look at?')
-      redirect_to controller: :users, action: :index
+      redirect_to users_path
       return
     end
 
-    @user = User.find_by(login: params[:user_id])
-
-    unless current_user == @user
+    unless current_user == @user || logged_in_as_admin?
       flash[:error] = ts('You can only see your own drafts, sorry!')
-      redirect_to current_user
+      redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
 
@@ -201,8 +199,11 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of entire work
     if @work.chaptered?
-      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
-        @chapters = @work.chapters_in_order
+      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+        @chapters = @work.chapters_in_order(
+          include_drafts: (logged_in_as_admin? ||
+                           @work.user_is_owner_or_invited?(current_user))
+        )
       else
         flash.keep
         redirect_to([@work, @chapter]) && return
@@ -224,7 +225,11 @@ class WorksController < ApplicationController
   end
 
   def navigate
-    @chapters = @work.chapters_in_order(false)
+    @chapters = @work.chapters_in_order(
+      include_content: false,
+      include_drafts: (logged_in_as_admin? ||
+                       @work.user_is_owner_or_invited?(current_user))
+    )
   end
 
   # GET /works/new
@@ -312,7 +317,10 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     @hide_dashboard = true
-    @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
+    if @work.number_of_chapters > 1
+      @chapters = @work.chapters_in_order(include_content: false,
+                                          include_drafts: true)
+    end
     set_work_form_fields
 
     return unless params['remove'] == 'me'
