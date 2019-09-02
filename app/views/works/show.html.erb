@@ -43,7 +43,7 @@
     <div id="chapters" role="article">
       <% if @chapters %>
         <% for chapter in @chapters %>
-          <%= render 'chapters/chapter', chapter: chapter, hide_work_info: true %>
+          <%= render 'chapters/chapter', chapter: chapter %>
         <% end %>
       <% else %>
         <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
