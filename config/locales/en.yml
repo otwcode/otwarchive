@@ -214,7 +214,7 @@ en:
     creatorship_notification:
       subject: "[%{app_name}] Co-creator notification"
       intro: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following %{type}:"
-      explanation: "Regardless of your co-creation settings, you can be added to new chapters and series that are added to the work where you are already listed as one of the co-creators."
+      explanation: "When you're a co-creator on a work, you can be added to new chapters regardless of your co-creation settings. You will also be added to any series the work is added to."
       html:
         creation: "%{creation_link} by %{pseud_links}"
         remove: "If you've been added in error or don't want to be listed as a creator, you can %{edit} to remove yourself as creator."
