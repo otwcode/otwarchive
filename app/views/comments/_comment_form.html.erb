@@ -110,7 +110,7 @@
       <%= generate_countdown_html("comment_content_for_#{commentable.id}", ArchiveConfig.COMMENT_MAX) %>
       <%= live_validation_for_field("comment_content_for_#{commentable.id}",
               :failureMessage => ts('Brevity is the soul of wit, but we need your comment to have text in it.'),
-              :maximum_length => (ArchiveConfig.COMMENT_MAX*.9).to_i,
+              :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
       <p class="submit actions">
         <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", data: {disable_with: ts("Please wait...")} %>
