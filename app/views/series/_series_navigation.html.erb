@@ -13,7 +13,7 @@
     <li><%= link_to ts("Reorder Series"), manage_series_path(@series) %></li>
     <li><%= link_to ts("Orphan Series"), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>
     <% unless (@series.pseuds - current_user.pseuds).empty? %>
-      <li><%= link_to ts("Remove Me As Author"), edit_series_path(@series, :remove => 'me'), data: {confirm: series_removal_confirmation(@series, current_user)} %></li>
+      <li><%= link_to ts("Remove Me As Co-Creator"), edit_series_path(@series, :remove => 'me'), data: {confirm: series_removal_confirmation(@series, current_user)} %></li>
     <% end %>
   <% end %>
 </ul>

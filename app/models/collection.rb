@@ -211,10 +211,15 @@ class Collection < ApplicationRecord
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    table = challenge_type.tableize
-    not_closed.where(challenge_type: challenge_type).
-      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
-      where("#{table}.signups_close_at > ?", Time.now).order("#{table}.signups_close_at DESC")
+    if challenge_type == "PromptMeme"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1").
+        where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
+    elsif challenge_type == "GiftExchange"
+      not_closed.where(challenge_type: challenge_type).
+        joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").
+        where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+    end
   end
 
   scope :with_name_like, lambda {|name|

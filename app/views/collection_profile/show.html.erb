@@ -98,7 +98,11 @@
 
         <% if @collection.challenge %>
           <li><%= link_to ts('Delete Challenge'),
-                          eval("collection_#{challenge_class_name(@collection)}_path(@collection)"),
+                          if @collection.prompt_meme?
+                            collection_prompt_meme_path(@collection)
+                          else
+                            collection_gift_exchange_path(@collection)
+                          end,
                           data: {confirm: ts('Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection.)')},                          :method => :delete %>
           </li>
         <% end %>

@@ -19,7 +19,7 @@ class ArchiveFaq < ApplicationRecord
   end
 
   # Change the positions of the questions in the archive_faq
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.questions.in_order).reorder_list(positions)
   end
 
@@ -27,7 +27,7 @@ class ArchiveFaq < ApplicationRecord
     slug_was
   end
 
-  def self.reorder(positions)
+  def self.reorder_list(positions)
     SortableList.new(self.order('position ASC')).reorder_list(positions)
   end
 

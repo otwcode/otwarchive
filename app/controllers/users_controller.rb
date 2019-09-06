@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   before_action :check_user_status, only: [:edit, :update]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :browse, :delete_confirmation, :index, :show]
+  before_action :check_ownership, except: [:activate, :delete_confirmation, :index, :show]
   skip_before_action :store_location, only: [:end_first_login]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -44,8 +44,7 @@ class UsersController < ApplicationController
 
     visible = visible_items(current_user)
 
-    @fandoms = @fandoms.order('work_count DESC').load unless @fandoms.empty?
-    @works = visible[:works].revealed.non_anon.order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible[:works].order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     if current_user.respond_to?(:subscriptions)
@@ -194,7 +193,8 @@ class UsersController < ApplicationController
     @sole_owned_collections = @user.collections.to_a.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? }
 
     if @works.empty? && @sole_owned_collections.empty?
-      @user.wipeout_unposted_works if @user.unposted_works
+      @user.wipeout_unposted_works
+      @user.destroy_empty_series
 
       @user.destroy
       flash[:notice] = ts('You have successfully deleted your account.')
@@ -236,20 +236,6 @@ class UsersController < ApplicationController
     head :no_content
   end
 
-  def browse
-    @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
-    @tag_types = %w(Fandom Character Relationship Freeform)
-    @tags = @user.tags.with_scoped_count.includes(:merger)
-
-    @tags = if params[:sort] == 'count'
-              @tags.order('count DESC')
-            else
-              @tags.order('name ASC')
-            end
-
-    @tags = @tags.group_by { |t| t.type.to_s }
-  end
-
   private
 
   def reauthenticate
@@ -280,18 +266,19 @@ class UsersController < ApplicationController
     #       .visible_to_registered_user.
     visible_method = current_user.nil? && current_admin.nil? ? :visible_to_all : :visible_to_registered_user
 
-    # hahaha omg so ugly BUT IT WORKS :P
-    @fandoms = Fandom.select('tags.*, count(tags.id) as work_count')
-                     .joins(:direct_filter_taggings)
-                     .joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'")
-                     .group('tags.id')
-                     .merge(Work.send(visible_method).revealed.non_anon)
-                     .merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-  INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-  INNER JOIN users ON pseuds.user_id = users.id").where('users.id = ?', @user.id))
     visible_works = @user.works.send(visible_method)
     visible_series = @user.series.send(visible_method)
     visible_bookmarks = @user.bookmarks.send(visible_method)
+
+    visible_works = visible_works.revealed.non_anon
+    @fandoms = if @user == User.orphan_account
+                 []
+               else
+                 Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
+                   joins(:filtered_works).group("tags.id").merge(visible_works).
+                   where(filter_taggings: { inherited: false }).
+                   order('work_count DESC').load
+               end
 
     {
       works: visible_works,
@@ -326,17 +313,7 @@ class UsersController < ApplicationController
       # Removes user as an author from co-authored works
 
       @coauthored_works.each do |w|
-        pseuds_with_author_removed = w.pseuds - @user.pseuds
-        w.pseuds = pseuds_with_author_removed
-
-        w.save && w.touch # force cache_key to bust
-
-        w.chapters.each do |c|
-          c.pseuds = c.pseuds - @user.pseuds
-
-          c.pseuds = w.pseuds if c.pseuds.empty?
-          c.save
-        end
+        w.remove_author(@user)
       end
     end
 
@@ -362,7 +339,8 @@ class UsersController < ApplicationController
     @works = @user.works.where(posted: true)
 
     if @works.blank?
-      @user.wipeout_unposted_works if @user.unposted_works
+      @user.wipeout_unposted_works
+      @user.destroy_empty_series
 
       @user.destroy
 
