@@ -1,26 +1,18 @@
 class Work < ApplicationRecord
   include Taggable
-  include Creatable
+  include CreationNotifier
   include Collectible
   include Bookmarkable
-  include Pseudable
   include Searchable
   include BookmarkCountCaching
   include WorkStats
   include WorkChapterCountCaching
   include ActiveModel::ForbiddenAttributesProtection
+  include Creatable
 
   ########################################################################
   # ASSOCIATIONS
   ########################################################################
-
-  # creatorships can't have dependent => destroy because we email the
-  # user in a before_destroy callback
-  has_many :creatorships, as: :creation
-  has_many :pseuds,
-           through: :creatorships,
-           after_remove: [:expire_pseud, :reindex_changed_pseud]
-  has_many :users, -> { distinct }, through: :pseuds
 
   has_many :external_creatorships, as: :creation, dependent: :destroy, inverse_of: :creation
   has_many :archivists, through: :external_creatorships
@@ -28,8 +20,7 @@ class Work < ApplicationRecord
   has_many :external_authors, -> { distinct }, through: :external_author_names
 
   # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
-  has_many :chapters
-  validates_associated :chapters
+  has_many :chapters, inverse_of: :work, autosave: true
 
   has_many :serial_works, dependent: :destroy
   has_many :series, through: :serial_works
@@ -78,10 +69,6 @@ class Work < ApplicationRecord
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
-  attr_accessor :authors
-  attr_accessor :authors_to_remove
-  attr_accessor :invalid_pseuds
-  attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_recipients
 
@@ -116,17 +103,6 @@ class Work < ApplicationRecord
     allow_blank: true,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
-
-  # Checks that work has at least one author
-  def validate_authors
-    if self.authors.blank? && self.pseuds.blank?
-      errors.add(:base, ts("Work must have at least one author."))
-      throw :abort
-    elsif !self.invalid_pseuds.blank?
-      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", pseuds: self.invalid_pseuds.inspect))
-      throw :abort
-    end
-  end
 
   # Makes sure the title has no leading spaces
   validate :clean_and_validate_title
@@ -163,13 +139,16 @@ class Work < ApplicationRecord
     end
   end
 
+  # Run Taggable#check_for_invalid_tags as a validation.
+  validate :check_for_invalid_tags
+
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
 
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   after_save :post_first_chapter
   before_save :set_word_count
@@ -179,9 +158,8 @@ class Work < ApplicationRecord
   before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
-  before_save :check_for_invalid_tags
-  before_update :validate_tags, :notify_before_update
-  after_update :adjust_series_restriction
+  before_update :validate_tags
+  after_update :adjust_series_restriction, :notify_after_update
 
   before_save :hide_spam
   after_save :moderate_spam
@@ -189,9 +167,9 @@ class Work < ApplicationRecord
 
   after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
   after_destroy :expire_caches, :update_pseud_index
-  before_destroy :before_destroy
 
-  def before_destroy
+  before_destroy :send_deleted_work_notification, prepend: true
+  def send_deleted_work_notification
     if self.posted?
       users = self.pseuds.collect(&:user).uniq
       orphan_account = User.orphan_account
@@ -241,11 +219,6 @@ class Work < ApplicationRecord
     Work.expire_work_tag_groups_id(self.id)
   end
 
-  def reindex_changed_pseud(pseud)
-    pseud = pseud.id if pseud.respond_to?(:id)
-    IndexQueue.enqueue_id(Pseud, pseud, :background)
-  end
-
   def update_pseud_index
     return unless should_reindex_pseuds?
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
@@ -268,7 +241,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_tag_cache_key(id)
-    "/v1/work_blurb_tag_cache_key/#{id}"
+    "/v2/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_tag_cache(id)
@@ -290,11 +263,6 @@ class Work < ApplicationRecord
 
   def tag_groups_key
     Work.tag_groups_key_id(self.id)
-  end
-
-  def expire_pseud(pseud)
-    CacheMaster.record(self.id, 'pseud', pseud.id)
-    CacheMaster.record(self.id, 'user', pseud.user_id)
   end
 
   # When works are done being reindexed, expire the appropriate caches
@@ -324,12 +292,7 @@ class Work < ApplicationRecord
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
-    self.chapters.order("position DESC").map(&:destroy)
-  end
-
-  after_destroy :clean_up_creatorships
-  def clean_up_creatorships
-    self.creatorships.each{ |c| c.destroy }
+    chapters.sort_by(&:position).reverse.each(&:destroy)
   end
 
   after_destroy :clean_up_filter_taggings
@@ -401,69 +364,39 @@ class Work < ApplicationRecord
     end
   end
 
-  ########################################################################
-  # AUTHORSHIP
-  ########################################################################
-
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    selected_pseuds = Pseud.find(attributes[:ids])
-    (self.authors ||= []) << selected_pseuds
-    # if current user has selected different pseuds
-    current_user = User.current_user
-    if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
-    end
-    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
-    if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds]
-      if results[:banned_pseuds].present?
-        self.errors.add(
-          :base,
-          ts("%{name} is currently banned and cannot be listed as a co-creator.",
-             name: results[:banned_pseuds].to_sentence
-          )
-        )
-      end
-    end
-    self.authors.flatten!
-    self.authors.uniq!
-  end
-
+  # Remove all pseuds associated with a particular user. Raises an exception if
+  # this would result in removing all creators from the work.
+  #
+  # Callbacks handle most of the work when deleting creatorships, but we do
+  # have one special case: if a co-created work has a chapter that only has
+  # one listed creator, and that creator removes themselves from the work, we
+  # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
-    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
-    raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
-    self.pseuds = pseuds_with_author_removed
-    save
-    self.chapters.each do |chapter|
-      chapter.pseuds = (chapter.pseuds - author_to_remove.pseuds).uniq
-      if chapter.pseuds.empty?
-        chapter.pseuds = self.pseuds
+    pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
+    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
+
+    transaction do
+      chapters.each do |chapter|
+        if (chapter.pseuds - author_to_remove.pseuds).empty?
+          pseuds_with_author_removed.each do |new_pseud|
+            chapter.creatorships.find_or_create_by(pseud: new_pseud)
+          end
+        end
+
+        chapter.creatorships.where(pseud: author_to_remove.pseuds).destroy_all
       end
-      chapter.save
+
+      creatorships.where(pseud: author_to_remove.pseuds).destroy_all
     end
-    # Update cache_key after chapter pseuds have been updated.
-    self.touch
   end
 
-  def add_creator(creator_to_add, new_pseud = nil)
-    new_pseud = creator_to_add.default_pseud if new_pseud.nil?
-    self.pseuds << new_pseud
-    self.chapters.each do |chapter|
-      chapter.pseuds << new_pseud
-      chapter.save
-    end
-    save
-  end
+  # Override the default behavior so that we also check for creatorships
+  # associated with one of the chapters.
+  def user_is_owner_or_invited?(user)
+    return false unless user.is_a?(User)
+    return true if super
 
-  # Transfer ownership of the work from one user to another
-  def change_ownership(old_user, new_user, new_pseud = nil)
-    raise "No new user provided, cannot change ownership" unless new_user
-    add_creator(new_user, new_pseud)
-    remove_author(old_user) if old_user && users.include?(old_user)
+    chapters.joins(:creatorships).merge(user.creatorships).exists?
   end
 
   def set_challenge_info
@@ -474,13 +407,18 @@ class Work < ApplicationRecord
     end
   end
 
+  # If this is fulfilling a challenge claim, add the collection.
+  #
+  # Unlike set_challenge_info, we don't automatically add the prompter as a
+  # recipient, because (a) some prompters are anonymous, so there has to be a
+  # prompter notification (separate from the recipient notification) ensuring
+  # that anonymous prompters are notified, and (b) if the prompter is not
+  # anonymous, they'll receive two notifications with roughly the same info
+  # (gift notification + prompter notification).
   def set_challenge_claim_info
-    # if this is fulfilling a challenge claim, add the collection and recipient
-    challenge_claims.each do |assignment|
+    challenge_claims.each do |claim|
       add_to_collection(claim.collection)
-      self.gifts << Gift.new(pseud: claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
     end
-    save
   end
 
   def challenge_assignment_ids
@@ -493,8 +431,9 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
-    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
-      select {|assign| ((self.authors.blank? ? [] : self.authors.collect(&:user)) + (self.users + [User.current_user])).compact.include?(assign.offering_user)}
+    self.challenge_assignments =
+      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
+      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
@@ -552,18 +491,14 @@ class Work < ApplicationRecord
   # VISIBILITY
   ########################################################################
 
-  def visible(current_user=User.current_user)
-    if current_user.nil? || current_user == :false
-      return self if self.posted unless self.restricted || self.hidden_by_admin
-    elsif self.posted && !self.hidden_by_admin
-      return self
-    elsif self.hidden_by_admin?
-      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)
-    end
-  end
+  def visible?(user = User.current_user)
+    return true if user.is_a?(Admin)
 
-  def visible?(user=User.current_user)
-    self.visible(user) == self
+    if posted && !hidden_by_admin
+      user.is_a?(User) || !restricted
+    else
+      user_is_owner_or_invited?(user)
+    end
   end
 
   def unrestricted=(setting)
@@ -685,7 +620,11 @@ class Work < ApplicationRecord
       new_series = Series.new
       new_series.title = attributes[:title]
       new_series.restricted = self.restricted
-      new_series.authors = (self.pseuds + (self.authors.blank? ? [] : self.authors)).flatten.uniq
+      (User.current_user.pseuds & self.pseuds_after_saving).each do |pseud|
+        # Only add the current user's pseuds now -- the after_create callback
+        # on the serial work will do the rest.
+        new_series.creatorships.build(pseud: pseud)
+      end
       new_series.save
       self.series << new_series
     end
@@ -734,7 +673,7 @@ class Work < ApplicationRecord
   end
 
   # Change the positions of the chapters in the work
-  def reorder(positions)
+  def reorder_list(positions)
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
@@ -765,13 +704,11 @@ class Work < ApplicationRecord
     end
   end
 
-  def chapters_in_order(include_content = true)
+  def chapters_in_order(include_drafts: false, include_content: true)
     # in order
     chapters = self.chapters.order('position ASC')
-    # only posted chapters unless author
-    unless User.current_user && (User.current_user.is_a?(Admin) || User.current_user.is_author_of?(self))
-      chapters = chapters.where(posted: true)
-    end
+    # only posted chapters unless specified
+    chapters = chapters.where(posted: true) unless include_drafts
     # when doing navigation pass false as contents are not needed
     chapters = chapters.select('published_at, id, work_id, title, position, posted') unless include_content
     chapters
@@ -813,7 +750,7 @@ class Work < ApplicationRecord
     # self.chapters.posted.count ( not self.number_of_posted_chapter , here be dragons )
     self.complete = self.chapters.posted.count == expected_number_of_chapters
     if self.will_save_change_to_attribute?(:complete)
-      Work.where("id = #{self.id}").update_all("complete = #{self.complete}")
+      Work.where(id: id).update_all(["complete = ?", complete])
     end
   end
 
@@ -1071,26 +1008,6 @@ class Work < ApplicationRecord
     end
   end
 
-  protected
-
-  # a string for use in joins: clause to add ownership lookup
-  OWNERSHIP_JOIN = "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                    INNER JOIN users ON pseuds.user_id = users.id"
-
-  COMMON_TAG_JOIN = "INNER JOIN common_taggings ON (works.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Work')
-                  INNER JOIN tags ON common_taggings.common_tag_id = tags.id"
-
-
-  VISIBLE_TO_ALL_CONDITIONS = {posted: true, restricted: false, hidden_by_admin: false}
-
-  VISIBLE_TO_USER_CONDITIONS = {posted: true, hidden_by_admin: false}
-
-  VISIBLE_TO_ADMIN_CONDITIONS = {posted: true}
-
-
-
-
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1162,68 +1079,7 @@ class Work < ApplicationRecord
     visible_to_user(user)
   end
 
-  scope :with_filter, lambda { |tag|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag.id}})
-  }
-
-  # Note: this version will work only on canonical tags (filters)
-  scope :with_all_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}}).
-    group("works.id").
-    having("count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_filter_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:filter_taggings).
-    where({filter_taggings: {filter_id: tag_ids_to_find}})
-  }
-
-  scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
-    group("works.id").
-    having("count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
-  }
-
-  scope :with_any_tag_ids, lambda {|tag_ids_to_find|
-    select("DISTINCT works.*").
-    joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find)
-  }
-
-  scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
-  scope :with_all_filters, lambda {|tags_to_find| with_all_filter_ids(tags_to_find.collect(&:id))}
-  scope :with_any_filters, lambda {|tags_to_find| with_any_filter_ids(tags_to_find.collect(&:id))}
-
-  scope :ids_only, -> { select("DISTINCT(works.id)") }
-
-  scope :tags_with_count, -> {
-    select("tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count").
-    joins(:tags).
-    group("tags.name").
-    order("tags.type, tags.name ASC")
-  }
-
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
-  scope :written_by_id, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids)
-  }
-  scope :written_by_id_having, lambda {|pseud_ids|
-    select("DISTINCT works.*").
-    joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id").
-    having("count(DISTINCT pseuds.id) = #{pseud_ids.size}")
-  }
 
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
@@ -1238,74 +1094,6 @@ class Work < ApplicationRecord
     where("series.id = ?", series.id)
   end
 
-  scope :for_recipient, lambda {|recipient|
-    select("DISTINCT works.*").
-    joins(:gifts).
-    where('gifts.recipient_name = ?', recipient)
-  }
-
-  # shouldn't really use a named scope for this, but I'm afraid to try
-  # to change the way work filtering works
-  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
-
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a scope, please do!
-  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
-  def self.no_tags(tag_category, options = {})
-    tags = tag_category.tags
-    where(options).collect{|w| w if (w.tags & tags).empty? }.compact.uniq
-  end
-
-  # Used when admins have disabled filtering
-  def self.list_without_filters(owner, options)
-    works = case owner.class.to_s
-            when 'Pseud'
-              works = Work.written_by_id([owner.id])
-            when 'User'
-              works = Work.owned_by(owner)
-            when 'Collection'
-              works = Work.in_collection(owner)
-            else
-              if owner.is_a?(Tag)
-                works = owner.filtered_works
-              end
-            end
-
-    # Need to support user + fandom and collection + tag pages
-    if options[:fandom_id] || options[:filter_ids]
-      id = options[:fandom_id] || options[:filter_ids].first
-      tag = Tag.find_by(id: id)
-      if tag.present?
-        works = works.with_filter(tag)
-      end
-    end
-
-    if %w(Pseud User).include?(owner.class.to_s)
-      works = works.where(in_anon_collection: false)
-    end
-    unless owner.is_a?(Collection)
-      works = works.revealed
-    end
-    if User.current_user.nil? || User.current_user == :false
-      works = works.unrestricted
-    end
-
-    works = works.posted
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-  end
-
-  def self.collected_without_filters(user, options)
-    works = Work.written_by_id([user.id])
-    works = works.join(:collection_items)
-    unless User.current_user == user
-      works = works.where(in_anon_collection: false)
-      works = works.posted
-    end
-    works = works.order("revised_at DESC")
-    works = works.paginate(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-  end
-
   ########################################################################
   # SORTING
   ########################################################################
@@ -1316,8 +1104,6 @@ class Work < ApplicationRecord
   def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
-    elsif self.authors.present?
-      self.authors.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     else
       self.pseuds.map(&:name).join(",  ").downcase.gsub(SORTED_AUTHOR_REGEX, '')
     end
@@ -1341,7 +1127,7 @@ class Work < ApplicationRecord
   ########################################################################
 
   def akismet_attributes
-    content = chapters_in_order.map { |c| c.content }.join
+    content = chapters_in_order(include_drafts: true).map(&:content).join
     user = users.first
     {
       comment_type: "fanwork-post",
@@ -1428,14 +1214,6 @@ class Work < ApplicationRecord
       bookmarkable_type: 'Work',
       bookmarkable_join: { name: "bookmarkable" }
     )
-  end
-
-  def pseud_ids
-    creatorships.pluck :pseud_id
-  end
-
-  def user_ids
-    Pseud.where(id: pseud_ids).pluck(:user_id)
   end
 
   def collection_ids

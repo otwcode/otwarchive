@@ -405,6 +405,6 @@ module HtmlCleaner
 
   def add_break_between_paragraphs(value)
     return "" if value.blank?
-    value.gsub(/\s*<\/p>\s*<p>s*/, "</p><br /><p>")
+    value.gsub(%r{\s*</p>\s*<p>\s*}, "</p><br /><p>")
   end
 end

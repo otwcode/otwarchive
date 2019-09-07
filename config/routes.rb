@@ -183,7 +183,8 @@ Otwarchive::Application.routes.draw do
       collection do
         get :bulk_search
         post :bulk_search
-        post :update_user
+        post :update
+        post :update_status
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -209,7 +210,6 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users, except: [:new, :create] do
     member do
-      get :browse
       get :change_email
       post :changed_email
       get :change_password
@@ -242,6 +242,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resource :creatorships, controller: "creatorships", only: [:show, :update]
     resources :external_authors do
       resources :external_author_names
     end
@@ -467,14 +468,6 @@ Otwarchive::Application.routes.draw do
   #### API ####
 
   namespace :api do
-    namespace :v1 do
-      resources :bookmarks, only: [:create], defaults: { format: :json }
-      resources :works, only: [:create], defaults: { format: :json }
-      post 'bookmarks/import', to: 'bookmarks#create'
-      post 'works/import', to: 'works#create'
-      post 'works/urls', to: 'works#batch_urls'
-    end
-
     namespace :v2 do
       resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }

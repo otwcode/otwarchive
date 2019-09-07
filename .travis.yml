@@ -4,6 +4,8 @@ dist: xenial
 language: ruby
 cache: bundler
 
+if: tag IS blank
+
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rake db:otwseed"
