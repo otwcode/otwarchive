@@ -23,7 +23,7 @@ Feature: Authenticate Admin Users
       And I fill in "admin_password" with "wrangulator"
       And I press "Log in as admin"
     Then I should not see "Successfully logged in"
-      And I should see "The password or admin user name you entered doesn't match our records"
+      And I should see "The password or admin user name you entered doesn't match our records."
 
   Scenario: Admin can log in
   Given I have no users
@@ -46,3 +46,14 @@ Feature: Authenticate Admin Users
       And I fill in "admin_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
+
+  Scenario: Admin cannot log in with wrong password
+  Given the following admin exists
+    | login       | password |
+    | Zooey       | secret   |
+  When I go to the admin login page
+    And I fill in "Admin user name" with "Zooey"
+    And I fill in "Admin password" with "notsecret"
+    And I press "Log In"
+  Then I should see "The password or user name you entered doesn't match our records."
+
